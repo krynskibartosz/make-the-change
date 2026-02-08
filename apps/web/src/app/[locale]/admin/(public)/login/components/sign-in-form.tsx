@@ -1,29 +1,47 @@
-"use client";
-import { Mail, LogIn } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { useActionState } from 'react';
+'use client'
+import { Input, PasswordInput } from '@make-the-change/core/ui'
+import { LogIn, Mail } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import type { FC } from 'react'
+import { useActionState, useEffect } from 'react'
+import { SubmitButton } from '@/app/[locale]/admin/(dashboard)/components/ui/submit-button'
+import { FormError } from '@/app/[locale]/admin/(public)/login/components/form-error'
+import { signInAction } from '@/app/[locale]/admin/login/actions'
+import { useRouter } from '@/i18n/navigation'
 
-import { Input, PasswordInput } from '@/app/[locale]/admin/(dashboard)/components/ui/input';
-import { SubmitButton } from '@/app/[locale]/admin/(dashboard)/components/ui/submit-button';
-import { FormError } from '@/app/[locale]/admin/(public)/login/components/form-error';
-import { signInAction } from '@/app/[locale]/admin/login/actions';
+type SignInState = {
+  success: boolean
+  message?: string
+  errors?: Record<string, string[]>
+  redirectUrl?: string
+}
 
-import type { FC } from 'react';
-
-const initialState: any = { success: false, message: '', errors: undefined };
+const initialState: SignInState = {
+  success: false,
+  message: '',
+  errors: undefined,
+  redirectUrl: undefined,
+}
 
 export const SignInForm: FC = () => {
-  const searchParams = useSearchParams();
-  const [state, formAction, isPending] = useActionState(signInAction as any, initialState);
-  const redirectTarget = searchParams?.get('redirect') || '/admin/dashboard';
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [state, formAction, isPending] = useActionState(signInAction, initialState)
+  const redirectTarget = searchParams?.get('redirect') || '/admin/dashboard'
+
+  useEffect(() => {
+    if (state?.success && state?.redirectUrl) {
+      router.push(state.redirectUrl)
+    }
+  }, [state, router])
 
   const getFieldError = (fieldName: 'email' | 'password'): string => {
-    if (state?.success || !state?.errors) return '';
-    return state.errors?.[fieldName]?.[0] ?? '';
-  };
-  const emailError = getFieldError('email');
-  const passwordError = getFieldError('password');
-  const generalErrorMessage = !state?.success && state?.message ? state.message : '';
+    if (state?.success || !state?.errors) return ''
+    return state.errors?.[fieldName]?.[0] ?? ''
+  }
+  const emailError = getFieldError('email')
+  const passwordError = getFieldError('password')
+  const generalErrorMessage = !state?.success && state?.message ? state.message : ''
 
   return (
     <form action={formAction} aria-labelledby="sign-in-form-title" className="space-y-8">
@@ -49,7 +67,7 @@ export const SignInForm: FC = () => {
             className={`
               h-14 pl-12 pr-5 text-lg
               bg-background/60 backdrop-blur-sm
-              border-border/40 hover:border-border/60 focus:border-primary/50
+              border-[hsl(var(--border)/0.4)] hover:border-[hsl(var(--border)/0.6)] focus:border-primary/50
               rounded-2xl transition-all duration-300
               placeholder:text-muted-foreground/60
             `}
@@ -68,7 +86,7 @@ export const SignInForm: FC = () => {
             className={`
               h-14 px-5 text-lg
               bg-background/60 backdrop-blur-sm
-              border-border/40 hover:border-border/60 focus:border-primary/50
+              border-[hsl(var(--border)/0.4)] hover:border-[hsl(var(--border)/0.6)] focus:border-primary/50
               rounded-2xl transition-all duration-300
               placeholder:text-muted-foreground/60
             `}
@@ -99,5 +117,5 @@ export const SignInForm: FC = () => {
 
       {generalErrorMessage && <FormError message={generalErrorMessage} />}
     </form>
-  );
-};
+  )
+}

@@ -1,5 +1,7 @@
 # Partenariats Stratégiques - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **Écosystème de partenaires confirmés pour la plateforme "Make the CHANGE" avec modèle marketplace commission-based bootstrap et intégrations opérationnelles validées.**
 
 ## 🤝 Vue d'Ensemble Partenariats
@@ -13,7 +15,7 @@
 
 ## 🇧🇪 HABEEBEE - Partenaire Principal Belgique
 
-> **Note**: Recherche détaillée disponible dans [partner-research-habeebee.md](./partner-research-habeebee.md)
+> **Note**: Recherche détaillée à produire (ou consulter archives internes si besoin).
 
 ### Profil Organisationnel Confirmé
 ```yaml
@@ -106,7 +108,7 @@ Exemple Produits Premium (1 point = 1€):
 
 ## 🇲🇬 ILANGA NATURE - Partenaire Impact Madagascar
 
-> **Note**: Recherche détaillée disponible dans [partner-research-ilanga-nature.md](./partner-research-ilanga-nature.md)
+> **Note**: Recherche détaillée à produire (ou consulter archives internes si besoin).
 
 ### Profil Mission Sociale
 ```yaml

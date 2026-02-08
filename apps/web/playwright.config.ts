@@ -36,12 +36,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         // Mode headless pour performance
         launchOptions: {
-          args: ['--no-sandbox', '--disable-dev-shm-usage']
-        }
+          args: ['--no-sandbox', '--disable-dev-shm-usage'],
+        },
       },
     },
     // Désactiver temporairement firefox/webkit pour accélérer les tests

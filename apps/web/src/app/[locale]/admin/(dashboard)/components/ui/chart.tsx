@@ -1,14 +1,13 @@
 'use client'
 
-import { ResponsiveBar, type BarDatum } from '@nivo/bar'
-import { ResponsiveCalendar, type CalendarDatum } from '@nivo/calendar'
-import { ResponsiveLine, type Serie } from '@nivo/line'
-import { ResponsivePie, type PieDatum } from '@nivo/pie'
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn'
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/card'
-
+import { cn } from '@make-the-change/core/shared/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { type BarDatum, ResponsiveBar } from '@nivo/bar'
+import { type CalendarDatum, ResponsiveCalendar } from '@nivo/calendar'
+import { ResponsiveLine } from '@nivo/line'
+import { ResponsivePie } from '@nivo/pie'
 import type { FC } from 'react'
+
 type ChartContainerProps = {
   title?: string
   description?: string
@@ -22,7 +21,7 @@ const ChartContainer: FC<ChartContainerProps> = ({
   description,
   className,
   height = 400,
-  children
+  children,
 }) => (
   <Card className={cn('transition-all duration-200 hover:shadow-lg', className)}>
     {title && (
@@ -78,7 +77,7 @@ const ChartBar: FC<ChartBarProps> = ({
   axisLeft = {
     tickSize: 5,
     tickPadding: 5,
-  }
+  },
 }) => (
   <div style={{ height: `${height}px` }}>
     <ResponsiveBar
@@ -120,51 +119,62 @@ const ChartBar: FC<ChartBarProps> = ({
             {
               on: 'hover',
               style: {
-                itemOpacity: 1
-              }
-            }
-          ]
-        }
+                itemOpacity: 1,
+              },
+            },
+          ],
+        },
       ]}
       theme={{
         background: 'transparent',
-        textColor: 'hsl(var(--foreground))',
-        fontSize: 12,
+        text: {
+          fontSize: 12,
+          fill: 'hsl(var(--foreground))',
+        },
         axis: {
           domain: {
             line: {
               stroke: 'hsl(var(--border))',
-              strokeWidth: 1
-            }
+              strokeWidth: 1,
+            },
           },
           legend: {
             text: {
               fontSize: 12,
-              fill: 'hsl(var(--foreground))'
-            }
+              fill: 'hsl(var(--foreground))',
+            },
           },
           ticks: {
             line: {
               stroke: 'hsl(var(--border))',
-              strokeWidth: 1
+              strokeWidth: 1,
             },
             text: {
               fontSize: 11,
-              fill: 'hsl(var(--muted-foreground))'
-            }
-          }
+              fill: 'hsl(var(--muted-foreground))',
+            },
+          },
         },
         grid: {
           line: {
             stroke: 'hsl(var(--border))',
             strokeWidth: 1,
-            strokeOpacity: 0.5
-          }
-        }
+            strokeOpacity: 0.5,
+          },
+        },
       }}
     />
   </div>
 )
+type Serie = {
+  id: string | number
+  data: Array<{
+    x: string | number | Date
+    y: string | number | Date
+  }>
+  [key: string]: unknown
+}
+
 type ChartLineProps = {
   data: Serie[]
   colors?: string[]
@@ -195,7 +205,7 @@ const ChartLine: FC<ChartLineProps> = ({
   pointSize = 6,
   enableArea = false,
   axisBottom = {},
-  axisLeft = {}
+  axisLeft = {},
 }) => (
   <div style={{ height: `${height}px` }}>
     <ResponsiveLine
@@ -242,58 +252,66 @@ const ChartLine: FC<ChartLineProps> = ({
               on: 'hover',
               style: {
                 itemBackground: 'rgba(0, 0, 0, .03)',
-                itemOpacity: 1
-              }
-            }
-          ]
-        }
+                itemOpacity: 1,
+              },
+            },
+          ],
+        },
       ]}
       theme={{
         background: 'transparent',
-        textColor: 'hsl(var(--foreground))',
-        fontSize: 12,
+        text: {
+          fontSize: 12,
+          fill: 'hsl(var(--foreground))',
+        },
         axis: {
           domain: {
             line: {
               stroke: 'hsl(var(--border))',
-              strokeWidth: 1
-            }
+              strokeWidth: 1,
+            },
           },
           legend: {
             text: {
               fontSize: 12,
-              fill: 'hsl(var(--foreground))'
-            }
+              fill: 'hsl(var(--foreground))',
+            },
           },
           ticks: {
             line: {
               stroke: 'hsl(var(--border))',
-              strokeWidth: 1
+              strokeWidth: 1,
             },
             text: {
               fontSize: 11,
-              fill: 'hsl(var(--muted-foreground))'
-            }
-          }
+              fill: 'hsl(var(--muted-foreground))',
+            },
+          },
         },
         grid: {
           line: {
             stroke: 'hsl(var(--border))',
             strokeWidth: 1,
-            strokeOpacity: 0.5
-          }
-        }
+            strokeOpacity: 0.5,
+          },
+        },
       }}
       yScale={{
         type: 'linear',
         min: 'auto',
         max: 'auto',
         stacked: false,
-        reverse: false
+        reverse: false,
       }}
     />
   </div>
 )
+type PieDatum = {
+  id: string | number
+  value: number
+  [key: string]: unknown
+}
+
 type ChartPieProps = {
   data: PieDatum[]
   colors?: string[]
@@ -313,7 +331,7 @@ const ChartPie: FC<ChartPieProps> = ({
   innerRadius = 0.5,
   padAngle = 0.7,
   enableArcLinkLabels = true,
-  enableArcLabels = false
+  enableArcLabels = false,
 }) => (
   <div style={{ height: `${height}px` }}>
     <ResponsivePie
@@ -336,21 +354,11 @@ const ChartPie: FC<ChartPieProps> = ({
       padAngle={padAngle}
       arcLabelsTextColor={{
         from: 'color',
-        modifiers: [
-          [
-            'darker',
-            2
-          ]
-        ]
+        modifiers: [['darker', 2]],
       }}
       borderColor={{
         from: 'color',
-        modifiers: [
-          [
-            'darker',
-            0.2
-          ]
-        ]
+        modifiers: [['darker', 0.2]],
       }}
       legends={[
         {
@@ -371,16 +379,18 @@ const ChartPie: FC<ChartPieProps> = ({
             {
               on: 'hover',
               style: {
-                itemTextColor: 'hsl(var(--foreground))'
-              }
-            }
-          ]
-        }
+                itemTextColor: 'hsl(var(--foreground))',
+              },
+            },
+          ],
+        },
       ]}
       theme={{
         background: 'transparent',
-        textColor: 'hsl(var(--foreground))',
-        fontSize: 12,
+        text: {
+          fontSize: 12,
+          fill: 'hsl(var(--foreground))',
+        },
       }}
     />
   </div>
@@ -406,7 +416,7 @@ const ChartCalendar: FC<ChartCalendarProps> = ({
   margin = { top: 40, right: 40, bottom: 40, left: 40 },
   monthBorderColor = 'hsl(var(--border))',
   dayBorderColor = 'hsl(var(--background))',
-  emptyColor = 'hsl(var(--muted))'
+  emptyColor = 'hsl(var(--muted))',
 }) => (
   <div style={{ height: `${height}px` }}>
     <ResponsiveCalendar
@@ -429,13 +439,15 @@ const ChartCalendar: FC<ChartCalendarProps> = ({
           itemWidth: 42,
           itemHeight: 36,
           itemsSpacing: 14,
-          itemDirection: 'right-to-left'
-        }
+          itemDirection: 'right-to-left',
+        },
       ]}
       theme={{
         background: 'transparent',
-        textColor: 'hsl(var(--foreground))',
-        fontSize: 11,
+        text: {
+          fontSize: 11,
+          fill: 'hsl(var(--foreground))',
+        },
       }}
     />
   </div>
@@ -445,7 +457,7 @@ export const Chart = Object.assign(ChartContainer, {
   Bar: ChartBar,
   Line: ChartLine,
   Pie: ChartPie,
-  Calendar: ChartCalendar
+  Calendar: ChartCalendar,
 })
 
 export { ChartContainer, ChartBar, ChartLine, ChartPie, ChartCalendar }

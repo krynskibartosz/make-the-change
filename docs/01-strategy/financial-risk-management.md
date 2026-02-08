@@ -1,5 +1,7 @@
 # Gestion des Risques Financiers
 
+> Historique 2024/2025 — à revalider en 2026.
+
 ## Vue d'ensemble
 
 La viabilité financière de Make the CHANGE repose sur une gestion rigoureuse du passif points et des flux de trésorerie. Cette analyse détaille les mécanismes de provisionnement, les scénarios de stress et les stratégies de mitigation.

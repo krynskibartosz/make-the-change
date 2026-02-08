@@ -1,17 +1,11 @@
 'use client'
-import { Target, Box, User } from 'lucide-react'
-import { type FC } from 'react'
 
-import { formatCurrency } from '@/app/[locale]/admin/(dashboard)/components/ui/format-utils'
+import { formatCurrency } from '@make-the-change/core/shared/utils'
+import { Box, Target, User } from 'lucide-react'
+import type { FC } from 'react'
+import type { Project } from '@/lib/types/project'
 
-type Project =  {
-  type: string
-  current_funding: number | null
-  target_budget: number
-  producer_id: string
-}
-
-type ProjectListMetadataProps =  {
+type ProjectListMetadataProps = {
   project: Project
 }
 
@@ -33,7 +27,10 @@ export const ProjectListMetadata: FC<ProjectListMetadataProps> = ({ project }) =
 
     <div className="flex items-center gap-2 transition-colors duration-200 md:group-hover:text-foreground group-active:text-foreground">
       <User className="w-4 h-4 text-primary/70 md:group-hover:text-primary group-active:text-primary transition-colors duration-200" />
-      <span className="text-sm">Producteur: {project.producer_id}</span>
+      <span className="text-sm">
+        Producteur:{' '}
+        {project.producer?.name_default || project.producer_name || project.producer_id}
+      </span>
     </div>
   </div>
 )

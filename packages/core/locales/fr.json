@@ -1,0 +1,668 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "retry": "Retry",
+    "preview": "Preview",
+    "select_placeholder": "Select...",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "products": "Products"
+    }
+  },
+  "navigation": {
+    "home": "Accueil",
+    "admin": "Administration",
+    "dashboard": "Tableau de bord",
+    "products": "Produits",
+    "projects": "Projets",
+    "subscriptions": "Abonnements",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter",
+    "about": "À propos",
+    "how_it_works": "Comment ça marche",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "profile": "Profil",
+    "my_investments": "Mes investissements",
+    "my_orders": "Mes commandes",
+    "my_points": "Mes points"
+  },
+  "admin": {
+    "common": {
+      "retry": "Réessayer",
+      "preview": "Aperçu",
+      "select_placeholder": "Sélectionner...",
+      "breadcrumbs": {
+        "dashboard": "Tableau de bord",
+        "products": "Produits"
+      }
+    },
+    "dashboard": {
+      "title": "Tableau de bord administrateur",
+      "welcome": "Bienvenue dans votre espace d'administration",
+      "statistics": "Statistiques"
+    },
+    "cover": {
+      "add_cover": "Cliquez pour ajouter une couverture",
+      "edit_cover": "Modifier la couverture",
+      "remove": "Retirer",
+      "add_avatar": "Ajouter un avatar",
+      "edit_avatar": "Modifier l'avatar"
+    },
+    "crop": {
+        "title_avatar": "Ajuster l'avatar",
+        "title_cover": "Ajuster la couverture",
+        "title_gallery": "Ajuster l'image",
+        "zoom": "Zoom",
+        "rotation": "Rotation",
+        "reset": "Réinitialiser",
+        "confirm": "Confirmer",
+        "cancel": "Annuler"
+      },
+      "products": {
+      "title": "Gestion des produits",
+      "new_product": "Nouveau produit",
+      "product_list": "Liste des produits",
+      "name": "Nom du produit",
+      "price": "Prix",
+      "actions": "Actions",
+      "search_placeholder": "Rechercher des produits...",
+      "filters": {
+        "all_partners": "Tous les partenaires",
+        "all_categories": "Toutes les catégories",
+        "sort_by": "Trier par",
+        "tags_placeholder": "Tags...",
+        "active_only": "Actifs uniquement",
+        "clear_filters": "Effacer filtres",
+        "clear_all_filters": "Effacer tous les filtres",
+        "reset": "Réinitialiser"
+      },
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)",
+        "price_asc": "Prix croissant",
+        "price_desc": "Prix décroissant",
+        "featured": "Mis en avant"
+      },
+      "stock": {
+        "increase": "Augmenter le stock",
+        "decrease": "Diminuer le stock",
+        "label": "stock",
+        "points_label": "pts"
+      },
+      "visibility": {
+        "hide": "Masquer le produit",
+        "show": "Afficher le produit",
+        "visible": "Visible",
+        "hidden": "Masqué"
+      },
+      "filters_tooltip": {
+        "category": "Filtrer par catégorie: {name}",
+        "subcategory": "Filtrer par sous-catégorie: {name}",
+        "producer": "Filtrer par producteur: {name}",
+        "tag": "Filtrer par tag: {tag}",
+        "featured": "Filtrer par produits mis en avant"
+      },
+      "other_tags": "{count} autres",
+      "filter_modal": {
+        "partner": "Partenaire",
+        "category": "Catégorie",
+        "tags": "Tags",
+        "active_only_description": "Afficher uniquement les éléments actifs"
+      },
+      "empty_state": {
+        "title": "Aucun produit",
+        "description": "Aucun résultat pour ces filtres."
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les produits",
+        "retry": "Réessayer"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "changing": "Changement...",
+        "activate": "Activer",
+        "deactivate": "Désactiver",
+        "toggle_tooltip": "Cliquer pour {action} le produit",
+        "modal": {
+          "title": "{action} le produit",
+          "description": {
+            "activate": "Le produit sera visible dans la boutique et disponible à la vente.",
+            "deactivate": "Le produit sera retiré de la boutique et ne sera plus disponible à la vente."
+          },
+          "cancel": "Annuler"
+        }
+      },
+      "partner": {
+        "none": "Aucun partenaire",
+        "loading": "Chargement...",
+        "not_found": "Partenaire introuvable",
+        "view_tooltip": "Voir le partenaire {name}"
+      },
+      "featured": {
+        "short": "Vedette",
+        "full": "En vedette"
+      },
+      "details": {
+        "show": "Afficher les détails",
+        "hide": "Masquer les détails"
+      },
+      "edit": {
+        "sections": {
+          "general": "Informations générales",
+          "pricing": "Prix & Configuration",
+          "images": "Images",
+          "advanced_settings": "Paramètres avancés",
+          "status_visibility": "Statut et visibilité",
+          "commercial": "Informations commerciales",
+          "logistics": "Logistique & Expédition",
+          "categorization": "Catégorisation & Tags",
+          "attributes": "Attributs & Tags",
+          "lifecycle": "Cycle de vie",
+          "seo": "SEO & Référencement",
+          "product_details": "Détails produit"
+        },
+        "fields": {
+          "name": "Nom du produit",
+          "slug": "Slug",
+          "short_description": "Description courte",
+          "description": "Description",
+          "price_points": "Prix en points",
+          "stock_quantity": "Quantité en stock",
+          "min_tier": "Niveau minimum",
+          "fulfillment_method": "Méthode de livraison",
+          "is_active": "Produit actif",
+          "featured": "Produit en vedette",
+          "is_hero_product": "Produit héros",
+          "price_eur_equivalent": "Prix équivalent EUR",
+          "weight_grams": "Poids (grammes)",
+          "origin_country": "Pays d'origine",
+          "partner_source": "Source partenaire",
+          "category_id": "Catégorie principale",
+          "category_id_description": "Sélectionnez la catégorie principale",
+          "secondary_category_id": "Catégorie secondaire",
+          "tags": "Tags",
+          "tags_description": "Séparés par des virgules",
+          "launch_date": "Date de lancement",
+          "discontinue_date": "Date d'arrêt",
+          "seo_title": "Titre SEO",
+          "seo_title_description": "Maximum 60 caractères",
+          "seo_description": "Description SEO",
+          "seo_description_description": "Maximum 160 caractères",
+          "producer_id": "Producteur",
+          "allergens": "Allergènes",
+          "allergens_description": "Séparés par des virgules",
+          "certifications": "Certifications",
+          "certifications_description": "Bio, équitable, etc. Séparées par des virgules"
+        },
+        "placeholders": {
+          "name": "Nom du produit",
+          "slug": "slug-du-produit",
+          "short_description": "Description courte du produit...",
+          "description": "Description détaillée du produit...",
+          "min_tier": "Sélectionner un niveau",
+          "fulfillment_method": "Sélectionner une méthode",
+          "origin_country": "France, Belgique...",
+          "partner_source": "Habeebee, Ilanga...",
+          "category": "Sélectionner une catégorie",
+          "secondary_category": "Catégorie secondaire (optionnel)",
+          "tags": "bio, local, artisanal...",
+          "seo_title": "Titre optimisé pour les moteurs de recherche",
+          "seo_description": "Description SEO courte et accrocheuse",
+          "allergens": "gluten, noix, lait...",
+          "certifications": "bio, équitable, AOC...",
+          "category_id": "Sélectionner une catégorie",
+          "producer_id": "Sélectionner un producteur",
+          "stock_quantity": "0",
+          "price_points": "100"
+        },
+        "fulfillment": {
+          "dropship": "Dropshipping",
+          "stock": "En stock",
+          "ondemand": "Sur commande"
+        },
+        "tiers": {
+          "all": "Tous niveaux",
+          "explorateur": "Explorateur",
+          "protecteur": "Protecteur",
+          "ambassadeur": "Ambassadeur"
+        },
+        "status": {
+          "active": "Actif",
+          "active_description": "Le produit est visible pour les utilisateurs",
+          "featured": "En vedette",
+          "featured_description": "Affichage prioritaire dans les listes",
+          "hero": "Produit héros",
+          "hero_description": "Mise en avant spéciale sur la page d'accueil"
+        },
+        "toast": {
+          "error": {
+            "title": "Erreur de sauvegarde",
+            "description": "Une erreur inconnue est survenue lors de la sauvegarde."
+          },
+          "success": {
+            "title": "Produit mis à jour",
+            "description": "Les modifications ont été sauvegardées avec succès."
+          }
+        },
+        "errors": {
+          "missing_id": {
+            "title": "ID de produit manquant",
+            "description": "L'identifiant du produit n'est pas valide ou manquant dans l'URL."
+          },
+          "not_found": {
+            "title": "Produit non trouvé",
+            "description": "Le produit demandé n'existe pas ou a été supprimé."
+          },
+          "loading": {
+            "title": "Erreur de chargement",
+            "description": "Une erreur est survenue lors du chargement du produit."
+          }
+        },
+        "loading": {
+          "title": "Chargement du produit",
+          "description": "Veuillez patienter pendant le chargement des données..."
+        },
+        "subtitle": "Produit",
+        "no_slug": "Sans slug",
+        "blur_system": {
+          "title": "🚀 Système DB Blur Scalable",
+          "images": "Images",
+          "with_blur": "Avec blur",
+          "missing": "Manquants",
+          "coverage": "Couverture",
+          "loading": "Chargement des blur hashes depuis la DB..."
+        },
+        "images": {
+          "add": "Ajouter des images"
+        }
+      }
+    },
+    "categories": {
+      "title": "Gestion des catégories",
+      "new_category": "Nouvelle catégorie",
+      "edit_category": "Modifier la catégorie",
+      "empty_state": {
+        "title": "Aucune catégorie",
+        "description": "Commencez par créer votre première catégorie."
+      }
+    },
+    "biodex": {
+      "title": "Biodex - Espèces",
+      "new_species": "Nouvelle espèce",
+      "edit_species": "Modifier l'espèce",
+      "empty_state": {
+        "title": "Aucune espèce",
+        "description": "Ajoutez des espèces à votre Biodex."
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "new_post": "Nouvel article",
+      "edit_post": "Modifier l'article",
+      "empty_state": {
+        "title": "Aucun article",
+        "description": "Rédigez votre premier article de blog."
+      }
+    },
+    "points": {
+      "title": "Transactions de points",
+      "empty_state": {
+        "title": "Aucune transaction",
+        "description": "L'historique des points est vide."
+      }
+    },
+    "investments": {
+      "title": "Investissements",
+      "empty_state": {
+        "title": "Aucun investissement",
+        "description": "Aucun investissement n'a été réalisé pour le moment."
+      }
+    },
+    "projects": {
+      "title": "Gestion des projets",
+      "new_project": "Nouveau projet",
+      "project_list": "Liste des projets",
+      "map_view": "Vue carte",
+      "name": "Nom du projet",
+      "location": "Localisation",
+      "status": "Statut",
+      "investment_goal": "Objectif d'investissement"
+    },
+    "partners": {
+      "title": "Gestion des partenaires",
+      "description": "Gestion des partenaires"
+    },
+    "orders": {
+      "title": "Suivi des commandes",
+      "description": "Suivi des commandes"
+    },
+    "sidebar": {
+      "dashboard": {
+        "label": "Tableau de bord",
+        "description": "Vue d'ensemble et statistiques"
+      },
+      "management": {
+        "label": "Gestion"
+      },
+      "logout": "Déconnexion",
+      "close_menu": "Fermer le menu de navigation",
+      "main_navigation": "Navigation principale",
+      "mobile_navigation_menu": "Menu de navigation mobile"
+    },
+    "subscriptions": {
+      "title": "Gestion des abonnements",
+      "new_subscription": "Nouvel abonnement",
+      "subscription_list": "Liste des abonnements",
+      "user": "Utilisateur",
+      "plan": "Plan",
+      "status": "Statut",
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    }
+  },
+  "ui": {
+    "view_modes": {
+      "grid": "Grille",
+      "list": "Liste",
+      "map": "Carte"
+    }
+  },
+  "metadata": {
+    "title": "Make the CHANGE - Plateforme Écologique",
+    "description": "Investissez dans des projets écologiques et découvrez des produits durables"
+  },
+  "footer": {
+    "tagline": "Investissez dans la biodiversité, récoltez des récompenses tangibles.",
+    "quick_links": "Liens rapides",
+    "projects": "Projets",
+    "products": "Produits",
+    "about": "À propos",
+    "how_it_works": "Comment ça marche",
+    "support": "Support",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "contact_us": "Nous contacter",
+    "rights_reserved": "Tous droits réservés."
+  },
+  "home": {
+    "hero": {
+      "title": "Investissez dans la biodiversité",
+      "subtitle": "Soutenez des projets écologiques concrets et échangez vos points contre des produits durables",
+      "cta_primary": "Découvrir les projets",
+      "cta_secondary": "Comment ça marche"
+    },
+    "features": {
+      "title": "Pourquoi Make the CHANGE ?",
+      "invest": {
+        "title": "Investissez",
+        "description": "Soutenez des projets de biodiversité vérifiés et suivez votre impact en temps réel."
+      },
+      "earn": {
+        "title": "Gagnez des points",
+        "description": "Chaque investissement vous rapporte des points bonus selon votre niveau d'engagement."
+      },
+      "redeem": {
+        "title": "Échangez",
+        "description": "Utilisez vos points pour obtenir des produits durables de nos partenaires."
+      }
+    },
+    "featured_projects": "Projets en vedette",
+    "view_all_projects": "Voir tous les projets",
+    "featured_products": "Produits populaires",
+    "view_all_products": "Voir tous les produits",
+    "cta": {
+      "title": "Prêt à faire la différence ?",
+      "description": "Rejoignez notre communauté d'investisseurs responsables et contribuez à la préservation de la biodiversité.",
+      "button": "Créer mon compte"
+    }
+  },
+  "about": {
+    "title": "À propos de Make the CHANGE",
+    "intro": "Make the CHANGE est une plateforme innovante qui connecte les citoyens engagés avec des projets de biodiversité concrets.",
+    "mission": {
+      "title": "Notre mission",
+      "description": "Démocratiser l'investissement dans la biodiversité en le rendant accessible, transparent et gratifiant."
+    },
+    "values": {
+      "title": "Nos valeurs",
+      "transparency": {
+        "title": "Transparence",
+        "description": "Suivi en temps réel de l'impact de vos investissements."
+      },
+      "impact": {
+        "title": "Impact",
+        "description": "Des projets concrets avec des résultats mesurables."
+      },
+      "community": {
+        "title": "Communauté",
+        "description": "Une communauté engagée pour la biodiversité."
+      }
+    }
+  },
+  "how_it_works": {
+    "title": "Comment ça marche",
+    "subtitle": "Trois étapes simples pour contribuer à la biodiversité",
+    "steps": {
+      "choose": {
+        "title": "1. Choisissez un projet",
+        "description": "Parcourez notre catalogue de projets vérifiés et sélectionnez ceux qui vous tiennent à cœur."
+      },
+      "invest": {
+        "title": "2. Investissez",
+        "description": "Soutenez les projets avec des investissements unitaires ou un abonnement mensuel."
+      },
+      "enjoy": {
+        "title": "3. Profitez",
+        "description": "Suivez l'impact de vos investissements et échangez vos points contre des produits."
+      }
+    },
+    "tiers": {
+      "title": "Nos formules",
+      "explorer": {
+        "title": "Explorateur",
+        "price": "Gratuit",
+        "description": "Découvrez la plateforme sans engagement"
+      },
+      "protector": {
+        "title": "Protecteur",
+        "price": "À partir de 50€",
+        "description": "Investissements unitaires avec bonus"
+      },
+      "ambassador": {
+        "title": "Ambassadeur",
+        "price": "À partir de 18€/mois",
+        "description": "Abonnement premium avec avantages exclusifs"
+      }
+    }
+  },
+  "projects": {
+    "title": "Nos projets",
+    "subtitle": "Découvrez et soutenez des projets de biodiversité vérifiés",
+    "biodex_levels": "Biodex - Niveaux de Contenu",
+    "filter": {
+      "all": "Tous",
+      "active": "Actifs",
+      "completed": "Terminés",
+      "search_placeholder": "Rechercher un projet..."
+    },
+    "card": {
+      "funded": "financé",
+      "goal": "Objectif",
+      "view_details": "Voir les détails"
+    },
+    "detail": {
+      "about": "À propos du projet",
+      "impact": "Impact",
+      "updates": "Actualités",
+      "invest_now": "Investir maintenant",
+      "share": "Partager"
+    },
+    "empty": "Aucun projet trouvé"
+  },
+  "products": {
+    "title": "Notre boutique",
+    "subtitle": "Échangez vos points contre des produits durables de nos partenaires",
+    "filter": {
+      "all": "Tous",
+      "category": "Catégorie",
+      "price": "Prix",
+      "search_placeholder": "Rechercher un produit..."
+    },
+    "card": {
+      "points": "points",
+      "add_to_cart": "Ajouter au panier",
+      "out_of_stock": "Rupture de stock"
+    },
+    "detail": {
+      "description": "Description",
+      "producer": "Producteur",
+      "certifications": "Certifications",
+      "exchange": "Échanger"
+    },
+    "empty": "Aucun produit trouvé"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "login_button": "Se connecter",
+    "forgot_password": "Mot de passe oublié ?",
+    "invalid_credentials": "Identifiants invalides",
+    "register": "Créer un compte",
+    "register_button": "S'inscrire",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "confirm_password": "Confirmer le mot de passe",
+    "accept_terms": "J'accepte les conditions d'utilisation",
+    "already_have_account": "Déjà un compte ?",
+    "no_account": "Pas encore de compte ?",
+    "reset_password": "Réinitialiser le mot de passe",
+    "reset_password_button": "Envoyer le lien",
+    "reset_password_success": "Un email de réinitialisation a été envoyé.",
+    "back_to_login": "Retour à la connexion"
+  },
+  "dashboard": {
+    "title": "Mon tableau de bord",
+    "welcome": "Bienvenue",
+    "overview": {
+      "title": "Aperçu",
+      "total_invested": "Total investi",
+      "points_balance": "Solde de points",
+      "projects_supported": "Projets soutenus",
+      "orders_completed": "Commandes"
+    },
+    "recent_activity": "Activité récente",
+    "quick_actions": {
+      "title": "Actions rapides",
+      "browse_projects": "Parcourir les projets",
+      "browse_products": "Parcourir la boutique",
+      "view_investments": "Voir mes investissements"
+    }
+  },
+  "profile": {
+    "title": "Mon profil",
+    "personal_info": "Informations personnelles",
+    "email": "Email",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "city": "Ville",
+    "postal_code": "Code postal",
+    "country": "Pays",
+    "save_changes": "Enregistrer les modifications",
+    "change_password": "Changer le mot de passe",
+    "current_password": "Mot de passe actuel",
+    "new_password": "Nouveau mot de passe",
+    "confirm_new_password": "Confirmer le nouveau mot de passe"
+  },
+  "investments": {
+    "title": "Mes investissements",
+    "total": "Total investi",
+    "history": "Historique",
+    "empty": "Vous n'avez pas encore d'investissement",
+    "start_investing": "Commencer à investir",
+    "status": {
+      "active": "Actif",
+      "completed": "Terminé",
+      "pending": "En cours"
+    }
+  },
+  "orders": {
+    "title": "Mes commandes",
+    "history": "Historique des commandes",
+    "empty": "Vous n'avez pas encore de commande",
+    "browse_products": "Parcourir la boutique",
+    "status": {
+      "pending": "En attente",
+      "processing": "En préparation",
+      "shipped": "Expédié",
+      "delivered": "Livré",
+      "cancelled": "Annulé"
+    },
+    "details": "Détails de la commande"
+  },
+  "points": {
+    "title": "Mes points",
+    "balance": "Solde actuel",
+    "history": "Historique",
+    "earned": "Gagnés",
+    "spent": "Dépensés",
+    "expiring_soon": "Points expirant bientôt",
+    "empty": "Aucune transaction de points"
+  },
+  "partner": {
+    "products": {
+      "title": "Produits"
+    },
+    "projects": {
+      "title": "Projets"
+    },
+    "profile": {
+      "title": "Profil"
+    },
+    "orders": {
+      "title": "Commandes"
+    }
+  },
+  "producers": {
+    "title": "Nos Producteurs",
+    "subtitle": "Découvrez les producteurs engagés qui changent le monde.",
+    "intro_title": "Nos Producteurs",
+    "intro_description": "Rencontrez les hommes et les femmes qui cultivent l'avenir avec passion et respect de la terre.",
+    "discover": "Découvrir",
+    "no_producers": "Aucun producteur trouvé",
+    "no_producers_desc": "Revenez bientôt pour découvrir nos partenaires.",
+    "back_to_producers": "Tous les producteurs",
+    "about": "À propos",
+    "gallery": "Galerie",
+    "certifications": "Certifications",
+    "contact": "Contacter",
+    "visit_website": "Visiter le site web",
+    "key_figures": "Chiffres clés",
+    "annual_production": "Production annuelle",
+    "surface": "Surface",
+    "employees": "Employés",
+    "since": "Depuis"
+  }
+}

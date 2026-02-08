@@ -1,0 +1,49 @@
+'use client';
+
+import { type FC } from 'react';
+import { useTranslations } from 'next-intl';
+
+import { useTranslationContext } from '../../contexts/translation-context';
+import { useFieldContext } from '@/app/[locale]/admin/(dashboard)/components/form/create-admin-form';
+import { TextField } from '@/app/[locale]/admin/(dashboard)/components/form/fields/text-field-context';
+import { TextAreaField } from '@/app/[locale]/admin/(dashboard)/components/form/fields/textarea-field-context';
+
+export const EssentialInfoSection: FC = () => {
+  const t = useTranslations();
+  const { currentLanguage } = useTranslationContext();
+  const field = useFieldContext();
+
+  const translationPath =
+    currentLanguage === 'fr' ? '' : `translations.${currentLanguage}.`;
+
+  return (
+    <section className="space-y-4">
+      <h2 className="text-lg font-semibold">
+        {t('admin.biodex.sections.essential_info')}
+      </h2>
+
+      <div className="space-y-4">
+        <TextField
+          name={`${translationPath}name`}
+          label={t('admin.biodex.fields.name')}
+          placeholder={t('admin.biodex.placeholders.name')}
+          required
+        />
+
+        <TextField
+          name={`${translationPath}scientific_name`}
+          label={t('admin.biodex.fields.scientific_name')}
+          placeholder={t('admin.biodex.placeholders.scientific_name')}
+        />
+
+        <TextAreaField
+          name={`${translationPath}description`}
+          label={t('admin.biodex.fields.description')}
+          placeholder={t('admin.biodex.placeholders.description')}
+          rows={4}
+          required
+        />
+      </div>
+    </section>
+  );
+};

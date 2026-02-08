@@ -1,37 +1,39 @@
 'use client'
 
-import {  User, Calendar, DollarSign } from 'lucide-react'
-
-import { Badge } from '@/app/[locale]/admin/(dashboard)/components/badge'
-import { AdminListItem } from '@/app/[locale]/admin/(dashboard)/components/ui/admin-list-item'
-import { formatDate, formatCurrency } from '@/app/[locale]/admin/(dashboard)/components/ui/format-utils'
-
+import { formatCurrency, formatDate } from '@make-the-change/core/shared/utils'
+import { Badge } from '@make-the-change/core/ui'
+import { Calendar, DollarSign, User } from 'lucide-react'
 import type { FC, ReactNode } from 'react'
+import { AdminListItem } from '@/app/[locale]/admin/(dashboard)/components/ui/admin-list-item'
+import type { Order } from '@/lib/types/order'
 
-type Order =  {
-  id: string
-  customerName: string
-  status: string
-  createdAt: string
-  total: number | null
-}
-
-type OrderListItemProps =  {
+type OrderListItemProps = {
   order: Order
   actions?: ReactNode
 }
 
-const getStatusColor = (status: string) => {
+const getStatusColor = (status: string | null) => {
   switch (status) {
-    case 'pending': { return 'yellow'
+    case 'pending': {
+      return 'yellow'
     }
-    case 'shipped': { return 'blue'
+    case 'paid': {
+      return 'blue'
     }
-    case 'delivered': { return 'green'
+    case 'processing': {
+      return 'yellow'
     }
-    case 'cancelled': { return 'red'
+    case 'in_transit': {
+      return 'blue'
     }
-    default: { return 'gray'
+    case 'completed': {
+      return 'green'
+    }
+    case 'closed': {
+      return 'gray'
+    }
+    default: {
+      return 'gray'
     }
   }
 }
@@ -46,9 +48,7 @@ export const OrderListItem: FC<OrderListItemProps> = ({ order, actions }) => {
         <h3 className="text-base font-medium text-foreground truncate">
           Commande #{order.id.slice(0, 8)}
         </h3>
-        <Badge color={getStatusColor(order.status)}>
-          {order.status}
-        </Badge>
+        <Badge color={getStatusColor(order.status)}>{order.status}</Badge>
       </div>
     </div>
   )

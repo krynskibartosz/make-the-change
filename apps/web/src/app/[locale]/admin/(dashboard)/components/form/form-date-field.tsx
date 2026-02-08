@@ -1,11 +1,9 @@
-"use client"
+'use client'
 
-import { forwardRef, type ForwardedRef } from 'react'
-
-import { Input } from '@/app/[locale]/admin/(dashboard)/components/ui/input'
-import { cn } from '@/lib/utils'
-
-import { useFieldContext } from './form-context'
+import { Input } from '@make-the-change/core/ui'
+import { type ForwardedRef, forwardRef } from 'react'
+import { useController, useFormContext } from 'react-hook-form'
+import { cn } from '@make-the-change/core/shared/utils'
 
 // Helper function extracted to outer scope for better performance
 const toErrorMessage = (u: unknown): string => {
@@ -22,25 +20,29 @@ const toErrorMessage = (u: unknown): string => {
 }
 
 export type FormDateFieldProps = {
+  name: string
   label?: string
   placeholder?: string
   required?: boolean
   className?: string
   min?: string
   max?: string
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur' | 'size' | 'type' | 'min' | 'max'>
+} & Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'onBlur' | 'size' | 'type' | 'min' | 'max'
+>
 
 const FormDateFieldComponent = (
-  { label, placeholder, required, className, min, max, ...props }: FormDateFieldProps,
-  ref: ForwardedRef<HTMLInputElement>
+  { name, label, placeholder, required, className, min, max, ...props }: FormDateFieldProps,
+  ref: ForwardedRef<HTMLInputElement>,
 ) => {
-  const field = useFieldContext<string | undefined>()
-  const value = field.state.value ?? ''
-  const errors = ((field.state.meta.errors as unknown[]) ?? []).map((error) => toErrorMessage(error)).filter(Boolean)
-  const hasError = errors.length > 0
+  const { control } = useFormContext()
+  const { field, fieldState } = useController({ control, name })
+  const value = typeof field.value === 'string' ? field.value : ''
+  const errorMessage = fieldState.error ? toErrorMessage(fieldState.error) : undefined
 
   const handleChange = (s: string) => {
-    field.handleChange(s || undefined)
+    field.onChange(s || undefined)
   }
 
   return (
@@ -52,17 +54,12 @@ const FormDateFieldComponent = (
         placeholder={placeholder}
         type="date"
         value={value}
-        className={cn(
-          hasError && 'border-red-500 focus:border-red-500',
-          className
-        )}
-        onBlur={field.handleBlur}
+        className={cn(errorMessage && 'border-destructive focus:border-destructive', className)}
+        onBlur={field.onBlur}
         onChange={(e) => handleChange(e.target.value)}
         {...props}
       />
-      {hasError && errors[0] && (
-        <p className="text-sm text-red-500">{errors[0]}</p>
-      )}
+      {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
     </div>
   )
 }

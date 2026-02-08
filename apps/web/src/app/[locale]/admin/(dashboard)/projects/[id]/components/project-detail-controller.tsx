@@ -1,133 +1,187 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { type FC } from 'react';
-
-import { ProjectBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-breadcrumbs';
-import { ProjectCompactHeader } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-compact-header';
-import { ProjectDetailLayout } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-detail-layout';
-import { ProjectDetailsEditor } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-details-editor';
-import type { ProjectFormData } from '@/lib/validators/project';
+import { type FC, useCallback, useMemo } from 'react'
+import { ProjectBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-breadcrumbs'
+import { ProjectCompactHeader } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-compact-header'
+import { ProductDetailLayout } from '@/app/[locale]/admin/(dashboard)/products/[id]/components/product-detail-layout'
+import { ProjectDetailsEditor } from '@/app/[locale]/admin/(dashboard)/projects/[id]/components/project-details-editor'
+import { useOptimisticAutoSave } from '@make-the-change/core/shared/hooks'
+import { toast } from '@/hooks/use-toast'
+import type { SaveStatus } from '@/app/[locale]/admin/(dashboard)/products/[id]/save-status'
+import { updateProjectAction } from '@/app/[locale]/admin/(dashboard)/projects/actions'
+import { LanguageSwitcher } from '@/components/admin/translation/language-switcher'
+import {
+  type TranslationData,
+  TranslationProvider,
+} from '@/components/admin/translation/translation-context'
+import type { ProjectFormData } from '@/lib/validators/project'
 
 type ProjectDetailControllerProps = {
-  projectData: ProjectFormData & { id: string };
-  onSave: (patch: Partial<ProjectFormData>) => Promise<void>;
-  onImageUpload?: (file: File) => Promise<void>;
-  onImageRemove?: (url: string) => Promise<void>;
-};
+  projectData: ProjectFormData & { id: string }
+}
 
 export const ProjectDetailController: FC<ProjectDetailControllerProps> = ({
   projectData,
-  onSave,
-  onImageUpload,
-  onImageRemove
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [pendingData, setPendingData] = useState<Partial<ProjectFormData>>({});
-
-  const handleEditToggle = (editing: boolean) => {
-    if (!editing) {
-      setPendingData({});
-    }
-    setIsEditing(editing);
-  };
-
-  const handleDataChange = (data: Partial<ProjectFormData>) => {
-    setPendingData(prev => ({ ...prev, ...data }));
-  };
-
-  const handleSave = async () => {
-    setIsSaving(true);
-
-    try {
-      const patch: Partial<ProjectFormData> = {};
-      for (const key of [
-        'name','slug','type','target_budget','status','featured','producer_id','description','long_description','images'
-      ] as const) {
-        if (key in pendingData && (projectData as any)[key] !== (pendingData as any)[key]) {
-          (patch as any)[key] = (pendingData as any)[key];
-        }
+  // Fonction de sauvegarde adaptée pour le hook
+  const handleSave = useCallback(
+    async (data: Partial<ProjectFormData>) => {
+      // Nettoyage des données avant envoi si nécessaire
+      // Ici on envoie directement le patch
+      const result = await updateProjectAction(projectData.id, data)
+      if (!result.success) {
+        throw new Error(result.error || 'Erreur lors de la sauvegarde')
       }
+    },
+    [projectData.id],
+  )
 
-      if (Object.keys(patch).length > 0) {
-        await onSave(patch);
+  // Utilisation du hook optimisé
+  const { status, lastSavedAt, errorMessage, saveNow, update, pendingData } = useOptimisticAutoSave(
+    {
+      saveFn: handleSave,
+      debounceMs: 2000, // Un peu plus long pour éviter trop d'appels
+      onToast: toast,
+    },
+  )
+
+  // Données actuelles = données originales + modifications en attente
+  const currentData = useMemo(
+    () => ({
+      ...projectData,
+      ...pendingData,
+    }),
+    [projectData, pendingData],
+  )
+
+  // Gestion des changements de champ
+  const handleFieldChange = useCallback(
+    (field: string, value: unknown) => {
+      const typedField = field as keyof ProjectFormData
+
+      update({ [typedField]: value })
+    },
+    [update],
+  )
+
+  // Indicateur de statut mappé vers le format attendu par l'UI
+  const saveStatus = useMemo((): SaveStatus => {
+    if (status === 'saving') return { type: 'saving', message: 'Sauvegarde...' }
+    if (status === 'error')
+      return {
+        type: 'error',
+        message: errorMessage || 'Erreur inconnue',
+        retryable: true,
       }
-
-      setIsEditing(false);
-      setPendingData({});
-    } catch (error) {
-      console.error('Error saving project:', error);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleImageUpload = async (file: File) => {
-    if (onImageUpload) {
-      try {
-        await onImageUpload(file);
-      } catch (error) {
-        console.error('Error uploading image:', error);
+    if (status === 'pending') {
+      const count = Object.keys(pendingData).length
+      return {
+        type: 'modified',
+        message: `${count} modification(s) en attente`,
+        count,
+        fields: Object.keys(pendingData),
       }
     }
-  };
-
-  const handleImageRemove = async (url: string) => {
-    if (onImageRemove) {
-      try {
-        await onImageRemove(url);
-      } catch (error) {
-        console.error('Error removing image:', error);
+    if (status === 'saved' && lastSavedAt) {
+      const timeSince = Math.floor((Date.now() - lastSavedAt.getTime()) / 1000)
+      return {
+        type: 'saved',
+        message: `Sauvegardé il y a ${timeSince}s`,
+        timestamp: lastSavedAt,
       }
-    } else {
-      const currentImages = displayData.images || [];
-      const newImages = currentImages.filter((img: string) => img !== url);
-      handleDataChange({ images: newImages });
     }
-  };
+    return {
+      type: 'pristine',
+      message: 'Tous les changements sont sauvegardés',
+    }
+  }, [status, errorMessage, pendingData, lastSavedAt])
 
-  const displayData = { ...projectData, ...pendingData };
+  // Fonction pour gérer le changement de statut (header)
+  const handleStatusChange = useCallback(
+    async (newStatus: 'active' | 'draft' | 'funded' | 'completed' | 'archived') => {
+      update({ status: newStatus })
+      // On force la sauvegarde pour le statut car c'est une action importante
+      await saveNow()
+    },
+    [update, saveNow],
+  )
+
+  // Préparation des données de traduction initiales
+  const initialTranslations = useMemo(() => {
+    const data: TranslationData = {}
+    if (projectData.name_i18n) data.name = projectData.name_i18n as Record<string, string>
+    if (projectData.description_i18n)
+      data.description = projectData.description_i18n as Record<string, string>
+    if (projectData.long_description_i18n)
+      data.long_description = projectData.long_description_i18n as Record<string, string>
+    if (projectData.seo_title_i18n)
+      data.seo_title = projectData.seo_title_i18n as Record<string, string>
+    if (projectData.seo_description_i18n)
+      data.seo_description = projectData.seo_description_i18n as Record<string, string>
+    return data
+  }, [projectData])
+
+  // Gestion des changements de traduction
+  const handleTranslationChange = useCallback(
+    (translations: TranslationData) => {
+      const patch: Partial<ProjectFormData> = {}
+
+      if (translations.name) patch.name_i18n = translations.name
+      if (translations.description) patch.description_i18n = translations.description
+      if (translations.long_description)
+        patch.long_description_i18n = translations.long_description
+      if (translations.seo_title) patch.seo_title_i18n = translations.seo_title
+      if (translations.seo_description)
+        patch.seo_description_i18n = translations.seo_description
+
+      update(patch)
+    },
+    [update],
+  )
 
   return (
-    <ProjectDetailLayout
-      toolbar={<div />}
-      content={
-        <ProjectDetailsEditor
-          isEditing={isEditing}
-          isSaving={isSaving}
-          projectData={displayData}
-          onImageRemove={handleImageRemove}
-          onImageUpload={handleImageUpload}
-          onSave={async (data) => {
-            const patch: Partial<ProjectFormData> = {};
-            for (const key of [
-              'name','slug','type','target_budget','status','featured','producer_id','description','long_description','images'
-            ] as const) {
-              if ((data as any)[key] !== undefined && (projectData as any)[key] !== (data as any)[key]) {
-                (patch as any)[key] = (data as any)[key];
-              }
-            }
-
-            if (Object.keys(patch).length > 0) {
-              await onSave(patch);
-            }
-            setIsEditing(false);
-          }}
-        />
-      }
-      header={
-        <>
-          <ProjectBreadcrumbs projectData={projectData} />
-          <ProjectCompactHeader
-            isEditing={isEditing}
-            isSaving={isSaving}
-            projectData={displayData}
-            onEditToggle={handleEditToggle}
-            onSave={handleSave}
+    <TranslationProvider
+      initialTranslations={initialTranslations}
+      translatableFields={[
+        'name',
+        'description',
+        'long_description',
+        'seo_title',
+        'seo_description',
+      ]}
+      defaultValues={{
+        name: projectData.name,
+        description: projectData.description,
+        long_description: projectData.long_description,
+        seo_title: projectData.seo_title,
+        seo_description: projectData.seo_description,
+      }}
+      onTranslationChange={handleTranslationChange}
+    >
+      <ProductDetailLayout
+        toolbar={<LanguageSwitcher />}
+        content={
+          <ProjectDetailsEditor
+            pendingChanges={pendingData}
+            projectData={currentData}
+            saveStatus={saveStatus}
+            onFieldChange={handleFieldChange}
+            onFieldBlur={saveNow}
+            onSaveAll={saveNow}
           />
-        </>
-      }
-    />
-  );
-};
+        }
+        header={
+          <>
+            <ProjectBreadcrumbs projectData={projectData} />
+            <ProjectCompactHeader
+              projectData={currentData}
+              saveStatus={saveStatus}
+              onSaveAll={saveNow}
+              onStatusChange={handleStatusChange}
+            />
+          </>
+        }
+      />
+    </TranslationProvider>
+  )
+}

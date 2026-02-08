@@ -1,4 +1,6 @@
 # 📈 Tendances UI/UX 2025 - Analyse Stratégique
+
+> Historique 2024/2025 — à revalider en 2026.
 **Application Biodiversité & Écologie Durable - Make the CHANGE**
 
 **📍 DOCUMENT TYPE**: Recherche UX Stratégique | **🗓️ DATE**: 27 Août 2025 | **⭐️ PRIORITÉ**: Haute

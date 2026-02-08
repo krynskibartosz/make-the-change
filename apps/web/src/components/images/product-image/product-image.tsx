@@ -1,49 +1,47 @@
-'use client';
+'use client'
 
-import { Package, Images } from 'lucide-react';
-import Image from 'next/image';
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn';
-
-import type { FC } from 'react';
+import { cn } from '@make-the-change/core/shared/utils'
+import { Images, Package } from 'lucide-react'
+import Image from 'next/image'
+import type { FC } from 'react'
 
 // BlurHash supprimé: on privilégie blurDataURL (DB) comme placeholder Next/Image
 
 type ProductImageProps = {
-  src?: string;
-  alt: string;
-  size: 'xs' | 'sm' | 'md' | 'lg';
-  className?: string;
-  priority?: boolean;
-  fallbackType?: 'placeholder' | 'initials';
-  initials?: string;
-  images?: string[];
+  src?: string
+  alt: string
+  size: 'xs' | 'sm' | 'md' | 'lg'
+  className?: string
+  priority?: boolean
+  fallbackType?: 'placeholder' | 'initials'
+  initials?: string
+  images?: string[]
   // Nouveau: blur direct depuis le serveur (zéro calcul client)
-  blurDataURL?: string;
-  blurHash?: string;
-  onImageClick?: () => void;
-};
+  blurDataURL?: string
+  blurHash?: string
+  onImageClick?: () => void
+}
 
 const sizeMap = {
   xs: 'w-7 h-7 md:w-8 md:h-8',
   sm: 'w-8 h-8',
   md: 'w-24 h-24',
   lg: 'w-32 h-32',
-} as const;
+} as const
 
 const PlaceholderSVG: FC<{ className?: string }> = ({ className }) => {
   return (
     <div
       className={cn(
         'bg-gradient-to-br from-muted/60 to-muted/40 flex items-center justify-center rounded-lg',
-        'border border-border/20',
-        className
+        'border border-[hsl(var(--border)/0.2)]',
+        className,
       )}
     >
       <Package className="w-1/2 h-1/2 text-muted-foreground/40" />
     </div>
-  );
-};
+  )
+}
 
 const InitialsFallback: FC<{ initials: string; className?: string }> = ({
   initials,
@@ -53,21 +51,18 @@ const InitialsFallback: FC<{ initials: string; className?: string }> = ({
     <div
       className={cn(
         'bg-primary/10 flex items-center justify-center rounded-lg text-xs font-medium text-primary',
-        className
+        className,
       )}
     >
       {initials}
     </div>
-  );
-};
+  )
+}
 
-const ImageCountBadge: FC<{ count: number; onClick?: () => void }> = ({
-  count,
-  onClick,
-}) => {
-  if (count <= 1) return null;
+const ImageCountBadge: FC<{ count: number; onClick?: () => void }> = ({ count, onClick }) => {
+  if (count <= 1) return null
 
-  const displayCount = count > 9 ? '9+' : count.toString();
+  const displayCount = count > 9 ? '9+' : count.toString()
 
   return (
     <button
@@ -81,19 +76,19 @@ const ImageCountBadge: FC<{ count: number; onClick?: () => void }> = ({
         'transition-all duration-200',
         'hover:bg-black/80 hover:scale-110',
         'focus:outline-none focus:ring-2 focus:ring-primary/50',
-        'shadow-lg border border-white/20'
+        'shadow-lg border border-white/20',
       )}
       onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onClick?.();
+        e.preventDefault()
+        e.stopPropagation()
+        onClick?.()
       }}
     >
       <Images size={10} />
       <span>{displayCount}</span>
     </button>
-  );
-};
+  )
+}
 
 export const ProductImage: FC<ProductImageProps> = ({
   src,
@@ -107,19 +102,13 @@ export const ProductImage: FC<ProductImageProps> = ({
   blurDataURL,
   onImageClick,
 }) => {
-  const sizeClass = sizeMap[size];
-  const isValidImage = src && src.trim() !== '' && src.startsWith('http');
-  const imageCount = images?.length || 0;
+  const sizeClass = sizeMap[size]
+  const isValidImage = src && src.trim() !== '' && src.startsWith('http')
+  const imageCount = images?.length || 0
 
   if (isValidImage) {
     return (
-      <div
-        className={cn(
-          'relative overflow-hidden rounded-lg bg-muted/20',
-          sizeClass,
-          className
-        )}
-      >
+      <div className={cn('relative overflow-hidden rounded-lg bg-muted/20', sizeClass, className)}>
         {/* Effet pile de photos - ombre légère derrière */}
         {imageCount > 1 && (
           <>
@@ -139,45 +128,36 @@ export const ProductImage: FC<ProductImageProps> = ({
           src={src}
           unoptimized={src.includes('unsplash') || src.includes('supabase')}
           onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
+            const target = e.target as HTMLImageElement
+            target.style.display = 'none'
           }}
         />
 
         {/* Badge compteur d'images */}
         <ImageCountBadge count={imageCount} onClick={onImageClick} />
       </div>
-    );
+    )
   }
 
   if (fallbackType === 'initials' && initials) {
-    return (
-      <InitialsFallback
-        className={cn(sizeClass, className)}
-        initials={initials}
-      />
-    );
+    return <InitialsFallback className={cn(sizeClass, className)} initials={initials} />
   }
 
-  return <PlaceholderSVG className={cn(sizeClass, className)} />;
-};
+  return <PlaceholderSVG className={cn(sizeClass, className)} />
+}
 
 export const useMainProductImage = (images?: string[]): string | undefined => {
   if (!images || !Array.isArray(images) || images.length === 0) {
-    return undefined;
+    return undefined
   }
 
-  return images.find(
-    (img) => img && img.trim() !== '' && img.startsWith('http')
-  );
-};
+  return images.find((img) => img && img.trim() !== '' && img.startsWith('http'))
+}
 
 export const getMainProductImage = (images?: string[]): string | undefined => {
   if (!images || !Array.isArray(images) || images.length === 0) {
-    return undefined;
+    return undefined
   }
 
-  return images.find(
-    (img) => img && img.trim() !== '' && img.startsWith('http')
-  );
-};
+  return images.find((img) => img && img.trim() !== '' && img.startsWith('http'))
+}

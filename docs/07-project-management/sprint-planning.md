@@ -31,7 +31,7 @@
 - **Semaine 5-6** : TDD Projects CRUD (validation, status transitions, funding calculations) - Coverage 95%+
 - **Semaine 7-8** : TDD Users management (KYC, points, permissions) + E2E critical paths - Coverage 90%+
 - **Parallèle** : Négociation HABEEBEE + 2 producteurs backup, photos produits
-- **🧪 Référence** : Voir [../06-development/tdd-strategy.md](../06-development/tdd-strategy.md) pour détails TDD
+- **🧪 Référence** : Stratégie de tests détaillée *(à documenter)*
 
 **NOUVEAU - Marketing Bootstrap (Parallèle Semaines 1-8) :**
 - **Semaines 1-2** : Landing pages partenaires (makethechange.com/habeebee, /ilanga) + UTM tracking
@@ -78,7 +78,7 @@
 ### **Mois 5 : Tests, Optimisation & Launch (Semaines 17-20)**
 
 **Semaines 17-18 : Quality Assurance (Coverage Focus)**
-- **Coverage Verification** : Critical paths 95%+, overall 85%+ (voir [../06-development/tdd-strategy.md](../06-development/tdd-strategy.md))
+- **Coverage Verification** : Critical paths 95%+, overall 85%+ (stratégie de tests *(à documenter)*)
 - **E2E Complete Suite** : All critical user journeys automated (investment flow, subscription flow, points redemption)
 - **Performance & Security** : Optimization, penetration testing
 - **🧪 Tests E2E Critiques** : 

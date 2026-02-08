@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@make-the-change/core/css";
+@import "@make-the-change/core/css/themes/client";
+@import "../styles/theme-definitions.css";
+
+@source "../**/*.{ts,tsx}";

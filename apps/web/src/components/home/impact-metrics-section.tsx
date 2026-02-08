@@ -1,10 +1,8 @@
 'use client'
 
+import { Card, CardContent } from '@make-the-change/core/ui'
 import { motion } from 'framer-motion'
-import { TreePine, Flower, Zap, Users } from 'lucide-react'
-
-import { Card, CardContent } from '@/app/[locale]/admin/(dashboard)/components/ui/card'
-
+import { Flower, TreePine, Users, Zap } from 'lucide-react'
 import type { FC } from 'react'
 
 type ImpactMetrics = {
@@ -23,7 +21,7 @@ export const ImpactMetricsSection: FC<ImpactMetricsSectionProps> = ({ metrics })
     treesPlanted: 1250,
     beehivesSupported: 45,
     co2Offset: 1200,
-    localJobs: 320
+    localJobs: 320,
   }
 
   const data = metrics || defaultMetrics
@@ -31,38 +29,38 @@ export const ImpactMetricsSection: FC<ImpactMetricsSectionProps> = ({ metrics })
   const impactData = [
     {
       icon: TreePine,
-      label: "Arbres Plantés",
+      label: 'Arbres Plantés',
       value: data.treesPlanted.toLocaleString(),
-      gradient: "from-green-500 to-emerald-600",
-      bg: "bg-green-500/10"
+      gradient: 'from-green-500 to-emerald-600',
+      bg: 'bg-green-500/10',
     },
     {
       icon: Flower,
-      label: "Ruches Soutenues",
+      label: 'Ruches Soutenues',
       value: data.beehivesSupported.toString(),
-      gradient: "from-yellow-500 to-orange-500",
-      bg: "bg-yellow-500/10"
+      gradient: 'from-yellow-500 to-orange-500',
+      bg: 'bg-yellow-500/10',
     },
     {
       icon: Zap,
-      label: "CO₂ Compensé (kg)",
+      label: 'CO₂ Compensé (kg)',
       value: `${(data.co2Offset / 1000).toFixed(1)}t`,
-      gradient: "from-blue-500 to-cyan-500",
-      bg: "bg-blue-500/10"
+      gradient: 'from-blue-500 to-cyan-500',
+      bg: 'bg-blue-500/10',
     },
     {
       icon: Users,
-      label: "Emplois Locaux Créés",
+      label: 'Emplois Locaux Créés',
       value: data.localJobs.toString(),
-      gradient: "from-purple-500 to-pink-500",
-      bg: "bg-purple-500/10"
-    }
+      gradient: 'from-purple-500 to-pink-500',
+      bg: 'bg-purple-500/10',
+    },
   ]
 
   return (
     <section className="container mx-auto px-4 py-16 bg-gradient-to-br from-green-50/50 to-blue-50/50 dark:from-green-950/20 dark:to-blue-950/20">
       <div className="text-center mb-12">
-        <motion.h2 
+        <motion.h2
           animate={{ opacity: 1, y: 0 }}
           className="text-3xl md:text-4xl font-bold mb-4"
           initial={{ opacity: 0, y: 20 }}
@@ -70,13 +68,14 @@ export const ImpactMetricsSection: FC<ImpactMetricsSectionProps> = ({ metrics })
         >
           Notre Impact Environnemental
         </motion.h2>
-        <motion.p 
+        <motion.p
           animate={{ opacity: 1, y: 0 }}
           className="text-lg text-muted-foreground max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Ensemble, nous créons un impact positif mesurable sur l&apos;environnement et les communautés locales
+          Ensemble, nous créons un impact positif mesurable sur l&apos;environnement et les
+          communautés locales
         </motion.p>
       </div>
 
@@ -88,14 +87,18 @@ export const ImpactMetricsSection: FC<ImpactMetricsSectionProps> = ({ metrics })
               key={impact.label}
               animate={{ opacity: 1, scale: 1 }}
               initial={{ opacity: 0, scale: 0.8 }}
-              transition={{ delay: index * 0.1 + 0.4, type: "spring", stiffness: 100 }}
+              transition={{ delay: index * 0.1 + 0.4, type: 'spring', stiffness: 100 }}
             >
-              <Card className="text-center hover:shadow-lg transition-all duration-300 group border-border/50 bg-background/60 backdrop-blur-sm">
+              <Card className="text-center hover:shadow-lg transition-all duration-300 group border-[hsl(var(--border)/0.5)] bg-background/60 backdrop-blur-sm">
                 <CardContent className="p-6">
-                  <div className={`w-16 h-16 ${impact.bg} rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                  <div
+                    className={`w-16 h-16 ${impact.bg} rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform`}
+                  >
                     <Icon className={`w-8 h-8 bg-gradient-to-r ${impact.gradient} bg-clip-text`} />
                   </div>
-                  <div className={`text-2xl md:text-3xl font-bold bg-gradient-to-r ${impact.gradient} bg-clip-text text-transparent mb-2`}>
+                  <div
+                    className={`text-2xl md:text-3xl font-bold bg-gradient-to-r ${impact.gradient} bg-clip-text text-transparent mb-2`}
+                  >
                     {impact.value}
                   </div>
                   <div className="text-xs md:text-sm text-muted-foreground font-medium leading-tight">
@@ -108,7 +111,7 @@ export const ImpactMetricsSection: FC<ImpactMetricsSectionProps> = ({ metrics })
         })}
       </div>
 
-      <motion.div 
+      <motion.div
         animate={{ opacity: 1, y: 0 }}
         className="text-center mt-12"
         initial={{ opacity: 0, y: 20 }}

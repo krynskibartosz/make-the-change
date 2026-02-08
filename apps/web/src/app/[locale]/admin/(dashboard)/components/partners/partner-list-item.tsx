@@ -1,21 +1,13 @@
 'use client'
 
+import { getInitials } from '@make-the-change/core/shared/utils'
+import { Badge } from '@make-the-change/core/ui'
 import { Mail } from 'lucide-react'
-import { type FC, type ReactNode } from 'react'
-
-import { Badge } from '@/app/[locale]/admin/(dashboard)/components/badge'
+import type { FC, ReactNode } from 'react'
 import { AdminListItem } from '@/app/[locale]/admin/(dashboard)/components/ui/admin-list-item'
-import { getInitials } from '@/app/[locale]/admin/(dashboard)/components/ui/format-utils'
+import type { Partner } from '@/lib/types/partner'
 
-
-type Partner =  {
-  id: string
-  name: string
-  status: string
-  contact_email: string
-}
-
-type PartnerListItemProps =  {
+type PartnerListItemProps = {
   partner: Partner
   actions?: ReactNode
 }
@@ -27,13 +19,18 @@ export const PartnerListItem: FC<PartnerListItemProps> = ({ partner, actions }) 
         {getInitials(partner.name)}
       </div>
       <div className="flex items-center gap-2 flex-1 min-w-0">
-        <h3 className="text-base font-medium text-foreground truncate">
-          {partner.name}
-        </h3>
-        <Badge color={
-          partner.status === 'active' ? 'green' :
-          (partner.status === 'pending' ? 'yellow' : 'gray')
-        }>
+        <h3 className="text-base font-medium text-foreground truncate">{partner.name}</h3>
+        <Badge
+          color={
+            partner.status === 'active'
+              ? 'green'
+              : partner.status === 'pending'
+                ? 'yellow'
+                : partner.status === 'suspended'
+                  ? 'orange'
+                  : 'gray'
+          }
+        >
           {partner.status}
         </Badge>
       </div>

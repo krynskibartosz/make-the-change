@@ -1,5 +1,7 @@
 # Conformité Légale & Réglementaire
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **Framework complet de conformité pour Make the CHANGE basé sur les décisions expertes finalisées**
 
 ---

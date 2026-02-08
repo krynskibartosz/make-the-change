@@ -1,0 +1,590 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "retry": "Retry",
+    "preview": "Preview",
+    "select_placeholder": "Select...",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "products": "Products"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "admin": "Administration",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "projects": "Projects",
+    "subscriptions": "Subscriptions",
+    "users": "Users",
+    "settings": "Settings",
+    "logout": "Logout",
+    "about": "About",
+    "how_it_works": "How it works",
+    "login": "Login",
+    "register": "Sign up",
+    "profile": "Profile",
+    "my_investments": "My investments",
+    "my_orders": "My orders",
+    "my_points": "My points"
+  },
+  "admin": {
+    "common": {
+      "retry": "Retry",
+      "preview": "Preview",
+      "select_placeholder": "Select...",
+      "breadcrumbs": {
+        "dashboard": "Dashboard",
+        "products": "Products"
+      }
+    },
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "welcome": "Welcome to your administration area",
+      "statistics": "Statistics"
+    },
+    "cover": {
+      "add_cover": "Click to add a cover",
+      "edit_cover": "Edit cover",
+      "remove": "Remove",
+      "add_avatar": "Add avatar",
+      "edit_avatar": "Edit avatar"
+    },
+    "crop": {
+      "title_avatar": "Adjust avatar",
+      "title_cover": "Adjust cover",
+      "title_gallery": "Adjust image",
+      "zoom": "Zoom",
+      "rotation": "Rotation",
+      "reset": "Reset",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "products": {
+      "title": "Product Management",
+      "new_product": "New Product",
+      "product_list": "Product List",
+      "name": "Product Name",
+      "price": "Price",
+      "actions": "Actions",
+      "search_placeholder": "Search products...",
+      "filters": {
+        "all_partners": "All partners",
+        "all_categories": "All categories",
+        "sort_by": "Sort by",
+        "tags_placeholder": "Tags...",
+        "active_only": "Active only",
+        "clear_filters": "Clear filters",
+        "clear_all_filters": "Clear all filters",
+        "reset": "Reset"
+      },
+      "sort": {
+        "newest": "Most recent",
+        "oldest": "Oldest",
+        "name_asc": "Name (A-Z)",
+        "name_desc": "Name (Z-A)",
+        "price_asc": "Price ascending",
+        "price_desc": "Price descending",
+        "featured": "Featured first"
+      },
+      "stock": {
+        "increase": "Increase stock",
+        "decrease": "Decrease stock",
+        "label": "stock",
+        "points_label": "pts"
+      },
+      "visibility": {
+        "hide": "Hide product",
+        "show": "Show product",
+        "visible": "Visible",
+        "hidden": "Hidden"
+      },
+      "filters_tooltip": {
+        "category": "Filter by category: {name}",
+        "subcategory": "Filter by subcategory: {name}",
+        "producer": "Filter by producer: {name}",
+        "tag": "Filter by tag: {tag}",
+        "featured": "Filter by featured products"
+      },
+      "other_tags": "{count} others",
+      "filter_modal": {
+        "partner": "Partner",
+        "category": "Category",
+        "tags": "Tags",
+        "active_only_description": "Show only active items"
+      },
+      "empty_state": {
+        "title": "No products",
+        "description": "No results for these filters."
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load products",
+        "retry": "Retry"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "changing": "Changing...",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "toggle_tooltip": "Click to {action} the product",
+        "modal": {
+          "title": "{action} product",
+          "description": {
+            "activate": "The product will be visible in the store and available for sale.",
+            "deactivate": "The product will be removed from the store and no longer available for sale."
+          },
+          "cancel": "Cancel"
+        }
+      },
+      "partner": {
+        "none": "No partner",
+        "loading": "Loading...",
+        "not_found": "Partner not found",
+        "view_tooltip": "View partner {name}"
+      },
+      "featured": {
+        "short": "Featured",
+        "full": "Featured"
+      },
+      "details": {
+        "show": "Show details",
+        "hide": "Hide details"
+      },
+      "edit": {
+        "sections": {
+          "general": "General Information",
+          "pricing": "Pricing & Configuration",
+          "images": "Images",
+          "advanced_settings": "Advanced Settings",
+          "status_visibility": "Status & Visibility",
+          "commercial": "Commercial Information",
+          "logistics": "Logistics & Shipping",
+          "categorization": "Categorization & Tags",
+          "lifecycle": "Lifecycle",
+          "seo": "SEO & Referencing",
+          "product_details": "Product Details"
+        },
+        "fields": {
+          "name": "Product Name",
+          "slug": "Slug",
+          "short_description": "Short Description",
+          "description": "Description",
+          "price_points": "Price in Points",
+          "stock_quantity": "Stock Quantity",
+          "min_tier": "Minimum Tier",
+          "fulfillment_method": "Fulfillment Method",
+          "is_active": "Product Active",
+          "featured": "Featured Product",
+          "is_hero_product": "Hero Product",
+          "price_eur_equivalent": "EUR Equivalent Price",
+          "weight_grams": "Weight (grams)",
+          "origin_country": "Origin Country",
+          "partner_source": "Partner Source",
+          "category_id": "Main Category",
+          "secondary_category_id": "Secondary Category",
+          "tags": "Tags",
+          "tags_description": "Separated by commas",
+          "launch_date": "Launch Date",
+          "discontinue_date": "Discontinue Date",
+          "seo_title": "SEO Title",
+          "seo_title_description": "Maximum 60 characters",
+          "seo_description": "SEO Description",
+          "seo_description_description": "Maximum 160 characters",
+          "allergens": "Allergens",
+          "allergens_description": "Separated by commas",
+          "certifications": "Certifications",
+          "certifications_description": "Organic, fair trade, etc. Separated by commas"
+        },
+        "placeholders": {
+          "name": "Product name",
+          "slug": "product-slug",
+          "short_description": "Short product description...",
+          "description": "Detailed product description...",
+          "min_tier": "Select a tier",
+          "fulfillment_method": "Select a method"
+        },
+        "blur_system": {
+          "title": "🚀 Scalable DB Blur System",
+          "images": "Images",
+          "with_blur": "With blur",
+          "missing": "Missing",
+          "coverage": "Coverage",
+          "loading": "Loading blur hashes from DB..."
+        },
+        "images": {
+          "add": "Add images"
+        },
+        "fulfillment": {
+          "dropship": "Dropshipping",
+          "stock": "In Stock",
+          "ondemand": "On Demand"
+        },
+        "tiers": {
+          "all": "All levels",
+          "explorateur": "Explorer",
+          "protecteur": "Protector",
+          "ambassadeur": "Ambassador"
+        },
+        "status": {
+          "active": "Active",
+          "active_description": "The product is visible to users",
+          "featured": "Featured",
+          "featured_description": "Priority display in lists",
+          "hero": "Hero Product",
+          "hero_description": "Special highlight on homepage"
+        },
+        "toast": {
+          "error": {
+            "title": "Save Error",
+            "description": "An unknown error occurred while saving."
+          },
+          "success": {
+            "title": "Product Updated",
+            "description": "Changes have been saved successfully."
+          }
+        },
+        "errors": {
+          "missing_id": {
+            "title": "Missing Product ID",
+            "description": "The product identifier is invalid or missing in the URL."
+          },
+          "not_found": {
+            "title": "Product Not Found",
+            "description": "The requested product does not exist or has been deleted."
+          },
+          "loading": {
+            "title": "Loading Error",
+            "description": "An error occurred while loading the product."
+          }
+        },
+        "loading": {
+          "title": "Loading Product",
+          "description": "Please wait while loading data..."
+        },
+        "subtitle": "Product",
+        "no_slug": "No slug"
+      }
+    },
+    "projects": {
+      "title": "Project Management",
+      "new_project": "New Project",
+      "project_list": "Project List",
+      "map_view": "Map View",
+      "name": "Project Name",
+      "location": "Location",
+      "status": "Status",
+      "investment_goal": "Investment Goal"
+    },
+    "partners": {
+      "title": "Partner Management",
+      "description": "Partner management"
+    },
+    "orders": {
+      "title": "Order Management",
+      "description": "Order tracking"
+    },
+    "sidebar": {
+      "dashboard": {
+        "label": "Dashboard",
+        "description": "Overview and statistics"
+      },
+      "management": {
+        "label": "Management"
+      },
+      "logout": "Logout",
+      "close_menu": "Close navigation menu",
+      "main_navigation": "Main navigation",
+      "mobile_navigation_menu": "Mobile navigation menu"
+    },
+    "subscriptions": {
+      "title": "Subscription Management",
+      "new_subscription": "New Subscription",
+      "subscription_list": "Subscription List",
+      "user": "User",
+      "plan": "Plan",
+      "status": "Status",
+      "start_date": "Start Date",
+      "end_date": "End Date"
+    }
+  },
+  "ui": {
+    "view_modes": {
+      "grid": "Grid",
+      "list": "List",
+      "map": "Map"
+    }
+  },
+  "metadata": {
+    "title": "Make the CHANGE - Ecological Platform",
+    "description": "Invest in ecological projects and discover sustainable products"
+  },
+  "footer": {
+    "tagline": "Invest in biodiversity, reap tangible rewards.",
+    "quick_links": "Quick links",
+    "projects": "Projects",
+    "products": "Products",
+    "about": "About",
+    "how_it_works": "How it works",
+    "support": "Support",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact_us": "Contact us",
+    "rights_reserved": "All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "title": "Invest in biodiversity",
+      "subtitle": "Support concrete ecological projects and exchange your points for sustainable products",
+      "cta_primary": "Discover projects",
+      "cta_secondary": "How it works"
+    },
+    "features": {
+      "title": "Why Make the CHANGE?",
+      "invest": {
+        "title": "Invest",
+        "description": "Support verified biodiversity projects and track your impact in real-time."
+      },
+      "earn": {
+        "title": "Earn points",
+        "description": "Each investment earns you bonus points based on your engagement level."
+      },
+      "redeem": {
+        "title": "Redeem",
+        "description": "Use your points to get sustainable products from our partners."
+      }
+    },
+    "featured_projects": "Featured projects",
+    "view_all_projects": "View all projects",
+    "featured_products": "Popular products",
+    "view_all_products": "View all products",
+    "cta": {
+      "title": "Ready to make a difference?",
+      "description": "Join our community of responsible investors and contribute to biodiversity preservation.",
+      "button": "Create my account"
+    }
+  },
+  "about": {
+    "title": "About Make the CHANGE",
+    "intro": "Make the CHANGE is an innovative platform that connects engaged citizens with concrete biodiversity projects.",
+    "mission": {
+      "title": "Our mission",
+      "description": "Democratize biodiversity investment by making it accessible, transparent and rewarding."
+    },
+    "values": {
+      "title": "Our values",
+      "transparency": {
+        "title": "Transparency",
+        "description": "Real-time tracking of your investment impact."
+      },
+      "impact": {
+        "title": "Impact",
+        "description": "Concrete projects with measurable results."
+      },
+      "community": {
+        "title": "Community",
+        "description": "An engaged community for biodiversity."
+      }
+    }
+  },
+  "how_it_works": {
+    "title": "How it works",
+    "subtitle": "Three simple steps to contribute to biodiversity",
+    "steps": {
+      "choose": {
+        "title": "1. Choose a project",
+        "description": "Browse our catalog of verified projects and select the ones you care about."
+      },
+      "invest": {
+        "title": "2. Invest",
+        "description": "Support projects with one-time investments or a monthly subscription."
+      },
+      "enjoy": {
+        "title": "3. Enjoy",
+        "description": "Track your investment impact and exchange your points for products."
+      }
+    },
+    "tiers": {
+      "title": "Our plans",
+      "explorer": {
+        "title": "Explorer",
+        "price": "Free",
+        "description": "Discover the platform without commitment"
+      },
+      "protector": {
+        "title": "Protector",
+        "price": "From €50",
+        "description": "One-time investments with bonus"
+      },
+      "ambassador": {
+        "title": "Ambassador",
+        "price": "From €18/month",
+        "description": "Premium subscription with exclusive benefits"
+      }
+    }
+  },
+  "projects": {
+    "title": "Our projects",
+    "subtitle": "Discover and support verified biodiversity projects",
+    "filter": {
+      "all": "All",
+      "active": "Active",
+      "completed": "Completed",
+      "search_placeholder": "Search a project..."
+    },
+    "card": {
+      "funded": "funded",
+      "goal": "Goal",
+      "view_details": "View details"
+    },
+    "detail": {
+      "about": "About the project",
+      "impact": "Impact",
+      "updates": "Updates",
+      "invest_now": "Invest now",
+      "share": "Share"
+    },
+    "empty": "No projects found"
+  },
+  "products": {
+    "title": "Our shop",
+    "subtitle": "Exchange your points for sustainable products from our partners",
+    "filter": {
+      "all": "All",
+      "category": "Category",
+      "price": "Price",
+      "search_placeholder": "Search a product..."
+    },
+    "card": {
+      "points": "points",
+      "add_to_cart": "Add to cart",
+      "out_of_stock": "Out of stock"
+    },
+    "detail": {
+      "description": "Description",
+      "producer": "Producer",
+      "certifications": "Certifications",
+      "exchange": "Exchange"
+    },
+    "empty": "No products found"
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "login_button": "Log in",
+    "forgot_password": "Forgot password?",
+    "invalid_credentials": "Invalid credentials",
+    "register": "Create account",
+    "register_button": "Sign up",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "confirm_password": "Confirm password",
+    "accept_terms": "I accept the terms of service",
+    "already_have_account": "Already have an account?",
+    "no_account": "Don't have an account?",
+    "reset_password": "Reset password",
+    "reset_password_button": "Send link",
+    "reset_password_success": "A reset email has been sent.",
+    "back_to_login": "Back to login"
+  },
+  "dashboard": {
+    "title": "My dashboard",
+    "welcome": "Welcome",
+    "overview": {
+      "title": "Overview",
+      "total_invested": "Total invested",
+      "points_balance": "Points balance",
+      "projects_supported": "Projects supported",
+      "orders_completed": "Orders"
+    },
+    "recent_activity": "Recent activity",
+    "quick_actions": {
+      "title": "Quick actions",
+      "browse_projects": "Browse projects",
+      "browse_products": "Browse shop",
+      "view_investments": "View my investments"
+    }
+  },
+  "profile": {
+    "title": "My profile",
+    "personal_info": "Personal information",
+    "email": "Email",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "postal_code": "Postal code",
+    "country": "Country",
+    "save_changes": "Save changes",
+    "change_password": "Change password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "confirm_new_password": "Confirm new password"
+  },
+  "investments": {
+    "title": "My investments",
+    "total": "Total invested",
+    "history": "History",
+    "empty": "You don't have any investments yet",
+    "start_investing": "Start investing",
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "pending": "Pending"
+    }
+  },
+  "orders": {
+    "title": "My orders",
+    "history": "Order history",
+    "empty": "You don't have any orders yet",
+    "browse_products": "Browse shop",
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "details": "Order details"
+  },
+  "points": {
+    "title": "My points",
+    "balance": "Current balance",
+    "history": "History",
+    "earned": "Earned",
+    "spent": "Spent",
+    "expiring_soon": "Points expiring soon",
+    "empty": "No points transactions"
+  },
+  "partner": {
+    "products": {
+      "title": "Products"
+    },
+    "projects": {
+      "title": "Projects"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "orders": {
+      "title": "Orders"
+    }
+  }
+}

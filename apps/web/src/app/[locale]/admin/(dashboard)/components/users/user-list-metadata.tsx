@@ -3,14 +3,10 @@
 import { Mail, Shield } from 'lucide-react'
 
 import type { FC } from 'react'
-
-type User = {
-  email: string
-  role: string
-}
+import type { UserSummary } from '@/lib/types/user'
 
 type UserListMetadataProps = {
-  user: User
+  user: UserSummary
 }
 
 export const UserListMetadata: FC<UserListMetadataProps> = ({ user }) => {
@@ -24,7 +20,7 @@ export const UserListMetadata: FC<UserListMetadataProps> = ({ user }) => {
       <div className="flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-2 transition-colors duration-200 md:group-hover:text-foreground group-active:text-foreground">
           <Shield className="w-4 h-4 text-orange-500/70 md:group-hover:text-orange-500 group-active:text-orange-500 transition-colors duration-200" />
-          <span className="text-sm">{user.role}</span>
+          <span className="text-sm">{user.kyc_status}</span>
         </div>
       </div>
     </div>

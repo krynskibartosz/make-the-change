@@ -1,8 +1,6 @@
-
-import { createServerClient } from '@supabase/ssr'
+import { type CookieOptions, createServerClient } from '@supabase/ssr'
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-
-import type { NextRequest} from 'next/server';
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -17,21 +15,24 @@ export async function updateSession(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: Array<{ name: string; value: string; options?: CookieOptions }>) {
           for (const { name, value } of cookiesToSet) request.cookies.set(name, value)
 
           response = NextResponse.next({
             request: { headers: request.headers },
           })
 
-          for (const { name, value, options } of cookiesToSet) response.cookies.set(name, value, options)
-          
+          for (const { name, value, options } of cookiesToSet)
+            response.cookies.set(name, value, options)
         },
       },
-    }
+    },
   )
 
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
 
   if (process.env.NODE_ENV === 'development' && request.nextUrl.pathname.startsWith('/admin')) {
     // Development mode - no additional auth checks

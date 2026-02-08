@@ -1,5 +1,7 @@
 # 🎨 Produit & Design
 
+> Historique 2024/2025 — à revalider en 2026.
+
 Cette section contient la vision produit, roadmap, design system et architecture UX de Make the CHANGE.
 
 ## 📋 Contenu de cette Section
@@ -10,21 +12,25 @@ Documentation centralisée du produit, design system, parcours utilisateurs et a
 
 | Document | Description | Status | Dernière MAJ |
 |----------|-------------|--------|--------------|
-| [product-roadmap.md](./product-roadmap.md) | Vision 3 phases et milestones | ✅ Final | 2025-01-XX |
-| [feature-list.md](./feature-list.md) | Catalogue features par phase | 📋 À créer | - |
 | [user-journeys.md](./user-journeys.md) | Parcours utilisateurs optimisés | ✅ Final | 2025-01-XX |
-| [information-architecture.md](./information-architecture.md) | IA globale plateforme | ✅ Final | 2025-01-XX |
+| [partners-catalog.md](./partners-catalog.md) | Catalogue partenaires & catégories | ✅ Final | 2025-01-XX |
 | **ux-research-2025/** | **Recherche UX Stratégique 2025** ⭐ **NOUVEAU** | | |
 | [ux-research-2025/README.md](./ux-research-2025/README.md) | Hub recherche UX 2025 | ✅ **Final** | 2025-08-27 |
 | [ux-research-2025/ui-trends-analysis.md](./ux-research-2025/ui-trends-analysis.md) | Top 10 tendances UI/UX 2025 | ✅ **Final** | 2025-08-27 |
 | **design-system/** | **Système de design étendu** | | |
 | [design-system/README.md](./design-system/README.md) | Vue d'ensemble design system | ✅ Final | 2025-01-XX |
 | [design-system/foundations.md](./design-system/foundations.md) | Couleurs, typo, spacing | ✅ Final | 2025-01-XX |
+| [design-system/brand-guidelines.md](./design-system/brand-guidelines.md) | Guidelines de marque | ✅ Final | 2025-01-XX |
 | [design-system/components-library.md](./design-system/components-library.md) | **12 patterns UI production-ready** ⭐ **NOUVEAU** | ✅ **Final** | 2025-08-27 |
 | [design-system/green-ux-guidelines.md](./design-system/green-ux-guidelines.md) | **Guidelines design éco-responsable** ⭐ **NOUVEAU** | ✅ **Final** | 2025-08-27 |
-| [design-system/components.md](./design-system/components.md) | Composants réutilisables | 📋 À créer | - |
-| [design-system/patterns.md](./design-system/patterns.md) | Patterns UX | 📋 À créer | - |
-| [design-system/accessibility.md](./design-system/accessibility.md) | Guidelines WCAG | 📋 À créer | - |
+
+### 📌 Documents à créer (2026)
+- product-roadmap.md — Vision 3 phases et milestones
+- feature-list.md — Catalogue features par phase
+- information-architecture.md — IA globale plateforme
+- design-system/components.md — Composants réutilisables
+- design-system/patterns.md — Patterns UX
+- design-system/accessibility.md — Guidelines WCAG
 
 ## 🚀 Vision Produit
 
@@ -77,7 +83,6 @@ Démocratiser l'investissement dans la biodiversité avec un modèle "Invest-to-
 ## 🔗 Liens Connexes
 
 - [💼 01-Strategy](../01-strategy/) - Business model et personas
-- [📱 04-Specifications](../04-specifications/) - Spécifications détaillées
 - [🔧 03-Technical](../03-technical/) - Architecture technique
 - [🔬 08-Research](../08-research/) - User research
 

@@ -1,7 +1,8 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vitest/config'
+
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react()],
@@ -11,17 +12,23 @@ export default defineConfig({
     globals: true,
     css: true,
     exclude: ['**/node_modules/**', '**/test/e2e/**', '**/*.e2e.*', '**/*.playwright.*'],
-    include: ['**/test/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: [
+      '**/test/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      '**/test/integration/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+    ],
     coverage: {
       provider: 'v8',
+      all: false,
       reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',
         'test/',
+        '.next/',
+        '**/.next/**',
         '**/*.d.ts',
         '**/*.config.*',
         '**/coverage/**',
-        'src/components/ui/**', // shadcn/ui components
+        'src/components/ui/**', // base ui components
         '**/*.stories.*',
       ],
       thresholds: {

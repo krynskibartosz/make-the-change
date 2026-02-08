@@ -6,8 +6,10 @@ type ChevronIconProps = {
   className?: string
 }
 
-export const ChevronIcon: FC<ChevronIconProps> = ({className}) => (
-  <div className={`flex-shrink-0 ml-4 transition-transform duration-300 md:group-hover:translate-x-1 group-active:translate-x-0.5 ${className}`}>
+export const ChevronIcon: FC<ChevronIconProps> = ({ className }) => (
+  <div
+    className={`flex-shrink-0 ml-4 transition-transform duration-300 md:group-hover:translate-x-1 group-active:translate-x-0.5 ${className}`}
+  >
     <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="chevronGradient" x1="0%" x2="100%" y1="0%" y2="0%">

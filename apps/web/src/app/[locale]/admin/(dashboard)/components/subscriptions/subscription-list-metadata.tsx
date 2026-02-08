@@ -1,6 +1,6 @@
 'use client'
-import { User, Settings, Euro, Calendar } from 'lucide-react'
-import { type FC } from 'react'
+import { Calendar, Euro, Settings, User } from 'lucide-react'
+import type { FC } from 'react'
 
 import type { Subscription } from '@/lib/types/subscription'
 
@@ -18,7 +18,7 @@ export const SubscriptionListMetadata: FC<SubscriptionListMetadataProps> = ({ su
 
       <div className="flex items-center gap-2 transition-colors duration-200 md:group-hover:text-foreground group-active:text-foreground">
         <Settings className="w-4 h-4 text-blue-500/70 md:group-hover:text-blue-500 group-active:text-blue-500 transition-colors duration-200" />
-        <span className="text-sm">{subscription.subscription_tier}</span>
+        <span className="text-sm">{subscription.plan_type}</span>
       </div>
     </div>
 
@@ -26,13 +26,22 @@ export const SubscriptionListMetadata: FC<SubscriptionListMetadataProps> = ({ su
       <div className="flex items-center gap-2 transition-colors duration-200 md:group-hover:text-foreground group-active:text-foreground">
         <Euro className="w-4 h-4 text-green-500/70 md:group-hover:text-green-500 group-active:text-green-500 transition-colors duration-200" />
         <span className="text-sm">
-          €{subscription.amount_eur} / {subscription.billing_frequency === 'monthly' ? 'mois' : 'an'}
+          €
+          {subscription.billing_frequency === 'monthly'
+            ? (subscription.monthly_price ?? 0)
+            : (subscription.annual_price ?? 0)}{' '}
+          / {subscription.billing_frequency === 'monthly' ? 'mois' : 'an'}
         </span>
       </div>
 
       <div className="flex items-center gap-2 transition-colors duration-200 md:group-hover:text-foreground group-active:text-foreground">
         <Calendar className="w-4 h-4 text-purple-500/70 md:group-hover:text-purple-500 group-active:text-purple-500 transition-colors duration-200" />
-        <span className="text-sm">Début: {new Date(subscription.start_date).toLocaleDateString('fr-FR')}</span>
+        <span className="text-sm">
+          Début:{' '}
+          {subscription.current_period_start
+            ? new Date(subscription.current_period_start).toLocaleDateString('fr-FR')
+            : '—'}
+        </span>
       </div>
     </div>
   </div>

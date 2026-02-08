@@ -1,0 +1,784 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Er is een fout opgetreden",
+    "success": "Succesvol",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "add": "Toevoegen",
+    "back": "Terug",
+    "next": "Volgende",
+    "previous": "Vorige",
+    "search": "Zoeken",
+    "filter": "Filteren"
+  },
+  "errors": {
+    "notFound": {
+      "title": "{entity} niet gevonden",
+      "description": "Deze {entity} bestaat niet of is verwijderd"
+    },
+    "accessDenied": {
+      "title": "Toegang geweigerd",
+      "description": "U heeft geen toestemming om deze {entity} te bekijken"
+    },
+    "serverError": {
+      "title": "Server fout",
+      "description": "Er is een technisch probleem opgetreden, probeer het opnieuw"
+    },
+    "loadingError": {
+      "title": "Laadmissie",
+      "description": "Kan deze {entity} niet laden"
+    },
+    "entities": {
+      "product": {
+        "singular": "product",
+        "article": "dit"
+      },
+      "user": {
+        "singular": "gebruiker",
+        "article": "deze"
+      },
+      "project": {
+        "singular": "project",
+        "article": "dit"
+      },
+      "partner": {
+        "singular": "partner",
+        "article": "deze"
+      },
+      "subscription": {
+        "singular": "abonnement",
+        "article": "dit"
+      },
+      "order": {
+        "singular": "bestelling",
+        "article": "deze"
+      },
+      "species": {
+        "singular": "soort",
+        "article": "deze"
+      }
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "admin": "Beheer",
+    "dashboard": "Dashboard",
+    "products": "Producten",
+    "projects": "Projecten",
+    "subscriptions": "Abonnementen",
+    "users": "Gebruikers",
+    "settings": "Instellingen",
+    "logout": "Uitloggen",
+    "back": "Terug naar de projectenlijst"
+  },
+  "auth": {
+    "login": "Inloggen",
+    "email": "Email",
+    "password": "Wachtwoord",
+    "login_button": "Inloggen",
+    "forgot_password": "Wachtwoord vergeten?",
+    "invalid_credentials": "Ongeldige inloggegevens"
+  },
+  "admin": {
+    "common": {
+      "retry": "Opnieuw proberen",
+      "preview": "Voorbeeld",
+      "select_placeholder": "Selecteer...",
+      "breadcrumbs": {
+        "dashboard": "Dashboard",
+        "products": "Producten",
+        "projects": "Projecten"
+      }
+    },
+    "dashboard": {
+      "title": "Beheerder Dashboard",
+      "welcome": "Welkom in uw beheergebied",
+      "statistics": "Statistieken"
+    },
+    "products": {
+      "title": "Productbeheer",
+      "new_product": "Nieuw Product",
+      "product_list": "Productlijst",
+      "name": "Productnaam",
+      "price": "Prijs",
+      "status": {
+        "active": "Actief",
+        "inactive": "Inactief",
+        "changing": "Wijzigen...",
+        "activate": "Activeren",
+        "deactivate": "Deactiveren",
+        "toggle_tooltip": "Klik om het product te {action}",
+        "modal": {
+          "title": "Product {action}",
+          "description": {
+            "activate": "Het product wordt zichtbaar in de winkel en beschikbaar voor verkoop.",
+            "deactivate": "Het product wordt uit de winkel gehaald en niet meer beschikbaar voor verkoop."
+          },
+          "cancel": "Annuleren"
+        }
+      },
+      "actions": "Acties",
+      "search_placeholder": "Producten zoeken...",
+      "filters": {
+        "all_partners": "Alle partners",
+        "all_categories": "Alle categorieÃ«n",
+        "sort_by": "Sorteren op",
+        "tags_placeholder": "Tags...",
+        "active_only": "Alleen actieve",
+        "clear_filters": "Filters wissen",
+        "clear_all_filters": "Alle filters wissen",
+        "reset": "Opnieuw instellen"
+      },
+      "sort": {
+        "newest": "Meest recent",
+        "oldest": "Oudste",
+        "name_asc": "Naam (A-Z)",
+        "name_desc": "Naam (Z-A)",
+        "price_asc": "Prijs oplopend",
+        "price_desc": "Prijs aflopend",
+        "featured": "Uitgelicht eerst"
+      },
+      "stock": {
+        "increase": "Voorraad verhogen",
+        "decrease": "Voorraad verlagen",
+        "label": "voorraad",
+        "points_label": "ptn"
+      },
+      "visibility": {
+        "hide": "Product verbergen",
+        "show": "Product tonen",
+        "visible": "Zichtbaar",
+        "hidden": "Verborgen"
+      },
+      "filters_tooltip": {
+        "category": "Filteren op categorie: {name}",
+        "subcategory": "Filteren op subcategorie: {name}",
+        "producer": "Filteren op producent: {name}",
+        "tag": "Filteren op tag: {tag}",
+        "featured": "Filteren op uitgelichte producten"
+      },
+      "other_tags": "{count} andere",
+      "filter_modal": {
+        "partner": "Partner",
+        "category": "Categorie",
+        "tags": "Tags",
+        "active_only_description": "Toon alleen actieve items"
+      },
+      "empty_state": {
+        "title": "Geen producten",
+        "description": "Geen resultaten voor deze filters."
+      },
+      "error": {
+        "loading_title": "Laadprobleem",
+        "loading_description": "Kan producten niet laden",
+        "retry": "Opnieuw proberen"
+      },
+      "partner": {
+        "none": "Geen partner",
+        "loading": "Laden...",
+        "not_found": "Partner niet gevonden",
+        "view_tooltip": "Partner {name} bekijken"
+      },
+      "featured": {
+        "short": "Uitgelicht",
+        "full": "Uitgelicht"
+      },
+      "details": {
+        "show": "Details tonen",
+        "hide": "Details verbergen"
+      },
+      "edit": {
+        "sections": {
+          "general": "Algemene Informatie",
+          "pricing": "Prijs & Configuratie",
+          "images": "Afbeeldingen"
+        },
+        "fields": {
+          "name": "Productnaam",
+          "slug": "Slug",
+          "short_description": "Korte Beschrijving",
+          "description": "Beschrijving",
+          "price_points": "Prijs in Punten",
+          "stock_quantity": "Voorraad",
+          "min_tier": "Minimum Tier",
+          "fulfillment_method": "Uitvoeringsmethode"
+        },
+        "placeholders": {
+          "name": "Productnaam",
+          "slug": "product-slug",
+          "short_description": "Korte productbeschrijving...",
+          "description": "Gedetailleerde productbeschrijving...",
+          "min_tier": "Selecteer een tier",
+          "fulfillment_method": "Selecteer een methode"
+        },
+        "blur_system": {
+          "title": "ðŸš€ Schaalbaar DB Blur Systeem",
+          "images": "Afbeeldingen",
+          "with_blur": "Met blur",
+          "missing": "Ontbreekt",
+          "coverage": "Dekking",
+          "loading": "Blur hashes laden vanuit DB..."
+        },
+        "images": {
+          "add": "Afbeeldingen toevoegen"
+        }
+      }
+    },
+    "projects": {
+      "title": "Projectbeheer",
+      "new_project": "Nieuw project",
+      "project_list": "Projectlijst",
+      "map_view": "Kaartweergave",
+      "name": "Projectnaam",
+      "location": "Locatie",
+      "status": "Status",
+      "investment_goal": "Investeringsdoel",
+      "search_placeholder": "Projecten zoeken...",
+      "labels": {
+        "status": "Status"
+      },
+      "sort": {
+        "newest": "Nieuwste eerst",
+        "oldest": "Oudste eerst",
+        "name_asc": "Naam (A-Z)",
+        "name_desc": "Naam (Z-A)",
+        "budget_desc": "Hoogste budget eerst",
+        "budget_asc": "Laagste budget eerst",
+        "featured": "Eerst uitgelicht"
+      },
+      "filters": {
+        "all_statuses": "Alle statussen",
+        "all_types": "Alle types",
+        "all_partners": "Alle partners",
+        "all_countries": "Alle landen",
+        "sort_by": "Sorteren op",
+        "impact_types": "Impacttypes",
+        "active_only": "Alleen actieve",
+        "clear_filters": "Filters wissen",
+        "clear_all_filters": "Alle filters resetten",
+        "reset": "Resetten"
+      },
+      "filter_modal": {
+        "partner": "Partner",
+        "type": "Projecttype",
+        "country": "Land",
+        "impact_types": "Impacttypes",
+        "active_only_description": "Toon alleen actieve projecten"
+      },
+      "type": {
+        "beehive": "Bijenkorf",
+        "olive_tree": "Olijfboom",
+        "vineyard": "Wijngaard",
+        "forest": "Bos",
+        "solar": "Zonne-energie"
+      },
+      "statuses": {
+        "active": "Actief",
+        "funded": "Gefinancierd",
+        "closed": "Afgerond",
+        "suspended": "Opgeschort",
+        "inactive": "Inactief"
+      },
+      "statusActions": {
+        "activate": "Activeren",
+        "suspend": "Opschorten"
+      },
+      "funding": {
+        "increase": "Doel verhogen",
+        "decrease": "Doel verlagen"
+      },
+      "featured": {
+        "add": "Markeer als uitgelicht",
+        "remove": "Uitgelicht verwijderen"
+      },
+      "filters_tooltip": {
+        "type": "Filter op type: {type}",
+        "partner": "Filter op partner: {name}",
+        "country": "Filter op land: {country}",
+        "impact_type": "Filter op impacttype: {type}",
+        "featured": "Filter op uitgelichte projecten"
+      },
+      "other_impact_types": "en nog {count}",
+      "empty_state": {
+        "title": "Geen projecten",
+        "description": "Geen resultaten voor deze filters."
+      },
+      "error": {
+        "loading_title": "Laadfout",
+        "loading_description": "Kan projecten niet laden.",
+        "retry": "Opnieuw proberen"
+      },
+      "edit": {
+        "title": "Project",
+        "subtitle": "Projectbeheer",
+        "untitled": "Project",
+        "no_slug": "slug ontbreekt",
+        "sections": {
+          "essential": "Essentiële informatie",
+          "funding": "Financiering & configuratie",
+          "description": "Projectbeschrijving",
+          "images": "Projectgalerij"
+        },
+        "fields": {
+          "name": "Projectnaam",
+          "slug": "Slug",
+          "type": "Projecttype",
+          "status": "Status",
+          "featured": "Uitgelicht project",
+          "target_budget": "Doelbudget (€)",
+          "producer_id": "Gekoppelde producent",
+          "description": "Korte beschrijving",
+          "long_description": "Uitgebreide beschrijving"
+        },
+        "placeholders": {
+          "name": "Bijv. Programma stadsbijenkasten",
+          "slug": "bijv-stadsbijenkasten",
+          "type": "Selecteer een type…",
+          "status": "Selecteer een status…",
+          "producer_id": "Producer-ID…",
+          "description": "Samenvatting van het project…",
+          "long_description": "Beschrijf het project, zijn doelstellingen en impact…"
+        },
+        "helpers": {
+          "featured": "Tonen tussen de uitgelichte projecten",
+          "location_hint": "Uitgebreide geografische informatie (GPS-coördinaten, kaart) volgt in een latere versie."
+        },
+        "messages": {
+          "long_description_required": "Een uitgebreide beschrijving is verplicht voor projecten met een budget boven €5000."
+        },
+        "cover": {
+          "updated": "Omslag bijgewerkt",
+          "error": "Omslag kon niet worden bijgewerkt",
+          "change": "Omslag wijzigen",
+          "remove": "Verwijderen",
+          "placeholder": "Voeg een omslagafbeelding toe",
+          "placeholder_disabled": "Bewaar het project voordat je een omslag toevoegt",
+          "tip": "Gebruik de acties hierboven om de projectomslag aan te passen.",
+          "noImage": "Voeg beelden toe om het project in de kijker te zetten.",
+          "description": "De omslag verschijnt bovenaan de projectpagina, de avatar is de hoofdminiatuur."
+        },
+        "avatar": {
+          "updated": "Projectavatar bijgewerkt",
+          "error": "Avatar kon niet worden bijgewerkt",
+          "remove": "Avatar verwijderen"
+        },
+        "images": {
+          "upload_error": "Fout bij uploaden",
+          "uploaded": "Afbeelding toegevoegd",
+          "delete_error": "Afbeelding kon niet worden verwijderd",
+          "deleted": "Afbeelding verwijderd",
+          "order_updated": "Volgorde van afbeeldingen bijgewerkt",
+          "requires_save": "Bewaar het project voordat je afbeeldingen toevoegt."
+        },
+        "actions": {
+          "saved": "Opslaan gelukt",
+          "saved_description": "Alle wijzigingen zijn opgeslagen.",
+          "save_error": "Opslagfout",
+          "save_error_description": "Wijzigingen konden niet worden opgeslagen."
+        }
+      },
+      "create": {
+        "title": "Project aanmaken",
+        "subtitle": "Vul de onderstaande informatie in om een nieuw project te publiceren.",
+        "status": {
+          "dirty": "Wijzigingen bezig…",
+          "pristine": "Geen wijzigingen in behandeling"
+        },
+        "actions": {
+          "saving": "Bezig met aanmaken…",
+          "save": "Project aanmaken"
+        }
+      }
+    },
+    "partners": {
+      "title": "Partnerbeheer",
+      "description": "Producent- en partnerbeheer",
+      "new_partner": "Nieuwe Partner",
+      "search_placeholder": "Zoeken op naam, e-mail of land...",
+      "filters": {
+        "all_statuses": "Alle statussen",
+        "all_countries": "Alle landen",
+        "status": "Status",
+        "status_active": "Actief",
+        "status_inactive": "Inactief",
+        "status_suspended": "Opgeschort",
+        "country": "Land",
+        "sort_by": "Sorteren op",
+        "active_only": "Alleen actief",
+        "clear_filters": "Filters wissen",
+        "clear_all_filters": "Alle filters wissen",
+        "reset": "Resetten"
+      },
+      "sort": {
+        "newest": "Meest recent",
+        "oldest": "Oudste",
+        "name_asc": "Naam (A-Z)",
+        "name_desc": "Naam (Z-A)"
+      },
+      "visibility": {
+        "hide": "Partner deactiveren",
+        "show": "Partner activeren",
+        "visible": "Actief",
+        "hidden": "Inactief"
+      },
+      "filters_tooltip": {
+        "status": "Filteren op status: {status}",
+        "country": "Filteren op land: {country}"
+      },
+      "filter_modal": {
+        "status": "Status",
+        "country": "Land",
+        "active_only_description": "Toon alleen actieve partners"
+      },
+      "empty_state": {
+        "title": "Geen partners gevonden",
+        "description": "Geen partners komen overeen met uw filters. Probeer uw criteria te wijzigen of maak een nieuwe partner aan."
+      },
+      "error": {
+        "loading_title": "Laad fout",
+        "loading_description": "Kan partners niet laden",
+        "retry": "Opnieuw proberen"
+      },
+      "edit": {
+        "title": "Partner Bewerken",
+        "loading": "Laden...",
+        "breadcrumbs": {
+        "partners": "Partners",
+        "loading": "Laden..."
+      },
+        "sections": {
+          "essential": {
+            "title": "Essentiële Informatie",
+            "description": "Partnernaam, slug en status"
+          },
+          "contact": {
+            "title": "Contactgegevens",
+            "description": "E-mail en website van de partner"
+          },
+          "address": {
+            "title": "Adres",
+            "description": "Volledige locatie van de partner"
+          },
+          "metadata": {
+            "title": "Aanvullende Informatie",
+            "description": "Beschrijving en andere details"
+          }
+        },
+        "fields": {
+          "name": {
+            "label": "Partnernaam",
+            "placeholder": "Bijv. Habeebee",
+            "helper": "Volledige naam van de partnerorganisatie"
+          },
+          "slug": {
+            "label": "Slug",
+            "placeholder": "bijv-habeebee",
+            "helper": "Unieke URL-identificatie (automatisch gegenereerd)"
+          },
+          "status": {
+            "label": "Status",
+            "placeholder": "Selecteer een status",
+            "helper": "Activeringsstatus van de partner",
+            "options": {
+              "active": "Actief",
+              "inactive": "Inactief",
+              "suspended": "Opgeschort"
+            }
+          },
+          "contact_email": {
+            "label": "Contact E-mail",
+            "placeholder": "contact@partner.com",
+            "helper": "Hoofd e-mailadres om de partner te contacteren"
+          },
+          "website": {
+            "label": "Website",
+            "placeholder": "https://www.partner.com",
+            "helper": "Volledige URL van de website van de partner"
+          },
+          "address_street": {
+            "label": "Straat",
+            "placeholder": "123 Voorbeeldstraat",
+            "helper": "Straatnummer en naam"
+          },
+          "address_city": {
+            "label": "Stad",
+            "placeholder": "Parijs",
+            "helper": "Hoofdkantoorstad"
+          },
+          "address_postal_code": {
+            "label": "Postcode",
+            "placeholder": "75001",
+            "helper": "Postcode"
+          },
+          "address_country": {
+            "label": "Land",
+            "placeholder": "Frankrijk",
+            "helper": "Hoofdkantoorland"
+          },
+          "description": {
+            "label": "Beschrijving",
+            "placeholder": "Beschrijf de partner, hun missie en activiteiten...",
+            "helper": "Gedetailleerde presentatie van de partner en hun expertise"
+          }
+        },
+        "status": {
+          "saving": "Opslaan...",
+          "saved": "Opgeslagen",
+          "error": "Fout bij opslaan"
+        },
+        "actions": {
+          "save": "Opslaan",
+          "saving": "Opslaan..."
+        },
+        "cover": {
+          "updated": "Omslag bijgewerkt",
+          "error": "Omslag kon niet worden bijgewerkt",
+          "change": "Omslag wijzigen",
+          "remove": "Verwijderen",
+          "placeholder": "Voeg een omslagafbeelding toe",
+          "placeholder_disabled": "Bewaar de partner voordat je een omslag toevoegt",
+          "tip": "Gebruik de acties hierboven om het partnerprofiel aan te passen.",
+          "noImage": "Voeg beelden toe om de partner in de kijker te zetten.",
+          "description": "De omslag verschijnt bovenaan de partnerpagina, de profielfoto wordt gebruikt als miniatuur."
+        },
+        "avatar": {
+          "updated": "Partnerfoto bijgewerkt",
+          "error": "Foto kon niet worden bijgewerkt",
+          "remove": "Foto verwijderen"
+        },
+        "storage": {
+          "bucket_missing": {
+            "title": "Opslagbucket ontbreekt",
+            "description": "Maak de Supabase-bucket \"%{bucket}\" aan of werk de variabele NEXT_PUBLIC_SUPABASE_STORAGE_PRODUCER_BUCKET bij."
+          }
+        }
+      }
+    },
+    "orders": {
+      "title": "Bestellingbeheer",
+      "description": "Bestelling tracking"
+    },
+    "pointsTransactions": {
+      "title": "Punten Transacties",
+      "description": "Volledige geschiedenis van puntenbewegingen",
+      "search_placeholder": "Zoeken op gebruiker of beschrijving...",
+      "columns": {
+        "date": "Datum",
+        "user": "Gebruiker",
+        "type": "Type",
+        "amount": "Bedrag",
+        "balance": "Saldo na",
+        "description": "Beschrijving",
+        "reference": "Referentie",
+        "actions": "Acties"
+      },
+      "types": {
+        "earned_subscription": "Verdiend - Abonnement",
+        "earned_purchase": "Verdiend - Aankoop",
+        "earned_referral": "Verdiend - Verwijzing",
+        "spent_order": "Uitgegeven - Bestelling",
+        "spent_investment": "Uitgegeven - Investering",
+        "adjustment_admin": "Admin Aanpassing",
+        "bonus_welcome": "Welkomstbonus",
+        "bonus_milestone": "Mijlpaalbonus"
+      },
+      "filters": {
+        "all_types": "Alle types",
+        "date_range": "Datumbereik",
+        "date_from": "Startdatum",
+        "date_to": "Einddatum",
+        "sort_by": "Sorteren op",
+        "clear_filters": "Filters wissen"
+      },
+      "sort": {
+        "newest": "Nieuwste",
+        "oldest": "Oudste",
+        "amount_desc": "Bedrag aflopend",
+        "amount_asc": "Bedrag oplopend"
+      },
+      "actions": {
+        "open_menu": "Menu openen",
+        "view_details": "Details bekijken"
+      },
+      "references": {
+        "order": "Bestelling",
+        "investment": "Investering",
+        "subscription": "Abonnement"
+      },
+      "details": {
+        "title": "Transactiedetails",
+        "description": "Volledige informatie over deze puntentransactie",
+        "transaction_id": "Transactie-ID",
+        "reference": "Referentie",
+        "view_reference": "Referentie bekijken",
+        "expires_at": "Vervaldatum",
+        "metadata": "Metadata",
+        "processed_at": "Verwerkt op",
+        "created_at": "Aangemaakt op"
+      },
+      "empty_state": {
+        "title": "Geen transacties",
+        "description": "Geen transacties voldoen aan uw criteria"
+      },
+      "error": {
+        "loading_title": "Laadfout",
+        "loading_description": "Kan transacties niet laden",
+        "retry": "Opnieuw proberen"
+      }
+    },
+    "sidebar": {
+      "dashboard": {
+        "label": "Dashboard",
+        "description": "Overzicht en statistieken"
+      },
+      "management": {
+        "label": "Beheer"
+      },
+      "groups": {
+        "activity": "Activiteit",
+        "catalog": "Catalogus",
+        "community": "Gemeenschap",
+        "configuration": "Configuratie"
+      },
+      "links": {
+        "products": "Producten",
+        "categories": "Categorieën",
+        "projects": "Projecten",
+        "orders": "Bestellingen",
+        "investments": "Investeringen",
+        "biodex": "Biodex",
+        "partners": "Partners",
+        "users": "Gebruikers",
+        "subscriptions": "Abonnementen",
+        "pointsTransactions": "Punten Transacties",
+        "stocks": "Voorraadbeheer",
+        "translations": "Vertalingen"
+      },
+      "stocks": {
+        "description": "Beheer productvoorraad"
+      },
+      "translations": {
+        "description": "Beheer applicatievertalingen"
+      },
+      "logout": "Uitloggen",
+      "close_menu": "Navigatiemenu sluiten",
+      "main_navigation": "Hoofdnavigatie",
+      "mobile_navigation_menu": "Mobiele navigatiemenu"
+    },
+    "investments": {
+      "title": "Beheer van investeringen",
+      "description": "Volg investeringen en uitgekeerde punten"
+    },
+    "subscriptions": {
+      "title": "Abonnementenbeheer",
+      "new_subscription": "Nieuw Abonnement",
+      "subscription_list": "Abonnementenlijst",
+      "user": "Gebruiker",
+      "plan": "Plan",
+      "status": "Status",
+      "start_date": "Startdatum",
+      "end_date": "Einddatum"
+    },
+    "users": {
+      "edit": {
+        "autoSave": {
+          "saving": "Bezig met opslaan...",
+          "saved": "Opgeslagen",
+          "pending": "Wijziging in behandeling...",
+          "error": "Opslaan mislukt",
+          "pristine": "Alle wijzigingen zijn opgeslagen"
+        }
+      }
+    },
+    "biodex": {
+      "title": "Biodex",
+      "description": "Soorten- en biodiversiteitsbeheer",
+      "new_species": "Nieuwe soort",
+      "search_placeholder": "Zoek naar een soort...",
+      "sort": {
+        "newest": "Meest recent",
+        "oldest": "Oudste",
+        "name_asc": "Naam (A-Z)",
+        "name_desc": "Naam (Z-A)"
+      },
+      "filters": {
+        "sort_by": "Sorteer op",
+        "clear_filters": "Filters wissen",
+        "clear_all_filters": "Alle filters wissen",
+        "reset": "Resetten"
+      },
+      "error": {
+        "loading_title": "Fout bij laden",
+        "loading_description": "Kan soorten niet laden",
+        "retry": "Opnieuw proberen"
+      },
+      "empty_state": {
+        "title": "Geen soorten",
+        "description": "Geen soorten komen overeen met deze filters."
+      },
+      "species": {
+        "no_description": "Geen beschrijving beschikbaar",
+        "content_levels": "inhoudsniveaus",
+        "actions": {
+          "edit": "Soort bewerken",
+          "delete": "Soort verwijderen"
+        }
+      },
+      "sections": {
+        "essential_info": "Essentiële informatie",
+        "content_levels": "Inhoudsniveaus",
+        "characteristics": "Kenmerken",
+        "status": "Beschermingsstatus",
+        "additional_info": "Aanvullende informatie",
+        "media": "Media"
+      },
+      "fields": {
+        "name": "Soortnaam",
+        "scientific_name": "Wetenschappelijke naam",
+        "description": "Beschrijving",
+        "cover_image": "Omslagafbeelding",
+        "icon": "Pictogram",
+        "level_title": "Niveau titel",
+        "level_description": "Niveau beschrijving",
+        "conservation_status": "Beschermingsstatus",
+        "protection_measures": "Beschermingsmaatregelen",
+        "population_trend": "Bevolkingstrend",
+        "image_url": "Afbeelding URL",
+        "thumbnail_url": "Miniatuur URL",
+        "image_credit": "Afbeelding credits",
+        "diet": "Dieet",
+        "reproduction": "Voortplanting",
+        "interesting_facts": "Interessante feiten",
+        "size": "Grootte",
+        "weight": "Gewicht",
+        "habitat": "Leefomgeving",
+        "behavior": "Gedrag"
+      },
+      "placeholders": {
+        "name": "Bijv.: Honingbij",
+        "scientific_name": "Bijv.: Apis mellifera",
+        "description": "Gedetailleerde beschrijving van de soort...",
+        "level_title": "Titel voor dit inhoudsniveau",
+        "level_description": "Informatie aangepast aan dit niveau..."
+      },
+      "actions": {
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan..."
+      }
+    }
+  },
+  "ui": {
+    "view_modes": {
+      "grid": "Raster",
+      "list": "Lijst",
+      "map": "Kaart"
+    }
+  },
+  "metadata": {
+    "title": "Make the CHANGE - Ecologisch Platform",
+    "description": "Investeer in ecologische projecten en ontdek duurzame producten"
+  }
+}

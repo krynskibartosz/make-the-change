@@ -1,7 +1,6 @@
-
 import { z } from 'zod'
 
-export const projectFormSchema = z.object({
+export const projectBaseSchema = z.object({
   name: z
     .string()
     .min(1, 'Le nom du projet est requis')
@@ -12,66 +11,90 @@ export const projectFormSchema = z.object({
     .string()
     .min(1, 'Le slug est requis')
     .max(80, 'Le slug ne peut pas dépasser 80 caractères')
-    .regex(
-      /^[\da-z-]+$/,
-      'Le slug ne peut contenir que des lettres minuscules, chiffres et tirets'
-    )
+    .regex(/^[\da-z-]+$/, 'Le slug ne peut contenir que des lettres minuscules, chiffres et tirets')
     .refine(
       (slug) => !slug.startsWith('-') && !slug.endsWith('-'),
-      'Le slug ne peut pas commencer ou finir par un tiret'
+      'Le slug ne peut pas commencer ou finir par un tiret',
     ),
 
   type: z.enum(['beehive', 'olive_tree', 'vineyard'], {
-    errorMap: () => ({ message: 'Type de projet invalide' })
+    errorMap: () => ({ message: 'Type de projet invalide' }),
   }),
 
   target_budget: z
     .number()
-    .min(100, 'Le budget cible doit être d\'au moins 100€')
+    .min(100, "Le budget cible doit être d'au moins 100€")
     .max(100_000, 'Le budget cible ne peut pas dépasser 100 000€'),
 
   producer_id: z
     .string()
-    .min(1, 'L\'identifiant du producteur est requis')
-    .max(50, 'L\'identifiant ne peut pas dépasser 50 caractères'),
+    .min(1, "L'identifiant du producteur est requis")
+    .max(50, "L'identifiant ne peut pas dépasser 50 caractères"),
 
   description: z
     .string()
     .max(500, 'La description courte ne peut pas dépasser 500 caractères')
     .optional()
-    .transform(val => val?.trim()),
+    .transform((val) => val?.trim()),
 
   long_description: z
     .string()
     .max(5000, 'La description détaillée ne peut pas dépasser 5000 caractères')
     .optional()
-    .transform(val => val?.trim()),
+    .transform((val) => val?.trim()),
 
-  status: z.enum(['active', 'funded', 'closed', 'suspended'], {
-    errorMap: () => ({ message: 'Statut de projet invalide' })
-  }).default('active'),
+  status: z
+    .enum(['draft', 'active', 'funded', 'completed', 'archived'], {
+      errorMap: () => ({ message: 'Statut de projet invalide' }),
+    })
+    .default('draft'),
 
   featured: z.boolean().default(false),
 
+  hero_image: z.string().url("URL d'image invalide").nullable().optional(),
+  avatar_image: z.string().url("URL d'image invalide").nullable().optional(),
+
   images: z
-    .array(z.string().url('URL d\'image invalide'))
+    .array(z.string().url("URL d'image invalide"))
     .max(15, 'Maximum 15 images par projet')
     .default([]),
-}).refine((data) => {
-  if (data.target_budget > 5000 && !data.long_description) {
-    return false
-  }
-  return true
-}, {
-  message: 'Une description détaillée est requise pour les projets avec un budget supérieur à 5000€',
-  path: ['long_description']
+
+  // Translations
+  name_i18n: z.record(z.string()).optional(),
+  description_i18n: z.record(z.string()).optional(),
+  long_description_i18n: z.record(z.string()).optional(),
+  seo_title_i18n: z.record(z.string()).optional(),
+  seo_description_i18n: z.record(z.string()).optional(),
+
+  // SEO
+  seo_title: z.string().max(60, 'Le titre SEO ne peut pas dépasser 60 caractères').optional(),
+  seo_description: z
+    .string()
+    .max(160, 'La description SEO ne peut pas dépasser 160 caractères')
+    .optional(),
 })
+
+export const projectFormSchema = projectBaseSchema.refine(
+  (data) => {
+    if (data.target_budget > 5000 && !data.long_description) {
+      return false
+    }
+    return true
+  },
+  {
+    message:
+      'Une description détaillée est requise pour les projets avec un budget supérieur à 5000€',
+    path: ['long_description'],
+  },
+)
+
+export const projectPatchSchema = projectBaseSchema.partial()
 
 export const projectSlugAsyncSchema = z.object({
   slug: z.string().refine(async (slug) => {
     if (!slug) return true
     return !['admin', 'api', 'reserved'].includes(slug)
-  }, 'Ce slug est déjà utilisé ou réservé')
+  }, 'Ce slug est déjà utilisé ou réservé'),
 })
 
 export type ProjectFormData = z.infer<typeof projectFormSchema>
@@ -84,8 +107,10 @@ export const defaultProjectValues: ProjectFormData = {
   producer_id: '',
   description: '',
   long_description: '',
-  status: 'active',
+  status: 'draft',
   featured: false,
+  hero_image: null,
+  avatar_image: null,
   images: [],
 }
 
@@ -96,10 +121,11 @@ export const projectTypeLabels = {
 } as const
 
 export const projectStatusLabels = {
+  draft: 'Brouillon',
   active: 'Actif',
   funded: 'Financé',
-  closed: 'Fermé',
-  suspended: 'Suspendu',
+  completed: 'Terminé',
+  archived: 'Archivé',
 } as const
 
 export const projectTypeRules = {

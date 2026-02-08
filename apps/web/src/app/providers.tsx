@@ -2,18 +2,20 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
-import { ThemeProvider } from 'next-themes'
+import { AppThemeProvider as ThemeProvider } from '@/components/providers/theme-provider'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { type FC, type PropsWithChildren, useState } from 'react'
-
-import { trpc, trpcClient } from '@/lib/trpc'
 
 const ReactQueryDevtools =
   process.env.NODE_ENV === 'development'
-    ? dynamic(() => import('@tanstack/react-query-devtools').then(m => ({ default: m.ReactQueryDevtools })), { ssr: false })
-    : (() => null) as unknown as React.ComponentType<{ initialIsOpen?: boolean }>
+    ? dynamic(
+        () =>
+          import('@tanstack/react-query-devtools').then((m) => ({ default: m.ReactQueryDevtools })),
+        { ssr: false },
+      )
+    : ((() => null) as unknown as React.ComponentType<{ initialIsOpen?: boolean }>)
 
-export const Providers: FC<PropsWithChildren> = ({children}) => {
-  
+export const Providers: FC<PropsWithChildren> = ({ children }) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -24,26 +26,24 @@ export const Providers: FC<PropsWithChildren> = ({children}) => {
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
   )
 
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="light"
-      disableTransitionOnChange={false}
-      enableSystem={false}
+      defaultTheme="system"
+      disableTransitionOnChange
+      enableSystem
       storageKey="make-the-change-theme"
-      themes={['light', 'dark']}
+      themes={['light', 'dark', 'system']}
     >
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <NuqsAdapter>
           {children}
-          {process.env.NODE_ENV === 'development' && (
-            <ReactQueryDevtools initialIsOpen={false} />
-          )}
-        </QueryClientProvider>
-      </trpc.Provider>
+        </NuqsAdapter>
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      </QueryClientProvider>
     </ThemeProvider>
   )
 }

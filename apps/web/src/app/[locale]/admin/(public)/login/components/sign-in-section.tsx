@@ -1,10 +1,9 @@
-import { SignInForm } from '@/app/[locale]/admin/(public)/login/components/sign-in-form'
-
 import type { FC } from 'react'
+import { SignInForm } from '@/app/[locale]/admin/(public)/login/components/sign-in-form'
 
 export const SignInSection: FC = () => (
   <section
-    aria-labelledby='sign-in-heading'
+    aria-labelledby="sign-in-heading"
     className={`
       flex-1 flex flex-col justify-center
       px-8 sm:px-16 md:px-12 lg:px-24
@@ -16,10 +15,10 @@ export const SignInSection: FC = () => (
       md:shadow-[-20px_0_50px_-12px_rgba(0,0,0,0.15)] dark:md:shadow-[-20px_0_50px_-12px_rgba(0,0,0,0.4)]
     `}
   >
-    <div className='w-full'>
-      <header className='flex flex-col gap-6 mb-12'>
+    <div className="w-full">
+      <header className="flex flex-col gap-6 mb-12">
         <h2
-          id='sign-in-heading'
+          id="sign-in-heading"
           className={`
             text-foreground text-4xl font-bold tracking-tight
             bg-gradient-to-br from-foreground via-foreground to-muted-foreground
@@ -28,7 +27,7 @@ export const SignInSection: FC = () => (
         >
           Accès Administrateur
         </h2>
-        <p className='text-muted-foreground text-lg leading-relaxed opacity-90'>
+        <p className="text-muted-foreground text-lg leading-relaxed opacity-90">
           Veuillez entrer vos identifiants administrateur.
         </p>
       </header>

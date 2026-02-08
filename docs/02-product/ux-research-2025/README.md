@@ -1,5 +1,7 @@
 # 🔬 UX Research 2025 - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **📍 SECTION TYPE**: Recherche UX Stratégique | **🗓️ DATE**: 27 Août 2025 | **⭐️ PRIORITÉ**: Stratégique
 
 ## 🎯 Vue d'Ensemble
@@ -10,15 +12,15 @@ Cette section contient la recherche UX stratégique basée sur l'analyse UI/UX 2
 
 ### 🚀 **Analyse Stratégique**
 - **[ui-trends-analysis.md](./ui-trends-analysis.md)** - Top 10 tendances UX/UI 2025 avec scoring impact/faisabilité
-- **[gamification-strategy.md](./gamification-strategy.md)** - Patterns d'engagement éthique pour biodiversité *(À créer)*
-- **[performance-metrics.md](./performance-metrics.md)** - KPIs et instrumentation design *(À créer)*
+- **Gamification strategy** - Patterns d'engagement éthique pour biodiversité *(À créer)*
+- **Performance metrics** - KPIs et instrumentation design *(À créer)*
 
 ### 🎨 **Compléments Design System**
 - **[../design-system/components-library.md](../design-system/components-library.md)** - 12 patterns UI prêts à l'emploi
 - **[../design-system/green-ux-guidelines.md](../design-system/green-ux-guidelines.md)** - Guidelines design durable
 
 ### 📱 **Spécifications Techniques**
-- **[../../04-specifications/mobile-app/mvp/implementation-patterns.md](../../04-specifications/mobile-app/mvp/implementation-patterns.md)** - Patterns d'implémentation mobile
+- **Patterns d'implémentation mobile** *(À documenter)*
 
 ## 🌟 Valeur Unique
 
@@ -80,9 +82,8 @@ Cette recherche UX combine :
 - **[User Journeys](../user-journeys.md)** - Parcours optimisés
 
 ### 👨‍💻 **Pour Développeurs**
-- **[Implementation Patterns](../../04-specifications/mobile-app/mvp/implementation-patterns.md)** - Spécifications techniques
-- **[Tech Stack](../../03-technical/tech-stack.md)** - Architecture Expo SDK 53
-- **[Mobile App Specs](../../04-specifications/mobile-app/README.md)** - Spécifications complètes
+- **[Design System (canonique)](../../03-technical/design-system.md)** - Base UI + Tailwind v4
+- **[Schéma DB](../../03-technical/database-schema.md)** - Source of truth données
 
 ### 💼 **Pour Product Managers**
 - **[Business Model](../../01-strategy/business-model-definitive.md)** - Modèle économique
@@ -97,7 +98,7 @@ Cette recherche UX combine :
 3. Utiliser **[Components Library](../design-system/components-library.md)** pour patterns éprouvés
 
 ### 👨‍💻 **Phase Développement**
-1. Implémenter avec **[Patterns Techniques](../../04-specifications/mobile-app/mvp/implementation-patterns.md)**
+1. Implémenter selon le **design system canonique** et les conventions techniques
 2. Intégrer instrumentation selon **Performance Metrics** *(À créer)*
 3. Valider accessibilité WCAG 2.2 en continu
 

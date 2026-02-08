@@ -1,109 +1,59 @@
-"use client"
+import { db } from '@make-the-change/core/db'
+import { orders, producers, products, projects } from '@make-the-change/core/schema'
+import { and, count, eq, inArray, lte } from 'drizzle-orm'
+import { requireAdminPage } from '@/lib/auth-guards'
+import AdminDashboardClient from './dashboard-client'
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+export default async function AdminDashboardPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  await requireAdminPage(locale)
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { useAuth } from '@/hooks/use-auth'
+  try {
+    const [pendingOrders] = await db
+      .select({ count: count() })
+      .from(orders)
+      .where(inArray(orders.status, ['pending', 'paid', 'processing']))
 
-const AdminDashboardPage = () => {
-  const { user, loading, signOut: _signOut } = useAuth()
-  const router = useRouter()
+    const [lowStockProducts] = await db
+      .select({ count: count() })
+      .from(products)
+      .where(and(eq(products.stock_management, true), lte(products.stock_quantity, 5)))
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/admin/login')
-    }
-  }, [user, loading, router])
+    const [pendingProducers] = await db
+      .select({ count: count() })
+      .from(producers)
+      .where(eq(producers.status, 'pending'))
 
+    const [activeProjects] = await db
+      .select({ count: count() })
+      .from(projects)
+      .where(eq(projects.status, 'active'))
 
-  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary" />
-      </div>
+      <AdminDashboardClient
+        stats={{
+          pendingOrders: pendingOrders?.count ?? 0,
+          lowStockProducts: lowStockProducts?.count ?? 0,
+          pendingProducers: pendingProducers?.count ?? 0,
+          activeProjects: activeProjects?.count ?? 0,
+        }}
+      />
+    )
+  } catch {
+    return (
+      <AdminDashboardClient
+        stats={{
+          pendingOrders: 0,
+          lowStockProducts: 0,
+          pendingProducers: 0,
+          activeProjects: 0,
+        }}
+        hasError
+      />
     )
   }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Redirection vers la page de connexion...</p>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="h-full overflow-auto px-4 md:px-6 py-4 md:py-6 safe-bottom">
-      {}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <Card className="glass-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm md:text-base">Utilisateurs Actifs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl md:text-3xl font-semibold bg-gradient-primary bg-clip-text text-transparent">1,247</div>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm md:text-base">Revenus Mensuels</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl md:text-3xl font-semibold bg-gradient-accent bg-clip-text text-transparent">€12,847</div>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm md:text-base">Conversions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl md:text-3xl font-semibold text-foreground">24.57%</div>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm md:text-base">Projets Actifs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl md:text-3xl font-semibold text-success">42</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {}
-      <div className="mt-6 md:mt-8">
-        <Card className="glass-card">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg md:text-xl">Actions Rapides</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              <Button asChild className="h-12 md:h-10 text-responsive" variant="default">
-                <Link href="/admin/products">Gérer Produits</Link>
-              </Button>
-              <Button asChild className="h-12 md:h-10 text-responsive" variant="accent">
-                <Link href="/admin/orders">Voir Commandes</Link>
-              </Button>
-              <Button asChild className="h-12 md:h-10 text-responsive" variant="info">
-                <Link href="/admin/users">Utilisateurs</Link>
-              </Button>
-              <Button asChild className="h-12 md:h-10 text-responsive" variant="outline">
-                <Link href="/demo-2025">Demo 2025</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
 }
-
-export default AdminDashboardPage

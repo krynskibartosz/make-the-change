@@ -1,19 +1,16 @@
-import { X, Upload } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { X } from 'lucide-react'
+import Image from 'next/image'
+import type { FC } from 'react'
+import { useState } from 'react'
+import { cn } from '@make-the-change/core/shared/utils'
+import { ImageUploader } from './image-uploader'
 
-import { cn } from '@/lib/utils';
-
-import { ImageUploader } from './image-uploader';
-
-import type { FC } from 'react';
-
-type MultiImageUploaderProps =  {
-  currentImages?: string[];
-  onImagesChange?: (images: string[]) => void;
-  maxImages?: number;
-  disabled?: boolean;
-  className?: string;
+type MultiImageUploaderProps = {
+  currentImages?: string[]
+  onImagesChange?: (images: string[]) => void
+  maxImages?: number
+  disabled?: boolean
+  className?: string
 }
 
 export const MultiImageUploader: FC<MultiImageUploaderProps> = ({
@@ -21,45 +18,45 @@ export const MultiImageUploader: FC<MultiImageUploaderProps> = ({
   onImagesChange,
   maxImages = 10,
   disabled = false,
-  className = ''
+  className = '',
 }) => {
-  const [uploadingCount, setUploadingCount] = useState(0);
+  const [uploadingCount, setUploadingCount] = useState(0)
 
   const handleImageSelect = async (file: File | null) => {
-    if (!file || currentImages.length >= maxImages) return;
+    if (!file || currentImages.length >= maxImages) return
 
     try {
-      setUploadingCount(prev => prev + 1);
+      setUploadingCount((prev) => prev + 1)
 
       // Simuler un upload (remplacez par votre logique d'upload)
-      const formData = new FormData();
-      formData.append('file', file);
-      
+      const formData = new FormData()
+      formData.append('file', file)
+
       const response = await fetch('/api/upload/product-images', {
         method: 'POST',
         body: formData,
-      });
+      })
 
-      if (!response.ok) throw new Error('Upload failed');
+      if (!response.ok) throw new Error('Upload failed')
 
-      const result = await response.json();
-      const newImages = [...currentImages, result.url];
-      
-      onImagesChange?.(newImages);
+      const result = await response.json()
+      const newImages = [...currentImages, result.url]
+
+      onImagesChange?.(newImages)
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('Upload error:', error)
     } finally {
-      setUploadingCount(prev => prev - 1);
+      setUploadingCount((prev) => prev - 1)
     }
-  };
+  }
 
   const handleImageRemove = (indexToRemove: number) => {
-    const newImages = currentImages.filter((_, index) => index !== indexToRemove);
-    onImagesChange?.(newImages);
-  };
+    const newImages = currentImages.filter((_, index) => index !== indexToRemove)
+    onImagesChange?.(newImages)
+  }
 
-  const remainingSlots = maxImages - currentImages.length;
-  const canUploadMore = remainingSlots > 0 && !disabled;
+  const remainingSlots = maxImages - currentImages.length
+  const canUploadMore = remainingSlots > 0 && !disabled
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -89,7 +86,7 @@ export const MultiImageUploader: FC<MultiImageUploaderProps> = ({
                   width={300}
                 />
               </div>
-              
+
               {!disabled && (
                 <button
                   className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
@@ -110,16 +107,12 @@ export const MultiImageUploader: FC<MultiImageUploaderProps> = ({
           {currentImages.length}/{maxImages} images
         </span>
         {uploadingCount > 0 && (
-          <span className="text-primary">
-            Upload en cours... ({uploadingCount})
-          </span>
+          <span className="text-primary">Upload en cours... ({uploadingCount})</span>
         )}
         {!canUploadMore && currentImages.length >= maxImages && (
-          <span className="text-orange-500">
-            Limite atteinte
-          </span>
+          <span className="text-orange-500">Limite atteinte</span>
         )}
       </div>
     </div>
-  );
-};
+  )
+}

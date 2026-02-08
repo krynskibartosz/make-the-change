@@ -5,10 +5,9 @@ import type { FC } from 'react'
 type FormErrorProps = { message: string }
 
 export const FormError: FC<FormErrorProps> = ({ message }) => {
-  
   return (
     <div
-      role='alert'
+      role="alert"
       className={`
         text-destructive text-sm font-medium p-4 mt-6
         bg-destructive/5 dark:bg-destructive/10 backdrop-blur-sm
@@ -16,8 +15,8 @@ export const FormError: FC<FormErrorProps> = ({ message }) => {
         flex items-center gap-3 shadow-sm
       `}
     >
-      <AlertCircle aria-hidden='true' className='shrink-0' size={16} />
-      <span className='leading-relaxed'>{message}</span>
+      <AlertCircle aria-hidden="true" className="shrink-0" size={16} />
+      <span className="leading-relaxed">{message}</span>
     </div>
-  );
+  )
 }

@@ -1,5 +1,7 @@
 # Registre des Risques - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 ## Vue d'ensemble
 
 Ce registre identifie, évalue et documente les stratégies de mitigation pour les risques critiques du projet Make the CHANGE. Basé sur l'analyse externe indépendante et les stress-tests financiers.

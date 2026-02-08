@@ -1,13 +1,11 @@
-
 export type Investment = {
-  type: 'beehive' | 'olive_tree' | 'family_plot'
+  type: 'beehive' | 'olive_tree' | 'vineyard'
   amount_eur: number
-  partner: 'habeebee' | 'ilanga' | 'promiel' | 'multi'
   bonus_percentage: number
 }
 
 export type Subscription = {
-  type: 'ambassador_standard' | 'ambassador_premium'
+  type: 'monthly_standard' | 'monthly_premium' | 'annual_standard' | 'annual_premium'
   billing_frequency: 'monthly' | 'annual'
   amount_eur: number
   bonus_percentage: number
@@ -43,12 +41,12 @@ export function calculateInvestmentPoints(investment: Investment): PointsCalcula
     total_points,
     euro_value_equivalent: total_points,
     investment_type: investment.type,
-    calculated_at: new Date()
+    calculated_at: new Date(),
   }
 }
 
 export function calculateSubscriptionPoints(subscription: Subscription): PointsCalculation {
-  const validTypes = ['ambassador_standard', 'ambassador_premium']
+  const validTypes = ['monthly_standard', 'monthly_premium', 'annual_standard', 'annual_premium']
   if (!validTypes.includes(subscription.type)) {
     throw new Error('Invalid subscription type')
   }
@@ -77,7 +75,7 @@ export function calculateSubscriptionPoints(subscription: Subscription): PointsC
     bonus_points,
     total_points,
     euro_value_equivalent: total_points,
-    calculated_at: new Date()
+    calculated_at: new Date(),
   }
 }
 
@@ -87,30 +85,23 @@ export function validateInvestmentRules(investment: Investment): boolean {
       min_amount: 50,
       max_amount: 200,
       expected_bonus: 30,
-      valid_partners: ['habeebee']
     },
     olive_tree: {
       min_amount: 80,
       max_amount: 300,
       expected_bonus: 40,
-      valid_partners: ['ilanga']
     },
-    family_plot: {
-      min_amount: 150,
+    vineyard: {
+      min_amount: 100,
       max_amount: 500,
       expected_bonus: 50,
-      valid_partners: ['multi', 'habeebee', 'ilanga']
-    }
+    },
   }
 
   const rule = rules[investment.type]
   if (!rule) return false
 
   if (investment.amount_eur < rule.min_amount || investment.amount_eur > rule.max_amount) {
-    return false
-  }
-
-  if (!rule.valid_partners.includes(investment.partner)) {
     return false
   }
 

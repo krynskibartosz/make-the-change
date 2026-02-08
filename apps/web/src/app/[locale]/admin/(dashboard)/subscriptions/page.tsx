@@ -1,252 +1,157 @@
-"use client"
+import { db } from '@make-the-change/core/db'
+import { profiles, subscriptions } from '@make-the-change/core/schema'
+import { and, count, desc, eq, ilike, or } from 'drizzle-orm'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
+import { requireAdminPage } from '@/lib/auth-guards'
+import type { Subscription } from '@/lib/types/subscription'
+import { PAGE_SIZE } from './constants'
+import { SubscriptionsClient } from './subscriptions-client'
 
-import { CreditCard, User, Plus, Settings, Euro, Calendar } from 'lucide-react'
-import Link from 'next/link'
-import { useState, useEffect, type FC } from 'react'
-
-import { Badge } from '@/app/[locale]/admin/(dashboard)/components/badge'
-import { AdminPageContainer } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-container'
-import { AdminPageHeader } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-header'
-import { AdminPagination } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-pagination'
-import { SubscriptionListItem } from '@/app/[locale]/admin/(dashboard)/components/subscriptions/subscription-list-item'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/card'
-import { DataList, DataCard } from '@/app/[locale]/admin/(dashboard)/components/ui/data-list'
-import { Input } from '@/app/[locale]/admin/(dashboard)/components/ui/input'
-import { ListContainer } from '@/app/[locale]/admin/(dashboard)/components/ui/list-container'
-import { SimpleSelect } from '@/app/[locale]/admin/(dashboard)/components/ui/select'
-import { ViewToggle, type ViewMode } from '@/app/[locale]/admin/(dashboard)/components/ui/view-toggle'
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/hooks/use-toast'
-import { trpc } from '@/lib/trpc'
-
-const AdminSubscriptionsPage: FC = () => {
-  const { toast } = useToast()
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<'active' | 'cancelled' | 'suspended' | 'past_due' | undefined>()
-  const [subscriptionTier, setSubscriptionTier] = useState<'ambassadeur_standard' | 'ambassadeur_premium' | undefined>()
-  const utils = trpc.useUtils()
-
-  const handleStatusChange = (value: string) => {
-    setStatus(value as 'active' | 'cancelled' | 'suspended' | 'past_due' | undefined)
-  }
-
-  const handleTierChange = (value: string) => {
-    setSubscriptionTier(value as 'ambassadeur_standard' | 'ambassadeur_premium' | undefined)
-  }
-
-  const [view, setView] = useState<ViewMode>('grid')
-  const [cursor, setCursor] = useState<string | undefined>()
-  const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 20
-
-  const [subscriptions, setSubscriptions] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isFetching, setIsFetching] = useState(false)
-
-  const { data, isLoading: trpcLoading, isFetching: trpcFetching, refetch } = trpc.admin.subscriptions.list.useQuery(
-    { search: search || undefined, status: status || undefined, subscriptionTier: subscriptionTier || undefined, limit: 20, page: currentPage },
-    {
-      retry: false
-    }
-  )
-
-  useEffect(() => {
-    setIsLoading(trpcLoading)
-    setIsFetching(trpcFetching)
-  }, [trpcLoading, trpcFetching])
-
-  useEffect(() => {
-    if (data) {
-      setSubscriptions(data.items || [])
-    }
-  }, [data])
-
-  const createSubscription = trpc.admin.subscriptions.create.useMutation({
-    onMutate: async () => {
-      await utils.admin.subscriptions.list.cancel()
-
-      const prevData = utils.admin.subscriptions.list.getData({ search: search || undefined, status: status || undefined, subscriptionTier: subscriptionTier || undefined, limit: 20, page: currentPage })
-      return { prevData }
-    },
-    onSuccess: () => {
-      utils.admin.subscriptions.list.invalidate()
-      toast({ variant: 'success', title: 'Abonnement créé' })
-    },
-    onError: (e, vars, ctx) => {
-      if (ctx?.prevData) {
-        utils.admin.subscriptions.list.setData({ search: search || undefined, status: status || undefined, subscriptionTier: subscriptionTier || undefined, limit: 20, page: currentPage }, ctx.prevData)
-      }
-      toast({ variant: 'destructive', title: 'Création échouée', description: e.message })
-    },
-    onSettled: () => {
-      utils.admin.subscriptions.list.invalidate()
-    }
-  })
-
-  const updateSubscription = trpc.admin.subscriptions.update.useMutation({
-    onMutate: async (vars) => {
-      await utils.admin.subscriptions.list.cancel()
-      const prev = utils.admin.subscriptions.list.getData({ search: search || undefined, status: status || undefined, subscriptionTier: subscriptionTier || undefined, limit: 20, page: currentPage })
-      if (prev) {
-        utils.admin.subscriptions.list.setData({ search: search || undefined, status: status || undefined, subscriptionTier: subscriptionTier || undefined, limit: 20, page: currentPage }, {
-          ...prev,
-          items: prev.items.map((s: any) => (s.id === vars.id ? { ...s, ...vars.patch } : s)),
-        } as any)
-      }
-      return { prev }
-    },
-    onError: (_e, _vars, ctx) => {
-      if (ctx?.prev) utils.admin.subscriptions.list.setData({ search: search || undefined, status: status || undefined, subscriptionTier: subscriptionTier || undefined, limit: 20, page: currentPage }, ctx.prev as any)
-      toast({ variant: 'destructive', title: 'Mise à jour échouée' })
-    },
-    onSuccess: () => toast({ variant: 'success', title: 'Abonnement mis à jour' }),
-    onSettled: () => utils.admin.subscriptions.list.invalidate(),
-  })
-
-  return (
-    <AdminPageContainer>
-      <AdminPageHeader>
-        <Input
-          className="max-w-xs"
-          placeholder="Rechercher un abonnement..."
-          value={search}
-          onChange={(e) => setSearch((e.target as HTMLInputElement).value)}
-        />
-        <SimpleSelect
-          className="w-[150px]"
-          placeholder="Statut"
-          value={status}
-          options={[
-            { value: 'active', label: 'Actif' },
-            { value: 'cancelled', label: 'Annulé' },
-            { value: 'suspended', label: 'Suspendu' },
-            { value: 'past_due', label: 'En retard' },
-          ]}
-          onValueChange={handleStatusChange}
-        />
-        <SimpleSelect
-          className="w-[150px]"
-          placeholder="Niveau"
-          value={subscriptionTier}
-          options={[
-            { value: 'ambassadeur_standard', label: 'Standard' },
-            { value: 'ambassadeur_premium', label: 'Premium' },
-          ]}
-          onValueChange={handleTierChange}
-        />
-        {(isLoading || isFetching) && <span aria-live="polite" className="text-xs text-muted-foreground">Chargement…</span>}
-
-        <Link href="/admin/subscriptions/new">
-          <Button className="flex items-center gap-2" size="sm">
-            <Plus className="h-4 w-4" />
-            Nouvel abonnement
-          </Button>
-        </Link>
-        <ViewToggle
-          availableViews={['grid', 'list']}
-          value={view}
-          onChange={setView}
-        />
-      </AdminPageHeader>
-      
-      {view === 'grid' ? (
-        <DataList
-          gridCols={3}
-          isLoading={isLoading}
-          items={subscriptions}
-          emptyState={{
-            title: 'Aucun abonnement trouvé',
-            description: 'Aucun résultat pour ces filtres.',
-            action: (
-              <Button size="sm" variant="outline" onClick={() => { setSearch(''); setStatus(undefined); setSubscriptionTier(undefined); setCursor(undefined); refetch() }}>
-                Réinitialiser les filtres
-              </Button>
-            )
-          }}
-          renderItem={(s: any) => (
-            <DataCard href={`/admin/subscriptions/${s.id}`}>
-              <DataCard.Header>
-                <DataCard.Title>
-                  <div className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium">
-                      {s.users?.user_profiles?.first_name} {s.users?.user_profiles?.last_name}
-                    </span>
-                    <Badge color={s.status === 'active' ? 'green' : 'gray'}>{s.status}</Badge>
-                  </div>
-                </DataCard.Title>
-              </DataCard.Header>
-              <DataCard.Content>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <User className="w-3.5 h-3.5" />
-                  <span>{s.users?.email}</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <Settings className="w-3.5 h-3.5" />
-                  <span>{s.subscription_tier}</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <Euro className="w-3.5 h-3.5" />
-                  <span>€{s.amount_eur} / {s.billing_frequency === 'monthly' ? 'mois' : 'an'}</span>
-                </div>
-              </DataCard.Content>
-              <DataCard.Footer>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" onClick={(e) => { e.preventDefault(); updateSubscription.mutate({ id: s.id, patch: { status: s.status === 'active' ? 'suspended' : 'active' } }) }}>{s.status === 'active' ? 'Suspendre' : 'Activer'}</Button>
-                </div>
-                <span className="text-xs text-muted-foreground">ID: {s.id}</span>
-              </DataCard.Footer>
-            </DataCard>
-          )}
-        />
-      ) : (
-        isLoading ? (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">Chargement des abonnements...</p>
-          </div>
-        ) : subscriptions.length === 0 ? (
-          <div className="text-center py-8">
-            <CreditCard className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">Aucun abonnement trouvé</h3>
-            <p className="text-muted-foreground mb-4">Aucun résultat pour ces filtres.</p>
-            <Button size="sm" variant="outline" onClick={() => { setSearch(''); setStatus(undefined); setSubscriptionTier(undefined); setCursor(undefined); refetch() }}>
-              Réinitialiser les filtres
-            </Button>
-          </div>
-        ) : (
-          <ListContainer>
-            {subscriptions.map((subscription) => (
-              <SubscriptionListItem
-                key={subscription.id}
-                subscription={subscription}
-                actions={
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <Button size="sm" variant="outline" onClick={(e) => { e.preventDefault(); updateSubscription.mutate({ id: subscription.id, patch: { status: subscription.status === 'active' ? 'suspended' : 'active' } }) }}>
-                      {subscription.status === 'active' ? 'Suspendre' : 'Activer'}
-                    </Button>
-                  </div>
-                }
-              />
-            ))}
-          </ListContainer>
-        )
-      )}
-
-      <AdminPagination
-        pagination={subscriptions.length > pageSize ? {
-          currentPage,
-          pageSize,
-          totalItems: subscriptions.length,
-          totalPages: Math.ceil(subscriptions.length / pageSize)
-        } : {
-          currentPage: 1,
-          pageSize,
-          totalItems: subscriptions.length,
-          totalPages: 1
-        }}
-      />
-    </AdminPageContainer>
-  )
+type SearchParams = {
+  q?: string
+  status?: string
+  plan?: string
+  page?: string
 }
 
-export default AdminSubscriptionsPage
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const params = await props.params
+  const t = await getTranslations({ locale: params.locale, namespace: 'admin.subscriptions' })
+
+  return {
+    title: `${t('title')} | Admin`,
+  }
+}
+
+export default async function AdminSubscriptionsPage(props: {
+  params: Promise<{ locale: string }>
+  searchParams: Promise<SearchParams>
+}) {
+  const { locale } = await props.params
+  await requireAdminPage(locale)
+  const searchParams = await props.searchParams
+  const { q, status: statusFilter, plan: planFilter, page } = searchParams
+
+  const pageNumber = Number(page && page !== 'undefined' ? page : 1)
+  const offset = (pageNumber - 1) * PAGE_SIZE
+
+  // Build Filter Conditions
+  const conditions = []
+
+  if (q) {
+    const searchLower = `%${q.toLowerCase()}%`
+    conditions.push(
+      or(
+        ilike(profiles.email, searchLower),
+        ilike(profiles.first_name, searchLower),
+        ilike(profiles.last_name, searchLower),
+      ),
+    )
+  }
+
+  if (statusFilter && statusFilter !== 'all') {
+    conditions.push(eq(subscriptions.status, statusFilter as NonNullable<Subscription['status']>))
+  }
+
+  if (planFilter && planFilter !== 'all') {
+    conditions.push(
+      eq(subscriptions.plan_type, planFilter as NonNullable<Subscription['plan_type']>),
+    )
+  }
+
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+  // Execute Queries
+  const [subscriptionRows, totalResult] = await Promise.all([
+    // 1. Subscriptions (Paginated & Filtered)
+    db
+      .select({
+        id: subscriptions.id,
+        user_id: subscriptions.user_id,
+        plan_type: subscriptions.plan_type,
+        billing_frequency: subscriptions.billing_frequency,
+        monthly_points_allocation: subscriptions.monthly_points_allocation,
+        monthly_price: subscriptions.monthly_price,
+        annual_price: subscriptions.annual_price,
+        monthly_points: subscriptions.monthly_points,
+        annual_points: subscriptions.annual_points,
+        bonus_percentage: subscriptions.bonus_percentage,
+        status: subscriptions.status,
+        current_period_start: subscriptions.current_period_start,
+        current_period_end: subscriptions.current_period_end,
+        next_billing_date: subscriptions.next_billing_date,
+        cancel_at_period_end: subscriptions.cancel_at_period_end,
+        stripe_subscription_id: subscriptions.stripe_subscription_id,
+        stripe_customer_id: subscriptions.stripe_customer_id,
+        cancelled_at: subscriptions.cancelled_at,
+        ended_at: subscriptions.ended_at,
+        trial_end: subscriptions.trial_end,
+        conversion_date: subscriptions.conversion_date,
+        cancellation_reason: subscriptions.cancellation_reason,
+        created_at: subscriptions.created_at,
+        updated_at: subscriptions.updated_at,
+        updated_by: subscriptions.updated_by,
+        profile_email: profiles.email,
+        profile_first_name: profiles.first_name,
+        profile_last_name: profiles.last_name,
+      })
+      .from(subscriptions)
+      .leftJoin(profiles, eq(profiles.id, subscriptions.user_id))
+      .where(whereClause)
+      .orderBy(desc(subscriptions.created_at))
+      .limit(PAGE_SIZE)
+      .offset(offset),
+
+    // 2. Count (Filtered)
+    db
+      .select({ count: count() })
+      .from(subscriptions)
+      .leftJoin(profiles, eq(profiles.id, subscriptions.user_id))
+      .where(whereClause),
+  ])
+
+  const currentTotal = totalResult[0]?.count ?? 0
+
+  const items = subscriptionRows.map((row) => ({
+    ...row,
+    user_id: row.user_id!,
+    plan_type: row.plan_type,
+    billing_frequency: row.billing_frequency ?? 'monthly',
+    monthly_points_allocation: Number(row.monthly_points_allocation || 0),
+    monthly_price: row.monthly_price ? Number(row.monthly_price) : null,
+    annual_price: row.annual_price ? Number(row.annual_price) : null,
+    monthly_points: Number(row.monthly_points || 0),
+    annual_points: Number(row.annual_points || 0),
+    bonus_percentage: Number(row.bonus_percentage || 0),
+    status: row.status ?? 'active',
+    cancel_at_period_end: row.cancel_at_period_end ?? false,
+    created_at: row.created_at?.toISOString() ?? new Date().toISOString(),
+    updated_at: row.updated_at?.toISOString() ?? new Date().toISOString(),
+    current_period_start: row.current_period_start?.toISOString() ?? null,
+    current_period_end: row.current_period_end?.toISOString() ?? null,
+    next_billing_date: row.next_billing_date?.toISOString() ?? null,
+    cancelled_at: row.cancelled_at?.toISOString() ?? null,
+    ended_at: row.ended_at?.toISOString() ?? null,
+    trial_end: row.trial_end?.toISOString() ?? null,
+    conversion_date: row.conversion_date?.toISOString() ?? null,
+    updated_by: row.updated_by ?? null,
+    users: {
+      id: row.user_id!,
+      email: row.profile_email ?? '',
+      first_name: row.profile_first_name ?? '',
+      last_name: row.profile_last_name ?? '',
+      avatar_url: null,
+      phone: null,
+    },
+  }))
+
+  const initialData = {
+    items,
+    total: currentTotal,
+  }
+
+  return <SubscriptionsClient initialData={initialData} />
+}

@@ -210,3 +210,8 @@ sk_test_*
 pk_test_*
 .vercel
 .env*.local
+
+# Playwright (web-client)
+apps/web-client/test-results/
+apps/web-client/playwright-report/
+apps/web-client/playwright/.auth/

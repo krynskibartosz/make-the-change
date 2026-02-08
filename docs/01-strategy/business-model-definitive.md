@@ -1,5 +1,7 @@
 # 🌱 Modèle Économique Définitif - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **📍 VERSION DÉFINITIVE** | **🗓️ FINALISÉ: Août 2025** | **⭐️ IMPLÉMENTATION OBLIGATOIRE**
 
 ## 🎯 Modèle Hybride 3 Niveaux - Version Finale

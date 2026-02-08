@@ -1,118 +1,122 @@
+'use server'
 
-'use server';
+import { revalidatePath } from 'next/cache'
 
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
+import { requireAdmin } from '@/lib/auth-guards'
+import {
+  type ProjectFormData,
+  projectFormSchema,
+  projectPatchSchema,
+} from '@/lib/validators/project'
 
-import { createSupabaseServer } from '@/supabase/server';
-
-const projectSchema = z.object({
-  name: z.string().min(3, "Le nom du projet est requis et doit faire au moins 3 caractères."),
-  slug: z.string().min(3, "Le slug est requis."),
-  type: z.enum(['beehive', 'olive_tree', 'vineyard'], {
-    errorMap: () => ({ message: "Le type de projet est invalide." })
-  }),
-  target_budget: z.coerce.number().positive("Le budget cible doit être un nombre positif."),
-  producer_id: z.string().uuid("Un producteur valide est requis."),
-  description: z.string().optional(),
-  long_description: z.string().optional(),
-  status: z.enum(['active', 'funded', 'closed', 'suspended']).default('active'),
-  featured: z.coerce.boolean().default(false),
-});
-
-export type ProjectFormState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]> | null;
-  id?: string;
+export type ProjectActionResult = {
+  success: boolean
+  data?: { id: string } & Record<string, unknown>
+  error?: string
+  errors?: Record<string, string[]>
 }
 
-export async function createProject(prevState: ProjectFormState, formData: FormData): Promise<ProjectFormState> {
-  const validatedFields = projectSchema.safeParse(
-    Object.fromEntries(formData.entries())
-  );
+import type { NewProject } from '@make-the-change/core/schema'
 
-  if (!validatedFields.success) {
+// Adapter to map form data to schema-compatible format
+function adaptProjectDataForSchema(data: ProjectFormData | Partial<ProjectFormData>): Partial<NewProject> {
+  const patch: Partial<NewProject> = {}
+
+  // Explicit mapping of fields to avoid 'as unknown' casting
+  
+  // Mapped fields
+  if ('name' in data) patch.name_default = data.name
+  if ('description' in data) patch.description_default = data.description
+  if ('long_description' in data) patch.long_description_default = data.long_description
+  if ('images' in data) patch.gallery_image_urls = data.images
+  if ('hero_image' in data) patch.hero_image_url = data.hero_image
+  if ('avatar_image' in data) patch.avatar_image_url = data.avatar_image
+
+  // Direct fields
+  if ('slug' in data) patch.slug = data.slug
+  if ('type' in data) patch.type = data.type
+  if ('target_budget' in data) patch.target_budget = data.target_budget
+  if ('producer_id' in data) patch.producer_id = data.producer_id
+  if ('status' in data) patch.status = data.status
+  if ('featured' in data) patch.featured = data.featured
+  
+  // SEO & Translations
+  if ('seo_title' in data) patch.seo_title = data.seo_title
+  if ('seo_description' in data) patch.seo_description = data.seo_description
+  
+  if ('name_i18n' in data) patch.name_i18n = data.name_i18n
+  if ('description_i18n' in data) patch.description_i18n = data.description_i18n
+  if ('long_description_i18n' in data) patch.long_description_i18n = data.long_description_i18n
+  if ('seo_title_i18n' in data) patch.seo_title_i18n = data.seo_title_i18n
+  if ('seo_description_i18n' in data) patch.seo_description_i18n = data.seo_description_i18n
+
+  return patch
+}
+
+export async function createProjectAction(input: ProjectFormData): Promise<ProjectActionResult> {
+  await requireAdmin()
+  const parsed = projectFormSchema.safeParse(input)
+  if (!parsed.success) {
     return {
       success: false,
-      message: "Erreurs de validation. Veuillez vérifier les champs.",
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
+      error: 'Validation failed',
+      errors: parsed.error.flatten().fieldErrors,
+    }
   }
 
-  const supabase = await createSupabaseServer();
+  const db = await import('@make-the-change/core/db').then((m) => m.db)
+  const { projects } = await import('@make-the-change/core/schema')
 
-  const hardcodedLocation = 'POINT(0 0)';
-  const hardcodedAddress = { street: "", city: "", region: "", country: "" };
+  try {
+    const adapted = adaptProjectDataForSchema(parsed.data)
+    const [data] = await db
+      .insert(projects)
+      .values(adapted as NewProject)
+      .returning()
 
-  const { data, error } = await supabase
-    .from('projects')
-    .insert({
-      ...validatedFields.data,
-      location: hardcodedLocation,
-      address: hardcodedAddress,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    return { success: false, message: `Erreur de base de données: ${error.message}`, errors: null };
-  }
-
-  revalidatePath('/admin/projects');
-  redirect(`/admin/projects/${data.id}`);
-}
-
-export async function updateProject(id: string, prevState: ProjectFormState, formData: FormData): Promise<ProjectFormState> {
-  const validatedFields = projectSchema.safeParse(
-    Object.fromEntries(formData.entries())
-  );
-
-  if (!validatedFields.success) {
+    revalidatePath('/admin/projects')
+    return { success: true, data }
+  } catch (error) {
     return {
       success: false,
-      message: "Erreurs de validation. Veuillez vérifier les champs.",
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-
-  const supabase = await createSupabaseServer();
-
-  const hardcodedLocation = 'POINT(0 0)';
-  const hardcodedAddress = { street: "", city: "", region: "", country: "" };
-
-  const { error } = await supabase
-    .from('projects')
-    .update({
-      ...validatedFields.data,
-      location: hardcodedLocation,
-      address: hardcodedAddress,
-    })
-    .eq('id', id);
-
-  if (error) {
-    return { success: false, message: `Erreur de base de données: ${error.message}`, errors: null };
-  }
-
-  revalidatePath('/admin/projects');
-  revalidatePath(`/admin/projects/${id}`);
-
-  return {
-    success: true,
-    message: "Projet mis à jour avec succès.",
-    id,
+      error: error instanceof Error ? error.message : 'Failed to create project',
+    }
   }
 }
 
-export async function deleteProject(id: string) {
-  const supabase = await createSupabaseServer();
-  const { error } = await supabase.from('projects').delete().eq('id', id);
-
-  if (error) {
-    console.error("Error deleting project:", error);
+export async function updateProjectAction(
+  id: string,
+  patch: Partial<ProjectFormData>,
+): Promise<ProjectActionResult> {
+  await requireAdmin()
+  const parsed = projectPatchSchema.safeParse(patch)
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: 'Validation failed',
+      errors: parsed.error.flatten().fieldErrors,
+    }
   }
 
-  revalidatePath('/admin/projects');
-  redirect('/admin/projects');
+  const db = await import('@make-the-change/core/db').then((m) => m.db)
+  const { projects } = await import('@make-the-change/core/schema')
+  const { eq } = await import('drizzle-orm')
+
+  try {
+    const adapted = adaptProjectDataForSchema(parsed.data)
+    const [data] = await db.update(projects).set(adapted).where(eq(projects.id, id)).returning()
+
+    if (!data) {
+      return { success: false, error: 'Project not found' }
+    }
+
+    revalidatePath('/admin/projects')
+    revalidatePath(`/admin/projects/${id}`)
+    return { success: true, data }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update project',
+    }
+  }
 }

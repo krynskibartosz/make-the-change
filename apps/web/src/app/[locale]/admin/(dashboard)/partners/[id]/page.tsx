@@ -1,60 +1,32 @@
-'use client'
+import { db } from '@make-the-change/core/db'
+import { producers } from '@make-the-change/core/schema'
+import { eq } from 'drizzle-orm'
+import { requireAdminPage } from '@/lib/auth-guards'
 
-import { useParams } from 'next/navigation'
-import { useMemo } from 'react'
-import { type FC } from 'react'
+import { PartnerEditClient } from './partner-edit-client'
 
-import { PartnerDetailController } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-detail-controller'
-import { trpc } from '@/lib/trpc'
+export default async function AdminPartnerEditPage({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>
+}) {
+  const { id, locale } = await params
+  await requireAdminPage(locale)
+  const [partner] = await db.select().from(producers).where(eq(producers.id, id)).limit(1)
 
-import type { PartnerFormData } from '@make-the-change/api/validators/partner';
-
-const AdminPartnerEditPage: FC = () => {
-  const params = useParams<{ id: string }>()
-  const partnerId = params?.id as string
-  const utils = trpc.useUtils()
-
-  const { data: partner, isLoading, error } = trpc.admin.partners.byId.useQuery(
-    { id: partnerId },
-    {
-      enabled: !!partnerId,
-      retry: 1,
-    }
-  )
-
-  const update = trpc.admin.partners.update.useMutation({
-    onSuccess: () => {
-      utils.admin.partners.byId.invalidate({ id: partnerId })
-      utils.admin.partners.list.invalidate()
-    },
-    onError: (error) => {
-      console.error('Erreur lors de la mise à jour:', error)
-      alert('Erreur lors de la sauvegarde')
-    },
-  })
-
-  const partnerData = useMemo(() => {
-    return partner || null
-  }, [partner])
-
-  if (!partnerId) return <div className="p-8">ID de partenaire manquant</div>
-  if (isLoading) return <div className="p-8">Chargement du partenaire...</div>
-  if (error) return <div className="p-8">Erreur: {error.message}</div>
-  if (!partnerData) return <div className="p-8">Partenaire non trouvé</div>
-
-  const handleSave = async (patch: Partial<PartnerFormData>) => {
-    await update.mutateAsync({
-      id: partnerId,
-      patch,
-    })
+  if (!partner) {
+    return <div className="p-8">Partenaire non trouvé</div>
   }
 
-  return (
-    <PartnerDetailController
-      partnerData={partnerData as PartnerFormData & { id: string }}
-      onSave={handleSave}
-    />
-  )
-}
+  const partnerData = {
+    id: partner.id,
+    name: partner.name_default || 'Unknown Business',
+    slug: partner.slug || '',
+    description: partner.description_default || '',
+    contact_website: partner.contact_website || '',
+    contact_email: partner.contact_email || '',
+    status: partner.status || 'pending',
+  }
 
-export default AdminPartnerEditPage
+  return <PartnerEditClient initialPartner={partnerData} />
+}

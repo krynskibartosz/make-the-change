@@ -1,5 +1,7 @@
 # Stratégie de Prospection Partenaires - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **Guide stratégique pour identifier, évaluer et sélectionner de nouveaux partenaires biodiversité en Belgique et Europe.**
 
 ---

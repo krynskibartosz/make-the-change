@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
+import { useController, useFormContext } from 'react-hook-form'
 import { SingleAutocomplete } from '@/app/[locale]/admin/(dashboard)/components/ui/single-autocomplete'
 import { TagsAutocomplete } from '@/app/[locale]/admin/(dashboard)/components/ui/tags-autocomplete'
 
-import { useFieldContext, useFieldErrors } from './form-context'
-
 export type FormAutocompleteProps = {
+  name: string
   mode?: 'single' | 'tags'
   suggestions?: string[]
   placeholder?: string
@@ -18,6 +18,7 @@ export type FormAutocompleteProps = {
 }
 
 export const FormAutocomplete = ({
+  name,
   mode = 'single',
   suggestions = [],
   placeholder,
@@ -26,14 +27,12 @@ export const FormAutocomplete = ({
   allowCreate = true,
   maxTags = 10,
 }: FormAutocompleteProps) => {
-  // Always call hooks at the top level
-  const fieldSingle = useFieldContext<string | undefined>()
-  const fieldTags = useFieldContext<string[]>()
-  const errors = useFieldErrors()
-  const hasError = errors.length > 0
+  const { control } = useFormContext()
+  const { field, fieldState } = useController({ control, name })
+  const errorMessage = fieldState.error?.message
 
   if (mode === 'tags') {
-    const value = fieldTags.state.value ?? []
+    const value = Array.isArray(field.value) ? (field.value as string[]) : []
     return (
       <div className="space-y-1">
         <TagsAutocomplete
@@ -43,14 +42,14 @@ export const FormAutocomplete = ({
           placeholder={placeholder}
           suggestions={suggestions}
           value={value}
-          onChange={(tags) => fieldTags.handleChange(tags)}
+          onChange={(tags) => field.onChange(tags)}
         />
-        {hasError && errors[0] && <p className="text-sm text-red-500">{errors[0]}</p>}
+        {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
       </div>
     )
   }
 
-  const value = fieldSingle.state.value ?? ''
+  const value = typeof field.value === 'string' ? field.value : ''
   return (
     <div className="space-y-1">
       <SingleAutocomplete
@@ -60,9 +59,9 @@ export const FormAutocomplete = ({
         placeholder={placeholder}
         suggestions={suggestions}
         value={value}
-        onChange={(v) => fieldSingle.handleChange(v)}
+        onChange={(v) => field.onChange(v)}
       />
-      {hasError && errors[0] && <p className="text-sm text-red-500">{errors[0]}</p>}
+      {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
     </div>
   )
 }

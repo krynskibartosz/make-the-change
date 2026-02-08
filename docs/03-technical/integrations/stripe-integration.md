@@ -22,4 +22,4 @@ Idempotency: store processed event IDs; ensure handler is retry-safe. Les jobs d
 - Respect Stripe retry schedule; do not throw to trigger retries intentionally unless transient.
 
 ## References
-- `api/subscriptions-endpoints.md`, `services/billing-service.md`, `api/stripe-webhook-example.ts`.
+- `../services/billing-service.md`

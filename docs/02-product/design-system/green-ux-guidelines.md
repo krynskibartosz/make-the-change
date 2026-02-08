@@ -1,4 +1,6 @@
 # 🌱 Green UX Guidelines - Make the CHANGE
+
+> Historique 2024/2025 — à revalider en 2026.
 **Design System Durable pour Applications Biodiversité**
 
 **📍 DOCUMENT TYPE**: Guidelines Design Durable | **🗓️ DATE**: 27 Août 2025 | **⭐️ PRIORITÉ**: Stratégique

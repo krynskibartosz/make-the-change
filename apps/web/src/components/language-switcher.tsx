@@ -1,19 +1,18 @@
-'use client';
+'use client'
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl'
 
-import { useRouter, usePathname } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
+import { usePathname, useRouter } from '@/i18n/navigation'
+import { routing } from '@/i18n/routing'
 
 export function LanguageSwitcher() {
-  const t = useTranslations('common');
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
+  const locale = useLocale()
+  const router = useRouter()
+  const pathname = usePathname()
 
   const handleLocaleChange = (newLocale: string) => {
-    router.push(pathname, { locale: newLocale });
-  };
+    router.push(pathname, { locale: newLocale })
+  }
 
   return (
     <div className="flex items-center gap-2">
@@ -31,5 +30,5 @@ export function LanguageSwitcher() {
         </button>
       ))}
     </div>
-  );
+  )
 }

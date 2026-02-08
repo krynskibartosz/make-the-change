@@ -74,23 +74,33 @@ import { Button, Input, Select, Dialog } from '@core/shared/ui';
 
 ### Form Components (PHASE 2)
 
-Form components combine base components with form field logic:
+Form components are React Hook Form bindings for base UI components:
 
 ```typescript
-import { FormField, FormInput, FormCheckbox } from '@core/shared/ui';
-import { useForm } from '@tanstack/react-form';
+import { FormProvider, useForm } from 'react-hook-form';
+import { FormInput, FormCheckbox, FormSelect } from '@core/shared/ui';
 
-<form.Field name="email">
-  {(field) => (
-    <FormField field={field} label="Email">
-      <FormInput field={field} />
-    </FormField>
-  )}
-</form.Field>
+type Values = {
+  email: string;
+  role: string;
+  accepted: boolean;
+};
+
+const form = useForm<Values>({
+  defaultValues: { email: '', role: '', accepted: false },
+});
+
+<FormProvider {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <FormInput name="email" label="Email" />
+    <FormSelect name="role" label="Role" options={roles} />
+    <FormCheckbox name="accepted" label="Accept terms" />
+  </form>
+</FormProvider>
 ```
 
-**Status**: 🔄 In Development  
-**Components**: FormField, FormInput, FormCheckbox, FormSelect
+**Status**: ✅ Production Ready (RHF)  
+**Components**: FieldShell, FormField, FormInput, FormTextArea, FormSelect, FormCheckbox, FormSubmitButton
 
 ### Composite Components (PHASE 3)
 
@@ -388,4 +398,3 @@ Same as main project.
 **Last Updated**: February 4, 2026  
 **Maintained By**: Development Team  
 **Production Ready**: ✅ Yes
-

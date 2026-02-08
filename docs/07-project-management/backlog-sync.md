@@ -13,7 +13,7 @@ bash scripts/export_issues.sh
 # -> backlog/issues-export.tsv
 ```
 
-Utilisez ce TSV pour confronter avec la documentation (docs/02-product, docs/04-specifications, etc.).
+Utilisez ce TSV pour confronter avec la documentation (docs/02-product, docs/03-technical, docs/_legacy_archive/04-specifications si besoin historique).
 
 ## 2) Préparer les mises à jour d’issues (titre, labels, body, assignés)
 
@@ -58,4 +58,3 @@ Le script s’assure que l’issue est présente dans le Project et met à jour 
 bash scripts/analyze_issues.sh  # si vous avez un token
 # ou utilisez gh + queries existantes pour un spot-check
 ```
-

@@ -1,11 +1,12 @@
 'use client'
 
 import { Icon } from 'leaflet'
+import { Leaf } from 'lucide-react'
 import { useMemo } from 'react'
-import { MapContainer as LeafletMapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer as LeafletMapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
-import { MapPin, Leaf, TreePine, Grape, Badge } from 'lucide-react'
+import { Badge } from '@make-the-change/core/ui'
 
 type ProjectLocation = {
   id: string
@@ -36,14 +37,14 @@ type MapContainerProps = {
 const projectTypeLabels = {
   beehive: 'Ruche',
   olive_tree: 'Olivier',
-  vineyard: 'Vigne'
+  vineyard: 'Vigne',
 }
 
 const createProjectIcon = (type: string) => {
   const colors = {
     beehive: '#eab308',
     olive_tree: '#16a34a',
-    vineyard: '#9333ea'
+    vineyard: '#9333ea',
   }
 
   return new Icon({
@@ -55,27 +56,25 @@ const createProjectIcon = (type: string) => {
     `)}`,
     iconSize: [40, 40],
     iconAnchor: [20, 40],
-    popupAnchor: [0, -40]
+    popupAnchor: [0, -40],
   })
 }
 
 export default function MapContainer({
   projects,
-  selectedProject,
+  selectedProject: _selectedProject,
   onProjectSelect,
-  selectedType
+  selectedType,
 }: MapContainerProps) {
   const filteredProjects = useMemo(() => {
-    return selectedType === 'all'
-      ? projects
-      : projects.filter(p => p.type === selectedType)
+    return selectedType === 'all' ? projects : projects.filter((p) => p.type === selectedType)
   }, [projects, selectedType])
 
   const mapCenter = useMemo(() => {
     if (filteredProjects.length === 0) return [46.603_354, 1.888_334]
 
-    const lats = filteredProjects.map(p => p.coordinates[0]).filter(lat => lat !== 0)
-    const lngs = filteredProjects.map(p => p.coordinates[1]).filter(lng => lng !== 0)
+    const lats = filteredProjects.map((p) => p.coordinates[0]).filter((lat) => lat !== 0)
+    const lngs = filteredProjects.map((p) => p.coordinates[1]).filter((lng) => lng !== 0)
 
     if (lats.length === 0 || lngs.length === 0) return [46.603_354, 1.888_334]
 
@@ -101,11 +100,13 @@ export default function MapContainer({
         />
 
         {filteredProjects.map((project) => {
-          if (!project.coordinates ||
-              project.coordinates[0] === 0 ||
-              project.coordinates[1] === 0 ||
-              isNaN(project.coordinates[0]) ||
-              isNaN(project.coordinates[1])) {
+          if (
+            !project.coordinates ||
+            project.coordinates[0] === 0 ||
+            project.coordinates[1] === 0 ||
+            Number.isNaN(project.coordinates[0]) ||
+            Number.isNaN(project.coordinates[1])
+          ) {
             return null
           }
 
@@ -115,21 +116,28 @@ export default function MapContainer({
               icon={createProjectIcon(project.type)}
               position={project.coordinates as [number, number]}
               eventHandlers={{
-                click: () => onProjectSelect(project)
+                click: () => onProjectSelect(project),
               }}
             >
               <Popup>
                 <div className="min-w-[280px] p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      project.type === 'beehive' ? 'bg-yellow-500' :
-                      (project.type === 'olive_tree' ? 'bg-green-600' : 'bg-purple-600')
-                    }`}>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        project.type === 'beehive'
+                          ? 'bg-yellow-500'
+                          : project.type === 'olive_tree'
+                            ? 'bg-green-600'
+                            : 'bg-purple-600'
+                      }`}
+                    >
                       <Leaf className="w-4 h-4 text-white" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900">{project.name}</h3>
-                      <p className="text-sm text-gray-600">{project.city}, {project.country}</p>
+                      <p className="text-sm text-gray-600">
+                        {project.city}, {project.country}
+                      </p>
                       <p className="text-xs text-amber-600 mt-1">📍 Coordonnées approximatives</p>
                     </div>
                   </div>
@@ -142,44 +150,59 @@ export default function MapContainer({
 
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">Budget:</span>
-                      <span className="font-semibold">{project.currentFunding}€ / {project.targetBudget}€</span>
+                      <span className="font-semibold">
+                        {project.currentFunding}€ / {project.targetBudget}€
+                      </span>
                     </div>
 
                     {project.impactMetrics.co2_offset_kg_per_year && (
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">CO2 compensé:</span>
-                        <span className="font-semibold">{project.impactMetrics.co2_offset_kg_per_year}kg/an</span>
+                        <span className="font-semibold">
+                          {project.impactMetrics.co2_offset_kg_per_year}kg/an
+                        </span>
                       </div>
                     )}
 
                     {project.impactMetrics.local_jobs_created && (
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">Emplois créés:</span>
-                        <span className="font-semibold">{project.impactMetrics.local_jobs_created}</span>
+                        <span className="font-semibold">
+                          {project.impactMetrics.local_jobs_created}
+                        </span>
                       </div>
                     )}
 
                     {project.impactMetrics.biodiversity_score && (
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">Score biodiversité:</span>
-                        <span className="font-semibold">{project.impactMetrics.biodiversity_score}/100</span>
+                        <span className="font-semibold">
+                          {project.impactMetrics.biodiversity_score}/100
+                        </span>
                       </div>
                     )}
 
                     {project.impactMetrics.educational_visits && (
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">Visites éducatives:</span>
-                        <span className="font-semibold">{project.impactMetrics.educational_visits}</span>
+                        <span className="font-semibold">
+                          {project.impactMetrics.educational_visits}
+                        </span>
                       </div>
                     )}
                   </div>
 
                   <div className="mt-3 pt-3 border-t border-gray-200">
-                    <Badge variant="secondary" className={
-                      project.type === 'beehive' ? 'bg-yellow-100 text-yellow-800' :
-                      (project.type === 'olive_tree' ? 'bg-green-100 text-green-800' :
-                      'bg-purple-100 text-purple-800')
-                    }>
+                    <Badge
+                      variant="secondary"
+                      className={
+                        project.type === 'beehive'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : project.type === 'olive_tree'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-purple-100 text-purple-800'
+                      }
+                    >
                       {projectTypeLabels[project.type]}
                     </Badge>
                   </div>

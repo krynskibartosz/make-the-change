@@ -1,5 +1,7 @@
 # Analyse des Risques - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **Analyse critique des défis potentiels, complexités cachées et points de vigilance pour le développement de la plateforme "Invest-to-Earn" écologique.**
 
 ---
@@ -193,8 +195,8 @@ Stratégie Scaling:
 #### Description du Risque
 Dépendance APIs externes critiques :
 - **Stripe** : Paiements
-- **Google Maps** : Géolocalisation  
-- **Vercel Blob Store** : Images
+- **Leaflet / Map tiles** : Géolocalisation  
+- **Supabase Storage (optionnel Vercel Blob)** : Images
 
 Panne ou changement politique tarifaire = impact majeur.
 
@@ -223,7 +225,7 @@ Monitoring & Alertes:
 ### 🟠 **Risque Élevé #7 : Défi de la Personnalisation**
 
 #### Description du Risque
-Documentation USER-STRATEGY décrit 5 personas avec besoins très différents. Tenter tout personnaliser dès MVP → complexification énorme code et interface.
+Documentation personas (voir `../01-strategy/user-personas.md`) décrit 5 profils avec besoins très différents. Tenter tout personnaliser dès MVP → complexification énorme code et interface.
 
 #### Plan de Mitigation
 ```yaml
@@ -425,10 +427,10 @@ Validation UX avec Couleurs Réelles:
 ## 📚 Références Croisées
 
 ### Documents Connexes
-- **[BUSINESS-MODEL.md](./BUSINESS-MODEL.md#économie-de-points-finalisée)** - Économie points détaillée
-- **[TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md#sécurité-finalisées)** - Architecture et sécurité
-- **[USER-STRATEGY.md](./USER-STRATEGY.md#personas-validés)** - Personas et stratégie UX
-- **[DEVELOPMENT-PLAN.md](./DEVELOPMENT-PLAN.md#checklist-implémentation-critique)** - Planning et contraintes
+- **[business-model-definitive.md](../01-strategy/business-model-definitive.md)** - Économie points détaillée
+- **[database-schema.md](../03-technical/database-schema.md)** - Modèle de données & contraintes
+- **[user-personas.md](../01-strategy/user-personas.md)** - Personas et stratégie UX
+- **[implementation-roadmap.md](./implementation-roadmap.md)** - Planning & contraintes
 
 ### Mise à Jour
 - **Fréquence** : Review mensuelle ou si nouveau risque identifié

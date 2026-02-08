@@ -1,49 +1,46 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { type FC } from 'react';
+import { type FC, useState } from 'react'
 
-import { PartnerBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-breadcrumbs';
-import { PartnerCompactHeader } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-compact-header';
-import { PartnerDetailLayout } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-detail-layout';
-import { PartnerDetailsEditor } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-details-editor';
-
-import type { PartnerFormData } from '@make-the-change/api/validators/partner';
-
+import { PartnerBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-breadcrumbs'
+import { PartnerCompactHeader } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-compact-header'
+import { PartnerDetailLayout } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-detail-layout'
+import { PartnerDetailsEditor } from '@/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-details-editor'
+import type { PartnerFormData } from '@/lib/validators/partner'
 
 type PartnerDetailControllerProps = {
-  partnerData: PartnerFormData & { id: string };
-  onSave: (patch: Partial<PartnerFormData>) => Promise<void>;
-};
+  partnerData: PartnerFormData & { id: string }
+  onSave: (patch: Partial<PartnerFormData>) => Promise<void>
+}
 
 export const PartnerDetailController: FC<PartnerDetailControllerProps> = ({
   partnerData,
   onSave,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   const handleSave = async (formData: PartnerFormData) => {
-    setIsSaving(true);
+    setIsSaving(true)
     try {
-      const patch: Partial<PartnerFormData> = {};
+      const patch: Partial<PartnerFormData> = {}
       for (const key of Object.keys(formData) as (keyof PartnerFormData)[]) {
         if (partnerData[key] !== formData[key]) {
-          (patch as any)[key] = formData[key];
+          ;(patch as Record<string, unknown>)[key] = formData[key]
         }
       }
 
       if (Object.keys(patch).length > 0) {
-        await onSave(patch);
+        await onSave(patch)
       }
 
-      setIsEditing(false);
+      setIsEditing(false)
     } catch (error) {
-      console.error('Error saving partner:', error);
+      console.error('Error saving partner:', error)
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
   return (
     <PartnerDetailLayout
@@ -64,10 +61,14 @@ export const PartnerDetailController: FC<PartnerDetailControllerProps> = ({
             isSaving={isSaving}
             partnerData={partnerData}
             onEditToggle={setIsEditing}
-            onSave={() => document.querySelector('#partner-editor-form')?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
+            onSave={() =>
+              document
+                .querySelector('#partner-editor-form')
+                ?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))
+            }
           />
         </>
       }
     />
-  );
-};
+  )
+}

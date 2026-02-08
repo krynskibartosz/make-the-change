@@ -1,5 +1,7 @@
 # 🎯 Stratégie d'Acquisition Client - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **📍 VERSION: Phase 1 Bootstrap** | **🗓️ FINALISÉ: 27 Août 2025** | **💰 BUDGET TOTAL: €1,200**
 
 **🎯 OBJECTIF**: Acquérir 60-100 premiers abonnés payants avec €0 capital initial via stratégies cost-effective et partenariats intelligents, en exploitant le modèle dual billing pour optimiser les conversions.

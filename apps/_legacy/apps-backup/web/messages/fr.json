@@ -1,0 +1,1043 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer"
+  },
+  "errors": {
+    "notFound": {
+      "title": "{entity} introuvable",
+      "description": "{article} {entity} n'existe pas ou a été supprimé(e)"
+    },
+    "accessDenied": {
+      "title": "Accès refusé",
+      "description": "Vous n'avez pas l'autorisation d'accéder à {article} {entity}"
+    },
+    "serverError": {
+      "title": "Erreur serveur",
+      "description": "Un problème technique est survenu, veuillez réessayer"
+    },
+    "loadingError": {
+      "title": "Erreur de chargement",
+      "description": "Impossible de charger {article} {entity}"
+    },
+    "entities": {
+      "product": {
+        "singular": "produit",
+        "article": "ce"
+      },
+      "user": {
+        "singular": "utilisateur",
+        "article": "cet"
+      },
+      "project": {
+        "singular": "projet",
+        "article": "ce"
+      },
+      "partner": {
+        "singular": "partenaire",
+        "article": "ce"
+      },
+      "subscription": {
+        "singular": "abonnement",
+        "article": "cet"
+      },
+      "order": {
+        "singular": "commande",
+        "article": "cette"
+      },
+      "species": {
+        "singular": "espèce",
+        "article": "cette"
+      }
+    }
+  },
+  "navigation": {
+    "home": "Accueil",
+    "admin": "Administration",
+    "dashboard": "Tableau de bord",
+    "products": "Produits",
+    "projects": "Projets",
+    "subscriptions": "Abonnements",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter",
+    "back": "Retour à la liste des projets"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "login_button": "Se connecter",
+    "forgot_password": "Mot de passe oublié ?",
+    "invalid_credentials": "Identifiants invalides"
+  },
+  "admin": {
+    "common": {
+      "retry": "Réessayer",
+      "preview": "Aperçu",
+      "select_placeholder": "Sélectionner...",
+      "breadcrumbs": {
+        "dashboard": "Tableau de bord",
+        "products": "Produits",
+        "projects": "Projets"
+      }
+    },
+    "dashboard": {
+      "title": "Tableau de bord administrateur",
+      "welcome": "Bienvenue dans votre espace d'administration",
+      "statistics": "Statistiques"
+    },
+    "products": {
+      "title": "Gestion des produits",
+      "new_product": "Nouveau produit",
+      "product_list": "Liste des produits",
+      "name": "Nom du produit",
+      "price": "Prix",
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "changing": "Changement...",
+        "activate": "Activer",
+        "deactivate": "Désactiver",
+        "toggle_tooltip": "Cliquer pour {action} le produit",
+        "modal": {
+          "title": "{action} le produit",
+          "description": {
+            "activate": "Le produit sera visible dans la boutique et disponible à la vente.",
+            "deactivate": "Le produit sera retiré de la boutique et ne sera plus disponible à la vente."
+          },
+          "cancel": "Annuler"
+        }
+      },
+      "actions": "Actions",
+      "search_placeholder": "Rechercher des produits...",
+      "filters": {
+        "all_partners": "Tous les partenaires",
+        "all_categories": "Toutes les catégories",
+        "sort_by": "Trier par",
+        "tags_placeholder": "Tags...",
+        "active_only": "Actifs uniquement",
+        "clear_filters": "Effacer filtres",
+        "clear_all_filters": "Effacer tous les filtres",
+        "reset": "Réinitialiser"
+      },
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)",
+        "price_asc": "Prix croissant",
+        "price_desc": "Prix décroissant",
+        "featured": "Mis en avant"
+      },
+      "stock": {
+        "increase": "Augmenter le stock",
+        "decrease": "Diminuer le stock",
+        "label": "stock",
+        "points_label": "pts"
+      },
+      "visibility": {
+        "hide": "Masquer le produit",
+        "show": "Afficher le produit",
+        "visible": "Visible",
+        "hidden": "Masqué"
+      },
+      "filters_tooltip": {
+        "category": "Filtrer par catégorie: {name}",
+        "subcategory": "Filtrer par sous-catégorie: {name}",
+        "producer": "Filtrer par producteur: {name}",
+        "tag": "Filtrer par tag: {tag}",
+        "featured": "Filtrer par produits mis en avant"
+      },
+      "other_tags": "{count} autres",
+      "filter_modal": {
+        "partner": "Partenaire",
+        "category": "Catégorie",
+        "tags": "Tags",
+        "active_only_description": "Afficher uniquement les éléments actifs"
+      },
+      "empty_state": {
+        "title": "Aucun produit",
+        "description": "Aucun résultat pour ces filtres."
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les produits",
+        "retry": "Réessayer"
+      },
+      "partner": {
+        "none": "Aucun partenaire",
+        "loading": "Chargement...",
+        "not_found": "Partenaire introuvable",
+        "view_tooltip": "Voir le partenaire {name}"
+      },
+      "featured": {
+        "short": "Vedette",
+        "full": "En vedette"
+      },
+      "details": {
+        "show": "Afficher les détails",
+        "hide": "Masquer les détails"
+      },
+      "edit": {
+        "sections": {
+          "general": "Informations générales",
+          "essential": "Informations essentielles",
+          "pricing": "Prix & Configuration",
+          "details": "Détails du produit",
+          "images": "Images",
+          "metadata": "Métadonnées",
+          "advanced_settings": "Paramètres avancés",
+          "status_visibility": "Statut et visibilité",
+          "commercial": "Informations commerciales",
+          "logistics": "Logistique & Expédition",
+          "categorization": "Catégorisation & Tags",
+          "lifecycle": "Cycle de vie",
+          "seo": "SEO & Référencement",
+          "product_details": "Détails produit"
+        },
+        "fields": {
+          "name": "Nom du produit",
+          "slug": "Slug",
+          "short_description": "Description courte",
+          "description": "Description",
+          "price_points": "Prix en points",
+          "stock_quantity": "Quantité en stock",
+          "min_tier": "Niveau minimum",
+          "fulfillment_method": "Méthode de livraison",
+          "is_active": "Produit actif",
+          "featured": "Produit en vedette",
+          "is_hero_product": "Produit héros",
+          "price_eur_equivalent": "Prix équivalent EUR",
+          "weight_grams": "Poids (grammes)",
+          "origin_country": "Pays d'origine",
+          "partner_source": "Source partenaire",
+          "category_id": "Catégorie principale",
+          "secondary_category_id": "Catégorie secondaire",
+          "tags": "Tags",
+          "tags_description": "Séparés par des virgules",
+          "launch_date": "Date de lancement",
+          "discontinue_date": "Date d'arrêt",
+          "seo_title": "Titre SEO",
+          "seo_title_description": "Maximum 60 caractères",
+          "seo_description": "Description SEO",
+          "seo_description_description": "Maximum 160 caractères",
+          "allergens": "Allergènes",
+          "allergens_description": "Séparés par des virgules",
+          "certifications": "Certifications",
+          "certifications_description": "Bio, équitable, etc. Séparées par des virgules"
+        },
+        "placeholders": {
+          "name": "Ex: Miel de Madagascar",
+          "slug": "ex-miel-de-madagascar",
+          "short_description": "Description courte du produit...",
+          "description": "Description détaillée du produit...",
+          "min_tier": "Sélectionner un niveau",
+          "minTier": "Sélectionner un niveau...",
+          "fulfillment_method": "Sélectionner une méthode",
+          "origin_country": "France, Belgique...",
+          "originCountry": "France",
+          "partner_source": "Habeebee, Ilanga...",
+          "category": "Sélectionner une catégorie",
+          "secondary_category": "Catégorie secondaire (optionnel)",
+          "tags": "bio, local, artisanal...",
+          "seo_title": "Titre optimisé pour les moteurs de recherche",
+          "seoTitle": "Titre optimisé pour les moteurs de recherche",
+          "seo_description": "Description SEO courte et accrocheuse",
+          "seoDescription": "Description SEO courte et accrocheuse",
+          "shortDescription": "Résumé du produit en quelques mots...",
+          "allergens": "gluten, noix, lait...",
+          "certifications": "bio, équitable, AOC..."
+        },
+        "fulfillment": {
+          "stock": "Stock physique",
+          "stock_desc": "Expédié depuis votre stock existant",
+          "dropship": "Dropshipping",
+          "dropship_desc": "Envoyé directement par le partenaire",
+          "ondemand": "Sur commande",
+          "ondemand_desc": "Fabriqué à la demande (production agile)"
+        },
+        "tiers": {
+          "all": "Tous niveaux",
+          "explorateur": "Explorateur",
+          "protecteur": "Protecteur",
+          "ambassadeur": "Ambassadeur"
+        },
+        "status": {
+          "saving": "Sauvegarde en cours...",
+          "unsaved": "Modifications non sauvegardées",
+          "saved": "Sauvegardé automatiquement",
+          "savedAt": "Sauvegardé à {time}",
+          "autoSaveArmed": "Sauvegarde automatique activée",
+          "synced": "Synchronisé"
+        },
+        "toast": {
+          "error": {
+            "title": "Erreur de sauvegarde",
+            "description": "Une erreur inconnue est survenue lors de la sauvegarde."
+          },
+          "success": {
+            "title": "Produit mis à jour",
+            "description": "Les modifications ont été sauvegardées avec succès."
+          }
+        },
+        "errors": {
+          "missing_id": {
+            "title": "ID de produit manquant",
+            "description": "L'identifiant du produit n'est pas valide ou manquant dans l'URL."
+          },
+          "not_found": {
+            "title": "Produit non trouvé",
+            "description": "Le produit demandé n'existe pas ou a été supprimé."
+          },
+          "loading": {
+            "title": "Erreur de chargement",
+            "description": "Une erreur est survenue lors du chargement du produit."
+          }
+        },
+        "loading": {
+          "title": "Chargement du produit",
+          "description": "Veuillez patienter pendant le chargement des données..."
+        },
+        "subtitle": "Produit",
+        "no_slug": "Sans slug",
+        "blur_system": {
+          "title": "🚀 Système DB Blur Scalable",
+          "images": "Images",
+          "with_blur": "Avec blur",
+          "missing": "Manquants",
+          "coverage": "Couverture",
+          "loading": "Chargement des blur hashes depuis la DB..."
+        },
+        "images": {
+          "add": "Ajouter des images",
+          "deleted": "Image supprimée avec succès",
+          "delete_error": "Erreur lors de la suppression de l'image",
+          "replaced": "Image remplacée avec succès",
+          "replace_error": "Erreur lors du remplacement de l'image",
+          "order_updated": "Ordre des images mis à jour",
+          "order_update_error": "Erreur lors de la mise à jour de l'ordre",
+          "requires_save": "Les modifications d'images nécessitent une sauvegarde manuelle"
+        },
+        "title": "Édition du produit",
+        "actions": {
+          "saving": "Sauvegarde...",
+          "saveManually": "Sauvegarder manuellement"
+        },
+        "labels": {
+          "active": "Activer ce produit",
+          "featured": "Mettre en avant ce produit"
+        },
+        "helpers": {
+          "active": "Rendre le produit visible et disponible à la vente",
+          "featured": "Le produit apparaîtra dans les sélections premium et les mises en avant",
+          "tags": "Ajoutez des tags pour faciliter la recherche (ex: bio, local, artisanal)",
+          "seo_title": "Optimisé pour les moteurs de recherche (max 60 caractères)",
+          "seo_description": "Description SEO courte et accrocheuse (max 160 caractères)"
+        },
+        "messages": {
+          "premiumDescriptionRequired": "Une description détaillée est requise pour les produits de niveau Ambassadeur"
+        }
+      }
+    },
+    "projects": {
+      "title": "Gestion des projets",
+      "new_project": "Nouveau projet",
+      "project_list": "Liste des projets",
+      "map_view": "Vue carte",
+      "name": "Nom du projet",
+      "location": "Localisation",
+      "status": "Statut",
+      "investment_goal": "Objectif de financement",
+      "search_placeholder": "Rechercher des projets...",
+      "labels": {
+        "status": "Statut"
+      },
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)",
+        "budget_desc": "Budget décroissant",
+        "budget_asc": "Budget croissant",
+        "featured": "Projets mis en avant"
+      },
+      "filters": {
+        "all_statuses": "Tous les statuts",
+        "all_types": "Tous les types",
+        "all_partners": "Tous les partenaires",
+        "all_countries": "Tous les pays",
+        "sort_by": "Trier par",
+        "impact_types": "Types d'impact",
+        "active_only": "Actifs uniquement",
+        "clear_filters": "Effacer les filtres",
+        "clear_all_filters": "Réinitialiser les filtres",
+        "reset": "Réinitialiser"
+      },
+      "filter_modal": {
+        "partner": "Partenaire",
+        "type": "Type de projet",
+        "country": "Pays",
+        "impact_types": "Types d'impact",
+        "active_only_description": "Afficher uniquement les projets actifs"
+      },
+      "type": {
+        "beehive": "Ruche",
+        "olive_tree": "Olivier",
+        "vineyard": "Vignoble",
+        "forest": "Forêt",
+        "solar": "Solaire"
+      },
+      "type_descriptions": {
+        "beehive": "Projet apicole pour la protection des abeilles",
+        "olive_tree": "Plantation d'oliviers pour l'huile d'olive durable",
+        "vineyard": "Vignoble écologique et production de vin bio"
+      },
+      "statuses": {
+        "active": "Actif",
+        "funded": "Financé",
+        "closed": "Terminé",
+        "suspended": "Suspendu",
+        "inactive": "Inactif"
+      },
+      "status_descriptions": {
+        "active": "Le projet est ouvert et accepte des investissements",
+        "funded": "Objectif de financement atteint",
+        "closed": "Le projet est terminé ou archivé",
+        "suspended": "Le projet est temporairement en pause"
+      },
+      "statusActions": {
+        "activate": "Activer",
+        "suspend": "Suspendre"
+      },
+      "funding": {
+        "increase": "Augmenter l'objectif",
+        "decrease": "Réduire l'objectif"
+      },
+      "featured": {
+        "add": "Mettre en avant",
+        "remove": "Retirer de la mise en avant"
+      },
+      "filters_tooltip": {
+        "type": "Filtrer par type : {type}",
+        "partner": "Filtrer par partenaire : {name}",
+        "country": "Filtrer par pays : {country}",
+        "impact_type": "Filtrer par type d'impact : {type}",
+        "featured": "Filtrer les projets mis en avant"
+      },
+      "other_impact_types": "et {count} autres",
+      "empty_state": {
+        "title": "Aucun projet",
+        "description": "Aucun résultat ne correspond à ces filtres."
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les projets.",
+        "retry": "Réessayer"
+      },
+      "edit": {
+        "title": "Projet",
+        "subtitle": "Gestion du projet",
+        "untitled": "Projet",
+        "no_slug": "slug manquant",
+        "breadcrumbs": {
+          "projects": "Projets",
+          "loading": "Chargement..."
+        },
+        "sections": {
+          "essential": "Informations essentielles",
+          "funding": "Financement & configuration",
+          "description": "Description du projet",
+          "images": "Galerie du projet"
+        },
+        "fields": {
+          "name": "Nom du projet",
+          "slug": "Slug",
+          "type": "Type de projet",
+          "status": "Statut",
+          "featured": "Projet mis en avant",
+          "target_budget": "Budget cible (€)",
+          "producer_id": "Producteur associé",
+          "description": "Description courte",
+          "long_description": "Description détaillée"
+        },
+        "placeholders": {
+          "name": "Ex: Programme ruches urbaines",
+          "slug": "ex-programme-ruches",
+          "type": "Sélectionner un type…",
+          "status": "Sélectionner un statut…",
+          "producer_id": "Identifiant du producteur…",
+          "description": "Résumé du projet…",
+          "long_description": "Détaillez le projet, ses objectifs et son impact…"
+        },
+        "helpers": {
+          "featured": "Afficher dans les projets mis en avant",
+          "location_hint": "Les informations géographiques avancées (coordonnées GPS, carte) seront gérées dans une future version."
+        },
+        "messages": {
+          "long_description_required": "Une description détaillée est requise pour les projets avec un budget supérieur à 5000€."
+        },
+        "cover": {
+          "updated": "Couverture mise à jour",
+          "error": "Échec de la mise à jour de la couverture",
+          "change": "Modifier la couverture",
+          "remove": "Supprimer",
+          "placeholder": "Ajoutez une image de couverture",
+          "placeholder_disabled": "Enregistrez le projet pour ajouter une couverture",
+          "tip": "Utilisez les actions ci-dessus pour personnaliser la couverture du projet.",
+          "noImage": "Ajoutez des visuels pour mettre en valeur le projet.",
+          "description": "La couverture apparaît en haut de la page du projet, la photo en médaillon correspond à sa vignette principale."
+        },
+        "avatar": {
+          "updated": "Photo du projet mise à jour",
+          "error": "Impossible de mettre à jour la photo",
+          "remove": "Retirer la photo"
+        },
+        "images": {
+          "upload_error": "Erreur lors de l’upload",
+          "uploaded": "Image ajoutée",
+          "delete_error": "Impossible de supprimer l’image",
+          "deleted": "Image supprimée",
+          "order_updated": "Ordre des images mis à jour",
+          "requires_save": "Créez le projet avant d’ajouter des images."
+        },
+        "actions": {
+          "saved": "Sauvegarde réussie",
+          "saved_description": "Toutes les modifications ont été sauvegardées.",
+          "save_error": "Erreur de sauvegarde",
+          "save_error_description": "Impossible de sauvegarder les modifications."
+        }
+      },
+      "create": {
+        "title": "Créer un projet",
+        "subtitle": "Renseignez les informations ci-dessous pour publier un nouveau projet.",
+        "status": {
+          "dirty": "Modifications en cours…",
+          "pristine": "Aucune modification en attente"
+        },
+        "actions": {
+          "saving": "Création…",
+          "save": "Créer le projet"
+        }
+      }
+    },
+    "partners": {
+      "title": "Gestion des partenaires",
+      "description": "Gestion des producteurs et partenaires",
+      "new_partner": "Nouveau partenaire",
+      "search_placeholder": "Rechercher par nom, email ou pays...",
+      "filters": {
+        "all_statuses": "Tous les statuts",
+        "all_countries": "Tous les pays",
+        "status": "Statut",
+        "status_active": "Actif",
+        "status_inactive": "Inactif",
+        "status_suspended": "Suspendu",
+        "country": "Pays",
+        "sort_by": "Trier par",
+        "active_only": "Actifs uniquement",
+        "clear_filters": "Effacer filtres",
+        "clear_all_filters": "Effacer tous les filtres",
+        "reset": "Réinitialiser"
+      },
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)"
+      },
+      "visibility": {
+        "hide": "Désactiver le partenaire",
+        "show": "Activer le partenaire",
+        "visible": "Actif",
+        "hidden": "Inactif"
+      },
+      "filters_tooltip": {
+        "status": "Filtrer par statut: {status}",
+        "country": "Filtrer par pays: {country}"
+      },
+      "filter_modal": {
+        "status": "Statut",
+        "country": "Pays",
+        "active_only_description": "Afficher uniquement les partenaires actifs"
+      },
+      "empty_state": {
+        "title": "Aucun partenaire trouvé",
+        "description": "Aucun partenaire ne correspond à vos filtres. Essayez de modifier vos critères ou créez un nouveau partenaire."
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les partenaires",
+        "retry": "Réessayer"
+      },
+      "edit": {
+        "title": "Édition du partenaire",
+        "loading": "Chargement...",
+      "breadcrumbs": {
+        "partners": "Partenaires",
+        "loading": "Chargement..."
+      },
+      "sections": {
+        "essential": {
+          "title": "Informations essentielles"
+        },
+        "contact": {
+          "title": "Coordonnées"
+        },
+        "address": {
+          "title": "Adresse"
+        },
+        "metadata": {
+          "title": "Métadonnées"
+        }
+      },
+        "fields": {
+          "name": {
+            "label": "Nom du partenaire",
+            "placeholder": "Ex: Habeebee",
+            "helper": "Le nom complet de l'organisation partenaire"
+          },
+          "slug": {
+            "label": "Slug",
+            "placeholder": "ex-habeebee",
+            "helper": "Identifiant URL unique (généré automatiquement)"
+          },
+          "status": {
+            "label": "Statut",
+            "placeholder": "Sélectionner un statut",
+            "helper": "État d'activation du partenaire",
+            "options": {
+              "active": "Actif",
+              "inactive": "Inactif",
+              "suspended": "Suspendu"
+            },
+            "descriptions": {
+              "active": "Le partenaire est opérationnel et visible",
+              "inactive": "Le partenaire est désactivé temporairement",
+              "suspended": "Le partenaire est suspendu (problème en cours)"
+            }
+          },
+          "contact_email": {
+            "label": "Email de contact",
+            "placeholder": "contact@partenaire.com",
+            "helper": "Adresse email principale pour contacter le partenaire"
+          },
+          "website": {
+            "label": "Site web",
+            "placeholder": "https://www.partenaire.com",
+            "helper": "URL complète du site web du partenaire"
+          },
+          "address_street": {
+            "label": "Rue",
+            "placeholder": "123 Rue de l'Exemple",
+            "helper": "Numéro et nom de rue"
+          },
+          "address_city": {
+            "label": "Ville",
+            "placeholder": "Paris",
+            "helper": "Ville du siège social"
+          },
+          "address_postal_code": {
+            "label": "Code postal",
+            "placeholder": "75001",
+            "helper": "Code postal"
+          },
+          "address_country": {
+            "label": "Pays",
+            "placeholder": "France",
+            "helper": "Pays du siège social"
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "Décrivez le partenaire, sa mission et ses activités...",
+            "helper": "Présentation détaillée du partenaire et de son expertise"
+          }
+        },
+        "status": {
+          "saving": "Sauvegarde en cours...",
+          "saved": "Sauvegardé",
+          "error": "Erreur lors de la sauvegarde"
+        },
+        "actions": {
+          "save": "Sauvegarder",
+          "saving": "Sauvegarde..."
+        },
+        "cover": {
+          "updated": "Couverture mise à jour",
+          "error": "Échec de la mise à jour de la couverture",
+          "change": "Modifier la couverture",
+          "remove": "Supprimer",
+          "placeholder": "Ajoutez une image de couverture",
+          "placeholder_disabled": "Enregistrez le partenaire pour ajouter une couverture",
+          "tip": "Utilisez les actions ci-dessus pour personnaliser le profil du partenaire.",
+          "noImage": "Ajoutez des visuels pour mettre en valeur le partenaire.",
+          "description": "La couverture apparaît en haut de la page du partenaire, la photo de profil est utilisée comme vignette."
+        },
+        "avatar": {
+          "updated": "Photo du partenaire mise à jour",
+          "error": "Impossible de mettre à jour la photo",
+          "remove": "Retirer la photo"
+        },
+        "storage": {
+          "bucket_missing": {
+            "title": "Bucket de stockage introuvable",
+            "description": "Créez le bucket Supabase \"%{bucket}\" ou mettez à jour la variable NEXT_PUBLIC_SUPABASE_STORAGE_PRODUCER_BUCKET."
+          }
+        }
+      }
+    },
+    "orders": {
+      "title": "Suivi des commandes",
+      "description": "Suivi des commandes"
+    },
+    "pointsTransactions": {
+      "title": "Transactions de Points",
+      "description": "Historique complet des mouvements de points",
+      "search_placeholder": "Rechercher par utilisateur ou description...",
+      "columns": {
+        "date": "Date",
+        "user": "Utilisateur",
+        "type": "Type",
+        "amount": "Montant",
+        "balance": "Solde après",
+        "description": "Description",
+        "reference": "Référence",
+        "actions": "Actions"
+      },
+      "types": {
+        "earned_subscription": "Gagné - Abonnement",
+        "earned_purchase": "Gagné - Achat",
+        "earned_referral": "Gagné - Parrainage",
+        "spent_order": "Dépensé - Commande",
+        "spent_investment": "Dépensé - Investissement",
+        "adjustment_admin": "Ajustement Admin",
+        "bonus_welcome": "Bonus Bienvenue",
+        "bonus_milestone": "Bonus Milestone"
+      },
+      "filters": {
+        "all_types": "Tous les types",
+        "date_range": "Période",
+        "date_from": "Date de début",
+        "date_to": "Date de fin",
+        "sort_by": "Trier par",
+        "clear_filters": "Effacer les filtres"
+      },
+      "sort": {
+        "newest": "Plus récentes",
+        "oldest": "Plus anciennes",
+        "amount_desc": "Montant décroissant",
+        "amount_asc": "Montant croissant"
+      },
+      "actions": {
+        "open_menu": "Ouvrir le menu",
+        "view_details": "Voir les détails"
+      },
+      "references": {
+        "order": "Commande",
+        "investment": "Investissement",
+        "subscription": "Abonnement"
+      },
+      "details": {
+        "title": "Détails de la transaction",
+        "description": "Informations complètes sur cette transaction de points",
+        "transaction_id": "ID Transaction",
+        "reference": "Référence",
+        "view_reference": "Voir la référence",
+        "expires_at": "Date d'expiration",
+        "metadata": "Métadonnées",
+        "processed_at": "Traité le",
+        "created_at": "Créé le"
+      },
+      "empty_state": {
+        "title": "Aucune transaction",
+        "description": "Aucune transaction ne correspond à vos critères"
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les transactions",
+        "retry": "Réessayer"
+      }
+    },
+    "sidebar": {
+      "dashboard": {
+        "label": "Tableau de bord",
+        "description": "Vue d'ensemble et statistiques"
+      },
+      "management": {
+        "label": "Gestion"
+      },
+      "groups": {
+        "activity": "Activité",
+        "catalog": "Catalogue",
+        "community": "Communauté",
+        "configuration": "Configuration"
+      },
+      "links": {
+        "products": "Produits",
+        "categories": "Catégories",
+        "projects": "Projets",
+        "orders": "Commandes",
+        "investments": "Investissements",
+        "biodex": "Biodex",
+        "partners": "Partenaires",
+        "users": "Utilisateurs",
+        "subscriptions": "Abonnements",
+        "pointsTransactions": "Transactions Points",
+        "stocks": "Gestion des Stocks",
+        "translations": "Traductions"
+      },
+      "stocks": {
+        "description": "Gérer les stocks de produits"
+      },
+      "translations": {
+        "description": "Gérer les traductions de l'application"
+      },
+      "logout": "Déconnexion",
+      "close_menu": "Fermer le menu de navigation",
+      "main_navigation": "Navigation principale",
+      "mobile_navigation_menu": "Menu de navigation mobile"
+    },
+    "categories": {
+      "title": "Gestion des catégories",
+      "description": "Gestion des catégories de produits",
+      "new_category": "Nouvelle catégorie",
+      "search_placeholder": "Rechercher une catégorie...",
+      "edit": {
+        "loading": "Chargement...",
+        "breadcrumbs": {
+          "categories": "Catégories",
+          "loading": "Chargement..."
+        }
+      },
+      "sections": {
+        "essential_info": "Informations essentielles",
+        "configuration": "Configuration",
+        "image": "Image",
+        "seo": "SEO",
+        "metadata": "Métadonnées"
+      },
+      "fields": {
+        "name": "Nom",
+        "slug": "Slug",
+        "description": "Description",
+        "parent_category": "Catégorie parente",
+        "no_parent": "Aucune (catégorie racine)",
+        "sort_order": "Ordre de tri",
+        "is_active": "Catégorie active",
+        "image_url": "URL de l'image",
+        "seo_title": "Titre SEO",
+        "seo_description": "Description SEO",
+        "created_at": "Créé le",
+        "updated_at": "Modifié le"
+      },
+      "filters": {
+        "all_parents": "Toutes les catégories",
+        "root_only": "Catégories racines uniquement",
+        "active_only": "Actives uniquement",
+        "sort_by": "Trier par",
+        "clear_filters": "Réinitialiser les filtres",
+        "clear_all_filters": "Effacer tous les filtres",
+        "reset": "Réinitialiser"
+      },
+      "filter_modal": {
+        "parent": "Catégorie parente",
+        "active_only_description": "Afficher uniquement les catégories actives"
+      },
+      "sort": {
+        "newest": "Plus récentes",
+        "oldest": "Plus anciennes",
+        "name_asc": "Nom A-Z",
+        "name_desc": "Nom Z-A",
+        "order_asc": "Ordre croissant",
+        "order_desc": "Ordre décroissant"
+      },
+      "empty_state": {
+        "title": "Aucune catégorie trouvée",
+        "description": "Commencez par créer votre première catégorie"
+      },
+      "visibility": {
+        "visible": "Visible",
+        "hidden": "Masqué",
+        "show": "Afficher",
+        "hide": "Masquer"
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les catégories",
+        "retry": "Réessayer"
+      }
+    },
+    "investments": {
+      "title": "Gestion des investissements",
+      "description": "Suivi des investissements et des retours"
+    },
+    "subscriptions": {
+      "title": "Gestion des abonnements",
+      "new_subscription": "Nouvel abonnement",
+      "subscription_list": "Liste des abonnements",
+      "user": "Utilisateur",
+      "plan": "Plan",
+      "status": "Statut",
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    },
+    "users": {
+      "title": "Gestion des utilisateurs",
+      "description": "Gestion des utilisateurs",
+      "search_placeholder": "Rechercher par nom ou email...",
+      "new_user": "Nouvel utilisateur",
+      "filters": {
+        "all_statuses": "Tous les statuts",
+        "status_active": "Actifs",
+        "status_inactive": "Inactifs",
+        "all_roles": "Tous les niveaux",
+        "role_admin": "Administrateurs",
+        "role_user": "Utilisateurs",
+        "status": "Statut",
+        "role": "Niveau",
+        "sort_by": "Trier par",
+        "active_only": "Actifs uniquement",
+        "clear_filters": "Effacer filtres",
+        "clear_all_filters": "Effacer tous les filtres",
+        "reset": "Réinitialiser"
+      },
+      "filters_tooltip": {
+        "status": "Filtrer par statut : {status}",
+        "role": "Filtrer par niveau : {role}"
+      },
+      "filter_modal": {
+        "status": "Statut",
+        "role": "Niveau utilisateur",
+        "active_only_description": "Afficher uniquement les utilisateurs actifs"
+      },
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)"
+      },
+      "visibility": {
+        "show": "Activer l'utilisateur",
+        "hide": "Désactiver l'utilisateur",
+        "visible": "Actif",
+        "hidden": "Inactif"
+      },
+      "empty_state": {
+        "title": "Aucun utilisateur trouvé",
+        "description": "Aucun utilisateur ne correspond à vos critères de recherche."
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Une erreur est survenue lors du chargement des utilisateurs.",
+        "retry": "Réessayer"
+      },
+      "edit": {
+        "autoSave": {
+          "saving": "Sauvegarde en cours...",
+          "saved": "Sauvegardé",
+          "pending": "Modification en attente...",
+          "error": "Erreur de sauvegarde",
+          "pristine": "Tous les changements sont sauvegardés"
+        }
+      }
+    },
+    "biodex": {
+      "title": "Biodex",
+      "description": "Gestion des espèces et biodiversité",
+      "new_species": "Nouvelle espèce",
+      "search_placeholder": "Rechercher une espèce...",
+      "sort": {
+        "newest": "Plus récentes",
+        "oldest": "Plus anciennes",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)"
+      },
+      "filters": {
+        "sort_by": "Trier par",
+        "clear_filters": "Effacer les filtres",
+        "clear_all_filters": "Effacer tous les filtres",
+        "reset": "Réinitialiser"
+      },
+      "error": {
+        "loading_title": "Erreur de chargement",
+        "loading_description": "Impossible de charger les espèces",
+        "retry": "Réessayer"
+      },
+      "empty_state": {
+        "title": "Aucune espèce",
+        "description": "Aucune espèce ne correspond à ces filtres."
+      },
+      "species": {
+        "no_description": "Aucune description disponible",
+        "content_levels": "niveaux de contenu",
+        "actions": {
+          "edit": "Modifier l'espèce",
+          "delete": "Supprimer l'espèce"
+        }
+      },
+      "sections": {
+        "essential_info": "Informations essentielles",
+        "content_levels": "Niveaux de contenu",
+        "characteristics": "Caractéristiques",
+        "status": "Statut de conservation",
+        "additional_info": "Informations supplémentaires",
+        "media": "Médias"
+      },
+      "fields": {
+        "name": "Nom de l'espèce",
+        "scientific_name": "Nom scientifique",
+        "description": "Description",
+        "cover_image": "Image de couverture",
+        "icon": "Icône",
+        "level_title": "Titre du niveau",
+        "level_description": "Description du niveau",
+        "conservation_status": "Statut de conservation",
+        "protection_measures": "Mesures de protection",
+        "population_trend": "Tendance de la population",
+        "image_url": "URL de l'image",
+        "thumbnail_url": "URL de la miniature",
+        "image_credit": "Crédit de l'image",
+        "diet": "Régime alimentaire",
+        "reproduction": "Reproduction",
+        "interesting_facts": "Faits intéressants",
+        "size": "Taille",
+        "weight": "Poids",
+        "habitat": "Habitat",
+        "behavior": "Comportement"
+      },
+      "placeholders": {
+        "name": "Ex: Abeille domestique",
+        "scientific_name": "Ex: Apis mellifera",
+        "description": "Description détaillée de l'espèce...",
+        "level_title": "Titre pour ce niveau de contenu",
+        "level_description": "Informations adaptées à ce niveau..."
+      },
+      "actions": {
+        "save": "Enregistrer",
+        "saving": "Enregistrement..."
+      }
+    }
+  },
+  "ui": {
+    "view_modes": {
+      "grid": "Grille",
+      "list": "Liste",
+      "map": "Carte"
+    }
+  },
+  "metadata": {
+    "title": "Make the CHANGE - Plateforme Écologique",
+    "description": "Investissez dans des projets écologiques et découvrez des produits durables"
+  }
+}

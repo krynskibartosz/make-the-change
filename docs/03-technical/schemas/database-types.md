@@ -3,28 +3,20 @@
  Scope: Canonical enums and constraints referenced by backend logic.
 
 ## Enums
-- user_level: explorateur | protecteur | ambassadeur
-- kyc_status: pending | light | complete
-- subscription_tier: ambassadeur_standard | ambassadeur_premium
-- billing_frequency: monthly | annual
-- investment_type: ruche | olivier | parcelle_familiale
-- project_status: active | funded | closed | suspended
-- order_status: pending | confirmed | processing | shipped | delivered | cancelled
-- shipment_status: pending | picked | shipped | in_transit | delivered | exception
-- fulfillment_method: stock | dropship
-- inventory_movement: in | out | reserved | released | adjustment
+- fulfillment_method: ship | pickup | digital | experience
+- user_level_enum: explorateur | protecteur | ambassadeur
+- product_partner_source: direct | cooperative | partner | marketplace
+- allergen_enum: gluten | lactose | nuts | peanuts | eggs | fish | shellfish | soy | sesame | sulfites | celery | mustard | lupin
+- certification_enum: bio | organic | fair_trade | vegan | vegetarian | halal | kosher | gluten_free | non_gmo | rainforest_alliance | msc | fsc | ecocert | demeter
 
-## Constraints
-- Unique slugs for projects/products/categories/producers.
-- Foreign keys with `ON DELETE CASCADE` for child rows (items, movements, updates).
-- Numeric guards: nonnegative points and stock, positive amounts.
+## Constraints (actuelles)
+- PKs sur toutes les tables Drizzle (UUID).
+- Aucune contrainte unique ou index secondaire explicitement défini dans Drizzle à ce stade.
 
-## Indices (critical)
-- investments: (user_id, status), (points_expiry_date)
-- points_transactions: (user_id, created_at), (expires_at WHERE amount>0)
-- projects: GIST(location) WHERE status='active'
-- orders: (user_id, created_at DESC)
+## À prévoir (si besoin)
+- Index sur `slug`, `created_at`, `user_id` selon les requêtes réelles.
+- Contraintes uniques sur `slug` pour `projects`, `products`, `categories` si validé métier.
 
 ## References
-- See `database-schema.md` for full DDL.
-
+- `../database-schema.md`
+- `packages/core/src/shared/db/schema.ts`

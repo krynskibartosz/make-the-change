@@ -1,13 +1,12 @@
-"use client"
+'use client'
 
-import { forwardRef, type ForwardedRef } from 'react'
-
-import { Input } from '@/app/[locale]/admin/(dashboard)/components/ui/input'
-import { cn } from '@/lib/utils'
-
-import { useFieldContext, useFieldErrors } from './form-context'
+import { Input } from '@make-the-change/core/ui'
+import { type ForwardedRef, forwardRef } from 'react'
+import { useController, useFormContext } from 'react-hook-form'
+import { cn } from '@make-the-change/core/shared/utils'
 
 export type FormNumberFieldProps = {
+  name: string
   label?: string
   placeholder?: string
   required?: boolean
@@ -15,30 +14,43 @@ export type FormNumberFieldProps = {
   kind?: 'int' | 'float'
   emptyValue?: number | null | undefined
   step?: number | string
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur' | 'size' | 'type' | 'step'>
+} & Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'onBlur' | 'size' | 'type' | 'step'
+>
 
 const FormNumberFieldComponent = (
-  { label, placeholder, required, className, kind = 'int', emptyValue, step, ...props }: FormNumberFieldProps,
-  ref: ForwardedRef<HTMLInputElement>
+  {
+    name,
+    label,
+    placeholder,
+    required,
+    className,
+    kind = 'int',
+    emptyValue,
+    step,
+    ...props
+  }: FormNumberFieldProps,
+  ref: ForwardedRef<HTMLInputElement>,
 ) => {
-  const field = useFieldContext<number | null | undefined>()
+  const { control } = useFormContext()
+  const { field, fieldState } = useController({ control, name })
 
-  const rawValue = field.state.value
+  const rawValue = field.value as number | null | undefined
   const value = rawValue === null || rawValue === undefined ? '' : String(rawValue)
-  const errors = useFieldErrors()
-  const hasError = errors.length > 0
+  const errorMessage = fieldState.error?.message
 
   const handleChange = (s: string) => {
     if (s === '') {
-      field.handleChange(emptyValue)
+      field.onChange(emptyValue)
       return
     }
     if (kind === 'float') {
       const n = Number.parseFloat(s)
-      field.handleChange(Number.isNaN(n) ? emptyValue : n)
+      field.onChange(Number.isNaN(n) ? emptyValue : n)
     } else {
       const n = Number.parseInt(s, 10)
-      field.handleChange(Number.isNaN(n) ? emptyValue : n)
+      field.onChange(Number.isNaN(n) ? emptyValue : n)
     }
   }
 
@@ -51,17 +63,12 @@ const FormNumberFieldComponent = (
         step={step}
         type="number"
         value={value}
-        className={cn(
-          hasError && 'border-red-500 focus:border-red-500',
-          className
-        )}
-        onBlur={field.handleBlur}
+        className={cn(errorMessage && 'border-destructive focus:border-destructive', className)}
+        onBlur={field.onBlur}
         onChange={(e) => handleChange(e.target.value)}
         {...props}
       />
-      {hasError && errors[0] && (
-        <p className="text-sm text-red-500">{errors[0]}</p>
-      )}
+      {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
     </div>
   )
 }

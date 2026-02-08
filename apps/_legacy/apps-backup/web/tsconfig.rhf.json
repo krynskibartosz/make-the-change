@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/app/[locale]/admin/(dashboard)/products/[id]/page.rhf.tsx",
+    "src/app/[locale]/admin/(dashboard)/products/[id]/components/rhf/**/*.ts",
+    "src/app/[locale]/admin/(dashboard)/products/[id]/components/rhf/**/*.tsx",
+    "src/app/[locale]/admin/(dashboard)/products/[id]/hooks/use-product-form-rhf.ts",
+    "src/app/[locale]/admin/(dashboard)/products/[id]/hooks/use-create-product-form-rhf.ts",
+    "src/app/[locale]/admin/(dashboard)/products/new/page.tsx",
+
+    "src/app/[locale]/admin/(dashboard)/projects/[id]/page.rhf.tsx",
+    "src/app/[locale]/admin/(dashboard)/projects/[id]/components/rhf/**/*.ts",
+    "src/app/[locale]/admin/(dashboard)/projects/[id]/components/rhf/**/*.tsx",
+    "src/app/[locale]/admin/(dashboard)/projects/[id]/components/project-detail-skeleton.tsx",
+    "src/app/[locale]/admin/(dashboard)/projects/[id]/hooks/use-project-form-rhf.ts",
+    "src/app/[locale]/admin/(dashboard)/projects/[id]/hooks/use-create-project-form-rhf.ts",
+    "src/app/[locale]/admin/(dashboard)/projects/new/page.tsx",
+
+    "src/app/[locale]/admin/(dashboard)/partners/[id]/page.rhf.tsx",
+    "src/app/[locale]/admin/(dashboard)/partners/[id]/components/rhf/**/*.ts",
+    "src/app/[locale]/admin/(dashboard)/partners/[id]/components/rhf/**/*.tsx",
+    "src/app/[locale]/admin/(dashboard)/partners/[id]/components/partner-detail-skeleton.tsx",
+    "src/app/[locale]/admin/(dashboard)/partners/[id]/hooks/use-partner-form-rhf.ts",
+    "src/app/[locale]/admin/(dashboard)/partners/[id]/hooks/use-create-partner-form-rhf.ts",
+    "src/app/[locale]/admin/(dashboard)/partners/new/page.tsx"
+  ]
+}
+

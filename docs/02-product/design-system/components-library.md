@@ -1,4 +1,6 @@
 # 🧩 Components Library - 12 Patterns UI Prêts à l'Emploi
+
+> Historique 2024/2025 — à revalider en 2026.
 **Make the CHANGE - Application Biodiversité & Écologie Durable**
 
 **📍 DOCUMENT TYPE**: Bibliothèque de Composants UI | **🗓️ DATE**: 27 Août 2025 | **⭐️ PRIORITÉ**: Critique

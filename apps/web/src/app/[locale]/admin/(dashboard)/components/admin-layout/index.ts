@@ -1,17 +1,9 @@
+export { AdminDetailActions, AdminDetailHeader } from '../layout/admin-detail-header'
+export { AdminDetailLayout } from '../layout/admin-detail-layout'
+export { AdminPageLayout } from './admin-page-layout'
+export { AdminPageContent } from './content'
 
-export { AdminPageLayout } from './admin-page-layout';
-
-
-export { AdminPageHeader } from './header';
-export { AdminPageContent } from './content';
-export { AdminPageFooter } from './footer';
-
-
-export { FilterButton, FilterModal } from './filter-modal';
-
-
-export { Filters } from './generic-filters';
-
-
-export { AdminDetailLayout } from '../layout/admin-detail-layout';
-export { AdminDetailHeader, AdminDetailActions } from '../layout/admin-detail-header';
+export { FilterButton, FilterModal } from './filter-modal'
+export { AdminPageFooter } from './footer'
+export { Filters } from './generic-filters'
+export { AdminPageHeader } from './header'

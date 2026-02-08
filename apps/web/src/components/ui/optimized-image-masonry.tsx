@@ -4,102 +4,90 @@
  * Conserve la même UI/UX que l'ancien système
  */
 
-'use client';
+'use client'
 
-import { 
-  DndContext, 
-  closestCenter, 
-  KeyboardSensor, 
-  PointerSensor, 
-  useSensor, 
-  useSensors
-} from '@dnd-kit/core';
-import { 
-  arrayMove, 
-  SortableContext, 
-  sortableKeyboardCoordinates, 
-  verticalListSortingStrategy,
-  rectSortingStrategy
-, 
-  useSortable
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { Trash2, Edit3, Eye, GripVertical } from 'lucide-react';
-import Image from 'next/image';
-import { type FC } from 'react';
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn';
-import { useIsMobile } from '@/hooks/use-media-query';
-import type { ProductBlurHash } from '@/types/blur';
-
-import type {
-  DragEndEvent
-} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core'
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { cn } from '@make-the-change/core/shared/utils'
+import { Edit3, Eye, GripVertical, Trash2 } from 'lucide-react'
+import Image from 'next/image'
+import type { FC } from 'react'
+import { useIsMobile } from '@/hooks/use-media-query'
+import type { ProductBlurHash } from '@/types/blur'
 
 type OptimizedImageMasonryProps = {
-  images: string[];
-  className?: string;
-  onImageClick?: (imageUrl: string, index: number) => void;
-  onImageReplace?: (imageUrl: string, index: number) => void;
-  onImageDelete?: (imageUrl: string, index: number) => void;
-  onImagePreview?: (imageUrl: string, index: number) => void;
-  onImagesReorder?: (oldIndex: number, newIndex: number, newImages: string[]) => void;
-  showActions?: boolean;
-  enableReorder?: boolean;
-  
+  images: string[]
+  className?: string
+  onImageClick?: (imageUrl: string, index: number) => void
+  onImageReplace?: (imageUrl: string, index: number) => void
+  onImageDelete?: (imageUrl: string, index: number) => void
+  onImagePreview?: (imageUrl: string, index: number) => void
+  onImagesReorder?: (oldIndex: number, newIndex: number, newImages: string[]) => void
+  showActions?: boolean
+  enableReorder?: boolean
+
   // 🚀 NOUVEAU : Support pour blur via map URL -> blur
-  imageBlurMap?: Record<string, ProductBlurHash>;
-  productId?: string;              // Pour diagnostics
-};
+  imageBlurMap?: Record<string, ProductBlurHash>
+}
 
 // Composant sortable pour une image individuelle (reproduction exacte de l'ancien)
 const SortableImageItem: FC<{
-  src: string;
-  alt: string;
-  index: number;
-  className?: string;
-  id: string;
-  showActions?: boolean;
-  onImageClick?: (imageUrl: string, index: number) => void;
-  onImageReplace?: (imageUrl: string, index: number) => void;
-  onImageDelete?: (imageUrl: string, index: number) => void;
-  onImagePreview?: (imageUrl: string, index: number) => void;
-  
+  src: string
+  alt: string
+  index: number
+  className?: string
+  id: string
+  showActions?: boolean
+  onImageClick?: (imageUrl: string, index: number) => void
+  onImageReplace?: (imageUrl: string, index: number) => void
+  onImageDelete?: (imageUrl: string, index: number) => void
+  onImagePreview?: (imageUrl: string, index: number) => void
+
   // 🚀 NOUVEAU : Support blur optimisé
-  blurHash?: ProductBlurHash;
-}> = ({ 
-  src, 
-  alt, 
-  index, 
-  className, 
-  id, 
+  blurHash?: ProductBlurHash
+}> = ({
+  src,
+  alt,
+  index,
+  className,
+  id,
   showActions = false,
   onImageClick,
   onImageReplace,
   onImageDelete,
   onImagePreview,
-  blurHash
+  blurHash,
 }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  };
+  }
 
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile()
 
   // Utiliser la data URL issue de la DB si disponible (zéro dépendance react-blurhash)
   const blurProps = blurHash?.blurDataURL
     ? { placeholder: 'blur' as const, blurDataURL: blurHash.blurDataURL }
-    : {};
+    : {}
 
   return (
     <div
@@ -108,7 +96,7 @@ const SortableImageItem: FC<{
       className={cn(
         'relative group w-full h-full cursor-pointer',
         isDragging && 'opacity-50 scale-95 z-10',
-        className
+        className,
       )}
       onClick={() => onImageClick?.(src, index)}
     >
@@ -124,7 +112,6 @@ const SortableImageItem: FC<{
           </div>
         </div>
       )}
-
 
       {/* 🚀 Image Next.js avec blur optimisé du serveur */}
       <Image
@@ -148,8 +135,8 @@ const SortableImageItem: FC<{
                   className="bg-white/90 hover:bg-white p-2 rounded-lg shadow-md transition-colors"
                   title="Prévisualiser"
                   onClick={(e) => {
-                    e.stopPropagation();
-                    onImagePreview?.(src, index);
+                    e.stopPropagation()
+                    onImagePreview?.(src, index)
                   }}
                 >
                   <Eye className="h-4 w-4 text-gray-700" />
@@ -158,8 +145,8 @@ const SortableImageItem: FC<{
                   className="bg-white/90 hover:bg-white p-2 rounded-lg shadow-md transition-colors"
                   title="Remplacer"
                   onClick={(e) => {
-                    e.stopPropagation();
-                    onImageReplace?.(src, index);
+                    e.stopPropagation()
+                    onImageReplace?.(src, index)
                   }}
                 >
                   <Edit3 className="h-4 w-4 text-gray-700" />
@@ -168,8 +155,8 @@ const SortableImageItem: FC<{
                   className="bg-white/90 hover:bg-red-50 p-2 rounded-lg shadow-md transition-colors"
                   title="Supprimer"
                   onClick={(e) => {
-                    e.stopPropagation();
-                    onImageDelete?.(src, index);
+                    e.stopPropagation()
+                    onImageDelete?.(src, index)
                   }}
                 >
                   <Trash2 className="h-4 w-4 text-red-600" />
@@ -180,11 +167,11 @@ const SortableImageItem: FC<{
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export const OptimizedImageMasonry: FC<OptimizedImageMasonryProps> = ({ 
-  images, 
+export const OptimizedImageMasonry: FC<OptimizedImageMasonryProps> = ({
+  images,
   className = 'w-full',
   onImageClick,
   onImageReplace,
@@ -193,22 +180,11 @@ export const OptimizedImageMasonry: FC<OptimizedImageMasonryProps> = ({
   onImagesReorder,
   showActions = false,
   enableReorder = false,
-  imageBlurMap = {},    // 🚀 NOUVEAU : blur map optimisé
-  productId
+  imageBlurMap = {}, // 🚀 NOUVEAU : blur map optimisé
 }) => {
-
-
   // 🚀 NOUVEAU : Helper pour obtenir le blur hash d'une image
-  const getBlurForImage = (imageUrl: string): ProductBlurHash | undefined => imageBlurMap?.[imageUrl];
-
-  // 🚀 NOUVEAU : Statistiques du nouveau système
-  const optimizedStats = {
-    totalImages: images.length,
-    withBlur: Object.keys(imageBlurMap).length,
-    missing: images.length - Object.keys(imageBlurMap).length,
-    coverage: images.length > 0 ? Math.round((Object.keys(imageBlurMap).length / images.length) * 100) : 100
-  };
-
+  const getBlurForImage = (imageUrl: string): ProductBlurHash | undefined =>
+    imageBlurMap?.[imageUrl]
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -218,26 +194,28 @@ export const OptimizedImageMasonry: FC<OptimizedImageMasonryProps> = ({
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+    }),
+  )
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+    const { active, over } = event
 
     if (over && active.id !== over.id) {
-      const oldIndex = images.indexOf(active.id);
-      const newIndex = images.indexOf(over.id);
-      
-      const newImages = arrayMove(images, oldIndex, newIndex);
-      onImagesReorder?.(oldIndex, newIndex, newImages);
-    }
-  };
+      const activeId = String(active.id)
+      const overId = String(over.id)
+      const oldIndex = images.indexOf(activeId)
+      const newIndex = images.indexOf(overId)
 
-  const isMobile = useIsMobile();
+      const newImages = arrayMove(images, oldIndex, newIndex)
+      onImagesReorder?.(oldIndex, newIndex, newImages)
+    }
+  }
+
+  const isMobile = useIsMobile()
 
   // Structure identique à l'ancien ImageMasonry qui fonctionnait
   const content = (
-    <div className={cn("border border-border rounded-lg overflow-hidden", className)}>
+    <div className={cn('border rounded-lg overflow-hidden', className)}>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 p-2">
         {images.map((imageUrl, index) => (
           <div key={imageUrl} className="relative aspect-square min-h-[120px]">
@@ -257,36 +235,24 @@ export const OptimizedImageMasonry: FC<OptimizedImageMasonryProps> = ({
         ))}
       </div>
     </div>
-  );
+  )
 
   // Si reorder activé, envelopper avec DndContext (comme l'ancien)
   if (enableReorder && !isMobile) {
     return (
       <div className="space-y-4">
-        <DndContext
-          collisionDetection={closestCenter}
-          sensors={sensors}
-          onDragEnd={handleDragEnd}
-        >
-            <SortableContext 
-            items={images} 
-            strategy={rectSortingStrategy}
-          >
+        <DndContext collisionDetection={closestCenter} sensors={sensors} onDragEnd={handleDragEnd}>
+          <SortableContext items={images} strategy={rectSortingStrategy}>
             {content}
           </SortableContext>
         </DndContext>
       </div>
-    );
+    )
   }
 
   // Sinon, rendu simple (comme l'ancien quand pas de reorder)
-  return (
-    <div className="space-y-4">
-      
-      {content}
-    </div>
-  );
-};
+  return <div className="space-y-4">{content}</div>
+}
 
 // Export pour compatibilité
-export default OptimizedImageMasonry;
+export default OptimizedImageMasonry

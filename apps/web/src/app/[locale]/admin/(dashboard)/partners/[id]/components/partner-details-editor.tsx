@@ -1,30 +1,28 @@
-'use client';
+'use client'
 
-import { partnerStatusLabels, type PartnerFormData } from '@make-the-change/api/validators/partner';
-import { Building2, Mail, Save } from 'lucide-react';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/card';
-import { FormInput, FormSelect, FormTextArea } from '@/components/form';
-import { Button } from '@/components/ui/button';
-import { useFormWithToast } from '@/hooks/use-form-with-toast';
-
-import type { FC, PropsWithChildren } from 'react';
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { FormInput, FormSelect, FormTextArea } from '@make-the-change/core/ui/rhf'
+import { Building2, Mail, Save } from 'lucide-react'
+import type { FC, PropsWithChildren } from 'react'
+import { FormProvider } from 'react-hook-form'
+import { useFormWithToast } from '@/hooks/use-form-with-toast'
+import { type PartnerFormData, partnerStatusLabels } from '@/lib/validators/partner'
 
 type PartnerDetailsEditorProps = {
-  partnerData: PartnerFormData & { id: string };
-  isEditing: boolean;
-  isSaving?: boolean;
-  onSave?: (data: PartnerFormData) => Promise<void>;
-};
+  partnerData: PartnerFormData & { id: string }
+  isEditing: boolean
+  isSaving?: boolean
+  onSave?: (data: PartnerFormData) => Promise<void>
+}
 
 const PartnerCardsGrid: FC<PropsWithChildren> = ({ children }) => (
-  <div className='grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 [&>*]:h-full'>{children}</div>
-);
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 [&>*]:h-full">{children}</div>
+)
 
 const statusOptions = Object.entries(partnerStatusLabels).map(([value, label]) => ({
   value,
-  label
-}));
+  label,
+}))
 
 export const PartnerDetailsEditor: FC<PartnerDetailsEditorProps> = ({
   partnerData,
@@ -32,26 +30,26 @@ export const PartnerDetailsEditor: FC<PartnerDetailsEditorProps> = ({
   isSaving = false,
   onSave,
 }) => {
-  const { form, isSubmitting } = useFormWithToast({
+  const { form, handleSubmit, isSubmitting } = useFormWithToast({
     defaultValues: partnerData,
     onSubmit: async (value: PartnerFormData) => {
       if (onSave) {
-        await onSave(value);
-        return { success: true };
+        await onSave(value)
+        return { success: true }
       }
-      return { success: true };
+      return { success: true }
     },
     toasts: {
       success: {
         title: 'Partenaire mis à jour',
-        description: 'Les modifications ont été enregistrées avec succès'
+        description: 'Les modifications ont été enregistrées avec succès',
       },
       error: {
         title: 'Erreur',
-        description: 'Impossible de mettre à jour le partenaire'
-      }
-    }
-  });
+        description: 'Impossible de mettre à jour le partenaire',
+      },
+    },
+  })
 
   const contentSections = [
     {
@@ -59,137 +57,109 @@ export const PartnerDetailsEditor: FC<PartnerDetailsEditorProps> = ({
       title: 'Informations générales',
       icon: Building2,
       content: (
-        <div className='space-y-4'>
-          <form.Field name="name">
-            {(field) => (
-              <FormInput
-                required
-                disabled={!isEditing}
-                field={field}
-                label="Nom du partenaire"
-                placeholder="Nom du partenaire"
-              />
-            )}
-          </form.Field>
+        <div className="space-y-4">
+          <FormInput
+            name="name"
+            required
+            disabled={!isEditing}
+            label="Nom du partenaire"
+            placeholder="Nom du partenaire"
+          />
 
-          <form.Field name="slug">
-            {(field) => (
-              <FormInput
-                required
-                disabled={!isEditing}
-                field={field}
-                label="Slug"
-                placeholder="slug-du-partenaire"
-              />
-            )}
-          </form.Field>
+          <FormInput
+            name="slug"
+            required
+            disabled={!isEditing}
+            label="Slug"
+            placeholder="slug-du-partenaire"
+          />
 
-          <form.Field name="description">
-            {(field) => (
-              <FormTextArea
-                disabled={!isEditing}
-                field={field}
-                label="Description"
-                placeholder="Description du partenaire..."
-                rows={6}
-              />
-            )}
-          </form.Field>
+          <FormTextArea
+            name="description"
+            disabled={!isEditing}
+            label="Description"
+            placeholder="Description du partenaire..."
+            rows={6}
+          />
         </div>
-      )
+      ),
     },
     {
       id: 'contact',
       title: 'Contact & Statut',
       icon: Mail,
       content: (
-        <div className='space-y-4'>
-          <form.Field name="contact_email">
-            {(field) => (
-              <FormInput
-                required
-                disabled={!isEditing}
-                field={field}
-                label="Email de contact"
-                placeholder="contact@partenaire.com"
-                type="email"
-              />
-            )}
-          </form.Field>
+        <div className="space-y-4">
+          <FormInput
+            name="contact_email"
+            required
+            disabled={!isEditing}
+            label="Email de contact"
+            placeholder="contact@partenaire.com"
+            type="email"
+          />
 
-          <form.Field name="website">
-            {(field) => (
-              <FormInput
-                disabled={!isEditing}
-                field={field}
-                label="Site web"
-                placeholder="https://partenaire.com"
-                type="url"
-              />
-            )}
-          </form.Field>
+          <FormInput
+            name="contact_website"
+            disabled={!isEditing}
+            label="Site web"
+            placeholder="https://partenaire.com"
+            type="url"
+          />
 
-          <form.Field name="status">
-            {(field) => (
-              <FormSelect
-                disabled={!isEditing}
-                field={field}
-                label="Statut"
-                options={statusOptions}
-                placeholder="Sélectionner un statut"
-              />
-            )}
-          </form.Field>
+          <FormSelect
+            name="status"
+            disabled={!isEditing}
+            label="Statut"
+            options={statusOptions}
+            placeholder="Sélectionner un statut"
+          />
         </div>
-      )
+      ),
     },
-  ];
+  ]
 
   return (
-    <form className='space-y-6 md:space-y-8' onSubmit={(e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      form.handleSubmit();
-    }}>
-      <PartnerCardsGrid>
-        {contentSections.map((section) => (
-          <Card key={section.id} className='transition-all duration-200 hover:shadow-lg'>
-            <CardHeader className='pb-4'>
-              <CardTitle className='flex items-center gap-3 text-lg'>
-                <div className='p-2 bg-gradient-to-br from-primary/20 to-orange-500/20 rounded-lg border border-primary/20'>
-                  <section.icon className='h-5 w-5 text-primary' />
-                </div>
-                {section.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {section.content}
-            </CardContent>
-          </Card>
-        ))}
-      </PartnerCardsGrid>
+    <FormProvider {...form}>
+      <form className="space-y-6 md:space-y-8" onSubmit={handleSubmit}>
+        <PartnerCardsGrid>
+          {contentSections.map((section) => (
+            <Card key={section.id} className="transition-all duration-200 hover:shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-lg">
+                  <div className="p-2 bg-gradient-to-br from-primary/20 to-orange-500/20 rounded-lg border border-primary/20">
+                    <section.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  {section.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>{section.content}</CardContent>
+            </Card>
+          ))}
+        </PartnerCardsGrid>
 
-      {isEditing && (
-        <div className="flex justify-end">
-          <Button
-            className="flex items-center gap-2"
-            disabled={isSubmitting || isSaving}
-            type="submit"
-          >
-            {(isSubmitting || isSaving) ? (
-              <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
-                Sauvegarde...
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4" />
-                Sauvegarder
-              </>
-            )}
-          </Button>
-        </div>
-      )}
-    </form>
-  );
-};
+        {isEditing && (
+          <div className="flex justify-end">
+            <Button
+              className="flex items-center gap-2"
+              disabled={isSubmitting || isSaving}
+              type="submit"
+            >
+              {isSubmitting || isSaving ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  Sauvegarde...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4" />
+                  Sauvegarder
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+      </form>
+    </FormProvider>
+  )
+}

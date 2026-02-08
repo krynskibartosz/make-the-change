@@ -1,24 +1,24 @@
-import Image from 'next/image';
-import { type FC } from 'react';
+import Image from 'next/image'
+import type { FC } from 'react'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@make-the-change/core/shared/utils'
 
-import { ImageActionButtons } from './image-action-buttons';
+import { ImageActionButtons } from './image-action-buttons'
 
 type ImageDisplayProps = {
-  src: string;
-  onRemove: () => void;
-  onChange: () => void;
-  disabled?: boolean;
-  className?: string;
+  src: string
+  onRemove: () => void
+  onChange: () => void
+  disabled?: boolean
+  className?: string
 }
 
-export const ImageDisplay: FC<ImageDisplayProps> = ({ 
-  src, 
-  onRemove, 
-  onChange, 
+export const ImageDisplay: FC<ImageDisplayProps> = ({
+  src,
+  onRemove,
+  onChange,
   disabled = false,
-  className = ''
+  className = '',
 }) => (
   <div className={cn('relative group w-full h-full', className)}>
     <Image
@@ -29,11 +29,7 @@ export const ImageDisplay: FC<ImageDisplayProps> = ({
       src={src}
     />
     {!disabled && (
-      <ImageActionButtons 
-        disabled={disabled} 
-        onChange={onChange} 
-        onRemove={onRemove}
-      />
+      <ImageActionButtons disabled={disabled} onChange={onChange} onRemove={onRemove} />
     )}
   </div>
-);
+)

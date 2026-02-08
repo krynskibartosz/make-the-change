@@ -1,5 +1,7 @@
 # Partner Webhooks - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
  Scope: Contracts for receiving partner production/impact data and optional order/stock hooks.
 
 ## Security
@@ -26,5 +28,4 @@
 - 2xx acknowledge; non-2xx triggers retry; log and alert after exhaustion.
 
 ## References
-- `services/partner-service.md`.
-
+- `../services/fulfillment-service.md`

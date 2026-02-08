@@ -2,6 +2,7 @@
 
 ## Objective
 Manage 18-month expiry with proactive warnings and automatic expiration.
+Status: Planned (requires points tables not yet in Drizzle schema).
 
 ## Steps
 1) On points earn: compute `expires_at`; insert expiry schedule record.
@@ -11,7 +12,7 @@ Manage 18-month expiry with proactive warnings and automatic expiration.
 ## Failure Paths
 - Notification provider down → retry next run; record failures.
 
-## Data
+## Data (planned)
 - Tables: points_transactions, points_expiry_schedule; view: user_points_summary.
 
 ## Diagram
@@ -23,4 +24,3 @@ sequenceDiagram
   Cron->>API: send 7d warnings
   Cron->>DB: expire points
 ```
-

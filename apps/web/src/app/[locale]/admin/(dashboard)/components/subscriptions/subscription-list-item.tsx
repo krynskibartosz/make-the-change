@@ -1,12 +1,10 @@
 'use client'
 
+import type { FC, ReactNode } from 'react'
 import { AdminListItem } from '@/app/[locale]/admin/(dashboard)/components/ui/admin-list-item'
 import type { Subscription } from '@/lib/types/subscription'
-
 import { SubscriptionListHeader } from './subscription-list-header'
 import { SubscriptionListMetadata } from './subscription-list-metadata'
-
-import type { FC, ReactNode } from 'react'
 
 type SubscriptionListItemProps = {
   subscription: Subscription

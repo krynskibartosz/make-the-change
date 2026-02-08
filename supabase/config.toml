@@ -1,0 +1,18 @@
+project_id = "pbgqswbyqzspqjmwqksc"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "commerce", "investment", "content", "identity"]
+
+[db]
+port = 54322
+shadow_port = 54320
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback"]
+
+[studio]
+enabled = true
+port = 54323

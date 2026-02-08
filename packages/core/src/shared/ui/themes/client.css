@@ -1,0 +1,12 @@
+/* Client theme — Make the CHANGE
+ *
+ * Currently, client uses the defaults from `@make-the-change/core/css`.
+ * This file exists to make theme selection explicit and allow future
+ * client-only overrides without touching the base design tokens.
+ */
+
+@layer base {
+  :root {
+    /* Intentionally empty (inherits core defaults). */
+  }
+}

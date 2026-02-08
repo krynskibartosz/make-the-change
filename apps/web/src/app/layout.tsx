@@ -1,6 +1,5 @@
-import { Inter } from 'next/font/google'
-
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import '@/app/globals.css'
 import type { FC, PropsWithChildren } from 'react'
 
@@ -12,13 +11,9 @@ export const metadata: Metadata = {
   keywords: ['écologie', 'investissement', 'durable', 'environnement', 'projets verts'],
 }
 
-const RootLayout: FC<PropsWithChildren> = ({
-  children,
-}) => (
-  <html>
-    <body className={inter.className}>
-      {children}
-    </body>
+const RootLayout: FC<PropsWithChildren> = ({ children }) => (
+  <html suppressHydrationWarning>
+    <body className={inter.className}>{children}</body>
   </html>
 )
 

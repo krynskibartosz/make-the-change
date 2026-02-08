@@ -2,6 +2,7 @@
 
 ## Objective
 Create an order paid with points; route items between micro-hub stock and partner dropship; ship and track.
+Status: Planned (inventory/shipments tables not yet in Drizzle schema).
 
 ## Steps
 1) Validate cart; compute totals and shipping.

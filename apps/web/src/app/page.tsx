@@ -1,6 +1,9 @@
-import { redirect } from 'next/navigation';
+import Link from 'next/link'
 
 export default function RootPage() {
-  // Rediriger automatiquement vers la locale par défaut
-  redirect('/fr');
+  return (
+    <div className="flex h-screen w-full items-center justify-center">
+      <Link href="/fr">Go to App</Link>
+    </div>
+  )
 }

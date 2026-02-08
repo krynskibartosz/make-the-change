@@ -1,24 +1,26 @@
-"use client"
+'use client'
 
-import { useFieldContext, useFieldErrors } from './form-context'
+import { useController, useFormContext } from 'react-hook-form'
 
 export type FormToggleProps = {
+  name: string
   label: string
   description?: string
   className?: string
   hideLabel?: boolean
 }
 
-export const FormToggle = ({ 
-  label, 
-  description, 
+export const FormToggle = ({
+  name,
+  label,
+  description,
   className,
   hideLabel = false,
 }: FormToggleProps) => {
-  const field = useFieldContext<boolean>()
-  const checked = Boolean(field.state.value)
-  const errors = useFieldErrors()
-  const hasError = errors.length > 0
+  const { control } = useFormContext()
+  const { field, fieldState } = useController({ control, name })
+  const checked = Boolean(field.value)
+  const errorMessage = fieldState.error?.message
 
   return (
     <div className="space-y-1">
@@ -26,11 +28,11 @@ export const FormToggle = ({
         <input
           aria-label={hideLabel ? label : undefined}
           checked={checked}
-          className={`h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 ${className}`}
+          className={`h-4 w-4 rounded border-input text-primary focus:ring-ring ${className}`}
           id={hideLabel ? undefined : label}
           type="checkbox"
-          onBlur={field.handleBlur}
-          onChange={(e) => field.handleChange(e.target.checked)}
+          onBlur={field.onBlur}
+          onChange={(e) => field.onChange(e.target.checked)}
         />
         <div className="grid gap-1.5 leading-none">
           {!hideLabel && (
@@ -41,16 +43,10 @@ export const FormToggle = ({
               {label}
             </label>
           )}
-          {description && (
-            <p className="text-xs text-muted-foreground">
-              {description}
-            </p>
-          )}
+          {description && <p className="text-xs text-muted-foreground">{description}</p>}
         </div>
       </div>
-      {hasError && errors[0] && (
-        <p className="text-sm text-red-500">{errors[0]}</p>
-      )}
+      {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
     </div>
   )
 }

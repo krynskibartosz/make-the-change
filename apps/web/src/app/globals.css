@@ -1,487 +1,76 @@
 @import "tailwindcss";
-@import "../styles/admin-theme-v4.css";
+@import "@make-the-change/core/css";
+@import "@make-the-change/core/css/themes/admin";
+@import "../styles/theme-definitions.css";
 
-@theme {
-  /* 🎨 Colors - Design System 2025 Light Mode */
-  --color-background: #ffffff;
-  --color-foreground: #111827;
-  --color-card: #f9fafb;
-  --color-card-foreground: #111827;
-  --color-popover: #ffffff;
-  --color-popover-foreground: #111827;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
 
-  /* Primary - Vert Olivier Professionnel (Nature/Huile) */
-  --color-primary: #6b7c32;
-  --color-primary-light: #7d8f3a;
-  --color-primary-dark: #5a6829;
-  --color-primary-foreground: #f7f8f2;
-
-  /* Secondary - Terres Méditerranéennes */
-  --color-secondary: #f4f1eb;
-  --color-secondary-dark: #e8e2d6;
-  --color-secondary-foreground: #3c2e20;
-
-  /* Accent - Miel Doré Subtil (Soleil/Miel) */
-  --color-accent: #d4a574;
-  --color-accent-light: #ddb485;
-  --color-accent-dark: #c19660;
-  --color-accent-foreground: #2d1f14;
-
-  /* Palette Biodiversité - Couleurs Contextuelles */
-  --color-olive: #6b7c32;        /* Huile d'olive, projets nature */
-  --color-olive-light: #7d8f3a;
-  --color-honey: #d4a574;        /* Miel, produits sucrés */
-  --color-honey-light: #ddb485;
-  --color-earth: #8b6914;        /* Terre, agriculture */
-  --color-earth-light: #a67c1a;
-  --color-ocean: #4a90a4;        /* Eau, projets aquatiques */
-  --color-ocean-light: #5ba3b8;
-
-  /* Sémantiques */
-  --color-success: #10b981;
-  --color-success-foreground: #f0fdfa;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #fef2f2;
-  --color-warning: #f59e0b;
-  --color-warning-foreground: #1f1611;
-  --color-info: #1e90ff;
-  --color-info-foreground: #f0f9ff;
-
-  /* UI Elements */
-  --color-muted: #f3f4f6;
-  --color-muted-foreground: #6b7280;
-  --color-border: #e5e7eb;
-  --color-input: #f9fafb;
-  --color-ring: #059669;
-
-  /* 📐 Border Radius - Système Complet */
-  --radius-none: 0px;
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
-  --radius-3xl: 24px;
-  --radius-4xl: 32px;
-  --radius-pill: 9999px;
-
-  /* Semantic Radius */
-  --radius-control: 8px;
-  --radius-surface: 12px;
-  --radius-overlay: 24px;
-  --radius-dialog: 28px;
-
-  /* 🎯 Z-Index System */
-  --z-base: 0;
-  --z-content: 10;
-  --z-header: 20;
-  --z-overlay: 30;
-  --z-modal: 40;
-  --z-fab: 50;
-
-  /* 📐 Spacing & Layout */
-  --spacing-fab: 3.5rem;
-  --spacing-header-mobile: 4rem;
-  --spacing-header-desktop: 5rem;
-
-  /* 🔄 Animation */
-  --transition-fast: 150ms;
-  --transition-normal: 300ms;
-  --transition-slow: 500ms;
-
-  /* 🌟 Shadows */
-  --shadow-surface: 0 1px 2px 0 rgb(0 0 0 / 0.06);
-  --shadow-card: 0 1px 3px 0.5px rgb(0 0 0 / 0.05), 0 1px 2px 0 rgb(0 0 0 / 0.06);
-  --shadow-overlay: 0 10px 30px -10px rgb(0 0 0 / 0.35);
-  --shadow-dialog: 0 25px 50px -12px rgb(0 0 0 / 0.5);
-
-  /* 📏 Density System */
-  --density-card-padding: 1.5rem;
-  --density-button-height: 2.5rem;
-  --density-spacing-sm: 0.5rem;
-  --density-spacing-md: 1rem;
-  --density-spacing-lg: 1.5rem;
-
-  /* 🎨 Component Tokens */
-  --button-action-height: 2rem;
-  --skeleton-color: #e5e7eb;
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
 }
 
-/* 🌙 Dark Mode - Compatible avec next-themes */
-.dark {
-  --color-background: #0f1419;
-  --color-foreground: #f8fafc;
-  --color-card: #1e293b;
-  --color-card-foreground: #f8fafc;
-  --color-popover: #0f1419;
-  --color-popover-foreground: #f8fafc;
-
-  --color-primary: #7d8f3a;
-  --color-primary-light: #8fa045;
-  --color-primary-dark: #6b7c32;
-  --color-primary-foreground: #f7f8f2;
-
-  --color-secondary: #3c3530;
-  --color-secondary-dark: #2a251f;
-  --color-secondary-foreground: #f4f1eb;
-
-  --color-accent: #ddb485;
-  --color-accent-light: #e6c396;
-  --color-accent-dark: #d4a574;
-  --color-accent-foreground: #2d1f14;
-
-  --color-muted: #374151;
-  --color-muted-foreground: #9ca3af;
-  --color-border: #4b5563;
-  --color-input: #374151;
-  --color-ring: #10b981;
-
-  --color-success: #10b981;
-  --color-success-foreground: #064e3b;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #7f1d1d;
-  --color-warning: #f59e0b;
-  --color-warning-foreground: #451a03;
-  --color-info: #3b82f6;
-  --color-info-foreground: #1e3a8a;
-}
-
-/* 🎚️ Density Variants */
-[data-density="compact"] {
-  --density-card-padding: 0.75rem;
-  --density-button-height: 2rem;
-  --density-spacing-sm: 0.25rem;
-  --density-spacing-md: 0.5rem;
-  --density-spacing-lg: 0.75rem;
-  --radius-control: 6px;
-  --radius-surface: 8px;
-}
-
-[data-density="comfortable"] {
-  --density-card-padding: 2rem;
-  --density-button-height: 3rem;
-  --density-spacing-sm: 0.75rem;
-  --density-spacing-md: 1.5rem;
-  --density-spacing-lg: 2rem;
-  --radius-control: 12px;
-  --radius-surface: 16px;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 @layer utilities {
-  .scrollbar-hide {
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* 🎯 Design System - Action vs Information */
-  
-  /* Actions (Primary Color) - Éléments cliquables - Style subtil */
-  .action-primary {
-    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
-    background-color: color-mix(in srgb, var(--color-primary) 5%, transparent);
-    color: var(--color-primary);
-  }
-  
-  .action-primary:hover {
-    border-color: var(--color-primary);
-    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  }
-  
-  .link-primary {
-    color: var(--color-primary);
-  }
-  
-  .link-primary:hover {
-    color: var(--color-primary-dark);
-    text-decoration: underline;
-  }
-  
-  .text-primary {
-    color: var(--color-primary);
-  }
-
-  /* Information - Style très subtil et moderne */
-  .badge-subtle {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: var(--color-muted);
-    color: var(--color-muted-foreground);
-  }
-  
-  .tag-subtle {
-    padding: 0.125rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: color-mix(in srgb, var(--color-muted) 50%, transparent);
-    color: var(--color-muted-foreground);
-    border: 1px solid var(--color-border);
-  }
-  
-  .text-data {
-    color: var(--color-foreground);
-    font-weight: 500;
-  }
-
-  /* Couleurs d'accent très subtiles - uniquement pour les éléments importants */
-  .badge-accent-subtle {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: color-mix(in srgb, var(--color-accent) 3%, var(--color-muted));
-    color: color-mix(in srgb, var(--color-accent) 60%, var(--color-muted-foreground));
-  }
-  
-  .text-accent-subtle {
-    color: color-mix(in srgb, var(--color-accent) 50%, var(--color-muted-foreground));
-  }
-
-  /* Classes contextuelles biodiversité - Style unifié */
-  .badge-olive {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: color-mix(in srgb, var(--color-olive) 8%, var(--color-muted));
-    color: color-mix(in srgb, var(--color-olive) 80%, var(--color-foreground));
-  }
-  
-  .badge-honey {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: color-mix(in srgb, var(--color-honey) 8%, var(--color-muted));
-    color: color-mix(in srgb, var(--color-honey) 80%, var(--color-foreground));
-  }
-  
-  .badge-earth {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: color-mix(in srgb, var(--color-earth) 8%, var(--color-muted));
-    color: color-mix(in srgb, var(--color-earth) 80%, var(--color-foreground));
-  }
-  
-  .badge-ocean {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: color-mix(in srgb, var(--color-ocean) 8%, var(--color-muted));
-    color: color-mix(in srgb, var(--color-ocean) 80%, var(--color-foreground));
-  }
-
-  /* Status Colors - Pour différents états */
-  .status-success {
-    background-color: var(--color-success);
-    color: var(--color-success-foreground);
-  }
-  
-  .status-warning {
-    background-color: var(--color-warning);
-    color: var(--color-warning-foreground);
-  }
-  
-  .status-destructive {
-    background-color: var(--color-destructive);
-    color: var(--color-destructive-foreground);
-  }
-}
-
-/* Utility Classes pour Gradients 2025 */
-@layer utilities {
-  .bg-gradient-primary {
-    background: var(--gradient-primary);
-  }
-  
-  .bg-gradient-accent {
-    background: var(--gradient-accent);
-  }
-  
-  .bg-gradient-hero {
-    background: var(--gradient-hero);
-  }
-  
-  .bg-gradient-success {
-    background: var(--gradient-success);
-  }
-  
-  .bg-gradient-ocean {
-    background: var(--gradient-ocean);
-  }
-  
-  .bg-mesh-nature {
-    background: var(--mesh-nature);
-  }
-  
-  .bg-mesh-warm {
-    background: var(--mesh-warm);
-  }
-
-  /* Animations Gradient */
-  .gradient-shift {
-    background-size: 300% 300%;
-    animation: gradientShift 6s ease infinite;
-  }
-  
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* Hover Effects Avancés */
-  .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px hsl(var(--primary) / 0.15);
-  }
-
-  /* Glass Effect Moderne */
-  .glass {
-    backdrop-filter: blur(12px);
-    background: hsl(var(--background) / 0.8);
-    border: 1px solid hsl(var(--border) / 0.5);
-  }
-  
-  .glass-card {
-    backdrop-filter: blur(16px);
-    background: hsl(var(--card) / 0.9);
-    border: 1px solid hsl(var(--border) / 0.3);
-    box-shadow: 0 8px 32px hsl(var(--foreground) / 0.1);
-  }
-}
-
-/* Optimisations Responsive Mobile-First 2025 */
-@layer utilities {
-  /* Touch optimizations pour mobile */
-  @media (max-width: 768px) {
-    button, [role='button'], .touch-target {
-      min-height: 44px;
-      min-width: 44px;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* Responsive grids */
-    .grid-responsive {
-      grid-template-columns: 1fr;
-    }
-    
-    .grid-responsive.md\:grid-cols-2 {
-      grid-template-columns: 1fr;
-    }
-    
-    .grid-responsive.lg\:grid-cols-3 {
-      grid-template-columns: 1fr;
-    }
-
-    /* Responsive spacing */
-    .px-responsive {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-    
-    .py-responsive {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-    }
-
-    /* Text responsive */
-    .text-responsive {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .grid-responsive.md\:grid-cols-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .grid-responsive.lg\:grid-cols-3 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .px-responsive {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-    
-    .py-responsive {
-      padding-top: 2rem;
-      padding-bottom: 2rem;
-    }
-
-    .text-responsive {
-      font-size: 1rem;
-      line-height: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .grid-responsive.lg\:grid-cols-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  /* Active states for touch devices */
-  @media (hover: none) and (pointer: coarse) {
-    button:active, [role='button']:active {
-      transform: scale(0.95) !important;
-      filter: brightness(0.9) !important;
-      transition: all 0.1s ease-out;
-    }
-  }
-
-  /* Safe area for devices with notches */
-  @supports (padding: max(0px)) {
-    .safe-top {
-      padding-top: max(1rem, env(safe-area-inset-top));
-    }
-    
-    .safe-bottom {
-      padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    }
-    
-    .safe-left {
-      padding-left: max(1rem, env(safe-area-inset-left));
-    }
-    
-    .safe-right {
-      padding-right: max(1rem, env(safe-area-inset-right));
-    }
+  .text-balance {
+    text-wrap: balance;
   }
 }

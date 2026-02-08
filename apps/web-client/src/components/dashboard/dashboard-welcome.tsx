@@ -1,0 +1,92 @@
+'use client'
+
+import { Badge } from '@make-the-change/core/ui'
+import { Sparkles } from 'lucide-react'
+import type { FC } from 'react'
+import { cn } from '@/lib/utils'
+
+type DashboardWelcomeProps = {
+  firstName: string
+  userLevel: string
+  eyebrow?: string
+  title?: string
+  summary?: Array<{ label: string; value: string }>
+  className?: string
+}
+
+const levelColors: Record<string, { badge: string; glow: string }> = {
+  explorateur: {
+    badge: 'bg-muted text-muted-foreground',
+    glow: 'from-muted/50',
+  },
+  protecteur: {
+    badge: 'bg-success/15 text-success',
+    glow: 'from-success/20',
+  },
+  ambassadeur: {
+    badge: 'bg-warning/15 text-warning',
+    glow: 'from-warning/20',
+  },
+}
+
+export const DashboardWelcome: FC<DashboardWelcomeProps> = ({
+  firstName,
+  userLevel,
+  eyebrow = 'Bienvenue',
+  title,
+  summary,
+  className,
+}) => {
+  const level = levelColors[userLevel] || levelColors.explorateur
+  const displayTitle = title || `Bonjour, ${firstName} !`
+
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-accent/10 to-transparent p-6 shadow-sm md:p-8',
+        className,
+      )}
+    >
+      {/* Animated Glow */}
+      <div
+        className={cn(
+          'absolute -right-20 -top-20 h-56 w-56 animate-pulse rounded-full blur-3xl',
+          `bg-gradient-to-br ${level.glow} via-transparent to-transparent`,
+        )}
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 opacity-60" />
+
+      <div className="relative z-10 space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <span className="text-sm font-medium text-muted-foreground">{eyebrow}</span>
+            </div>
+            <h1 className="text-2xl font-bold md:text-3xl">{displayTitle}</h1>
+          </div>
+
+          <Badge className={cn('self-start md:self-auto', level.badge)}>
+            {userLevel.charAt(0).toUpperCase() + userLevel.slice(1)}
+          </Badge>
+        </div>
+
+        {summary && summary.length > 0 && (
+          <div className="flex gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible">
+            {summary.map((item) => (
+              <div
+                key={item.label}
+                className="min-w-[180px] rounded-2xl border bg-background/70 px-4 py-3 text-left shadow-sm backdrop-blur sm:min-w-0"
+              >
+                <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                  {item.label}
+                </div>
+                <div className="text-lg font-semibold text-foreground">{item.value}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

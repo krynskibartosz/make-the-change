@@ -1,29 +1,37 @@
-# Tech Stack - Make the CHANGE
+# 🚀 Stack Technique & Outils
 
-**Stack technique moderne 2025 optimisé pour plateforme "Make the CHANGE" - architecture évolutive bootstrap vers scale avec budget minimal.**
+> **État**: À jour (Février 2026)
+> **Alignement**: ADR-0001 (Architecture Monorepo)
 
-## 🚀 Architecture Évolutive 3-Phases
+Ce document détaille les choix techniques, les versions exactes et les configurations critiques du projet Make the CHANGE.
 
-### PHASE 1 - Bootstrap Stack (0€ capital)
+---
 
-#### Mobile App MVP (Expo Go)
-```yaml
-Framework: Expo SDK 53 + React Native (Expo Go)
-Development: Expo Go (gratuit, sans build nécessaire)
-Language: TypeScript 5.9+ (strict mode)
-Navigation: Expo Router v4 (file-based routing)
-UI Framework: NativeWind v4 + Tailwind CSS v4
-State Management: TanStack Query v5 + AsyncStorage
-Authentication: Supabase Auth (gratuit)
-Maps: react-native-maps (Google Maps gratuit tier)
-```
+## 🏗️ Architecture Globale
+
+**Monorepo**: [Turborepo v2.3](https://turbo.build/) + [pnpm workspaces](https://pnpm.io/)
+**Runtime**: Node.js 22 LTS (Web/API)
+**Pattern**: Full-stack TypeScript + tRPC (bientôt Server Actions)
+
+### Structure Workspace
+- `apps/web`: Admin Dashboard + E-commerce (Next.js 15)
+- `apps/mobile`: Application Mobile (Expo 53)
+- `packages/api`: Backend logic & Routers (tRPC)
+- `packages/shared`: Shared types, constants, utilities
+- `packages/db`: Database schema (Supabase)
+
+---
+
+## 🛠️ Stack Technique Détaillée
+
+### PHASE 1 - MVP Stack (0€/mois)
 
 #### Web Dashboard Minimal (Vercel Free)
 ```yaml
 Framework: Next.js 15.4 App Router + React Server Components
 Hosting: Vercel Hobby (gratuit 100GB bandwidth)
 Language: TypeScript 5.9+ (strict mode)
-UI Framework: shadcn/ui v2 + Tailwind CSS v4
+UI Framework: Base UI (Headless) + Tailwind CSS v4 + Custom Components
 Forms: TanStack Form (simple)
 Payment: Stripe Elements v3 + Stripe Subscriptions (dual billing)
 Billing: Stripe Customer Portal + Subscription management
@@ -308,157 +316,8 @@ export async function createProjectAction(input: any) {
 // queryClient.invalidateQueries({ queryKey: ['projects'] }) // garde le cache client cohérent
 ```
 
-### shadcn/ui Configuration
+### Base UI & Custom UI Configuration
 ```typescript
-// components.json
-{
-  "style": "default",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.js",
-    "css": "src/styles/globals.css",
-    "baseColor": "slate",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils"
-  }
-}
+// packages/core/src/shared/ui/README.md
+// Voir documentation interne pour l'usage des composants Base UI.
 ```
-
-## 🗄️ Base de Données
-
-### PostgreSQL 15 Configuration
-```sql
--- Extensions requises
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "postgis";
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
-
--- Configuration optimisée pour performances
-ALTER SYSTEM SET shared_preload_libraries = 'pg_stat_statements';
-ALTER SYSTEM SET pg_stat_statements.track = 'all';
-ALTER SYSTEM SET max_connections = 100;
-ALTER SYSTEM SET shared_buffers = '256MB';
-```
-
-### Cache Strategy (PostgreSQL Native)
-```sql
--- Materialized views pour cache performances
-CREATE MATERIALIZED VIEW user_investment_summary AS
-SELECT 
-  user_id,
-  COUNT(*) as total_investments,
-  SUM(amount_eur) as total_invested,
-  SUM(points_generated) as total_points
-FROM investments 
-WHERE status = 'active'
-GROUP BY user_id;
-
--- Index pour performances
-CREATE INDEX idx_user_investment_summary_user ON user_investment_summary(user_id);
-
--- Refresh automatique (via cron job)
-REFRESH MATERIALIZED VIEW user_investment_summary;
-```
-
-## 🔗 Intégrations Externes
-
-### APIs Tierces
-```yaml
-Stripe: v2023-10-16 (payments + KYC)
-Google Maps: v3 (géolocalisation)
-Supabase: Latest (auth + database)
-Vercel Blob: Latest (file storage)
-SendGrid: v3 (emails transactionnels)
-```
-
-### Partner APIs
-```yaml
-HABEEBEE: API REST custom (production tracking)
-ILANGA NATURE: Webhook integration (impact tracking)
-PROMIEL: API REST custom (production data)
-```
-
-## ⚡ Performance Targets
-
-### Mobile Performance
-```yaml
-Cold Start: <2s
-Hot Navigation: <500ms
-API Calls: <1s for queries
-Image Loading: <2s for products
-Bundle Size: <10MB
-```
-
-### Web Performance
-```yaml
-First Contentful Paint: <1.5s
-Largest Contentful Paint: <2.5s
-Time to Interactive: <3s
-Cumulative Layout Shift: <0.1
-API Response P95: <200ms
-```
-
-### Database Performance
-```yaml
-Simple Queries: <50ms
-Complex Queries: <200ms
-Concurrent Users: 1000+
-Connection Pool: 20 max
-```
-
-## 🚀 Deployment Stack
-
-### Infrastructure Évolutive (3 Phases)
-```yaml
-PHASE 1 - Bootstrap (0-5K€ MRR):
-  Frontend: Vercel Hobby (Gratuit)
-  API: Vercel Edge Functions (Gratuit jusqu'à 100GB)
-  Database: Supabase Free Tier (Gratuit jusqu'à 500MB)
-  Storage: Vercel Blob Store (Gratuit jusqu'à 1GB)
-  Monitoring: Vercel Analytics (Gratuit)
-  Total: 0€/mois
-
-PHASE 2 - Growth (5-50K€ MRR):
-  Frontend: Vercel Pro (20€/mois)
-  API: Vercel Edge Functions scaling (50€/mois)
-  Database: Supabase Pro (25€/mois)
-  Storage: Vercel Blob Store (50€/mois)
-  Monitoring: Vercel Analytics Pro (inclus)
-  Total: 145€/mois
-
-PHASE 3 - Scale (50K€+ MRR):
-  Infrastructure: Enterprise solutions
-  Total: 500-2000€/mois selon scale
-```
-
-### CI/CD Pipeline
-```yaml
-Source Control: GitHub
-CI/CD: GitHub Actions
-Environments: Development, Staging, Production
-Testing: Vitest + Playwright automatique
-Security: Snyk + GitHub Advanced Security
-Performance: Lighthouse CI budgets
-```
-
-## 📚 Ressources & Documentation
-
-### Documentation Officielle
-- [Expo SDK 53](https://docs.expo.dev/versions/v53.0.0/)
-- [Vercel Edge Functions](https://nextjs.org/docs)
-- [tRPC v11.5.0](https://trpc.io/docs/v11)
-- [TanStack Query v5](https://tanstack.com/query/latest)
-- [Supabase](https://supabase.com/docs)
-
-### Communautés
-- [Expo Discord](https://discord.gg/expo)
-- [TanStack Discord](https://discord.com/invite/WrRKjPJ)
-- [tRPC Discord](https://discord.gg/KATT)
-
----
-
-*Stack technique évolutif : démarre gratuit (0€ Phase 1), scale selon revenus (145€ Phase 2), architecture enterprise (500-2000€ Phase 3)*

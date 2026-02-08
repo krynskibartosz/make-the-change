@@ -1,17 +1,16 @@
 'use client'
 
-import { Menu, Search, Bell } from 'lucide-react'
-import { type FC } from 'react'
-
+import { Button } from '@make-the-change/core/ui'
+import { Bell, Menu, Search } from 'lucide-react'
+import type { FC } from 'react'
 import { useMobile } from '@/app/[locale]/admin/(dashboard)/components/layout/mobile-context'
 import { CompactThemeToggle } from '@/app/[locale]/admin/(dashboard)/components/theme/compact-theme-toggle'
-import { Button } from '@/components/ui/button'
 
 export const MobileHeader: FC = () => {
   const { toggleMobileMenu } = useMobile()
 
   return (
-    <header className="md:hidden sticky top-0 z-[45] bg-background/90 backdrop-blur-xl border-b border-border/10 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.1)]">
+    <header className="md:hidden sticky top-0 z-[45] bg-background/90 backdrop-blur-xl border-b border-[hsl(var(--border)/0.1)] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.1)]">
       <div className="flex justify-between items-center p-4">
         {}
         <div className="flex items-center gap-3">
@@ -23,10 +22,18 @@ export const MobileHeader: FC = () => {
 
         {}
         <div className="flex items-center gap-2">
-          <Button className="p-3 rounded-2xl min-h-[44px] min-w-[44px] touch-manipulation" size="sm" variant="ghost">
+          <Button
+            className="p-3 rounded-2xl min-h-[44px] min-w-[44px] touch-manipulation"
+            size="sm"
+            variant="ghost"
+          >
             <Search className="w-5 h-5" />
           </Button>
-          <Button className="p-3 rounded-2xl min-h-[44px] min-w-[44px] touch-manipulation" size="sm" variant="ghost">
+          <Button
+            className="p-3 rounded-2xl min-h-[44px] min-w-[44px] touch-manipulation"
+            size="sm"
+            variant="ghost"
+          >
             <Bell className="w-5 h-5" />
           </Button>
           <CompactThemeToggle />

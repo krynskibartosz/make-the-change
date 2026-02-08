@@ -1,25 +1,20 @@
-'use client';
+'use client'
 
-import { ToastWithIcon, ToastClose, ToastDescription, ToastTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/toast';
-import { useToast } from '@/hooks/use-toast';
+import { Toast } from '@base-ui/react/toast'
+import { ToastWithIcon } from '@/app/[locale]/admin/(dashboard)/components/ui/toast'
+import { toastManager, useToast } from '@/hooks/use-toast'
 
-export const Toaster = () => {
-  const { toasts } = useToast();
+const ToastList = () => {
+  const { toasts } = useToast()
+  return toasts.map((toast) => <ToastWithIcon key={toast.id} toast={toast} />)
+}
 
-  return (
-    <>
-      {toasts.map(({ id, title, description, action, ...props }) => {
-        return (
-          <ToastWithIcon key={id} {...props}>
-            <div className='grid gap-1'>
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && <ToastDescription>{description}</ToastDescription>}
-            </div>
-            {action}
-            <ToastClose />
-          </ToastWithIcon>
-        );
-      })}
-    </>
-  );
-};
+import type { FC, PropsWithChildren } from 'react'
+
+export const Toaster: FC<PropsWithChildren> = ({ children }) => (
+  <Toast.Provider toastManager={toastManager}>
+    {children}
+    <Toast.Viewport className="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]" />
+    <ToastList />
+  </Toast.Provider>
+)

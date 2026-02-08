@@ -1,107 +1,105 @@
-'use client';
+'use client'
 
-import { CheckCircle, AlertCircle, Save, Dot, Upload } from 'lucide-react';
-import { type FC } from 'react';
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn';
-import type { SaveStatus } from '@/app/[locale]/admin/(dashboard)/products/[id]/types';
-import { Button } from '@/components/ui/button';
-
+import { cn } from '@make-the-change/core/shared/utils'
+import { Button } from '@make-the-change/core/ui'
+import { AlertCircle, CheckCircle, Dot, Save, Upload } from 'lucide-react'
+import type { FC } from 'react'
+import type { SaveStatus } from '@/app/[locale]/admin/(dashboard)/products/[id]/save-status'
 
 type SaveStatusIndicatorProps = {
-  saveStatus: SaveStatus | null | undefined;
-  onSaveAll?: () => void;
+  saveStatus: SaveStatus | null | undefined
+  onSaveAll?: () => void
 }
 
 // Ce composant affiche le statut de sauvegarde calculé automatiquement
 export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({ saveStatus, onSaveAll }) => {
-
-  if (!saveStatus) return null;
+  if (!saveStatus) return null
 
   const mapLegacyType = (type: string) => {
     const mapping: Record<string, string> = {
-      'idle': 'pristine',
-      'pending': 'modified'
-    };
-    return mapping[type] || type;
-  };
+      idle: 'pristine',
+      pending: 'modified',
+    }
+    return mapping[type] || type
+  }
 
-  const normalizedType = mapLegacyType(saveStatus.type);
+  const normalizedType = mapLegacyType(saveStatus.type)
 
   const statusConfig = {
-    pristine: { 
+    pristine: {
       icon: null,
-      color: 'text-gray-400', 
-      bgColor: '', 
+      color: 'text-gray-400',
+      bgColor: '',
       show: false,
       message: '',
       compact: false,
       animate: false,
-      priority: false
+      priority: false,
     },
-    modified: { 
+    modified: {
       icon: Dot,
-      color: 'text-amber-500', 
-      bgColor: 'bg-amber-50/80', 
+      color: 'text-amber-500',
+      bgColor: 'bg-amber-50/80',
       show: true,
       message: 'Modifications non sauvegardées',
       compact: true,
       animate: false,
-      priority: false
+      priority: false,
     },
-    saving: { 
+    saving: {
       icon: Upload,
-      color: 'text-blue-500', 
-      bgColor: 'bg-blue-50/80', 
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-50/80',
       show: true,
       message: 'Sauvegarde...',
       compact: false,
       animate: true,
-      priority: false
+      priority: false,
     },
-    saved: { 
+    saved: {
       icon: CheckCircle,
-      color: 'text-emerald-500', 
-      bgColor: 'bg-emerald-50/80', 
+      color: 'text-emerald-500',
+      bgColor: 'bg-emerald-50/80',
       show: true,
       message: 'Sauvegardé',
       compact: false,
       animate: false,
-      priority: false
+      priority: false,
     },
-    error: { 
+    error: {
       icon: AlertCircle,
-      color: 'text-red-500', 
-      bgColor: 'bg-red-50/80', 
+      color: 'text-red-500',
+      bgColor: 'bg-red-50/80',
       show: true,
       message: saveStatus.message || 'Erreur de sauvegarde',
       compact: false,
       animate: false,
-      priority: true
-    }
-  };
+      priority: true,
+    },
+  }
 
-  const config = statusConfig[normalizedType as keyof typeof statusConfig];
-  
-  if (!config || !config.show) return null;
+  const config = statusConfig[normalizedType as keyof typeof statusConfig]
 
-  const Icon = config.icon;
+  if (!config || !config.show) return null
+
+  const Icon = config.icon
 
   if (config.compact) {
     return (
-      <div className={cn(
-        'flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200',
-        config.bgColor,
-        config.color
-      )}>
-        {Icon && <Icon className="shrink-0" size={12} />} 
+      <div
+        className={cn(
+          'flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-all duration-200',
+          config.bgColor,
+          config.color,
+        )}
+      >
+        {Icon && <Icon className="shrink-0" size={12} />}
         <span className="hidden sm:inline truncate">
-          {saveStatus.count && saveStatus.count > 0 
+          {'count' in saveStatus && saveStatus.count > 0
             ? `${saveStatus.count} modification${saveStatus.count > 1 ? 's' : ''}`
-            : config.message
-          }
+            : config.message}
         </span>
-        {saveStatus.count && saveStatus.count > 0 && onSaveAll && (
+        {'count' in saveStatus && saveStatus.count > 0 && onSaveAll && (
           <Button
             className="ml-1 px-1.5 py-0.5 h-5 text-xs hover:bg-amber-100"
             size="sm"
@@ -113,27 +111,21 @@ export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({ saveStatus, 
           </Button>
         )}
       </div>
-    );
+    )
   }
 
   return (
-    <div className={cn(
-      'flex items-center gap-2 px-2.5 py-1.5 rounded-md text-sm font-medium transition-all duration-300',
-      config.bgColor,
-      config.color,
-      saveStatus.type === 'saved' && 'animate-in fade-in slide-in-from-right-2',
-      config.priority && 'ring-1 ring-current ring-opacity-20'
-    )}>
-      {Icon && (
-        <Icon 
-          size={14} 
-          className={cn(
-            'shrink-0',
-            config.animate && 'animate-pulse'
-          )} 
-        />
+    <div
+      className={cn(
+        'flex items-center gap-2 px-2.5 py-1.5 rounded-md text-sm font-medium transition-all duration-300',
+        config.bgColor,
+        config.color,
+        saveStatus.type === 'saved' && 'animate-in fade-in slide-in-from-right-2',
+        config.priority && 'ring-1 ring-current ring-opacity-20',
       )}
+    >
+      {Icon && <Icon className={cn('shrink-0', config.animate && 'animate-pulse')} size={14} />}
       <span className="truncate max-w-[180px]">{config.message}</span>
     </div>
-  );
-};
+  )
+}

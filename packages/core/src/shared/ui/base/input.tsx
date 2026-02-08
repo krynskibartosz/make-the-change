@@ -31,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       showPasswordToggle = false,
       variant = 'default',
       size = 'md',
+      required,
       ...props
     },
     ref: ForwardedRef<HTMLInputElement>,
@@ -75,7 +76,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           >
             {label}
-            {error && <span className="text-destructive animate-pulse">*</span>}
+            {required && <span className="text-destructive animate-pulse">*</span>}
           </label>
         )}
 
@@ -99,6 +100,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={error ? 'true' : undefined}
             id={inputId}
             type={inputType}
+            required={required}
             className={cn(
               'flex w-full rounded-2xl transition-all duration-300',
               variantClasses[variant],

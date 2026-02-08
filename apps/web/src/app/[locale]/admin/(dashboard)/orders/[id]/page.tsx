@@ -1,72 +1,83 @@
-'use client'
+import { db } from '@make-the-change/core/db'
+import { orderItems, orders, publicProfiles } from '@make-the-change/core/schema'
+import { eq } from 'drizzle-orm'
+import { requireAdminPage } from '@/lib/auth-guards'
 
-import { useParams } from 'next/navigation'
-import { useMemo } from 'react'
-import { type FC } from 'react'
+import { OrderEditClient } from './order-edit-client'
 
-import { OrderDetailController } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-detail-controller'
-import { trpc } from '@/lib/trpc'
-const AdminOrderEditPage: FC = () => {
-  const params = useParams<{ id: string }>()
-  const orderId = params?.id as string
-  const utils = trpc.useUtils()
+type Address =
+  | string
+  | {
+      street?: string
+      postal_code?: string
+      postalCode?: string
+      city?: string
+      country?: string
+    }
+  | null
 
-  const { data: order, isLoading } = trpc.admin.orders.detail.useQuery(
-    { orderId },
-    { enabled: !!orderId, retry: 1, retryDelay: 500 }
-  )
-  const update = trpc.admin.orders.update.useMutation({
-    onMutate: async (vars) => {
-      await utils.admin.orders.detail.cancel({ orderId })
+const formatAddress = (address: Address) => {
+  if (!address) return ''
+  if (typeof address === 'string') return address
+  const parts = [
+    address.street,
+    address.postal_code || address.postalCode,
+    address.city,
+    address.country,
+  ].filter(Boolean)
+  return parts.join(', ')
+}
 
-      const prevDetail = utils.admin.orders.detail.getData({ orderId })
+export default async function AdminOrderEditPage({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>
+}) {
+  const { id, locale } = await params
+  await requireAdminPage(locale)
 
-      if (prevDetail) {
-        utils.admin.orders.detail.setData({ orderId }, { ...prevDetail, ...vars.patch })
-      }
+  const [orderRow] = await db
+    .select({
+      order: orders,
+      customer: publicProfiles,
+    })
+    .from(orders)
+    .leftJoin(publicProfiles, eq(publicProfiles.id, orders.user_id))
+    .where(eq(orders.id, id))
+    .limit(1)
 
-      return { prevDetail }
-    },
-    onError: (error, _vars, ctx) => {
-      if (ctx?.prevDetail) {
-        utils.admin.orders.detail.setData({ orderId }, ctx.prevDetail)
-      }
-      console.error('Erreur lors de la mise à jour:', error)
-      alert('Erreur lors de la sauvegarde')
-    },
-    onSettled: () => {
-      utils.admin.orders.detail.invalidate({ orderId })
+  if (!orderRow?.order) {
+    return <div className="p-8">Commande non trouvée</div>
+  }
+
+  const order = orderRow.order
+  const customer = orderRow.customer
+  const customerName = customer
+    ? `${customer.first_name || ''} ${customer.last_name || ''}`.trim() || customer.email
+    : 'Unknown'
+
+  const orderItemsRows = await db.select().from(orderItems).where(eq(orderItems.order_id, order.id))
+
+  const items = orderItemsRows.map((item) => {
+    const snapshot = item.product_snapshot as { name?: string; name_default?: string } | null
+    return {
+      productId: item.product_id,
+      name: snapshot?.name || snapshot?.name_default || 'Produit',
+      quantity: item.quantity,
+      price: Number(item.unit_price_points || 0),
     }
   })
 
-  const orderData = useMemo(() => {
-    return order || null
-  }, [order])
-
-  if (!orderId) return <div className="p-8">Missing orderId</div>
-  if (isLoading && !orderData) return <div className="p-8">Chargement…</div>
-  if (!orderData) return <div className="p-8">Commande non trouvée</div>
-
-  const handleSave = async (patch: any) => {
-    if (!orderId) return
-
-    try {
-      await update.mutateAsync({
-        orderId,
-        patch
-      })
-      console.warn('Updating order:', { id: orderId, patch })
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour:', error)
-      alert('Erreur lors de la sauvegarde')
-    }
+  const orderData = {
+    id: order.id,
+    customerName: customerName || '',
+    email: customer?.email || '',
+    status: order.status ?? 'pending',
+    createdAt: order.created_at?.toISOString() ?? '',
+    total: Number(order.total_points || 0),
+    items,
+    shippingAddress: formatAddress(order.shipping_address as Address),
   }
 
-  return (
-    <OrderDetailController
-      orderData={orderData}
-      onSave={handleSave}
-    />
-  )
+  return <OrderEditClient initialOrder={orderData} />
 }
-export default AdminOrderEditPage

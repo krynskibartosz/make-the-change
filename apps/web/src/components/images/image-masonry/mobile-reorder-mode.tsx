@@ -1,62 +1,62 @@
-'use client';
+'use client'
 
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Check, X } from 'lucide-react';
-import Image from 'next/image';
-import { type FC, useState } from 'react';
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn';
+import { cn } from '@make-the-change/core/shared/utils'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, X } from 'lucide-react'
+import Image from 'next/image'
+import { type FC, useState } from 'react'
 
 type MobileReorderModeProps = {
-  images: string[];
-  onReorder: (newImages: string[]) => void;
-  onCancel: () => void;
-  className?: string;
-};
+  images: string[]
+  onReorder: (newImages: string[]) => void
+  onCancel: () => void
+  className?: string
+}
 
 export const MobileReorderMode: FC<MobileReorderModeProps> = ({
   images,
   onReorder,
   onCancel,
-  className
+  className,
 }) => {
-  const [currentImages, setCurrentImages] = useState([...images]);
+  const [currentImages, setCurrentImages] = useState([...images])
 
   const moveImage = (index: number, direction: 'up' | 'down' | 'left' | 'right') => {
-    const newImages = [...currentImages];
-    let newIndex = index;
+    const newImages = [...currentImages]
+    let newIndex = index
 
     switch (direction) {
       case 'up': {
-        newIndex = Math.max(0, index - 1);
-        break;
+        newIndex = Math.max(0, index - 1)
+        break
       }
       case 'down': {
-        newIndex = Math.min(newImages.length - 1, index + 1);
-        break;
+        newIndex = Math.min(newImages.length - 1, index + 1)
+        break
       }
       case 'left': {
-        newIndex = Math.max(0, index - 1);
-        break;
+        newIndex = Math.max(0, index - 1)
+        break
       }
       case 'right': {
-        newIndex = Math.min(newImages.length - 1, index + 1);
-        break;
+        newIndex = Math.min(newImages.length - 1, index + 1)
+        break
       }
     }
 
     if (newIndex !== index) {
-      const [movedImage] = newImages.splice(index, 1);
-      newImages.splice(newIndex, 0, movedImage);
-      setCurrentImages(newImages);
+      const [movedImage] = newImages.splice(index, 1)
+      if (!movedImage) return
+      newImages.splice(newIndex, 0, movedImage)
+      setCurrentImages(newImages)
     }
-  };
+  }
 
   const handleSave = () => {
-    onReorder(currentImages);
-  };
+    onReorder(currentImages)
+  }
 
   return (
-    <div className={cn("bg-white dark:bg-gray-900 border border-border rounded-lg p-4", className)}>
+    <div className={cn('bg-white dark:bg-gray-900 border rounded-lg p-4', className)}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Réorganiser les images</h3>
@@ -86,7 +86,7 @@ export const MobileReorderMode: FC<MobileReorderModeProps> = ({
             className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 rounded-lg p-3"
           >
             {/* Image miniature */}
-            <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-border">
+            <div className="relative w-16 h-16 rounded-lg overflow-hidden border">
               <Image
                 fill
                 alt={`Image ${index + 1}`}
@@ -109,10 +109,10 @@ export const MobileReorderMode: FC<MobileReorderModeProps> = ({
                   disabled={index === 0}
                   title="Déplacer vers le haut"
                   className={cn(
-                    "p-2 rounded border transition-colors",
+                    'p-2 rounded border transition-colors',
                     index === 0
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white hover:bg-blue-50 text-blue-600 border-blue-200"
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white hover:bg-blue-50 text-blue-600 border-blue-200',
                   )}
                   onClick={() => moveImage(index, 'up')}
                 >
@@ -122,10 +122,10 @@ export const MobileReorderMode: FC<MobileReorderModeProps> = ({
                   disabled={index === 0}
                   title="Déplacer vers la gauche"
                   className={cn(
-                    "p-2 rounded border transition-colors",
+                    'p-2 rounded border transition-colors',
                     index === 0
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white hover:bg-blue-50 text-blue-600 border-blue-200"
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white hover:bg-blue-50 text-blue-600 border-blue-200',
                   )}
                   onClick={() => moveImage(index, 'left')}
                 >
@@ -135,10 +135,10 @@ export const MobileReorderMode: FC<MobileReorderModeProps> = ({
                   disabled={index === currentImages.length - 1}
                   title="Déplacer vers le bas"
                   className={cn(
-                    "p-2 rounded border transition-colors",
+                    'p-2 rounded border transition-colors',
                     index === currentImages.length - 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white hover:bg-blue-50 text-blue-600 border-blue-200"
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white hover:bg-blue-50 text-blue-600 border-blue-200',
                   )}
                   onClick={() => moveImage(index, 'down')}
                 >
@@ -148,10 +148,10 @@ export const MobileReorderMode: FC<MobileReorderModeProps> = ({
                   disabled={index === currentImages.length - 1}
                   title="Déplacer vers la droite"
                   className={cn(
-                    "p-2 rounded border transition-colors",
+                    'p-2 rounded border transition-colors',
                     index === currentImages.length - 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white hover:bg-blue-50 text-blue-600 border-blue-200"
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white hover:bg-blue-50 text-blue-600 border-blue-200',
                   )}
                   onClick={() => moveImage(index, 'right')}
                 >
@@ -163,5 +163,5 @@ export const MobileReorderMode: FC<MobileReorderModeProps> = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

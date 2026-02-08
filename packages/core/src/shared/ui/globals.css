@@ -1,0 +1,156 @@
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --card: 210 20% 98%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 74 42% 34%;
+    --primary-foreground: 60 20% 97%;
+    --secondary: 35 25% 94%;
+    --secondary-foreground: 28 30% 18%;
+    --accent: 32 52% 64%;
+    --accent-foreground: 24 36% 13%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 158 64% 35%;
+    --success: 160 84% 39%;
+    --success-foreground: 160 80% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 25 40% 10%;
+    --info: 210 100% 56%;
+    --info-foreground: 210 100% 96%;
+
+    --radius: 8px;
+    --radius-control: 8px;
+    --radius-overlay: 24px;
+
+    --density-button-height: 2.5rem;
+    --density-spacing-sm: 0.5rem;
+    --density-spacing-md: 1rem;
+
+    --transition-normal: 300ms;
+
+    --z-overlay: 30;
+  }
+
+  .dark {
+    --background: 206 27% 8%;
+    --foreground: 210 40% 98%;
+    --card: 215 28% 17%;
+    --card-foreground: 210 40% 98%;
+    --popover: 206 27% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 74 42% 39%;
+    --primary-foreground: 206 27% 8%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --accent: 32 52% 64%;
+    --accent-foreground: 206 27% 8%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 215 20% 65%;
+    --border: 215 20% 25%;
+    --input: 215 20% 25%;
+    --ring: 160 84% 39%;
+    --success: 160 84% 39%;
+    --success-foreground: 160 80% 14%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 25 40% 10%;
+    --info: 210 100% 56%;
+    --info-foreground: 210 100% 96%;
+  }
+}
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #111827;
+  --color-card: #f9fafb;
+  --color-card-foreground: #111827;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #111827;
+
+  --color-primary: #6b7c32;
+  --color-primary-light: #7d8f3a;
+  --color-primary-dark: #5a6829;
+  --color-primary-foreground: #f7f8f2;
+
+  --color-secondary: #f4f1eb;
+  --color-secondary-dark: #e8e2d6;
+  --color-secondary-foreground: #3c2e20;
+
+  --color-accent: #d4a574;
+  --color-accent-light: #ddb485;
+  --color-accent-dark: #c19660;
+  --color-accent-foreground: #2d1f14;
+
+  --color-olive: #6b7c32;
+  --color-olive-light: #7d8f3a;
+  --color-honey: #d4a574;
+  --color-honey-light: #ddb485;
+  --color-earth: #8b6914;
+  --color-earth-light: #a67c1a;
+  --color-ocean: #4a90a4;
+  --color-ocean-light: #5ba3b8;
+
+  --color-success: #10b981;
+  --color-success-foreground: #f0fdfa;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fef2f2;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #1f1611;
+  --color-info: #1e90ff;
+  --color-info-foreground: #f0f9ff;
+
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #6b7280;
+  --color-border: #e5e7eb;
+  --color-input: #f9fafb;
+  --color-ring: #059669;
+}
+
+.dark {
+  --color-background: #0f1419;
+  --color-foreground: #f8fafc;
+  --color-card: #1e293b;
+  --color-card-foreground: #f8fafc;
+  --color-popover: #0f1419;
+  --color-popover-foreground: #f8fafc;
+
+  --color-primary: #7d8f3a;
+  --color-primary-light: #8fa045;
+  --color-primary-dark: #6b7c32;
+  --color-primary-foreground: #f7f8f2;
+
+  --color-secondary: #3c3530;
+  --color-secondary-dark: #2a251f;
+  --color-secondary-foreground: #f4f1eb;
+
+  --color-accent: #ddb485;
+  --color-accent-light: #e6c396;
+  --color-accent-dark: #d4a574;
+  --color-accent-foreground: #2d1f14;
+
+  --color-muted: #374151;
+  --color-muted-foreground: #9ca3af;
+  --color-border: #4b5563;
+  --color-input: #374151;
+  --color-ring: #10b981;
+
+  --color-success: #10b981;
+  --color-success-foreground: #064e3b;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #7f1d1d;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #451a03;
+  --color-info: #3b82f6;
+  --color-info-foreground: #1e3a8a;
+}

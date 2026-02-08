@@ -1,41 +1,50 @@
-'use client';
+'use client'
 
-import { User, Shield, Mail, Save } from 'lucide-react';
-import { useCallback } from 'react';
-import { z } from 'zod';
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { FormInput, FormSelect } from '@make-the-change/core/ui/rhf'
+import { Save, Shield, User } from 'lucide-react'
+import type { FC, PropsWithChildren } from 'react'
+import { FormProvider } from 'react-hook-form'
+import { useFormWithToast } from '@/hooks/use-form-with-toast'
+import { countryOptions } from '@/lib/validators/user'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/card';
-import { FormInput, FormSelect } from '@/components/form';
-import { Button } from '@/components/ui/button';
-import { useFormWithToast } from '@/hooks/use-form-with-toast';
-
-import type { FC, PropsWithChildren } from 'react';
-
-
-const userEditSchema = z.object({
-  name: z.string().min(1, 'Le nom est requis').max(100, 'Le nom ne peut pas dépasser 100 caractères').trim(),
-  email: z.string().min(1, 'L\'email est requis').email('Format d\'email invalide').max(100, 'L\'email ne peut pas dépasser 100 caractères'),
-  role: z.enum(['admin', 'user']).default('user'),
-  is_active: z.boolean().default(true),
-});
-
-type UserEditData = z.infer<typeof userEditSchema>;
+type UserEditData = {
+  email: string
+  first_name?: string
+  last_name?: string
+  user_level: 'explorateur' | 'protecteur' | 'ambassadeur'
+  kyc_status: 'pending' | 'light' | 'complete' | 'rejected'
+  address_country_code?: string
+}
 
 type UserDetailsEditorProps = {
-  userData: UserEditData & { id: string };
-  isEditing: boolean;
-  isSaving?: boolean;
-  onSave?: (data: UserEditData) => Promise<void>;
-};
+  userData: UserEditData & { id: string }
+  isEditing: boolean
+  isSaving?: boolean
+  onSave?: (data: UserEditData) => Promise<void>
+}
 
 const UserCardsGrid: FC<PropsWithChildren> = ({ children }) => (
-  <div className='grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 [&>*]:h-full'>{children}</div>
-);
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 [&>*]:h-full">{children}</div>
+)
 
-const roleOptions = [
-  { value: 'user', label: 'Utilisateur' },
-  { value: 'admin', label: 'Administrateur' },
-];
+const userLevelOptions = [
+  { value: 'explorateur', label: 'Explorateur' },
+  { value: 'protecteur', label: 'Protecteur' },
+  { value: 'ambassadeur', label: 'Ambassadeur' },
+]
+
+const kycStatusOptions = [
+  { value: 'pending', label: 'En attente' },
+  { value: 'light', label: 'KYC léger' },
+  { value: 'complete', label: 'KYC complet' },
+  { value: 'rejected', label: 'Rejeté' },
+]
+
+const formattedCountryOptions = countryOptions.map((code) => ({
+  value: code,
+  label: code,
+}))
 
 export const UserDetailsEditor: FC<UserDetailsEditorProps> = ({
   userData,
@@ -43,31 +52,33 @@ export const UserDetailsEditor: FC<UserDetailsEditorProps> = ({
   isSaving = false,
   onSave,
 }) => {
-  const { form, isSubmitting } = useFormWithToast({
+  const { form, handleSubmit, isSubmitting } = useFormWithToast({
     defaultValues: {
-      name: userData.name || '',
       email: userData.email || '',
-      role: userData.role || 'user',
-      is_active: userData.is_active ?? true,
+      first_name: userData.first_name || '',
+      last_name: userData.last_name || '',
+      user_level: userData.user_level || 'explorateur',
+      kyc_status: userData.kyc_status || 'pending',
+      address_country_code: userData.address_country_code || 'FR',
     } as UserEditData,
     onSubmit: async (value: UserEditData) => {
       if (onSave) {
-        await onSave(value);
-        return { success: true };
+        await onSave(value)
+        return { success: true }
       }
-      return { success: true };
+      return { success: true }
     },
     toasts: {
       success: {
         title: 'Utilisateur mis à jour',
-        description: 'Les modifications ont été enregistrées avec succès'
+        description: 'Les modifications ont été enregistrées avec succès',
       },
       error: {
         title: 'Erreur',
-        description: 'Impossible de mettre à jour l\'utilisateur'
-      }
-    }
-  });
+        description: "Impossible de mettre à jour l'utilisateur",
+      },
+    },
+  })
 
   const contentSections = [
     {
@@ -75,122 +86,104 @@ export const UserDetailsEditor: FC<UserDetailsEditorProps> = ({
       title: 'Informations du compte',
       icon: User,
       content: (
-        <div className='space-y-4'>
-          <form.Field name="name">
-            {(field) => (
-              <FormInput
-                required
-                disabled={!isEditing}
-                field={field}
-                label="Nom complet"
-                placeholder="Nom complet"
-              />
-            )}
-          </form.Field>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormInput
+              name="first_name"
+              disabled={!isEditing}
+              label="Prénom"
+              placeholder="Prénom"
+            />
+            <FormInput name="last_name" disabled={!isEditing} label="Nom" placeholder="Nom" />
+          </div>
 
-          <form.Field name="email">
-            {(field) => (
-              <FormInput
-                required
-                disabled={!isEditing}
-                field={field}
-                label="Adresse e-mail"
-                placeholder="email@example.com"
-                type="email"
-              />
-            )}
-          </form.Field>
+          <FormInput
+            name="email"
+            required
+            disabled={!isEditing}
+            label="Adresse e-mail"
+            placeholder="email@example.com"
+            type="email"
+          />
         </div>
-      )
+      ),
     },
     {
       id: 'permissions',
-      title: 'Permissions et Statut',
+      title: 'Niveau et KYC',
       icon: Shield,
       content: (
-        <div className='space-y-4'>
-          <form.Field name="role">
-            {(field) => (
-              <FormSelect
-                disabled={!isEditing}
-                field={field}
-                label="Rôle"
-                options={roleOptions}
-                placeholder="Sélectionner un rôle"
-              />
-            )}
-          </form.Field>
+        <div className="space-y-4">
+          <FormSelect
+            name="user_level"
+            disabled={!isEditing}
+            label="Niveau utilisateur"
+            options={userLevelOptions}
+            placeholder="Sélectionner un niveau"
+          />
 
-          <form.Field name="is_active">
-            {(field: any) => (
-              <div className='pt-2'>
-                <label className="flex items-center gap-2">
-                  <input
-                    checked={field.state.value}
-                    disabled={!isEditing}
-                    type="checkbox"
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.checked)}
-                  />
-                  <span className="text-sm font-medium">Compte actif</span>
-                  {field.state.value && (
-                    <div className="h-2 w-2 bg-green-500 rounded-full" />
-                  )}
-                </label>
-              </div>
-            )}
-          </form.Field>
+          <FormSelect
+            name="kyc_status"
+            disabled={!isEditing}
+            label="Statut KYC"
+            options={kycStatusOptions}
+            placeholder="Sélectionner un statut"
+          />
+
+          <FormSelect
+            name="address_country_code"
+            disabled={!isEditing}
+            label="Code pays"
+            options={formattedCountryOptions}
+            placeholder="Sélectionner un code pays"
+          />
         </div>
-      )
+      ),
     },
-  ];
+  ]
 
   return (
-    <form className='space-y-6 md:space-y-8' onSubmit={(e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      form.handleSubmit()
-    }}>
-      <UserCardsGrid>
-        {contentSections.map((section) => (
-          <Card key={section.id} className='transition-all duration-200 hover:shadow-lg'>
-            <CardHeader className='pb-4'>
-              <CardTitle className='flex items-center gap-3 text-lg'>
-                <div className='p-2 bg-gradient-to-br from-primary/20 to-orange-500/20 rounded-lg border border-primary/20'>
-                  <section.icon className='h-5 w-5 text-primary' />
-                </div>
-                {section.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {section.content}
-            </CardContent>
-          </Card>
-        ))}
-      </UserCardsGrid>
+    <FormProvider {...form}>
+      <form className="space-y-6 md:space-y-8" onSubmit={handleSubmit}>
+        <UserCardsGrid>
+          {contentSections.map((section) => (
+            <Card key={section.id} className="transition-all duration-200 hover:shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-lg">
+                  <div className="p-2 bg-gradient-to-br from-primary/20 to-orange-500/20 rounded-lg border border-primary/20">
+                    <section.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  {section.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>{section.content}</CardContent>
+            </Card>
+          ))}
+        </UserCardsGrid>
 
-      {}
-      {isEditing && (
-        <div className="flex justify-end">
-          <Button
-            className="flex items-center gap-2"
-            disabled={isSubmitting || isSaving}
-            type="submit"
-          >
-            {(isSubmitting || isSaving) ? (
-              <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
-                Sauvegarde...
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4" />
-                Sauvegarder
-              </>
-            )}
-          </Button>
-        </div>
-      )}
-    </form>
-  );
-};
+        {}
+        {isEditing && (
+          <div className="flex justify-end">
+            <Button
+              className="flex items-center gap-2"
+              disabled={isSubmitting || isSaving}
+              type="submit"
+            >
+              {isSubmitting || isSaving ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  Sauvegarde...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4" />
+                  Sauvegarder
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+      </form>
+    </FormProvider>
+  )
+}

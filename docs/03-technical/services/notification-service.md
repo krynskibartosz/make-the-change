@@ -22,5 +22,4 @@
 - Provider failures, throttling, preference overrides, template variables.
 
 ## References
-- `api/notifications-endpoints.md`.
-
+- `../workflows/` (si flux détaillés ajoutés)

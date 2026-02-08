@@ -1,1 +1,1 @@
-export { ImageGalleryModal, PreviewButton } from './image-gallery-modal';
+export { ImageGalleryModal, PreviewButton } from './image-gallery-modal'

@@ -1,5 +1,7 @@
 # 💼 Stratégie Business & Vision
 
+> Historique 2024/2025 — à revalider en 2026.
+
 Cette section contient toutes les décisions et analyses stratégiques du projet Make the CHANGE.
 
 ## 📋 Contenu de cette Section
@@ -46,7 +48,6 @@ Documentation centralisée de la stratégie business, personas, partenariats et 
 ## 🔗 Liens Connexes
 
 - [🎨 02-Product](../02-product/) - Roadmap et design
-- [📱 04-Specifications](../04-specifications/) - Implémentation
 - [📦 05-Operations](../05-operations/) - Processus opérationnels
 - [🔧 03-Technical](../03-technical/) - Architecture technique
 

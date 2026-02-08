@@ -1,6 +1,7 @@
 # Fulfillment Service (Hybrid) - Make the CHANGE
 
  Scope: Route orders between micro-hub stock and partner dropship, compute shipping, manage inventory and shipments.
+ Status: Planned (inventory/shipments tables not yet in Drizzle schema).
 
 ## Responsibilities
 - Check availability and reserve micro-stock hero products; create shipments per route.
@@ -17,7 +18,7 @@
 - On order create: create `reserved` movements; upon ship: `out` movements; on cancel: `released`.
 - Low-stock alerts from `inventory_status_overview` view; notify ops.
 
-## Data
+## Data (planned)
 - Tables: inventory, inventory_movements, shipments.
 
 ## Security
@@ -30,7 +31,7 @@
 - Mixed carts; oversell race; multi-shipment orders; carrier edge-cases.
 
 ## References
-- `api/orders-endpoints.md`, `api/products-endpoints.md`, `database-schema.md`.
+- `../database-schema.md`
 
 ## Shipping Policy (MVP)
 - Ambassadeur actif: livraison gratuite (0 points) par défaut.

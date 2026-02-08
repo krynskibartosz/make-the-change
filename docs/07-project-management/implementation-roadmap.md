@@ -101,27 +101,21 @@ Selon retours utilisateurs:
 - Développement itératif des plus populaires
 ```
 
-## Structure du Monorepo Cible
+## Structure du Monorepo (réel, 2026)
 
 ```
-makethechange/
+make-the-change/
 ├── apps/
-│   ├── mobile/              # Expo React Native App
-│   ├── web-admin/           # Next.js Admin Dashboard
-│   └── web-ecommerce/       # Next.js E-commerce Site
+│   ├── web/                 # Next.js Admin Dashboard
+│   ├── web-client/          # Next.js Storefront
+│   └── mobile/              # Expo React Native App
 ├── packages/
-│   ├── core/                # Shared business logic
-│   ├── ui/                  # Shared UI components
-│   ├── feature-flags/       # Feature flags system
-│   ├── database/            # Supabase SQL migrations
-│   ├── config/              # Shared configuration
-│   └── auth/                # Authentication logic
-├── tools/
-│   └── scripts/             # Build & deployment scripts
+│   └── core/                # Business logic + UI shared (Base UI + Tailwind v4)
+├── scripts/                 # Build & maintenance scripts
 └── docs/                    # Documentation
 ```
 
-## Feature Flags Planifiés
+## Feature Flags Planifiés (non implémentés)
 
 ### Phase 1 : Core (Activés par défaut)
 ```yaml

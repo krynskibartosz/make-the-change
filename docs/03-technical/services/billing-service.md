@@ -18,8 +18,9 @@
 - Conversion monthly→annual: cancel sub, compute proration credit, create PI with discount, update DB; replanifier l’allocation mensuelle (pas de crédit immédiat de points).
 
 ## Data
-- Tables: subscriptions, subscription_billing_history, subscription_changes.
-- Table/planification: soit table `scheduled_point_allocations` (recommandé), soit génération via cron mensuel calculé à partir de `start_date`.
+- Table actuelle: `public.subscriptions` (voir `database-schema.md`).
+- Tables planifiées: `subscription_billing_history`, `subscription_changes`.
+- Planification (proposée): `scheduled_point_allocations` ou cron mensuel calculé à partir de `start_date`.
  - Voir `services/job-scheduling.md` pour schéma de table, fonction de processing et cron.
 
 ## Security
@@ -33,4 +34,4 @@
 - Accrual mensuel: 12 attributions sur 12 mois, expiry à +18mois/attribution.
 
 ## References
-- `api/subscriptions-endpoints.md`, `api/stripe-webhook-example.ts`.
+- `../integrations/stripe-integration.md`

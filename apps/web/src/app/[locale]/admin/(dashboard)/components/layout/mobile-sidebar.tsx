@@ -1,14 +1,12 @@
 'use client'
 
-import { X, LayoutDashboard, Package, ShoppingCart, Users } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { type FC } from 'react'
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn'
+import { cn } from '@make-the-change/core/shared/utils'
+import { Button } from '@make-the-change/core/ui'
+import { LayoutDashboard, Package, ShoppingCart, Users, X } from 'lucide-react'
+import { type FC, useEffect, useState } from 'react'
 import { useMobile } from '@/app/[locale]/admin/(dashboard)/components/layout/mobile-context'
-import { Button } from '@/components/ui/button'
+import { LocalizedLink } from '@/components/localized-link'
+import { usePathname } from '@/i18n/navigation'
 
 export const MobileSidebar: FC = () => {
   const { isMobileMenuOpen, setIsMobileMenuOpen } = useMobile()
@@ -16,7 +14,7 @@ export const MobileSidebar: FC = () => {
 
   useEffect(() => {
     setIsMobileMenuOpen(false)
-  }, [pathname, setIsMobileMenuOpen])
+  }, [setIsMobileMenuOpen])
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -50,9 +48,9 @@ export const MobileSidebar: FC = () => {
       />
 
       {}
-      <aside className="fixed left-0 top-0 h-full w-[92vw] max-w-[320px] z-[65] bg-card/95 backdrop-blur-xl border-r border-border shadow-2xl md:hidden">
+      <aside className="fixed left-0 top-0 h-full w-[92vw] max-w-[320px] z-[65] bg-card/95 backdrop-blur-xl border-r shadow-2xl md:hidden">
         {}
-        <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">MC</span>
@@ -68,7 +66,7 @@ export const MobileSidebar: FC = () => {
         <nav className="flex-1 p-4">
           <div className="space-y-2">
             {navItems.map((item) => (
-              <Link
+              <LocalizedLink
                 key={item.href}
                 href={item.href}
                 className={cn(
@@ -76,21 +74,19 @@ export const MobileSidebar: FC = () => {
                   'min-h-[44px] touch-manipulation',
                   pathname === item.href
                     ? 'bg-gradient-primary text-primary-foreground shadow-lg'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/10'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/10',
                 )}
               >
                 <item.icon className="w-5 h-5" />
                 {item.label}
-              </Link>
+              </LocalizedLink>
             ))}
           </div>
         </nav>
 
         {}
-        <div className="p-4 border-t border-border">
-          <div className="text-xs text-muted-foreground text-center">
-            © 2025 Make the CHANGE
-          </div>
+        <div className="p-4 border-t">
+          <div className="text-xs text-muted-foreground text-center">© 2025 Make the CHANGE</div>
         </div>
       </aside>
     </>

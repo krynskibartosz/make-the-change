@@ -41,37 +41,43 @@ const DialogContent = forwardRef<
   ComponentPropsWithoutRef<typeof Dialog.Popup> & {
     size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
     showCloseButton?: boolean
+    closeLabel?: string
   }
->(({ className, children, size = 'md', showCloseButton = true, ...props }, ref) => {
-  const sizeClasses = {
-    sm: 'max-w-[425px]',
-    md: 'max-w-[640px]',
-    lg: 'max-w-[768px]',
-    xl: 'max-w-[1024px]',
-    full: 'max-w-[95vw] max-h-[95vh]',
-  }
+>(
+  (
+    { className, children, size = 'md', showCloseButton = true, closeLabel = 'Fermer', ...props },
+    ref,
+  ) => {
+    const sizeClasses = {
+      sm: 'max-w-[425px]',
+      md: 'max-w-[640px]',
+      lg: 'max-w-[768px]',
+      xl: 'max-w-[1024px]',
+      full: 'max-w-[95vw] max-h-[95vh]',
+    }
 
-  return (
-    <DialogPortal>
-      <DialogOverlay />
-      <Dialog.Viewport className="fixed inset-0 z-50">
-        <Dialog.Popup
-          ref={ref}
-          className={`${baseContent} ${sizeClasses[size]}${className ? ` ${className}` : ''}`}
-          {...props}
-        >
-          {children}
-          {showCloseButton && (
-            <DialogClose className="absolute right-4 top-4 rounded-lg p-1 opacity-70 transition-all hover:opacity-100 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-background disabled:pointer-events-none">
-              <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-              <span className="sr-only">Fermer</span>
-            </DialogClose>
-          )}
-        </Dialog.Popup>
-      </Dialog.Viewport>
-    </DialogPortal>
-  )
-})
+    return (
+      <DialogPortal>
+        <DialogOverlay />
+        <Dialog.Viewport className="fixed inset-0 z-50">
+          <Dialog.Popup
+            ref={ref}
+            className={`${baseContent} ${sizeClasses[size]}${className ? ` ${className}` : ''}`}
+            {...props}
+          >
+            {children}
+            {showCloseButton && (
+              <DialogClose className="absolute right-4 top-4 rounded-lg p-1 opacity-70 transition-all hover:opacity-100 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-background disabled:pointer-events-none">
+                <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                <span className="sr-only">{closeLabel}</span>
+              </DialogClose>
+            )}
+          </Dialog.Popup>
+        </Dialog.Viewport>
+      </DialogPortal>
+    )
+  },
+)
 DialogContent.displayName = 'DialogContent'
 
 const DialogHeader: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => (

@@ -5,16 +5,15 @@
  * Utilise directement l'outil MCP Supabase
  */
 
-const https = require('https');
-const { exec } = require('child_process');
+const https = require('node:https')
 
 // Configuration Supabase
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.error('❌ Variables d\'environnement manquantes: SUPABASE_URL ou SUPABASE_ANON_KEY');
-  process.exit(1);
+  console.error("❌ Variables d'environnement manquantes: SUPABASE_URL ou SUPABASE_ANON_KEY")
+  process.exit(1)
 }
 
 /**
@@ -23,8 +22,8 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 function querySupabase(sql) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
-      query: sql
-    });
+      query: sql,
+    })
 
     const options = {
       hostname: SUPABASE_URL.replace('https://', ''),
@@ -33,36 +32,36 @@ function querySupabase(sql) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY,
-        'Content-Length': Buffer.byteLength(postData)
-      }
-    };
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPABASE_ANON_KEY,
+        'Content-Length': Buffer.byteLength(postData),
+      },
+    }
 
     const req = https.request(options, (res) => {
-      let data = '';
+      let data = ''
 
       res.on('data', (chunk) => {
-        data += chunk;
-      });
+        data += chunk
+      })
 
       res.on('end', () => {
         try {
-          const result = JSON.parse(data);
-          resolve(result);
+          const result = JSON.parse(data)
+          resolve(result)
         } catch (error) {
-          reject(error);
+          reject(error)
         }
-      });
-    });
+      })
+    })
 
     req.on('error', (error) => {
-      reject(error);
-    });
+      reject(error)
+    })
 
-    req.write(postData);
-    req.end();
-  });
+    req.write(postData)
+    req.end()
+  })
 }
 
 /**
@@ -70,7 +69,7 @@ function querySupabase(sql) {
  */
 async function getAllProductFields(productId = null) {
   try {
-    let sql;
+    let sql
 
     if (productId) {
       sql = `
@@ -113,7 +112,7 @@ async function getAllProductFields(productId = null) {
           partner_source
         FROM products
         WHERE id = '${productId}'
-      `;
+      `
     } else {
       sql = `
         SELECT
@@ -155,55 +154,54 @@ async function getAllProductFields(productId = null) {
           partner_source
         FROM products
         LIMIT 5
-      `;
+      `
     }
 
-    console.log('🔍 Exécution de la requête SQL...');
-    console.log('SQL:', sql);
+    console.log('🔍 Exécution de la requête SQL...')
+    console.log('SQL:', sql)
 
-    const result = await querySupabase(sql);
+    const result = await querySupabase(sql)
 
     if (result.error) {
-      console.error('❌ Erreur SQL:', result.error);
-      return;
+      console.error('❌ Erreur SQL:', result.error)
+      return
     }
 
     if (!result.data || result.data.length === 0) {
-      console.log('⚠️ Aucun produit trouvé');
-      return;
+      console.log('⚠️ Aucun produit trouvé')
+      return
     }
 
-    console.log('\n📦 ===== RÉSULTATS =====');
+    console.log('\n📦 ===== RÉSULTATS =====')
 
     result.data.forEach((product, index) => {
-      console.log(`\n🔹 PRODUIT ${index + 1}: ${product.name}`);
-      console.log('='.repeat(50));
+      console.log(`\n🔹 PRODUIT ${index + 1}: ${product.name}`)
+      console.log('='.repeat(50))
 
       Object.entries(product).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           if (Array.isArray(value)) {
-            console.log(`${key}: [${value.length} éléments]`);
+            console.log(`${key}: [${value.length} éléments]`)
             if (value.length > 0 && value.length <= 3) {
               value.forEach((item, idx) => {
-                console.log(`  ${idx + 1}. ${item}`);
-              });
+                console.log(`  ${idx + 1}. ${item}`)
+              })
             }
           } else if (typeof value === 'object') {
-            console.log(`${key}: ${JSON.stringify(value, null, 2)}`);
+            console.log(`${key}: ${JSON.stringify(value, null, 2)}`)
           } else {
-            console.log(`${key}: ${value}`);
+            console.log(`${key}: ${value}`)
           }
         } else {
-          console.log(`${key}: null`);
+          console.log(`${key}: null`)
         }
-      });
-    });
+      })
+    })
 
-    console.log(`\n📊 Total des produits récupérés: ${result.data.length}`);
-    console.log('✅ Requête exécutée avec succès!');
-
+    console.log(`\n📊 Total des produits récupérés: ${result.data.length}`)
+    console.log('✅ Requête exécutée avec succès!')
   } catch (error) {
-    console.error('❌ Erreur lors de l\'exécution:', error.message);
+    console.error("❌ Erreur lors de l'exécution:", error.message)
   }
 }
 
@@ -247,51 +245,45 @@ function displayFieldsStructure() {
     'updated_at (TIMESTAMP)',
     'blur_hashes (TEXT[])',
     'secondary_category_id (UUID)',
-    'partner_source (VARCHAR)'
-  ];
+    'partner_source (VARCHAR)',
+  ]
 
-  console.log('\n📋 ===== STRUCTURE DES CHAMPS =====');
-  console.log(`📊 Total: ${fields.length} champs\n`);
+  console.log('\n📋 ===== STRUCTURE DES CHAMPS =====')
+  console.log(`📊 Total: ${fields.length} champs\n`)
 
   fields.forEach((field, index) => {
-    console.log(`${(index + 1).toString().padStart(2, '0')}. ${field}`);
-  });
+    console.log(`${(index + 1).toString().padStart(2, '0')}. ${field}`)
+  })
 }
 
 // Fonction principale
 async function main() {
-  const args = process.argv.slice(2);
-  const command = args[0];
-  const productId = args[1];
+  const args = process.argv.slice(2)
+  const command = args[0]
+  const productId = args[1]
 
-  console.log('🚀 Script de récupération des champs produit');
-  console.log('==========================================\n');
+  console.log('🚀 Script de récupération des champs produit')
+  console.log('==========================================\n')
 
   if (command === 'structure') {
-    displayFieldsStructure();
+    displayFieldsStructure()
   } else if (command === 'get' && productId) {
-    console.log(`🔍 Récupération du produit avec ID: ${productId}`);
-    await getAllProductFields(productId);
+    console.log(`🔍 Récupération du produit avec ID: ${productId}`)
+    await getAllProductFields(productId)
   } else if (command === 'list') {
-    console.log('📋 Récupération des 5 premiers produits...');
-    await getAllProductFields();
+    console.log('📋 Récupération des 5 premiers produits...')
+    await getAllProductFields()
   } else {
-    console.log('📖 Utilisation:');
-    console.log('  node get-product-fields.js structure    # Affiche la structure des champs');
-    console.log('  node get-product-fields.js list         # Liste les 5 premiers produits');
-    console.log('  node get-product-fields.js get <id>     # Récupère un produit spécifique');
-    console.log('\n📝 Exemples:');
-    console.log('  node get-product-fields.js structure');
-    console.log('  node get-product-fields.js list');
-    console.log('  node get-product-fields.js get 123e4567-e89b-12d3-a456-426614174000');
+    console.log('📖 Utilisation:')
+    console.log('  node get-product-fields.js structure    # Affiche la structure des champs')
+    console.log('  node get-product-fields.js list         # Liste les 5 premiers produits')
+    console.log('  node get-product-fields.js get <id>     # Récupère un produit spécifique')
+    console.log('\n📝 Exemples:')
+    console.log('  node get-product-fields.js structure')
+    console.log('  node get-product-fields.js list')
+    console.log('  node get-product-fields.js get 123e4567-e89b-12d3-a456-426614174000')
   }
 }
 
 // Exécution du script
-main().catch(console.error);
-
-
-
-
-
-
+main().catch(console.error)

@@ -1,0 +1,281 @@
+/* 📦 Component Classes - Tailwind v4 Pure */
+@layer components {
+  /* Surface Components */
+  .surface-card {
+    border-radius: var(--radius-surface);
+    box-shadow: var(--shadow-card);
+    background: var(--surface-level-2);
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
+    padding: var(--density-card-padding);
+    gap: var(--density-spacing-md);
+    transition: all var(--transition-normal) ease;
+  }
+
+  .surface-card:hover {
+    box-shadow: var(--shadow-glow, var(--shadow-overlay));
+    transform: translateY(-2px);
+  }
+
+  /* Control Components */
+  .control-button {
+    border-radius: var(--radius-control);
+    min-height: var(--density-button-height);
+    height: var(--density-button-height);
+    transition: all var(--transition-fast) ease;
+    touch-action: manipulation;
+  }
+
+  /* Micro Components */
+  /* Badges et Pills - Utiliser couleur accent pour l'information */
+  .micro-badge {
+    border-radius: var(--radius-xs);
+    padding: 0.125rem 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+
+  .micro-pill {
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent-dark);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+  }
+  .admin-page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--background-base);
+    color: var(--text-primary);
+    transition: background-color var(--transition-normal) ease,
+      color var(--transition-normal) ease;
+  }
+
+  .admin-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-header);
+    backdrop-filter: blur(20px) saturate(180%);
+    background-color: color-mix(in srgb, var(--surface-level-1) 88%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-subtle) 65%, transparent);
+    box-shadow: 0 4px 14px 0 rgba(15, 23, 42, 0.08);
+  }
+
+  .dark .admin-header {
+    background-color: color-mix(in srgb, var(--surface-level-1) 92%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-subtle) 45%, transparent);
+    box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.45);
+  }
+
+  /* Mobile: position below mobile header */
+  @media (max-width: 767px) {
+    .admin-header {
+      top: 40px; /* Height of mobile header */
+    }
+  }
+
+  /* Desktop: adjust for sidebar width */
+  @media (min-width: 768px) {
+    .admin-header {
+      top: 0;
+      left: 256px; /* w-64 = 256px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .admin-header {
+      left: 288px; /* lg:w-72 = 288px */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .admin-header {
+      left: 320px; /* xl:w-80 = 320px */
+    }
+  }
+
+  .admin-content {
+    flex: 1;
+    overflow: auto;
+    background-color: var(--surface-level-1);
+    color: var(--text-primary);
+    transition: background-color var(--transition-normal) ease,
+      color var(--transition-normal) ease;
+    /* Le contenu commence dès le top, pas de compensation pour le header */
+  }
+
+  .content-wrapper {
+    position: relative;
+    background-color: var(--surface-level-1);
+    color: var(--text-primary);
+    transition: background-color var(--transition-normal) ease,
+      color var(--transition-normal) ease;
+  }
+
+  .content-wrapper-dark {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .dark .content-wrapper-dark {
+    background-color: var(--background-base);
+    background-image:
+      radial-gradient(circle at 15% 20%, hsla(215, 84%, 56%, 0.1), transparent 35%),
+      radial-gradient(circle at 85% 80%, hsla(172, 74%, 46%, 0.1), transparent 40%);
+    background-repeat: no-repeat;
+  }
+
+  .card-base {
+    position: relative;
+    overflow: visible;
+    border-radius: var(--radius-surface);
+    border: 1px solid color-mix(in srgb, var(--border-subtle) 75%, transparent);
+    background-color: color-mix(in srgb, var(--surface-level-2) 94%, transparent);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+      border-color 0.2s ease-in-out,
+      box-shadow var(--transition-normal) ease,
+      transform var(--transition-fast) ease;
+  }
+
+  .card-base:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--border-subtle) 90%, transparent);
+    box-shadow: var(--shadow-overlay);
+  }
+
+  .card-base-dark {
+    isolation: isolate;
+  }
+
+  .dark .card-base-dark {
+    background-color: hsla(222, 24%, 22%, 0.6);
+    border-color: hsla(222, 24%, 35%, 0.5);
+    box-shadow: 0 18px 44px -16px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .dark .card-base-dark:hover {
+    border-color: hsla(222, 24%, 50%, 0.8);
+    box-shadow: 0 24px 52px -18px rgba(0, 0, 0, 0.6);
+  }
+
+  .admin-content-md {
+    padding: 1.5rem;
+  }
+
+  .admin-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--z-header);
+    backdrop-filter: blur(24px);
+    background-color: color-mix(in srgb, var(--surface-level-1) 92%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--border-subtle) 55%, transparent);
+    box-shadow: 0 -4px 14px 0 rgba(0, 0, 0, 0.18);
+  }
+
+  .admin-action-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  @media (min-width: 768px) {
+    .admin-action-group {
+      gap: 0.5rem;
+    }
+  }
+
+  .admin-button-action {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    padding: 0 0.5rem;
+    height: 2rem;
+  }
+
+  /* Boutons d'action - Utiliser couleur primaire */
+  .admin-button-action {
+    background-image: var(--gradient-primary);
+    background-size: 220% 220%;
+    animation: gradientShift 10s ease infinite;
+    animation-play-state: paused;
+    color: var(--color-primary-foreground);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 65%, transparent);
+  }
+  
+  .admin-button-action:hover {
+    filter: brightness(1.05);
+    border-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
+    animation-play-state: running;
+  }
+
+  .admin-button-action:focus-visible {
+    outline: 2px solid;
+    outline-color: var(--color-primary);
+    outline-offset: 1px;
+    animation-play-state: running;
+  }
+
+  .admin-button-fab {
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    transition: all 200ms ease;
+    background-image: var(--gradient-primary);
+    background-size: 220% 220%;
+    animation: gradientShift 12s ease infinite;
+    animation-play-state: paused;
+    color: var(--color-primary-foreground);
+  }
+
+  .admin-button-fab:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    transform: scale(1.05);
+    filter: brightness(1.08);
+    animation-play-state: running;
+  }
+
+  .admin-button-fab:active {
+    transform: scale(0.95);
+    animation-play-state: running;
+  }
+
+  .admin-button-fab:focus-visible {
+    outline: 2px solid;
+    outline-color: var(--color-primary);
+    outline-offset: 2px;
+    animation-play-state: running;
+  }
+
+  .admin-skeleton {
+    background-color: var(--skeleton-color);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    border-radius: 0.375rem;
+  }
+
+  /* Badges de filtre - Utiliser couleur accent pour l'information */
+  .admin-filter-badge {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--color-accent);
+    border-radius: 9999px;
+    margin-left: 0.25rem;
+  }
+
+  .admin-loading-indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: rgb(59 130 246);
+    border-radius: 9999px;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}

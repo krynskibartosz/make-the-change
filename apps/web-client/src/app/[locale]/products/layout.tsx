@@ -1,0 +1,59 @@
+'use server'
+
+import type { PropsWithChildren } from 'react'
+import { Header } from '@/components/layout/header'
+import { MainContent } from '@/components/layout/main-content'
+import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
+import { CartDock } from '@/features/commerce/cart/cart-dock'
+import { CartSheet } from '@/features/commerce/cart/cart-sheet'
+import { CartSnackbar } from '@/features/commerce/cart/cart-snackbar'
+import { createClient } from '@/lib/supabase/server'
+
+export default async function ProductsLayout({ children }: PropsWithChildren) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { data: headerProfile } = user
+    ? await supabase.from('profiles').select('avatar_url, metadata').eq('id', user.id).single()
+    : { data: null }
+
+  const headerMetadata = headerProfile?.metadata as Record<string, unknown> | null | undefined
+  const metadataAvatarUrl = headerMetadata?.avatar_url
+  const headerAvatarUrl =
+    typeof metadataAvatarUrl === 'string'
+      ? metadataAvatarUrl
+      : typeof headerProfile?.avatar_url === 'string'
+        ? headerProfile.avatar_url
+        : null
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      {/* 
+        Sticky Header that can hide on scroll.
+        On mobile, we rely more on the new ProductsClient top bar + BottomNav, 
+        so the main header can be less prominent or identical.
+      */}
+      <div className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md transition-all duration-200">
+        <Header
+          user={user ? { id: user.id, email: user.email || '', avatarUrl: headerAvatarUrl } : null}
+        />
+      </div>
+
+      <MainContent className="flex-1">
+          {children}
+      </MainContent>
+
+      <CartSheet />
+      <CartSnackbar />
+      <CartDock />
+      
+      {/* 
+        Re-introduced MobileBottomNav as per user feedback ("on pourrait avoir u bottom bar").
+        This improves navigation ergonomics on mobile.
+      */}
+      <MobileBottomNav />
+    </div>
+  )
+}

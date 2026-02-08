@@ -1,74 +1,72 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { type FC } from 'react';
+import { type FC, useState } from 'react'
 
-import { OrderBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-breadcrumbs';
-import { OrderCompactHeader } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-compact-header';
-import { OrderDetailLayout } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-detail-layout';
-import { OrderDetailsEditor } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-details-editor';
+import { OrderBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-breadcrumbs'
+import { OrderCompactHeader } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-compact-header'
+import { OrderDetailLayout } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-detail-layout'
+import { OrderDetailsEditor } from '@/app/[locale]/admin/(dashboard)/orders/[id]/components/order-details-editor'
 
 type OrderData = {
-  id: string;
-  customerName: string;
-  email: string;
-  status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
-  createdAt: string;
-  total: number;
-  items: { productId: string; name: string; quantity: number; price: number }[];
-  shippingAddress: string;
-};
+  id: string
+  customerName: string
+  email: string
+  status: 'pending' | 'paid' | 'processing' | 'in_transit' | 'completed' | 'closed'
+  createdAt: string
+  total: number
+  items: { productId: string; name: string; quantity: number; price: number }[]
+  shippingAddress: string
+}
 
 type OrderDetailControllerProps = {
-  orderData: OrderData;
-  onSave: (patch: Partial<OrderData>) => Promise<void>;
-};
+  orderData: OrderData
+  onSave: (patch: Partial<OrderData>) => Promise<void>
+}
 
-export const OrderDetailController: FC<OrderDetailControllerProps> = ({
-  orderData,
-  onSave,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [pendingData, setPendingData] = useState<Partial<OrderData>>({});
+export const OrderDetailController: FC<OrderDetailControllerProps> = ({ orderData, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [pendingData, setPendingData] = useState<Partial<OrderData>>({})
 
   const handleEditToggle = (editing: boolean) => {
     if (!editing) {
-      setPendingData({});
+      setPendingData({})
     }
-    setIsEditing(editing);
-  };
+    setIsEditing(editing)
+  }
 
   const handleDataChange = (data: Partial<OrderData>) => {
-    setPendingData(prev => ({ ...prev, ...data }));
-  };
+    setPendingData((prev) => ({ ...prev, ...data }))
+  }
 
   const handleSave = async () => {
-    setIsSaving(true);
+    setIsSaving(true)
     try {
-      const patch: Partial<OrderData> = {};
-      for (const key of [
-        'status', 'shippingAddress'
-      ] as const) {
-        if (key in pendingData && (orderData as any)[key] !== (pendingData as any)[key]) {
-          (patch as any)[key] = (pendingData as any)[key];
-        }
+      const patch: Partial<OrderData> = {}
+      if (pendingData.status !== undefined && orderData.status !== pendingData.status) {
+        patch.status = pendingData.status
+      }
+      if (
+        pendingData.shippingAddress !== undefined &&
+        orderData.shippingAddress !== pendingData.shippingAddress
+      ) {
+        patch.shippingAddress = pendingData.shippingAddress
       }
 
       if (Object.keys(patch).length > 0) {
-        await onSave(patch);
+        await onSave(patch)
       }
 
-      setIsEditing(false);
-      setPendingData({});
+      setIsEditing(false)
+      setPendingData({})
     } catch (error) {
-      console.error('Error saving order:', error);
+      console.error('Error saving order:', error)
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
-  const displayData = { ...orderData, ...pendingData };
+  const displayData = { ...orderData, ...pendingData }
 
   return (
     <OrderDetailLayout
@@ -94,5 +92,5 @@ export const OrderDetailController: FC<OrderDetailControllerProps> = ({
         </>
       }
     />
-  );
-};
+  )
+}

@@ -1,6 +1,7 @@
 # Job Scheduling (pg_cron) – Make the CHANGE
 
 Goal: Define how recurring jobs run without external workers, using PostgreSQL `pg_cron` on Supabase.
+Status: Draft (depends on tables not yet defined in Drizzle schema).
 
 ## Prerequisites
 ```sql
@@ -143,4 +144,3 @@ SELECT cron.schedule('refresh-inventory-status', '0 */6 * * *', 'REFRESH MATERIA
 
 ## Notes
 - All of the above runs on Supabase Free using pg_cron; no external workers required.
-

@@ -1,0 +1,77 @@
+{
+  "admin": {
+    "biodex": {
+      "title": "Biodex",
+      "description": "Manage educational content about species",
+      "new_species": "New species",
+      "sort": {
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "name_asc": "Alphabetical (A-Z)",
+        "name_desc": "Alphabetical (Z-A)"
+      },
+      "filters": {
+        "status": {
+          "label": "Status",
+          "all": "All",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "search": {
+          "placeholder": "Search for a species..."
+        }
+      },
+      "sections": {
+        "essential_info": "Essential Information",
+        "content_levels": "Content Levels",
+        "characteristics": "Characteristics",
+        "status": "Status",
+        "additional_info": "Additional Information",
+        "media": "Media"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Species name"
+        },
+        "scientific_name": {
+          "label": "Scientific name",
+          "placeholder": "Species scientific name"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "General species description"
+        },
+        "cover_image": "Cover image",
+        "icon": "Icon",
+        "level_title": "Level title",
+        "level_description": "Level description",
+        "conservation_status": "Conservation status",
+        "protection_measures": "Protection measures",
+        "population_trend": "Population trend",
+        "interesting_facts": "Interesting facts",
+        "diet": "Diet",
+        "reproduction": "Reproduction",
+        "habitat": "Habitat"
+      },
+      "placeholders": {
+        "name": "e.g. African Lion",
+        "scientific_name": "e.g. Panthera leo",
+        "description": "Detailed species description...",
+        "level_title": "Title for this difficulty level",
+        "level_description": "Content description for this level...",
+        "conservation_status": "e.g. Critically endangered",
+        "protection_measures": "Actions in place...",
+        "population_trend": "e.g. Declining",
+        "interesting_facts": "Notable facts about the species...",
+        "diet": "Feeding habits...",
+        "reproduction": "Reproduction cycle...",
+        "habitat": "Natural environment..."
+      },
+      "list": {
+        "empty": "No species found",
+        "add": "Add species"
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # 💰 Grille Tarifaire Définitive - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 **📍 VERSION DÉFINITIVE** | **🗓️ FINALISÉ: Août 2025** | **⭐️ RÉFÉRENCE UNIQUE OBLIGATOIRE**
 
 ## 🎯 Principe Général

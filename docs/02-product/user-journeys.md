@@ -1,4 +1,6 @@
 # Analyse UX Fondamentale - Make the CHANGE
+
+> Historique 2024/2025 — à revalider en 2026.
 ## Optimisation des Écrans Existants selon les Standards 2025
 
 *Analyse focalisée sur l'optimisation des layouts, interactions et affordances des écrans actuels sans ajout de fonctionnalités*

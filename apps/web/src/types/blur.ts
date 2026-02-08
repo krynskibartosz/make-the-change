@@ -7,4 +7,3 @@ export type ProductBlurHash = {
   // Data URL stockée en DB pour Next/Image (placeholder)
   blurDataURL?: string
 }
-

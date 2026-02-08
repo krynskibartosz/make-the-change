@@ -1,20 +1,20 @@
-import { type FC, type ReactNode, type MouseEvent } from 'react';
+import type { FC, MouseEvent, ReactNode } from 'react'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@make-the-change/core/shared/utils'
 
 type RoundActionButtonProps = {
-  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
-  children: ReactNode;
-  className?: string;
-  disabled?: boolean;
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void
+  children: ReactNode
+  className?: string
+  disabled?: boolean
 }
 
-export const RoundActionButton: FC<RoundActionButtonProps> = ({ 
-  onClick, 
-  children, 
+export const RoundActionButton: FC<RoundActionButtonProps> = ({
+  onClick,
+  children,
   className = '',
-  disabled = false 
-} ) => (
+  disabled = false,
+}) => (
   <button
     aria-label="Action sur l'image"
     disabled={disabled}
@@ -23,13 +23,13 @@ export const RoundActionButton: FC<RoundActionButtonProps> = ({
       'w-12 h-12 bg-background/95 backdrop-blur-sm rounded-full shadow-lg',
       'hover:scale-110 hover:shadow-xl transition-all duration-300',
       'flex items-center justify-center cursor-pointer',
-      'border border-border/20 hover:border-primary/30',
+      'border border-[hsl(var(--border)/0.2)] hover:border-primary/30',
       'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2',
       'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100',
-      className
+      className,
     )}
     onClick={onClick}
   >
     {children}
   </button>
-);
+)

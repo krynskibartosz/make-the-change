@@ -1,0 +1,62 @@
+{
+  "name": "@make-the-change/core",
+  "version": "0.1.0",
+  "description": "Core business logic, database, and shared utilities for Make the Change",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ui": "./src/shared/ui/index.ts",
+    "./ui/next": "./src/shared/ui/next/index.ts",
+    "./ui/rhf": "./src/shared/ui/rhf/index.ts",
+    "./shared/utils": "./src/shared/utils/index.ts",
+    "./shared/hooks": "./src/shared/hooks/index.ts",
+    "./i18n": "./src/shared/i18n.ts",
+    "./locales/*": "./locales/*.json",
+    "./db": {
+      "react-native": "./src/shared/db/forbidden.ts",
+      "browser": "./src/shared/db/forbidden.ts",
+      "default": "./src/shared/db/client.ts"
+    },
+    "./schema": "./src/shared/db/schema.ts",
+    "./database-types": "./src/shared/db/database.types.ts",
+    "./css": "./src/shared/ui/globals.css",
+    "./css/themes/admin": "./src/shared/ui/themes/admin.css",
+    "./css/themes/client": "./src/shared/ui/themes/client.css",
+    "./tailwind.config": "./tailwind.config.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest",
+    "lint": "biome check .",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.1.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.1",
+    "lucide-react": "^0.542.0",
+    "next": "16.1.0",
+    "postgres": "^3.4.8",
+    "react-hook-form": "^7.52.2",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.16.0",
+    "@types/react": "^19.1.12",
+    "@vitejs/plugin-react": "^4.3.4",
+    "drizzle-kit": "^0.31.8",
+    "jsdom": "^25.0.1",
+    "react": "^19.0.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

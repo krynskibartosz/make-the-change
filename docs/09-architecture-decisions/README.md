@@ -18,5 +18,5 @@ Chaque ADR doit suivre un format simple :
 
 ## Index des Décisions
 
-- [ADR-0001: Choix du Monorepo et de la Stack Technique](./0001-choix-monorepo-stack-technique.md)
-- ... (les futurs ADRs seront listés ici)
+- Aucun ADR actif pour le moment.
+- Les décisions historiques sont archivées dans `docs/_legacy_archive/`.

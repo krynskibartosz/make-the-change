@@ -1,6 +1,7 @@
 # Auth Service - Make the CHANGE
 
  Scope: Supabase Auth integration, session management, rate limiting, KYC integration hooks.
+ Status: Partial (core auth via Supabase; some tables are planned).
 
 ## Responsibilities
 - Register/login/logout flows; refresh tokens and rotation.
@@ -9,15 +10,16 @@
 - KYC initialization via Stripe Identity and webhook processing.
 
 ## Design
-- Source of truth for authentication is Supabase Auth; application profile lives in `users` + `user_profiles`.
+- Source of truth for authentication is Supabase Auth; application profile lives in `public.profiles` / `public.public_profiles` (current schema).
 - Access token (JWT) 1h expiry; refresh token 7–30d depending on remember me.
-- Rate limiting: PostgreSQL-only counters (no Redis) using `rate_limits` table + function. See `services/rate-limiting.md`.
+- Rate limiting: PostgreSQL-only counters (no Redis) using a `rate_limits` table + function (à documenter).
 
 ## APIs
 - Used by `auth` router and `users` router security endpoints.
 
 ## Data
-- Tables: users, user_profiles, user_sessions, audit_log.
+- Tables actuelles: `public.users`, `public.profiles`, `public.public_profiles`.
+- Tables planifiées: `user_sessions`, `audit_log` (non présentes dans Drizzle pour l’instant).
 - RLS: self-only; admin bypass via security definer RPC if needed.
 
 ## KYC

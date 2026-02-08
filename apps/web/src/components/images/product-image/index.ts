@@ -1,1 +1,1 @@
-export { ProductImage, useMainProductImage, getMainProductImage } from './product-image';
+export { getMainProductImage, ProductImage, useMainProductImage } from './product-image'

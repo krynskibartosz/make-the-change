@@ -1,85 +1,94 @@
-"use client"
-import { Globe, Check } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState, useMemo, useCallback, useTransition, type FC } from 'react';
+'use client'
+import { Check, Globe } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 
 type LocaleOption = {
-  code: string;
-  label: string;
-  flag: string;
-  nativeName: string;
-};
+  code: string
+  label: string
+  flag: string
+  nativeName: string
+}
 
 const locales: LocaleOption[] = [
   { code: 'fr', label: 'Français', flag: '🇫🇷', nativeName: 'FR' },
   { code: 'en', label: 'English', flag: '🇺🇸', nativeName: 'EN' },
-  { code: 'nl', label: 'Nederlands', flag: '🇳🇱', nativeName: 'NL' }
-];
+  { code: 'nl', label: 'Nederlands', flag: '🇳🇱', nativeName: 'NL' },
+]
 
-const DROPDOWN_HEIGHT = 200;
+const DROPDOWN_HEIGHT = 200
 
-type CompactLocaleSwitcherProps=  {
-  className?: string;
+type CompactLocaleSwitcherProps = {
+  className?: string
 }
 
 export const LocaleSwitcher: FC<CompactLocaleSwitcherProps> = ({ className }) => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState<'top' | 'bottom'>('bottom');
-  const [isPending, startTransition] = useTransition();
-  
-  const currentLocale = useMemo(() => pathname.split('/')[1] || 'fr', [pathname]);
-  const currentLocaleData = useMemo(() => 
-    locales.find(locale => locale.code === currentLocale) || locales[0],
-    [currentLocale]
-  );
+  const pathname = usePathname()
+  const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [dropdownPosition, setDropdownPosition] = useState<'top' | 'bottom'>('bottom')
+  const [isPending, startTransition] = useTransition()
+
+  const currentLocale = useMemo(() => pathname.split('/')[1] || 'fr', [pathname])
+  const currentLocaleData = useMemo(
+    () => locales.find((locale) => locale.code === currentLocale) ?? locales[0]!,
+    [currentLocale],
+  )
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
-    const handleClickOutside = () => setIsOpen(false);
-    if (isOpen) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
-    }
-  }, [isOpen]);
-
-  const handleToggleOpen = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    
+    const handleClickOutside = () => setIsOpen(false)
     if (!isOpen) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      
-      setDropdownPosition(spaceBelow >= DROPDOWN_HEIGHT ? 'bottom' : 'top');
+      return
     }
-    
-    setIsOpen(!isOpen);
-  }, [isOpen]);
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [isOpen])
 
-  const switchLocale = useCallback((newLocale: string) => {
-    if (newLocale === currentLocale) return;
-    
-    const pathWithoutLocale = pathname.replace(`/${currentLocale}`, '');
-    const newUrl = `/${newLocale}${pathWithoutLocale}`;
-    
-    setIsOpen(false);
-    startTransition(() => {
-      router.push(newUrl);
-    });
-  }, [currentLocale, pathname, router, startTransition]);
+  const handleToggleOpen = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+
+      if (!isOpen) {
+        const rect = e.currentTarget.getBoundingClientRect()
+        const spaceBelow = window.innerHeight - rect.bottom
+
+        setDropdownPosition(spaceBelow >= DROPDOWN_HEIGHT ? 'bottom' : 'top')
+      }
+
+      setIsOpen(!isOpen)
+    },
+    [isOpen],
+  )
+
+  const switchLocale = useCallback(
+    (newLocale: string) => {
+      if (newLocale === currentLocale) return
+
+      const pathWithoutLocale = pathname.replace(`/${currentLocale}`, '')
+      const newUrl = `/${newLocale}${pathWithoutLocale}`
+
+      setIsOpen(false)
+      startTransition(() => {
+        router.push(newUrl)
+      })
+    },
+    [currentLocale, pathname, router],
+  )
 
   if (!mounted) {
     return (
-      <div className={`flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 animate-pulse min-w-[120px] ${className || ''}`}>
+      <div
+        className={`flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 animate-pulse min-w-[120px] ${className || ''}`}
+      >
         <Globe className="w-4 h-4 text-gray-400" />
         <div className="w-8 h-4 bg-gray-300 dark:bg-gray-600 rounded" />
       </div>
-    );
+    )
   }
 
   return (
@@ -95,25 +104,29 @@ export const LocaleSwitcher: FC<CompactLocaleSwitcherProps> = ({ className }) =>
         onClick={handleToggleOpen}
       >
         <div className="flex items-center gap-2 min-w-0">
-          <Globe className={`w-4 h-4 transition-colors duration-300 flex-shrink-0 ${
-            isOpen ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
-          }`} />
-          <span className={`text-sm font-medium transition-colors duration-300 truncate ${
-            isOpen ? 'text-green-600 dark:text-green-400' : ''
-          }`}>
+          <Globe
+            className={`w-4 h-4 transition-colors duration-300 flex-shrink-0 ${
+              isOpen ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
+            }`}
+          />
+          <span
+            className={`text-sm font-medium transition-colors duration-300 truncate ${
+              isOpen ? 'text-green-600 dark:text-green-400' : ''
+            }`}
+          >
             {isPending ? '...' : currentLocaleData.nativeName}
           </span>
         </div>
-        
+
         <div
           className={`flex-shrink-0 transition-transform duration-200 ${
             isOpen ? 'rotate-180' : 'rotate-0'
           }`}
         >
-          <svg 
+          <svg
             fill="none"
-            stroke="currentColor" 
-            viewBox="0 0 24 24" 
+            stroke="currentColor"
+            viewBox="0 0 24 24"
             className={`w-3 h-3 transition-colors duration-300 ${
               isOpen ? 'text-green-600 dark:text-green-400' : 'text-gray-400'
             }`}
@@ -126,16 +139,16 @@ export const LocaleSwitcher: FC<CompactLocaleSwitcherProps> = ({ className }) =>
       {isOpen && (
         <div
           className={`absolute left-0 right-0 z-50 bg-gradient-to-br from-white/95 to-white/90 dark:from-gray-900/95 dark:to-gray-900/90 backdrop-blur-xl border border-gray-200/20 dark:border-gray-700/20 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/40 overflow-hidden min-w-[200px] ${
-            dropdownPosition === 'bottom' 
-              ? 'top-full mt-2 animate-in slide-in-from-top-2 fade-in-0 zoom-in-95 duration-200' 
+            dropdownPosition === 'bottom'
+              ? 'top-full mt-2 animate-in slide-in-from-top-2 fade-in-0 zoom-in-95 duration-200'
               : 'bottom-full mb-2 animate-in slide-in-from-bottom-2 fade-in-0 zoom-in-95 duration-200'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-2 space-y-1">
             {locales.map((locale) => {
-              const isSelected = locale.code === currentLocale;
-              
+              const isSelected = locale.code === currentLocale
+
               return (
                 <button
                   key={locale.code}
@@ -147,37 +160,41 @@ export const LocaleSwitcher: FC<CompactLocaleSwitcherProps> = ({ className }) =>
                   }`}
                   onClick={() => switchLocale(locale.code)}
                 >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span aria-hidden="true" className="text-lg flex-shrink-0" role="img">
-                        {locale.flag}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div className={`font-medium truncate ${
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span aria-hidden="true" className="text-lg flex-shrink-0" role="img">
+                      {locale.flag}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div
+                        className={`font-medium truncate ${
                           isSelected ? 'text-green-600 dark:text-green-400' : ''
-                        }`}>
-                          {locale.label}
-                        </div>
-                        <div className={`text-xs opacity-70 truncate ${
-                          isSelected ? 'text-green-600/80 dark:text-green-400/80' : 'text-gray-500 dark:text-gray-400'
-                        }`}>
-                          {locale.nativeName}
-                        </div>
+                        }`}
+                      >
+                        {locale.label}
+                      </div>
+                      <div
+                        className={`text-xs opacity-70 truncate ${
+                          isSelected
+                            ? 'text-green-600/80 dark:text-green-400/80'
+                            : 'text-gray-500 dark:text-gray-400'
+                        }`}
+                      >
+                        {locale.nativeName}
                       </div>
                     </div>
-                  
+                  </div>
+
                   {isSelected && (
                     <div className="animate-in zoom-in-50 spin-in-12 duration-300">
                       <Check className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
                     </div>
                   )}
                 </button>
-              );
+              )
             })}
           </div>
-            
-          
         </div>
       )}
     </div>
-  );
-};
+  )
+}

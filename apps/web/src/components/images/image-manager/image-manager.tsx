@@ -1,20 +1,19 @@
-'use client';
+'use client'
 
-import { GripVertical, X, Eye, ArrowLeft, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
-import { type FC, useState } from 'react';
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn';
-import { Button } from '@/components/ui/button';
+import { cn } from '@make-the-change/core/shared/utils'
+import { Button } from '@make-the-change/core/ui'
+import { ArrowLeft, ArrowRight, Eye, X } from 'lucide-react'
+import Image from 'next/image'
+import { type FC, useState } from 'react'
 
 type ImageManagerProps = {
-  images: string[];
-  onImagesReorder: (newImages: string[]) => void;
-  onImageRemove: (imageUrl: string) => void;
-  onImagePreview?: (imageUrl: string) => void;
-  disabled?: boolean;
-  className?: string;
-};
+  images: string[]
+  onImagesReorder: (newImages: string[]) => void
+  onImageRemove: (imageUrl: string) => void
+  onImagePreview?: (imageUrl: string) => void
+  disabled?: boolean
+  className?: string
+}
 
 export const ImageManager: FC<ImageManagerProps> = ({
   images,
@@ -22,56 +21,63 @@ export const ImageManager: FC<ImageManagerProps> = ({
   onImageRemove,
   onImagePreview,
   disabled = false,
-  className
+  className,
 }) => {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
 
   // Vérification de sécurité
   if (!images || !Array.isArray(images)) {
     return (
-      <div className={cn("border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center", className)}>
+      <div
+        className={cn(
+          'border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center',
+          className,
+        )}
+      >
         <p className="text-muted-foreground">Aucune image à gérer</p>
         <p className="text-sm text-muted-foreground mt-2">
           Ajoutez des images via l&apos;uploader pour les organiser ici
         </p>
       </div>
-    );
+    )
   }
 
   const moveImage = (fromIndex: number, toIndex: number) => {
-    if (disabled || toIndex < 0 || toIndex >= images.length) return;
-    
-    const newImages = [...images];
-    const [movedImage] = newImages.splice(fromIndex, 1);
-    newImages.splice(toIndex, 0, movedImage);
-    onImagesReorder(newImages);
-  };
+    if (disabled || toIndex < 0 || toIndex >= images.length) return
+
+    const newImages = [...images]
+    const [movedImage] = newImages.splice(fromIndex, 1)
+    if (!movedImage) return
+    newImages.splice(toIndex, 0, movedImage)
+    onImagesReorder(newImages)
+  }
 
   const handlePreview = (imageUrl: string) => {
-    setPreviewImage(imageUrl);
-    onImagePreview?.(imageUrl);
-  };
+    setPreviewImage(imageUrl)
+    onImagePreview?.(imageUrl)
+  }
 
   if (images.length === 0) {
     return (
-      <div className={cn("border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center", className)}>
+      <div
+        className={cn(
+          'border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center',
+          className,
+        )}
+      >
         <p className="text-muted-foreground">Aucune image à gérer</p>
         <p className="text-sm text-muted-foreground mt-2">
           Ajoutez des images via l&apos;uploader pour les organiser ici
         </p>
       </div>
-    );
+    )
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn('space-y-4', className)}>
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium">
-          Gestion des images ({images.length})
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          Utilisez les flèches pour réorganiser
-        </p>
+        <h3 className="text-lg font-medium">Gestion des images ({images.length})</h3>
+        <p className="text-sm text-muted-foreground">Utilisez les flèches pour réorganiser</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -79,8 +85,8 @@ export const ImageManager: FC<ImageManagerProps> = ({
           <div
             key={imageUrl}
             className={cn(
-              "relative group bg-background border rounded-lg overflow-hidden transition-all shadow-sm hover:shadow-md",
-              disabled && "opacity-50 pointer-events-none"
+              'relative group bg-background border rounded-lg overflow-hidden transition-all shadow-sm hover:shadow-md',
+              disabled && 'opacity-50 pointer-events-none',
             )}
           >
             {/* Badge de position */}
@@ -123,7 +129,7 @@ export const ImageManager: FC<ImageManagerProps> = ({
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
-                
+
                 <div className="flex gap-1">
                   <Button
                     className="h-8 w-8 p-0"
@@ -157,7 +163,7 @@ export const ImageManager: FC<ImageManagerProps> = ({
 
       {/* Modal de prévisualisation */}
       {previewImage && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
           onClick={() => setPreviewImage(null)}
         >
@@ -181,5 +187,5 @@ export const ImageManager: FC<ImageManagerProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

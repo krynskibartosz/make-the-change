@@ -935,10 +935,9 @@ Week 8:
 ```
 
 ## References
-- See `api/gamification-endpoints.md` for API specifications
-- See `04-specifications/mobile-app/v1/gamification/` for UI requirements
-- See `services/points-service.md` for points integration
-- See `services/notification-service.md` for celebration notifications
+- See `../workflows/gamification-flow.md` for flow overview
+- See `points-service.md` for points integration
+- See `notification-service.md` for celebration notifications
 
 ---
 

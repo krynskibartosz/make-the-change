@@ -1,223 +1,220 @@
-'use client';
+'use client'
 
-import { type FC, type ChangeEvent } from 'react';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/[locale]/admin/(dashboard)/components/ui/card';
-import { Input } from '@/app/[locale]/admin/(dashboard)/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/[locale]/admin/(dashboard)/components/ui/select';
-import { TextArea } from '@/app/[locale]/admin/(dashboard)/components/ui/textarea';
-
-type SubscriptionData = {
-  id: string;
-  user_id: string;
-  subscription_tier?: string;
-  billing_frequency?: string;
-  amount_eur?: number;
-  status?: string;
-  start_date?: string;
-  end_date?: string;
-  auto_renew?: boolean;
-  notes?: string;
-};
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@make-the-change/core/ui'
+import type { ChangeEvent, FC } from 'react'
+import type { Subscription } from '@/lib/types/subscription'
 
 type SubscriptionDetailsEditorProps = {
-  subscription: SubscriptionData;
-  isEditing: boolean;
-  onChange?: (data: Partial<SubscriptionData>) => void;
-};
+  subscription: Subscription
+  isEditing: boolean
+  onChange?: (data: Partial<Subscription>) => void
+}
 
 export const SubscriptionDetailsEditor: FC<SubscriptionDetailsEditorProps> = ({
   subscription,
   isEditing,
-  onChange
+  onChange,
 }) => {
-  const handleChange = (key: keyof SubscriptionData, value: any) => {
-    onChange?.({ [key]: value });
-  };
+  const handleChange = <K extends keyof Subscription>(key: K, value: Subscription[K]) => {
+    onChange?.({ [key]: value })
+  }
 
-  const formatDate = (dateString?: string): string => {
-    if (!dateString) return '';
-    return new Date(dateString).toISOString().split('T')[0];
-  };
+  const formatDate = (dateString?: string | null): string => {
+    if (!dateString) return ''
+    return new Date(dateString).toISOString().split('T')[0] ?? ''
+  }
 
   return (
-    <div className='space-y-6'>
+    <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Informations générales</CardTitle>
         </CardHeader>
-        <CardContent className='space-y-4'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div className='space-y-2'>
-              <label className='text-sm font-medium' htmlFor='subscription_tier'>Type d&apos;abonnement</label>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="plan_type">
+                Plan
+              </label>
               {isEditing ? (
                 <Select
-                  value={subscription.subscription_tier}
-                  onValueChange={(value) => handleChange('subscription_tier', value)}
+                  value={subscription.plan_type}
+                  onValueChange={(value) => handleChange('plan_type', value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder='Sélectionner un type' />
+                    <SelectValue placeholder="Sélectionner un plan" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='ambassadeur_standard'>Ambassadeur Standard</SelectItem>
-                    <SelectItem value='ambassadeur_premium'>Ambassadeur Premium</SelectItem>
+                    <SelectItem value="monthly_standard">Mensuel Standard</SelectItem>
+                    <SelectItem value="monthly_premium">Mensuel Premium</SelectItem>
+                    <SelectItem value="annual_standard">Annuel Standard</SelectItem>
+                    <SelectItem value="annual_premium">Annuel Premium</SelectItem>
                   </SelectContent>
                 </Select>
               ) : (
-                <div className='p-2 bg-muted rounded-md'>
-                  {subscription.subscription_tier === 'ambassadeur_standard' && 'Ambassadeur Standard'}
-                  {subscription.subscription_tier === 'ambassadeur_premium' && 'Ambassadeur Premium'}
-                  {!subscription.subscription_tier && 'Non défini'}
+                <div className="p-2 bg-muted rounded-md">
+                  {subscription.plan_type || 'Non défini'}
                 </div>
               )}
             </div>
 
-            <div className='space-y-2'>
-              <label className='text-sm font-medium' htmlFor='status'>Statut</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="status">
+                Statut
+              </label>
               {isEditing ? (
                 <Select
                   value={subscription.status}
                   onValueChange={(value) => handleChange('status', value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder='Sélectionner un statut' />
+                    <SelectValue placeholder="Sélectionner un statut" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='active'>Actif</SelectItem>
-                    <SelectItem value='cancelled'>Annulé</SelectItem>
-                    <SelectItem value='suspended'>Suspendu</SelectItem>
-                    <SelectItem value='past_due'>En retard</SelectItem>
+                    <SelectItem value="active">Actif</SelectItem>
+                    <SelectItem value="inactive">Inactif</SelectItem>
+                    <SelectItem value="cancelled">Annulé</SelectItem>
+                    <SelectItem value="past_due">En retard</SelectItem>
+                    <SelectItem value="unpaid">Impayé</SelectItem>
+                    <SelectItem value="trialing">Essai</SelectItem>
+                    <SelectItem value="expired">Expiré</SelectItem>
+                    <SelectItem value="incomplete">Incomplet</SelectItem>
+                    <SelectItem value="paused">Suspendu</SelectItem>
                   </SelectContent>
                 </Select>
               ) : (
-                <div className='p-2 bg-muted rounded-md'>
-                  {subscription.status === 'active' && 'Actif'}
-                  {subscription.status === 'cancelled' && 'Annulé'}
-                  {subscription.status === 'suspended' && 'Suspendu'}
-                  {subscription.status === 'past_due' && 'En retard'}
-                  {!subscription.status && 'Non défini'}
-                </div>
+                <div className="p-2 bg-muted rounded-md">{subscription.status || 'Non défini'}</div>
               )}
             </div>
 
-            <div className='space-y-2'>
-              <label className='text-sm font-medium' htmlFor='billing_frequency'>Fréquence de facturation</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="billing_frequency">
+                Fréquence de facturation
+              </label>
               {isEditing ? (
                 <Select
                   value={subscription.billing_frequency}
                   onValueChange={(value) => handleChange('billing_frequency', value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder='Sélectionner une fréquence' />
+                    <SelectValue placeholder="Sélectionner une fréquence" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='monthly'>Mensuel</SelectItem>
-                    <SelectItem value='quarterly'>Trimestriel</SelectItem>
-                    <SelectItem value='yearly'>Annuel</SelectItem>
+                    <SelectItem value="monthly">Mensuel</SelectItem>
+                    <SelectItem value="annual">Annuel</SelectItem>
                   </SelectContent>
                 </Select>
               ) : (
-                <div className='p-2 bg-muted rounded-md'>
-                  {subscription.billing_frequency === 'monthly' && 'Mensuel'}
-                  {subscription.billing_frequency === 'quarterly' && 'Trimestriel'}
-                  {subscription.billing_frequency === 'yearly' && 'Annuel'}
-                  {!subscription.billing_frequency && 'Non défini'}
+                <div className="p-2 bg-muted rounded-md">
+                  {subscription.billing_frequency || 'Non défini'}
                 </div>
               )}
             </div>
 
-            <div className='space-y-2'>
-              <label className='text-sm font-medium' htmlFor='amount_eur'>Montant (€)</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="monthly_points_allocation">
+                Points mensuels
+              </label>
               {isEditing ? (
                 <Input
-                  id='amount_eur'
-                  placeholder='0.00'
-                  type='number'
-                  value={subscription.amount_eur || ''}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('amount_eur', Number.parseFloat(e.target.value) || 0)}
+                  id="monthly_points_allocation"
+                  type="number"
+                  value={subscription.monthly_points_allocation ?? 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleChange('monthly_points_allocation', Number(e.target.value) || 0)
+                  }
                 />
               ) : (
-                <div className='p-2 bg-muted rounded-md'>
-                  {subscription.amount_eur ? `${subscription.amount_eur} €` : 'Non défini'}
+                <div className="p-2 bg-muted rounded-md">
+                  {subscription.monthly_points_allocation ?? 0}
                 </div>
               )}
             </div>
 
-            <div className='space-y-2'>
-              <label className='text-sm font-medium' htmlFor='start_date'>Date de début</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="monthly_price">
+                Prix mensuel (€)
+              </label>
               {isEditing ? (
                 <Input
-                  id='start_date'
-                  type='date'
-                  value={formatDate(subscription.start_date)}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('start_date', e.target.value)}
+                  id="monthly_price"
+                  type="number"
+                  value={subscription.monthly_price ?? 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleChange('monthly_price', Number(e.target.value) || 0)
+                  }
                 />
               ) : (
-                <div className='p-2 bg-muted rounded-md'>
-                  {subscription.start_date ? new Date(subscription.start_date).toLocaleDateString('fr-FR') : 'Non défini'}
-                </div>
+                <div className="p-2 bg-muted rounded-md">{subscription.monthly_price ?? 0}</div>
               )}
             </div>
 
-            <div className='space-y-2'>
-              <label className='text-sm font-medium' htmlFor='end_date'>Date de fin</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="annual_price">
+                Prix annuel (€)
+              </label>
               {isEditing ? (
                 <Input
-                  id='end_date'
-                  type='date'
-                  value={formatDate(subscription.end_date)}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('end_date', e.target.value)}
+                  id="annual_price"
+                  type="number"
+                  value={subscription.annual_price ?? 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleChange('annual_price', Number(e.target.value) || 0)
+                  }
                 />
               ) : (
-                <div className='p-2 bg-muted rounded-md'>
-                  {subscription.end_date ? new Date(subscription.end_date).toLocaleDateString('fr-FR') : 'Non défini'}
-                </div>
+                <div className="p-2 bg-muted rounded-md">{subscription.annual_price ?? 0}</div>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="bonus_percentage">
+                Bonus (%)
+              </label>
+              {isEditing ? (
+                <Input
+                  id="bonus_percentage"
+                  max="100"
+                  min="0"
+                  type="number"
+                  value={subscription.bonus_percentage ?? 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleChange('bonus_percentage', Number(e.target.value) || 0)
+                  }
+                />
+              ) : (
+                <div className="p-2 bg-muted rounded-md">{subscription.bonus_percentage ?? 0}</div>
               )}
             </div>
           </div>
 
-          <div className='space-y-2'>
-            <label className='text-sm font-medium' htmlFor='auto_renew'>
-              Renouvellement automatique
-            </label>
-            {isEditing ? (
-              <div className='flex items-center space-x-2'>
-                <input
-                  checked={subscription.auto_renew || false}
-                  className='h-4 w-4'
-                  id='auto_renew'
-                  type='checkbox'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('auto_renew', e.target.checked)}
-                />
-                <label className='text-sm' htmlFor='auto_renew'>
-                  {subscription.auto_renew ? 'Activé' : 'Désactivé'}
-                </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Période début</label>
+              <div className="p-2 bg-muted rounded-md">
+                {formatDate(subscription.current_period_start)}
               </div>
-            ) : (
-              <div className='p-2 bg-muted rounded-md'>
-                {subscription.auto_renew ? 'Activé' : 'Désactivé'}
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Période fin</label>
+              <div className="p-2 bg-muted rounded-md">
+                {formatDate(subscription.current_period_end)}
               </div>
-            )}
-          </div>
-
-          <div className='space-y-2'>
-            <label className='text-sm font-medium' htmlFor='notes'>Notes</label>
-            {isEditing ? (
-              <TextArea
-                id='notes'
-                placeholder='Notes sur cet abonnement...'
-                rows={3}
-                value={subscription.notes || ''}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange('notes', e.target.value)}
-              />
-            ) : (
-              <div className='p-2 bg-muted rounded-md min-h-[80px]'>
-                {subscription.notes || 'Aucune note'}
-              </div>
-            )}
+            </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

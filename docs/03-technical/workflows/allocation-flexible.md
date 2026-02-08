@@ -1,5 +1,7 @@
 # Workflow: Allocation Flexible Ambassadeur - Make the CHANGE
 
+> Historique 2024/2025 — à revalider en 2026.
+
 ## Objective
 Enable Ambassadeur users to flexibly allocate their monthly subscription points across multiple projects with validation and limits based on tier.
 

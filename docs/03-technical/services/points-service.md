@@ -1,6 +1,7 @@
 # Points Service - Make the CHANGE
 
  Scope: Points calculation, expiry scheduling, warnings, debits/refunds, and analytics.
+ Status: Planned (tables not yet defined in Drizzle schema).
 
 ## Responsibilities
 - Calculate points from investments and subscriptions (tier/frequency bonuses).
@@ -13,7 +14,7 @@
 - Subscription: points from pricing table by tier × frequency; monthly accrual via webhooks.
 - Expiry: created_at + 18 months; materialized view for upcoming expiries; cron-driven processing.
 
-## Data
+## Data (planned)
 - Tables: points_transactions, points_expiry_schedule; materialized views: user_points_summary.
 
 ## Security
@@ -26,5 +27,5 @@
 - Boundary dates; idempotent awards; negative balance prevention; refund chain.
 
 ## References
-- `api/points-endpoints.md`, `database-schema.md`.
-
+- `../database-schema.md`
+- `../workflows/points-expiry.md`

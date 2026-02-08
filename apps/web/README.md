@@ -1,106 +1,90 @@
-# Make the CHANGE - Web Application
+# @make-the-change/web
 
-Application web Next.js 15.4 avec authentification Supabase et TanStack Query.
+> The Admin Dashboard for Make the CHANGE, built with Next.js App Router.
 
-## 🚀 Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-16.1-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
+[![Drizzle ORM](https://img.shields.io/badge/Drizzle-0.45-green)](https://orm.drizzle.team/)
+
+## 🚀 Features
+
+- **Full Admin Control**: Manage Products, Orders, Users, Projects, and Subscriptions.
+- **Internationalization**: Full i18n support (fr, en, nl) via `next-intl`.
+- **Data Visualization**: Charts via `@nivo` and Maps via `react-leaflet`.
+- **Secure Authentication**: Supabase SSR Auth with Role-Based Access Control (RBAC).
+- **Type-Safe Database**: Direct PostgreSQL access via Drizzle ORM (Server Actions).
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16 (Turbopack)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4 + CSS Variables
+- **State Management**: TanStack Query v5
+- **Forms**: React Hook Form + Zod
+- **Testing**: Vitest (Unit/Integration) + Playwright (E2E)
+
+## 📦 Project Structure
+
+```bash
+src/
+├── app/                  # Next.js App Router
+│   ├── [locale]/         # Localized routes
+│   │   ├── admin/        # Dashboard pages
+│   │   └── api/          # API Handlers
+├── components/           # React components
+│   └── ui/               # Shared UI elements
+├── lib/                  # Utilities & Logic
+│   ├── db.ts             # Database client (from core)
+│   └── validators/       # Zod schemas
+└── supabase/             # Supabase configuration
+```
+
+## 🏃‍♂️ Getting Started
 
 ### Prerequisites
+
 - Node.js 20+
-- pnpm (installé au niveau du monorepo)
-- Compte Supabase configuré
+- pnpm
+- Access to Supabase project & PostgreSQL database
 
 ### Environment Variables
 
-1. Copiez le fichier d'exemple :
+Copy `.env.example` to `.env.local` and fill in:
+
 ```bash
 cp .env.example .env.local
 ```
 
-2. Configurez vos variables Supabase :
-```bash
-# Get these from https://supabase.com/dashboard/project/YOUR_PROJECT_ID/settings/api
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
-```
+Required variables:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `DATABASE_URL` (Connection string)
 
 ### Development
 
 ```bash
-# Install dependencies (from monorepo root)
-pnpm install
-
-# Start development server
 pnpm dev
+# Starts server at http://localhost:3000
 ```
 
-L'application sera accessible sur [http://localhost:3000](http://localhost:3000).
+### Building
 
-## 🧪 Testing Authentication
-
-Visitez [http://localhost:3000/test](http://localhost:3000/test) pour tester :
-- Création de compte avec vérification email
-- Connexion/déconnexion
-- Gestion des erreurs
-
-## 🏗️ Architecture
-
-### Tech Stack
-- **Framework**: Next.js 15.4 (App Router)
-- **Language**: TypeScript 5.9+ (strict mode)
-- **Styling**: Tailwind CSS v4
-- **State Management**: TanStack Query v5.85.6
-- **Authentication**: Supabase Auth
-- **Database**: Supabase PostgreSQL
-
-### Structure
-```
-src/
-├── app/                 # Next.js App Router
-│   ├── (auth)/         # Auth pages group (future)
-│   ├── test/           # Authentication test page
-│   ├── layout.tsx      # Root layout
-│   ├── page.tsx        # Home page
-│   └── providers.tsx   # React Query provider
-├── components/         # React components
-├── hooks/             # Custom hooks (useAuth)
-├── lib/               # Utilities (Supabase client)
-└── types/             # TypeScript types
-```
-
-### Features
-- ✅ Supabase Authentication
-- ✅ Real-time auth state management
-- ✅ Error handling and user feedback
-- ✅ Responsive design
-- ✅ TypeScript strict mode
-- ✅ TanStack Query integration
-
-## 🚀 Production
-
-L'application est déployée sur Vercel : [make-the-change.vercel.app](https://make-the-change.vercel.app)
-
-### Build
 ```bash
 pnpm build
+pnpm start
 ```
 
-### Environment Variables (Vercel)
-Configurez les variables d'environnement dans Vercel Dashboard :
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+## 🧪 Testing
 
-## 📋 Scripts
+```bash
+# Unit & Integration Tests
+pnpm test
 
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm start` - Start production server
-- `pnpm lint` - Run ESLint
-- `pnpm type-check` - Run TypeScript compiler
+# E2E Tests
+pnpm test:e2e
+```
 
-## 🔗 Links
+## 🤝 Dependencies
 
-- **Supabase Dashboard**: https://supabase.com/dashboard/project/ebmjxinsyyjwshnynwwu
-- **Vercel Dashboard**: https://vercel.com/dashboard
-- **Documentation**: ../../docs/
-
-
+Internal dependencies from workspace:
+- `@make-the-change/core`: Shared business logic, database schema, and types.

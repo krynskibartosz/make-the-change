@@ -1,0 +1,37 @@
+import { Inter } from 'next/font/google';
+
+import type { Metadata } from 'next';
+import '@/app/globals.css';
+import type { FC, PropsWithChildren } from 'react';
+
+import LogoImage from '@/../../../assets/logo.png';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'Make the CHANGE - Plateforme Écologique',
+  description:
+    'Investissez dans des projets écologiques et découvrez des produits durables',
+  keywords: [
+    'écologie',
+    'investissement',
+    'durable',
+    'environnement',
+    'projets verts',
+  ],
+  icons: {
+    icon: LogoImage.src,
+    shortcut: LogoImage.src,
+    apple: LogoImage.src,
+  },
+};
+
+const RootLayout: FC<PropsWithChildren> = ({ children }) => (
+  <html lang="fr" suppressHydrationWarning>
+    <body className={inter.className} suppressHydrationWarning>
+      {children}
+    </body>
+  </html>
+);
+
+export default RootLayout;

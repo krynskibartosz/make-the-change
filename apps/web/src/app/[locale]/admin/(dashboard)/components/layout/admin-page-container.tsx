@@ -6,11 +6,10 @@ type AdminPageContainerProps = {
   className?: string
 } & PropsWithChildren
 
-export const AdminPageContainer: FC<AdminPageContainerProps> = ({
-  children,
-  className = ''
-}) => (
-  <div className={`h-full overflow-auto px-4 md:px-6 py-4 md:py-6 safe-bottom ${className}`}>
+export const AdminPageContainer: FC<AdminPageContainerProps> = ({ children, className = '' }) => (
+  <div
+    className={`h-full overflow-auto px-4 md:px-6 py-4 md:py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-6 ${className}`}
+  >
     {children}
   </div>
 )

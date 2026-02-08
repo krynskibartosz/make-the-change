@@ -36,8 +36,5 @@
       "cache": false
     }
   },
-  "globalDependencies": [
-    "**/.env.*local",
-    "tsconfig.json"
-  ]
+  "globalDependencies": ["**/.env.*local", "tsconfig.json"]
 }

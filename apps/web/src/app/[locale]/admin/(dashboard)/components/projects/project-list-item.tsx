@@ -1,29 +1,17 @@
 'use client'
 
+import type { FC, ReactNode } from 'react'
 import { AdminListItem } from '@/app/[locale]/admin/(dashboard)/components/ui/admin-list-item'
-
+import type { Project } from '@/lib/types/project'
 import { ProjectListHeader } from './project-list-header'
 import { ProjectListMetadata } from './project-list-metadata'
 
-import type { FC, ReactNode } from 'react'
-
-type Project =  {
-  id: string
-  name: string
-  status: string
-  type: string
-  current_funding: number | null
-  target_budget: number
-  producer_id: string
-  featured?: boolean
-}
-
-type ProjectListItemProps =  {
+type ProjectListItemProps = {
   project: Project
   actions?: ReactNode
 }
 
-export const ProjectListItem: FC<ProjectListItemProps> = ({ project, actions } ) => (
+export const ProjectListItem: FC<ProjectListItemProps> = ({ project, actions }) => (
   <AdminListItem
     actions={actions}
     header={<ProjectListHeader project={project} />}

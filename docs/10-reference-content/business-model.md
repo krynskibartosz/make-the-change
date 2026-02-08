@@ -1,3 +1,7 @@
+# Business Model — Make the CHANGE
+
+> Historique 2024/2025 — à revalider en 2026.
+
 ---
 title: "Business Model – Make the CHANGE"
 status: "Reference source for NotebookLM"

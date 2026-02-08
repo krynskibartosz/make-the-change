@@ -1,10 +1,10 @@
-import { type ChangeEvent, forwardRef } from 'react';
+import { type ChangeEvent, forwardRef } from 'react'
 
-type ImageInputProps =  {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
-  multiple?: boolean;
-  disabled?: boolean;
+type ImageInputProps = {
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  className?: string
+  multiple?: boolean
+  disabled?: boolean
 }
 
 export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
@@ -18,10 +18,10 @@ export const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>(
       multiple={multiple}
       type="file"
       onChange={(e) => {
-        onChange(e);
+        onChange(e)
       }}
     />
-  )
-);
+  ),
+)
 
-ImageInput.displayName = 'ImageInput';
+ImageInput.displayName = 'ImageInput'

@@ -1,18 +1,16 @@
 'use client'
 
+import { Button } from '@make-the-change/core/ui'
 import { motion } from 'framer-motion'
-
-import { LocalizedLink } from '@/components/localized-link'
-import { Button } from '@/components/ui/button'
-
 import type { FC } from 'react'
+import { LocalizedLink } from '@/components/localized-link'
 
 export const HeroSection: FC = () => {
   return (
     <section className="relative overflow-hidden pt-20 pb-16 bg-gradient-to-br from-background via-muted/5 to-background">
       {/* Background avec effet grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-      
+
       {/* Éléments décoratifs */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl" />
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-accent/10 rounded-full blur-xl" />
@@ -24,7 +22,7 @@ export const HeroSection: FC = () => {
           initial={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h1 
+          <motion.h1
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-bold mb-6"
             initial={{ opacity: 0, y: 30 }}
@@ -36,26 +34,35 @@ export const HeroSection: FC = () => {
             </span>
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             animate={{ opacity: 1, y: 0 }}
             className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Investissez dans des projets écologiques durables et découvrez des produits
-            qui transforment notre planète, un geste à la fois.
+            Investissez dans des projets écologiques durables et découvrez des produits qui
+            transforment notre planète, un geste à la fois.
           </motion.p>
 
-          <motion.div 
+          <motion.div
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Button asChild className="h-14 px-8 shadow-lg hover:shadow-xl transition-all" size="lg">
+            <Button
+              asChild
+              className="h-14 px-8 shadow-lg hover:shadow-xl transition-all"
+              size="lg"
+            >
               <LocalizedLink href="/projects">Découvrir les Projets</LocalizedLink>
             </Button>
-            <Button asChild className="h-14 px-8 border-2 hover:bg-primary/5" size="lg" variant="outline">
+            <Button
+              asChild
+              className="h-14 px-8 border-2 hover:bg-primary/5"
+              size="lg"
+              variant="outline"
+            >
               <LocalizedLink href="/shop">Visiter la Boutique</LocalizedLink>
             </Button>
           </motion.div>

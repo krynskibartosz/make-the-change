@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { ChevronDown, X } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
-
-import { cn } from '@/app/[locale]/admin/(dashboard)/components/cn';
+import { cn } from '@make-the-change/core/shared/utils'
+import { ChevronDown, X } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export type TagsAutocompleteProps = {
-  value: string[];
-  onChange: (tags: string[]) => void;
-  suggestions?: string[];
-  placeholder?: string;
-  maxTags?: number;
-  disabled?: boolean;
-  className?: string;
+  value: string[]
+  onChange: (tags: string[]) => void
+  suggestions?: string[]
+  placeholder?: string
+  maxTags?: number
+  disabled?: boolean
+  className?: string
+  id?: string
 }
 
 export const TagsAutocomplete: React.FC<TagsAutocompleteProps> = ({
@@ -22,123 +22,126 @@ export const TagsAutocomplete: React.FC<TagsAutocompleteProps> = ({
   placeholder = 'Rechercher des tags...',
   maxTags = 10,
   disabled = false,
-  className
+  className,
+  id,
 }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
+  const [inputValue, setInputValue] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
 
   // Filtrer les suggestions qui ne sont pas déjà sélectionnées
   const availableSuggestions = suggestions.filter(
-    suggestion => !value.includes(suggestion) && 
-    suggestion.toLowerCase().includes(inputValue.toLowerCase())
-  );
+    (suggestion) =>
+      !value.includes(suggestion) && suggestion.toLowerCase().includes(inputValue.toLowerCase()),
+  )
 
   // Ajouter l'option "Créer" si l'input ne correspond à aucune suggestion
-  const options = [...availableSuggestions];
-  if (inputValue.trim() && !suggestions.some(s => s.toLowerCase() === inputValue.toLowerCase())) {
-    options.push(`Créer "${inputValue.trim()}"`);
+  const options = [...availableSuggestions]
+  if (inputValue.trim() && !suggestions.some((s) => s.toLowerCase() === inputValue.toLowerCase())) {
+    options.push(`Créer "${inputValue.trim()}"`)
   }
 
   const openDropdown = () => {
-    setIsOpen(true);
-  };
+    setIsOpen(true)
+  }
 
-  const closeDropdown = () => {
-    setIsOpen(false);
-    setFocusedIndex(-1);
-  };
+  const closeDropdown = useCallback(() => {
+    setIsOpen(false)
+    setFocusedIndex(-1)
+  }, [])
 
   const addTag = (tag: string) => {
-    const cleanTag = tag.startsWith('Créer "') ? tag.slice(7, -1) : tag;
+    const cleanTag = tag.startsWith('Créer "') ? tag.slice(7, -1) : tag
     if (!value.includes(cleanTag) && value.length < maxTags) {
-      onChange([...value, cleanTag]);
+      onChange([...value, cleanTag])
     }
-    setInputValue('');
-    closeDropdown();
-  };
+    setInputValue('')
+    closeDropdown()
+  }
 
   const removeTag = (tagToRemove: string) => {
-    onChange(value.filter(tag => tag !== tagToRemove));
-  };
+    onChange(value.filter((tag) => tag !== tagToRemove))
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     switch (e.key) {
-    case 'ArrowDown': {
-      e.preventDefault();
-      setFocusedIndex(prev => Math.min(prev + 1, options.length - 1));
-    
-    break;
-    }
-    case 'ArrowUp': {
-      e.preventDefault();
-      setFocusedIndex(prev => Math.max(prev - 1, -1));
-    
-    break;
-    }
-    case 'Enter': {
-      e.preventDefault();
-      if (focusedIndex >= 0 && options[focusedIndex]) {
-        addTag(options[focusedIndex]);
-      } else if (inputValue.trim()) {
-        addTag(inputValue.trim());
+      case 'ArrowDown': {
+        e.preventDefault()
+        setFocusedIndex((prev) => Math.min(prev + 1, options.length - 1))
+
+        break
       }
-    
-    break;
+      case 'ArrowUp': {
+        e.preventDefault()
+        setFocusedIndex((prev) => Math.max(prev - 1, -1))
+
+        break
+      }
+      case 'Enter': {
+        e.preventDefault()
+        if (focusedIndex >= 0 && options[focusedIndex]) {
+          addTag(options[focusedIndex])
+        } else if (inputValue.trim()) {
+          addTag(inputValue.trim())
+        }
+
+        break
+      }
+      case 'Escape': {
+        closeDropdown()
+
+        break
+      }
+      default: {
+        if (e.key === 'Backspace' && !inputValue && value.length > 0) {
+          const lastTag = value.at(-1)
+          if (lastTag) removeTag(lastTag)
+        }
+      }
     }
-    case 'Escape': {
-      closeDropdown();
-    
-    break;
-    }
-    default: { if (e.key === 'Backspace' && !inputValue && value.length > 0) {
-      removeTag(value.at(-1));
-    }
-    }
-    }
-  };
+  }
 
   // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        closeDropdown();
+      if (
+        containerRef.current &&
+        event.target instanceof Node &&
+        !containerRef.current.contains(event.target)
+      ) {
+        closeDropdown()
       }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [isOpen]);
+
+    if (!isOpen) return
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen, closeDropdown])
 
   useEffect(() => {
     if (focusedIndex >= 0 && listRef.current) {
-      const focusedElement = listRef.current.children[focusedIndex] as HTMLElement;
+      const focusedElement = listRef.current.children[focusedIndex] as HTMLElement
       if (focusedElement) {
-        focusedElement.scrollIntoView({ block: 'nearest' });
+        focusedElement.scrollIntoView({ block: 'nearest' })
       }
     }
-  }, [focusedIndex]);
-
+  }, [focusedIndex])
 
   return (
-    <div 
-      ref={containerRef}
-      className={cn('relative', className)}
-    >
+    <div ref={containerRef} className={cn('relative', className)}>
       {/* Tags sélectionnés + Input */}
       <div
         className={cn(
-          'min-h-[44px] w-full rounded-lg border border-border bg-background px-3 py-2 text-sm',
+          'min-h-[44px] w-full rounded-lg border bg-background px-3 py-2 text-sm',
           'focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary',
           'flex flex-wrap gap-1.5 items-center',
           disabled && 'opacity-50 cursor-not-allowed',
-          className
+          className,
         )}
         onClick={() => inputRef.current?.focus()}
       >
@@ -154,8 +157,8 @@ export const TagsAutocomplete: React.FC<TagsAutocompleteProps> = ({
               disabled={disabled}
               type="button"
               onClick={(e) => {
-                e.stopPropagation();
-                removeTag(tag);
+                e.stopPropagation()
+                removeTag(tag)
               }}
             >
               <X size={10} />
@@ -165,6 +168,7 @@ export const TagsAutocomplete: React.FC<TagsAutocompleteProps> = ({
 
         {/* Input */}
         <input
+          id={id}
           ref={inputRef}
           className="flex-1 min-w-0 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
           disabled={disabled || value.length >= maxTags}
@@ -174,43 +178,38 @@ export const TagsAutocomplete: React.FC<TagsAutocompleteProps> = ({
           onFocus={openDropdown}
           onKeyDown={handleKeyDown}
           onChange={(e) => {
-            setInputValue(e.target.value);
-            openDropdown();
-            setFocusedIndex(-1);
+            setInputValue(e.target.value)
+            openDropdown()
+            setFocusedIndex(-1)
           }}
         />
 
         {/* Chevron indicateur */}
         <ChevronDown
           size={16}
-          className={cn(
-            'text-muted-foreground transition-transform',
-            isOpen && 'rotate-180'
-          )}
+          className={cn('text-muted-foreground transition-transform', isOpen && 'rotate-180')}
         />
       </div>
 
       {/* Counter */}
       <div className="flex justify-between text-xs text-muted-foreground mt-1">
         <span>Tapez pour rechercher ou créer</span>
-        <span className={value.length >= maxTags ? 'text-orange-500' : ''}>
+        <span className={value.length >= maxTags ? 'text-warning' : ''}>
           {value.length}/{maxTags}
         </span>
       </div>
 
       {/* Dropdown suggestions simple */}
       {isOpen && options.length > 0 && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-lg border border-border bg-background shadow-lg shadow-black/10">
+        <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-lg border bg-background shadow-lg shadow-black/10">
           <ul ref={listRef} className="p-1">
             {options.map((option, index) => (
               <li
                 key={option}
                 className={cn(
                   'px-3 py-2 text-sm cursor-pointer rounded-md transition-colors',
-                  index === focusedIndex
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted',
-                  option.startsWith('Créer "') && 'italic text-muted-foreground'
+                  index === focusedIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted',
+                  option.startsWith('Créer "') && 'italic text-muted-foreground',
                 )}
                 onMouseDown={() => addTag(option)}
                 onMouseEnter={() => setFocusedIndex(index)}
@@ -222,5 +221,5 @@ export const TagsAutocomplete: React.FC<TagsAutocompleteProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

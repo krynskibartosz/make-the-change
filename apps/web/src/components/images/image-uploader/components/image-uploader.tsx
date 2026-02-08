@@ -1,25 +1,24 @@
-import { Loader2, AlertCircle } from 'lucide-react';
-import { type FC, useRef, useState } from 'react';
+import { AlertCircle, Loader2 } from 'lucide-react'
+import { type FC, useRef, useState } from 'react'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@make-the-change/core/shared/utils'
+import { useImageHandler } from '../hooks/use-image-handler'
+import { ImageDisplay } from './image-display'
+import { ImageInput } from './image-input'
+import { ImageUploadArea } from './image-upload-area'
 
-import { ImageDisplay } from './image-display';
-import { ImageInput } from './image-input';
-import { ImageUploadArea } from './image-upload-area';
-import { useImageHandler } from '../hooks/use-image-handler';
-
-type ImageUploaderProps =  {
-  currentImage?: string;
-  onImageSelect?: (file: File | null) => void;
-  onImagesSelect?: (files: File[]) => void; 
-  onImageRemove?: () => void;
-  onUploadComplete?: () => void; 
-  width?: string;
-  height?: string;
-  disabled?: boolean;
-  multiple?: boolean; 
-  className?: string;
-  isUploading?: boolean; 
+type ImageUploaderProps = {
+  currentImage?: string
+  onImageSelect?: (file: File | null) => void
+  onImagesSelect?: (files: File[]) => void
+  onImageRemove?: () => void
+  onUploadComplete?: () => void
+  width?: string
+  height?: string
+  disabled?: boolean
+  multiple?: boolean
+  className?: string
+  isUploading?: boolean
 }
 
 export const ImageUploader: FC<ImageUploaderProps> = ({
@@ -35,162 +34,144 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
   className,
   isUploading: externalIsUploading = false,
 }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isDragOver, setIsDragOver] = useState(false)
 
-  const { 
-    uploadedImageSrc, 
-    handleImageUpload, 
-    clearImage, 
-    isUploading, 
-    error 
-  } = useImageHandler();
+  const { uploadedImageSrc, handleImageUpload, clearImage, isUploading, error } = useImageHandler()
 
   const triggerFileInput = () => {
-    if (disabled) {
-    } else {
-      fileInputRef.current?.click();
-    }
-  };
+    if (disabled) return
+    fileInputRef.current?.click()
+  }
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    
-    handleImageUpload(e);
-    const files = e.target.files;
-    
+    handleImageUpload(e)
+    const files = e.target.files
+
     if (files && files.length > 0) {
-      
       if (multiple) {
-        
-        const fileArray = [...files];
+        const fileArray = [...files]
         if (onImagesSelect) {
           try {
-            await onImagesSelect(fileArray);
-            
-            clearImage();
+            await onImagesSelect(fileArray)
+
+            clearImage()
             if (fileInputRef.current) {
-              fileInputRef.current.value = '';
+              fileInputRef.current.value = ''
             }
-            onUploadComplete?.();
+            onUploadComplete?.()
           } catch (error) {
-            console.error('Upload failed:', error);
+            console.error('Upload failed:', error)
           }
-        } else {
         }
       } else {
-        
-        const file = files[0];
+        const file = files[0]
+        if (!file) {
+          return
+        }
         if (onImageSelect) {
           try {
-            await onImageSelect(file);
-            
-            clearImage();
+            await onImageSelect(file)
+
+            clearImage()
             if (fileInputRef.current) {
-              fileInputRef.current.value = '';
+              fileInputRef.current.value = ''
             }
-            onUploadComplete?.();
+            onUploadComplete?.()
           } catch (error) {
-            console.error('Upload failed:', error);
+            console.error('Upload failed:', error)
           }
-        } else {
         }
       }
-    } else {
     }
-  };
+  }
 
   const handleRemove = () => {
-    clearImage();
-    onImageRemove?.();
+    clearImage()
+    onImageRemove?.()
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = ''
     }
-  };
+  }
 
-  
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!disabled) {
-      setIsDragOver(true);
+      setIsDragOver(true)
     }
-  };
+  }
 
   const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
+    e.preventDefault()
+    setIsDragOver(false)
+  }
 
   const handleDrop = async (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    
-    if (disabled) return;
+    e.preventDefault()
+    setIsDragOver(false)
 
-    const files = e.dataTransfer.files;
+    if (disabled) return
+
+    const files = e.dataTransfer.files
     if (files.length > 0) {
       if (multiple) {
-        
-        const fileArray = [...files];
-        handleImageUpload({ target: { files: fileArray } } as any);
-        
+        const fileArray = [...files]
+        handleImageUpload({ target: { files: fileArray } } as any)
+
         if (onImagesSelect) {
           try {
-            await onImagesSelect(fileArray);
-            
-            clearImage();
+            await onImagesSelect(fileArray)
+
+            clearImage()
             if (fileInputRef.current) {
-              fileInputRef.current.value = '';
+              fileInputRef.current.value = ''
             }
-            onUploadComplete?.();
+            onUploadComplete?.()
           } catch (error) {
-            console.error('Upload failed:', error);
+            console.error('Upload failed:', error)
           }
         }
       } else {
-        
-        const file = files[0];
-        handleImageUpload({ target: { files: [file] } } as any);
-        
+        const file = files[0]
+        if (!file) {
+          return
+        }
+        handleImageUpload({ target: { files: [file] } } as any)
+
         if (onImageSelect) {
           try {
-            await onImageSelect(file);
-            clearImage();
+            await onImageSelect(file)
+            clearImage()
             if (fileInputRef.current) {
-              fileInputRef.current.value = '';
+              fileInputRef.current.value = ''
             }
-            onUploadComplete?.();
+            onUploadComplete?.()
           } catch (error) {
-            console.error('Upload failed:', error);
+            console.error('Upload failed:', error)
           }
         }
       }
     }
-  };
+  }
 
-  
-  
-  const displayImage = multiple ? undefined : (uploadedImageSrc || currentImage);
+  const displayImage = multiple ? undefined : uploadedImageSrc || currentImage
 
   return (
-    <div 
+    <div
       className={cn(
         'relative border-2 border-dashed border-muted-foreground/25 rounded-lg transition-all duration-300 ease-in-out hover:border-muted-foreground/50 overflow-hidden',
         width,
         height,
         isDragOver && 'border-primary/50 bg-primary/5',
         disabled && 'opacity-50 cursor-not-allowed',
-        className
+        className,
       )}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       {displayImage && !isUploading ? (
-        <ImageDisplay 
-          src={displayImage} 
-          onChange={triggerFileInput}
-          onRemove={handleRemove}
-        />
+        <ImageDisplay src={displayImage} onChange={triggerFileInput} onRemove={handleRemove} />
       ) : isUploading ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 backdrop-blur-sm">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -207,14 +188,14 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
           </div>
         </div>
       ) : (
-        <ImageUploadArea 
-          disabled={disabled} 
+        <ImageUploadArea
+          disabled={disabled}
           isDragOver={isDragOver}
           isUploading={isUploading || externalIsUploading}
           onClick={triggerFileInput}
         />
       )}
-      
+
       <ImageInput
         ref={fileInputRef}
         disabled={disabled}
@@ -222,5 +203,5 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
         onChange={handleFileSelect}
       />
     </div>
-  );
-};
+  )
+}

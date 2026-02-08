@@ -1,22 +1,13 @@
 'use client'
 
+import type { FC } from 'react'
 import { AdminListItem } from '@/app/[locale]/admin/(dashboard)/components/ui/admin-list-item'
-
+import type { UserSummary } from '@/lib/types/user'
 import { UserListHeader } from './user-list-header'
 import { UserListMetadata } from './user-list-metadata'
 
-import type { FC } from 'react'
-
-type User = {
-  id: string
-  name: string
-  email: string
-  role: string
-  is_active: boolean
-}
-
 type UserListItemProps = {
-  user: User
+  user: UserSummary
   actions?: React.ReactNode
 }
 

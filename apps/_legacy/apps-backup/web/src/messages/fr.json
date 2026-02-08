@@ -1,0 +1,77 @@
+{
+  "admin": {
+    "biodex": {
+      "title": "Biodex",
+      "description": "Gérez le contenu éducatif sur les espèces",
+      "new_species": "Nouvelle espèce",
+      "sort": {
+        "newest": "Plus récentes",
+        "oldest": "Plus anciennes",
+        "name_asc": "Alphabétique (A-Z)",
+        "name_desc": "Alphabétique (Z-A)"
+      },
+      "filters": {
+        "status": {
+          "label": "Statut",
+          "all": "Tous",
+          "active": "Actif",
+          "inactive": "Inactif"
+        },
+        "search": {
+          "placeholder": "Rechercher une espèce..."
+        }
+      },
+      "sections": {
+        "essential_info": "Informations essentielles",
+        "content_levels": "Niveaux de contenu",
+        "characteristics": "Caractéristiques",
+        "status": "Statut",
+        "additional_info": "Informations complémentaires",
+        "media": "Médias"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Nom de l'espèce"
+        },
+        "scientific_name": {
+          "label": "Nom scientifique",
+          "placeholder": "Nom scientifique de l'espèce"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Description générale de l'espèce"
+        },
+        "cover_image": "Image de couverture",
+        "icon": "Icône",
+        "level_title": "Titre du niveau",
+        "level_description": "Description du niveau",
+        "conservation_status": "Statut de conservation",
+        "protection_measures": "Mesures de protection",
+        "population_trend": "Tendance de la population",
+        "interesting_facts": "Faits intéressants",
+        "diet": "Régime alimentaire",
+        "reproduction": "Reproduction",
+        "habitat": "Habitat"
+      },
+      "placeholders": {
+        "name": "ex: Lion d'Afrique",
+        "scientific_name": "ex: Panthera leo",
+        "description": "Description détaillée de l'espèce...",
+        "level_title": "Titre pour ce niveau de difficulté",
+        "level_description": "Description du contenu pour ce niveau...",
+        "conservation_status": "ex: En danger critique",
+        "protection_measures": "Actions mises en place...",
+        "population_trend": "ex: En déclin",
+        "interesting_facts": "Faits remarquables sur l'espèce...",
+        "diet": "Habitudes alimentaires...",
+        "reproduction": "Cycle de reproduction...",
+        "habitat": "Environnement naturel..."
+      },
+      "list": {
+        "empty": "Aucune espèce trouvée",
+        "add": "Ajouter une espèce"
+      }
+    }
+  }
+}

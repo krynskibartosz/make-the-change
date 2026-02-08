@@ -1,9 +1,12 @@
-import { defineRouting } from 'next-intl/routing';
- 
+import { defaultLocale, locales } from '@make-the-change/core/i18n'
+import { defineRouting } from 'next-intl/routing'
+
+export { locales, defaultLocale }
+
 export const routing = defineRouting({
   // Langues supportées
-  locales: ['fr', 'en', 'nl'],
-  
+  locales: [...locales],
+
   // Langue par défaut
-  defaultLocale: 'fr'
-});
+  defaultLocale,
+})

@@ -1,5 +1,7 @@
 # 📦 Opérations & Processus
 
+> Historique 2024/2025 — à revalider en 2026.
+
 Cette section contient tous les processus opérationnels, procédures et guides pour la gestion quotidienne de Make the CHANGE.
 
 ## 📋 Contenu de cette Section
@@ -10,14 +12,16 @@ Documentation des processus métier, gestion des stocks, support client et proc�
 
 | Document | Description | Status | Dernière MAJ |
 |----------|-------------|--------|--------------|
-| [inventory-management.md](./inventory-management.md) | Gestion stocks et logistique partenaires | ✅ Final | 2025-01-XX |
-| [communication-client.md](./communication-client.md) | Support client et stratégie communication | ✅ Final | 2025-01-XX |
-| [detailed-procedures.md](./detailed-procedures.md) | Procédures step-by-step opérationnelles | ✅ Final | 2025-01-XX |
-| ~~[devops-deployment.md](./devops-deployment.md)~~ | ~~DevOps, monitoring, backup~~ | ❌ Supprimé | *Voir [03-technical/infrastructure/deployment.md](../03-technical/infrastructure/deployment.md)* |
-| **procedures/** | Procédures spécialisées | | |
-| [procedures/daily-operations.md](./procedures/daily-operations.md) | Routines quotidiennes | 📋 À créer | - |
-| [procedures/crisis-management.md](./procedures/crisis-management.md) | Gestion de crise | 📋 À créer | - |
-| [procedures/training-guides.md](./procedures/training-guides.md) | Formation équipe | 📋 À créer | - |
+| [operations-essentials.md](./operations-essentials.md) | Processus essentiels (MVP) | ✅ Actif | 2025-01-XX |
+| [acquisition-strategy.md](./acquisition-strategy.md) | Acquisition & canaux partenaires | ✅ Actif | 2025-01-XX |
+
+### 📌 Documents à créer (2026)
+- inventory-management.md — Gestion stocks & logistique partenaires
+- communication-client.md — Support client & communication
+- detailed-procedures.md — Procédures opérationnelles détaillées
+- procedures/daily-operations.md — Routines quotidiennes
+- procedures/crisis-management.md — Gestion de crise
+- procedures/training-guides.md — Formation équipe
 
 ## 🎯 Processus Opérationnels Clés
 
@@ -83,7 +87,7 @@ Documentation des processus métier, gestion des stocks, support client et proc�
 ## 🔗 Liens Connexes
 
 - [💼 01-Strategy](../01-strategy/kpis-metrics.md) - KPIs et métriques business
-- [🔧 03-Technical](../03-technical/infrastructure/) - Infrastructure et monitoring
+- [🔧 03-Technical](../03-technical/) - Architecture technique
 - [📅 07-Project-Management](../07-project-management/) - Gestion projet
 - [🎨 02-Product](../02-product/) - Vision produit
 

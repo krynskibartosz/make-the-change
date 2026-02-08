@@ -1,71 +1,79 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { type FC } from 'react';
+import { type FC, useState } from 'react'
 
-import { UserBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-breadcrumbs';
-import { UserCompactHeader } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-compact-header';
-import { UserDetailLayout } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-detail-layout';
-import { UserDetailsEditor } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-details-editor';
+import { UserBreadcrumbs } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-breadcrumbs'
+import { UserCompactHeader } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-compact-header'
+import { UserDetailLayout } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-detail-layout'
+import { UserDetailsEditor } from '@/app/[locale]/admin/(dashboard)/users/[id]/components/user-details-editor'
 
 type UserData = {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'user';
-  is_active: boolean;
-};
+  id: string
+  email: string
+  first_name?: string | null
+  last_name?: string | null
+  user_level: 'explorateur' | 'protecteur' | 'ambassadeur'
+  kyc_status: 'pending' | 'light' | 'complete' | 'rejected'
+  address_country_code?: string | null
+}
 
 type UserDetailControllerProps = {
-  userData: UserData;
-  onSave: (patch: Partial<UserData>) => Promise<void>;
-};
+  userData: UserData
+  onSave: (patch: Partial<UserData>) => Promise<void>
+}
 
-export const UserDetailController: FC<UserDetailControllerProps> = ({
-  userData,
-  onSave,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [pendingData, setPendingData] = useState<Partial<UserData>>({});
+export const UserDetailController: FC<UserDetailControllerProps> = ({ userData, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [pendingData, setPendingData] = useState<Partial<UserData>>({})
 
   const handleEditToggle = (editing: boolean) => {
     if (!editing) {
-      setPendingData({});
+      setPendingData({})
     }
-    setIsEditing(editing);
-  };
-
-  const handleDataChange = (data: Partial<UserData>) => {
-    setPendingData(prev => ({ ...prev, ...data }));
-  };
+    setIsEditing(editing)
+  }
 
   const handleSave = async () => {
-    setIsSaving(true);
+    setIsSaving(true)
     try {
-      const patch: Partial<UserData> = {};
-      for (const key of [
-        'name', 'email', 'role', 'is_active'
-      ] as const) {
-        if (key in pendingData && (userData as any)[key] !== (pendingData as any)[key]) {
-          (patch as any)[key] = (pendingData as any)[key];
+      const patch: Partial<UserData> = {}
+      const keys = [
+        'email',
+        'first_name',
+        'last_name',
+        'user_level',
+        'kyc_status',
+        'address_country_code',
+      ] as const
+
+      for (const key of keys) {
+        const newValue = pendingData[key]
+        if (newValue !== undefined && userData[key] !== newValue) {
+          ;(patch as any)[key] = newValue
         }
       }
 
       if (Object.keys(patch).length > 0) {
-        await onSave(patch);
+        await onSave(patch)
       }
 
-      setIsEditing(false);
-      setPendingData({});
+      setIsEditing(false)
+      setPendingData({})
     } catch (error) {
-      console.error('Error saving user:', error);
+      console.error('Error saving user:', error)
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
-  const displayData = { ...userData, ...pendingData };
+  const displayData = {
+    ...userData,
+    ...pendingData,
+    first_name: userData.first_name || undefined,
+    last_name: userData.last_name || undefined,
+    address_country_code: userData.address_country_code || undefined,
+  }
 
   return (
     <UserDetailLayout
@@ -76,17 +84,27 @@ export const UserDetailController: FC<UserDetailControllerProps> = ({
           isSaving={isSaving}
           userData={displayData}
           onSave={async (data) => {
-            const patch: Partial<UserData> = {};
-            for (const key of ['name', 'email', 'role', 'is_active'] as const) {
-              if ((data as any)[key] !== undefined && (userData as any)[key] !== (data as any)[key]) {
-                (patch as any)[key] = (data as any)[key];
+            const patch: Partial<UserData> = {}
+            const keys = [
+              'email',
+              'first_name',
+              'last_name',
+              'user_level',
+              'kyc_status',
+              'address_country_code',
+            ] as const
+
+            for (const key of keys) {
+              const newValue = data[key]
+              if (newValue !== undefined && userData[key] !== newValue) {
+                ;(patch as any)[key] = newValue
               }
             }
 
             if (Object.keys(patch).length > 0) {
-              await onSave(patch);
+              await onSave(patch)
             }
-            setIsEditing(false);
+            setIsEditing(false)
           }}
         />
       }
@@ -103,5 +121,5 @@ export const UserDetailController: FC<UserDetailControllerProps> = ({
         </>
       }
     />
-  );
-};
+  )
+}

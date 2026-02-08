@@ -1,4 +1,17 @@
-const withNextIntl = require('next-intl/plugin')('./src/i18n/request.ts');
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import createNextIntlPlugin from 'next-intl/plugin'
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+let supabaseHostname = 'ebmjxinsyyjwshnynwwu.supabase.co'
+try {
+  if (supabaseUrl) {
+    supabaseHostname = new URL(supabaseUrl).hostname
+  }
+} catch {}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,17 +20,19 @@ const nextConfig = {
   typedRoutes: true, // Type-safe routing
 
   // Exclude test files from pages
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js'].filter(ext => !['test', 'spec', 'setup'].includes(ext.split('.')[0])),
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'].filter(
+    (ext) => !['test', 'spec', 'setup'].includes(ext.split('.')[0]),
+  ),
 
   // Existing configuration
-  transpilePackages: ["@make-the-change/shared"],
-  
+  transpilePackages: ['@make-the-change/core'],
+
   // Environment variables
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
-  
+
   // Image optimizations (15.3+ improvements)
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -26,7 +41,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ebmjxinsyyjwshnynwwu.supabase.co',
+        hostname: supabaseHostname,
         pathname: '/storage/v1/object/public/**',
       },
       {
@@ -34,37 +49,34 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
-      // Ajouter d'autres domaines Supabase si nécessaire
       {
         protocol: 'https',
-        hostname: '*.supabase.co',
-        pathname: '/storage/v1/object/public/**',
+        hostname: 'www.ilanga-nature.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+        pathname: '/**',
       },
     ],
-    // Fallback pour compatibilité
-    domains: [
-      'images.unsplash.com', 
-      'ebmjxinsyyjwshnynwwu.supabase.co',
-      // Ajout de domaines génériques
-      'supabase.co'
-    ],
   },
-  
+
   // Webpack configuration
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': require('path').resolve(__dirname, 'src'),
-    };
+      '@': path.resolve(__dirname, 'src'),
+    }
 
     // Exclude test files from build
     config.module.rules.push({
       test: /\.test\.|\.spec\.|\.setup\./,
       loader: 'ignore-loader',
-    });
+    })
 
-    return config;
+    return config
   },
 }
 
-module.exports = withNextIntl(nextConfig)
+export default withNextIntl(nextConfig)

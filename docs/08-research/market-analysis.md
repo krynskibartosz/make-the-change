@@ -1,5 +1,7 @@
 # Étude de Marché : Investissement Impact France
 
+> Historique 2024/2025 — à revalider en 2026.
+
 ## 🎯 Objectifs
 
 Analyser le marché français de l'investissement responsable et de la consommation durable pour positionner Make the CHANGE et dimensionner l'opportunité business.

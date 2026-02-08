@@ -1,5 +1,7 @@
 # 🔬 Recherche & Analyse
 
+> Historique 2024/2025 — à revalider en 2026.
+
 Cette section contient toutes les recherches utilisateurs, analyses concurrentielles et études de marché pour Make the CHANGE.
 
 ## 📋 Contenu de cette Section
@@ -94,7 +96,6 @@ Recherches et analyses pour informer les décisions produit et stratégiques.
 
 - [💼 01-Strategy](../01-strategy/user-personas.md) - Personas détaillés
 - [🎨 02-Product](../02-product/user-journeys.md) - Parcours utilisateurs
-- [📱 04-Specifications](../04-specifications/) - Spécifications à valider
 - [📅 07-Project-Management](../07-project-management/) - Planning recherche
 
 ## 📚 Resources & Tools

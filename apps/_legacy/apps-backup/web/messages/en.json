@@ -1,0 +1,939 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "retry": "Retry",
+    "preview": "Preview",
+    "select_placeholder": "Select..."
+  },
+  "errors": {
+    "notFound": {
+      "title": "{entity} not found",
+      "description": "This {entity} does not exist or has been deleted"
+    },
+    "accessDenied": {
+      "title": "Access denied",
+      "description": "You don't have permission to access this {entity}"
+    },
+    "serverError": {
+      "title": "Server error",
+      "description": "A technical problem occurred, please try again"
+    },
+    "loadingError": {
+      "title": "Loading error",
+      "description": "Unable to load this {entity}"
+    },
+    "entities": {
+      "product": {
+        "singular": "product",
+        "article": "this"
+      },
+      "user": {
+        "singular": "user",
+        "article": "this"
+      },
+      "project": {
+        "singular": "project",
+        "article": "this"
+      },
+      "partner": {
+        "singular": "partner",
+        "article": "this"
+      },
+      "subscription": {
+        "singular": "subscription",
+        "article": "this"
+      },
+      "order": {
+        "singular": "order",
+        "article": "this"
+      },
+      "species": {
+        "singular": "species",
+        "article": "this"
+      }
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "admin": "Administration",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "projects": "Projects",
+    "subscriptions": "Subscriptions",
+    "users": "Users",
+    "settings": "Settings",
+    "logout": "Logout",
+    "back": "Back to project list"
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "login_button": "Log in",
+    "forgot_password": "Forgot password?",
+    "invalid_credentials": "Invalid credentials"
+  },
+  "admin": {
+    "common": {
+      "retry": "Retry",
+      "preview": "Preview",
+      "select_placeholder": "Select...",
+      "breadcrumbs": {
+        "dashboard": "Dashboard",
+        "products": "Products",
+        "projects": "Projects"
+      }
+    },
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "welcome": "Welcome to your administration area",
+      "statistics": "Statistics"
+    },
+    "products": {
+      "title": "Product Management",
+      "new_product": "New Product",
+      "product_list": "Product List",
+      "name": "Product Name",
+      "price": "Price",
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "changing": "Changing...",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "toggle_tooltip": "Click to {action} the product",
+        "modal": {
+          "title": "{action} product",
+          "description": {
+            "activate": "The product will be visible in the store and available for sale.",
+            "deactivate": "The product will be removed from the store and no longer available for sale."
+          },
+          "cancel": "Cancel"
+        }
+      },
+      "actions": "Actions",
+      "search_placeholder": "Search products...",
+      "filters": {
+        "all_partners": "All partners",
+        "all_categories": "All categories",
+        "sort_by": "Sort by",
+        "tags_placeholder": "Tags...",
+        "active_only": "Active only",
+        "clear_filters": "Clear filters",
+        "clear_all_filters": "Clear all filters",
+        "reset": "Reset"
+      },
+      "sort": {
+        "newest": "Most recent",
+        "oldest": "Oldest",
+        "name_asc": "Name (A-Z)",
+        "name_desc": "Name (Z-A)",
+        "price_asc": "Price ascending",
+        "price_desc": "Price descending",
+        "featured": "Featured first"
+      },
+      "stock": {
+        "increase": "Increase stock",
+        "decrease": "Decrease stock",
+        "label": "stock",
+        "points_label": "pts"
+      },
+      "visibility": {
+        "hide": "Hide product",
+        "show": "Show product",
+        "visible": "Visible",
+        "hidden": "Hidden"
+      },
+      "filters_tooltip": {
+        "category": "Filter by category: {name}",
+        "subcategory": "Filter by subcategory: {name}",
+        "producer": "Filter by producer: {name}",
+        "tag": "Filter by tag: {tag}",
+        "featured": "Filter by featured products"
+      },
+      "other_tags": "{count} others",
+      "filter_modal": {
+        "partner": "Partner",
+        "category": "Category",
+        "tags": "Tags",
+        "active_only_description": "Show only active items"
+      },
+      "empty_state": {
+        "title": "No products",
+        "description": "No results for these filters."
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load products",
+        "retry": "Retry"
+      },
+      "partner": {
+        "none": "No partner",
+        "loading": "Loading...",
+        "not_found": "Partner not found",
+        "view_tooltip": "View partner {name}"
+      },
+      "featured": {
+        "short": "Featured",
+        "full": "Featured"
+      },
+      "details": {
+        "show": "Show details",
+        "hide": "Hide details"
+      },
+      "edit": {
+        "sections": {
+          "general": "General Information",
+          "pricing": "Pricing & Configuration",
+          "images": "Images",
+          "advanced_settings": "Advanced Settings",
+          "status_visibility": "Status & Visibility",
+          "commercial": "Commercial Information",
+          "logistics": "Logistics & Shipping",
+          "categorization": "Categorization & Tags",
+          "lifecycle": "Lifecycle",
+          "seo": "SEO & Referencing",
+          "product_details": "Product Details"
+        },
+        "fields": {
+          "name": "Product Name",
+          "slug": "Slug",
+          "short_description": "Short Description",
+          "description": "Description",
+          "price_points": "Price in Points",
+          "stock_quantity": "Stock Quantity",
+          "min_tier": "Minimum Tier",
+          "fulfillment_method": "Fulfillment Method",
+          "is_active": "Product Active",
+          "featured": "Featured Product",
+          "is_hero_product": "Hero Product",
+          "price_eur_equivalent": "EUR Equivalent Price",
+          "weight_grams": "Weight (grams)",
+          "origin_country": "Origin Country",
+          "partner_source": "Partner Source",
+          "category_id": "Main Category",
+          "secondary_category_id": "Secondary Category",
+          "tags": "Tags",
+          "tags_description": "Separated by commas",
+          "launch_date": "Launch Date",
+          "discontinue_date": "Discontinue Date",
+          "seo_title": "SEO Title",
+          "seo_title_description": "Maximum 60 characters",
+          "seo_description": "SEO Description",
+          "seo_description_description": "Maximum 160 characters",
+          "allergens": "Allergens",
+          "allergens_description": "Separated by commas",
+          "certifications": "Certifications",
+          "certifications_description": "Organic, fair trade, etc. Separated by commas"
+        },
+        "placeholders": {
+          "name": "Product name",
+          "slug": "product-slug",
+          "short_description": "Short product description...",
+          "description": "Detailed product description...",
+          "min_tier": "Select a tier",
+          "fulfillment_method": "Select a method"
+        },
+        "blur_system": {
+          "title": "ðŸš€ Scalable DB Blur System",
+          "images": "Images",
+          "with_blur": "With blur",
+          "missing": "Missing",
+          "coverage": "Coverage",
+          "loading": "Loading blur hashes from DB..."
+        },
+        "images": {
+          "add": "Add images"
+        },
+        "fulfillment": {
+          "dropship": "Dropshipping",
+          "stock": "In Stock",
+          "ondemand": "On Demand"
+        },
+        "tiers": {
+          "all": "All levels",
+          "explorateur": "Explorer",
+          "protecteur": "Protector",
+          "ambassadeur": "Ambassador"
+        },
+        "status": {
+          "active": "Active",
+          "active_description": "The product is visible to users",
+          "featured": "Featured",
+          "featured_description": "Priority display in lists",
+          "hero": "Hero Product",
+          "hero_description": "Special highlight on homepage"
+        },
+        "toast": {
+          "error": {
+            "title": "Save Error",
+            "description": "An unknown error occurred while saving."
+          },
+          "success": {
+            "title": "Product Updated",
+            "description": "Changes have been saved successfully."
+          }
+        },
+        "errors": {
+          "missing_id": {
+            "title": "Missing Product ID",
+            "description": "The product identifier is invalid or missing in the URL."
+          },
+          "not_found": {
+            "title": "Product Not Found",
+            "description": "The requested product does not exist or has been deleted."
+          },
+          "loading": {
+            "title": "Loading Error",
+            "description": "An error occurred while loading the product."
+          }
+        },
+        "loading": {
+          "title": "Loading Product",
+          "description": "Please wait while loading data..."
+        },
+        "subtitle": "Product",
+        "no_slug": "No slug"
+      }
+    },
+    "projects": {
+      "title": "Project Management",
+      "new_project": "New Project",
+      "project_list": "Project List",
+      "map_view": "Map View",
+      "name": "Project Name",
+      "location": "Location",
+      "status": "Status",
+      "investment_goal": "Investment Goal",
+      "search_placeholder": "Search projects...",
+      "labels": {
+        "status": "Status"
+      },
+      "sort": {
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "name_asc": "Name (A-Z)",
+        "name_desc": "Name (Z-A)",
+        "budget_desc": "Budget high to low",
+        "budget_asc": "Budget low to high",
+        "featured": "Featured first"
+      },
+      "filters": {
+        "all_statuses": "All statuses",
+        "all_types": "All types",
+        "all_partners": "All partners",
+        "all_countries": "All countries",
+        "sort_by": "Sort by",
+        "impact_types": "Impact types",
+        "active_only": "Active only",
+        "clear_filters": "Clear filters",
+        "clear_all_filters": "Clear all filters",
+        "reset": "Reset filters"
+      },
+      "filter_modal": {
+        "partner": "Partner",
+        "type": "Project type",
+        "country": "Country",
+        "impact_types": "Impact types",
+        "active_only_description": "Show only active projects"
+      },
+      "type": {
+        "beehive": "Beehive",
+        "olive_tree": "Olive tree",
+        "vineyard": "Vineyard",
+        "forest": "Forest",
+        "solar": "Solar"
+      },
+      "statuses": {
+        "active": "Active",
+        "funded": "Funded",
+        "closed": "Closed",
+        "suspended": "Suspended",
+        "inactive": "Inactive"
+      },
+      "statusActions": {
+        "activate": "Activate",
+        "suspend": "Suspend"
+      },
+      "funding": {
+        "increase": "Increase target",
+        "decrease": "Decrease target"
+      },
+      "featured": {
+        "add": "Mark as featured",
+        "remove": "Remove featured tag"
+      },
+      "filters_tooltip": {
+        "type": "Filter by type: {type}",
+        "partner": "Filter by partner: {name}",
+        "country": "Filter by country: {country}",
+        "impact_type": "Filter by impact type: {type}",
+        "featured": "Filter by featured projects"
+      },
+      "other_impact_types": "and {count} more",
+      "empty_state": {
+        "title": "No projects",
+        "description": "No results match these filters."
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load projects.",
+        "retry": "Try again"
+      },
+      "edit": {
+        "title": "Project",
+        "subtitle": "Project management",
+        "untitled": "Project",
+        "no_slug": "missing slug",
+        "breadcrumbs": {
+          "projects": "Projects",
+          "loading": "Loading..."
+        },
+        "sections": {
+          "essential": "Essential information",
+          "funding": "Funding & configuration",
+          "description": "Project description",
+          "images": "Project gallery"
+        },
+        "fields": {
+          "name": "Project name",
+          "slug": "Slug",
+          "type": "Project type",
+          "status": "Status",
+          "featured": "Featured project",
+          "target_budget": "Target budget (€)",
+          "producer_id": "Associated producer",
+          "description": "Short description",
+          "long_description": "Detailed description"
+        },
+        "placeholders": {
+          "name": "e.g. Urban beehives program",
+          "slug": "ex-urban-beehives",
+          "type": "Select a type…",
+          "status": "Select a status…",
+          "producer_id": "Producer identifier…",
+          "description": "Project summary…",
+          "long_description": "Describe the project, its goals and impact…"
+        },
+        "helpers": {
+          "featured": "Display in featured projects",
+          "location_hint": "Advanced geographic information (GPS coordinates, map) will be managed in a future version."
+        },
+        "messages": {
+          "long_description_required": "A detailed description is required for projects with a budget above €5000."
+        },
+        "cover": {
+          "updated": "Cover updated",
+          "error": "Failed to update cover",
+          "change": "Change cover",
+          "remove": "Remove",
+          "placeholder": "Add a cover image",
+          "placeholder_disabled": "Save the project before adding a cover",
+          "tip": "Use the actions above to customise the project cover.",
+          "noImage": "Add visuals to showcase the project.",
+          "description": "The cover appears at the top of the project page, the avatar is used as its main thumbnail."
+        },
+        "avatar": {
+          "updated": "Project avatar updated",
+          "error": "Unable to update avatar",
+          "remove": "Remove avatar"
+        },
+        "images": {
+          "upload_error": "Upload error",
+          "uploaded": "Image added",
+          "delete_error": "Failed to delete image",
+          "deleted": "Image deleted",
+          "order_updated": "Image order updated",
+          "requires_save": "Create the project before adding images."
+        },
+        "actions": {
+          "saved": "Save successful",
+          "saved_description": "All changes have been saved.",
+          "save_error": "Save error",
+          "save_error_description": "Unable to save changes."
+        }
+      },
+      "create": {
+        "title": "Create a project",
+        "subtitle": "Fill in the details below to publish a new project.",
+        "status": {
+          "dirty": "Changes in progress…",
+          "pristine": "No changes pending"
+        },
+        "actions": {
+          "saving": "Creating…",
+          "save": "Create project"
+        }
+      }
+    },
+    "partners": {
+      "title": "Partner Management",
+      "description": "Producer and partner management",
+      "new_partner": "New Partner",
+      "search_placeholder": "Search by name, email or country...",
+      "filters": {
+        "all_statuses": "All statuses",
+        "all_countries": "All countries",
+        "status": "Status",
+        "status_active": "Active",
+        "status_inactive": "Inactive",
+        "status_suspended": "Suspended",
+        "country": "Country",
+        "sort_by": "Sort by",
+        "active_only": "Active only",
+        "clear_filters": "Clear filters",
+        "clear_all_filters": "Clear all filters",
+        "reset": "Reset"
+      },
+      "sort": {
+        "newest": "Most recent",
+        "oldest": "Oldest",
+        "name_asc": "Name (A-Z)",
+        "name_desc": "Name (Z-A)"
+      },
+      "visibility": {
+        "hide": "Deactivate partner",
+        "show": "Activate partner",
+        "visible": "Active",
+        "hidden": "Inactive"
+      },
+      "filters_tooltip": {
+        "status": "Filter by status: {status}",
+        "country": "Filter by country: {country}"
+      },
+      "filter_modal": {
+        "status": "Status",
+        "country": "Country",
+        "active_only_description": "Show only active partners"
+      },
+      "empty_state": {
+        "title": "No partners found",
+        "description": "No partners match your filters. Try modifying your criteria or create a new partner."
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load partners",
+        "retry": "Retry"
+      },
+      "edit": {
+        "title": "Edit Partner",
+        "loading": "Loading...",
+        "breadcrumbs": {
+        "partners": "Partners",
+        "loading": "Loading..."
+      },
+        "sections": {
+          "essential": {
+            "title": "Essential Information",
+            "description": "Partner name, slug and status"
+          },
+          "contact": {
+            "title": "Contact Details",
+            "description": "Email and website of the partner"
+          },
+          "address": {
+            "title": "Address",
+            "description": "Complete location of the partner"
+          },
+          "metadata": {
+            "title": "Additional Information",
+            "description": "Description and other details"
+          }
+        },
+        "fields": {
+          "name": {
+            "label": "Partner Name",
+            "placeholder": "e.g. Habeebee",
+            "helper": "Full name of the partner organization"
+          },
+          "slug": {
+            "label": "Slug",
+            "placeholder": "eg-habeebee",
+            "helper": "Unique URL identifier (auto-generated)"
+          },
+          "status": {
+            "label": "Status",
+            "placeholder": "Select a status",
+            "helper": "Partner activation state",
+            "options": {
+              "active": "Active",
+              "inactive": "Inactive",
+              "suspended": "Suspended"
+            }
+          },
+          "contact_email": {
+            "label": "Contact Email",
+            "placeholder": "contact@partner.com",
+            "helper": "Main email address to contact the partner"
+          },
+          "website": {
+            "label": "Website",
+            "placeholder": "https://www.partner.com",
+            "helper": "Full URL of the partner's website"
+          },
+          "address_street": {
+            "label": "Street",
+            "placeholder": "123 Example Street",
+            "helper": "Street number and name"
+          },
+          "address_city": {
+            "label": "City",
+            "placeholder": "Paris",
+            "helper": "Headquarters city"
+          },
+          "address_postal_code": {
+            "label": "Postal Code",
+            "placeholder": "75001",
+            "helper": "Postal code"
+          },
+          "address_country": {
+            "label": "Country",
+            "placeholder": "France",
+            "helper": "Headquarters country"
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "Describe the partner, their mission and activities...",
+            "helper": "Detailed presentation of the partner and their expertise"
+          }
+        },
+        "status": {
+          "saving": "Saving...",
+          "saved": "Saved",
+          "error": "Error while saving"
+        },
+        "actions": {
+          "save": "Save",
+          "saving": "Saving..."
+        },
+        "cover": {
+          "updated": "Cover updated",
+          "error": "Failed to update cover",
+          "change": "Change cover",
+          "remove": "Remove",
+          "placeholder": "Add a cover image",
+          "placeholder_disabled": "Save the partner before adding a cover",
+          "tip": "Use the actions above to customize the partner's profile.",
+          "noImage": "Add visuals to showcase the partner.",
+          "description": "The cover appears at the top of the partner page, the profile picture is used as a thumbnail."
+        },
+        "avatar": {
+          "updated": "Partner photo updated",
+          "error": "Unable to update photo",
+          "remove": "Remove photo"
+        },
+        "storage": {
+          "bucket_missing": {
+            "title": "Storage bucket missing",
+            "description": "Create the Supabase bucket \"%{bucket}\" or update the NEXT_PUBLIC_SUPABASE_STORAGE_PRODUCER_BUCKET variable."
+          }
+        }
+      }
+    },
+    "orders": {
+      "title": "Order Management",
+      "description": "Order tracking"
+    },
+    "pointsTransactions": {
+      "title": "Points Transactions",
+      "description": "Complete history of points movements",
+      "search_placeholder": "Search by user or description...",
+      "columns": {
+        "date": "Date",
+        "user": "User",
+        "type": "Type",
+        "amount": "Amount",
+        "balance": "Balance After",
+        "description": "Description",
+        "reference": "Reference",
+        "actions": "Actions"
+      },
+      "types": {
+        "earned_subscription": "Earned - Subscription",
+        "earned_purchase": "Earned - Purchase",
+        "earned_referral": "Earned - Referral",
+        "spent_order": "Spent - Order",
+        "spent_investment": "Spent - Investment",
+        "adjustment_admin": "Admin Adjustment",
+        "bonus_welcome": "Welcome Bonus",
+        "bonus_milestone": "Milestone Bonus"
+      },
+      "filters": {
+        "all_types": "All types",
+        "date_range": "Date range",
+        "date_from": "Start date",
+        "date_to": "End date",
+        "sort_by": "Sort by",
+        "clear_filters": "Clear filters"
+      },
+      "sort": {
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "amount_desc": "Amount descending",
+        "amount_asc": "Amount ascending"
+      },
+      "actions": {
+        "open_menu": "Open menu",
+        "view_details": "View details"
+      },
+      "references": {
+        "order": "Order",
+        "investment": "Investment",
+        "subscription": "Subscription"
+      },
+      "details": {
+        "title": "Transaction Details",
+        "description": "Complete information about this points transaction",
+        "transaction_id": "Transaction ID",
+        "reference": "Reference",
+        "view_reference": "View reference",
+        "expires_at": "Expiration date",
+        "metadata": "Metadata",
+        "processed_at": "Processed at",
+        "created_at": "Created at"
+      },
+      "empty_state": {
+        "title": "No transactions",
+        "description": "No transactions match your criteria"
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load transactions",
+        "retry": "Retry"
+      }
+    },
+    "sidebar": {
+      "dashboard": {
+        "label": "Dashboard",
+        "description": "Overview and statistics"
+      },
+      "management": {
+        "label": "Management"
+      },
+      "groups": {
+        "activity": "Activity",
+        "catalog": "Catalog",
+        "community": "Community",
+        "configuration": "Configuration"
+      },
+      "links": {
+        "products": "Products",
+        "categories": "Categories",
+        "projects": "Projects",
+        "orders": "Orders",
+        "investments": "Investments",
+        "biodex": "Biodex",
+        "partners": "Partners",
+        "users": "Users",
+        "subscriptions": "Subscriptions",
+        "pointsTransactions": "Points Transactions",
+        "stocks": "Stock Management",
+        "translations": "Translations"
+      },
+      "stocks": {
+        "description": "Manage product inventory"
+      },
+      "translations": {
+        "description": "Manage application translations"
+      },
+      "logout": "Logout",
+      "close_menu": "Close navigation menu",
+      "main_navigation": "Main navigation",
+      "mobile_navigation_menu": "Mobile navigation menu"
+    },
+    "categories": {
+      "title": "Category Management",
+      "description": "Manage product categories",
+      "new_category": "New Category",
+      "search_placeholder": "Search for a category...",
+      "edit": {
+        "loading": "Loading...",
+        "breadcrumbs": {
+          "categories": "Categories",
+          "loading": "Loading..."
+        }
+      },
+      "sections": {
+        "essential_info": "Essential information",
+        "configuration": "Configuration",
+        "image": "Image",
+        "seo": "SEO",
+        "metadata": "Metadata"
+      },
+      "fields": {
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "parent_category": "Parent category",
+        "no_parent": "None (root category)",
+        "sort_order": "Sort order",
+        "is_active": "Category active",
+        "image_url": "Image URL",
+        "seo_title": "SEO Title",
+        "seo_description": "SEO Description",
+        "created_at": "Created at",
+        "updated_at": "Updated at"
+      },
+      "filters": {
+        "all_parents": "All categories",
+        "root_only": "Root categories only",
+        "active_only": "Active only",
+        "sort_by": "Sort by",
+        "clear_filters": "Reset filters",
+        "clear_all_filters": "Clear all filters",
+        "reset": "Reset"
+      },
+      "filter_modal": {
+        "parent": "Parent category",
+        "active_only_description": "Show only active categories"
+      },
+      "sort": {
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "name_asc": "Name A-Z",
+        "name_desc": "Name Z-A",
+        "order_asc": "Ascending order",
+        "order_desc": "Descending order"
+      },
+      "empty_state": {
+        "title": "No categories found",
+        "description": "Start by creating your first category"
+      },
+      "visibility": {
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "show": "Show",
+        "hide": "Hide"
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load categories",
+        "retry": "Retry"
+      }
+    },
+    "investments": {
+      "title": "Investment Management",
+      "description": "Track investments and distribution returns"
+    },
+    "subscriptions": {
+      "title": "Subscription Management",
+      "new_subscription": "New Subscription",
+      "subscription_list": "Subscription List",
+      "user": "User",
+      "plan": "Plan",
+      "status": "Status",
+      "start_date": "Start Date",
+      "end_date": "End Date"
+    },
+    "users": {
+      "edit": {
+        "autoSave": {
+          "saving": "Saving...",
+          "saved": "Saved",
+          "pending": "Change pending...",
+          "error": "Save error",
+          "pristine": "All changes saved"
+        }
+      }
+    },
+    "biodex": {
+      "title": "Biodex",
+      "description": "Species and biodiversity management",
+      "new_species": "New Species",
+      "search_placeholder": "Search for a species...",
+      "sort": {
+        "newest": "Most Recent",
+        "oldest": "Oldest",
+        "name_asc": "Name (A-Z)",
+        "name_desc": "Name (Z-A)"
+      },
+      "filters": {
+        "sort_by": "Sort by",
+        "clear_filters": "Clear filters",
+        "clear_all_filters": "Clear all filters",
+        "reset": "Reset"
+      },
+      "error": {
+        "loading_title": "Loading error",
+        "loading_description": "Unable to load species",
+        "retry": "Retry"
+      },
+      "empty_state": {
+        "title": "No species",
+        "description": "No species match these filters."
+      },
+      "species": {
+        "no_description": "No description available",
+        "content_levels": "content levels",
+        "actions": {
+          "edit": "Edit species",
+          "delete": "Delete species"
+        }
+      },
+      "sections": {
+        "essential_info": "Essential Information",
+        "content_levels": "Content Levels",
+        "characteristics": "Characteristics",
+        "status": "Conservation Status",
+        "additional_info": "Additional Information",
+        "media": "Media"
+      },
+      "fields": {
+        "name": "Species Name",
+        "scientific_name": "Scientific Name",
+        "description": "Description",
+        "cover_image": "Cover Image",
+        "icon": "Icon",
+        "level_title": "Level Title",
+        "level_description": "Level Description",
+        "conservation_status": "Conservation Status",
+        "protection_measures": "Protection Measures",
+        "population_trend": "Population Trend",
+        "image_url": "Image URL",
+        "thumbnail_url": "Thumbnail URL",
+        "image_credit": "Image Credit",
+        "diet": "Diet",
+        "reproduction": "Reproduction",
+        "interesting_facts": "Interesting Facts",
+        "size": "Size",
+        "weight": "Weight",
+        "habitat": "Habitat",
+        "behavior": "Behavior"
+      },
+      "placeholders": {
+        "name": "E.g.: Honey Bee",
+        "scientific_name": "E.g.: Apis mellifera",
+        "description": "Detailed description of the species...",
+        "level_title": "Title for this content level",
+        "level_description": "Information adapted to this level..."
+      },
+      "actions": {
+        "save": "Save",
+        "saving": "Saving..."
+      }
+    }
+  },
+  "ui": {
+    "view_modes": {
+      "grid": "Grid",
+      "list": "List",
+      "map": "Map"
+    }
+  },
+  "metadata": {
+    "title": "Make the CHANGE - Ecological Platform",
+    "description": "Invest in ecological projects and discover sustainable products"
+  }
+}

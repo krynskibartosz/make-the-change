@@ -1,0 +1,4 @@
+.next
+node_modules
+dist
+src/app/[locale]/admin/(dashboard)/_old-products

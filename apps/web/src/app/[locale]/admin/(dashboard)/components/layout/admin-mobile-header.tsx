@@ -1,17 +1,24 @@
 'use client'
 
-import { Menu } from 'lucide-react'
-import { type FC } from 'react'
-
+import { Button } from '@make-the-change/core/ui'
+import { Briefcase, Menu } from 'lucide-react'
+import type { FC } from 'react'
 import { useAdminSidebar } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-sidebar-context'
-import { CompactThemeToggle } from '@/app/[locale]/admin/(dashboard)/components/theme/compact-theme-toggle'
-import { Button } from '@/components/ui/button'
+import { useAdminUiPreferences } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-ui-preferences'
 
+/**
+ * Mobile top bar for the admin dashboard.
+ *
+ * Responsibilities:
+ * - Provide access to the primary navigation (sidebar toggle).
+ * - Provide quick UI toggles (theme and work mode).
+ */
 export const AdminMobileHeader: FC = () => {
   const { toggleMobileSidebar } = useAdminSidebar()
+  const { workMode, toggleWorkMode } = useAdminUiPreferences()
 
   return (
-    <header className="sticky top-0 z-[45] flex md:hidden items-center justify-between h-14 px-4 bg-background/95 backdrop-blur-md border-b border-border/50">
+    <header className="sticky top-0 z-[45] flex md:hidden items-center justify-between h-14 px-4 bg-background/95 backdrop-blur-md border-b border-[hsl(var(--border)/0.5)]">
       <div className="flex items-center gap-3">
         <Button
           aria-label="Ouvrir le menu de navigation"
@@ -31,7 +38,18 @@ export const AdminMobileHeader: FC = () => {
         </div>
       </div>
 
-      <CompactThemeToggle />
+      <div className="flex items-center gap-2">
+        <Button
+          aria-label={workMode ? 'Désactiver le mode travail' : 'Activer le mode travail'}
+          aria-pressed={workMode ? 'true' : 'false'}
+          className="p-2 rounded-2xl min-h-[44px] min-w-[44px] touch-manipulation"
+          size="sm"
+          variant={workMode ? 'secondary' : 'ghost'}
+          onClick={toggleWorkMode}
+        >
+          <Briefcase className="h-5 w-5" />
+        </Button>
+      </div>
     </header>
   )
 }

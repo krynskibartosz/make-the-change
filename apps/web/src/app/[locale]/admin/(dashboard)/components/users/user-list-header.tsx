@@ -1,19 +1,12 @@
 'use client'
 
-import { Badge } from '@/app/[locale]/admin/(dashboard)/components/badge'
-import { getInitials } from '@/app/[locale]/admin/(dashboard)/components/ui/format-utils'
-
+import { getInitials } from '@make-the-change/core/shared/utils'
+import { Badge } from '@make-the-change/core/ui'
 import type { FC } from 'react'
-
-type User = {
-  id: string
-  name: string
-  email: string
-  is_active: boolean
-}
+import type { UserSummary } from '@/lib/types/user'
 
 type UserListHeaderProps = {
-  user: User
+  user: UserSummary
 }
 
 export const UserListHeader: FC<UserListHeaderProps> = ({ user }) => {
@@ -25,13 +18,9 @@ export const UserListHeader: FC<UserListHeaderProps> = ({ user }) => {
       </div>
 
       <div className="flex items-center gap-2 flex-1 min-w-0">
-        <h3 className="text-base font-medium text-foreground truncate">
-          {user.name}
-        </h3>
+        <h3 className="text-base font-medium text-foreground truncate">{user.name}</h3>
 
-        <Badge color={user.is_active ? 'green' : 'red'}>
-          {user.is_active ? 'actif' : 'inactif'}
-        </Badge>
+        <Badge color="gray">{user.user_level}</Badge>
       </div>
     </div>
   )

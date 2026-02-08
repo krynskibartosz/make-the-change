@@ -1,5 +1,8 @@
-
 import { z } from 'zod'
+import {
+  productVariantsSchema,
+  seasonalAvailabilitySchema,
+} from '@make-the-change/core'
 
 // BlurHash schema - DEPRECATED: Maintenant géré automatiquement par OptimizedImage
 // const blurHashSchema = z.object({
@@ -8,7 +11,7 @@ import { z } from 'zod'
 //   type: z.enum(['product'], { errorMap: () => ({ message: 'Type BlurHash invalide pour un produit' }) })
 // })
 
-export const productFormSchema = z.object({
+export const productBaseSchema = z.object({
   name: z
     .string()
     .min(1, 'Le nom du produit est requis')
@@ -21,24 +24,24 @@ export const productFormSchema = z.object({
     .max(80, 'Le slug ne peut pas dépasser 80 caractères')
     .regex(
       /^[\da-z-]+$/,
-      'Le slug ne peut contenir que des lettres minuscules, chiffres et tirets'
+      'Le slug ne peut contenir que des lettres minuscules, chiffres et tirets',
     ),
 
   short_description: z
     .string()
     .max(200, 'La description courte ne peut pas dépasser 200 caractères')
     .optional()
-    .transform(val => val?.trim()),
+    .transform((val) => val?.trim()),
 
   description: z
     .string()
     .max(2000, 'La description ne peut pas dépasser 2000 caractères')
     .optional()
-    .transform(val => val?.trim()),
+    .transform((val) => val?.trim()),
 
   price_points: z
     .number()
-    .min(1, 'Le prix doit être d\'au moins 1 point')
+    .min(0, 'Le prix peut être de 0 point (gratuit)')
     .max(50_000, 'Le prix ne peut pas dépasser 50 000 points')
     .int('Le prix doit être un nombre entier'),
 
@@ -52,91 +55,108 @@ export const productFormSchema = z.object({
   category_id: z
     .string()
     .min(1, 'La catégorie est requise')
-    .max(50, 'L\'identifiant de catégorie ne peut pas dépasser 50 caractères'),
+    .max(50, "L'identifiant de catégorie ne peut pas dépasser 50 caractères"),
 
   producer_id: z
     .string()
     .min(1, 'Le producteur est requis')
-    .max(50, 'L\'identifiant du producteur ne peut pas dépasser 50 caractères'),
+    .max(50, "L'identifiant du producteur ne peut pas dépasser 50 caractères"),
 
-  min_tier: z.enum(['explorateur', 'protecteur', 'ambassadeur'], {
-    errorMap: () => ({ message: 'Niveau minimum invalide' })
-  }).default('explorateur'),
+  min_tier: z
+    .enum(['explorateur', 'protecteur', 'ambassadeur'], {
+      errorMap: () => ({ message: 'Niveau minimum invalide' }),
+    })
+    .default('explorateur'),
 
-  fulfillment_method: z.enum(['stock', 'dropship', 'ondemand'], {
-    errorMap: () => ({ message: 'Méthode de livraison invalide' })
-  }).default('stock'),
+  fulfillment_method: z
+    .enum(['ship', 'pickup', 'digital', 'experience', 'stock', 'dropship', 'ondemand'], {
+      errorMap: () => ({ message: 'Méthode de livraison invalide' }),
+    })
+    .default('ship'),
 
   is_active: z.boolean().default(true),
   featured: z.boolean().default(false),
   is_hero_product: z.boolean().default(false),
-  
+
   // Pricing
-  price_eur_equivalent: z
-    .number()
-    .min(0, 'Le prix EUR ne peut pas être négatif')
-    .optional(),
-  
-  
+  price_eur_equivalent: z.string().optional(),
+
   // Stock management
   stock_management: z.boolean().default(true),
-  
+
   // Physical properties
-  weight_grams: z
-    .number()
-    .min(0, 'Le poids ne peut pas être négatif')
-    .optional(),
-  
-  dimensions: z
-    .record(z.number())
-    .optional(),
-  
+  weight_grams: z.number().min(0, 'Le poids ne peut pas être négatif').optional(),
+
+  dimensions: z.record(z.number()).optional(),
+
   // Categorization & Metadata
   secondary_category_id: z.string().optional(),
   tags: z.array(z.string()).default([]),
-  variants: z.record(z.unknown()).optional(),
+  variants: productVariantsSchema.optional(),
   metadata: z.record(z.unknown()).optional(),
-  
+
   // Product details
   nutrition_facts: z.record(z.unknown()).optional(),
   allergens: z.array(z.string()).default([]),
   certifications: z.array(z.string()).default([]),
-  seasonal_availability: z.record(z.unknown()).optional(),
-  
+  seasonal_availability: seasonalAvailabilitySchema.optional(),
+
   // Logistics
   origin_country: z.string().optional(),
-  partner_source: z.string().optional(),
-  
+  partner_source: z.enum(['direct', 'cooperative', 'partner', 'marketplace']).default('direct'),
+
+  // Translations
+  name_i18n: z.record(z.string()).optional(),
+  description_i18n: z.record(z.string()).optional(),
+  short_description_i18n: z.record(z.string()).optional(),
+  seo_title_i18n: z.record(z.string()).optional(),
+  seo_description_i18n: z.record(z.string()).optional(),
+
   // Lifecycle
   launch_date: z.string().optional(),
   discontinue_date: z.string().optional(),
-  
+
   // SEO
   seo_title: z.string().max(60, 'Le titre SEO ne peut pas dépasser 60 caractères').optional(),
-  seo_description: z.string().max(160, 'La description SEO ne peut pas dépasser 160 caractères').optional(),
+  seo_description: z
+    .string()
+    .max(160, 'La description SEO ne peut pas dépasser 160 caractères')
+    .optional(),
+  seo_keywords: z.string().optional(),
 
   images: z
-    .array(z.string().url('URL d\'image invalide'))
+    .array(z.string().url("URL d'image invalide"))
     .max(10, 'Maximum 10 images par produit')
     .default([]),
-
-}).refine((data) => {
-  if (data.price_points > 1000 && !data.description) {
-    return false
-  }
-  return true
-}, {
-  message: 'Une description détaillée est requise pour les produits premium (>1000 points)',
-  path: ['description']
-}).refine((data) => {
-  if ((data.fulfillment_method === 'dropship' || data.fulfillment_method === 'ondemand') && data.stock_quantity > 0) {
-    return false
-  }
-  return true
-}, {
-  message: 'Les produits en dropshipping/sur commande ne peuvent pas avoir de stock',
-  path: ['stock_quantity']
 })
+
+export const productFormSchema = productBaseSchema
+  .refine(
+    (data) => {
+      if (data.price_points > 1000 && !data.description) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'Une description détaillée est requise pour les produits premium (>1000 points)',
+      path: ['description'],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.fulfillment_method === 'digital' && data.stock_quantity > 0) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'Les produits digitaux ne peuvent pas avoir de stock',
+      path: ['stock_quantity'],
+    },
+  )
+
+export const productPatchSchema = productBaseSchema.partial()
 
 export const productAsyncSchema = z.object({
   slug: z.string().refine(async (slug) => {
@@ -147,7 +167,7 @@ export const productAsyncSchema = z.object({
   category_id: z.string().refine(async (categoryId) => {
     if (!categoryId) return true
     return true
-  }, 'Cette catégorie n\'existe pas'),
+  }, "Cette catégorie n'existe pas"),
 })
 
 export type ProductFormData = z.infer<typeof productFormSchema>
@@ -159,13 +179,15 @@ export const defaultProductValues: ProductFormData = {
   description: '',
   price_points: 100,
   stock_quantity: 0,
+  stock_management: true,
   category_id: '',
   producer_id: '',
   min_tier: 'explorateur',
-  fulfillment_method: 'stock',
+  fulfillment_method: 'ship',
   is_active: true,
   featured: false,
   is_hero_product: false,
+  partner_source: 'direct',
   images: [],
   tags: [],
   allergens: [],
@@ -179,22 +201,24 @@ export const tierLabels = {
 } as const
 
 export const fulfillmentMethodLabels = {
-  stock: 'Stock interne',
-  dropship: 'Dropshipping',
+  ship: 'Livraison',
+  pickup: 'Retrait',
+  digital: 'Numérique',
+  experience: 'Expérience',
 } as const
 
 export const tierPricingRules = {
   explorateur: {
     maxPrice: 500,
-    description: 'Produits d\'entrée de gamme'
+    description: "Produits d'entrée de gamme",
   },
   protecteur: {
     maxPrice: 2000,
-    description: 'Produits premium accessibles'
+    description: 'Produits premium accessibles',
   },
   ambassadeur: {
     maxPrice: 10_000,
-    description: 'Tous les produits'
+    description: 'Tous les produits',
   },
 } as const
 

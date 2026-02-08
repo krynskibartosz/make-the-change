@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import { Link } from '@/i18n/navigation';
-
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
+// import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 export function LocalizedLink(props: ComponentProps<typeof Link>) {
-  return <Link {...props} />;
+  return <Link {...props} />
 }

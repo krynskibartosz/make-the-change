@@ -1,0 +1,39 @@
+{
+  "cli": {
+    "version": ">= 13.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EAS_USE_CACHE": "1"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EAS_USE_CACHE": "1"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      },
+      "env": {
+        "EAS_RESTORE_CACHE": "0",
+        "EAS_SAVE_CACHE": "1"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "Gregorysteisel@gmail.com"
+      }
+    }
+  }
+}

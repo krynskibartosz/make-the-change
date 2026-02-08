@@ -1,8 +1,7 @@
 'use client'
 
-import { type FC } from 'react'
-
-import { MinimalPagination } from '@/app/[locale]/admin/(dashboard)/components/ui/minimal-pagination'
+import { Pagination } from '@make-the-change/core/ui'
+import type { FC } from 'react'
 
 type PaginationInfo = {
   currentPage: number
@@ -14,13 +13,15 @@ type PaginationInfo = {
 type AdminPaginationProps = {
   pagination: PaginationInfo
   className?: string
+  onPageChange?: (page: number) => void
 }
 
 export const AdminPagination: FC<AdminPaginationProps> = ({
   pagination,
-  className = ''
+  className = '',
+  onPageChange,
 }) => (
   <div className={`mt-6 ${className}`}>
-    <MinimalPagination pagination={pagination} />
+    <Pagination pagination={pagination} onPageChange={onPageChange} />
   </div>
 )

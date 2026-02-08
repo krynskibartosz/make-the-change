@@ -1,18 +1,11 @@
 'use client'
+import { getInitials } from '@make-the-change/core/shared/utils'
+import { Badge } from '@make-the-change/core/ui'
 import { Star } from 'lucide-react'
-import { type FC } from 'react'
+import type { FC } from 'react'
+import type { Project } from '@/lib/types/project'
 
-import { Badge } from '@/app/[locale]/admin/(dashboard)/components/badge'
-import { getInitials } from '@/app/[locale]/admin/(dashboard)/components/ui/format-utils'
-
-type Project =  {
-  id: string
-  name: string
-  status: string
-  featured?: boolean
-}
-
-type ProjectListHeaderProps =  {
+type ProjectListHeaderProps = {
   project: Project
 }
 
@@ -24,13 +17,9 @@ export const ProjectListHeader: FC<ProjectListHeaderProps> = ({ project }) => (
     </div>
 
     <div className="flex items-center gap-2 flex-1 min-w-0">
-      <h3 className="text-base font-medium text-foreground truncate">
-        {project.name}
-      </h3>
+      <h3 className="text-base font-medium text-foreground truncate">{project.name}</h3>
 
-      <Badge color={project.status === 'active' ? 'green' : 'gray'}>
-        {project.status}
-      </Badge>
+      <Badge color={project.status === 'active' ? 'green' : 'gray'}>{project.status}</Badge>
 
       {project.featured && <Star className="w-4 h-4 text-yellow-500" />}
     </div>
