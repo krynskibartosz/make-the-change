@@ -153,7 +153,7 @@ export const CategoryForm: FC<CategoryFormProps> = ({ initialData, parents = [] 
               <FormSelect
                 name="parent_id"
                 label="Catégorie parente"
-                options={[{ value: null, label: 'Aucune (Racine)' }, ...parents.map((p) => ({ value: p.id, label: p.name }))]}
+                options={[{ value: '', label: 'Aucune (Racine)' }, ...parents.map((p) => ({ value: p.id, label: p.name }))]}
                 placeholder="Sélectionner une catégorie parente"
               />
 

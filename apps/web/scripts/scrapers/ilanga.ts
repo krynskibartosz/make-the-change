@@ -37,7 +37,7 @@ export async function scrapeIlanga(): Promise<{ producer: any, products: Scraped
         const hasImg = el.querySelector('img');
         // Simple check: shouldn't contain too many other divs with prices
         // If innerText length is small enough, it's likely a card
-        return hasPrice && hasImg && el.innerText.length < 500 && el.innerText.length > 10;
+        return hasPrice && hasImg && (el as HTMLElement).innerText.length < 500 && (el as HTMLElement).innerText.length > 10;
       });
 
       // Dedup: if A contains B, keep B (the smaller one)
@@ -48,7 +48,7 @@ export async function scrapeIlanga(): Promise<{ producer: any, products: Scraped
       uniqueCards.forEach(card => {
         const imgEl = card.querySelector('img');
         const img = imgEl ? imgEl.src : null;
-        const text = card.innerText;
+        const text = (card as HTMLElement).innerText;
         // Naive parser
         const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         

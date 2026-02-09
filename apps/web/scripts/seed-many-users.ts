@@ -55,7 +55,8 @@ const avatarBaseUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=";
 // --- Helpers ---
 
 function getRandomElement<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  if (arr.length === 0) throw new Error('Empty array');
+  return arr[Math.floor(Math.random() * arr.length)] as T;
 }
 
 function getRandomInt(min: number, max: number): number {

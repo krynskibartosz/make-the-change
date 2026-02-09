@@ -272,8 +272,8 @@ const ProjectDetailsEditor: React.FC<ProjectDetailsEditorProps> = ({
           onAvatarUpload={(files) => imageCrop.selectImage('avatar', files)}
           onHeroRemove={() => onFieldChange('hero_image', null)}
           onAvatarRemove={() => onFieldChange('avatar_image', null)}
-          isHeroLoading={imageCrop.isLoading && imageCrop.activeImage?.type === 'hero'}
-          isAvatarLoading={imageCrop.isLoading && imageCrop.activeImage?.type === 'avatar'}
+          isHeroLoading={imageCrop.isLoading.hero || (imageCrop.isSaving && imageCrop.cropTask?.type === 'hero')}
+          isAvatarLoading={imageCrop.isLoading.avatar || (imageCrop.isSaving && imageCrop.cropTask?.type === 'avatar')}
           disabled={imageCrop.isSaving}
           enableCondensed={false}
         />

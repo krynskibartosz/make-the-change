@@ -7,7 +7,8 @@ function getRandomDate(start: Date, end: Date) {
 }
 
 function getRandomElement<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  if (arr.length === 0) throw new Error('Empty array');
+  return arr[Math.floor(Math.random() * arr.length)] as T;
 }
 
 // --- Project Updates ---

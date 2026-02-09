@@ -1,5 +1,5 @@
 import { db } from '@make-the-change/core/db'
-import { blog_categories, blog_authors, projects } from '@make-the-change/core/schema'
+import { blogAuthors, blogCategories, projects } from '@make-the-change/core/schema'
 import { asc } from 'drizzle-orm'
 import { getTranslations } from 'next-intl/server'
 import { requireAdminPage } from '@/lib/auth-guards'
@@ -24,8 +24,8 @@ export default async function NewBlogPostPage(props: { params: Promise<{ locale:
 
   // Fetch relations
   const [authors, categories, projectList] = await Promise.all([
-    db.query.blog_authors.findMany({ orderBy: asc(blog_authors.name) }),
-    db.query.blog_categories.findMany({ orderBy: asc(blog_categories.name) }),
+    db.query.blogAuthors.findMany({ orderBy: asc(blogAuthors.name) }),
+    db.query.blogCategories.findMany({ orderBy: asc(blogCategories.name) }),
     db.query.projects.findMany({ columns: { id: true, name_default: true } }) // Assuming name_default exists on projects
   ])
 
@@ -33,7 +33,7 @@ export default async function NewBlogPostPage(props: { params: Promise<{ locale:
     <AdminPageContainer>
       <AdminPageHeader title={t('new_post')} backHref="/admin/blog" />
       <BlogPostForm 
-        authors={authors.map(a => ({ id: a.id, name: a.name }))}
+        authors={authors.map(a => ({ id: a.id, name: a.name || 'Sans nom' }))}
         categories={categories.map(c => ({ id: c.id, name: c.name }))}
         projects={projectList.map(p => ({ id: p.id, name: p.name_default || 'Sans nom' }))}
       />

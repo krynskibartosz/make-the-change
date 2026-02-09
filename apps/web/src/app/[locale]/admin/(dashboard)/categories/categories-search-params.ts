@@ -1,5 +1,4 @@
 import {
-  createBoolean,
   createLoader,
   parseAsBoolean,
   parseAsInteger,
@@ -12,7 +11,7 @@ export const categorySearchParams = {
   sort: parseAsString.withDefault('created_at_desc'),
   view: parseAsString.withDefault('list'),
   parent: parseAsString.withDefault('all'),
-  is_active: createBoolean(false), // Optional boolean filter
+  is_active: parseAsBoolean.withDefault(false), // Optional boolean filter
 }
 
 export const loadCategorySearchParams = createLoader(categorySearchParams)

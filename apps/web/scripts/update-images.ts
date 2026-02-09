@@ -29,7 +29,8 @@ function getImageForProject(project: any): { hero: string, gallery: string[] } {
     }
   }
   
-  const images = imageMappings[keyword];
+  const images = imageMappings[keyword] || imageMappings['default'];
+  if (!images) throw new Error('No images found');
   const heroId = images[0];
   const galleryIds = images.slice(1).concat(images.slice(0, 1)); // Rotate for variety
   

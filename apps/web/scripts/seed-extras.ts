@@ -118,6 +118,7 @@ async function seedInvestments() {
     // 40% chance to invest
     if (Math.random() > 0.4) {
       const project = projects[Math.floor(Math.random() * projects.length)];
+      if (!project) continue;
       const amount = Math.floor(Math.random() * 5 + 1) * 100; // 100, 200, ... 500
       
       const { error } = await supabaseAdmin

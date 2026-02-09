@@ -77,6 +77,7 @@ export const InvestmentsClient: FC<InvestmentsClientProps> = ({ initialData }) =
 
         <DataList
             isLoading={false}
+            renderSkeleton={() => <div className="h-16 bg-muted animate-pulse rounded-lg" />}
             items={investments}
             variant="list"
             getItemKey={(item) => item.id}
@@ -86,17 +87,28 @@ export const InvestmentsClient: FC<InvestmentsClientProps> = ({ initialData }) =
                 description: t('admin.investments.empty_state.description'),
             }}
             renderItem={(inv) => (
-                <div className="block">
-                    <AdminListItem
-                        title={`${inv.amount_points} Points`}
-                        subtitle={inv.project_name || 'Projet inconnu'}
-                        status={inv.status === 'completed' ? 'active' : 'inactive'}
-                        meta={[
-                            inv.user_email || 'Utilisateur inconnu',
-                            new Date(inv.created_at).toLocaleString()
-                        ]}
-                    />
-                </div>
+                <AdminListItem
+                    key={inv.id}
+                    href="#"
+                    header={
+                        <div className="flex flex-col gap-1">
+                            <span className="font-semibold text-foreground">{inv.amount_points} Points</span>
+                            <span className="text-sm text-muted-foreground">{inv.project_name || 'Projet inconnu'}</span>
+                        </div>
+                    }
+                    metadata={
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span>{inv.user_email || 'Utilisateur inconnu'}</span>
+                            <span>•</span>
+                            <span>{new Date(inv.created_at).toLocaleString()}</span>
+                            {inv.status === 'completed' && (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
+                                    Complété
+                                </span>
+                            )}
+                        </div>
+                    }
+                />
             )}
         />
 

@@ -1,5 +1,17 @@
 import { z } from 'zod';
-import { contentLevelsSchema } from '@make-the-change/core/schema';
+
+// Schema for content levels (gamification) defined locally to avoid import issues
+const contentLevelSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  unlocked_at_level: z.number().optional(),
+});
+
+const contentLevelsSchema = z.object({
+  beginner: contentLevelSchema.optional(),
+  intermediate: contentLevelSchema.optional(),
+  advanced: contentLevelSchema.optional(),
+}).optional();
 
 /**
  * Schema for Species Form (Admin)

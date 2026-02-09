@@ -7,7 +7,7 @@ import {
   blogPostFormSchema,
 } from '@/lib/validators/blog'
 import { db } from '@make-the-change/core/db'
-import { blog_posts } from '@make-the-change/core/schema'
+import { blogPosts } from '@make-the-change/core/schema'
 import { eq } from 'drizzle-orm'
 
 export type BlogPostActionResult = {
@@ -30,7 +30,7 @@ export async function createBlogPostAction(input: BlogPostFormData): Promise<Blo
 
   try {
     const [data] = await db
-      .insert(blog_posts)
+      .insert(blogPosts)
       .values({
         ...parsed.data,
         published_at: parsed.data.status === 'published' ? new Date() : null,
@@ -69,9 +69,9 @@ export async function updateBlogPostAction(
     }
 
     const [data] = await db
-      .update(blog_posts)
+      .update(blogPosts)
       .set(updateData)
-      .where(eq(blog_posts.id, id))
+      .where(eq(blogPosts.id, id))
       .returning()
 
     if (!data) {
@@ -93,7 +93,7 @@ export async function deleteBlogPostAction(id: string): Promise<BlogPostActionRe
   await requireAdmin()
   
   try {
-    await db.delete(blog_posts).where(eq(blog_posts.id, id))
+    await db.delete(blogPosts).where(eq(blogPosts.id, id))
     revalidatePath('/admin/blog')
     return { success: true }
   } catch (error) {

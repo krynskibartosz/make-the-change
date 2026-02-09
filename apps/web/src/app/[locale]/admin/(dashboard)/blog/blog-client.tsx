@@ -88,6 +88,7 @@ export const BlogClient: FC<BlogClientProps> = ({ initialData }) => {
 
         <DataList
             isLoading={false}
+            renderSkeleton={() => <div className="h-16 bg-muted animate-pulse rounded-lg" />}
             items={posts}
             variant="list"
             getItemKey={(item) => item.id}
@@ -104,17 +105,28 @@ export const BlogClient: FC<BlogClientProps> = ({ initialData }) => {
                 )
             }}
             renderItem={(post) => (
-                <LocalizedLink key={post.id} href={`/admin/blog/${post.id}`} className="block">
-                    <AdminListItem
-                        title={post.title}
-                        subtitle={post.slug}
-                        status={post.status === 'published' ? 'active' : 'inactive'}
-                        meta={[
-                            post.author_name ? `Par ${post.author_name}` : 'Auteur inconnu',
-                            new Date(post.created_at).toLocaleDateString()
-                        ]}
-                    />
-                </LocalizedLink>
+                <AdminListItem
+                    key={post.id}
+                    href={`/admin/blog/${post.id}`}
+                    header={
+                        <div className="flex flex-col gap-1">
+                            <span className="font-semibold text-foreground">{post.title}</span>
+                            <span className="text-sm text-muted-foreground">{post.slug}</span>
+                        </div>
+                    }
+                    metadata={
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span>{post.author_name ? `Par ${post.author_name}` : 'Auteur inconnu'}</span>
+                            <span>•</span>
+                            <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                            {post.status === 'published' && (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
+                                    Publié
+                                </span>
+                            )}
+                        </div>
+                    }
+                />
             )}
         />
 

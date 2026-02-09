@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { tipTapContentSchema } from '@make-the-change/core/schema';
 
 export const blogPostFormSchema = z.object({
   title: z.string().min(1, 'Le titre est requis').max(200),

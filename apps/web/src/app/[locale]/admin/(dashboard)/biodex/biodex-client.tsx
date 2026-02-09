@@ -88,6 +88,7 @@ export const BiodexClient: FC<BiodexClientProps> = ({ initialData }) => {
 
         <DataList
             isLoading={false}
+            renderSkeleton={() => <div className="h-16 bg-muted animate-pulse rounded-lg" />}
             items={speciesList}
             variant="list"
             getItemKey={(item) => item.id}
@@ -104,16 +105,28 @@ export const BiodexClient: FC<BiodexClientProps> = ({ initialData }) => {
                 )
             }}
             renderItem={(species) => (
-                <LocalizedLink key={species.id} href={`/admin/biodex/${species.id}`} className="block">
-                    <AdminListItem
-                        title={species.name_default || 'Sans nom'}
-                        subtitle={species.scientific_name}
-                        status={species.is_featured ? 'active' : 'inactive'} // Using status for featured visual
-                        meta={[
-                            species.conservation_status || 'Statut inconnu'
-                        ]}
-                    />
-                </LocalizedLink>
+                <AdminListItem
+                    key={species.id}
+                    href={`/admin/biodex/${species.id}`}
+                    header={
+                        <div className="flex flex-col gap-1">
+                            <span className="font-semibold text-foreground">{species.name_default || 'Sans nom'}</span>
+                            {species.scientific_name && <span className="text-sm text-muted-foreground italic">{species.scientific_name}</span>}
+                        </div>
+                    }
+                    metadata={
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground">
+                                {species.conservation_status || 'Statut inconnu'}
+                            </span>
+                            {species.is_featured && (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
+                                    Mis en avant
+                                </span>
+                            )}
+                        </div>
+                    }
+                />
             )}
         />
 

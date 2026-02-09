@@ -255,6 +255,15 @@ export const species = investment.table('species', {
   iucn_status: conservationStatusEnum('iucn_status'),
   habitat: text('habitat'),
   image_url: text('image_url'),
+  
+  // I18n & Gamification
+  name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
+  description_i18n: jsonb('description_i18n').default({ en: '' }),
+  habitat_i18n: jsonb('habitat_i18n').default({ en: '' }),
+  content_levels: jsonb('content_levels').default({}),
+  is_featured: boolean('is_featured').default(false),
+  is_endemic: boolean('is_endemic').default(false),
+
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at'),
   created_by: uuid('created_by'),
@@ -376,6 +385,15 @@ export const blogAuthors = content.table('blog_authors', {
   updated_by: uuid('updated_by'),
 })
 
+export const blogCategories = content.table('blog_categories', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull(),
+  description: text('description'),
+  created_at: timestamp('created_at').defaultNow(),
+  updated_at: timestamp('updated_at').defaultNow(),
+})
+
 export const blogPosts = content.table('blog_posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   slug: text('slug').notNull(),
@@ -384,6 +402,8 @@ export const blogPosts = content.table('blog_posts', {
   content: text('content'),
   cover_image: text('cover_image'),
   author_id: uuid('author_id'),
+  category_id: uuid('category_id'),
+  project_id: uuid('project_id'),
   published_at: timestamp('published_at'),
   status: text('status').default('draft'),
   tags: text('tags').array(),

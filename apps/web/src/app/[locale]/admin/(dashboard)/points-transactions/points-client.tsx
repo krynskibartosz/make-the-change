@@ -77,6 +77,7 @@ export const PointsClient: FC<PointsClientProps> = ({ initialData }) => {
 
         <DataList
             isLoading={false}
+            renderSkeleton={() => <div className="h-16 bg-muted animate-pulse rounded-lg" />}
             items={transactions}
             variant="list"
             getItemKey={(item) => item.id}
@@ -86,17 +87,25 @@ export const PointsClient: FC<PointsClientProps> = ({ initialData }) => {
                 description: t('admin.points.empty_state.description'),
             }}
             renderItem={(tx) => (
-                <div className="block">
-                    <AdminListItem
-                        title={`${tx.amount > 0 ? '+' : ''}${tx.amount} Points`}
-                        subtitle={tx.description || 'Pas de description'}
-                        status={tx.amount > 0 ? 'active' : 'inactive'} // Green for positive, Gray for negative/neutral
-                        meta={[
-                            tx.user_email || 'Utilisateur inconnu',
-                            new Date(tx.created_at).toLocaleString()
-                        ]}
-                    />
-                </div>
+                <AdminListItem
+                    key={tx.id}
+                    href="#"
+                    header={
+                        <div className="flex flex-col gap-1">
+                            <span className={`font-semibold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                {tx.amount > 0 ? '+' : ''}{tx.amount} Points
+                            </span>
+                            <span className="text-sm text-muted-foreground">{tx.description || 'Pas de description'}</span>
+                        </div>
+                    }
+                    metadata={
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span>{tx.user_email || 'Utilisateur inconnu'}</span>
+                            <span>•</span>
+                            <span>{new Date(tx.created_at).toLocaleString()}</span>
+                        </div>
+                    }
+                />
             )}
         />
 

@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft, Package, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { createProject } from '@/app/[locale]/admin/(dashboard)/projects/actions'
+import { createProjectAction } from '@/app/[locale]/admin/(dashboard)/projects/actions'
 import { LocalizedLink as Link } from '@/components/localized-link'
 import { ImageUpload } from '@/components/ui/image-upload'
 import { useToast } from '@/hooks/use-toast'
@@ -34,18 +34,12 @@ const NewProjectPage = () => {
 
   const handleSubmit = form.handleSubmit(async (value) => {
     try {
-      const formData = new FormData()
-      for (const [key, val] of Object.entries(value)) {
-        if (val != null) {
-          formData.append(key, val.toString())
-        }
+      const payload = {
+        ...value,
+        images: projectImages,
       }
 
-      if (projectImages.length > 0) {
-        formData.append('images', JSON.stringify(projectImages))
-      }
-
-      const result = await createProject({ success: false, message: '' }, formData)
+      const result = await createProjectAction(payload)
 
       if (result.success) {
         queryClient.invalidateQueries({ queryKey: ['admin', 'projects', 'list'] })
@@ -59,7 +53,7 @@ const NewProjectPage = () => {
         toast({
           variant: 'destructive',
           title: 'Erreur',
-          description: result.message || 'Impossible de créer le projet',
+          description: result.error || 'Impossible de créer le projet',
         })
       }
     } catch (error) {

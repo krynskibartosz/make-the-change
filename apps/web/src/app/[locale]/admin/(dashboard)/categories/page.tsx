@@ -102,11 +102,11 @@ export default async function CategoriesPage(props: {
     id: c.id,
     name_default: c.name_default,
     description_default: c.description_default,
-    slug: c.slug,
+    slug: c.slug || '',
     parent_id: c.parent_id,
-    is_active: c.is_active,
-    created_at: c.created_at.toISOString(),
-    updated_at: c.updated_at.toISOString(),
+    is_active: c.is_active ?? true,
+    created_at: c.created_at?.toISOString() || new Date().toISOString(),
+    updated_at: c.updated_at?.toISOString() || new Date().toISOString(),
     _count: {
         products: 0, // Placeholder
         children: 0 // Placeholder

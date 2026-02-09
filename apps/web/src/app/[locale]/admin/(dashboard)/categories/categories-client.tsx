@@ -94,6 +94,7 @@ export const CategoriesClient: FC<CategoriesClientProps> = ({ initialData }) => 
 
         <DataList
             isLoading={false}
+            renderSkeleton={() => <div className="h-16 bg-muted animate-pulse rounded-lg" />}
             items={categories}
             variant="list"
             getItemKey={(item) => item.id}
@@ -110,18 +111,28 @@ export const CategoriesClient: FC<CategoriesClientProps> = ({ initialData }) => 
                 )
             }}
             renderItem={(category) => (
-                <LocalizedLink key={category.id} href={`/admin/categories/${category.id}`} className="block">
-                    <AdminListItem
-                        title={category.name_default || 'Sans nom'}
-                        subtitle={category.slug}
-                        status={category.is_active ? 'active' : 'inactive'}
-                        image={null} // No image for category list for now, or maybe icon
-                        meta={[
-                            category.parent_id ? 'Sous-catégorie' : 'Catégorie racine',
-                            `${category._count?.products ?? 0} produits`
-                        ]}
-                    />
-                </LocalizedLink>
+                <AdminListItem
+                    key={category.id}
+                    href={`/admin/categories/${category.id}`}
+                    header={
+                        <div className="flex flex-col gap-1">
+                            <span className="font-semibold text-foreground">{category.name_default || 'Sans nom'}</span>
+                            <span className="text-sm text-muted-foreground">{category.slug}</span>
+                        </div>
+                    }
+                    metadata={
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span>{category.parent_id ? 'Sous-catégorie' : 'Catégorie racine'}</span>
+                            <span>•</span>
+                            <span>{category._count?.products ?? 0} produits</span>
+                            {!category.is_active && (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-destructive/10 text-destructive">
+                                    Inactif
+                                </span>
+                            )}
+                        </div>
+                    }
+                />
             )}
         />
 

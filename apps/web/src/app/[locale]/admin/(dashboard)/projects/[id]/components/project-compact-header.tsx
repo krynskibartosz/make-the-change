@@ -76,7 +76,11 @@ export const ProjectCompactHeader: FC<ProjectCompactHeaderProps> = ({
     },
   }
 
-  const statusInfo = statusConfig[status] || statusConfig.draft
+  const statusInfo = statusConfig[status] || statusConfig.draft || {
+    label: status,
+    dotClass: 'bg-muted',
+    pillClass: 'bg-muted/30 border-border/60'
+  }
 
   const handleStatusToggle = () => {
     if (!onStatusChange) return

@@ -46,7 +46,7 @@ function adaptProductDataForSchema(data: ProductFormData | Partial<ProductFormDa
   if ('stock_quantity' in data) patch.stock_quantity = data.stock_quantity
   if ('stock_management' in data) patch.stock_management = data.stock_management
   if ('min_tier' in data) patch.min_tier = data.min_tier
-  if ('fulfillment_method' in data) patch.fulfillment_method = data.fulfillment_method
+  if ('fulfillment_method' in data) patch.fulfillment_method = data.fulfillment_method as any
   
   if ('images' in data) patch.images = data.images
   if ('tags' in data) patch.tags = data.tags

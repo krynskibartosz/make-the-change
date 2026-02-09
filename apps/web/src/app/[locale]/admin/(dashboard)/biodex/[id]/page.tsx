@@ -40,9 +40,9 @@ export default async function EditSpeciesPage(props: { params: Promise<{ locale:
     description_i18n: speciesData.description_i18n as { fr?: string; en?: string; nl?: string } | undefined,
     habitat_i18n: speciesData.habitat_i18n as { fr?: string; en?: string; nl?: string } | undefined,
     content_levels: speciesData.content_levels as any,
-    conservation_status: speciesData.conservation_status as any,
-    is_featured: speciesData.is_featured,
-    is_endemic: speciesData.is_endemic,
+    conservation_status: speciesData.iucn_status as any,
+    is_featured: speciesData.is_featured ?? false,
+    is_endemic: speciesData.is_endemic ?? false,
   }
 
   return (

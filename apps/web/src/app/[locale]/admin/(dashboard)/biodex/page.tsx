@@ -51,7 +51,7 @@ export default async function BiodexPage(props: {
     const searchLower = `%${q.toLowerCase()}%`
     conditions.push(
       or(
-        ilike(species.name_default, searchLower),
+        ilike(species.name, searchLower),
         ilike(species.scientific_name, searchLower),
       ),
     )
@@ -67,10 +67,10 @@ export default async function BiodexPage(props: {
         orderBy = desc(species.created_at)
         break
       case 'name_asc':
-        orderBy = asc(species.name_default)
+        orderBy = asc(species.name)
         break
       case 'name_desc':
-        orderBy = desc(species.name_default)
+        orderBy = desc(species.name)
         break
     }
   }
@@ -89,11 +89,11 @@ export default async function BiodexPage(props: {
 
   const items = speciesResult.map(s => ({
     id: s.id,
-    name_default: s.name_default,
+    name_default: s.name,
     scientific_name: s.scientific_name,
-    conservation_status: s.conservation_status,
-    is_featured: s.is_featured,
-    created_at: s.created_at.toISOString(),
+    conservation_status: s.iucn_status,
+    is_featured: s.is_featured ?? false,
+    created_at: s.created_at?.toISOString() ?? new Date().toISOString(),
   }))
 
   const total = countResult[0]?.count ?? 0

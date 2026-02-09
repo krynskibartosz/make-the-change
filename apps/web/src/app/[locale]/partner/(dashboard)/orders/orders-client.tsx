@@ -60,6 +60,9 @@ export const OrdersClient: FC<OrdersClientProps> = ({ initialOrders }) => {
 
       <AdminPageLayout.Content>
         <DataList
+          isLoading={false}
+          renderSkeleton={() => <div className="h-24 bg-muted animate-pulse rounded-lg" />}
+          getItemKey={(item) => item.id}
           items={orders}
           variant="list"
           emptyState={{

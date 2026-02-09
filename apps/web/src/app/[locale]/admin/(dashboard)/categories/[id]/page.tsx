@@ -44,12 +44,14 @@ export default async function EditCategoryPage(props: { params: Promise<{ locale
   // Adapt data for form
   const formData = {
     ...category,
-    name_i18n: category.name_i18n as { fr: string; en: string; nl?: string },
-    description_i18n: category.description_i18n as { fr?: string; en?: string; nl?: string } | undefined,
-    metadata: category.metadata as Record<string, any>,
+    slug: category.slug || '',
+    name_i18n: category.name_i18n as any,
+    description_i18n: category.description_i18n as any,
+    metadata: category.metadata as any,
     seo_title: category.seo_title || undefined,
     seo_description: category.seo_description || undefined,
-    parent_id: category.parent_id || null, // Ensure null if undefined
+    parent_id: category.parent_id || null,
+    is_active: category.is_active ?? true,
     sort_order: category.sort_order || 0,
   }
 

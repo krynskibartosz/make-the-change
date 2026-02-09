@@ -6,6 +6,7 @@ import { FormInput, FormSelect, FormTextArea } from '@make-the-change/core/ui/rh
 import { FileText, Save, Trash2 } from 'lucide-react'
 import type { FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from '@/i18n/navigation'
 import {
@@ -222,21 +223,21 @@ export const BlogPostForm: FC<BlogPostFormProps> = ({ initialData, authors = [],
                 <FormSelect
                     name="author_id"
                     label="Auteur"
-                    options={[{ value: null, label: 'Aucun' }, ...authors.map(a => ({ value: a.id, label: a.name }))]}
+                    options={[{ value: '', label: 'Aucun' }, ...authors.map(a => ({ value: a.id, label: a.name }))]}
                     placeholder="Sélectionner un auteur"
                 />
 
                 <FormSelect
                     name="category_id"
                     label="Catégorie"
-                    options={[{ value: null, label: 'Aucune' }, ...categories.map(c => ({ value: c.id, label: c.name }))]}
+                    options={[{ value: '', label: 'Aucune' }, ...categories.map(c => ({ value: c.id, label: c.name }))]}
                     placeholder="Sélectionner une catégorie"
                 />
 
                 <FormSelect
                     name="project_id"
                     label="Projet lié"
-                    options={[{ value: null, label: 'Aucun' }, ...projects.map(p => ({ value: p.id, label: p.name }))]}
+                    options={[{ value: '', label: 'Aucun' }, ...projects.map(p => ({ value: p.id, label: p.name }))]}
                     placeholder="Sélectionner un projet"
                 />
                 </CardContent>

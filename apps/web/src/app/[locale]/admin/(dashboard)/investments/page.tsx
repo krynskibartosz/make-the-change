@@ -1,6 +1,6 @@
 import { db } from '@make-the-change/core/db'
 import { investments } from '@make-the-change/core/schema'
-import { and, asc, count, desc, eq, ilike, or } from 'drizzle-orm'
+import { and, asc, count, desc, type SQL } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { requireAdminPage } from '@/lib/auth-guards'
@@ -45,7 +45,7 @@ export default async function InvestmentsPage(props: {
 
   const offset = (page - 1) * PAGE_SIZE
 
-  const conditions = []
+  const conditions: SQL[] = []
 
   // If search is needed, we usually need to join or have a denormalized field. 
   // For now, no search condition on base table except maybe ID.
@@ -84,7 +84,7 @@ export default async function InvestmentsPage(props: {
     project_name: (inv as any).project?.name_default || 'Projet inconnu',
     amount_points: Number(inv.amount_points),
     status: inv.status || 'unknown',
-    created_at: inv.created_at.toISOString(),
+    created_at: inv.created_at?.toISOString() || new Date().toISOString(),
   }))
 
   const total = countResult[0]?.count ?? 0

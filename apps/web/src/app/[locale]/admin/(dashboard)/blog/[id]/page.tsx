@@ -1,5 +1,5 @@
 import { db } from '@make-the-change/core/db'
-import { blog_posts, blog_categories, blog_authors, projects } from '@make-the-change/core/schema'
+import { blogPosts, blogCategories, blogAuthors, projects } from '@make-the-change/core/schema'
 import { asc, eq } from 'drizzle-orm'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -23,8 +23,8 @@ export default async function EditBlogPostPage(props: { params: Promise<{ locale
   await requireAdminPage(locale)
   const t = await getTranslations('admin.blog')
 
-  const post = await db.query.blog_posts.findFirst({
-    where: eq(blog_posts.id, id),
+  const post = await db.query.blogPosts.findFirst({
+    where: eq(blogPosts.id, id),
   })
 
   if (!post) {
@@ -33,17 +33,19 @@ export default async function EditBlogPostPage(props: { params: Promise<{ locale
 
   // Fetch relations
   const [authors, categories, projectList] = await Promise.all([
-    db.query.blog_authors.findMany({ orderBy: asc(blog_authors.name) }),
-    db.query.blog_categories.findMany({ orderBy: asc(blog_categories.name) }),
+    db.query.blogAuthors.findMany({ orderBy: asc(blogAuthors.name) }),
+    db.query.blogCategories.findMany({ orderBy: asc(blogCategories.name) }),
     db.query.projects.findMany({ columns: { id: true, name_default: true } })
   ])
 
   const formData = {
     ...post,
     status: post.status as 'draft' | 'published' | 'archived',
+    excerpt: post.excerpt || undefined,
+    content: post.content || undefined,
+    cover_image: post.cover_image || undefined,
     seo_title: post.seo_title || undefined,
     seo_description: post.seo_description || undefined,
-    seo_keywords: post.seo_keywords || undefined,
     author_id: post.author_id || null,
     category_id: post.category_id || null,
     project_id: post.project_id || null,
@@ -54,7 +56,7 @@ export default async function EditBlogPostPage(props: { params: Promise<{ locale
       <AdminPageHeader title={t('edit_post')} backHref="/admin/blog" />
       <BlogPostForm 
         initialData={formData}
-        authors={authors.map(a => ({ id: a.id, name: a.name }))}
+        authors={authors.map(a => ({ id: a.id, name: a.name || 'Sans nom' }))}
         categories={categories.map(c => ({ id: c.id, name: c.name }))}
         projects={projectList.map(p => ({ id: p.id, name: p.name_default || 'Sans nom' }))}
       />

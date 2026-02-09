@@ -1,5 +1,5 @@
 import { db } from '@make-the-change/core/db'
-import { blog_posts } from '@make-the-change/core/schema'
+import { blogPosts } from '@make-the-change/core/schema'
 import { and, asc, count, desc, ilike, or } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
@@ -51,26 +51,26 @@ export default async function BlogPage(props: {
     const searchLower = `%${q.toLowerCase()}%`
     conditions.push(
       or(
-        ilike(blog_posts.title, searchLower),
-        ilike(blog_posts.slug, searchLower),
+        ilike(blogPosts.title, searchLower),
+        ilike(blogPosts.slug, searchLower),
       ),
     )
   }
 
-  let orderBy = desc(blog_posts.created_at)
+  let orderBy = desc(blogPosts.created_at)
   if (sort) {
     switch (sort) {
       case 'created_at_asc':
-        orderBy = asc(blog_posts.created_at)
+        orderBy = asc(blogPosts.created_at)
         break
       case 'created_at_desc':
-        orderBy = desc(blog_posts.created_at)
+        orderBy = desc(blogPosts.created_at)
         break
       case 'title_asc':
-        orderBy = asc(blog_posts.title)
+        orderBy = asc(blogPosts.title)
         break
       case 'title_desc':
-        orderBy = desc(blog_posts.title)
+        orderBy = desc(blogPosts.title)
         break
     }
   }
@@ -80,7 +80,7 @@ export default async function BlogPage(props: {
   // We should ideally join with authors (profiles or blog_authors)
   // For now we'll just fetch posts
   const [postsResult, countResult] = await Promise.all([
-    db.query.blog_posts.findMany({
+    db.query.blogPosts.findMany({
       where: whereClause,
       orderBy: orderBy,
       limit: PAGE_SIZE,
@@ -89,15 +89,15 @@ export default async function BlogPage(props: {
         author: true // assuming relation exists
       }
     }),
-    db.select({ count: count() }).from(blog_posts).where(whereClause),
+    db.select({ count: count() }).from(blogPosts).where(whereClause),
   ])
 
   const items = postsResult.map(p => ({
     id: p.id,
     title: p.title,
     slug: p.slug,
-    status: p.status,
-    created_at: p.created_at.toISOString(),
+    status: p.status || 'draft',
+    created_at: p.created_at?.toISOString() || new Date().toISOString(),
     author_name: (p as any).author?.name || 'Inconnu'
   }))
 
