@@ -85,7 +85,7 @@ export default async function OrdersPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge
-                        variant={getOrderStatusColor(order.status || 'pending')}
+                        variant={getOrderStatusColor(order?.status || 'pending')}
                         className="w-fit"
                       >
                         {t(`status.${order.status}`)}
