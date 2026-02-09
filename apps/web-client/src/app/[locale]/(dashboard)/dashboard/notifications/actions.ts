@@ -26,8 +26,8 @@ export async function updateNotifications(
     marketing: formData.get('marketing') === 'on',
   }
 
-  const { error } = await supabase
-    .from('profiles')
+  const { error } = await (supabase
+    .from('profiles') as any)
     .update({ notification_preferences: prefs })
     .eq('id', user.id)
 

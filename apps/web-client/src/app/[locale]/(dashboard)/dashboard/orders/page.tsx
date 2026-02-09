@@ -64,7 +64,7 @@ export default async function OrdersPage() {
                 ? firstItem.product[0]
                 : firstItem.product
               : null
-            const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0)
+            const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0)
 
             return (
               <Link key={order.id} href={`/dashboard/orders/${order.id}`} className="block">

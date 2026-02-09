@@ -29,12 +29,14 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     product.stock_quantity !== null && product.stock_quantity > 0 && product.stock_quantity <= 5
 
   const metadata = product.metadata as Record<string, unknown> | null
-  const images = (metadata?.images as string[] | undefined) || []
+  const columnImages = (product.images as string[] | null | undefined) || []
+  const metadataImages = (metadata?.images as string[] | undefined) || []
   const mainImage =
+    columnImages[0] ||
     (metadata?.image_url as string | undefined) ||
-    images[0] ||
+    metadataImages[0] ||
     getRandomProductImage(product.name_default?.length || 0)
-  const secondaryImage = images[1] || mainImage
+  const secondaryImage = columnImages[1] || metadataImages[1] || mainImage
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()

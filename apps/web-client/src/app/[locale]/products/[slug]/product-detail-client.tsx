@@ -55,9 +55,9 @@ export function ProductDetailClient({
   const totalPoints = (product.price_points || 0) * quantity
   const metadata = product.metadata as Record<string, unknown> | null
   const imageUrl =
+    (product.images as string[] | undefined)?.[0] ||
     (metadata?.image_url as string | undefined) ||
     (metadata?.images as string[] | undefined)?.[0] ||
-    (product.images as string[] | undefined)?.[0] || // Fallback to new images column
     getRandomProductImage(product.name_default?.length || 0)
 
   // Get location display for producer
@@ -278,9 +278,9 @@ export function ProductDetailClient({
                       {(() => {
                         const metadata = relatedProduct.metadata as Record<string, unknown> | null
                         const imageUrl =
+                          (relatedProduct.images as string[] | undefined)?.[0] ||
                           (metadata?.image_url as string | undefined) ||
                           (metadata?.images as string[] | undefined)?.[0] ||
-                          (relatedProduct.images as string[] | undefined)?.[0] || // Fallback
                           getRandomProductImage(relatedProduct.name_default?.length || 0)
                         return (
                           <img

@@ -15,7 +15,7 @@ export default async function NotificationsPage() {
     .eq('id', user.id)
     .single()
 
-  const prefs = (profile?.notification_preferences || {}) as Record<string, unknown>
+  const prefs = ((profile as any)?.notification_preferences || {}) as Record<string, unknown>
 
   return (
     <NotificationsClient

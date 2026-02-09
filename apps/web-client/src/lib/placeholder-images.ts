@@ -54,6 +54,14 @@ export const getRandomProjectImage = (seed?: number) => {
   return list[seed % list.length]
 }
 
+export const getRandomProducerImage = (seed?: number) => {
+  // Reuse project images for producers for now, or add specific ones
+  const list = placeholderImages.projects
+  if (!list.length) return placeholderImages.categories.default
+  if (seed === undefined) return list[0]
+  return list[seed % list.length]
+}
+
 export const getRandomCoverImage = (seed?: number) => {
   const list = placeholderImages.profileCovers
   if (!list.length) return placeholderImages.categories.default

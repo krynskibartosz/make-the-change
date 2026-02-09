@@ -14,7 +14,7 @@ export default async function InvestmentsPage() {
   const supabase = await createClient()
 
   // Fetch user investments with project details using RLS
-  const { data: userInvestments } = await supabase
+  const { data: userInvestments } = (await supabase
     .from('investments')
     .select(`
       id,
@@ -29,7 +29,7 @@ export default async function InvestmentsPage() {
         status
       )
     `)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false })) as { data: any[] | null }
 
   // Calculate total invested
   const totalInvested = (userInvestments || []).reduce(

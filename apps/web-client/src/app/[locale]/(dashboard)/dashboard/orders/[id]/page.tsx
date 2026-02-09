@@ -16,7 +16,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const t = await getTranslations('orders')
   const supabase = await createClient()
 
-  const { data: order } = await supabase
+  const { data: orderData } = await supabase
     .from('orders')
     .select(
       `
@@ -42,7 +42,9 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     .eq('id', id)
     .single()
 
-  if (!order) notFound()
+  if (!orderData) notFound()
+
+  const order = orderData as any
 
   type OrderItemRow = {
     id: string

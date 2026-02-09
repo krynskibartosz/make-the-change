@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
   Badge,
   Button,
+  buttonVariants,
   Checkbox,
   Input,
   Separator,
@@ -374,8 +375,7 @@ export function ProductsClient({
             {filteredProducts.length} produits
           </span>
           <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+            <SheetTrigger className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), "gap-2")}>
                 <Filter className="h-4 w-4" />
                 Filtres
                 {(selectedTags.length > 0) && (
@@ -383,7 +383,6 @@ export function ProductsClient({
                     {selectedTags.length}
                   </Badge>
                 )}
-              </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <SheetHeader className="mb-6 text-left">

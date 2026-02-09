@@ -196,6 +196,8 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
         )}
       >
         <DataList
+          isLoading={false}
+          renderSkeleton={() => <div className="h-64 bg-muted animate-pulse rounded-lg" />}
           items={projects}
           gridCols={3}
           emptyState={{

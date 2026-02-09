@@ -2,7 +2,7 @@ import 'server-only'
 import type { CookieOptions } from '@supabase/ssr'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { Database } from '@make-the-change/core/src/shared/db/database.types'
+import { Database } from '@make-the-change/core/database-types'
 
 export async function createClient() {
   const cookieStore = await cookies()

@@ -86,7 +86,7 @@ export default async function ProducerPage({ params }: ProducerPageProps) {
 
         <div className="container relative mx-auto h-full px-4">
           <div className="flex h-full flex-col justify-end pb-8">
-            <Badge className="mb-4 w-fit capitalize" size="lg">
+            <Badge className="mb-4 w-fit capitalize px-3 py-1 text-base">
               {producer.type}
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">

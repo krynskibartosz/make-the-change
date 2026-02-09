@@ -14,7 +14,7 @@ type Species = {
   id: string
   name: string | null
   scientific_name: string | null
-  content_levels: unknown
+  content_levels: any
 }
 
 type Project = {
