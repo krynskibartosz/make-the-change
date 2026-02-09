@@ -1078,6 +1078,49 @@ type GeneratedDatabase = {
         }
         Relationships: []
       }
+      public_projects: {
+        Row: {
+          address_city: string | null
+          address_coordinates: unknown | null
+          address_country_code: string | null
+          address_postal_code: string | null
+          address_region: string | null
+          address_street: string | null
+          avatar_image_url: string | null
+          certification_labels: string[] | null
+          created_at: string | null
+          created_by: string | null
+          current_funding: number | null
+          deleted_at: string | null
+          description_default: string | null
+          description_i18n: Json | null
+          featured: boolean | null
+          funding_progress: number | null
+          gallery_image_urls: string[] | null
+          hero_image_url: string | null
+          id: string | null
+          impact_metrics: Json | null
+          launch_date: string | null
+          location: unknown | null
+          long_description_default: string | null
+          long_description_i18n: Json | null
+          maturity_date: string | null
+          metadata: Json | null
+          name_default: string | null
+          name_i18n: Json | null
+          producer_id: string | null
+          seo_description: string | null
+          seo_title: string | null
+          slug: string | null
+          species_id: string | null
+          status: "draft" | "active" | "funded" | "completed" | "archived" | null
+          target_budget: number | null
+          type: "beehive" | "olive_tree" | "vineyard" | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Relationships: []
+      }
       public_user_profiles: {
         Row: {
           avatar_url: string | null
@@ -1238,6 +1281,12 @@ type GeneratedDatabase = {
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      place_euro_order: {
+        Args: {
+          p_order_data: Json
+        }
+        Returns: Json
       }
       place_points_order: {
         Args: {
