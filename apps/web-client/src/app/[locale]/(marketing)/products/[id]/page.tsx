@@ -7,6 +7,7 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency } from '@/lib/utils'
+import { FloatingActionButtons } from './floating-action-buttons'
 
 interface ProductDetailPageProps {
   params: Promise<{
@@ -59,8 +60,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const producerImage = product.producer?.images && Array.isArray(product.producer.images) && product.producer.images.length > 0 ? product.producer.images[0] : undefined
   
   // Calculate price display
-  const displayPrice = product.price_eur_equivalent || 0
   const displayPoints = product.price_points || 0
+  const displayPrice = displayPoints > 0 ? displayPoints / 100 : 0
   
   // Stock status
   const inStock = (product.stock_quantity || 0) > 0
@@ -87,7 +88,15 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 <span className="uppercase tracking-widest text-xs font-bold">Produit Authentique</span>
               </div>
               
-              <h1 className="text-6xl font-black tracking-tighter sm:text-8xl lg:text-9xl mb-8 text-foreground animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 drop-shadow-sm">
+              <h1 className={`
+                font-black tracking-tighter mb-8 text-foreground animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 drop-shadow-sm
+                ${product.name_default.length > 40 
+                  ? 'text-4xl sm:text-5xl lg:text-6xl' 
+                  : product.name_default.length > 25 
+                    ? 'text-5xl sm:text-6xl lg:text-7xl' 
+                    : 'text-6xl sm:text-7xl lg:text-8xl'
+                }
+              `}>
                 {product.name_default}
               </h1>
               
@@ -391,6 +400,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </div>
         </div>
       </div>
+
+      {/* Floating Mobile Action Buttons */}
+      <FloatingActionButtons
+        productId={product.id}
+        displayPrice={displayPrice}
+        inStock={inStock}
+      />
     </>
   )
 }

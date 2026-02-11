@@ -26,6 +26,7 @@ import { MainMenuStructure } from '@/features/cms/types'
 import { Link, usePathname } from '@/i18n/navigation'
 import { getCategoryImage, placeholderImages } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
+import { useScrollHeader } from '@/hooks/use-scroll-header'
 
 const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3000'
 
@@ -39,6 +40,7 @@ export function Header({ user, menuData }: HeaderProps) {
   const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [moreOpen, setMoreOpen] = useState(false)
+  const { isVisible } = useScrollHeader()
 
   const navigation = useMemo(() => [
     { id: 'home', name: 'home', href: '/' },
@@ -113,7 +115,16 @@ export function Header({ user, menuData }: HeaderProps) {
   // Let's hide it on mobile for now as requested.
 
   return (
-    <header className="hidden md:block sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header 
+      className={cn(
+        "hidden md:block fixed top-0 left-0 right-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out",
+        isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+      )}
+      style={{
+        transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
+        opacity: isVisible ? 1 : 0
+      }}
+    >
       <nav className="container relative mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">

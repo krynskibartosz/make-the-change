@@ -32,7 +32,7 @@ export default async function HomePage() {
   const [
     { count: activeProjectsCount },
     { count: activeProductsCount },
-    { count: membersCount },
+    { data: membersCountData },
     { data: featuredProjects },
     { data: featuredProducts },
     homeContent,
@@ -41,7 +41,7 @@ export default async function HomePage() {
   ] = await Promise.all([
     supabase.schema('investment').from('projects').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.schema('commerce').from('products').select('*', { count: 'exact', head: true }).eq('is_active', true),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    (supabase.rpc('count_total_members') as any),
     supabase
       .schema('investment')
       .from('projects')
@@ -60,6 +60,8 @@ export default async function HomePage() {
     supabase.rpc('get_total_points_generated'),
     getBlogPosts()
   ])
+
+  const membersCount = membersCountData || 0
 
   // If RPC doesn't exist yet, we can fallback to summing up profiles points_balance for now, 
   // or just use a placeholder if the RPC fails.

@@ -189,6 +189,24 @@ export const ProductsClient: FC<ProductsClientProps> = ({
     >
       {/* Custom Image Display */}
       <div className="relative aspect-square w-full mb-4 overflow-hidden rounded-lg bg-muted">
+        <style jsx>{`
+          .image-failed::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: hsl(var(--muted));
+          }
+          .image-failed::before {
+            content: '📦';
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.2;
+            z-index: 1;
+          }
+        `}</style>
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -197,9 +215,13 @@ export const ProductsClient: FC<ProductsClientProps> = ({
             className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             onError={(e) => {
-              console.error('Image failed to load:', product.image_url);
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
+              // Show fallback by adding a class to parent
+              const parent = target.parentElement;
+              if (parent) {
+                parent.classList.add('image-failed');
+              }
             }}
           />
         ) : (
