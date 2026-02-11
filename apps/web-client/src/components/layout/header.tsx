@@ -20,191 +20,80 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
 import { MegaMenu } from '@/components/layout/mega-menu'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
+import { Logo } from '@/components/ui/logo'
 import { CartButton } from '@/features/commerce/cart/cart-button'
+import { MainMenuStructure } from '@/features/cms/types'
 import { Link, usePathname } from '@/i18n/navigation'
 import { getCategoryImage, placeholderImages } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
 
 const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3000'
 
-const megaMenuContent = {
-  projects: {
-    eyebrow: 'Investir',
-    title: 'Projets a impact',
-    sections: [
-      {
-        title: 'Thematique',
-        items: [
-          {
-            title: 'Biodiversite',
-            image: placeholderImages.projects[0],
-            href: '/projects?status=active',
-          },
-          {
-            title: 'Agriculture durable',
-            image: placeholderImages.projects[1],
-            href: '/projects?status=active',
-          },
-        ],
-      },
-      {
-        title: 'Explorer',
-        items: [
-          {
-            title: 'Nouveautes',
-            image: placeholderImages.projects[2],
-            href: '/projects',
-            badge: 'Nouveau',
-          },
-          {
-            title: 'Projets populaires',
-            image: placeholderImages.projects[0],
-            href: '/projects',
-          },
-        ],
-      },
-    ],
-    featured: {
-      title: 'Investir dans la biodiversite',
-      image: placeholderImages.projects[1],
-      href: '/projects',
-      ctaLabel: 'Voir tous les projets',
-    },
-  },
-  products: {
-    eyebrow: 'Boutique',
-    title: 'Produits responsables',
-    sections: [
-      {
-        title: 'Categories phares',
-        items: [
-          {
-            title: 'Alimentation',
-            image: getCategoryImage('alimentation'),
-            href: '/products',
-          },
-          {
-            title: 'Maison',
-            image: getCategoryImage('maison'),
-            href: '/products',
-          },
-        ],
-      },
-      {
-        title: 'Inspiration',
-        items: [
-          {
-            title: 'Bien-etre',
-            image: getCategoryImage('bien_etre'),
-            href: '/products',
-            badge: 'Tendance',
-          },
-          {
-            title: 'Eco lifestyle',
-            image: getCategoryImage('eco'),
-            href: '/products',
-          },
-        ],
-      },
-    ],
-    featured: {
-      title: 'Decouvrez la boutique',
-      image: placeholderImages.products[0],
-      href: '/products',
-      ctaLabel: 'Voir la boutique',
-    },
-  },
-  discover: {
-    eyebrow: 'Explorer',
-    title: 'Decouvrir Make the Change',
-    sections: [
-      {
-        title: "S'informer",
-        items: [
-          {
-            title: 'Biodex',
-            image: placeholderImages.projects[0],
-            href: '/biodex',
-            badge: 'Nouveau',
-          },
-          {
-            title: 'Comment ça marche',
-            image: placeholderImages.projects[0],
-            href: '/how-it-works',
-          },
-          {
-            title: 'Blog',
-            image: placeholderImages.projects[1],
-            href: '/blog',
-          },
-          {
-            title: 'À propos',
-            image: placeholderImages.projects[2],
-            href: '/about',
-          },
-        ],
-      },
-      {
-        title: 'Communauté',
-        items: [
-          {
-            title: 'Classement',
-            image: getCategoryImage('bien_etre'),
-            href: '/leaderboard',
-            badge: 'Populaire',
-          },
-          {
-            title: 'Espace Partenaire',
-            image: getCategoryImage('eco'),
-            href: ADMIN_URL,
-          },
-        ],
-      },
-    ],
-    featured: {
-      title: 'Rejoignez le mouvement',
-      image: placeholderImages.profileCovers[0],
-      href: '/register',
-      ctaLabel: "S'inscrire",
-    },
-  },
-}
-
-const navigation = [
-  { id: 'home', name: 'home', href: '/' },
-  {
-    id: 'projects',
-    name: 'projects',
-    href: '/projects',
-    mega: megaMenuContent.projects,
-  },
-  {
-    id: 'products',
-    name: 'products',
-    href: '/products',
-    mega: megaMenuContent.products,
-  },
-  {
-    id: 'discover',
-    name: 'discover',
-    href: '#',
-    label: 'Découvrir',
-    mega: megaMenuContent.discover,
-  },
-]
-
 interface HeaderProps {
   user?: { id: string; email: string; avatarUrl?: string | null } | null
+  menuData?: MainMenuStructure | null
 }
 
-export function Header({ user }: HeaderProps) {
+export function Header({ user, menuData }: HeaderProps) {
   const t = useTranslations('navigation')
   const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [moreOpen, setMoreOpen] = useState(false)
+
+  const navigation = useMemo(() => [
+    { id: 'home', name: 'home', href: '/' },
+    {
+      id: 'projects',
+      name: 'projects',
+      href: '/projects',
+      mega: menuData?.projects,
+    },
+    {
+      id: 'products',
+      name: 'products',
+      href: '/products',
+      mega: menuData?.products,
+    },
+    {
+      id: 'discover',
+      name: 'discover',
+      href: '#',
+      label: 'Découvrir',
+      mega: menuData?.discover || {
+        title: 'Découvrir Make the Change',
+        sections: [
+          {
+            title: 'Concept',
+            items: [
+              { title: 'Notre mission', href: '/about', image: placeholderImages.categories.eco },
+              { title: 'Comment ça marche', href: '/how-it-works', image: placeholderImages.categories.eco },
+              { title: 'Nos producteurs', href: '/producers', image: placeholderImages.categories.eco },
+            ],
+          },
+          {
+            title: 'Expérience',
+            items: [
+              { title: 'Défis', href: '/challenges', image: placeholderImages.categories.bien_etre },
+              { title: 'Classement', href: '/leaderboard', image: placeholderImages.categories.bien_etre },
+              { title: 'Biodex', href: '/biodex', image: placeholderImages.categories.bien_etre },
+            ],
+          },
+          {
+            title: 'Aide & Ressources',
+            items: [
+              { title: 'Blog', href: '/blog', image: placeholderImages.categories.default },
+              { title: 'FAQ', href: '/faq', image: placeholderImages.categories.default },
+              { title: 'Contact', href: '/contact', image: placeholderImages.categories.default },
+            ],
+          },
+        ],
+      },
+    },
+  ], [menuData])
+
   const activeMegaMenu = useMemo(
     () => navigation.find((item) => item.id === activeMenu)?.mega,
-    [activeMenu],
+    [activeMenu, navigation],
   )
   const closeMegaMenu = () => setActiveMenu(null)
 
@@ -227,11 +116,9 @@ export function Header({ user }: HeaderProps) {
     <header className="hidden md:block sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container relative mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Leaf className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="hidden font-bold sm:inline-block">Make the CHANGE</span>
+        <Link href="/" className="flex items-center gap-3">
+          <Logo variant="icon" height={40} width={40} className="h-10" />
+          <span className="text-xl font-bold text-foreground">Make the Change</span>
         </Link>
 
         {/* Desktop Navigation */}

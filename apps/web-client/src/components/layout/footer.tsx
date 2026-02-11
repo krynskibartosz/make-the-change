@@ -1,8 +1,9 @@
 'use client'
 
-import { Leaf, Mail, MapPin } from 'lucide-react'
+import { Mail, MapPin } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import { Logo } from '@/components/ui/logo'
 
 export function Footer() {
   const t = useTranslations('footer')
@@ -15,10 +16,8 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                <Leaf className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="font-bold">Make the CHANGE</span>
+              <Logo variant="icon" height={36} width={36} className="h-9" />
+              <span className="text-xl font-bold text-foreground">Make the Change</span>
             </Link>
             <p className="text-sm text-muted-foreground">{t('tagline')}</p>
           </div>
@@ -48,7 +47,7 @@ export function Footer() {
                   href="/leaderboard"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Classement
+                  {t('leaderboard')}
                 </Link>
               </li>
               <li>
@@ -56,7 +55,7 @@ export function Footer() {
                   href="/blog"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Blog
+                  {t('blog')}
                 </Link>
               </li>
               <li>
@@ -132,7 +131,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>Brussels, Belgium</span>
+                <span>{t('address')}</span>
               </li>
             </ul>
           </div>

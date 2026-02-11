@@ -2,13 +2,13 @@
 
 import { ShoppingCart } from 'lucide-react'
 import { usePathname } from '@/i18n/navigation'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatPoints, formatCurrency } from '@/lib/utils'
 import { useCartUI } from './cart-ui-provider'
 import { useCartTotals } from './use-cart'
 
 export function CartDock() {
   const pathname = usePathname()
-  const { itemsCount, totalPoints } = useCartTotals()
+  const { itemsCount, totalPoints, totalEuros } = useCartTotals()
   const { isCartOpen, openCart, snackbar } = useCartUI()
 
   const isProjectDetail = pathname.startsWith('/projects/') && pathname.split('/').length > 2
@@ -50,7 +50,12 @@ export function CartDock() {
             </p>
           </div>
         </div>
-        <p className="text-sm font-semibold text-primary">{formatPoints(totalPoints)} pts</p>
+        <div className="flex flex-col items-end">
+          <p className="text-sm font-semibold text-primary">{formatPoints(totalPoints)} pts</p>
+          {totalEuros > 0 && (
+            <p className="text-[10px] text-muted-foreground">{formatCurrency(totalEuros)}</p>
+          )}
+        </div>
       </button>
     </div>
   )

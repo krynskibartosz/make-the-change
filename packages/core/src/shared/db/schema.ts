@@ -35,14 +35,30 @@ const point = customType<{ data: string }>({
 export const commerce = pgSchema('commerce')
 export const investment = pgSchema('investment')
 export const content = pgSchema('content')
+export const gamification = pgSchema('gamification')
 export const identity = pgSchema('identity')
 
 // Enums (schema-scoped)
+export const challengeTypeEnum = gamification.enum('challenge_type', [
+  'daily',
+  'monthly',
+  'season',
+  'special',
+])
+
+export const challengeStatusEnum = gamification.enum('challenge_status', [
+  'active',
+  'inactive',
+  'archived',
+])
+
 export const fulfillmentMethodEnum = commerce.enum('fulfillment_method', [
   'ship',
   'pickup',
   'digital',
   'experience',
+  'dropship',
+  'ondemand',
 ])
 export const productPartnerSourceEnum = commerce.enum('product_partner_source', [
   'direct',
@@ -50,7 +66,7 @@ export const productPartnerSourceEnum = commerce.enum('product_partner_source', 
   'partner',
   'marketplace',
 ])
-export const allergenEnum = commerce.enum('allergen_enum', [
+export const allergenEnum = commerce.enum('allergen', [
   'gluten',
   'lactose',
   'nuts',
@@ -65,7 +81,7 @@ export const allergenEnum = commerce.enum('allergen_enum', [
   'mustard',
   'lupin',
 ])
-export const certificationEnum = commerce.enum('certification_enum', [
+export const certificationEnum = commerce.enum('certification', [
   'bio',
   'organic',
   'fair_trade',
@@ -81,7 +97,7 @@ export const certificationEnum = commerce.enum('certification_enum', [
   'ecocert',
   'demeter',
 ])
-export const orderStatusEnum = commerce.enum('order_status_enum', [
+export const orderStatusEnum = commerce.enum('order_status', [
   'pending',
   'paid',
   'processing',
@@ -89,20 +105,20 @@ export const orderStatusEnum = commerce.enum('order_status_enum', [
   'completed',
   'closed',
 ])
-export const paymentMethodEnum = commerce.enum('payment_method_enum', [
+export const paymentMethodEnum = commerce.enum('payment_method', [
   'points',
   'stripe_card',
   'stripe_sepa',
   'stripe_bank_transfer',
   'mixed',
 ])
-export const subscriptionPlanEnum = commerce.enum('subscription_plan_enum_v2', [
+export const subscriptionPlanEnum = commerce.enum('subscription_plan', [
   'monthly_standard',
   'monthly_premium',
   'annual_standard',
   'annual_premium',
 ])
-export const subscriptionStatusEnum = commerce.enum('subscription_status_type', [
+export const subscriptionStatusEnum = commerce.enum('subscription_status', [
   'active',
   'inactive',
   'cancelled',
@@ -115,45 +131,45 @@ export const subscriptionStatusEnum = commerce.enum('subscription_status_type', 
 ])
 export const billingFrequencyEnum = commerce.enum('billing_frequency', ['monthly', 'annual'])
 
-export const userLevelEnum = identity.enum('user_level_enum', [
+export const userLevelEnum = identity.enum('user_level', [
   'explorateur',
   'protecteur',
   'ambassadeur',
 ])
-export const kycStatusEnum = identity.enum('kyc_status_enum', [
+export const kycStatusEnum = identity.enum('kyc_status', [
   'pending',
   'light',
   'complete',
   'rejected',
 ])
-export const userRoleEnum = identity.enum('user_role_enum', [
+export const userRoleEnum = identity.enum('user_role', [
   'user',
   'admin',
   'superadmin',
   'producer',
   'moderator',
 ])
-export const producerStatusEnum = investment.enum('producer_status_enum', [
+export const producerStatusEnum = investment.enum('producer_status', [
   'pending',
   'active',
   'inactive',
   'suspended',
   'archived',
 ])
-export const producerTypeEnum = investment.enum('producer_type_enum', [
+export const producerTypeEnum = investment.enum('producer_type', [
   'farmer',
   'cooperative',
   'association',
   'company',
   'individual',
 ])
-export const producerPartnershipEnum = investment.enum('producer_partnership_enum', [
+export const producerPartnershipEnum = investment.enum('producer_partnership', [
   'exclusive',
   'preferred',
   'standard',
   'trial',
 ])
-export const conservationStatusEnum = investment.enum('conservation_status_enum', [
+export const conservationStatusEnum = investment.enum('conservation_status', [
   'LC',
   'NT',
   'VU',
@@ -162,7 +178,7 @@ export const conservationStatusEnum = investment.enum('conservation_status_enum'
   'EW',
   'EX',
 ])
-export const investmentStatusEnum = investment.enum('investment_status_enum', [
+export const investmentStatusEnum = investment.enum('investment_status', [
   'pending',
   'approved',
   'active',
@@ -170,7 +186,7 @@ export const investmentStatusEnum = investment.enum('investment_status_enum', [
   'cancelled',
   'defaulted',
 ])
-export const projectStatusEnum = investment.enum('project_status_enum', [
+export const projectStatusEnum = investment.enum('project_status', [
   'draft',
   'active',
   'funded',
@@ -182,13 +198,43 @@ export const projectTypeEnum = investment.enum('project_type', [
   'olive_tree',
   'vineyard',
 ])
-export const updateTypeEnum = investment.enum('update_type_enum', [
+export const updateTypeEnum = investment.enum('update_type', [
   'production',
   'maintenance',
   'harvest',
   'impact',
   'news',
   'milestone',
+])
+
+// Public Schema Enums
+import { pgEnum } from 'drizzle-orm/pg-core'
+export const messageStatusEnum = pgEnum('message_status', [
+  'pending',
+  'read',
+  'replied',
+  'archived',
+])
+
+export const pointsLedgerReasonEnum = commerce.enum('points_ledger_reason', [
+  'purchase',
+  'refund',
+  'investment',
+  'investment_returns',
+  'admin_adjustment',
+  'welcome_bonus',
+  'referral',
+])
+
+export const pointsLedgerReferenceTypeEnum = commerce.enum('points_ledger_reference_type', [
+  'order',
+  'subscription',
+  'investment',
+  'referral',
+  'admin_adjustment',
+  'bonus',
+  'refund',
+  'expiration',
 ])
 
 export const userRoles = identity.table('user_roles', {
@@ -394,6 +440,12 @@ export const blogCategories = content.table('blog_categories', {
   updated_at: timestamp('updated_at').defaultNow(),
 })
 
+export const blogPostStatusEnum = content.enum('blog_post_status', [
+  'draft',
+  'published',
+  'archived',
+])
+
 export const blogPosts = content.table('blog_posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   slug: text('slug').notNull(),
@@ -405,7 +457,7 @@ export const blogPosts = content.table('blog_posts', {
   category_id: uuid('category_id'),
   project_id: uuid('project_id'),
   published_at: timestamp('published_at'),
-  status: text('status').default('draft'),
+  status: blogPostStatusEnum('status').default('draft'),
   tags: text('tags').array(),
   featured: boolean('featured').default(false),
   seo_title: text('seo_title'),
@@ -627,7 +679,7 @@ export const producerMessages = pgTable('producer_messages', {
   sender_user_id: uuid('sender_user_id').notNull(),
   subject: text('subject').notNull(),
   message: text('message').notNull(),
-  status: text('status').notNull().default('pending'),
+  status: messageStatusEnum('status').notNull().default('pending'),
   metadata: jsonb('metadata').default({}),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
@@ -637,8 +689,8 @@ export const pointsLedger = commerce.table('points_ledger', {
   id: uuid('id').primaryKey().defaultRandom(),
   user_id: uuid('user_id').notNull(),
   delta: bigint('delta', { mode: 'number' }).notNull(),
-  reason: text('reason').notNull(),
-  reference_type: text('reference_type'),
+  reason: pointsLedgerReasonEnum('reason').notNull(),
+  reference_type: pointsLedgerReferenceTypeEnum('reference_type'),
   reference_id: uuid('reference_id'),
   metadata: jsonb('metadata').default({}),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
@@ -655,12 +707,46 @@ export const stripeEvents = commerce.table('stripe_events', {
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
+// Gamification Schema
+export const challenges = gamification.table('challenges', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  description: text('description'),
+  type: challengeTypeEnum('type').notNull().default('monthly'),
+  reward_points: integer('reward_points').notNull().default(0),
+  reward_badge: text('reward_badge'),
+  status: challengeStatusEnum('status').notNull().default('active'),
+  start_date: timestamp('start_date', { withTimezone: true }),
+  end_date: timestamp('end_date', { withTimezone: true }),
+  metadata: jsonb('metadata').default({}),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  created_by: uuid('created_by'),
+  updated_by: uuid('updated_by'),
+})
+
+export const userChallenges = gamification.table('user_challenges', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  user_id: uuid('user_id').notNull(),
+  challenge_id: uuid('challenge_id').notNull(),
+  progress: integer('progress').default(0),
+  target: integer('target').default(100),
+  completed_at: timestamp('completed_at', { withTimezone: true }),
+  claimed_at: timestamp('claimed_at', { withTimezone: true }),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
 // Export Types
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 export type ProducerMessage = typeof producerMessages.$inferSelect
 export type PointsLedgerEntry = typeof pointsLedger.$inferSelect
 export type StripeEvent = typeof stripeEvents.$inferSelect
+export type Challenge = typeof challenges.$inferSelect
+export type NewChallenge = typeof challenges.$inferInsert
+export type UserChallenge = typeof userChallenges.$inferSelect
 
 export type Product = typeof products.$inferSelect
 export type NewProduct = typeof products.$inferInsert

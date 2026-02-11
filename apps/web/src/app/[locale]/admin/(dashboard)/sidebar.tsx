@@ -16,6 +16,7 @@ import {
   Package,
   Receipt,
   TrendingUp,
+  Trophy,
   Users,
 } from 'lucide-react'
 import { type FC, useState } from 'react'
@@ -59,6 +60,7 @@ const navigationSections = [
     label: 'Contenu',
     icon: FileText,
     items: [
+      { href: '/admin/challenges', icon: Trophy, label: 'Challenges' },
       { href: '/admin/biodex', icon: Leaf, label: 'Biodex' },
       { href: '/admin/blog', icon: FileText, label: 'Blog' },
     ],

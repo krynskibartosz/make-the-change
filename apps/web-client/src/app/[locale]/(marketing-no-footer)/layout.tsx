@@ -7,6 +7,7 @@ import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { CartDock } from '@/features/commerce/cart/cart-dock'
 import { CartSheet } from '@/features/commerce/cart/cart-sheet'
 import { CartSnackbar } from '@/features/commerce/cart/cart-snackbar'
+import { getMenu } from '@/features/cms/cms.service'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function MarketingNoFooterLayout({ children }: PropsWithChildren) {
@@ -15,9 +16,14 @@ export default async function MarketingNoFooterLayout({ children }: PropsWithChi
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { data: headerProfile } = user
-    ? await supabase.from('profiles').select('avatar_url, metadata').eq('id', user.id).single()
-    : { data: null }
+  const [menuData, profileData] = await Promise.all([
+    getMenu('main-header'),
+    user
+      ? supabase.from('profiles').select('avatar_url, metadata').eq('id', user.id).single()
+      : Promise.resolve({ data: null }),
+  ])
+
+  const headerProfile = profileData.data
 
   const headerMetadata = headerProfile?.metadata as Record<string, unknown> | null | undefined
   const metadataAvatarUrl = headerMetadata?.avatar_url
@@ -32,6 +38,7 @@ export default async function MarketingNoFooterLayout({ children }: PropsWithChi
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <Header
         user={user ? { id: user.id, email: user.email || '', avatarUrl: headerAvatarUrl } : null}
+        menuData={menuData}
       />
       <MainContent>{children}</MainContent>
       <CartSheet />

@@ -6,7 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { requireAuth } from '@/lib/auth-guards'
 import { getOrderStatusColor } from '@/lib/status-colors'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate, formatPoints } from '@/lib/utils'
+import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
 
 export default async function OrdersPage() {
   const t = await getTranslations('orders')
@@ -26,6 +26,7 @@ export default async function OrdersPage() {
         quantity,
         unit_price_points,
         total_price_points,
+        product_snapshot,
         product:public_products!product_id(
           id,
           name_default,
@@ -64,7 +65,12 @@ export default async function OrdersPage() {
                 ? firstItem.product[0]
                 : firstItem.product
               : null
-            const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0)
+            const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0)
+            const totalEuros = items.reduce((sum: number, item: any) => {
+              const snapshot = item.product_snapshot as Record<string, any> | null
+              const priceEuros = snapshot?.priceEuros || 0
+              return sum + (priceEuros * (item.quantity || 0))
+            }, 0)
 
             return (
               <Link key={order.id} href={`/dashboard/orders/${order.id}`} className="block">

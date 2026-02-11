@@ -56,12 +56,12 @@ const accountNavPrimaryItems: AccountNavItem[] = [
 
 const accountNavSecondaryItems: AccountNavItem[] = [
   { href: '/dashboard/subscription', labelKey: 'subscriptions', icon: CreditCard },
-  { href: '/dashboard/notifications', labelText: 'Notifications', icon: Bell },
   { href: '/dashboard/settings', labelKey: 'settings', icon: Settings },
 ]
 
 export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
   const t = useTranslations('navigation')
+  const tDashboard = useTranslations('dashboard')
   const pathname = usePathname()
   const { isMobileOpen, setIsMobileOpen } = useDashboardSidebar()
 
@@ -88,7 +88,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
     { href: '/', icon: Home, label: t('home') },
     { href: '/projects', icon: Leaf, label: t('projects') },
     { href: '/products', icon: ShoppingBag, label: t('products') },
-    { href: '/leaderboard', icon: Trophy, label: 'Classement' },
+    { href: '/leaderboard', icon: Trophy, label: t('leaderboard') },
   ]
 
   const isActiveAccountRoute = (href: string) =>
@@ -213,7 +213,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
                   levelColors[userLevel],
                 )}
               >
-                {userLevel.charAt(0).toUpperCase() + userLevel.slice(1)}
+                {tDashboard(`overview.levels.${userLevel}`)}
               </Badge>
             </div>
           </div>
@@ -226,7 +226,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
               size="icon"
               className="h-11 w-11 lg:hidden"
               onClick={() => setIsMobileOpen(false)}
-              aria-label="Fermer le menu"
+              aria-label={t('close_menu')}
             >
               <X className="h-5 w-5" />
             </Button>
@@ -238,7 +238,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
         <div className="space-y-4">
           <div>
             <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Mon compte
+              {t('account_section')}
             </p>
             <nav className="space-y-1">
               {accountNavPrimaryItems.map((item) => (
@@ -269,7 +269,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
 
           <div>
             <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Explorer
+              {t('explore_section')}
             </p>
             <nav className="space-y-1">
               {exploreNavItems.map((item) => (
@@ -290,7 +290,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
         <SidebarNavLink
           href={`/profile/${user.id}`}
           icon={User}
-          label="Profil public"
+          label={t('public_profile')}
           active={false}
           endIcon={ArrowUpRight}
         />

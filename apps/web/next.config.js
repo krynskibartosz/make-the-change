@@ -16,6 +16,9 @@ try {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Performance optimizations
+  reactCompiler: true,
+  experimental: {
+  },
   turbopack: {}, // Enable Turbopack builds (beta)
   typedRoutes: true, // Type-safe routing
 

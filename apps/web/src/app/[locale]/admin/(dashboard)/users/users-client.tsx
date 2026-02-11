@@ -11,6 +11,7 @@ import {
 import { DataCard } from '@make-the-change/core/ui/next'
 import { Mail, Plus, Shield, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { type FC, useCallback, useMemo, useState, useTransition } from 'react'
 import { useDebouncedCallback } from '@/app/[locale]/admin/(dashboard)/components/hooks/use-debounced-callback'
 import { AdminPageContainer } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-container'
@@ -35,6 +36,7 @@ type UsersClientProps = {
 }
 
 export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
+  const t = useTranslations('admin.users')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -79,8 +81,8 @@ export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
       <AdminPageHeader>
         <Input
           className="max-w-xs"
-          aria-label="Rechercher des utilisateurs"
-          placeholder="Rechercher par nom ou email"
+          aria-label={t('search_placeholder')}
+          placeholder={t('search_placeholder')}
           defaultValue={q}
           onChange={(e) => {
             debouncedSearch(e.target.value)
@@ -88,7 +90,7 @@ export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
         />
         <SimpleSelect
           className="w-[180px]"
-          placeholder="Filtrer par niveau"
+          placeholder={t('search_placeholder')}
           value={role ?? 'all'}
           options={[
             { value: 'all', label: 'Tous' },
@@ -106,7 +108,7 @@ export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
         <Link href="/admin/users/new">
           <Button className="flex items-center gap-2" size="sm">
             <Plus className="h-4 w-4" />
-            Nouvel utilisateur
+            {t('new_user')}
           </Button>
         </Link>
         <ViewToggle availableViews={['grid', 'list']} value={view} onChange={setView} />
@@ -118,8 +120,8 @@ export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
           isLoading={isPending}
           items={users}
           emptyState={{
-            title: 'Aucun utilisateur',
-            description: 'Aucun résultat pour ces filtres.',
+            title: t('empty_state.title'),
+            description: t('empty_state.description'),
             action: (
               <Button
                 size="sm"
@@ -160,8 +162,8 @@ export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
       ) : users.length === 0 ? (
         <div className="text-center py-8">
           <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">Aucun utilisateur</h3>
-          <p className="text-muted-foreground mb-4">Aucun résultat pour ces filtres.</p>
+          <h3 className="text-lg font-medium text-foreground mb-2">{t('empty_state.title')}</h3>
+          <p className="text-muted-foreground mb-4">{t('empty_state.description')}</p>
           <Button
             size="sm"
             variant="outline"

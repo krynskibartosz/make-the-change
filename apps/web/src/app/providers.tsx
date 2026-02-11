@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
-import { AppThemeProvider as ThemeProvider } from '@/components/providers/theme-provider'
+import { AppThemeProvider as ThemeProvider, Brand } from '@make-the-change/core'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { type FC, type PropsWithChildren, useState } from 'react'
 
@@ -15,7 +15,12 @@ const ReactQueryDevtools =
       )
     : ((() => null) as unknown as React.ComponentType<{ initialIsOpen?: boolean }>)
 
-export const Providers: FC<PropsWithChildren> = ({ children }) => {
+interface ProvidersProps extends PropsWithChildren {
+  initialBrand?: Brand
+  initialCustomVars?: Record<string, string>
+}
+
+export const Providers: FC<ProvidersProps> = ({ children, initialBrand, initialCustomVars }) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -37,6 +42,8 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
       enableSystem
       storageKey="make-the-change-theme"
       themes={['light', 'dark', 'system']}
+      initialBrand={initialBrand}
+      initialCustomVars={initialCustomVars}
     >
       <QueryClientProvider client={queryClient}>
         <NuqsAdapter>

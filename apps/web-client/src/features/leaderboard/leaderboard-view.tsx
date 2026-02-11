@@ -126,13 +126,6 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                     >
                       {/* Avatar et infos au-dessus du bloc */}
                       <div className="relative z-20 mb-2 flex flex-col items-center">
-                        <div className="flex items-center gap-1">
-                          <Icon className={cn('h-3 w-3', meta.iconClassName)} />
-                          <span className="text-xs font-semibold text-muted-foreground">
-                            #{leader.rank}
-                          </span>
-                        </div>
-
                         <div className="relative">
                           <div className={cn('relative h-12 w-12 rounded-full ring-2 ring-border', meta.ring)}>
                             {leader.avatarUrl ? (
@@ -152,7 +145,7 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                               'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white',
                               meta.bg
                             )}>
-                              {leader.rank}
+                              <Icon className="h-3 w-3 text-white" />
                             </div>
                           </div>
                         </div>
@@ -207,7 +200,7 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
 
           {/* List (internal scroll) */}
           <div className="flex-1 min-h-0 ">
-            <div className="h-full  divide-y  divide-border/70 border-t -translate-y-1 z-20" >
+            <div className="h-full overflow-y-auto divide-y divide-border/70 border-t -translate-y-1 z-20" >
               {currentUserRank ? (
                 <div className="sticky top-0 z-10 border-b bg-background/55 px-4 py-3 backdrop-blur" >
                   <div className="flex items-center justify-between gap-3 rounded-full border bg-gradient-to-r from-primary/10 via-transparent to-accent/10 px-4 py-2">

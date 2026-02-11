@@ -6,7 +6,7 @@
 import { z } from 'zod'
 
 // Project Types
-export const ProjectTypeEnum = z.enum(['beehive', 'olive_tree', 'vineyard'])
+export const ProjectTypeEnum = z.enum(['beehive', 'olive_tree', 'vineyard', 'forest', 'marine'])
 export type ProjectType = z.infer<typeof ProjectTypeEnum>
 
 // Project Status

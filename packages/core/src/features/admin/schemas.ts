@@ -1,16 +1,25 @@
 import { z } from 'zod'
+import {
+  projectTypeEnum,
+  projectStatusEnum,
+  subscriptionPlanEnum,
+  subscriptionStatusEnum,
+  billingFrequencyEnum,
+  userLevelEnum,
+  kycStatusEnum,
+} from '../../shared/db/schema'
 
 export const adminProjectSchema = z.object({
   name: z.string().min(3, 'Le nom du projet est requis et doit faire au moins 3 caractères.'),
   slug: z.string().min(3, 'Le slug est requis.'),
-  type: z.enum(['beehive', 'olive_tree', 'vineyard'], {
+  type: z.enum(projectTypeEnum.enumValues, {
     errorMap: () => ({ message: 'Le type de projet est invalide.' }),
   }),
   target_budget: z.coerce.number().positive('Le budget cible doit être un nombre positif.'),
   producer_id: z.string().uuid('Un producteur valide est requis.'),
   description: z.string().optional(),
   long_description: z.string().optional(),
-  status: z.enum(['draft', 'active', 'funded', 'completed', 'archived']).default('draft'),
+  status: z.enum(projectStatusEnum.enumValues).default('draft'),
   featured: z.coerce.boolean().default(false),
 })
 
@@ -19,10 +28,10 @@ export type AdminProjectInput = z.infer<typeof adminProjectSchema>
 export const adminSubscriptionSchema = z.object({
   user_id: z.string().uuid('Un utilisateur valide est requis.'),
   stripe_customer_id: z.string().min(1, 'Stripe customer requis.'),
-  plan_type: z.enum(['monthly_standard', 'monthly_premium', 'annual_standard', 'annual_premium'], {
+  plan_type: z.enum(subscriptionPlanEnum.enumValues, {
     errorMap: () => ({ message: "Le type d'abonnement est invalide." }),
   }),
-  billing_frequency: z.enum(['monthly', 'annual']).default('monthly'),
+  billing_frequency: z.enum(billingFrequencyEnum.enumValues).default('monthly'),
   monthly_points_allocation: z.coerce
     .number()
     .int()
@@ -30,19 +39,7 @@ export const adminSubscriptionSchema = z.object({
   monthly_price: z.coerce.number().nonnegative().optional(),
   annual_price: z.coerce.number().nonnegative().optional(),
   bonus_percentage: z.coerce.number().min(0).max(100).default(0),
-  status: z
-    .enum([
-      'active',
-      'inactive',
-      'cancelled',
-      'past_due',
-      'unpaid',
-      'trialing',
-      'expired',
-      'incomplete',
-      'paused',
-    ])
-    .default('active'),
+  status: z.enum(subscriptionStatusEnum.enumValues).default('active'),
 })
 
 export type AdminSubscriptionInput = z.infer<typeof adminSubscriptionSchema>
@@ -83,13 +80,13 @@ export const adminUserSchema = z
       .optional(),
 
     user_level: z
-      .enum(['explorateur', 'protecteur', 'ambassadeur'], {
+      .enum(userLevelEnum.enumValues, {
         errorMap: () => ({ message: 'Niveau utilisateur invalide' }),
       })
       .default('explorateur'),
 
     kyc_status: z
-      .enum(['pending', 'light', 'complete', 'rejected'], {
+      .enum(kycStatusEnum.enumValues, {
         errorMap: () => ({ message: 'Statut KYC invalide' }),
       })
       .default('pending'),

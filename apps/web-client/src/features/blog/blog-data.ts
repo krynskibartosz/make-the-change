@@ -12,14 +12,18 @@ const extractTextFromTipTap = (json: any): string => {
   return ''
 }
 
-const mapPost = (row: Record<string, unknown>): BlogPost => {
+const mapPost = (row: any): BlogPost => {
   const authorRaw = row.author
   const authorValue = Array.isArray(authorRaw) ? authorRaw[0] : authorRaw
   const author =
     authorValue && typeof authorValue === 'object' ? (authorValue as Record<string, unknown>) : null
-  const coverImage = typeof row.cover_image === 'string' ? row.cover_image : null
-  const tags = Array.isArray(row.tags)
-    ? row.tags.filter((t): t is string => typeof t === 'string')
+  const coverImage = row.cover_image_url || null
+  
+  // Handle nested tags from the many-to-many relationship
+  const tags = row.blog_post_tags 
+    ? row.blog_post_tags
+        .map((item: any) => item.tag?.name)
+        .filter((t: any): t is string => typeof t === 'string')
     : []
 
   let content = ''
@@ -52,6 +56,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
+      .schema('content')
       .from('blog_posts')
       .select(
         `
@@ -60,16 +65,21 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
         title,
         excerpt,
         content,
-        cover_image,
+        cover_image_url,
         published_at,
-        tags,
         featured,
         author:blog_authors(
           name,
           avatar_url
+        ),
+        blog_post_tags(
+          tag:blog_tags(
+            name
+          )
         )
       `,
       )
+      .eq('status', 'published')
       .order('published_at', { ascending: false })
       .limit(50)
 
@@ -82,12 +92,85 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const all = await getBlogPosts()
-  return all.find((p) => p.slug === slug) ?? null
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .schema('content')
+      .from('blog_posts')
+      .select(
+        `
+        id,
+        slug,
+        title,
+        excerpt,
+        content,
+        cover_image_url,
+        published_at,
+        featured,
+        author:blog_authors(
+          name,
+          avatar_url
+        ),
+        blog_post_tags(
+          tag:blog_tags(
+            name
+          )
+        )
+      `,
+      )
+      .eq('slug', slug)
+      .single()
+
+    if (error || !data) return null
+
+    return mapPost(data)
+  } catch {
+    return null
+  }
 }
 
-export async function getBlogPostsByTag(tag: string): Promise<BlogPost[]> {
-  const all = await getBlogPosts()
-  const needle = tag.toLowerCase()
-  return all.filter((p) => p.tags.some((t) => t.toLowerCase() === needle))
+export async function getBlogPostById(id: string): Promise<BlogPost | null> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .schema('content')
+      .from('blog_posts')
+      .select(
+        `
+        id,
+        slug,
+        title,
+        excerpt,
+        content,
+        cover_image_url,
+        published_at,
+        status,
+        featured,
+        author:blog_authors(
+          name,
+          avatar_url
+        ),
+        blog_post_tags(
+          tag:blog_tags(
+            name
+          )
+        )
+      `,
+      )
+      .eq('id', id)
+      .single()
+
+    if (error || !data) return null
+
+    // For admin, we need the raw status, which mapPost doesn't currently include in BlogPost type?
+    // Let's check BlogPost type. If it's missing status, we should add it.
+    // For now, mapPost returns BlogPost which is for public view. 
+    // But the Admin Editor needs 'status'.
+    // I'll extend the return type or just return the raw data mapped + status.
+    
+    const post = mapPost(data)
+    return { ...post, status: data.status } as BlogPost & { status: 'draft' | 'published' | 'archived' }
+  } catch {
+    return null
+  }
 }

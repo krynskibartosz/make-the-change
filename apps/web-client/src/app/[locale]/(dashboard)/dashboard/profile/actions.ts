@@ -32,26 +32,26 @@ export async function updateProfile(
     return { error: 'Not authenticated' }
   }
 
-  const db = await import('@make-the-change/core/db').then((m) => m.db)
-  const { profiles } = await import('@make-the-change/core/schema')
-  const { eq } = await import('drizzle-orm')
+  const { error } = await supabase
+    .from('profiles')
+    .update({
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      address_street: address,
+      address_city: city,
+      address_postal_code: postalCode,
+      address_country_code: country,
+      bio,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', user.id)
+
+  if (error) {
+    return { error: error.message }
+  }
 
   try {
-    await db
-      .update(profiles)
-      .set({
-        first_name: firstName,
-        last_name: lastName,
-        phone,
-        address_street: address,
-        address_city: city,
-        address_postal_code: postalCode,
-        address_country_code: country,
-        bio,
-        updated_at: new Date(),
-      })
-      .where(eq(profiles.id, user.id))
-
     revalidatePath('/dashboard/profile')
     return { success: 'Profil mis à jour avec succès' }
   } catch (error) {
@@ -113,26 +113,27 @@ export async function updateProfileMedia(
       return { error: 'Aucune image a televerser' }
     }
 
-    const db = await import('@make-the-change/core/db').then((m) => m.db)
-    const { profiles } = await import('@make-the-change/core/schema')
-    const { eq } = await import('drizzle-orm')
-
-    const currentProfile = await db.query.profiles.findFirst({
-      where: eq(profiles.id, user.id),
-    })
+    // Fetch current metadata to merge
+    const { data: currentProfile } = await supabase
+      .from('profiles')
+      .select('metadata')
+      .eq('id', user.id)
+      .single()
 
     const currentMetadata = (currentProfile?.metadata || {}) as Record<string, unknown>
 
-    await db
-      .update(profiles)
-      .set({
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
         metadata: {
           ...currentMetadata,
           ...uploaded,
         },
-        updated_at: new Date(),
+        updated_at: new Date().toISOString(),
       })
-      .where(eq(profiles.id, user.id))
+      .eq('id', user.id)
+
+    if (updateError) throw new Error(updateError.message)
 
     revalidatePath('/dashboard/profile')
     return { success: 'Profil visuel mis a jour' }
@@ -150,13 +151,12 @@ export async function updateProfileImages(
   if (!user) return { error: 'Not authenticated' }
 
   try {
-    const db = await import('@make-the-change/core/db').then((m) => m.db)
-    const { profiles } = await import('@make-the-change/core/schema')
-    const { eq } = await import('drizzle-orm')
-
-    const currentProfile = await db.query.profiles.findFirst({
-      where: eq(profiles.id, user.id),
-    })
+    // Fetch current metadata to merge
+    const { data: currentProfile } = await supabase
+      .from('profiles')
+      .select('metadata')
+      .eq('id', user.id)
+      .single()
 
     const currentMetadata = (currentProfile?.metadata || {}) as Record<string, unknown>
     const newMetadata = { ...currentMetadata }
@@ -164,13 +164,15 @@ export async function updateProfileImages(
     if (images.avatarUrl) newMetadata.avatar_url = images.avatarUrl
     if (images.coverUrl) newMetadata.cover_url = images.coverUrl
 
-    await db
-      .update(profiles)
-      .set({
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
         metadata: newMetadata,
-        updated_at: new Date(),
+        updated_at: new Date().toISOString(),
       })
-      .where(eq(profiles.id, user.id))
+      .eq('id', user.id)
+
+    if (updateError) throw new Error(updateError.message)
 
     revalidatePath('/dashboard/profile')
     return { success: 'Image mise à jour' }

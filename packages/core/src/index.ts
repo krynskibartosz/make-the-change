@@ -8,7 +8,9 @@ export * as commerce from './entities/commerce'
 export * as investment from './entities/investment'
 export * as admin from './features/admin'
 export * as auth from './features/auth'
-export * as shared from './shared'
+// Shared Modules
+export * from './shared'
+export * from './shared/ui'
 export * as i18n from './shared/i18n'
 export * as ui from './shared/ui'
 

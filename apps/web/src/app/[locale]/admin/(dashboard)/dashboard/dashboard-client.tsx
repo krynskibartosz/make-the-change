@@ -1,7 +1,16 @@
 'use client'
 
 import { Card, CardContent } from '@make-the-change/core/ui'
-import { Activity, AlertTriangle, Package, ShoppingCart, Target, Users } from 'lucide-react'
+import {
+  Activity,
+  AlertTriangle,
+  Package,
+  ShieldCheck,
+  ShoppingCart,
+  Target,
+  Trophy,
+  Users,
+} from 'lucide-react'
 import { useEffect } from 'react'
 import { AdminPageContainer } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-container'
 import { AdminKpiCard } from '@/app/[locale]/admin/(dashboard)/dashboard/components/kpi-card'
@@ -13,7 +22,9 @@ export type AdminDashboardStats = {
   pendingOrders: number
   lowStockProducts: number
   pendingProducers: number
+  pendingKyc: number
   activeProjects: number
+  activeChallenges: number
 }
 
 export type AdminDashboardClientProps = {
@@ -92,7 +103,7 @@ const AdminDashboardPage = ({ stats, hasError = false }: AdminDashboardClientPro
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
             <AdminTaskCard
               description="Traitez les commandes en attente et réduisez le délai de traitement."
               href="/admin/orders?status=pending"
@@ -103,15 +114,6 @@ const AdminDashboardPage = ({ stats, hasError = false }: AdminDashboardClientPro
               tone={stats.pendingOrders > 0 ? 'accent' : 'default'}
             />
             <AdminTaskCard
-              description="Identifiez les produits à faible stock pour éviter les ruptures."
-              href="/admin/products?active_only=true"
-              icon={Package}
-              metricLabel="Produits stock faible"
-              metricValue={stats.lowStockProducts}
-              title="Stocks"
-              tone={stats.lowStockProducts > 0 ? 'warning' : 'default'}
-            />
-            <AdminTaskCard
               description="Validez ou qualifiez les producteurs en attente d’activation."
               href="/admin/partners?status=pending"
               icon={Users}
@@ -120,12 +122,30 @@ const AdminDashboardPage = ({ stats, hasError = false }: AdminDashboardClientPro
               title="Partenaires"
               tone={stats.pendingProducers > 0 ? 'accent' : 'default'}
             />
+            <AdminTaskCard
+              description="Vérifiez et validez les documents d'identité des utilisateurs."
+              href="/admin/users?role=all"
+              icon={ShieldCheck}
+              metricLabel="Vérifications KYC"
+              metricValue={stats.pendingKyc}
+              title="Identité"
+              tone={stats.pendingKyc > 0 ? 'warning' : 'default'}
+            />
+            <AdminTaskCard
+              description="Identifiez les produits à faible stock pour éviter les ruptures."
+              href="/admin/products?active_only=true"
+              icon={Package}
+              metricLabel="Produits stock faible"
+              metricValue={stats.lowStockProducts}
+              title="Stocks"
+              tone={stats.lowStockProducts > 0 ? 'warning' : 'default'}
+            />
           </div>
         </section>
 
         <section aria-label="Métriques" className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Métriques (secondaires)</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-6">
             <AdminKpiCard
               icon={Target}
               title="Projets actifs"
@@ -133,10 +153,22 @@ const AdminDashboardPage = ({ stats, hasError = false }: AdminDashboardClientPro
               value={stats.activeProjects}
             />
             <AdminKpiCard
+              icon={Trophy}
+              title="Challenges"
+              tone="info"
+              value={stats.activeChallenges}
+            />
+            <AdminKpiCard
               icon={ShoppingCart}
-              title="Commandes (à traiter)"
+              title="Commandes"
               tone="accent"
               value={stats.pendingOrders}
+            />
+            <AdminKpiCard
+              icon={ShieldCheck}
+              title="KYC en attente"
+              tone="warning"
+              value={stats.pendingKyc}
             />
             <AdminKpiCard
               icon={Package}
@@ -146,7 +178,7 @@ const AdminDashboardPage = ({ stats, hasError = false }: AdminDashboardClientPro
             />
             <AdminKpiCard
               icon={Users}
-              title="Partenaires (en attente)"
+              title="Partenaires"
               tone="info"
               value={stats.pendingProducers}
             />

@@ -54,8 +54,8 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
   return (
     <div className={cn('absolute left-0 right-0 top-full z-50', className)} onMouseLeave={onClose}>
       <div className="absolute inset-0 -z-10 h-full w-full bg-background/80 backdrop-blur" />
-      <Card className="mx-auto w-full max-w-6xl border bg-background/80 p-6 shadow-2xl">
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+      <Card className="mx-auto w-full max-w-[90rem] border bg-background/80 p-6 shadow-2xl">
+        <div className="grid gap-6 lg:grid-cols-[1fr_350px] xl:grid-cols-[1fr_400px]">
           <div>
             <div className="mb-6">
               {content.eyebrow && (
@@ -69,7 +69,12 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
               )}
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div
+              className={cn(
+                'grid gap-4 sm:grid-cols-2',
+                content.sections.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2',
+              )}
+            >
               {content.sections.map((section) => (
                 <div key={section.title} className="space-y-3">
                   <p className="text-sm font-semibold text-foreground">{section.title}</p>
@@ -93,7 +98,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
           {content.featured && (
             <Link
               href={content.featured.href}
-              className="group relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-2xl border bg-muted/30"
+              className="group relative flex h-full max-h-[400px] flex-col overflow-hidden rounded-2xl border bg-muted/30"
             >
               <img
                 src={content.featured.image}

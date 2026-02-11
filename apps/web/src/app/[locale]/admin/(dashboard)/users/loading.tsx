@@ -1,3 +1,5 @@
+'use client'
+
 import { DataList, Skeleton } from '@make-the-change/core/ui'
 
 export default function Loading() {

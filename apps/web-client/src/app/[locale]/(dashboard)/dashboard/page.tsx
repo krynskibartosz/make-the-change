@@ -12,9 +12,10 @@ import { getTranslations } from 'next-intl/server'
 import { ActivityTimeline } from '@/components/dashboard/activity-timeline'
 import { DashboardWelcome } from '@/components/dashboard/dashboard-welcome'
 import { StatCard } from '@/components/dashboard/stat-card'
+import { BadgesSection } from '@/components/dashboard/badges-section'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
-import { calculateImpactScore, getLevelProgress } from '@/lib/gamification'
+import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatPoints } from '@/lib/utils'
 
@@ -31,50 +32,70 @@ export default async function DashboardPage() {
     return null
   }
 
-  const db = await import('@make-the-change/core/db').then((m) => m.db)
-  const { profiles, investments } = await import('@make-the-change/core/schema')
-  const { eq, count, sum, desc } = await import('drizzle-orm')
+  // Fetch user profile from Supabase to get all fields correctly (points_balance, kyc_status, user_level)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single()
 
-  // Fetch user profile
-  const profile = await db.query.profiles.findFirst({
-    where: eq(profiles.id, user.id),
-  })
+  // Fetch claimed badges from gamification schema
+  const { data: claimedChallenges } = await supabase
+    .schema('gamification')
+    .from('user_challenges')
+    .select('*, challenges(title, reward_badge)')
+    .not('claimed_at', 'is', null)
 
-  // Fetch investments stats
-  const [investmentsStats] = await db
-    .select({
-      count: count(),
-      totalInvested: sum(investments.amount_eur_equivalent),
-    })
-    .from(investments)
-    .where(eq(investments.user_id, user.id))
+  // Fetch investments stats and recent activity using Supabase Client (Zero-Bundle architecture)
+  const { data: allInvestments, error: investmentsError } = await supabase
+    .schema('investment')
+    .from('investments')
+    .select('id, amount_eur_equivalent, created_at, project:projects(name_default)')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
 
-  // Fetch recent activity (investments)
-  const recentInvestments = await db.query.investments.findMany({
-    where: eq(investments.user_id, user.id),
-    orderBy: [desc(investments.created_at)],
-    limit: 3,
-    with: {
-      project: {
-        columns: {
-          name_default: true,
-        },
-      },
-    },
-  })
+  if (investmentsError) {
+    console.error('Error fetching investments:', investmentsError)
+  }
+
+  const investmentsList = allInvestments || []
+  
+  // Calculate stats in JS (PostgREST limitation for simple queries, acceptable for per-user data)
+  const totalInvested = investmentsList.reduce((sum, inv) => sum + (Number(inv.amount_eur_equivalent) || 0), 0)
+  const projectsSupported = investmentsList.length
+  
+  // Get recent 3 for timeline
+  const recentInvestments = investmentsList.slice(0, 3)
 
   const firstName = profile?.first_name || 'Utilisateur'
-  const profileMetadata = (profile?.metadata || {}) as Record<string, unknown>
-  const pointsBalance = Number((profileMetadata.points_balance as number | undefined) ?? 0)
-  const totalInvested = Number(investmentsStats?.totalInvested || 0)
-  const projectsSupported = investmentsStats?.count || 0
+  const pointsBalance = profile?.points_balance ?? 0
+  
   const impactScore = calculateImpactScore({
     points: pointsBalance,
     projects: projectsSupported,
     invested: totalInvested,
   })
+  
   const levelProgress = getLevelProgress(impactScore)
-  const userLevel = levelProgress.currentLevel
+  
+  // Use DB level as source of truth, or fallback to calculated level
+  const userLevel = profile?.user_level || levelProgress.currentLevel
+  const kycStatus = profile?.kyc_status || 'pending'
+
+  // Calculate Badges
+  const milestoneBadges = getMilestoneBadges({
+    points: pointsBalance,
+    projects: projectsSupported,
+    invested: totalInvested,
+  }).map(name => ({ name, iconType: 'medal' as const }))
+
+  const challengeBadges = (claimedChallenges || []).map((uc: any) => ({
+    name: uc.challenges?.reward_badge || uc.challenges?.title || 'Challenge Réussi',
+    date: uc.claimed_at ? new Date(uc.claimed_at).toLocaleDateString('fr-FR') : undefined,
+    iconType: 'trophy' as const
+  }))
+
+  const allBadges = [...milestoneBadges, ...challengeBadges]
 
   const quickStats = [
     { label: 'Impact score', value: impactScore.toString() },
@@ -83,15 +104,20 @@ export default async function DashboardPage() {
   ]
 
   const activityItems =
-    recentInvestments?.map((investment) => ({
-      id: investment.id,
-      icon: <Leaf className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />,
-      title: investment.project?.name_default || 'Projet',
-      subtitle: new Date(investment.created_at ?? new Date()).toLocaleDateString('fr-FR'),
-      value: (
-        <Badge variant="success">+{formatCurrency(Number(investment.amount_eur_equivalent))}</Badge>
-      ),
-    })) || []
+    recentInvestments?.map((investment: any) => {
+      // Handle Supabase join which might return array or object
+      const project = Array.isArray(investment.project) ? investment.project[0] : investment.project
+      
+      return {
+        id: investment.id,
+        icon: <Leaf className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />,
+        title: project?.name_default || 'Projet',
+        subtitle: new Date(investment.created_at ?? new Date()).toLocaleDateString('fr-FR'),
+        value: (
+          <Badge variant="success">+{formatCurrency(Number(investment.amount_eur_equivalent))}</Badge>
+        ),
+      }
+    }) || []
 
   const nextLevel = levelProgress.nextLevel
   const monthlyGoal = 5
@@ -104,6 +130,8 @@ export default async function DashboardPage() {
           className="lg:col-span-8"
           firstName={firstName}
           userLevel={userLevel}
+          kycStatus={kycStatus}
+          kycLabel={t(`overview.kyc.${kycStatus}`)}
           eyebrow={t('title')}
           title={`${t('welcome')}, ${firstName} !`}
           summary={quickStats}
@@ -136,6 +164,8 @@ export default async function DashboardPage() {
             </Link>
           </CardContent>
         </Card>
+
+        <BadgesSection className="lg:col-span-12 border bg-background/70 shadow-sm backdrop-blur" badges={allBadges} />
 
         <div className="lg:col-span-12 flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible xl:grid-cols-4">
           <StatCard

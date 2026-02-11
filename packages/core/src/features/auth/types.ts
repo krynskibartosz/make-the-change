@@ -4,13 +4,20 @@
  */
 
 import { z } from 'zod'
+import {
+  userLevelEnum,
+  kycStatusEnum,
+  subscriptionPlanEnum,
+  billingFrequencyEnum,
+  subscriptionStatusEnum,
+} from '../../shared/db/schema'
 
 // User Levels (DB truth)
-export const UserLevelEnum = z.enum(['explorateur', 'protecteur', 'ambassadeur'])
+export const UserLevelEnum = z.enum(userLevelEnum.enumValues)
 export type UserLevel = z.infer<typeof UserLevelEnum>
 
 // KYC Status (DB truth)
-export const KycStatusEnum = z.enum(['pending', 'light', 'complete', 'rejected'])
+export const KycStatusEnum = z.enum(kycStatusEnum.enumValues)
 export type KycStatus = z.infer<typeof KycStatusEnum>
 
 // User Schema
@@ -42,30 +49,15 @@ export const CreateUserSchema = UserSchema.omit({
 export type CreateUser = z.infer<typeof CreateUserSchema>
 
 // Subscription Plan (DB truth)
-export const SubscriptionPlanEnum = z.enum([
-  'monthly_standard',
-  'monthly_premium',
-  'annual_standard',
-  'annual_premium',
-])
+export const SubscriptionPlanEnum = z.enum(subscriptionPlanEnum.enumValues)
 export type SubscriptionPlan = z.infer<typeof SubscriptionPlanEnum>
 
 // Billing Frequency
-export const BillingFrequencyEnum = z.enum(['monthly', 'annual'])
+export const BillingFrequencyEnum = z.enum(billingFrequencyEnum.enumValues)
 export type BillingFrequency = z.infer<typeof BillingFrequencyEnum>
 
 // Subscription Status (DB truth)
-export const SubscriptionStatusEnum = z.enum([
-  'active',
-  'inactive',
-  'cancelled',
-  'past_due',
-  'unpaid',
-  'trialing',
-  'expired',
-  'incomplete',
-  'paused',
-])
+export const SubscriptionStatusEnum = z.enum(subscriptionStatusEnum.enumValues)
 export type SubscriptionStatus = z.infer<typeof SubscriptionStatusEnum>
 
 // Subscription Schema

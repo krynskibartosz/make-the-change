@@ -5,6 +5,7 @@ import { Menu } from 'lucide-react'
 import type { FC } from 'react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { useDashboardSidebar } from './dashboard-sidebar-context'
+import { Logo } from '@/components/ui/logo'
 
 export const DashboardMobileHeader: FC = () => {
   const { toggleMobileSidebar } = useDashboardSidebar()
@@ -21,7 +22,7 @@ export const DashboardMobileHeader: FC = () => {
         >
           <Menu className="h-5 w-5" />
         </Button>
-        <span className="text-lg font-bold">Make the CHANGE</span>
+        <Logo variant="full" height={32} width={120} className="h-8" />
       </div>
       <ThemeToggle />
     </header>

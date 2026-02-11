@@ -189,7 +189,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 {icon}
               </span>
             )}
-            <span>{children}</span>
+            {children}
           </div>
         )}
       </button>

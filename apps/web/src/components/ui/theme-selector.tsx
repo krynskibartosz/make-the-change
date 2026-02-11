@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Check, Moon, Sun, Monitor, Palette } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { useThemeBrand } from '@/components/providers/theme-provider'
+import { useThemeBrand, THEMES } from '@make-the-change/core'
 import { cn } from '@make-the-change/core/shared/utils'
 
 export function ThemeSelector() {
@@ -78,51 +78,25 @@ export function ThemeSelector() {
           <div className="my-1 h-px bg-muted" />
           
           <div className="px-2 py-1.5 text-sm font-semibold">Theme</div>
-          <div className="grid gap-1">
-            <button
-              onClick={() => setBrand('default')}
-              className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                brand === 'default' && "bg-accent text-accent-foreground"
-              )}
-            >
-              <span className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-slate-900 border border-slate-700" />
-              <span>Default</span>
-              {brand === 'default' && <Check className="ml-auto h-4 w-4" />}
-            </button>
-            <button
-              onClick={() => setBrand('ocean')}
-              className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                brand === 'ocean' && "bg-accent text-accent-foreground"
-              )}
-            >
-              <span className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#0ea5e9]" />
-              <span>Ocean</span>
-              {brand === 'ocean' && <Check className="ml-auto h-4 w-4" />}
-            </button>
-            <button
-              onClick={() => setBrand('forest')}
-              className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                brand === 'forest' && "bg-accent text-accent-foreground"
-              )}
-            >
-              <span className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#2d4a2b]" />
-              <span>Forest</span>
-              {brand === 'forest' && <Check className="ml-auto h-4 w-4" />}
-            </button>
-            <button
-              onClick={() => setBrand('minimal')}
-              className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                brand === 'minimal' && "bg-accent text-accent-foreground"
-              )}
-            >
-              <span className="mr-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#36454f]" />
-              <span>Minimal</span>
-              {brand === 'minimal' && <Check className="ml-auto h-4 w-4" />}
-            </button>
+          <div className="grid gap-1 max-h-[300px] overflow-y-auto">
+            {THEMES.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setBrand(t.id as any)}
+                className={cn(
+                  "flex w-full items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
+                  brand === t.id && "bg-accent text-accent-foreground"
+                )}
+              >
+                <div 
+                  data-theme={t.id === 'default' ? undefined : t.id}
+                  className="mr-2 flex h-4 w-4 items-center justify-center rounded-full border shadow-sm"
+                  style={{ backgroundColor: 'hsl(var(--primary))' }}
+                />
+                <span>{t.name}</span>
+                {brand === t.id && <Check className="ml-auto h-4 w-4" />}
+              </button>
+            ))}
           </div>
         </div>
       )}

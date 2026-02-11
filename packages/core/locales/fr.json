@@ -38,7 +38,15 @@
     "profile": "Profil",
     "my_investments": "Mes investissements",
     "my_orders": "Mes commandes",
-    "my_points": "Mes points"
+    "my_points": "Mes points",
+    "referrals": "Parrainage",
+    "leaderboard": "Classement",
+    "public_profile": "Profil public",
+    "account_section": "Mon compte",
+    "explore_section": "Explorer",
+    "close_menu": "Fermer le menu",
+    "open_cart": "Ouvrir le panier",
+    "cart": "Panier"
   },
   "admin": {
     "common": {
@@ -74,6 +82,7 @@
       },
       "products": {
       "title": "Gestion des produits",
+      "description": "Gérez votre catalogue de produits, les stocks et la visibilité.",
       "new_product": "Nouveau produit",
       "product_list": "Liste des produits",
       "name": "Nom du produit",
@@ -402,17 +411,49 @@
     "privacy": "Confidentialité",
     "terms": "Conditions",
     "contact_us": "Nous contacter",
-    "rights_reserved": "Tous droits réservés."
+    "rights_reserved": "Tous droits réservés.",
+    "leaderboard": "Classement",
+    "blog": "Blog",
+    "address": "Brussels, Belgium"
   },
   "home": {
     "hero": {
       "title": "Investissez dans la biodiversité",
       "subtitle": "Soutenez des projets écologiques concrets et échangez vos points contre des produits durables",
       "cta_primary": "Découvrir les projets",
-      "cta_secondary": "Comment ça marche"
+      "cta_secondary": "Comment ça marche",
+      "badge": "L'investissement à impact 2.0"
+    },
+    "stats": {
+      "projects": "Projets",
+      "members": "Membres",
+      "global_impact": "Impact Global"
+    },
+    "universe": {
+      "title": "Explorez l'Univers",
+      "description": "Une approche holistique pour transformer votre impact environnemental.",
+      "cards": {
+        "projects": {
+          "badge": "Impact Direct",
+          "title": "Projets Vivants",
+          "description": "Reforestation, restauration d'habitats et protection de la biodiversité sauvage.",
+          "cta": "Découvrir les projets"
+        },
+        "products": {
+          "badge": "Éco-responsable",
+          "title": "Boutique Éthique",
+          "description": "Consommez mieux avec nos produits artisanaux."
+        },
+        "community": {
+          "title": "Communauté",
+          "description": "Rejoignez des milliers de membres engagés pour un futur durable.",
+          "cta": "En savoir plus"
+        }
+      }
     },
     "features": {
       "title": "Pourquoi Make the CHANGE ?",
+      "explore": "Explorer",
       "invest": {
         "title": "Investissez",
         "description": "Soutenez des projets de biodiversité vérifiés et suivez votre impact en temps réel."
@@ -426,14 +467,34 @@
         "description": "Utilisez vos points pour obtenir des produits durables de nos partenaires."
       }
     },
+    "stats_section": {
+      "title": "Impact Global",
+      "active_projects": "Projets Actifs",
+      "engaged_members": "Membres Engagés",
+      "ethical_products": "Produits Éthiques",
+      "points_generated": "Points Générés"
+    },
+    "blog_section": {
+      "title": "Dernières actualités",
+      "view_all": "Voir tous les articles"
+    },
     "featured_projects": "Projets en vedette",
     "view_all_projects": "Voir tous les projets",
+    "project_card": {
+      "active": "Actif",
+      "funded": "financé"
+    },
     "featured_products": "Produits populaires",
     "view_all_products": "Voir tous les produits",
     "cta": {
       "title": "Prêt à faire la différence ?",
       "description": "Rejoignez notre communauté d'investisseurs responsables et contribuez à la préservation de la biodiversité.",
-      "button": "Créer mon compte"
+      "button": "Créer mon compte",
+      "stats": {
+        "engagement": "Engagement Total",
+        "transparency": "Transparence 100%",
+        "community": "Communauté Active"
+      }
     }
   },
   "about": {
@@ -503,7 +564,24 @@
       "all": "Tous",
       "active": "Actifs",
       "completed": "Terminés",
-      "search_placeholder": "Rechercher un projet..."
+      "search_placeholder": "Rechercher un projet...",
+      "reset_filters": "Réinitialiser les filtres",
+      "empty_description": "Essayez de modifier vos filtres ou revenez plus tard pour découvrir de nouveaux projets.",
+      "featured": "Vedette",
+      "status": {
+        "active": "En cours",
+        "completed": "Terminé",
+        "all": "Tous"
+      },
+      "location": {
+        "unspecified": "Localisation non spécifiée"
+      },
+      "progress": {
+        "label": "Progression",
+        "collected": "collectés",
+        "goal": "Obj."
+      },
+      "cta": "Voir le projet"
     },
     "card": {
       "funded": "financé",
@@ -520,26 +598,129 @@
     "empty": "Aucun projet trouvé"
   },
   "products": {
-    "title": "Notre boutique",
-    "subtitle": "Échangez vos points contre des produits durables de nos partenaires",
-    "filter": {
-      "all": "Tous",
-      "category": "Catégorie",
-      "price": "Prix",
-      "search_placeholder": "Rechercher un produit..."
+      "title": "Notre boutique",
+      "subtitle": "Échangez vos points contre des produits durables de nos partenaires",
+      "search_placeholder": "Rechercher des produits...",
+      "featured": "Mis en avant",
+      "product_list": "produits",
+      "filters": {
+        "title": "Filtres",
+        "all_categories": "Toutes les catégories",
+        "all_producers": "Tous les producteurs",
+        "all_tags": "Tous les tags",
+        "sort_by": "Trier par",
+        "clear_filters": "Effacer les filtres",
+        "clear_all": "Tout effacer"
+      },
+      "sort": {
+        "featured": "Mis en avant",
+        "name_asc": "Nom (A-Z)",
+        "name_desc": "Nom (Z-A)",
+        "price_asc": "Prix croissant",
+        "price_desc": "Prix décroissant"
+      },
+      "empty_state": {
+        "title": "Aucun produit trouvé",
+        "description": "Essayez de modifier vos filtres ou termes de recherche"
+      },
+      "card": {
+        "points": "points",
+        "add_to_cart": "Ajouter au panier",
+        "out_of_stock": "Rupture de stock",
+        "best_seller": "Best Seller",
+        "low_stock": "Stock faible",
+        "sold_out": "Épuisé",
+        "adding": "Ajout...",
+        "added_message": "Ajouté au panier",
+        "view_action": "Voir",
+        "default_name": "Produit",
+        "default_description": "Description du produit"
+      },
+      "detail": {
+        "description": "Description",
+        "producer": "Producteur",
+        "certifications": "Certifications",
+        "exchange": "Échanger"
+      }
     },
-    "card": {
-      "points": "points",
-      "add_to_cart": "Ajouter au panier",
-      "out_of_stock": "Rupture de stock"
+  "checkout": {
+    "title": "Commande",
+    "steps": {
+      "cart": "Panier",
+      "address": "Adresse",
+      "confirm": "Confirmer",
+      "step_indicator": "Étape {current}/{total}"
     },
-    "detail": {
-      "description": "Description",
-      "producer": "Producteur",
-      "certifications": "Certifications",
-      "exchange": "Échanger"
+    "validation": {
+      "first_name_required": "Prénom requis",
+      "last_name_required": "Nom requis",
+      "address_required": "Adresse requise",
+      "city_required": "Ville requise",
+      "postal_code_required": "Code postal requis",
+      "country_required": "Pays requis"
     },
-    "empty": "Aucun produit trouvé"
+    "empty": {
+      "title": "Votre panier est vide",
+      "description": "Ajoutez des produits avant de passer commande.",
+      "cta": "Explorer la boutique"
+    },
+    "header": {
+      "items_count": "{count} article(s)",
+      "back": "Retour",
+      "edit": "Modifier"
+    },
+    "errors": {
+      "stale_cart": {
+        "title": "Mise à jour requise",
+        "description": "Certains articles dans votre panier ont des prix obsolètes. Veuillez vider votre panier et ajouter les articles à nouveau pour payer en euros.",
+        "action": "Vider le panier et retourner à la boutique"
+      },
+      "insufficient_points_server": "Votre solde a été vérifié côté serveur et il est insuffisant pour confirmer cette commande.",
+      "insufficient_points": "Points insuffisants pour confirmer cette commande.",
+      "generic": "Une erreur est survenue. Réessayez."
+    },
+    "actions": {
+      "earn_points": "Gagner des points",
+      "view_balance": "Voir mon solde",
+      "continue": "Continuer",
+      "confirm_points": "Confirmer (Points)",
+      "pay_simulation": "Payer (Simulation)"
+    },
+    "summary": {
+      "title": "Récapitulatif",
+      "other_items": "+{count} autre(s) article(s)",
+      "total": "Total",
+      "total_order": "Total commande"
+    },
+    "address": {
+      "title": "Adresse de livraison",
+      "labels": {
+        "first_name": "Prénom",
+        "last_name": "Nom",
+        "street": "Adresse",
+        "city": "Ville",
+        "postal_code": "Code postal",
+        "country": "Pays"
+      }
+    },
+    "payment": {
+      "title": "Moyen de paiement",
+      "points": "Mes Points",
+      "balance": "Solde: {amount} pts",
+      "card": "Carte Bancaire",
+      "simulation": "Simulation (Euros)",
+      "confirmation_title": "Confirmation",
+      "current_balance": "Solde actuel",
+      "after_purchase": "Après achat",
+      "total_to_pay": "Total à payer"
+    },
+    "footer": {
+      "no_hidden_fees": "Aucun frais caché.",
+      "status": {
+        "ok": "OK",
+        "insufficient": "Insuffisant"
+      }
+    }
   },
   "auth": {
     "login": "Se connecter",
@@ -569,7 +750,19 @@
       "total_invested": "Total investi",
       "points_balance": "Solde de points",
       "projects_supported": "Projets soutenus",
-      "orders_completed": "Commandes"
+      "orders_completed": "Commandes",
+      "kyc_status": "Statut KYC",
+      "levels": {
+        "explorateur": "Explorateur",
+        "protecteur": "Protecteur",
+        "ambassadeur": "Ambassadeur"
+      },
+      "kyc": {
+        "pending": "En attente",
+        "light": "Vérification légère",
+        "complete": "Vérifié",
+        "rejected": "Rejeté"
+      }
     },
     "recent_activity": "Activité récente",
     "quick_actions": {
@@ -577,6 +770,32 @@
       "browse_projects": "Parcourir les projets",
       "browse_products": "Parcourir la boutique",
       "view_investments": "Voir mes investissements"
+    },
+    "settings": {
+      "title": "Préférences & Compte",
+      "description": "Gérez vos réglages de compte",
+      "general": {
+        "language": "Langue",
+        "timezone": "Fuseau horaire"
+      },
+      "privacy": {
+        "title": "Confidentialité & Consentements",
+        "public_profile": {
+          "label": "Profil public",
+          "description": "Permet d'apparaître dans le classement et d'avoir un profil public."
+        },
+        "marketing": {
+          "label": "Communications marketing",
+          "description": "Recevoir des nouvelles de la plateforme et des projets."
+        }
+      },
+      "socials": {
+        "title": "Réseaux Sociaux",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram",
+        "twitter": "X (Twitter)"
+      },
+      "save": "Enregistrer les préférences"
     }
   },
   "profile": {
@@ -591,6 +810,12 @@
     "postal_code": "Code postal",
     "country": "Pays",
     "save_changes": "Enregistrer les modifications",
+    "location": "Localisation",
+    "residence_address": "Adresse de résidence",
+    "bio_impact": "Biographie & Impact",
+    "tell_your_story": "Racontez votre histoire",
+    "edit_profile": "Édition du Profil",
+    "account_security": "Sécurité du compte",
     "change_password": "Changer le mot de passe",
     "current_password": "Mot de passe actuel",
     "new_password": "Nouveau mot de passe",
@@ -618,6 +843,7 @@
       "processing": "En préparation",
       "shipped": "Expédié",
       "delivered": "Livré",
+      "completed": "Terminé",
       "cancelled": "Annulé"
     },
     "details": "Détails de la commande"

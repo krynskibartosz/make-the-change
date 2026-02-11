@@ -45,3 +45,37 @@ export interface SelectOption<T extends string | number = string> {
 }
 
 export type HTMLElementType = React.ElementType | React.ForwardRefExoticComponent<unknown>
+
+export type Brand = 
+  | 'default' 
+  | 'ocean' 
+  | 'forest' 
+  | 'minimal'
+  | 'nostalgic'
+  | 'neon'
+  | 'vintage'
+  | 'corporate'
+  | 'eco'
+  | 'pastel'
+  | 'luxury'
+  | 'retro'
+  | 'neuro'
+  | 'biolum'
+  | 'heritage'
+  | 'custom'
+
+export interface UserTheme {
+  id: string
+  name: string
+  brand: Brand
+  customVars: Record<string, string>
+  created_at: string
+  updated_at: string
+}
+
+export interface ThemeConfig {
+  activeThemeId: string
+  customThemes: UserTheme[]
+  brand?: Brand // Legacy support
+  customVars?: Record<string, string> // Legacy support
+}

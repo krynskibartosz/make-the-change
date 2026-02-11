@@ -5,7 +5,7 @@ import { getLocale } from 'next-intl/server'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link, redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate, formatPoints } from '@/lib/utils'
+import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
 
 interface CheckoutSuccessPageProps {
   searchParams: Promise<{ orderId?: string }>
@@ -59,6 +59,12 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
 
   const items = (order.items ?? []) as unknown as OrderItemRow[]
 
+  const totalEuros = items.reduce((sum, item) => {
+    const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
+    const priceEuros = (snapshot.priceEuros as number) || 0
+    return sum + (priceEuros * item.quantity)
+  }, 0)
+
   return (
     <SectionContainer
       size="md"
@@ -87,9 +93,16 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
             <div className="rounded-2xl border bg-muted/30 px-4 py-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Total</span>
-                <span className="font-semibold text-foreground">
-                  {formatPoints(Number(order.total_points || 0))} pts
-                </span>
+                <div className="flex flex-col items-end">
+                  <span className="font-semibold text-foreground">
+                    {formatPoints(Number(order.total_points || 0))} pts
+                  </span>
+                  {totalEuros > 0 && (
+                    <span className="text-xs text-muted-foreground font-medium">
+                      {formatCurrency(totalEuros)}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -97,14 +110,22 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
               {items.slice(0, 3).map((item) => {
                 const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
                 const name = (snapshot.name as string | undefined) || 'Produit'
+                const priceEuros = (snapshot.priceEuros as number) || 0
                 return (
                   <div key={item.id} className="flex items-center justify-between gap-3 text-sm">
                     <span className="truncate">
                       {name} <span className="text-muted-foreground">x{item.quantity}</span>
                     </span>
-                    <span className="font-semibold tabular-nums">
-                      {formatPoints(Number(item.total_price_points || 0))} pts
-                    </span>
+                    <div className="flex flex-col items-end">
+                      <span className="font-semibold tabular-nums">
+                        {formatPoints(Number(item.total_price_points || 0))} pts
+                      </span>
+                      {priceEuros > 0 && (
+                        <span className="text-xs text-muted-foreground tabular-nums">
+                          {formatCurrency(priceEuros * item.quantity)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 )
               })}

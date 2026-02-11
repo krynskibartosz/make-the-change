@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getOrderStatusColor } from '@/lib/status-colors'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate, formatPoints } from '@/lib/utils'
+import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
 
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>
@@ -16,7 +16,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const t = await getTranslations('orders')
   const supabase = await createClient()
 
-  const { data: orderData } = await supabase
+  const { data: order } = await supabase
     .from('orders')
     .select(
       `
@@ -42,9 +42,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     .eq('id', id)
     .single()
 
-  if (!orderData) notFound()
-
-  const order = orderData as any
+  if (!order) notFound()
 
   type OrderItemRow = {
     id: string
@@ -56,6 +54,12 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
   const items = (order.items ?? []) as unknown as OrderItemRow[]
   const address = (order.shipping_address || {}) as Record<string, unknown>
+
+  const totalEuros = items.reduce((sum, item) => {
+    const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
+    const priceEuros = (snapshot.priceEuros as number) || 0
+    return sum + (priceEuros * item.quantity)
+  }, 0)
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -75,7 +79,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               {t(`status.${order.status}`)}
             </Badge>
           </div>
-          <h1 className="text-2xl font-bold sm:text-3xl">Commande #{order.id.slice(0, 8)}</h1>
+          <h1 className="text-2xl font-bold sm:text-3xl">Commande #{order.id?.slice(0, 8)}</h1>
           <p className="text-sm text-muted-foreground">
             {formatDate(order.created_at || new Date())}
           </p>
@@ -88,6 +92,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             {items.map((item) => {
               const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
               const name = (snapshot.name as string | undefined) || 'Produit'
+              const priceEuros = (snapshot.priceEuros as number) || 0
               return (
                 <div
                   key={item.id}
@@ -99,9 +104,16 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                       x{item.quantity} • {formatPoints(Number(item.unit_price_points || 0))} pts
                     </p>
                   </div>
-                  <p className="text-sm font-semibold text-primary tabular-nums">
-                    {formatPoints(Number(item.total_price_points || 0))} pts
-                  </p>
+                  <div className="flex flex-col items-end">
+                    <p className="text-sm font-semibold text-primary tabular-nums">
+                      {formatPoints(Number(item.total_price_points || 0))} pts
+                    </p>
+                    {priceEuros > 0 && (
+                      <p className="text-xs text-muted-foreground tabular-nums">
+                        {formatCurrency(priceEuros * item.quantity)}
+                      </p>
+                    )}
+                  </div>
                 </div>
               )
             })}
@@ -163,9 +175,16 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             </div>
             <div className="flex items-center justify-between rounded-xl border bg-muted/30 px-3 py-2">
               <span className="text-muted-foreground">Total</span>
-              <span className="font-semibold text-primary">
-                {formatPoints(Number(order.total_points || 0))} pts
-              </span>
+              <div className="flex flex-col items-end">
+                <span className="font-semibold text-primary">
+                  {formatPoints(Number(order.total_points || 0))} pts
+                </span>
+                {totalEuros > 0 && (
+                  <span className="text-xs text-muted-foreground font-medium">
+                    {formatCurrency(totalEuros)}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </DetailView.Section>

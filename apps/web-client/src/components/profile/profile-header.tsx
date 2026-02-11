@@ -112,37 +112,39 @@ export const ProfileHeader = ({
       </div>
 
       {/* Profile Info Overlay */}
-      <div className="container mx-auto relative -mt-16 flex flex-col gap-4 px-4 pb-6 sm:px-8 md:flex-row md:items-end md:justify-between">
-        <div className="flex items-end gap-4">
-          <div className="relative h-24 w-24 md:h-32 md:w-32">
+      <div className="container mx-auto relative -mt-16 flex flex-col gap-6 px-4 pb-6 sm:px-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-end text-center sm:text-left">
+          <div className="relative h-32 w-32 md:h-40 md:w-40 -mt-8 sm:mt-0">
             <ImageUploader
               imageSrc={avatarUrl}
               size="avatar"
               isLoading={isAvatarLoading}
               onImageClick={handleAvatarClick}
               disabled={readonly}
-              className="h-full w-full rounded-full shadow-2xl"
+              className="h-full w-full rounded-full border-4 border-background shadow-2xl"
               containerClassName="h-full w-full"
             />
           </div>
           
           <div className="mb-2">
-            <h1 className="text-3xl font-bold text-foreground md:text-4xl">{name}</h1>
-            <div className="flex items-center gap-2">
-              {email && <p className="text-sm text-muted-foreground">{email}</p>}
-              <Badge className={cn('rounded-full', levelClass)}>
+            <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl tracking-tight">{name}</h1>
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-1">
+              {email && <p className="text-sm text-muted-foreground font-medium">{email}</p>}
+              <Badge className={cn('rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider', levelClass)}>
                 {level.charAt(0).toUpperCase() + level.slice(1)}
               </Badge>
             </div>
           </div>
         </div>
 
-        <div className="hidden rounded-2xl border bg-background/50 px-6 py-4 backdrop-blur md:block">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Impact score</p>
-          <p className="text-3xl font-bold text-foreground">
-            {new Intl.NumberFormat('fr-FR').format(impactScore)}
-          </p>
-          <p className="text-xs text-muted-foreground">Votre progression globale</p>
+        <div className="flex flex-col gap-1 rounded-2xl border bg-background/60 p-4 sm:p-6 backdrop-blur-md shadow-xl lg:min-w-[200px]">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/70">Impact score</p>
+          <div className="flex items-baseline gap-2">
+            <p className="text-3xl font-black text-foreground lg:text-4xl">
+              {new Intl.NumberFormat('fr-FR').format(impactScore)}
+            </p>
+          </div>
+          <p className="text-xs font-medium text-muted-foreground/60">Votre progression globale</p>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { useCartUI } from '@/features/commerce/cart/cart-ui-provider'
 import { useCart } from '@/features/commerce/cart/use-cart'
 import { Link } from '@/i18n/navigation'
 import { getRandomProductImage } from '@/lib/placeholder-images'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatPoints, formatCurrency } from '@/lib/utils'
 
 interface ProductCardProps {
   product: Product
@@ -52,7 +52,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         productId: product.id,
         quantity: 1,
         snapshot: {
-          name: product.name_default || 'Produit',
+          name: product.name_default || t('default_name'),
           slug: product.slug || '',
           pricePoints: Number(product.price_points || 0),
           priceEuros: product.price_eur_equivalent ? Number(product.price_eur_equivalent) : undefined,
@@ -63,8 +63,8 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       })
       
       showSnackbar({
-        message: 'Ajouté au panier',
-        actionLabel: 'Voir',
+        message: t('added_message'),
+        actionLabel: t('view_action'),
         onAction: openCart,
         durationMs: 3000,
       })
@@ -85,7 +85,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         {/* Main Image */}
         <img
           src={mainImage}
-          alt={product.name_default || 'Produit'}
+          alt={product.name_default || t('default_name')}
           className={cn(
             'absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-in-out',
             isHovered && secondaryImage !== mainImage ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
@@ -97,7 +97,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         {secondaryImage !== mainImage && (
           <img
             src={secondaryImage}
-            alt={product.name_default || 'Produit'}
+            alt={product.name_default || t('default_name')}
             className={cn(
               'absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-in-out',
               isHovered ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
@@ -110,17 +110,17 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         <div className="absolute left-3 top-3 flex flex-col gap-2">
           {product.featured && (
             <Badge variant="default" className="w-fit bg-primary/90 hover:bg-primary">
-              Best Seller
+              {t('best_seller')}
             </Badge>
           )}
           {showLowStock && (
             <Badge variant="destructive" className="w-fit opacity-90">
-              Low Stock
+              {t('low_stock')}
             </Badge>
           )}
           {isOutOfStock && (
             <Badge variant="outline" className="w-fit bg-background/80 backdrop-blur">
-              Épuisé
+              {t('sold_out')}
             </Badge>
           )}
         </div>
@@ -150,7 +150,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
             disabled={isOutOfStock || isAdding}
           >
             {isAdding ? (
-              <span className="animate-pulse">Ajout...</span>
+              <span className="animate-pulse">{t('adding')}</span>
             ) : isOutOfStock ? (
               t('out_of_stock')
             ) : (
@@ -179,13 +179,20 @@ export function ProductCard({ product, className, priority = false }: ProductCar
           <h3 className="font-medium leading-tight text-foreground group-hover:text-primary transition-colors">
             {product.name_default}
           </h3>
-          <span className="font-bold text-primary shrink-0 ml-2">
-            {formatPoints(product.price_points || 0)} pts
-          </span>
+          <div className="flex flex-col items-end shrink-0 ml-2">
+            <span className="font-bold text-primary">
+              {formatPoints(product.price_points || 0)} pts
+            </span>
+            {product.price_eur_equivalent && (
+              <span className="text-xs text-muted-foreground font-medium">
+                {formatCurrency(Number(product.price_eur_equivalent))}
+              </span>
+            )}
+          </div>
         </div>
         
         <p className="line-clamp-1 text-sm text-muted-foreground">
-           {product.short_description_default || "Description du produit"}
+           {product.short_description_default || t('default_description')}
         </p>
 
         {product.tags && product.tags.length > 0 && (

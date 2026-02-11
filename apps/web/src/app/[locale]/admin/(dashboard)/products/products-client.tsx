@@ -1,7 +1,25 @@
 'use client'
 
-import { Button, CheckboxWithLabel, Input, SimpleSelect } from '@make-the-change/core/ui'
-import { Package, Plus } from 'lucide-react'
+import {
+  Button,
+  CheckboxWithLabel,
+  Input,
+  DataList,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@make-the-change/core/ui'
+import {
+  Package,
+  Plus,
+  Building2,
+  Folder,
+  ArrowUpDown,
+  Hash,
+  Search,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useQueryStates } from 'nuqs'
 import { type FC, useMemo, useState } from 'react'
@@ -19,9 +37,11 @@ import {
   ViewToggle,
 } from '@/app/[locale]/admin/(dashboard)/components/ui/view-toggle'
 import { ProductCard } from '@/app/[locale]/admin/(dashboard)/products/components/product'
-import { ProductCardSkeleton, ProductListSkeleton } from '@/app/[locale]/admin/(dashboard)/products/components/product-card-skeleton'
+import {
+  ProductCardSkeleton,
+  ProductListSkeleton,
+} from '@/app/[locale]/admin/(dashboard)/products/components/product-card-skeleton'
 import { LocalizedLink } from '@/components/localized-link'
-import { DataList } from '@make-the-change/core/ui'
 import type { Product } from '@/lib/types/product'
 
 import { PAGE_SIZE as pageSize } from './constants'
@@ -46,7 +66,8 @@ const createCategoryHierarchy = (
   categories: Categories | undefined,
   t: (key: string) => string,
 ): SelectOption[] => {
-  if (!categories) return [{ value: 'all', label: t('admin.products.filters.all_categories') }]
+  if (!categories)
+    return [{ value: 'all', label: t('admin.products.filters.all_categories') }]
 
   const rootCategories = categories.filter((cat) => !cat.parentId)
   const subCategories = categories.filter((cat) => cat.parentId)
@@ -83,6 +104,48 @@ const getSortOptions = (t: (key: string) => string): SelectOption[] => [
   { value: 'price_desc', label: t('admin.products.sort.price_desc') },
   { value: 'featured_first', label: t('admin.products.sort.featured') },
 ]
+
+const FilterSelect = ({
+  icon,
+  placeholder,
+  value,
+  onValueChange,
+  options,
+  disabled,
+  className,
+}: {
+  icon?: React.ReactNode
+  placeholder: string
+  value?: string
+  onValueChange?: (val: string) => void
+  options: SelectOption[]
+  disabled?: boolean
+  className?: string
+}) => (
+  <Select 
+    value={value} 
+    onValueChange={(val) => onValueChange?.(val || '')} 
+    disabled={disabled}
+  >
+    <SelectTrigger className={className}>
+      <div className="flex items-center gap-2 truncate">
+        {icon && (
+          <span className="text-muted-foreground/70 shrink-0">{icon}</span>
+        )}
+        <span className="truncate">
+          <SelectValue placeholder={placeholder} />
+        </span>
+      </div>
+    </SelectTrigger>
+    <SelectContent>
+      {options.map((opt) => (
+        <SelectItem key={opt.value} value={opt.value}>
+          {opt.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)
 
 export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
   const t = useTranslations()
@@ -136,13 +199,23 @@ export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
         sortBy !== 'created_at_desc' ||
         selectedTags.length > 0
       ),
-    [search, activeOnly, selectedProducerId, selectedCategoryId, sortBy, selectedTags],
+    [
+      search,
+      activeOnly,
+      selectedProducerId,
+      selectedCategoryId,
+      sortBy,
+      selectedTags,
+    ],
   )
 
   const producerOptions = useMemo(
     (): SelectOption[] =>
       producers
-        ? createSelectOptions(producers, t('admin.products.filters.all_partners'))
+        ? createSelectOptions(
+            producers,
+            t('admin.products.filters.all_partners'),
+          )
         : [{ value: 'all', label: t('admin.products.filters.all_partners') }],
     [producers, t],
   )
@@ -163,7 +236,8 @@ export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
 
   const sortOptions = useMemo(() => getSortOptions(t), [t])
   const sortSelectionItems = useMemo(
-    () => sortOptions.map((option) => ({ id: option.value, name: option.label })),
+    () =>
+      sortOptions.map((option) => ({ id: option.value, name: option.label })),
     [sortOptions],
   )
 
@@ -173,101 +247,150 @@ export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
 
   return (
     <AdminPageContainer>
-      <AdminPageHeader>
+      <AdminPageHeader
+        title={t('admin.products.title')}
+        description={t('admin.products.description')}
+      >
         <div className="flex items-center gap-2">
           <LocalizedLink href="/admin/products/new">
             <Button icon={<Plus />} size="sm">
               {t('admin.products.new_product')}
             </Button>
           </LocalizedLink>
-          <ViewToggle value={view as ViewMode} onChange={(v) => setFilters({ view: v })} />
+          <ViewToggle
+            value={view as ViewMode}
+            onChange={(v) => setFilters({ view: v })}
+          />
         </div>
       </AdminPageHeader>
 
       <div className="space-y-3 md:hidden">
         <div className="flex items-center gap-2">
-          <div className="flex-1">
+          <div className="flex-1 relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
+              className="pl-9"
               aria-label={t('admin.products.search_placeholder')}
               placeholder={t('admin.products.search_placeholder')}
               defaultValue={search}
               onChange={(e) => debouncedSearch(e.target.value)}
             />
           </div>
-          <AdminFilterButton isActive={isFilterActive} onClick={() => setIsFilterModalOpen(true)} />
+          <AdminFilterButton
+            isActive={isFilterActive}
+            onClick={() => setIsFilterModalOpen(true)}
+          />
         </div>
       </div>
 
-      <div className="hidden md:block space-y-4">
-        <div className="flex items-center gap-4">
-          <div className="flex-1 max-w-md">
+      <div className="hidden md:flex flex-col gap-4 p-4 bg-card/40 border rounded-xl mb-6 shadow-sm">
+        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+          <div className="flex-1 w-full lg:max-w-md relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              className="pl-9 bg-background"
               aria-label={t('admin.products.search_placeholder')}
               placeholder={t('admin.products.search_placeholder')}
               defaultValue={search}
               onChange={(e) => debouncedSearch(e.target.value)}
             />
           </div>
-        </div>
 
-        <div className="flex items-center gap-3 flex-wrap">
-          <SimpleSelect
-            className="w-48"
-            disabled={!producers}
-            options={producerOptions}
-            placeholder={t('admin.products.filters.all_partners')}
-            value={selectedProducerId || 'all'}
-            onValueChange={(value) => updateFilters({ producer: value === 'all' ? 'all' : value })}
-          />
-
-          <SimpleSelect
-            className="w-52"
-            disabled={!categories}
-            options={categoryOptions}
-            placeholder={t('admin.products.filters.all_categories')}
-            value={selectedCategoryId || 'all'}
-            onValueChange={(value) => updateFilters({ category: value === 'all' ? 'all' : value })}
-          />
-
-          <SimpleSelect
-            className="w-44"
-            options={sortOptions}
-            placeholder={t('admin.products.filters.sort_by')}
-            value={sortBy}
-            onValueChange={(value) => updateFilters({ sort: value as typeof sortBy })}
-          />
-
-          <SimpleSelect
-            className="w-40"
-            disabled={!tagsData}
-            options={tagOptions}
-            placeholder={t('admin.products.filters.tags_placeholder')}
-            value=""
-            onValueChange={(value) => {
-              if (value && !selectedTags.includes(value)) {
-                const newTags = [...selectedTags, value]
-                updateFilters({ tags: newTags })
+          <div className="flex items-center gap-3 flex-wrap flex-1 w-full lg:w-auto">
+            <FilterSelect
+              className="w-full sm:w-[200px]"
+              icon={<Building2 className="h-4 w-4" />}
+              options={producerOptions}
+              placeholder={t('admin.products.filters.all_partners')}
+              value={selectedProducerId || 'all'}
+              onValueChange={(value) =>
+                updateFilters({ producer: value === 'all' ? 'all' : value })
               }
-            }}
-          />
+              disabled={!producers}
+            />
 
-          <CheckboxWithLabel
-            checked={activeOnly}
-            label={t('admin.products.filters.active_only')}
-            onCheckedChange={(v) => updateFilters({ active_only: !!v })}
-          />
+            <FilterSelect
+              className="w-full sm:w-[200px]"
+              icon={<Folder className="h-4 w-4" />}
+              options={categoryOptions}
+              placeholder={t('admin.products.filters.all_categories')}
+              value={selectedCategoryId || 'all'}
+              onValueChange={(value) =>
+                updateFilters({ category: value === 'all' ? 'all' : value })
+              }
+              disabled={!categories}
+            />
 
-          {isFilterActive && (
-            <Button
-              className="text-xs px-3 py-2 h-auto text-muted-foreground hover:text-foreground border-dashed"
-              size="sm"
-              variant="outline"
-              onClick={resetFilters}
-            >
-              {t('admin.products.filters.clear_filters')}
-            </Button>
-          )}
+            <FilterSelect
+              className="w-full sm:w-[180px]"
+              icon={<ArrowUpDown className="h-4 w-4" />}
+              options={sortOptions}
+              placeholder={t('admin.products.filters.sort_by')}
+              value={sortBy}
+              onValueChange={(value) =>
+                updateFilters({ sort: value as typeof sortBy })
+              }
+            />
+
+            <FilterSelect
+              className="w-full sm:w-[160px]"
+              icon={<Hash className="h-4 w-4" />}
+              options={tagOptions}
+              placeholder={t('admin.products.filters.tags_placeholder')}
+              value=""
+              onValueChange={(value) => {
+                if (value && !selectedTags.includes(value)) {
+                  const newTags = [...selectedTags, value]
+                  updateFilters({ tags: newTags })
+                }
+              }}
+              disabled={!tagsData}
+            />
+
+            <div className="flex items-center px-2">
+              <CheckboxWithLabel
+                checked={activeOnly}
+                label={t('admin.products.filters.active_only')}
+                onCheckedChange={(v) => updateFilters({ active_only: !!v })}
+              />
+            </div>
+
+            {isFilterActive && (
+              <Button
+                className="ml-auto text-xs px-3 py-2 h-auto text-muted-foreground hover:text-foreground border-dashed"
+                size="sm"
+                variant="outline"
+                onClick={resetFilters}
+              >
+                {t('admin.products.filters.clear_filters')}
+              </Button>
+            )}
+          </div>
         </div>
+
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-2 border-t border-border/50">
+            {selectedTags.map((tag) => (
+              <span
+                key={tag}
+                className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full flex items-center gap-1"
+              >
+                <Hash className="h-3 w-3" />
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newTags = selectedTags.filter((t) => t !== tag)
+                    updateFilters({ tags: newTags })
+                  }}
+                  className="hover:text-primary/80 ml-1"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       <DataList
@@ -291,8 +414,10 @@ export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
             product={product}
             view={view === 'map' ? 'grid' : (view as 'list' | 'grid')}
             onFilterChange={{
-              setCategory: (categoryId: string) => updateFilters({ category: categoryId }),
-              setProducer: (producerId: string) => updateFilters({ producer: producerId }),
+              setCategory: (categoryId: string) =>
+                updateFilters({ category: categoryId }),
+              setProducer: (producerId: string) =>
+                updateFilters({ producer: producerId }),
               addTag: (tag: string) => {
                 if (!selectedTags.includes(tag)) {
                   const newTags = [...selectedTags, tag]
@@ -302,7 +427,9 @@ export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
             }}
           />
         )}
-        renderSkeleton={() => (view === 'grid' ? <ProductCardSkeleton /> : <ProductListSkeleton />)}
+        renderSkeleton={() =>
+          view === 'grid' ? <ProductCardSkeleton /> : <ProductListSkeleton />
+        }
       />
 
       {totalPages > 1 && (
@@ -318,16 +445,24 @@ export const ProductsClient: FC<ProductsClientProps> = ({ initialData }) => {
           />
         </div>
       )}
-      <AdminFilterSheet open={isFilterModalOpen} onOpenChange={setIsFilterModalOpen}>
+      <AdminFilterSheet
+        open={isFilterModalOpen}
+        onOpenChange={setIsFilterModalOpen}
+      >
         <Filters>
-          <Filters.View view={view as ViewMode} onViewChange={(v) => setFilters({ view: v })} />
+          <Filters.View
+            view={view as ViewMode}
+            onViewChange={(v) => setFilters({ view: v })}
+          />
 
           <Filters.Selection
             allLabel=""
             items={sortSelectionItems}
             label={t('admin.products.filters.sort_by')}
             selectedId={sortBy}
-            onSelectionChange={(id) => updateFilters({ sort: id as typeof sortBy })}
+            onSelectionChange={(id) =>
+              updateFilters({ sort: id as typeof sortBy })
+            }
           />
 
           <Filters.Selection

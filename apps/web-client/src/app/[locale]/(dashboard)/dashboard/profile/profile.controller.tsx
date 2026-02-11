@@ -1,9 +1,10 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useOptimisticAutoSave } from '@/hooks/use-optimistic-auto-save'
 import { ProfileView } from './profile.view'
 import { 
   profileSchema, 
@@ -37,6 +38,7 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
 
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
+    mode: 'onBlur',
     defaultValues: {
       firstName: profile?.first_name || '',
       lastName: profile?.last_name || '',
@@ -49,24 +51,28 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
     }
   })
 
-  const passwordForm = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      newPassword: '',
-      confirmPassword: ''
-    }
+  const autoSave = useOptimisticAutoSave({
+    saveFn: async (data: ProfileFormValues) => {
+      const result = await updateProfile(data)
+      if (result.error) throw new Error(result.error)
+    },
+    debounceMs: 2000,
   })
+
+  // Watch for changes to trigger markDirty
+  useEffect(() => {
+    const subscription = profileForm.watch((value) => {
+      if (profileForm.formState.isDirty) {
+        autoSave.markDirty(value)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [profileForm.watch, profileForm.formState.isDirty, autoSave.markDirty])
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
     setProfileStatus({})
-    const result = await updateProfile(data)
-    setProfileStatus(result)
-    
-    // On success, we keep the form values as they are now synced
-    // Optional: reset({ ...data }) to reset dirty state
-    if (result.success) {
-      profileForm.reset(data)
-    }
+    await autoSave.saveNow()
+    profileForm.reset(data)
   }
 
   const onPasswordSubmit = async (data: PasswordFormValues) => {
@@ -79,17 +85,26 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
     }
   }
 
+  const passwordForm = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      newPassword: '',
+      confirmPassword: ''
+    }
+  })
+
   return (
     <ProfileView
       profileForm={profileForm}
       passwordForm={passwordForm}
       onProfileSubmit={onProfileSubmit}
       onPasswordSubmit={onPasswordSubmit}
-      isProfileSubmitting={profileForm.formState.isSubmitting}
+      isProfileSubmitting={profileForm.formState.isSubmitting || autoSave.status === 'saving'}
       isPasswordSubmitting={passwordForm.formState.isSubmitting}
       profileStatus={profileStatus}
       passwordStatus={passwordStatus}
       userEmail={userEmail}
+      autoSave={autoSave}
       t={t}
     />
   )

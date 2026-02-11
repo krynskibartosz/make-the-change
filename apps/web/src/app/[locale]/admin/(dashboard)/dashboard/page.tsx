@@ -1,5 +1,12 @@
 import { db } from '@make-the-change/core/db'
-import { orders, producers, products, projects } from '@make-the-change/core/schema'
+import {
+  challenges,
+  orders,
+  producers,
+  products,
+  profiles,
+  projects,
+} from '@make-the-change/core/schema'
 import { and, count, eq, inArray, lte } from 'drizzle-orm'
 import { requireAdminPage } from '@/lib/auth-guards'
 import AdminDashboardClient from './dashboard-client'
@@ -28,10 +35,20 @@ export default async function AdminDashboardPage({
       .from(producers)
       .where(eq(producers.status, 'pending'))
 
+    const [pendingKyc] = await db
+      .select({ count: count() })
+      .from(profiles)
+      .where(eq(profiles.kyc_status, 'pending'))
+
     const [activeProjects] = await db
       .select({ count: count() })
       .from(projects)
       .where(eq(projects.status, 'active'))
+
+    const [activeChallenges] = await db
+      .select({ count: count() })
+      .from(challenges)
+      .where(eq(challenges.status, 'active'))
 
     return (
       <AdminDashboardClient
@@ -39,7 +56,9 @@ export default async function AdminDashboardPage({
           pendingOrders: pendingOrders?.count ?? 0,
           lowStockProducts: lowStockProducts?.count ?? 0,
           pendingProducers: pendingProducers?.count ?? 0,
+          pendingKyc: pendingKyc?.count ?? 0,
           activeProjects: activeProjects?.count ?? 0,
+          activeChallenges: activeChallenges?.count ?? 0,
         }}
       />
     )
@@ -50,7 +69,9 @@ export default async function AdminDashboardPage({
           pendingOrders: 0,
           lowStockProducts: 0,
           pendingProducers: 0,
+          pendingKyc: 0,
           activeProjects: 0,
+          activeChallenges: 0,
         }}
         hasError
       />

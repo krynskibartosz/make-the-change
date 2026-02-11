@@ -12,6 +12,9 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactCompiler: true,
+  experimental: {
+  },
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -27,6 +30,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'plus.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.ilanga-nature.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
       },
     ],
   },

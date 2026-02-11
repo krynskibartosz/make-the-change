@@ -25,6 +25,13 @@ export async function updateSettings(
   const timezone = (formData.get('timezone') as string) || 'Europe/Paris'
   const publicProfile = formData.get('publicProfile') === 'on'
 
+  // Social links
+  const socialLinks = {
+    linkedin: formData.get('social_linkedin') as string || '',
+    instagram: formData.get('social_instagram') as string || '',
+    twitter: formData.get('social_twitter') as string || '',
+  }
+
   const { data: currentProfile } = await supabase
     .from('profiles')
     .select('metadata')
@@ -43,6 +50,8 @@ export async function updateSettings(
       language_code: languageCode,
       timezone,
       metadata: nextMetadata,
+      social_links: socialLinks,
+      // Removed notification_preferences update from here as it is handled in a separate tab
     })
     .eq('id', user.id)
 

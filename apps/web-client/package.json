@@ -1,6 +1,7 @@
 {
   "name": "@make-the-change/web-client",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "description": "Application cliente Make the Change - Landing pages et app utilisateur",
   "scripts": {

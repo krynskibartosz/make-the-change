@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl'
 import { useActionState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { type AuthState, login } from '../actions'
+import { ArrowRight, Lock, Mail } from 'lucide-react'
 
 export default function LoginPage() {
   const t = useTranslations('auth')
@@ -23,57 +24,72 @@ export default function LoginPage() {
   const returnTo = searchParams.get('returnTo') || ''
 
   return (
-    <Card className="border bg-background/70 shadow-2xl backdrop-blur-xl">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl sm:text-3xl">{t('login')}</CardTitle>
-        <CardDescription className="hidden sm:block">
-          Connectez-vous pour accéder à votre espace
+    <Card className="border bg-background/60 shadow-2xl backdrop-blur-xl rounded-[2.5rem] overflow-hidden">
+      <CardHeader className="p-8 pb-4 text-center space-y-2">
+        <CardTitle className="text-3xl font-black tracking-tight">{t('login')}</CardTitle>
+        <CardDescription className="text-sm font-medium">
+          Ravis de vous revoir ! Accédez à votre impact.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="space-y-4">
+      <CardContent className="p-8 pt-4">
+        <form action={formAction} className="space-y-6">
           <input type="hidden" name="returnTo" value={returnTo} />
           {state.error && (
-            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
               {state.error}
             </div>
           )}
 
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            label={t('email')}
-            placeholder="votre@email.com"
-            required
-            autoComplete="email"
-          />
+          <div className="space-y-4">
+            <div className="relative group">
+              <Mail className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                label={t('email')}
+                placeholder="votre@email.com"
+                className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                required
+                autoComplete="email"
+              />
+            </div>
 
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            label={t('password')}
-            placeholder="••••••••"
-            required
-            autoComplete="current-password"
-          />
+            <div className="relative group">
+              <Lock className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                label={t('password')}
+                placeholder="••••••••"
+                className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                required
+                autoComplete="current-password"
+              />
+            </div>
+          </div>
 
           <div className="flex justify-end">
-            <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+            <Link href="/forgot-password" size="sm" className="text-xs font-bold text-primary hover:underline uppercase tracking-widest">
               {t('forgot_password')}
             </Link>
           </div>
 
-          <Button type="submit" className="w-full" loading={isPending}>
+          <Button 
+            type="submit" 
+            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform" 
+            loading={isPending}
+          >
             {t('login_button')}
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-center">
-        <p className="text-sm text-muted-foreground">
+      <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">
+        <p className="text-sm font-medium text-muted-foreground mt-6">
           {t('no_account')}{' '}
-          <Link href="/register" className="text-primary hover:underline">
+          <Link href="/register" className="text-primary font-black hover:underline uppercase tracking-tight">
             {t('register')}
           </Link>
         </p>

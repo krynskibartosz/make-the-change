@@ -10,11 +10,12 @@ import {
   CardTitle,
   Input,
 } from '@make-the-change/core/ui'
-import { Check, ExternalLink, Mail } from 'lucide-react'
+import { Check, ExternalLink, Mail, User, Shield, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { type FormEvent, useActionState, useMemo, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { type AuthState, register } from '../actions'
+import { cn } from '@/lib/utils'
 
 // Map email domains to their webmail URLs
 const emailProviders: Record<string, { name: string; url: string; icon?: string }> = {
@@ -90,41 +91,44 @@ export default function RegisterPage() {
     const provider = getEmailProvider(submittedEmail)
 
     return (
-      <Card className="border bg-background/70 shadow-2xl backdrop-blur-xl">
-        <CardContent className="pt-6 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
-            <Check className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+      <Card className="border bg-background/60 shadow-2xl backdrop-blur-xl rounded-[2.5rem] overflow-hidden">
+        <CardContent className="p-10 text-center space-y-8">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20">
+            <Check className="h-10 w-10 text-emerald-500" />
           </div>
-          <h2 className="mb-2 text-xl font-semibold">Inscription réussie !</h2>
-          <p className="mb-2 text-muted-foreground">Un email de confirmation a été envoyé à</p>
-          <p className="mb-4 font-medium text-foreground">{submittedEmail}</p>
-          <p className="mb-6 text-sm text-muted-foreground">
-            Cliquez sur le lien dans l'email pour activer votre compte.
-          </p>
+          <div className="space-y-2">
+            <h2 className="text-3xl font-black tracking-tight">Inscription réussie !</h2>
+            <p className="text-muted-foreground font-medium">Un email de confirmation a été envoyé à</p>
+            <p className="text-lg font-black text-primary">{submittedEmail}</p>
+          </div>
+          
+          <div className="p-6 rounded-2xl bg-muted/30 text-sm font-medium text-muted-foreground leading-relaxed">
+            Cliquez sur le lien dans l'email pour activer votre compte et commencer l'aventure.
+          </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {provider ? (
               <a
                 href={provider.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary h-14 text-sm font-black uppercase tracking-widest text-primary-foreground hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 hover:scale-[1.02]"
               >
-                <Mail className="h-4 w-4" />
+                <Mail className="h-5 w-5" />
                 Ouvrir {provider.name}
-                <ExternalLink className="h-3 w-3 opacity-70" />
+                <ExternalLink className="h-4 w-4 opacity-70" />
               </a>
             ) : (
-              <Button variant="outline" className="w-full" asChild>
+              <Button variant="outline" className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm border-2" asChild>
                 <a href="mailto:" target="_blank" rel="noopener noreferrer">
-                  <Mail className="mr-2 h-4 w-4" />
+                  <Mail className="mr-2 h-5 w-5" />
                   Ouvrir ma boîte mail
                 </a>
               </Button>
             )}
 
             <Link href="/login" className="block">
-              <Button variant="ghost" className="w-full">
+              <Button variant="ghost" className="w-full h-12 font-bold uppercase tracking-widest text-[10px]">
                 {t('back_to_login')}
               </Button>
             </Link>
@@ -135,157 +139,168 @@ export default function RegisterPage() {
   }
 
   return (
-    <Card className="border bg-background/70 shadow-2xl backdrop-blur-xl">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl sm:text-3xl">{t('register')}</CardTitle>
-        <CardDescription className="hidden sm:block">
-          Créez votre compte pour commencer à investir
+    <Card className="border bg-background/60 shadow-2xl backdrop-blur-xl rounded-[2.5rem] overflow-hidden">
+      <CardHeader className="p-8 pb-4 text-center space-y-2">
+        <CardTitle className="text-3xl font-black tracking-tight">{t('register')}</CardTitle>
+        <CardDescription className="text-sm font-medium">
+          Rejoignez le mouvement pour un futur durable.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} onSubmit={handleFormSubmit} className="space-y-4">
+      <CardContent className="p-8 pt-4">
+        <form action={formAction} onSubmit={handleFormSubmit} className="space-y-8">
           {state.error && (
-            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
               {state.error}
             </div>
           )}
 
-          <div className="flex items-center justify-between rounded-full border bg-background/80 px-3 py-2 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-            <span>
-              Etape {step}/{totalSteps}
-            </span>
-            <span>{step === 1 ? 'Profil' : step === 2 ? 'Sécurité' : 'Validation'}</span>
+          {/* Stepper Progress */}
+          <div className="relative flex items-center justify-between px-2">
+            <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-muted/50 -z-10" />
+            {[1, 2, 3].map((s) => (
+              <div 
+                key={s} 
+                className={cn(
+                  "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-500",
+                  step >= s ? "bg-primary border-primary text-white scale-110 shadow-lg shadow-primary/20" : "bg-background border-muted text-muted-foreground"
+                )}
+              >
+                {step > s ? <Check className="h-5 w-5" /> : <span className="text-xs font-black">{s}</span>}
+              </div>
+            ))}
           </div>
 
-          {step === 1 && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                id="firstName"
-                name="firstName"
-                type="text"
-                label={t('first_name')}
-                placeholder="Jean"
-                required
-                autoComplete="given-name"
-                value={formValues.firstName}
-                onChange={(event) =>
-                  setFormValues((prev) => ({ ...prev, firstName: event.target.value }))
-                }
-              />
-              <Input
-                id="lastName"
-                name="lastName"
-                type="text"
-                label={t('last_name')}
-                placeholder="Dupont"
-                required
-                autoComplete="family-name"
-                value={formValues.lastName}
-                onChange={(event) =>
-                  setFormValues((prev) => ({ ...prev, lastName: event.target.value }))
-                }
-              />
-            </div>
-          )}
-
-          {step !== 1 && (
-            <>
-              <input type="hidden" name="firstName" value={formValues.firstName} />
-              <input type="hidden" name="lastName" value={formValues.lastName} />
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                label={t('email')}
-                placeholder="votre@email.com"
-                required
-                autoComplete="email"
-                value={formValues.email}
-                onChange={(event) =>
-                  setFormValues((prev) => ({ ...prev, email: event.target.value }))
-                }
-              />
-
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                label={t('password')}
-                placeholder="••••••••"
-                required
-                autoComplete="new-password"
-                value={formValues.password}
-                onChange={(event) =>
-                  setFormValues((prev) => ({ ...prev, password: event.target.value }))
-                }
-              />
-
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                label={t('confirm_password')}
-                placeholder="••••••••"
-                required
-                autoComplete="new-password"
-                value={formValues.confirmPassword}
-                onChange={(event) =>
-                  setFormValues((prev) => ({ ...prev, confirmPassword: event.target.value }))
-                }
-                error={showPasswordMismatch ? 'Les mots de passe ne correspondent pas.' : undefined}
-              />
-            </>
-          )}
-
-          {step === 3 && (
-            <>
-              <input type="hidden" name="email" value={formValues.email} />
-              <input type="hidden" name="password" value={formValues.password} />
-              <input type="hidden" name="confirmPassword" value={formValues.confirmPassword} />
-            </>
-          )}
-
-          {step === 3 && (
-            <div className="flex items-start gap-2 rounded-2xl border bg-muted/30 p-4">
-              <input
-                type="checkbox"
-                id="terms"
-                name="terms"
-                required
-                className="mt-1 h-4 w-4 rounded border-input"
-                checked={formValues.terms}
-                onChange={(event) =>
-                  setFormValues((prev) => ({ ...prev, terms: event.target.checked }))
-                }
-              />
-              <label htmlFor="terms" className="text-sm text-muted-foreground">
-                {t('accept_terms')}{' '}
-                <Link href="/terms" className="text-primary hover:underline">
-                  conditions
-                </Link>
-              </label>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            {step > 1 && (
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
-              >
-                Retour
-              </Button>
+          <div className="space-y-6">
+            {step === 1 && (
+              <div className="grid gap-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="relative group">
+                   <User className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                   <Input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    label={t('first_name')}
+                    placeholder="Jean"
+                    className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                    required
+                    autoComplete="given-name"
+                    value={formValues.firstName}
+                    onChange={(event) =>
+                      setFormValues((prev) => ({ ...prev, firstName: event.target.value }))
+                    }
+                  />
+                </div>
+                <div className="relative group">
+                  <User className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    label={t('last_name')}
+                    placeholder="Dupont"
+                    className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                    required
+                    autoComplete="family-name"
+                    value={formValues.lastName}
+                    onChange={(event) =>
+                      setFormValues((prev) => ({ ...prev, lastName: event.target.value }))
+                    }
+                  />
+                </div>
+              </div>
             )}
+
+            {step === 2 && (
+              <div className="grid gap-4 animate-in fade-in slide-in-from-right-4 duration-500">
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  label={t('email')}
+                  placeholder="votre@email.com"
+                  className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                  required
+                  autoComplete="email"
+                  value={formValues.email}
+                  onChange={(event) =>
+                    setFormValues((prev) => ({ ...prev, email: event.target.value }))
+                  }
+                />
+
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  label={t('password')}
+                  placeholder="••••••••"
+                  className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                  required
+                  autoComplete="new-password"
+                  value={formValues.password}
+                  onChange={(event) =>
+                    setFormValues((prev) => ({ ...prev, password: event.target.value }))
+                  }
+                />
+
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  label={t('confirm_password')}
+                  placeholder="••••••••"
+                  className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                  required
+                  autoComplete="new-password"
+                  value={formValues.confirmPassword}
+                  onChange={(event) =>
+                    setFormValues((prev) => ({ ...prev, confirmPassword: event.target.value }))
+                  }
+                  error={showPasswordMismatch ? 'Les mots de passe ne correspondent pas.' : undefined}
+                />
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="p-6 rounded-[2rem] bg-primary/5 border border-primary/10 space-y-4">
+                   <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Shield className="h-5 w-5 text-primary" />
+                      </div>
+                      <p className="font-black text-sm uppercase tracking-widest">Dernière étape</p>
+                   </div>
+                   <p className="text-sm font-medium text-muted-foreground leading-relaxed">
+                     En rejoignant Make the CHANGE, vous participez activement à la protection de notre planète.
+                   </p>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 rounded-2xl bg-muted/30 group cursor-pointer hover:bg-muted/50 transition-colors">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    name="terms"
+                    required
+                    className="mt-1 h-5 w-5 rounded-lg border-2 border-primary/20 checked:bg-primary transition-all cursor-pointer"
+                    checked={formValues.terms}
+                    onChange={(event) =>
+                      setFormValues((prev) => ({ ...prev, terms: event.target.checked }))
+                    }
+                  />
+                  <label htmlFor="terms" className="text-sm font-medium text-muted-foreground leading-tight cursor-pointer">
+                    {t('accept_terms')}{' '}
+                    <Link href="/terms" className="text-primary font-bold hover:underline">
+                      conditions d'utilisation
+                    </Link>
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-4">
             <Button
               type={step === totalSteps ? 'submit' : 'button'}
-              className="w-full"
+              className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform"
               onClick={() => {
                 if (step < totalSteps && canProceed) {
                   setStep((prev) => Math.min(prev + 1, totalSteps))
@@ -295,14 +310,42 @@ export default function RegisterPage() {
               loading={step === totalSteps && isPending}
             >
               {step === totalSteps ? t('register_button') : 'Continuer'}
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
+            
+            {step > 1 && (
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full h-10 font-bold uppercase tracking-widest text-[10px] opacity-60 hover:opacity-100"
+                onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
+              >
+                <ArrowLeft className="mr-2 h-3 w-3" />
+                Étape précédente
+              </Button>
+            )}
           </div>
+          
+          {/* Hidden inputs for form action */}
+          {step !== 1 && (
+            <>
+              <input type="hidden" name="firstName" value={formValues.firstName} />
+              <input type="hidden" name="lastName" value={formValues.lastName} />
+            </>
+          )}
+          {step === 3 && (
+            <>
+              <input type="hidden" name="email" value={formValues.email} />
+              <input type="hidden" name="password" value={formValues.password} />
+              <input type="hidden" name="confirmPassword" value={formValues.confirmPassword} />
+            </>
+          )}
         </form>
       </CardContent>
-      <CardFooter className="flex justify-center">
-        <p className="text-sm text-muted-foreground">
+      <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">
+        <p className="text-sm font-medium text-muted-foreground mt-6">
           {t('already_have_account')}{' '}
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href="/login" className="text-primary font-black hover:underline uppercase tracking-tight">
             {t('login')}
           </Link>
         </p>

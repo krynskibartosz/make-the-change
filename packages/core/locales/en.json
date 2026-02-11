@@ -38,7 +38,9 @@
     "profile": "Profile",
     "my_investments": "My investments",
     "my_orders": "My orders",
-    "my_points": "My points"
+    "my_points": "My points",
+    "open_cart": "Open cart",
+    "cart": "Cart"
   },
   "admin": {
     "common": {
@@ -74,6 +76,7 @@
     },
     "products": {
       "title": "Product Management",
+      "description": "Manage your product catalog",
       "new_product": "New Product",
       "product_list": "Product List",
       "name": "Product Name",
@@ -319,6 +322,17 @@
       "status": "Status",
       "start_date": "Start Date",
       "end_date": "End Date"
+    },
+    "users": {
+      "title": "User Management",
+      "description": "Manage user accounts, their levels and KYC status.",
+      "new_user": "New User",
+      "user_list": "User List",
+      "search_placeholder": "Search by name or email...",
+      "empty_state": {
+        "title": "No users",
+        "description": "No results for these filters."
+      }
     }
   },
   "ui": {
@@ -345,17 +359,49 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "contact_us": "Contact us",
-    "rights_reserved": "All rights reserved."
+    "rights_reserved": "All rights reserved.",
+    "leaderboard": "Leaderboard",
+    "blog": "Blog",
+    "address": "Brussels, Belgium"
   },
   "home": {
     "hero": {
       "title": "Invest in biodiversity",
       "subtitle": "Support concrete ecological projects and exchange your points for sustainable products",
       "cta_primary": "Discover projects",
-      "cta_secondary": "How it works"
+      "cta_secondary": "How it works",
+      "badge": "Impact Investment 2.0"
+    },
+    "stats": {
+      "projects": "Projects",
+      "members": "Members",
+      "global_impact": "Global Impact"
+    },
+    "universe": {
+      "title": "Explore the Universe",
+      "description": "A holistic approach to transform your environmental impact.",
+      "cards": {
+        "projects": {
+          "badge": "Direct Impact",
+          "title": "Living Projects",
+          "description": "Reforestation, habitat restoration and wild biodiversity protection.",
+          "cta": "Discover projects"
+        },
+        "products": {
+          "badge": "Eco-friendly",
+          "title": "Ethical Shop",
+          "description": "Consume better with our artisanal products."
+        },
+        "community": {
+          "title": "Community",
+          "description": "Join thousands of committed members for a sustainable future.",
+          "cta": "Learn more"
+        }
+      }
     },
     "features": {
       "title": "Why Make the CHANGE?",
+      "explore": "Explore",
       "invest": {
         "title": "Invest",
         "description": "Support verified biodiversity projects and track your impact in real-time."
@@ -369,14 +415,34 @@
         "description": "Use your points to get sustainable products from our partners."
       }
     },
+    "stats_section": {
+      "title": "Global Impact",
+      "active_projects": "Active Projects",
+      "engaged_members": "Engaged Members",
+      "ethical_products": "Ethical Products",
+      "points_generated": "Points Generated"
+    },
+    "blog_section": {
+      "title": "Latest News",
+      "view_all": "View all articles"
+    },
     "featured_projects": "Featured projects",
     "view_all_projects": "View all projects",
+    "project_card": {
+      "active": "Active",
+      "funded": "funded"
+    },
     "featured_products": "Popular products",
     "view_all_products": "View all products",
     "cta": {
       "title": "Ready to make a difference?",
       "description": "Join our community of responsible investors and contribute to biodiversity preservation.",
-      "button": "Create my account"
+      "button": "Create my account",
+      "stats": {
+        "engagement": "Total Engagement",
+        "transparency": "100% Transparency",
+        "community": "Active Community"
+      }
     }
   },
   "about": {
@@ -445,7 +511,24 @@
       "all": "All",
       "active": "Active",
       "completed": "Completed",
-      "search_placeholder": "Search a project..."
+      "search_placeholder": "Search a project...",
+      "reset_filters": "Reset filters",
+      "empty_description": "Try adjusting your filters or come back later to discover new projects.",
+      "featured": "Featured",
+      "status": {
+        "active": "Active",
+        "completed": "Completed",
+        "all": "All"
+      },
+      "location": {
+        "unspecified": "Location unspecified"
+      },
+      "progress": {
+        "label": "Progress",
+        "collected": "collected",
+        "goal": "Goal"
+      },
+      "cta": "View project"
     },
     "card": {
       "funded": "funded",
@@ -462,26 +545,129 @@
     "empty": "No projects found"
   },
   "products": {
-    "title": "Our shop",
-    "subtitle": "Exchange your points for sustainable products from our partners",
-    "filter": {
-      "all": "All",
-      "category": "Category",
-      "price": "Price",
-      "search_placeholder": "Search a product..."
+      "title": "Our shop",
+      "subtitle": "Exchange your points for sustainable products from our partners",
+      "search_placeholder": "Search products...",
+      "featured": "Featured",
+      "product_list": "products",
+      "filters": {
+        "title": "Filters",
+        "all_categories": "All categories",
+        "all_producers": "All producers",
+        "all_tags": "All tags",
+        "sort_by": "Sort by",
+        "clear_filters": "Clear filters",
+        "clear_all": "Clear all"
+      },
+      "sort": {
+        "featured": "Featured",
+        "name_asc": "Name (A-Z)",
+        "name_desc": "Name (Z-A)",
+        "price_asc": "Price (Low to High)",
+        "price_desc": "Price (High to Low)"
+      },
+      "empty_state": {
+        "title": "No products found",
+        "description": "Try adjusting your filters or search terms"
+      },
+      "card": {
+        "points": "points",
+        "add_to_cart": "Add to cart",
+        "out_of_stock": "Out of stock",
+        "best_seller": "Best Seller",
+        "low_stock": "Low Stock",
+        "sold_out": "Sold Out",
+        "adding": "Adding...",
+        "added_message": "Added to cart",
+        "view_action": "View",
+        "default_name": "Product",
+        "default_description": "Product description"
+      },
+      "detail": {
+        "description": "Description",
+        "producer": "Producer",
+        "certifications": "Certifications",
+        "exchange": "Exchange"
+      }
     },
-    "card": {
-      "points": "points",
-      "add_to_cart": "Add to cart",
-      "out_of_stock": "Out of stock"
+  "checkout": {
+    "title": "Checkout",
+    "steps": {
+      "cart": "Cart",
+      "address": "Address",
+      "confirm": "Confirm",
+      "step_indicator": "Step {current}/{total}"
     },
-    "detail": {
-      "description": "Description",
-      "producer": "Producer",
-      "certifications": "Certifications",
-      "exchange": "Exchange"
+    "validation": {
+      "first_name_required": "First name required",
+      "last_name_required": "Last name required",
+      "address_required": "Address required",
+      "city_required": "City required",
+      "postal_code_required": "Postal code required",
+      "country_required": "Country required"
     },
-    "empty": "No products found"
+    "empty": {
+      "title": "Your cart is empty",
+      "description": "Add products before checking out.",
+      "cta": "Browse shop"
+    },
+    "header": {
+      "items_count": "{count} item(s)",
+      "back": "Back",
+      "edit": "Edit"
+    },
+    "errors": {
+      "stale_cart": {
+        "title": "Update required",
+        "description": "Some items in your cart have outdated prices. Please clear your cart and add items again to pay in euros.",
+        "action": "Clear cart and return to shop"
+      },
+      "insufficient_points_server": "Your balance was checked server-side and is insufficient to confirm this order.",
+      "insufficient_points": "Insufficient points to confirm this order.",
+      "generic": "An error occurred. Please try again."
+    },
+    "actions": {
+      "earn_points": "Earn points",
+      "view_balance": "View balance",
+      "continue": "Continue",
+      "confirm_points": "Confirm (Points)",
+      "pay_simulation": "Pay (Simulation)"
+    },
+    "summary": {
+      "title": "Summary",
+      "other_items": "+{count} other item(s)",
+      "total": "Total",
+      "total_order": "Order Total"
+    },
+    "address": {
+      "title": "Shipping Address",
+      "labels": {
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "street": "Address",
+        "city": "City",
+        "postal_code": "Postal Code",
+        "country": "Country"
+      }
+    },
+    "payment": {
+      "title": "Payment Method",
+      "points": "My Points",
+      "balance": "Balance: {amount} pts",
+      "card": "Credit Card",
+      "simulation": "Simulation (Euros)",
+      "confirmation_title": "Confirmation",
+      "current_balance": "Current balance",
+      "after_purchase": "After purchase",
+      "total_to_pay": "Total to pay"
+    },
+    "footer": {
+      "no_hidden_fees": "No hidden fees.",
+      "status": {
+        "ok": "OK",
+        "insufficient": "Insufficient"
+      }
+    }
   },
   "auth": {
     "login": "Login",
@@ -511,7 +697,19 @@
       "total_invested": "Total invested",
       "points_balance": "Points balance",
       "projects_supported": "Projects supported",
-      "orders_completed": "Orders"
+      "orders_completed": "Orders",
+      "kyc_status": "KYC Status",
+      "levels": {
+        "explorateur": "Explorer",
+        "protecteur": "Protector",
+        "ambassadeur": "Ambassador"
+      },
+      "kyc": {
+        "pending": "Pending",
+        "light": "Light verification",
+        "complete": "Verified",
+        "rejected": "Rejected"
+      }
     },
     "recent_activity": "Recent activity",
     "quick_actions": {
@@ -519,6 +717,32 @@
       "browse_projects": "Browse projects",
       "browse_products": "Browse shop",
       "view_investments": "View my investments"
+    },
+    "settings": {
+      "title": "Preferences & Account",
+      "description": "Manage your account settings",
+      "general": {
+        "language": "Language",
+        "timezone": "Timezone"
+      },
+      "privacy": {
+        "title": "Privacy & Consents",
+        "public_profile": {
+          "label": "Public Profile",
+          "description": "Allows appearing in the leaderboard and having a public profile."
+        },
+        "marketing": {
+          "label": "Marketing Communications",
+          "description": "Receive news about the platform and projects."
+        }
+      },
+      "socials": {
+        "title": "Social Networks",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram",
+        "twitter": "X (Twitter)"
+      },
+      "save": "Save preferences"
     }
   },
   "profile": {
@@ -560,6 +784,7 @@
       "processing": "Processing",
       "shipped": "Shipped",
       "delivered": "Delivered",
+      "completed": "Completed",
       "cancelled": "Cancelled"
     },
     "details": "Order details"

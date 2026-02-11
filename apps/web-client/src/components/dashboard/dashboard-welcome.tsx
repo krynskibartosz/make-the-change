@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils'
 type DashboardWelcomeProps = {
   firstName: string
   userLevel: string
+  kycStatus?: string
+  kycLabel?: string
   eyebrow?: string
   title?: string
   summary?: Array<{ label: string; value: string }>
@@ -29,9 +31,18 @@ const levelColors: Record<string, { badge: string; glow: string }> = {
   },
 }
 
+const kycColors: Record<string, string> = {
+  pending: 'bg-warning/10 text-warning border-warning/20',
+  light: 'bg-info/10 text-info border-info/20',
+  complete: 'bg-success/10 text-success border-success/20',
+  rejected: 'bg-destructive/10 text-destructive border-destructive/20',
+}
+
 export const DashboardWelcome: FC<DashboardWelcomeProps> = ({
   firstName,
   userLevel,
+  kycStatus,
+  kycLabel,
   eyebrow = 'Bienvenue',
   title,
   summary,
@@ -66,9 +77,16 @@ export const DashboardWelcome: FC<DashboardWelcomeProps> = ({
             <h1 className="text-2xl font-bold md:text-3xl">{displayTitle}</h1>
           </div>
 
-          <Badge className={cn('self-start md:self-auto', level.badge)}>
-            {userLevel.charAt(0).toUpperCase() + userLevel.slice(1)}
-          </Badge>
+          <div className="flex flex-wrap gap-2">
+            {kycStatus && (
+              <Badge variant="outline" className={cn('rounded-full font-medium', kycColors[kycStatus])}>
+                KYC: {kycLabel || kycStatus}
+              </Badge>
+            )}
+            <Badge className={cn('rounded-full', level.badge)}>
+              {userLevel.charAt(0).toUpperCase() + userLevel.slice(1)}
+            </Badge>
+          </div>
         </div>
 
         {summary && summary.length > 0 && (

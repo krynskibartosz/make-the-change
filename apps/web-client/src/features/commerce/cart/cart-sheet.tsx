@@ -12,7 +12,7 @@ import {
 import { ShoppingBag, X } from 'lucide-react'
 import { useRef } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatPoints, formatCurrency } from '@/lib/utils'
 import { CartLineItem } from './cart-line-item'
 import { useCartUI } from './cart-ui-provider'
 import { useCart, useCartTotals } from './use-cart'
@@ -23,7 +23,7 @@ const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
 export function CartSheet() {
   const router = useRouter()
   const { items, hydrated, setQuantity, removeItem, replaceItems, clear } = useCart()
-  const { itemsCount, totalPoints } = useCartTotals()
+  const { itemsCount, totalPoints, totalEuros } = useCartTotals()
   const { isCartOpen, openCart, closeCart, showSnackbar } = useCartUI()
   const itemsRef = useRef(items)
   itemsRef.current = items
@@ -203,9 +203,16 @@ export function CartSheet() {
 
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-foreground">Total</span>
-                <span className="text-sm font-semibold text-foreground tabular-nums">
-                  {formatPoints(totalPoints)} pts
-                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-sm font-semibold text-foreground tabular-nums">
+                    {formatPoints(totalPoints)} pts
+                  </span>
+                  {totalEuros > 0 && (
+                    <span className="text-xs text-muted-foreground tabular-nums">
+                      {formatCurrency(totalEuros)}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <Button

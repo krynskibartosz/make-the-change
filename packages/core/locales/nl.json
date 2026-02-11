@@ -30,15 +30,446 @@
     "subscriptions": "Abonnementen",
     "users": "Gebruikers",
     "settings": "Instellingen",
-    "logout": "Uitloggen"
-  },
-  "auth": {
+    "logout": "Uitloggen",
+    "about": "Over ons",
+    "how_it_works": "Hoe het werkt",
     "login": "Inloggen",
+    "register": "Registreren",
+    "profile": "Profiel",
+    "my_investments": "Mijn investeringen",
+    "my_orders": "Mijn bestellingen",
+    "my_points": "Mijn punten",
+    "leaderboard": "Klassement",
+    "public_profile": "Openbaar profiel",
+    "account_section": "Mijn account",
+    "explore_section": "Verkennen",
+    "close_menu": "Menu sluiten",
+    "open_cart": "Winkelwagen openen",
+    "cart": "Winkelwagen"
+  },
+  "home": {
+    "hero": {
+      "title": "Investeer in biodiversiteit",
+      "subtitle": "Steun concrete ecologische projecten en ruil uw punten in voor duurzame producten",
+      "cta_primary": "Ontdek projecten",
+      "cta_secondary": "Hoe het werkt",
+      "badge": "Impact Investering 2.0"
+    },
+    "stats": {
+      "projects": "Projecten",
+      "members": "Leden",
+      "global_impact": "Global Impact"
+    },
+    "universe": {
+      "title": "Verken het Universum",
+      "description": "Een holistische aanpak om uw milieu-impact te transformeren.",
+      "cards": {
+        "projects": {
+          "badge": "Directe Impact",
+          "title": "Levende Projecten",
+          "description": "Herbebossing, habitat herstel en bescherming van wilde biodiversiteit.",
+          "cta": "Ontdek projecten"
+        },
+        "products": {
+          "badge": "Milieuvriendelijk",
+          "title": "Ethische Winkel",
+          "description": "Consumbeer beter met onze ambachtelijke producten."
+        },
+        "community": {
+          "title": "Gemeenschap",
+          "description": "Sluit je aan bij duizenden toegewijde leden voor een duurzame toekomst.",
+          "cta": "Meer weten"
+        }
+      }
+    },
+    "features": {
+      "title": "Waarom Make the CHANGE?",
+      "explore": "Verkennen",
+      "invest": {
+        "title": "Investeer",
+        "description": "Steun geverifieerde biodiversiteitsprojecten en volg uw impact in realtime."
+      },
+      "earn": {
+        "title": "Verdien punten",
+        "description": "Elke investering levert bonuspunten op op basis van uw betrokkenheidsniveau."
+      },
+      "redeem": {
+        "title": "Inwisselen",
+        "description": "Gebruik uw punten om duurzame producten van onze partners te verkrijgen."
+      }
+    },
+    "stats_section": {
+      "title": "Wereldwijde Impact",
+      "active_projects": "Actieve Projecten",
+      "engaged_members": "Betrokken Leden",
+      "ethical_products": "Ethische Producten",
+      "points_generated": "Gegenereerde Punten"
+    },
+    "featured_projects": "Uitgelichte projecten",
+    "view_all_projects": "Alle projecten bekijken",
+    "project_card": {
+      "active": "Actief",
+      "funded": "gefinancierd"
+    },
+    "featured_products": "Populaire producten",
+    "view_all_products": "Alle producten bekijken",
+    "cta": {
+      "title": "Klaar om het verschil te maken?",
+      "description": "Sluit je aan bij onze gemeenschap van verantwoorde investeerders en draag bij aan het behoud van biodiversiteit.",
+      "button": "Account aanmaken",
+      "stats": {
+        "engagement": "Totale Betrokkenheid",
+        "transparency": "100% Transparantie",
+        "community": "Actieve Gemeenschap"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Mijn dashboard",
+    "welcome": "Welkom",
+    "overview": {
+      "title": "Overzicht",
+      "total_invested": "Totaal geïnvesteerd",
+      "points_balance": "Puntensaldo",
+      "projects_supported": "Ondersteunde projecten",
+      "orders_completed": "Bestellingen",
+      "kyc_status": "KYC Status",
+      "levels": {
+        "explorateur": "Verkenner",
+        "protecteur": "Beschermer",
+        "ambassadeur": "Ambassadeur"
+      },
+      "kyc": {
+        "pending": "In afwachting",
+        "light": "Lichte verificatie",
+        "complete": "Geverifieerd",
+        "rejected": "Geweigerd"
+      }
+    },
+    "recent_activity": "Recente activiteit",
+    "quick_actions": {
+      "title": "Snelle acties",
+      "browse_projects": "Projecten bekijken",
+      "browse_products": "Winkel bekijken",
+      "view_investments": "Mijn investeringen bekijken"
+    },
+    "settings": {
+      "title": "Voorkeuren & Account",
+      "description": "Beheer uw accountinstellingen",
+      "general": {
+        "language": "Taal",
+        "timezone": "Tijdzone"
+      },
+      "privacy": {
+        "title": "Privacy & Toestemmingen",
+        "public_profile": {
+          "label": "Openbaar Profiel",
+          "description": "Maakt het mogelijk om in het klassement te verschijnen en een openbaar profiel te hebben."
+        },
+        "marketing": {
+          "label": "Marketingcommunicatie",
+          "description": "Ontvang nieuws over het platform en projecten."
+        }
+      },
+      "socials": {
+        "title": "Sociale Netwerken",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram",
+        "twitter": "X (Twitter)"
+      },
+      "save": "Voorkeuren opslaan"
+    }
+  },
+  "checkout": {
+    "title": "Afrekenen",
+    "steps": {
+      "cart": "Winkelwagen",
+      "address": "Adres",
+      "confirm": "Bevestigen",
+      "step_indicator": "Stap {current}/{total}"
+    },
+    "validation": {
+      "first_name_required": "Voornaam verplicht",
+      "last_name_required": "Achternaam verplicht",
+      "address_required": "Adres verplicht",
+      "city_required": "Stad verplicht",
+      "postal_code_required": "Postcode verplicht",
+      "country_required": "Land verplicht"
+    },
+    "empty": {
+      "title": "Uw winkelwagen is leeg",
+      "description": "Voeg producten toe voordat u afrekent.",
+      "cta": "Winkel bekijken"
+    },
+    "header": {
+      "items_count": "{count} artikel(en)",
+      "back": "Terug",
+      "edit": "Bewerken"
+    },
+    "errors": {
+      "stale_cart": {
+        "title": "Update vereist",
+        "description": "Sommige items in uw winkelwagen hebben verouderde prijzen. Leeg uw winkelwagen en voeg de items opnieuw toe om in euro's te betalen.",
+        "action": "Winkelwagen legen en terug naar winkel"
+      },
+      "insufficient_points_server": "Uw saldo is server-side gecontroleerd en is onvoldoende om deze bestelling te bevestigen.",
+      "insufficient_points": "Onvoldoende punten om deze bestelling te bevestigen.",
+      "generic": "Er is een fout opgetreden. Probeer het opnieuw."
+    },
+    "actions": {
+      "earn_points": "Punten verdienen",
+      "view_balance": "Saldo bekijken",
+      "continue": "Doorgaan",
+      "confirm_points": "Bevestigen (Punten)",
+      "pay_simulation": "Betalen (Simulatie)"
+    },
+    "summary": {
+      "title": "Samenvatting",
+      "other_items": "+{count} ander(e) artikel(en)",
+      "total": "Totaal",
+      "total_order": "Totaal bestelling"
+    },
+    "address": {
+      "title": "Verzendadres",
+      "labels": {
+        "first_name": "Voornaam",
+        "last_name": "Achternaam",
+        "street": "Adres",
+        "city": "Stad",
+        "postal_code": "Postcode",
+        "country": "Land"
+      }
+    },
+    "payment": {
+      "title": "Betaalmethode",
+      "points": "Mijn Punten",
+      "balance": "Saldo: {amount} ptn",
+      "card": "Creditcard",
+      "simulation": "Simulatie (Euro's)",
+      "confirmation_title": "Bevestiging",
+      "current_balance": "Huidig saldo",
+      "after_purchase": "Na aankoop",
+      "total_to_pay": "Totaal te betalen"
+    },
+    "footer": {
+      "no_hidden_fees": "Geen verborgen kosten.",
+      "status": {
+        "ok": "OK",
+        "insufficient": "Onvoldoende"
+      }
+    }
+  },
+  "projects": {
+    "title": "Onze projecten",
+    "subtitle": "Ontdek en steun geverifieerde biodiversiteitsprojecten",
+    "filter": {
+      "all": "Alle",
+      "active": "Actief",
+      "completed": "Voltooid",
+      "search_placeholder": "Zoek een project...",
+      "reset_filters": "Filters resetten",
+      "empty_description": "Probeer uw filters aan te passen of kom later terug om nieuwe projecten te ontdekken.",
+      "featured": "Uitgelicht",
+      "status": {
+        "active": "Actief",
+        "completed": "Voltooid",
+        "all": "Alle"
+      },
+      "location": {
+        "unspecified": "Locatie niet gespecificeerd"
+      },
+      "progress": {
+        "label": "Voortgang",
+        "collected": "opgehaald",
+        "goal": "Doel"
+      },
+      "cta": "Bekijk project"
+    },
+    "card": {
+      "funded": "gefinancierd",
+      "goal": "Doel",
+      "view_details": "Details bekijken"
+    },
+    "detail": {
+      "about": "Over het project",
+      "impact": "Impact",
+      "updates": "Updates",
+      "invest_now": "Nu investeren",
+      "share": "Delen"
+    },
+    "empty": "Geen projecten gevonden"
+  },
+  "products": {
+    "title": "Onze winkel",
+    "subtitle": "Ruil uw punten in voor duurzame producten van onze partners",
+    "search_placeholder": "Producten zoeken...",
+    "featured": "Uitgelicht",
+    "filters": {
+      "all_categories": "Alle categorieën",
+      "all_producers": "Alle producenten",
+      "sort_by": "Sorteren op",
+      "clear_filters": "Filters wissen"
+    },
+    "sort": {
+      "featured": "Uitgelicht",
+      "name_asc": "Naam (A-Z)",
+      "name_desc": "Naam (Z-A)",
+      "price_asc": "Prijs (Laag naar Hoog)",
+      "price_desc": "Prijs (Hoog naar Laag)"
+    },
+    "empty_state": {
+      "title": "Geen producten gevonden",
+      "description": "Probeer uw filters of zoektermen aan te passen"
+    },
+    "card": {
+      "points": "punten",
+      "add_to_cart": "In winkelwagen",
+      "out_of_stock": "Niet op voorraad",
+      "best_seller": "Best Seller",
+      "low_stock": "Beperkte voorraad",
+      "sold_out": "Uitverkocht",
+      "adding": "Toevoegen...",
+      "added_message": "Toegevoegd aan winkelwagen",
+      "view_action": "Bekijken",
+      "default_name": "Product",
+      "default_description": "Productbeschrijving"
+    },
+    "detail": {
+      "description": "Beschrijving",
+      "producer": "Producent",
+      "certifications": "Certificeringen",
+      "exchange": "Inwisselen"
+    }
+  },
+  "footer": {
+    "tagline": "Investeer in biodiversiteit, oogst tastbare beloningen.",
+    "quick_links": "Snelle links",
+    "projects": "Projecten",
+    "products": "Producten",
+    "about": "Over ons",
+    "how_it_works": "Hoe het werkt",
+    "support": "Ondersteuning",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Voorwaarden",
+    "contact_us": "Neem contact op",
+    "rights_reserved": "Alle rechten voorbehouden.",
+    "leaderboard": "Klassement",
+    "blog": "Blog",
+    "address": "Brussel, België"
+  },
+  "profile": {
+    "title": "Mijn profiel",
+    "personal_info": "Persoonlijke informatie",
     "email": "Email",
-    "password": "Wachtwoord",
-    "login_button": "Inloggen",
-    "forgot_password": "Wachtwoord vergeten?",
-    "invalid_credentials": "Ongeldige inloggegevens"
+    "first_name": "Voornaam",
+    "last_name": "Achternaam",
+    "phone": "Telefoon",
+    "address": "Adres",
+    "city": "Stad",
+    "postal_code": "Postcode",
+    "country": "Land",
+    "save_changes": "Wijzigingen opslaan",
+    "change_password": "Wachtwoord wijzigen",
+    "current_password": "Huidig wachtwoord",
+    "new_password": "Nieuw wachtwoord",
+    "confirm_new_password": "Bevestig nieuw wachtwoord"
+  },
+  "investments": {
+    "title": "Mijn investeringen",
+    "total": "Totaal geïnvesteerd",
+    "history": "Geschiedenis",
+    "empty": "U heeft nog geen investeringen",
+    "start_investing": "Begin met investeren",
+    "status": {
+      "active": "Actief",
+      "completed": "Voltooid",
+      "pending": "In afwachting"
+    }
+  },
+  "orders": {
+    "title": "Mijn bestellingen",
+    "history": "Bestelgeschiedenis",
+    "empty": "U heeft nog geen bestellingen",
+    "browse_products": "Winkel bekijken",
+    "status": {
+      "pending": "In afwachting",
+      "processing": "Verwerken",
+      "shipped": "Verzonden",
+      "delivered": "Geleverd",
+      "completed": "Voltooid",
+      "cancelled": "Geannuleerd"
+    },
+    "details": "Bestelgegevens"
+  },
+  "points": {
+    "title": "Mijn punten",
+    "balance": "Huidig saldo",
+    "history": "Geschiedenis",
+    "earned": "Verdiend",
+    "spent": "Uitgegeven",
+    "expiring_soon": "Punten verlopen binnenkort",
+    "empty": "Geen puntentransacties"
+  },
+  "about": {
+    "title": "Over Make the CHANGE",
+    "intro": "Make the CHANGE is een innovatief platform dat betrokken burgers verbindt met concrete biodiversiteitsprojecten.",
+    "mission": {
+      "title": "Onze missie",
+      "description": "Biodiversiteitsinvesteringen democratiseren door ze toegankelijk, transparant en lonend te maken."
+    },
+    "values": {
+      "title": "Onze waarden",
+      "transparency": {
+        "title": "Transparantie",
+        "description": "Realtime tracking van uw investeringsimpact."
+      },
+      "impact": {
+        "title": "Impact",
+        "description": "Concrete projecten met meetbare resultaten."
+      },
+      "community": {
+        "title": "Gemeenschap",
+        "description": "Een betrokken gemeenschap voor biodiversiteit."
+      }
+    }
+  },
+  "how_it_works": {
+    "title": "Hoe het werkt",
+    "subtitle": "Drie eenvoudige stappen om bij te dragen aan biodiversiteit",
+    "steps": {
+      "choose": {
+        "title": "1. Kies een project",
+        "description": "Blader door onze catalogus van geverifieerde projecten en selecteer de projecten die u belangrijk vindt."
+      },
+      "invest": {
+        "title": "2. Investeer",
+        "description": "Steun projecten met eenmalige investeringen of een maandelijks abonnement."
+      },
+      "enjoy": {
+        "title": "3. Geniet",
+        "description": "Volg de impact van uw investeringen en ruil uw punten in voor producten."
+      }
+    },
+    "tiers": {
+      "title": "Onze plannen",
+      "explorer": {
+        "title": "Verkenner",
+        "price": "Gratis",
+        "description": "Ontdek het platform zonder verplichting"
+      },
+      "protector": {
+        "title": "Beschermer",
+        "price": "Vanaf €50",
+        "description": "Eenmalige investeringen met bonus"
+      },
+      "ambassador": {
+        "title": "Ambassadeur",
+        "price": "Vanaf €18/maand",
+        "description": "Premium abonnement met exclusieve voordelen"
+      }
+    }
   },
   "admin": {
     "dashboard": {
@@ -293,6 +724,17 @@
       "status": "Status",
       "start_date": "Startdatum",
       "end_date": "Einddatum"
+    },
+    "users": {
+      "title": "Gebruikersbeheer",
+      "description": "Beheer gebruikersaccounts, hun niveaus en KYC-status.",
+      "new_user": "Nieuwe gebruiker",
+      "user_list": "Gebruikerslijst",
+      "search_placeholder": "Zoeken op naam of e-mail...",
+      "empty_state": {
+        "title": "Geen gebruikers",
+        "description": "Geen resultaten voor deze filters."
+      }
     },
     "common": {
       "retry": "Retry",

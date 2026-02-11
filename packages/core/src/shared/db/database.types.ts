@@ -1303,6 +1303,10 @@ type GeneratedDatabase = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      get_total_points_generated: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
     }
     Enums: {
       allergen_enum:
@@ -1418,8 +1422,88 @@ export type Database = GeneratedDatabase & {
     Enums: GeneratedDatabase["public"]["Enums"]
     CompositeTypes: GeneratedDatabase["public"]["CompositeTypes"]
   }
-  content: {
+  cms: {
     Tables: {}
+    Views: GeneratedDatabase["public"]["Views"]
+    Enums: GeneratedDatabase["public"]["Enums"]
+    CompositeTypes: GeneratedDatabase["public"]["CompositeTypes"]
+  }
+  content: {
+    Tables: {
+      menus: {
+        Row: {
+          created_at: string | null
+          id: string
+          slug: string
+          structure: Json
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          slug: string
+          structure?: Json
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          slug?: string
+          structure?: Json
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menus_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      pages: {
+        Row: {
+          created_at: string | null
+          id: string
+          sections: Json
+          seo: Json | null
+          slug: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          sections?: Json
+          seo?: Json | null
+          slug: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          sections?: Json
+          seo?: Json | null
+          slug?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pages_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
     Views: GeneratedDatabase["public"]["Views"]
     Enums: GeneratedDatabase["public"]["Enums"]
     CompositeTypes: GeneratedDatabase["public"]["CompositeTypes"]

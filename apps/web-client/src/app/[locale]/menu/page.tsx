@@ -13,6 +13,13 @@ import {
   PiggyBank,
   ShieldCheck,
   ShoppingBag,
+  Users,
+  Package,
+  Trophy,
+  Leaf,
+  FileQuestion,
+  Lock,
+  UserPlus,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
@@ -70,17 +77,27 @@ export default function MenuPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4">
-            <Button asChild variant="outline" size="lg" className="w-full">
-              <Link href="/login">
-                Se connecter
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-4">
+              <Button asChild variant="outline" size="lg" className="w-full">
+                <Link href="/login">
+                  <Lock className="h-4 w-4 mr-2" />
+                  Se connecter
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="w-full">
+                <Link href="/register">
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  S'inscrire
+                </Link>
+              </Button>
+            </div>
+            <div className="space-y-1 rounded-xl border bg-card p-1 shadow-sm">
+              <Link href="/forgot-password" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                  <Lock className="h-5 w-5 text-muted-foreground" />
+                  Mot de passe oublié
               </Link>
-            </Button>
-            <Button asChild size="lg" className="w-full">
-              <Link href="/register">
-                S'inscrire
-              </Link>
-            </Button>
+            </div>
           </div>
         )}
 
@@ -146,6 +163,53 @@ export default function MenuPage() {
             <Link href="/contact" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
                 <Mail className="h-5 w-5 text-muted-foreground" />
                 Contact
+            </Link>
+            <div className="mx-4 border-t" />
+            <Link href="/faq" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                <FileQuestion className="h-5 w-5 text-muted-foreground" />
+                FAQ
+            </Link>
+            <div className="mx-4 border-t" />
+            <Link href="/products" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                <Package className="h-5 w-5 text-muted-foreground" />
+                Produits
+            </Link>
+            <div className="mx-4 border-t" />
+            <Link href="/producers" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                <Users className="h-5 w-5 text-muted-foreground" />
+                Producteurs
+            </Link>
+            <div className="mx-4 border-t" />
+            <Link href="/projects" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                <Leaf className="h-5 w-5 text-muted-foreground" />
+                Projets
+            </Link>
+            <div className="mx-4 border-t" />
+            <Link href="/biodex" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+                <Trophy className="h-5 w-5 text-muted-foreground" />
+                Biodex
+            </Link>
+          </div>
+        </div>
+
+        {/* Shopping & Activities */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
+            Shopping & Activités
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/cart" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                  <ShoppingBag className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium">Panier</span>
+            </Link>
+            
+            <Link href="/challenges" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                  <Trophy className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium">Défis</span>
             </Link>
           </div>
         </div>

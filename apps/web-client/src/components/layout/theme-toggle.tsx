@@ -4,14 +4,29 @@ import { Button } from '@make-the-change/core/ui'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 
 export function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const currentTheme = resolvedTheme ?? theme
   const nextTheme = currentTheme === 'dark' ? 'light' : 'dark'
 
   const toggleTheme = () => {
     setTheme(nextTheme)
+  }
+
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="control-button">
+        <span className="h-4 w-4" />
+      </Button>
+    )
   }
 
   return (

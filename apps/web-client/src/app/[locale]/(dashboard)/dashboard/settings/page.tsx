@@ -1,6 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
-import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { SettingsClient } from './settings-client'
 
 export default async function SettingsPage() {
@@ -13,12 +12,14 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('language_code, timezone, metadata')
+    .select('language_code, timezone, metadata, notification_preferences, social_links, theme_config')
     .eq('id', user.id)
     .single()
 
   const metadata = (profile?.metadata || {}) as Record<string, unknown>
   const publicProfile = Boolean(metadata.is_public_profile)
+  const notificationPrefs = (profile?.notification_preferences || {}) as Record<string, boolean>
+  const socialLinks = (profile?.social_links || {}) as Record<string, string>
 
   // Fetch marketing consent
   const adminSupabase = createAdminClient()
@@ -34,15 +35,24 @@ export default async function SettingsPage() {
   const marketingConsent = consents?.[0]?.granted ?? false
 
   return (
-    <DashboardPageContainer>
-      <SettingsClient
-        initial={{
-          languageCode: profile?.language_code || 'fr',
-          timezone: profile?.timezone || 'Europe/Paris',
-          publicProfile,
-          marketingConsent,
-        }}
-      />
-    </DashboardPageContainer>
+    <SettingsClient
+      initial={{
+        languageCode: profile?.language_code || 'fr',
+        timezone: profile?.timezone || 'Europe/Paris',
+        publicProfile,
+        marketingConsent,
+        notificationPrefs: {
+          email: notificationPrefs.email ?? true,
+          push: notificationPrefs.push ?? false,
+          monthly_report: notificationPrefs.monthly_report ?? true
+        },
+        socialLinks: {
+          linkedin: socialLinks.linkedin || '',
+          instagram: socialLinks.instagram || '',
+          twitter: socialLinks.twitter || ''
+        },
+        themeConfig: profile?.theme_config || null
+      }}
+    />
   )
 }
