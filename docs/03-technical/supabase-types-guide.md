@@ -1,31 +1,28 @@
 # Types TypeScript & Base de Données (2026)
 
-> Historique 2024/2025 — à revalider en 2026.
+## Règle principale
 
-## ✅ Source de vérité actuelle
-Le schéma **Drizzle** est la source de vérité :
+La vérité de la base de données est vérifiée via le MCP Supabase.
+
+- Toujours valider l’état réel en base avec MCP Supabase.
+- Ensuite seulement, aligner les types et schémas TypeScript.
+
+## Contrat applicatif
+
+Le contrat applicatif reste centralisé dans:
 - `packages/core/src/shared/db/schema.ts`
-- Types inférés via Drizzle (`InferSelectModel`, `InferInsertModel`)
 
-## ✅ Utilisation recommandée
-```ts
-import type { InferSelectModel } from 'drizzle-orm'
-import { products } from '@make-the-change/core/schema'
+Ce contrat doit refléter la réalité constatée via MCP Supabase.
 
-export type Product = InferSelectModel<typeof products>
-```
+## Types Supabase générés
 
-## Supabase “generated types” (optionnel)
-Si un besoin externe l’exige (outils BI, scripts data), on peut **générer** des types Supabase, mais ils ne sont **pas** utilisés dans l’app aujourd’hui.
+La génération de types Supabase est optionnelle et ne remplace pas la vérification MCP:
 
 ```bash
 supabase gen types typescript --project-id <PROJECT_ID> > /tmp/supabase-types.ts
 ```
 
-## CI/CD (optionnel)
-- Ajouter uniquement si la génération est nécessaire.
-- Conserver ces fichiers hors du runtime applicatif.
+## Politique SQL
 
-## Résumé
-- **Drizzle = source de vérité**
-- **Supabase types = optionnel / non utilisé**
+- Aucun fichier `.sql` ne doit être versionné dans ce dépôt.
+- Le guard `pnpm guard:no-sql` applique cette règle.

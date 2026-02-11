@@ -1,7 +1,6 @@
 # @make-the-change/web
 
 > The Admin Dashboard for Make the CHANGE, built with Next.js App Router.
-a
 [![Next.js](https://img.shields.io/badge/Next.js-16.1-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![Drizzle ORM](https://img.shields.io/badge/Drizzle-0.45-green)](https://orm.drizzle.team/)
@@ -21,7 +20,6 @@ a
 - **Styling**: Tailwind CSS 4 + CSS Variables
 - **State Management**: TanStack Query v5
 - **Forms**: React Hook Form + Zod
-- **Testing**: Vitest (Unit/Integration) + Playwright (E2E)
 
 ## 📦 Project Structure
 
@@ -72,16 +70,6 @@ pnpm dev
 ```bash
 pnpm build
 pnpm start
-```
-
-## 🧪 Testing
-
-```bash
-# Unit & Integration Tests
-pnpm test
-
-# E2E Tests
-pnpm test:e2e
 ```
 
 ## 🤝 Dependencies

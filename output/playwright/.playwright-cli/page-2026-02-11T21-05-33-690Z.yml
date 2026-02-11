@@ -1,0 +1,153 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e60] [cursor=pointer]:
+    - img [ref=e61]
+  - alert [ref=e64]
+  - generic [ref=e65]:
+    - banner [ref=e66]:
+      - generic [ref=e67]:
+        - button "Ouvrir le menu de navigation" [ref=e68] [cursor=pointer]:
+          - img [ref=e71]
+        - img "Make the Change" [ref=e73]
+      - button "Activer le mode sombre" [ref=e74] [cursor=pointer]:
+        - img [ref=e77]
+    - main [ref=e79]:
+      - generic [ref=e81]:
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - generic [ref=e88]:
+                - img [ref=e89]
+                - generic [ref=e92]: Mon tableau de bord
+              - heading "Bienvenue, Alice !" [level=1] [ref=e93]
+            - generic [ref=e94]:
+              - generic [ref=e95]: "KYC: En attente"
+              - generic [ref=e96]: Explorateur
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - generic [ref=e99]: Impact score
+              - generic [ref=e100]: "2345"
+            - generic [ref=e101]:
+              - generic [ref=e102]: Solde de points
+              - generic [ref=e103]: 1 000 pts
+            - generic [ref=e104]:
+              - generic [ref=e105]: Projets soutenus
+              - generic [ref=e106]: "5"
+        - generic [ref=e107]:
+          - heading "Actions rapides" [level=3] [ref=e109]
+          - generic [ref=e111]:
+            - link "Parcourir les projets" [ref=e112] [cursor=pointer]:
+              - /url: /fr/projects
+              - button "Parcourir les projets" [ref=e113]:
+                - generic [ref=e115]:
+                  - img [ref=e116]
+                  - text: Parcourir les projets
+            - link "Parcourir la boutique" [ref=e119] [cursor=pointer]:
+              - /url: /fr/products
+              - button "Parcourir la boutique" [ref=e120]:
+                - generic [ref=e122]:
+                  - img [ref=e123]
+                  - text: Parcourir la boutique
+        - generic [ref=e126]:
+          - heading "Mes Badges & Succès" [level=3] [ref=e128]:
+            - img [ref=e129]
+            - text: Mes Badges & Succès
+          - generic [ref=e133]:
+            - generic [ref=e134]:
+              - img [ref=e136]
+              - paragraph [ref=e143]: Premier projet
+            - generic [ref=e144]:
+              - img [ref=e146]
+              - paragraph [ref=e153]: 1000 points
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - generic [ref=e158]:
+              - heading "Impact score" [level=3] [ref=e159]
+              - img [ref=e161]
+            - generic [ref=e168]: "2345"
+          - generic [ref=e169]:
+            - generic [ref=e172]:
+              - heading "Total investi" [level=3] [ref=e173]
+              - img [ref=e175]
+            - generic [ref=e179]: 190,00 €
+          - generic [ref=e180]:
+            - generic [ref=e183]:
+              - heading "Solde de points" [level=3] [ref=e184]
+              - img [ref=e186]
+            - generic [ref=e190]: 1 000 pts
+          - generic [ref=e191]:
+            - generic [ref=e194]:
+              - heading "Projets soutenus" [level=3] [ref=e195]
+              - img [ref=e197]
+            - generic [ref=e201]: "5"
+        - generic [ref=e202]:
+          - generic [ref=e203]:
+            - heading "Activité récente" [level=3] [ref=e204]
+            - link "Voir tout" [ref=e205] [cursor=pointer]:
+              - /url: /fr/dashboard/investments
+              - button "Voir tout" [ref=e206]:
+                - generic [ref=e208]:
+                  - text: Voir tout
+                  - img [ref=e209]
+          - generic [ref=e212]:
+            - generic [ref=e216]:
+              - generic [ref=e217]:
+                - img [ref=e219]
+                - generic [ref=e222]:
+                  - paragraph [ref=e223]: Oliviers de Provence 2024
+                  - paragraph [ref=e224]: 08/02/2026
+              - generic [ref=e226]: +50,00 €
+            - generic [ref=e229]:
+              - generic [ref=e230]:
+                - img [ref=e232]
+                - generic [ref=e235]:
+                  - paragraph [ref=e236]: rearre
+                  - paragraph [ref=e237]: 08/02/2026
+              - generic [ref=e239]: +20,00 €
+            - generic [ref=e242]:
+              - generic [ref=e243]:
+                - img [ref=e245]
+                - generic [ref=e248]:
+                  - paragraph [ref=e249]: Ruches Urbaines Bruxelles
+                  - paragraph [ref=e250]: 08/02/2026
+              - generic [ref=e252]: +40,00 €
+        - generic [ref=e253]:
+          - heading "Progression niveau" [level=3] [ref=e255]:
+            - img [ref=e256]
+            - text: Progression niveau
+          - generic [ref=e262]:
+            - generic [ref=e264]:
+              - generic [ref=e265]: Vers ambassadeur
+              - generic [ref=e266]: 34%
+            - generic [ref=e269]:
+              - paragraph [ref=e270]: Prochain niveau
+              - generic [ref=e271]:
+                - generic [ref=e272]: Ambassadeur
+                - generic [ref=e273]: Explorateur
+            - generic [ref=e275]:
+              - generic [ref=e276]: Objectif du mois
+              - generic [ref=e277]: 5/5 projets
+            - link "Explorer les projets" [ref=e280] [cursor=pointer]:
+              - /url: /fr/projects
+              - button "Explorer les projets" [ref=e281]:
+                - generic [ref=e283]: Explorer les projets
+    - navigation [ref=e285]:
+      - link "Accueil" [ref=e286] [cursor=pointer]:
+        - /url: /fr
+        - img [ref=e288]
+        - generic [ref=e291]: Accueil
+      - link "Produits" [ref=e292] [cursor=pointer]:
+        - /url: /fr/products
+        - img [ref=e294]
+        - generic [ref=e297]: Produits
+      - link "Projets" [ref=e298] [cursor=pointer]:
+        - /url: /fr/projects
+        - img [ref=e300]
+        - generic [ref=e303]: Projets
+      - link "Classement" [ref=e304] [cursor=pointer]:
+        - /url: /fr/leaderboard
+        - img [ref=e306]
+        - generic [ref=e312]: Classement
+      - link "Menu" [ref=e313] [cursor=pointer]:
+        - /url: /fr/menu
+        - img [ref=e315]
+        - generic [ref=e318]: Menu

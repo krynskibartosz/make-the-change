@@ -12,13 +12,6 @@ pids
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
@@ -65,7 +58,6 @@ jspm_packages/
 # dotenv environment variable files
 .env
 .env.development.local
-.env.test.local
 .env.production.local
 .env.local
 
@@ -152,7 +144,6 @@ temp/
 # Local development
 .env.local
 .env.development.local
-.env.test.local
 .env.production.local
 
 # Database
@@ -210,8 +201,3 @@ sk_test_*
 pk_test_*
 .vercel
 .env*.local
-
-# Playwright (web-client)
-apps/web-client/test-results/
-apps/web-client/playwright-report/
-apps/web-client/playwright/.auth/

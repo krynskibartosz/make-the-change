@@ -140,7 +140,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
             {species.threats && species.threats.length > 0 && (
               <Card>
                 <CardContent className="pt-6">
-                  <div className="mb-2 flex items-center gap-2 text-orange-600">
+                  <div className="mb-2 flex items-center gap-2 text-client-orange-600">
                     <AlertTriangle className="h-5 w-5" />
                     <h3 className="font-semibold">Menaces</h3>
                   </div>

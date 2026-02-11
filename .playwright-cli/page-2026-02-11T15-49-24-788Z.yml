@@ -1,0 +1,265 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - banner [ref=e13]:
+      - navigation [ref=e14]:
+        - link "Make the Change Make the Change" [ref=e15] [cursor=pointer]:
+          - /url: /fr
+          - img "Make the Change" [ref=e17]
+          - generic [ref=e18]: Make the Change
+        - generic [ref=e19]:
+          - link "Accueil" [ref=e20] [cursor=pointer]:
+            - /url: /fr
+          - button "Projets" [ref=e21]:
+            - text: Projets
+            - img [ref=e22]
+          - button "Produits" [ref=e24]:
+            - text: Produits
+            - img [ref=e25]
+          - link "Guide de marque" [ref=e27] [cursor=pointer]:
+            - /url: /fr/brand-guidelines
+          - button "Découvrir" [ref=e28]:
+            - text: Découvrir
+            - img [ref=e29]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - link "Connexion" [ref=e33] [cursor=pointer]:
+              - /url: /fr/login
+              - button "Connexion" [ref=e34]:
+                - generic [ref=e36]: Connexion
+            - link "S'inscrire" [ref=e37] [cursor=pointer]:
+              - /url: /fr/register
+              - button "S'inscrire" [ref=e38]:
+                - generic [ref=e40]: S'inscrire
+          - link "Ouvrir le panier" [ref=e42] [cursor=pointer]:
+            - /url: /fr/cart
+            - img [ref=e43]
+          - button "Activer le mode sombre" [ref=e47] [cursor=pointer]:
+            - img [ref=e50]
+    - main [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: Design System
+              - heading "Brand Guidelines Make the Change" [level=1] [ref=e58]
+              - paragraph [ref=e59]: Référentiel officiel pour aligner l'identité visuelle, éditoriale et produit sur tous les points de contact.
+              - paragraph [ref=e60]: "Dernière mise à jour: février 2026"
+            - complementary [ref=e61]:
+              - paragraph [ref=e62]: Quick links
+              - generic [ref=e63]:
+                - link "Logo" [ref=e64] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines/logo
+                  - generic [ref=e65]: Logo
+                  - img [ref=e66]
+                - link "Couleurs" [ref=e68] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines/colors
+                  - generic [ref=e69]: Couleurs
+                  - img [ref=e70]
+                - link "Typographie" [ref=e72] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines/typography
+                  - generic [ref=e73]: Typographie
+                  - img [ref=e74]
+                - link "Tone of voice" [ref=e76] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines/voice
+                  - generic [ref=e77]: Tone of voice
+                  - img [ref=e78]
+          - paragraph [ref=e80]: hola
+        - generic [ref=e81]:
+          - complementary [ref=e82]:
+            - navigation [ref=e83]:
+              - generic [ref=e84]:
+                - paragraph [ref=e85]: Foundation
+                - list [ref=e86]:
+                  - listitem [ref=e87]:
+                    - link "01 Vue d'ensemble" [ref=e88] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines
+                      - generic [ref=e89]: "01"
+                      - generic [ref=e90]: Vue d'ensemble
+                      - img [ref=e91]
+              - generic [ref=e93]:
+                - paragraph [ref=e94]: Identity
+                - list [ref=e95]:
+                  - listitem [ref=e96]:
+                    - link "01 Logo" [ref=e97] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/logo
+                      - generic [ref=e98]: "01"
+                      - generic [ref=e99]: Logo
+                      - img [ref=e100]
+                  - listitem [ref=e102]:
+                    - link "02 Couleurs" [ref=e103] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/colors
+                      - generic [ref=e104]: "02"
+                      - generic [ref=e105]: Couleurs
+                      - img [ref=e106]
+                  - listitem [ref=e108]:
+                    - link "03 Typographie" [ref=e109] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/typography
+                      - generic [ref=e110]: "03"
+                      - generic [ref=e111]: Typographie
+                      - img [ref=e112]
+              - generic [ref=e114]:
+                - paragraph [ref=e115]: Writing
+                - list [ref=e116]:
+                  - listitem [ref=e117]:
+                    - link "01 Tone of voice" [ref=e118] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/voice
+                      - generic [ref=e119]: "01"
+                      - generic [ref=e120]: Tone of voice
+                      - img [ref=e121]
+              - generic [ref=e123]:
+                - paragraph [ref=e124]: Resources
+                - list [ref=e125]:
+                  - listitem [ref=e126]:
+                    - link "01 Assets" [ref=e127] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/assets
+                      - generic [ref=e128]: "01"
+                      - generic [ref=e129]: Assets
+                      - img [ref=e130]
+          - generic [ref=e133]:
+            - generic [ref=e134]:
+              - link "logo Le logo Make the Change est un actif prioritaire. Respecter strictement les variantes, dimensions minimales et zones de protection. View guide 01" [ref=e135] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/logo
+                - paragraph [ref=e136]: logo
+                - paragraph [ref=e137]: Le logo Make the Change est un actif prioritaire. Respecter strictement les variantes, dimensions minimales et zones de protection.
+                - generic [ref=e138]:
+                  - generic [ref=e139]: View guide
+                  - img [ref=e140]
+                - generic:
+                  - img
+                - generic: "01"
+              - link "couleurs La palette est structurée pour garantir lisibilité, hiérarchie visuelle et reconnaissance de marque sur desktop et mobile. View guide 02" [ref=e142] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/colors
+                - paragraph [ref=e143]: couleurs
+                - paragraph [ref=e144]: La palette est structurée pour garantir lisibilité, hiérarchie visuelle et reconnaissance de marque sur desktop et mobile.
+                - generic [ref=e145]:
+                  - generic [ref=e146]: View guide
+                  - img [ref=e147]
+                - generic:
+                  - img
+                - generic: "02"
+              - link "typographie La hiérarchie textuelle doit rester stable entre pages marketing, écrans produit et supports externes. View guide 03" [ref=e149] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/typography
+                - paragraph [ref=e150]: typographie
+                - paragraph [ref=e151]: La hiérarchie textuelle doit rester stable entre pages marketing, écrans produit et supports externes.
+                - generic [ref=e152]:
+                  - generic [ref=e153]: View guide
+                  - img [ref=e154]
+                - generic:
+                  - img
+                - generic: "03"
+              - link "tone of voice Le ton de Make the Change est chaleureux, fiable et orienté action concrète. Chaque microcopy doit refléter cette posture. View guide 04" [ref=e156] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/voice
+                - paragraph [ref=e157]: tone of voice
+                - paragraph [ref=e158]: Le ton de Make the Change est chaleureux, fiable et orienté action concrète. Chaque microcopy doit refléter cette posture.
+                - generic [ref=e159]:
+                  - generic [ref=e160]: View guide
+                  - img [ref=e161]
+                - generic:
+                  - img
+                - generic: "04"
+              - link "assets Cette section centralise les ressources marque disponibles pour les équipes produit, marketing et partenaires. View guide 05" [ref=e163] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/assets
+                - paragraph [ref=e164]: assets
+                - paragraph [ref=e165]: Cette section centralise les ressources marque disponibles pour les équipes produit, marketing et partenaires.
+                - generic [ref=e166]:
+                  - generic [ref=e167]: View guide
+                  - img [ref=e168]
+                - generic:
+                  - img
+                - generic: "05"
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - paragraph [ref=e173]: Fondations de marque
+                - heading "Construire une marque cohérente sur tous les points de contact." [level=2] [ref=e174]
+                - paragraph [ref=e175]: Ce cadre s applique au produit, au marketing, au support et aux communications partenaires. Toute nouvelle interface doit respecter ces principes avant livraison.
+                - heading "Principes de décision" [level=3] [ref=e176]
+                - list [ref=e177]:
+                  - listitem [ref=e178]:
+                    - generic [ref=e179]: "1"
+                    - generic [ref=e180]: Une page doit rester lisible en moins de 5 secondes.
+                  - listitem [ref=e181]:
+                    - generic [ref=e182]: "2"
+                    - generic [ref=e183]: Les décisions visuelles doivent être justifiées par un objectif métier.
+                  - listitem [ref=e184]:
+                    - generic [ref=e185]: "3"
+                    - generic [ref=e186]: Toujours privilégier les tokens et composants partagés du design system.
+                  - listitem [ref=e187]:
+                    - generic [ref=e188]: "4"
+                    - generic [ref=e189]: Les contenus doivent être localisés et validés en FR/EN/NL.
+                  - listitem [ref=e190]:
+                    - generic [ref=e191]: "5"
+                    - generic [ref=e192]: Toute exception au guide doit être documentée et validée.
+              - complementary [ref=e193]:
+                - paragraph [ref=e194]: Gouvernance
+                - list [ref=e195]:
+                  - listitem [ref=e196]: Product + Design valident les évolutions de guidelines.
+                  - listitem [ref=e197]: Engineering vérifie la conformité technique avant merge.
+                  - listitem [ref=e198]: Marketing valide la cohérence de ton et de message public.
+    - contentinfo [ref=e199]:
+      - generic [ref=e200]:
+        - generic [ref=e201]:
+          - generic [ref=e202]:
+            - link "Make the Change Make the Change" [ref=e203] [cursor=pointer]:
+              - /url: /fr
+              - img "Make the Change" [ref=e205]
+              - generic [ref=e206]: Make the Change
+            - paragraph [ref=e207]: Investissez dans la biodiversité, récoltez des récompenses tangibles.
+          - generic [ref=e208]:
+            - heading "Liens rapides" [level=3] [ref=e209]
+            - list [ref=e210]:
+              - listitem [ref=e211]:
+                - link "Projets" [ref=e212] [cursor=pointer]:
+                  - /url: /fr/projects
+              - listitem [ref=e213]:
+                - link "Produits" [ref=e214] [cursor=pointer]:
+                  - /url: /fr/products
+              - listitem [ref=e215]:
+                - link "Classement" [ref=e216] [cursor=pointer]:
+                  - /url: /fr/leaderboard
+              - listitem [ref=e217]:
+                - link "Blog" [ref=e218] [cursor=pointer]:
+                  - /url: /fr/blog
+              - listitem [ref=e219]:
+                - link "À propos" [ref=e220] [cursor=pointer]:
+                  - /url: /fr/about
+              - listitem [ref=e221]:
+                - link "Comment ça marche" [ref=e222] [cursor=pointer]:
+                  - /url: /fr/how-it-works
+              - listitem [ref=e223]:
+                - link "Guide de marque" [ref=e224] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines
+          - generic [ref=e225]:
+            - heading "Support" [level=3] [ref=e226]
+            - list [ref=e227]:
+              - listitem [ref=e228]:
+                - link "FAQ" [ref=e229] [cursor=pointer]:
+                  - /url: /fr/faq
+              - listitem [ref=e230]:
+                - link "Contact" [ref=e231] [cursor=pointer]:
+                  - /url: /fr/contact
+              - listitem [ref=e232]:
+                - link "Confidentialité" [ref=e233] [cursor=pointer]:
+                  - /url: /fr/privacy
+              - listitem [ref=e234]:
+                - link "Conditions" [ref=e235] [cursor=pointer]:
+                  - /url: /fr/terms
+          - generic [ref=e236]:
+            - heading "Nous contacter" [level=3] [ref=e237]
+            - list [ref=e238]:
+              - listitem [ref=e239]:
+                - img [ref=e240]
+                - link "contact@make-the-change.com" [ref=e243] [cursor=pointer]:
+                  - /url: mailto:contact@make-the-change.com
+              - listitem [ref=e244]:
+                - img [ref=e245]
+                - generic [ref=e248]: Brussels, Belgium
+        - generic [ref=e249]:
+          - paragraph [ref=e250]: © 2026 Make the CHANGE. Tous droits réservés.
+          - generic [ref=e251]:
+            - link "Confidentialité" [ref=e252] [cursor=pointer]:
+              - /url: /fr/privacy
+            - link "Conditions" [ref=e253] [cursor=pointer]:
+              - /url: /fr/terms

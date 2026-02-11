@@ -143,7 +143,7 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
                     
                     <div className="absolute top-4 right-4 flex gap-2">
                       {project.featured && (
-                        <Badge variant="secondary" className="font-bold shadow-sm backdrop-blur-md bg-white/90">
+                        <Badge variant="secondary" className="font-bold shadow-sm backdrop-blur-md bg-marketing-overlay-light/90">
                           {t('filter.featured')}
                         </Badge>
                       )}

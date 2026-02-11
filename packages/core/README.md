@@ -312,19 +312,6 @@ import { commerce, admin } from '@make-the-change/core'
 // Use admin schemas in commerce logic ❌
 ```
 
----
-
-## 🧪 Testing
-
-> ⚠️ **TODO:** Add test suite (Vitest recommended)
-
-**Priority modules for testing:**
-1. `investment/points-calculator.ts` (complex business logic)
-2. `shared/utils/validators.ts` (validation edge cases)
-3. `shared/utils/formatters.ts` (currency/date formatting)
-
----
-
 ## 📝 Contributing
 
 This package follows:
@@ -336,7 +323,6 @@ This package follows:
 - `index.ts` - Public exports
 - `types.ts` - TypeScript types
 - `utils.ts` - Helper functions
-- `*.test.ts` - Tests (when added)
 
 ---
 

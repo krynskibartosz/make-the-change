@@ -1,13 +1,48 @@
 'use client'
 
-import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
-import Placeholder from '@tiptap/extension-placeholder'
-import { Toolbar } from './toolbar'
-import { Bold, Italic, Link as LinkIcon } from 'lucide-react'
 import { Toggle } from '@make-the-change/core/ui'
+import Image from '@tiptap/extension-image'
+import Link from '@tiptap/extension-link'
+import Placeholder from '@tiptap/extension-placeholder'
+import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import { Bold, Italic, Link as LinkIcon } from 'lucide-react'
+import { useRef } from 'react'
 import { cn } from '@/lib/utils'
+import { Toolbar } from './toolbar'
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const isTipTapDoc = (value: unknown): boolean => {
+  if (!isRecord(value) || value.type !== 'doc') {
+    return false
+  }
+
+  if (value.content !== undefined && !Array.isArray(value.content)) {
+    return false
+  }
+
+  return true
+}
+
+const parseEditorContent = (content: string): string | Record<string, unknown> => {
+  const trimmed = content.trim()
+  if (!trimmed) {
+    return '<p></p>'
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed) as unknown
+    if (isTipTapDoc(parsed) && isRecord(parsed)) {
+      return parsed
+    }
+  } catch {
+    // Keep legacy HTML/string support for already stored posts.
+  }
+
+  return content
+}
 
 interface EditorProps {
   content: string
@@ -16,7 +51,14 @@ interface EditorProps {
   className?: string
 }
 
-export const EditorComponent = ({ content, onChange, placeholder = 'Commencez à écrire...', className }: EditorProps) => {
+export const EditorComponent = ({
+  content,
+  onChange,
+  placeholder = 'Commencez à écrire...',
+  className,
+}: EditorProps) => {
+  const initialContentRef = useRef(parseEditorContent(content))
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -25,21 +67,24 @@ export const EditorComponent = ({ content, onChange, placeholder = 'Commencez à
         },
       }),
       Image,
+      Link.configure({
+        openOnClick: false,
+      }),
       Placeholder.configure({
         placeholder,
       }),
     ],
-    content: content,
+    content: initialContentRef.current,
     editorProps: {
       attributes: {
         class: cn(
           'prose dark:prose-invert prose-sm sm:prose-base max-w-none focus:outline-none min-h-[300px] p-4',
-          className
+          className,
         ),
       },
     },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
+      onChange(JSON.stringify(editor.getJSON()))
     },
   })
 

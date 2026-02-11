@@ -73,10 +73,10 @@ export default async function PointsPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('earned')}
             </CardTitle>
-            <ArrowUp className="h-4 w-4 text-emerald-500" />
+            <ArrowUp className="h-4 w-4 text-client-emerald-500" />
           </CardHeader>
           <CardContent className="p-5 pt-0 sm:px-8 sm:pb-8 sm:pt-4">
-            <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            <div className="text-2xl font-bold text-client-emerald-600 dark:text-client-emerald-400">
               +{formatPoints(totalEarned)} pts
             </div>
           </CardContent>
@@ -87,10 +87,10 @@ export default async function PointsPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('spent')}
             </CardTitle>
-            <ArrowDown className="h-4 w-4 text-orange-500" />
+            <ArrowDown className="h-4 w-4 text-client-orange-500" />
           </CardHeader>
           <CardContent className="p-5 pt-0 sm:px-8 sm:pb-8 sm:pt-4">
-            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+            <div className="text-2xl font-bold text-client-orange-600 dark:text-client-orange-400">
               -{formatPoints(totalSpent)} pts
             </div>
           </CardContent>
@@ -116,8 +116,8 @@ export default async function PointsPage() {
                     {earned > 0 && (
                       <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
-                            <ArrowUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-client-emerald-100 dark:bg-client-emerald-900/30">
+                            <ArrowUp className="h-5 w-5 text-client-emerald-600 dark:text-client-emerald-400" />
                           </div>
                           <div>
                             <p className="font-medium">Commande #{order.id.slice(0, 8)} (Gain)</p>
@@ -134,8 +134,8 @@ export default async function PointsPage() {
                     {spent > 0 && (
                       <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
-                            <ArrowDown className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-client-orange-100 dark:bg-client-orange-900/30">
+                            <ArrowDown className="h-5 w-5 text-client-orange-600 dark:text-client-orange-400" />
                           </div>
                           <div>
                             <p className="font-medium">

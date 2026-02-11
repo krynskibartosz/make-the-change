@@ -22,35 +22,35 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-client-black/80 via-client-black/20 to-transparent" />
         </div>
         
         <div className="relative h-full flex flex-col justify-end p-6 sm:p-8 md:p-10">
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               {post.tags.slice(0, 3).map((tag) => (
-                <Badge key={tag} className="bg-white/10 hover:bg-white/20 text-white border-none backdrop-blur-md rounded-full px-3 py-1">
+                <Badge key={tag} className="bg-client-white/10 hover:bg-client-white/20 text-client-white border-none backdrop-blur-md rounded-full px-3 py-1">
                   {tag}
                 </Badge>
               ))}
             </div>
             
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-client-white leading-tight tracking-tight">
               {post.title}
             </h2>
             
             {post.excerpt && (
-              <p className="line-clamp-2 text-lg text-white/80 max-w-2xl font-medium">
+              <p className="line-clamp-2 text-lg text-client-white/80 max-w-2xl font-medium">
                 {post.excerpt}
               </p>
             )}
             
-            <div className="flex items-center gap-3 text-white/70 pt-2">
+            <div className="flex items-center gap-3 text-client-white/70 pt-2">
               {post.author?.avatarUrl && (
-                <img src={post.author.avatarUrl} alt={post.author.name} className="h-8 w-8 rounded-full border border-white/10" />
+                <img src={post.author.avatarUrl} alt={post.author.name} className="h-8 w-8 rounded-full border border-client-white/10" />
               )}
               <span className="text-sm font-medium">{post.author?.name}</span>
-              <span className="text-white/30">•</span>
+              <span className="text-client-white/30">•</span>
               <span className="text-sm">{formatDate(post.publishedAt || '')}</span>
             </div>
           </div>
@@ -102,9 +102,9 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
               loading="lazy"
             />
           ) : null}
-          <div className="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0" />
+          <div className="absolute inset-0 bg-client-black/10 transition-opacity group-hover:opacity-0" />
           {post.featured ? (
-            <Badge className="absolute right-3 top-3 rounded-full bg-white/90 text-black hover:bg-white backdrop-blur-sm shadow-sm">
+            <Badge className="absolute right-3 top-3 rounded-full bg-client-white/90 text-client-black hover:bg-client-white backdrop-blur-sm shadow-sm">
               ★ Featured
             </Badge>
           ) : null}

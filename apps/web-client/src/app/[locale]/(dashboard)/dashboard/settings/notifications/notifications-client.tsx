@@ -104,8 +104,8 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
                   </div>
                 )}
                 {state.success && (
-                  <div className="flex items-center gap-3 rounded-xl bg-emerald-500/10 p-4 text-sm text-emerald-600 font-bold border border-emerald-500/20 animate-in zoom-in-95">
-                    <div className="bg-emerald-500 text-white rounded-full p-0.5">
+                  <div className="flex items-center gap-3 rounded-xl bg-client-emerald-500/10 p-4 text-sm text-client-emerald-600 font-bold border border-client-emerald-500/20 animate-in zoom-in-95">
+                    <div className="bg-client-emerald-500 text-client-white rounded-full p-0.5">
                       <Check className="h-3.5 w-3.5" />
                     </div>
                     {state.success}

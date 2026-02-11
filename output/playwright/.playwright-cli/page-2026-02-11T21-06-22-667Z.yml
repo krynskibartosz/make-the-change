@@ -1,0 +1,75 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button "Continuer mes achats" [ref=e5] [cursor=pointer]:
+        - generic [ref=e7]:
+          - img [ref=e8]
+          - text: Continuer mes achats
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - img [ref=e13]
+          - generic [ref=e16]: Votre panier
+        - heading "Récapitulatif Impact." [level=1] [ref=e17]
+      - generic [ref=e18]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: "1"
+          - generic [ref=e22]:
+            - paragraph [ref=e23]: Panier
+            - paragraph [ref=e24]: Vérifiez vos articles et vos quantités
+        - generic [ref=e26]:
+          - generic [ref=e27]: "2"
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Adresse
+            - paragraph [ref=e30]: Ajoutez votre adresse de livraison
+        - generic [ref=e32]:
+          - generic [ref=e33]: "3"
+          - generic [ref=e34]:
+            - paragraph [ref=e35]: Confirmer
+            - paragraph [ref=e36]: Choisissez le mode de paiement
+    - generic [ref=e37]:
+      - generic [ref=e40]:
+        - img [ref=e44]
+        - generic [ref=e47]:
+          - heading "Votre panier est vide" [level=3] [ref=e48]
+          - paragraph [ref=e49]: Ajoutez des produits avant de passer commande.
+        - link "Explorer la boutique" [ref=e50] [cursor=pointer]:
+          - /url: /fr/products
+          - text: Explorer la boutique
+          - img [ref=e51]
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e57]:
+            - heading "Total commande" [level=3] [ref=e58]:
+              - img [ref=e59]
+              - text: Total commande
+            - generic [ref=e61]: Étape 1/3
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - generic [ref=e65]: Sous-total
+                - generic [ref=e66]: 0 pts
+              - generic [ref=e67]:
+                - generic [ref=e68]: Livraison
+                - generic [ref=e69]: Gratuite
+              - generic [ref=e70]:
+                - generic [ref=e71]: Total
+                - generic [ref=e73]: 0 pts
+            - button "Passer au paiement" [disabled] [ref=e74]:
+              - generic [ref=e75]:
+                - text: Passer au paiement
+                - img [ref=e76]
+            - generic [ref=e78]:
+              - generic [ref=e79]:
+                - img [ref=e80]
+                - generic [ref=e83]: Paiement sécurisé
+              - generic [ref=e84]:
+                - img [ref=e85]
+                - generic [ref=e88]: 100% Impact
+        - generic [ref=e90]:
+          - img [ref=e92]
+          - generic [ref=e97]:
+            - heading "Livraison instantanée" [level=4] [ref=e98]
+            - paragraph [ref=e99]: Vos crédits d'impact sont crédités sur votre compte immédiatement après validation.
+  - button "Open Next.js Dev Tools" [ref=e105] [cursor=pointer]:
+    - img [ref=e106]
+  - alert [ref=e109]

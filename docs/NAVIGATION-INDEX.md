@@ -8,6 +8,7 @@
 - Design system canonique : `03-technical/design-system.md`
 - Schéma DB : `03-technical/database-schema.md`
 - Alignement Drizzle / Supabase : `03-technical/drizzle-supabase-alignment.md`
+- Scope actif & gouvernance DB : `03-technical/active-scope-and-db-governance.md`
 - Supabase : `03-technical/integrations/supabase-integration.md`
 - Stripe : `03-technical/integrations/stripe-integration.md`
 - Feature flags : `03-technical/feature-flags-config.md`

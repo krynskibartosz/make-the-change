@@ -45,7 +45,7 @@ export function CartLineItem({
       <CardContent className={cn('flex gap-5 items-center', density === 'compact' ? 'p-3' : 'p-5')}>
         <div
           className={cn(
-            'shrink-0 overflow-hidden rounded-2xl bg-muted border border-white/10 shadow-inner',
+            'shrink-0 overflow-hidden rounded-2xl bg-muted border border-client-white/10 shadow-inner',
             density === 'compact' ? 'h-16 w-16' : 'h-24 w-24 sm:h-28 sm:w-28',
           )}
         >
@@ -57,7 +57,7 @@ export function CartLineItem({
               loading="lazy"
             />
           ) : (
-            <div className="h-full w-full bg-gradient-to-br from-primary/10 via-transparent to-emerald-500/10" />
+            <div className="h-full w-full bg-gradient-to-br from-primary/10 via-transparent to-client-emerald-500/10" />
           )}
         </div>
 
@@ -75,7 +75,7 @@ export function CartLineItem({
                   #{item.productId.slice(0, 8)}
                 </p>
                 {showLowStock && (
-                  <Badge variant="outline" className="text-orange-500 border-orange-500/30 bg-orange-500/5 rounded-full px-2 py-0 text-[10px]">
+                  <Badge variant="outline" className="text-client-orange-500 border-client-orange-500/30 bg-client-orange-500/5 rounded-full px-2 py-0 text-[10px]">
                     Plus que {item.snapshot.stockQuantity}
                   </Badge>
                 )}

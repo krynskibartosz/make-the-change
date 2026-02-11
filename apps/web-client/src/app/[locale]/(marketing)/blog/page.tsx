@@ -1,74 +1,120 @@
+import { getTranslations } from 'next-intl/server'
+import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
 import { getBlogPosts } from '@/features/blog/blog-data'
 import { BlogCard } from '@/features/blog/components/blog-card'
+import { Link } from '@/i18n/navigation'
+import { cn } from '@/lib/utils'
 
-export default async function BlogPage() {
+interface BlogPageProps {
+  searchParams: Promise<{
+    category?: string
+  }>
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const t = await getTranslations('marketing_pages.blog_list')
+  const params = await searchParams
   const posts = await getBlogPosts()
-  const featuredPost = posts.find(p => p.featured) || posts[0]
-  const otherPosts = posts.filter(p => p.id !== featuredPost?.id)
+
+  const selectedCategory = params.category?.trim() || 'all'
+  const normalizedCategory = selectedCategory.toLowerCase()
+
+  const categories = Array.from(
+    new Set(
+      posts
+        .flatMap((post) => post.tags)
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0),
+    ),
+  ).sort((first, second) => first.localeCompare(second))
+
+  const filteredPosts =
+    normalizedCategory === 'all'
+      ? posts
+      : posts.filter((post) => post.tags.some((tag) => tag.toLowerCase() === normalizedCategory))
+
+  const featuredPost = filteredPosts.find((post) => post.featured) || filteredPosts[0]
+  const otherPosts = filteredPosts.filter((post) => post.id !== featuredPost?.id)
+
+  const categoryLabel =
+    normalizedCategory === 'all'
+      ? t('categories.all')
+      : categories.find((tag) => tag.toLowerCase() === normalizedCategory) || selectedCategory
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="container relative max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
-                  Blog & Actualités
-                </div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
-                  Explorez le futur de <span className="text-primary block mt-2">l'impact positif.</span>
-                </h1>
-                <p className="text-lg text-muted-foreground font-medium max-w-lg leading-relaxed">
-                  Des histoires inspirantes, des analyses d'experts et les coulisses de nos projets pour comprendre comment nous changeons le monde ensemble.
-                </p>
-              </div>
-              
-              {/* Search or Categories could go here */}
-              <div className="flex gap-3">
-                {['Tous', 'Impact', 'Technologie', 'Lifestyle'].map((cat, i) => (
-                  <button 
-                    key={cat}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      i === 0 
-                        ? 'bg-foreground text-background' 
-                        : 'bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Featured Post - Side Layout */}
-            {featuredPost && (
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <BlogCard post={featuredPost} variant="featured" className="aspect-[4/3] lg:aspect-square" />
-              </div>
+      <PageHero
+        title={t('title')}
+        description={t('description')}
+        badge={t('badge')}
+        size="lg"
+        variant="gradient"
+      >
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/blog"
+            className={cn(
+              'rounded-full px-4 py-2 text-sm font-medium transition-all',
+              normalizedCategory === 'all'
+                ? 'bg-foreground text-background'
+                : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground',
             )}
-          </div>
+          >
+            {t('categories.all')}
+          </Link>
+          {categories.map((category) => {
+            const isActive = normalizedCategory === category.toLowerCase()
+            return (
+              <Link
+                key={category}
+                href={`/blog?category=${encodeURIComponent(category)}`}
+                className={cn(
+                  'rounded-full px-4 py-2 text-sm font-medium transition-all',
+                  isActive
+                    ? 'bg-foreground text-background'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground',
+                )}
+              >
+                {category}
+              </Link>
+            )
+          })}
         </div>
-      </section>
+      </PageHero>
 
-      {/* Grid Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-2xl font-bold tracking-tight">Récents articles</h2>
-            {/* Filter component could go here */}
+      {featuredPost ? (
+        <SectionContainer size="md" className="pt-0">
+          <div className="relative group">
+            <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-r from-primary/20 to-secondary/20 opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100" />
+            <BlogCard
+              post={featuredPost}
+              variant="featured"
+              className="aspect-[4/3] lg:aspect-[3/2]"
+            />
           </div>
-          
+        </SectionContainer>
+      ) : null}
+
+      <SectionContainer
+        size="lg"
+        className={cn('bg-muted/30', featuredPost ? 'pt-6' : 'pt-0')}
+        title={t('recent_title')}
+        description={t('active_filter', { category: categoryLabel })}
+      >
+        {otherPosts.length > 0 ? (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {otherPosts.map((post) => (
               <BlogCard key={post.id} post={post} />
             ))}
           </div>
-        </div>
-      </section>
+        ) : (
+          <div className="rounded-3xl border border-dashed bg-background/70 p-10 text-center">
+            <p className="text-lg font-semibold">{t('empty_title')}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{t('empty_description')}</p>
+          </div>
+        )}
+      </SectionContainer>
     </div>
   )
 }

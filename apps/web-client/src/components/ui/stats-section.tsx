@@ -22,14 +22,14 @@ const variantClasses = {
   default: '',
   card: 'rounded-2xl border bg-muted/40 p-8 md:p-12',
   gradient:
-    'rounded-2xl border bg-gradient-to-br from-primary/5 via-background to-emerald-50/30 p-8 md:p-12 dark:from-primary/10 dark:to-emerald-950/20',
+    'rounded-2xl border bg-gradient-to-br from-primary/5 via-background to-client-emerald-50/30 p-8 md:p-12 dark:from-primary/10 dark:to-client-emerald-950/20',
 }
 
 const gradients = [
-  'from-primary to-emerald-500',
-  'from-emerald-500 to-teal-500',
-  'from-amber-500 to-orange-500',
-  'from-sky-500 to-indigo-500',
+  'from-primary to-client-emerald-500',
+  'from-client-emerald-500 to-client-teal-500',
+  'from-client-amber-500 to-client-orange-500',
+  'from-client-sky-500 to-client-indigo-500',
 ]
 
 const useCountUp = (target: number, duration = 1200) => {

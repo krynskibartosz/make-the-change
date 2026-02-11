@@ -11,7 +11,7 @@ import {
 import { DataCard } from '@make-the-change/core/ui/next'
 import { Building2, Mail, Plus } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { type FC, useCallback, useMemo, useState, useTransition } from 'react'
+import { type FC, useCallback, useEffect, useState, useTransition } from 'react'
 import { useDebouncedCallback } from '@/app/[locale]/admin/(dashboard)/components/hooks/use-debounced-callback'
 import { AdminPageContainer } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-container'
 import { AdminPageHeader } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-header'
@@ -64,7 +64,7 @@ export const PartnersClient: FC<Props> = ({ initialConvertData, total }) => {
   // Sync with props
   const [data, setData] = useState<Partner[]>(initialConvertData)
 
-  useMemo(() => {
+  useEffect(() => {
     setData(initialConvertData)
   }, [initialConvertData])
 

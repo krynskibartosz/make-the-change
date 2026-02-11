@@ -1,6 +1,7 @@
 # Alignement Drizzle / Supabase — Make the CHANGE
 
-Source de vérité schéma : `packages/core/src/shared/db/schema.ts`.  
+Règle actuelle : la vérité DB runtime se valide via MCP Supabase.  
+Le schéma applicatif en code reste `packages/core/src/shared/db/schema.ts` et doit être aligné avec la réalité observée.  
 Ce document décrit les écarts entre le schéma Drizzle et l’usage Supabase dans les API, et propose un plan d’alignement.
 
 ---

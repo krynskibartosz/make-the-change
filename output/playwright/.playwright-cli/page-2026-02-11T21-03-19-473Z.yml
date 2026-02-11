@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link "Make the Change Make the Change" [ref=e4] [cursor=pointer]:
+      - /url: /fr
+      - img "Make the Change" [ref=e6]
+      - generic [ref=e7]: Make the Change
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "Créer un compte" [level=3] [ref=e11]
+        - paragraph [ref=e12]: Rejoignez le mouvement pour un futur durable.
+      - generic [ref=e14]:
+        - generic [ref=e113]: Email address "qa+1770843780@example.com" is invalid
+        - generic [ref=e15]:
+          - img [ref=e73]
+          - img [ref=e97]
+          - generic [ref=e22]: "3"
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - img [ref=e103]
+              - paragraph [ref=e105]: Dernière étape
+            - paragraph [ref=e106]: En rejoignant Make the CHANGE, vous participez activement à la protection de notre planète.
+          - generic [ref=e107] [cursor=pointer]:
+            - checkbox "J'accepte les conditions d'utilisation conditions d'utilisation" [ref=e108]
+            - generic [ref=e109]:
+              - text: J'accepte les conditions d'utilisation
+              - link "conditions d'utilisation" [ref=e110]:
+                - /url: /fr/terms
+        - generic [ref=e43]:
+          - button "S'inscrire" [ref=e111] [cursor=pointer]:
+            - generic [ref=e45]:
+              - text: S'inscrire
+              - img [ref=e115]
+          - button "Étape précédente" [ref=e91] [cursor=pointer]:
+            - generic [ref=e93]:
+              - img [ref=e94]
+              - text: Étape précédente
+      - paragraph [ref=e49]:
+        - text: Déjà un compte ?
+        - link "Se connecter" [ref=e50] [cursor=pointer]:
+          - /url: /fr/login
+    - generic [ref=e51]:
+      - generic [ref=e57]: +10K
+      - generic [ref=e58]:
+        - img [ref=e59]
+        - text: Impact vérifié par la communauté
+  - button "Open Next.js Dev Tools" [ref=e67] [cursor=pointer]:
+    - img [ref=e68]
+  - alert [ref=e71]

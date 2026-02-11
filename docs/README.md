@@ -1,11 +1,12 @@
 # Documentation — Make the CHANGE (2026)
 
-Stack actuelle : **Next.js 16**, **Expo 55**, **Drizzle**, **Base UI**, **Tailwind v4**, **Biome**.
+Stack active : **Next.js 16**, **Drizzle**, **Supabase**, **Base UI**, **Tailwind v4**, **Biome**.
 
 ## Entrées principales
 - Démarrage rapide : `docs/GETTING-STARTED.md`
 - Index de navigation : `docs/NAVIGATION-INDEX.md`
 - Design system canonique : `docs/03-technical/design-system.md`
+- Scope & gouvernance DB : `docs/03-technical/active-scope-and-db-governance.md`
 
 ## Sections actives
 - `01-strategy/` — Vision, business model, pricing
@@ -19,3 +20,7 @@ Stack actuelle : **Next.js 16**, **Expo 55**, **Drizzle**, **Base UI**, **Tailwi
 
 ## Archives
 Tout contenu obsolète ou legacy est dans `docs/_legacy_archive/`.
+
+## Scope applicatif actuel
+- Actif: `apps/web`, `apps/web-client`, `packages/core`
+- Gelé: `apps/mobile`, `apps/mobile-clean`, `apps/mobile-sdk55`, `apps/_legacy`

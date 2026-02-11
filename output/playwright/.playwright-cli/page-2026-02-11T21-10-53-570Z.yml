@@ -1,0 +1,85 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - img [ref=e12]
+            - generic [ref=e15]: Paiement sécurisé
+          - generic [ref=e16]:
+            - heading "Commande" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Finalisez votre commande en 3 étapes. 1 article(s) prêt(s) à être validé(s).
+        - generic [ref=e19]:
+          - button "Retour" [ref=e20] [cursor=pointer]:
+            - generic [ref=e22]: Retour
+          - link "Modifier" [ref=e23] [cursor=pointer]:
+            - /url: /fr/cart
+      - generic [ref=e24]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: "1"
+          - paragraph [ref=e29]: Panier
+        - generic [ref=e32]:
+          - generic [ref=e33]: "2"
+          - paragraph [ref=e35]: Adresse
+        - generic [ref=e37]:
+          - generic [ref=e38]: "3"
+          - generic [ref=e39]:
+            - paragraph [ref=e40]: Confirmer
+            - paragraph [ref=e143]: Choisissez le mode de paiement
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - img [ref=e43]
+          - paragraph [ref=e46]: Transactions protégées et validation serveur en temps réel.
+        - generic [ref=e47]:
+          - img [ref=e48]
+          - paragraph [ref=e53]: Livraison rapide, sans frais supplémentaires.
+    - generic [ref=e144]:
+      - heading "Moyen de paiement" [level=3] [ref=e146]
+      - generic [ref=e147]:
+        - radiogroup "Moyen de paiement" [ref=e148]:
+          - 'radio "Mes Points Sélectionné Solde: 0 pts Paiement instantané via votre solde actuel." [checked] [ref=e149]':
+            - generic [ref=e150]:
+              - img [ref=e152]
+              - generic [ref=e155]:
+                - generic [ref=e156]:
+                  - paragraph [ref=e157]: Mes Points
+                  - generic [ref=e158]: Sélectionné
+                - paragraph [ref=e159]: "Solde: 0 pts"
+                - paragraph [ref=e160]: Paiement instantané via votre solde actuel.
+          - radio "Carte Bancaire Simulation (Euros) Simulation de paiement en euros (mode test)." [ref=e161]:
+            - generic [ref=e162]:
+              - img [ref=e164]
+              - generic [ref=e166]:
+                - paragraph [ref=e168]: Carte Bancaire
+                - paragraph [ref=e169]: Simulation (Euros)
+                - paragraph [ref=e170]: Simulation de paiement en euros (mode test).
+        - generic [ref=e171]:
+          - heading "Vérification finale" [level=3] [ref=e172]
+          - generic [ref=e173]:
+            - generic [ref=e174]:
+              - paragraph [ref=e175]: Solde actuel
+              - paragraph [ref=e176]: 0 pts
+            - generic [ref=e177]:
+              - paragraph [ref=e178]: Après achat
+              - paragraph [ref=e179]: 0 pts
+          - generic [ref=e180]: Points insuffisants pour confirmer cette commande.
+          - generic [ref=e181]:
+            - generic [ref=e182]: Total commande
+            - generic [ref=e183]: 1 000 pts
+          - generic [ref=e184]:
+            - button "Retour" [ref=e185] [cursor=pointer]:
+              - generic [ref=e187]: Retour
+            - button "Confirmer (Points)" [disabled] [ref=e188]:
+              - generic [ref=e189]: Confirmer (Points)
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - paragraph [ref=e82]: Total
+        - paragraph [ref=e83]: 1 000 pts / 10,00 €
+        - paragraph [ref=e84]: Aucun frais caché.
+      - generic [ref=e85]:
+        - generic [ref=e86]: Insuffisant
+        - button "Confirmer (Points)" [disabled] [ref=e190]:
+          - generic [ref=e89]: Confirmer (Points)
+  - button "Open Next.js Dev Tools" [ref=e95] [cursor=pointer]:
+    - img [ref=e96]
+  - alert [ref=e99]

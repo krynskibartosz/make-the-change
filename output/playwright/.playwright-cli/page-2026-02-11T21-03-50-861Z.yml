@@ -1,0 +1,30 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link "Make the Change Make the Change" [ref=e4] [cursor=pointer]:
+      - /url: /fr
+      - img "Make the Change" [ref=e6]
+      - generic [ref=e7]: Make the Change
+    - generic [ref=e135]:
+      - img [ref=e137]
+      - generic [ref=e139]:
+        - heading "Inscription réussie !" [level=2] [ref=e140]
+        - paragraph [ref=e141]: Un email de confirmation a été envoyé à
+        - paragraph [ref=e142]: qa1770843826@testmail.com
+      - generic [ref=e143]: Cliquez sur le lien dans l'email pour activer votre compte et commencer l'aventure.
+      - generic [ref=e144]:
+        - link "Ouvrir ma boîte mail" [ref=e145] [cursor=pointer]:
+          - /url: "mailto:"
+          - img [ref=e146]
+          - text: Ouvrir ma boîte mail
+        - link "Retour à la connexion" [ref=e149] [cursor=pointer]:
+          - /url: /fr/login
+          - button "Retour à la connexion" [ref=e150]:
+            - generic [ref=e152]: Retour à la connexion
+    - generic [ref=e51]:
+      - generic [ref=e57]: +10K
+      - generic [ref=e58]:
+        - img [ref=e59]
+        - text: Impact vérifié par la communauté
+  - button "Open Next.js Dev Tools" [ref=e67] [cursor=pointer]:
+    - img [ref=e68]
+  - alert [ref=e71]

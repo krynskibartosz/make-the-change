@@ -16,17 +16,17 @@
     "monorepo"
   ],
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "type-check": "turbo type-check",
-    "test": "turbo test",
+    "build": "turbo build --filter=@make-the-change/web --filter=@make-the-change/web-client",
+    "dev": "turbo dev --filter=@make-the-change/web --filter=@make-the-change/web-client",
+    "lint": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && turbo lint --filter=@make-the-change/web --filter=@make-the-change/web-client",
+    "type-check": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && turbo type-check --filter=@make-the-change/web --filter=@make-the-change/web-client",
     "clean": "turbo clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "types:generate": "./scripts/generate-types.sh",
+    "guard:no-sql": "node ./tools/guard-no-sql.mjs",
+    "guard:no-hardcoded-colors": "node ./tools/guard-no-hardcoded-marketing-colors.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo build && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
@@ -41,8 +41,9 @@
     "pnpm": ">=9.0.0"
   },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/web",
+    "apps/web-client",
+    "packages/core"
   ],
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",

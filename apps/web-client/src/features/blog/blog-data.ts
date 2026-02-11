@@ -1,54 +1,142 @@
 import 'server-only'
 
 import { createClient } from '@/lib/supabase/server'
-import type { BlogPost } from './blog-types'
+import type { BlogPost, BlogPostStatus } from './blog-types'
+import { parseBlogContent } from './content/parse-blog-content'
 
-const extractTextFromTipTap = (json: any): string => {
-  if (!json || typeof json !== 'object') return String(json || '')
-  if (json.type === 'text' && typeof json.text === 'string') return json.text
-  if (Array.isArray(json.content)) {
-    return json.content.map(extractTextFromTipTap).join('\n\n')
-  }
-  return ''
+type BlogTagRelationRow = {
+  tag?: {
+    name?: string | null
+  } | null
+} | null
+
+type BlogAuthorRow = {
+  name?: string | null
+  avatar_url?: string | null
+} | null
+
+type BlogPostRow = {
+  id: string
+  slug: string
+  title: string | null
+  excerpt: string | null
+  content: unknown
+  cover_image_url: string | null
+  published_at: string | null
+  featured: boolean | null
+  status?: BlogPostStatus | null
+  author?: BlogAuthorRow | BlogAuthorRow[] | null
+  blog_post_tags?: BlogTagRelationRow[] | null
 }
 
-const mapPost = (row: any): BlogPost => {
-  const authorRaw = row.author
-  const authorValue = Array.isArray(authorRaw) ? authorRaw[0] : authorRaw
-  const author =
-    authorValue && typeof authorValue === 'object' ? (authorValue as Record<string, unknown>) : null
-  const coverImage = row.cover_image_url || null
-  
-  // Handle nested tags from the many-to-many relationship
-  const tags = row.blog_post_tags 
-    ? row.blog_post_tags
-        .map((item: any) => item.tag?.name)
-        .filter((t: any): t is string => typeof t === 'string')
-    : []
+const BLOG_POST_SELECT = `
+  id,
+  slug,
+  title,
+  excerpt,
+  content,
+  cover_image_url,
+  published_at,
+  featured,
+  author:blog_authors(
+    name,
+    avatar_url
+  ),
+  blog_post_tags(
+    tag:blog_tags(
+      name
+    )
+  )
+`
 
-  let content = ''
-  if (typeof row.content === 'string') {
-    content = row.content
-  } else if (row.content && typeof row.content === 'object') {
-    content = extractTextFromTipTap(row.content)
+const BLOG_POST_ADMIN_SELECT = `
+  id,
+  slug,
+  title,
+  excerpt,
+  content,
+  cover_image_url,
+  published_at,
+  status,
+  featured,
+  author:blog_authors(
+    name,
+    avatar_url
+  ),
+  blog_post_tags(
+    tag:blog_tags(
+      name
+    )
+  )
+`
+
+const toRawContent = (content: unknown): string => {
+  if (typeof content === 'string') {
+    return content
   }
+
+  if (content === null || content === undefined) {
+    return ''
+  }
+
+  if (typeof content === 'object') {
+    try {
+      return JSON.stringify(content)
+    } catch {
+      return ''
+    }
+  }
+
+  return String(content)
+}
+
+const toAuthor = (authorRaw: BlogPostRow['author']) => {
+  const authorValue = Array.isArray(authorRaw) ? authorRaw[0] : authorRaw
+  if (!authorValue || typeof authorValue !== 'object') {
+    return null
+  }
+
+  return {
+    name:
+      typeof authorValue.name === 'string' && authorValue.name.trim() ? authorValue.name : 'Author',
+    avatarUrl: typeof authorValue.avatar_url === 'string' ? authorValue.avatar_url : null,
+  }
+}
+
+const toTags = (relations: BlogPostRow['blog_post_tags']): string[] => {
+  if (!Array.isArray(relations)) {
+    return []
+  }
+
+  return relations
+    .map((relation) => relation?.tag?.name)
+    .filter((value): value is string => typeof value === 'string' && value.length > 0)
+}
+
+const toStatus = (value: unknown): BlogPostStatus | undefined => {
+  if (value === 'draft' || value === 'published' || value === 'archived') {
+    return value
+  }
+
+  return undefined
+}
+
+const mapPost = (row: BlogPostRow): BlogPost => {
+  const rawContent = toRawContent(row.content)
 
   return {
     id: String(row.id),
     slug: String(row.slug),
     title: String(row.title || ''),
     excerpt: String(row.excerpt || ''),
-    content,
-    coverImage,
-    author: author
-      ? {
-          name: String(author.name || 'Auteur'),
-          avatarUrl: typeof author.avatar_url === 'string' ? author.avatar_url : null,
-        }
-      : null,
+    content: parseBlogContent(row.content),
+    rawContent,
+    coverImage: row.cover_image_url || null,
+    author: toAuthor(row.author),
     publishedAt: row.published_at ? String(row.published_at) : null,
-    tags,
+    tags: toTags(row.blog_post_tags),
     featured: Boolean(row.featured),
+    status: toStatus(row.status),
   }
 }
 
@@ -58,34 +146,16 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     const { data, error } = await supabase
       .schema('content')
       .from('blog_posts')
-      .select(
-        `
-        id,
-        slug,
-        title,
-        excerpt,
-        content,
-        cover_image_url,
-        published_at,
-        featured,
-        author:blog_authors(
-          name,
-          avatar_url
-        ),
-        blog_post_tags(
-          tag:blog_tags(
-            name
-          )
-        )
-      `,
-      )
+      .select(BLOG_POST_SELECT)
       .eq('status', 'published')
       .order('published_at', { ascending: false })
       .limit(50)
 
-    if (error || !data) return []
+    if (error || !data) {
+      return []
+    }
 
-    return data.map(mapPost)
+    return data.map((row) => mapPost(row as BlogPostRow))
   } catch {
     return []
   }
@@ -97,33 +167,15 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     const { data, error } = await supabase
       .schema('content')
       .from('blog_posts')
-      .select(
-        `
-        id,
-        slug,
-        title,
-        excerpt,
-        content,
-        cover_image_url,
-        published_at,
-        featured,
-        author:blog_authors(
-          name,
-          avatar_url
-        ),
-        blog_post_tags(
-          tag:blog_tags(
-            name
-          )
-        )
-      `,
-      )
+      .select(BLOG_POST_SELECT)
       .eq('slug', slug)
       .single()
 
-    if (error || !data) return null
+    if (error || !data) {
+      return null
+    }
 
-    return mapPost(data)
+    return mapPost(data as BlogPostRow)
   } catch {
     return null
   }
@@ -135,41 +187,15 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
     const { data, error } = await supabase
       .schema('content')
       .from('blog_posts')
-      .select(
-        `
-        id,
-        slug,
-        title,
-        excerpt,
-        content,
-        cover_image_url,
-        published_at,
-        status,
-        featured,
-        author:blog_authors(
-          name,
-          avatar_url
-        ),
-        blog_post_tags(
-          tag:blog_tags(
-            name
-          )
-        )
-      `,
-      )
+      .select(BLOG_POST_ADMIN_SELECT)
       .eq('id', id)
       .single()
 
-    if (error || !data) return null
+    if (error || !data) {
+      return null
+    }
 
-    // For admin, we need the raw status, which mapPost doesn't currently include in BlogPost type?
-    // Let's check BlogPost type. If it's missing status, we should add it.
-    // For now, mapPost returns BlogPost which is for public view. 
-    // But the Admin Editor needs 'status'.
-    // I'll extend the return type or just return the raw data mapped + status.
-    
-    const post = mapPost(data)
-    return { ...post, status: data.status } as BlogPost & { status: 'draft' | 'published' | 'archived' }
+    return mapPost(data as BlogPostRow)
   } catch {
     return null
   }

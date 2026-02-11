@@ -1,0 +1,276 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - banner [ref=e13]:
+      - navigation [ref=e14]:
+        - link "Make the Change Make the Change" [ref=e15] [cursor=pointer]:
+          - /url: /fr
+          - img "Make the Change" [ref=e17]
+          - generic [ref=e18]: Make the Change
+        - generic [ref=e19]:
+          - link "Accueil" [ref=e20] [cursor=pointer]:
+            - /url: /fr
+          - button "Projets" [ref=e21]:
+            - text: Projets
+            - img [ref=e22]
+          - button "Produits" [ref=e24]:
+            - text: Produits
+            - img [ref=e25]
+          - link "Guide de marque" [ref=e27] [cursor=pointer]:
+            - /url: /fr/brand-guidelines
+          - button "Découvrir" [ref=e28]:
+            - text: Découvrir
+            - img [ref=e29]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - link "Connexion" [ref=e33] [cursor=pointer]:
+              - /url: /fr/login
+              - button "Connexion" [ref=e34]:
+                - generic [ref=e36]: Connexion
+            - link "S'inscrire" [ref=e37] [cursor=pointer]:
+              - /url: /fr/register
+              - button "S'inscrire" [ref=e38]:
+                - generic [ref=e40]: S'inscrire
+          - link "Ouvrir le panier" [ref=e42] [cursor=pointer]:
+            - /url: /fr/cart
+            - img [ref=e43]
+          - button "Activer le mode sombre" [ref=e47] [cursor=pointer]:
+            - img [ref=e50]
+    - main [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - paragraph [ref=e57]: Ton de voix
+            - heading "Ton de voix" [level=1] [ref=e58]
+            - paragraph [ref=e59]: Le ton de Make the Change est chaleureux, fiable et orienté action concrète. Chaque microcopy doit refléter cette posture.
+            - paragraph [ref=e60]: "Dernière mise à jour: février 2026"
+          - complementary [ref=e61]:
+            - paragraph [ref=e62]: Liens rapides
+            - generic [ref=e63]:
+              - link "Vue d'ensemble" [ref=e64] [cursor=pointer]:
+                - /url: /fr/brand-guidelines
+                - generic [ref=e65]: Vue d'ensemble
+                - img [ref=e66]
+              - link "Logo" [ref=e68] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/logo
+                - generic [ref=e69]: Logo
+                - img [ref=e70]
+              - link "Couleurs" [ref=e72] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/colors
+                - generic [ref=e73]: Couleurs
+                - img [ref=e74]
+              - link "Typographie" [ref=e76] [cursor=pointer]:
+                - /url: /fr/brand-guidelines/typography
+                - generic [ref=e77]: Typographie
+                - img [ref=e78]
+        - generic [ref=e80]:
+          - complementary [ref=e81]:
+            - navigation [ref=e82]:
+              - generic [ref=e83]:
+                - paragraph [ref=e84]: Fondations
+                - list [ref=e85]:
+                  - listitem [ref=e86]:
+                    - link "01 Vue d'ensemble" [ref=e87] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines
+                      - generic [ref=e88]: "01"
+                      - generic [ref=e89]: Vue d'ensemble
+                      - img [ref=e90]
+              - generic [ref=e92]:
+                - paragraph [ref=e93]: Identité
+                - list [ref=e94]:
+                  - listitem [ref=e95]:
+                    - link "01 Logo" [ref=e96] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/logo
+                      - generic [ref=e97]: "01"
+                      - generic [ref=e98]: Logo
+                      - img [ref=e99]
+                  - listitem [ref=e101]:
+                    - link "02 Couleurs" [ref=e102] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/colors
+                      - generic [ref=e103]: "02"
+                      - generic [ref=e104]: Couleurs
+                      - img [ref=e105]
+                  - listitem [ref=e107]:
+                    - link "03 Typographie" [ref=e108] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/typography
+                      - generic [ref=e109]: "03"
+                      - generic [ref=e110]: Typographie
+                      - img [ref=e111]
+              - generic [ref=e113]:
+                - paragraph [ref=e114]: Rédaction
+                - list [ref=e115]:
+                  - listitem [ref=e116]:
+                    - link "01 Ton de voix" [ref=e117] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/voice
+                      - generic [ref=e118]: "01"
+                      - generic [ref=e119]: Ton de voix
+                      - img [ref=e120]
+              - generic [ref=e122]:
+                - paragraph [ref=e123]: Ressources
+                - list [ref=e124]:
+                  - listitem [ref=e125]:
+                    - link "01 Ressources" [ref=e126] [cursor=pointer]:
+                      - /url: /fr/brand-guidelines/assets
+                      - generic [ref=e127]: "01"
+                      - generic [ref=e128]: Ressources
+                      - img [ref=e129]
+          - generic [ref=e133]:
+            - generic [ref=e134]:
+              - generic [ref=e135]:
+                - paragraph [ref=e136]: 5 piliers rédactionnels
+                - generic [ref=e137]:
+                  - article [ref=e138]:
+                    - paragraph [ref=e139]: Rassurant
+                    - paragraph [ref=e140]: Expliquer simplement, réduire les ambiguïtés, éviter les promesses vagues.
+                  - article [ref=e141]:
+                    - paragraph [ref=e142]: Collectif
+                    - paragraph [ref=e143]: Parler de contribution partagée et de bénéfices communs.
+                  - article [ref=e144]:
+                    - paragraph [ref=e145]: Innovant
+                    - paragraph [ref=e146]: Montrer la valeur de la tech avec un langage concret et compréhensible.
+                  - article [ref=e147]:
+                    - paragraph [ref=e148]: Authentique
+                    - paragraph [ref=e149]: Ancrer les messages dans des faits, des chiffres et des cas réels.
+                  - article [ref=e150]:
+                    - paragraph [ref=e151]: Optimiste
+                    - paragraph [ref=e152]: Mettre en avant la progression et les prochaines étapes positives.
+              - generic [ref=e153]:
+                - paragraph [ref=e154]: "Microcopy: exemples validés"
+                - paragraph [ref=e155]: Utiliser ces formulations comme référence pour les CTA, statuts, erreurs et onboarding.
+                - generic [ref=e156]:
+                  - article [ref=e157]:
+                    - paragraph [ref=e158]: CTA principal
+                    - generic [ref=e159]:
+                      - generic [ref=e160]:
+                        - paragraph [ref=e161]:
+                          - img [ref=e162]
+                          - text: À faire
+                        - paragraph [ref=e165]: Soutenir ce projet maintenant
+                      - generic [ref=e166]:
+                        - paragraph [ref=e167]:
+                          - img [ref=e168]
+                          - text: À éviter
+                        - paragraph [ref=e172]: Clique ici
+                  - article [ref=e173]:
+                    - paragraph [ref=e174]: Message de statut
+                    - generic [ref=e175]:
+                      - generic [ref=e176]:
+                        - paragraph [ref=e177]:
+                          - img [ref=e178]
+                          - text: À faire
+                        - paragraph [ref=e181]: Contribution confirmée, impact en cours de calcul.
+                      - generic [ref=e182]:
+                        - paragraph [ref=e183]:
+                          - img [ref=e184]
+                          - text: À éviter
+                        - paragraph [ref=e188]: OK, c est bon.
+                  - article [ref=e189]:
+                    - paragraph [ref=e190]: Message erreur
+                    - generic [ref=e191]:
+                      - generic [ref=e192]:
+                        - paragraph [ref=e193]:
+                          - img [ref=e194]
+                          - text: À faire
+                        - paragraph [ref=e197]: Le paiement a échoué. Vérifiez vos informations et réessayez.
+                      - generic [ref=e198]:
+                        - paragraph [ref=e199]:
+                          - img [ref=e200]
+                          - text: À éviter
+                        - paragraph [ref=e204]: Erreur inconnue.
+                  - article [ref=e205]:
+                    - paragraph [ref=e206]: Onboarding
+                    - generic [ref=e207]:
+                      - generic [ref=e208]:
+                        - paragraph [ref=e209]:
+                          - img [ref=e210]
+                          - text: À faire
+                        - paragraph [ref=e213]: Choisissez un premier projet pour démarrer votre impact.
+                      - generic [ref=e214]:
+                        - paragraph [ref=e215]:
+                          - img [ref=e216]
+                          - text: À éviter
+                        - paragraph [ref=e220]: Commencez ici.
+              - generic [ref=e221]:
+                - paragraph [ref=e222]: Checklist de relecture éditoriale
+                - list [ref=e223]:
+                  - listitem [ref=e224]: Le message explique clairement la prochaine action.
+                  - listitem [ref=e225]: Le ton reste positif sans minimiser les contraintes réelles.
+                  - listitem [ref=e226]: Le vocabulaire est cohérent avec la mission biodiversité.
+            - complementary [ref=e227]:
+              - generic [ref=e228]:
+                - paragraph [ref=e229]: Ton de voix
+                - paragraph [ref=e230]: Le ton de Make the Change est chaleureux, fiable et orienté action concrète. Chaque microcopy doit refléter cette posture.
+                - navigation [ref=e231]:
+                  - link "5 piliers rédactionnels" [ref=e232] [cursor=pointer]:
+                    - /url: "#pillars"
+                  - 'link "Microcopy: exemples validés" [ref=e233] [cursor=pointer]':
+                    - /url: "#microcopy"
+                  - link "Checklist de relecture éditoriale" [ref=e234] [cursor=pointer]:
+                    - /url: "#review"
+    - contentinfo [ref=e235]:
+      - generic [ref=e236]:
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - link "Make the Change Make the Change" [ref=e239] [cursor=pointer]:
+              - /url: /fr
+              - img "Make the Change" [ref=e241]
+              - generic [ref=e242]: Make the Change
+            - paragraph [ref=e243]: Investissez dans la biodiversité, récoltez des récompenses tangibles.
+          - generic [ref=e244]:
+            - heading "Liens rapides" [level=3] [ref=e245]
+            - list [ref=e246]:
+              - listitem [ref=e247]:
+                - link "Projets" [ref=e248] [cursor=pointer]:
+                  - /url: /fr/projects
+              - listitem [ref=e249]:
+                - link "Produits" [ref=e250] [cursor=pointer]:
+                  - /url: /fr/products
+              - listitem [ref=e251]:
+                - link "Classement" [ref=e252] [cursor=pointer]:
+                  - /url: /fr/leaderboard
+              - listitem [ref=e253]:
+                - link "Blog" [ref=e254] [cursor=pointer]:
+                  - /url: /fr/blog
+              - listitem [ref=e255]:
+                - link "À propos" [ref=e256] [cursor=pointer]:
+                  - /url: /fr/about
+              - listitem [ref=e257]:
+                - link "Comment ça marche" [ref=e258] [cursor=pointer]:
+                  - /url: /fr/how-it-works
+              - listitem [ref=e259]:
+                - link "Guide de marque" [ref=e260] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines
+          - generic [ref=e261]:
+            - heading "Support" [level=3] [ref=e262]
+            - list [ref=e263]:
+              - listitem [ref=e264]:
+                - link "FAQ" [ref=e265] [cursor=pointer]:
+                  - /url: /fr/faq
+              - listitem [ref=e266]:
+                - link "Contact" [ref=e267] [cursor=pointer]:
+                  - /url: /fr/contact
+              - listitem [ref=e268]:
+                - link "Confidentialité" [ref=e269] [cursor=pointer]:
+                  - /url: /fr/privacy
+              - listitem [ref=e270]:
+                - link "Conditions" [ref=e271] [cursor=pointer]:
+                  - /url: /fr/terms
+          - generic [ref=e272]:
+            - heading "Nous contacter" [level=3] [ref=e273]
+            - list [ref=e274]:
+              - listitem [ref=e275]:
+                - img [ref=e276]
+                - link "contact@make-the-change.com" [ref=e279] [cursor=pointer]:
+                  - /url: mailto:contact@make-the-change.com
+              - listitem [ref=e280]:
+                - img [ref=e281]
+                - generic [ref=e284]: Brussels, Belgium
+        - generic [ref=e285]:
+          - paragraph [ref=e286]: © 2026 Make the CHANGE. Tous droits réservés.
+          - generic [ref=e287]:
+            - link "Confidentialité" [ref=e288] [cursor=pointer]:
+              - /url: /fr/privacy
+            - link "Conditions" [ref=e289] [cursor=pointer]:
+              - /url: /fr/terms

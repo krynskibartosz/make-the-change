@@ -1,0 +1,44 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link "Make the Change Make the Change" [ref=e4] [cursor=pointer]:
+      - /url: /fr
+      - img "Make the Change" [ref=e6]
+      - generic [ref=e7]: Make the Change
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "Se connecter" [level=3] [ref=e11]
+        - paragraph [ref=e12]: Ravis de vous revoir ! Accédez à votre impact.
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - img [ref=e17]
+            - generic [ref=e20]:
+              - generic [ref=e21]:
+                - text: Email
+                - generic [ref=e22]: "*"
+              - textbox "votre@email.com" [ref=e24]
+          - generic [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]:
+              - generic [ref=e30]:
+                - text: Mot de passe
+                - generic [ref=e31]: "*"
+              - textbox "••••••••" [ref=e33]
+        - link "Mot de passe oublié ?" [ref=e35] [cursor=pointer]:
+          - /url: /fr/forgot-password
+        - button "Se connecter" [ref=e36] [cursor=pointer]:
+          - generic [ref=e38]:
+            - text: Se connecter
+            - img [ref=e39]
+      - paragraph [ref=e42]:
+        - text: Pas encore de compte ?
+        - link "Créer un compte" [ref=e43] [cursor=pointer]:
+          - /url: /fr/register
+    - generic [ref=e44]:
+      - generic [ref=e50]: +10K
+      - generic [ref=e51]:
+        - img [ref=e52]
+        - text: Impact vérifié par la communauté
+  - button "Open Next.js Dev Tools" [ref=e60] [cursor=pointer]:
+    - img [ref=e61]
+  - alert [ref=e64]

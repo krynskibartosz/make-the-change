@@ -60,7 +60,7 @@ export default async function ChallengesPage() {
       >
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-20 pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/20 blur-[120px] animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-amber-500/20 blur-[100px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-client-amber-500/20 blur-[100px]" />
         </div>
       </PageHero>
 
@@ -90,7 +90,7 @@ export default async function ChallengesPage() {
                       )}>
                         {c.type === 'daily' ? 'Quotidien' : c.type === 'monthly' ? 'Mensuel' : 'Saisonnier'}
                       </div>
-                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 border border-amber-500/20 text-[10px] font-black uppercase tracking-tight">
+                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-client-amber-500/10 text-client-amber-600 border border-client-amber-500/20 text-[10px] font-black uppercase tracking-tight">
                         <Sparkles className="h-3 w-3" />
                         {c.reward_points > 0 ? `+${c.reward_points} pts` : 'Badge'}
                       </div>
@@ -100,7 +100,7 @@ export default async function ChallengesPage() {
                       <h3 className="text-2xl font-black tracking-tight group-hover:text-primary transition-colors flex items-center gap-2">
                         {c.title}
                         {c.userProgress.isCompleted && (
-                          <div className="bg-success text-white rounded-full p-0.5">
+                          <div className="bg-success text-client-white rounded-full p-0.5">
                             <CheckCircle2 className="h-4 w-4" />
                           </div>
                         )}
@@ -151,21 +151,21 @@ export default async function ChallengesPage() {
         )}
 
         {/* Gamification Tip Card */}
-        <div className="mt-16 relative group overflow-hidden rounded-[3rem] border bg-slate-950 p-8 md:p-12 text-white shadow-2xl">
+        <div className="mt-16 relative group overflow-hidden rounded-[3rem] border bg-client-slate-950 p-8 md:p-12 text-client-white shadow-2xl">
           <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent opacity-40" />
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 justify-between">
             <div className="flex items-center gap-6">
-              <div className="h-16 w-16 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center shrink-0 rotate-12 group-hover:rotate-0 transition-transform">
+              <div className="h-16 w-16 rounded-3xl bg-client-white/5 backdrop-blur-xl border border-client-white/10 flex items-center justify-center shrink-0 rotate-12 group-hover:rotate-0 transition-transform">
                 <Zap className="h-8 w-8 text-primary" />
               </div>
               <div className="space-y-1">
                 <p className="text-xl font-black tracking-tight">Boostez votre Impact Score</p>
-                <p className="text-slate-400 font-medium max-w-md">
+                <p className="text-client-slate-400 font-medium max-w-md">
                   Chaque challenge accompli vous propulse dans le classement global et débloque des avantages exclusifs en boutique.
                 </p>
               </div>
             </div>
-            <Button asChild variant="outline" className="w-full md:w-auto h-14 px-8 rounded-2xl border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-xs">
+            <Button asChild variant="outline" className="w-full md:w-auto h-14 px-8 rounded-2xl border-client-white/10 text-client-white hover:bg-client-white/5 font-black uppercase tracking-widest text-xs">
               <Link href="/leaderboard">
                 Voir le classement <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

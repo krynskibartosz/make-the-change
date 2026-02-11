@@ -20,7 +20,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@make-the-change/core/shared/utils'
 import { Edit3, Eye, GripVertical, Trash2 } from 'lucide-react'
 import Image from 'next/image'
-import type { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 
 type ImageMasonryProps = {
   images: string[]
@@ -32,6 +32,175 @@ type ImageMasonryProps = {
   onImagesReorder?: (oldIndex: number, newIndex: number, newImages: string[]) => void
   showActions?: boolean
   enableReorder?: boolean
+}
+
+type ImageActionHandler = (imageUrl: string, index: number) => void
+
+type ImageMasonryGridProps = {
+  images: string[]
+  imageIds: string[]
+  className?: string
+  renderImageItem: (imageUrl: string, index: number, imageId: string) => ReactNode
+}
+
+type SortableImageItemProps = {
+  src: string
+  alt: string
+  index: number
+  className?: string
+  id: string
+  enableReorder: boolean
+  showActions: boolean
+  onImageClick?: ImageActionHandler
+  onImageReplace?: ImageActionHandler
+  onImageDelete?: ImageActionHandler
+  onImagePreview?: ImageActionHandler
+}
+
+const ImageMasonryGrid: FC<ImageMasonryGridProps> = ({
+  images,
+  imageIds,
+  className,
+  renderImageItem,
+}) => (
+  <div className={cn('border rounded-lg overflow-hidden', className)}>
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 p-2">
+      {images.map((imageUrl, index) => (
+        <div key={index} className="relative aspect-square min-h-[120px]">
+          {renderImageItem(imageUrl, index, imageIds[index] ?? `image-${index}`)}
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+const SortableImageItem: FC<SortableImageItemProps> = ({
+  src,
+  alt,
+  index,
+  className,
+  id,
+  enableReorder,
+  showActions,
+  onImageClick,
+  onImageReplace,
+  onImageDelete,
+  onImagePreview,
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn('relative group w-full h-full', isDragging && 'z-50 opacity-50', className)}
+    >
+      {/* Drag handle pour desktop et mobile */}
+      {enableReorder && showActions && (
+        <div
+          {...attributes}
+          {...listeners}
+          className="absolute top-2 left-2 z-30 p-1 bg-black/70 rounded cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
+          title="Glisser pour réorganiser"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
+          <GripVertical className="w-4 h-4 text-white" />
+        </div>
+      )}
+
+      {/* Image standard (placeholder Next/Image non utilisé ici) */}
+      <Image
+        fill
+        alt={alt}
+        src={src}
+        unoptimized={src.includes('unsplash')}
+        className={cn(
+          'object-cover transition-all duration-200',
+          showActions ? 'group-hover:brightness-75' : 'hover:brightness-90 cursor-pointer',
+          isDragging && 'brightness-75',
+        )}
+      />
+
+      {/* Click handler overlay - Réactivé mais conditionnel */}
+      {!showActions && onImageClick && (
+        <div
+          className="absolute inset-0 z-5 cursor-pointer"
+          onClick={() => {
+            onImageClick(src, index)
+          }}
+        />
+      )}
+
+      {/* Overlay avec actions au hover en mode édition */}
+      {showActions && (
+        <div
+          className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center z-20"
+          onMouseDown={(e) => {
+            // Empêcher l'overlay d'interférer avec le drag sur le handle
+            if (enableReorder) {
+              e.stopPropagation()
+            }
+          }}
+        >
+          <div className="flex gap-2">
+            {/* Bouton prévisualiser */}
+            <button
+              className="p-2 bg-blue-500/90 hover:bg-blue-500 rounded-full transition-colors duration-200 shadow-lg"
+              title="Prévisualiser l'image"
+              onClick={(e) => {
+                e.stopPropagation()
+                onImagePreview?.(src, index)
+              }}
+            >
+              <Eye className="w-4 h-4 text-white" />
+            </button>
+
+            {/* Bouton remplacer */}
+            <button
+              className="p-2 bg-white/90 hover:bg-white rounded-full transition-colors duration-200 shadow-lg"
+              title="Remplacer l'image"
+              onClick={(e) => {
+                e.stopPropagation()
+                onImageReplace?.(src, index)
+              }}
+            >
+              <Edit3 className="w-4 h-4 text-gray-700" />
+            </button>
+
+            {/* Bouton supprimer */}
+            <button
+              className="p-2 bg-red-500/90 hover:bg-red-500 rounded-full transition-colors duration-200 shadow-lg"
+              title="Supprimer l'image"
+              onClick={(e) => {
+                e.stopPropagation()
+                onImageDelete?.(src, index)
+              }}
+            >
+              <Trash2 className="w-4 h-4 text-white" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Indicateur de clic en mode non-édition */}
+      {!showActions && (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+          <div className="bg-black/50 rounded-full p-3">
+            <Eye className="w-6 h-6 text-white" />
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export const ImageMasonry: FC<ImageMasonryProps> = ({
@@ -72,130 +241,6 @@ export const ImageMasonry: FC<ImageMasonryProps> = ({
     }
   }
 
-  // Composant sortable pour une image individuelle
-  const SortableImageItem: FC<{
-    src: string
-    alt: string
-    index: number
-    className?: string
-    id: string
-  }> = ({ src, alt, index, className, id }) => {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-      id,
-    })
-
-    const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-    }
-
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className={cn('relative group w-full h-full', isDragging && 'z-50 opacity-50', className)}
-      >
-        {/* Drag handle pour desktop et mobile */}
-        {enableReorder && showActions && (
-          <div
-            {...attributes}
-            {...listeners}
-            className="absolute top-2 left-2 z-30 p-1 bg-black/70 rounded cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
-            title="Glisser pour réorganiser"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            <GripVertical className="w-4 h-4 text-white" />
-          </div>
-        )}
-
-        {/* Image standard (placeholder Next/Image non utilisé ici) */}
-        <Image
-          fill
-          alt={alt}
-          src={src}
-          unoptimized={src.includes('unsplash')}
-          className={cn(
-            'object-cover transition-all duration-200',
-            showActions ? 'group-hover:brightness-75' : 'hover:brightness-90 cursor-pointer',
-            isDragging && 'brightness-75',
-          )}
-        />
-
-        {/* Click handler overlay - Réactivé mais conditionnel */}
-        {!showActions && onImageClick && (
-          <div
-            className="absolute inset-0 z-5 cursor-pointer"
-            onClick={() => {
-              onImageClick(src, index)
-            }}
-          />
-        )}
-
-        {/* Overlay avec actions au hover en mode édition */}
-        {showActions && (
-          <div
-            className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center z-20"
-            onMouseDown={(e) => {
-              // Empêcher l'overlay d'interférer avec le drag sur le handle
-              if (enableReorder) {
-                e.stopPropagation()
-              }
-            }}
-          >
-            <div className="flex gap-2">
-              {/* Bouton prévisualiser */}
-              <button
-                className="p-2 bg-blue-500/90 hover:bg-blue-500 rounded-full transition-colors duration-200 shadow-lg"
-                title="Prévisualiser l'image"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onImagePreview?.(src, index)
-                }}
-              >
-                <Eye className="w-4 h-4 text-white" />
-              </button>
-
-              {/* Bouton remplacer */}
-              <button
-                className="p-2 bg-white/90 hover:bg-white rounded-full transition-colors duration-200 shadow-lg"
-                title="Remplacer l'image"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onImageReplace?.(src, index)
-                }}
-              >
-                <Edit3 className="w-4 h-4 text-gray-700" />
-              </button>
-
-              {/* Bouton supprimer */}
-              <button
-                className="p-2 bg-red-500/90 hover:bg-red-500 rounded-full transition-colors duration-200 shadow-lg"
-                title="Supprimer l'image"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onImageDelete?.(src, index)
-                }}
-              >
-                <Trash2 className="w-4 h-4 text-white" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Indicateur de clic en mode non-édition */}
-        {!showActions && (
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
-            <div className="bg-black/50 rounded-full p-3">
-              <Eye className="w-6 h-6 text-white" />
-            </div>
-          </div>
-        )}
-      </div>
-    )
-  }
-
   // Vérification de sécurité
   if (!images || !Array.isArray(images) || images.length === 0) {
     return (
@@ -213,38 +258,57 @@ export const ImageMasonry: FC<ImageMasonryProps> = ({
   // Configuration pour DndContext
   const imageIds = images.map((_, index) => `image-${index}`)
 
-  // Grille uniforme et responsive pour toutes les images
-  const GalleryContent = () => {
-    return (
-      <div className={cn('border rounded-lg overflow-hidden', className)}>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 p-2">
-          {images.map((imageUrl, index) => (
-            <div key={index} className="relative aspect-square min-h-[120px]">
-              <SortableImageItem
-                alt={`Product image ${index + 1}`}
-                className="cursor-pointer"
-                id={imageIds[index] ?? `image-${index}`}
-                index={index}
-                src={imageUrl}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
   // Si le réordonnancement est activé et qu'on est en mode édition, envelopper avec DndContext
   if (enableReorder && showActions) {
     return (
       <DndContext collisionDetection={closestCenter} sensors={sensors} onDragEnd={handleDragEnd}>
         <SortableContext items={imageIds} strategy={rectSortingStrategy}>
-          <GalleryContent />
+          <ImageMasonryGrid
+            images={images}
+            imageIds={imageIds}
+            className={className}
+            renderImageItem={(imageUrl, index, imageId) => (
+              <SortableImageItem
+                alt={`Product image ${index + 1}`}
+                className="cursor-pointer"
+                enableReorder={enableReorder}
+                id={imageId}
+                index={index}
+                onImageClick={onImageClick}
+                onImageDelete={onImageDelete}
+                onImagePreview={onImagePreview}
+                onImageReplace={onImageReplace}
+                showActions={showActions}
+                src={imageUrl}
+              />
+            )}
+          />
         </SortableContext>
       </DndContext>
     )
   }
 
   // Sinon, affichage normal sans drag & drop
-  return <GalleryContent />
+  return (
+    <ImageMasonryGrid
+      images={images}
+      imageIds={imageIds}
+      className={className}
+      renderImageItem={(imageUrl, index, imageId) => (
+        <SortableImageItem
+          alt={`Product image ${index + 1}`}
+          className="cursor-pointer"
+          enableReorder={enableReorder}
+          id={imageId}
+          index={index}
+          onImageClick={onImageClick}
+          onImageDelete={onImageDelete}
+          onImagePreview={onImagePreview}
+          onImageReplace={onImageReplace}
+          showActions={showActions}
+          src={imageUrl}
+        />
+      )}
+    />
+  )
 }

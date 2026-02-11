@@ -1,0 +1,433 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img "Make the Change" [ref=e7]
+          - generic [ref=e8]: Make the Change
+        - generic [ref=e9]:
+          - link "Home" [ref=e10] [cursor=pointer]:
+            - /url: /en
+          - button "Projects" [ref=e11]:
+            - text: Projects
+            - img [ref=e12]
+          - button "Products" [ref=e14]:
+            - text: Products
+            - img [ref=e15]
+          - link "Brand guidelines" [ref=e17] [cursor=pointer]:
+            - /url: /en/brand-guidelines
+          - button "Découvrir" [ref=e18]:
+            - text: Découvrir
+            - img [ref=e19]
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - link "Login" [ref=e23] [cursor=pointer]:
+              - /url: /en/login
+              - button "Login" [ref=e24]:
+                - generic [ref=e26]: Login
+            - link "Sign up" [ref=e27] [cursor=pointer]:
+              - /url: /en/register
+              - button "Sign up" [ref=e28]:
+                - generic [ref=e30]: Sign up
+          - link "Open cart" [ref=e32] [cursor=pointer]:
+            - /url: /en/cart
+            - img [ref=e33]
+          - button "Activer le mode sombre" [ref=e37] [cursor=pointer]:
+            - img [ref=e40]
+    - main [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - paragraph [ref=e47]: Colors
+            - heading "Color system" [level=1] [ref=e48]
+            - paragraph [ref=e49]: The palette is structured to keep readability, visual hierarchy, and brand recognition on desktop and mobile.
+            - paragraph [ref=e50]: "Last update: February 2026"
+          - complementary [ref=e51]:
+            - paragraph [ref=e52]: Quick links
+            - generic [ref=e53]:
+              - link "Overview" [ref=e54] [cursor=pointer]:
+                - /url: /en/brand-guidelines
+                - generic [ref=e55]: Overview
+                - img [ref=e56]
+              - link "Logo" [ref=e58] [cursor=pointer]:
+                - /url: /en/brand-guidelines/logo
+                - generic [ref=e59]: Logo
+                - img [ref=e60]
+              - link "Typography" [ref=e62] [cursor=pointer]:
+                - /url: /en/brand-guidelines/typography
+                - generic [ref=e63]: Typography
+                - img [ref=e64]
+              - link "Tone of voice" [ref=e66] [cursor=pointer]:
+                - /url: /en/brand-guidelines/voice
+                - generic [ref=e67]: Tone of voice
+                - img [ref=e68]
+        - generic [ref=e70]:
+          - complementary [ref=e71]:
+            - navigation [ref=e72]:
+              - generic [ref=e73]:
+                - paragraph [ref=e74]: Foundation
+                - list [ref=e75]:
+                  - listitem [ref=e76]:
+                    - link "01 Overview" [ref=e77] [cursor=pointer]:
+                      - /url: /en/brand-guidelines
+                      - generic [ref=e78]: "01"
+                      - generic [ref=e79]: Overview
+                      - img [ref=e80]
+              - generic [ref=e82]:
+                - paragraph [ref=e83]: Identity
+                - list [ref=e84]:
+                  - listitem [ref=e85]:
+                    - link "01 Logo" [ref=e86] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/logo
+                      - generic [ref=e87]: "01"
+                      - generic [ref=e88]: Logo
+                      - img [ref=e89]
+                  - listitem [ref=e91]:
+                    - link "02 Colors" [ref=e92] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/colors
+                      - generic [ref=e93]: "02"
+                      - generic [ref=e94]: Colors
+                      - img [ref=e95]
+                  - listitem [ref=e97]:
+                    - link "03 Typography" [ref=e98] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/typography
+                      - generic [ref=e99]: "03"
+                      - generic [ref=e100]: Typography
+                      - img [ref=e101]
+              - generic [ref=e103]:
+                - paragraph [ref=e104]: Writing
+                - list [ref=e105]:
+                  - listitem [ref=e106]:
+                    - link "01 Tone of voice" [ref=e107] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/voice
+                      - generic [ref=e108]: "01"
+                      - generic [ref=e109]: Tone of voice
+                      - img [ref=e110]
+              - generic [ref=e112]:
+                - paragraph [ref=e113]: Resources
+                - list [ref=e114]:
+                  - listitem [ref=e115]:
+                    - link "01 Assets" [ref=e116] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/assets
+                      - generic [ref=e117]: "01"
+                      - generic [ref=e118]: Assets
+                      - img [ref=e119]
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - generic [ref=e125]:
+                - paragraph [ref=e126]: Recommended 60-30-10 ratio
+                - paragraph [ref=e127]: Use neutral tones as the main base, reinforce structure with primary colors, and reserve accents for key actions.
+                - generic [ref=e129]:
+                  - generic [ref=e130]: 60% neutrals
+                  - generic [ref=e131]: 30% primary
+                  - generic [ref=e132]: 10% accents
+              - generic [ref=e133]:
+                - paragraph [ref=e134]: Core brand palette
+                - paragraph [ref=e135]: These tones are the foundation of the identity. Usage notes reflect current product conventions.
+                - generic [ref=e136]:
+                  - article [ref=e137]:
+                    - paragraph [ref=e139]: Emerald
+                    - paragraph [ref=e140]: Primary action and trust color
+                    - generic [ref=e141]:
+                      - generic [ref=e142]: "#58CC02"
+                      - generic [ref=e143]: "--primary"
+                  - article [ref=e144]:
+                    - paragraph [ref=e146]: Night blue
+                    - paragraph [ref=e147]: Main text and strong structural surfaces
+                    - generic [ref=e148]:
+                      - generic [ref=e149]: "#4B4B4B"
+                      - generic [ref=e150]: "--foreground"
+                  - article [ref=e151]:
+                    - paragraph [ref=e153]: Amber
+                    - paragraph [ref=e154]: Conversion accent and secondary CTA
+                    - generic [ref=e155]:
+                      - generic [ref=e156]: "#FFC800"
+                      - generic [ref=e157]: "--accent"
+                  - article [ref=e158]:
+                    - paragraph [ref=e160]: Off white
+                    - paragraph [ref=e161]: Main background and breathing space
+                    - generic [ref=e162]:
+                      - generic [ref=e163]: "#F7F7F7"
+                      - generic [ref=e164]: "--background"
+                  - article [ref=e165]:
+                    - paragraph [ref=e167]: Terracotta
+                    - paragraph [ref=e168]: Moderate warning and editorial signal
+                    - generic [ref=e169]:
+                      - generic [ref=e170]: "#FF9600"
+                      - generic [ref=e171]: "--warning"
+                  - article [ref=e172]:
+                    - paragraph [ref=e174]: Sage
+                    - paragraph [ref=e175]: Soft surfaces and informational sections
+                    - generic [ref=e176]:
+                      - generic [ref=e177]: "#AFAFAF"
+                      - generic [ref=e178]: "--muted"
+              - generic [ref=e179]:
+                - paragraph [ref=e180]: Mapping to UI tokens
+                - paragraph [ref=e181]: Brand colors are implemented through CSS variables and available themes in the app.
+                - generic [ref=e182]:
+                  - article [ref=e183]:
+                    - paragraph [ref=e184]: Default theme
+                    - generic [ref=e185]:
+                      - generic [ref=e186]:
+                        - generic [ref=e187]:
+                          - generic [ref=e189]: Base
+                          - generic [ref=e191]:
+                            - generic [ref=e192]:
+                              - generic:
+                                - generic: Fond
+                                - code: "--background"
+                            - generic [ref=e194]:
+                              - generic:
+                                - generic: Texte
+                                - code: "--foreground"
+                            - generic [ref=e196]:
+                              - generic:
+                                - generic: Bordure
+                                - code: "--border"
+                            - generic [ref=e198]:
+                              - generic:
+                                - generic: Entrée
+                                - code: "--input"
+                        - generic [ref=e200]:
+                          - generic [ref=e202]: Marque
+                          - generic [ref=e204]:
+                            - generic [ref=e205]:
+                              - generic:
+                                - generic: Primaire
+                                - code: "--primary"
+                            - generic [ref=e207]:
+                              - generic:
+                                - generic: Secondaire
+                                - code: "--secondary"
+                            - generic [ref=e209]:
+                              - generic:
+                                - generic: Accent
+                                - code: "--accent"
+                            - generic [ref=e211]:
+                              - generic:
+                                - generic: Ring
+                                - code: "--ring"
+                        - generic [ref=e213]:
+                          - generic [ref=e215]: Statut
+                          - generic [ref=e217]:
+                            - generic [ref=e218]:
+                              - generic:
+                                - generic: Succès
+                                - code: "--success"
+                            - generic [ref=e220]:
+                              - generic:
+                                - generic: Erreur
+                                - code: "--destructive"
+                            - generic [ref=e222]:
+                              - generic:
+                                - generic: Alerte
+                                - code: "--warning"
+                            - generic [ref=e224]:
+                              - generic:
+                                - generic: Info
+                                - code: "--info"
+                      - generic [ref=e232]: "Source: DEFAULT ENGINE"
+                  - article [ref=e233]:
+                    - paragraph [ref=e234]: Ocean variant
+                    - generic [ref=e235]:
+                      - generic [ref=e236]:
+                        - generic [ref=e237]:
+                          - generic [ref=e239]: Base
+                          - generic [ref=e241]:
+                            - generic [ref=e242]:
+                              - generic:
+                                - generic: Fond
+                                - code: "--background"
+                            - generic [ref=e244]:
+                              - generic:
+                                - generic: Texte
+                                - code: "--foreground"
+                            - generic [ref=e246]:
+                              - generic:
+                                - generic: Bordure
+                                - code: "--border"
+                            - generic [ref=e248]:
+                              - generic:
+                                - generic: Entrée
+                                - code: "--input"
+                        - generic [ref=e250]:
+                          - generic [ref=e252]: Marque
+                          - generic [ref=e254]:
+                            - generic [ref=e255]:
+                              - generic:
+                                - generic: Primaire
+                                - code: "--primary"
+                            - generic [ref=e257]:
+                              - generic:
+                                - generic: Secondaire
+                                - code: "--secondary"
+                            - generic [ref=e259]:
+                              - generic:
+                                - generic: Accent
+                                - code: "--accent"
+                            - generic [ref=e261]:
+                              - generic:
+                                - generic: Ring
+                                - code: "--ring"
+                        - generic [ref=e263]:
+                          - generic [ref=e265]: Statut
+                          - generic [ref=e267]:
+                            - generic [ref=e268]:
+                              - generic:
+                                - generic: Succès
+                                - code: "--success"
+                            - generic [ref=e270]:
+                              - generic:
+                                - generic: Erreur
+                                - code: "--destructive"
+                            - generic [ref=e272]:
+                              - generic:
+                                - generic: Alerte
+                                - code: "--warning"
+                            - generic [ref=e274]:
+                              - generic:
+                                - generic: Info
+                                - code: "--info"
+                      - generic [ref=e282]: "Source: OCEAN ENGINE"
+                  - article [ref=e283]:
+                    - paragraph [ref=e284]: Forest variant
+                    - generic [ref=e285]:
+                      - generic [ref=e286]:
+                        - generic [ref=e287]:
+                          - generic [ref=e289]: Base
+                          - generic [ref=e291]:
+                            - generic [ref=e292]:
+                              - generic:
+                                - generic: Fond
+                                - code: "--background"
+                            - generic [ref=e294]:
+                              - generic:
+                                - generic: Texte
+                                - code: "--foreground"
+                            - generic [ref=e296]:
+                              - generic:
+                                - generic: Bordure
+                                - code: "--border"
+                            - generic [ref=e298]:
+                              - generic:
+                                - generic: Entrée
+                                - code: "--input"
+                        - generic [ref=e300]:
+                          - generic [ref=e302]: Marque
+                          - generic [ref=e304]:
+                            - generic [ref=e305]:
+                              - generic:
+                                - generic: Primaire
+                                - code: "--primary"
+                            - generic [ref=e307]:
+                              - generic:
+                                - generic: Secondaire
+                                - code: "--secondary"
+                            - generic [ref=e309]:
+                              - generic:
+                                - generic: Accent
+                                - code: "--accent"
+                            - generic [ref=e311]:
+                              - generic:
+                                - generic: Ring
+                                - code: "--ring"
+                        - generic [ref=e313]:
+                          - generic [ref=e315]: Statut
+                          - generic [ref=e317]:
+                            - generic [ref=e318]:
+                              - generic:
+                                - generic: Succès
+                                - code: "--success"
+                            - generic [ref=e320]:
+                              - generic:
+                                - generic: Erreur
+                                - code: "--destructive"
+                            - generic [ref=e322]:
+                              - generic:
+                                - generic: Alerte
+                                - code: "--warning"
+                            - generic [ref=e324]:
+                              - generic:
+                                - generic: Info
+                                - code: "--info"
+                      - generic [ref=e332]: "Source: FOREST ENGINE"
+            - complementary [ref=e333]:
+              - generic [ref=e334]:
+                - paragraph [ref=e335]: Color system
+                - paragraph [ref=e336]: The palette is structured to keep readability, visual hierarchy, and brand recognition on desktop and mobile.
+                - navigation [ref=e337]:
+                  - link "Recommended 60-30-10 ratio" [ref=e338] [cursor=pointer]:
+                    - /url: "#ratio"
+                  - link "Core brand palette" [ref=e339] [cursor=pointer]:
+                    - /url: "#palette"
+                  - link "Mapping to UI tokens" [ref=e340] [cursor=pointer]:
+                    - /url: "#tokens"
+    - contentinfo [ref=e341]:
+      - generic [ref=e342]:
+        - generic [ref=e343]:
+          - generic [ref=e344]:
+            - link "Make the Change Make the Change" [ref=e345] [cursor=pointer]:
+              - /url: /en
+              - img "Make the Change" [ref=e347]
+              - generic [ref=e348]: Make the Change
+            - paragraph [ref=e349]: Invest in biodiversity, reap tangible rewards.
+          - generic [ref=e350]:
+            - heading "Quick links" [level=3] [ref=e351]
+            - list [ref=e352]:
+              - listitem [ref=e353]:
+                - link "Projects" [ref=e354] [cursor=pointer]:
+                  - /url: /en/projects
+              - listitem [ref=e355]:
+                - link "Products" [ref=e356] [cursor=pointer]:
+                  - /url: /en/products
+              - listitem [ref=e357]:
+                - link "Leaderboard" [ref=e358] [cursor=pointer]:
+                  - /url: /en/leaderboard
+              - listitem [ref=e359]:
+                - link "Blog" [ref=e360] [cursor=pointer]:
+                  - /url: /en/blog
+              - listitem [ref=e361]:
+                - link "About" [ref=e362] [cursor=pointer]:
+                  - /url: /en/about
+              - listitem [ref=e363]:
+                - link "How it works" [ref=e364] [cursor=pointer]:
+                  - /url: /en/how-it-works
+              - listitem [ref=e365]:
+                - link "Brand guidelines" [ref=e366] [cursor=pointer]:
+                  - /url: /en/brand-guidelines
+          - generic [ref=e367]:
+            - heading "Support" [level=3] [ref=e368]
+            - list [ref=e369]:
+              - listitem [ref=e370]:
+                - link "FAQ" [ref=e371] [cursor=pointer]:
+                  - /url: /en/faq
+              - listitem [ref=e372]:
+                - link "Contact" [ref=e373] [cursor=pointer]:
+                  - /url: /en/contact
+              - listitem [ref=e374]:
+                - link "Privacy" [ref=e375] [cursor=pointer]:
+                  - /url: /en/privacy
+              - listitem [ref=e376]:
+                - link "Terms" [ref=e377] [cursor=pointer]:
+                  - /url: /en/terms
+          - generic [ref=e378]:
+            - heading "Contact us" [level=3] [ref=e379]
+            - list [ref=e380]:
+              - listitem [ref=e381]:
+                - img [ref=e382]
+                - link "contact@make-the-change.com" [ref=e385] [cursor=pointer]:
+                  - /url: mailto:contact@make-the-change.com
+              - listitem [ref=e386]:
+                - img [ref=e387]
+                - generic [ref=e390]: Brussels, Belgium
+        - generic [ref=e391]:
+          - paragraph [ref=e392]: © 2026 Make the CHANGE. All rights reserved.
+          - generic [ref=e393]:
+            - link "Privacy" [ref=e394] [cursor=pointer]:
+              - /url: /en/privacy
+            - link "Terms" [ref=e395] [cursor=pointer]:
+              - /url: /en/terms
+  - button "Open Next.js Dev Tools" [ref=e401] [cursor=pointer]:
+    - img [ref=e402]
+  - alert [ref=e405]

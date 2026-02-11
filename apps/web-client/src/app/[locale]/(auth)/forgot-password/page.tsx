@@ -10,7 +10,7 @@ import {
   CardTitle,
   Input,
 } from '@make-the-change/core/ui'
-import { ArrowLeft, Mail, Sparkles, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Mail, Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useActionState } from 'react'
 import { Link } from '@/i18n/navigation'
@@ -28,16 +28,19 @@ export default function ForgotPasswordPage() {
             <Mail className="h-10 w-10 text-primary" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-3xl font-black tracking-tight">Email envoyé !</h2>
+            <h2 className="text-3xl font-black tracking-tight">{t('forgot_success_title')}</h2>
             <p className="text-muted-foreground font-medium leading-relaxed">{state.success}</p>
           </div>
-          
+
           <div className="p-6 rounded-2xl bg-muted/30 text-sm font-medium text-muted-foreground leading-relaxed">
-            Vérifiez votre boîte de réception et suivez les instructions pour réinitialiser votre mot de passe.
+            {t('forgot_success_hint')}
           </div>
 
           <Link href="/login" className="block">
-            <Button variant="outline" className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm border-2">
+            <Button
+              variant="outline"
+              className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm border-2"
+            >
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t('back_to_login')}
             </Button>
@@ -54,9 +57,7 @@ export default function ForgotPasswordPage() {
           <Sparkles className="h-6 w-6 text-primary" />
         </div>
         <CardTitle className="text-3xl font-black tracking-tight">{t('reset_password')}</CardTitle>
-        <CardDescription className="text-sm font-medium">
-          Pas d'inquiétude, nous allons vous aider.
-        </CardDescription>
+        <CardDescription className="text-sm font-medium">{t('forgot_help_text')}</CardDescription>
       </CardHeader>
       <CardContent className="p-8 pt-4">
         <form action={formAction} className="space-y-6">
@@ -73,16 +74,16 @@ export default function ForgotPasswordPage() {
               name="email"
               type="email"
               label={t('email')}
-              placeholder="votre@email.com"
+              placeholder={t('email_placeholder')}
               className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
               required
               autoComplete="email"
             />
           </div>
 
-          <Button 
-            type="submit" 
-            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform" 
+          <Button
+            type="submit"
+            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform"
             loading={isPending}
           >
             {t('reset_password_button')}
@@ -91,7 +92,10 @@ export default function ForgotPasswordPage() {
         </form>
       </CardContent>
       <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">
-        <Link href="/login" className="text-xs font-bold text-primary hover:underline uppercase tracking-widest mt-6 flex items-center gap-2">
+        <Link
+          href="/login"
+          className="text-xs font-bold text-primary hover:underline uppercase tracking-widest mt-6 flex items-center gap-2"
+        >
           <ArrowLeft className="h-3 w-3" />
           {t('back_to_login')}
         </Link>

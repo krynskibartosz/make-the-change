@@ -29,7 +29,7 @@ Tous les anciens projets ne se valent pas. Une sélection rigoureuse est nécess
 
 1.  **Similarité Fonctionnelle** : Le module répond-il au même besoin métier ?
 2.  **Proximité Technologique** : La stack est-elle compatible (React/Next.js vs autre) ?
-3.  **Qualité du Code Perçue** : Présence de typage fort, tests, documentation.
+3.  **Qualité du Code Perçue** : Présence de typage fort, architecture claire, documentation.
 4.  **Feedback Utilisateur** : Cette feature était-elle appréciée ou source de bugs ?
 
 ### Matrice de Décision (Exemple Projet Actuel)
@@ -39,7 +39,7 @@ Tous les anciens projets ne se valent pas. Une sélection rigoureuse est nécess
 | **`web-v3`** | Architecture globale, UI Components, Hooks | **5/5 (Référence)** | **À migrer/adapter** en priorité. |
 | **`_old-products`** | Logique métier Produits, Traductions, Auto-save | **4/5 (Métier)** | **Extraire la logique**, réécrire la vue. |
 | **`web-client` (v1)** | Auth flows, Pages publiques | **3/5 (Public)** | Analyser pour le SEO et le parcours client. |
-| **`mobile`** | API calls, Types partagés | **2/5 (Contexte)** | Vérifier la compatibilité des contrats d'interface. |
+| **`apps/web-client`** | Flows publics, e-commerce, parcours client | **3/5 (Contexte)** | Vérifier la compatibilité des contrats d'interface. |
 
 ---
 
@@ -115,7 +115,7 @@ Créer des "Adapters" ou des "Wrappers" modernes qui utilisent la logique legacy
 Une fois le composant moderne fonctionnel :
 1.  Rediriger les routes vers le nouveau composant.
 2.  Supprimer le code legacy mort.
-3.  Valider via tests de non-régression.
+3.  Valider via checklist de QA manuelle et revue métier.
 
 ---
 
@@ -125,7 +125,7 @@ Une fois le composant moderne fonctionnel :
 - [ ] Le code extrait respecte-t-il l'architecture "Controller/View" ?
 - [ ] Les types `any` ont-ils été éliminés ?
 - [ ] Les dépendances externes (npm) sont-elles à jour et nécessaires ?
-- [ ] Le code est-il couvert par des tests (unitaires ou E2E) ?
+- [ ] Les parcours critiques ont-ils été validés via QA manuelle ?
 - [ ] La documentation (ou JSDoc) a-t-elle été mise à jour ?
 
 ### Métriques de Succès de la Démarche

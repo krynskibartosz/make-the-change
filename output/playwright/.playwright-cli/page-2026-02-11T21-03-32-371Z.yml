@@ -1,0 +1,53 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - link "Make the Change Make the Change" [ref=e4] [cursor=pointer]:
+      - /url: /fr
+      - img "Make the Change" [ref=e6]
+      - generic [ref=e7]: Make the Change
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "Créer un compte" [level=3] [ref=e11]
+        - paragraph [ref=e12]: Rejoignez le mouvement pour un futur durable.
+      - generic [ref=e14]:
+        - generic [ref=e113]: Email address "qa+1770843780@example.com" is invalid
+        - generic [ref=e15]:
+          - img [ref=e73]
+          - generic [ref=e117]: "2"
+          - generic [ref=e22]: "3"
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - text: Email
+              - generic [ref=e121]: "*"
+            - textbox "votre@email.com" [ref=e123]: qa+1770843780@example.com
+          - generic [ref=e124]:
+            - generic [ref=e125]:
+              - text: Mot de passe
+              - generic [ref=e126]: "*"
+            - textbox "••••••••" [ref=e128]: Test1234!Test
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - text: Confirmer le mot de passe
+              - generic [ref=e131]: "*"
+            - textbox "••••••••" [ref=e133]: Test1234!Test
+        - generic [ref=e43]:
+          - button "Continuer" [ref=e134] [cursor=pointer]:
+            - generic [ref=e45]:
+              - text: Continuer
+              - img [ref=e115]
+          - button "Étape précédente" [active] [ref=e91] [cursor=pointer]:
+            - generic [ref=e93]:
+              - img [ref=e94]
+              - text: Étape précédente
+      - paragraph [ref=e49]:
+        - text: Déjà un compte ?
+        - link "Se connecter" [ref=e50] [cursor=pointer]:
+          - /url: /fr/login
+    - generic [ref=e51]:
+      - generic [ref=e57]: +10K
+      - generic [ref=e58]:
+        - img [ref=e59]
+        - text: Impact vérifié par la communauté
+  - button "Open Next.js Dev Tools" [ref=e67] [cursor=pointer]:
+    - img [ref=e68]
+  - alert [ref=e71]

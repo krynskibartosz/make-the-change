@@ -18,7 +18,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Box, MapPin, Package, Plus, Star, Target, User } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
-import { type FC, useCallback, useMemo, useState, useTransition } from 'react'
+import { type FC, useCallback, useEffect, useState, useTransition } from 'react'
 import { useDebouncedCallback } from '@/app/[locale]/admin/(dashboard)/components/hooks/use-debounced-callback'
 import { AdminPageContainer } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-container'
 import { AdminPageHeader } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-header'
@@ -95,7 +95,7 @@ export const ProjectsClient: FC<ProjectsClientProps> = ({ initialData }) => {
   const [projectsState, setProjectsState] = useState<Project[]>(initialData.items)
 
   // Sync with prop updates
-  useMemo(() => {
+  useEffect(() => {
     setProjectsState(initialData.items)
   }, [initialData.items])
 

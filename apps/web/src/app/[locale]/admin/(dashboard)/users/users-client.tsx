@@ -12,7 +12,7 @@ import { DataCard } from '@make-the-change/core/ui/next'
 import { Mail, Plus, Shield, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { type FC, useCallback, useMemo, useState, useTransition } from 'react'
+import { type FC, useCallback, useEffect, useState, useTransition } from 'react'
 import { useDebouncedCallback } from '@/app/[locale]/admin/(dashboard)/components/hooks/use-debounced-callback'
 import { AdminPageContainer } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-container'
 import { AdminPageHeader } from '@/app/[locale]/admin/(dashboard)/components/layout/admin-page-header'
@@ -53,7 +53,7 @@ export const UsersClient: FC<UsersClientProps> = ({ initialData }) => {
   const [usersState, setUsersState] = useState<UserSummary[]>(initialData.items || [])
 
   // Sync with prop updates
-  useMemo(() => {
+  useEffect(() => {
     setUsersState(initialData.items)
   }, [initialData.items])
 

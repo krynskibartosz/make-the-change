@@ -1,10 +1,24 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { ArrowLeft, Package, Share2, Building2, Sparkles, Leaf, Globe, Star, ShoppingCart, Award, Clock } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import {
+  ArrowLeft,
+  Award,
+  Building2,
+  Clock,
+  Globe,
+  Leaf,
+  Package,
+  Share2,
+  ShoppingCart,
+  Sparkles,
+  Star,
+} from 'lucide-react'
 import { notFound } from 'next/navigation'
-import { PageHero } from '@/components/ui/page-hero'
+import { getTranslations } from 'next-intl/server'
+import { MarketingCtaBand } from '@/components/marketing/marketing-cta-band'
+import { MarketingHeroShell } from '@/components/marketing/marketing-hero-shell'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
+import { sanitizeImageUrl } from '@/lib/image-url'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency } from '@/lib/utils'
 import { FloatingActionButtons } from './floating-action-buttons'
@@ -16,12 +30,61 @@ interface ProductDetailPageProps {
   }>
 }
 
+type ProductProducer = {
+  name_default: string | null
+  description_default: string | null
+  images: string[] | null
+  address_city: string | null
+  address_country_code: string | null
+  contact_website: string | null
+}
+
+type ProductCategory = {
+  name_default: string | null
+}
+
+type PublicProduct = {
+  id: string
+  name_default: string
+  description_default: string
+  producer_id: string | null
+  category_id: string | null
+  featured: boolean | null
+  is_hero_product: boolean | null
+  tags: (string | null)[] | null
+  stock_quantity: number | null
+  price_points: number | null
+  image_url: string | null
+  images: string[] | null
+  certifications: string[] | null
+}
+
+type PublicProductsClient = {
+  from: (table: string) => {
+    select: (columns: string) => {
+      eq: (
+        column: string,
+        value: unknown,
+      ) => {
+        eq: (
+          column: string,
+          value: unknown,
+        ) => {
+          single: () => Promise<{ data: PublicProduct | null; error: unknown }>
+        }
+      }
+    }
+  }
+}
+
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { id } = await params
   const t = await getTranslations('products')
   const supabase = await createClient()
 
-  const { data: productData, error } = await (supabase as any)
+  const publicProductsClient = supabase as unknown as PublicProductsClient
+
+  const { data: productData, error } = await publicProductsClient
     .from('public_products')
     .select('*')
     .eq('id', id)
@@ -35,157 +98,171 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   // Fetch related data in parallel
   const [producerResult, categoryResult] = await Promise.all([
-    productData.producer_id 
-      ? supabase.from('producers').select('*').eq('id', productData.producer_id).single() 
+    productData.producer_id
+      ? supabase.from('producers').select('*').eq('id', productData.producer_id).single()
       : Promise.resolve({ data: null }),
-    productData.category_id 
-      ? supabase.from('categories').select('*').eq('id', productData.category_id).single() 
-      : Promise.resolve({ data: null })
+    productData.category_id
+      ? supabase.from('categories').select('*').eq('id', productData.category_id).single()
+      : Promise.resolve({ data: null }),
   ])
+
+  const producer = (producerResult.data as ProductProducer | null) || null
+  const category = (categoryResult.data as ProductCategory | null) || null
 
   const product = {
     ...productData,
-    producer: producerResult.data,
-    category: categoryResult.data
+    producer,
+    category,
   }
 
   // Determine cover image using image_url from public_products view
-  const coverImage = (product as any).image_url || (
-    (product as any).images && 
-    Array.isArray((product as any).images) && 
-    (product as any).images.length > 0 ? 
-    (product as any).images[0] : 
-    undefined
-  )
-  const producerImage = product.producer?.images && Array.isArray(product.producer.images) && product.producer.images.length > 0 ? product.producer.images[0] : undefined
-  
+  const coverImage =
+    sanitizeImageUrl(product.image_url) ||
+    (Array.isArray(product.images) && product.images.length > 0
+      ? sanitizeImageUrl(product.images[0])
+      : undefined)
+  const producerImage =
+    product.producer?.images &&
+    Array.isArray(product.producer.images) &&
+    product.producer.images.length > 0
+      ? sanitizeImageUrl(product.producer.images[0])
+      : undefined
+
   // Calculate price display
   const displayPoints = product.price_points || 0
   const displayPrice = displayPoints > 0 ? displayPoints / 100 : 0
-  
+
   // Stock status
   const inStock = (product.stock_quantity || 0) > 0
-  const stockStatus = inStock 
-    ? `${product.stock_quantity || 0} disponibles` 
-    : 'Rupture de stock'
+  const stockStatus = inStock
+    ? t('detail_page.stock_available', { count: product.stock_quantity || 0 })
+    : t('card.out_of_stock')
+  const productName = product.name_default || ''
+  const productDescription = product.description_default || ''
 
   return (
     <>
       {/* Modern Hero Section - 2026 Style */}
-      <section className="relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32 min-h-[90vh] flex items-center justify-center">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-primary/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-3000" />
-          <div className="absolute bottom-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-emerald-400/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-5000 delay-1000" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9ImN1cnJlbnRDb2xvciIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-100 text-foreground/20 mask-image-gradient" />
-        </div>
+      <MarketingHeroShell
+        minHeightClassName="min-h-[90vh]"
+        background={
+          <>
+            <div className="absolute top-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-primary/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-3000" />
+            <div className="absolute bottom-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-marketing-positive-400/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-5000 delay-1000" />
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9ImN1cnJlbnRDb2xvciIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-100 text-foreground/20 mask-image-gradient" />
+          </>
+        }
+      >
+        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+          {/* Content Column */}
+          <div className="space-y-8 order-2 lg:order-1">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 shadow-sm">
+              <Sparkles className="h-4 w-4" />
+              <span className="uppercase tracking-widest text-xs font-bold">
+                {t('detail_page.authentic_badge')}
+              </span>
+            </div>
 
-        <div className="container relative z-10 mx-auto px-4">
-          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
-            {/* Content Column */}
-            <div className="space-y-8 order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 shadow-sm">
-                <Sparkles className="h-4 w-4" />
-                <span className="uppercase tracking-widest text-xs font-bold">Produit Authentique</span>
-              </div>
-              
-              <h1 className={`
+            <h1
+              className={`
                 font-black tracking-tighter mb-8 text-foreground animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 drop-shadow-sm
-                ${product.name_default.length > 40 
-                  ? 'text-4xl sm:text-5xl lg:text-6xl' 
-                  : product.name_default.length > 25 
-                    ? 'text-5xl sm:text-6xl lg:text-7xl' 
-                    : 'text-6xl sm:text-7xl lg:text-8xl'
+                ${
+                  productName.length > 40
+                    ? 'text-4xl sm:text-5xl lg:text-6xl'
+                    : productName.length > 25
+                      ? 'text-5xl sm:text-6xl lg:text-7xl'
+                      : 'text-6xl sm:text-7xl lg:text-8xl'
                 }
-              `}>
-                {product.name_default}
-              </h1>
-              
-              <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed font-medium animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 max-w-xl">
-                {product.description_default}
-              </p>
+              `}
+            >
+              {productName}
+            </h1>
 
-              {/* Product Meta Info */}
-              <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-                {product.category && (
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
-                    <Package className="h-4 w-4 text-primary" />
-                    <span className="font-medium">{product.category?.name_default || ''}</span>
-                  </div>
-                )}
-                {product.producer && (
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
-                    <Building2 className="h-4 w-4 text-primary" />
-                    <span className="font-medium">{product.producer?.name_default || ''}</span>
-                  </div>
-                )}
-                {product.featured && (
-                  <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-none">
-                    <Star className="h-3 w-3 mr-1" />
-                    {t('featured')}
-                  </Badge>
-                )}
-                {product.is_hero_product && (
-                  <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-none">
-                    <Award className="h-3 w-3 mr-1" />
-                    Produit Vedette
-                  </Badge>
-                )}
-              </div>
-              
-              {/* Tags */}
-              {product.tags && Array.isArray(product.tags) && product.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-                  {product.tags.map((tag: string | null, index: number) => (
-                    <Badge key={index} variant="outline" className="text-xs bg-primary/5 border-primary/20 text-primary">
-                      {tag ?? ''}
-                    </Badge>
-                  ))}
+            <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed font-medium animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 max-w-xl">
+              {productDescription}
+            </p>
+
+            {/* Product Meta Info */}
+            <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+              {product.category && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
+                  <Package className="h-4 w-4 text-primary" />
+                  <span className="font-medium">{product.category?.name_default || ''}</span>
                 </div>
+              )}
+              {product.producer && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span className="font-medium">{product.producer?.name_default || ''}</span>
+                </div>
+              )}
+              {product.featured && (
+                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-gradient-to-r from-marketing-warning-500 to-marketing-warning-500 text-marketing-overlay-light border-none">
+                  <Star className="h-3 w-3 mr-1" />
+                  {t('featured')}
+                </Badge>
+              )}
+              {product.is_hero_product && (
+                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-gradient-to-r from-marketing-accent-alt-500 to-marketing-accent-alt-500 text-marketing-overlay-light border-none">
+                  <Award className="h-3 w-3 mr-1" />
+                  {t('detail_page.hero_product_badge')}
+                </Badge>
               )}
             </div>
 
-            {/* Image Column */}
-            <div className="relative order-1 lg:order-2">
-              <div className="aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0">
-                {coverImage ? (
-                  <img
-                    src={coverImage}
-                    alt={product.name_default || 'Product'}
-                    className="h-full w-full object-cover scale-110 transition-transform duration-700 hover:scale-100"
-                  />
-                ) : (
-                  <div className="h-full w-full bg-gradient-to-br from-primary/20 to-muted flex items-center justify-center">
-                    <Package className="h-24 w-24 text-primary/50" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+            {/* Tags */}
+            {product.tags && Array.isArray(product.tags) && product.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                {product.tags.map((tag, index) => (
+                  <Badge
+                    key={index}
+                    variant="outline"
+                    className="text-xs bg-primary/5 border-primary/20 text-primary"
+                  >
+                    {tag ?? ''}
+                  </Badge>
+                ))}
               </div>
-              
-              {/* Floating Element - Price & Stock Badge */}
-              <div className="absolute -bottom-10 -left-10 z-20 p-6 rounded-3xl bg-background/90 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 animate-in slide-in-from-left-4 duration-1000 delay-300">
-                <div className="flex items-center gap-4">
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-primary/30">
-                    {inStock ? (
-                      <ShoppingCart className="h-7 w-7" />
-                    ) : (
-                      <Clock className="h-7 w-7" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-3xl font-black leading-none mb-1">{formatCurrency(displayPrice)}</p>
-                    <p className="text-sm text-muted-foreground font-medium">
-                      {inStock ? stockStatus : 'Indisponible'}
-                    </p>
-                  </div>
+            )}
+          </div>
+
+          {/* Image Column */}
+          <div className="relative order-1 lg:order-2">
+            <div className="aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0">
+              {coverImage ? (
+                <img
+                  src={coverImage}
+                  alt={productName || t('card.default_name')}
+                  className="h-full w-full object-cover scale-110 transition-transform duration-700 hover:scale-100"
+                />
+              ) : (
+                <div className="h-full w-full bg-gradient-to-br from-primary/20 to-muted flex items-center justify-center">
+                  <Package className="h-24 w-24 text-primary/50" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent opacity-60" />
+            </div>
+
+            {/* Floating Element - Price & Stock Badge */}
+            <div className="absolute -bottom-10 -left-10 z-20 p-6 rounded-3xl bg-background/90 backdrop-blur-xl shadow-[0_8px_30px_hsl(var(--marketing-overlay-dark) / 0.12)] border border-marketing-overlay-light/20 animate-in slide-in-from-left-4 duration-1000 delay-300">
+              <div className="flex items-center gap-4">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-marketing-positive-600 flex items-center justify-center text-marketing-overlay-light shadow-lg shadow-primary/30">
+                  {inStock ? <ShoppingCart className="h-7 w-7" /> : <Clock className="h-7 w-7" />}
+                </div>
+                <div>
+                  <p className="text-3xl font-black leading-none mb-1">
+                    {formatCurrency(displayPrice)}
+                  </p>
+                  <p className="text-sm text-muted-foreground font-medium">{stockStatus}</p>
                 </div>
               </div>
-              
-              {/* Decorative blob behind */}
-              <div className="absolute inset-0 bg-primary/20 blur-[80px] -z-10 rounded-full scale-125" />
             </div>
+
+            {/* Decorative blob behind */}
+            <div className="absolute inset-0 bg-primary/20 blur-[80px] -z-10 rounded-full scale-125" />
           </div>
         </div>
-      </section>
+      </MarketingHeroShell>
 
       {/* Enhanced Product Details Section */}
       <SectionContainer size="lg" className="relative">
@@ -197,11 +274,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 <div className="mb-8">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6">
                     <Globe className="h-3 w-3" />
-                    <span>Description</span>
+                    <span>{t('detail.description')}</span>
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-4">{t('detail.description')}</h2>
+                  <h2 className="text-4xl font-black tracking-tight mb-4">
+                    {t('detail.description')}
+                  </h2>
                 </div>
-                
+
                 <div className="prose prose-lg max-w-none">
                   <p className="whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground font-medium">
                     {product.description_default}
@@ -227,26 +306,26 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       </span>
                       {displayPoints > 0 && (
                         <span className="ml-3 text-2xl font-bold text-muted-foreground">
-                          ou {displayPoints} pts
+                          {t('detail_page.or_points', { points: displayPoints })}
                         </span>
                       )}
                     </div>
                   </div>
                   <div className="flex items-center gap-2 mb-4">
                     <p className="text-sm font-bold text-muted-foreground uppercase tracking-tight">
-                      {inStock ? stockStatus : 'Rupture de stock'}
+                      {stockStatus}
                     </p>
                     {inStock && (
-                      <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <div className="h-2 w-2 rounded-full bg-marketing-positive-500 animate-pulse" />
                     )}
                   </div>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="space-y-4">
-                  <Button 
-                    className="w-full h-14 text-lg font-bold rounded-full bg-primary hover:bg-primary/90 hover:scale-105 transition-all shadow-lg" 
-                    size="lg" 
+                  <Button
+                    className="w-full h-14 text-lg font-bold rounded-full bg-primary hover:bg-primary/90 hover:scale-105 transition-all shadow-lg"
+                    size="lg"
                     disabled={!inStock}
                   >
                     {inStock ? (
@@ -257,11 +336,14 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                     ) : (
                       <>
                         <Clock className="mr-2 h-5 w-5" />
-                        Rupture de stock
+                        {t('card.out_of_stock')}
                       </>
                     )}
                   </Button>
-                  <Button variant="outline" className="w-full h-14 text-lg font-bold rounded-full border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all">
+                  <Button
+                    variant="outline"
+                    className="w-full h-14 text-lg font-bold rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"
+                  >
                     <Share2 className="mr-2 h-5 w-5" />
                     {t('detail.exchange')}
                   </Button>
@@ -270,7 +352,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 {/* Enhanced Producer Section */}
                 {product.producer && (
                   <div className="pt-8 border-t border-border/50">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-600 text-xs font-bold uppercase tracking-wider mb-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-marketing-warning-500/10 text-marketing-warning-600 text-xs font-bold uppercase tracking-wider mb-6">
                       <Building2 className="h-3 w-3" />
                       <span>{t('detail.producer')}</span>
                     </div>
@@ -278,9 +360,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       <div className="flex items-start gap-4">
                         {producerImage ? (
                           <div className="h-16 w-16 rounded-2xl overflow-hidden bg-muted flex-shrink-0 border border-border/50 group-hover:scale-110 transition-transform">
-                            <img 
-                              src={producerImage} 
-                              alt={product.producer?.name_default || 'Producer'} 
+                            <img
+                              src={producerImage}
+                              alt={product.producer?.name_default || 'Producer'}
                               className="h-full w-full object-cover"
                             />
                           </div>
@@ -298,17 +380,20 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                           </div>
                           {product.producer.address_city && (
                             <div className="text-xs text-muted-foreground mb-2">
-                              📍 {product.producer?.address_city || ''}{product.producer?.address_country_code ? `, ${product.producer.address_country_code}` : ''}
+                              📍 {product.producer?.address_city || ''}
+                              {product.producer?.address_country_code
+                                ? `, ${product.producer.address_country_code}`
+                                : ''}
                             </div>
                           )}
-                            {product.producer?.contact_website && (
-                            <a 
-                              href={product.producer?.contact_website || ''} 
-                              target="_blank" 
+                          {product.producer?.contact_website && (
+                            <a
+                              href={product.producer?.contact_website || ''}
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-sm text-primary font-medium hover:underline group-hover:gap-3 transition-all"
                             >
-                              Visiter le site web
+                              {t('detail_page.visit_website')}
                               <ArrowLeft className="h-3 w-3 rotate-180" />
                             </a>
                           )}
@@ -317,34 +402,39 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                     </div>
                   </div>
                 )}
-                
+
                 {/* Product Certifications */}
-                {product.certifications && Array.isArray(product.certifications) && product.certifications.length > 0 && (
-                  <div className="pt-6 border-t border-border/50">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 text-xs font-bold uppercase tracking-wider mb-4">
-                      <Award className="h-3 w-3" />
-                      <span>Certifications</span>
+                {product.certifications &&
+                  Array.isArray(product.certifications) &&
+                  product.certifications.length > 0 && (
+                    <div className="pt-6 border-t border-border/50">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-marketing-positive-500/10 text-marketing-positive-600 text-xs font-bold uppercase tracking-wider mb-4">
+                        <Award className="h-3 w-3" />
+                        <span>{t('detail.certifications')}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.certifications.map((cert: string, index: number) => (
+                          <Badge
+                            key={index}
+                            className="bg-marketing-positive-50 text-marketing-positive-700 border-marketing-positive-200"
+                          >
+                            {cert}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {product.certifications.map((cert: string, index: number) => (
-                        <Badge key={index} className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                          {cert}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                  )}
               </CardContent>
             </Card>
           </div>
         </div>
-        
+
         {/* Modern Navigation */}
         <div className="mt-16">
           <Link href="/products">
             <Button variant="ghost" className="pl-0 hover:pl-2 transition-all group">
               <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-medium">{t('title')}</span>
+              <span className="font-medium">{t('detail_page.back_to_products')}</span>
             </Button>
           </Link>
         </div>
@@ -352,61 +442,52 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       {/* Modern CTA Section - Eco-Futurism Style */}
       <div className="container mx-auto px-4 pb-20 lg:pb-32 pt-20">
-        <div 
-          className="relative rounded-[3rem] !bg-[#0A1A14] !text-white p-12 md:p-24 overflow-hidden isolate shadow-2xl shadow-emerald-900/20"
-          style={{ backgroundColor: '#0A1A14', color: 'white' }}
-        >
-          {/* Animated Noise Texture */}
-          <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none">
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] animate-grain" />
-          </div>
-
-          {/* Organic Gradient Orbs */}
-          <div className="absolute -top-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-emerald-500/20 blur-[120px] mix-blend-screen animate-pulse duration-[4000ms]" />
-          <div className="absolute -bottom-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-teal-600/20 blur-[120px] mix-blend-screen animate-pulse duration-[6000ms]" />
-          
-          {/* Topographic Lines */}
-          <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEiL2Q+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIiAvPjwvc3ZnPg==')] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]" />
-
-          <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto">
-            {/* Badge */}
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <Globe className="h-5 w-5 text-emerald-400" />
-              <span className="text-sm font-bold tracking-widest uppercase text-emerald-100">Impact Durable</span>
-            </div>
-
-            {/* Main Title */}
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.9] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-              <span className="block text-white">Soutenir les</span>
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 bg-300% animate-gradient">
-                producteurs locaux.
+        <MarketingCtaBand
+          badge={
+            <>
+              <Globe className="h-5 w-5 text-marketing-positive-400" />
+              <span className="text-sm font-bold tracking-widest uppercase text-marketing-positive-100">
+                {t('detail_page.cta.badge')}
               </span>
-            </h2>
-
-            {/* Description */}
-            <p className="text-xl md:text-2xl text-emerald-100/80 font-medium leading-relaxed max-w-2xl mx-auto mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-              Chaque achat est un vote pour un avenir plus durable et équitable.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-              <Button size="lg" className="h-16 px-10 text-lg rounded-full font-bold bg-emerald-500 text-white hover:bg-emerald-400 hover:scale-105 transition-all shadow-[0_0_50px_-10px_rgba(16,185,129,0.4)] border-none">
-                Découvrir plus de produits
+            </>
+          }
+          title={
+            <>
+              <span className="block text-marketing-overlay-light">
+                {t('detail_page.cta.title_line1')}
+              </span>
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-300% animate-gradient">
+                {t('detail_page.cta.title_line2')}
+              </span>
+            </>
+          }
+          description={t('detail_page.cta.description')}
+          primaryAction={
+            <Link href="/products">
+              <Button
+                size="lg"
+                className="h-16 px-10 text-lg rounded-full font-bold bg-marketing-positive-500 text-marketing-overlay-light hover:bg-marketing-positive-400 hover:scale-105 transition-all shadow-[0_0_50px_-10px_hsl(var(--marketing-positive) / 0.4)] border-none"
+              >
+                {t('detail_page.cta.primary')}
               </Button>
-              <Button size="lg" variant="outline" className="h-16 px-10 text-lg rounded-full font-bold border-white/20 bg-transparent text-white hover:bg-white/10 hover:border-white/40 transition-all backdrop-blur-sm">
-                En savoir plus
+            </Link>
+          }
+          secondaryAction={
+            <Link href="/about">
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-16 px-10 text-lg rounded-full font-bold border-marketing-overlay-light/20 bg-transparent text-marketing-overlay-light hover:bg-marketing-overlay-light/10 hover:border-marketing-overlay-light/40 transition-all backdrop-blur-sm"
+              >
+                {t('detail_page.cta.secondary')}
               </Button>
-            </div>
-          </div>
-        </div>
+            </Link>
+          }
+        />
       </div>
 
       {/* Floating Mobile Action Buttons */}
-      <FloatingActionButtons
-        productId={product.id}
-        displayPrice={displayPrice}
-        inStock={inStock}
-      />
+      <FloatingActionButtons productId={product.id} displayPrice={displayPrice} inStock={inStock} />
     </>
   )
 }

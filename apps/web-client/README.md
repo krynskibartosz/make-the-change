@@ -59,25 +59,3 @@ Required:
 # Runs on localhost:3001 to avoid conflict with Admin (3000)
 pnpm dev
 ```
-
-## 🧪 Testing
-```bash
-pnpm test
-```
-
-### E2E (Playwright)
-```bash
-# Run E2E tests (assumes web-client on localhost:3001)
-pnpm test:e2e
-
-# Run headed
-pnpm test:e2e:headed
-
-# Seed synthetic data (orders + investment + producer message)
-pnpm test:seed
-```
-
-Required env for E2E:
-- `E2E_USER_EMAIL`, `E2E_USER_PASSWORD`
-- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`

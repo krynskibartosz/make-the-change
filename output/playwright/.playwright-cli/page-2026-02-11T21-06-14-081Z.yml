@@ -1,0 +1,122 @@
+- generic [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e68]:
+      - button "Open issues overlay" [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]: "1"
+          - generic [ref=e72]: "2"
+        - generic [ref=e73]:
+          - text: Issue
+          - generic [ref=e74]: s
+      - button "Collapse issues badge" [ref=e75]:
+        - img [ref=e76]
+  - alert [ref=e11]: Gourde Inox
+  - generic [ref=e78]:
+    - main [ref=e79]:
+      - main [ref=e654]:
+        - generic [ref=e661]:
+          - generic [ref=e662]:
+            - generic [ref=e663]:
+              - img [ref=e664]
+              - generic [ref=e667]: Produit authentique
+            - heading "Gourde Inox" [level=1] [ref=e668]
+            - paragraph [ref=e669]: Gourde réutilisable zéro déchet.
+            - generic [ref=e670]:
+              - generic [ref=e671]:
+                - img [ref=e672]
+                - generic [ref=e676]: Maison
+              - generic [ref=e677]:
+                - img [ref=e678]
+                - generic [ref=e682]: Océan Bleu
+              - generic [ref=e683]:
+                - img [ref=e684]
+                - text: Mis en avant
+          - generic [ref=e686]:
+            - img "Gourde Inox" [ref=e688]
+            - generic [ref=e691]:
+              - img [ref=e693]
+              - generic [ref=e697]:
+                - paragraph [ref=e698]: 10,00 €
+                - paragraph [ref=e699]: 200 disponibles
+        - generic [ref=e702]:
+          - generic [ref=e703]:
+            - generic [ref=e706]:
+              - generic [ref=e707]:
+                - generic [ref=e708]:
+                  - img [ref=e709]
+                  - generic [ref=e712]: Description
+                - heading "Description" [level=2] [ref=e713]
+              - paragraph [ref=e715]: Gourde réutilisable zéro déchet.
+            - generic [ref=e718]:
+              - generic [ref=e719]:
+                - img [ref=e721]
+                - generic [ref=e725]: 10,00 €ou 1000 pts
+                - paragraph [ref=e727]: 200 disponibles
+              - generic [ref=e729]:
+                - button "Ajouter au panier" [active] [ref=e730] [cursor=pointer]:
+                  - generic [ref=e732]:
+                    - img [ref=e733]
+                    - text: Ajouter au panier
+                - button "Échanger" [ref=e737] [cursor=pointer]:
+                  - generic [ref=e739]:
+                    - img [ref=e740]
+                    - text: Échanger
+              - generic [ref=e746]:
+                - generic [ref=e747]:
+                  - img [ref=e748]
+                  - generic [ref=e752]: Producteur
+                - generic [ref=e754]:
+                  - generic [ref=e755]: O
+                  - generic [ref=e756]:
+                    - generic [ref=e757]: Océan Bleu
+                    - generic [ref=e758]: Protection des écosystèmes marins.
+          - link "Retour à la boutique" [ref=e760] [cursor=pointer]:
+            - /url: /fr/products
+            - button "Retour à la boutique" [ref=e761]:
+              - generic [ref=e763]:
+                - img [ref=e764]
+                - generic [ref=e766]: Retour à la boutique
+        - generic [ref=e771]:
+          - generic [ref=e772]:
+            - img [ref=e773]
+            - generic [ref=e776]: Impact durable
+          - heading "Soutenir les producteurs locaux." [level=2] [ref=e777]:
+            - generic [ref=e778]: Soutenir les
+            - generic [ref=e779]: producteurs locaux.
+          - paragraph [ref=e780]: Chaque achat est un vote pour un avenir plus durable et équitable.
+          - generic [ref=e781]:
+            - link "Découvrir plus de produits" [ref=e782] [cursor=pointer]:
+              - /url: /fr/products
+              - button "Découvrir plus de produits" [ref=e783]:
+                - generic [ref=e785]: Découvrir plus de produits
+            - link "En savoir plus" [ref=e786] [cursor=pointer]:
+              - /url: /fr/about
+              - button "En savoir plus" [ref=e787]:
+                - generic [ref=e789]: En savoir plus
+        - button "Ajouter au panier - 10,00 €" [ref=e791] [cursor=pointer]:
+          - generic [ref=e793]:
+            - img [ref=e794]
+            - text: Ajouter au panier - 10,00 €
+    - navigation [ref=e619]:
+      - link "Accueil" [ref=e620] [cursor=pointer]:
+        - /url: /fr
+        - img [ref=e622]
+        - generic [ref=e625]: Accueil
+      - link "Produits" [ref=e626] [cursor=pointer]:
+        - /url: /fr/products
+        - img [ref=e628]
+        - generic [ref=e631]: Produits
+      - link "Projets" [ref=e632] [cursor=pointer]:
+        - /url: /fr/projects
+        - img [ref=e634]
+        - generic [ref=e637]: Projets
+      - link "Classement" [ref=e638] [cursor=pointer]:
+        - /url: /fr/leaderboard
+        - img [ref=e640]
+        - generic [ref=e646]: Classement
+      - link "Menu" [ref=e647] [cursor=pointer]:
+        - /url: /fr/menu
+        - img [ref=e649]
+        - generic [ref=e652]: Menu

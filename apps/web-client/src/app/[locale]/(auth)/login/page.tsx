@@ -10,12 +10,12 @@ import {
   CardTitle,
   Input,
 } from '@make-the-change/core/ui'
+import { ArrowRight, Lock, Mail } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useActionState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { type AuthState, login } from '../actions'
-import { ArrowRight, Lock, Mail } from 'lucide-react'
 
 export default function LoginPage() {
   const t = useTranslations('auth')
@@ -27,9 +27,7 @@ export default function LoginPage() {
     <Card className="border bg-background/60 shadow-2xl backdrop-blur-xl rounded-[2.5rem] overflow-hidden">
       <CardHeader className="p-8 pb-4 text-center space-y-2">
         <CardTitle className="text-3xl font-black tracking-tight">{t('login')}</CardTitle>
-        <CardDescription className="text-sm font-medium">
-          Ravis de vous revoir ! Accédez à votre impact.
-        </CardDescription>
+        <CardDescription className="text-sm font-medium">{t('login_subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="p-8 pt-4">
         <form action={formAction} className="space-y-6">
@@ -48,7 +46,7 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 label={t('email')}
-                placeholder="votre@email.com"
+                placeholder={t('email_placeholder')}
                 className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
                 required
                 autoComplete="email"
@@ -71,14 +69,18 @@ export default function LoginPage() {
           </div>
 
           <div className="flex justify-end">
-            <Link href="/forgot-password" size="sm" className="text-xs font-bold text-primary hover:underline uppercase tracking-widest">
+            <Link
+              href="/forgot-password"
+              size="sm"
+              className="text-xs font-bold text-primary hover:underline uppercase tracking-widest"
+            >
               {t('forgot_password')}
             </Link>
           </div>
 
-          <Button 
-            type="submit" 
-            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform" 
+          <Button
+            type="submit"
+            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform"
             loading={isPending}
           >
             {t('login_button')}
@@ -89,7 +91,10 @@ export default function LoginPage() {
       <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">
         <p className="text-sm font-medium text-muted-foreground mt-6">
           {t('no_account')}{' '}
-          <Link href="/register" className="text-primary font-black hover:underline uppercase tracking-tight">
+          <Link
+            href="/register"
+            className="text-primary font-black hover:underline uppercase tracking-tight"
+          >
             {t('register')}
           </Link>
         </p>

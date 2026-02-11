@@ -12,30 +12,30 @@ type LeaderboardViewProps = {
 const podiumMeta = {
   1: {
     icon: Crown,
-    ring: 'ring-yellow-500/50',
-    glow: 'from-yellow-500/12 via-transparent to-transparent',
-    iconClassName: 'text-yellow-500',
-    bg: 'bg-yellow-500',
-    text: 'text-yellow-500',
-    gradient: 'from-yellow-500 to-yellow-700',
+    ring: 'ring-client-yellow-500/50',
+    glow: 'from-client-yellow-500/12 via-transparent to-transparent',
+    iconClassName: 'text-client-yellow-500',
+    bg: 'bg-client-yellow-500',
+    text: 'text-client-yellow-500',
+    gradient: 'from-client-yellow-500 to-client-yellow-700',
   },
   2: {
     icon: Medal,
-    ring: 'ring-slate-400/50',
-    glow: 'from-slate-400/10 via-transparent to-transparent',
-    iconClassName: 'text-slate-400',
-    bg: 'bg-slate-400',
-    text: 'text-slate-400',
-    gradient: 'from-slate-400 to-slate-600',
+    ring: 'ring-client-slate-400/50',
+    glow: 'from-client-slate-400/10 via-transparent to-transparent',
+    iconClassName: 'text-client-slate-400',
+    bg: 'bg-client-slate-400',
+    text: 'text-client-slate-400',
+    gradient: 'from-client-slate-400 to-client-slate-600',
   },
   3: {
     icon: Trophy,
-    ring: 'ring-orange-500/50',
-    glow: 'from-orange-500/12 via-transparent to-transparent',
-    iconClassName: 'text-orange-500',
-    bg: 'bg-orange-500',
-    text: 'text-orange-500',
-    gradient: 'from-orange-400 to-orange-600',
+    ring: 'ring-client-orange-500/50',
+    glow: 'from-client-orange-500/12 via-transparent to-transparent',
+    iconClassName: 'text-client-orange-500',
+    bg: 'bg-client-orange-500',
+    text: 'text-client-orange-500',
+    gradient: 'from-client-orange-400 to-client-orange-600',
   },
 } as const
 
@@ -90,7 +90,7 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
       <div className="relative flex-1 overflow-hidden bg-background/70 shadow-sm backdrop-blur" style={{ paddingBottom: '0px' }}>
         <div className="pointer-events-none absolute -top-28 right-[-160px] h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 left-[-160px] h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.10),_transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--client-white)/0.10),_transparent_55%)]" />
 
         <CardContent className="relative flex h-full flex-col p-0" style={{ paddingBottom: '0px' }}>
           {/* Top Bar (non-interactive) */}
@@ -142,10 +142,10 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                             )}
                             {/* Badge de rang */}
                             <div className={cn(
-                              'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white',
+                              'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-client-white',
                               meta.bg
                             )}>
-                              <Icon className="h-3 w-3 text-white" />
+                              <Icon className="h-3 w-3 text-client-white" />
                             </div>
                           </div>
                         </div>
@@ -175,17 +175,17 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                           )}
                         >
                           {/* Numéro de rang sur le bloc */}
-                          <span className="text-3xl sm:text-4xl font-bold text-white/60">
+                          <span className="text-3xl sm:text-4xl font-bold text-client-white/60">
                             {leader.rank}
                           </span>
                           
                           {/* Effet de brillance */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-transparent rounded-t-lg" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-client-white/10 to-transparent rounded-t-lg" />
                         </div>
                         
                         {/* Ombre portée */}
                         <div 
-                          className="absolute bottom-0 left-1 right-1 bg-black/15 rounded-full blur-sm" 
+                          className="absolute bottom-0 left-1 right-1 bg-client-black/15 rounded-full blur-sm" 
                           style={{
                             height: isFirst ? '12px' : leader.rank === 2 ? '10px' : '8px'
                           }}

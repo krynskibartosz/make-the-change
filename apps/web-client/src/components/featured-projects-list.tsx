@@ -45,7 +45,7 @@ export function FeaturedProjectsList({ projects }: FeaturedProjectsListProps) {
                 alt={project.name_default || 'Project'}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-client-black/60 via-transparent to-transparent opacity-60" />
               <Badge variant="success" className="absolute top-4 right-4 shadow-sm">
                 Actif
               </Badge>

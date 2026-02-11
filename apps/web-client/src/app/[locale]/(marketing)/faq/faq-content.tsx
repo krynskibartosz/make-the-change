@@ -1,169 +1,190 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Search, 
-  Plus, 
-  Minus, 
-  Zap, 
-  Globe, 
-  ShieldCheck,
-  Sparkles
-} from 'lucide-react'
 import { Button } from '@make-the-change/core/ui'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Globe, Plus, Search, ShieldCheck, Sparkles, Zap } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
-const faqs = [
-  {
-    id: '01',
-    category: 'Concept',
-    q: 'Comment fonctionnent les points ?',
-    a: 'Chaque euro investi dans un projet génère des points d\'impact. Ces points sont votre monnaie pour le marketplace : échangez-les contre des produits éco-responsables, des expériences uniques ou réinvestissez-les.',
-    icon: Zap,
-    color: 'text-amber-500'
-  },
-  {
-    id: '02',
-    category: 'Transparence',
-    q: 'Puis-je suivre mon impact ?',
-    a: "Absolument. Nous utilisons des données satellites et des capteurs IoT pour vous fournir un tableau de bord en temps réel. Vous voyez concrètement où va votre argent : arbres plantés, CO2 capturé, biodiversité restaurée.",
-    icon: Globe,
-    color: 'text-blue-500'
-  },
-  {
-    id: '03',
-    category: 'Finance',
-    q: 'Le paiement se fait comment ?',
-    a: 'Actuellement, nous acceptons les cartes bancaires et les virements instantanés. La V1 introduit un système de "wallet" impact qui permet aussi d\'utiliser vos points pour soutenir de nouveaux projets.',
-    icon: Sparkles,
-    color: 'text-purple-500'
-  },
-  {
-    id: '04',
-    category: 'Compte',
-    q: 'Profil public & Badges ?',
-    a: 'Votre profil est votre vitrine d\'impact. Gagnez des badges rares (ex: "Gardien de la Forêt") en atteignant des paliers. Vous pouvez choisir de rendre votre profil public pour inspirer votre communauté.',
-    icon: ShieldCheck,
-    color: 'text-emerald-500'
-  },
-]
+const FAQ_ITEM_CONFIG = [
+  { id: '01', key: 'points', icon: Zap, color: 'text-marketing-warning-500' },
+  { id: '02', key: 'tracking', icon: Globe, color: 'text-marketing-info-500' },
+  { id: '03', key: 'payment', icon: Sparkles, color: 'text-marketing-accent-alt-500' },
+  { id: '04', key: 'profile', icon: ShieldCheck, color: 'text-marketing-positive-500' },
+] as const
 
 export function FaqContent() {
+  const t = useTranslations('marketing_pages.faq')
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+
+  const faqs = useMemo(
+    () =>
+      FAQ_ITEM_CONFIG.map((config) => ({
+        id: config.id,
+        category: t(`items.${config.key}.category`),
+        q: t(`items.${config.key}.question`),
+        a: t(`items.${config.key}.answer`),
+        icon: config.icon,
+        color: config.color,
+      })),
+    [t],
+  )
+
+  const filteredFaqs = useMemo(() => {
+    const normalizedQuery = search.trim().toLowerCase()
+    if (!normalizedQuery) {
+      return faqs
+    }
+
+    return faqs.filter((item) =>
+      `${item.category} ${item.q} ${item.a}`.toLowerCase().includes(normalizedQuery),
+    )
+  }, [faqs, search])
+
+  useEffect(() => {
+    if (activeId && !filteredFaqs.some((item) => item.id === activeId)) {
+      setActiveId(null)
+    }
+  }, [activeId, filteredFaqs])
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-white selection:bg-emerald-500/30 font-sans transition-colors duration-300">
-      
-      {/* Background - Static & Subtle */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-emerald-500/5 to-transparent dark:from-emerald-900/10" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 dark:opacity-10 mix-blend-overlay" />
+    <div className="min-h-screen bg-marketing-neutral-50 font-sans text-marketing-neutral-900 transition-colors duration-300 selection:bg-marketing-positive-500/30 dark:bg-marketing-surface-strong dark:text-marketing-overlay-light">
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <div className="absolute left-0 top-0 h-[500px] w-full bg-gradient-to-b from-marketing-positive-500/5 to-transparent dark:from-marketing-positive-900/10" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-10" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-16 lg:py-24 max-w-5xl">
-        
-        {/* Header Section - Clean & Direct */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100/50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 mb-6">
+      <div className="relative z-10 container mx-auto max-w-5xl px-4 py-16 lg:py-24">
+        <div className="mb-16 flex flex-col items-center text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-marketing-positive-200 bg-marketing-positive-100/50 px-3 py-1 dark:border-marketing-positive-500/20 dark:bg-marketing-positive-500/10">
             <span className="relative flex h-2 w-2">
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-marketing-positive-500" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Help Center</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-marketing-positive-700 dark:text-marketing-positive-300">
+              {t('badge')}
+            </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6 text-slate-900 dark:text-white">
-            Questions fréquentes
+          <h1 className="mb-6 text-4xl font-black tracking-tight text-marketing-neutral-900 dark:text-marketing-overlay-light md:text-6xl">
+            {t('title')}
           </h1>
-          
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mb-10">
-            Tout ce que vous devez savoir sur Make the Change, nos projets et votre impact.
+
+          <p className="mb-10 max-w-2xl text-lg text-marketing-neutral-600 dark:text-marketing-neutral-400">
+            {t('description')}
           </p>
 
           <div className="relative w-full max-w-lg">
-            <div className="relative flex items-center bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 shadow-sm transition-colors focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500">
-              <Search className="w-5 h-5 text-slate-400 mr-3" />
-              <input 
-                type="text" 
-                placeholder="Rechercher..." 
-                className="w-full bg-transparent border-none outline-none text-base text-slate-900 dark:text-white placeholder:text-slate-400"
+            <div className="relative flex items-center rounded-xl border border-marketing-neutral-200 bg-marketing-overlay-light px-4 py-3 shadow-sm transition-colors focus-within:border-marketing-positive-500 focus-within:ring-1 focus-within:ring-marketing-positive-500 dark:border-marketing-overlay-light/10 dark:bg-marketing-overlay-light/5">
+              <Search className="mr-3 h-5 w-5 text-marketing-neutral-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder={t('search_placeholder')}
+                className="w-full border-none bg-transparent text-base text-marketing-neutral-900 outline-none placeholder:text-marketing-neutral-400 dark:text-marketing-overlay-light"
               />
             </div>
           </div>
         </div>
 
-        {/* FAQ Grid - Functional & Fast */}
-        <div className="grid grid-cols-1 gap-4">
-          {faqs.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setActiveId(activeId === item.id ? null : item.id)}
-              className={cn(
-                "group relative cursor-pointer rounded-2xl border transition-all duration-200 overflow-hidden",
-                activeId === item.id 
-                  ? "bg-white dark:bg-white/10 border-emerald-500/30 shadow-lg dark:shadow-emerald-900/10" 
-                  : "bg-white/50 dark:bg-white/5 border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
-              )}
-            >
-              <div className="p-6 md:p-8">
-                <div className="flex items-center justify-between gap-6">
-                  <div className="flex items-center gap-4 md:gap-6">
-                    <span className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 text-sm font-bold text-slate-500 dark:text-slate-400">
-                      {item.id}
-                    </span>
-                    <h3 className={cn(
-                      "text-lg md:text-xl font-bold transition-colors",
-                      activeId === item.id ? "text-slate-900 dark:text-white" : "text-slate-700 dark:text-slate-200"
-                    )}>
-                      {item.q}
-                    </h3>
-                  </div>
-                  
-                  <div className={cn(
-                    "flex-shrink-0 h-8 w-8 rounded-full border flex items-center justify-center transition-all duration-200",
-                    activeId === item.id 
-                      ? "bg-emerald-500 border-emerald-500 text-white rotate-45" 
-                      : "bg-transparent border-slate-200 dark:border-white/20 text-slate-400 group-hover:border-slate-400"
-                  )}>
-                    <Plus className="h-4 w-4" />
-                  </div>
-                </div>
+        {filteredFaqs.length > 0 ? (
+          <div className="grid grid-cols-1 gap-4">
+            {filteredFaqs.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setActiveId(activeId === item.id ? null : item.id)}
+                className={cn(
+                  'group relative cursor-pointer overflow-hidden rounded-2xl border transition-all duration-200',
+                  activeId === item.id
+                    ? 'border-marketing-positive-500/30 bg-marketing-overlay-light shadow-lg dark:bg-marketing-overlay-light/10 dark:shadow-marketing-positive-900/10'
+                    : 'border-marketing-neutral-200 bg-marketing-overlay-light/50 hover:border-marketing-neutral-300 hover:bg-marketing-overlay-light dark:border-marketing-overlay-light/10 dark:bg-marketing-overlay-light/5 dark:hover:border-marketing-overlay-light/20 dark:hover:bg-marketing-overlay-light/10',
+                )}
+              >
+                <div className="p-6 md:p-8">
+                  <div className="flex items-center justify-between gap-6">
+                    <div className="flex items-center gap-4 md:gap-6">
+                      <span className="hidden h-10 w-10 items-center justify-center rounded-lg bg-marketing-neutral-100 text-sm font-bold text-marketing-neutral-500 dark:bg-marketing-overlay-light/5 dark:text-marketing-neutral-400 md:flex">
+                        {item.id}
+                      </span>
+                      <h3
+                        className={cn(
+                          'text-lg font-bold transition-colors md:text-xl',
+                          activeId === item.id
+                            ? 'text-marketing-neutral-900 dark:text-marketing-overlay-light'
+                            : 'text-marketing-neutral-700 dark:text-marketing-neutral-200',
+                        )}
+                      >
+                        {item.q}
+                      </h3>
+                    </div>
 
-                <AnimatePresence initial={false}>
-                  {activeId === item.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
+                    <div
+                      className={cn(
+                        'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-all duration-200',
+                        activeId === item.id
+                          ? 'rotate-45 border-marketing-positive-500 bg-marketing-positive-500 text-marketing-overlay-light'
+                          : 'border-marketing-neutral-200 bg-transparent text-marketing-neutral-400 group-hover:border-marketing-neutral-400 dark:border-marketing-overlay-light/20',
+                      )}
                     >
-                      <div className="pt-6 pl-0 md:pl-16">
-                        <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-                          {item.a}
-                        </p>
-                        
-                        <div className="mt-6 flex items-center gap-2">
-                           <Button variant="ghost" className="h-9 px-4 rounded-lg text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-700 -ml-4">
-                             En savoir plus <span className="ml-1">→</span>
-                           </Button>
+                      <Plus className="h-4 w-4" />
+                    </div>
+                  </div>
+
+                  <AnimatePresence initial={false}>
+                    {activeId === item.id && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                      >
+                        <div className="pt-6 md:pl-16">
+                          <p className="text-base leading-relaxed text-marketing-neutral-600 dark:text-marketing-neutral-300 md:text-lg">
+                            {item.a}
+                          </p>
+
+                          <div className="mt-6 flex items-center gap-2">
+                            <Button
+                              asChild
+                              variant="ghost"
+                              className="h-9 -ml-4 rounded-lg px-4 text-sm font-medium text-marketing-positive-600 hover:bg-marketing-positive-50 hover:text-marketing-positive-700 dark:text-marketing-positive-400 dark:hover:bg-marketing-positive-500/10"
+                            >
+                              <Link href="/contact">
+                                {t('learn_more')} <span className="ml-1">→</span>
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-marketing-neutral-300 bg-marketing-overlay-light/70 p-10 text-center dark:border-marketing-overlay-light/20 dark:bg-marketing-overlay-light/5">
+            <p className="text-lg font-bold">{t('empty_title')}</p>
+            <p className="mt-2 text-sm text-marketing-neutral-600 dark:text-marketing-neutral-400">
+              {t('empty_description')}
+            </p>
+          </div>
+        )}
 
-        {/* Simple Footer */}
-        <div className="mt-20 pt-10 border-t border-slate-200 dark:border-white/10 text-center">
-          <p className="text-slate-500 dark:text-slate-400 mb-4">Vous ne trouvez pas votre réponse ?</p>
-          <a href="#" className="inline-flex items-center text-sm font-bold text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-            Contactez notre support
-          </a>
+        <div className="mt-20 border-t border-marketing-neutral-200 pt-10 text-center dark:border-marketing-overlay-light/10">
+          <p className="mb-4 text-marketing-neutral-500 dark:text-marketing-neutral-400">
+            {t('footer_prompt')}
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center text-sm font-bold text-marketing-neutral-900 transition-colors hover:text-marketing-positive-600 dark:text-marketing-overlay-light dark:hover:text-marketing-positive-400"
+          >
+            {t('footer_cta')}
+          </Link>
         </div>
-
       </div>
     </div>
   )

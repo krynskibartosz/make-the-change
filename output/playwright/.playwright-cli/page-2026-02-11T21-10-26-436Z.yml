@@ -1,0 +1,80 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - img [ref=e12]
+            - generic [ref=e15]: Paiement sécurisé
+          - generic [ref=e16]:
+            - heading "Commande" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Finalisez votre commande en 3 étapes. 1 article(s) prêt(s) à être validé(s).
+        - generic [ref=e19]:
+          - button "Retour" [ref=e20] [cursor=pointer]:
+            - generic [ref=e22]: Retour
+          - link "Modifier" [ref=e23] [cursor=pointer]:
+            - /url: /fr/cart
+      - generic [ref=e24]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: "1"
+          - paragraph [ref=e29]: Panier
+        - generic [ref=e32]:
+          - generic [ref=e33]: "2"
+          - generic [ref=e34]:
+            - paragraph [ref=e35]: Adresse
+            - paragraph [ref=e100]: Ajoutez votre adresse de livraison
+        - generic [ref=e37]:
+          - generic [ref=e38]: "3"
+          - paragraph [ref=e40]: Confirmer
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - img [ref=e43]
+          - paragraph [ref=e46]: Transactions protégées et validation serveur en temps réel.
+        - generic [ref=e47]:
+          - img [ref=e48]
+          - paragraph [ref=e53]: Livraison rapide, sans frais supplémentaires.
+    - generic [ref=e101]:
+      - generic [ref=e102]:
+        - heading "Adresse de livraison" [level=3] [ref=e103]
+        - paragraph [ref=e104]: Renseignez une adresse complète pour accélérer le traitement de la commande.
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - generic [ref=e108]:
+            - generic [ref=e109]: Prénom
+            - textbox "Prénom" [ref=e111]: Alice
+          - generic [ref=e112]:
+            - generic [ref=e113]: Nom
+            - textbox "Nom" [ref=e115]: Investor
+        - generic [ref=e116]:
+          - generic [ref=e117]: Adresse
+          - textbox "Adresse" [ref=e119]
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - generic [ref=e122]: Ville
+            - textbox "Ville" [ref=e124]
+          - generic [ref=e125]:
+            - generic [ref=e126]: Code postal
+            - textbox "Code postal" [ref=e128]
+        - generic [ref=e129]:
+          - generic [ref=e130]: Pays
+          - textbox "Pays" [ref=e132]
+        - generic [ref=e133]:
+          - paragraph [ref=e134]: Aperçu de l'adresse
+          - paragraph [ref=e135]: Alice Investor
+        - generic [ref=e136]:
+          - button "Retour" [ref=e137] [cursor=pointer]:
+            - generic [ref=e139]: Retour
+          - button "Continuer" [ref=e140] [cursor=pointer]:
+            - generic [ref=e142]: Continuer
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - paragraph [ref=e82]: Total
+        - paragraph [ref=e83]: 1 000 pts / 10,00 €
+        - paragraph [ref=e84]: Aucun frais caché.
+      - generic [ref=e85]:
+        - generic [ref=e86]: Insuffisant
+        - button "Continuer" [ref=e87] [cursor=pointer]:
+          - generic [ref=e89]: Continuer
+  - button "Open Next.js Dev Tools" [ref=e95] [cursor=pointer]:
+    - img [ref=e96]
+  - alert [ref=e99]

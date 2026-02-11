@@ -57,7 +57,7 @@ export function SettingsClient({ initial }: SettingsClientProps) {
               </div>
             ) : null}
             {state.success ? (
-              <div className="flex items-center gap-2 rounded-lg bg-emerald-100 p-3 text-sm text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+              <div className="flex items-center gap-2 rounded-lg bg-client-emerald-100 p-3 text-sm text-client-emerald-700 dark:bg-client-emerald-900/30 dark:text-client-emerald-400">
                 <Check className="h-4 w-4" />
                 {state.success}
               </div>

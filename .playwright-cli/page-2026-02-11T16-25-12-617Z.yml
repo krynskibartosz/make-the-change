@@ -1,0 +1,208 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - main [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - paragraph [ref=e17]: make the change brand
+            - navigation [ref=e18]:
+              - generic [ref=e19]: Downloads
+              - generic [ref=e20]: Help
+              - generic [ref=e21]: About Make the Change
+              - generic [ref=e22]: Careers
+          - generic [ref=e23]:
+            - generic [ref=e24]:
+              - paragraph [ref=e25]: Logo
+              - heading "Logo usage rules" [level=1] [ref=e26]
+              - paragraph [ref=e27]: The Make the Change logo is a primary asset. Follow approved variants, minimum sizes, and clear-space rules.
+              - paragraph [ref=e28]: "Last update: February 2026"
+            - img "Mascot" [ref=e34]
+        - generic [ref=e35]:
+          - complementary [ref=e36]:
+            - navigation [ref=e37]:
+              - generic [ref=e38]:
+                - paragraph [ref=e39]: Foundation
+                - list [ref=e40]:
+                  - listitem [ref=e41]:
+                    - link "01 Overview" [ref=e42] [cursor=pointer]:
+                      - /url: /en/brand-guidelines
+                      - generic [ref=e43]: "01"
+                      - generic [ref=e44]: Overview
+                      - img [ref=e45]
+              - generic [ref=e47]:
+                - paragraph [ref=e48]: Identity
+                - list [ref=e49]:
+                  - listitem [ref=e50]:
+                    - link "01 Logo" [ref=e51] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/logo
+                      - generic [ref=e52]: "01"
+                      - generic [ref=e53]: Logo
+                      - img [ref=e54]
+                  - listitem [ref=e56]:
+                    - link "02 Colors" [ref=e57] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/colors
+                      - generic [ref=e58]: "02"
+                      - generic [ref=e59]: Colors
+                      - img [ref=e60]
+                  - listitem [ref=e62]:
+                    - link "03 Typography" [ref=e63] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/typography
+                      - generic [ref=e64]: "03"
+                      - generic [ref=e65]: Typography
+                      - img [ref=e66]
+              - generic [ref=e68]:
+                - paragraph [ref=e69]: Writing
+                - list [ref=e70]:
+                  - listitem [ref=e71]:
+                    - link "01 Tone of voice" [ref=e72] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/voice
+                      - generic [ref=e73]: "01"
+                      - generic [ref=e74]: Tone of voice
+                      - img [ref=e75]
+              - generic [ref=e77]:
+                - paragraph [ref=e78]: Resources
+                - list [ref=e79]:
+                  - listitem [ref=e80]:
+                    - link "01 Assets" [ref=e81] [cursor=pointer]:
+                      - /url: /en/brand-guidelines/assets
+                      - generic [ref=e82]: "01"
+                      - generic [ref=e83]: Assets
+                      - img [ref=e84]
+          - generic [ref=e87]:
+            - generic [ref=e88]:
+              - generic [ref=e90]:
+                - generic [ref=e91]:
+                  - paragraph [ref=e92]: Full lockup
+                  - img "Full lockup" [ref=e96]
+                - generic [ref=e97]:
+                  - paragraph [ref=e98]: Icon only
+                  - img "Icon only" [ref=e102]
+              - article [ref=e103]:
+                - paragraph [ref=e104]: Primary logo
+                - heading "Approved variants" [level=2] [ref=e105]:
+                  - text: Approved variants
+                  - link [ref=e106] [cursor=pointer]:
+                    - /url: "#logotype"
+                    - img [ref=e107]
+                - paragraph [ref=e110]: Use the primary version on standard product and marketing surfaces. It is the default on light backgrounds.
+            - generic [ref=e111]:
+              - img "Primary logo" [ref=e116]
+              - article [ref=e117]:
+                - paragraph [ref=e118]: Primary logo
+                - heading "Clear space" [level=2] [ref=e119]:
+                  - text: Clear space
+                  - link [ref=e120] [cursor=pointer]:
+                    - /url: "#clear-space"
+                    - img [ref=e121]
+                - paragraph [ref=e124]: Keep minimum free space around the logo equal to the height of the main symbol.
+            - generic [ref=e125]:
+              - generic [ref=e127]:
+                - generic [ref=e128]:
+                  - paragraph [ref=e129]: Screen
+                  - paragraph [ref=e130]: 80 px
+                - generic [ref=e131]:
+                  - paragraph [ref=e132]: Print
+                  - paragraph [ref=e133]: 20 mm
+              - article [ref=e134]:
+                - paragraph [ref=e135]: Primary logo
+                - heading "Minimum sizes" [level=2] [ref=e136]:
+                  - text: Minimum sizes
+                  - link [ref=e137] [cursor=pointer]:
+                    - /url: "#minimum-sizes"
+                    - img [ref=e138]
+                - paragraph [ref=e141]: "Web: 80 px (full lockup) / 60 px (icon)."
+            - generic [ref=e142]:
+              - generic [ref=e144]:
+                - article [ref=e145]:
+                  - paragraph [ref=e146]:
+                    - img [ref=e147]
+                    - text: Do
+                  - list [ref=e150]:
+                    - listitem [ref=e151]: Use only approved source files.
+                    - listitem [ref=e152]: Maintain strong contrast with the background.
+                    - listitem [ref=e153]: Preserve original logo proportions in every format.
+                - article [ref=e154]:
+                  - paragraph [ref=e155]:
+                    - img [ref=e156]
+                    - text: Do not
+                  - list [ref=e160]:
+                    - listitem [ref=e161]: Stretch, skew, or rotate the logo.
+                    - listitem [ref=e162]: Change logo colors outside the approved palette.
+                    - listitem [ref=e163]: Add shadows, outlines, or decorative effects.
+                    - listitem [ref=e164]: Place the logo on noisy backgrounds without support.
+              - article [ref=e165]:
+                - paragraph [ref=e166]: Primary logo
+                - heading "Do not" [level=2] [ref=e167]:
+                  - text: Do not
+                  - link [ref=e168] [cursor=pointer]:
+                    - /url: "#do-dont"
+                    - img [ref=e169]
+                - paragraph [ref=e172]: Stretch, skew, or rotate the logo.
+    - contentinfo [ref=e173]:
+      - generic [ref=e174]:
+        - generic [ref=e175]:
+          - generic [ref=e176]:
+            - link "Make the Change Make the Change" [ref=e177] [cursor=pointer]:
+              - /url: /en
+              - img "Make the Change" [ref=e179]
+              - generic [ref=e180]: Make the Change
+            - paragraph [ref=e181]: Invest in biodiversity, reap tangible rewards.
+          - generic [ref=e182]:
+            - heading "Quick links" [level=3] [ref=e183]
+            - list [ref=e184]:
+              - listitem [ref=e185]:
+                - link "Projects" [ref=e186] [cursor=pointer]:
+                  - /url: /en/projects
+              - listitem [ref=e187]:
+                - link "Products" [ref=e188] [cursor=pointer]:
+                  - /url: /en/products
+              - listitem [ref=e189]:
+                - link "Leaderboard" [ref=e190] [cursor=pointer]:
+                  - /url: /en/leaderboard
+              - listitem [ref=e191]:
+                - link "Blog" [ref=e192] [cursor=pointer]:
+                  - /url: /en/blog
+              - listitem [ref=e193]:
+                - link "About" [ref=e194] [cursor=pointer]:
+                  - /url: /en/about
+              - listitem [ref=e195]:
+                - link "How it works" [ref=e196] [cursor=pointer]:
+                  - /url: /en/how-it-works
+              - listitem [ref=e197]:
+                - link "Brand guidelines" [ref=e198] [cursor=pointer]:
+                  - /url: /en/brand-guidelines
+          - generic [ref=e199]:
+            - heading "Support" [level=3] [ref=e200]
+            - list [ref=e201]:
+              - listitem [ref=e202]:
+                - link "FAQ" [ref=e203] [cursor=pointer]:
+                  - /url: /en/faq
+              - listitem [ref=e204]:
+                - link "Contact" [ref=e205] [cursor=pointer]:
+                  - /url: /en/contact
+              - listitem [ref=e206]:
+                - link "Privacy" [ref=e207] [cursor=pointer]:
+                  - /url: /en/privacy
+              - listitem [ref=e208]:
+                - link "Terms" [ref=e209] [cursor=pointer]:
+                  - /url: /en/terms
+          - generic [ref=e210]:
+            - heading "Contact us" [level=3] [ref=e211]
+            - list [ref=e212]:
+              - listitem [ref=e213]:
+                - img [ref=e214]
+                - link "contact@make-the-change.com" [ref=e217] [cursor=pointer]:
+                  - /url: mailto:contact@make-the-change.com
+              - listitem [ref=e218]:
+                - img [ref=e219]
+                - generic [ref=e222]: Brussels, Belgium
+        - generic [ref=e223]:
+          - paragraph [ref=e224]: © 2026 Make the CHANGE. All rights reserved.
+          - generic [ref=e225]:
+            - link "Privacy" [ref=e226] [cursor=pointer]:
+              - /url: /en/privacy
+            - link "Terms" [ref=e227] [cursor=pointer]:
+              - /url: /en/terms

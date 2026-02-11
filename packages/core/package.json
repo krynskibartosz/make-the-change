@@ -30,7 +30,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
-    "test": "vitest",
     "lint": "biome check .",
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
@@ -48,16 +47,11 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.2",
     "@types/pg": "^8.16.0",
     "@types/react": "^19.1.12",
-    "@vitejs/plugin-react": "^4.3.4",
     "drizzle-kit": "^0.31.8",
-    "jsdom": "^25.0.1",
     "react": "^19.0.0",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.7.2"
   }
 }

@@ -1,25 +1,24 @@
 'use client'
 
-import {
-  Button,
-} from '@make-the-change/core/ui'
+import { Button } from '@make-the-change/core/ui'
 import {
   Coins,
+  FileQuestion,
   FileText,
   HelpCircle,
   Info,
   LayoutDashboard,
+  Leaf,
+  Lock,
   Mail,
+  Package,
+  Palette,
   PiggyBank,
   ShieldCheck,
   ShoppingBag,
-  Users,
-  Package,
   Trophy,
-  Leaf,
-  FileQuestion,
-  Lock,
   UserPlus,
+  Users,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
@@ -28,22 +27,32 @@ import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function MenuPage() {
-  const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(null)
-  const t = useTranslations('navigation') // Assuming translations exist or fallback
+  const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(
+    null,
+  )
+  const tNav = useTranslations('navigation')
+  const tMenu = useTranslations('menu_page')
+  const tFooter = useTranslations('footer')
   const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3000'
 
   useEffect(() => {
     const supabase = createClient()
     const getUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-            const { data: profile } = await supabase.from('profiles').select('avatar_url').eq('id', user.id).single()
-            setUser({
-                id: user.id,
-                email: user.email || '',
-                avatarUrl: profile?.avatar_url
-            })
-        }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('avatar_url')
+          .eq('id', user.id)
+          .single()
+        setUser({
+          id: user.id,
+          email: user.email || '',
+          avatarUrl: profile?.avatar_url,
+        })
+      }
     }
     getUser()
   }, [])
@@ -53,8 +62,7 @@ export default function MenuPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background pb-24">
       <div className="container px-4 py-6 space-y-8">
-        
-        <h1 className="text-2xl font-bold tracking-tight">Menu</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{tMenu('title')}</h1>
 
         {/* User Profile Section */}
         {user ? (
@@ -68,11 +76,11 @@ export default function MenuPage() {
             </div>
             <div className="flex-1 overflow-hidden">
               <p className="truncate font-semibold text-lg">{user.email}</p>
-              <Link 
-                href="/dashboard/profile" 
+              <Link
+                href="/dashboard/profile"
                 className="text-sm text-muted-foreground hover:text-primary hover:underline flex items-center gap-1 mt-1"
               >
-                Voir mon profil
+                {tMenu('user.view_profile')}
               </Link>
             </div>
           </div>
@@ -82,20 +90,23 @@ export default function MenuPage() {
               <Button asChild variant="outline" size="lg" className="w-full">
                 <Link href="/login">
                   <Lock className="h-4 w-4 mr-2" />
-                  Se connecter
+                  {tNav('login')}
                 </Link>
               </Button>
               <Button asChild size="lg" className="w-full">
                 <Link href="/register">
                   <UserPlus className="h-4 w-4 mr-2" />
-                  S'inscrire
+                  {tNav('register')}
                 </Link>
               </Button>
             </div>
             <div className="space-y-1 rounded-xl border bg-card p-1 shadow-sm">
-              <Link href="/forgot-password" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                  <Lock className="h-5 w-5 text-muted-foreground" />
-                  Mot de passe oublié
+              <Link
+                href="/forgot-password"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                <Lock className="h-5 w-5 text-muted-foreground" />
+                {tMenu('auth.forgot_password')}
               </Link>
             </div>
           </div>
@@ -105,35 +116,47 @@ export default function MenuPage() {
         {user && (
           <div className="space-y-3">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-              Mon Espace
+              {tMenu('sections.account')}
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              <Link href="/dashboard" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
-                  <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    <LayoutDashboard className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm font-medium">Tableau de bord</span>
-              </Link>
-              
-              <Link href="/dashboard/investments" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
-                  <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    <PiggyBank className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm font-medium">Investissements</span>
+              <Link
+                href="/dashboard"
+                className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+              >
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                  <LayoutDashboard className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium">{tNav('dashboard')}</span>
               </Link>
 
-              <Link href="/dashboard/orders" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
-                  <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    <ShoppingBag className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm font-medium">Commandes</span>
+              <Link
+                href="/dashboard/investments"
+                className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+              >
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                  <PiggyBank className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium">{tNav('my_investments')}</span>
               </Link>
 
-              <Link href="/dashboard/points" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
-                  <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    <Coins className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm font-medium">Points</span>
+              <Link
+                href="/dashboard/orders"
+                className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+              >
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                  <ShoppingBag className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium">{tNav('my_orders')}</span>
+              </Link>
+
+              <Link
+                href="/dashboard/points"
+                className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+              >
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                  <Coins className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium">{tNav('my_points')}</span>
               </Link>
             </div>
           </div>
@@ -142,52 +165,87 @@ export default function MenuPage() {
         {/* General Links */}
         <div className="space-y-3">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-            Explorer
+            {tMenu('sections.explore')}
           </h3>
           <div className="space-y-1 rounded-xl border bg-card p-1 shadow-sm">
-            <Link href="/blog" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <FileText className="h-5 w-5 text-muted-foreground" />
-                Blog
+            <Link
+              href="/blog"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <FileText className="h-5 w-5 text-muted-foreground" />
+              {tMenu('explore.blog')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/about" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <Info className="h-5 w-5 text-muted-foreground" />
-                À propos
+            <Link
+              href="/about"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Info className="h-5 w-5 text-muted-foreground" />
+              {tNav('about')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/how-it-works" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <HelpCircle className="h-5 w-5 text-muted-foreground" />
-                Comment ça marche
+            <Link
+              href="/how-it-works"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <HelpCircle className="h-5 w-5 text-muted-foreground" />
+              {tNav('how_it_works')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/contact" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <Mail className="h-5 w-5 text-muted-foreground" />
-                Contact
+            <Link
+              href="/brand-guidelines"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Palette className="h-5 w-5 text-muted-foreground" />
+              {tNav('brand_guidelines')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/faq" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <FileQuestion className="h-5 w-5 text-muted-foreground" />
-                FAQ
+            <Link
+              href="/contact"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Mail className="h-5 w-5 text-muted-foreground" />
+              {tMenu('explore.contact')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/products" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <Package className="h-5 w-5 text-muted-foreground" />
-                Produits
+            <Link
+              href="/faq"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <FileQuestion className="h-5 w-5 text-muted-foreground" />
+              {tMenu('explore.faq')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/producers" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <Users className="h-5 w-5 text-muted-foreground" />
-                Producteurs
+            <Link
+              href="/products"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Package className="h-5 w-5 text-muted-foreground" />
+              {tNav('products')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/projects" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <Leaf className="h-5 w-5 text-muted-foreground" />
-                Projets
+            <Link
+              href="/producers"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Users className="h-5 w-5 text-muted-foreground" />
+              {tMenu('explore.producers')}
             </Link>
             <div className="mx-4 border-t" />
-            <Link href="/biodex" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                <Trophy className="h-5 w-5 text-muted-foreground" />
-                Biodex
+            <Link
+              href="/projects"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Leaf className="h-5 w-5 text-muted-foreground" />
+              {tNav('projects')}
+            </Link>
+            <div className="mx-4 border-t" />
+            <Link
+              href="/biodex"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Trophy className="h-5 w-5 text-muted-foreground" />
+              {tMenu('explore.biodex')}
             </Link>
           </div>
         </div>
@@ -195,21 +253,27 @@ export default function MenuPage() {
         {/* Shopping & Activities */}
         <div className="space-y-3">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-            Shopping & Activités
+            {tMenu('sections.shopping')}
           </h3>
           <div className="grid grid-cols-2 gap-3">
-            <Link href="/cart" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
-                <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                  <ShoppingBag className="h-5 w-5" />
-                </div>
-                <span className="text-sm font-medium">Panier</span>
+            <Link
+              href="/cart"
+              className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+            >
+              <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                <ShoppingBag className="h-5 w-5" />
+              </div>
+              <span className="text-sm font-medium">{tNav('cart')}</span>
             </Link>
-            
-            <Link href="/challenges" className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md">
-                <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                  <Trophy className="h-5 w-5" />
-                </div>
-                <span className="text-sm font-medium">Défis</span>
+
+            <Link
+              href="/challenges"
+              className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+            >
+              <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                <Trophy className="h-5 w-5" />
+              </div>
+              <span className="text-sm font-medium">{tMenu('shopping.challenges')}</span>
             </Link>
           </div>
         </div>
@@ -217,33 +281,36 @@ export default function MenuPage() {
         {/* Partners & Legal */}
         <div className="space-y-3">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-            Partenaires
+            {tMenu('sections.partners')}
           </h3>
-          <a 
-            href={ADMIN_URL} 
-            target="_blank" 
+          <a
+            href={ADMIN_URL}
+            target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 rounded-xl border border-dashed bg-card/50 px-4 py-4 text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground"
           >
-              <ShieldCheck className="h-5 w-5 text-muted-foreground" />
-              Espace Partenaire
+            <ShieldCheck className="h-5 w-5 text-muted-foreground" />
+            {tMenu('partner_space')}
           </a>
         </div>
 
         {/* Settings & Theme */}
         <div className="flex items-center justify-between rounded-xl border bg-card p-4 shadow-sm mt-8">
-            <span className="font-medium">Thème de l'application</span>
-            <ThemeToggle />
+          <span className="font-medium">{tMenu('theme')}</span>
+          <ThemeToggle />
         </div>
 
         <div className="text-center text-xs text-muted-foreground pt-8 pb-4">
-            <p>Make the CHANGE v1.0.0</p>
-            <div className="flex justify-center gap-4 mt-2">
-                <Link href="/terms" className="hover:underline">Conditions</Link>
-                <Link href="/privacy" className="hover:underline">Confidentialité</Link>
-            </div>
+          <p>{tMenu('version', { version: '1.0.0' })}</p>
+          <div className="flex justify-center gap-4 mt-2">
+            <Link href="/terms" className="hover:underline">
+              {tFooter('terms')}
+            </Link>
+            <Link href="/privacy" className="hover:underline">
+              {tFooter('privacy')}
+            </Link>
+          </div>
         </div>
-
       </div>
     </div>
   )

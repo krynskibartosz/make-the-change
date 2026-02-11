@@ -46,7 +46,29 @@
     "explore_section": "Explorer",
     "close_menu": "Fermer le menu",
     "open_cart": "Ouvrir le panier",
-    "cart": "Panier"
+    "cart": "Panier",
+    "brand_guidelines": "Guide de marque",
+    "discover": "Découvrir",
+    "menu": "Menu",
+    "discover_menu": {
+      "title": "Découvrir Make the Change",
+      "sections": {
+        "concept": "Concept",
+        "experience": "Expérience",
+        "help_resources": "Aide & ressources"
+      },
+      "items": {
+        "mission": "Notre mission",
+        "how_it_works": "Comment ça marche",
+        "producers": "Nos producteurs",
+        "challenges": "Défis",
+        "leaderboard": "Classement",
+        "biodex": "BioDex",
+        "blog": "Blog",
+        "faq": "FAQ",
+        "contact": "Contact"
+      }
+    }
   },
   "admin": {
     "common": {
@@ -71,16 +93,16 @@
       "edit_avatar": "Modifier l'avatar"
     },
     "crop": {
-        "title_avatar": "Ajuster l'avatar",
-        "title_cover": "Ajuster la couverture",
-        "title_gallery": "Ajuster l'image",
-        "zoom": "Zoom",
-        "rotation": "Rotation",
-        "reset": "Réinitialiser",
-        "confirm": "Confirmer",
-        "cancel": "Annuler"
-      },
-      "products": {
+      "title_avatar": "Ajuster l'avatar",
+      "title_cover": "Ajuster la couverture",
+      "title_gallery": "Ajuster l'image",
+      "zoom": "Zoom",
+      "rotation": "Rotation",
+      "reset": "Réinitialiser",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    },
+    "products": {
       "title": "Gestion des produits",
       "description": "Gérez votre catalogue de produits, les stocks et la visibilité.",
       "new_product": "Nouveau produit",
@@ -414,7 +436,8 @@
     "rights_reserved": "Tous droits réservés.",
     "leaderboard": "Classement",
     "blog": "Blog",
-    "address": "Brussels, Belgium"
+    "address": "Brussels, Belgium",
+    "brand_guidelines": "Guide de marque"
   },
   "home": {
     "hero": {
@@ -442,7 +465,8 @@
         "products": {
           "badge": "Éco-responsable",
           "title": "Boutique Éthique",
-          "description": "Consommez mieux avec nos produits artisanaux."
+          "description": "Consommez mieux avec nos produits artisanaux.",
+          "cta": "Explorer la boutique"
         },
         "community": {
           "title": "Communauté",
@@ -502,22 +526,88 @@
     "intro": "Make the CHANGE est une plateforme innovante qui connecte les citoyens engagés avec des projets de biodiversité concrets.",
     "mission": {
       "title": "Notre mission",
-      "description": "Démocratiser l'investissement dans la biodiversité en le rendant accessible, transparent et gratifiant."
+      "description": "Démocratiser l'investissement dans la biodiversité en le rendant accessible, transparent et gratifiant.",
+      "heading": {
+        "line1": "Democratiser",
+        "highlight": "l'impact environnemental."
+      },
+      "metrics": {
+        "transparency": "Transparent",
+        "active_projects": "Projets Actifs"
+      },
+      "image_alt": "Projet biodiversite",
+      "community": {
+        "title": "Communaute",
+        "description": "Engagee pour demain"
+      }
     },
     "values": {
       "title": "Nos valeurs",
       "transparency": {
         "title": "Transparence",
-        "description": "Suivi en temps réel de l'impact de vos investissements."
+        "description": "Suivi en temps réel de l'impact de vos investissements.",
+        "verified_label": "Blockchain Verified"
       },
       "impact": {
         "title": "Impact",
-        "description": "Des projets concrets avec des résultats mesurables."
+        "description": "Des projets concrets avec des résultats mesurables.",
+        "metric_label": "D'efficacite"
       },
       "community": {
         "title": "Communauté",
         "description": "Une communauté engagée pour la biodiversité."
+      },
+      "section_badge": "Nos piliers",
+      "section_heading": {
+        "line1": "Des valeurs ancrees dans",
+        "highlight": "l'action concrete."
+      },
+      "section_description": "Nous ne nous contentons pas de promesses. Chaque fonctionnalite de la plateforme est concue pour maximiser l'impact reel.",
+      "innovation": {
+        "title": "Innovation",
+        "description": "Tech for Good : IA, Satellite et Big Data au service de la nature.",
+        "badges": {
+          "ai": "AI",
+          "iot": "IoT"
+        }
       }
+    },
+    "hero": {
+      "badge": "Notre Histoire",
+      "cards": {
+        "global": {
+          "title": "Global",
+          "subtitle": "Impact"
+        },
+        "nature": "Nature",
+        "social": "Social"
+      }
+    },
+    "team": {
+      "title": "L'equipe visionnaire",
+      "subtitle": "Rencontrez les esprits qui transforment l'ambition ecologique en realite.",
+      "gregory": {
+        "badge": "Leadership",
+        "role": "CEO & Co-Fondateur",
+        "quote": "\"L'ecologie ne doit plus etre une contrainte, mais une opportunite.\"",
+        "bio": "Entrepreneur passionne, Gregory a consacre la derniere decennie a construire des ponts entre innovation technologique et impact durable. Sa vision : creer un ecosysteme ou chaque action individuelle se traduit par une restauration concrete de la biodiversite mondiale."
+      },
+      "bartosz": {
+        "badge": "Technology",
+        "role": "CTO & Co-Fondateur",
+        "quote": "\"La transparence n'est pas une option, c'est la fondation de la confiance.\"",
+        "bio": "Architecte de l'invisible, Bartosz transforme la complexite de la blockchain en une experience utilisateur fluide et securisee. Il veille a ce que chaque ligne de code serve la mission : garantir l'integrite et l'impact de chaque investissement."
+      }
+    },
+    "cta": {
+      "badge": "Rejoignez le mouvement",
+      "title": {
+        "line1": "Ensemble, preservons",
+        "line2": "notre heritage."
+      },
+      "description": "Chaque action compte. Transformez votre engagement en impact reel et mesurable pour la biodiversite.",
+      "primary": "Commencer maintenant",
+      "secondary": "Voir les projets"
     }
   },
   "how_it_works": {
@@ -526,15 +616,30 @@
     "steps": {
       "choose": {
         "title": "1. Choisissez un projet",
-        "description": "Parcourez notre catalogue de projets vérifiés et sélectionnez ceux qui vous tiennent à cœur."
+        "description": "Parcourez notre catalogue de projets vérifiés et sélectionnez ceux qui vous tiennent à cœur.",
+        "badges": {
+          "verified_catalog": "Catalogue vérifié",
+          "advanced_filters": "Filtres avancés"
+        }
       },
       "invest": {
         "title": "2. Investissez",
-        "description": "Soutenez les projets avec des investissements unitaires ou un abonnement mensuel."
+        "description": "Soutenez les projets avec des investissements unitaires ou un abonnement mensuel.",
+        "features": {
+          "payment_secure": "Paiement 100% sécurisé",
+          "total_transparency": "Transparence totale des flux",
+          "measurable_impact": "Impact mesurable dès 1€"
+        }
       },
       "enjoy": {
         "title": "3. Profitez",
-        "description": "Suivez l'impact de vos investissements et échangez vos points contre des produits."
+        "description": "Suivez l'impact de vos investissements et échangez vos points contre des produits.",
+        "metrics": {
+          "points": "Points",
+          "rewards": "Récompenses",
+          "badges": "Badges",
+          "impact": "Impact"
+        }
       }
     },
     "tiers": {
@@ -542,18 +647,53 @@
       "explorer": {
         "title": "Explorateur",
         "price": "Gratuit",
-        "description": "Découvrez la plateforme sans engagement"
+        "description": "Découvrez la plateforme sans engagement",
+        "features": {
+          "access_projects": "Accès à tous les projets",
+          "realtime_tracking": "Suivi de l'impact en temps réel",
+          "monthly_newsletter": "Newsletter mensuelle exclusive"
+        },
+        "cta": "Commencer l'aventure"
       },
       "protector": {
         "title": "Protecteur",
         "price": "À partir de 50€",
-        "description": "Investissements unitaires avec bonus"
+        "description": "Investissements unitaires avec bonus",
+        "badge": "Le plus prisé",
+        "features": {
+          "all_explorer": "Tout Explorer inclus",
+          "points_bonus": "Bonus de points (30-50%)",
+          "investment_certificate": "Certificat d'investissement officiel",
+          "priority_access": "Accès prioritaire aux projets"
+        },
+        "cta": "Devenir Protecteur"
       },
       "ambassador": {
         "title": "Ambassadeur",
         "price": "À partir de 18€/mois",
-        "description": "Abonnement premium avec avantages exclusifs"
-      }
+        "description": "Abonnement premium avec avantages exclusifs",
+        "features": {
+          "all_protector": "Tout Protecteur inclus",
+          "monthly_points": "Points mensuels automatiques",
+          "events": "Événements & Meetups exclusifs",
+          "vip_support": "Support VIP prioritaire"
+        },
+        "cta": "Rejoindre l'élite"
+      },
+      "per_month": "/mois"
+    },
+    "interactive_badge": "Guide interactif",
+    "cta": {
+      "title_prefix": "Prêt à faire",
+      "title_highlight": "le changement ?",
+      "description": "Rejoignez une communauté de milliers d'investisseurs qui transforment déjà leur épargne en impact concret.",
+      "primary": "Créer mon compte",
+      "secondary": "Voir les projets"
+    },
+    "trust": {
+      "secure": "Sécurisé",
+      "support": "Support",
+      "entry_fee": "Frais d'entrée"
     }
   },
   "projects": {
@@ -595,60 +735,156 @@
       "invest_now": "Investir maintenant",
       "share": "Partager"
     },
-    "empty": "Aucun projet trouvé"
-  },
-  "products": {
-      "title": "Notre boutique",
-      "subtitle": "Échangez vos points contre des produits durables de nos partenaires",
-      "search_placeholder": "Rechercher des produits...",
-      "featured": "Mis en avant",
-      "product_list": "produits",
-      "filters": {
-        "title": "Filtres",
-        "all_categories": "Toutes les catégories",
-        "all_producers": "Tous les producteurs",
-        "all_tags": "Tous les tags",
-        "sort_by": "Trier par",
-        "clear_filters": "Effacer les filtres",
-        "clear_all": "Tout effacer"
+    "empty": "Aucun projet trouvé",
+    "detail_page": {
+      "back_to_list": "Retourner à la liste des projets",
+      "cover": {
+        "status_active": "En cours de financement",
+        "status_closed": "Clôturé",
+        "launched_on": "Lancé le {date}"
       },
-      "sort": {
-        "featured": "Mis en avant",
-        "name_asc": "Nom (A-Z)",
-        "name_desc": "Nom (Z-A)",
-        "price_asc": "Prix croissant",
-        "price_desc": "Prix décroissant"
+      "main": {
+        "story_title": "L'histoire du projet",
+        "gallery_title": "Galerie photo",
+        "gallery_image_alt": "{name} - Image {index}",
+        "impact_title": "Impact attendu",
+        "ecological": {
+          "title": "Écologique",
+          "description": "Transition vers une agriculture biologique durable"
+        },
+        "local": {
+          "title": "Local",
+          "description": "Soutien à l'économie locale et circuits courts"
+        },
+        "durable": {
+          "title": "Durable",
+          "description": "Viabilité économique à long terme pour le producteur"
+        }
       },
-      "empty_state": {
-        "title": "Aucun produit trouvé",
-        "description": "Essayez de modifier vos filtres ou termes de recherche"
-      },
-      "card": {
-        "points": "points",
-        "add_to_cart": "Ajouter au panier",
-        "out_of_stock": "Rupture de stock",
-        "best_seller": "Best Seller",
-        "low_stock": "Stock faible",
-        "sold_out": "Épuisé",
-        "adding": "Ajout...",
-        "added_message": "Ajouté au panier",
-        "view_action": "Voir",
-        "default_name": "Produit",
-        "default_description": "Description du produit"
-      },
-      "detail": {
-        "description": "Description",
-        "producer": "Producteur",
-        "certifications": "Certifications",
-        "exchange": "Échanger"
+      "sidebar": {
+        "status_closed": "Clôturé",
+        "collected": "Collecté",
+        "risk_prefix": "Investissement à risque.",
+        "risk_learn_more": "En savoir plus",
+        "investors": "Investisseurs",
+        "days_remaining": "Jours restants",
+        "share_project": "Partager le projet",
+        "project_owner": "Porteur de projet",
+        "verified": "Vérifié",
+        "visit_website": "Visiter le site web"
       }
     },
+    "invest_page": {
+      "back_to_project": "Retour au projet",
+      "title": "Investir dans l'avenir",
+      "supporting": "Vous soutenez {project}",
+      "amount_label": "Combien souhaitez-vous investir ?",
+      "custom_amount_placeholder": "Montant libre (min. 10€)",
+      "impact_title": "Impact estimé",
+      "impact_description": "~{trees} arbres plantés ou protégés",
+      "goal_label": "Objectif du projet",
+      "contribution_add": "Votre contribution ajoutera +{percent}% à l'objectif",
+      "secure_payment": "Paiement 100% sécurisé",
+      "verified_project": "Projet vérifié",
+      "processing": "Traitement...",
+      "confirm": "Confirmer",
+      "confirm_with_amount": "Confirmer {amount}",
+      "legal_prefix": "En confirmant, vous acceptez nos",
+      "legal_terms": "Conditions Générales d'Investissement",
+      "legal_suffix": "L'investissement comporte des risques."
+    }
+  },
+  "products": {
+    "title": "Notre boutique",
+    "subtitle": "Échangez vos points contre des produits durables de nos partenaires",
+    "search_placeholder": "Rechercher des produits...",
+    "featured": "Mis en avant",
+    "product_list": "produits",
+    "filters": {
+      "title": "Filtres",
+      "active_filters": "Filtres actifs",
+      "search_label": "Recherche",
+      "category_label": "Catégorie",
+      "producer_label": "Producteur",
+      "tag_label": "Tag",
+      "sort_label": "Tri",
+      "all_categories": "Toutes les catégories",
+      "all_producers": "Tous les producteurs",
+      "all_tags": "Tous les tags",
+      "sort_by": "Trier par",
+      "clear_filters": "Effacer les filtres",
+      "clear_all": "Tout effacer"
+    },
+    "sort": {
+      "featured": "Mis en avant",
+      "name_asc": "Nom (A-Z)",
+      "name_desc": "Nom (Z-A)",
+      "price_asc": "Prix croissant",
+      "price_desc": "Prix décroissant"
+    },
+    "empty_state": {
+      "title": "Aucun produit trouvé",
+      "description": "Essayez de modifier vos filtres ou termes de recherche"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page",
+      "of": "sur"
+    },
+    "card": {
+      "points": "points",
+      "add_to_cart": "Ajouter au panier",
+      "out_of_stock": "Rupture de stock",
+      "best_seller": "Best Seller",
+      "low_stock": "Stock faible",
+      "sold_out": "Épuisé",
+      "adding": "Ajout...",
+      "added_message": "Ajouté au panier",
+      "view_action": "Voir",
+      "default_name": "Produit",
+      "default_description": "Description du produit"
+    },
+    "detail": {
+      "description": "Description",
+      "producer": "Producteur",
+      "certifications": "Certifications",
+      "exchange": "Échanger"
+    },
+    "detail_page": {
+      "stock_available": "{count} disponibles",
+      "authentic_badge": "Produit authentique",
+      "hero_product_badge": "Produit vedette",
+      "or_points": "ou {points} pts",
+      "visit_website": "Visiter le site web",
+      "back_to_products": "Retour à la boutique",
+      "cta": {
+        "badge": "Impact durable",
+        "title_line1": "Soutenir les",
+        "title_line2": "producteurs locaux.",
+        "description": "Chaque achat est un vote pour un avenir plus durable et équitable.",
+        "primary": "Découvrir plus de produits",
+        "secondary": "En savoir plus"
+      }
+    }
+  },
   "checkout": {
     "title": "Commande",
+    "hero": {
+      "badge": "Paiement sécurisé",
+      "description": "Finalisez votre commande en 3 étapes. {count} article(s) prêt(s) à être validé(s).",
+      "security_note": "Transactions protégées et validation serveur en temps réel.",
+      "shipping_note": "Livraison rapide, sans frais supplémentaires."
+    },
     "steps": {
       "cart": "Panier",
       "address": "Adresse",
       "confirm": "Confirmer",
+      "hints": {
+        "cart": "Vérifiez vos articles et vos quantités",
+        "address": "Ajoutez votre adresse de livraison",
+        "confirm": "Choisissez le mode de paiement"
+      },
       "step_indicator": "Étape {current}/{total}"
     },
     "validation": {
@@ -690,10 +926,21 @@
       "title": "Récapitulatif",
       "other_items": "+{count} autre(s) article(s)",
       "total": "Total",
-      "total_order": "Total commande"
+      "total_order": "Total commande",
+      "items_label": "{count} article(s)",
+      "shipping": "Livraison",
+      "shipping_free": "Gratuite",
+      "payment_method": "Mode de paiement",
+      "saved_address": "Adresse de livraison",
+      "no_address": "Adresse non renseignée",
+      "points_method": "Paiement en points",
+      "card_method": "Carte (simulation)",
+      "sticky_note": "Vous pourrez modifier vos informations avant validation définitive."
     },
     "address": {
       "title": "Adresse de livraison",
+      "subtitle": "Renseignez une adresse complète pour accélérer le traitement de la commande.",
+      "preview": "Aperçu de l'adresse",
       "labels": {
         "first_name": "Prénom",
         "last_name": "Nom",
@@ -709,16 +956,62 @@
       "balance": "Solde: {amount} pts",
       "card": "Carte Bancaire",
       "simulation": "Simulation (Euros)",
+      "selected": "Sélectionné",
+      "points_help": "Paiement instantané via votre solde actuel.",
+      "card_help": "Simulation de paiement en euros (mode test).",
+      "preview_title": "Vérification finale",
       "confirmation_title": "Confirmation",
       "current_balance": "Solde actuel",
       "after_purchase": "Après achat",
-      "total_to_pay": "Total à payer"
+      "total_to_pay": "Total à payer",
+      "simulated_notice": "Aucun débit réel ne sera effectué."
     },
     "footer": {
       "no_hidden_fees": "Aucun frais caché.",
       "status": {
         "ok": "OK",
-        "insufficient": "Insuffisant"
+        "insufficient": "Insuffisant",
+        "update_required": "Mise à jour"
+      }
+    },
+    "success": {
+      "badge": "Commande validée",
+      "title": "Commande confirmée",
+      "subtitle": "Merci pour votre achat. Référence #{orderId}.",
+      "paid": "Payée",
+      "date": "Date",
+      "total": "Total",
+      "order_summary": "Détail de la commande",
+      "fallback_product": "Produit",
+      "more_items": "+{count} autre(s) article(s)",
+      "actions": {
+        "orders": "Voir mes commandes",
+        "continue": "Continuer mes achats"
+      }
+    },
+    "cart_page": {
+      "snackbar": {
+        "cleared": "Panier vidé",
+        "item_removed": "Article supprimé",
+        "undo": "Annuler"
+      },
+      "continue_shopping": "Continuer mes achats",
+      "badge": "Votre panier",
+      "hero_title_prefix": "Récapitulatif",
+      "hero_title_highlight": "Impact.",
+      "clear_cart": "Vider le panier",
+      "out_of_stock_alert": "Un article est en rupture de stock.",
+      "subtotal": "Sous-total",
+      "shipping": "Livraison",
+      "free_shipping": "Gratuite",
+      "checkout": "Passer au paiement",
+      "trust": {
+        "payment_secure": "Paiement sécurisé",
+        "impact": "100% Impact"
+      },
+      "instant_delivery": {
+        "title": "Livraison instantanée",
+        "description": "Vos crédits d'impact sont crédités sur votre compte immédiatement après validation."
       }
     }
   },
@@ -740,7 +1033,45 @@
     "reset_password": "Réinitialiser le mot de passe",
     "reset_password_button": "Envoyer le lien",
     "reset_password_success": "Un email de réinitialisation a été envoyé.",
-    "back_to_login": "Retour à la connexion"
+    "back_to_login": "Retour à la connexion",
+    "email_placeholder": "votre@email.com",
+    "login_subtitle": "Ravis de vous revoir ! Accédez à votre impact.",
+    "register_subtitle": "Rejoignez le mouvement pour un futur durable.",
+    "register_success_title": "Inscription réussie !",
+    "register_success_email_sent": "Un email de confirmation a été envoyé à",
+    "register_success_instruction": "Cliquez sur le lien dans l'email pour activer votre compte et commencer l'aventure.",
+    "open_provider": "Ouvrir {provider}",
+    "open_mailbox": "Ouvrir ma boîte mail",
+    "first_name_placeholder": "Jean",
+    "last_name_placeholder": "Dupont",
+    "passwords_mismatch": "Les mots de passe ne correspondent pas.",
+    "final_step_title": "Dernière étape",
+    "final_step_description": "En rejoignant Make the CHANGE, vous participez activement à la protection de notre planète.",
+    "terms_link_label": "conditions d'utilisation",
+    "continue": "Continuer",
+    "previous_step": "Étape précédente",
+    "forgot_success_title": "Email envoyé !",
+    "forgot_success_hint": "Vérifiez votre boîte de réception et suivez les instructions pour réinitialiser votre mot de passe.",
+    "forgot_help_text": "Pas d'inquiétude, nous allons vous aider.",
+    "layout": {
+      "background_alt": "Nature Background",
+      "badge": "Plateforme certifiée",
+      "title_prefix": "Le futur de la",
+      "title_highlight": "biodiversité",
+      "title_suffix": "est entre vos mains.",
+      "description": "Transformez votre épargne en impact concret et rejoignez la plus grande communauté d'investisseurs engagés.",
+      "features": {
+        "secure": "Investissements sécurisés & transparents",
+        "tracking": "Suivi d'impact & biodiversité en temps réel",
+        "rewards": "Récompenses exclusives & BioDex collectionnable"
+      },
+      "user_alt": "User",
+      "quote": {
+        "text": "\"Une plateforme qui donne enfin du sens à chaque euro investi.\"",
+        "author": "Marie D. • Protectrice"
+      },
+      "community_proof": "Impact vérifié par la communauté"
+    }
   },
   "dashboard": {
     "title": "Mon tableau de bord",
@@ -873,22 +1204,592 @@
   },
   "producers": {
     "title": "Nos Producteurs",
-    "subtitle": "Découvrez les producteurs engagés qui changent le monde.",
+    "subtitle": "Decouvrez les producteurs engages qui changent le monde.",
     "intro_title": "Nos Producteurs",
     "intro_description": "Rencontrez les hommes et les femmes qui cultivent l'avenir avec passion et respect de la terre.",
-    "discover": "Découvrir",
-    "no_producers": "Aucun producteur trouvé",
-    "no_producers_desc": "Revenez bientôt pour découvrir nos partenaires.",
+    "discover": "Decouvrir",
+    "no_producers": "Aucun producteur trouve",
+    "no_producers_desc": "Revenez bientot pour decouvrir nos partenaires.",
     "back_to_producers": "Tous les producteurs",
-    "about": "À propos",
+    "about": "A propos",
     "gallery": "Galerie",
     "certifications": "Certifications",
     "contact": "Contacter",
     "visit_website": "Visiter le site web",
-    "key_figures": "Chiffres clés",
+    "key_figures": "Chiffres cles",
     "annual_production": "Production annuelle",
     "surface": "Surface",
-    "employees": "Employés",
-    "since": "Depuis"
+    "employees": "Employes",
+    "since": "Depuis",
+    "default_name": "Producteur",
+    "no_description": "Aucune description disponible.",
+    "details_coming_soon": "Details bientot disponibles",
+    "producer_label": "Producteur engage",
+    "no_certifications": "Aucune certification renseignee pour le moment.",
+    "related_products": "Produits lies",
+    "related_projects": "Projets lies",
+    "location": "Localisation",
+    "default_product_name": "Produit",
+    "default_project_name": "Projet",
+    "no_contact_available": "Aucun contact public disponible pour le moment."
+  },
+  "brand_guidelines": {
+    "badge": "Système de design",
+    "title": "Guide de marque Make the Change",
+    "subtitle": "Référentiel officiel pour aligner l'identité visuelle, éditoriale et produit sur tous les points de contact.",
+    "last_updated": "Dernière mise à jour: février 2026",
+    "nav": {
+      "overview": "Vue d'ensemble",
+      "logo": "Logo",
+      "colors": "Couleurs",
+      "typography": "Typographie",
+      "voice": "Ton de voix",
+      "assets": "Ressources"
+    },
+    "metadata": {
+      "overview": {
+        "title": "Vue d'ensemble",
+        "description": "Principes de marque, gouvernance et cadre de cohérence pour Make the Change."
+      },
+      "logo": {
+        "title": "Logo",
+        "description": "Règles d'utilisation du logo, variantes officielles et exemples de mauvaises pratiques."
+      },
+      "colors": {
+        "title": "Couleurs",
+        "description": "Palette de marque, ratios de composition et correspondance avec les tokens CSS."
+      },
+      "typography": {
+        "title": "Typographie",
+        "description": "Échelle typographique, hiérarchie de lecture et bonnes pratiques rédactionnelles UI."
+      },
+      "voice": {
+        "title": "Ton de voix",
+        "description": "Principes éditoriaux et exemples de microcopy pour une communication cohérente."
+      },
+      "assets": {
+        "title": "Ressources",
+        "description": "Catalogue des fichiers de marque disponibles, statuts de livraison et accès au kit."
+      }
+    },
+    "overview": {
+      "eyebrow": "Fondations de marque",
+      "title": "Construire une marque cohérente sur tous les points de contact.",
+      "intro": "Ce cadre s applique au produit, au marketing, au support et aux communications partenaires. Toute nouvelle interface doit respecter ces principes avant livraison.",
+      "pillars": {
+        "trust": {
+          "title": "Confiance",
+          "description": "Privilégier une communication claire, vérifiable et orientée transparence."
+        },
+        "community": {
+          "title": "Collectif",
+          "description": "Mettre en avant les bénéfices partagés et la contribution de la communauté."
+        },
+        "innovation": {
+          "title": "Innovation utile",
+          "description": "Utiliser la technologie comme levier de simplicité, pas comme effet visuel gratuit."
+        },
+        "authenticity": {
+          "title": "Authenticité",
+          "description": "Valoriser le réel: producteurs, impacts mesurables, preuves terrain."
+        }
+      },
+      "principles_title": "Principes de décision",
+      "principles": {
+        "item1": "Une page doit rester lisible en moins de 5 secondes.",
+        "item2": "Les décisions visuelles doivent être justifiées par un objectif métier.",
+        "item3": "Toujours privilégier les tokens et composants partagés du design system.",
+        "item4": "Les contenus doivent être localisés et validés en FR/EN/NL.",
+        "item5": "Toute exception au guide doit être documentée et validée."
+      },
+      "governance_title": "Gouvernance",
+      "governance": {
+        "item1": "Product + Design valident les évolutions de guidelines.",
+        "item2": "Engineering vérifie la conformité technique avant merge.",
+        "item3": "Marketing valide la cohérence de ton et de message public."
+      }
+    },
+    "logo": {
+      "title": "Règles d'usage du logo",
+      "intro": "Le logo Make the Change est un actif prioritaire. Respecter strictement les variantes, dimensions minimales et zones de protection.",
+      "main_logo_title": "Logo principal",
+      "main_logo_description": "La version principale est utilisée sur les surfaces produit et marketing standard. Elle est prioritaire sur fond clair.",
+      "variations_title": "Variations autorisées",
+      "variations": {
+        "full": "Version complète",
+        "icon": "Icône seule",
+        "dark": "Version fond sombre",
+        "light": "Version fond clair"
+      },
+      "clear_space_title": "Zone de protection",
+      "clear_space_rule": "Conserver un espace libre minimum autour du logo équivalent à la hauteur du symbole principal.",
+      "min_size_title": "Tailles minimales",
+      "min_size_web": "Web: 80 px (version complète) / 60 px (icône).",
+      "min_size_print": "Print: 20 mm (version complète) / 15 mm (icône).",
+      "do_title": "À faire",
+      "do": {
+        "item1": "Utiliser uniquement les fichiers sources validés.",
+        "item2": "Maintenir un contraste élevé entre logo et arrière-plan.",
+        "item3": "Respecter les proportions originales dans tous les formats."
+      },
+      "dont_title": "À éviter",
+      "dont": {
+        "item1": "Déformer, incliner ou étirer le logo.",
+        "item2": "Modifier les couleurs hors palette autorisée.",
+        "item3": "Ajouter ombres, contours ou effets décoratifs.",
+        "item4": "Superposer le logo sur une image illisible sans support."
+      }
+    },
+    "colors": {
+      "title": "Système de couleurs",
+      "intro": "La palette est structurée pour garantir lisibilité, hiérarchie visuelle et reconnaissance de marque sur desktop et mobile.",
+      "ratio_title": "Ratio recommandé 60-30-10",
+      "ratio_description": "Utiliser majoritairement des tons neutres, renforcer la structure avec les couleurs primaires et réserver les accents aux actions clés.",
+      "ratio_neutral": "60% neutres",
+      "ratio_primary": "30% primaires",
+      "ratio_accent": "10% accents",
+      "core_palette_title": "Palette cœur de marque",
+      "core_palette_description": "Ces teintes constituent le socle de la charte. Les usages sont donnés à titre de référence produit.",
+      "palette": {
+        "emerald": {
+          "name": "Émeraude",
+          "role": "Couleur primaire action et confiance"
+        },
+        "night": {
+          "name": "Bleu nuit",
+          "role": "Texte principal et structures fortes"
+        },
+        "amber": {
+          "name": "Ambré",
+          "role": "Accent conversion et CTA secondaire"
+        },
+        "offwhite": {
+          "name": "Blanc cassé",
+          "role": "Fond principal et zones de respiration"
+        },
+        "terracotta": {
+          "name": "Terracotta",
+          "role": "Alerte modérée et signal éditorial"
+        },
+        "sage": {
+          "name": "Sauge",
+          "role": "Surfaces douces et sections informatives"
+        }
+      },
+      "tokens_title": "Correspondance avec les tokens UI",
+      "tokens_description": "Les couleurs de marque sont implémentées via les variables CSS et les thèmes disponibles dans l application.",
+      "theme_preview": {
+        "default": "Thème par défaut",
+        "ocean": "Variante Ocean",
+        "forest": "Variante Forest"
+      }
+    },
+    "typography": {
+      "title": "Système typographique",
+      "intro": "La hiérarchie textuelle doit rester stable entre pages marketing, écrans produit et supports externes.",
+      "scale_title": "Échelle typographique",
+      "scale_description": "Appliquer cette échelle pour conserver un rythme de lecture homogène dans toute l application.",
+      "weights_title": "Poids recommandés",
+      "weights_description": "Limiter le nombre de graisses sur un même écran. Utiliser Black/Bold pour la hiérarchie et Regular pour le contenu.",
+      "best_practices_title": "Bonnes pratiques",
+      "best_practices": {
+        "item1": "Privilégier un alignement à gauche pour les textes longs.",
+        "item2": "Maintenir un interlignage confortable (1.4 à 1.6).",
+        "item3": "Éviter les blocs entièrement en capitales hors labels courts.",
+        "item4": "Vérifier le contraste du texte dans chaque thème actif."
+      },
+      "sample_title": "Exemple de composition",
+      "sample_description": "Exemple de bloc éditorial conforme aux règles de hiérarchie et de lisibilité.",
+      "sample_heading": "Investir pour la nature, avec clarté.",
+      "sample_body": "Chaque message doit expliquer l action, son impact et la prochaine étape. La forme sert la compréhension.",
+      "sample_caption": "Label secondaire / information contextuelle",
+      "table": {
+        "heading_role": "Rôle",
+        "heading_size": "Taille",
+        "heading_usage": "Usage",
+        "rows": {
+          "h1": {
+            "label": "Titre H1",
+            "size": "36-48 px",
+            "usage": "Titres de page et messages héros"
+          },
+          "h2": {
+            "label": "Titre H2",
+            "size": "28-32 px",
+            "usage": "Titres de section"
+          },
+          "h3": {
+            "label": "Titre H3",
+            "size": "22-24 px",
+            "usage": "Sous-sections et cartes"
+          },
+          "body": {
+            "label": "Corps",
+            "size": "16 px",
+            "usage": "Contenu principal et descriptions"
+          },
+          "caption": {
+            "label": "Légende",
+            "size": "14 px",
+            "usage": "Aides contextuelles et métadonnées"
+          }
+        }
+      },
+      "weights_labels": {
+        "regular": "Normal 400",
+        "medium": "Moyen 500",
+        "semibold": "Semi-gras 600",
+        "bold": "Gras 700",
+        "black": "Noir 900"
+      }
+    },
+    "voice": {
+      "title": "Ton de voix",
+      "intro": "Le ton de Make the Change est chaleureux, fiable et orienté action concrète. Chaque microcopy doit refléter cette posture.",
+      "pillars_title": "5 piliers rédactionnels",
+      "pillars": {
+        "reassuring": {
+          "title": "Rassurant",
+          "description": "Expliquer simplement, réduire les ambiguïtés, éviter les promesses vagues."
+        },
+        "collective": {
+          "title": "Collectif",
+          "description": "Parler de contribution partagée et de bénéfices communs."
+        },
+        "innovative": {
+          "title": "Innovant",
+          "description": "Montrer la valeur de la tech avec un langage concret et compréhensible."
+        },
+        "authentic": {
+          "title": "Authentique",
+          "description": "Ancrer les messages dans des faits, des chiffres et des cas réels."
+        },
+        "optimistic": {
+          "title": "Optimiste",
+          "description": "Mettre en avant la progression et les prochaines étapes positives."
+        }
+      },
+      "microcopy_title": "Microcopy: exemples validés",
+      "microcopy_description": "Utiliser ces formulations comme référence pour les CTA, statuts, erreurs et onboarding.",
+      "microcopy_do_label": "À faire",
+      "microcopy_dont_label": "À éviter",
+      "examples": {
+        "cta": {
+          "label": "CTA principal",
+          "good": "Soutenir ce projet maintenant",
+          "bad": "Clique ici"
+        },
+        "status": {
+          "label": "Message de statut",
+          "good": "Contribution confirmée, impact en cours de calcul.",
+          "bad": "OK, c est bon."
+        },
+        "error": {
+          "label": "Message erreur",
+          "good": "Le paiement a échoué. Vérifiez vos informations et réessayez.",
+          "bad": "Erreur inconnue."
+        },
+        "onboarding": {
+          "label": "Onboarding",
+          "good": "Choisissez un premier projet pour démarrer votre impact.",
+          "bad": "Commencez ici."
+        }
+      },
+      "review_title": "Checklist de relecture éditoriale",
+      "review_items": {
+        "item1": "Le message explique clairement la prochaine action.",
+        "item2": "Le ton reste positif sans minimiser les contraintes réelles.",
+        "item3": "Le vocabulaire est cohérent avec la mission biodiversité."
+      }
+    },
+    "assets": {
+      "title": "Ressources et téléchargements",
+      "intro": "Cette section centralise les ressources marque disponibles pour les équipes produit, marketing et partenaires.",
+      "catalog_title": "Catalogue V1",
+      "catalog_description": "Le statut indique la disponibilité opérationnelle de chaque ressource.",
+      "status_ready": "Disponible",
+      "status_coming": "Bientôt disponible",
+      "status_internal": "Usage interne",
+      "items": {
+        "logo_kit": {
+          "name": "Logo kit principal",
+          "usage": "Usage web, social, print et signature produit",
+          "format": "SVG / PNG / PDF"
+        },
+        "social_templates": {
+          "name": "Templates social media",
+          "usage": "Posts Instagram, LinkedIn et stories",
+          "format": "Figma / PNG"
+        },
+        "presentation": {
+          "name": "Deck de présentation marque",
+          "usage": "Pitch partenaires et documents commerciaux",
+          "format": "PDF / PPTX"
+        },
+        "press_photos": {
+          "name": "Bibliothèque photo presse",
+          "usage": "Presse, partenaires institutionnels et RP",
+          "format": "JPG haute définition"
+        }
+      },
+      "download_title": "Téléchargements",
+      "download_description": "Les boutons seront activés dès validation finale du brand kit par les équipes Design + Marketing.",
+      "download_primary": "Télécharger le brand kit complet",
+      "download_secondary": "Télécharger les assets réseaux sociaux",
+      "note_title": "Note de gouvernance",
+      "note_description": "Toute diffusion externe doit utiliser la dernière version des assets publiée dans cette section."
+    },
+    "ui": {
+      "quick_links": "Liens rapides",
+      "view_guide": "Voir le guide",
+      "groups": {
+        "foundation": "Fondations",
+        "identity": "Identité",
+        "writing": "Rédaction",
+        "resources": "Ressources"
+      },
+      "brand_lockup": "make the change brand",
+      "top_nav": {
+        "downloads": "Téléchargements",
+        "help": "Aide",
+        "about": "À propos de Make the Change",
+        "careers": "Carrières"
+      }
+    }
+  },
+  "marketing_pages": {
+    "blog_post": {
+      "back_to_blog": "Retour au blog",
+      "author_label": "Auteur",
+      "published_label": "Publie le",
+      "all_articles": "Tous les articles"
+    },
+    "blog_list": {
+      "badge": "Blog & Actualites",
+      "title": "Explorez le futur de l'impact positif.",
+      "description": "Histoires inspirantes, analyses d experts et coulisses des projets pour comprendre notre impact collectif.",
+      "categories": {
+        "all": "Tous"
+      },
+      "recent_title": "Articles recents",
+      "active_filter": "Categorie active: {category}",
+      "empty_title": "Aucun article pour ce filtre",
+      "empty_description": "Essayez une autre categorie ou revenez plus tard."
+    },
+    "biodex": {
+      "meta": {
+        "title": "BioDex - Catalogue des especes",
+        "description": "Explorez les especes protegees par nos projets biodiversite."
+      },
+      "badge": "Encyclopedie du vivant",
+      "title": "BioDex",
+      "description": "Explorez la diversite du vivant. Decouvrez les especes protegees, leur habitat et leur role dans les ecosystemes.",
+      "results_count": "{shown} / {total} especes",
+      "search_placeholder": "Rechercher une espece, une famille...",
+      "filters": {
+        "label": "Filtres",
+        "all_statuses": "Tous les statuts"
+      },
+      "status": {
+        "NE": "Non evalue",
+        "DD": "Donnees insuffisantes",
+        "LC": "Preoccupation mineure",
+        "NT": "Quasi menace",
+        "VU": "Vulnerable",
+        "EN": "En danger",
+        "CR": "En danger critique",
+        "EW": "Eteint a l etat sauvage",
+        "EX": "Eteint"
+      },
+      "empty_title": "Le BioDex est encore vide",
+      "empty_description": "Les especes seront repertoriees ici des que nos premiers projets seront documentes.",
+      "empty_filtered_title": "Aucune espece ne correspond",
+      "empty_filtered_description": "Essayez un autre terme ou changez le filtre de conservation."
+    },
+    "faq": {
+      "meta": {
+        "title": "FAQ - Make the Change",
+        "description": "Questions frequentes sur la plateforme Make the Change."
+      },
+      "badge": "Help Center",
+      "title": "Questions frequentes",
+      "description": "Tout ce que vous devez savoir sur Make the Change, nos projets et votre impact.",
+      "search_placeholder": "Rechercher...",
+      "learn_more": "En savoir plus",
+      "empty_title": "Aucun resultat",
+      "empty_description": "Essayez un autre mot-cle ou contactez notre support.",
+      "footer_prompt": "Vous ne trouvez pas votre reponse ?",
+      "footer_cta": "Contactez notre support",
+      "items": {
+        "points": {
+          "category": "Concept",
+          "question": "Comment fonctionnent les points ?",
+          "answer": "Chaque euro investi dans un projet genere des points d impact. Ces points peuvent etre utilises sur le marketplace ou reinvestis."
+        },
+        "tracking": {
+          "category": "Transparence",
+          "question": "Puis-je suivre mon impact ?",
+          "answer": "Oui. Vous disposez d un suivi en temps reel pour visualiser les effets concrets de vos investissements."
+        },
+        "payment": {
+          "category": "Finance",
+          "question": "Quels moyens de paiement sont disponibles ?",
+          "answer": "Nous acceptons actuellement la carte bancaire et le virement. Le wallet impact sera active dans une prochaine version."
+        },
+        "profile": {
+          "category": "Compte",
+          "question": "A quoi servent les badges du profil ?",
+          "answer": "Les badges valorisent votre engagement. Vous pouvez rendre votre profil public pour partager votre progression."
+        }
+      }
+    },
+    "contact": {
+      "badge": "Toujours a l'ecoute",
+      "hero": {
+        "title_line1": "Parlons de",
+        "title_highlight": "l'avenir.",
+        "description_line1": "Une idee folle ? Un projet ambitieux ?",
+        "description_line2": "Construisons-le ensemble."
+      },
+      "email": {
+        "title_line1": "Envoyez-nous",
+        "title_line2": "un signal.",
+        "description": "Notre equipe est reactive. Reponse garantie sous 24h.",
+        "copy_label": "Copier l'adresse email"
+      },
+      "social": {
+        "title": "Social Hub",
+        "description": "Rejoignez la conversation et suivez nos impacts en temps reel.",
+        "twitter": {
+          "label": "Twitter / X",
+          "handle": "@makethechange"
+        },
+        "linkedin": {
+          "label": "LinkedIn",
+          "handle": "Make the Change"
+        },
+        "instagram": {
+          "label": "Instagram",
+          "handle": "@mtc_impact"
+        }
+      },
+      "faq_card": {
+        "title": "FAQ",
+        "description": "Reponses instantanees.",
+        "cta": "Consulter la FAQ"
+      },
+      "office": {
+        "city": "Paris, FR",
+        "label": "HQ & Innovation Lab",
+        "status": "Open",
+        "coordinates": "48.8566 N, 2.3522 E"
+      },
+      "cta": {
+        "title_line1": "Pret a",
+        "title_line2": "changer",
+        "title_line3": "le monde ?",
+        "description": "Rejoignez 50,000+ acteurs du changement des aujourd'hui.",
+        "primary": "Commencer maintenant"
+      }
+    },
+    "privacy": {
+      "badge": "Legal & Securite",
+      "hero": {
+        "title_line1": "Votre confiance",
+        "title_highlight": "est notre priorite.",
+        "description_line1": "Nous avons concu Make the CHANGE avec la confidentialite au coeur de l experience.",
+        "description_line2": "Transparence totale, zero compromis."
+      },
+      "cards": {
+        "minimal_collection": {
+          "title": "Collecte minimale",
+          "description": "Nous collectons uniquement les informations necessaires au compte, aux commandes et au suivi d impact."
+        },
+        "data_ownership": {
+          "title": "Vos donnees vous appartiennent.",
+          "description": "Nous ne vendons pas vos donnees. Jamais.",
+          "guarantee": "Garanti a 100%"
+        },
+        "security": {
+          "title": "Securite renforcee",
+          "description": "Les informations sensibles ne sont jamais exposees publiquement et sont protegees par chiffrement."
+        },
+        "contact": {
+          "title": "Des questions ?",
+          "description": "Notre equipe DPO est la pour vous.",
+          "cta": "Nous ecrire"
+        }
+      }
+    },
+    "terms": {
+      "badge": "Juridique",
+      "hero": {
+        "title_line1": "Conditions",
+        "title_highlight": "d'utilisation",
+        "description": "La transparence est au coeur de notre mission. Voici les regles qui regissent la plateforme."
+      },
+      "sections": {
+        "acceptance": {
+          "title": "Acceptation des conditions",
+          "body": "En utilisant <strong>Make the CHANGE</strong>, vous rejoignez une communaute engagee et acceptez integralement les presentes conditions d utilisation."
+        },
+        "evolution": {
+          "title": "Evolution de la plateforme",
+          "body": "Make the CHANGE est un projet vivant. Les contenus, points et mecanismes peuvent evoluer pour mieux servir la mission.",
+          "points": {
+            "item1": "Mises a jour regulieres pour ameliorer l experience",
+            "item2": "Transparence totale sur les changements majeurs"
+          }
+        },
+        "contact": {
+          "title": "Une question ?",
+          "body": "Notre equipe est disponible pour toute clarification sur ces conditions et vos usages de la plateforme.",
+          "cta": "contact@make-the-change.com"
+        }
+      }
+    }
+  },
+  "menu_page": {
+    "title": "Menu",
+    "user": {
+      "view_profile": "Voir mon profil"
+    },
+    "auth": {
+      "forgot_password": "Mot de passe oublié"
+    },
+    "sections": {
+      "account": "Mon espace",
+      "explore": "Explorer",
+      "shopping": "Shopping & activités",
+      "partners": "Partenaires"
+    },
+    "explore": {
+      "blog": "Blog",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "producers": "Producteurs",
+      "biodex": "BioDex"
+    },
+    "shopping": {
+      "challenges": "Défis"
+    },
+    "partner_space": "Espace partenaire",
+    "theme": "Thème de l'application",
+    "version": "Make the CHANGE v{version}"
+  },
+  "system_pages": {
+    "not_found": {
+      "title": "Page introuvable",
+      "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+      "home": "Accueil",
+      "explore": "Explorer"
+    },
+    "error": {
+      "title": "Une erreur est survenue",
+      "description": "Nous nous excusons pour ce désagrément. Veuillez réessayer ou retourner à l'accueil.",
+      "retry": "Réessayer",
+      "home": "Accueil",
+      "error_code": "Code erreur: {code}"
+    }
   }
 }

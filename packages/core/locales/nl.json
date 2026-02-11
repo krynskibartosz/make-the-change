@@ -45,7 +45,29 @@
     "explore_section": "Verkennen",
     "close_menu": "Menu sluiten",
     "open_cart": "Winkelwagen openen",
-    "cart": "Winkelwagen"
+    "cart": "Winkelwagen",
+    "brand_guidelines": "Merkrichtlijnen",
+    "discover": "Ontdekken",
+    "menu": "Menu",
+    "discover_menu": {
+      "title": "Ontdek Make the Change",
+      "sections": {
+        "concept": "Concept",
+        "experience": "Ervaring",
+        "help_resources": "Hulp & bronnen"
+      },
+      "items": {
+        "mission": "Onze missie",
+        "how_it_works": "Hoe het werkt",
+        "producers": "Onze producenten",
+        "challenges": "Uitdagingen",
+        "leaderboard": "Klassement",
+        "biodex": "BioDex",
+        "blog": "Blog",
+        "faq": "FAQ",
+        "contact": "Contact"
+      }
+    }
   },
   "home": {
     "hero": {
@@ -73,7 +95,8 @@
         "products": {
           "badge": "Milieuvriendelijk",
           "title": "Ethische Winkel",
-          "description": "Consumbeer beter met onze ambachtelijke producten."
+          "description": "Consumbeer beter met onze ambachtelijke producten.",
+          "cta": "Winkel bekijken"
         },
         "community": {
           "title": "Gemeenschap",
@@ -182,10 +205,21 @@
   },
   "checkout": {
     "title": "Afrekenen",
+    "hero": {
+      "badge": "Veilig afrekenen",
+      "description": "Rond je bestelling af in 3 stappen. {count} artikel(en) klaar om te bevestigen.",
+      "security_note": "Beveiligde transacties met realtime servercontrole.",
+      "shipping_note": "Snelle levering zonder extra kosten."
+    },
     "steps": {
       "cart": "Winkelwagen",
       "address": "Adres",
       "confirm": "Bevestigen",
+      "hints": {
+        "cart": "Controleer je artikelen en aantallen",
+        "address": "Vul je verzendadres in",
+        "confirm": "Kies je betaalmethode"
+      },
       "step_indicator": "Stap {current}/{total}"
     },
     "validation": {
@@ -227,10 +261,21 @@
       "title": "Samenvatting",
       "other_items": "+{count} ander(e) artikel(en)",
       "total": "Totaal",
-      "total_order": "Totaal bestelling"
+      "total_order": "Totaal bestelling",
+      "items_label": "{count} artikel(en)",
+      "shipping": "Verzending",
+      "shipping_free": "Gratis",
+      "payment_method": "Betaalmethode",
+      "saved_address": "Verzendadres",
+      "no_address": "Geen adres ingevuld",
+      "points_method": "Betaling met punten",
+      "card_method": "Kaart (simulatie)",
+      "sticky_note": "Je kunt je gegevens nog aanpassen voor de definitieve bevestiging."
     },
     "address": {
       "title": "Verzendadres",
+      "subtitle": "Vul een volledig adres in om de verwerking te versnellen.",
+      "preview": "Adresvoorbeeld",
       "labels": {
         "first_name": "Voornaam",
         "last_name": "Achternaam",
@@ -246,16 +291,62 @@
       "balance": "Saldo: {amount} ptn",
       "card": "Creditcard",
       "simulation": "Simulatie (Euro's)",
+      "selected": "Geselecteerd",
+      "points_help": "Directe betaling via je huidige saldo.",
+      "card_help": "Simulatie van betaling in euro's (testmodus).",
+      "preview_title": "Laatste controle",
       "confirmation_title": "Bevestiging",
       "current_balance": "Huidig saldo",
       "after_purchase": "Na aankoop",
-      "total_to_pay": "Totaal te betalen"
+      "total_to_pay": "Totaal te betalen",
+      "simulated_notice": "Er wordt geen echte betaling uitgevoerd."
     },
     "footer": {
       "no_hidden_fees": "Geen verborgen kosten.",
       "status": {
         "ok": "OK",
-        "insufficient": "Onvoldoende"
+        "insufficient": "Onvoldoende",
+        "update_required": "Update nodig"
+      }
+    },
+    "success": {
+      "badge": "Bestelling voltooid",
+      "title": "Bestelling bevestigd",
+      "subtitle": "Bedankt voor je aankoop. Referentie #{orderId}.",
+      "paid": "Betaald",
+      "date": "Datum",
+      "total": "Totaal",
+      "order_summary": "Besteloverzicht",
+      "fallback_product": "Product",
+      "more_items": "+{count} extra artikel(en)",
+      "actions": {
+        "orders": "Mijn bestellingen bekijken",
+        "continue": "Verder winkelen"
+      }
+    },
+    "cart_page": {
+      "snackbar": {
+        "cleared": "Winkelwagen geleegd",
+        "item_removed": "Artikel verwijderd",
+        "undo": "Ongedaan maken"
+      },
+      "continue_shopping": "Verder winkelen",
+      "badge": "Je winkelwagen",
+      "hero_title_prefix": "Impact",
+      "hero_title_highlight": "overzicht.",
+      "clear_cart": "Winkelwagen legen",
+      "out_of_stock_alert": "Een artikel is niet op voorraad.",
+      "subtotal": "Subtotaal",
+      "shipping": "Verzending",
+      "free_shipping": "Gratis",
+      "checkout": "Afrekenen",
+      "trust": {
+        "payment_secure": "Veilige betaling",
+        "impact": "100% Impact"
+      },
+      "instant_delivery": {
+        "title": "Directe levering",
+        "description": "Je impactcredits worden direct na bevestiging op je account bijgeschreven."
       }
     }
   },
@@ -297,18 +388,85 @@
       "invest_now": "Nu investeren",
       "share": "Delen"
     },
-    "empty": "Geen projecten gevonden"
+    "empty": "Geen projecten gevonden",
+    "detail_page": {
+      "back_to_list": "Terug naar de projectenlijst",
+      "cover": {
+        "status_active": "Financiering loopt",
+        "status_closed": "Gesloten",
+        "launched_on": "Gelanceerd op {date}"
+      },
+      "main": {
+        "story_title": "Verhaal van het project",
+        "gallery_title": "Fotogalerij",
+        "gallery_image_alt": "{name} - Afbeelding {index}",
+        "impact_title": "Verwachte impact",
+        "ecological": {
+          "title": "Ecologisch",
+          "description": "Overgang naar duurzame biologische landbouw"
+        },
+        "local": {
+          "title": "Lokaal",
+          "description": "Steun voor lokale economie en korte ketens"
+        },
+        "durable": {
+          "title": "Duurzaam",
+          "description": "Economische levensvatbaarheid op lange termijn voor de producent"
+        }
+      },
+      "sidebar": {
+        "status_closed": "Gesloten",
+        "collected": "Opgehaald",
+        "risk_prefix": "Investeren houdt risico in.",
+        "risk_learn_more": "Meer weten",
+        "investors": "Investeerders",
+        "days_remaining": "Dagen resterend",
+        "share_project": "Project delen",
+        "project_owner": "Projectdrager",
+        "verified": "Geverifieerd",
+        "visit_website": "Bezoek website"
+      }
+    },
+    "invest_page": {
+      "back_to_project": "Terug naar project",
+      "title": "Investeer in de toekomst",
+      "supporting": "Je steunt {project}",
+      "amount_label": "Hoeveel wil je investeren?",
+      "custom_amount_placeholder": "Vrij bedrag (min. €10)",
+      "impact_title": "Geschatte impact",
+      "impact_description": "~{trees} bomen geplant of beschermd",
+      "goal_label": "Projectdoel",
+      "contribution_add": "Jouw bijdrage voegt +{percent}% toe aan het doel",
+      "secure_payment": "100% veilige betaling",
+      "verified_project": "Geverifieerd project",
+      "processing": "Verwerken...",
+      "confirm": "Bevestigen",
+      "confirm_with_amount": "Bevestig {amount}",
+      "legal_prefix": "Door te bevestigen ga je akkoord met onze",
+      "legal_terms": "Algemene Investeringsvoorwaarden",
+      "legal_suffix": "Investeren houdt risico's in."
+    }
   },
   "products": {
     "title": "Onze winkel",
     "subtitle": "Ruil uw punten in voor duurzame producten van onze partners",
     "search_placeholder": "Producten zoeken...",
     "featured": "Uitgelicht",
+    "product_list": "producten",
     "filters": {
+      "title": "Filters",
+      "active_filters": "Actieve filters",
+      "search_label": "Zoeken",
+      "category_label": "Categorie",
+      "producer_label": "Producent",
+      "tag_label": "Tag",
+      "sort_label": "Sortering",
       "all_categories": "Alle categorieën",
       "all_producers": "Alle producenten",
+      "all_tags": "Alle tags",
       "sort_by": "Sorteren op",
-      "clear_filters": "Filters wissen"
+      "clear_filters": "Filters wissen",
+      "clear_all": "Alles wissen"
     },
     "sort": {
       "featured": "Uitgelicht",
@@ -320,6 +478,12 @@
     "empty_state": {
       "title": "Geen producten gevonden",
       "description": "Probeer uw filters of zoektermen aan te passen"
+    },
+    "pagination": {
+      "previous": "Vorige",
+      "next": "Volgende",
+      "page": "Pagina",
+      "of": "van"
     },
     "card": {
       "points": "punten",
@@ -339,6 +503,22 @@
       "producer": "Producent",
       "certifications": "Certificeringen",
       "exchange": "Inwisselen"
+    },
+    "detail_page": {
+      "stock_available": "{count} beschikbaar",
+      "authentic_badge": "Authentiek product",
+      "hero_product_badge": "Uitgelicht product",
+      "or_points": "of {points} punten",
+      "visit_website": "Bezoek website",
+      "back_to_products": "Terug naar winkel",
+      "cta": {
+        "badge": "Duurzame impact",
+        "title_line1": "Steun",
+        "title_line2": "lokale producenten.",
+        "description": "Elke aankoop is een stem voor een duurzamere en eerlijkere toekomst.",
+        "primary": "Ontdek meer producten",
+        "secondary": "Meer informatie"
+      }
     }
   },
   "footer": {
@@ -357,7 +537,8 @@
     "rights_reserved": "Alle rechten voorbehouden.",
     "leaderboard": "Klassement",
     "blog": "Blog",
-    "address": "Brussel, België"
+    "address": "Brussel, België",
+    "brand_guidelines": "Merkrichtlijnen"
   },
   "profile": {
     "title": "Mijn profiel",
@@ -417,22 +598,88 @@
     "intro": "Make the CHANGE is een innovatief platform dat betrokken burgers verbindt met concrete biodiversiteitsprojecten.",
     "mission": {
       "title": "Onze missie",
-      "description": "Biodiversiteitsinvesteringen democratiseren door ze toegankelijk, transparant en lonend te maken."
+      "description": "Biodiversiteitsinvesteringen democratiseren door ze toegankelijk, transparant en lonend te maken.",
+      "heading": {
+        "line1": "Democratiseer",
+        "highlight": "ecologische impact."
+      },
+      "metrics": {
+        "transparency": "Transparant",
+        "active_projects": "Actieve Projecten"
+      },
+      "image_alt": "Biodiversiteitsproject",
+      "community": {
+        "title": "Gemeenschap",
+        "description": "Betrokken voor morgen"
+      }
     },
     "values": {
       "title": "Onze waarden",
       "transparency": {
         "title": "Transparantie",
-        "description": "Realtime tracking van uw investeringsimpact."
+        "description": "Realtime tracking van uw investeringsimpact.",
+        "verified_label": "Blockchain Verified"
       },
       "impact": {
         "title": "Impact",
-        "description": "Concrete projecten met meetbare resultaten."
+        "description": "Concrete projecten met meetbare resultaten.",
+        "metric_label": "Efficientiewinst"
       },
       "community": {
         "title": "Gemeenschap",
         "description": "Een betrokken gemeenschap voor biodiversiteit."
+      },
+      "section_badge": "Onze pijlers",
+      "section_heading": {
+        "line1": "Waarden verankerd in",
+        "highlight": "concrete actie."
+      },
+      "section_description": "Wij blijven niet bij beloften. Elke functie van het platform is ontworpen om echte impact te maximaliseren.",
+      "innovation": {
+        "title": "Innovatie",
+        "description": "Tech for Good: AI, satelliet en big data in dienst van de natuur.",
+        "badges": {
+          "ai": "AI",
+          "iot": "IoT"
+        }
       }
+    },
+    "hero": {
+      "badge": "Ons Verhaal",
+      "cards": {
+        "global": {
+          "title": "Global",
+          "subtitle": "Impact"
+        },
+        "nature": "Natuur",
+        "social": "Sociaal"
+      }
+    },
+    "team": {
+      "title": "Het visionaire team",
+      "subtitle": "Ontmoet de mensen die ecologische ambitie omzetten in realiteit.",
+      "gregory": {
+        "badge": "Leiderschap",
+        "role": "CEO & Medeoprichter",
+        "quote": "\"Ecologie mag geen beperking meer zijn, maar een kans.\"",
+        "bio": "Als gepassioneerde ondernemer bouwt Gregory al tien jaar bruggen tussen technologische innovatie en duurzame impact. Zijn visie: een ecosysteem waarin elke individuele actie leidt tot concrete biodiversiteitsherstel wereldwijd."
+      },
+      "bartosz": {
+        "badge": "Technologie",
+        "role": "CTO & Medeoprichter",
+        "quote": "\"Transparantie is geen optie, het is de basis van vertrouwen.\"",
+        "bio": "Als architect van het onzichtbare vertaalt Bartosz blockchaincomplexiteit naar een vloeiende en veilige gebruikerservaring. Hij zorgt ervoor dat elke regel code de missie ondersteunt: de integriteit en impact van elke investering garanderen."
+      }
+    },
+    "cta": {
+      "badge": "Sluit je aan bij de beweging",
+      "title": {
+        "line1": "Samen beschermen we",
+        "line2": "ons erfgoed."
+      },
+      "description": "Elke actie telt. Zet jouw betrokkenheid om in echte, meetbare impact voor biodiversiteit.",
+      "primary": "Nu starten",
+      "secondary": "Projecten bekijken"
     }
   },
   "how_it_works": {
@@ -441,15 +688,30 @@
     "steps": {
       "choose": {
         "title": "1. Kies een project",
-        "description": "Blader door onze catalogus van geverifieerde projecten en selecteer de projecten die u belangrijk vindt."
+        "description": "Blader door onze catalogus van geverifieerde projecten en selecteer de projecten die u belangrijk vindt.",
+        "badges": {
+          "verified_catalog": "Geverifieerde catalogus",
+          "advanced_filters": "Geavanceerde filters"
+        }
       },
       "invest": {
         "title": "2. Investeer",
-        "description": "Steun projecten met eenmalige investeringen of een maandelijks abonnement."
+        "description": "Steun projecten met eenmalige investeringen of een maandelijks abonnement.",
+        "features": {
+          "payment_secure": "100% veilige betaling",
+          "total_transparency": "Volledige transparantie van transacties",
+          "measurable_impact": "Meetbare impact vanaf €1"
+        }
       },
       "enjoy": {
         "title": "3. Geniet",
-        "description": "Volg de impact van uw investeringen en ruil uw punten in voor producten."
+        "description": "Volg de impact van uw investeringen en ruil uw punten in voor producten.",
+        "metrics": {
+          "points": "Punten",
+          "rewards": "Beloningen",
+          "badges": "Badges",
+          "impact": "Impact"
+        }
       }
     },
     "tiers": {
@@ -457,18 +719,53 @@
       "explorer": {
         "title": "Verkenner",
         "price": "Gratis",
-        "description": "Ontdek het platform zonder verplichting"
+        "description": "Ontdek het platform zonder verplichting",
+        "features": {
+          "access_projects": "Toegang tot alle projecten",
+          "realtime_tracking": "Realtime impactopvolging",
+          "monthly_newsletter": "Exclusieve maandelijkse nieuwsbrief"
+        },
+        "cta": "Start je avontuur"
       },
       "protector": {
         "title": "Beschermer",
         "price": "Vanaf €50",
-        "description": "Eenmalige investeringen met bonus"
+        "description": "Eenmalige investeringen met bonus",
+        "badge": "Meest gekozen",
+        "features": {
+          "all_explorer": "Alles van Verkenner inbegrepen",
+          "points_bonus": "Puntenbonus (30-50%)",
+          "investment_certificate": "Officieel investeringscertificaat",
+          "priority_access": "Prioritaire toegang tot projecten"
+        },
+        "cta": "Word Beschermer"
       },
       "ambassador": {
         "title": "Ambassadeur",
         "price": "Vanaf €18/maand",
-        "description": "Premium abonnement met exclusieve voordelen"
-      }
+        "description": "Premium abonnement met exclusieve voordelen",
+        "features": {
+          "all_protector": "Alles van Beschermer inbegrepen",
+          "monthly_points": "Automatische maandelijkse punten",
+          "events": "Exclusieve events & meetups",
+          "vip_support": "Prioritaire VIP-support"
+        },
+        "cta": "Word elite-lid"
+      },
+      "per_month": "/maand"
+    },
+    "interactive_badge": "Interactieve gids",
+    "cta": {
+      "title_prefix": "Klaar om",
+      "title_highlight": "het verschil te maken?",
+      "description": "Sluit je aan bij een community van duizenden investeerders die hun spaargeld al omzetten in concrete impact.",
+      "primary": "Maak mijn account",
+      "secondary": "Bekijk projecten"
+    },
+    "trust": {
+      "secure": "Veilig",
+      "support": "Support",
+      "entry_fee": "Instapkost"
     }
   },
   "admin": {
@@ -769,6 +1066,654 @@
     },
     "orders": {
       "title": "Bestellingen"
+    }
+  },
+  "brand_guidelines": {
+    "badge": "Designsysteem",
+    "title": "Merkrichtlijnen Make the Change",
+    "subtitle": "Officieel referentiekader om visuele identiteit, schrijfstijl en productuitvoering op elkaar af te stemmen.",
+    "last_updated": "Laatste update: februari 2026",
+    "nav": {
+      "overview": "Overzicht",
+      "logo": "Logo",
+      "colors": "Kleuren",
+      "typography": "Typografie",
+      "voice": "Schrijfstijl",
+      "assets": "Middelen"
+    },
+    "metadata": {
+      "overview": {
+        "title": "Overzicht",
+        "description": "Merkprincipes, governance en consistentiekader voor Make the Change."
+      },
+      "logo": {
+        "title": "Logo",
+        "description": "Regels voor logogebruik, goedgekeurde varianten en veelvoorkomende fouten."
+      },
+      "colors": {
+        "title": "Kleuren",
+        "description": "Merkpalet, compositieratio en koppeling met UI CSS-tokens."
+      },
+      "typography": {
+        "title": "Typografie",
+        "description": "Typografische schaal, leeshiërarchie en best practices voor UI-teksten."
+      },
+      "voice": {
+        "title": "Schrijfstijl",
+        "description": "Redactionele principes en microcopy-voorbeelden voor consistente communicatie."
+      },
+      "assets": {
+        "title": "Middelen",
+        "description": "Catalogus van beschikbare merkbestanden, status en toegang tot de kit."
+      }
+    },
+    "overview": {
+      "eyebrow": "Merkfundamenten",
+      "title": "Bouw een consistent merk over alle touchpoints heen.",
+      "intro": "Dit kader geldt voor product, marketing, support en partnercommunicatie. Elke nieuwe interface moet hieraan voldoen voor release.",
+      "pillars": {
+        "trust": {
+          "title": "Vertrouwen",
+          "description": "Communiceer helder, controleerbaar en transparant."
+        },
+        "community": {
+          "title": "Collectieve impact",
+          "description": "Benadruk gedeelde waarde en de rol van de community."
+        },
+        "innovation": {
+          "title": "Nuttige innovatie",
+          "description": "Gebruik technologie om te vereenvoudigen, niet om te overbelasten."
+        },
+        "authenticity": {
+          "title": "Authenticiteit",
+          "description": "Werk met echte producenten, meetbare impact en concrete bewijzen."
+        }
+      },
+      "principles_title": "Beslisprincipes",
+      "principles": {
+        "item1": "Een pagina moet binnen 5 seconden begrijpelijk zijn.",
+        "item2": "Visuele keuzes moeten een bedrijfsdoel ondersteunen.",
+        "item3": "Gebruik altijd gedeelde design-system tokens en componenten.",
+        "item4": "Content moet gelokaliseerd en gevalideerd zijn in FR/EN/NL.",
+        "item5": "Elke uitzondering op deze gids moet gedocumenteerd en goedgekeurd zijn."
+      },
+      "governance_title": "Governance",
+      "governance": {
+        "item1": "Product + Design keuren updates van richtlijnen goed.",
+        "item2": "Engineering valideert technische conformiteit voor merge.",
+        "item3": "Marketing valideert toon en boodschap voor publieke communicatie."
+      }
+    },
+    "logo": {
+      "title": "Regels voor logogebruik",
+      "intro": "Het Make the Change logo is een kernasset. Volg strikt de varianten, minimale afmetingen en vrijruimte.",
+      "main_logo_title": "Primair logo",
+      "main_logo_description": "De primaire versie gebruik je op standaard product- en marketingsurfaces. Dit is de default op lichte achtergronden.",
+      "variations_title": "Toegestane varianten",
+      "variations": {
+        "full": "Volledige versie",
+        "icon": "Alleen icoon",
+        "dark": "Versie voor donkere achtergrond",
+        "light": "Versie voor lichte achtergrond"
+      },
+      "clear_space_title": "Vrije ruimte",
+      "clear_space_rule": "Houd rondom het logo minimaal vrije ruimte gelijk aan de hoogte van het hoofdicoon.",
+      "min_size_title": "Minimale afmetingen",
+      "min_size_web": "Web: 80 px (volledige versie) / 60 px (icoon).",
+      "min_size_print": "Print: 20 mm (volledige versie) / 15 mm (icoon).",
+      "do_title": "Doen",
+      "do": {
+        "item1": "Gebruik uitsluitend goedgekeurde bronbestanden.",
+        "item2": "Behoud voldoende contrast met de achtergrond.",
+        "item3": "Respecteer altijd de originele proporties."
+      },
+      "dont_title": "Niet doen",
+      "dont": {
+        "item1": "Het logo uitrekken, kantelen of roteren.",
+        "item2": "Kleuren aanpassen buiten het toegestane palet.",
+        "item3": "Schaduwen, outlines of decoratieve effecten toevoegen.",
+        "item4": "Plaatsen op onleesbare beelden zonder ondersteunende achtergrond."
+      }
+    },
+    "colors": {
+      "title": "Kleursysteem",
+      "intro": "Het palet is opgebouwd voor leesbaarheid, visuele hiërarchie en merkherkenning op desktop en mobiel.",
+      "ratio_title": "Aanbevolen 60-30-10 verhouding",
+      "ratio_description": "Gebruik neutrale tonen als basis, primair voor structuur en accenten alleen voor belangrijke acties.",
+      "ratio_neutral": "60% neutraal",
+      "ratio_primary": "30% primair",
+      "ratio_accent": "10% accent",
+      "core_palette_title": "Kernpalet van het merk",
+      "core_palette_description": "Deze kleuren vormen de basis van de identiteit. De gebruiksrollen volgen de huidige productconventies.",
+      "palette": {
+        "emerald": {
+          "name": "Smaragd",
+          "role": "Primaire actie- en vertrouwenskleur"
+        },
+        "night": {
+          "name": "Nachtblauw",
+          "role": "Hoofdtekst en sterke structurele vlakken"
+        },
+        "amber": {
+          "name": "Amber",
+          "role": "Conversie-accent en secundaire CTA"
+        },
+        "offwhite": {
+          "name": "Gebroken wit",
+          "role": "Hoofdachtergrond en visuele rust"
+        },
+        "terracotta": {
+          "name": "Terracotta",
+          "role": "Gematigde waarschuwing en redactioneel signaal"
+        },
+        "sage": {
+          "name": "Salie",
+          "role": "Zachte vlakken en informatieve secties"
+        }
+      },
+      "tokens_title": "Koppeling met UI-tokens",
+      "tokens_description": "Merkkleuren zijn geïmplementeerd via CSS-variabelen en beschikbare thema s in de applicatie.",
+      "theme_preview": {
+        "default": "Standaardthema",
+        "ocean": "Ocean-variant",
+        "forest": "Forest-variant"
+      }
+    },
+    "typography": {
+      "title": "Typografisch systeem",
+      "intro": "Teksthiërarchie moet consistent blijven tussen marketingpagina s, productschermen en externe materialen.",
+      "scale_title": "Typografische schaal",
+      "scale_description": "Gebruik deze schaal om overal hetzelfde leesritme te behouden.",
+      "weights_title": "Aanbevolen gewichten",
+      "weights_description": "Beperk het aantal gewichten per scherm. Gebruik Black/Bold voor hiërarchie en Regular voor inhoud.",
+      "best_practices_title": "Best practices",
+      "best_practices": {
+        "item1": "Gebruik links uitlijnen voor langere teksten.",
+        "item2": "Hanteer comfortabele regelafstand (1.4 tot 1.6).",
+        "item3": "Vermijd volledige kapitalen buiten korte labels.",
+        "item4": "Controleer tekstcontrast in elk actief thema."
+      },
+      "sample_title": "Voorbeeldcompositie",
+      "sample_description": "Voorbeeld van een tekstblok dat voldoet aan hiërarchie- en leesbaarheidsregels.",
+      "sample_heading": "Investeer in natuur met helderheid.",
+      "sample_body": "Elke boodschap moet de actie, impact en volgende stap uitleggen. Vorm ondersteunt begrip.",
+      "sample_caption": "Secundair label / contextinformatie",
+      "table": {
+        "heading_role": "Rol",
+        "heading_size": "Grootte",
+        "heading_usage": "Gebruik",
+        "rows": {
+          "h1": {
+            "label": "Kop H1",
+            "size": "36-48 px",
+            "usage": "Paginatitels en hero-boodschappen"
+          },
+          "h2": {
+            "label": "Kop H2",
+            "size": "28-32 px",
+            "usage": "Sectietitels"
+          },
+          "h3": {
+            "label": "Kop H3",
+            "size": "22-24 px",
+            "usage": "Subsecties en kaarten"
+          },
+          "body": {
+            "label": "Body",
+            "size": "16 px",
+            "usage": "Hoofdinhoud en beschrijvingen"
+          },
+          "caption": {
+            "label": "Caption",
+            "size": "14 px",
+            "usage": "Contextuele hulptekst en metadata"
+          }
+        }
+      },
+      "weights_labels": {
+        "regular": "Normaal 400",
+        "medium": "Medium 500",
+        "semibold": "Semi-vet 600",
+        "bold": "Vet 700",
+        "black": "Zwart 900"
+      }
+    },
+    "voice": {
+      "title": "Schrijfstijl",
+      "intro": "De stem van Make the Change is warm, betrouwbaar en actiegericht. Elke microcopy moet dat uitstralen.",
+      "pillars_title": "5 redactionele pijlers",
+      "pillars": {
+        "reassuring": {
+          "title": "Geruststellend",
+          "description": "Leg duidelijk uit, verminder ambiguiteit en vermijd vage claims."
+        },
+        "collective": {
+          "title": "Collectief",
+          "description": "Benadruk gedeelde bijdrage en gezamenlijke resultaten."
+        },
+        "innovative": {
+          "title": "Innovatief",
+          "description": "Toon de waarde van technologie in begrijpelijke taal."
+        },
+        "authentic": {
+          "title": "Authentiek",
+          "description": "Baseer boodschappen op feiten, cijfers en praktijk."
+        },
+        "optimistic": {
+          "title": "Optimistisch",
+          "description": "Benadruk vooruitgang en concrete positieve vervolgstappen."
+        }
+      },
+      "microcopy_title": "Microcopy: goedgekeurde voorbeelden",
+      "microcopy_description": "Gebruik deze formuleringen als referentie voor CTA s, statussen, fouten en onboarding.",
+      "microcopy_do_label": "Doen",
+      "microcopy_dont_label": "Vermijden",
+      "examples": {
+        "cta": {
+          "label": "Primaire CTA",
+          "good": "Steun dit project nu",
+          "bad": "Klik hier"
+        },
+        "status": {
+          "label": "Statusbericht",
+          "good": "Bijdrage bevestigd, impact wordt berekend.",
+          "bad": "OK, klaar."
+        },
+        "error": {
+          "label": "Foutmelding",
+          "good": "Betaling mislukt. Controleer je gegevens en probeer opnieuw.",
+          "bad": "Onbekende fout."
+        },
+        "onboarding": {
+          "label": "Onboarding",
+          "good": "Kies je eerste project om je impacttraject te starten.",
+          "bad": "Begin hier."
+        }
+      },
+      "review_title": "Checklist redactionele review",
+      "review_items": {
+        "item1": "De boodschap maakt de volgende actie duidelijk.",
+        "item2": "De toon blijft positief zonder echte beperkingen te verbergen.",
+        "item3": "Woordgebruik blijft consistent met de biodiversiteitsmissie."
+      }
+    },
+    "assets": {
+      "title": "Middelen en downloads",
+      "intro": "Deze sectie centraliseert merkresources voor product-, marketing- en partnerteams.",
+      "catalog_title": "V1-catalogus",
+      "catalog_description": "De status geeft de operationele beschikbaarheid van elke resource aan.",
+      "status_ready": "Beschikbaar",
+      "status_coming": "Binnenkort beschikbaar",
+      "status_internal": "Intern gebruik",
+      "items": {
+        "logo_kit": {
+          "name": "Kern logo-kit",
+          "usage": "Gebruik voor web, social, print en productsignatuur",
+          "format": "SVG / PNG / PDF"
+        },
+        "social_templates": {
+          "name": "Social media templates",
+          "usage": "Instagram, LinkedIn en story-content",
+          "format": "Figma / PNG"
+        },
+        "presentation": {
+          "name": "Merkpresentatie deck",
+          "usage": "Partnerpitches en commerciële documentatie",
+          "format": "PDF / PPTX"
+        },
+        "press_photos": {
+          "name": "Persfotobibliotheek",
+          "usage": "Pers, institutionele partners en PR",
+          "format": "Hoge resolutie JPG"
+        }
+      },
+      "download_title": "Downloads",
+      "download_description": "Knoppen worden geactiveerd zodra de definitieve brand kit is gevalideerd door Design + Marketing.",
+      "download_primary": "Download volledige brand kit",
+      "download_secondary": "Download social media assets",
+      "note_title": "Governance-opmerking",
+      "note_description": "Elke externe communicatie moet de nieuwste versie uit deze sectie gebruiken."
+    },
+    "ui": {
+      "quick_links": "Snelle links",
+      "view_guide": "Bekijk gids",
+      "groups": {
+        "foundation": "Fundament",
+        "identity": "Identiteit",
+        "writing": "Schrijven",
+        "resources": "Bronnen"
+      },
+      "brand_lockup": "make the change brand",
+      "top_nav": {
+        "downloads": "Downloads",
+        "help": "Help",
+        "about": "Over Make the Change",
+        "careers": "Carrières"
+      }
+    }
+  },
+  "producers": {
+    "title": "Onze Producenten",
+    "subtitle": "Ontdek de betrokken producenten die echte impact realiseren.",
+    "intro_title": "Onze Producenten",
+    "intro_description": "Maak kennis met de mensen die met respect voor bodem en biodiversiteit aan de toekomst bouwen.",
+    "discover": "Ontdekken",
+    "no_producers": "Geen producent gevonden",
+    "no_producers_desc": "Kom binnenkort terug om onze partners te ontdekken.",
+    "back_to_producers": "Alle producenten",
+    "about": "Over",
+    "gallery": "Galerij",
+    "certifications": "Certificeringen",
+    "contact": "Contact",
+    "visit_website": "Website bezoeken",
+    "key_figures": "Kerncijfers",
+    "annual_production": "Jaarlijkse productie",
+    "surface": "Oppervlakte",
+    "employees": "Medewerkers",
+    "since": "Sinds",
+    "default_name": "Producent",
+    "no_description": "Geen beschrijving beschikbaar.",
+    "details_coming_soon": "Details volgen binnenkort",
+    "producer_label": "Betrokken producent",
+    "no_certifications": "Nog geen certificeringen beschikbaar.",
+    "related_products": "Gerelateerde producten",
+    "related_projects": "Gerelateerde projecten",
+    "location": "Locatie",
+    "default_product_name": "Product",
+    "default_project_name": "Project",
+    "no_contact_available": "Momenteel geen publiek contact beschikbaar."
+  },
+  "marketing_pages": {
+    "blog_post": {
+      "back_to_blog": "Terug naar blog",
+      "author_label": "Auteur",
+      "published_label": "Gepubliceerd op",
+      "all_articles": "Alle artikelen"
+    },
+    "blog_list": {
+      "badge": "Blog & Updates",
+      "title": "Verken de toekomst van positieve impact.",
+      "description": "Inspirerende verhalen, expertinzichten en context achter onze impactprojecten.",
+      "categories": {
+        "all": "Alle"
+      },
+      "recent_title": "Recente artikelen",
+      "active_filter": "Actieve categorie: {category}",
+      "empty_title": "Geen artikel voor dit filter",
+      "empty_description": "Probeer een andere categorie of kom later terug."
+    },
+    "biodex": {
+      "meta": {
+        "title": "BioDex - Soortencatalogus",
+        "description": "Ontdek de soorten die door onze biodiversiteitsprojecten worden beschermd."
+      },
+      "badge": "Levende encyclopedie",
+      "title": "BioDex",
+      "description": "Verken biodiversiteit, ontdek beschermde soorten en hun rol in ecosystemen.",
+      "results_count": "{shown} / {total} soorten",
+      "search_placeholder": "Zoek op soort of familie...",
+      "filters": {
+        "label": "Filters",
+        "all_statuses": "Alle statussen"
+      },
+      "status": {
+        "NE": "Niet geevalueerd",
+        "DD": "Onvoldoende gegevens",
+        "LC": "Niet bedreigd",
+        "NT": "Bijna bedreigd",
+        "VU": "Kwetsbaar",
+        "EN": "Bedreigd",
+        "CR": "Ernstig bedreigd",
+        "EW": "Uitgestorven in het wild",
+        "EX": "Uitgestorven"
+      },
+      "empty_title": "BioDex is nog leeg",
+      "empty_description": "Soorten verschijnen hier zodra projecten zijn gedocumenteerd.",
+      "empty_filtered_title": "Geen soorten gevonden",
+      "empty_filtered_description": "Probeer een andere zoekterm of filter."
+    },
+    "faq": {
+      "meta": {
+        "title": "FAQ - Make the Change",
+        "description": "Veelgestelde vragen over Make the Change."
+      },
+      "badge": "Help Center",
+      "title": "Veelgestelde vragen",
+      "description": "Alles wat je moet weten over Make the Change en jouw impact.",
+      "search_placeholder": "Zoeken...",
+      "learn_more": "Meer weten",
+      "empty_title": "Geen resultaten",
+      "empty_description": "Probeer een ander trefwoord of neem contact op met support.",
+      "footer_prompt": "Niet gevonden wat je zocht?",
+      "footer_cta": "Contacteer support",
+      "items": {
+        "points": {
+          "category": "Concept",
+          "question": "Hoe werken punten?",
+          "answer": "Elke euro die je investeert genereert impactpunten. Je kunt ze gebruiken in de marketplace of opnieuw investeren."
+        },
+        "tracking": {
+          "category": "Transparantie",
+          "question": "Kan ik mijn impact volgen?",
+          "answer": "Ja. Je krijgt realtime opvolging zodat je de concrete impact van je investering ziet."
+        },
+        "payment": {
+          "category": "Financien",
+          "question": "Welke betaalmethoden zijn beschikbaar?",
+          "answer": "We ondersteunen momenteel kaartbetalingen en overschrijvingen. De impact-wallet volgt in een volgende release."
+        },
+        "profile": {
+          "category": "Account",
+          "question": "Waarvoor dienen profielbadges?",
+          "answer": "Badges tonen je engagement. Je kunt je profiel openbaar maken om je vooruitgang te delen."
+        }
+      }
+    },
+    "contact": {
+      "badge": "Altijd bereikbaar",
+      "hero": {
+        "title_line1": "Laten we praten over",
+        "title_highlight": "de toekomst.",
+        "description_line1": "Een gedurfd idee? Een ambitieus project?",
+        "description_line2": "Laten we het samen bouwen."
+      },
+      "email": {
+        "title_line1": "Stuur ons",
+        "title_line2": "een signaal.",
+        "description": "Ons team reageert snel. Antwoord binnen 24u gegarandeerd.",
+        "copy_label": "E-mailadres kopieren"
+      },
+      "social": {
+        "title": "Social Hub",
+        "description": "Volg het gesprek en onze impact in realtime.",
+        "twitter": {
+          "label": "Twitter / X",
+          "handle": "@makethechange"
+        },
+        "linkedin": {
+          "label": "LinkedIn",
+          "handle": "Make the Change"
+        },
+        "instagram": {
+          "label": "Instagram",
+          "handle": "@mtc_impact"
+        }
+      },
+      "faq_card": {
+        "title": "FAQ",
+        "description": "Snelle antwoorden.",
+        "cta": "FAQ openen"
+      },
+      "office": {
+        "city": "Paris, FR",
+        "label": "HQ & Innovation Lab",
+        "status": "Open",
+        "coordinates": "48.8566 N, 2.3522 E"
+      },
+      "cta": {
+        "title_line1": "Klaar om",
+        "title_line2": "de wereld",
+        "title_line3": "te veranderen?",
+        "description": "Sluit je vandaag aan bij 50.000+ changemakers.",
+        "primary": "Nu starten"
+      }
+    },
+    "privacy": {
+      "badge": "Juridisch & Veiligheid",
+      "hero": {
+        "title_line1": "Jouw vertrouwen",
+        "title_highlight": "is onze prioriteit.",
+        "description_line1": "Make the CHANGE is ontworpen met privacy als kern van de ervaring.",
+        "description_line2": "Volledige transparantie, geen compromissen."
+      },
+      "cards": {
+        "minimal_collection": {
+          "title": "Minimale dataverzameling",
+          "description": "We verzamelen enkel gegevens die nodig zijn voor account, bestellingen en impactopvolging."
+        },
+        "data_ownership": {
+          "title": "Jouw data blijft van jou.",
+          "description": "We verkopen je data nooit.",
+          "guarantee": "100% gegarandeerd"
+        },
+        "security": {
+          "title": "Versterkte beveiliging",
+          "description": "Gevoelige informatie wordt nooit publiek getoond en blijft beschermd via encryptie."
+        },
+        "contact": {
+          "title": "Vragen?",
+          "description": "Ons DPO-team helpt je graag verder.",
+          "cta": "Contact opnemen"
+        }
+      }
+    },
+    "terms": {
+      "badge": "Juridisch",
+      "hero": {
+        "title_line1": "Gebruiks",
+        "title_highlight": "voorwaarden",
+        "description": "Transparantie staat centraal in onze missie. Dit zijn de regels van het platform."
+      },
+      "sections": {
+        "acceptance": {
+          "title": "Aanvaarding van de voorwaarden",
+          "body": "Door <strong>Make the CHANGE</strong> te gebruiken, sluit je je aan bij een betrokken community en aanvaard je deze voorwaarden volledig."
+        },
+        "evolution": {
+          "title": "Evolutie van het platform",
+          "body": "Make the CHANGE is een levend project. Inhoud, punten en mechanismen kunnen evolueren om de missie beter te ondersteunen.",
+          "points": {
+            "item1": "Regelmatige updates om de ervaring te verbeteren",
+            "item2": "Volledige transparantie over grote wijzigingen"
+          }
+        },
+        "contact": {
+          "title": "Een vraag?",
+          "body": "Ons team is beschikbaar voor elke verduidelijking over deze voorwaarden en het gebruik van het platform.",
+          "cta": "contact@make-the-change.com"
+        }
+      }
+    }
+  },
+  "menu_page": {
+    "title": "Menu",
+    "user": {
+      "view_profile": "Bekijk mijn profiel"
+    },
+    "auth": {
+      "forgot_password": "Wachtwoord vergeten"
+    },
+    "sections": {
+      "account": "Mijn ruimte",
+      "explore": "Verkennen",
+      "shopping": "Winkelen & activiteiten",
+      "partners": "Partners"
+    },
+    "explore": {
+      "blog": "Blog",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "producers": "Producenten",
+      "biodex": "BioDex"
+    },
+    "shopping": {
+      "challenges": "Uitdagingen"
+    },
+    "partner_space": "Partnerruimte",
+    "theme": "App-thema",
+    "version": "Make the CHANGE v{version}"
+  },
+  "system_pages": {
+    "not_found": {
+      "title": "Pagina niet gevonden",
+      "description": "De pagina die u zoekt bestaat niet of is verplaatst.",
+      "home": "Home",
+      "explore": "Verkennen"
+    },
+    "error": {
+      "title": "Er is een fout opgetreden",
+      "description": "Onze excuses voor het ongemak. Probeer opnieuw of ga terug naar de homepagina.",
+      "retry": "Opnieuw proberen",
+      "home": "Home",
+      "error_code": "Foutcode: {code}"
+    }
+  },
+  "auth": {
+    "login": "Inloggen",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "login_button": "Inloggen",
+    "forgot_password": "Wachtwoord vergeten?",
+    "invalid_credentials": "Ongeldige inloggegevens",
+    "register": "Account aanmaken",
+    "register_button": "Registreren",
+    "first_name": "Voornaam",
+    "last_name": "Achternaam",
+    "confirm_password": "Bevestig wachtwoord",
+    "accept_terms": "Ik accepteer de gebruiksvoorwaarden",
+    "already_have_account": "Heb je al een account?",
+    "no_account": "Nog geen account?",
+    "reset_password": "Wachtwoord resetten",
+    "reset_password_button": "Link verzenden",
+    "reset_password_success": "Er is een resetmail verzonden.",
+    "back_to_login": "Terug naar inloggen",
+    "email_placeholder": "jij@email.com",
+    "login_subtitle": "Fijn je terug te zien! Krijg toegang tot je impact.",
+    "register_subtitle": "Sluit je aan bij de beweging voor een duurzame toekomst.",
+    "register_success_title": "Registratie geslaagd!",
+    "register_success_email_sent": "Een bevestigingsmail is verzonden naar",
+    "register_success_instruction": "Klik op de link in de e-mail om je account te activeren en je avontuur te starten.",
+    "open_provider": "Open {provider}",
+    "open_mailbox": "Open mijn mailbox",
+    "first_name_placeholder": "Jan",
+    "last_name_placeholder": "Jansen",
+    "passwords_mismatch": "Wachtwoorden komen niet overeen.",
+    "final_step_title": "Laatste stap",
+    "final_step_description": "Door je aan te sluiten bij Make the CHANGE draag je actief bij aan de bescherming van onze planeet.",
+    "terms_link_label": "gebruiksvoorwaarden",
+    "continue": "Doorgaan",
+    "previous_step": "Vorige stap",
+    "forgot_success_title": "E-mail verzonden!",
+    "forgot_success_hint": "Controleer je inbox en volg de instructies om je wachtwoord opnieuw in te stellen.",
+    "forgot_help_text": "Geen zorgen, we helpen je.",
+    "layout": {
+      "background_alt": "Natuurachtergrond",
+      "badge": "Gecertificeerd platform",
+      "title_prefix": "De toekomst van",
+      "title_highlight": "biodiversiteit",
+      "title_suffix": "ligt in jouw handen.",
+      "description": "Zet je spaargeld om in concrete impact en sluit je aan bij de grootste community van betrokken investeerders.",
+      "features": {
+        "secure": "Veilige en transparante investeringen",
+        "tracking": "Realtime opvolging van impact en biodiversiteit",
+        "rewards": "Exclusieve beloningen en verzamelbare BioDex"
+      },
+      "user_alt": "Gebruiker",
+      "quote": {
+        "text": "\"Een platform dat eindelijk betekenis geeft aan elke geïnvesteerde euro.\"",
+        "author": "Marie D. • Beschermer"
+      },
+      "community_proof": "Impact geverifieerd door de community"
     }
   }
 }

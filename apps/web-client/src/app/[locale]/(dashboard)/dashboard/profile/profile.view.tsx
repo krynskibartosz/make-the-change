@@ -115,8 +115,8 @@ export function ProfileView({
         <Card className="border bg-background/70 shadow-sm backdrop-blur transition-all hover:shadow-md">
           <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-500/10 rounded-lg">
-                <MapPin className="h-5 w-5 text-orange-500" />
+              <div className="p-2 bg-client-orange-500/10 rounded-lg">
+                <MapPin className="h-5 w-5 text-client-orange-500" />
               </div>
               <div>
                 <CardTitle className="text-base sm:text-lg">{t('location')}</CardTitle>
@@ -161,8 +161,8 @@ export function ProfileView({
         <Card className="xl:col-span-2 border bg-background/70 shadow-sm backdrop-blur transition-all hover:shadow-md">
           <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <Shield className="h-5 w-5 text-emerald-500" />
+              <div className="p-2 bg-client-emerald-500/10 rounded-lg">
+                <Shield className="h-5 w-5 text-client-emerald-500" />
               </div>
               <div>
                 <CardTitle className="text-base sm:text-lg">{t('bio_impact')}</CardTitle>

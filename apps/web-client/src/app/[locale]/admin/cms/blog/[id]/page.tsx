@@ -1,6 +1,6 @@
+import { notFound } from 'next/navigation'
 import { getBlogPostById } from '@/features/blog/blog-data'
 import { BlogEditor } from '@/features/blog/components/blog-editor'
-import { notFound } from 'next/navigation'
 
 export default async function AdminBlogEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -10,13 +10,15 @@ export default async function AdminBlogEditPage({ params }: { params: Promise<{ 
     notFound()
   }
 
-  // Ensure coverImage/cover_image_url consistency
   const editorPost = {
-    ...post,
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    content: post.rawContent,
+    excerpt: post.excerpt,
+    status: post.status ?? 'draft',
     cover_image_url: post.coverImage || undefined,
-    // Cast status because getBlogPostById returns it (as we saw in my modification) 
-    // but TypeScript might need help if I didn't update the BlogPost interface globally.
-    status: (post as any).status || 'draft' 
+    featured: Boolean(post.featured),
   }
 
   return (

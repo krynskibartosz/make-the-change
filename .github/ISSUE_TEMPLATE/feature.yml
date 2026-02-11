@@ -71,7 +71,6 @@ body:
       label: 🛠️ Plateforme Concernée
       description: Quelle plateforme sera impactée?
       options:
-        - Mobile (React Native + Expo)
         - Web Admin (Next.js + Vercel)
         - Web E-commerce (Next.js + Vercel)
         - Backend API (tRPC + Vercel Edge)
@@ -166,7 +165,7 @@ body:
       description: Checklist standardisée de completion
       placeholder: |
         - [ ] Code reviewed & merged
-        - [ ] Tests written (unit + integration) 
+        - [ ] QA manuelle des parcours critiques
         - [ ] Documentation updated
         - [ ] Performance targets met
         - [ ] Accessibility verified
@@ -174,35 +173,9 @@ body:
         - [ ] Product Owner approval
       value: |
         - [ ] Code reviewed & merged
-        - [ ] Tests written (unit + integration)
+        - [ ] QA manuelle des parcours critiques
         - [ ] Documentation updated  
         - [ ] Performance targets met
         - [ ] Accessibility verified
         - [ ] Staging deployment validated
         - [ ] Product Owner approval
-        
-  - type: textarea
-    id: testing-plan
-    attributes:
-      label: 🧪 Testing Plan
-      description: Plan de tests manuel et automatisé
-      placeholder: |
-        ### Manual Testing
-        - [ ] Happy path scenarios
-        - [ ] Edge cases
-        - [ ] Error handling
-        
-        ### Automated Testing
-        - [ ] Unit tests coverage >80%
-        - [ ] Integration tests key flows
-        - [ ] E2E critical user journeys
-      value: |
-        ### Manual Testing
-        - [ ] Happy path scenarios
-        - [ ] Edge cases
-        - [ ] Error handling
-        
-        ### Automated Testing
-        - [ ] Unit tests coverage >80%
-        - [ ] Integration tests key flows
-        - [ ] E2E critical user journeys

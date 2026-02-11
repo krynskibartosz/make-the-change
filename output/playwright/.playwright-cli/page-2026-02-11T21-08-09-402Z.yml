@@ -1,0 +1,115 @@
+- generic [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - img [ref=e12]
+            - generic [ref=e15]: Paiement sécurisé
+          - generic [ref=e16]:
+            - heading "Commande" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Finalisez votre commande en 3 étapes. 1 article(s) prêt(s) à être validé(s).
+        - generic [ref=e19]:
+          - button "Retour" [ref=e20] [cursor=pointer]:
+            - generic [ref=e22]: Retour
+          - link "Modifier" [ref=e23] [cursor=pointer]:
+            - /url: /fr/cart
+      - generic [ref=e24]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: "1"
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Panier
+            - paragraph [ref=e30]: Vérifiez vos articles et vos quantités
+        - generic [ref=e32]:
+          - generic [ref=e33]: "2"
+          - generic [ref=e34]:
+            - paragraph [ref=e35]: Adresse
+            - paragraph [ref=e36]: Ajoutez votre adresse de livraison
+        - generic [ref=e38]:
+          - generic [ref=e39]: "3"
+          - generic [ref=e40]:
+            - paragraph [ref=e41]: Confirmer
+            - paragraph [ref=e42]: Choisissez le mode de paiement
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - paragraph [ref=e48]: Transactions protégées et validation serveur en temps réel.
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - paragraph [ref=e55]: Livraison rapide, sans frais supplémentaires.
+    - generic [ref=e56]:
+      - generic [ref=e176]:
+        - heading "Moyen de paiement" [level=3] [ref=e178]
+        - generic [ref=e179]:
+          - radiogroup "Moyen de paiement" [ref=e180]:
+            - 'radio "Mes Points Solde: 0 pts Paiement instantané via votre solde actuel." [ref=e223]':
+              - generic [ref=e182]:
+                - img [ref=e184]
+                - generic [ref=e187]:
+                  - paragraph [ref=e189]: Mes Points
+                  - paragraph [ref=e191]: "Solde: 0 pts"
+                  - paragraph [ref=e192]: Paiement instantané via votre solde actuel.
+            - radio "Carte Bancaire Sélectionné Simulation (Euros) Simulation de paiement en euros (mode test)." [checked] [active] [ref=e224]:
+              - generic [ref=e194]:
+                - img [ref=e196]
+                - generic [ref=e198]:
+                  - generic [ref=e199]:
+                    - paragraph [ref=e200]: Carte Bancaire
+                    - generic [ref=e225]: Sélectionné
+                  - paragraph [ref=e201]: Simulation (Euros)
+                  - paragraph [ref=e202]: Simulation de paiement en euros (mode test).
+          - generic [ref=e203]:
+            - heading "Vérification finale" [level=3] [ref=e204]
+            - generic [ref=e205]:
+              - paragraph [ref=e226]: Total à payer
+              - paragraph [ref=e227]: 10,00 €
+              - paragraph [ref=e228]: Aucun débit réel ne sera effectué.
+            - generic [ref=e213]:
+              - generic [ref=e214]: Total commande
+              - generic [ref=e215]: 10,00 €
+            - generic [ref=e216]:
+              - button "Retour" [ref=e217] [cursor=pointer]:
+                - generic [ref=e219]: Retour
+              - button "Payer (Simulation)" [ref=e229] [cursor=pointer]:
+                - generic [ref=e221]: Payer (Simulation)
+      - complementary [ref=e81]:
+        - generic [ref=e82]:
+          - heading "Récapitulatif" [level=3] [ref=e84]
+          - generic [ref=e85]:
+            - generic [ref=e87]:
+              - generic [ref=e88]:
+                - paragraph [ref=e89]: Gourde Inox
+                - paragraph [ref=e90]: x1
+              - paragraph [ref=e91]: 1 000 pts
+            - generic [ref=e93]:
+              - generic [ref=e94]:
+                - generic [ref=e95]: 1 article(s)
+                - generic [ref=e96]: 1 000 pts
+              - generic [ref=e97]:
+                - generic [ref=e98]: Livraison
+                - generic [ref=e99]: Gratuite
+              - generic [ref=e100]:
+                - generic [ref=e101]: Total
+                - generic [ref=e102]: 1 000 pts
+              - generic [ref=e103]:
+                - generic [ref=e104]: Total à payer
+                - generic [ref=e105]: 10,00 €
+            - generic [ref=e106]:
+              - paragraph [ref=e107]: Mode de paiement
+              - paragraph [ref=e108]: Carte (simulation)
+            - generic [ref=e109]:
+              - paragraph [ref=e110]: Adresse de livraison
+              - paragraph [ref=e111]: Alice Investor, 12 rue de la Paix, 75001 Paris, France
+            - paragraph [ref=e112]: Vous pourrez modifier vos informations avant validation définitive.
+    - generic [ref=e114]:
+      - generic [ref=e115]:
+        - paragraph [ref=e116]: Total
+        - paragraph [ref=e117]: 1 000 pts / 10,00 €
+        - paragraph [ref=e118]: Aucun frais caché.
+      - generic [ref=e119]:
+        - generic [ref=e120]: OK
+        - button "Payer (Simulation)" [ref=e231] [cursor=pointer]:
+          - generic [ref=e123]: Payer (Simulation)
+  - button "Open Next.js Dev Tools" [ref=e129] [cursor=pointer]:
+    - img [ref=e130]
+  - alert [ref=e133]

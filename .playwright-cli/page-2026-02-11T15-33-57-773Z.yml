@@ -1,0 +1,316 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+        - navigation [ref=e15]:
+          - link "Downloads" [ref=e16] [cursor=pointer]:
+            - /url: /resources
+            - strong [ref=e17]: Downloads
+          - link "Help" [ref=e18] [cursor=pointer]:
+            - /url: https://duolingo.com/contact
+            - strong [ref=e19]: Help
+          - link "About Duolingo" [ref=e21] [cursor=pointer]:
+            - /url: https://duolingo.com/info
+          - link "Careers" [ref=e22] [cursor=pointer]:
+            - /url: https://duolingo.com/careers
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - heading "Identity" [level=3] [ref=e26]
+          - heading "Logos" [level=2] [ref=e27]
+        - paragraph [ref=e28]: How we write our name, how we use our symbols — these are the closest we get to a "signature" for Duolingo. How they appear, whether tiny on a screen or enormous at an airport, becomes a crucial way for our customers and partners to find and trust us.
+  - generic [ref=e30]:
+    - navigation [ref=e32]:
+      - generic [ref=e33]:
+        - link "Identity" [ref=e34] [cursor=pointer]:
+          - /url: /identity/logos
+          - generic [ref=e35]: Identity
+        - generic [ref=e38]:
+          - link "Logos" [ref=e39] [cursor=pointer]:
+            - /url: /identity/logos
+            - generic [ref=e40]: Logos
+          - generic [ref=e41]:
+            - link "Logotype" [ref=e42] [cursor=pointer]:
+              - /url: /identity/logos#logotype
+              - generic [ref=e43]: Logotype
+            - link "Landscape lockup" [ref=e44] [cursor=pointer]:
+              - /url: /identity/logos#landscape-lockup
+              - generic [ref=e45]: Landscape lockup
+            - link "Portrait lockup" [ref=e46] [cursor=pointer]:
+              - /url: /identity/logos#portrait-lockup
+              - generic [ref=e47]: Portrait lockup
+            - link "Icon" [ref=e48] [cursor=pointer]:
+              - /url: /identity/logos#icon
+              - generic [ref=e49]: Icon
+          - link "Color" [ref=e50] [cursor=pointer]:
+            - /url: /identity/color
+            - generic [ref=e51]: Color
+            - img [ref=e52]
+          - link "Typography" [ref=e54] [cursor=pointer]:
+            - /url: /identity/typography
+            - generic [ref=e55]: Typography
+            - img [ref=e56]
+          - link "Imagery" [ref=e58] [cursor=pointer]:
+            - /url: /identity/imagery
+            - generic [ref=e59]: Imagery
+            - img [ref=e60]
+          - link "Brand family" [ref=e62] [cursor=pointer]:
+            - /url: /identity/brand-family
+            - generic [ref=e63]: Brand family
+            - img [ref=e64]
+        - link "Writing" [ref=e66] [cursor=pointer]:
+          - /url: /writing/brand-narrative
+          - generic [ref=e67]: Writing
+          - img [ref=e68]
+        - link "Illustration" [ref=e70] [cursor=pointer]:
+          - /url: /illustration/shape-language
+          - generic [ref=e71]: Illustration
+          - img [ref=e72]
+        - link "Marketing" [ref=e74] [cursor=pointer]:
+          - /url: /marketing/assets
+          - generic [ref=e75]: Marketing
+          - img [ref=e76]
+        - link "Resources" [ref=e78] [cursor=pointer]:
+          - /url: /resources
+          - generic [ref=e79]: Resources
+          - img [ref=e80]
+    - generic [ref=e82]:
+      - generic [ref=e83]:
+        - heading "Logotype anchor" [level=1] [ref=e84]:
+          - text: Logotype
+          - link "anchor" [ref=e85] [cursor=pointer]:
+            - /url: https://design.duolingo.com/identity/logos#logotype
+            - img "anchor" [ref=e86]
+        - generic [ref=e87]:
+          - figure [ref=e88]:
+            - img [ref=e89]
+            - link "download" [ref=e91] [cursor=pointer]:
+              - /url: /5a81f96dcfb7bd962077.svg
+              - img "download" [ref=e92]
+          - generic [ref=e93]:
+            - radio [checked] [ref=e94] [cursor=pointer]
+            - radio [ref=e95] [cursor=pointer]
+            - radio [ref=e96] [cursor=pointer]
+        - generic [ref=e97]:
+          - paragraph [ref=e98]: Our typographic signature uses custom letterforms inspired by the curves and shapes of our famous mascot, Duo. Look closely and you'll see that the flick on the "g" mirrors Duo's expressive eyebrows.
+          - paragraph [ref=e99]: "The logotype can be used in one of three colors: feather green, white, or gray."
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - heading "Logotype" [level=3] [ref=e102]
+          - heading "Clear space" [level=2] [ref=e103]
+        - figure [ref=e104]
+        - paragraph [ref=e105]: To allow our logotype to stand out, do not place any objects such as graphics or text in the clear space shown.
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - heading "Logotype" [level=3] [ref=e108]
+          - heading "Minimum sizes" [level=2] [ref=e109]
+        - figure [ref=e110]:
+          - generic [ref=e111]:
+            - figure "Screen" [ref=e112]:
+              - figure "100 px" [ref=e113]:
+                - generic [ref=e114]: 100 px
+              - generic [ref=e115]: Screen
+            - figure "Print" [ref=e116]:
+              - figure "35 mm 1.375 in" [ref=e117]:
+                - generic [ref=e118]:
+                  - text: 35 mm
+                  - text: 1.375 in
+              - generic [ref=e119]: Print
+        - paragraph [ref=e120]: The logotype should always be legible. Never use it at sizes smaller than specified.
+      - generic [ref=e121]:
+        - generic [ref=e122]:
+          - heading "Logotype" [level=3] [ref=e123]
+          - heading "General positioning" [level=2] [ref=e124]
+        - figure [ref=e125]
+        - generic [ref=e127]:
+          - paragraph [ref=e128]: This general guidance applies to digital or print applications, including both portrait and landscape orientations.
+          - paragraph [ref=e129]: "When creating a composition, place the logo in one of the four corners, or center it on the central vertical axis. Take advantage of the space and make the logo as large as possible. Remember: Be bold, be proud, make it big!"
+          - paragraph [ref=e130]: Avoid using the logotype at sizes smaller than one-third of the canvas width.
+      - generic [ref=e131]:
+        - generic [ref=e132]:
+          - heading "Logotype" [level=3] [ref=e133]
+          - heading "Rotation" [level=2] [ref=e134]
+        - figure [ref=e135]:
+          - generic [ref=e136]:
+            - figure "Horizontal" [ref=e137]:
+              - generic [ref=e138]: Horizontal
+            - figure "Vertical" [ref=e139]:
+              - generic [ref=e140]: Vertical
+        - generic [ref=e141]:
+          - paragraph [ref=e142]: Typically, we place our logotype flat on a 0° angle. Horizontal is our default rotation state. Examples include use in our app, on our website, and most advertising formats.
+          - paragraph [ref=e143]: Occasionally, we rotate our logotype 90° to make the best use of space with unusual formats. By rotating the logo vertically, we are able to display it at a larger scale. Examples include vertical ad spaces such as "skyscraper" banner ads, physical banners/flags, and playful applications like merchandise or stationery.
+      - generic [ref=e144]:
+        - generic [ref=e145]:
+          - heading "Logotype" [level=3] [ref=e146]
+          - heading "Please don't..." [level=2] [ref=e147]
+        - figure [ref=e148]:
+          - generic [ref=e149]:
+            - figure [ref=e150]:
+              - img
+            - figure [ref=e151]:
+              - img
+            - figure [ref=e152]:
+              - img
+            - figure [ref=e153]:
+              - img
+            - figure [ref=e154]:
+              - img
+            - figure [ref=e155]:
+              - img
+            - figure [ref=e156]:
+              - img
+            - figure [ref=e157]:
+              - img
+            - figure [ref=e158]:
+              - img
+        - list [ref=e159]:
+          - listitem [ref=e160]: Change the color of the logo.
+          - listitem [ref=e161]: Squash the logo.
+          - listitem [ref=e162]: Recreate the logo using a different font.
+          - listitem [ref=e163]: Outline the logo.
+          - listitem [ref=e164]: Fill the logo with images.
+          - listitem [ref=e165]: Place the logo over a busy background.
+          - listitem [ref=e166]: Skew the logo. Accepted rotations are 0° and 90°.
+          - listitem [ref=e167]: Fill the logo with gradients.
+          - listitem [ref=e168]: Change the logo's spacing or proportions.
+      - separator [ref=e169]
+      - generic [ref=e170]:
+        - heading "Landscape Lockup anchor" [level=1] [ref=e171]:
+          - text: Landscape Lockup
+          - link "anchor" [ref=e172] [cursor=pointer]:
+            - /url: https://design.duolingo.com/identity/logos#landscape-lockup
+            - img "anchor" [ref=e173]
+        - figure [ref=e174]:
+          - link "download" [ref=e175] [cursor=pointer]:
+            - /url: /7d3b95abf67001cde6ea.svg
+            - img "download" [ref=e176]
+        - generic [ref=e177]:
+          - paragraph [ref=e178]: Displaying Duo next to our logotype is useful in third party applications, where Duo's recognizability would aid in brand awareness. This fixed lockup ensures that they will safely coexist in such instances.
+          - paragraph [ref=e179]: Supply this logo lockup in a press release, at conferences, or for use in spaces managed by other companies.
+          - list [ref=e180]:
+            - listitem [ref=e181]:
+              - link "Duo's Voice" [ref=e182] [cursor=pointer]:
+                - /url: /writing/voice
+              - img [ref=e183]
+            - listitem [ref=e185]:
+              - link "Illustrating Duo" [ref=e186] [cursor=pointer]:
+                - /url: /illustration/duo
+              - img [ref=e187]
+      - generic [ref=e189]:
+        - generic [ref=e190]:
+          - heading "Landscape Lockup" [level=3] [ref=e191]
+          - heading "Clear space" [level=2] [ref=e192]
+        - figure [ref=e193]
+        - generic [ref=e194]:
+          - paragraph [ref=e195]: The bottom of Duo's body is aligned with the inside of the loop on the "g" character. The side of his head aligns with the top of the "l". A space equal to one-half the x-height is left between Duo and the logotype.
+          - paragraph [ref=e196]: Do not place any objects such as graphics or text in the clear space shown.
+      - generic [ref=e197]:
+        - generic [ref=e198]:
+          - heading "Landscape Lockup" [level=3] [ref=e199]
+          - heading "Please don't..." [level=2] [ref=e200]
+        - figure [ref=e201]:
+          - generic [ref=e202]:
+            - figure [ref=e203]:
+              - img
+            - figure [ref=e204]:
+              - img
+            - figure [ref=e205]:
+              - img
+        - list [ref=e206]:
+          - listitem [ref=e207]: Change the scale or position of Duo in the lockup.
+          - listitem [ref=e208]: Allow Duo to touch or sit on the logotype.
+          - listitem [ref=e209]: Use alternative Duo poses in a lockup.
+      - separator [ref=e210]
+      - generic [ref=e211]:
+        - heading "Portrait lockup anchor" [level=1] [ref=e212]:
+          - text: Portrait lockup
+          - link "anchor" [ref=e213] [cursor=pointer]:
+            - /url: https://design.duolingo.com/identity/logos#portrait-lockup
+            - img "anchor" [ref=e214]
+        - figure [ref=e215]:
+          - link "download" [ref=e216] [cursor=pointer]:
+            - /url: /0ae09c1b67d1113e0ac1.svg
+            - img "download" [ref=e217]
+        - generic [ref=e218]:
+          - paragraph [ref=e219]: The stacked version of our logo is useful in third party applications. Because Duo is extremely recognizable, his larger size and more prominent placement helps us stand out among other apps and brands. Use this version when supplying logos to third parties, and when the usage is within a square or tall space.
+          - list [ref=e220]:
+            - listitem [ref=e221]:
+              - link "Duo's Voice" [ref=e222] [cursor=pointer]:
+                - /url: /writing/voice
+              - img [ref=e223]
+            - listitem [ref=e225]:
+              - link "Illustrating Duo" [ref=e226] [cursor=pointer]:
+                - /url: /illustration/duo
+              - img [ref=e227]
+      - generic [ref=e229]:
+        - generic [ref=e230]:
+          - heading "Portrait lockup" [level=3] [ref=e231]
+          - heading "Clear space" [level=2] [ref=e232]
+        - figure [ref=e233]
+        - paragraph [ref=e234]: To allow our logotype to stand out, do not place any objects such as graphics or text in the clear space shown.
+      - separator [ref=e235]
+      - generic [ref=e236]:
+        - heading "Icon anchor" [level=1] [ref=e237]:
+          - text: Icon
+          - link "anchor" [ref=e238] [cursor=pointer]:
+            - /url: https://design.duolingo.com/identity/logos#icon
+            - img "anchor" [ref=e239]
+        - figure [ref=e240]:
+          - link "download" [ref=e241] [cursor=pointer]:
+            - /url: /86230c9ad10d9f08b785.svg
+            - img "download" [ref=e242]
+        - paragraph [ref=e243]: Because Duolingo's presence largely exists online, the consistent appearance of our icon is critical in ensuring our audience recognizes our brand across various spaces. In many cases, this symbol is the first introduction that people have to Duolingo.
+      - generic [ref=e244]:
+        - generic [ref=e245]:
+          - heading "Icon" [level=3] [ref=e246]
+          - heading "Avatars" [level=2] [ref=e247]
+        - figure [ref=e248]
+        - generic [ref=e250]:
+          - paragraph [ref=e251]: Our icon is our face on social accounts, keeping Duo's personality front and center. It can be safely used at a wide variety of sizes, as small as 16px like our favicon.
+          - paragraph [ref=e252]: In instances where we know the avatar will be displayed as a square (with or without rounded corners), Duo's eye mask should touch the left and right edges of the frame. When the masking shape approaches a circle, there should be space between the eye mask and the edge on either side.
+      - contentinfo [ref=e253]:
+        - navigation [ref=e254]:
+          - link "Color" [ref=e255] [cursor=pointer]:
+            - /url: /identity/color
+            - text: Color
+            - img [ref=e256]
+        - separator [ref=e258]
+        - generic [ref=e259]:
+          - generic [ref=e260]:
+            - link "Duolingo" [ref=e261] [cursor=pointer]:
+              - /url: https://duolingo.com
+            - link "About" [ref=e262] [cursor=pointer]:
+              - /url: https://duolingo.com/info
+            - link "Careers" [ref=e263] [cursor=pointer]:
+              - /url: https://duolingo.com/careers
+            - link "Apps" [ref=e264] [cursor=pointer]:
+              - /url: https://duolingo.com/mobile
+            - link "Help" [ref=e265] [cursor=pointer]:
+              - /url: https://support.duolingo.com
+            - link "Terms" [ref=e266] [cursor=pointer]:
+              - /url: https://duolingo.com/terms
+            - link "Privacy" [ref=e267] [cursor=pointer]:
+              - /url: https://duolingo.com/privacy
+          - generic [ref=e268]:
+            - link [ref=e269] [cursor=pointer]:
+              - /url: https://dribbble.com/Duolingo
+              - img [ref=e270]
+            - link [ref=e272] [cursor=pointer]:
+              - /url: https://twitter.com/duolingo
+              - img [ref=e273]
+            - link [ref=e275] [cursor=pointer]:
+              - /url: https://instagram.com/duolingo
+              - img [ref=e276]
+            - link [ref=e278] [cursor=pointer]:
+              - /url: https://facebook.com/duolingo
+              - img [ref=e279]
+            - link [ref=e281] [cursor=pointer]:
+              - /url: https://youtube.com/user/duolingo
+              - img [ref=e282]
+  - button "back to top" [ref=e284] [cursor=pointer]:
+    - img "back to top" [ref=e285]
+  - generic [ref=e286]:
+    - img "success" [ref=e287]
+    - text: All good.

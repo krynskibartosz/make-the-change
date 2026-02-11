@@ -12,27 +12,27 @@ type PodiumTestViewProps = {
 const podiumMeta = {
   1: {
     icon: Crown,
-    ring: 'ring-amber-200/50',
-    glow: 'from-amber-500/12 via-transparent to-transparent',
-    iconClassName: 'text-amber-300',
+    ring: 'ring-client-amber-200/50',
+    glow: 'from-client-amber-500/12 via-transparent to-transparent',
+    iconClassName: 'text-client-amber-300',
     blockHeight: 'h-32',
-    blockColor: 'from-amber-600 to-amber-800',
+    blockColor: 'from-client-amber-500 to-client-orange-800',
   },
   2: {
     icon: Medal,
-    ring: 'ring-slate-200/40',
-    glow: 'from-slate-200/10 via-transparent to-transparent',
-    iconClassName: 'text-slate-200',
+    ring: 'ring-client-slate-200/40',
+    glow: 'from-client-slate-200/10 via-transparent to-transparent',
+    iconClassName: 'text-client-slate-200',
     blockHeight: 'h-24',
-    blockColor: 'from-slate-600 to-slate-800',
+    blockColor: 'from-client-slate-600 to-client-slate-800',
   },
   3: {
     icon: Trophy,
-    ring: 'ring-orange-200/40',
-    glow: 'from-orange-300/12 via-transparent to-transparent',
-    iconClassName: 'text-orange-200',
+    ring: 'ring-client-orange-200/40',
+    glow: 'from-client-orange-300/12 via-transparent to-transparent',
+    iconClassName: 'text-client-orange-200',
     blockHeight: 'h-20',
-    blockColor: 'from-orange-600 to-orange-800',
+    blockColor: 'from-client-orange-600 to-client-orange-800',
   },
 } as const
 
@@ -65,9 +65,9 @@ function AvatarCircle({
         {/* Badge de rang */}
         <div className={cn(
           'absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-          rank === 1 && 'bg-yellow-500 text-white',
-          rank === 2 && 'bg-gray-400 text-white', 
-          rank === 3 && 'bg-orange-400 text-white'
+          rank === 1 && 'bg-client-yellow-500 text-client-white',
+          rank === 2 && 'bg-client-gray-400 text-client-white', 
+          rank === 3 && 'bg-client-orange-400 text-client-white'
         )}>
           {rank}
         </div>
@@ -143,23 +143,23 @@ export function PodiumTestView({ leaders, currentUserRank }: PodiumTestViewProps
                         'relative rounded-t-lg shadow-2xl',
                         meta.blockHeight,
                         'w-24 flex items-center justify-center',
-                        leader.rank === 1 && 'bg-gradient-to-b from-yellow-500 to-yellow-700',
-                        leader.rank === 2 && 'bg-gradient-to-b from-gray-400 to-gray-600',
-                        leader.rank === 3 && 'bg-gradient-to-b from-orange-400 to-orange-600'
+                        leader.rank === 1 && 'bg-gradient-to-b from-client-yellow-500 to-client-yellow-700',
+                        leader.rank === 2 && 'bg-gradient-to-b from-client-gray-400 to-client-gray-600',
+                        leader.rank === 3 && 'bg-gradient-to-b from-client-orange-400 to-client-orange-600'
                       )}
                     >
                       {/* Numéro de rang sur le bloc */}
-                      <span className="text-4xl font-bold text-white/20">
+                      <span className="text-4xl font-bold text-client-white/20">
                         {leader.rank}
                       </span>
                       
                       {/* Effet de brillance */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-transparent rounded-t-lg" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-client-white/10 to-transparent rounded-t-lg" />
                     </div>
                     
                     {/* Ombre portée */}
                     <div 
-                      className="absolute -bottom-2 left-2 right-2 h-4 bg-black/20 rounded-full blur-md" 
+                      className="absolute -bottom-2 left-2 right-2 h-4 bg-client-black/20 rounded-full blur-md" 
                       style={{
                         height: leader.rank === 1 ? '16px' : leader.rank === 2 ? '12px' : '10px'
                       }}

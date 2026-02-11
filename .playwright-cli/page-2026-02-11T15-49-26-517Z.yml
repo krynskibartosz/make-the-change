@@ -1,0 +1,265 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - generic [ref=e12]:
+    - banner [ref=e13]:
+      - navigation [ref=e14]:
+        - link "Make the Change Make the Change" [ref=e15] [cursor=pointer]:
+          - /url: /nl
+          - img "Make the Change" [ref=e17]
+          - generic [ref=e18]: Make the Change
+        - generic [ref=e19]:
+          - link "Home" [ref=e20] [cursor=pointer]:
+            - /url: /nl
+          - button "Projecten" [ref=e21]:
+            - text: Projecten
+            - img [ref=e22]
+          - button "Producten" [ref=e24]:
+            - text: Producten
+            - img [ref=e25]
+          - link "Merkrichtlijnen" [ref=e27] [cursor=pointer]:
+            - /url: /nl/brand-guidelines
+          - button "Découvrir" [ref=e28]:
+            - text: Découvrir
+            - img [ref=e29]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - link "Inloggen" [ref=e33] [cursor=pointer]:
+              - /url: /nl/login
+              - button "Inloggen" [ref=e34]:
+                - generic [ref=e36]: Inloggen
+            - link "Registreren" [ref=e37] [cursor=pointer]:
+              - /url: /nl/register
+              - button "Registreren" [ref=e38]:
+                - generic [ref=e40]: Registreren
+          - link "Winkelwagen openen" [ref=e42] [cursor=pointer]:
+            - /url: /nl/cart
+            - img [ref=e43]
+          - button "Activer le mode sombre" [ref=e47] [cursor=pointer]:
+            - img [ref=e50]
+    - main [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: Design System
+              - heading "Make the Change Merkrichtlijnen" [level=1] [ref=e58]
+              - paragraph [ref=e59]: Officieel referentiekader om visuele identiteit, tone of voice en productuitvoering op elkaar af te stemmen.
+              - paragraph [ref=e60]: "Laatste update: februari 2026"
+            - complementary [ref=e61]:
+              - paragraph [ref=e62]: Quick links
+              - generic [ref=e63]:
+                - link "Logo" [ref=e64] [cursor=pointer]:
+                  - /url: /nl/brand-guidelines/logo
+                  - generic [ref=e65]: Logo
+                  - img [ref=e66]
+                - link "Kleuren" [ref=e68] [cursor=pointer]:
+                  - /url: /nl/brand-guidelines/colors
+                  - generic [ref=e69]: Kleuren
+                  - img [ref=e70]
+                - link "Typografie" [ref=e72] [cursor=pointer]:
+                  - /url: /nl/brand-guidelines/typography
+                  - generic [ref=e73]: Typografie
+                  - img [ref=e74]
+                - link "Tone of voice" [ref=e76] [cursor=pointer]:
+                  - /url: /nl/brand-guidelines/voice
+                  - generic [ref=e77]: Tone of voice
+                  - img [ref=e78]
+          - paragraph [ref=e80]: hola
+        - generic [ref=e81]:
+          - complementary [ref=e82]:
+            - navigation [ref=e83]:
+              - generic [ref=e84]:
+                - paragraph [ref=e85]: Foundation
+                - list [ref=e86]:
+                  - listitem [ref=e87]:
+                    - link "01 Overzicht" [ref=e88] [cursor=pointer]:
+                      - /url: /nl/brand-guidelines
+                      - generic [ref=e89]: "01"
+                      - generic [ref=e90]: Overzicht
+                      - img [ref=e91]
+              - generic [ref=e93]:
+                - paragraph [ref=e94]: Identity
+                - list [ref=e95]:
+                  - listitem [ref=e96]:
+                    - link "01 Logo" [ref=e97] [cursor=pointer]:
+                      - /url: /nl/brand-guidelines/logo
+                      - generic [ref=e98]: "01"
+                      - generic [ref=e99]: Logo
+                      - img [ref=e100]
+                  - listitem [ref=e102]:
+                    - link "02 Kleuren" [ref=e103] [cursor=pointer]:
+                      - /url: /nl/brand-guidelines/colors
+                      - generic [ref=e104]: "02"
+                      - generic [ref=e105]: Kleuren
+                      - img [ref=e106]
+                  - listitem [ref=e108]:
+                    - link "03 Typografie" [ref=e109] [cursor=pointer]:
+                      - /url: /nl/brand-guidelines/typography
+                      - generic [ref=e110]: "03"
+                      - generic [ref=e111]: Typografie
+                      - img [ref=e112]
+              - generic [ref=e114]:
+                - paragraph [ref=e115]: Writing
+                - list [ref=e116]:
+                  - listitem [ref=e117]:
+                    - link "01 Tone of voice" [ref=e118] [cursor=pointer]:
+                      - /url: /nl/brand-guidelines/voice
+                      - generic [ref=e119]: "01"
+                      - generic [ref=e120]: Tone of voice
+                      - img [ref=e121]
+              - generic [ref=e123]:
+                - paragraph [ref=e124]: Resources
+                - list [ref=e125]:
+                  - listitem [ref=e126]:
+                    - link "01 Assets" [ref=e127] [cursor=pointer]:
+                      - /url: /nl/brand-guidelines/assets
+                      - generic [ref=e128]: "01"
+                      - generic [ref=e129]: Assets
+                      - img [ref=e130]
+          - generic [ref=e133]:
+            - generic [ref=e134]:
+              - link "logo Het Make the Change logo is een kernasset. Volg strikt de varianten, minimale afmetingen en vrijruimte. View guide 01" [ref=e135] [cursor=pointer]:
+                - /url: /nl/brand-guidelines/logo
+                - paragraph [ref=e136]: logo
+                - paragraph [ref=e137]: Het Make the Change logo is een kernasset. Volg strikt de varianten, minimale afmetingen en vrijruimte.
+                - generic [ref=e138]:
+                  - generic [ref=e139]: View guide
+                  - img [ref=e140]
+                - generic:
+                  - img
+                - generic: "01"
+              - link "kleuren Het palet is opgebouwd voor leesbaarheid, visuele hiërarchie en merkherkenning op desktop en mobiel. View guide 02" [ref=e142] [cursor=pointer]:
+                - /url: /nl/brand-guidelines/colors
+                - paragraph [ref=e143]: kleuren
+                - paragraph [ref=e144]: Het palet is opgebouwd voor leesbaarheid, visuele hiërarchie en merkherkenning op desktop en mobiel.
+                - generic [ref=e145]:
+                  - generic [ref=e146]: View guide
+                  - img [ref=e147]
+                - generic:
+                  - img
+                - generic: "02"
+              - link "typografie Teksthiërarchie moet consistent blijven tussen marketingpagina s, productschermen en externe materialen. View guide 03" [ref=e149] [cursor=pointer]:
+                - /url: /nl/brand-guidelines/typography
+                - paragraph [ref=e150]: typografie
+                - paragraph [ref=e151]: Teksthiërarchie moet consistent blijven tussen marketingpagina s, productschermen en externe materialen.
+                - generic [ref=e152]:
+                  - generic [ref=e153]: View guide
+                  - img [ref=e154]
+                - generic:
+                  - img
+                - generic: "03"
+              - link "tone of voice De stem van Make the Change is warm, betrouwbaar en actiegericht. Elke microcopy moet dat uitstralen. View guide 04" [ref=e156] [cursor=pointer]:
+                - /url: /nl/brand-guidelines/voice
+                - paragraph [ref=e157]: tone of voice
+                - paragraph [ref=e158]: De stem van Make the Change is warm, betrouwbaar en actiegericht. Elke microcopy moet dat uitstralen.
+                - generic [ref=e159]:
+                  - generic [ref=e160]: View guide
+                  - img [ref=e161]
+                - generic:
+                  - img
+                - generic: "04"
+              - link "assets Deze sectie centraliseert merkresources voor product-, marketing- en partnerteams. View guide 05" [ref=e163] [cursor=pointer]:
+                - /url: /nl/brand-guidelines/assets
+                - paragraph [ref=e164]: assets
+                - paragraph [ref=e165]: Deze sectie centraliseert merkresources voor product-, marketing- en partnerteams.
+                - generic [ref=e166]:
+                  - generic [ref=e167]: View guide
+                  - img [ref=e168]
+                - generic:
+                  - img
+                - generic: "05"
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - paragraph [ref=e173]: Merkfundamenten
+                - heading "Bouw een consistent merk over alle touchpoints heen." [level=2] [ref=e174]
+                - paragraph [ref=e175]: Dit kader geldt voor product, marketing, support en partnercommunicatie. Elke nieuwe interface moet hieraan voldoen voor release.
+                - heading "Beslisprincipes" [level=3] [ref=e176]
+                - list [ref=e177]:
+                  - listitem [ref=e178]:
+                    - generic [ref=e179]: "1"
+                    - generic [ref=e180]: Een pagina moet binnen 5 seconden begrijpelijk zijn.
+                  - listitem [ref=e181]:
+                    - generic [ref=e182]: "2"
+                    - generic [ref=e183]: Visuele keuzes moeten een bedrijfsdoel ondersteunen.
+                  - listitem [ref=e184]:
+                    - generic [ref=e185]: "3"
+                    - generic [ref=e186]: Gebruik altijd gedeelde design-system tokens en componenten.
+                  - listitem [ref=e187]:
+                    - generic [ref=e188]: "4"
+                    - generic [ref=e189]: Content moet gelokaliseerd en gevalideerd zijn in FR/EN/NL.
+                  - listitem [ref=e190]:
+                    - generic [ref=e191]: "5"
+                    - generic [ref=e192]: Elke uitzondering op deze gids moet gedocumenteerd en goedgekeurd zijn.
+              - complementary [ref=e193]:
+                - paragraph [ref=e194]: Governance
+                - list [ref=e195]:
+                  - listitem [ref=e196]: Product + Design keuren updates van richtlijnen goed.
+                  - listitem [ref=e197]: Engineering valideert technische conformiteit voor merge.
+                  - listitem [ref=e198]: Marketing valideert toon en boodschap voor publieke communicatie.
+    - contentinfo [ref=e199]:
+      - generic [ref=e200]:
+        - generic [ref=e201]:
+          - generic [ref=e202]:
+            - link "Make the Change Make the Change" [ref=e203] [cursor=pointer]:
+              - /url: /nl
+              - img "Make the Change" [ref=e205]
+              - generic [ref=e206]: Make the Change
+            - paragraph [ref=e207]: Investeer in biodiversiteit, oogst tastbare beloningen.
+          - generic [ref=e208]:
+            - heading "Snelle links" [level=3] [ref=e209]
+            - list [ref=e210]:
+              - listitem [ref=e211]:
+                - link "Projecten" [ref=e212] [cursor=pointer]:
+                  - /url: /nl/projects
+              - listitem [ref=e213]:
+                - link "Producten" [ref=e214] [cursor=pointer]:
+                  - /url: /nl/products
+              - listitem [ref=e215]:
+                - link "Klassement" [ref=e216] [cursor=pointer]:
+                  - /url: /nl/leaderboard
+              - listitem [ref=e217]:
+                - link "Blog" [ref=e218] [cursor=pointer]:
+                  - /url: /nl/blog
+              - listitem [ref=e219]:
+                - link "Over ons" [ref=e220] [cursor=pointer]:
+                  - /url: /nl/about
+              - listitem [ref=e221]:
+                - link "Hoe het werkt" [ref=e222] [cursor=pointer]:
+                  - /url: /nl/how-it-works
+              - listitem [ref=e223]:
+                - link "Merkrichtlijnen" [ref=e224] [cursor=pointer]:
+                  - /url: /nl/brand-guidelines
+          - generic [ref=e225]:
+            - heading "Ondersteuning" [level=3] [ref=e226]
+            - list [ref=e227]:
+              - listitem [ref=e228]:
+                - link "FAQ" [ref=e229] [cursor=pointer]:
+                  - /url: /nl/faq
+              - listitem [ref=e230]:
+                - link "Contact" [ref=e231] [cursor=pointer]:
+                  - /url: /nl/contact
+              - listitem [ref=e232]:
+                - link "Privacy" [ref=e233] [cursor=pointer]:
+                  - /url: /nl/privacy
+              - listitem [ref=e234]:
+                - link "Voorwaarden" [ref=e235] [cursor=pointer]:
+                  - /url: /nl/terms
+          - generic [ref=e236]:
+            - heading "Neem contact op" [level=3] [ref=e237]
+            - list [ref=e238]:
+              - listitem [ref=e239]:
+                - img [ref=e240]
+                - link "contact@make-the-change.com" [ref=e243] [cursor=pointer]:
+                  - /url: mailto:contact@make-the-change.com
+              - listitem [ref=e244]:
+                - img [ref=e245]
+                - generic [ref=e248]: Brussel, België
+        - generic [ref=e249]:
+          - paragraph [ref=e250]: © 2026 Make the CHANGE. Alle rechten voorbehouden.
+          - generic [ref=e251]:
+            - link "Privacy" [ref=e252] [cursor=pointer]:
+              - /url: /nl/privacy
+            - link "Voorwaarden" [ref=e253] [cursor=pointer]:
+              - /url: /nl/terms

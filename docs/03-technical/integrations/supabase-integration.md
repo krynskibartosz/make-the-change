@@ -2,6 +2,11 @@
 
  Scope: Auth, PostgreSQL, RLS, storage (optional), schema management.
 
+## Source of truth policy
+- Source of truth for runtime DB state: **Supabase MCP**.
+- Local SQL files are not used as truth and are forbidden in this repository.
+- Application schema in code (`packages/core/src/shared/db/schema.ts`) must be aligned with what is observed in Supabase MCP.
+
 ## Auth
 - Use supabase-js in Edge-safe mode (no session persistence); inject user JWT in headers for RLS.
 
@@ -16,9 +21,9 @@
 - Media can use Supabase Storage or Vercel Blob; choose per cost/perf.
 
 ## Migrations
-- Drizzle schema is the source of truth (`packages/core/src/shared/db/schema.ts`).
+- Validate real DB structure first with Supabase MCP.
+- Keep TypeScript schema/contracts aligned in `packages/core/src/shared/db/schema.ts`.
 - Drizzle config: `packages/core/drizzle.config.ts`.
-- If SQL migrations are required, keep them co-located with the Drizzle workflow and document in `database-schema.md`.
 
 ## Observability
 - Monitor slow queries; index usage; connection pool saturation.

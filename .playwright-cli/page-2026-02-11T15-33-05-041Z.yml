@@ -1,0 +1,523 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+        - navigation [ref=e15]:
+          - link "Downloads" [ref=e16] [cursor=pointer]:
+            - /url: /resources
+            - strong [ref=e17]: Downloads
+          - link "Help" [ref=e18] [cursor=pointer]:
+            - /url: https://duolingo.com/contact
+            - strong [ref=e19]: Help
+          - link "About Duolingo" [ref=e21] [cursor=pointer]:
+            - /url: https://duolingo.com/info
+          - link "Careers" [ref=e22] [cursor=pointer]:
+            - /url: https://duolingo.com/careers
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - heading "Illustration" [level=3] [ref=e26]
+          - heading "Shape language" [level=2] [ref=e27]
+        - paragraph [ref=e28]: You know a Duolingo illustration when you see one. That's because we follow a few simple guidelines, from the color palette to our use of shadows. Follow along to create illustrations that fit into the Duolingo world.
+  - generic [ref=e30]:
+    - navigation [ref=e32]:
+      - generic [ref=e33]:
+        - link "Identity" [ref=e34] [cursor=pointer]:
+          - /url: /identity/logos
+          - generic [ref=e35]: Identity
+          - img [ref=e36]
+        - link "Writing" [ref=e38] [cursor=pointer]:
+          - /url: /writing/brand-narrative
+          - generic [ref=e39]: Writing
+          - img [ref=e40]
+        - link "Illustration" [ref=e42] [cursor=pointer]:
+          - /url: /illustration/shape-language
+          - generic [ref=e43]: Illustration
+        - generic [ref=e46]:
+          - link "Shape language" [ref=e47] [cursor=pointer]:
+            - /url: /illustration/shape-language
+            - generic [ref=e48]: Shape language
+          - generic [ref=e49]:
+            - link "Construction" [ref=e50] [cursor=pointer]:
+              - /url: /illustration/shape-language#construction
+              - generic [ref=e51]: Construction
+            - link "Rhythm" [ref=e52] [cursor=pointer]:
+              - /url: /illustration/shape-language#rhythm
+              - generic [ref=e53]: Rhythm
+            - link "Simplicity" [ref=e54] [cursor=pointer]:
+              - /url: /illustration/shape-language#simplicity
+              - generic [ref=e55]: Simplicity
+            - link "Objects in space" [ref=e56] [cursor=pointer]:
+              - /url: /illustration/shape-language#objects-in-space
+              - generic [ref=e57]: Objects in space
+            - link "Color" [ref=e58] [cursor=pointer]:
+              - /url: /illustration/shape-language#color
+              - generic [ref=e59]: Color
+            - link "Floating accents" [ref=e60] [cursor=pointer]:
+              - /url: /illustration/shape-language#floating-accents
+              - generic [ref=e61]: Floating accents
+          - link "Characters" [ref=e62] [cursor=pointer]:
+            - /url: /illustration/characters
+            - generic [ref=e63]: Characters
+            - img [ref=e64]
+          - link "Duo" [ref=e66] [cursor=pointer]:
+            - /url: /illustration/duo
+            - generic [ref=e67]: Duo
+            - img [ref=e68]
+        - link "Marketing" [ref=e70] [cursor=pointer]:
+          - /url: /marketing/assets
+          - generic [ref=e71]: Marketing
+          - img [ref=e72]
+        - link "Resources" [ref=e74] [cursor=pointer]:
+          - /url: /resources
+          - generic [ref=e75]: Resources
+          - img [ref=e76]
+    - generic [ref=e78]:
+      - generic [ref=e79]:
+        - heading "Construction anchor" [level=1] [ref=e80]:
+          - text: Construction
+          - link "anchor" [ref=e81] [cursor=pointer]:
+            - /url: https://design.duolingo.com/illustration/shape-language#construction
+            - img "anchor" [ref=e82]
+        - figure [ref=e83]:
+          - figure [ref=e86]:
+            - img
+        - paragraph [ref=e87]: "All of our illustrations are made from three basic shapes: the rounded rectangle, the circle, and the rounded triangle. You'll probably find yourself using the rounded rectangle the most. It's okay to use your pathfinder tool to cut shapes up as you need them. Just make sure that every shape has rounded edges. Pointy shapes are off-brand."
+      - separator [ref=e88]
+      - generic [ref=e89]:
+        - heading "Rhythm anchor" [level=1] [ref=e90]:
+          - text: Rhythm
+          - link "anchor" [ref=e91] [cursor=pointer]:
+            - /url: https://design.duolingo.com/illustration/shape-language#rhythm
+            - img "anchor" [ref=e92]
+        - figure [ref=e93]
+        - paragraph [ref=e96]: "It's the rhythm of simple shapes that makes our illustrations interesting. Imagine each illustration is a melody. No one wants to hear the same note played over and over, but if you switch between longer and shorter notes, the ear gets interested. Take a look at the reddish blocks on the left: Shapes with similar visual weight are predictable and uninteresting, while a variation in shapes gives the eye something exciting to look at. We want to create a character that, beyond being visually pleasing, actually communicates a story through their design. Rhythm helps with that."
+      - separator [ref=e97]
+      - generic [ref=e98]:
+        - heading "Simplicity anchor" [level=1] [ref=e99]:
+          - text: Simplicity
+          - link "anchor" [ref=e100] [cursor=pointer]:
+            - /url: https://design.duolingo.com/illustration/shape-language#simplicity
+            - img "anchor" [ref=e101]
+        - figure [ref=e102]:
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - generic [ref=e105]: 6 shapes
+              - generic [ref=e106]: Not enough shapes, too abstract
+            - generic [ref=e107]:
+              - generic [ref=e108]: 15 shapes
+              - generic [ref=e109]: Good!
+            - generic [ref=e110]:
+              - generic [ref=e111]: 30 shapes
+              - generic [ref=e112]: Too many shapes
+        - paragraph [ref=e113]: "An illustration with good rhythm can still be simple. To use the music analogy again: Simple songs can be powerful, but there is more pressure on each note to strengthen the song. The trick is to make each shape matter in the illustration. Stylistically and practically, we need to use the fewest shapes possible."
+      - separator [ref=e114]
+      - generic [ref=e115]:
+        - heading "Objects in space anchor" [level=1] [ref=e116]:
+          - text: Objects in space
+          - link "anchor" [ref=e117] [cursor=pointer]:
+            - /url: https://design.duolingo.com/illustration/shape-language#objects-in-space
+            - img "anchor" [ref=e118]
+        - figure [ref=e119]:
+          - figure [ref=e121]:
+            - img
+        - paragraph [ref=e122]: Duolingo characters and icons are designed on a flat perspective. Depth can still be conveyed as long as it's on the same line of sight.
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - heading "Objects in space" [level=3] [ref=e125]
+          - heading "Shadows and shading" [level=2] [ref=e126]
+        - figure [ref=e127]:
+          - generic [ref=e128]:
+            - figure [ref=e129]:
+              - img
+            - figure [ref=e130]:
+              - img
+            - figure [ref=e131]:
+              - img
+        - generic [ref=e132]:
+          - paragraph [ref=e133]: Shadows always appear below characters and objects as a pill shape — never an oval, because ovals imply perspective.
+          - paragraph [ref=e134]: The shadow's color depends on the background. Never put a shadow under an illustration that isn't a darker color than the base it's sitting on.
+          - paragraph [ref=e135]: You may want to put an object back in space and give it a slightly different color. Try not to! This adds more colors to the illustration. Animators can also turn an object in space more easily when they can be more suggestive with where the body parts align.
+      - separator [ref=e136]
+      - generic [ref=e137]:
+        - heading "Color anchor" [level=1] [ref=e138]:
+          - text: Color
+          - link "anchor" [ref=e139] [cursor=pointer]:
+            - /url: https://design.duolingo.com/illustration/shape-language#color
+            - img "anchor" [ref=e140]
+        - figure [ref=e141]:
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - figure "Polar" [ref=e145]:
+                  - generic [ref=e148]: Polar
+                - generic [ref=e150]:
+                  - text: F7F7F7
+                  - generic "Click to copy hex" [ref=e151] [cursor=pointer]:
+                    - img "copy" [ref=e152]
+              - generic [ref=e153]:
+                - figure "Swan" [ref=e154]:
+                  - generic [ref=e157]: Swan
+                - generic [ref=e159]:
+                  - text: E5E5E5
+                  - generic "Click to copy hex" [ref=e160] [cursor=pointer]:
+                    - img "copy" [ref=e161]
+              - generic [ref=e162]:
+                - figure "Hare" [ref=e163]:
+                  - generic [ref=e166]: Hare
+                - generic [ref=e168]:
+                  - text: AFAFAF
+                  - generic "Click to copy hex" [ref=e169] [cursor=pointer]:
+                    - img "copy" [ref=e170]
+              - generic [ref=e171]:
+                - figure "Wolf" [ref=e172]:
+                  - generic [ref=e175]: Wolf
+                - generic [ref=e177]:
+                  - text: "777777"
+                  - generic "Click to copy hex" [ref=e178] [cursor=pointer]:
+                    - img "copy" [ref=e179]
+              - generic [ref=e180]:
+                - figure "Eel" [ref=e181]:
+                  - generic [ref=e184]: Eel
+                - generic [ref=e186]:
+                  - text: 4B4B4B
+                  - generic "Click to copy hex" [ref=e187] [cursor=pointer]:
+                    - img "copy" [ref=e188]
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - figure "Squid" [ref=e191]:
+                  - generic [ref=e194]: Squid
+                - generic [ref=e196]:
+                  - text: EBE3E3
+                  - generic "Click to copy hex" [ref=e197] [cursor=pointer]:
+                    - img "copy" [ref=e198]
+              - generic [ref=e199]:
+                - figure "Walking Fish" [ref=e200]:
+                  - generic [ref=e203]: Walking Fish
+                - generic [ref=e205]:
+                  - text: FFDFE0
+                  - generic "Click to copy hex" [ref=e206] [cursor=pointer]:
+                    - img "copy" [ref=e207]
+              - generic [ref=e208]:
+                - figure "Flamingo" [ref=e209]:
+                  - generic [ref=e212]: Flamingo
+                - generic [ref=e214]:
+                  - text: FFB2B2
+                  - generic "Click to copy hex" [ref=e215] [cursor=pointer]:
+                    - img "copy" [ref=e216]
+              - generic [ref=e217]:
+                - figure "Pig" [ref=e218]:
+                  - generic [ref=e221]: Pig
+                - generic [ref=e223]:
+                  - text: F5A4A4
+                  - generic "Click to copy hex" [ref=e224] [cursor=pointer]:
+                    - img "copy" [ref=e225]
+              - generic [ref=e226]:
+                - figure "Crab" [ref=e227]:
+                  - generic [ref=e230]: Crab
+                - generic [ref=e232]:
+                  - text: FF7878
+                  - generic "Click to copy hex" [ref=e233] [cursor=pointer]:
+                    - img "copy" [ref=e234]
+              - generic [ref=e235]:
+                - figure "Cardinal" [ref=e236]:
+                  - generic [ref=e239]: Cardinal
+                - generic [ref=e241]:
+                  - text: FF4B4B
+                  - generic "Click to copy hex" [ref=e242] [cursor=pointer]:
+                    - img "copy" [ref=e243]
+              - generic [ref=e244]:
+                - figure "Fire Ant" [ref=e245]:
+                  - generic [ref=e248]: Fire Ant
+                - generic [ref=e250]:
+                  - text: EA2B2B
+                  - generic "Click to copy hex" [ref=e251] [cursor=pointer]:
+                    - img "copy" [ref=e252]
+            - generic [ref=e253]:
+              - generic [ref=e254]:
+                - figure "Canary" [ref=e255]:
+                  - generic [ref=e258]: Canary
+                - generic [ref=e260]:
+                  - text: FFF5D3
+                  - generic "Click to copy hex" [ref=e261] [cursor=pointer]:
+                    - img "copy" [ref=e262]
+              - generic [ref=e263]:
+                - figure "Duck" [ref=e264]:
+                  - generic [ref=e267]: Duck
+                - generic [ref=e269]:
+                  - text: FBE56D
+                  - generic "Click to copy hex" [ref=e270] [cursor=pointer]:
+                    - img "copy" [ref=e271]
+              - generic [ref=e272]:
+                - figure "Bee" [ref=e273]:
+                  - generic [ref=e276]: Bee
+                - generic [ref=e278]:
+                  - text: FFC800
+                  - generic "Click to copy hex" [ref=e279] [cursor=pointer]:
+                    - img "copy" [ref=e280]
+              - generic [ref=e281]:
+                - figure "Lion" [ref=e282]:
+                  - generic [ref=e285]: Lion
+                - generic [ref=e287]:
+                  - text: FFB100
+                  - generic "Click to copy hex" [ref=e288] [cursor=pointer]:
+                    - img "copy" [ref=e289]
+              - generic [ref=e290]:
+                - figure "Fox" [ref=e291]:
+                  - generic [ref=e294]: Fox
+                - generic [ref=e296]:
+                  - text: FF9600
+                  - generic "Click to copy hex" [ref=e297] [cursor=pointer]:
+                    - img "copy" [ref=e298]
+              - generic [ref=e299]:
+                - figure "Cheetah" [ref=e300]:
+                  - generic [ref=e303]: Cheetah
+                - generic [ref=e305]:
+                  - text: FFCE8E
+                  - generic "Click to copy hex" [ref=e306] [cursor=pointer]:
+                    - img "copy" [ref=e307]
+              - generic [ref=e308]:
+                - figure "Monkey" [ref=e309]:
+                  - generic [ref=e312]: Monkey
+                - generic [ref=e314]:
+                  - text: E5A259
+                  - generic "Click to copy hex" [ref=e315] [cursor=pointer]:
+                    - img "copy" [ref=e316]
+              - generic [ref=e317]:
+                - figure "Camel" [ref=e318]:
+                  - generic [ref=e321]: Camel
+                - generic [ref=e323]:
+                  - text: E7A601
+                  - generic "Click to copy hex" [ref=e324] [cursor=pointer]:
+                    - img "copy" [ref=e325]
+              - generic [ref=e326]:
+                - figure "Guinea Pig" [ref=e327]:
+                  - generic [ref=e330]: Guinea Pig
+                - generic [ref=e332]:
+                  - text: CD7900
+                  - generic "Click to copy hex" [ref=e333] [cursor=pointer]:
+                    - img "copy" [ref=e334]
+              - generic [ref=e335]:
+                - figure "Grizzly" [ref=e336]:
+                  - generic [ref=e339]: Grizzly
+                - generic [ref=e341]:
+                  - text: A56644
+                  - generic "Click to copy hex" [ref=e342] [cursor=pointer]:
+                    - img "copy" [ref=e343]
+            - generic [ref=e344]:
+              - generic [ref=e345]:
+                - figure "Sea Sponge" [ref=e346]:
+                  - generic [ref=e349]: Sea Sponge
+                - generic [ref=e351]:
+                  - text: D7FFB8
+                  - generic "Click to copy hex" [ref=e352] [cursor=pointer]:
+                    - img "copy" [ref=e353]
+              - generic [ref=e354]:
+                - figure "Turtle" [ref=e355]:
+                  - generic [ref=e358]: Turtle
+                - generic [ref=e360]:
+                  - text: A5ED6E
+                  - generic "Click to copy hex" [ref=e361] [cursor=pointer]:
+                    - img "copy" [ref=e362]
+              - generic [ref=e363]:
+                - figure "Owl" [ref=e364]:
+                  - generic [ref=e367]: Owl
+                - generic [ref=e369]:
+                  - text: 58CC02
+                  - generic "Click to copy hex" [ref=e370] [cursor=pointer]:
+                    - img "copy" [ref=e371]
+              - generic [ref=e372]:
+                - figure "Tree Frog" [ref=e373]:
+                  - generic [ref=e376]: Tree Frog
+                - generic [ref=e378]:
+                  - text: 58A700
+                  - generic "Click to copy hex" [ref=e379] [cursor=pointer]:
+                    - img "copy" [ref=e380]
+            - generic [ref=e381]:
+              - generic [ref=e382]:
+                - figure "Iguana" [ref=e383]:
+                  - generic [ref=e386]: Iguana
+                - generic [ref=e388]:
+                  - text: DDF4FF
+                  - generic "Click to copy hex" [ref=e389] [cursor=pointer]:
+                    - img "copy" [ref=e390]
+              - generic [ref=e391]:
+                - figure "Anchovy" [ref=e392]:
+                  - generic [ref=e395]: Anchovy
+                - generic [ref=e397]:
+                  - text: D2E4E8
+                  - generic "Click to copy hex" [ref=e398] [cursor=pointer]:
+                    - img "copy" [ref=e399]
+              - generic [ref=e400]:
+                - figure "Beluga" [ref=e401]:
+                  - generic [ref=e404]: Beluga
+                - generic [ref=e406]:
+                  - text: BBF2FF
+                  - generic "Click to copy hex" [ref=e407] [cursor=pointer]:
+                    - img "copy" [ref=e408]
+              - generic [ref=e409]:
+                - figure "Moon Jelly" [ref=e410]:
+                  - generic [ref=e413]: Moon Jelly
+                - generic [ref=e415]:
+                  - text: 7AF0F2
+                  - generic "Click to copy hex" [ref=e416] [cursor=pointer]:
+                    - img "copy" [ref=e417]
+              - generic [ref=e418]:
+                - figure "Blue Jay" [ref=e419]:
+                  - generic [ref=e422]: Blue Jay
+                - generic [ref=e424]:
+                  - text: 84D8FF
+                  - generic "Click to copy hex" [ref=e425] [cursor=pointer]:
+                    - img "copy" [ref=e426]
+              - generic [ref=e427]:
+                - figure "Macaw" [ref=e428]:
+                  - generic [ref=e431]: Macaw
+                - generic [ref=e433]:
+                  - text: 1CB0F6
+                  - generic "Click to copy hex" [ref=e434] [cursor=pointer]:
+                    - img "copy" [ref=e435]
+              - generic [ref=e436]:
+                - figure "Whale" [ref=e437]:
+                  - generic [ref=e440]: Whale
+                - generic [ref=e442]:
+                  - text: 1899D6
+                  - generic "Click to copy hex" [ref=e443] [cursor=pointer]:
+                    - img "copy" [ref=e444]
+              - generic [ref=e445]:
+                - figure "Humpback" [ref=e446]:
+                  - generic [ref=e449]: Humpback
+                - generic [ref=e451]:
+                  - text: 2B70C9
+                  - generic "Click to copy hex" [ref=e452] [cursor=pointer]:
+                    - img "copy" [ref=e453]
+              - generic [ref=e454]:
+                - figure "Narwhal" [ref=e455]:
+                  - generic [ref=e458]: Narwhal
+                - generic [ref=e460]:
+                  - text: 1453A3
+                  - generic "Click to copy hex" [ref=e461] [cursor=pointer]:
+                    - img "copy" [ref=e462]
+            - generic [ref=e463]:
+              - generic [ref=e464]:
+                - figure "Starfish" [ref=e465]:
+                  - generic [ref=e468]: Starfish
+                - generic [ref=e470]:
+                  - text: FFAADE
+                  - generic "Click to copy hex" [ref=e471] [cursor=pointer]:
+                    - img "copy" [ref=e472]
+              - generic [ref=e473]:
+                - figure "Beetle" [ref=e474]:
+                  - generic [ref=e477]: Beetle
+                - generic [ref=e479]:
+                  - text: CE82FF
+                  - generic "Click to copy hex" [ref=e480] [cursor=pointer]:
+                    - img "copy" [ref=e481]
+              - generic [ref=e482]:
+                - figure "Betta" [ref=e483]:
+                  - generic [ref=e486]: Betta
+                - generic [ref=e488]:
+                  - text: 9069CD
+                  - generic "Click to copy hex" [ref=e489] [cursor=pointer]:
+                    - img "copy" [ref=e490]
+              - generic [ref=e491]:
+                - figure "Butterfly" [ref=e492]:
+                  - generic [ref=e495]: Butterfly
+                - generic [ref=e497]:
+                  - text: 6F4EA1
+                  - generic "Click to copy hex" [ref=e498] [cursor=pointer]:
+                    - img "copy" [ref=e499]
+        - paragraph [ref=e500]: Our illustrations use a wide variety of colors. It's understandable that some illustrations will need a color outside of the palette, but use these colors as a general guide and be consistent where you can.
+      - generic [ref=e501]:
+        - generic [ref=e502]:
+          - heading "Color" [level=3] [ref=e503]
+          - heading "Assigning color" [level=2] [ref=e504]
+        - figure [ref=e505]:
+          - generic [ref=e506]:
+            - generic [ref=e508]: This is fine
+            - generic [ref=e510]: This is fine
+            - generic [ref=e512]: This is better
+            - generic [ref=e514]: This is better
+        - paragraph [ref=e515]: Be as playful as you'd like. We want our illustrations to be colorful and vibrant.
+      - generic [ref=e516]:
+        - generic [ref=e517]:
+          - heading "Color" [level=3] [ref=e518]
+          - heading "Pastels vs. gray" [level=2] [ref=e519]
+        - figure [ref=e520]:
+          - generic [ref=e521]:
+            - figure [ref=e522]:
+              - img
+            - figure [ref=e523]:
+              - img
+        - paragraph [ref=e524]: All of our apps and services are designed with white backgrounds. This prevents us from using white as a base color. Instead, use the light pastels in our palette. But never use gray — it appears lifeless and cold compared to the rest of our bright palette.
+      - generic [ref=e525]:
+        - generic [ref=e526]:
+          - heading "Color" [level=3] [ref=e527]
+          - heading "Too much color" [level=2] [ref=e528]
+        - figure [ref=e529]:
+          - figure [ref=e531]:
+            - img
+        - paragraph [ref=e532]: Keep your illustration to a few colors. Too many colors can hurt legibility when an object scales to a small size.
+      - separator [ref=e533]
+      - generic [ref=e534]:
+        - heading "Floating accents anchor" [level=1] [ref=e535]:
+          - text: Floating accents
+          - link "anchor" [ref=e536] [cursor=pointer]:
+            - /url: https://design.duolingo.com/illustration/shape-language#floating-accents
+            - img "anchor" [ref=e537]
+        - figure [ref=e538]:
+          - generic [ref=e541]:
+            - figure [ref=e542]:
+              - img
+            - figure [ref=e543]:
+              - img
+        - paragraph [ref=e544]: We'll occasionally have certain objects float above or below a character or object. We take this design element from Duo's feet, which kind of flutter below his body as he jumps and flies. Floating objects give us flexibility when turning an object in space, and they help make posing easier. Only float an object if it serves the illustration — don't force it.
+      - contentinfo [ref=e545]:
+        - navigation [ref=e546]:
+          - link "Glossary" [ref=e547] [cursor=pointer]:
+            - /url: /writing/glossary
+            - img [ref=e548]
+            - text: Glossary
+          - link "Characters" [ref=e550] [cursor=pointer]:
+            - /url: /illustration/characters
+            - text: Characters
+            - img [ref=e551]
+        - separator [ref=e553]
+        - generic [ref=e554]:
+          - generic [ref=e555]:
+            - link "Duolingo" [ref=e556] [cursor=pointer]:
+              - /url: https://duolingo.com
+            - link "About" [ref=e557] [cursor=pointer]:
+              - /url: https://duolingo.com/info
+            - link "Careers" [ref=e558] [cursor=pointer]:
+              - /url: https://duolingo.com/careers
+            - link "Apps" [ref=e559] [cursor=pointer]:
+              - /url: https://duolingo.com/mobile
+            - link "Help" [ref=e560] [cursor=pointer]:
+              - /url: https://support.duolingo.com
+            - link "Terms" [ref=e561] [cursor=pointer]:
+              - /url: https://duolingo.com/terms
+            - link "Privacy" [ref=e562] [cursor=pointer]:
+              - /url: https://duolingo.com/privacy
+          - generic [ref=e563]:
+            - link [ref=e564] [cursor=pointer]:
+              - /url: https://dribbble.com/Duolingo
+              - img [ref=e565]
+            - link [ref=e567] [cursor=pointer]:
+              - /url: https://twitter.com/duolingo
+              - img [ref=e568]
+            - link [ref=e570] [cursor=pointer]:
+              - /url: https://instagram.com/duolingo
+              - img [ref=e571]
+            - link [ref=e573] [cursor=pointer]:
+              - /url: https://facebook.com/duolingo
+              - img [ref=e574]
+            - link [ref=e576] [cursor=pointer]:
+              - /url: https://youtube.com/user/duolingo
+              - img [ref=e577]
+  - button "back to top" [ref=e579] [cursor=pointer]:
+    - img "back to top" [ref=e580]
+  - generic [ref=e581]:
+    - img "success" [ref=e582]
+    - text: All good.

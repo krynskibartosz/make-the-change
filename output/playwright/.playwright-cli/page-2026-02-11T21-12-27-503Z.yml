@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - img [ref=e9]
+        - generic [ref=e12]: Commande validée
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - img [ref=e17]
+            - heading "Commande confirmée" [level=1] [ref=e20]
+          - paragraph [ref=e21]: "Merci pour votre achat. Référence #44F84D2D."
+        - generic [ref=e22]: Payée
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - paragraph [ref=e25]: Date
+          - paragraph [ref=e26]: 11 février 2026
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: Total
+          - paragraph [ref=e29]: 0 pts
+    - generic [ref=e30]:
+      - heading "Détail de la commande" [level=3] [ref=e32]
+      - generic [ref=e33]:
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - text: Gourde Inox
+            - generic [ref=e37]: x1
+          - generic [ref=e39]: 0 pts
+        - generic [ref=e41]:
+          - generic [ref=e42]: Total
+          - generic [ref=e44]: 0 pts
+        - generic [ref=e45]:
+          - link "Voir mes commandes" [ref=e46] [cursor=pointer]:
+            - /url: /fr/dashboard/orders
+            - button "Voir mes commandes" [ref=e47]:
+              - generic [ref=e49]:
+                - text: Voir mes commandes
+                - img [ref=e50]
+          - link "Continuer mes achats" [ref=e52] [cursor=pointer]:
+            - /url: /fr/products
+            - button "Continuer mes achats" [ref=e53]:
+              - generic [ref=e55]:
+                - text: Continuer mes achats
+                - img [ref=e56]
+  - button "Open Next.js Dev Tools" [ref=e64] [cursor=pointer]:
+    - img [ref=e65]
+  - alert [ref=e68]

@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <div className="container mx-auto px-4 py-16">
       {/* Hero Skeleton */}
-      <section className="mb-16 rounded-3xl bg-gradient-to-br from-primary/5 via-background to-emerald-50/30 p-8 sm:p-12">
+      <section className="mb-16 rounded-3xl bg-gradient-to-br from-primary/5 via-background to-client-emerald-50/30 p-8 sm:p-12">
         <div className="mx-auto max-w-3xl text-center">
           <Skeleton className="mx-auto mb-4 h-6 w-32" />
           <Skeleton className="mx-auto mb-6 h-12 w-3/4" />

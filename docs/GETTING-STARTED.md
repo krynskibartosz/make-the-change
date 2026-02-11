@@ -13,12 +13,11 @@ pnpm install
 Copier et remplir :
 - `.env.example`
 - `apps/web/.env.example`
-- `apps/mobile/.env.example`
+- `apps/web-client/.env.example`
 
 ## Démarrage (local)
 ```bash
-pnpm dev        # web + web-client + core
-pnpm dev:all    # inclut mobile
+pnpm dev
 ```
 
 ## Commandes qualité
@@ -28,10 +27,19 @@ pnpm type-check
 pnpm build
 ```
 
-## Sources de vérité
-- **Schéma DB (Drizzle)** : `packages/core/src/shared/db/schema.ts`
+## Scope actif
+- `apps/web`
+- `apps/web-client`
+- `packages/core`
+
+## Règles DB
+- **Source de vérité DB runtime** : MCP Supabase (toujours vérifier l’état réel en base via MCP avant toute décision technique).
+- **Fichiers `.sql`** : interdits dans le repo (guard `pnpm guard:no-sql`).
+- **Contrat applicatif** : `packages/core/src/shared/db/schema.ts` doit rester aligné avec la vérité observée via MCP.
+
+## Sources techniques
 - **Tokens UI** : `packages/core/src/shared/ui/globals.css`
 - **Config Tailwind** : `packages/core/tailwind.config.ts`
 - **Locales** : `packages/core/locales/*`
 
-Dernière MAJ : **2 février 2026**
+Dernière MAJ : **11 février 2026**

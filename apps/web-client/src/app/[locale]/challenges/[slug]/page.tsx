@@ -70,7 +70,7 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
                   Progression
                 </p>
                 <p className="mt-2 inline-flex items-center gap-2 text-sm font-semibold">
-                  <Flame className="h-4 w-4 text-amber-500" /> 0%
+                  <Flame className="h-4 w-4 text-client-amber-500" /> 0%
                 </p>
               </div>
             </div>

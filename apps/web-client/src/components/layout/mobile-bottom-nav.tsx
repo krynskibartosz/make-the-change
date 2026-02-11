@@ -1,29 +1,7 @@
 'use client'
 
-import {
-  BottomSheet,
-  BottomSheetContent,
-  BottomSheetTrigger,
-  Button,
-} from '@make-the-change/core/ui'
-import {
-  Coins,
-  FileText,
-  HelpCircle,
-  Home,
-  Info,
-  LayoutDashboard,
-  Mail,
-  Menu,
-  PiggyBank,
-  ShieldCheck,
-  ShoppingBag,
-  Trophy,
-  User,
-} from 'lucide-react'
+import { Home, Menu, PiggyBank, ShoppingBag, Trophy, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
-import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -33,19 +11,7 @@ interface MobileBottomNavProps {
 
 export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const t = useTranslations('navigation') // Assuming translations exist or fallback
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  // Determine if we are in a "Menu" sub-page to highlight the menu tab
-  const isMenuPage =
-    pathname.startsWith('/about') ||
-    pathname.startsWith('/blog') ||
-    pathname.startsWith('/contact') ||
-    pathname.startsWith('/faq') ||
-    pathname.startsWith('/how-it-works') ||
-    pathname.startsWith('/privacy') ||
-    pathname.startsWith('/terms') ||
-    pathname.startsWith('/dashboard') // Since profile is in dashboard, we might consider dashboard as "Menu" context if not one of the other tabs
+  const t = useTranslations('navigation')
 
   // Specific check for tabs
   const isHome = pathname === '/'
@@ -60,32 +26,30 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     {
       href: '/',
       icon: Home,
-      label: 'Accueil',
+      label: t('home'),
       isActive: isHome,
     },
     {
       href: '/products',
       icon: ShoppingBag,
-      label: 'Produits',
+      label: t('products'),
       isActive: isProducts,
     },
     {
       href: '/projects',
       icon: PiggyBank,
-      label: 'Projets',
+      label: t('projects'),
       isActive: isProjects,
     },
     {
       href: '/leaderboard',
       icon: Trophy,
-      label: 'Classement',
+      label: t('leaderboard'),
       isActive: isLeaderboard,
     },
   ]
 
   const avatarUrl = user?.avatarUrl ?? null
-  const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
-  const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3000'
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-safe md:hidden">
@@ -129,17 +93,16 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
             )}
           >
             {user ? (
-               // If logged in, show small avatar or User icon
-               avatarUrl ? (
-                 <img src={avatarUrl} alt="" className="h-6 w-6 rounded-full object-cover" />
-               ) : (
-                 <User className={cn('h-5 w-5', isMenuActive && 'fill-primary/20')} />
-               )
+              avatarUrl ? (
+                <img src={avatarUrl} alt="" className="h-6 w-6 rounded-full object-cover" />
+              ) : (
+                <User className={cn('h-5 w-5', isMenuActive && 'fill-primary/20')} />
+              )
             ) : (
               <Menu className={cn('h-5 w-5', isMenuActive && 'fill-primary/20')} />
             )}
           </div>
-          <span className={isMenuActive ? 'font-semibold' : ''}>Menu</span>
+          <span className={isMenuActive ? 'font-semibold' : ''}>{t('menu')}</span>
         </Link>
       </nav>
     </div>

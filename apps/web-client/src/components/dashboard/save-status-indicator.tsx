@@ -31,8 +31,8 @@ export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({
     },
     pending: {
       icon: Dot,
-      color: 'text-amber-500',
-      bgColor: 'bg-amber-50/80 dark:bg-amber-950/20',
+      color: 'text-client-amber-500',
+      bgColor: 'bg-client-amber-50/80 dark:bg-client-amber-950/20',
       show: true,
       message: pendingChanges > 0 ? `${pendingChanges} modification${pendingChanges > 1 ? 's' : ''}` : 'Modifications en attente',
     },
@@ -80,7 +80,7 @@ export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({
       <span className="truncate">{config.message}</span>
       {status === 'pending' && onSaveNow && (
         <Button
-          className="ml-1 px-1.5 py-0.5 h-5 text-[10px] hover:bg-amber-100 dark:hover:bg-amber-900/40"
+          className="ml-1 px-1.5 py-0.5 h-5 text-[10px] hover:bg-client-amber-100 dark:hover:bg-client-amber-900/40"
           size="sm"
           variant="ghost"
           onClick={onSaveNow}

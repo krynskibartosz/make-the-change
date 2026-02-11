@@ -1,0 +1,9 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6]:
+    - paragraph [ref=e7]: Votre panier est vide
+    - paragraph [ref=e8]: Ajoutez des produits avant de passer commande.
+    - link "Explorer la boutique" [ref=e9] [cursor=pointer]:
+      - /url: /fr/products
+  - button "Open Next.js Dev Tools" [ref=e15] [cursor=pointer]:
+    - img [ref=e16]
+  - alert [ref=e19]

@@ -265,7 +265,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               </div>
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Bonus</p>
-                <p className="mt-2 text-lg font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
+                <p className="mt-2 text-lg font-semibold tabular-nums text-client-emerald-600 dark:text-client-emerald-400">
                   +{calc ? formatPoints(calc.bonus_points) : '—'} pts
                 </p>
               </div>

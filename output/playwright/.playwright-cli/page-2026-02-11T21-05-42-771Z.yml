@@ -1,0 +1,418 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e68]:
+      - button "Open issues overlay" [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]: "1"
+          - generic [ref=e72]: "2"
+        - generic [ref=e73]:
+          - text: Issue
+          - generic [ref=e74]: s
+      - button "Collapse issues badge" [ref=e75]:
+        - img [ref=e76]
+  - alert [ref=e11]
+  - generic [ref=e78]:
+    - main [ref=e79]:
+      - generic [ref=e82]:
+        - heading "Notre boutique" [level=1] [ref=e83]
+        - paragraph [ref=e84]: Échangez vos points contre des produits durables de nos partenaires
+      - generic [ref=e88]:
+        - generic [ref=e90]:
+          - button "Filtrer" [ref=e91]:
+            - button "Filtrer" [ref=e93] [cursor=pointer]:
+              - generic [ref=e95]:
+                - img [ref=e96]
+                - text: Filtrer
+          - combobox [ref=e98] [cursor=pointer]:
+            - generic [ref=e99]:
+              - img [ref=e100]
+              - generic [ref=e103]: Mis en avant
+            - img [ref=e105]
+          - textbox [ref=e107]: featured_first
+        - generic [ref=e108]:
+          - generic [ref=e110]:
+            - paragraph [ref=e111]: produits
+            - paragraph [ref=e112]: 51 produits
+          - generic [ref=e113]:
+            - img [ref=e114]
+            - textbox "Rechercher des produits..." [ref=e119]
+        - generic [ref=e121]:
+          - button "View details Gourde Inox Gourde Inox Gourde réutilisable zéro déchet. 1,000 points €10.00 Mis en avant Voir" [ref=e123] [cursor=pointer]:
+            - link "View details" [ref=e124]:
+              - /url: /products/3e23f67b-e870-48e9-9e6e-027a452ed647
+            - generic [ref=e125]:
+              - img "Gourde Inox" [ref=e127]
+              - heading "Gourde Inox" [level=2] [ref=e131]
+              - generic [ref=e132]:
+                - paragraph [ref=e133]: Gourde réutilisable zéro déchet.
+                - generic [ref=e134]:
+                  - generic [ref=e135]:
+                    - generic [ref=e136]: 1,000 points
+                    - generic [ref=e137]: €10.00
+                  - generic [ref=e138]: Mis en avant
+              - generic [ref=e140]:
+                - text: Voir
+                - img [ref=e141]
+          - button "View details Panier Légumes Bio Panier Légumes Bio Assortiment de légumes de saison. 800 points €8.00 Mis en avant Voir" [ref=e144] [cursor=pointer]:
+            - link "View details" [ref=e145]:
+              - /url: /products/a7942614-42f5-4013-8a76-d74fd2fa6217
+            - generic [ref=e146]:
+              - img "Panier Légumes Bio" [ref=e148]
+              - heading "Panier Légumes Bio" [level=2] [ref=e152]
+              - generic [ref=e153]:
+                - paragraph [ref=e154]: Assortiment de légumes de saison.
+                - generic [ref=e155]:
+                  - generic [ref=e156]:
+                    - generic [ref=e157]: 800 points
+                    - generic [ref=e158]: €8.00
+                  - generic [ref=e159]: Mis en avant
+              - generic [ref=e161]:
+                - text: Voir
+                - img [ref=e162]
+          - button "View details Shampoing Solide Shampoing Solide Zéro plastique, 100% naturel. 300 points €3.00 Mis en avant Voir" [ref=e165] [cursor=pointer]:
+            - link "View details" [ref=e166]:
+              - /url: /products/c96b7819-730f-48b5-bd93-ec10371dbc2e
+            - generic [ref=e167]:
+              - img "Shampoing Solide" [ref=e169]
+              - heading "Shampoing Solide" [level=2] [ref=e173]
+              - generic [ref=e174]:
+                - paragraph [ref=e175]: Zéro plastique, 100% naturel.
+                - generic [ref=e176]:
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: 300 points
+                    - generic [ref=e179]: €3.00
+                  - generic [ref=e180]: Mis en avant
+              - generic [ref=e182]:
+                - text: Voir
+                - img [ref=e183]
+          - button "View details Miel de Lavande Miel de Lavande Miel pur récolté en Provence. 500 points €5.00 Mis en avant Voir" [ref=e186] [cursor=pointer]:
+            - link "View details" [ref=e187]:
+              - /url: /products/f6a92215-e5d7-4e97-b91d-a83cd6d61838
+            - generic [ref=e188]:
+              - img "Miel de Lavande" [ref=e190]
+              - heading "Miel de Lavande" [level=2] [ref=e194]
+              - generic [ref=e195]:
+                - paragraph [ref=e196]: Miel pur récolté en Provence.
+                - generic [ref=e197]:
+                  - generic [ref=e198]:
+                    - generic [ref=e199]: 500 points
+                    - generic [ref=e200]: €5.00
+                  - generic [ref=e201]: Mis en avant
+              - generic [ref=e203]:
+                - text: Voir
+                - img [ref=e204]
+          - button "View details Huile d'Olive Extra Vierge 750ml Huile d'Olive Extra Vierge 750ml Huile d'olive premium 1,800 points €18.00 Mis en avant Voir" [ref=e207] [cursor=pointer]:
+            - link "View details" [ref=e208]:
+              - /url: /products/e8f78510-93f8-4f08-a020-87d08d4b438d
+            - generic [ref=e209]:
+              - img "Huile d'Olive Extra Vierge 750ml" [ref=e211]
+              - heading "Huile d'Olive Extra Vierge 750ml" [level=2] [ref=e215]
+              - generic [ref=e216]:
+                - paragraph [ref=e217]: Huile d'olive premium
+                - generic [ref=e218]:
+                  - generic [ref=e219]:
+                    - generic [ref=e220]: 1,800 points
+                    - generic [ref=e221]: €18.00
+                  - generic [ref=e222]: Mis en avant
+              - generic [ref=e224]:
+                - text: Voir
+                - img [ref=e225]
+          - button "View details Visite Guidée de la Ferme Visite Guidée de la Ferme Expérience à la ferme 2,000 points €20.00 Mis en avant Voir" [ref=e228] [cursor=pointer]:
+            - link "View details" [ref=e229]:
+              - /url: /products/1cabd434-9d3f-4032-b5d8-18a3d94af628
+            - generic [ref=e230]:
+              - img "Visite Guidée de la Ferme" [ref=e232]
+              - heading "Visite Guidée de la Ferme" [level=2] [ref=e236]
+              - generic [ref=e237]:
+                - paragraph [ref=e238]: Expérience à la ferme
+                - generic [ref=e239]:
+                  - generic [ref=e240]:
+                    - generic [ref=e241]: 2,000 points
+                    - generic [ref=e242]: €20.00
+                  - generic [ref=e243]: Mis en avant
+              - generic [ref=e245]:
+                - text: Voir
+                - img [ref=e246]
+          - button "View details Huile d'Olive Extra Huile d'Olive Extra Huile pressée à froid. 1,200 points €12.00 Voir" [ref=e249] [cursor=pointer]:
+            - link "View details" [ref=e250]:
+              - /url: /products/d0bf9323-89ba-4e24-aa58-03ebe5ebeb32
+            - generic [ref=e251]:
+              - img "Huile d'Olive Extra" [ref=e253]
+              - heading "Huile d'Olive Extra" [level=2] [ref=e257]
+              - generic [ref=e258]:
+                - paragraph [ref=e259]: Huile pressée à froid.
+                - generic [ref=e261]:
+                  - generic [ref=e262]: 1,200 points
+                  - generic [ref=e263]: €12.00
+              - generic [ref=e265]:
+                - text: Voir
+                - img [ref=e266]
+          - button "View details Savon Bio Savon Bio Savon artisanal aux huiles essentielles. 250 points €2.50 Voir" [ref=e269] [cursor=pointer]:
+            - link "View details" [ref=e270]:
+              - /url: /products/5ee85c90-852d-4ee7-af8e-ca1c96fe199a
+            - generic [ref=e271]:
+              - img "Savon Bio" [ref=e273]
+              - heading "Savon Bio" [level=2] [ref=e277]
+              - generic [ref=e278]:
+                - paragraph [ref=e279]: Savon artisanal aux huiles essentielles.
+                - generic [ref=e281]:
+                  - generic [ref=e282]: 250 points
+                  - generic [ref=e283]: €2.50
+              - generic [ref=e285]:
+                - text: Voir
+                - img [ref=e286]
+          - button "View details Miel de Niaouli Miel de Niaouli Produit authentique de Madagascar. Miel de Niaouli. 50 points €0.50 Voir" [ref=e289] [cursor=pointer]:
+            - link "View details" [ref=e290]:
+              - /url: /products/23fe2209-661c-411e-b025-4f89afb7678c
+            - generic [ref=e291]:
+              - img "Miel de Niaouli" [ref=e293]
+              - heading "Miel de Niaouli" [level=2] [ref=e297]
+              - generic [ref=e298]:
+                - paragraph [ref=e299]: Produit authentique de Madagascar. Miel de Niaouli.
+                - generic [ref=e301]:
+                  - generic [ref=e302]: 50 points
+                  - generic [ref=e303]: €0.50
+              - generic [ref=e305]:
+                - text: Voir
+                - img [ref=e306]
+          - button "View details Miel de Forêts Sèches Miel de Forêts Sèches Produit authentique de Madagascar. Miel de Forêts Sèches. 50 points €0.50 Voir" [ref=e309] [cursor=pointer]:
+            - link "View details" [ref=e310]:
+              - /url: /products/836d05ee-fdb1-4475-bf49-dea2d5abeeef
+            - generic [ref=e311]:
+              - img "Miel de Forêts Sèches" [ref=e313]
+              - heading "Miel de Forêts Sèches" [level=2] [ref=e317]
+              - generic [ref=e318]:
+                - paragraph [ref=e319]: Produit authentique de Madagascar. Miel de Forêts Sèches.
+                - generic [ref=e321]:
+                  - generic [ref=e322]: 50 points
+                  - generic [ref=e323]: €0.50
+              - generic [ref=e325]:
+                - text: Voir
+                - img [ref=e326]
+          - button "View details Miel de Cactus Miel de Cactus Produit authentique de Madagascar. Miel de Cactus. 50 points €0.50 Voir" [ref=e329] [cursor=pointer]:
+            - link "View details" [ref=e330]:
+              - /url: /products/8c6b2765-7512-4244-99e4-be233b3279b7
+            - generic [ref=e331]:
+              - img "Miel de Cactus" [ref=e333]
+              - heading "Miel de Cactus" [level=2] [ref=e337]
+              - generic [ref=e338]:
+                - paragraph [ref=e339]: Produit authentique de Madagascar. Miel de Cactus.
+                - generic [ref=e341]:
+                  - generic [ref=e342]: 50 points
+                  - generic [ref=e343]: €0.50
+              - generic [ref=e345]:
+                - text: Voir
+                - img [ref=e346]
+          - button "View details Miel de Baies Roses Miel de Baies Roses Produit authentique de Madagascar. Miel de Baies Roses. 50 points €0.50 Voir" [ref=e349] [cursor=pointer]:
+            - link "View details" [ref=e350]:
+              - /url: /products/30d6eece-5d10-4b8d-b674-8c23ca920d7d
+            - generic [ref=e351]:
+              - img "Miel de Baies Roses" [ref=e353]
+              - heading "Miel de Baies Roses" [level=2] [ref=e357]
+              - generic [ref=e358]:
+                - paragraph [ref=e359]: Produit authentique de Madagascar. Miel de Baies Roses.
+                - generic [ref=e361]:
+                  - generic [ref=e362]: 50 points
+                  - generic [ref=e363]: €0.50
+              - generic [ref=e365]:
+                - text: Voir
+                - img [ref=e366]
+          - button "View details Miel de Mokarana Miel de Mokarana Produit authentique de Madagascar. Miel de Mokarana. 50 points €0.50 Voir" [ref=e369] [cursor=pointer]:
+            - link "View details" [ref=e370]:
+              - /url: /products/c9712e94-a8e4-4a78-a391-75b3587c483a
+            - generic [ref=e371]:
+              - img "Miel de Mokarana" [ref=e373]
+              - heading "Miel de Mokarana" [level=2] [ref=e377]
+              - generic [ref=e378]:
+                - paragraph [ref=e379]: Produit authentique de Madagascar. Miel de Mokarana.
+                - generic [ref=e381]:
+                  - generic [ref=e382]: 50 points
+                  - generic [ref=e383]: €0.50
+              - generic [ref=e385]:
+                - text: Voir
+                - img [ref=e386]
+          - button "View details Poivre Noir en Grains - BIO Poivre Noir en Grains - BIO Produit authentique de Madagascar. Poivre Noir en Grains - BIO. 49 points €0.49 Voir" [ref=e389] [cursor=pointer]:
+            - link "View details" [ref=e390]:
+              - /url: /products/59d7b57c-f784-4438-9fa4-e35cde17ffd0
+            - generic [ref=e391]:
+              - img "Poivre Noir en Grains - BIO" [ref=e393]
+              - heading "Poivre Noir en Grains - BIO" [level=2] [ref=e397]
+              - generic [ref=e398]:
+                - paragraph [ref=e399]: Produit authentique de Madagascar. Poivre Noir en Grains - BIO.
+                - generic [ref=e401]:
+                  - generic [ref=e402]: 49 points
+                  - generic [ref=e403]: €0.49
+              - generic [ref=e405]:
+                - text: Voir
+                - img [ref=e406]
+          - button "View details Coarse Salt 175g Coarse Salt 175g Produit authentique de Madagascar. Coarse Salt 175g. 45 points €0.45 Voir" [ref=e409] [cursor=pointer]:
+            - link "View details" [ref=e410]:
+              - /url: /products/9c5d8714-bac3-4f79-a437-c88a651cbf3b
+            - generic [ref=e411]:
+              - img "Coarse Salt 175g" [ref=e413]
+              - heading "Coarse Salt 175g" [level=2] [ref=e417]
+              - generic [ref=e418]:
+                - paragraph [ref=e419]: Produit authentique de Madagascar. Coarse Salt 175g.
+                - generic [ref=e421]:
+                  - generic [ref=e422]: 45 points
+                  - generic [ref=e423]: €0.45
+              - generic [ref=e425]:
+                - text: Voir
+                - img [ref=e426]
+          - button "View details Ground Black Pepper 60g Ground Black Pepper 60g Produit authentique de Madagascar. Ground Black Pepper 60g. 45 points €0.45 Voir" [ref=e429] [cursor=pointer]:
+            - link "View details" [ref=e430]:
+              - /url: /products/d000343c-f36f-48da-8c3a-af8fbab5e7b7
+            - generic [ref=e431]:
+              - img "Ground Black Pepper 60g" [ref=e433]
+              - heading "Ground Black Pepper 60g" [level=2] [ref=e437]
+              - generic [ref=e438]:
+                - paragraph [ref=e439]: Produit authentique de Madagascar. Ground Black Pepper 60g.
+                - generic [ref=e441]:
+                  - generic [ref=e442]: 45 points
+                  - generic [ref=e443]: €0.45
+              - generic [ref=e445]:
+                - text: Voir
+                - img [ref=e446]
+          - button "View details Green Peppercorns in Brine 135g Green Peppercorns in Brine 135g Produit authentique de Madagascar. Green Peppercorns in Brine 135g. 45 points €0.45 Voir" [ref=e449] [cursor=pointer]:
+            - link "View details" [ref=e450]:
+              - /url: /products/896761a3-8aa8-428c-bc1b-ca9933e67708
+            - generic [ref=e451]:
+              - img "Green Peppercorns in Brine 135g" [ref=e453]
+              - heading "Green Peppercorns in Brine 135g" [level=2] [ref=e457]
+              - generic [ref=e458]:
+                - paragraph [ref=e459]: Produit authentique de Madagascar. Green Peppercorns in Brine 135g.
+                - generic [ref=e461]:
+                  - generic [ref=e462]: 45 points
+                  - generic [ref=e463]: €0.45
+              - generic [ref=e465]:
+                - text: Voir
+                - img [ref=e466]
+          - button "View details Poivre Noir en Grains Poivre Noir en Grains Produit authentique de Madagascar. Poivre Noir en Grains. 45 points €0.45 Voir" [ref=e469] [cursor=pointer]:
+            - link "View details" [ref=e470]:
+              - /url: /products/85530c9a-3987-4911-9274-572d3b9726e6
+            - generic [ref=e471]:
+              - img "Poivre Noir en Grains" [ref=e473]
+              - heading "Poivre Noir en Grains" [level=2] [ref=e477]
+              - generic [ref=e478]:
+                - paragraph [ref=e479]: Produit authentique de Madagascar. Poivre Noir en Grains.
+                - generic [ref=e481]:
+                  - generic [ref=e482]: 45 points
+                  - generic [ref=e483]: €0.45
+              - generic [ref=e485]:
+                - text: Voir
+                - img [ref=e486]
+          - button "View details Coarse Salt 500g Coarse Salt 500g Produit authentique de Madagascar. Coarse Salt 500g. 42 points €0.42 Voir" [ref=e489] [cursor=pointer]:
+            - link "View details" [ref=e490]:
+              - /url: /products/e03f3004-26a0-475f-b371-f6fea03a38b3
+            - generic [ref=e491]:
+              - img "Coarse Salt 500g" [ref=e493]
+              - heading "Coarse Salt 500g" [level=2] [ref=e497]
+              - generic [ref=e498]:
+                - paragraph [ref=e499]: Produit authentique de Madagascar. Coarse Salt 500g.
+                - generic [ref=e501]:
+                  - generic [ref=e502]: 42 points
+                  - generic [ref=e503]: €0.42
+              - generic [ref=e505]:
+                - text: Voir
+                - img [ref=e506]
+          - button "View details Coriander Seeds 35g Coriander Seeds 35g Produit authentique de Madagascar. Coriander Seeds 35g. 30 points €0.30 Voir" [ref=e509] [cursor=pointer]:
+            - link "View details" [ref=e510]:
+              - /url: /products/0ff05e4c-4ecf-4710-87c2-d184a3e53c3e
+            - generic [ref=e511]:
+              - img "Coriander Seeds 35g" [ref=e513]
+              - heading "Coriander Seeds 35g" [level=2] [ref=e517]
+              - generic [ref=e518]:
+                - paragraph [ref=e519]: Produit authentique de Madagascar. Coriander Seeds 35g.
+                - generic [ref=e521]:
+                  - generic [ref=e522]: 30 points
+                  - generic [ref=e523]: €0.30
+              - generic [ref=e525]:
+                - text: Voir
+                - img [ref=e526]
+          - button "View details Savon bébé HABABY Savon bébé HABABY Savon Hababy saponifié à froid (surgras 8%) pour votre bébé. À l'extrait de calendula, il est idéal pour prendre le plus grand soin de la peau si fragile des bébés. Convient également aux adultes. 75 points €0.75 Voir" [ref=e529] [cursor=pointer]:
+            - link "View details" [ref=e530]:
+              - /url: /products/eb9f6623-37f3-4cc8-9cce-f1426f7ac319
+            - generic [ref=e531]:
+              - img "Savon bébé HABABY" [ref=e533]
+              - heading "Savon bébé HABABY" [level=2] [ref=e537]
+              - generic [ref=e538]:
+                - paragraph [ref=e539]: Savon Hababy saponifié à froid (surgras 8%) pour votre bébé. À l'extrait de calendula, il est idéal pour prendre le plus grand soin de la peau si fragile des bébés. Convient également aux adultes.
+                - generic [ref=e541]:
+                  - generic [ref=e542]: 75 points
+                  - generic [ref=e543]: €0.75
+              - generic [ref=e545]:
+                - text: Voir
+                - img [ref=e546]
+          - button "View details Coffret 7 mini savons (50g) Coffret 7 mini savons (50g) Joyeux et coloré, à l'image d'Habeebee, ce pack composé des 7 savons de Habeebee en format de 50g est super mimi et de taille idéale pour chaque point d'eau de la maison. A offrir ou à s'offrir; c'est un beau voyage dans l'univers incroyable de la savonnerie artisanale d'Habeebee. 290 points €2.90 Voir" [ref=e549] [cursor=pointer]:
+            - link "View details" [ref=e550]:
+              - /url: /products/0295a229-245c-4ecc-8324-105f320b6602
+            - generic [ref=e551]:
+              - img "Coffret 7 mini savons (50g)" [ref=e553]
+              - heading "Coffret 7 mini savons (50g)" [level=2] [ref=e557]
+              - generic [ref=e558]:
+                - paragraph [ref=e559]: Joyeux et coloré, à l'image d'Habeebee, ce pack composé des 7 savons de Habeebee en format de 50g est super mimi et de taille idéale pour chaque point d'eau de la maison. A offrir ou à s'offrir; c'est un beau voyage dans l'univers incroyable de la savonnerie artisanale d'Habeebee.
+                - generic [ref=e561]:
+                  - generic [ref=e562]: 290 points
+                  - generic [ref=e563]: €2.90
+              - generic [ref=e565]:
+                - text: Voir
+                - img [ref=e566]
+          - 'button "View details Coffret bougies BELDI Coffret bougies BELDI Coffret composé de 4 bougies Beldi à la cire d’abeille, coulées dans des verres recyclés soufflés traditionnels du Maroc. La lumière Habeebee belle et naturelle qui purifie l’air et brille longtemps. Un lien d’amitié entre deux belles cultures. Exclusivité boutique et marchés de Noël Conseil d’utilisation : ne pas laisser la bougie brûler jusqu’au bout.Chaque verre est soufflé artisanalement ; une chaleur excessive peut altérer sa résistance. 290 points €2.90 Voir" [ref=e569] [cursor=pointer]':
+            - link "View details" [ref=e570]:
+              - /url: /products/1821dc13-8d56-44e8-b98d-55a7f6c588c5
+            - generic [ref=e571]:
+              - img "Coffret bougies BELDI" [ref=e573]
+              - heading "Coffret bougies BELDI" [level=2] [ref=e577]
+              - generic [ref=e578]:
+                - paragraph [ref=e579]: "Coffret composé de 4 bougies Beldi à la cire d’abeille, coulées dans des verres recyclés soufflés traditionnels du Maroc. La lumière Habeebee belle et naturelle qui purifie l’air et brille longtemps. Un lien d’amitié entre deux belles cultures. Exclusivité boutique et marchés de Noël Conseil d’utilisation : ne pas laisser la bougie brûler jusqu’au bout.Chaque verre est soufflé artisanalement ; une chaleur excessive peut altérer sa résistance."
+                - generic [ref=e581]:
+                  - generic [ref=e582]: 290 points
+                  - generic [ref=e583]: €2.90
+              - generic [ref=e585]:
+                - text: Voir
+                - img [ref=e586]
+          - button "View details Baume hiver rhume & nez bouché SAPIN DE NOËL Baume hiver rhume & nez bouché SAPIN DE NOËL Baume qui réconforte tout l'hiver. Idéal pour passer l'hiver, ce baume aux 3 huiles essentielles géniales de Sapin Baumier, Ravintsara et Eucalyptus connues pour lutter contre le nez bouché, les rhumes et les petits bobos de l'hiver. A appliquer sur le dos et le torse. Convient aux enfants à partir de 6 ans. Déconseillé aux femmes enceintes. 120 points €1.20 Voir" [ref=e589] [cursor=pointer]:
+            - link "View details" [ref=e590]:
+              - /url: /products/02e89240-01e1-433c-809c-d5ef42614689
+            - generic [ref=e591]:
+              - img "Baume hiver rhume & nez bouché SAPIN DE NOËL" [ref=e593]
+              - heading "Baume hiver rhume & nez bouché SAPIN DE NOËL" [level=2] [ref=e597]
+              - generic [ref=e598]:
+                - paragraph [ref=e599]: Baume qui réconforte tout l'hiver. Idéal pour passer l'hiver, ce baume aux 3 huiles essentielles géniales de Sapin Baumier, Ravintsara et Eucalyptus connues pour lutter contre le nez bouché, les rhumes et les petits bobos de l'hiver. A appliquer sur le dos et le torse. Convient aux enfants à partir de 6 ans. Déconseillé aux femmes enceintes.
+                - generic [ref=e601]:
+                  - generic [ref=e602]: 120 points
+                  - generic [ref=e603]: €1.20
+              - generic [ref=e605]:
+                - text: Voir
+                - img [ref=e606]
+        - navigation "Products pagination" [ref=e608]:
+          - generic [ref=e609]:
+            - paragraph [ref=e610]: Page 1 sur 3 • 51 produits
+            - generic [ref=e611]:
+              - button [disabled] [ref=e612]:
+                - img [ref=e613]
+              - button [ref=e615]:
+                - img [ref=e616]
+    - navigation [ref=e619]:
+      - link "Accueil" [ref=e620] [cursor=pointer]:
+        - /url: /fr
+        - img [ref=e622]
+        - generic [ref=e625]: Accueil
+      - link "Produits" [ref=e626] [cursor=pointer]:
+        - /url: /fr/products
+        - img [ref=e628]
+        - generic [ref=e631]: Produits
+      - link "Projets" [ref=e632] [cursor=pointer]:
+        - /url: /fr/projects
+        - img [ref=e634]
+        - generic [ref=e637]: Projets
+      - link "Classement" [ref=e638] [cursor=pointer]:
+        - /url: /fr/leaderboard
+        - img [ref=e640]
+        - generic [ref=e646]: Classement
+      - link "Menu" [ref=e647] [cursor=pointer]:
+        - /url: /fr/menu
+        - img [ref=e649]
+        - generic [ref=e652]: Menu

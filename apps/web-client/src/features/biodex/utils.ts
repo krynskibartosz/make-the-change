@@ -4,15 +4,15 @@ export const CONSERVATION_STATUS_CONFIG: Record<
   ConservationStatus,
   { label: string; color: string; bg: string }
 > = {
-  NE: { label: 'Non évalué', color: 'text-gray-600', bg: 'bg-gray-100' },
-  DD: { label: 'Données insuffisantes', color: 'text-gray-600', bg: 'bg-gray-100' },
-  LC: { label: 'Préoccupation mineure', color: 'text-green-700', bg: 'bg-green-100' },
-  NT: { label: 'Quasi menacé', color: 'text-emerald-700', bg: 'bg-emerald-100' },
-  VU: { label: 'Vulnérable', color: 'text-yellow-700', bg: 'bg-yellow-100' },
-  EN: { label: 'En danger', color: 'text-orange-700', bg: 'bg-orange-100' },
-  CR: { label: 'En danger critique', color: 'text-red-700', bg: 'bg-red-100' },
-  EW: { label: 'Éteint à l\'état sauvage', color: 'text-purple-700', bg: 'bg-purple-100' },
-  EX: { label: 'Éteint', color: 'text-black', bg: 'bg-gray-200' },
+  NE: { label: 'Non évalué', color: 'text-client-gray-600', bg: 'bg-client-gray-100' },
+  DD: { label: 'Données insuffisantes', color: 'text-client-gray-600', bg: 'bg-client-gray-100' },
+  LC: { label: 'Préoccupation mineure', color: 'text-client-green-700', bg: 'bg-client-green-100' },
+  NT: { label: 'Quasi menacé', color: 'text-client-emerald-700', bg: 'bg-client-emerald-100' },
+  VU: { label: 'Vulnérable', color: 'text-client-yellow-700', bg: 'bg-client-yellow-100' },
+  EN: { label: 'En danger', color: 'text-client-orange-700', bg: 'bg-client-orange-100' },
+  CR: { label: 'En danger critique', color: 'text-client-red-700', bg: 'bg-client-red-100' },
+  EW: { label: 'Éteint à l\'état sauvage', color: 'text-client-purple-700', bg: 'bg-client-purple-100' },
+  EX: { label: 'Éteint', color: 'text-client-black', bg: 'bg-client-gray-200' },
 }
 
 export function getStatusConfig(status: string | null) {

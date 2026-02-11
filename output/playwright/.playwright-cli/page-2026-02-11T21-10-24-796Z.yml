@@ -1,0 +1,65 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - img [ref=e12]
+            - generic [ref=e15]: Paiement sécurisé
+          - generic [ref=e16]:
+            - heading "Commande" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Finalisez votre commande en 3 étapes. 1 article(s) prêt(s) à être validé(s).
+        - generic [ref=e19]:
+          - button "Retour" [ref=e20] [cursor=pointer]:
+            - generic [ref=e22]: Retour
+          - link "Modifier" [ref=e23] [cursor=pointer]:
+            - /url: /fr/cart
+      - generic [ref=e24]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: "1"
+          - generic [ref=e28]:
+            - paragraph [ref=e29]: Panier
+            - paragraph [ref=e30]: Vérifiez vos articles et vos quantités
+        - generic [ref=e32]:
+          - generic [ref=e33]: "2"
+          - paragraph [ref=e35]: Adresse
+        - generic [ref=e37]:
+          - generic [ref=e38]: "3"
+          - paragraph [ref=e40]: Confirmer
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - img [ref=e43]
+          - paragraph [ref=e46]: Transactions protégées et validation serveur en temps réel.
+        - generic [ref=e47]:
+          - img [ref=e48]
+          - paragraph [ref=e53]: Livraison rapide, sans frais supplémentaires.
+    - generic [ref=e56]:
+      - heading "Récapitulatif" [level=3] [ref=e58]
+      - generic [ref=e59]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - paragraph [ref=e63]: Gourde Inox
+            - paragraph [ref=e64]: x1 • 1 000 pts
+          - generic [ref=e65]:
+            - paragraph [ref=e66]: 1 000 pts
+            - paragraph [ref=e67]: 10,00 €
+        - generic [ref=e69]:
+          - generic [ref=e70]: Total
+          - generic [ref=e71]: 1 000 pts / 10,00 €
+        - generic [ref=e72]:
+          - button "Modifier" [ref=e73] [cursor=pointer]:
+            - generic [ref=e75]: Modifier
+          - button "Continuer" [ref=e76] [cursor=pointer]:
+            - generic [ref=e78]: Continuer
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - paragraph [ref=e82]: Total
+        - paragraph [ref=e83]: 1 000 pts / 10,00 €
+        - paragraph [ref=e84]: Aucun frais caché.
+      - generic [ref=e85]:
+        - generic [ref=e86]: Insuffisant
+        - button "Continuer" [ref=e87] [cursor=pointer]:
+          - generic [ref=e89]: Continuer
+  - button "Open Next.js Dev Tools" [ref=e95] [cursor=pointer]:
+    - img [ref=e96]
+  - alert [ref=e99]

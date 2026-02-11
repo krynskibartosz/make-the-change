@@ -15,31 +15,20 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Performance optimizations
   reactCompiler: true,
   experimental: {
   },
-  turbopack: {}, // Enable Turbopack builds (beta)
-  typedRoutes: true, // Type-safe routing
-
-  // Exclude test files from pages
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js'].filter(
-    (ext) => !['test', 'spec', 'setup'].includes(ext.split('.')[0]),
-  ),
-
-  // Existing configuration
+  turbopack: {},
+  typedRoutes: true,
   transpilePackages: ['@make-the-change/core'],
 
-  // Environment variables
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
 
-  // Image optimizations (15.3+ improvements)
   images: {
     formats: ['image/avif', 'image/webp'],
-    // Activer l'optimisation pour de meilleures performances
     unoptimized: false,
     remotePatterns: [
       {
@@ -71,12 +60,6 @@ const nextConfig = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, 'src'),
     }
-
-    // Exclude test files from build
-    config.module.rules.push({
-      test: /\.test\.|\.spec\.|\.setup\./,
-      loader: 'ignore-loader',
-    })
 
     return config
   },

@@ -74,6 +74,14 @@ export function Footer() {
                   {t('how_it_works')}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/brand-guidelines"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('brand_guidelines')}
+                </Link>
+              </li>
             </ul>
           </div>
 

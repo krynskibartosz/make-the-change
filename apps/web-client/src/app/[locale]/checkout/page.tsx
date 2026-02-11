@@ -37,11 +37,15 @@ export default async function CheckoutPage() {
   }
 
   return (
-    <SectionContainer
-      size="md"
-      className="min-h-[calc(100svh-4rem)] bg-gradient-to-b from-background via-background to-muted/20 py-4 sm:py-6"
-    >
-      <CheckoutClient pointsBalance={pointsBalance} defaultAddress={defaultAddress} />
-    </SectionContainer>
+    <section className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-muted/25">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-40 top-0 h-[440px] w-[440px] rounded-full bg-primary/10 blur-[100px]" />
+        <div className="absolute -right-40 bottom-0 h-[420px] w-[420px] rounded-full bg-marketing-positive-500/10 blur-[100px]" />
+      </div>
+
+      <SectionContainer size="lg" className="relative py-6 sm:py-10">
+        <CheckoutClient pointsBalance={pointsBalance} defaultAddress={defaultAddress} />
+      </SectionContainer>
+    </section>
   )
 }

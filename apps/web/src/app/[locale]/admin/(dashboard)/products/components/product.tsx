@@ -9,7 +9,15 @@ import {
 } from '@make-the-change/core/ui/next'
 import { Box, Eye, EyeOff, Minus, Package, Plus, Star, User, Zap } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
-import { type FC, startTransition, useEffect, useRef, useState } from 'react'
+import {
+  type FC,
+  type KeyboardEvent,
+  type MouseEvent,
+  startTransition,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { updateProductAction } from '@/app/[locale]/admin/(dashboard)/products/actions'
 import { ProductImage } from '@/components/images/product-image'
 import { useRouter } from '@/i18n/navigation'
@@ -66,61 +74,93 @@ export const ProductCard: FC<ProductCardProps> = ({
   const t = useTranslations('admin.products')
   const locale = useLocale()
   const pendingRequest = useRef<NodeJS.Timeout | null>(null)
+  const pendingPatch = useRef<ProductUpdateInput>({})
+  const latestCommittedProduct = useRef<Product>(initialProduct)
   const router = useRouter()
   const [product, setProduct] = useState<Product>(initialProduct)
 
   useEffect(() => {
+    if (pendingRequest.current) {
+      clearTimeout(pendingRequest.current)
+      pendingRequest.current = null
+    }
+    pendingPatch.current = {}
+    latestCommittedProduct.current = initialProduct
     setProduct(initialProduct)
   }, [initialProduct])
 
+  useEffect(() => {
+    return () => {
+      if (pendingRequest.current) {
+        clearTimeout(pendingRequest.current)
+      }
+    }
+  }, [])
+
   // Helper to remove focus from parent list item
-  const removeFocusFromParent = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const removeFocusFromParent = (e: MouseEvent | KeyboardEvent) => {
     const listContainer = e.currentTarget.closest('[role="button"]')
     if (listContainer) {
       ;(listContainer as HTMLElement).blur()
     }
   }
   const applyPatch = async (patch: ProductUpdateInput) => {
-    const previous = product
-    setProduct((current: Product) => ({ ...current, ...patch }))
-    const result = await updateProductAction(product.id!, patch)
+    const productId = latestCommittedProduct.current.id || initialProduct.id
+    if (!productId) return
+
+    const result = await updateProductAction(productId, patch)
     if (!result.success) {
-      setProduct(previous)
+      setProduct(latestCommittedProduct.current)
       throw new Error(result.error || 'Échec de mise à jour')
     }
+    latestCommittedProduct.current = { ...latestCommittedProduct.current, ...patch }
     router.refresh()
   }
 
-  const debouncedMutation = (patch: ProductUpdateInput, delay = 500) => {
+  const scheduleMutation = (delay = 500) => {
     if (pendingRequest.current) {
       clearTimeout(pendingRequest.current)
     }
 
-    startTransition(() => {
-      // Optimistic update logic already handled in onMutate,
-      // but keeping startTransition for UI responsiveness if needed
-    })
-
     pendingRequest.current = setTimeout(() => {
+      const patch = pendingPatch.current
+      pendingPatch.current = {}
+      if (Object.keys(patch).length === 0) {
+        pendingRequest.current = null
+        return
+      }
       applyPatch(patch).catch(() => {})
       pendingRequest.current = null
     }, delay)
   }
 
   const adjustStock = (delta: number) => {
-    const currentStock = product.stock_quantity || 0
-    const newStock = Math.max(0, currentStock + delta)
-    if (newStock === currentStock) return
+    let didChange = false
+    setProduct((current) => {
+      const currentStock = current.stock_quantity || 0
+      const newStock = Math.max(0, currentStock + delta)
+      if (newStock === currentStock) return current
+
+      didChange = true
+      pendingPatch.current = { ...pendingPatch.current, stock_quantity: newStock }
+      return { ...current, stock_quantity: newStock }
+    })
+    if (!didChange) return
 
     startTransition(() => {
-      debouncedMutation({ stock_quantity: newStock })
+      scheduleMutation(500)
     })
   }
 
   const toggleActive = () => {
-    const newActive = !product.is_active
+    setProduct((current) => {
+      const newActive = !current.is_active
+      pendingPatch.current = { ...pendingPatch.current, is_active: newActive }
+      return { ...current, is_active: newActive }
+    })
+
     startTransition(() => {
-      debouncedMutation({ is_active: newActive }, 300)
+      scheduleMutation(300)
     })
   }
 

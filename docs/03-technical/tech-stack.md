@@ -5,6 +5,9 @@
 
 Ce document détaille les choix techniques, les versions exactes et les configurations critiques du projet Make the CHANGE.
 
+> Note opérationnelle (février 2026): scope actif limité à `apps/web`, `apps/web-client`, `packages/core`.  
+> Le mobile est temporairement gelé et la stack de tests automatisés n'est pas active dans ce repo.
+
 ---
 
 ## 🏗️ Architecture Globale
@@ -142,13 +145,11 @@ Git Hooks: Husky v9 + lint-staged
 Pre-commit: Lint + format + type check
 ```
 
-### Testing Stack
+### Validation actuelle
 ```yaml
-Unit Tests: Vitest v2 (ultra-fast)
-Component Tests: React Testing Library
-E2E Tests: Playwright v1.45 (web) + Maestro (mobile)
-Coverage: c8 (intégré dans Vitest)
-Mocking: MSW (Mock Service Worker)
+Validation: QA manuelle sur parcours critiques
+Checks automatisés actifs: lint + type-check + build
+Tests automatisés: désactivés dans ce dépôt
 ```
 
 ### Build & Deploy

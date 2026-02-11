@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link "Make the Change Make the Change" [ref=e4] [cursor=pointer]:
+      - /url: /fr
+      - img "Make the Change" [ref=e6]
+      - generic [ref=e7]: Make the Change
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "Créer un compte" [level=3] [ref=e11]
+        - paragraph [ref=e12]: Rejoignez le mouvement pour un futur durable.
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e18]: "1"
+          - generic [ref=e20]: "2"
+          - generic [ref=e22]: "3"
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]:
+              - generic [ref=e30]:
+                - text: Prénom
+                - generic [ref=e31]: "*"
+              - textbox "Jean" [ref=e33]
+          - generic [ref=e34]:
+            - img [ref=e35]
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - text: Nom
+                - generic [ref=e40]: "*"
+              - textbox "Dupont" [ref=e42]
+        - button "Continuer" [disabled] [ref=e44]:
+          - generic [ref=e45]:
+            - text: Continuer
+            - img [ref=e46]
+      - paragraph [ref=e49]:
+        - text: Déjà un compte ?
+        - link "Se connecter" [ref=e50] [cursor=pointer]:
+          - /url: /fr/login
+    - generic [ref=e51]:
+      - generic [ref=e57]: +10K
+      - generic [ref=e58]:
+        - img [ref=e59]
+        - text: Impact vérifié par la communauté
+  - button "Open Next.js Dev Tools" [ref=e67] [cursor=pointer]:
+    - img [ref=e68]
+  - alert [ref=e71]

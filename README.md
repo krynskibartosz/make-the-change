@@ -1,7 +1,18 @@
 # Make the Change
 
-Stack: Next.js 16, Expo 55, Drizzle, Biome, Tailwind v4.  
+Stack active: Next.js 16, Drizzle, Supabase, Biome, Tailwind v4.  
 Architecture: Feature-Sliced Design (FSD).
+
+Scope actif:
+- `apps/web`
+- `apps/web-client`
+- `packages/core`
+
+Hors scope temporaire (gelé):
+- `apps/mobile`
+- `apps/mobile-clean`
+- `apps/mobile-sdk55`
+- `apps/_legacy`
 
 ## Getting Started
 

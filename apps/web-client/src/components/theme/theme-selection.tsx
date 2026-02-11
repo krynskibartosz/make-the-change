@@ -136,7 +136,7 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
               className={cn(
                 "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all",
                 activeCategory === cat 
-                  ? "bg-background text-primary shadow-xl ring-1 ring-black/5 scale-105" 
+                  ? "bg-background text-primary shadow-xl ring-1 ring-client-black/5 scale-105" 
                   : "text-muted-foreground hover:text-foreground hover:bg-background/40"
               )}
             >
@@ -288,7 +288,7 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
               {/* Active Indicator Floating */}
               {mounted && config.activeThemeId === t.id && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-xl z-20 flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-client-white animate-pulse" />
                   Actif
                 </div>
               )}
@@ -298,7 +298,7 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
                   variant="ghost"
                   size="sm"
                   onClick={(e) => handleDeleteTheme(e, t.id)}
-                  className="h-9 w-9 p-0 rounded-2xl bg-destructive/10 text-destructive opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive hover:text-white"
+                  className="h-9 w-9 p-0 rounded-2xl bg-destructive/10 text-destructive opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive hover:text-client-white"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -349,7 +349,7 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
             >
               {mounted && config.activeThemeId === t.id && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-xl z-20 flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-client-white animate-pulse" />
                   Actif
                 </div>
               )}

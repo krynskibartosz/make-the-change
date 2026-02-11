@@ -20,6 +20,7 @@ import {
   X,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import type { FC } from 'react'
 import { useDashboardSidebar } from '@/components/layout/dashboard-sidebar-context'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -59,6 +60,102 @@ const accountNavSecondaryItems: AccountNavItem[] = [
   { href: '/dashboard/settings', labelKey: 'settings', icon: Settings },
 ]
 
+const sidebarItemClass =
+  'group relative flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:ring-offset-2 focus-visible:ring-offset-background'
+
+type SidebarNavLinkProps = {
+  href: string
+  icon: LucideIcon
+  label: string
+  active: boolean
+  endIcon?: LucideIcon
+  tone?: 'default' | 'danger'
+  onClick?: () => void
+}
+
+const SidebarNavLink: FC<SidebarNavLinkProps> = ({
+  href,
+  icon: Icon,
+  label,
+  active,
+  endIcon: EndIcon,
+  tone = 'default',
+  onClick,
+}) => (
+  <Link
+    href={href}
+    onClick={onClick}
+    aria-current={active ? 'page' : undefined}
+    className={cn(
+      sidebarItemClass,
+      active
+        ? "bg-primary/10 text-foreground shadow-sm shadow-primary/10 before:absolute before:left-1 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-full before:bg-primary before:content-['']"
+        : 'text-muted-foreground hover:text-foreground hover:bg-muted/30',
+      tone === 'danger' && !active && 'hover:bg-destructive/10 hover:text-destructive',
+    )}
+  >
+    <span
+      className={cn(
+        'flex h-8 w-8 items-center justify-center rounded-lg bg-muted/30 text-muted-foreground transition-colors',
+        active ? 'bg-primary/10 text-primary' : 'group-hover:bg-muted/50 group-hover:text-foreground',
+        tone === 'danger' && !active && 'group-hover:bg-destructive/15 group-hover:text-destructive',
+      )}
+    >
+      <Icon className="h-4 w-4" />
+    </span>
+    <span className="truncate">{label}</span>
+    {EndIcon ? (
+      <EndIcon
+        className={cn(
+          'ml-auto h-4 w-4 text-muted-foreground/70 transition-colors',
+          active ? 'text-primary' : 'group-hover:text-foreground',
+        )}
+      />
+    ) : null}
+  </Link>
+)
+
+type SidebarActionButtonProps = {
+  icon: LucideIcon
+  label: string
+  type?: 'button' | 'submit'
+  onClick?: () => void
+  tone?: 'default' | 'danger'
+}
+
+const SidebarActionButton: FC<SidebarActionButtonProps> = ({
+  icon: Icon,
+  label,
+  type = 'button',
+  onClick,
+  tone = 'default',
+}) => (
+  <button
+    type={type}
+    onClick={onClick}
+    className={cn(
+      sidebarItemClass,
+      'w-full text-left',
+      tone === 'danger'
+        ? 'text-muted-foreground hover:text-destructive hover:bg-destructive/10'
+        : 'text-muted-foreground hover:text-foreground hover:bg-muted/30',
+    )}
+  >
+    <span
+      className={cn(
+        'flex h-8 w-8 items-center justify-center rounded-lg bg-muted/30 text-muted-foreground transition-colors',
+        tone === 'danger'
+          ? 'group-hover:bg-destructive/15 group-hover:text-destructive'
+          : 'group-hover:bg-muted/50 group-hover:text-foreground',
+      )}
+    >
+      <Icon className="h-4 w-4" />
+    </span>
+    <span className="truncate">{label}</span>
+  </button>
+)
+
 export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
   const t = useTranslations('navigation')
   const tDashboard = useTranslations('dashboard')
@@ -93,100 +190,6 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
 
   const isActiveAccountRoute = (href: string) =>
     pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
-
-  const baseItemClass =
-    'group relative flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:ring-offset-2 focus-visible:ring-offset-background'
-
-  const SidebarNavLink = ({
-    href,
-    icon: Icon,
-    label,
-    active,
-    endIcon: EndIcon,
-    tone = 'default',
-  }: {
-    href: string
-    icon: LucideIcon
-    label: string
-    active: boolean
-    endIcon?: LucideIcon
-    tone?: 'default' | 'danger'
-  }) => (
-    <Link
-      href={href}
-      onClick={handleNavClick}
-      aria-current={active ? 'page' : undefined}
-      className={cn(
-        baseItemClass,
-        active
-          ? "bg-primary/10 text-foreground shadow-sm shadow-primary/10 before:absolute before:left-1 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-full before:bg-primary before:content-['']"
-          : 'text-muted-foreground hover:text-foreground hover:bg-muted/30',
-        tone === 'danger' && !active && 'hover:bg-destructive/10 hover:text-destructive',
-      )}
-    >
-      <span
-        className={cn(
-          'flex h-8 w-8 items-center justify-center rounded-lg bg-muted/30 text-muted-foreground transition-colors',
-          active
-            ? 'bg-primary/10 text-primary'
-            : 'group-hover:bg-muted/50 group-hover:text-foreground',
-          tone === 'danger' &&
-            !active &&
-            'group-hover:bg-destructive/15 group-hover:text-destructive',
-        )}
-      >
-        <Icon className="h-4 w-4" />
-      </span>
-      <span className="truncate">{label}</span>
-      {EndIcon ? (
-        <EndIcon
-          className={cn(
-            'ml-auto h-4 w-4 text-muted-foreground/70 transition-colors',
-            active ? 'text-primary' : 'group-hover:text-foreground',
-          )}
-        />
-      ) : null}
-    </Link>
-  )
-
-  const SidebarActionButton = ({
-    icon: Icon,
-    label,
-    type = 'button',
-    onClick,
-    tone = 'default',
-  }: {
-    icon: LucideIcon
-    label: string
-    type?: 'button' | 'submit'
-    onClick?: () => void
-    tone?: 'default' | 'danger'
-  }) => (
-    <button
-      type={type}
-      onClick={onClick}
-      className={cn(
-        baseItemClass,
-        'w-full text-left',
-        tone === 'danger'
-          ? 'text-muted-foreground hover:text-destructive hover:bg-destructive/10'
-          : 'text-muted-foreground hover:text-foreground hover:bg-muted/30',
-      )}
-    >
-      <span
-        className={cn(
-          'flex h-8 w-8 items-center justify-center rounded-lg bg-muted/30 text-muted-foreground transition-colors',
-          tone === 'danger'
-            ? 'group-hover:bg-destructive/15 group-hover:text-destructive'
-            : 'group-hover:bg-muted/50 group-hover:text-foreground',
-        )}
-      >
-        <Icon className="h-4 w-4" />
-      </span>
-      <span className="truncate">{label}</span>
-    </button>
-  )
 
   const sidebarContent = (
     <div className="flex flex-col h-full min-h-0 text-foreground bg-background/95 backdrop-blur-xl border-r">
@@ -248,6 +251,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
                   icon={item.icon}
                   label={'labelKey' in item ? t(item.labelKey) : item.labelText}
                   active={isActiveAccountRoute(item.href)}
+                  onClick={handleNavClick}
                 />
               ))}
             </nav>
@@ -262,6 +266,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
                   icon={item.icon}
                   label={'labelKey' in item ? t(item.labelKey) : item.labelText}
                   active={isActiveAccountRoute(item.href)}
+                  onClick={handleNavClick}
                 />
               ))}
             </nav>
@@ -279,6 +284,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
                   icon={item.icon}
                   label={item.label}
                   active={pathname === item.href || pathname.startsWith(`${item.href}/`)}
+                  onClick={handleNavClick}
                 />
               ))}
             </nav>
@@ -293,6 +299,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
           label={t('public_profile')}
           active={false}
           endIcon={ArrowUpRight}
+          onClick={handleNavClick}
         />
         <form action={logout}>
           <SidebarActionButton icon={LogOut} label={t('logout')} type="submit" tone="danger" />

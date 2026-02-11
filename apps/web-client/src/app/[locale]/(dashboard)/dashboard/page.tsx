@@ -110,7 +110,7 @@ export default async function DashboardPage() {
       
       return {
         id: investment.id,
-        icon: <Leaf className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />,
+        icon: <Leaf className="h-4 w-4 text-client-emerald-600 dark:text-client-emerald-400" />,
         title: project?.name_default || 'Projet',
         subtitle: new Date(investment.created_at ?? new Date()).toLocaleDateString('fr-FR'),
         value: (
@@ -210,7 +210,7 @@ export default async function DashboardPage() {
         <Card className="lg:col-span-5 border bg-background/70 shadow-sm backdrop-blur">
           <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
             <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-              <Trophy className="h-5 w-5 text-amber-500" />
+              <Trophy className="h-5 w-5 text-client-amber-500" />
               Progression niveau
             </CardTitle>
           </CardHeader>

@@ -1,11 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { Copy, Check } from 'lucide-react'
 import { Button } from '@make-the-change/core/ui'
+import { Check, Copy } from 'lucide-react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
-export function ContactCopyButton({ email = "contact@make-the-change.com", className }: { email?: string, className?: string }) {
+export function ContactCopyButton({
+  email = 'contact@make-the-change.com',
+  srLabel = 'Copy the email address',
+  className,
+}: {
+  email?: string
+  srLabel?: string
+  className?: string
+}) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async (e: React.MouseEvent) => {
@@ -24,10 +32,13 @@ export function ContactCopyButton({ email = "contact@make-the-change.com", class
     <Button
       variant="outline"
       size="icon"
-      className={cn("rounded-full h-12 w-12 bg-white/10 border-white/20 hover:bg-white/20 text-white backdrop-blur-sm transition-all duration-300", className)}
+      className={cn(
+        'h-12 w-12 rounded-full border-marketing-overlay-light/20 bg-marketing-overlay-light/10 text-marketing-overlay-light backdrop-blur-sm transition-all duration-300 hover:bg-marketing-overlay-light/20',
+        className,
+      )}
       onClick={handleCopy}
     >
-      <span className="sr-only">Copier l'email</span>
+      <span className="sr-only">{srLabel}</span>
       {copied ? (
         <Check className="h-5 w-5 animate-in zoom-in duration-300" />
       ) : (

@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e129] [cursor=pointer]:
+    - img [ref=e130]
+  - alert [ref=e133]: Commande confirmée
+  - generic [ref=e236]:
+    - generic [ref=e238]:
+      - generic [ref=e239]:
+        - img [ref=e240]
+        - generic [ref=e243]: Commande validée
+      - generic [ref=e244]:
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - img [ref=e248]
+            - heading "Commande confirmée" [level=1] [ref=e251]
+          - paragraph [ref=e252]: "Merci pour votre achat. Référence #FE47F304."
+        - generic [ref=e253]: Payée
+      - generic [ref=e254]:
+        - generic [ref=e255]:
+          - paragraph [ref=e256]: Date
+          - paragraph [ref=e257]: 11 février 2026
+        - generic [ref=e258]:
+          - paragraph [ref=e259]: Total
+          - paragraph [ref=e260]: 0 pts
+    - generic [ref=e261]:
+      - heading "Détail de la commande" [level=3] [ref=e263]
+      - generic [ref=e264]:
+        - generic [ref=e266]:
+          - generic [ref=e267]:
+            - text: Produit
+            - generic [ref=e268]: x1
+          - generic [ref=e270]: 0 pts
+        - generic [ref=e272]:
+          - generic [ref=e273]: Total
+          - generic [ref=e275]: 0 pts
+        - generic [ref=e276]:
+          - link "Voir mes commandes" [ref=e277] [cursor=pointer]:
+            - /url: /fr/dashboard/orders
+            - button "Voir mes commandes" [ref=e278]:
+              - generic [ref=e280]:
+                - text: Voir mes commandes
+                - img [ref=e281]
+          - link "Continuer mes achats" [ref=e283] [cursor=pointer]:
+            - /url: /fr/products
+            - button "Continuer mes achats" [ref=e284]:
+              - generic [ref=e286]:
+                - text: Continuer mes achats
+                - img [ref=e287]
