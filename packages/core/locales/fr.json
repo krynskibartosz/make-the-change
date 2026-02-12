@@ -842,6 +842,7 @@
       "adding": "Ajout...",
       "added_message": "Ajouté au panier",
       "view_action": "Voir",
+      "wishlist_action": "Ajouter aux favoris",
       "default_name": "Produit",
       "default_description": "Description du produit"
     },

@@ -13,7 +13,6 @@ import {
   BottomSheetTrigger,
   Button,
   Checkbox,
-  DataCard,
   DataList,
   Input,
   Select,
@@ -21,8 +20,8 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@make-the-change/core/ui'
-import { ArrowRight, ArrowUpDown, Filter, Package, Search } from 'lucide-react'
-import Image from 'next/image'
+import { ProductCardSkeleton } from '@make-the-change/core/ui/next'
+import { ArrowUpDown, Filter, Package, Search } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { type FC, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
@@ -40,7 +39,7 @@ import {
   type ProductSort,
   type ProductsQueryState,
 } from '@/features/commerce/products/query-state'
-import { sanitizeImageUrl } from '@/lib/image-url'
+import { ClientCatalogProductCard } from './components/client-catalog-product-card'
 
 export interface Product {
   id: string
@@ -49,6 +48,7 @@ export interface Product {
   description_default?: string | null
   price?: number
   price_points?: number | null
+  stock_quantity?: number | null
   featured?: boolean | null
   category_id?: string | null
   producer_id?: string | null
@@ -93,84 +93,6 @@ const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
   { value: 'price_asc', label: tProducts('sort.price_asc') },
   { value: 'price_desc', label: tProducts('sort.price_desc') },
 ]
-
-type ProductGridCardProps = {
-  product: Product
-  featuredLabel: string
-  pointsLabel: string
-  viewLabel: string
-}
-
-const ProductGridCard: FC<ProductGridCardProps> = ({
-  product,
-  featuredLabel,
-  pointsLabel,
-  viewLabel,
-}) => {
-  const [imageFailed, setImageFailed] = useState(false)
-  const pointsValue = product.price_points || 0
-  const euroValue = product.price || 0
-  const imageUrl = sanitizeImageUrl(product.image_url)
-
-  return (
-    <DataCard
-      href={`/products/${product.id}`}
-      className="h-full rounded-3xl border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg md:p-5"
-    >
-      <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-xl border border-border bg-muted/40">
-        {imageUrl && !imageFailed ? (
-          <Image
-            src={imageUrl}
-            alt={product.name_default}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            onError={() => setImageFailed(true)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <Package className="h-12 w-12 text-muted-foreground/25" />
-          </div>
-        )}
-      </div>
-
-      <DataCard.Header className="mb-2">
-        <DataCard.Title className="text-xl font-black tracking-tight">
-          {product.name_default}
-        </DataCard.Title>
-      </DataCard.Header>
-
-      <DataCard.Content className="mb-0 gap-3">
-        <p className="line-clamp-2 min-h-10 text-sm leading-relaxed text-muted-foreground">
-          {product.short_description_default || product.description_default || ''}
-        </p>
-
-        <div className="flex items-center justify-between gap-3 border-t border-border/70 pt-3">
-          <div className="flex flex-col">
-            <span className="text-2xl font-black tracking-tight text-primary">
-              {pointsValue.toLocaleString()} {pointsLabel}
-            </span>
-            {euroValue > 0 && (
-              <span className="text-sm text-muted-foreground">€{euroValue.toFixed(2)}</span>
-            )}
-          </div>
-          {product.featured && (
-            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
-              {featuredLabel}
-            </span>
-          )}
-        </div>
-      </DataCard.Content>
-
-      <DataCard.Footer className="mt-3 border-t border-border/70 pt-3 text-sm font-black uppercase tracking-wide text-primary">
-        <span className="inline-flex items-center gap-2">
-          {viewLabel}
-          <ArrowRight className="h-4 w-4" />
-        </span>
-      </DataCard.Footer>
-    </DataCard>
-  )
-}
 
 type ProductsFiltersSidebarProps = {
   title: string
@@ -676,30 +598,16 @@ export const ProductsClient: FC<ProductsClientProps> = ({
             ) : undefined,
           }}
           renderItem={(product: Product) => (
-            <ProductGridCard
+            <ClientCatalogProductCard
               product={product}
               featuredLabel={tProducts('featured')}
+              outOfStockLabel={tProducts('card.sold_out')}
+              lowStockLabel={tProducts('card.low_stock')}
               pointsLabel={tProducts('card.points')}
               viewLabel={tProducts('card.view_action')}
             />
           )}
-          renderSkeleton={() => (
-            <DataCard className="rounded-3xl p-4 md:p-5">
-              <div className="mb-4 aspect-square w-full animate-pulse rounded-xl bg-muted" />
-              <DataCard.Header className="mb-2">
-                <DataCard.Title>
-                  <div className="h-6 w-3/4 animate-pulse rounded bg-muted" />
-                </DataCard.Title>
-              </DataCard.Header>
-              <DataCard.Content className="mb-0">
-                <div className="space-y-2">
-                  <div className="h-4 w-full animate-pulse rounded bg-muted" />
-                  <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
-                  <div className="h-8 w-1/3 animate-pulse rounded bg-muted" />
-                </div>
-              </DataCard.Content>
-            </DataCard>
-          )}
+          renderSkeleton={() => <ProductCardSkeleton context="clientCatalog" />}
         />
 
         <ProductsPagination

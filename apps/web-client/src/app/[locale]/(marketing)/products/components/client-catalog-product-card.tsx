@@ -1,0 +1,72 @@
+'use client'
+
+import { ProductCard } from '@make-the-change/core/ui/next'
+import type { FC } from 'react'
+import { buildProductCardBadges } from '@/features/commerce/products/product-card-badges'
+import { sanitizeImageUrl } from '@/lib/image-url'
+
+type ClientCatalogProduct = {
+  id: string
+  name_default: string
+  short_description_default?: string | null
+  description_default?: string | null
+  price?: number
+  price_points?: number | null
+  stock_quantity?: number | null
+  featured?: boolean | null
+  image_url?: string | null
+}
+
+type ClientCatalogProductCardProps = {
+  product: ClientCatalogProduct
+  featuredLabel: string
+  outOfStockLabel: string
+  lowStockLabel: string
+  pointsLabel: string
+  viewLabel: string
+}
+
+export const ClientCatalogProductCard: FC<ClientCatalogProductCardProps> = ({
+  product,
+  featuredLabel,
+  outOfStockLabel,
+  lowStockLabel,
+  pointsLabel,
+  viewLabel,
+}) => {
+  const imageUrl = sanitizeImageUrl(product.image_url)
+  const badges = buildProductCardBadges({
+    featured: product.featured,
+    stockQuantity: product.stock_quantity,
+    labels: {
+      featuredLabel,
+      outOfStockLabel,
+      lowStockLabel,
+    },
+  })
+
+  return (
+    <ProductCard
+      context="clientCatalog"
+      model={{
+        id: product.id,
+        href: `/products/${product.id}`,
+        title: product.name_default,
+        description: product.short_description_default || product.description_default || '',
+        image: {
+          src: imageUrl,
+          alt: product.name_default,
+        },
+        pricePoints: product.price_points || 0,
+        priceEuro: product.price || 0,
+        stockQuantity: product.stock_quantity,
+        featured: !!product.featured,
+        badges,
+      }}
+      labels={{
+        pointsLabel,
+        viewLabel,
+      }}
+    />
+  )
+}

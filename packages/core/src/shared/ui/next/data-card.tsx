@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import type { ComponentType, FC, KeyboardEvent, MouseEvent, PropsWithChildren } from 'react'
 import { useCallback } from 'react'
 import { cn } from '../utils'
+import { isCardInteractiveTarget } from './card-interaction'
 
 type LinkComponentProps = {
   href: string
@@ -62,8 +63,7 @@ const DataCardComponent: FC<PropsWithChildren<DataCardProps>> = ({
 
   const handleCardClick = useCallback(
     (event: MouseEvent<HTMLElement>) => {
-      const target = event.target as HTMLElement
-      if (target.closest('a[href]') || target.closest('button')) {
+      if (isCardInteractiveTarget(event.target, event.currentTarget)) {
         return
       }
 
@@ -76,8 +76,7 @@ const DataCardComponent: FC<PropsWithChildren<DataCardProps>> = ({
     (event: KeyboardEvent<HTMLElement>) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault()
-        const target = event.target as HTMLElement
-        if (target.closest('a[href]') || target.closest('button')) {
+        if (isCardInteractiveTarget(event.target, event.currentTarget)) {
           return
         }
         activateCard()

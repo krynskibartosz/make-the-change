@@ -7,12 +7,42 @@ import {
 } from '@/features/brand-guidelines/metadata'
 
 const CORE_COLORS = [
-  { key: 'emerald', hex: '#58CC02', cssVar: '--primary' },
-  { key: 'night', hex: '#4B4B4B', cssVar: '--foreground' },
-  { key: 'amber', hex: '#FFC800', cssVar: '--accent' },
-  { key: 'offwhite', hex: '#F7F7F7', cssVar: '--background' },
-  { key: 'terracotta', hex: '#FF9600', cssVar: '--warning' },
-  { key: 'sage', hex: '#AFAFAF', cssVar: '--muted' },
+  {
+    key: 'emerald',
+    tokenVar: '--client-brand-emerald',
+    cssVar: '--primary',
+    swatchClass: 'bg-[hsl(var(--client-brand-emerald))]',
+  },
+  {
+    key: 'night',
+    tokenVar: '--client-brand-night',
+    cssVar: '--foreground',
+    swatchClass: 'bg-[hsl(var(--client-brand-night))]',
+  },
+  {
+    key: 'amber',
+    tokenVar: '--client-brand-amber',
+    cssVar: '--accent',
+    swatchClass: 'bg-[hsl(var(--client-brand-amber))]',
+  },
+  {
+    key: 'offwhite',
+    tokenVar: '--client-brand-offwhite',
+    cssVar: '--background',
+    swatchClass: 'bg-[hsl(var(--client-brand-offwhite))]',
+  },
+  {
+    key: 'terracotta',
+    tokenVar: '--client-brand-terracotta',
+    cssVar: '--warning',
+    swatchClass: 'bg-[hsl(var(--client-brand-terracotta))]',
+  },
+  {
+    key: 'sage',
+    tokenVar: '--client-brand-sage',
+    cssVar: '--muted',
+    swatchClass: 'bg-[hsl(var(--client-brand-sage))]',
+  },
 ] as const
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -70,10 +100,7 @@ export default async function BrandGuidelinesColorsPage() {
               key={color.key}
               className="rounded-2xl border border-border bg-background p-4 shadow-sm"
             >
-              <div
-                className="mb-3 h-20 rounded-xl border border-border"
-                style={{ backgroundColor: color.hex }}
-              />
+              <div className={`mb-3 h-20 rounded-xl border border-border ${color.swatchClass}`} />
               <p className="text-base font-black tracking-tight text-foreground">
                 {t(`palette.${color.key}.name`)}
               </p>
@@ -81,7 +108,7 @@ export default async function BrandGuidelinesColorsPage() {
                 {t(`palette.${color.key}.role`)}
               </p>
               <div className="mt-3 flex items-center gap-2 border-t border-border pt-3 text-xs">
-                <span className="font-mono text-muted-foreground">{color.hex}</span>
+                <span className="font-mono text-muted-foreground">{`hsl(var(${color.tokenVar}))`}</span>
                 <span className="ml-auto rounded-full bg-muted px-2 py-1 font-black uppercase tracking-wide text-muted-foreground">
                   {color.cssVar}
                 </span>

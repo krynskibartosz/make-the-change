@@ -790,6 +790,7 @@
       "adding": "Adding...",
       "added_message": "Added to cart",
       "view_action": "View",
+      "wishlist_action": "Add to wishlist",
       "default_name": "Product",
       "default_description": "Product description"
     },

@@ -1,5 +1,6 @@
 'use server'
 
+import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -8,6 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 export type SettingsState = {
   error?: string
   success?: string
+  locale?: Locale
 }
 
 export async function updateSettings(
@@ -21,15 +23,16 @@ export async function updateSettings(
 
   if (!user) return { error: 'Not authenticated' }
 
-  const languageCode = (formData.get('languageCode') as string) || 'fr'
+  const requestedLanguage = (formData.get('languageCode') as string) || defaultLocale
+  const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
   const timezone = (formData.get('timezone') as string) || 'Europe/Paris'
   const publicProfile = formData.get('publicProfile') === 'on'
 
   // Social links
   const socialLinks = {
-    linkedin: formData.get('social_linkedin') as string || '',
-    instagram: formData.get('social_instagram') as string || '',
-    twitter: formData.get('social_twitter') as string || '',
+    linkedin: (formData.get('social_linkedin') as string) || '',
+    instagram: (formData.get('social_instagram') as string) || '',
+    twitter: (formData.get('social_twitter') as string) || '',
   }
 
   const { data: currentProfile } = await supabase
@@ -80,5 +83,5 @@ export async function updateSettings(
   revalidatePath('/dashboard/settings')
   revalidatePath('/dashboard/profile')
 
-  return { success: 'Paramètres mis à jour' }
+  return { success: 'Paramètres mis à jour', locale: languageCode }
 }

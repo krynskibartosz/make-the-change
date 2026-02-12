@@ -31,7 +31,9 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "lint": "biome check .",
-    "type-check": "tsc -p tsconfig.json --noEmit"
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "db:types:generate": "if [ -z \"$SUPABASE_PROJECT_ID\" ]; then echo \"SUPABASE_PROJECT_ID is required\"; exit 1; fi; pnpm dlx supabase@2.76.7 gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/shared/db/database.types.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
@@ -47,11 +49,16 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.10.2",
     "@types/pg": "^8.16.0",
     "@types/react": "^19.1.12",
     "drizzle-kit": "^0.31.8",
+    "jsdom": "^28.0.0",
     "react": "^19.0.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.18"
   }
 }

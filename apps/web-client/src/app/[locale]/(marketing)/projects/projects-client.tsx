@@ -1,32 +1,66 @@
 'use client'
 
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from '@make-the-change/core/ui'
-import { Calendar, MapPin, Search, Target, TrendingUp, ArrowRight } from 'lucide-react'
-import { useRouter, usePathname } from 'next/navigation'
-import { useEffect, useState, useTransition } from 'react'
+import { Button, Input } from '@make-the-change/core/ui'
+import { Search, Target } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
-import { cn, formatPoints, formatCurrency } from '@/lib/utils'
+import { useCallback, useEffect, useState, useTransition } from 'react'
+import {
+  type ClientCatalogProject,
+  ClientCatalogProjectCard,
+} from '@/app/[locale]/(marketing)/projects/components/client-catalog-project-card'
 
-interface Project {
-  id: string
-  slug: string
-  name_default: string
-  description_default: string
+type RawClientProject = {
+  id: string | null
+  slug: string | null
+  name_default: string | null
+  description_default: string | null
   target_budget: number | null
   current_funding: number | null
+  funding_progress: number | null
   address_city: string | null
   address_country_code: string | null
-  featured: boolean
+  featured: boolean | null
   launch_date: string | null
-  status: string
+  status: string | null
   hero_image_url: string | null
+  type: string | null
+  producer?: { name_default?: string | null } | Record<string, unknown> | null
 }
 
 interface ProjectsClientProps {
-  projects: any[] // Using any for now to avoid strict type issues with Supabase result, but ideally should match Project
+  projects: RawClientProject[]
   initialStatus: string
   initialSearch: string
+}
+
+const normalizeProject = (
+  project: RawClientProject,
+  index: number,
+  fallbackName: string,
+): ClientCatalogProject => {
+  const id = project.id || project.slug || `project-${index}`
+  const producer =
+    project.producer && typeof project.producer === 'object' && 'name_default' in project.producer
+      ? { name_default: project.producer.name_default as string | null | undefined }
+      : undefined
+
+  return {
+    id,
+    slug: project.slug || id,
+    name_default: project.name_default || fallbackName,
+    description_default: project.description_default,
+    target_budget: project.target_budget,
+    current_funding: project.current_funding,
+    funding_progress: project.funding_progress,
+    address_city: project.address_city,
+    address_country_code: project.address_country_code,
+    featured: project.featured,
+    status: project.status,
+    hero_image_url: project.hero_image_url,
+    type: project.type,
+    producer,
+  }
 }
 
 export function ProjectsClient({ projects, initialStatus, initialSearch }: ProjectsClientProps) {
@@ -37,7 +71,19 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
   const [search, setSearch] = useState(initialSearch)
   const [status, setStatus] = useState(initialStatus)
 
-  // Debounce search update
+  const updateFilters = useCallback(
+    (newSearch: string, newStatus: string) => {
+      const params = new URLSearchParams()
+      if (newSearch) params.set('search', newSearch)
+      if (newStatus && newStatus !== 'all') params.set('status', newStatus)
+
+      startTransition(() => {
+        router.push(`${pathname}?${params.toString()}`)
+      })
+    },
+    [pathname, router],
+  )
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (search !== initialSearch) {
@@ -46,31 +92,19 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [search, initialSearch, status])
-
-  const updateFilters = (newSearch: string, newStatus: string) => {
-    const params = new URLSearchParams()
-    if (newSearch) params.set('search', newSearch)
-    if (newStatus && newStatus !== 'all') params.set('status', newStatus)
-
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`)
-    })
-  }
+  }, [search, initialSearch, status, updateFilters])
 
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus)
     updateFilters(search, newStatus)
   }
 
-  const calculateProgress = (current: number | null, target: number | null) => {
-    if (!target || target === 0) return 0
-    return Math.min(((current || 0) / target) * 100, 100)
-  }
+  const normalizedProjects = projects.map((project, index) =>
+    normalizeProject(project, index, t('card.view_details')),
+  )
 
   return (
     <div className="space-y-8">
-      {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-card p-4 rounded-xl shadow-sm border">
         <div className="relative w-full md:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -99,16 +133,13 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
         </div>
       </div>
 
-      {/* Grid */}
-      {projects.length === 0 ? (
+      {normalizedProjects.length === 0 ? (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8 bg-muted/30 rounded-3xl border-2 border-dashed">
           <Target className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
           <h2 className="text-2xl font-bold mb-2">{t('empty')}</h2>
-          <p className="text-muted-foreground max-w-md">
-            {t('filter.empty_description')}
-          </p>
-          <Button 
-            variant="outline" 
+          <p className="text-muted-foreground max-w-md">{t('filter.empty_description')}</p>
+          <Button
+            variant="outline"
             onClick={() => {
               setSearch('')
               setStatus('all')
@@ -121,87 +152,27 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => {
-            const progress = calculateProgress(project.current_funding, project.target_budget)
-            
-            return (
-              <Link key={project.id} href={`/projects/${project.slug}`} className="group block h-full">
-                <Card className="h-full overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 border-muted bg-card">
-                  {/* Image */}
-                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                    {project.hero_image_url ? (
-                      <img
-                        src={project.hero_image_url}
-                        alt={project.name_default}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                    ) : (
-                      <div className="h-full w-full flex items-center justify-center bg-primary/5 text-primary/20">
-                        <Target className="h-16 w-16" />
-                      </div>
-                    )}
-                    
-                    <div className="absolute top-4 right-4 flex gap-2">
-                      {project.featured && (
-                        <Badge variant="secondary" className="font-bold shadow-sm backdrop-blur-md bg-marketing-overlay-light/90">
-                          {t('filter.featured')}
-                        </Badge>
-                      )}
-                      <Badge 
-                        variant={project.status === 'active' ? 'default' : 'secondary'}
-                        className="font-bold shadow-sm backdrop-blur-md"
-                      >
-                        {project.status === 'active' ? t('filter.status.active') : project.status}
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <CardContent className="p-5 space-y-4">
-                    <div>
-                      <h3 className="text-xl font-bold line-clamp-1 mb-2 group-hover:text-primary transition-colors">
-                        {project.name_default}
-                      </h3>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4 mr-1 text-primary" />
-                        {project.address_city && project.address_country_code ? (
-                          <span>{project.address_city}, {project.address_country_code}</span>
-                        ) : (
-                          <span>{t('filter.location.unspecified')}</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-muted-foreground text-sm line-clamp-2 min-h-[2.5rem]">
-                      {project.description_default}
-                    </p>
-
-                    <div className="space-y-2 pt-2">
-                      <div className="flex justify-between text-sm font-medium">
-                        <span className="text-muted-foreground">{t('filter.progress.label')}</span>
-                        <span className="text-primary">{Math.round(progress)}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-primary transition-all duration-500 rounded-full"
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <div className="flex justify-between text-xs text-muted-foreground pt-1">
-                        <span>{formatCurrency(project.current_funding || 0)} {t('filter.progress.collected')}</span>
-                        <span>{t('filter.progress.goal')} {formatCurrency(project.target_budget || 0)}</span>
-                      </div>
-                    </div>
-
-                    <Button className="w-full mt-2 group-hover:bg-primary/90">
-                      {t('filter.cta')}
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
-            )
-          })}
+          {normalizedProjects.map((project) => (
+            <ClientCatalogProjectCard
+              key={project.id}
+              project={project}
+              labels={{
+                viewLabel: t('filter.cta'),
+                progressLabel: t('filter.progress.label'),
+                fundedLabel: t('filter.progress.collected'),
+                goalLabel: t('filter.progress.goal'),
+                featuredLabel: t('filter.featured'),
+                activeLabel: t('filter.status.active'),
+              }}
+            />
+          ))}
         </div>
+      )}
+
+      {isPending && (
+        <p className="text-xs text-muted-foreground animate-pulse" aria-live="polite">
+          Chargement...
+        </p>
       )}
     </div>
   )

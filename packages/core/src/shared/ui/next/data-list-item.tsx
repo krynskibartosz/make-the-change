@@ -4,6 +4,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { ComponentType, FC, KeyboardEvent, MouseEvent, PropsWithChildren } from 'react'
 import { cn } from '../utils'
+import { blurCardContainer, isCardInteractiveTarget } from './card-interaction'
 
 type LinkComponentProps = {
   href: string
@@ -72,10 +73,9 @@ const DataListItemComponent: FC<PropsWithChildren<DataListItemProps>> = ({
   )
 
   const handleCardClick = (event: MouseEvent<HTMLElement>) => {
-    const target = event.target as HTMLElement
-    if (target.closest('a[href]') || target.closest('button')) {
+    if (isCardInteractiveTarget(event.target, event.currentTarget)) {
       // Remove focus from the container when clicking on interactive elements
-      ;(event.currentTarget as HTMLElement)?.blur()
+      blurCardContainer(event.currentTarget)
       return
     }
 
@@ -85,8 +85,7 @@ const DataListItemComponent: FC<PropsWithChildren<DataListItemProps>> = ({
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      const target = event.target as HTMLElement
-      if (target.closest('a[href]') || target.closest('button')) {
+      if (isCardInteractiveTarget(event.target, event.currentTarget)) {
         return
       }
       activateItem()

@@ -1,3 +1,4 @@
+import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { SettingsClient } from './settings-client'
@@ -12,7 +13,9 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('language_code, timezone, metadata, notification_preferences, social_links, theme_config')
+    .select(
+      'language_code, timezone, metadata, notification_preferences, social_links, theme_config',
+    )
     .eq('id', user.id)
     .single()
 
@@ -20,6 +23,8 @@ export default async function SettingsPage() {
   const publicProfile = Boolean(metadata.is_public_profile)
   const notificationPrefs = (profile?.notification_preferences || {}) as Record<string, boolean>
   const socialLinks = (profile?.social_links || {}) as Record<string, string>
+  const requestedLanguage = profile?.language_code || defaultLocale
+  const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
 
   // Fetch marketing consent
   const adminSupabase = createAdminClient()
@@ -37,21 +42,21 @@ export default async function SettingsPage() {
   return (
     <SettingsClient
       initial={{
-        languageCode: profile?.language_code || 'fr',
+        languageCode,
         timezone: profile?.timezone || 'Europe/Paris',
         publicProfile,
         marketingConsent,
         notificationPrefs: {
           email: notificationPrefs.email ?? true,
           push: notificationPrefs.push ?? false,
-          monthly_report: notificationPrefs.monthly_report ?? true
+          monthly_report: notificationPrefs.monthly_report ?? true,
         },
         socialLinks: {
           linkedin: socialLinks.linkedin || '',
           instagram: socialLinks.instagram || '',
-          twitter: socialLinks.twitter || ''
+          twitter: socialLinks.twitter || '',
         },
-        themeConfig: profile?.theme_config || null
+        themeConfig: profile?.theme_config || null,
       }}
     />
   )

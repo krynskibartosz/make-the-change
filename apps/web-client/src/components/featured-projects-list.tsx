@@ -1,9 +1,9 @@
 'use client'
 
-import { DataCard, DataList, Badge, Progress } from '@make-the-change/core/ui'
-import LocalizedLink from '@/components/ui/localized-link'
-import { formatPoints } from '@/lib/utils'
-import { getRandomProjectImage } from '@/lib/placeholder-images'
+import { DataList } from '@make-the-change/core/ui'
+import { ProjectCard } from '@make-the-change/core/ui/next'
+import { buildProjectCardBadges } from '@/features/investment/project-card-badges'
+import { sanitizeImageUrl } from '@/lib/image-url'
 
 type FeaturedProject = {
   id: string
@@ -13,71 +13,109 @@ type FeaturedProject = {
   hero_image_url: string | null
   target_budget: number | null
   current_funding: number | null
+  status?: string | null
+  featured?: boolean | null
 }
 
 type FeaturedProjectsListProps = {
   projects: FeaturedProject[]
+  activeLabel: string
+  fundedLabel: string
 }
 
-export function FeaturedProjectsList({ projects }: FeaturedProjectsListProps) {
-  return (
-    <DataList
-      items={projects}
-      gridCols={3}
-      isLoading={false}
-      getItemKey={(project) => project.id}
-      renderItem={(project) => {
-        const fundingProgress = project.target_budget
-          ? (project.current_funding! / project.target_budget) * 100
-          : 0
-        return (
-          <DataCard
-            LinkComponent={LocalizedLink}
-            href={`/projects/${project.slug}`}
-            className="h-full transition-all hover:-translate-y-1 hover:shadow-xl p-0 gap-0"
-          >
-            <div className="relative h-48 w-full shrink-0 overflow-hidden">
-              <img
-                src={
-                  project.hero_image_url ||
-                  getRandomProjectImage(project.name_default?.length || 0)
-                }
-                alt={project.name_default || 'Project'}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-client-black/60 via-transparent to-transparent opacity-60" />
-              <Badge variant="success" className="absolute top-4 right-4 shadow-sm">
-                Actif
-              </Badge>
-            </div>
+const renderProjectCard = (
+  project: FeaturedProject,
+  labels: {
+    activeLabel: string
+    fundedLabel: string
+  },
+  priority = false,
+) => {
+  const title = project.name_default || 'Project'
+  const badges = buildProjectCardBadges({
+    featured: project.featured,
+    status: project.status,
+    labels: {
+      featuredLabel: undefined,
+      activeLabel: labels.activeLabel,
+      fundedLabel: labels.fundedLabel,
+    },
+  })
 
-            <div className="flex flex-col flex-1 p-6">
-              <h3 className="font-semibold text-lg mb-2 line-clamp-1">
-                {project.name_default}
-              </h3>
-              <p className="mb-4 line-clamp-2 text-sm text-muted-foreground flex-1">
-                {project.description_default}
-              </p>
-              {project.target_budget && (
-                <div className="space-y-2 mt-auto pt-2">
-                  <Progress value={fundingProgress} className="h-2" />
-                  <div className="flex justify-between text-xs font-medium uppercase tracking-wide">
-                    <span>{Math.round(fundingProgress || 0)}% financé</span>
-                    <span className="text-muted-foreground">
-                      {formatPoints(project.target_budget!)}€
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </DataCard>
-        )
+  return (
+    <ProjectCard
+      context="clientHome"
+      model={{
+        id: project.id,
+        href: `/projects/${project.slug}`,
+        title,
+        description: project.description_default || '',
+        image: {
+          src: sanitizeImageUrl(project.hero_image_url),
+          alt: title,
+        },
+        imagePriority: priority,
+        status: project.status,
+        featured: project.featured,
+        progressPercent:
+          project.target_budget && project.target_budget > 0
+            ? ((project.current_funding || 0) / project.target_budget) * 100
+            : 0,
+        currentFundingEuro: project.current_funding,
+        targetBudgetEuro: project.target_budget,
+        badges,
       }}
-      renderSkeleton={() => <div className="h-64 rounded-3xl bg-muted animate-pulse" />}
-      emptyState={{
-        title: 'Aucun projet',
-        description: 'Aucun projet en vedette pour le moment.',
+      labels={{
+        viewLabel: '',
+        progressLabel: '',
+        fundedLabel: labels.fundedLabel,
+        goalLabel: '',
       }}
     />
+  )
+}
+
+export function FeaturedProjectsList({
+  projects,
+  activeLabel,
+  fundedLabel,
+}: FeaturedProjectsListProps) {
+  const labels = { activeLabel, fundedLabel }
+
+  if (projects.length === 0) {
+    return (
+      <div className="rounded-3xl border border-dashed border-border/80 bg-muted/30 p-8 text-center">
+        <p className="text-sm text-muted-foreground">Aucun projet en vedette pour le moment.</p>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div className="md:hidden">
+        <div className="flex gap-4 overflow-x-auto pb-4 px-1">
+          {projects.map((project, index) => (
+            <div key={project.id} className="min-w-[280px] max-w-[320px] flex-1">
+              {renderProjectCard(project, labels, index === 0)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="hidden md:block">
+        <DataList
+          items={projects}
+          gridCols={3}
+          isLoading={false}
+          getItemKey={(project) => project.id}
+          renderItem={(project) => renderProjectCard(project, labels)}
+          renderSkeleton={() => <div className="h-64 rounded-3xl bg-muted animate-pulse" />}
+          emptyState={{
+            title: 'Aucun projet',
+            description: 'Aucun projet en vedette pour le moment.',
+          }}
+        />
+      </div>
+    </>
   )
 }

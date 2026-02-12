@@ -31,6 +31,8 @@ type RawFeaturedProject = {
   hero_image_url: string | null
   target_budget: number | null
   current_funding: number | null
+  status: string | null
+  featured: boolean | null
 }
 
 export default async function HomePage() {
@@ -91,6 +93,8 @@ export default async function HomePage() {
     hero_image_url: project.hero_image_url,
     target_budget: project.target_budget,
     current_funding: project.current_funding,
+    status: project.status,
+    featured: project.featured,
   }))
 
   const featuredProducts = (featuredProductsRaw || []) as unknown as Product[]

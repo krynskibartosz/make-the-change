@@ -1,13 +1,12 @@
 'use server'
 
 import type { PropsWithChildren } from 'react'
-import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { MainContent } from '@/components/layout/main-content'
+import { getMenu } from '@/features/cms/cms.service'
 import { CartDock } from '@/features/commerce/cart/cart-dock'
 import { CartSheet } from '@/features/commerce/cart/cart-sheet'
 import { CartSnackbar } from '@/features/commerce/cart/cart-snackbar'
-import { getMenu } from '@/features/cms/cms.service'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function ProductDetailLayout({ children }: PropsWithChildren) {
@@ -45,7 +44,6 @@ export default async function ProductDetailLayout({ children }: PropsWithChildre
       <CartSnackbar />
       <CartDock />
       {/* MobileBottomNav is intentionally excluded here - replaced by FloatingActionButtons */}
-      <Footer />
     </div>
   )
 }
