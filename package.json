@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "build": "turbo build --filter=@make-the-change/web --filter=@make-the-change/web-client",
+    "build:vercel": "turbo build --filter=@make-the-change/web --filter=@make-the-change/web-client",
     "dev": "turbo dev --filter=@make-the-change/web --filter=@make-the-change/web-client",
     "lint": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && pnpm guard:ui && turbo lint --filter=@make-the-change/web --filter=@make-the-change/web-client",
     "type-check": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && pnpm guard:ui && turbo type-check --filter=@make-the-change/web --filter=@make-the-change/web-client",
