@@ -21,7 +21,7 @@ import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency } from '@/lib/utils'
-import { FloatingActionButtons } from './floating-action-buttons'
+import { FloatingActionButtons, ProductDetailAddToCartButton } from './floating-action-buttons'
 
 interface ProductDetailPageProps {
   params: Promise<{
@@ -46,6 +46,7 @@ type ProductCategory = {
 type PublicProduct = {
   id: string
   name_default: string
+  slug: string | null
   description_default: string
   producer_id: string | null
   category_id: string | null
@@ -54,6 +55,8 @@ type PublicProduct = {
   tags: (string | null)[] | null
   stock_quantity: number | null
   price_points: number | null
+  price_eur_equivalent: number | null
+  fulfillment_method: 'ship' | 'pickup' | 'digital' | 'experience' | null
   image_url: string | null
   images: string[] | null
   certifications: string[] | null
@@ -139,6 +142,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     : t('card.out_of_stock')
   const productName = product.name_default || ''
   const productDescription = product.description_default || ''
+  const parsedPriceEuros =
+    product.price_eur_equivalent === null || product.price_eur_equivalent === undefined
+      ? Number.NaN
+      : Number(product.price_eur_equivalent)
+  const priceEuros = Number.isFinite(parsedPriceEuros) ? parsedPriceEuros : null
 
   return (
     <>
@@ -323,23 +331,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
                 {/* Action Buttons */}
                 <div className="space-y-4">
-                  <Button
+                  <ProductDetailAddToCartButton
                     className="w-full h-14 text-lg font-bold rounded-full bg-primary hover:bg-primary/90 hover:scale-105 transition-all shadow-lg"
-                    size="lg"
-                    disabled={!inStock}
-                  >
-                    {inStock ? (
-                      <>
-                        <ShoppingCart className="mr-2 h-5 w-5" />
-                        {t('card.add_to_cart')}
-                      </>
-                    ) : (
-                      <>
-                        <Clock className="mr-2 h-5 w-5" />
-                        {t('card.out_of_stock')}
-                      </>
-                    )}
-                  </Button>
+                    productId={product.id}
+                    productName={productName || t('card.default_name')}
+                    productSlug={product.slug}
+                    pricePoints={displayPoints}
+                    priceEuros={priceEuros}
+                    imageUrl={coverImage || null}
+                    fulfillmentMethod={product.fulfillment_method}
+                    stockQuantity={product.stock_quantity}
+                    inStock={inStock}
+                  />
                   <Button
                     variant="outline"
                     className="w-full h-14 text-lg font-bold rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"
@@ -487,7 +490,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       </div>
 
       {/* Floating Mobile Action Buttons */}
-      <FloatingActionButtons productId={product.id} displayPrice={displayPrice} inStock={inStock} />
+      <FloatingActionButtons
+        productId={product.id}
+        productName={productName || t('card.default_name')}
+        productSlug={product.slug}
+        pricePoints={displayPoints}
+        priceEuros={priceEuros}
+        imageUrl={coverImage || null}
+        fulfillmentMethod={product.fulfillment_method}
+        stockQuantity={product.stock_quantity}
+        displayPrice={displayPrice}
+        inStock={inStock}
+      />
     </>
   )
 }

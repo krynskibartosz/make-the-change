@@ -30,17 +30,20 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       variant = 'default',
       size = 'md',
       required,
+      id,
       ...props
     },
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false)
     const [shakeAnimation, setShakeAnimation] = useState('')
-    const textAreaId = useId()
+    const generatedId = useId()
+    const textAreaId = id ?? (label || error || helpText ? `textarea-${generatedId}` : undefined)
+    const describedByBaseId = textAreaId ?? `textarea-${generatedId}`
     const ariaDescribedBy = error
-      ? `${textAreaId}-error`
+      ? `${describedByBaseId}-error`
       : helpText
-        ? `${textAreaId}-help`
+        ? `${describedByBaseId}-help`
         : undefined
 
     const handleErrorShake = () => {
@@ -61,6 +64,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       outlined: 'bg-transparent border-2 border-[hsl(var(--border))]',
       filled: 'bg-muted/70 backdrop-blur-sm border border-[hsl(var(--border)/0.7)] shadow-sm',
     }
+
+    const hasTrailingAffordance = Boolean(trailingIcon) || Boolean(error)
 
     return (
       <div className="space-y-1.5">
@@ -104,7 +109,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               'focus-visible:border-primary/70 focus-visible:shadow-md',
               'disabled:cursor-not-allowed disabled:opacity-50',
               leadingIcon && 'pl-12',
-              (trailingIcon ?? error) && 'pr-12',
+              hasTrailingAffordance && 'pr-12',
               error
                 ? 'border-destructive bg-destructive/5 focus-visible:ring-destructive/30 focus-visible:border-destructive'
                 : 'hover:border-[hsl(var(--border)/0.8)] hover:shadow-sm dark:hover:border-[hsl(var(--border))]',

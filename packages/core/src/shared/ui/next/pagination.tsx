@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import type { FC } from 'react'
+import { Button } from '../base/button'
 
 export type PaginationData = {
   currentPage: number
@@ -96,15 +97,18 @@ export const Pagination: FC<PaginationProps> = ({
       </div>
 
       <div className="flex items-center gap-1">
-        <button
+        <Button
+          aria-label={labels?.previousAria ?? 'Previous page'}
           className="group cursor-pointer flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 text-sm text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:pointer-events-none transition-colors rounded-md hover:bg-muted/40"
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          aria-label={labels?.previousAria ?? 'Previous page'}
+          size="sm"
+          type="button"
+          variant="ghost"
         >
           <ChevronLeft className="h-4 w-4" />
           <span className="hidden sm:inline">{labels?.previous ?? 'Précédent'}</span>
-        </button>
+        </Button>
 
         <div className="hidden sm:flex items-center gap-1 mx-2">
           {generatePageNumbers().map((page, index) =>
@@ -116,7 +120,7 @@ export const Pagination: FC<PaginationProps> = ({
                 <MoreHorizontal className="h-4 w-4" />
               </div>
             ) : (
-              <button
+              <Button
                 key={page}
                 aria-current={currentPage === page ? 'page' : undefined}
                 className={`h-8 cursor-pointer w-8 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden ${
@@ -125,12 +129,15 @@ export const Pagination: FC<PaginationProps> = ({
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
                 }`}
                 onClick={() => handlePageChange(page)}
+                size="sm"
+                type="button"
+                variant="ghost"
               >
                 {currentPage === page && (
                   <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/20 pointer-events-none" />
                 )}
                 <span className="relative z-10">{page}</span>
-              </button>
+              </Button>
             ),
           )}
         </div>
@@ -139,15 +146,18 @@ export const Pagination: FC<PaginationProps> = ({
           {currentPage} / {totalPages}
         </div>
 
-        <button
+        <Button
+          aria-label={labels?.nextAria ?? 'Next page'}
           className="group cursor-pointer flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 text-sm text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:pointer-events-none transition-colors rounded-md hover:bg-muted/40"
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          aria-label={labels?.nextAria ?? 'Next page'}
+          size="sm"
+          type="button"
+          variant="ghost"
         >
           <span className="hidden sm:inline">{labels?.next ?? 'Suivant'}</span>
           <ChevronRight className="h-4 w-4" />
-        </button>
+        </Button>
       </div>
 
       <div className="sm:hidden text-xs text-muted-foreground text-center leading-none">

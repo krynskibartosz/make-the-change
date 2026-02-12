@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
   Input,
+  Radio,
+  RadioGroup,
 } from '@make-the-change/core/ui'
 import { CreditCard, ShieldCheck, Sparkles, Truck, Wallet } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -21,7 +23,7 @@ import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 import { placeEuroOrderAction } from './place-euro-order.action'
 import { placePointsOrderAction } from './place-points-order.action'
 
-type TranslateFn = (key: string, values?: Record<string, unknown>) => string
+type TranslateFn = (key: string, values?: Record<string, string | number | Date>) => string
 
 const createAddressSchema = (t: TranslateFn) =>
   z.object({
@@ -569,24 +571,26 @@ export function CheckoutClient({ pointsBalance, defaultAddress }: CheckoutClient
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6 p-5 sm:p-7">
-                <div
-                  role="radiogroup"
+                <RadioGroup
                   aria-label={t('payment.title')}
                   className="grid gap-3 sm:grid-cols-2"
+                  value={paymentMethod}
+                  onValueChange={(value) => {
+                    if (value === 'points' || value === 'euros') {
+                      setPaymentMethod(value)
+                    }
+                  }}
                 >
-                  <button
-                    type="button"
-                    role="radio"
-                    aria-checked={paymentMethod === 'points'}
+                  <label
                     className={cn(
-                      'rounded-2xl border p-4 text-left transition-all',
+                      'rounded-2xl border p-4 text-left transition-all cursor-pointer',
                       paymentMethod === 'points'
                         ? 'border-primary/50 bg-primary/10'
                         : 'border-border/60 bg-background/70 hover:border-primary/30',
                     )}
-                    onClick={() => setPaymentMethod('points')}
                   >
                     <div className="flex items-start gap-3">
+                      <Radio value="points" className="mt-2" />
                       <div
                         className={cn(
                           'mt-0.5 flex h-10 w-10 items-center justify-center rounded-full',
@@ -614,21 +618,18 @@ export function CheckoutClient({ pointsBalance, defaultAddress }: CheckoutClient
                         </p>
                       </div>
                     </div>
-                  </button>
+                  </label>
 
-                  <button
-                    type="button"
-                    role="radio"
-                    aria-checked={paymentMethod === 'euros'}
+                  <label
                     className={cn(
-                      'rounded-2xl border p-4 text-left transition-all',
+                      'rounded-2xl border p-4 text-left transition-all cursor-pointer',
                       paymentMethod === 'euros'
                         ? 'border-primary/50 bg-primary/10'
                         : 'border-border/60 bg-background/70 hover:border-primary/30',
                     )}
-                    onClick={() => setPaymentMethod('euros')}
                   >
                     <div className="flex items-start gap-3">
+                      <Radio value="euros" className="mt-2" />
                       <div
                         className={cn(
                           'mt-0.5 flex h-10 w-10 items-center justify-center rounded-full',
@@ -654,8 +655,8 @@ export function CheckoutClient({ pointsBalance, defaultAddress }: CheckoutClient
                         </p>
                       </div>
                     </div>
-                  </button>
-                </div>
+                  </label>
+                </RadioGroup>
 
                 <div className="space-y-4 border-t border-border/60 pt-5">
                   <h3 className="text-sm font-black uppercase tracking-[0.16em] text-muted-foreground">

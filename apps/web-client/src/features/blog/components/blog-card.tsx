@@ -1,4 +1,4 @@
-import { Badge, Card, CardContent } from '@make-the-change/core/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
 import { formatDate } from '@/lib/utils'
 import type { BlogPost } from '../blog-types'
@@ -47,7 +47,10 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
             
             <div className="flex items-center gap-3 text-client-white/70 pt-2">
               {post.author?.avatarUrl && (
-                <img src={post.author.avatarUrl} alt={post.author.name} className="h-8 w-8 rounded-full border border-client-white/10" />
+                <Avatar className="h-8 w-8 border border-client-white/10">
+                  <AvatarImage src={post.author.avatarUrl} alt={post.author.name} className="object-cover" />
+                  <AvatarFallback>{post.author.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+                </Avatar>
               )}
               <span className="text-sm font-medium">{post.author?.name}</span>
               <span className="text-client-white/30">•</span>
@@ -130,7 +133,10 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
           <div className="mt-auto pt-4 flex items-center justify-between border-t border-border/50">
             <div className="flex items-center gap-2">
               {post.author?.avatarUrl ? (
-                <img src={post.author.avatarUrl} alt={post.author.name} className="h-6 w-6 rounded-full" />
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={post.author.avatarUrl} alt={post.author.name} className="object-cover" />
+                  <AvatarFallback>{post.author.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
+                </Avatar>
               ) : (
                 <div className="h-6 w-6 rounded-full bg-primary/10" />
               )}
@@ -145,4 +151,3 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
     </Link>
   )
 }
-

@@ -1,8 +1,9 @@
-import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@make-the-change/core/ui'
-import { Plus, Edit, Trash, FileText } from 'lucide-react'
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { FileText, Plus } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/utils'
+import { BlogPostActionsMenu } from './blog-post-actions-menu'
 
 export default async function AdminBlogPage() {
   const supabase = await createClient()
@@ -25,7 +26,11 @@ export default async function AdminBlogPage() {
       </div>
 
       <div className="grid gap-4">
-        {posts?.map((post) => (
+        {posts?.map((post) => {
+          const authorValue = post.author as { name?: string }[] | { name?: string } | null
+          const authorName = Array.isArray(authorValue) ? authorValue[0]?.name : authorValue?.name
+
+          return (
           <Card key={post.id}>
             <CardContent className="p-6 flex items-center justify-between">
               <div className="space-y-1">
@@ -36,20 +41,16 @@ export default async function AdminBlogPage() {
                   </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {post.author?.name || 'Unknown Author'} • {formatDate(post.published_at || '')} • {post.view_count} vues
+                  {authorName || 'Unknown Author'} • {formatDate(post.published_at || '')} • {post.view_count} vues
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Link href={`/admin/cms/blog/${post.id}`}>
-                  <Button variant="outline" size="sm">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Éditer
-                  </Button>
-                </Link>
+                <BlogPostActionsMenu postId={post.id} />
               </div>
             </CardContent>
           </Card>
-        ))}
+          )
+        })}
 
         {(!posts || posts.length === 0) && (
           <div className="text-center py-12 text-muted-foreground">

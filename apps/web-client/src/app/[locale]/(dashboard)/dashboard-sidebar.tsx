@@ -1,7 +1,7 @@
 'use client'
 
 import type { Messages } from '@make-the-change/core/i18n'
-import { Badge, Button, Card, CardContent, CardHeader } from '@make-the-change/core/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Card, CardContent, CardHeader } from '@make-the-change/core/ui'
 import {
   ArrowUpRight,
   Bell,
@@ -197,11 +197,12 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 ring-1 ring-border">
-              {avatarUrl ? (
-                <img src={avatarUrl} alt="" className="h-12 w-12 rounded-full object-cover" />
-              ) : (
-                <span className="text-sm font-bold text-primary">{initial}</span>
-              )}
+              <Avatar className="h-12 w-12">
+                <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
+                <AvatarFallback className="bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 text-sm font-bold text-primary">
+                  {initial}
+                </AvatarFallback>
+              </Avatar>
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold leading-none text-foreground">

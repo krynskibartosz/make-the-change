@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@make-the-change/core/ui'
+import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@make-the-change/core/ui'
 import {
   Coins,
   FileQuestion,
@@ -163,11 +163,11 @@ export default function MenuPage() {
         )}
 
         {/* General Links */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
+        <Collapsible defaultOpen className="space-y-3">
+          <CollapsibleTrigger className="w-full text-left text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
             {tMenu('sections.explore')}
-          </h3>
-          <div className="space-y-1 rounded-xl border bg-card p-1 shadow-sm">
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-1 rounded-xl border bg-card p-1 shadow-sm">
             <Link
               href="/blog"
               className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -247,8 +247,8 @@ export default function MenuPage() {
               <Trophy className="h-5 w-5 text-muted-foreground" />
               {tMenu('explore.biodex')}
             </Link>
-          </div>
-        </div>
+          </CollapsibleContent>
+        </Collapsible>
 
         {/* Shopping & Activities */}
         <div className="space-y-3">

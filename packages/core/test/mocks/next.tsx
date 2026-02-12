@@ -3,10 +3,16 @@ import { beforeEach, vi } from 'vitest'
 
 export const routerPushMock = vi.fn()
 export const routerRefreshMock = vi.fn()
+export const pathnameMock = vi.fn()
+export const searchParamsMock = vi.fn()
 
 beforeEach(() => {
   routerPushMock.mockReset()
   routerRefreshMock.mockReset()
+  pathnameMock.mockReset()
+  searchParamsMock.mockReset()
+  pathnameMock.mockReturnValue('/products')
+  searchParamsMock.mockReturnValue(new URLSearchParams())
 })
 
 vi.mock('next/navigation', () => {
@@ -17,6 +23,8 @@ vi.mock('next/navigation', () => {
       prefetch: vi.fn(),
       replace: vi.fn(),
     }),
+    usePathname: () => pathnameMock(),
+    useSearchParams: () => searchParamsMock(),
   }
 })
 

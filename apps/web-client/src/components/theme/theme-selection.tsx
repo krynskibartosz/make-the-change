@@ -1,7 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { useThemeBrand, ThemePreview, ThemePalette, THEMES, ThemeBuilder } from '@make-the-change/core'
+import {
+  useThemeBrand,
+  ThemePreview,
+  ThemePalette,
+  THEMES,
+  ThemeBuilder,
+  type ThemeConfig,
+} from '@make-the-change/core'
 import { cn } from '@make-the-change/core/shared/utils'
 import { 
   Check, 
@@ -21,8 +28,19 @@ import {
   Search
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { Button, Input } from '@make-the-change/core/ui'
-import { saveUserTheme, deleteUserTheme, type ThemeConfig, type UserTheme } from './actions'
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  Input,
+  Toggle,
+  ToggleGroup,
+} from '@make-the-change/core/ui'
+import { saveUserTheme, deleteUserTheme } from './actions'
 
 interface ThemeSelectionProps {
   initialConfig?: ThemeConfig | null
@@ -39,6 +57,8 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
   const [config, setConfig] = React.useState<ThemeConfig>(initialConfig || { activeThemeId: 'default', customThemes: [] })
   const [newThemeName, setNewThemeName] = React.useState('')
   const [showNaming, setShowNaming] = React.useState(false)
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
+  const [themeIdToDelete, setThemeIdToDelete] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     setMounted(true)
@@ -85,15 +105,21 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
     setIsSaving(false)
   }
 
-  const handleDeleteTheme = async (e: React.MouseEvent, themeId: string) => {
+  const openDeleteThemeDialog = (e: React.MouseEvent, themeId: string) => {
     e.stopPropagation()
-    if (!confirm('Voulez-vous vraiment supprimer ce thème ?')) return
+    setThemeIdToDelete(themeId)
+    setDeleteDialogOpen(true)
+  }
 
+  const confirmDeleteTheme = async () => {
+    if (!themeIdToDelete) return
     setIsSaving(true)
-    const result = await deleteUserTheme(themeId)
+    const result = await deleteUserTheme(themeIdToDelete)
     if (result.themeConfig) setConfig(result.themeConfig)
     setSaveStatus(result)
     setIsSaving(false)
+    setDeleteDialogOpen(false)
+    setThemeIdToDelete(null)
   }
 
   const categories = ['All', 'Classic', 'Nature', 'Cyber', 'Special', 'Mes Créations']
@@ -128,22 +154,31 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 p-1.5 bg-muted/30 rounded-[2rem] border border-border/50">
+        <ToggleGroup
+          value={[activeCategory]}
+          onValueChange={(next) => {
+            const nextCategory = next[0]
+            if (typeof nextCategory === 'string') {
+              setActiveCategory(nextCategory)
+            }
+          }}
+          className="flex flex-wrap gap-2 p-1.5 bg-muted/30 rounded-[2rem] border border-border/50"
+        >
           {categories.map((cat) => (
-            <button
+            <Toggle
               key={cat}
-              onClick={() => setActiveCategory(cat)}
+              value={cat}
               className={cn(
-                "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all",
-                activeCategory === cat 
-                  ? "bg-background text-primary shadow-xl ring-1 ring-client-black/5 scale-105" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+                'px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all',
+                activeCategory === cat
+                  ? 'bg-background text-primary shadow-xl ring-1 ring-client-black/5 scale-105'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/40',
               )}
             >
               {cat}
-            </button>
+            </Toggle>
           ))}
-        </div>
+        </ToggleGroup>
       </div>
 
       {/* Mode d'affichage (Quick Switch) */}
@@ -297,7 +332,7 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={(e) => handleDeleteTheme(e, t.id)}
+                  onClick={(e) => openDeleteThemeDialog(e, t.id)}
                   className="h-9 w-9 p-0 rounded-2xl bg-destructive/10 text-destructive opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive hover:text-client-white"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -399,6 +434,21 @@ export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
           ))}
         </div>
       </div>
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogTitle>Supprimer ce thème personnalisé ?</DialogTitle>
+          <DialogDescription>
+            Cette action est irréversible. Le thème sera retiré de votre compte.
+          </DialogDescription>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline">Annuler</Button>} />
+            <Button variant="destructive" loading={isSaving} onClick={() => void confirmDeleteTheme()}>
+              Supprimer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

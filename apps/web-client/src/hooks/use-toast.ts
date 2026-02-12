@@ -1,63 +1,86 @@
 'use client'
 
-import { type ReactNode, useCallback, useState } from 'react'
+import { createToastManager, useToastManager } from '@make-the-change/core/ui'
+import type { ReactNode } from 'react'
 
-export type ToastVariant = 'default' | 'destructive' | 'success'
+export type ToastVariant = 'default' | 'destructive' | 'success' | 'warning' | 'info'
 
 export type ToastData = {
-  id: string
+  action?: ReactNode
+  showIcon?: boolean
+}
+
+export type ToastInput = {
   title?: ReactNode
   description?: ReactNode
+  action?: ReactNode
   variant?: ToastVariant
+  timeout?: number
+  priority?: 'low' | 'high'
+  showIcon?: boolean
 }
 
-type ToastState = {
-  toasts: ToastData[]
+export type ManagedToast = ReturnType<typeof useToastManager>['toasts'][number] & {
+  data?: ToastData
 }
 
-let toastId = 0
+export const toastManager = createToastManager()
 
-/**
- * Simple toast hook for notifications
- * Uses a basic implementation - can be enhanced with @base-ui/react/toast for production
- */
+const buildData = (input: ToastInput): ToastData | undefined => {
+  const data: ToastData = {}
+  if (input.action !== undefined) data.action = input.action
+  if (input.showIcon !== undefined) data.showIcon = input.showIcon
+  return Object.keys(data).length > 0 ? data : undefined
+}
+
+function toast(input: ToastInput) {
+  const id = toastManager.add({
+    title: input.title,
+    description: input.description,
+    type: input.variant ?? 'default',
+    timeout: input.timeout,
+    priority: input.priority,
+    data: buildData(input),
+  })
+  let currentData = buildData(input)
+
+  const update = (updates: ToastInput) => {
+    const nextData = buildData(updates)
+    const data = nextData ? { ...currentData, ...nextData } : undefined
+    currentData = data
+
+    toastManager.update(id, {
+      ...(updates.title !== undefined ? { title: updates.title } : {}),
+      ...(updates.description !== undefined ? { description: updates.description } : {}),
+      ...(updates.variant !== undefined ? { type: updates.variant } : {}),
+      ...(updates.timeout !== undefined ? { timeout: updates.timeout } : {}),
+      ...(updates.priority !== undefined ? { priority: updates.priority } : {}),
+      ...(data ? { data } : {}),
+    })
+  }
+
+  return { id, dismiss: () => toastManager.close(id), update }
+}
+
 export function useToast() {
-  const [state, setState] = useState<ToastState>({ toasts: [] })
+  const { toasts, close } = useToastManager()
 
-  const toast = useCallback((input: Omit<ToastData, 'id'>) => {
-    const id = String(++toastId)
-    const newToast: ToastData = { ...input, id }
-
-    setState((prev) => ({
-      toasts: [...prev.toasts, newToast],
-    }))
-
-    // Auto-dismiss after 5 seconds
-    setTimeout(() => {
-      setState((prev) => ({
-        toasts: prev.toasts.filter((t) => t.id !== id),
-      }))
-    }, 5000)
-
-    return {
-      id,
-      dismiss: () => {
-        setState((prev) => ({
-          toasts: prev.toasts.filter((t) => t.id !== id),
-        }))
-      },
+  const dismiss = (toastId?: string) => {
+    if (toastId) {
+      close(toastId)
+      return
     }
-  }, [])
 
-  const dismiss = useCallback((toastIdToDismiss?: string) => {
-    setState((prev) => ({
-      toasts: toastIdToDismiss ? prev.toasts.filter((t) => t.id !== toastIdToDismiss) : [],
-    }))
-  }, [])
+    for (const toastItem of toasts) {
+      close(toastItem.id)
+    }
+  }
 
   return {
-    toasts: state.toasts,
+    toasts: toasts as ManagedToast[],
     toast,
     dismiss,
   }
 }
+
+export { toast }

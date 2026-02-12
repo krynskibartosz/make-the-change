@@ -3,7 +3,7 @@
 import { Button, Textarea } from '@make-the-change/core/ui'
 import { useState, useTransition } from 'react'
 import { updateMenu } from '@/features/cms/actions/cms-actions'
-import { MainMenuStructure } from '@/features/cms/types'
+import type { MainMenuStructure } from '@/features/cms/types'
 import { useToast } from '@/hooks/use-toast'
 
 interface MenuEditorProps {
@@ -27,7 +27,7 @@ export function MenuEditor({ initialData, slug }: MenuEditorProps) {
             description: 'Le menu a été mis à jour avec succès.',
             variant: 'default',
           })
-        } catch (error) {
+        } catch {
           toast({
             title: 'Erreur',
             description: 'Impossible de mettre à jour le menu.',
@@ -35,7 +35,7 @@ export function MenuEditor({ initialData, slug }: MenuEditorProps) {
           })
         }
       })
-    } catch (e) {
+    } catch {
       toast({
         title: 'Erreur de format',
         description: 'Le JSON est invalide.',

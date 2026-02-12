@@ -1,6 +1,12 @@
 'use client'
 
-import { Button } from '@make-the-change/core/ui'
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from '@make-the-change/core/ui'
 import { Minus, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -26,29 +32,36 @@ export function QuantityStepper({
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        className="h-11 w-11"
-        onClick={() => onChange(Math.max(min, value - 1))}
-        disabled={disabled || !canDecrement}
-        aria-label="Diminuer la quantité"
+      <NumberField
+        value={value}
+        min={min}
+        max={max}
+        onValueChange={(nextValue) => {
+          if (typeof nextValue === 'number' && Number.isFinite(nextValue)) {
+            onChange(nextValue)
+          }
+        }}
       >
-        <Minus className="h-4 w-4" />
-      </Button>
-      <span className="w-10 text-center text-sm font-semibold tabular-nums">{value}</span>
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        className="h-11 w-11"
-        onClick={() => onChange(Math.min(max, value + 1))}
-        disabled={disabled || !canIncrement}
-        aria-label="Augmenter la quantité"
-      >
-        <Plus className="h-4 w-4" />
-      </Button>
+        <NumberFieldGroup className="inline-flex h-11 items-center overflow-hidden rounded-md border border-input bg-background">
+          <NumberFieldDecrement
+            className="inline-flex h-full w-11 items-center justify-center border-r border-input text-muted-foreground transition-colors hover:bg-muted disabled:opacity-50"
+            disabled={disabled || !canDecrement}
+            aria-label="Diminuer la quantité"
+          >
+            <Minus className="h-4 w-4" />
+          </NumberFieldDecrement>
+
+          <NumberFieldInput className="h-full w-10 bg-transparent text-center text-sm font-semibold tabular-nums outline-none" />
+
+          <NumberFieldIncrement
+            className="inline-flex h-full w-11 items-center justify-center border-l border-input text-muted-foreground transition-colors hover:bg-muted disabled:opacity-50"
+            disabled={disabled || !canIncrement}
+            aria-label="Augmenter la quantité"
+          >
+            <Plus className="h-4 w-4" />
+          </NumberFieldIncrement>
+        </NumberFieldGroup>
+      </NumberField>
     </div>
   )
 }

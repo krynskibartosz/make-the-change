@@ -1,11 +1,50 @@
 'use client'
 
-import { type Editor } from '@tiptap/react'
-import { Bold, Italic, Strikethrough, Heading2, Heading3, List, ListOrdered, Quote } from 'lucide-react'
-import { Toggle } from '@make-the-change/core/ui'
+import {
+  Toggle,
+  ToolbarGroup,
+  Toolbar as ToolbarRoot,
+  ToolbarSeparator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@make-the-change/core/ui'
+import type { Editor } from '@tiptap/react'
+import {
+  Bold,
+  Heading2,
+  Heading3,
+  Italic,
+  List,
+  ListOrdered,
+  Quote,
+  Strikethrough,
+} from 'lucide-react'
+import type { ReactNode } from 'react'
 
 interface ToolbarProps {
   editor: Editor | null
+}
+
+interface FormatToggleProps {
+  label: string
+  pressed: boolean
+  onPressedChange: () => void
+  children: ReactNode
+}
+
+function FormatToggle({ label, pressed, onPressedChange, children }: FormatToggleProps) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={<Toggle size="sm" pressed={pressed} onPressedChange={onPressedChange} />}
+      >
+        {children}
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
+  )
 }
 
 export function Toolbar({ editor }: ToolbarProps) {
@@ -14,82 +53,77 @@ export function Toolbar({ editor }: ToolbarProps) {
   }
 
   return (
-    <div className="border-b p-2 flex flex-wrap gap-1 bg-muted/20">
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('bold')}
-        onPressedChange={() => editor.chain().focus().toggleBold().run()}
-        aria-label="Toggle bold"
-      >
-        <Bold className="h-4 w-4" />
-      </Toggle>
-      
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('italic')}
-        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-        aria-label="Toggle italic"
-      >
-        <Italic className="h-4 w-4" />
-      </Toggle>
+    <TooltipProvider>
+      <ToolbarRoot className="w-full rounded-none border-0 border-b bg-muted/20 p-2">
+        <ToolbarGroup>
+          <FormatToggle
+            label="Gras"
+            pressed={editor.isActive('bold')}
+            onPressedChange={() => editor.chain().focus().toggleBold().run()}
+          >
+            <Bold className="h-4 w-4" />
+          </FormatToggle>
+          <FormatToggle
+            label="Italique"
+            pressed={editor.isActive('italic')}
+            onPressedChange={() => editor.chain().focus().toggleItalic().run()}
+          >
+            <Italic className="h-4 w-4" />
+          </FormatToggle>
+          <FormatToggle
+            label="Barré"
+            pressed={editor.isActive('strike')}
+            onPressedChange={() => editor.chain().focus().toggleStrike().run()}
+          >
+            <Strikethrough className="h-4 w-4" />
+          </FormatToggle>
+        </ToolbarGroup>
 
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('strike')}
-        onPressedChange={() => editor.chain().focus().toggleStrike().run()}
-        aria-label="Toggle strikethrough"
-      >
-        <Strikethrough className="h-4 w-4" />
-      </Toggle>
+        <ToolbarSeparator />
 
-      <div className="w-px h-6 bg-border mx-1 self-center" />
+        <ToolbarGroup>
+          <FormatToggle
+            label="Titre 2"
+            pressed={editor.isActive('heading', { level: 2 })}
+            onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          >
+            <Heading2 className="h-4 w-4" />
+          </FormatToggle>
+          <FormatToggle
+            label="Titre 3"
+            pressed={editor.isActive('heading', { level: 3 })}
+            onPressedChange={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          >
+            <Heading3 className="h-4 w-4" />
+          </FormatToggle>
+        </ToolbarGroup>
 
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('heading', { level: 2 })}
-        onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        aria-label="Toggle heading 2"
-      >
-        <Heading2 className="h-4 w-4" />
-      </Toggle>
+        <ToolbarSeparator />
 
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('heading', { level: 3 })}
-        onPressedChange={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        aria-label="Toggle heading 3"
-      >
-        <Heading3 className="h-4 w-4" />
-      </Toggle>
-
-      <div className="w-px h-6 bg-border mx-1 self-center" />
-
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('bulletList')}
-        onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
-        aria-label="Toggle bullet list"
-      >
-        <List className="h-4 w-4" />
-      </Toggle>
-
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('orderedList')}
-        onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-        aria-label="Toggle ordered list"
-      >
-        <ListOrdered className="h-4 w-4" />
-      </Toggle>
-
-      <Toggle
-        size="sm"
-        pressed={editor.isActive('blockquote')}
-        onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
-        aria-label="Toggle blockquote"
-      >
-        <Quote className="h-4 w-4" />
-      </Toggle>
-    </div>
+        <ToolbarGroup>
+          <FormatToggle
+            label="Liste à puces"
+            pressed={editor.isActive('bulletList')}
+            onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
+          >
+            <List className="h-4 w-4" />
+          </FormatToggle>
+          <FormatToggle
+            label="Liste numérotée"
+            pressed={editor.isActive('orderedList')}
+            onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
+          >
+            <ListOrdered className="h-4 w-4" />
+          </FormatToggle>
+          <FormatToggle
+            label="Citation"
+            pressed={editor.isActive('blockquote')}
+            onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
+          >
+            <Quote className="h-4 w-4" />
+          </FormatToggle>
+        </ToolbarGroup>
+      </ToolbarRoot>
+    </TooltipProvider>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { Menubar } from '@make-the-change/core/ui'
 import Link from 'next/link'
 import { usePathname, useParams } from 'next/navigation'
 import { cn } from '@make-the-change/core/shared/utils'
@@ -28,7 +29,7 @@ export function SettingsNav() {
   ]
 
   return (
-    <nav className="flex items-center gap-6 border-b border-border/40 overflow-x-auto no-scrollbar">
+    <Menubar className="w-full items-stretch gap-6 rounded-none border-0 border-b border-border/40 p-0 overflow-x-auto no-scrollbar">
       {items.map((item) => {
         const isActive = item.isActive(pathname)
         return (
@@ -36,16 +37,16 @@ export function SettingsNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "text-sm font-medium transition-all pb-4 border-b-2 whitespace-nowrap px-1",
+              'text-sm font-medium transition-all pb-4 border-b-2 whitespace-nowrap px-1',
               isActive
-                ? "text-primary border-primary font-bold"
-                : "text-muted-foreground border-transparent hover:text-foreground hover:border-border/50"
+                ? 'text-primary border-primary font-bold'
+                : 'text-muted-foreground border-transparent hover:text-foreground hover:border-border/50',
             )}
           >
             {item.title}
           </Link>
         )
       })}
-    </nav>
+    </Menubar>
   )
 }

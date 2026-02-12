@@ -53,6 +53,7 @@ export const FormSelect = <TFieldValues extends FieldValues>({
       description={description}
       error={errorMessage}
       fieldId={fieldId}
+      fieldName={String(name)}
       label={label}
       required={required}
     >
@@ -66,7 +67,12 @@ export const FormSelect = <TFieldValues extends FieldValues>({
           field.onChange(nextValue)
         }}
       >
-        <SelectTrigger id={fieldId} name={field.name}>
+        <SelectTrigger
+          aria-invalid={errorMessage ? 'true' : undefined}
+          aria-required={required ? 'true' : undefined}
+          id={fieldId}
+          name={field.name}
+        >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

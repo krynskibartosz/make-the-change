@@ -1,10 +1,13 @@
 'use client'
 
 import type { FC, ReactNode } from 'react'
+import { useId } from 'react'
 
+import { Field, FieldDescription, FieldError, FieldLabel } from '../base/field'
 import { cn } from '../utils'
 
 export type FieldShellProps = {
+  fieldName?: string
   label?: string
   description?: string
   className?: string
@@ -17,6 +20,7 @@ export type FieldShellProps = {
 }
 
 export const FieldShell: FC<FieldShellProps> = ({
+  fieldName,
   label,
   description,
   className,
@@ -26,30 +30,38 @@ export const FieldShell: FC<FieldShellProps> = ({
   isValidating = false,
   validatingText = 'Validation en cours...',
   fieldId,
-}) => (
-  <div className={cn('space-y-2', className)}>
-    {label && (
-      <label
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        htmlFor={fieldId}
-      >
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </label>
-    )}
+}) => {
+  const generatedId = useId()
+  const resolvedFieldId = fieldId ?? `field-${generatedId.replace(/:/g, '')}`
+  const resolvedFieldName = fieldName ?? resolvedFieldId
 
-    {description && <p className="text-sm text-muted-foreground">{description}</p>}
+  return (
+    <Field className={cn('space-y-2', className)} name={resolvedFieldName}>
+      {label && (
+        <FieldLabel
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          htmlFor={resolvedFieldId}
+        >
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </FieldLabel>
+      )}
 
-    <div className="relative">{children}</div>
+      {description && <FieldDescription className="text-sm text-muted-foreground">{description}</FieldDescription>}
 
-    {error && (
-      <div className="text-sm text-destructive">
-        <p>{error}</p>
-      </div>
-    )}
+      <div className="relative">{children}</div>
 
-    {isValidating && <p className="text-sm text-muted-foreground">{validatingText}</p>}
-  </div>
-)
+      {error && (
+        <FieldError className="text-sm text-destructive" match={true}>
+          {error}
+        </FieldError>
+      )}
+
+      {isValidating && (
+        <FieldDescription className="text-sm text-muted-foreground">{validatingText}</FieldDescription>
+      )}
+    </Field>
+  )
+}
 
 FieldShell.displayName = 'FieldShell'

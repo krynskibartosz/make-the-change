@@ -6,6 +6,7 @@ import { HomeBlogSection } from '@/components/marketing/home/home-blog-section'
 import { HomeFeaturedProductsSection } from '@/components/marketing/home/home-featured-products-section'
 import { HomeFeaturedProjectsSection } from '@/components/marketing/home/home-featured-projects-section'
 import { HomeFeaturesSection } from '@/components/marketing/home/home-features-section'
+import { HomePartnersSection } from '@/components/marketing/home/home-partners-section'
 import { HomeStatsSection } from '@/components/marketing/home/home-stats-section'
 import { HomeUniverseSection } from '@/components/marketing/home/home-universe-section'
 import { MarketingCtaBand } from '@/components/marketing/marketing-cta-band'
@@ -45,6 +46,7 @@ export default async function HomePage() {
     { data: membersCountData },
     { data: featuredProjectsRaw },
     { data: featuredProductsRaw },
+    { data: activeProducersRaw },
     homeContent,
     { data: pointsData },
     latestPosts,
@@ -74,6 +76,12 @@ export default async function HomePage() {
       .eq('featured', true)
       .limit(4)
       .order('created_at', { ascending: false }),
+    supabase
+      .schema('investment')
+      .from('producers')
+      .select('*')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false }),
     getPageContent('home'),
     supabase.rpc('get_total_points_generated') as unknown as Promise<NumericRpcResponse>,
     getBlogPosts(),
@@ -99,6 +107,7 @@ export default async function HomePage() {
 
   const featuredProducts = (featuredProductsRaw || []) as unknown as Product[]
   const blogPosts = (latestPosts || []) as BlogPost[]
+  const activeProducers = (activeProducersRaw || []) as any[]
 
   return (
     <div className="overflow-x-hidden">
@@ -273,6 +282,8 @@ export default async function HomePage() {
           products={featuredProducts}
         />
       ) : null}
+
+      <HomePartnersSection producers={activeProducers} />
 
       {blogPosts.length > 0 ? (
         <HomeBlogSection

@@ -8,6 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Field,
+  Form,
   Input,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, ArrowRight, Mail, Sparkles } from 'lucide-react'
@@ -60,14 +62,14 @@ export default function ForgotPasswordPage() {
         <CardDescription className="text-sm font-medium">{t('forgot_help_text')}</CardDescription>
       </CardHeader>
       <CardContent className="p-8 pt-4">
-        <form action={formAction} className="space-y-6">
+        <Form action={formAction} className="space-y-6">
           {state.error && (
             <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
               {state.error}
             </div>
           )}
 
-          <div className="relative group">
+          <Field className="relative group">
             <Mail className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
             <Input
               id="email"
@@ -79,7 +81,7 @@ export default function ForgotPasswordPage() {
               required
               autoComplete="email"
             />
-          </div>
+          </Field>
 
           <Button
             type="submit"
@@ -89,7 +91,7 @@ export default function ForgotPasswordPage() {
             {t('reset_password_button')}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-        </form>
+        </Form>
       </CardContent>
       <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">
         <Link

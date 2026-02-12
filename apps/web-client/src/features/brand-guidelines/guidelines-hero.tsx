@@ -106,7 +106,7 @@ export function GuidelinesHero() {
         className={cn(
           'relative mx-auto max-w-[1360px] gap-8 px-4 py-9 md:py-16',
           isOverview
-            ? 'grid lg:grid-cols-[1.2fr_0.8fr] lg:items-end'
+            ? 'grid lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:pt-24'
             : 'grid lg:grid-cols-[1fr_420px] lg:items-center',
         )}
       >

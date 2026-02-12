@@ -1,4 +1,17 @@
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Progress } from '@make-the-change/core/ui'
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Meter,
+  MeterIndicator,
+  MeterLabel,
+  MeterTrack,
+  MeterValue,
+  Progress,
+} from '@make-the-change/core/ui'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { ProfileHeader } from '@/components/profile/profile-header'
 import { Link } from '@/i18n/navigation'
@@ -43,6 +56,8 @@ export default async function ProfilePage() {
     invested: totalInvested,
   })
   const levelProgress = getLevelProgress(impactScore)
+  const pointsToNextLevel =
+    levelProgress.nextLevel === null ? 0 : Math.max(levelProgress.nextMin - impactScore, 0)
   const computedBadges = getMilestoneBadges({
     points: pointsBalance,
     projects: projectsSupported,
@@ -112,8 +127,18 @@ export default async function ProfilePage() {
                     </span>
                   </div>
                   <Progress value={levelProgress.progress} className="h-2" />
+                  <Meter value={levelProgress.progress} className="space-y-1">
+                    <MeterLabel className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                      Score d&apos;avancement
+                    </MeterLabel>
+                    <MeterTrack className="h-1.5 rounded-full bg-muted">
+                      <MeterIndicator className="h-full rounded-full bg-primary/70" />
+                    </MeterTrack>
+                    <MeterValue className="text-[10px] text-muted-foreground" />
+                  </Meter>
                   <p className="text-xs italic opacity-70">
-                    Plus que {new Intl.NumberFormat('fr-FR').format(levelProgress.pointsToNextLevel)} points avant le niveau suivant.
+                    Plus que {new Intl.NumberFormat('fr-FR').format(pointsToNextLevel)} points
+                    avant le niveau suivant.
                   </p>
                 </CardContent>
               </Card>

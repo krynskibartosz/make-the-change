@@ -1,5 +1,6 @@
 'use client'
 
+import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { cva, type VariantProps } from 'class-variance-authority'
 import type {
@@ -149,7 +150,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <button
+      <ButtonPrimitive
         ref={ref}
         aria-disabled={isDisabled ? 'true' : undefined}
         className={cn(buttonVariants({ variant, size, className }))}
@@ -192,7 +193,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             {children}
           </div>
         )}
-      </button>
+      </ButtonPrimitive>
     )
   },
 )

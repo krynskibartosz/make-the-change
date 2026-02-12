@@ -17,6 +17,26 @@ This is a **production-ready** component library built with:
 4. **Utility-Driven** - Tailwind CSS for consistent styling
 5. **Framework Agnostic** - Works across web, web-client, and mobile
 
+## Base UI Governance
+
+`packages/core/src/shared/ui` follows a strict governance model:
+
+1. **Use Base UI primitives first for interactive behavior**  
+   Any reusable interaction (`button`, `input`, `select`, `textarea`, menus, dialogs, etc.) must be built through wrappers in `base/**`.
+
+2. **No direct `@base-ui/react*` imports outside `base/**`**  
+   The only accepted exceptions are explicit file-level allowlist entries enforced by CI.
+
+3. **Intentional custom components stay documented**  
+   Components that are intentionally custom (layout/composition patterns without direct Base UI primitive parity) are listed in:
+   - `packages/core/src/shared/ui/base-ui-exceptions.ts`
+
+4. **Raw interactives are guarded**  
+   CI blocks new raw interactive tags outside `base/**`, except for files explicitly allowlisted in `BASE_UI_RAW_INTERACTIVE_ALLOWLIST`.
+
+5. **Public API stability first**  
+   Migrations should keep public exports and signatures stable for `web-client`, unless a dedicated breaking-change cycle is approved.
+
 ## Directory Structure
 
 ```

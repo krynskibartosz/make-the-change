@@ -10,6 +10,8 @@ import {
   CardTitle,
   Input,
   Progress,
+  Slider,
+  SliderThumb,
 } from '@make-the-change/core/ui'
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -217,6 +219,22 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               </div>
               <div className="mt-3">
                 <Progress value={progress} />
+              </div>
+              <div className="mt-4 px-1">
+                <Slider
+                  max={max}
+                  min={min}
+                  step={1}
+                  value={[amountEur]}
+                  onValueChange={(values) => {
+                    const nextValue = Array.isArray(values) ? values[0] : values
+                    if (typeof nextValue === 'number' && Number.isFinite(nextValue)) {
+                      setAmountEur(Math.max(min, Math.min(max, Math.round(nextValue))))
+                    }
+                  }}
+                >
+                  <SliderThumb />
+                </Slider>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
                 Limites: {min}€ - {max}€

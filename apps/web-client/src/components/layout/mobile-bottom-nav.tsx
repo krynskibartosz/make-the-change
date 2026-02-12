@@ -1,5 +1,6 @@
 'use client'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
 import { Home, Menu, PiggyBank, ShoppingBag, Trophy, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -94,7 +95,12 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
           >
             {user ? (
               avatarUrl ? (
-                <img src={avatarUrl} alt="" className="h-6 w-6 rounded-full object-cover" />
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={avatarUrl} alt="" className="object-cover" />
+                  <AvatarFallback>
+                    <User className={cn('h-4 w-4', isMenuActive && 'fill-primary/20')} />
+                  </AvatarFallback>
+                </Avatar>
               ) : (
                 <User className={cn('h-5 w-5', isMenuActive && 'fill-primary/20')} />
               )

@@ -1,5 +1,6 @@
 'use client'
 
+import { Input as InputPrimitive } from '@base-ui/react/input'
 import { Eye, EyeOff } from 'lucide-react'
 import type { ForwardedRef, InputHTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useId, useState } from 'react'
@@ -11,11 +12,16 @@ export type InputProps = {
   label?: string
   error?: string
   helpText?: string
+  description?: string
   leadingIcon?: ReactNode
   trailingIcon?: ReactNode
   showPasswordToggle?: boolean
   variant?: InputVariant
   size?: 'sm' | 'md' | 'lg'
+  containerClassName?: string
+  inputWrapperClassName?: string
+  labelClassName?: string
+  messageClassName?: string
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -26,12 +32,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       label,
       error,
       helpText,
+      description,
       leadingIcon,
       trailingIcon,
       showPasswordToggle = false,
       variant = 'default',
       size = 'md',
       required,
+      containerClassName,
+      inputWrapperClassName,
+      labelClassName,
+      messageClassName,
+      id,
       ...props
     },
     ref: ForwardedRef<HTMLInputElement>,
@@ -39,10 +51,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [isFocused, setIsFocused] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [shakeAnimation, setShakeAnimation] = useState('')
-    const inputId = useId()
-    const ariaDescribedBy = error ? `${inputId}-error` : helpText ? `${inputId}-help` : undefined
+    const resolvedHelpText = helpText ?? description
+    const generatedId = useId()
+    const inputId = id ?? (label || error || resolvedHelpText ? `input-${generatedId}` : undefined)
+    const describedByBaseId = inputId ?? `input-${generatedId}`
+    const ariaDescribedBy = error
+      ? `${describedByBaseId}-error`
+      : resolvedHelpText
+        ? `${describedByBaseId}-help`
+        : undefined
 
     const inputType = showPasswordToggle ? (showPassword ? 'text' : 'password') : type
+    const hasTrailingAffordance =
+      Boolean(trailingIcon) || (showPasswordToggle && type === 'password') || Boolean(error)
 
     const handleErrorShake = () => {
       if (error) {
@@ -66,13 +87,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     return (
-      <div className="space-y-1.5 w-full">
+      <div className={cn('space-y-1.5 w-full', containerClassName)}>
         {label && (
           <label
             htmlFor={inputId}
             className={cn(
               'flex items-center gap-1 text-sm font-medium transition-colors',
               error ? 'text-destructive' : 'text-muted-foreground dark:text-foreground/80',
+              labelClassName,
             )}
           >
             {label}
@@ -86,6 +108,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             isFocused && 'ring-2 ring-primary/25 ring-offset-1 shadow-lg',
             error && 'ring-2 ring-destructive/25 ring-offset-1',
             shakeAnimation,
+            inputWrapperClassName,
           )}
         >
           {leadingIcon && (
@@ -94,7 +117,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
 
-          <input
+          <InputPrimitive
             ref={ref}
             aria-describedby={ariaDescribedBy}
             aria-invalid={error ? 'true' : undefined}
@@ -110,7 +133,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'focus-visible:border-primary/70 focus-visible:shadow-md',
               'disabled:cursor-not-allowed disabled:opacity-50',
               leadingIcon && 'pl-12',
-              (trailingIcon ?? (showPasswordToggle && type === 'password') ?? error) && 'pr-12',
+              hasTrailingAffordance && 'pr-12',
               error
                 ? 'border-destructive bg-destructive/5 focus-visible:ring-destructive/30 focus-visible:border-destructive dark:bg-destructive/10'
                 : 'hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95',
@@ -145,15 +168,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {(error ?? helpText) && (
+        {(error ?? resolvedHelpText) && (
           <p
             className={cn(
               'text-sm transition-colors',
               error ? 'text-destructive' : 'text-muted-foreground',
+              messageClassName,
             )}
             id={ariaDescribedBy}
           >
-            {error ?? helpText}
+            {error ?? resolvedHelpText}
           </p>
         )}
       </div>

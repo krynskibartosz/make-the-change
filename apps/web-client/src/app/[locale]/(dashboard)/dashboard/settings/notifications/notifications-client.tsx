@@ -8,7 +8,10 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
-  CheckboxWithLabel,
+  CheckboxGroup,
+  Fieldset,
+  FieldsetLegend,
+  Form,
 } from '@make-the-change/core/ui'
 import { cn } from '@make-the-change/core/shared/utils'
 import { Check, Mail, Package, Trophy, Zap, Bell, ShieldCheck, Radio } from 'lucide-react'
@@ -84,7 +87,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         </p>
       </div>
 
-      <form action={formAction} className="space-y-8">
+      <Form action={formAction} className="space-y-8">
         <Card className="border bg-background/70 shadow-xl backdrop-blur-md overflow-hidden">
           <CardHeader className="p-6 pb-4 sm:p-8 sm:pb-6 border-b border-border/50 bg-muted/30">
             <div className="flex items-center gap-3">
@@ -115,33 +118,36 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
             ) : null}
 
             {/* Channels Section */}
-            <div className="p-6 sm:p-8 border-b border-border/50 space-y-5">
-               <div className="flex items-center gap-2 mb-4">
+            <Fieldset className="p-6 sm:p-8 border-b border-border/50 space-y-5">
+               <FieldsetLegend className="flex items-center gap-2 mb-4">
                   <Radio className="h-4 w-4 text-primary" />
-                  <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Canaux de diffusion</h3>
-               </div>
-               
-               <div className="grid gap-4 sm:grid-cols-2">
-                <CheckboxWithLabel
-                  name="notify_email"
-                  defaultChecked={initial.email}
-                  label="Email"
-                  description="Recevoir les alertes importantes par email."
-                />
-                <CheckboxWithLabel
-                  name="notify_push"
-                  defaultChecked={initial.push}
-                  label="Notifications Push"
-                  description="Recevoir les notifications sur votre navigateur/mobile."
-                />
-                <CheckboxWithLabel
-                  name="notify_monthly"
-                  defaultChecked={initial.monthly_report}
-                  label="Rapport mensuel d'impact"
-                  description="Un résumé complet de votre contribution chaque mois."
-                />
-              </div>
-            </div>
+                  <span className="text-sm font-black uppercase tracking-widest text-muted-foreground">Canaux de diffusion</span>
+               </FieldsetLegend>
+
+               <CheckboxGroup defaultValue={['email', 'monthly']} className="grid gap-4 sm:grid-cols-2">
+                <label htmlFor="notify_email" className="flex items-start gap-3 rounded-xl border border-border/60 p-3 hover:bg-muted/30">
+                  <Checkbox id="notify_email" name="notify_email" value="email" defaultChecked={initial.email} className="mt-1" />
+                  <div>
+                    <p className="text-sm font-semibold">Email</p>
+                    <p className="text-xs text-muted-foreground">Recevoir les alertes importantes par email.</p>
+                  </div>
+                </label>
+                <label htmlFor="notify_push" className="flex items-start gap-3 rounded-xl border border-border/60 p-3 hover:bg-muted/30">
+                  <Checkbox id="notify_push" name="notify_push" value="push" defaultChecked={initial.push} className="mt-1" />
+                  <div>
+                    <p className="text-sm font-semibold">Notifications Push</p>
+                    <p className="text-xs text-muted-foreground">Recevoir les notifications sur votre navigateur/mobile.</p>
+                  </div>
+                </label>
+                <label htmlFor="notify_monthly" className="flex items-start gap-3 rounded-xl border border-border/60 p-3 hover:bg-muted/30 sm:col-span-2">
+                  <Checkbox id="notify_monthly" name="notify_monthly" value="monthly" defaultChecked={initial.monthly_report} className="mt-1" />
+                  <div>
+                    <p className="text-sm font-semibold">Rapport mensuel d'impact</p>
+                    <p className="text-xs text-muted-foreground">Un résumé complet de votre contribution chaque mois.</p>
+                  </div>
+                </label>
+              </CheckboxGroup>
+            </Fieldset>
 
             {/* Topics Section */}
             <div className="divide-y divide-border/50">
@@ -193,7 +199,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
             Enregistrer les choix
           </Button>
         </div>
-      </form>
+      </Form>
     </div>
   )
 }

@@ -353,28 +353,44 @@ export default async function AboutPage() {
                   variant="outline"
                   size="icon"
                   className="h-12 w-12 rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"
+                  asChild
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  <a
+                    href="https://www.linkedin.com/in/steisel/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn de Gregory Steisel"
                   >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                      <rect x="2" y="9" width="4" height="12" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  </a>
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   className="h-12 w-12 rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"
+                  asChild
                 >
-                  <Globe className="h-5 w-5" />
+                  <a
+                    href="https://www.wexible.be"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Site web de Gregory Steisel"
+                  >
+                    <Globe className="h-5 w-5" />
+                  </a>
                 </Button>
               </div>
             </div>
@@ -414,40 +430,71 @@ export default async function AboutPage() {
                   variant="outline"
                   size="icon"
                   className="h-12 w-12 rounded-full border-border/50 hover:bg-marketing-gradient-mid-500 hover:text-marketing-overlay-light hover:border-marketing-gradient-mid-500 transition-all"
+                  asChild
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  <a
+                    href="https://www.linkedin.com/in/bartosz-krynski/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn de Bartosz Krynski"
                   >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                      <rect x="2" y="9" width="4" height="12" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  </a>
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   className="h-12 w-12 rounded-full border-border/50 hover:bg-marketing-gradient-mid-500 hover:text-marketing-overlay-light hover:border-marketing-gradient-mid-500 transition-all"
+                  asChild
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  <a
+                    href="https://github.com/krynskibartosz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub de Bartosz Krynski"
                   >
-                    <polyline points="16 18 22 12 16 6" />
-                    <polyline points="8 6 2 12 8 18" />
-                  </svg>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="16 18 22 12 16 6" />
+                      <polyline points="8 6 2 12 8 18" />
+                    </svg>
+                  </a>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-12 w-12 rounded-full border-border/50 hover:bg-marketing-gradient-mid-500 hover:text-marketing-overlay-light hover:border-marketing-gradient-mid-500 transition-all"
+                  asChild
+                >
+                  <a
+                    href="https://bartek-portfolio.vercel.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Site web de Bartosz Krynski"
+                  >
+                    <Globe className="h-5 w-5" />
+                  </a>
                 </Button>
               </div>
             </div>

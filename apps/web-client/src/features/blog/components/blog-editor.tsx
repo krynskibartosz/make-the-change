@@ -1,6 +1,14 @@
 'use client'
 
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   Button,
   Input,
   Label,
@@ -10,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
   Switch,
+  TextArea,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Save, Trash } from 'lucide-react'
 import { useState, useTransition } from 'react'
@@ -33,6 +42,7 @@ interface BlogEditorProps {
 
 export function BlogEditor({ post }: BlogEditorProps) {
   const [data, setData] = useState(post)
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
   const router = useRouter()
@@ -68,11 +78,10 @@ export function BlogEditor({ post }: BlogEditorProps) {
   }
 
   const handleDelete = () => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) return
-
     startTransition(async () => {
       try {
         await deleteBlogPost(post.id)
+        setDeleteDialogOpen(false)
         toast({ title: 'Supprimé', description: 'Article supprimé avec succès.' })
         router.push('/admin/cms/blog')
       } catch {
@@ -105,7 +114,12 @@ export function BlogEditor({ post }: BlogEditorProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="destructive" size="icon" onClick={handleDelete} disabled={isPending}>
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={() => setDeleteDialogOpen(true)}
+            disabled={isPending}
+          >
             <Trash className="h-4 w-4" />
           </Button>
           <Button onClick={handleSave} disabled={isPending}>
@@ -149,7 +163,7 @@ export function BlogEditor({ post }: BlogEditorProps) {
               <Select
                 value={data.status}
                 onValueChange={(value) => {
-                  if (isBlogStatus(value)) {
+                  if (typeof value === 'string' && isBlogStatus(value)) {
                     setData({ ...data, status: value })
                   }
                 }}
@@ -175,10 +189,10 @@ export function BlogEditor({ post }: BlogEditorProps) {
 
             <div className="space-y-2">
               <Label>Extrait (Description courte)</Label>
-              <textarea
-                className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
+              <TextArea
                 value={data.excerpt}
                 onChange={(e) => setData({ ...data, excerpt: e.target.value })}
+                className="min-h-[100px]"
               />
             </div>
 
@@ -204,12 +218,32 @@ export function BlogEditor({ post }: BlogEditorProps) {
               <Label>Mettre à la une</Label>
               <Switch
                 checked={data.featured}
-                onCheckedChange={(checked) => setData({ ...data, featured: checked })}
+                onCheckedChange={(checked) => setData({ ...data, featured: Boolean(checked) })}
               />
             </div>
           </div>
         </div>
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Supprimer cet article ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. L&apos;article sera supprimé définitivement.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleDelete}
+            >
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

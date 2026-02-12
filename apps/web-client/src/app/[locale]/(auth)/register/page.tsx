@@ -8,6 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Form,
   Input,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, ArrowRight, Check, ExternalLink, Mail, Shield, User } from 'lucide-react'
@@ -152,7 +153,7 @@ export default function RegisterPage() {
         <CardDescription className="text-sm font-medium">{t('register_subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="p-8 pt-4">
-        <form action={formAction} onSubmit={handleFormSubmit} className="space-y-8">
+        <Form action={formAction} onSubmit={handleFormSubmit} className="space-y-8">
           {state.error && (
             <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
               {state.error}
@@ -356,7 +357,7 @@ export default function RegisterPage() {
               <input type="hidden" name="confirmPassword" value={formValues.confirmPassword} />
             </>
           )}
-        </form>
+        </Form>
       </CardContent>
       <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">
         <p className="text-sm font-medium text-muted-foreground mt-6">

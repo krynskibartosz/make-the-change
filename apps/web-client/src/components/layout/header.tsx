@@ -1,6 +1,17 @@
 'use client'
 
-import { Button } from '@make-the-change/core/ui'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@make-the-change/core/ui'
 import { ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
@@ -178,47 +189,51 @@ export function Header({ user, menuData }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-1 md:flex">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-            const label = item.label ?? t(item.name)
-            if (item.mega) {
+        <NavigationMenu className="hidden md:flex">
+          <NavigationMenuList className="items-center gap-1">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+              const label = item.label ?? t(item.name)
+              if (item.mega) {
+                return (
+                  <NavigationMenuItem key={item.id}>
+                    <button
+                      type="button"
+                      className={cn(
+                        'flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                        (isActive || activeMenu === item.id) && 'bg-accent text-accent-foreground',
+                      )}
+                      aria-expanded={activeMenu === item.id}
+                      aria-controls={`mega-menu-${item.id}`}
+                      aria-haspopup="true"
+                      onMouseEnter={() => setActiveMenu(item.id)}
+                      onFocus={() => setActiveMenu(item.id)}
+                      onClick={() => setActiveMenu((prev) => (prev === item.id ? null : item.id))}
+                    >
+                      {label}
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  </NavigationMenuItem>
+                )
+              }
               return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={cn(
-                    'flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                    (isActive || activeMenu === item.id) && 'bg-accent text-accent-foreground',
-                  )}
-                  aria-expanded={activeMenu === item.id}
-                  aria-controls={`mega-menu-${item.id}`}
-                  aria-haspopup="true"
-                  onMouseEnter={() => setActiveMenu(item.id)}
-                  onFocus={() => setActiveMenu(item.id)}
-                  onClick={() => setActiveMenu((prev) => (prev === item.id ? null : item.id))}
-                >
-                  {label}
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                </button>
+                <NavigationMenuItem key={item.id}>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      'rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                      isActive && 'bg-accent text-accent-foreground',
+                    )}
+                    onMouseEnter={closeMegaMenu}
+                    onFocus={closeMegaMenu}
+                  >
+                    {label}
+                  </Link>
+                </NavigationMenuItem>
               )
-            }
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={cn(
-                  'rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                  isActive && 'bg-accent text-accent-foreground',
-                )}
-                onMouseEnter={closeMegaMenu}
-                onFocus={closeMegaMenu}
-              >
-                {label}
-              </Link>
-            )
-          })}
-        </div>
+            })}
+          </NavigationMenuList>
+        </NavigationMenu>
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-2">
@@ -226,16 +241,35 @@ export function Header({ user, menuData }: HeaderProps) {
             <div className="hidden items-center gap-2 sm:flex">
               <Button asChild variant="ghost" size="sm" className="h-11 gap-2 px-2.5">
                 <Link href="/dashboard" aria-label={t('dashboard')}>
-                  <span className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 ring-1 ring-border">
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
-                    ) : (
-                      <span className="text-xs font-bold text-primary">{initial}</span>
-                    )}
-                  </span>
+                  <Avatar className="h-8 w-8 ring-1 ring-border">
+                    <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
+                    <AvatarFallback className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 text-xs font-bold text-primary">
+                      {initial}
+                    </AvatarFallback>
+                  </Avatar>
                   <span className="font-medium">{t('dashboard')}</span>
                 </Link>
               </Button>
+
+              <Popover>
+                <PopoverTrigger className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted">
+                  <ChevronDown className="h-4 w-4" />
+                </PopoverTrigger>
+                <PopoverContent className="w-44 p-1">
+                  <Link
+                    href="/dashboard/profile"
+                    className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Profil
+                  </Link>
+                  <Link
+                    href="/dashboard/settings"
+                    className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Paramètres
+                  </Link>
+                </PopoverContent>
+              </Popover>
             </div>
           ) : (
             <div className="hidden items-center gap-2 sm:flex">

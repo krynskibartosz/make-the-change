@@ -1,4 +1,4 @@
-import { Badge, Card, CardContent } from '@make-the-change/core/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { Crown, Medal, Trophy } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn, formatPoints } from '@/lib/utils'
@@ -48,21 +48,15 @@ function AvatarCircle({
   avatarUrl: string | null
   ringClassName?: string
 }) {
+  const fallbackInitial = displayName.trim().slice(0, 1).toUpperCase()
+
   return (
-    <div className={cn('relative h-12 w-12 rounded-full ring-2 ring-border', ringClassName)}>
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt={displayName}
-          className="h-full w-full rounded-full object-cover"
-          loading="lazy"
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground">
-          {displayName.trim().slice(0, 1).toUpperCase()}
-        </div>
-      )}
-    </div>
+    <Avatar className={cn('relative h-12 w-12 rounded-full ring-2 ring-border', ringClassName)}>
+      <AvatarImage src={avatarUrl || undefined} alt={displayName} className="object-cover" />
+      <AvatarFallback className="text-sm font-semibold text-muted-foreground">
+        {fallbackInitial}
+      </AvatarFallback>
+    </Avatar>
   )
 }
 
@@ -127,19 +121,17 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                       {/* Avatar et infos au-dessus du bloc */}
                       <div className="relative z-20 mb-2 flex flex-col items-center">
                         <div className="relative">
-                          <div className={cn('relative h-12 w-12 rounded-full ring-2 ring-border', meta.ring)}>
-                            {leader.avatarUrl ? (
-                              <img
-                                src={leader.avatarUrl}
+                          <div className={cn('relative h-12 w-12', meta.ring)}>
+                            <Avatar className="h-12 w-12 ring-2 ring-border">
+                              <AvatarImage
+                                src={leader.avatarUrl || undefined}
                                 alt={leader.displayName}
-                                className="h-full w-full rounded-full object-cover"
-                                loading="lazy"
+                                className="object-cover"
                               />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center rounded-full bg-muted text-xs font-semibold text-muted-foreground">
+                              <AvatarFallback className="text-xs font-semibold text-muted-foreground">
                                 {leader.displayName.trim().slice(0, 1).toUpperCase()}
-                              </div>
-                            )}
+                              </AvatarFallback>
+                            </Avatar>
                             {/* Badge de rang */}
                             <div className={cn(
                               'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-client-white',

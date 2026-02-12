@@ -848,6 +848,7 @@ type GeneratedDatabase = {
           seo_description: string | null
           seo_title: string | null
           short_description_default: string | null
+          images: string[] | null
           short_description_i18n: Json | null
           slug: string | null
           stock_management: boolean | null
@@ -891,6 +892,7 @@ type GeneratedDatabase = {
           seo_description?: string | null
           seo_title?: string | null
           short_description_default?: string | null
+          images?: string[] | null
           short_description_i18n?: Json | null
           slug?: string | null
           stock_management?: boolean | null
@@ -934,6 +936,7 @@ type GeneratedDatabase = {
           seo_description?: string | null
           seo_title?: string | null
           short_description_default?: string | null
+          images?: string[] | null
           short_description_i18n?: Json | null
           slug?: string | null
           stock_management?: boolean | null

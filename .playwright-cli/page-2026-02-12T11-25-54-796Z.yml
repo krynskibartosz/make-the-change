@@ -1,0 +1,16 @@
+- generic [active] [ref=e1]:
+  - region "Notifications" [ref=e58]
+  - generic [ref=e63] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e64]:
+      - img [ref=e65]
+    - generic [ref=e68]:
+      - button "Open issues overlay" [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]: "1"
+          - generic [ref=e72]: "2"
+        - generic [ref=e73]:
+          - text: Issue
+          - generic [ref=e74]: s
+      - button "Collapse issues badge" [ref=e75]:
+        - img [ref=e76]
+  - alert [ref=e78]

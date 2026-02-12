@@ -10,6 +10,10 @@ import {
   CardHeader,
   CardTitle,
   CheckboxWithLabel,
+  Field,
+  Fieldset,
+  FieldsetLegend,
+  Form,
   Input,
   Select,
   SelectContent,
@@ -73,7 +77,7 @@ export function SettingsClient({ initial }: SettingsClientProps) {
           <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-3 sm:p-8 sm:pt-4">
-          <form action={formAction} className="space-y-8">
+          <Form action={formAction} className="space-y-8">
             {state.error ? (
               <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
                 {state.error}
@@ -87,7 +91,7 @@ export function SettingsClient({ initial }: SettingsClientProps) {
             ) : null}
 
             <div className="grid gap-6 md:grid-cols-2 border-b pb-8">
-              <div className="space-y-1.5 w-full">
+              <Field className="space-y-1.5 w-full">
                 <label
                   htmlFor="settings-language"
                   className="flex items-center gap-1 text-sm font-medium text-muted-foreground dark:text-foreground/80"
@@ -114,19 +118,21 @@ export function SettingsClient({ initial }: SettingsClientProps) {
                   </SelectContent>
                 </Select>
                 <input type="hidden" name="languageCode" value={selectedLanguage} />
-              </div>
-              <Input
-                name="timezone"
-                label={t('general.timezone')}
-                defaultValue={initial.timezone}
-                placeholder="Europe/Paris"
-              />
+              </Field>
+              <Field>
+                <Input
+                  name="timezone"
+                  label={t('general.timezone')}
+                  defaultValue={initial.timezone}
+                  placeholder="Europe/Paris"
+                />
+              </Field>
             </div>
 
-            <div className="space-y-5 pt-4">
-              <p className="text-sm font-semibold tracking-wide uppercase text-muted-foreground/80">
+            <Fieldset className="space-y-5 pt-4">
+              <FieldsetLegend className="text-sm font-semibold tracking-wide uppercase text-muted-foreground/80">
                 {t('privacy.title')}
-              </p>
+              </FieldsetLegend>
               <div className="grid gap-4 sm:grid-cols-2">
                 <CheckboxWithLabel
                   name="publicProfile"
@@ -142,12 +148,12 @@ export function SettingsClient({ initial }: SettingsClientProps) {
                   description={t('privacy.marketing.description')}
                 />
               </div>
-            </div>
+            </Fieldset>
 
-            <div className="space-y-5 pt-6 border-t">
-              <p className="text-sm font-semibold tracking-wide uppercase text-muted-foreground/80">
+            <Fieldset className="space-y-5 pt-6 border-t">
+              <FieldsetLegend className="text-sm font-semibold tracking-wide uppercase text-muted-foreground/80">
                 {t('socials.title')}
-              </p>
+              </FieldsetLegend>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <Input
                   name="social_linkedin"
@@ -168,14 +174,14 @@ export function SettingsClient({ initial }: SettingsClientProps) {
                   placeholder="@username"
                 />
               </div>
-            </div>
+            </Fieldset>
 
             <div className="pt-8">
               <Button type="submit" loading={isPending} className="w-full py-6 text-base">
                 {t('save')}
               </Button>
             </div>
-          </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

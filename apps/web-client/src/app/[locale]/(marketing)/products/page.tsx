@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server'
 import { PageHero } from '@/components/ui/page-hero'
-import { SectionContainer } from '@/components/ui/section-container'
 import {
   applyProductsFilters,
   applyProductsSort,
@@ -80,15 +79,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   return (
     <>
-      <PageHero
-        title={t('title')}
-        description={t('subtitle')}
-        hideDescriptionOnMobile={false}
-        size="sm"
-        variant="default"
-        className="py-8 md:pb-12 md:pt-24"
-      />
-      <SectionContainer size="sm" className="pt-0 md:pt-2">
+      <section className="pb-12 pt-0 md:pb-16 md:pt-2">
         <ProductsClient
           products={serializedProducts}
           categories={(categoriesList || []) as Category[]}
@@ -103,7 +94,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             page: currentPage,
           }}
         />
-      </SectionContainer>
+      </section>
     </>
   )
 }

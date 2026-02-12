@@ -77,6 +77,9 @@ const listContainerClasses: Record<ProductCardContext, string> = {
 
 const getMediaContainerClasses = (context: ProductCardContext, view: ProductCardView) => {
   if (view === 'list') {
+    if (context === 'admin') {
+      return 'relative h-16 w-16 overflow-hidden rounded-md border border-border/60 bg-muted/30 flex-shrink-0'
+    }
     return 'relative h-10 w-10 overflow-hidden rounded-md border border-border/60 bg-muted/30 flex-shrink-0'
   }
 
