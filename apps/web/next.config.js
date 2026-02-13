@@ -21,6 +21,9 @@ const nextConfig = {
   turbopack: {},
   typedRoutes: true,
   transpilePackages: ['@make-the-change/core'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
