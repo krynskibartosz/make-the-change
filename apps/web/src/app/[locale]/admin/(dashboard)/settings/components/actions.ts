@@ -56,7 +56,7 @@ export async function saveUserTheme(
         
         if (existingIndex >= 0) {
           // Update existing custom theme
-          const existingTheme = config.customThemes[existingIndex]
+          const existingTheme = config.customThemes[existingIndex]!
           existingTheme.name = name
           existingTheme.customVars = customVars
           existingTheme.updated_at = new Date().toISOString()
