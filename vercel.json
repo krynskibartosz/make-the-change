@@ -4,7 +4,8 @@
   "outputDirectory": "apps/web/.next",
   "framework": "nextjs",
   "builds": [
-    { "src": "apps/web/package.json", "use": "@vercel/next" }
+    { "src": "apps/web/package.json", "use": "@vercel/next" },
+    { "src": "apps/web-client/package.json", "use": "@vercel/next" }
   ],
   "regions": ["cdg1"]
 }
