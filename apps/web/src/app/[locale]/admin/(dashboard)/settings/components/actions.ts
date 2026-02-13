@@ -55,14 +55,13 @@ export async function saveUserTheme(
         const existingIndex = config.customThemes.findIndex(t => t.id === themeId || t.name === name)
         
         if (existingIndex >= 0) {
-          // Update
-          config.customThemes[existingIndex] = {
-            ...config.customThemes[existingIndex],
-            name,
-            customVars,
-            updated_at: new Date().toISOString()
-          }
-          config.activeThemeId = config.customThemes[existingIndex].id
+          // Update existing custom theme
+          const existingTheme = config.customThemes[existingIndex]
+          existingTheme.name = name
+          existingTheme.customVars = customVars
+          existingTheme.updated_at = new Date().toISOString()
+          config.customThemes[existingIndex] = existingTheme
+          config.activeThemeId = existingTheme.id
         } else {
           // Create new
           const newTheme: UserTheme = {
