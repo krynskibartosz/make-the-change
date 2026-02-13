@@ -15,8 +15,9 @@ export default async function AppearancePage() {
       .from('profiles')
       .select('theme_config')
       .eq('id', user.id)
-      .single()
-    themeConfig = profile?.theme_config as unknown as ThemeConfig || null
+      .single<{ theme_config: unknown | null }>()
+
+    themeConfig = (profile?.theme_config as ThemeConfig) ?? null
   }
 
   return (
