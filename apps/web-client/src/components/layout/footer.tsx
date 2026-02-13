@@ -12,7 +12,7 @@ export function Footer() {
   return (
     <footer className="hidden border-t bg-card md:block">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
@@ -80,6 +80,85 @@ export function Footer() {
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {t('brand_guidelines')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/biodex"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  BioDex
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/challenges"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Challenges
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/menu"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('menu')}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Account & Shopping */}
+          <div>
+            <h3 className="mb-4 font-semibold">Account & Shopping</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('dashboard')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/profile"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('profile')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cart"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('cart')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/checkout"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Checkout
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/login"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('login')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/register"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('register')}
                 </Link>
               </li>
             </ul>

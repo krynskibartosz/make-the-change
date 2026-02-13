@@ -278,9 +278,7 @@ export function Header({ user, menuData }: HeaderProps) {
                   {t('login')}
                 </Button>
               </Link>
-              <Link href="/register">
-                <Button size="sm">{t('register')}</Button>
-              </Link>
+              
             </div>
           )}
 

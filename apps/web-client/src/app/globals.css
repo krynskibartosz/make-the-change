@@ -2,8 +2,25 @@
 @import "@make-the-change/core/css";
 @import "@make-the-change/core/css/themes/client";
 @import "../styles/theme-definitions.css";
+@import "../styles/scrollbar.css";
 
 @source "../**/*.{ts,tsx}";
+
+/* Reset styles to eliminate browser defaults */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: hsl(var(--background)) !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 @theme {
   --animate-blob: blob 7s infinite;

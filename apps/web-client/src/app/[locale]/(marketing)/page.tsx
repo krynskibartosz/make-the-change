@@ -9,6 +9,7 @@ import { HomeFeaturesSection } from '@/components/marketing/home/home-features-s
 import { HomePartnersSection } from '@/components/marketing/home/home-partners-section'
 import { HomeStatsSection } from '@/components/marketing/home/home-stats-section'
 import { HomeUniverseSection } from '@/components/marketing/home/home-universe-section'
+import { DiversityFactLoader } from '@/components/marketing/home/diversity-fact-loader'
 import { MarketingCtaBand } from '@/components/marketing/marketing-cta-band'
 import { PageHero } from '@/components/ui/page-hero'
 import { getBlogPosts } from '@/features/blog/blog-data'
@@ -108,7 +109,7 @@ export default async function HomePage() {
   const featuredProducts = (featuredProductsRaw || []) as unknown as Product[]
   const blogPosts = (latestPosts || []) as BlogPost[]
   const activeProducers = (activeProducersRaw || []) as any[]
-
+console.log("activeProducers", activeProducers)
   return (
     <div className="overflow-x-hidden">
       <PageHero
@@ -126,11 +127,6 @@ export default async function HomePage() {
         variant="gradient"
         className="min-h-[100dvh] flex flex-col justify-center"
       >
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-30 pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/20 blur-[120px] animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-marketing-positive-500/20 blur-[100px]" />
-        </div>
-
         <div className="space-y-8 relative z-10">
           <div className="flex flex-col justify-center gap-4 sm:flex-row items-center">
             <Link href="/projects">
@@ -173,6 +169,8 @@ export default async function HomePage() {
               </span>
             </div>
           </div>
+
+          <DiversityFactLoader />
 
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 animate-bounce cursor-pointer mt-16">
             <ArrowDown className="h-6 w-6 text-primary" />

@@ -11,7 +11,7 @@ import {
   Form,
   Input,
 } from '@make-the-change/core/ui'
-import { ArrowLeft, ArrowRight, Check, ExternalLink, Mail, Shield, User } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ExternalLink, Mail, Shield, User, UserCircle, Lock, FileCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { type FormEvent, useActionState, useMemo, useState } from 'react'
 import { Link } from '@/i18n/navigation'
@@ -176,7 +176,11 @@ export default function RegisterPage() {
                 {step > s ? (
                   <Check className="h-5 w-5" />
                 ) : (
-                  <span className="text-xs font-black">{s}</span>
+                  <>
+                    {s === 1 && <UserCircle className="h-5 w-5" />}
+                    {s === 2 && <Lock className="h-5 w-5" />}
+                    {s === 3 && <FileCheck className="h-5 w-5" />}
+                  </>
                 )}
               </div>
             ))}

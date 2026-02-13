@@ -45,15 +45,7 @@ export const PageHero: FC<PageHeroProps> = ({
         className,
       )}
     >
-      {/* Animated Background Blobs */}
-      {variant === 'gradient' && (
-        <>
-          <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl motion-safe:animate-pulse" />
-          <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-accent/10 blur-3xl motion-safe:animate-pulse" />
-          <div className="absolute left-1/2 top-8 h-40 w-40 -translate-x-1/2 rounded-full bg-accent/10 blur-2xl motion-safe:animate-pulse" />
-        </>
-      )}
-
+      
       <div className="container relative z-10 mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
           {badge && (

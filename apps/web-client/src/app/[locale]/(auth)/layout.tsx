@@ -15,9 +15,9 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
   ]
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen bg-background">
       {/* Left Panel - Branding & Social Proof */}
-      <div className="relative hidden lg:flex lg:w-[45%] xl:w-[50%] flex-col justify-between overflow-hidden p-16">
+      <div className="relative hidden lg:flex lg:w-[45%] xl:w-[50%] flex-col justify-between overflow-hidden p-16 h-full">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 -z-10">
           <img
@@ -47,7 +47,7 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
         </Link>
 
         {/* Main Content */}
-        <div className="relative z-10 space-y-12 max-w-xl">
+        <div className="relative z-10 space-y-8 max-w-xl">
           <div className="space-y-6">
             <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-1 rounded-full font-black uppercase tracking-widest text-[10px] backdrop-blur-md">
               {t('layout.badge')}
@@ -73,35 +73,18 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Footer Quote */}
-        <div className="relative z-10">
-          <div className="flex items-center gap-4 p-6 rounded-[2rem] bg-client-white/5 backdrop-blur-xl border border-client-white/10 max-w-md">
-            <div className="h-12 w-12 shrink-0 rounded-full border-2 border-primary/40 bg-muted overflow-hidden">
-              <img
-                src={placeholderImages.projects[0]}
-                alt={t('layout.user_alt')}
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-client-white italic">{t('layout.quote.text')}</p>
-              <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-primary">
-                {t('layout.quote.author')}
-              </p>
-            </div>
-          </div>
+        
         </div>
       </div>
 
       {/* Right Panel - Form */}
-      <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-12 lg:px-12 xl:px-24 bg-gradient-to-br from-background via-muted/20 to-client-emerald-50/20 dark:via-muted/5 dark:to-client-emerald-950/10">
+      <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-8 lg:px-12 lg:py-6 xl:px-24 xl:py-4 bg-gradient-to-br from-background via-muted/20 to-client-emerald-50/20 dark:via-muted/5 dark:to-client-emerald-950/10 h-full overflow-hidden">
         <div className="absolute top-0 right-0 h-64 w-64 rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-client-emerald-500/5 blur-[100px] pointer-events-none" />
 
         {/* Mobile Logo */}
-        <Link href="/" className="mb-12 flex items-center justify-center lg:hidden gap-3">
+        <Link href="/" className="mb-8 flex items-center justify-center lg:hidden gap-3">
           <Logo variant="icon" className="h-16 w-16" width={64} height={64} />
           <span className="text-2xl font-black text-foreground">Make the Change</span>
         </Link>

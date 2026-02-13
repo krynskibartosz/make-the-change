@@ -29,7 +29,7 @@ export function HomeStatsSection({ title, stats }: HomeStatsSectionProps) {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="group relative p-8 rounded-[2.5rem] border border-border/70 bg-card/80 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-xl dark:bg-marketing-overlay-light/[0.02] dark:border-marketing-overlay-light/5 dark:hover:bg-marketing-overlay-light/[0.05] dark:hover:border-marketing-overlay-light/10"
+            className="group relative p-8 rounded-[2.5rem] border border-border/70 bg-card/80 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-xl"
           >
             <div
               className={cn(
@@ -49,10 +49,10 @@ export function HomeStatsSection({ title, stats }: HomeStatsSectionProps) {
               </div>
 
               <div className="space-y-2">
-                <p className="text-4xl md:text-5xl font-black tracking-tighter text-foreground dark:text-marketing-overlay-light">
+                <p className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
                   {stat.value}
                 </p>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300 dark:text-marketing-neutral-300 dark:group-hover:text-marketing-overlay-light">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                   {stat.label}
                 </p>
               </div>

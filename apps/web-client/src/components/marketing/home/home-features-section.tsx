@@ -86,7 +86,7 @@ export function HomeFeaturesSection({
                 {feature.title}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-10 pt-0 relative">
+            <CardContent className="p-10 pt-4 relative">
               <p className="text-muted-foreground font-medium leading-relaxed text-lg">
                 {feature.desc}
               </p>
