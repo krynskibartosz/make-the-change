@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Heart } from 'lucide-react'
+import { Lightbulb } from 'lucide-react'
 
 const diversityFacts = [
   "Plus de 7 000 langues sont parlées dans le monde",
@@ -18,18 +18,23 @@ const diversityFacts = [
 
 export function DiversityFactLoader() {
   const [currentFact, setCurrentFact] = useState('')
+  const [displayedText, setDisplayedText] = useState('')
   const [progress, setProgress] = useState(0)
+  const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
     // Affiche un fun fact aléatoire au début
-    setCurrentFact(diversityFacts[Math.floor(Math.random() * diversityFacts.length)])
+    const initialFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
+    setCurrentFact(initialFact)
     setProgress(0)
+    setIsTyping(true)
 
     // Change de fun fact toutes les 5 secondes
     const interval = setInterval(() => {
       const randomFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
       setCurrentFact(randomFact)
       setProgress(0)
+      setIsTyping(true)
     }, 5000)
 
     // Met à jour la progression toutes les 100ms
@@ -46,6 +51,27 @@ export function DiversityFactLoader() {
     }
   }, [])
 
+  // Effet typewriter
+  useEffect(() => {
+    if (!isTyping || !currentFact) return
+
+    setDisplayedText('')
+    let index = 0
+    const typingSpeed = 50 // ms par caractère
+
+    const typingInterval = setInterval(() => {
+      if (index < currentFact.length) {
+        setDisplayedText(currentFact.slice(0, index + 1))
+        index++
+      } else {
+        setIsTyping(false)
+        clearInterval(typingInterval)
+      }
+    }, typingSpeed)
+
+    return () => clearInterval(typingInterval)
+  }, [currentFact, isTyping])
+
   // Calcule le rayon et la circonférence pour le cercle
   const radius = 8
   const circumference = 2 * Math.PI * radius
@@ -53,8 +79,8 @@ export function DiversityFactLoader() {
 
   return (
     <div className="flex justify-center pt-2">
-      <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 shadow-sm w-80 justify-center">
-        <div className="relative">
+      <div className="flex items-start gap-3 px-6 py-4 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 shadow-sm w-96 justify-start min-h-[52px]">
+        <div className="relative flex-shrink-0 mt-0.5">
           <svg className="h-5 w-5 -rotate-90">
             <circle
               cx="10"
@@ -77,10 +103,13 @@ export function DiversityFactLoader() {
             />
           </svg>
         </div>
-        <Heart className="h-4 w-4 text-primary flex-shrink-0" />
-        <span className="text-xs font-medium text-foreground text-center truncate">
-          Fun fact: {currentFact}
-        </span>
+        <Lightbulb className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-medium text-foreground text-left block">
+            Fun fact: {displayedText}
+            {isTyping && <span className="inline-block w-1 h-3 bg-primary ml-1 animate-pulse" />}
+          </span>
+        </div>
       </div>
     </div>
   )

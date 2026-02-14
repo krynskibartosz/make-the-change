@@ -1,6 +1,6 @@
 import type { Product } from '@make-the-change/core/schema'
 import { Button } from '@make-the-change/core/ui'
-import { ArrowDown, ArrowRight, Globe, Leaf, ShieldCheck, Sparkles, Users, Zap } from 'lucide-react'
+import { ArrowDown, ArrowRight, Globe, Leaf, ShieldCheck, Sparkles, Users, Zap, Heart } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { HomeBlogSection } from '@/components/marketing/home/home-blog-section'
 import { HomeFeaturedProductsSection } from '@/components/marketing/home/home-featured-products-section'
@@ -11,6 +11,8 @@ import { HomeStatsSection } from '@/components/marketing/home/home-stats-section
 import { HomeUniverseSection } from '@/components/marketing/home/home-universe-section'
 import { DiversityFactLoader } from '@/components/marketing/home/diversity-fact-loader'
 import { MarketingCtaBand } from '@/components/marketing/marketing-cta-band'
+import { MarketingSection } from '@/components/marketing/marketing-section'
+import { MarketingStepsSection } from '@/components/marketing/home/marketing-steps-section'
 import { PageHero } from '@/components/ui/page-hero'
 import { getBlogPosts } from '@/features/blog/blog-data'
 import type { BlogPost } from '@/features/blog/blog-types'
@@ -40,6 +42,14 @@ type RawFeaturedProject = {
 export default async function HomePage() {
   const t = await getTranslations('home')
   const supabase = await createClient()
+
+  const placeholderImages = {
+    projects: [
+      'https://images.unsplash.com/photo-1551888192-3cf5d6a5e1c?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1571019613454-1cb2f5b3d5b?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1558628042-1c5a1e9c5b8?w=800&h=600&fit=crop',
+    ],
+  }
 
   const [
     { count: activeProjectsCount },
@@ -208,23 +218,7 @@ console.log("activeProducers", activeProducers)
         }}
       />
 
-      <HomeFeaturesSection
-        title={content?.features.title || t('features.title')}
-        exploreLabel={content?.features.explore || t('features.explore')}
-        invest={{
-          title: content?.features.invest.title || t('features.invest.title'),
-          description: content?.features.invest.description || t('features.invest.description'),
-        }}
-        earn={{
-          title: content?.features.earn.title || t('features.earn.title'),
-          description: content?.features.earn.description || t('features.earn.description'),
-        }}
-        redeem={{
-          title: content?.features.redeem.title || t('features.redeem.title'),
-          description: content?.features.redeem.description || t('features.redeem.description'),
-        }}
-      />
-
+      
       <HomeStatsSection
         title={t('stats_section.title')}
         stats={[
@@ -262,6 +256,8 @@ console.log("activeProducers", activeProducers)
           },
         ]}
       />
+
+      <MarketingStepsSection placeholderImages={placeholderImages} />
 
       {featuredProjects.length > 0 ? (
         <HomeFeaturedProjectsSection
