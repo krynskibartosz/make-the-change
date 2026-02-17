@@ -22,6 +22,7 @@ type HomeFeaturedProjectsSectionProps = {
   fundedLabel: string
   activeLabel: string
   projects: FeaturedProject[]
+  variant?: 'default' | 'muted'
 }
 
 export function HomeFeaturedProjectsSection({
@@ -30,6 +31,7 @@ export function HomeFeaturedProjectsSection({
   fundedLabel,
   activeLabel,
   projects,
+  variant = 'default',
 }: HomeFeaturedProjectsSectionProps) {
   return (
     <MarketingSection
@@ -45,7 +47,7 @@ export function HomeFeaturedProjectsSection({
           </Button>
         </Link>
       }
-      variant="muted"
+      variant={variant}
       size="lg"
     >
       <FeaturedProjectsList

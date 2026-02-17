@@ -1,18 +1,22 @@
 'use client'
 
-import { Mail, MapPin } from 'lucide-react'
+import { Mail, MapPin, Instagram, Facebook, Linkedin, Music } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/ui/logo'
+import { useCart } from '@/features/commerce/cart/use-cart'
+import { useUser } from '@/hooks/use-user'
 
 export function Footer() {
   const t = useTranslations('footer')
   const currentYear = new Date().getFullYear()
+  const { items } = useCart()
+  const { user } = useUser()
 
   return (
     <footer className="hidden border-t bg-card md:block">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-5">
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
@@ -113,22 +117,27 @@ export function Footer() {
           <div>
             <h3 className="mb-4 font-semibold">Account & Shopping</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {t('dashboard')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/profile"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {t('profile')}
-                </Link>
-              </li>
+              {user ? (
+                <>
+                  <li>
+                    <Link
+                      href="/dashboard"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {t('dashboard')}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/profile"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {t('profile')}
+                    </Link>
+                  </li>
+                </>
+              ) : null}
+
               <li>
                 <Link
                   href="/cart"
@@ -137,30 +146,38 @@ export function Footer() {
                   {t('cart')}
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/checkout"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Checkout
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/login"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {t('login')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/register"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {t('register')}
-                </Link>
-              </li>
+
+              {items.length > 0 ? (
+                <li>
+                  <Link
+                    href="/checkout"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t('checkout')}
+                  </Link>
+                </li>
+              ) : null}
+
+              {!user ? (
+                <>
+                  <li>
+                    <Link
+                      href="/login"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {t('login')}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/register"
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {t('register')}
+                    </Link>
+                  </li>
+                </>
+              ) : null}
             </ul>
           </div>
 
@@ -221,6 +238,48 @@ export function Footer() {
                 <span>{t('address')}</span>
               </li>
             </ul>
+
+            <div className="mt-4">
+              <h4 className="mb-3 text-sm font-medium">{t('follow_us')}</h4>
+              <div className="flex gap-3">
+                <a
+                  href="https://instagram.com/makethechange"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="h-5 w-5" />
+                </a>
+                <a
+                  href="https://facebook.com/makethechange"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="h-5 w-5" />
+                </a>
+                <a
+                  href="https://linkedin.com/company/makethechange"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="h-5 w-5" />
+                </a>
+                <a
+                  href="https://tiktok.com/@makethechange"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                  aria-label="TikTok"
+                >
+                  <Music className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 

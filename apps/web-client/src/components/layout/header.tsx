@@ -21,8 +21,8 @@ import { Logo } from '@/components/ui/logo'
 import type { MainMenuStructure } from '@/features/cms/types'
 import { CartButton } from '@/features/commerce/cart/cart-button'
 import { useScrollHeader } from '@/hooks/use-scroll-header'
+import { useDiscoverMenu } from '@/hooks/use-discover-menu'
 import { Link, usePathname } from '@/i18n/navigation'
-import { placeholderImages } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
 
 interface HeaderProps {
@@ -36,103 +36,9 @@ export function Header({ user, menuData }: HeaderProps) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const { isVisible } = useScrollHeader()
 
+  const discoverMenu = useDiscoverMenu()
+
   const navigation = useMemo(() => {
-    const fallbackDiscoverMenu = {
-      title: t('discover_menu.title'),
-      sections: [
-        {
-          title: t('discover_menu.sections.concept'),
-          items: [
-            {
-              title: t('discover_menu.items.mission'),
-              href: '/about',
-              image: placeholderImages.categories.eco,
-            },
-            {
-              title: t('discover_menu.items.how_it_works'),
-              href: '/how-it-works',
-              image: placeholderImages.categories.eco,
-            },
-            {
-              title: t('discover_menu.items.producers'),
-              href: '/producers',
-              image: placeholderImages.categories.eco,
-            },
-          ],
-        },
-        {
-          title: t('discover_menu.sections.experience'),
-          items: [
-            {
-              title: t('discover_menu.items.challenges'),
-              href: '/challenges',
-              image: placeholderImages.categories.bien_etre,
-            },
-            {
-              title: t('discover_menu.items.leaderboard'),
-              href: '/leaderboard',
-              image: placeholderImages.categories.bien_etre,
-            },
-            {
-              title: t('discover_menu.items.biodex'),
-              href: '/biodex',
-              image: placeholderImages.categories.bien_etre,
-            },
-          ],
-        },
-        {
-          title: t('discover_menu.sections.help_resources'),
-          items: [
-            {
-              title: t('discover_menu.items.blog'),
-              href: '/blog',
-              image: placeholderImages.categories.default,
-            },
-            {
-              title: t('discover_menu.items.faq'),
-              href: '/faq',
-              image: placeholderImages.categories.default,
-            },
-            {
-              title: t('discover_menu.items.contact'),
-              href: '/contact',
-              image: placeholderImages.categories.default,
-            },
-          ],
-        },
-      ],
-    }
-
-    const brandGuidelinesItem = {
-      title: t('brand_guidelines'),
-      href: '/brand-guidelines',
-      image: placeholderImages.categories.default,
-    }
-
-    const baseDiscoverMenu = menuData?.discover || fallbackDiscoverMenu
-    const alreadyInDiscover = baseDiscoverMenu.sections.some((section) =>
-      section.items.some((item) => item.href === '/brand-guidelines'),
-    )
-
-    const discoverMenuWithBrandGuidelines = alreadyInDiscover
-      ? baseDiscoverMenu
-      : {
-          ...baseDiscoverMenu,
-          sections:
-            baseDiscoverMenu.sections.length > 0
-              ? baseDiscoverMenu.sections.map((section, index, sections) =>
-                  index === sections.length - 1
-                    ? { ...section, items: [...section.items, brandGuidelinesItem] }
-                    : section,
-                )
-              : [
-                  {
-                    title: t('discover_menu.sections.help_resources'),
-                    items: [brandGuidelinesItem],
-                  },
-                ],
-        }
-
     return [
       { id: 'home', name: 'home', href: '/' },
       {
@@ -152,10 +58,10 @@ export function Header({ user, menuData }: HeaderProps) {
         name: 'discover',
         href: '#',
         label: t('discover'),
-        mega: discoverMenuWithBrandGuidelines,
+        mega: discoverMenu,
       },
     ]
-  }, [menuData, t])
+  }, [menuData, t, discoverMenu])
 
   const activeMegaMenu = useMemo(
     () => navigation.find((item) => item.id === activeMenu)?.mega,
@@ -278,7 +184,7 @@ export function Header({ user, menuData }: HeaderProps) {
                   {t('login')}
                 </Button>
               </Link>
-              
+
             </div>
           )}
 

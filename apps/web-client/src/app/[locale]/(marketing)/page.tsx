@@ -43,6 +43,9 @@ export default async function HomePage() {
   const t = await getTranslations('home')
   const supabase = await createClient()
 
+  // Check if user is authenticated
+  const { data: { user } } = await supabase.auth.getUser()
+
   const placeholderImages = {
     projects: [
       'https://images.unsplash.com/photo-1551888192-3cf5d6a5e1c?w=800&h=600&fit=crop',
@@ -119,9 +122,9 @@ export default async function HomePage() {
   const featuredProducts = (featuredProductsRaw || []) as unknown as Product[]
   const blogPosts = (latestPosts || []) as BlogPost[]
   const activeProducers = (activeProducersRaw || []) as any[]
-console.log("activeProducers", activeProducers)
+  console.log("activeProducers", activeProducers)
   return (
-    <div className="overflow-x-hidden">
+    <div >
       <PageHero
         badge={
           <span className="inline-flex items-center gap-2 px-1 py-1">
@@ -148,7 +151,7 @@ console.log("activeProducers", activeProducers)
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/how-it-works">
+            <Link href="/about">
               <Button
                 variant="outline"
                 size="lg"
@@ -160,24 +163,22 @@ console.log("activeProducers", activeProducers)
           </div>
 
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-              <Zap className="h-4 w-4 text-primary" />
-              <span className="text-xs font-bold uppercase tracking-tight">
-                {projectsCount} {content?.stats.projects || t('stats.projects')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-              <Users className="h-4 w-4 text-primary" />
-              <span className="text-xs font-bold uppercase tracking-tight">
-                {membersCount} {content?.stats.members || t('stats.members')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-              <Globe className="h-4 w-4 text-primary" />
-              <span className="text-xs font-bold uppercase tracking-tight">
-                {content?.stats.global_impact || t('stats.global_impact')}
-              </span>
-            </div>
+            <Link href="/projects">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
+                <Zap className="h-4 w-4 text-primary" />
+                <span className="text-xs font-bold uppercase tracking-tight">
+                  {projectsCount} {content?.stats.projects || t('stats.projects')}
+                </span>
+              </div>
+            </Link>
+            <Link href="/leaderboard">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
+                <Users className="h-4 w-4 text-primary" />
+                <span className="text-xs font-bold uppercase tracking-tight">
+                  {membersCount} {content?.stats.members || t('stats.members')}
+                </span>
+              </div>
+            </Link>
           </div>
 
           <DiversityFactLoader />
@@ -216,11 +217,12 @@ console.log("activeProducers", activeProducers)
             t('universe.cards.community.description'),
           cta: content?.universe.cards.community.cta || t('universe.cards.community.cta'),
         }}
+        variant="default"
       />
 
-      
+
       <HomeStatsSection
-        title={t('stats_section.title')}
+        title={`${t('stats_section.title')} - section à revoir, quelle infos afficher ?`}
         stats={[
           {
             value: projectsCount,
@@ -255,9 +257,10 @@ console.log("activeProducers", activeProducers)
             border: 'border-primary/20',
           },
         ]}
+        variant="muted"
       />
 
-      <MarketingStepsSection placeholderImages={placeholderImages} />
+      <MarketingStepsSection variant="default" />
 
       {featuredProjects.length > 0 ? (
         <HomeFeaturedProjectsSection
@@ -266,6 +269,7 @@ console.log("activeProducers", activeProducers)
           fundedLabel={t('project_card.funded')}
           activeLabel={t('project_card.active')}
           projects={featuredProjects}
+          variant="muted"
         />
       ) : null}
 
@@ -274,45 +278,57 @@ console.log("activeProducers", activeProducers)
           title={t('featured_products')}
           viewAllLabel={t('view_all_products')}
           products={featuredProducts}
+          variant={featuredProjects.length > 0 ? 'default' : 'muted'}
         />
       ) : null}
 
-      <HomePartnersSection producers={activeProducers} />
+      <HomePartnersSection
+        producers={activeProducers}
+        variant={(featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) % 2 === 0 ? 'muted' : 'default'}
+      />
 
       {blogPosts.length > 0 ? (
         <HomeBlogSection
           title={content?.blog?.title || t('blog_section.title')}
           viewAllLabel={t('blog_section.view_all')}
           posts={blogPosts}
+          variant={(featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) + 1 % 2 === 0 ? 'muted' : 'default'}
         />
       ) : null}
 
+      {/* CTA Section - Conditionally rendered based on authentication */}
       <section className="mb-24">
         <div className="container mx-auto px-4">
           <MarketingCtaBand
-            badge={
-              <>
-                <ShieldCheck className="h-5 w-5 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-marketing-neutral-300">
-                  {content?.cta.stats.transparency || t('cta.stats.transparency')}
-                </span>
-              </>
-            }
             title={content?.cta.title || t('cta.title')}
             description={content?.cta.description || t('cta.description')}
             primaryAction={
-              <Link href="/register" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
-                >
-                  {content?.cta.button || t('cta.button')}
-                  <ArrowRight className="ml-3 h-5 w-5" />
-                </Button>
-              </Link>
+              user ? (
+                // Authenticated user - encourage investing in projects
+                <Link href="/projects" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                  >
+                    Investir dans des projets
+                    <ArrowRight className="ml-3 h-5 w-5" />
+                  </Button>
+                </Link>
+              ) : (
+                // Non-authenticated user - encourage joining
+                <Link href="/register" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                  >
+                    Nous rejoindre
+                    <ArrowRight className="ml-3 h-5 w-5" />
+                  </Button>
+                </Link>
+              )
             }
             secondaryAction={
-              <Link href="/how-it-works" className="w-full sm:w-auto">
+              <Link href="/about" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
                   size="lg"

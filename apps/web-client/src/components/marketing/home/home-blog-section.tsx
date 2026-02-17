@@ -9,9 +9,10 @@ type HomeBlogSectionProps = {
   title: string
   viewAllLabel: string
   posts: BlogPost[]
+  variant?: 'default' | 'muted'
 }
 
-export function HomeBlogSection({ title, viewAllLabel, posts }: HomeBlogSectionProps) {
+export function HomeBlogSection({ title, viewAllLabel, posts, variant = 'default' }: HomeBlogSectionProps) {
   return (
     <MarketingSection
       title={title}
@@ -28,6 +29,7 @@ export function HomeBlogSection({ title, viewAllLabel, posts }: HomeBlogSectionP
       }
       size="lg"
       className="py-20"
+      variant={variant}
     >
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.slice(0, 3).map((post) => (

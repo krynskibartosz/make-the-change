@@ -1,30 +1,22 @@
 'use client'
 
-import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@make-the-change/core/ui'
+import { Button } from '@make-the-change/core/ui'
 import {
   Coins,
-  FileQuestion,
-  FileText,
-  HelpCircle,
-  Info,
   LayoutDashboard,
-  Leaf,
   Lock,
-  Mail,
-  Package,
-  Palette,
   PiggyBank,
-  ShieldCheck,
   ShoppingBag,
-  Trophy,
   UserPlus,
-  Users,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
+import { CategoryCard } from '@/components/ui/category-card'
+import { useDiscoverMenu } from '@/hooks/use-discover-menu'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 export default function MenuPage() {
   const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(
@@ -33,7 +25,9 @@ export default function MenuPage() {
   const tNav = useTranslations('navigation')
   const tMenu = useTranslations('menu_page')
   const tFooter = useTranslations('footer')
-  const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3000'
+
+  // Get the shared menu data
+  const discoverMenu = useDiscoverMenu()
 
   useEffect(() => {
     const supabase = createClient()
@@ -162,137 +156,62 @@ export default function MenuPage() {
           </div>
         )}
 
-        {/* General Links */}
-        <Collapsible defaultOpen className="space-y-3">
-          <CollapsibleTrigger className="w-full text-left text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-            {tMenu('sections.explore')}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-1 rounded-xl border bg-card p-1 shadow-sm">
-            <Link
-              href="/blog"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <FileText className="h-5 w-5 text-muted-foreground" />
-              {tMenu('explore.blog')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/about"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Info className="h-5 w-5 text-muted-foreground" />
-              {tNav('about')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/how-it-works"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <HelpCircle className="h-5 w-5 text-muted-foreground" />
-              {tNav('how_it_works')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/brand-guidelines"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Palette className="h-5 w-5 text-muted-foreground" />
-              {tNav('brand_guidelines')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/contact"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Mail className="h-5 w-5 text-muted-foreground" />
-              {tMenu('explore.contact')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/faq"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <FileQuestion className="h-5 w-5 text-muted-foreground" />
-              {tMenu('explore.faq')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/products"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Package className="h-5 w-5 text-muted-foreground" />
-              {tNav('products')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/producers"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Users className="h-5 w-5 text-muted-foreground" />
-              {tMenu('explore.producers')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/projects"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Leaf className="h-5 w-5 text-muted-foreground" />
-              {tNav('projects')}
-            </Link>
-            <div className="mx-4 border-t" />
-            <Link
-              href="/biodex"
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <Trophy className="h-5 w-5 text-muted-foreground" />
-              {tMenu('explore.biodex')}
-            </Link>
-          </CollapsibleContent>
-        </Collapsible>
+        {/* Discover Menu Sections (Reusing Mega Menu Data) */}
+        {discoverMenu.sections.map((section) => (
+          <div key={section.title} className="space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
+              {section.title}
+            </h3>
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+              {section.items.map((item) => (
+                <CategoryCard
+                  key={item.title}
+                  title={item.title}
+                  description={item.description}
+                  image={item.image}
+                  href={item.href}
+                  badge={item.badge}
+                  // Force small layout on mobile/menu page for better density
+                  isSmall={true}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
 
-        {/* Shopping & Activities */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-            {tMenu('sections.shopping')}
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
+        {/* Featured Section */}
+        {discoverMenu.featured && (
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
+              {tNav('discover_menu.featured.title')}
+            </h3>
             <Link
-              href="/cart"
-              className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
+              href={discoverMenu.featured.href}
+              className="group relative flex h-64 flex-col overflow-hidden rounded-2xl border bg-muted/30"
             >
-              <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                <ShoppingBag className="h-5 w-5" />
+              <img
+                src={discoverMenu.featured.image}
+                alt={discoverMenu.featured.title}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+              <div className="relative mt-auto space-y-2 p-6">
+                <h4 className="text-xl font-semibold text-foreground">
+                  {discoverMenu.featured.title}
+                </h4>
+                {discoverMenu.featured.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {discoverMenu.featured.description}
+                  </p>
+                )}
+                <span className="inline-flex w-fit items-center justify-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                  {discoverMenu.featured.ctaLabel}
+                </span>
               </div>
-              <span className="text-sm font-medium">{tNav('cart')}</span>
-            </Link>
-
-            <Link
-              href="/challenges"
-              className="flex flex-col items-start justify-center gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all hover:bg-accent/50 hover:shadow-md"
-            >
-              <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                <Trophy className="h-5 w-5" />
-              </div>
-              <span className="text-sm font-medium">{tMenu('shopping.challenges')}</span>
             </Link>
           </div>
-        </div>
-
-        {/* Partners & Legal */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-            {tMenu('sections.partners')}
-          </h3>
-          <a
-            href={ADMIN_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-xl border border-dashed bg-card/50 px-4 py-4 text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground"
-          >
-            <ShieldCheck className="h-5 w-5 text-muted-foreground" />
-            {tMenu('partner_space')}
-          </a>
-        </div>
+        )}
 
         {/* Settings & Theme */}
         <div className="flex items-center justify-between rounded-xl border bg-card p-4 shadow-sm mt-8">

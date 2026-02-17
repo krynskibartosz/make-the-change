@@ -11,6 +11,7 @@ type CategoryCardProps = {
   href: string
   className?: string
   badge?: string
+  isSmall?: boolean
 }
 
 export const CategoryCard: FC<CategoryCardProps> = ({
@@ -20,6 +21,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({
   href,
   className,
   badge,
+  isSmall = false,
 }) => {
   const isExternal = href.startsWith('http')
 
@@ -30,11 +32,16 @@ export const CategoryCard: FC<CategoryCardProps> = ({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          'group relative flex h-24 overflow-hidden rounded-xl border bg-background/70 shadow-sm backdrop-blur transition-all hover:bg-accent/50 hover:shadow-md',
+          'group relative flex min-h-24 h-auto overflow-hidden rounded-xl border bg-background/70 shadow-sm backdrop-blur transition-all hover:bg-accent/50 hover:shadow-md',
           className,
         )}
       >
-        <div className="relative w-24 shrink-0 sm:w-32 h-full">
+        <div
+          className={cn(
+            'relative h-full shrink-0',
+            isSmall ? 'w-14 sm:w-16' : 'w-20 sm:w-28',
+          )}
+        >
           <img
             src={image}
             alt={title}
@@ -42,7 +49,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({
             loading="lazy"
           />
         </div>
-        <div className="relative flex flex-col justify-center p-3">
+        <div className="relative flex flex-1 flex-col justify-center p-2 min-w-0">
           {badge && (
             <span className="mb-1 inline-flex w-fit rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
               {badge}
@@ -61,11 +68,16 @@ export const CategoryCard: FC<CategoryCardProps> = ({
     <Link
       href={href}
       className={cn(
-        'group relative flex h-24 overflow-hidden rounded-xl border bg-background/70 shadow-sm backdrop-blur transition-all hover:bg-accent/50 hover:shadow-md',
+        'group relative flex min-h-24 h-auto overflow-hidden rounded-xl border bg-background/70 shadow-sm backdrop-blur transition-all hover:bg-accent/50 hover:shadow-md',
         className,
       )}
     >
-      <div className="relative w-24 shrink-0 sm:w-32 h-full">
+      <div
+        className={cn(
+          'relative h-full shrink-0',
+          isSmall ? 'w-14 sm:w-16' : 'w-20 sm:w-28',
+        )}
+      >
         <img
           src={image}
           alt={title}
@@ -73,7 +85,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({
           loading="lazy"
         />
       </div>
-      <div className="relative flex flex-col justify-center p-3">
+      <div className="relative flex flex-1 flex-col justify-center p-2 min-w-0">
         {badge && (
           <span className="mb-1 inline-flex w-fit rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
             {badge}

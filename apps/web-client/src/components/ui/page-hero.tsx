@@ -21,9 +21,7 @@ const sizeClasses = {
 
 const variantClasses = {
   default: 'bg-background',
-  gradient:
-    'bg-gradient-to-br from-primary/5 via-background to-accent/10 dark:from-primary/10 dark:via-background dark:to-accent/10',
-  muted: 'bg-muted/30',
+  
 }
 
 export const PageHero: FC<PageHeroProps> = ({
@@ -39,9 +37,9 @@ export const PageHero: FC<PageHeroProps> = ({
   return (
     <section
       className={cn(
-        'relative overflow-hidden',
+        'relative ',
         sizeClasses[size],
-        variantClasses[variant],
+
         className,
       )}
     >

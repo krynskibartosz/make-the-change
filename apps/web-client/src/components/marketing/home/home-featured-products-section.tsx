@@ -9,12 +9,14 @@ type HomeFeaturedProductsSectionProps = {
   title: string
   viewAllLabel: string
   products: Product[]
+  variant?: 'default' | 'muted'
 }
 
 export function HomeFeaturedProductsSection({
   title,
   viewAllLabel,
   products,
+  variant = 'default',
 }: HomeFeaturedProductsSectionProps) {
   return (
     <MarketingSection
@@ -32,7 +34,7 @@ export function HomeFeaturedProductsSection({
       }
       size="lg"
     >
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (
           <ProductCard
             key={product.id}

@@ -14,18 +14,20 @@ type HomeStat = {
 type HomeStatsSectionProps = {
   title: string
   stats: HomeStat[]
+  variant?: 'default' | 'muted'
 }
 
-export function HomeStatsSection({ title, stats }: HomeStatsSectionProps) {
+export function HomeStatsSection({ title, stats, variant = 'default' }: HomeStatsSectionProps) {
   return (
     <MarketingSection
       title={title}
       size="lg"
+      variant={variant}
       className="py-32 mt-24 md:mt-0 relative overflow-hidden"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse duration-[8000ms]" />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 relative z-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative z-10">
         {stats.map((stat) => (
           <div
             key={stat.label}
@@ -50,7 +52,15 @@ export function HomeStatsSection({ title, stats }: HomeStatsSectionProps) {
 
               <div className="space-y-2">
                 <p className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
-                  {stat.value}
+                  {(() => {
+                    // Si la valeur est déjà formatée (contient un espace), on l'affiche telle quelle
+                    if (typeof stat.value === 'string' && stat.value.includes(' ')) {
+                      return stat.value;
+                    }
+                    // Sinon, on formate normalement
+                    const numValue = typeof stat.value === 'number' ? stat.value : Number(stat.value);
+                    return isNaN(numValue) ? stat.value : new Intl.NumberFormat('fr-FR').format(numValue);
+                  })()}
                 </p>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                   {stat.label}

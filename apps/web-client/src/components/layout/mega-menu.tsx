@@ -53,9 +53,8 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
 
   return (
     <div className={cn('absolute left-0 right-0 top-full z-50', className)} onMouseLeave={onClose}>
-      <div className="absolute inset-0 -z-10 h-full w-full bg-background/80 backdrop-blur" />
-      <Card className="mx-auto w-full max-w-[90rem] border bg-background/80 p-6 shadow-2xl">
-        <div className="grid gap-6 lg:grid-cols-[1fr_350px] xl:grid-cols-[1fr_400px]">
+      <Card className="mx-auto w-full max-w-[90rem] border-t-0 border-x-0 border-b bg-background/75 backdrop-blur-xl p-6 shadow-2xl supports-[backdrop-filter]:bg-background/75">
+        <div className="grid gap-6 md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
           <div>
             <div className="mb-6">
               {content.eyebrow && (
@@ -72,13 +71,29 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
             <div
               className={cn(
                 'grid gap-4 sm:grid-cols-2',
-                content.sections.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2',
+                content.sections.length === 3 && content.sections.some((s) => s.items.length > 3)
+                  ? 'lg:grid-cols-4 md:grid-cols-2'
+                  : content.sections.length >= 3
+                    ? 'lg:grid-cols-3 md:grid-cols-2'
+                    : 'md:grid-cols-2',
               )}
             >
               {content.sections.map((section) => (
-                <div key={section.title} className="space-y-3">
+                <div
+                  key={section.title}
+                  className={cn(
+                    'space-y-3',
+                    // Force col-span-2 for sections with many items (Help & Resources) to give them room for their 2-column internal grid
+                    section.items.length > 3 && 'col-span-2',
+                  )}
+                >
                   <p className="text-sm font-semibold text-foreground">{section.title}</p>
-                  <div className="grid gap-3">
+                  <div
+                    className={cn(
+                      'grid gap-3',
+                      section.items.length > 3 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1',
+                    )}
+                  >
                     {section.items.map((item) => (
                       <CategoryCard
                         key={item.title}
@@ -87,6 +102,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
                         image={item.image}
                         href={item.href}
                         badge={item.badge}
+                        isSmall={section.items.length > 3}
                       />
                     ))}
                   </div>
