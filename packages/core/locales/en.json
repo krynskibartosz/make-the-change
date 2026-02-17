@@ -53,14 +53,16 @@
       },
       "items": {
         "mission": "Our mission",
-        "how_it_works": "How it works",
         "producers": "Our producers",
+        "pricing": "Pricing",
         "challenges": "Challenges",
         "leaderboard": "Leaderboard",
         "biodex": "BioDex",
         "blog": "Blog",
         "faq": "FAQ",
-        "contact": "Contact"
+        "contact": "Contact",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
       }
     },
     "leaderboard": "Leaderboard"
@@ -386,7 +388,15 @@
     "leaderboard": "Leaderboard",
     "blog": "Blog",
     "address": "Brussels, Belgium",
-    "brand_guidelines": "Brand guidelines"
+    "brand_guidelines": "Brand guidelines",
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "cart": "Cart",
+    "checkout": "Checkout",
+    "login": "Login",
+    "register": "Register",
+    "follow_us": "Follow us"
   },
   "home": {
     "hero": {
@@ -467,6 +477,35 @@
         "engagement": "Total Engagement",
         "transparency": "100% Transparency",
         "community": "Active Community"
+      }
+    },
+    "steps": {
+      "choose": {
+        "title": "Choose a project",
+        "description": "Browse our catalog of verified projects and select the ones you care about.",
+        "badges": {
+          "verified_catalog": "Verified catalog",
+          "advanced_filters": "Advanced filters"
+        }
+      },
+      "invest": {
+        "title": "Invest",
+        "description": "Support projects with one-time investments or a monthly subscription.",
+        "features": {
+          "payment_secure": "100% secure payment",
+          "total_transparency": "Full transaction transparency",
+          "measurable_impact": "Measurable impact from €1"
+        }
+      },
+      "enjoy": {
+        "title": "Enjoy",
+        "description": "Track your investment impact and exchange your points for products.",
+        "metrics": {
+          "points": "Points",
+          "rewards": "Rewards",
+          "badges": "Badges",
+          "impact": "Impact"
+        }
       }
     }
   },

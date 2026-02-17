@@ -59,14 +59,16 @@
       },
       "items": {
         "mission": "Notre mission",
-        "how_it_works": "Comment ça marche",
         "producers": "Nos producteurs",
+        "pricing": "Tarification",
         "challenges": "Défis",
         "leaderboard": "Classement",
         "biodex": "BioDex",
         "blog": "Blog",
         "faq": "FAQ",
-        "contact": "Contact"
+        "contact": "Contact",
+        "privacy": "Politique de confidentialité",
+        "terms": "Conditions d'utilisation"
       }
     }
   },
@@ -437,7 +439,15 @@
     "leaderboard": "Classement",
     "blog": "Blog",
     "address": "Brussels, Belgium",
-    "brand_guidelines": "Guide de marque"
+    "brand_guidelines": "Guide de marque",
+    "menu": "Menu",
+    "dashboard": "Tableau de bord",
+    "profile": "Profil",
+    "cart": "Panier",
+    "checkout": "Paiement",
+    "login": "Connexion",
+    "register": "Inscription",
+    "follow_us": "Suivez-nous"
   },
   "home": {
     "hero": {
@@ -518,6 +528,35 @@
         "engagement": "Engagement Total",
         "transparency": "Transparence 100%",
         "community": "Communauté Active"
+      }
+    },
+    "steps": {
+      "choose": {
+        "title": "Choisissez un projet",
+        "description": "Parcourez notre catalogue de projets vérifiés et sélectionnez ceux qui vous tiennent à cœur.",
+        "badges": {
+          "verified_catalog": "Catalogue vérifié",
+          "advanced_filters": "Filtres avancés"
+        }
+      },
+      "invest": {
+        "title": "Investissez",
+        "description": "Soutenez les projets avec des investissements unitaires ou un abonnement mensuel.",
+        "features": {
+          "payment_secure": "Paiement 100% sécurisé",
+          "total_transparency": "Transparence totale des flux",
+          "measurable_impact": "Impact mesurable dès 1€"
+        }
+      },
+      "enjoy": {
+        "title": "Profitez",
+        "description": "Suivez l'impact de vos investissements et échangez vos points contre des produits.",
+        "metrics": {
+          "points": "Points",
+          "rewards": "Récompenses",
+          "badges": "Badges",
+          "impact": "Impact"
+        }
       }
     }
   },

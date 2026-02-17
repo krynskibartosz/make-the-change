@@ -145,6 +145,35 @@
         "transparency": "100% Transparantie",
         "community": "Actieve Gemeenschap"
       }
+    },
+    "steps": {
+      "choose": {
+        "title": "Kies een project",
+        "description": "Blader door onze catalogus van geverifieerde projecten en selecteer de projecten die u belangrijk vindt.",
+        "badges": {
+          "verified_catalog": "Geverifieerde catalogus",
+          "advanced_filters": "Geavanceerde filters"
+        }
+      },
+      "invest": {
+        "title": "Investeer",
+        "description": "Steun projecten met eenmalige investeringen of een maandelijks abonnement.",
+        "features": {
+          "payment_secure": "100% veilige betaling",
+          "total_transparency": "Volledige transparantie van transacties",
+          "measurable_impact": "Meetbare impact vanaf €1"
+        }
+      },
+      "enjoy": {
+        "title": "Geniet",
+        "description": "Volg de impact van uw investeringen en ruil uw punten in voor producten.",
+        "metrics": {
+          "points": "Punten",
+          "rewards": "Beloningen",
+          "badges": "Badges",
+          "impact": "Impact"
+        }
+      }
     }
   },
   "dashboard": {
@@ -539,7 +568,15 @@
     "leaderboard": "Klassement",
     "blog": "Blog",
     "address": "Brussel, België",
-    "brand_guidelines": "Merkrichtlijnen"
+    "brand_guidelines": "Merkrichtlijnen",
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "profile": "Profiel",
+    "cart": "Winkelwagen",
+    "checkout": "Afrekenen",
+    "login": "Inloggen",
+    "register": "Registreren",
+    "follow_us": "Volg ons"
   },
   "profile": {
     "title": "Mijn profiel",
