@@ -10,7 +10,7 @@ import {
   Twitter,
 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing/marketing-hero'
+import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing-hero'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { Link } from '@/i18n/navigation'
 import { ContactCopyButton } from './contact-copy-button'

@@ -1,6 +1,6 @@
 import { ArrowRight, CheckCircle2, Mail, Scale, Shield, Sparkles } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing/marketing-hero'
+import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing-hero'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 
 export default async function TermsPage() {

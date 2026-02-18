@@ -1,7 +1,7 @@
 import { Button } from '@make-the-change/core/ui'
 import { CheckCircle2, Fingerprint, Lock, Mail, Server, Shield } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing/marketing-hero'
+import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing-hero'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 
 export default async function PrivacyPage() {

@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 
 type LocaleLayoutProps = PropsWithChildren<{
   params: Promise<{ locale: string }>
+  modal: React.ReactNode
 }>
 
 const inter = Inter({
@@ -29,7 +30,7 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+export default async function LocaleLayout({ children, modal, params }: LocaleLayoutProps) {
   const resolvedParams = await params
   const locale: Locale = isLocale(resolvedParams.locale) ? resolvedParams.locale : defaultLocale
 
@@ -85,6 +86,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             initialCustomVars={initialCustomVars}
           >
             {children}
+            {modal}
           </Providers>
         </NextIntlClientProvider>
         <script

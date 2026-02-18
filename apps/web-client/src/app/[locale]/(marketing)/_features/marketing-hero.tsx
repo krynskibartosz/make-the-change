@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react'
-import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing/marketing-hero-shell'
+import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
 import { cn } from '@/lib/utils'
 
 type MarketingHeroProps = {
