@@ -82,7 +82,7 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
               <div className="relative aspect-video rounded-2xl overflow-hidden border shadow-2xl">
                 <img
                   src={placeholderImages.projects[0]}
-                  alt=""
+                  alt={t('steps.choose.title')}
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" aria-hidden="true" />
@@ -147,7 +147,7 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
               <div className="relative aspect-video rounded-2xl overflow-hidden border shadow-2xl">
                 <img
                   src={placeholderImages.projects[1]}
-                  alt=""
+                  alt={t('steps.invest.title')}
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" aria-hidden="true" />
@@ -165,7 +165,7 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
               <div className="relative aspect-video rounded-2xl overflow-hidden border shadow-2xl">
                 <img
                   src={placeholderImages.projects[2]}
-                  alt=""
+                  alt={t('steps.impact.title')}
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" aria-hidden="true" />

@@ -116,7 +116,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
             >
               <img
                 src={content.featured.image}
-                alt=""
+                alt={content.featured.title}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />

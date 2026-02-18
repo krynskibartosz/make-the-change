@@ -23,7 +23,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="control-button">
+      <Button variant="ghost" size="icon" className="control-button" aria-label="Toggle theme">
         <span className="h-4 w-4" />
       </Button>
     )

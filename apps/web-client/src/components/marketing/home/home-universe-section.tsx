@@ -40,7 +40,7 @@ export function HomeUniverseSection({
             <img
               src={projects.image || placeholderImages.projects[0]}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-              alt=""
+              alt={projects.title}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/80 via-marketing-overlay-dark/20 to-transparent" aria-hidden="true" />
             <div className="absolute bottom-0 left-0 p-8 lg:p-12 space-y-4">
@@ -66,7 +66,7 @@ export function HomeUniverseSection({
               <img
                 src={products.image || placeholderImages.products[0]}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                alt=""
+                alt={products.title}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/80 via-marketing-overlay-dark/20 to-transparent" aria-hidden="true" />
               <div className="absolute bottom-0 left-0 p-8 space-y-2">
