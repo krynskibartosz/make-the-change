@@ -22,9 +22,9 @@ export default async function ProducersPage() {
   const t = await getTranslations('producers')
 
   const { data: producers } = await supabase
-    .from('public_producers')
+    .from('public_producers' as any)
     .select('*')
-    .order('name_default')
+    .order('name_default') as any
 
   return (
     <>
@@ -36,11 +36,11 @@ export default async function ProducersPage() {
       />
       <SectionContainer size="lg" className="pt-0 pb-20">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {producers?.map((producer) => {
+          {producers?.map((producer: any) => {
             const hasValidSlug =
               typeof producer.slug === 'string' && producer.slug.trim().length > 0
             const images = Array.isArray(producer.images)
-              ? producer.images.filter((image): image is string => typeof image === 'string')
+              ? producer.images.filter((image: any): image is string => typeof image === 'string')
               : []
 
             const content = (

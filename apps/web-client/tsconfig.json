@@ -2,7 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -17,9 +21,15 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@make-the-change/core/locales/*": ["../../packages/core/locales/*"],
-      "@make-the-change/core/*": ["../../packages/core/src/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@make-the-change/core/locales/*": [
+        "../../packages/core/locales/*"
+      ],
+      "@make-the-change/core/*": [
+        "../../packages/core/src/*"
+      ]
     },
     "plugins": [
       {
@@ -27,6 +37,13 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

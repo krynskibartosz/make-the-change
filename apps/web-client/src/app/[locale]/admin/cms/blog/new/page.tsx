@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from '@make-the-change/core/ui'
-import { createBlogPost } from '@/features/blog/actions/blog-actions'
+import { createBlogPost } from '@/app/[locale]/(marketing)/blog/_features/actions/blog-actions'
 
 export default function NewBlogPage() {
   return (

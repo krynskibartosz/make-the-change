@@ -11,8 +11,8 @@ export type ThemeState = {
 }
 
 export async function saveUserTheme(
-  themeId: string, 
-  name?: string, 
+  themeId: string,
+  name?: string,
   customVars: Record<string, string> = {}
 ): Promise<ThemeState> {
   try {
@@ -26,9 +26,9 @@ export async function saveUserTheme(
     // 1. Get existing config
     const { data: profile } = await supabase
       .from('profiles')
-      .select('theme_config')
+      .select('theme_config' as any)
       .eq('id', user.id)
-      .single()
+      .single() as any
 
     let config: ThemeConfig = (profile?.theme_config as unknown as ThemeConfig) || {
       activeThemeId: 'default',
@@ -45,7 +45,7 @@ export async function saveUserTheme(
 
     // 2. Handle saving
     const isPredefined = THEMES.some(t => t.id === themeId && t.id !== 'custom')
-    
+
     if (isPredefined) {
       config.activeThemeId = themeId
     } else {
@@ -53,7 +53,7 @@ export async function saveUserTheme(
       if (name) {
         // Saving a new or updating an existing named theme
         const existingIndex = config.customThemes.findIndex(t => t.id === themeId || t.name === name)
-        
+
         if (existingIndex >= 0) {
           // Update
           config.customThemes[existingIndex] = {
@@ -88,7 +88,7 @@ export async function saveUserTheme(
 
     const { error } = await supabase
       .from('profiles')
-      .update({ theme_config: config as any })
+      .update({ theme_config: config } as any)
       .eq('id', user.id)
 
     if (error) throw error
@@ -110,22 +110,22 @@ export async function deleteUserTheme(themeId: string): Promise<ThemeState> {
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('theme_config')
+      .select('theme_config' as any)
       .eq('id', user.id)
-      .single()
+      .single() as any
 
     const config = (profile?.theme_config as unknown as ThemeConfig)
     if (!config || !config.customThemes) return { error: 'Configuration introuvable' }
 
     config.customThemes = config.customThemes.filter(t => t.id !== themeId)
-    
+
     if (config.activeThemeId === themeId) {
       config.activeThemeId = 'default'
     }
 
     const { error } = await supabase
       .from('profiles')
-      .update({ theme_config: config as any })
+      .update({ theme_config: config } as any)
       .eq('id', user.id)
 
     if (error) throw error

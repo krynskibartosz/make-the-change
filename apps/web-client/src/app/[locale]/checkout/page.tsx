@@ -1,6 +1,6 @@
 import { getLocale } from 'next-intl/server'
 import { SectionContainer } from '@/components/ui/section-container'
-import { CheckoutClient } from '@/features/commerce/checkout/checkout-client'
+import { CheckoutClient } from '@/app/[locale]/(marketing-no-footer)/checkout/_features/checkout-client'
 import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 

@@ -9,7 +9,7 @@ import {
 } from '@make-the-change/core/ui'
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react'
 import type { ComponentType } from 'react'
-import type { ManagedToast, ToastData, ToastVariant } from '@/hooks/use-toast'
+import type { ManagedToast, ToastData, ToastVariant } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 
 const toastIcons: Record<ToastVariant, ComponentType<{ className?: string }>> = {

@@ -178,6 +178,15 @@
           "badges": "Badges",
           "impact": "Impact"
         }
+      },
+      "impact": {
+        "title": "Impact maken",
+        "description": "Volg uw bijdrage in realtime en deel uw prestaties met uw gemeenschap.",
+        "features": {
+          "daily_tracking": "Dagelijkse tracking",
+          "reports": "Impactrapporten",
+          "certificates": "Blockchain-certificaten"
+        }
       }
     }
   },

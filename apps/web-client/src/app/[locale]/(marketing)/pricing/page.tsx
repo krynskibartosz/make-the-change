@@ -15,7 +15,7 @@ import {
   TrendingUp,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { MarketingSection } from '@/components/marketing/marketing-section'
+import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { PageHero } from '@/components/ui/page-hero'
 import { Link } from '@/i18n/navigation'
 import { placeholderImages } from '@/lib/placeholder-images'
@@ -41,7 +41,7 @@ export default function HowItWorksPage() {
   return (
     <>
       <PageHero
-        
+
         title={t('title')}
         description={t('subtitle')}
         size="lg"
@@ -53,7 +53,7 @@ export default function HowItWorksPage() {
         </div>
       </PageHero>
 
-      
+
       <MarketingSection
         title={t('tiers.title')}
         size="lg"
@@ -215,7 +215,7 @@ export default function HowItWorksPage() {
         </div>
       </MarketingSection>
 
-      
+
     </>
   )
 }

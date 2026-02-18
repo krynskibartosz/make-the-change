@@ -13,7 +13,7 @@ import { Check, Shield, User, MapPin, Key } from 'lucide-react'
 import { UseFormReturn } from 'react-hook-form'
 import { ProfileFormValues, PasswordFormValues } from './schemas'
 import { SaveStatusIndicator } from '@/components/dashboard/save-status-indicator'
-import type { AutoSaveReturn } from '@/hooks/use-optimistic-auto-save'
+import type { AutoSaveReturn } from '@/lib/hooks/use-optimistic-auto-save'
 
 interface ProfileViewProps {
   profileForm: UseFormReturn<ProfileFormValues>

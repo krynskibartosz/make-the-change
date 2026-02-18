@@ -2,7 +2,7 @@
 
 import { DataList } from '@make-the-change/core/ui'
 import { ProjectCard } from '@make-the-change/core/ui/next'
-import { buildProjectCardBadges } from '@/features/investment/project-card-badges'
+import { buildProjectCardBadges } from '@/app/[locale]/(marketing)/projects/_features/project-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 type FeaturedProject = {

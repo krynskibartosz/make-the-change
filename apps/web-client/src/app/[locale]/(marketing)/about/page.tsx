@@ -11,8 +11,8 @@ import {
   Users,
 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { MarketingCtaBand } from '@/components/marketing/marketing-cta-band'
-import { MarketingHeroShell } from '@/components/marketing/marketing-hero-shell'
+import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing/marketing-cta-band'
+import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing/marketing-hero-shell'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { placeholderImages } from '@/lib/placeholder-images'

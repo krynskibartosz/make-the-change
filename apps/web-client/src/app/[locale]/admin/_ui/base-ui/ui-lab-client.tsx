@@ -94,7 +94,7 @@ import {
   TooltipTrigger,
 } from '@make-the-change/core/ui'
 import { useState } from 'react'
-import { toast } from '@/hooks/use-toast'
+import { toast } from '@/components/ui/use-toast'
 
 const BASE_UI_COMPONENT_REGISTRY = {
   Accordion,

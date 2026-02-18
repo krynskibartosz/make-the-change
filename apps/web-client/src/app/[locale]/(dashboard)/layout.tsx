@@ -4,7 +4,7 @@ import { DashboardMobileHeader } from '@/components/layout/dashboard-mobile-head
 import { DashboardSidebarProvider } from '@/components/layout/dashboard-sidebar-context'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { redirect } from '@/i18n/navigation'
-import { getUser } from '@/lib/auth-guards'
+import { getUser } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardSidebar } from './dashboard-sidebar'
 

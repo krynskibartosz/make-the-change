@@ -1,9 +1,9 @@
 import { getTranslations } from 'next-intl/server'
-import { GuidelinesContentShell } from '@/features/brand-guidelines/guidelines-content-shell'
+import { GuidelinesContentShell } from '@/app/[locale]/(marketing)/brand-guidelines/_features/guidelines-content-shell'
 import {
   getBrandGuidelineMetadata,
   resolveGuidelineLocale,
-} from '@/features/brand-guidelines/metadata'
+} from '@/app/[locale]/(marketing)/brand-guidelines/_features/metadata'
 
 const SCALE_ROWS = [
   { key: 'h1', className: 'text-3xl md:text-5xl font-black tracking-tight' },

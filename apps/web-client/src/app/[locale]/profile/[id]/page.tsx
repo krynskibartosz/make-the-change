@@ -101,10 +101,11 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     <SectionContainer size="md" className="space-y-8 py-8 md:py-12">
       {/* 1. Header Section */}
       <ProfileHeader
-        name={profile.display_name}
-        level={levelProgress.currentLevel}
-        avatarUrl={profile.avatar_url}
-        coverUrl={profile.cover_url}
+        name={profile.display_name || ''}
+        // @ts-ignore
+        avatarUrl={profile.avatar_url || undefined}
+        // @ts-ignore
+        coverUrl={profile.cover_url || undefined}
         impactScore={impactScore}
         readonly={true}
       />
@@ -268,7 +269,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <dl className="space-y-4 text-sm">
                 <div>
                   <dt className="text-muted-foreground">Membre depuis</dt>
-                  <dd className="font-medium">{formatDate(profile.created_at)}</dd>
+                  <dd className="font-medium">{formatDate(profile.created_at || new Date())}</dd>
                 </div>
                 <div>
                   <dt className="text-muted-foreground">Ville</dt>

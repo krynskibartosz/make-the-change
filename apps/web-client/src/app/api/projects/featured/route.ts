@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET() {
   try {
     const supabase = await createClient()
-    const { data, error } = await supabase.from('public_featured_projects').select('*').limit(6)
+    const { data, error } = await supabase.from('public_featured_projects' as any).select('*').limit(6)
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })

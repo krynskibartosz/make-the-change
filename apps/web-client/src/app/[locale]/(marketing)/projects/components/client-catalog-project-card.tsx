@@ -2,7 +2,7 @@
 
 import { ProjectCard } from '@make-the-change/core/ui/next'
 import type { FC } from 'react'
-import { buildProjectCardBadges } from '@/features/investment/project-card-badges'
+import { buildProjectCardBadges } from '@/app/[locale]/(marketing)/projects/_features/project-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 export type ClientCatalogProject = {

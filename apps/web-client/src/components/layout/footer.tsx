@@ -4,8 +4,8 @@ import { Mail, MapPin, Instagram, Facebook, Linkedin, Music } from 'lucide-react
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/ui/logo'
-import { useCart } from '@/features/commerce/cart/use-cart'
-import { useUser } from '@/hooks/use-user'
+import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
+import { useUser } from '@/lib/hooks/use-user'
 
 export function Footer() {
   const t = useTranslations('footer')

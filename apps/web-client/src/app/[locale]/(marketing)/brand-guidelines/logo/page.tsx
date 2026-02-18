@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import {
   getBrandGuidelineMetadata,
   resolveGuidelineLocale,
-} from '@/features/brand-guidelines/metadata'
+} from '@/app/[locale]/(marketing)/brand-guidelines/_features/metadata'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

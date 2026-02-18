@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react'
 import { Footer } from '@/components/layout/footer'
-import { CartDock } from '@/features/commerce/cart/cart-dock'
-import { CartSheet } from '@/features/commerce/cart/cart-sheet'
-import { CartSnackbar } from '@/features/commerce/cart/cart-snackbar'
+import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
+import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
+import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 
 export default function BiodexDetailLayout({ children }: PropsWithChildren) {
   return (

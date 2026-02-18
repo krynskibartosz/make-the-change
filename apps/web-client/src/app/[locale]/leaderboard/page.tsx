@@ -1,5 +1,5 @@
-import { getCurrentUserRank, getLeaderboardTop } from '@/features/leaderboard/leaderboard-data'
-import { LeaderboardView } from '@/features/leaderboard/leaderboard-view'
+import { getCurrentUserRank, getLeaderboardTop } from '@/app/[locale]/leaderboard/_features/leaderboard-data'
+import { LeaderboardView } from '@/app/[locale]/leaderboard/_features/leaderboard-view'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function LeaderboardPage() {

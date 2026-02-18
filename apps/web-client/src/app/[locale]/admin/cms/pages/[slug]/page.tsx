@@ -1,5 +1,5 @@
-import { getPageContent } from '@/features/cms/cms.service'
-import { PageEditor } from '@/features/cms/components/page-editor'
+import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
+import { PageEditor } from '@/app/[locale]/admin/cms/_features/components/page-editor'
 
 export default async function EditPageContentPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

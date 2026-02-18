@@ -34,9 +34,6 @@ export const createClient = async (): Promise<SupabaseClient<Database>> => {
           }
         },
       },
-      db: {
-        schema: 'public',
-      },
     },
   )
 }

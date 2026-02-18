@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import {
   getBrandGuidelineMetadata,
   resolveGuidelineLocale,
-} from '@/features/brand-guidelines/metadata'
+} from '@/app/[locale]/(marketing)/brand-guidelines/_features/metadata'
 import { Link } from '@/i18n/navigation'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {

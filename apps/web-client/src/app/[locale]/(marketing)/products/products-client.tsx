@@ -37,9 +37,9 @@ import { type FC, useCallback, useEffect, useMemo, useState, useTransition } fro
 import {
   type ActiveFilterChip,
   ProductsActiveFilters,
-} from '@/features/commerce/products/products-active-filters'
-import { ProductsPagination } from '@/features/commerce/products/products-pagination'
-import type { ProductsPaginationData } from '@/features/commerce/products/products-query'
+} from '@/app/[locale]/(marketing)/products/_features/products-active-filters'
+import { ProductsPagination } from '@/app/[locale]/(marketing)/products/_features/products-pagination'
+import type { ProductsPaginationData } from '@/app/[locale]/(marketing)/products/_features/products-query'
 import {
   buildProductsSearchParams,
   DEFAULT_PRODUCT_SORT,
@@ -47,7 +47,7 @@ import {
   isProductSort,
   type ProductSort,
   type ProductsQueryState,
-} from '@/features/commerce/products/query-state'
+} from '@/app/[locale]/(marketing)/products/_features/query-state'
 import { ClientCatalogProductCard } from './components/client-catalog-product-card'
 
 export interface Product {

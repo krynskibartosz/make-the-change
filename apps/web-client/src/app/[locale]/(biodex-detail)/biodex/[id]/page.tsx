@@ -3,8 +3,8 @@ import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import { ArrowLeft, Leaf, ShieldCheck, Info, Sparkles, AlertTriangle } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
-import { Species } from '@/features/biodex/types'
-import { getLocalizedContent, getStatusConfig } from '@/features/biodex/utils'
+import { Species } from '@/app/[locale]/(marketing)/biodex/_features/types'
+import { getLocalizedContent, getStatusConfig } from '@/app/[locale]/(marketing)/biodex/_features/utils'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string; locale: string }> }) {

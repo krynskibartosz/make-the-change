@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { getMenu } from '@/features/cms/cms.service'
+import { getMenu } from '@/app/[locale]/admin/cms/_features/cms.service'
 
 export type HeaderUser = {
     id: string

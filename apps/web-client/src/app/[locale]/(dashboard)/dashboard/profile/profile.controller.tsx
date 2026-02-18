@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useOptimisticAutoSave } from '@/hooks/use-optimistic-auto-save'
+import { useOptimisticAutoSave } from '@/lib/hooks/use-optimistic-auto-save'
 import { ProfileView } from './profile.view'
 import { 
   profileSchema, 

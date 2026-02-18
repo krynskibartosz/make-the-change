@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import { GuidelinesHero } from '@/features/brand-guidelines/guidelines-hero'
-import { GuidelinesNav } from '@/features/brand-guidelines/guidelines-nav'
+import { GuidelinesHero } from '@/app/[locale]/(marketing)/brand-guidelines/_features/guidelines-hero'
+import { GuidelinesNav } from '@/app/[locale]/(marketing)/brand-guidelines/_features/guidelines-nav'
 
 export default function BrandGuidelinesLayout({ children }: PropsWithChildren) {
   return (

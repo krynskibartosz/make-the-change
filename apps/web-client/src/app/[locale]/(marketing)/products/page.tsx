@@ -7,11 +7,11 @@ import {
   clampPage,
   getPaginationRange,
   toProductsPagination,
-} from '@/features/commerce/products/products-query'
+} from '@/app/[locale]/(marketing)/products/_features/products-query'
 import {
   PRODUCTS_PAGE_SIZE,
   parseProductsQueryState,
-} from '@/features/commerce/products/query-state'
+} from '@/app/[locale]/(marketing)/products/_features/query-state'
 import { createClient } from '@/lib/supabase/server'
 import { type Category, type Producer, type Product, ProductsClient } from './products-client'
 

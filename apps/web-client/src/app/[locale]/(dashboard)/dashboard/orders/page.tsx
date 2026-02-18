@@ -3,7 +3,7 @@ import { ArrowRight, Package, ShoppingBag } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
-import { requireAuth } from '@/lib/auth-guards'
+import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getOrderStatusColor } from '@/lib/status-colors'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
@@ -57,7 +57,7 @@ export default async function OrdersPage() {
       {userOrders && userOrders.length > 0 ? (
         <div className="space-y-4">
           {userOrders.map((order) => {
-            const items = order.items || []
+            const items = (order.items as unknown) as any[] || []
             const firstItem = items[0]
             // Supabase returns joined fields as arrays, extract first element
             const firstProduct = firstItem
@@ -66,10 +66,10 @@ export default async function OrdersPage() {
                 : firstItem.product
               : null
             const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0)
-            const totalEuros = items.reduce((sum: number, item: any) => {
-              const snapshot = item.product_snapshot as Record<string, any> | null
+            const totalEuros = (Array.isArray(items) ? items : []).reduce((sum: number, item: any) => {
+              const snapshot = item?.product_snapshot as { priceEuros?: number } | null
               const priceEuros = snapshot?.priceEuros || 0
-              return sum + (priceEuros * (item.quantity || 0))
+              return sum + (priceEuros * (item?.quantity || 0))
             }, 0)
 
             return (
@@ -82,7 +82,7 @@ export default async function OrdersPage() {
                       </div>
                       <div>
                         <CardTitle className="text-base sm:text-lg">
-                          Commande #{order.id.slice(0, 8)}
+                          Commande #{order.id?.slice(0, 8) || '...'}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground">
                           {formatDate(order.created_at || new Date())}

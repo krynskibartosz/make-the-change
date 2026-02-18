@@ -3,7 +3,7 @@
 import { ToastProvider, ToastViewport } from '@make-the-change/core/ui'
 import type { FC, PropsWithChildren } from 'react'
 import { ToastWithIcon } from '@/components/ui/toast'
-import { toastManager, useToast } from '@/hooks/use-toast'
+import { toastManager, useToast } from '@/components/ui/use-toast'
 
 function ToastList() {
   const { toasts } = useToast()

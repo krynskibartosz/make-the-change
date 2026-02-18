@@ -1,8 +1,8 @@
 import { Button } from '@make-the-change/core/ui'
 import { CheckCircle2, Fingerprint, Lock, Mail, Server, Shield } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { MarketingHero } from '@/components/marketing/marketing-hero'
-import { MarketingSection } from '@/components/marketing/marketing-section'
+import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing/marketing-hero'
+import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 
 export default async function PrivacyPage() {
   const t = await getTranslations('marketing_pages.privacy')

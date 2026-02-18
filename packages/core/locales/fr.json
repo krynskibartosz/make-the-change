@@ -562,6 +562,15 @@
           "badges": "Badges",
           "impact": "Impact"
         }
+      },
+      "impact": {
+        "title": "Avoir un impact",
+        "description": "Suivez votre contribution en temps réel et partagez vos réalisations avec votre communauté.",
+        "features": {
+          "daily_tracking": "Suivi quotidien",
+          "reports": "Rapports d'impact",
+          "certificates": "Certificats blockchain"
+        }
       }
     }
   },

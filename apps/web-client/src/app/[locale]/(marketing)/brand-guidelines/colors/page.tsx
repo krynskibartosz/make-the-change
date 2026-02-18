@@ -1,10 +1,10 @@
 import { ThemePalette } from '@make-the-change/core'
 import { getTranslations } from 'next-intl/server'
-import { GuidelinesContentShell } from '@/features/brand-guidelines/guidelines-content-shell'
+import { GuidelinesContentShell } from '@/app/[locale]/(marketing)/brand-guidelines/_features/guidelines-content-shell'
 import {
   getBrandGuidelineMetadata,
   resolveGuidelineLocale,
-} from '@/features/brand-guidelines/metadata'
+} from '@/app/[locale]/(marketing)/brand-guidelines/_features/metadata'
 
 const CORE_COLORS = [
   {

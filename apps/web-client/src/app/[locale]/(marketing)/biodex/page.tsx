@@ -2,7 +2,7 @@ import { Sparkles } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
-import type { Species } from '@/features/biodex/types'
+import type { Species } from '@/app/[locale]/(marketing)/biodex/_features/types'
 import { createClient } from '@/lib/supabase/server'
 import { BiodexClient } from './biodex-client'
 

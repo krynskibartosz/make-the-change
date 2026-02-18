@@ -11,9 +11,9 @@ import {
 import { Filter, Leaf, Search } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
-import { SpeciesCard } from '@/features/biodex/species-card'
-import type { ConservationStatus, Species } from '@/features/biodex/types'
-import { getLocalizedContent } from '@/features/biodex/utils'
+import { SpeciesCard } from '@/app/[locale]/(marketing)/biodex/_features/species-card'
+import type { ConservationStatus, Species } from '@/app/[locale]/(marketing)/biodex/_features/types'
+import { getLocalizedContent } from '@/app/[locale]/(marketing)/biodex/_features/utils'
 
 const ALL_STATUSES = ['NE', 'DD', 'LC', 'NT', 'VU', 'EN', 'CR', 'EW', 'EX'] as const
 

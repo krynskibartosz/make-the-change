@@ -21,9 +21,9 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useRef } from 'react'
-import { CartLineItem } from '@/features/commerce/cart/cart-line-item'
-import { useCartUI } from '@/features/commerce/cart/cart-ui-provider'
-import { useCart, useCartTotals } from '@/features/commerce/cart/use-cart'
+import { CartLineItem } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-line-item'
+import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
+import { useCart, useCartTotals } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { Link, useRouter } from '@/i18n/navigation'
 import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 

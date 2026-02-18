@@ -511,6 +511,15 @@
           "badges": "Badges",
           "impact": "Impact"
         }
+      },
+      "impact": {
+        "title": "Make an Impact",
+        "description": "Track your contribution in real-time and share your achievements with your community.",
+        "features": {
+          "daily_tracking": "Daily tracking",
+          "reports": "Impact reports",
+          "certificates": "Blockchain certificates"
+        }
       }
     }
   },

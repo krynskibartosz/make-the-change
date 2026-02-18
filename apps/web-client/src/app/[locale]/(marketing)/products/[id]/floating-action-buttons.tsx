@@ -3,8 +3,8 @@
 import { Button } from '@make-the-change/core/ui'
 import { Clock, ShoppingCart } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCartUI } from '@/features/commerce/cart/cart-ui-provider'
-import { useCart } from '@/features/commerce/cart/use-cart'
+import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
+import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { formatCurrency } from '@/lib/utils'
 
 interface ProductCartPayload {

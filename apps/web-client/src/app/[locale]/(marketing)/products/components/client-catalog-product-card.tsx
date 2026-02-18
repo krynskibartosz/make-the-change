@@ -2,7 +2,7 @@
 
 import { ProductCard } from '@make-the-change/core/ui/next'
 import type { FC } from 'react'
-import { buildProductCardBadges } from '@/features/commerce/products/product-card-badges'
+import { buildProductCardBadges } from '@/app/[locale]/(marketing)/products/_features/product-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 type ClientCatalogProduct = {

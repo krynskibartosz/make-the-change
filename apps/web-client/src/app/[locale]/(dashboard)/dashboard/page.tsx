@@ -15,7 +15,7 @@ import { StatCard } from '@/components/dashboard/stat-card'
 import { BadgesSection } from '@/components/dashboard/badges-section'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
-import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
+import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/app/[locale]/leaderboard/_features/gamification'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatPoints } from '@/lib/utils'
 

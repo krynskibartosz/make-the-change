@@ -1,5 +1,5 @@
-import { getMenu } from '@/features/cms/cms.service'
-import { MenuEditor } from '@/features/cms/components/menu-editor'
+import { getMenu } from '@/app/[locale]/admin/cms/_features/cms.service'
+import { MenuEditor } from '@/app/[locale]/admin/cms/_features/components/menu-editor'
 
 export default async function EditMenuPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
