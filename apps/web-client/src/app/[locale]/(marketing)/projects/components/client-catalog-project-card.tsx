@@ -76,34 +76,42 @@ export const ClientCatalogProjectCard: FC<ClientCatalogProjectCardProps> = ({
   })
 
   return (
-    <ProjectCard
-      context="clientCatalog"
-      model={{
-        id: project.id,
-        href: `/projects/${project.slug}`,
-        title: project.name_default,
-        subtitle: getLocationLabel(project),
-        description: project.description_default || '',
-        image: {
-          src: imageUrl,
-          alt: project.name_default,
-        },
-        status: project.status,
-        featured: project.featured,
-        projectType: project.type || undefined,
-        producerName: project.producer?.name_default || undefined,
-        locationLabel: getLocationLabel(project),
-        progressPercent: getProgressPercent(project),
-        currentFundingEuro: project.current_funding,
-        targetBudgetEuro: project.target_budget,
-        badges,
-      }}
-      labels={{
-        viewLabel: labels.viewLabel,
-        progressLabel: labels.progressLabel,
-        fundedLabel: labels.fundedLabel,
-        goalLabel: labels.goalLabel,
-      }}
-    />
+    <div itemScope itemType="https://schema.org/Project">
+      <ProjectCard
+        context="clientCatalog"
+        model={{
+          id: project.id,
+          href: `/projects/${project.slug}`,
+          title: project.name_default,
+          subtitle: getLocationLabel(project),
+          description: project.description_default || '',
+          image: {
+            src: imageUrl || '',
+            alt: project.name_default,
+          },
+          status: project.status,
+          featured: project.featured,
+          projectType: project.type || undefined,
+          producerName: project.producer?.name_default || undefined,
+          locationLabel: getLocationLabel(project),
+          progressPercent: getProgressPercent(project),
+          currentFundingEuro: project.current_funding,
+          targetBudgetEuro: project.target_budget,
+          badges,
+        }}
+        labels={{
+          viewLabel: labels.viewLabel,
+          progressLabel: labels.progressLabel,
+          fundedLabel: labels.fundedLabel,
+          goalLabel: labels.goalLabel,
+        }}
+      />
+      <meta itemProp="name" content={project.name_default} />
+      <meta itemProp="description" content={project.description_default || ''} />
+      <meta itemProp="image" content={imageUrl || ''} />
+      {project.address_city && project.address_country_code && (
+        <meta itemProp="location" content={`${project.address_city}, ${project.address_country_code}`} />
+      )}
+    </div>
   )
 }

@@ -66,31 +66,31 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
   return (
     <>
       <MarketingSection title={"How it works"} size="lg" className="relative" variant={variant}>
-        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent hidden lg:block -z-10" />
+        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent hidden lg:block -z-10" aria-hidden="true" />
 
-        <motion.div
+        <motion.ol
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="space-y-12 lg:space-y-24"
+          className="space-y-12 lg:space-y-24 list-none m-0 p-0"
         >
           {/* Step 1 */}
-          <motion.div variants={itemVariants} className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl group-hover:bg-primary/10 transition-colors duration-500" />
+          <motion.li variants={itemVariants} className="grid lg:grid-cols-2 gap-8 items-center">
+            <figure className="relative group m-0">
+              <div className="absolute -inset-4 bg-primary/5 rounded-3xl blur-2xl group-hover:bg-primary/10 transition-colors duration-500" aria-hidden="true" />
               <div className="relative aspect-video rounded-2xl overflow-hidden border shadow-2xl">
                 <img
                   src={placeholderImages.projects[0]}
-                  alt={t('steps.choose.title')}
+                  alt=""
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" aria-hidden="true" />
                 <div className="absolute bottom-4 left-4 p-3 bg-marketing-overlay-light/10 backdrop-blur-md rounded-xl border border-marketing-overlay-light/20">
-                  <Search className="h-6 w-6 text-marketing-overlay-light" />
+                  <Search className="h-6 w-6 text-marketing-overlay-light" aria-hidden="true" />
                 </div>
               </div>
-            </div>
+            </figure>
             <div className="space-y-4 lg:pl-12">
               <div className="flex items-center gap-4">
                 <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center text-xl font-black shadow-lg shadow-primary/20">
@@ -113,10 +113,10 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
                 </Badge>
               </div>
             </div>
-          </motion.div>
+          </motion.li>
 
           {/* Step 2 */}
-          <motion.div variants={itemVariants} className="grid lg:grid-cols-2 gap-8 items-center">
+          <motion.li variants={itemVariants} className="grid lg:grid-cols-2 gap-8 items-center">
             <div className="order-2 lg:order-1 space-y-4 lg:pr-12">
               <div className="flex items-center gap-4">
                 <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center text-xl font-black shadow-lg shadow-primary/20">
@@ -127,53 +127,53 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
               <p className="text-lg text-muted-foreground leading-relaxed font-medium">
                 {t('steps.invest.description')}
               </p>
-              <div className="space-y-3 pt-2">
+              <ul className="space-y-3 pt-2 list-none m-0 p-0">
                 {[
                   t('steps.invest.features.payment_secure'),
                   t('steps.invest.features.total_transparency'),
                   t('steps.invest.features.measurable_impact'),
                 ].map((feature, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm font-bold opacity-80">
-                    <div className="h-5 w-5 rounded-full bg-marketing-positive-500/10 flex items-center justify-center">
+                  <li key={i} className="flex items-center gap-2 text-sm font-bold opacity-80">
+                    <span className="h-5 w-5 rounded-full bg-marketing-positive-500/10 flex items-center justify-center" aria-hidden="true">
                       <Check className="h-3 w-3 text-marketing-positive-600" />
-                    </div>
+                    </span>
                     {feature}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-            <div className="order-1 lg:order-2 relative group">
-              <div className="absolute -inset-4 bg-marketing-positive-500/5 rounded-3xl blur-2xl group-hover:bg-marketing-positive-500/10 transition-colors duration-500" />
+            <figure className="order-1 lg:order-2 relative group m-0">
+              <div className="absolute -inset-4 bg-marketing-positive-500/5 rounded-3xl blur-2xl group-hover:bg-marketing-positive-500/10 transition-colors duration-500" aria-hidden="true" />
               <div className="relative aspect-video rounded-2xl overflow-hidden border shadow-2xl">
                 <img
                   src={placeholderImages.projects[1]}
-                  alt={t('steps.invest.title')}
+                  alt=""
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" aria-hidden="true" />
                 <div className="absolute bottom-4 left-4 p-3 bg-marketing-overlay-light/10 backdrop-blur-md rounded-xl border border-marketing-overlay-light/20">
-                  <CreditCard className="h-6 w-6 text-marketing-overlay-light" />
+                  <CreditCard className="h-6 w-6 text-marketing-overlay-light" aria-hidden="true" />
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </figure>
+          </motion.li>
 
           {/* Step 3 */}
-          <motion.div variants={itemVariants} className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-marketing-warning-500/5 rounded-3xl blur-2xl group-hover:bg-marketing-warning-500/10 transition-colors duration-500" />
+          <motion.li variants={itemVariants} className="grid lg:grid-cols-2 gap-8 items-center">
+            <figure className="relative group m-0">
+              <div className="absolute -inset-4 bg-marketing-warning-500/5 rounded-3xl blur-2xl group-hover:bg-marketing-warning-500/10 transition-colors duration-500" aria-hidden="true" />
               <div className="relative aspect-video rounded-2xl overflow-hidden border shadow-2xl">
                 <img
                   src={placeholderImages.projects[2]}
-                  alt={t('steps.enjoy.title')}
+                  alt=""
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent" aria-hidden="true" />
                 <div className="absolute bottom-4 left-4 p-3 bg-marketing-overlay-light/10 backdrop-blur-md rounded-xl border border-marketing-overlay-light/20">
-                  <TrendingUp className="h-6 w-6 text-marketing-overlay-light" />
+                  <TrendingUp className="h-6 w-6 text-marketing-overlay-light" aria-hidden="true" />
                 </div>
               </div>
-            </div>
+            </figure>
             <div className="space-y-4 lg:pl-12">
               <div className="flex items-center gap-4">
                 <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center text-xl font-black shadow-lg shadow-primary/20">
@@ -184,27 +184,27 @@ export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSec
               <p className="text-lg text-muted-foreground leading-relaxed font-medium">
                 {t('steps.enjoy.description')}
               </p>
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-muted/50 border text-center">
-                  <p className="text-2xl font-black text-primary">
-                    {t('steps.enjoy.metrics.points')}
-                  </p>
-                  <p className="text-xs font-bold uppercase opacity-60">
+              <dl className="grid grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-muted/50 border text-center flex flex-col-reverse gap-1">
+                  <dt className="text-xs font-bold uppercase opacity-60 m-0">
                     {t('steps.enjoy.metrics.rewards')}
-                  </p>
+                  </dt>
+                  <dd className="text-2xl font-black text-primary m-0">
+                    {t('steps.enjoy.metrics.points')}
+                  </dd>
                 </div>
-                <div className="p-4 rounded-xl bg-muted/50 border text-center">
-                  <p className="text-2xl font-black text-marketing-positive-600">
-                    {t('steps.enjoy.metrics.badges')}
-                  </p>
-                  <p className="text-xs font-bold uppercase opacity-60">
+                <div className="p-4 rounded-xl bg-muted/50 border text-center flex flex-col-reverse gap-1">
+                  <dt className="text-xs font-bold uppercase opacity-60 m-0">
                     {t('steps.enjoy.metrics.impact')}
-                  </p>
+                  </dt>
+                  <dd className="text-2xl font-black text-marketing-positive-600 m-0">
+                    {t('steps.enjoy.metrics.badges')}
+                  </dd>
                 </div>
-              </div>
+              </dl>
             </div>
-          </motion.div>
-        </motion.div>
+          </motion.li>
+        </motion.ol>
       </MarketingSection>
 
 

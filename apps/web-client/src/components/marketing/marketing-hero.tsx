@@ -36,7 +36,7 @@ export const MarketingHero: FC<MarketingHeroProps> = ({
       minHeightClassName={minHeightClassName}
       containerClassName={cn('text-center', containerClassName)}
     >
-      <div className={contentClassName}>
+      <header className={contentClassName}>
         {badge}
         <h1
           className={cn(
@@ -59,7 +59,7 @@ export const MarketingHero: FC<MarketingHeroProps> = ({
         ) : null}
 
         {visual}
-      </div>
+      </header>
     </MarketingHeroShell>
   )
 }

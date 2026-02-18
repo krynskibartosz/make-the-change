@@ -1,12 +1,13 @@
 import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 import { placeholderImages } from '@/lib/placeholder-images'
+import { MegaMenuContent } from '@/components/layout/mega-menu'
 
 export function useDiscoverMenu() {
     const t = useTranslations('navigation')
 
-    const discoverMenu = useMemo(() => {
-        const fallbackDiscoverMenu = {
+    const discoverMenu = useMemo<MegaMenuContent>(() => {
+        const fallbackDiscoverMenu: MegaMenuContent = {
             title: t('discover_menu.title'),
             sections: [
                 {

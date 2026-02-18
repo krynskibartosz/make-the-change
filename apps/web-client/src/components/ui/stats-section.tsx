@@ -86,7 +86,7 @@ const StatValue: FC<{
 
 export const StatsSection: FC<StatsSectionProps> = ({ stats, className, variant = 'default' }) => {
   return (
-    <div
+    <dl
       className={cn(
         'grid gap-8 text-center',
         stats.length === 3 && 'md:grid-cols-3',
@@ -99,10 +99,11 @@ export const StatsSection: FC<StatsSectionProps> = ({ stats, className, variant 
       {stats.map((stat, index) => {
         const gradient = gradients[index % gradients.length]
         return (
-          <div key={stat.label} className="group space-y-2">
-            <div
+          <div key={stat.label} className="group flex flex-col-reverse gap-2">
+            <dt className="text-sm text-muted-foreground sm:text-base">{stat.label}</dt>
+            <dd
               className={cn(
-                'text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-transform duration-300 group-hover:scale-105 sm:text-4xl',
+                'text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-transform duration-300 group-hover:scale-105 sm:text-4xl m-0',
                 gradient,
               )}
             >
@@ -112,11 +113,10 @@ export const StatsSection: FC<StatsSectionProps> = ({ stats, className, variant 
                 suffix={stat.suffix}
                 format={stat.format}
               />
-            </div>
-            <div className="text-sm text-muted-foreground sm:text-base">{stat.label}</div>
+            </dd>
           </div>
         )
       })}
-    </div>
+    </dl>
   )
 }

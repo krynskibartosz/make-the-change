@@ -46,27 +46,37 @@ export const ClientCatalogProductCard: FC<ClientCatalogProductCardProps> = ({
   })
 
   return (
-    <ProductCard
-      context="clientCatalog"
-      model={{
-        id: product.id,
-        href: `/products/${product.id}`,
-        title: product.name_default,
-        description: product.short_description_default || product.description_default || '',
-        image: {
-          src: imageUrl,
-          alt: product.name_default,
-        },
-        pricePoints: product.price_points || 0,
-        priceEuro: product.price || 0,
-        stockQuantity: product.stock_quantity,
-        featured: !!product.featured,
-        badges,
-      }}
-      labels={{
-        pointsLabel,
-        viewLabel,
-      }}
-    />
+    <div itemScope itemType="https://schema.org/Product">
+      <ProductCard
+        context="clientCatalog"
+        model={{
+          id: product.id,
+          href: `/products/${product.id}`,
+          title: product.name_default,
+          description: product.short_description_default || product.description_default || '',
+          image: {
+            src: imageUrl || '',
+            alt: product.name_default,
+          },
+          pricePoints: product.price_points || 0,
+          priceEuro: product.price || 0,
+          stockQuantity: product.stock_quantity,
+          featured: !!product.featured,
+          badges,
+        }}
+        labels={{
+          pointsLabel,
+          viewLabel,
+        }}
+      />
+      <meta itemProp="name" content={product.name_default} />
+      <meta itemProp="description" content={product.short_description_default || product.description_default || ''} />
+      <meta itemProp="image" content={imageUrl || ''} />
+      <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+        <meta itemProp="price" content={`${product.price || 0}`} />
+        <meta itemProp="priceCurrency" content="EUR" />
+        <meta itemProp="availability" content={product.stock_quantity && product.stock_quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"} />
+      </div>
+    </div>
   )
 }

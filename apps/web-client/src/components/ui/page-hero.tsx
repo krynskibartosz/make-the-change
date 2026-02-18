@@ -21,7 +21,8 @@ const sizeClasses = {
 
 const variantClasses = {
   default: 'bg-background',
-  
+  gradient: 'bg-gradient-to-br from-primary/5 via-background to-secondary/5',
+  muted: 'bg-muted/30',
 }
 
 export const PageHero: FC<PageHeroProps> = ({
@@ -32,40 +33,39 @@ export const PageHero: FC<PageHeroProps> = ({
   children,
   className,
   size = 'md',
-  variant = 'gradient',
+  variant = 'default',
 }) => {
   return (
     <section
       className={cn(
-        'relative ',
+        'relative flex flex-col items-center justify-center overflow-hidden',
         sizeClasses[size],
-
+        variantClasses[variant],
         className,
       )}
     >
-      
-      <div className="container relative z-10 mx-auto px-4">
-        <div className="mx-auto max-w-3xl text-center">
-          {badge && (
-            <Badge variant="secondary" className="mb-4">
-              {badge}
-            </Badge>
-          )}
-          <h1 className="mb-6 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-            {title}
-          </h1>
-          {description && (
-            <p
-              className={cn(
-                'mb-8 text-base text-muted-foreground sm:text-lg md:text-xl',
-                hideDescriptionOnMobile && 'hidden sm:block',
-              )}
-            >
-              {description}
-            </p>
-          )}
-          {children}
-        </div>
+      <div className="container relative z-10 mx-auto px-4 flex flex-col items-center text-center">
+        {badge && (
+          <div className="mb-6 animate-fade-in">
+            {badge}
+          </div>
+        )}
+
+        <h1 className="mb-6 max-w-4xl text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          {title}
+        </h1>
+
+        {description && (
+          <p
+            className={cn(
+              'mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl md:text-2xl font-medium leading-relaxed',
+              hideDescriptionOnMobile && 'hidden sm:block',
+            )}
+          >
+            {description}
+          </p>
+        )}
+        {children}
       </div>
     </section>
   )

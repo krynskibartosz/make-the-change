@@ -126,8 +126,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       : undefined)
   const producerImage =
     product.producer?.images &&
-    Array.isArray(product.producer.images) &&
-    product.producer.images.length > 0
+      Array.isArray(product.producer.images) &&
+      product.producer.images.length > 0
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
@@ -174,12 +174,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             <h1
               className={`
                 font-black tracking-tighter mb-8 text-foreground animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 drop-shadow-sm
-                ${
-                  productName.length > 40
-                    ? 'text-4xl sm:text-5xl lg:text-6xl'
-                    : productName.length > 25
-                      ? 'text-5xl sm:text-6xl lg:text-7xl'
-                      : 'text-6xl sm:text-7xl lg:text-8xl'
+                ${productName.length > 40
+                  ? 'text-4xl sm:text-5xl lg:text-6xl'
+                  : productName.length > 25
+                    ? 'text-5xl sm:text-6xl lg:text-7xl'
+                    : 'text-6xl sm:text-7xl lg:text-8xl'
                 }
               `}
             >
@@ -501,6 +500,31 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         stockQuantity={product.stock_quantity}
         displayPrice={displayPrice}
         inStock={inStock}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: productName,
+            description: productDescription,
+            image: coverImage ? [coverImage] : [],
+            sku: product.id,
+            brand: {
+              '@type': 'Brand',
+              name: product.producer?.name_default || 'Make the Change',
+            },
+            offers: {
+              '@type': 'Offer',
+              url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.id}`,
+              priceCurrency: 'EUR',
+              price: displayPrice,
+              availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+              itemCondition: 'https://schema.org/NewCondition',
+            },
+          }),
+        }}
       />
     </>
   )

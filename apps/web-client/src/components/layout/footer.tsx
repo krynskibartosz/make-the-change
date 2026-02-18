@@ -27,7 +27,7 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <nav aria-label={t('quick_links')}>
             <h3 className="mb-4 font-semibold">{t('quick_links')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
@@ -111,10 +111,10 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/* Account & Shopping */}
-          <div>
+          <nav aria-label="Account & Shopping">
             <h3 className="mb-4 font-semibold">Account & Shopping</h3>
             <ul className="space-y-2 text-sm">
               {user ? (
@@ -179,10 +179,10 @@ export function Footer() {
                 </>
               ) : null}
             </ul>
-          </div>
+          </nav>
 
           {/* Support */}
-          <div>
+          <nav aria-label={t('support')}>
             <h3 className="mb-4 font-semibold">{t('support')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
@@ -218,67 +218,75 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/* Contact */}
           <div>
             <h3 className="mb-4 font-semibold">{t('contact_us')}</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2 text-muted-foreground">
+            <address className="not-italic space-y-3 text-sm">
+              <a
+                href="mailto:contact@make-the-change.com"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <Mail className="h-4 w-4" />
-                <a
-                  href="mailto:contact@make-the-change.com"
-                  className="hover:text-foreground transition-colors"
-                >
-                  contact@make-the-change.com
-                </a>
-              </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
+                contact@make-the-change.com
+              </a>
+              <p className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>{t('address')}</span>
-              </li>
-            </ul>
+                {t('address')}
+              </p>
+            </address>
 
             <div className="mt-4">
               <h4 className="mb-3 text-sm font-medium">{t('follow_us')}</h4>
-              <div className="flex gap-3">
-                <a
-                  href="https://instagram.com/makethechange"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-5 w-5" />
-                </a>
-                <a
-                  href="https://facebook.com/makethechange"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="h-5 w-5" />
-                </a>
-                <a
-                  href="https://linkedin.com/company/makethechange"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-5 w-5" />
-                </a>
-                <a
-                  href="https://tiktok.com/@makethechange"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
-                  aria-label="TikTok"
-                >
-                  <Music className="h-5 w-5" />
-                </a>
-              </div>
+              <nav aria-label="Réseaux sociaux">
+                <ul className="flex gap-3 m-0 p-0 list-none">
+                  <li>
+                    <a
+                      href="https://instagram.com/makethechange"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://facebook.com/makethechange"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                      aria-label="Facebook"
+                    >
+                      <Facebook className="h-5 w-5" />
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://linkedin.com/company/makethechange"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin className="h-5 w-5" />
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://tiktok.com/@makethechange"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground hover:bg-foreground hover:text-background transition-colors"
+                      aria-label="TikTok"
+                    >
+                      <Music className="h-5 w-5" />
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

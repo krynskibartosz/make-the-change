@@ -87,7 +87,7 @@ export function Header({ user, menuData }: HeaderProps) {
         opacity: isVisible ? 1 : 0,
       }}
     >
-      <nav className="container relative mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container relative mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <Logo variant="icon" height={40} width={40} className="h-10" />
@@ -95,7 +95,7 @@ export function Header({ user, menuData }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu aria-label="Navigation principale" className="hidden md:flex">
           <NavigationMenuList className="items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -146,7 +146,7 @@ export function Header({ user, menuData }: HeaderProps) {
           {user ? (
             <div className="hidden items-center gap-2 sm:flex">
               <Button asChild variant="ghost" size="sm" className="h-11 gap-2 px-2.5">
-                <Link href="/dashboard" aria-label={t('dashboard')}>
+                <Link href="/dashboard">
                   <Avatar className="h-8 w-8 ring-1 ring-border">
                     <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
                     <AvatarFallback className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 text-xs font-bold text-primary">
@@ -158,7 +158,7 @@ export function Header({ user, menuData }: HeaderProps) {
               </Button>
 
               <Popover>
-                <PopoverTrigger className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted">
+                <PopoverTrigger aria-label="Menu utilisateur" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted">
                   <ChevronDown className="h-4 w-4" />
                 </PopoverTrigger>
                 <PopoverContent className="w-44 p-1">
@@ -199,7 +199,7 @@ export function Header({ user, menuData }: HeaderProps) {
             <MegaMenu content={activeMegaMenu} onClose={closeMegaMenu} />
           </div>
         )}
-      </nav>
+      </div>
 
       {activeMegaMenu && (
         <div

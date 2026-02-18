@@ -2,6 +2,7 @@ import type { Product } from '@make-the-change/core/schema'
 import { Button } from '@make-the-change/core/ui'
 import { ArrowDown, ArrowRight, Globe, Leaf, ShieldCheck, Sparkles, Users, Zap, Heart } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { cn } from '@/lib/utils'
 import { HomeBlogSection } from '@/components/marketing/home/home-blog-section'
 import { HomeFeaturedProductsSection } from '@/components/marketing/home/home-featured-products-section'
 import { HomeFeaturedProjectsSection } from '@/components/marketing/home/home-featured-projects-section'
@@ -37,6 +38,35 @@ type RawFeaturedProject = {
   current_funding: number | null
   status: string | null
   featured: boolean | null
+}
+
+import type { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'metadata' })
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app'
+  return {
+    title: t('title'),
+    description: t('description'),
+    openGraph: {
+      type: 'website',
+      siteName: 'Make the Change',
+      locale: locale === 'fr' ? 'fr_FR' : locale === 'nl' ? 'nl_NL' : 'en_US',
+      url: `${baseUrl}/${locale}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        fr: `${baseUrl}/fr`,
+        en: `${baseUrl}/en`,
+        nl: `${baseUrl}/nl`,
+      },
+    },
+  }
 }
 
 export default async function HomePage() {
@@ -122,9 +152,9 @@ export default async function HomePage() {
   const featuredProducts = (featuredProductsRaw || []) as unknown as Product[]
   const blogPosts = (latestPosts || []) as BlogPost[]
   const activeProducers = (activeProducersRaw || []) as any[]
-  console.log("activeProducers", activeProducers)
+
   return (
-    <div >
+    <>
       <PageHero
         badge={
           <span className="inline-flex items-center gap-2 px-1 py-1">
@@ -142,44 +172,50 @@ export default async function HomePage() {
       >
         <div className="space-y-8 relative z-10">
           <div className="flex flex-col justify-center gap-4 sm:flex-row items-center">
-            <Link href="/projects">
-              <Button
-                size="lg"
-                className="flex items-center justify-center w-full sm:w-auto h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-sm shadow-2xl shadow-primary/20 hover:scale-105 transition-transform"
-              >
+            <Button
+              asChild
+              size="lg"
+              className="flex items-center justify-center w-full sm:w-auto h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-sm shadow-2xl shadow-primary/20 hover:scale-105 transition-transform"
+            >
+              <Link href="/projects">
                 {content?.hero.cta_primary || t('hero.cta_primary')}
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="/about">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-sm border-2 backdrop-blur-md hover:bg-background/50"
-              >
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-auto h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-sm border-2 backdrop-blur-md hover:bg-background/50"
+            >
+              <Link href="/about">
                 {content?.hero.cta_secondary || t('hero.cta_secondary')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Link href="/projects">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-                <Zap className="h-4 w-4 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-tight">
-                  {projectsCount} {content?.stats.projects || t('stats.projects')}
+          <ul className="flex flex-wrap justify-center gap-4 pt-4 list-none m-0 p-0">
+            <li>
+              <Link href="/projects">
+                <span className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
+                  <Zap className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-bold uppercase tracking-tight">
+                    {projectsCount} {content?.stats.projects || t('stats.projects')}
+                  </span>
                 </span>
-              </div>
-            </Link>
-            <Link href="/leaderboard">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-                <Users className="h-4 w-4 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-tight">
-                  {membersCount} {content?.stats.members || t('stats.members')}
+              </Link>
+            </li>
+            <li>
+              <Link href="/leaderboard">
+                <span className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
+                  <Users className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-bold uppercase tracking-tight">
+                    {membersCount} {content?.stats.members || t('stats.members')}
+                  </span>
                 </span>
-              </div>
-            </Link>
-          </div>
+              </Link>
+            </li>
+          </ul>
 
           <DiversityFactLoader />
 
@@ -260,7 +296,7 @@ export default async function HomePage() {
         variant="muted"
       />
 
-      <MarketingStepsSection variant="default" />
+      <MarketingStepsSection variant="default" placeholderImages={placeholderImages} />
 
       {featuredProjects.length > 0 ? (
         <HomeFeaturedProjectsSection
@@ -284,7 +320,7 @@ export default async function HomePage() {
 
       <HomePartnersSection
         producers={activeProducers}
-        variant={(featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) % 2 === 0 ? 'muted' : 'default'}
+        variant={((featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0)) % 2 === 0 ? 'muted' : 'default'}
       />
 
       {blogPosts.length > 0 ? (
@@ -292,12 +328,12 @@ export default async function HomePage() {
           title={content?.blog?.title || t('blog_section.title')}
           viewAllLabel={t('blog_section.view_all')}
           posts={blogPosts}
-          variant={(featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) + 1 % 2 === 0 ? 'muted' : 'default'}
+          variant={((featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) + 1) % 2 === 0 ? 'muted' : 'default'}
         />
       ) : null}
 
       {/* CTA Section - Conditionally rendered based on authentication */}
-      <section className="mb-24">
+      <section className={cn('py-24', ((featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) + 2) % 2 === 0 ? 'bg-muted/30' : 'bg-background')}>
         <div className="container mx-auto px-4">
           <MarketingCtaBand
             title={content?.cta.title || t('cta.title')}
@@ -305,64 +341,69 @@ export default async function HomePage() {
             primaryAction={
               user ? (
                 // Authenticated user - encourage investing in projects
-                <Link href="/projects" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
-                  >
+                // Authenticated user - encourage investing in projects
+                <Button
+                  asChild
+                  size="lg"
+                  className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                >
+                  <Link href="/projects" className="w-full sm:w-auto">
                     Investir dans des projets
                     <ArrowRight className="ml-3 h-5 w-5" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               ) : (
                 // Non-authenticated user - encourage joining
-                <Link href="/register" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
-                  >
+                // Non-authenticated user - encourage joining
+                <Button
+                  asChild
+                  size="lg"
+                  className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                >
+                  <Link href="/register" className="w-full sm:w-auto">
                     Nous rejoindre
                     <ArrowRight className="ml-3 h-5 w-5" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               )
             }
             secondaryAction={
-              <Link href="/about" className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest border-2 border-marketing-overlay-light/10 hover:bg-marketing-overlay-light/5 transition-all"
-                >
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest border-2 border-marketing-overlay-light/10 hover:bg-marketing-overlay-light/5 transition-all"
+              >
+                <Link href="/about" className="w-full sm:w-auto">
                   {content?.hero.cta_secondary || t('hero.cta_secondary')}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             }
             footer={
-              <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-40">
-                <div className="flex items-center gap-3">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+              <ul className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-40 list-none m-0 p-0">
+                <li className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em]">
                     {content?.cta.stats.engagement || t('cta.stats.engagement')}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em]">
                     {content?.cta.stats.transparency || t('cta.stats.transparency')}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em]">
                     {content?.cta.stats.community || t('cta.stats.community')}
-                  </p>
-                </div>
-              </div>
+                  </span>
+                </li>
+              </ul>
             }
           />
         </div>
       </section>
-    </div>
+    </>
   )
 }

@@ -7,20 +7,19 @@ import { CategoryCard } from '@/components/ui/category-card'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
-type MegaMenuItem = {
+export type MegaMenuItem = {
   title: string
   description?: string
   image: string
   href: string
-  badge?: string
 }
 
-type MegaMenuSection = {
+export type MegaMenuSection = {
   title: string
   items: MegaMenuItem[]
 }
 
-type MegaMenuContent = {
+export type MegaMenuContent = {
   eyebrow?: string
   title: string
   description?: string
@@ -34,7 +33,7 @@ type MegaMenuContent = {
   }
 }
 
-type MegaMenuProps = {
+export type MegaMenuProps = {
   content: MegaMenuContent
   onClose: () => void
   className?: string
@@ -88,24 +87,23 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
                   )}
                 >
                   <p className="text-sm font-semibold text-foreground">{section.title}</p>
-                  <div
+                  <ul
                     className={cn(
-                      'grid gap-3',
+                      'grid gap-3 list-none m-0 p-0',
                       section.items.length > 3 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1',
                     )}
                   >
                     {section.items.map((item) => (
-                      <CategoryCard
-                        key={item.title}
-                        title={item.title}
-                        description={item.description}
-                        image={item.image}
-                        href={item.href}
-                        badge={item.badge}
-                        isSmall={section.items.length > 3}
-                      />
+                      <li key={item.title}>
+                        <CategoryCard
+                          title={item.title}
+                          description={item.description}
+                          image={item.image}
+                          href={item.href}
+                        />
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               ))}
             </div>
@@ -118,7 +116,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
             >
               <img
                 src={content.featured.image}
-                alt={content.featured.title}
+                alt=""
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />

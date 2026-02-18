@@ -20,7 +20,7 @@ type HomePartnersSectionProps = {
 }
 
 export function HomePartnersSection({ producers, variant = 'default' }: HomePartnersSectionProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLUListElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [isAutoScrolling, setIsAutoScrolling] = useState(true)
@@ -126,6 +126,7 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Précédent"
             className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border border-border rounded-full transition-all backdrop-blur-sm ${!canScrollLeft ? 'opacity-0 pointer-events-none' : 'opacity-100'
               }`}
             onClick={() => scroll('left')}
@@ -136,6 +137,7 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Suivant"
             className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border border-border rounded-full transition-all backdrop-blur-sm ${!canScrollRight ? 'opacity-0 pointer-events-none' : 'opacity-100'
               }`}
             onClick={() => scroll('right')}
@@ -144,42 +146,47 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
           </Button>
 
           {/* Carousel container */}
-          <div
+          <ul
             ref={scrollContainerRef}
-            className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth px-12"
+            aria-label="Liste des partenaires"
+            className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth px-12 m-0 p-0 list-none"
             onMouseEnter={() => setIsAutoScrolling(false)}
             onMouseLeave={() => setIsAutoScrolling(true)}
           >
             {duplicatedProducers.map((producer: Producer, index: number) => (
-              <Link
+              <li
                 key={`${producer.id}-${index}`}
-                href={`/producers/${producer.id}`}
-                className="flex-shrink-0 w-64 h-32 bg-card/50 border border-border rounded-2xl flex items-center justify-center hover:bg-card transition-all duration-300 group cursor-pointer backdrop-blur-sm"
+                className="flex-shrink-0"
               >
-                <div className="text-center px-6 flex items-center gap-4">
-                  {producer.images && producer.images.length > 0 ? (
-                    <img
-                      src={producer.images[0]}
-                      alt={producer.name_default}
-                      className="w-12 h-12 rounded-lg object-cover"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                      <span className="text-foreground text-lg font-bold">
-                        {producer.name_default.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                  <div className="text-left">
-                    <div className="text-foreground font-bold text-lg group-hover:scale-105 transition-transform">
-                      {producer.name_default}
-                    </div>
+                <Link
+                  href={`/producers/${producer.id}`}
+                  className="block w-64 h-32 bg-card/50 border border-border rounded-2xl flex items-center justify-center hover:bg-card transition-all duration-300 group cursor-pointer backdrop-blur-sm"
+                >
+                  <div className="text-center px-6 flex items-center gap-4">
+                    {producer.images && producer.images.length > 0 ? (
+                      <img
+                        src={producer.images[0]}
+                        alt={producer.name_default}
+                        className="w-12 h-12 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
+                        <span className="text-foreground text-lg font-bold">
+                          {producer.name_default.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <h3 className="text-foreground font-bold text-lg group-hover:scale-105 transition-transform">
+                        {producer.name_default}
+                      </h3>
 
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
 

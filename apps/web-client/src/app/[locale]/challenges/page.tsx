@@ -6,13 +6,11 @@ import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { cn } from '@/lib/utils'
 
-export const dynamic = 'force-dynamic'
-
 export default async function ChallengesPage() {
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   const { data: challenges, error } = await supabase
     .schema('gamification')
     .from('challenges')
@@ -84,9 +82,9 @@ export default async function ChallengesPage() {
                     <div className="flex items-center justify-between">
                       <div className={cn(
                         "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                        c.type === 'daily' ? "bg-info/10 text-info border-info/20" : 
-                        c.type === 'monthly' ? "bg-accent/10 text-accent border-accent/20" : 
-                        "bg-primary/10 text-primary border-primary/20"
+                        c.type === 'daily' ? "bg-info/10 text-info border-info/20" :
+                          c.type === 'monthly' ? "bg-accent/10 text-accent border-accent/20" :
+                            "bg-primary/10 text-primary border-primary/20"
                       )}>
                         {c.type === 'daily' ? 'Quotidien' : c.type === 'monthly' ? 'Mensuel' : 'Saisonnier'}
                       </div>
@@ -95,7 +93,7 @@ export default async function ChallengesPage() {
                         {c.reward_points > 0 ? `+${c.reward_points} pts` : 'Badge'}
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <h3 className="text-2xl font-black tracking-tight group-hover:text-primary transition-colors flex items-center gap-2">
                         {c.title}
@@ -116,7 +114,7 @@ export default async function ChallengesPage() {
                         <span className="text-foreground">{c.userProgress.progress} / {c.userProgress.target}</span>
                       </div>
                       <div className="relative h-2 w-full rounded-full bg-muted overflow-hidden">
-                        <div 
+                        <div
                           className="absolute inset-0 bg-primary transition-all duration-1000 ease-out"
                           style={{ width: `${c.userProgress.percentage}%` }}
                         />
@@ -128,7 +126,7 @@ export default async function ChallengesPage() {
                         <Calendar className="h-3.5 w-3.5" />
                         Expire bientôt
                       </div>
-                      
+
                       {c.userProgress.isCompleted && !c.userProgress.isClaimed ? (
                         <div className="flex items-center gap-1.5 text-primary font-black text-[10px] uppercase tracking-widest animate-pulse">
                           <Zap className="h-3.5 w-3.5" />

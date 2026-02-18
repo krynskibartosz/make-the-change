@@ -97,9 +97,9 @@ const createSelectOptions = <T extends { id: string; name_default: string }>(
   items: T[] | undefined,
   allLabel: string,
 ): SelectOption[] => [
-  { value: '', label: allLabel },
-  ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
-]
+    { value: '', label: allLabel },
+    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
+  ]
 
 const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
   { value: 'featured_first', label: tProducts('sort.featured') },
@@ -470,15 +470,17 @@ export const ProductsClient: FC<ProductsClientProps> = ({
         <div className="px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
-              <div className="relative w-full lg:w-[320px]">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <search role="search" className="relative w-full lg:w-[320px]">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
                 <Input
+                  type="search"
                   className="h-10 bg-background pl-9"
                   placeholder={tProducts('search_placeholder')}
                   value={searchInput}
                   onChange={(event) => setSearchInput(event.target.value)}
+                  aria-label={tProducts('search_placeholder')}
                 />
-              </div>
+              </search>
 
               <Combobox
                 value={activeTagValue}

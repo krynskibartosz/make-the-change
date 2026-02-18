@@ -78,8 +78,8 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
   const producerImage =
     project.producer?.images &&
-    Array.isArray(project.producer.images) &&
-    project.producer.images.length > 0
+      Array.isArray(project.producer.images) &&
+      project.producer.images.length > 0
       ? project.producer.images[0]
       : undefined
 
@@ -174,6 +174,48 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           }
         />
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Project',
+            name: project.name_default,
+            description: project.description_default,
+            image: coverImage ? [coverImage] : [],
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/projects/${project.slug}`,
+            location:
+              project.address_city || project.address_country_code
+                ? {
+                  '@type': 'Place',
+                  address: {
+                    '@type': 'PostalAddress',
+                    addressLocality: project.address_city,
+                    addressCountry: project.address_country_code,
+                  },
+                }
+                : undefined,
+            organizer: project.producer
+              ? {
+                '@type': 'Organization',
+                name: project.producer.name_default,
+                url: project.producer.contact_website,
+                image: producerImage,
+              }
+              : {
+                '@type': 'Organization',
+                name: 'Make the Change',
+              },
+            startDate: project.launch_date,
+            endDate: project.maturity_date,
+            funding: {
+              '@type': 'MonetaryAmount',
+              currency: 'EUR',
+              value: project.target_budget,
+            },
+          }),
+        }}
+      />
     </>
   )
 }

@@ -93,13 +93,13 @@ export function FeaturedProjectsList({
   return (
     <>
       <div className="md:hidden">
-        <div className="flex gap-4 overflow-x-auto pb-4 px-1">
+        <ul className="flex gap-4 overflow-x-auto pb-4 px-1 list-none m-0 p-0">
           {projects.map((project, index) => (
-            <div key={project.id} className="min-w-[280px] max-w-[320px] flex-1">
+            <li key={project.id} className="min-w-[280px] max-w-[320px] flex-1">
               {renderProjectCard(project, labels, index === 0)}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
 
       <div className="hidden md:block">

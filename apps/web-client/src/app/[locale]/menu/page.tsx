@@ -170,9 +170,6 @@ export default function MenuPage() {
                   description={item.description}
                   image={item.image}
                   href={item.href}
-                  badge={item.badge}
-                  // Force small layout on mobile/menu page for better density
-                  isSmall={true}
                 />
               ))}
             </div>

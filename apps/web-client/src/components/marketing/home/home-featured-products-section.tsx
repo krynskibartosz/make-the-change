@@ -34,16 +34,17 @@ export function HomeFeaturedProductsSection({
       }
       size="lg"
     >
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4 list-none m-0 p-0">
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            className="h-full rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
-            priority
-          />
+          <li key={product.id}>
+            <ProductCard
+              product={product}
+              className="h-full rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
+              priority
+            />
+          </li>
         ))}
-      </div>
+      </ul>
     </MarketingSection>
   )
 }

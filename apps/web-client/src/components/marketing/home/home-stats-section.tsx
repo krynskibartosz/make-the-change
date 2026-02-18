@@ -25,9 +25,9 @@ export function HomeStatsSection({ title, stats, variant = 'default' }: HomeStat
       variant={variant}
       className="py-32 mt-24 md:mt-0 relative overflow-hidden"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse duration-[8000ms]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse duration-[8000ms]" aria-hidden="true" />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative z-10">
+      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative z-10 m-0">
         {stats.map((stat) => (
           <div
             key={stat.label}
@@ -38,6 +38,7 @@ export function HomeStatsSection({ title, stats, variant = 'default' }: HomeStat
                 'absolute inset-0 rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 border',
                 stat.border,
               )}
+              aria-hidden="true"
             />
 
             <div className="flex flex-col items-center justify-center text-center space-y-6">
@@ -46,30 +47,29 @@ export function HomeStatsSection({ title, stats, variant = 'default' }: HomeStat
                   'h-16 w-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg backdrop-blur-md',
                   stat.bg,
                 )}
+                aria-hidden="true"
               >
                 <stat.icon className={cn('h-8 w-8 transition-colors duration-500', stat.color)} />
               </div>
 
-              <div className="space-y-2">
-                <p className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
+              <div className="flex flex-col-reverse space-y-2 space-y-reverse">
+                <dt className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300 m-0">
+                  {stat.label}
+                </dt>
+                <dd className="text-4xl md:text-5xl font-black tracking-tighter text-foreground m-0">
                   {(() => {
-                    // Si la valeur est déjà formatée (contient un espace), on l'affiche telle quelle
                     if (typeof stat.value === 'string' && stat.value.includes(' ')) {
                       return stat.value;
                     }
-                    // Sinon, on formate normalement
                     const numValue = typeof stat.value === 'number' ? stat.value : Number(stat.value);
                     return isNaN(numValue) ? stat.value : new Intl.NumberFormat('fr-FR').format(numValue);
                   })()}
-                </p>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                  {stat.label}
-                </p>
+                </dd>
               </div>
             </div>
           </div>
         ))}
-      </div>
+      </dl>
     </MarketingSection>
   )
 }

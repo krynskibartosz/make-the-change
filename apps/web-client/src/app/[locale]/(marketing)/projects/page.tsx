@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
 import { createClient } from '@/lib/supabase/server'
@@ -13,6 +14,7 @@ interface ProjectsPageProps {
 
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const t = await getTranslations('projects')
+  const navT = await getTranslations('navigation')
   const params = await searchParams
   const status = params.status === 'active' || params.status === 'completed' ? params.status : 'all'
   const supabase = await createClient()
@@ -47,6 +49,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         variant="gradient"
       />
       <SectionContainer size="lg">
+        <Breadcrumbs items={[{ label: navT('projects'), href: '/projects' }]} />
         <ProjectsClient
           projects={projectsList || []}
           initialStatus={status}

@@ -8,13 +8,11 @@ try {
   if (supabaseUrl) {
     supabaseHostname = new URL(supabaseUrl).hostname
   }
-} catch {}
+} catch { }
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
-  experimental: {
-  },
   reactStrictMode: true,
   typescript: {
     // Temporarily allow production builds with TypeScript errors

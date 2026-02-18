@@ -31,11 +31,13 @@ export function HomeBlogSection({ title, viewAllLabel, posts, variant = 'default
       className="py-20"
       variant={variant}
     >
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none m-0 p-0">
         {posts.slice(0, 3).map((post) => (
-          <BlogCard key={post.id} post={post} />
+          <li key={post.id}>
+            <BlogCard post={post} />
+          </li>
         ))}
-      </div>
+      </ul>
     </MarketingSection>
   )
 }

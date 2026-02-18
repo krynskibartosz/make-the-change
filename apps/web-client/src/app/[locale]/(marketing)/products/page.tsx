@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import {
   applyProductsFilters,
@@ -20,6 +21,7 @@ interface ProductsPageProps {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const t = await getTranslations('products')
+  const navT = await getTranslations('navigation')
   const params = await searchParams
   const queryState = parseProductsQueryState(params)
   const supabase = await createClient()
@@ -79,7 +81,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   return (
     <>
-      <section className="pb-12 pt-0 md:pb-16 md:pt-2">
+      <section className="container pb-12 pt-0 md:pb-16 md:pt-2">
+        <Breadcrumbs items={[{ label: navT('products'), href: '/products' }]} />
         <ProductsClient
           products={serializedProducts}
           categories={(categoriesList || []) as Category[]}

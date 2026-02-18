@@ -13,18 +13,19 @@ interface BlogCardProps {
 export function BlogCard({ post, className, variant = 'default' }: BlogCardProps) {
   if (variant === 'featured') {
     return (
-      <Link href={`/blog/${post.slug}`} className="group relative block h-full overflow-hidden rounded-3xl">
+      <Link href={`/blog/${post.slug}`} className="group relative block h-full overflow-hidden rounded-3xl" itemScope itemType="https://schema.org/BlogPosting">
         <div className="absolute inset-0 bg-muted">
           {post.coverImage && (
             <img
               src={post.coverImage}
               alt={post.title}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              itemProp="image"
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-client-black/80 via-client-black/20 to-transparent" />
         </div>
-        
+
         <div className="relative h-full flex flex-col justify-end p-6 sm:p-8 md:p-10">
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -34,17 +35,17 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
                 </Badge>
               ))}
             </div>
-            
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-client-white leading-tight tracking-tight">
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-client-white leading-tight tracking-tight" itemProp="headline">
               {post.title}
             </h2>
-            
+
             {post.excerpt && (
-              <p className="line-clamp-2 text-lg text-client-white/80 max-w-2xl font-medium">
+              <p className="line-clamp-2 text-lg text-client-white/80 max-w-2xl font-medium" itemProp="description">
                 {post.excerpt}
               </p>
             )}
-            
+
             <div className="flex items-center gap-3 text-client-white/70 pt-2">
               {post.author?.avatarUrl && (
                 <Avatar className="h-8 w-8 border border-client-white/10">
@@ -52,9 +53,9 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
                   <AvatarFallback>{post.author.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
                 </Avatar>
               )}
-              <span className="text-sm font-medium">{post.author?.name}</span>
+              <span className="text-sm font-medium" itemProp="author">{post.author?.name}</span>
               <span className="text-client-white/30">•</span>
-              <span className="text-sm">{formatDate(post.publishedAt || '')}</span>
+              <span className="text-sm" itemProp="datePublished">{formatDate(post.publishedAt || '')}</span>
             </div>
           </div>
         </div>
@@ -94,7 +95,7 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
   }
 
   return (
-    <Link href={`/blog/${post.slug}`} className={cn("group block h-full", className)}>
+    <Link href={`/blog/${post.slug}`} className={cn("group block h-full", className)} itemScope itemType="https://schema.org/BlogPosting">
       <div className="h-full flex flex-col overflow-hidden rounded-2xl bg-card border border-border/50 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5">
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
           {post.coverImage ? (
@@ -103,6 +104,7 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
               alt={post.title}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
+              itemProp="image"
             />
           ) : null}
           <div className="absolute inset-0 bg-client-black/10 transition-opacity group-hover:opacity-0" />
@@ -112,7 +114,7 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
             </Badge>
           ) : null}
         </div>
-        
+
         <div className="flex flex-1 flex-col p-6 space-y-4">
           <div className="space-y-2">
             <div className="flex flex-wrap gap-2">
@@ -122,14 +124,14 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
                 </span>
               ))}
             </div>
-            <h2 className="text-xl font-bold leading-snug tracking-tight group-hover:text-primary transition-colors">
+            <h2 className="text-xl font-bold leading-snug tracking-tight group-hover:text-primary transition-colors" itemProp="headline">
               {post.title}
             </h2>
-            <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed">
+            <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed" itemProp="description">
               {post.excerpt}
             </p>
           </div>
-          
+
           <div className="mt-auto pt-4 flex items-center justify-between border-t border-border/50">
             <div className="flex items-center gap-2">
               {post.author?.avatarUrl ? (
@@ -140,9 +142,9 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
               ) : (
                 <div className="h-6 w-6 rounded-full bg-primary/10" />
               )}
-              <span className="text-xs font-medium text-foreground/80">{post.author?.name}</span>
+              <span className="text-xs font-medium text-foreground/80" itemProp="author">{post.author?.name}</span>
             </div>
-            <span className="text-xs text-muted-foreground font-mono">
+            <span className="text-xs text-muted-foreground font-mono" itemProp="datePublished">
               {formatDate(post.publishedAt || '')}
             </span>
           </div>

@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
 import { getBlogPosts } from '@/features/blog/blog-data'
@@ -14,6 +15,7 @@ interface BlogPageProps {
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const t = await getTranslations('marketing_pages.blog_list')
+  const navT = await getTranslations('navigation')
   const params = await searchParams
   const posts = await getBlogPosts()
 
@@ -82,6 +84,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           })}
         </div>
       </PageHero>
+
+      <div className="container py-6">
+        <Breadcrumbs items={[{ label: navT('blog'), href: '/blog' }]} />
+      </div>
 
       {featuredPost ? (
         <SectionContainer size="md" className="pt-0">

@@ -19,36 +19,22 @@ const diversityFacts = [
 export function DiversityFactLoader() {
   const [currentFact, setCurrentFact] = useState('')
   const [displayedText, setDisplayedText] = useState('')
-  const [progress, setProgress] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
     // Affiche un fun fact aléatoire au début
     const initialFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
     setCurrentFact(initialFact)
-    setProgress(0)
     setIsTyping(true)
 
     // Change de fun fact toutes les 5 secondes
     const interval = setInterval(() => {
       const randomFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
       setCurrentFact(randomFact)
-      setProgress(0)
       setIsTyping(true)
     }, 5000)
 
-    // Met à jour la progression toutes les 100ms
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = prev + 2
-        return newProgress >= 100 ? 0 : newProgress
-      })
-    }, 100)
-
-    return () => {
-      clearInterval(interval)
-      clearInterval(progressInterval)
-    }
+    return () => clearInterval(interval)
   }, [])
 
   // Effet typewriter
@@ -72,44 +58,17 @@ export function DiversityFactLoader() {
     return () => clearInterval(typingInterval)
   }, [currentFact, isTyping])
 
-  // Calcule le rayon et la circonférence pour le cercle
-  const radius = 8
-  const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (progress / 100) * circumference
+
 
   return (
-    <div className="flex justify-center pt-2">
-      <div className="flex items-start gap-3 px-6 py-4 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 shadow-sm w-96 justify-start min-h-[52px]">
-        <div className="relative flex-shrink-0 mt-0.5">
-          <svg className="h-5 w-5 -rotate-90">
-            <circle
-              cx="10"
-              cy="10"
-              r={radius}
-              stroke="hsl(var(--primary) / 0.2)"
-              strokeWidth="2"
-              fill="none"
-            />
-            <circle
-              cx="10"
-              cy="10"
-              r={radius}
-              stroke="hsl(var(--primary))"
-              strokeWidth="2"
-              fill="none"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              className="transition-all duration-100 ease-linear"
-            />
-          </svg>
-        </div>
-        <Lightbulb className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-        <div className="flex-1 min-w-0">
-          <span className="text-xs font-medium text-foreground text-left block">
-            Fun fact: {displayedText}
-            {isTyping && <span className="inline-block w-1 h-3 bg-primary ml-1 animate-pulse" />}
-          </span>
-        </div>
+    <div aria-label="Le saviez-vous ?" className="flex justify-center pt-8">
+      <div className="flex items-center gap-4 px-6 py-3 rounded-full bg-primary/5 backdrop-blur-sm border border-primary/10 shadow-sm max-w-lg min-h-[52px]">
+        <Lightbulb className="h-5 w-5 text-primary flex-shrink-0 animate-pulse" aria-hidden="true" />
+        <p className="text-sm font-medium text-foreground/80 leading-snug">
+          <span className="font-bold text-primary mr-2">Le saviez-vous ?</span>
+          {displayedText}
+          {isTyping && <span className="inline-block w-1 h-4 align-middle bg-primary ml-1 animate-pulse" aria-hidden="true" />}
+        </p>
       </div>
     </div>
   )

@@ -16,8 +16,31 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound()
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    image: post.coverImage ? [post.coverImage] : [],
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt, // Assuming no modified date available, fallback to published
+    author: post.author
+      ? [
+        {
+          '@type': 'Person',
+          name: post.author.name,
+          image: post.author.avatarUrl,
+        },
+      ]
+      : undefined,
+    description: post.excerpt,
+  }
+
   return (
     <article className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="relative h-[85vh] min-h-[600px] w-full overflow-hidden">
         {post.coverImage && (
           <img
