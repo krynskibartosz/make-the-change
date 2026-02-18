@@ -176,89 +176,89 @@ const ProductMedia: FC<{
   topRight,
   mediaOverlay,
 }) => {
-  const imageSrc = model.image?.src ?? undefined
-  const imageAlt = model.image?.alt || model.title
-  const hoverImageSrc = model.hoverImageSrc ?? undefined
-  const blurDataURL = model.image?.blurDataURL ?? undefined
-  const [mainImageFailed, setMainImageFailed] = useState(false)
-  const [hoverImageFailed, setHoverImageFailed] = useState(false)
-  const hasMainImage = !!imageSrc && !mainImageFailed
-  const hasHoverImage = !!hoverImageSrc && !hoverImageFailed && hasMainImage
-  const badges = resolveBadges(model, {
-    featuredLabel,
-    outOfStockLabel,
-    lowStockLabel,
-  })
+    const imageSrc = model.image?.src ?? undefined
+    const imageAlt = model.image?.alt || model.title
+    const hoverImageSrc = model.hoverImageSrc ?? undefined
+    const blurDataURL = model.image?.blurDataURL ?? undefined
+    const [mainImageFailed, setMainImageFailed] = useState(false)
+    const [hoverImageFailed, setHoverImageFailed] = useState(false)
+    const hasMainImage = !!imageSrc && !mainImageFailed
+    const hasHoverImage = !!hoverImageSrc && !hoverImageFailed && hasMainImage
+    const badges = resolveBadges(model, {
+      featuredLabel,
+      outOfStockLabel,
+      lowStockLabel,
+    })
 
-  return (
-    <div className={getMediaContainerClasses(context, view)}>
-      {hasMainImage ? (
-        <>
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            fill
-            priority={!!model.imagePriority}
-            placeholder={blurDataURL ? 'blur' : 'empty'}
-            blurDataURL={blurDataURL}
-            className={cn(
-              'object-cover transition-all duration-700 ease-in-out',
-              hasHoverImage
-                ? 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-105'
-                : '',
-            )}
-            unoptimized={imageSrc.includes('unsplash') || imageSrc.includes('supabase')}
-            onError={() => setMainImageFailed(true)}
-          />
-          {hasHoverImage && (
+    return (
+      <div className={getMediaContainerClasses(context, view)}>
+        {hasMainImage ? (
+          <>
             <Image
-              src={hoverImageSrc!}
+              src={imageSrc}
               alt={imageAlt}
               fill
-              className="object-cover opacity-0 scale-100 transition-all duration-700 ease-in-out group-hover:opacity-100 group-hover:scale-105"
-              unoptimized={hoverImageSrc.includes('unsplash') || hoverImageSrc.includes('supabase')}
-              onError={() => setHoverImageFailed(true)}
-            />
-          )}
-        </>
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <Package className="h-10 w-10 text-muted-foreground/25" />
-        </div>
-      )}
-
-      {view === 'grid' && badges.length > 0 && (
-        <div className="absolute left-3 top-3 z-20 flex flex-col gap-2 pointer-events-none">
-          {badges.map((badge) => (
-            <span
-              key={badge.id}
+              priority={!!model.imagePriority}
+              placeholder={blurDataURL ? 'blur' : 'empty'}
+              blurDataURL={blurDataURL}
               className={cn(
-                'rounded-full px-2.5 py-1 text-xs font-bold',
-                badgeToneClasses[badge.tone || 'neutral'],
+                'object-cover transition-all duration-700 ease-in-out',
+                hasHoverImage
+                  ? 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-105'
+                  : '',
               )}
-            >
-              {badge.label}
-            </span>
-          ))}
-        </div>
-      )}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              onError={() => setMainImageFailed(true)}
+            />
+            {hasHoverImage && (
+              <Image
+                src={hoverImageSrc!}
+                alt={imageAlt}
+                fill
+                className="object-cover opacity-0 scale-100 transition-all duration-700 ease-in-out group-hover:opacity-100 group-hover:scale-105"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                onError={() => setHoverImageFailed(true)}
+              />
+            )}
+          </>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Package className="h-10 w-10 text-muted-foreground/25" />
+          </div>
+        )}
 
-      {view === 'grid' && topRight && (
-        <div className="absolute right-3 top-3 z-20 pointer-events-auto" data-card-action>
-          {topRight}
-        </div>
-      )}
-      {view === 'grid' && mediaOverlay && (
-        <div
-          className="absolute inset-0 z-20 pointer-events-none [&>*]:pointer-events-auto"
-          data-card-action
-        >
-          {mediaOverlay}
-        </div>
-      )}
-    </div>
-  )
-}
+        {view === 'grid' && badges.length > 0 && (
+          <div className="absolute left-3 top-3 z-20 flex flex-col gap-2 pointer-events-none">
+            {badges.map((badge) => (
+              <span
+                key={badge.id}
+                className={cn(
+                  'rounded-full px-2.5 py-1 text-xs font-bold',
+                  badgeToneClasses[badge.tone || 'neutral'],
+                )}
+              >
+                {badge.label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {view === 'grid' && topRight && (
+          <div className="absolute right-3 top-3 z-20 pointer-events-auto" data-card-action>
+            {topRight}
+          </div>
+        )}
+        {view === 'grid' && mediaOverlay && (
+          <div
+            className="absolute inset-0 z-20 pointer-events-none [&>*]:pointer-events-auto"
+            data-card-action
+          >
+            {mediaOverlay}
+          </div>
+        )}
+      </div>
+    )
+  }
 
 const ProductMeta: FC<{
   context: ProductCardContext

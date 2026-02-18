@@ -17,7 +17,7 @@ export function HomeBlogSection({ title, viewAllLabel, posts, variant = 'default
     <MarketingSection
       title={title}
       action={
-        <Link href="/blog">
+        <Link href="/blog" aria-label={viewAllLabel}>
           <Button
             variant="ghost"
             className="flex items-center font-bold uppercase tracking-widest text-xs"

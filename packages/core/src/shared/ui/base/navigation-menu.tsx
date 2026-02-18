@@ -15,6 +15,7 @@ const NavigationMenuList = forwardRef<
     ref={ref}
     className={cn('flex list-none items-center gap-1', className)}
     {...props}
+    aria-orientation={undefined}
   />
 ))
 NavigationMenuList.displayName = 'NavigationMenuList'

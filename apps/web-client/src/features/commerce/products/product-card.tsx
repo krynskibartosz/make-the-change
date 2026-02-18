@@ -10,6 +10,7 @@ import { useCartUI } from '@/features/commerce/cart/cart-ui-provider'
 import { useCart } from '@/features/commerce/cart/use-cart'
 import { buildProductCardBadges } from '@/features/commerce/products/product-card-badges'
 import { getRandomProductImage } from '@/lib/placeholder-images'
+import { sanitizeImageUrl } from '@/lib/image-url'
 
 type ProductCardProps = {
   product: Product
@@ -29,11 +30,11 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   const columnImages = (product.images as string[] | null | undefined) || []
   const metadataImages = (metadata?.images as string[] | undefined) || []
   const mainImage =
-    columnImages[0] ||
-    (metadata?.image_url as string | undefined) ||
-    metadataImages[0] ||
+    sanitizeImageUrl(columnImages[0]) ||
+    sanitizeImageUrl(metadata?.image_url as string | undefined) ||
+    sanitizeImageUrl(metadataImages[0]) ||
     getRandomProductImage(product.name_default?.length || 0)
-  const secondaryImage = columnImages[1] || metadataImages[1] || mainImage
+  const secondaryImage = sanitizeImageUrl(columnImages[1]) || sanitizeImageUrl(metadataImages[1]) || mainImage
   const badges = buildProductCardBadges({
     featured: product.featured,
     stockQuantity: product.stock_quantity,
@@ -153,6 +154,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
               className="absolute bottom-3 right-3 h-10 w-10 rounded-full shadow-md md:hidden"
               onClick={handleAddToCart}
               disabled={isOutOfStock || isAdding}
+              aria-label={isOutOfStock ? t('out_of_stock') : t('add_to_cart')}
             >
               <Plus className="h-5 w-5" />
             </Button>

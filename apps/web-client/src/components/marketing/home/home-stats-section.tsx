@@ -51,22 +51,20 @@ export function HomeStatsSection({ title, stats, variant = 'default' }: HomeStat
               >
                 <stat.icon className={cn('h-8 w-8 transition-colors duration-500', stat.color)} />
               </div>
-
-              <div className="flex flex-col-reverse space-y-2 space-y-reverse">
-                <dt className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300 m-0">
-                  {stat.label}
-                </dt>
-                <dd className="text-4xl md:text-5xl font-black tracking-tighter text-foreground m-0">
-                  {(() => {
-                    if (typeof stat.value === 'string' && stat.value.includes(' ')) {
-                      return stat.value;
-                    }
-                    const numValue = typeof stat.value === 'number' ? stat.value : Number(stat.value);
-                    return isNaN(numValue) ? stat.value : new Intl.NumberFormat('fr-FR').format(numValue);
-                  })()}
-                </dd>
-              </div>
             </div>
+
+            <dd className="text-4xl md:text-5xl font-black tracking-tighter text-foreground m-0 text-center mt-6">
+              {(() => {
+                if (typeof stat.value === 'string' && stat.value.includes(' ')) {
+                  return stat.value;
+                }
+                const numValue = typeof stat.value === 'number' ? stat.value : Number(stat.value);
+                return isNaN(numValue) ? stat.value : new Intl.NumberFormat('fr-FR').format(numValue);
+              })()}
+            </dd>
+            <dt className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300 m-0 text-center mt-2">
+              {stat.label}
+            </dt>
           </div>
         ))}
       </dl>

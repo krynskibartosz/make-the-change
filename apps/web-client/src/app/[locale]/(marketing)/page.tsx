@@ -21,6 +21,7 @@ import { getPageContent } from '@/features/cms/cms.service'
 import type { HomePageContent } from '@/features/cms/types'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { sanitizeImageUrl } from '@/lib/image-url'
 import { formatPoints } from '@/lib/utils'
 
 type NumericRpcResponse = {
@@ -142,7 +143,7 @@ export default async function HomePage() {
     slug: project.slug || project.id,
     name_default: project.name_default,
     description_default: project.description_default,
-    hero_image_url: project.hero_image_url,
+    hero_image_url: sanitizeImageUrl(project.hero_image_url),
     target_budget: project.target_budget,
     current_funding: project.current_funding,
     status: project.status,

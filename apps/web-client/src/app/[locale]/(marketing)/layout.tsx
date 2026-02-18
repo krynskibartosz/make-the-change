@@ -29,6 +29,22 @@ export default async function MarketingLayout({ children }: PropsWithChildren) {
       '@type': 'PostalAddress',
       addressLocality: 'Brussels',
       addressCountry: 'BE'
+      // Note: Full address pending from business owner
+    },
+    location: {
+      '@type': 'Place',
+      name: 'Make the Change - Innovation Lab',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '123 Avenue de France (Example)', // Placeholder or remove if strictly unknown
+        addressLocality: 'Paris',
+        addressCountry: 'FR'
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 48.8566,
+        longitude: 2.3522
+      }
     },
     sameAs: [
       'https://x.com/makethechange',

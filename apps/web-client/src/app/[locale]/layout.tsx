@@ -95,6 +95,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
               '@type': 'WebSite',
               name: 'Make the Change',
               url: process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app'}/projects?search={search_term_string}`
+                },
+                'query-input': 'required name=search_term_string'
+              }
             }),
           }}
         />

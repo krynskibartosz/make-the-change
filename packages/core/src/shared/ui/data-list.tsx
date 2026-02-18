@@ -163,7 +163,7 @@ const DataListComponent = <T,>({
           'items-stretch auto-rows-fr',
           variant !== 'grid' && 'hidden',
         )}
-        aria-hidden={variant !== 'grid'}
+        aria-hidden={variant !== 'grid' ? true : undefined}
       >
         {items.map((item, index) => (
           <div key={getKey(item, index)} className="h-full">
@@ -176,7 +176,7 @@ const DataListComponent = <T,>({
       <div
         data-testid={`${testId}-list`}
         className={cn('space-y-6 lg:space-y-7', variant !== 'list' && 'hidden')}
-        aria-hidden={variant !== 'list'}
+        aria-hidden={variant !== 'list' ? true : undefined}
       >
         {items.map((item, index) => (
           <div key={getKey(item, index)} className="py-1">
@@ -254,7 +254,7 @@ const DataListItemComponent: FC<PropsWithChildren<DataListItemProps>> = ({
     const target = event.target as HTMLElement
     if (target.closest('a[href]') || target.closest('button')) {
       // Remove focus from the container when clicking on interactive elements
-      ;(event.currentTarget as HTMLElement)?.blur()
+      ; (event.currentTarget as HTMLElement)?.blur()
       return
     }
 

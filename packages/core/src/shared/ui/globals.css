@@ -19,7 +19,7 @@
     --input: 220 13% 91%;
     --ring: 158 64% 35%;
     --success: 160 84% 39%;
-    --success-foreground: 160 80% 96%;
+    --success-foreground: 160 80% 14%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --warning: 38 92% 50%;
@@ -28,8 +28,10 @@
     --info-foreground: 210 100% 96%;
 
     /* Marketing color tokens (additive, shared in core) */
-    --marketing-surface-strong: 153 44% 7%; /* #0A1A14 */
-    --marketing-surface-elevated: 157 28% 14%; /* #1A2E26 */
+    --marketing-surface-strong: 153 44% 7%;
+    /* #0A1A14 */
+    --marketing-surface-elevated: 157 28% 14%;
+    /* #1A2E26 */
     --marketing-positive: var(--success);
     --marketing-info: var(--info);
     --marketing-warning: var(--warning);
@@ -389,12 +391,23 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
   @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height); }
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--radix-accordion-content-height);
+    }
   }
+
   @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height); }
-    to { height: 0; }
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+
+    to {
+      height: 0;
+    }
   }
 
   /* Custom utility for glassmorphism and texture */

@@ -22,7 +22,7 @@ export function HomeFeaturedProductsSection({
     <MarketingSection
       title={title}
       action={
-        <Link href="/products">
+        <Link href="/products" aria-label={viewAllLabel}>
           <Button
             variant="ghost"
             className="flex items-center font-bold uppercase tracking-widest text-xs"

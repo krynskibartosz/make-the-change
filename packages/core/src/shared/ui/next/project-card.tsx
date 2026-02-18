@@ -189,69 +189,69 @@ const ProjectMedia: FC<{
   topRight,
   mediaOverlay,
 }) => {
-  const imageSrc = model.image?.src ?? undefined
-  const imageAlt = model.image?.alt || model.title
-  const blurDataURL = model.image?.blurDataURL ?? undefined
-  const [imageFailed, setImageFailed] = useState(false)
-  const hasImage = !!imageSrc && !imageFailed
-  const badges = resolveBadges(model, {
-    featuredLabel,
-    activeLabel,
-    fundedLabel,
-  })
+    const imageSrc = model.image?.src ?? undefined
+    const imageAlt = model.image?.alt || model.title
+    const blurDataURL = model.image?.blurDataURL ?? undefined
+    const [imageFailed, setImageFailed] = useState(false)
+    const hasImage = !!imageSrc && !imageFailed
+    const badges = resolveBadges(model, {
+      featuredLabel,
+      activeLabel,
+      fundedLabel,
+    })
 
-  return (
-    <div className={getMediaContainerClasses(context, view)}>
-      {hasImage ? (
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          fill
-          priority={!!model.imagePriority}
-          placeholder={blurDataURL ? 'blur' : 'empty'}
-          blurDataURL={blurDataURL}
-          className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
-          unoptimized={imageSrc.includes('unsplash') || imageSrc.includes('supabase')}
-          onError={() => setImageFailed(true)}
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <Target className="h-10 w-10 text-muted-foreground/25" />
-        </div>
-      )}
+    return (
+      <div className={getMediaContainerClasses(context, view)}>
+        {hasImage ? (
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            priority={!!model.imagePriority}
+            placeholder={blurDataURL ? 'blur' : 'empty'}
+            blurDataURL={blurDataURL}
+            className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Target className="h-10 w-10 text-muted-foreground/25" />
+          </div>
+        )}
 
-      {view === 'grid' && badges.length > 0 && (
-        <div className="absolute left-3 top-3 z-20 flex flex-col gap-2 pointer-events-none">
-          {badges.map((badge) => (
-            <span
-              key={badge.id}
-              className={cn(
-                'rounded-full px-2.5 py-1 text-xs font-bold',
-                badgeToneClasses[badge.tone || 'neutral'],
-              )}
-            >
-              {badge.label}
-            </span>
-          ))}
-        </div>
-      )}
+        {view === 'grid' && badges.length > 0 && (
+          <div className="absolute left-3 top-3 z-20 flex flex-col gap-2 pointer-events-none">
+            {badges.map((badge) => (
+              <span
+                key={badge.id}
+                className={cn(
+                  'rounded-full px-2.5 py-1 text-xs font-bold',
+                  badgeToneClasses[badge.tone || 'neutral'],
+                )}
+              >
+                {badge.label}
+              </span>
+            ))}
+          </div>
+        )}
 
-      {view === 'grid' && topRight && (
-        <div className="absolute right-3 top-3 z-20 pointer-events-auto" data-card-action>
-          {topRight}
-        </div>
-      )}
-      {view === 'grid' && mediaOverlay && (
-        <div
-          className="absolute inset-0 z-20 pointer-events-none [&>*]:pointer-events-auto"
-          data-card-action
-        >
-          {mediaOverlay}
-        </div>
-      )}
-    </div>
-  )
-}
+        {view === 'grid' && topRight && (
+          <div className="absolute right-3 top-3 z-20 pointer-events-auto" data-card-action>
+            {topRight}
+          </div>
+        )}
+        {view === 'grid' && mediaOverlay && (
+          <div
+            className="absolute inset-0 z-20 pointer-events-none [&>*]:pointer-events-auto"
+            data-card-action
+          >
+            {mediaOverlay}
+          </div>
+        )}
+      </div>
+    )
+  }
 
 const ProjectMeta: FC<{
   model: ProjectCardModel

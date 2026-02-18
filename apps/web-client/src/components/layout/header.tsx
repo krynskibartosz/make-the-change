@@ -179,7 +179,7 @@ export function Header({ user, menuData }: HeaderProps) {
             </div>
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
-              <Link href="/login">
+              <Link href="/login" aria-label={t('login')}>
                 <Button variant="ghost" size="sm">
                   {t('login')}
                 </Button>
