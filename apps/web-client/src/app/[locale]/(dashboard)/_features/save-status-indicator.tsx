@@ -4,7 +4,7 @@ import { cn } from '@make-the-change/core/shared/utils'
 import { Button } from '@make-the-change/core/ui'
 import { AlertCircle, CheckCircle, Dot, Save, Upload } from 'lucide-react'
 import type { FC } from 'react'
-import type { SaveStatus } from '@/lib/hooks/use-optimistic-auto-save'
+import type { SaveStatus } from '@/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save'
 
 type SaveStatusIndicatorProps = {
   status: SaveStatus
@@ -14,14 +14,23 @@ type SaveStatusIndicatorProps = {
   className?: string
 }
 
-export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({ 
-  status, 
-  errorMessage, 
+export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({
+  status,
+  errorMessage,
   pendingChanges = 0,
   onSaveNow,
   className
 }) => {
-  const statusConfig = {
+  type StatusConfigItem = {
+    icon: any
+    color: string
+    bgColor: string
+    show: boolean
+    message: string
+    animate?: boolean
+  }
+
+  const statusConfig: Record<SaveStatus, StatusConfigItem> = {
     pristine: {
       icon: null,
       color: 'text-muted-foreground',

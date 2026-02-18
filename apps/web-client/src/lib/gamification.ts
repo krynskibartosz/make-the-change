@@ -27,10 +27,6 @@ export const calculateImpactScore = ({ points, projects, invested }: ImpactInput
   return Math.max(0, Math.round(score))
 }
 
-export const getLevelFromScore = (score: number) => {
-  return LEVEL_THRESHOLDS.find((threshold) => score >= threshold.min && score <= threshold.max)
-    ?.level
-}
 
 export const getLevelProgress = (score: number) => {
   const current = LEVEL_THRESHOLDS.find(

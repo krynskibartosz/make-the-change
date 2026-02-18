@@ -15,7 +15,7 @@ import {
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { ProfileHeader } from '@/components/profile/profile-header'
 import { Link } from '@/i18n/navigation'
-import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/app/[locale]/leaderboard/_features/gamification'
+import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
 import { ProfileController } from './profile.controller'
 

@@ -12,8 +12,8 @@ import {
 import { Check, Shield, User, MapPin, Key } from 'lucide-react'
 import { UseFormReturn } from 'react-hook-form'
 import { ProfileFormValues, PasswordFormValues } from './schemas'
-import { SaveStatusIndicator } from '@/components/dashboard/save-status-indicator'
-import type { AutoSaveReturn } from '@/lib/hooks/use-optimistic-auto-save'
+import { SaveStatusIndicator } from '@/app/[locale]/(dashboard)/_features/save-status-indicator'
+import type { AutoSaveReturn } from '@/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save'
 
 interface ProfileViewProps {
   profileForm: UseFormReturn<ProfileFormValues>
@@ -52,8 +52,8 @@ export function ProfileView({
           <User className="h-5 w-5 text-primary" />
           {t('edit_profile')}
         </h2>
-        <SaveStatusIndicator 
-          status={autoSave.status} 
+        <SaveStatusIndicator
+          status={autoSave.status}
           errorMessage={autoSave.errorMessage}
           pendingChanges={autoSave.pendingChanges}
           onSaveNow={autoSave.saveNow}

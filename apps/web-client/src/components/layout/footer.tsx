@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/ui/logo'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
-import { useUser } from '@/lib/hooks/use-user'
+import { useUser } from './use-user'
 
 export function Footer() {
   const t = useTranslations('footer')

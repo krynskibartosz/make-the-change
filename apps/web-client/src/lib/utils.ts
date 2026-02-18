@@ -28,6 +28,4 @@ export const formatDate = (date: string | Date, locale = 'fr-FR'): string => {
   }).format(new Date(date))
 }
 
-export const formatPercentage = (value: number): string => {
-  return `${Math.round(value * 100)}%`
-}
+

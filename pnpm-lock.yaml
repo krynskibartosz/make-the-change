@@ -220,9 +220,6 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.57.4
         version: 2.94.0
-      '@tanstack/react-query':
-        specifier: ^5.85.6
-        version: 5.90.20(react@19.2.4)
       '@tiptap/extension-image':
         specifier: ^2.0.0
         version: 2.27.2(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))
@@ -238,24 +235,12 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.0.0
         version: 2.27.2
-      class-variance-authority:
-        specifier: ^0.7.1
-        version: 0.7.1
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
-      drizzle-orm:
-        specifier: ^0.45.1
-        version: 0.45.1(@types/pg@8.16.0)(postgres@3.4.8)
       framer-motion:
         specifier: ^12.23.12
         version: 12.31.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      leaflet:
-        specifier: ^1.9.4
-        version: 1.9.4
       lucide-react:
         specifier: ^0.542.0
         version: 0.542.0(react@19.2.4)
@@ -277,21 +262,12 @@ importers:
       react-hook-form:
         specifier: ^7.52.2
         version: 7.71.1(react@19.2.4)
-      react-leaflet:
-        specifier: ^5.0.0
-        version: 5.0.0(leaflet@1.9.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
       stripe:
         specifier: ^20.3.0
         version: 20.3.0(@types/node@22.19.8)
-      tailwind-merge:
-        specifier: ^3.3.1
-        version: 3.4.0
-      use-debounce:
-        specifier: ^10.0.0
-        version: 10.1.0(react@19.2.4)
       zod:
         specifier: ^3.24.1
         version: 3.25.76
@@ -302,9 +278,6 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.12
         version: 4.1.18
-      '@types/leaflet':
-        specifier: ^1.9.20
-        version: 1.9.21
       '@types/node':
         specifier: ^22.10.2
         version: 22.19.8

@@ -4,13 +4,13 @@ import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useOptimisticAutoSave } from '@/lib/hooks/use-optimistic-auto-save'
+import { useOptimisticAutoSave } from '@/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save'
 import { ProfileView } from './profile.view'
-import { 
-  profileSchema, 
-  passwordSchema, 
-  type ProfileFormValues, 
-  type PasswordFormValues 
+import {
+  profileSchema,
+  passwordSchema,
+  type ProfileFormValues,
+  type PasswordFormValues
 } from './schemas'
 import { updateProfile, updatePassword } from './actions'
 
@@ -79,7 +79,7 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
     setPasswordStatus({})
     const result = await updatePassword(data)
     setPasswordStatus(result)
-    
+
     if (result.success) {
       passwordForm.reset()
     }

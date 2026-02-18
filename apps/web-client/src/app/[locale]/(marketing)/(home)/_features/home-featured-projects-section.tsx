@@ -1,6 +1,6 @@
 import { Button } from '@make-the-change/core/ui'
 import { ArrowRight } from 'lucide-react'
-import { FeaturedProjectsList } from '@/components/featured-projects-list'
+import { FeaturedProjectsList } from '@/app/[locale]/(marketing)/(home)/_features/featured-projects-list'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { Link } from '@/i18n/navigation'
 

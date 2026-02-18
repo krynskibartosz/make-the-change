@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { ThemeSelection } from '@/components/theme/theme-selection'
+import { ThemeSelection } from './_features/theme/theme-selection'
 
 export default async function AppearancePage() {
   const supabase = await createClient()

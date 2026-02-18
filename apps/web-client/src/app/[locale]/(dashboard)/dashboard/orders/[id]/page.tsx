@@ -3,7 +3,7 @@ import { ArrowLeft, Package, Truck } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { getOrderStatusColor } from '@/lib/status-colors'
+import { getOrderStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
 

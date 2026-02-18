@@ -15,7 +15,7 @@ import { StatCard } from '@/components/dashboard/stat-card'
 import { BadgesSection } from '@/components/dashboard/badges-section'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
-import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/app/[locale]/leaderboard/_features/gamification'
+import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatPoints } from '@/lib/utils'
 
@@ -59,25 +59,25 @@ export default async function DashboardPage() {
   }
 
   const investmentsList = allInvestments || []
-  
+
   // Calculate stats in JS (PostgREST limitation for simple queries, acceptable for per-user data)
   const totalInvested = investmentsList.reduce((sum, inv) => sum + (Number(inv.amount_eur_equivalent) || 0), 0)
   const projectsSupported = investmentsList.length
-  
+
   // Get recent 3 for timeline
   const recentInvestments = investmentsList.slice(0, 3)
 
   const firstName = profile?.first_name || 'Utilisateur'
   const pointsBalance = profile?.points_balance ?? 0
-  
+
   const impactScore = calculateImpactScore({
     points: pointsBalance,
     projects: projectsSupported,
     invested: totalInvested,
   })
-  
+
   const levelProgress = getLevelProgress(impactScore)
-  
+
   // Use DB level as source of truth, or fallback to calculated level
   const userLevel = profile?.user_level || levelProgress.currentLevel
   const kycStatus = profile?.kyc_status || 'pending'
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
     recentInvestments?.map((investment: any) => {
       // Handle Supabase join which might return array or object
       const project = Array.isArray(investment.project) ? investment.project[0] : investment.project
-      
+
       return {
         id: investment.id,
         icon: <Leaf className="h-4 w-4 text-client-emerald-600 dark:text-client-emerald-400" />,

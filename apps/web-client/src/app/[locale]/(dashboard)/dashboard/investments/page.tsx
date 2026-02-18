@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
 import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
-import { getInvestmentStatusColor } from '@/lib/status-colors'
+import { getInvestmentStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
