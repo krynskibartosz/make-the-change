@@ -13,12 +13,12 @@
     "previous": "Précédent",
     "search": "Rechercher",
     "filter": "Filtrer",
-    "retry": "Retry",
-    "preview": "Preview",
-    "select_placeholder": "Select...",
+    "retry": "Réessayer",
+    "preview": "Aperçu",
+    "select_placeholder": "Sélectionner...",
     "breadcrumbs": {
-      "dashboard": "Dashboard",
-      "products": "Products"
+      "dashboard": "Tableau de bord",
+      "products": "Produits"
     }
   },
   "navigation": {
@@ -69,6 +69,11 @@
         "contact": "Contact",
         "privacy": "Politique de confidentialité",
         "terms": "Conditions d'utilisation"
+      },
+      "featured": {
+        "title": "Projets en vedette",
+        "description": "Découvrez nos projets phares et investissez dans un avenir durable.",
+        "cta": "Voir les projets"
       }
     }
   },

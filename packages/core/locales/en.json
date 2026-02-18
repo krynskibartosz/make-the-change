@@ -63,6 +63,11 @@
         "contact": "Contact",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service"
+      },
+      "featured": {
+        "title": "Featured Projects",
+        "description": "Explore our flagship projects and invest in a sustainable future.",
+        "cta": "View projects"
       }
     },
     "leaderboard": "Leaderboard"

@@ -13,12 +13,12 @@
     "previous": "Vorige",
     "search": "Zoeken",
     "filter": "Filteren",
-    "retry": "Retry",
-    "preview": "Preview",
-    "select_placeholder": "Select...",
+    "retry": "Opnieuw proberen",
+    "preview": "Voorbeeld",
+    "select_placeholder": "Selecteren...",
     "breadcrumbs": {
       "dashboard": "Dashboard",
-      "products": "Products"
+      "products": "Producten"
     }
   },
   "navigation": {
@@ -66,6 +66,11 @@
         "blog": "Blog",
         "faq": "FAQ",
         "contact": "Contact"
+      },
+      "featured": {
+        "title": "Uitgelichte projecten",
+        "description": "Ontdek onze topprojecten en investeer in een duurzame toekomst.",
+        "cta": "Bekijk projecten"
       }
     }
   },
