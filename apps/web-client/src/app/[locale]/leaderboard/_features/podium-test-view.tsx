@@ -1,6 +1,4 @@
-import { Badge } from '@make-the-change/core/ui'
 import { Crown, Medal, Trophy } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
 import { cn, formatPoints } from '@/lib/utils'
 import type { CurrentUserRank, LeaderboardEntry } from './leaderboard-types'
 
@@ -63,12 +61,14 @@ function AvatarCircle({
           </div>
         )}
         {/* Badge de rang */}
-        <div className={cn(
-          'absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-          rank === 1 && 'bg-client-yellow-500 text-client-white',
-          rank === 2 && 'bg-client-gray-400 text-client-white', 
-          rank === 3 && 'bg-client-orange-400 text-client-white'
-        )}>
+        <div
+          className={cn(
+            'absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
+            rank === 1 && 'bg-client-yellow-500 text-client-white',
+            rank === 2 && 'bg-client-gray-400 text-client-white',
+            rank === 3 && 'bg-client-orange-400 text-client-white',
+          )}
+        >
           {rank}
         </div>
       </div>
@@ -99,22 +99,21 @@ export function PodiumTestView({ leaders, currentUserRank }: PodiumTestViewProps
     <div className="min-h-screen bg-background p-8">
       <div className="mx-auto max-w-4xl">
         <h1 className="text-2xl font-bold text-center mb-8">Podium 3D Test</h1>
-        
+
         {/* Conteneur 3D avec perspective */}
         <div className="relative" style={{ perspective: '1000px', perspectiveOrigin: '50% 50%' }}>
-          <div className="relative flex justify-center items-end gap-8 pb-8" style={{ transformStyle: 'preserve-3d' }}>
-            
+          <div
+            className="relative flex justify-center items-end gap-8 pb-8"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
             {podiumSlots.map((leader) => {
               if (!leader) return null
               const meta = podiumMeta[leader.rank as 1 | 2 | 3]
-              const Icon = meta.icon
-              const isFirst = leader.rank === 1
+              const _Icon = meta.icon
+              const _isFirst = leader.rank === 1
 
               return (
-                <div
-                  key={leader.id}
-                  className="relative flex flex-col items-center"
-                >
+                <div key={leader.id} className="relative flex flex-col items-center">
                   {/* Avatar et infos au-dessus du bloc */}
                   <div className="relative z-20 mb-4 flex flex-col items-center">
                     <AvatarCircle
@@ -130,11 +129,11 @@ export function PodiumTestView({ leaders, currentUserRank }: PodiumTestViewProps
                   </div>
 
                   {/* Bloc de podium 3D */}
-                  <div 
+                  <div
                     className="relative"
                     style={{
                       transform: 'rotateX(-20deg) translateZ(0)',
-                      transformStyle: 'preserve-3d'
+                      transformStyle: 'preserve-3d',
                     }}
                   >
                     {/* Face avant du bloc */}
@@ -143,25 +142,26 @@ export function PodiumTestView({ leaders, currentUserRank }: PodiumTestViewProps
                         'relative rounded-t-lg shadow-2xl',
                         meta.blockHeight,
                         'w-24 flex items-center justify-center',
-                        leader.rank === 1 && 'bg-gradient-to-b from-client-yellow-500 to-client-yellow-700',
-                        leader.rank === 2 && 'bg-gradient-to-b from-client-gray-400 to-client-gray-600',
-                        leader.rank === 3 && 'bg-gradient-to-b from-client-orange-400 to-client-orange-600'
+                        leader.rank === 1 &&
+                          'bg-gradient-to-b from-client-yellow-500 to-client-yellow-700',
+                        leader.rank === 2 &&
+                          'bg-gradient-to-b from-client-gray-400 to-client-gray-600',
+                        leader.rank === 3 &&
+                          'bg-gradient-to-b from-client-orange-400 to-client-orange-600',
                       )}
                     >
                       {/* Numéro de rang sur le bloc */}
-                      <span className="text-4xl font-bold text-client-white/20">
-                        {leader.rank}
-                      </span>
-                      
+                      <span className="text-4xl font-bold text-client-white/20">{leader.rank}</span>
+
                       {/* Effet de brillance */}
                       <div className="absolute inset-0 bg-gradient-to-t from-transparent via-client-white/10 to-transparent rounded-t-lg" />
                     </div>
-                    
+
                     {/* Ombre portée */}
-                    <div 
-                      className="absolute -bottom-2 left-2 right-2 h-4 bg-client-black/20 rounded-full blur-md" 
+                    <div
+                      className="absolute -bottom-2 left-2 right-2 h-4 bg-client-black/20 rounded-full blur-md"
                       style={{
-                        height: leader.rank === 1 ? '16px' : leader.rank === 2 ? '12px' : '10px'
+                        height: leader.rank === 1 ? '16px' : leader.rank === 2 ? '12px' : '10px',
                       }}
                     />
                   </div>

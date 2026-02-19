@@ -1,4 +1,4 @@
-import { ConservationStatus } from './types'
+import type { ConservationStatus } from './types'
 
 export const CONSERVATION_STATUS_CONFIG: Record<
   ConservationStatus,
@@ -11,7 +11,11 @@ export const CONSERVATION_STATUS_CONFIG: Record<
   VU: { label: 'Vulnérable', color: 'text-client-yellow-700', bg: 'bg-client-yellow-100' },
   EN: { label: 'En danger', color: 'text-client-orange-700', bg: 'bg-client-orange-100' },
   CR: { label: 'En danger critique', color: 'text-client-red-700', bg: 'bg-client-red-100' },
-  EW: { label: 'Éteint à l\'état sauvage', color: 'text-client-purple-700', bg: 'bg-client-purple-100' },
+  EW: {
+    label: "Éteint à l'état sauvage",
+    color: 'text-client-purple-700',
+    bg: 'bg-client-purple-100',
+  },
   EX: { label: 'Éteint', color: 'text-client-black', bg: 'bg-client-gray-200' },
 }
 
@@ -25,7 +29,7 @@ export function getStatusConfig(status: string | null) {
 export function getLocalizedContent(
   content: Record<string, string> | null,
   locale: string,
-  fallback = ''
+  fallback = '',
 ): string {
   if (!content) return fallback
   return content[locale] || content['fr'] || content['en'] || fallback

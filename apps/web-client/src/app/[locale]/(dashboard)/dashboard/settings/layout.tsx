@@ -1,11 +1,7 @@
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { SettingsNav } from './settings-nav'
 
-export default function SettingsLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-full">
       <div className="w-full bg-background z-10">

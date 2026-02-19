@@ -10,7 +10,12 @@ type HomeBlogSectionProps = {
   variant?: 'default' | 'muted'
 }
 
-export const HomeBlogSection = ({ title, viewAllLabel, posts, variant = 'default' }: HomeBlogSectionProps) => (
+export const HomeBlogSection = ({
+  title,
+  viewAllLabel,
+  posts,
+  variant = 'default',
+}: HomeBlogSectionProps) => (
   <MarketingSection
     title={title}
     action={<HomeSectionViewAllAction href="/blog" label={viewAllLabel} />}
@@ -26,4 +31,4 @@ export const HomeBlogSection = ({ title, viewAllLabel, posts, variant = 'default
       ))}
     </ul>
   </MarketingSection>
-);
+)

@@ -12,7 +12,7 @@ import {
 import { ShoppingBag, X } from 'lucide-react'
 import { useRef } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
-import { cn, formatPoints, formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 import { CartLineItem } from './cart-line-item'
 import { useCartUI } from './cart-ui-provider'
 import { useCart, useCartTotals } from './use-cart'
@@ -114,7 +114,7 @@ export function CartSheet() {
 
               {/* Removed redundant "Voir tout" link that caused loops if already on /cart or similar flows.
                   On mobile, this sheet IS the main cart view. */}
-              
+
               <Button
                 type="button"
                 variant="ghost"

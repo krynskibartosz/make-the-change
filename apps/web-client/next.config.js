@@ -8,7 +8,7 @@ try {
   if (supabaseUrl) {
     supabaseHostname = new URL(supabaseUrl).hostname
   }
-} catch { }
+} catch {}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -20,7 +20,7 @@ const nextConfig = {
   typescript: {
     // Temporarily allow production builds with TypeScript errors
     // Remove this after the underlying type issues are fixed.
-    ignoreBuildErrors: true
+    ignoreBuildErrors: true,
   },
   images: {
     remotePatterns: [
@@ -72,7 +72,7 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()',
-          }
+          },
         ],
       },
     ]

@@ -24,9 +24,7 @@ export const HomeSectionEmptyState = ({
 }: HomeSectionEmptyStateProps) => (
   <MarketingSection title={title} size="lg" variant={variant}>
     <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
-      <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
-        {description}
-      </p>
+      <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">{description}</p>
       <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Button asChild className="w-full sm:w-auto">
           <Link href={primaryCtaHref}>

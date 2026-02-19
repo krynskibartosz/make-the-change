@@ -1,10 +1,10 @@
 'use client'
 
-import { Mail, MapPin, Instagram, Facebook, Linkedin, Music } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Mail, MapPin, Music } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
-import { Logo } from '@/components/ui/logo'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
+import { Logo } from '@/components/ui/logo'
+import { Link } from '@/i18n/navigation'
 import { useUser } from './use-user'
 
 export function Footer() {
@@ -233,7 +233,7 @@ export function Footer() {
               </a>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                  t('address')
+                  t('address'),
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

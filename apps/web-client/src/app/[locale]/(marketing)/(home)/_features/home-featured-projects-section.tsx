@@ -1,7 +1,7 @@
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { FeaturedProjectsList } from '@/app/[locale]/(marketing)/(home)/_features/featured-projects-list'
-import { HomeSectionViewAllAction } from './home-section-view-all-action'
 import type { HomeFeaturedProject } from './home.types'
+import { HomeSectionViewAllAction } from './home-section-view-all-action'
 
 type HomeFeaturedProjectsSectionProps = {
   title: string
@@ -26,10 +26,6 @@ export const HomeFeaturedProjectsSection = ({
     variant={variant}
     size="lg"
   >
-    <FeaturedProjectsList
-      projects={projects}
-      activeLabel={activeLabel}
-      fundedLabel={fundedLabel}
-    />
+    <FeaturedProjectsList projects={projects} activeLabel={activeLabel} fundedLabel={fundedLabel} />
   </MarketingSection>
-);
+)

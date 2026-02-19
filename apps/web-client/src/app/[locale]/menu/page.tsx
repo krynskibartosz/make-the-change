@@ -1,22 +1,14 @@
 'use client'
 
 import { Button } from '@make-the-change/core/ui'
-import {
-  Coins,
-  LayoutDashboard,
-  Lock,
-  PiggyBank,
-  ShoppingBag,
-  UserPlus,
-} from 'lucide-react'
+import { Coins, LayoutDashboard, Lock, PiggyBank, ShoppingBag, UserPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
-import { CategoryCard } from '@/components/ui/category-card'
 import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
+import { CategoryCard } from '@/components/ui/category-card'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
 
 export default function MenuPage() {
   const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(
@@ -36,11 +28,13 @@ export default function MenuPage() {
         data: { user },
       } = await supabase.auth.getUser()
       if (user) {
-        const { data: profile } = await supabase
+        const { data: profileData } = await supabase
           .from('profiles')
           .select('avatar_url')
           .eq('id', user.id)
           .single()
+
+        const profile = profileData as { avatar_url: string | null } | null
         setUser({
           id: user.id,
           email: user.email || '',

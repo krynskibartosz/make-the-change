@@ -1,10 +1,9 @@
-import { Button } from '@make-the-change/core/ui'
-import { Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 
 export default async function AdminCmsPage() {
-  const t = await getTranslations('admin')
+  const _t = await getTranslations('admin')
 
   return (
     <div className="container py-10 space-y-8">

@@ -1,9 +1,9 @@
 'use client'
 
+import { cn } from '@make-the-change/core/shared/utils'
 import { Menubar } from '@make-the-change/core/ui'
 import Link from 'next/link'
-import { usePathname, useParams } from 'next/navigation'
-import { cn } from '@make-the-change/core/shared/utils'
+import { useParams, usePathname } from 'next/navigation'
 
 export function SettingsNav() {
   const pathname = usePathname()
@@ -14,17 +14,17 @@ export function SettingsNav() {
     {
       title: 'Général',
       href: `/${locale}/dashboard/settings`,
-      isActive: (path: string) => path === `/${locale}/dashboard/settings`
+      isActive: (path: string) => path === `/${locale}/dashboard/settings`,
     },
     {
       title: 'Apparence',
       href: `/${locale}/dashboard/settings/appearance`,
-      isActive: (path: string) => path === `/${locale}/dashboard/settings/appearance`
+      isActive: (path: string) => path === `/${locale}/dashboard/settings/appearance`,
     },
     {
       title: 'Notifications',
       href: `/${locale}/dashboard/settings/notifications`,
-      isActive: (path: string) => path === `/${locale}/dashboard/settings/notifications`
+      isActive: (path: string) => path === `/${locale}/dashboard/settings/notifications`,
     },
   ]
 

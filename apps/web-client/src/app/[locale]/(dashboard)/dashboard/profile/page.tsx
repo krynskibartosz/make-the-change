@@ -108,7 +108,11 @@ export default async function ProfilePage() {
                     Continuez à investir pour grimper dans le classement.
                   </p>
                   <Link href="/leaderboard">
-                    <Button variant="outline" size="sm" className="w-full mt-2 font-bold uppercase tracking-wider text-[10px]">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full mt-2 font-bold uppercase tracking-wider text-[10px]"
+                    >
                       Voir le leaderboard
                     </Button>
                   </Link>
@@ -137,8 +141,8 @@ export default async function ProfilePage() {
                     <MeterValue className="text-[10px] text-muted-foreground" />
                   </Meter>
                   <p className="text-xs italic opacity-70">
-                    Plus que {new Intl.NumberFormat('fr-FR').format(pointsToNextLevel)} points
-                    avant le niveau suivant.
+                    Plus que {new Intl.NumberFormat('fr-FR').format(pointsToNextLevel)} points avant
+                    le niveau suivant.
                   </p>
                 </CardContent>
               </Card>
@@ -152,7 +156,11 @@ export default async function ProfilePage() {
                 <div className="flex flex-wrap gap-2">
                   {badges.length > 0 ? (
                     badges.map((badge) => (
-                      <Badge key={badge} variant="secondary" className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight bg-primary/10 text-primary border-primary/20">
+                      <Badge
+                        key={badge}
+                        variant="secondary"
+                        className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight bg-primary/10 text-primary border-primary/20"
+                      >
                         {badge}
                       </Badge>
                     ))

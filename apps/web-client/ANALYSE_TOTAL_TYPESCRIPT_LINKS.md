@@ -1376,3 +1376,63 @@ type ApiResponse<TData> = {
 28. https://www.totaltypescript.com/discriminated-unions-are-a-devs-best-friend
 29. https://www.totaltypescript.com/clarifying-the-satisfies-operator
 30. https://www.totaltypescript.com/mental-model-for-typescript-generics
+
+## Annexe UX/UI 2026: Mega Menu (Light/Dark) avec Base UI
+
+### Référence ajoutée
+
+- Base UI Menubar: https://base-ui.com/react/components/menubar
+
+### Vérification des composants déjà existants dans les packages parents
+
+Les primitives nécessaires existent déjà dans `../../packages/core`:
+
+- `../../packages/core/src/shared/ui/base/menubar.tsx`
+- `../../packages/core/src/shared/ui/base/menu.tsx`
+- `../../packages/core/src/shared/ui/base/navigation-menu.tsx`
+- Exports publics: `../../packages/core/src/shared/ui/index.ts`
+
+Conclusion: pas besoin d’ajouter une nouvelle dépendance UI pour refactoriser le mega menu du web-client.
+
+### Mapping recommandé pour le Header/MegaMenu actuel
+
+Contexte actuel:
+
+- Header: `src/components/layout/header.tsx`
+- Mega menu panel: `src/components/layout/mega-menu.tsx`
+- Cards menu: `src/components/ui/category-card.tsx`
+
+Cible Base UI:
+
+- `NavigationMenu` (Root/List/Item/Trigger) pour la navigation desktop.
+- `NavigationMenuBackdrop` pour la couche de fond (fermeture outside + lisibilité).
+- `NavigationMenuPopup` ou panel custom piloté par la valeur active du Root.
+- `Menu`/`Menubar` pour les menus compacts contextuels (pas le mega panel principal).
+
+### Pattern d’interaction recommandé (best-in-class)
+
+- Ouverture hover/focus avec délai court (`delay` ~80ms).
+- Fermeture avec délai légèrement supérieur (`closeDelay` ~140-220ms).
+- Fermeture robuste: `Escape`, click outside, `focusOut`.
+- Focus ring visible (WCAG 2.2) sur triggers et liens.
+- Une seule zone visuelle dominante dans le panel (featured), le reste en liens hiérarchisés.
+
+### Recommandations light/dark spécifiques
+
+- Éviter une simple transparence `bg-background/75` pour le panneau principal.
+- Introduire des tokens dédiés menu:
+  - `--menu-surface`
+  - `--menu-border`
+  - `--menu-shadow`
+  - `--menu-item-hover`
+  - `--menu-focus`
+- Dark mode: surface d’overlay distincte du fond page pour une vraie élévation perceptible.
+- Uniformiser les overlays d’images dans `CategoryCard` pour garantir le contraste texte.
+
+### Plan d’implémentation proposé
+
+1. Migrer la logique d’ouverture du header vers la state machine de `NavigationMenu` (au lieu des handlers manuels).
+2. Conserver `MegaMenu` comme contenu, mais retirer la responsabilité de positionnement absolu.
+3. Déplacer backdrop/positioning vers les primitives Base UI du root menu.
+4. Ajouter les tokens de surface menu pour harmoniser light/dark.
+5. Vérifier clavier + lecteur d’écran + contrastes (AA minimum).

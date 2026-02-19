@@ -1,20 +1,9 @@
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { Metadata } from 'next'
+import { parseProductsQueryState } from '@/app/[locale]/(marketing)/products/_features/query-state'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
-import { PageHero } from '@/components/ui/page-hero'
-import {
-  applyProductsFilters,
-  applyProductsSort,
-  clampPage,
-  getPaginationRange,
-  toProductsPagination,
-} from '@/app/[locale]/(marketing)/products/_features/products-query'
-import {
-  PRODUCTS_PAGE_SIZE,
-  parseProductsQueryState,
-} from '@/app/[locale]/(marketing)/products/_features/query-state'
+import { getProductStaticResources, getProducts } from './_features/get-products'
 import { type Category, type Producer, type Product, ProductsClient } from './products-client'
-import { getProducts, getProductStaticResources } from './_features/get-products'
 
 interface ProductsPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -31,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const t = await getTranslations('products')
+  const _t = await getTranslations('products')
   const navT = await getTranslations('navigation')
   const params = await searchParams
   const queryState = parseProductsQueryState(params)

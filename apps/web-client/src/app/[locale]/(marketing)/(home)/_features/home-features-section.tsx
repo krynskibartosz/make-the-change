@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
-import { ArrowRight, Gift, Heart, TrendingUp, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Gift, Heart, type LucideIcon, TrendingUp } from 'lucide-react'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { cn } from '@/lib/utils'
 
@@ -65,9 +65,18 @@ export function HomeFeaturesSection({
 
   return (
     <MarketingSection title={title} size="lg" className="relative overflow-hidden py-32">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-background to-background -z-10 opacity-60" aria-hidden="true" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] -z-10 mix-blend-screen animate-pulse duration-[10000ms]" aria-hidden="true" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-marketing-positive-500/10 rounded-full blur-[128px] -z-10 mix-blend-screen" aria-hidden="true" />
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-background to-background -z-10 opacity-60"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] -z-10 mix-blend-screen animate-pulse duration-[10000ms]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-0 right-1/4 w-96 h-96 bg-marketing-positive-500/10 rounded-full blur-[128px] -z-10 mix-blend-screen"
+        aria-hidden="true"
+      />
 
       <ul className="relative z-10 m-0 grid list-none gap-8 p-0 md:grid-cols-3">
         {featureItems.map((feature) => (
@@ -79,7 +88,10 @@ export function HomeFeaturesSection({
                 feature.glowClassName,
               )}
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-marketing-overlay-light/5 to-transparent pointer-events-none" aria-hidden="true" />
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-marketing-overlay-light/5 to-transparent pointer-events-none"
+                aria-hidden="true"
+              />
 
               <CardHeader className="p-10 pb-6 relative">
                 <div
@@ -90,7 +102,10 @@ export function HomeFeaturesSection({
                   aria-hidden="true"
                 >
                   <feature.icon
-                    className={cn('h-10 w-10 transition-colors duration-500', feature.colorClassName)}
+                    className={cn(
+                      'h-10 w-10 transition-colors duration-500',
+                      feature.colorClassName,
+                    )}
                   />
                 </div>
                 <CardTitle className="text-3xl font-black tracking-tight text-foreground mb-2">
@@ -104,7 +119,10 @@ export function HomeFeaturesSection({
 
                 <div className="mt-8 flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-75">
                   <span className={feature.colorClassName}>{exploreLabel}</span>
-                  <ArrowRight className={cn('h-4 w-4', feature.colorClassName)} aria-hidden="true" />
+                  <ArrowRight
+                    className={cn('h-4 w-4', feature.colorClassName)}
+                    aria-hidden="true"
+                  />
                 </div>
               </CardContent>
             </Card>

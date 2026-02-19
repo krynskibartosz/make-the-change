@@ -1,14 +1,16 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { MainMenuStructure, HomePageContent } from '../types'
+import { createClient } from '@/lib/supabase/server'
+import type { HomePageContent, MainMenuStructure } from '../types'
 
 export async function updateMenu(slug: string, structure: MainMenuStructure) {
   const supabase = await createClient()
-  
+
   // Check permission (simple check for now, can be expanded)
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) {
     throw new Error('Unauthorized')
   }
@@ -16,10 +18,10 @@ export async function updateMenu(slug: string, structure: MainMenuStructure) {
   const { error } = await supabase
     .schema('content')
     .from('menus')
-    .update({ 
+    .update({
       structure,
       updated_at: new Date().toISOString(),
-      updated_by: user.id
+      updated_by: user.id,
     })
     .eq('slug', slug)
 
@@ -34,8 +36,10 @@ export async function updateMenu(slug: string, structure: MainMenuStructure) {
 
 export async function updatePageContent(slug: string, sections: HomePageContent) {
   const supabase = await createClient()
-  
-  const { data: { user } } = await supabase.auth.getUser()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) {
     throw new Error('Unauthorized')
   }
@@ -43,10 +47,10 @@ export async function updatePageContent(slug: string, sections: HomePageContent)
   const { error } = await supabase
     .schema('content')
     .from('pages')
-    .update({ 
+    .update({
       sections,
       updated_at: new Date().toISOString(),
-      updated_by: user.id
+      updated_by: user.id,
     })
     .eq('slug', slug)
 

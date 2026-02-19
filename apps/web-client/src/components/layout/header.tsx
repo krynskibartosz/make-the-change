@@ -15,13 +15,13 @@ import {
 import { ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
+import { CartButton } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-button'
+import type { MainMenuStructure } from '@/app/[locale]/admin/cms/_features/types'
 import { MegaMenu } from '@/components/layout/mega-menu'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
-import { Logo } from '@/components/ui/logo'
-import type { MainMenuStructure } from '@/app/[locale]/admin/cms/_features/types'
-import { CartButton } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-button'
-import { useScrollHeader } from '@/components/layout/use-scroll-header'
 import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
+import { useScrollHeader } from '@/components/layout/use-scroll-header'
+import { Logo } from '@/components/ui/logo'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -158,7 +158,10 @@ export function Header({ user, menuData }: HeaderProps) {
               </Button>
 
               <Popover>
-                <PopoverTrigger aria-label="Menu utilisateur" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted">
+                <PopoverTrigger
+                  aria-label="Menu utilisateur"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+                >
                   <ChevronDown className="h-4 w-4" />
                 </PopoverTrigger>
                 <PopoverContent className="w-44 p-1">
@@ -184,7 +187,6 @@ export function Header({ user, menuData }: HeaderProps) {
                   {t('login')}
                 </Button>
               </Link>
-
             </div>
           )}
 

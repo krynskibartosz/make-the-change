@@ -102,10 +102,9 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
       {/* 1. Header Section */}
       <ProfileHeader
         name={profile.display_name || ''}
-        // @ts-ignore
         avatarUrl={profile.avatar_url || undefined}
-        // @ts-ignore
         coverUrl={profile.cover_url || undefined}
+        level={levelProgress.currentLevel}
         impactScore={impactScore}
         readonly={true}
       />
@@ -120,18 +119,14 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <Leaf className="h-5 w-5" />
                   </div>
-                  <h3 className="font-semibold text-primary">
-                    Impact Biodiversité
-                  </h3>
+                  <h3 className="font-semibold text-primary">Impact Biodiversité</h3>
                 </div>
                 <div>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-primary">
                       {impactScore.toLocaleString('fr-FR')}
                     </span>
-                    <span className="text-sm font-medium text-primary/80">
-                      points
-                    </span>
+                    <span className="text-sm font-medium text-primary/80">points</span>
                   </div>
                   <div className="mt-4 space-y-2">
                     <div className="flex justify-between text-xs font-medium text-primary/80">

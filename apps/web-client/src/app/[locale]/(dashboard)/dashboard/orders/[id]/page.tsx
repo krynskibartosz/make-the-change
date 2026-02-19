@@ -2,10 +2,10 @@ import { Badge, Button, DetailView } from '@make-the-change/core/ui'
 import { ArrowLeft, Package, Truck } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
 import { getOrderStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
+import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
+import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>
@@ -58,7 +58,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const totalEuros = items.reduce((sum, item) => {
     const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
     const priceEuros = (snapshot.priceEuros as number) || 0
-    return sum + (priceEuros * item.quantity)
+    return sum + priceEuros * item.quantity
   }, 0)
 
   return (

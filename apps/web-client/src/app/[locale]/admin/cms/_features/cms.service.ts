@@ -1,6 +1,6 @@
 import 'server-only'
 import { createClient } from '@/lib/supabase/server'
-import { MainMenuStructure, HomePageContent } from './types'
+import type { HomePageContent, MainMenuStructure } from './types'
 
 export async function getMenu(slug: string): Promise<MainMenuStructure | null> {
   // console.log(`Fetching menu ${slug} from content schema...`)

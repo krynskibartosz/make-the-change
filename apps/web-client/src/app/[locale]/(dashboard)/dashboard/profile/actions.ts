@@ -2,7 +2,12 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { profileSchema, passwordSchema, type ProfileFormValues, type PasswordFormValues } from './schemas'
+import {
+  type PasswordFormValues,
+  type ProfileFormValues,
+  passwordSchema,
+  profileSchema,
+} from './schemas'
 
 export type ProfileState = {
   error?: string
@@ -11,13 +16,11 @@ export type ProfileState = {
 
 const MAX_UPLOAD_SIZE = 2 * 1024 * 1024
 
-export async function updateProfile(
-  data: ProfileFormValues,
-): Promise<ProfileState> {
+export async function updateProfile(data: ProfileFormValues): Promise<ProfileState> {
   const result = profileSchema.safeParse(data)
-  
+
   if (!result.success) {
-    return { error: 'Données invalides: ' + result.error.errors.map(e => e.message).join(', ') }
+    return { error: 'Données invalides: ' + result.error.errors.map((e) => e.message).join(', ') }
   }
 
   const { firstName, lastName, phone, address, city, postalCode, country, bio } = result.data
@@ -142,11 +145,14 @@ export async function updateProfileMedia(
   }
 }
 
-export async function updateProfileImages(
-  images: { avatarUrl?: string; coverUrl?: string }
-): Promise<ProfileState> {
+export async function updateProfileImages(images: {
+  avatarUrl?: string
+  coverUrl?: string
+}): Promise<ProfileState> {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) return { error: 'Not authenticated' }
 
@@ -181,9 +187,7 @@ export async function updateProfileImages(
   }
 }
 
-export async function updatePassword(
-  data: PasswordFormValues
-): Promise<ProfileState> {
+export async function updatePassword(data: PasswordFormValues): Promise<ProfileState> {
   const result = passwordSchema.safeParse(data)
 
   if (!result.success) {
@@ -193,7 +197,7 @@ export async function updatePassword(
   const { newPassword } = result.data
 
   const supabase = await createClient()
-  
+
   const { error } = await supabase.auth.updateUser({
     password: newPassword,
   })

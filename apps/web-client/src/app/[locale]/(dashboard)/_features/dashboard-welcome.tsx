@@ -79,7 +79,10 @@ export const DashboardWelcome: FC<DashboardWelcomeProps> = ({
 
           <div className="flex flex-wrap gap-2">
             {kycStatus && (
-              <Badge variant="outline" className={cn('rounded-full font-medium', kycColors[kycStatus])}>
+              <Badge
+                variant="outline"
+                className={cn('rounded-full font-medium', kycColors[kycStatus])}
+              >
                 KYC: {kycLabel || kycStatus}
               </Badge>
             )}

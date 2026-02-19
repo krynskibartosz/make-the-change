@@ -38,11 +38,13 @@ type SearchParamsSource = SearchParamsRecord | URLSearchParams | ReadonlyURLSear
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 const getRawParam = (source: SearchParamsSource, key: string): string | undefined => {
-  if ('get' in source) {
-    return source.get(key) ?? undefined
+  const maybeGet = (source as { get?: unknown }).get
+  if (typeof maybeGet === 'function') {
+    const result = maybeGet.call(source, key)
+    return typeof result === 'string' ? result : undefined
   }
 
-  const value = source[key]
+  const value = (source as SearchParamsRecord)[key]
 
   if (Array.isArray(value)) {
     return value[0]

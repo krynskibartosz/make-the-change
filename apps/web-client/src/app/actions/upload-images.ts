@@ -1,7 +1,7 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
 
 const bucketSchema = z.enum(['projects', 'products', 'producers', 'users', 'categories'])
 
@@ -59,7 +59,8 @@ export async function uploadImages(formData: FormData): Promise<UploadResult> {
     const bucket = String(formData.get('bucket') || '')
     const entityId = String(formData.get('entityId') || '')
     const folderValue = formData.get('folder')
-    const folder = typeof folderValue === 'string' && folderValue.length > 0 ? folderValue : undefined
+    const folder =
+      typeof folderValue === 'string' && folderValue.length > 0 ? folderValue : undefined
 
     const parsed = uploadSchema.safeParse({ bucket, entityId, folder })
     if (!parsed.success) {

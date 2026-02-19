@@ -1,14 +1,13 @@
-import { Badge, Button } from '@make-the-change/core/ui'
-import { Award, Building2, Package, Share2, Sparkles, Star } from 'lucide-react'
-import { getTranslations, getLocale } from 'next-intl/server'
+import { Badge } from '@make-the-change/core/ui'
+import { Award, Package, Sparkles, Star } from 'lucide-react'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { cn, formatCurrency } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { Link } from '@/i18n/navigation'
 import { ProductDetailAddToCartButton } from './floating-action-buttons'
-import { ProductShareButton } from './product-share-button'
-import { ProductFavoriteButton } from './product-favorite-button'
 import type { ProductWithRelations } from './product-detail-data'
+import { ProductFavoriteButton } from './product-favorite-button'
+import { ProductShareButton } from './product-share-button'
 
 type ProductQuickViewProps = {
   product: ProductWithRelations
@@ -26,8 +25,8 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
 
   const producerImage =
     product.producer?.images &&
-      Array.isArray(product.producer.images) &&
-      product.producer.images.length > 0
+    Array.isArray(product.producer.images) &&
+    product.producer.images.length > 0
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
@@ -125,7 +124,6 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
             {productDescription && (
               <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
-
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground sm:text-base">
                   {productDescription}
                 </p>
@@ -135,7 +133,6 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             {product.producer && (
               <section className="group rounded-2xl border border-white/10 bg-background/40 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-background/60 hover:shadow-lg">
                 <a href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}>
-
                   <div className="flex items-start gap-3">
                     {producerImage ? (
                       <img

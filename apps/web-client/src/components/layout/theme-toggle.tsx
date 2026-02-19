@@ -3,8 +3,8 @@
 import { Button } from '@make-the-change/core/ui'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
 
 export function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme()

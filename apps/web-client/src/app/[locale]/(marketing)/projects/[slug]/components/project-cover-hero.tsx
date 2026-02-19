@@ -1,6 +1,6 @@
 import { Badge, Button } from '@make-the-change/core/ui'
-import Image from 'next/image'
 import { Calendar, Leaf, MapPin, Sparkles } from 'lucide-react'
+import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { cn, formatCurrency } from '@/lib/utils'
@@ -153,6 +153,6 @@ export async function ProjectCoverHero({
 
         <div className="absolute inset-0 bg-primary/20 blur-[80px] -z-10 rounded-full scale-125" />
       </div>
-    </div >
+    </div>
   )
 }

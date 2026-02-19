@@ -10,7 +10,10 @@ type HomeSectionViewAllActionProps = {
 export function HomeSectionViewAllAction({ href, label }: HomeSectionViewAllActionProps) {
   return (
     <Link href={href} aria-label={label}>
-      <Button variant="ghost" className="flex items-center text-xs font-bold uppercase tracking-widest">
+      <Button
+        variant="ghost"
+        className="flex items-center text-xs font-bold uppercase tracking-widest"
+      >
         {label}
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>

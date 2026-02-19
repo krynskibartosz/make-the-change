@@ -1,4 +1,4 @@
-import { Badge, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { Award, Medal, Trophy } from 'lucide-react'
 import type { FC } from 'react'
 

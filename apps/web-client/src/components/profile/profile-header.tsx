@@ -2,8 +2,8 @@
 
 import { Badge } from '@make-the-change/core/ui'
 import { useState } from 'react'
-import { uploadImages } from '@/app/actions/upload-images'
 import { updateProfileImages } from '@/app/[locale]/(dashboard)/dashboard/profile/actions'
+import { uploadImages } from '@/app/actions/upload-images'
 import { getRandomCoverImage } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
 import { ImageUploader } from './image-uploader'
@@ -48,7 +48,7 @@ export const ProfileHeader = ({
 
     const file = fileList[0]
     const setLoading = type === 'avatar' ? setIsAvatarLoading : setIsCoverLoading
-    
+
     setLoading(true)
     try {
       const formData = new FormData()
@@ -58,13 +58,13 @@ export const ProfileHeader = ({
 
       // 1. Upload to Storage
       const result = await uploadImages(formData)
-      
+
       if (result.success && result.urls && result.urls.length > 0) {
         const newUrl = result.urls[0]
-        
+
         // 2. Update DB
         const updateResult = await updateProfileImages({
-          [type === 'avatar' ? 'avatarUrl' : 'coverUrl']: newUrl
+          [type === 'avatar' ? 'avatarUrl' : 'coverUrl']: newUrl,
         })
 
         if (updateResult.success) {
@@ -125,12 +125,19 @@ export const ProfileHeader = ({
               containerClassName="h-full w-full"
             />
           </div>
-          
+
           <div className="mb-2">
-            <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl tracking-tight">{name}</h1>
+            <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl tracking-tight">
+              {name}
+            </h1>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-1">
               {email && <p className="text-sm text-muted-foreground font-medium">{email}</p>}
-              <Badge className={cn('rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider', levelClass)}>
+              <Badge
+                className={cn(
+                  'rounded-full px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider',
+                  levelClass,
+                )}
+              >
                 {level.charAt(0).toUpperCase() + level.slice(1)}
               </Badge>
             </div>
@@ -138,7 +145,9 @@ export const ProfileHeader = ({
         </div>
 
         <div className="flex flex-col gap-1 rounded-2xl border bg-background/60 p-4 sm:p-6 backdrop-blur-md shadow-xl lg:min-w-[200px]">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/70">Impact score</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/70">
+            Impact score
+          </p>
           <div className="flex items-baseline gap-2">
             <p className="text-3xl font-black text-foreground lg:text-4xl">
               {new Intl.NumberFormat('fr-FR').format(impactScore)}

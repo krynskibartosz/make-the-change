@@ -1,10 +1,10 @@
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
-import { ProjectsClient } from './projects-client'
 import { getProjects } from './_features/get-projects'
+import { ProjectsClient } from './projects-client'
 
 interface ProjectsPageProps {
   searchParams: Promise<{

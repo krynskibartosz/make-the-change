@@ -107,7 +107,10 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-card p-4 rounded-xl shadow-sm border">
         <search role="search" className="relative w-full md:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+            aria-hidden="true"
+          />
           <Input
             type="search"
             placeholder={t('filter.search_placeholder')}

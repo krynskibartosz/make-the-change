@@ -1,10 +1,10 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { ArrowRight, Leaf, TrendingUp } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
-import { Link } from '@/i18n/navigation'
 import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getInvestmentStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
+import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
+import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate } from '@/lib/utils'
 

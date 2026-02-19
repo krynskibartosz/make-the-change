@@ -45,17 +45,17 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     },
     user
       ? {
-        href: '/dashboard',
-        icon: User,
-        label: t('profile'),
-        isActive: isDashboard,
-      }
+          href: '/dashboard',
+          icon: User,
+          label: t('profile'),
+          isActive: isDashboard,
+        }
       : {
-        href: '/leaderboard',
-        icon: Trophy,
-        label: t('leaderboard'),
-        isActive: isLeaderboard,
-      },
+          href: '/leaderboard',
+          icon: Trophy,
+          label: t('leaderboard'),
+          isActive: isLeaderboard,
+        },
   ]
 
   const avatarUrl = user?.avatarUrl ?? null

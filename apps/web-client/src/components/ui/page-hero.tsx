@@ -59,7 +59,9 @@ const PageHeroLayout: FC<PageHeroLayoutProps> = ({
   </section>
 )
 
-const PageHeroBadge: FC<PageHeroSlotProps> = ({ children, className }) => <div className={cn('mb-6 animate-fade-in', className)}>{children}</div>
+const PageHeroBadge: FC<PageHeroSlotProps> = ({ children, className }) => (
+  <div className={cn('mb-6 animate-fade-in', className)}>{children}</div>
+)
 
 const PageHeroTitle: FC<PageHeroSlotProps> = ({ children, className }) => (
   <h1
@@ -88,7 +90,9 @@ const PageHeroDescription: FC<PageHeroDescriptionProps> = ({
   </p>
 )
 
-const PageHeroContent: FC<PageHeroSlotProps> = ({ children, className }) => <div className={cn('relative z-10', className)}>{children}</div>
+const PageHeroContent: FC<PageHeroSlotProps> = ({ children, className }) => (
+  <div className={cn('relative z-10', className)}>{children}</div>
+)
 
 const PageHeroActions: FC<PageHeroSlotProps> = ({ children, className }) => (
   <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row', className)}>
@@ -96,7 +100,9 @@ const PageHeroActions: FC<PageHeroSlotProps> = ({ children, className }) => (
   </div>
 )
 
-const PageHeroCTA: FC<PageHeroSlotProps> = ({ children, className }) => <div className={cn('w-full sm:w-auto', className)}>{children}</div>
+const PageHeroCTA: FC<PageHeroSlotProps> = ({ children, className }) => (
+  <div className={cn('w-full sm:w-auto', className)}>{children}</div>
+)
 
 const PageHeroRoot: FC<PageHeroProps> = ({
   badge,
@@ -110,11 +116,12 @@ const PageHeroRoot: FC<PageHeroProps> = ({
 }) => {
   const hasLegacySlots = badge !== undefined || title !== undefined || description !== undefined
 
-  if (!hasLegacySlots) return (
-    <PageHeroLayout className={className} size={size} variant={variant}>
-      {children}
-    </PageHeroLayout>
-  )
+  if (!hasLegacySlots)
+    return (
+      <PageHeroLayout className={className} size={size} variant={variant}>
+        {children}
+      </PageHeroLayout>
+    )
 
   return (
     <PageHeroLayout className={className} size={size} variant={variant}>

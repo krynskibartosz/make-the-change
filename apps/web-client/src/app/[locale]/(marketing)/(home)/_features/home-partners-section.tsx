@@ -202,28 +202,31 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
 }
 
 export const HomePartnersSection = (props: HomePartnersSectionProps) => {
-  if (props.mode === 'empty') return (
-    <section className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
-      <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
-          <h2 className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
-          <p className="mt-4 text-base text-muted-foreground sm:text-lg">{props.emptyDescription}</p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button asChild className="w-full sm:w-auto">
-              <Link href={props.primaryCtaHref}>{props.primaryCtaLabel}</Link>
-            </Button>
-            {props.secondaryCtaLabel && props.secondaryCtaHref ? (
-              <Button asChild variant="outline" className="w-full sm:w-auto">
-                <a href={props.secondaryCtaHref} target="_blank" rel="noreferrer">
-                  {props.secondaryCtaLabel}
-                </a>
+  if (props.mode === 'empty')
+    return (
+      <section className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
+            <h2 className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+              {props.emptyDescription}
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button asChild className="w-full sm:w-auto">
+                <Link href={props.primaryCtaHref}>{props.primaryCtaLabel}</Link>
               </Button>
-            ) : null}
+              {props.secondaryCtaLabel && props.secondaryCtaHref ? (
+                <Button asChild variant="outline" className="w-full sm:w-auto">
+                  <a href={props.secondaryCtaHref} target="_blank" rel="noreferrer">
+                    {props.secondaryCtaLabel}
+                  </a>
+                </Button>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  )
+      </section>
+    )
 
   return <HomePartnersCarousel producers={props.producers} variant={props.variant} />
 }

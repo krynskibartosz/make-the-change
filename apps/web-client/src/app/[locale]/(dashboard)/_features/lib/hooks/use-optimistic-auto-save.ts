@@ -50,7 +50,7 @@ export interface AutoSaveReturn {
   saveNow: () => Promise<void>
 
   // Marquer qu'il y a des modifications (lance le debounce)
-  markDirty: (data?: any) => void
+  markDirty: (data?: unknown) => void
 
   // Annuler le debounce en cours
   cancel: () => void
@@ -195,30 +195,33 @@ export function useOptimisticAutoSave<T = unknown>({
   }, [executeSave, clearTimers, log])
 
   // Mark dirty (triggers debounce)
-  const markDirty = useCallback((data?: T) => {
-    log('markDirty() called')
+  const markDirty = useCallback(
+    (data?: unknown) => {
+      log('markDirty() called')
 
-    if (data !== undefined) {
-      dataQueueRef.current = data
-    }
+      if (data !== undefined) {
+        dataQueueRef.current = data as T
+      }
 
-    // Clear existing debounce
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current)
-    }
+      // Clear existing debounce
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
 
-    // Update status
-    setStatus((currentStatus) => (currentStatus === 'saving' ? currentStatus : 'pending'))
+      // Update status
+      setStatus((currentStatus) => (currentStatus === 'saving' ? currentStatus : 'pending'))
 
-    // Increment pending changes counter
-    setPendingChanges((prev) => prev + 1)
+      // Increment pending changes counter
+      setPendingChanges((prev) => prev + 1)
 
-    // Schedule save
-    debounceTimerRef.current = setTimeout(() => {
-      log('Debounce elapsed, executing save')
-      void executeSave(dataQueueRef.current as T)
-    }, debounceMs)
-  }, [debounceMs, executeSave, log])
+      // Schedule save
+      debounceTimerRef.current = setTimeout(() => {
+        log('Debounce elapsed, executing save')
+        void executeSave(dataQueueRef.current as T)
+      }, debounceMs)
+    },
+    [debounceMs, executeSave, log],
+  )
 
   // Cancel debounce
   const cancel = useCallback(() => {

@@ -1,6 +1,5 @@
 import 'server-only'
 import { createClient } from '@supabase/supabase-js'
-import type { Database } from '@make-the-change/core/database-types'
 
 /**
  * Creates a static Supabase client for public data fetching.
@@ -11,8 +10,8 @@ import type { Database } from '@make-the-change/core/database-types'
  * based on `auth.uid()`.
  */
 export const createStaticClient = () => {
-    return createClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  )
 }

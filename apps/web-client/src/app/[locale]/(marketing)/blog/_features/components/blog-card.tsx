@@ -1,9 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage, Badge, Card, CardContent } from '@make-the-change/core/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge } from '@make-the-change/core/ui'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
-import { formatDate } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
 import type { BlogPost } from '../blog-types'
-import { cn } from '@/lib/utils'
 
 interface BlogCardProps {
   post: BlogPost
@@ -14,7 +13,12 @@ interface BlogCardProps {
 export function BlogCard({ post, className, variant = 'default' }: BlogCardProps) {
   if (variant === 'featured') {
     return (
-      <Link href={`/blog/${post.slug}`} className="group relative block h-full overflow-hidden rounded-3xl" itemScope itemType="https://schema.org/BlogPosting">
+      <Link
+        href={`/blog/${post.slug}`}
+        className="group relative block h-full overflow-hidden rounded-3xl"
+        itemScope
+        itemType="https://schema.org/BlogPosting"
+      >
         <div className="absolute inset-0 bg-muted">
           {post.coverImage && (
             <Image
@@ -32,18 +36,27 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               {post.tags.slice(0, 3).map((tag) => (
-                <Badge key={tag} className="bg-client-white/10 hover:bg-client-white/20 text-client-white border-none backdrop-blur-md rounded-full px-3 py-1">
+                <Badge
+                  key={tag}
+                  className="bg-client-white/10 hover:bg-client-white/20 text-client-white border-none backdrop-blur-md rounded-full px-3 py-1"
+                >
                   {tag}
                 </Badge>
               ))}
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-client-white leading-tight tracking-tight" itemProp="headline">
+            <h2
+              className="text-3xl md:text-4xl lg:text-5xl font-black text-client-white leading-tight tracking-tight"
+              itemProp="headline"
+            >
               {post.title}
             </h2>
 
             {post.excerpt && (
-              <p className="line-clamp-2 text-lg text-client-white/80 max-w-2xl font-medium" itemProp="description">
+              <p
+                className="line-clamp-2 text-lg text-client-white/80 max-w-2xl font-medium"
+                itemProp="description"
+              >
                 {post.excerpt}
               </p>
             )}
@@ -51,13 +64,21 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
             <div className="flex items-center gap-3 text-client-white/70 pt-2">
               {post.author?.avatarUrl && (
                 <Avatar className="h-8 w-8 border border-client-white/10">
-                  <AvatarImage src={post.author.avatarUrl} alt={post.author.name} className="object-cover" />
+                  <AvatarImage
+                    src={post.author.avatarUrl}
+                    alt={post.author.name}
+                    className="object-cover"
+                  />
                   <AvatarFallback>{post.author.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
                 </Avatar>
               )}
-              <span className="text-sm font-medium" itemProp="author">{post.author?.name}</span>
+              <span className="text-sm font-medium" itemProp="author">
+                {post.author?.name}
+              </span>
               <span className="text-client-white/30">•</span>
-              <span className="text-sm" itemProp="datePublished">{formatDate(post.publishedAt || '')}</span>
+              <span className="text-sm" itemProp="datePublished">
+                {formatDate(post.publishedAt || '')}
+              </span>
             </div>
           </div>
         </div>
@@ -81,7 +102,10 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
         <div className="space-y-2 py-1">
           <div className="flex flex-wrap gap-2">
             {post.tags.slice(0, 1).map((tag) => (
-              <span key={tag} className="text-[10px] font-bold uppercase tracking-wider text-primary">
+              <span
+                key={tag}
+                className="text-[10px] font-bold uppercase tracking-wider text-primary"
+              >
                 {tag}
               </span>
             ))}
@@ -89,16 +113,19 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
           <h3 className="font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {post.title}
           </h3>
-          <p className="text-xs text-muted-foreground">
-            {formatDate(post.publishedAt || '')}
-          </p>
+          <p className="text-xs text-muted-foreground">{formatDate(post.publishedAt || '')}</p>
         </div>
       </Link>
     )
   }
 
   return (
-    <Link href={`/blog/${post.slug}`} className={cn("group block h-full", className)} itemScope itemType="https://schema.org/BlogPosting">
+    <Link
+      href={`/blog/${post.slug}`}
+      className={cn('group block h-full', className)}
+      itemScope
+      itemType="https://schema.org/BlogPosting"
+    >
       <div className="h-full flex flex-col overflow-hidden rounded-2xl bg-card border border-border/50 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5">
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
           {post.coverImage ? (
@@ -122,15 +149,24 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
           <div className="space-y-2">
             <div className="flex flex-wrap gap-2">
               {post.tags.slice(0, 2).map((tag) => (
-                <span key={tag} className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                <span
+                  key={tag}
+                  className="text-[10px] font-bold uppercase tracking-wider text-primary"
+                >
                   {tag}
                 </span>
               ))}
             </div>
-            <h2 className="text-xl font-bold leading-snug tracking-tight group-hover:text-primary transition-colors" itemProp="headline">
+            <h2
+              className="text-xl font-bold leading-snug tracking-tight group-hover:text-primary transition-colors"
+              itemProp="headline"
+            >
               {post.title}
             </h2>
-            <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed" itemProp="description">
+            <p
+              className="line-clamp-2 text-sm text-muted-foreground leading-relaxed"
+              itemProp="description"
+            >
               {post.excerpt}
             </p>
           </div>
@@ -139,13 +175,19 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
             <div className="flex items-center gap-2">
               {post.author?.avatarUrl ? (
                 <Avatar className="h-6 w-6">
-                  <AvatarImage src={post.author.avatarUrl} alt={post.author.name} className="object-cover" />
+                  <AvatarImage
+                    src={post.author.avatarUrl}
+                    alt={post.author.name}
+                    className="object-cover"
+                  />
                   <AvatarFallback>{post.author.name?.slice(0, 1).toUpperCase()}</AvatarFallback>
                 </Avatar>
               ) : (
                 <div className="h-6 w-6 rounded-full bg-primary/10" />
               )}
-              <span className="text-xs font-medium text-foreground/80" itemProp="author">{post.author?.name}</span>
+              <span className="text-xs font-medium text-foreground/80" itemProp="author">
+                {post.author?.name}
+              </span>
             </div>
             <span className="text-xs text-muted-foreground font-mono" itemProp="datePublished">
               {formatDate(post.publishedAt || '')}

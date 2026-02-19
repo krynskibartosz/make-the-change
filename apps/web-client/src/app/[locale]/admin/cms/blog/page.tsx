@@ -1,4 +1,4 @@
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import { FileText, Plus } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
@@ -31,24 +31,25 @@ export default async function AdminBlogPage() {
           const authorName = Array.isArray(authorValue) ? authorValue[0]?.name : authorValue?.name
 
           return (
-          <Card key={post.id}>
-            <CardContent className="p-6 flex items-center justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-lg">{post.title}</h3>
-                  <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>
-                    {post.status}
-                  </Badge>
+            <Card key={post.id}>
+              <CardContent className="p-6 flex items-center justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-lg">{post.title}</h3>
+                    <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>
+                      {post.status}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {authorName || 'Unknown Author'} • {formatDate(post.published_at || '')} •{' '}
+                    {post.view_count} vues
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  {authorName || 'Unknown Author'} • {formatDate(post.published_at || '')} • {post.view_count} vues
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <BlogPostActionsMenu postId={post.id} />
-              </div>
-            </CardContent>
-          </Card>
+                <div className="flex items-center gap-2">
+                  <BlogPostActionsMenu postId={post.id} />
+                </div>
+              </CardContent>
+            </Card>
           )
         })}
 

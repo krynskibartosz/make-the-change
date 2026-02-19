@@ -2,6 +2,7 @@
 
 import { cn } from '@make-the-change/core/shared/utils'
 import { Button } from '@make-the-change/core/ui'
+import type { LucideIcon } from 'lucide-react'
 import { AlertCircle, CheckCircle, Dot, Save, Upload } from 'lucide-react'
 import type { FC } from 'react'
 import type { SaveStatus } from '@/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save'
@@ -19,10 +20,10 @@ export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({
   errorMessage,
   pendingChanges = 0,
   onSaveNow,
-  className
+  className,
 }) => {
   type StatusConfigItem = {
-    icon: any
+    icon: LucideIcon | null
     color: string
     bgColor: string
     show: boolean
@@ -43,7 +44,10 @@ export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({
       color: 'text-client-amber-500',
       bgColor: 'bg-client-amber-50/80 dark:bg-client-amber-950/20',
       show: true,
-      message: pendingChanges > 0 ? `${pendingChanges} modification${pendingChanges > 1 ? 's' : ''}` : 'Modifications en attente',
+      message:
+        pendingChanges > 0
+          ? `${pendingChanges} modification${pendingChanges > 1 ? 's' : ''}`
+          : 'Modifications en attente',
     },
     saving: {
       icon: Upload,
@@ -82,7 +86,7 @@ export const SaveStatusIndicator: FC<SaveStatusIndicatorProps> = ({
         config.bgColor,
         config.color,
         status === 'saved' && 'animate-in fade-in slide-in-from-right-2',
-        className
+        className,
       )}
     >
       {Icon && <Icon className={cn('shrink-0 h-3.5 w-3.5', config.animate && 'animate-pulse')} />}

@@ -1,15 +1,39 @@
-import { Badge, Button, Card, CardContent, Progress } from '@make-the-change/core/ui'
-import { ArrowRight, Calendar, Flame, CheckCircle2, Sparkles, Trophy, Target, Zap } from 'lucide-react'
-import { SectionContainer } from '@/components/ui/section-container'
+import { Button, Card, CardContent } from '@make-the-change/core/ui'
+import {
+  ArrowRight,
+  Calendar,
+  CheckCircle2,
+  Flame,
+  Sparkles,
+  Target,
+  Trophy,
+  Zap,
+} from 'lucide-react'
 import { PageHero } from '@/components/ui/page-hero'
+import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { cn } from '@/lib/utils'
 
+type ChallengeProgressRow = {
+  progress?: number | null
+  target?: number | null
+  completed_at?: string | null
+  claimed_at?: string | null
+}
+
+type ChallengeRow = {
+  id: string
+  slug: string
+  type: string
+  reward_points: number
+  title: string
+  description: string
+  user_challenges?: ChallengeProgressRow[] | ChallengeProgressRow | null
+}
+
 export default async function ChallengesPage() {
   const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
 
   const { data: challenges, error } = await supabase
     .schema('gamification')
@@ -22,8 +46,10 @@ export default async function ChallengesPage() {
     console.error('Error fetching challenges:', error)
   }
 
-  const items = (challenges || []).map((c: any) => {
-    const progressEntry = Array.isArray(c.user_challenges) ? c.user_challenges[0] : null
+  const items = ((challenges || []) as ChallengeRow[]).map((c) => {
+    const progressEntry = Array.isArray(c.user_challenges)
+      ? c.user_challenges[0]
+      : (c.user_challenges ?? null)
     const progress = progressEntry?.progress ?? 0
     const target = progressEntry?.target ?? 100
     const percentage = Math.min((progress / target) * 100, 100)
@@ -37,8 +63,8 @@ export default async function ChallengesPage() {
         target,
         percentage,
         isCompleted,
-        isClaimed
-      }
+        isClaimed,
+      },
     }
   })
 
@@ -70,7 +96,9 @@ export default async function ChallengesPage() {
                 <Target className="h-10 w-10 text-muted-foreground/30" />
               </div>
               <p className="text-xl font-black tracking-tight">Aucune mission disponible</p>
-              <p className="text-muted-foreground font-medium">Revenez bientôt pour de nouveaux défis !</p>
+              <p className="text-muted-foreground font-medium">
+                Revenez bientôt pour de nouveaux défis !
+              </p>
             </div>
           </div>
         ) : (
@@ -80,13 +108,21 @@ export default async function ChallengesPage() {
                 <Card className="h-full border bg-background/60 shadow-xl backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl rounded-[2.5rem] overflow-hidden">
                   <CardContent className="space-y-6 p-8">
                     <div className="flex items-center justify-between">
-                      <div className={cn(
-                        "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                        c.type === 'daily' ? "bg-info/10 text-info border-info/20" :
-                          c.type === 'monthly' ? "bg-accent/10 text-accent border-accent/20" :
-                            "bg-primary/10 text-primary border-primary/20"
-                      )}>
-                        {c.type === 'daily' ? 'Quotidien' : c.type === 'monthly' ? 'Mensuel' : 'Saisonnier'}
+                      <div
+                        className={cn(
+                          'px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border',
+                          c.type === 'daily'
+                            ? 'bg-info/10 text-info border-info/20'
+                            : c.type === 'monthly'
+                              ? 'bg-accent/10 text-accent border-accent/20'
+                              : 'bg-primary/10 text-primary border-primary/20',
+                        )}
+                      >
+                        {c.type === 'daily'
+                          ? 'Quotidien'
+                          : c.type === 'monthly'
+                            ? 'Mensuel'
+                            : 'Saisonnier'}
                       </div>
                       <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-client-amber-500/10 text-client-amber-600 border border-client-amber-500/20 text-[10px] font-black uppercase tracking-tight">
                         <Sparkles className="h-3 w-3" />
@@ -103,15 +139,17 @@ export default async function ChallengesPage() {
                           </div>
                         )}
                       </h3>
-                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-2">{c.description}</p>
+                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-2">
+                        {c.description}
+                      </p>
                     </div>
 
                     <div className="space-y-3 pt-2">
                       <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
-                        <span className="text-muted-foreground">
-                          Progression
+                        <span className="text-muted-foreground">Progression</span>
+                        <span className="text-foreground">
+                          {c.userProgress.progress} / {c.userProgress.target}
                         </span>
-                        <span className="text-foreground">{c.userProgress.progress} / {c.userProgress.target}</span>
                       </div>
                       <div className="relative h-2 w-full rounded-full bg-muted overflow-hidden">
                         <div
@@ -133,7 +171,9 @@ export default async function ChallengesPage() {
                           Réclamer !
                         </div>
                       ) : c.userProgress.isClaimed ? (
-                        <div className="text-success font-black text-[10px] uppercase tracking-widest">Récupéré</div>
+                        <div className="text-success font-black text-[10px] uppercase tracking-widest">
+                          Récupéré
+                        </div>
                       ) : (
                         <div className="flex items-center gap-1.5 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
                           <Flame className="h-3.5 w-3.5 text-warning" />
@@ -159,11 +199,16 @@ export default async function ChallengesPage() {
               <div className="space-y-1">
                 <p className="text-xl font-black tracking-tight">Boostez votre Impact Score</p>
                 <p className="text-client-slate-400 font-medium max-w-md">
-                  Chaque challenge accompli vous propulse dans le classement global et débloque des avantages exclusifs en boutique.
+                  Chaque challenge accompli vous propulse dans le classement global et débloque des
+                  avantages exclusifs en boutique.
                 </p>
               </div>
             </div>
-            <Button asChild variant="outline" className="w-full md:w-auto h-14 px-8 rounded-2xl border-client-white/10 text-client-white hover:bg-client-white/5 font-black uppercase tracking-widest text-xs">
+            <Button
+              asChild
+              variant="outline"
+              className="w-full md:w-auto h-14 px-8 rounded-2xl border-client-white/10 text-client-white hover:bg-client-white/5 font-black uppercase tracking-widest text-xs"
+            >
               <Link href="/leaderboard">
                 Voir le classement <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

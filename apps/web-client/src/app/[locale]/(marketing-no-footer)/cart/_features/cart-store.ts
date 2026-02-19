@@ -51,7 +51,9 @@ export const normalizeCartItems = (items: CartItemSnapshot[]): CartItemSnapshot[
       snapshot: {
         ...parsed.data.snapshot,
         pricePoints: Math.max(0, Math.round(parsed.data.snapshot.pricePoints)),
-        priceEuros: parsed.data.snapshot.priceEuros ? Math.max(0, parsed.data.snapshot.priceEuros) : undefined,
+        priceEuros: parsed.data.snapshot.priceEuros
+          ? Math.max(0, parsed.data.snapshot.priceEuros)
+          : undefined,
       },
     })
   }

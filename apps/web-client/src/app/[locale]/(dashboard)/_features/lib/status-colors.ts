@@ -3,7 +3,13 @@
  * Eliminates duplication across order/investment pages
  */
 
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'completed' | 'cancelled'
+export type OrderStatus =
+  | 'pending'
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'completed'
+  | 'cancelled'
 export type InvestmentStatus = 'active' | 'completed' | 'pending'
 
 // Badge variants available in @make-the-change/core/ui

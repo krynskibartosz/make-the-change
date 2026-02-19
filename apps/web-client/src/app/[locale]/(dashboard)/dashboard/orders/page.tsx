@@ -1,12 +1,29 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { ArrowRight, Package, ShoppingBag } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
-import { Link } from '@/i18n/navigation'
 import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getOrderStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
+import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
+import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate, formatPoints, formatCurrency } from '@/lib/utils'
+import { formatDate, formatPoints } from '@/lib/utils'
+
+type OrderItem = {
+  quantity: number | null
+  product_snapshot: { priceEuros?: number } | null
+  product:
+    | {
+        id: string | null
+        name_default: string | null
+        slug: string | null
+      }
+    | Array<{
+        id: string | null
+        name_default: string | null
+        slug: string | null
+      }>
+    | null
+}
 
 export default async function OrdersPage() {
   const t = await getTranslations('orders')
@@ -57,7 +74,7 @@ export default async function OrdersPage() {
       {userOrders && userOrders.length > 0 ? (
         <div className="space-y-4">
           {userOrders.map((order) => {
-            const items = (order.items as unknown) as any[] || []
+            const items = Array.isArray(order.items) ? (order.items as OrderItem[]) : []
             const firstItem = items[0]
             // Supabase returns joined fields as arrays, extract first element
             const firstProduct = firstItem
@@ -66,10 +83,10 @@ export default async function OrdersPage() {
                 : firstItem.product
               : null
             const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0)
-            const totalEuros = (Array.isArray(items) ? items : []).reduce((sum: number, item: any) => {
+            const _totalEuros = items.reduce((sum: number, item) => {
               const snapshot = item?.product_snapshot as { priceEuros?: number } | null
               const priceEuros = snapshot?.priceEuros || 0
-              return sum + (priceEuros * (item?.quantity || 0))
+              return sum + priceEuros * (item?.quantity || 0)
             }, 0)
 
             return (

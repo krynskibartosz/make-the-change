@@ -110,7 +110,10 @@ export const ClientCatalogProjectCard: FC<ClientCatalogProjectCardProps> = ({
       <meta itemProp="description" content={project.description_default || ''} />
       <meta itemProp="image" content={imageUrl || ''} />
       {project.address_city && project.address_country_code && (
-        <meta itemProp="location" content={`${project.address_city}, ${project.address_country_code}`} />
+        <meta
+          itemProp="location"
+          content={`${project.address_city}, ${project.address_country_code}`}
+        />
       )}
     </div>
   )

@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from 'react'
+import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
+import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
+import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { MainContent } from '@/components/layout/main-content'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
-import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
-import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
-import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 import { getHeaderData } from '@/lib/get-header-data'
 
 export default async function LeaderboardLayout({ children }: PropsWithChildren) {

@@ -77,9 +77,12 @@ export function DiversityFactLoader() {
   }, [currentFact, isTyping])
 
   return (
-    <div aria-label="Le saviez-vous ?" className="flex justify-center pt-8">
+    <div role="status" aria-live="polite" className="flex justify-center pt-8">
       <div className="flex min-h-[52px] max-w-lg items-center gap-4 rounded-full border border-primary/10 bg-primary/5 px-6 py-3 shadow-sm backdrop-blur-sm">
-        <Lightbulb className="h-5 w-5 flex-shrink-0 animate-pulse text-primary" aria-hidden="true" />
+        <Lightbulb
+          className="h-5 w-5 flex-shrink-0 animate-pulse text-primary"
+          aria-hidden="true"
+        />
         <p className="text-sm font-medium leading-snug text-foreground/80">
           <span className="mr-2 font-bold text-primary">Le saviez-vous ?</span>
           {displayedText}

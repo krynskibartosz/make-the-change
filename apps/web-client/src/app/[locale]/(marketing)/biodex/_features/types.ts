@@ -11,8 +11,8 @@ export type Species = {
   threats: string[] | null
   image_url: string | null
   gallery_urls: string[] | null
-  content_levels: Record<string, any> | null
-  metadata: Record<string, any> | null
+  content_levels: Record<string, unknown> | null
+  metadata: Record<string, unknown> | null
 }
 
 export type ConservationStatus = NonNullable<Species['conservation_status']>

@@ -93,24 +93,27 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
       const ip = headersList.get('x-forwarded-for') || 'unknown'
       const userAgent = headersList.get('user-agent') || 'unknown'
 
-      await adminSupabase.schema('identity').from('user_consents').insert([
-        {
-          user_id: data.user.id,
-          consent_type: 'terms_of_use',
-          consent_version: '1.0',
-          granted: true,
-          ip,
-          user_agent: userAgent,
-        },
-        {
-          user_id: data.user.id,
-          consent_type: 'privacy_policy',
-          consent_version: '1.0',
-          granted: true,
-          ip,
-          user_agent: userAgent,
-        },
-      ])
+      await adminSupabase
+        .schema('identity')
+        .from('user_consents')
+        .insert([
+          {
+            user_id: data.user.id,
+            consent_type: 'terms_of_use',
+            consent_version: '1.0',
+            granted: true,
+            ip,
+            user_agent: userAgent,
+          },
+          {
+            user_id: data.user.id,
+            consent_type: 'privacy_policy',
+            consent_version: '1.0',
+            granted: true,
+            ip,
+            user_agent: userAgent,
+          },
+        ])
     } catch (e) {
       // Non-blocking error
       console.error('Failed to record consents', e)

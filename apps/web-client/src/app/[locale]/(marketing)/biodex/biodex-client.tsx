@@ -95,6 +95,10 @@ export function BiodexClient({ species }: BiodexClientProps) {
           <Select
             value={status}
             onValueChange={(value) => {
+              if (!value) {
+                return
+              }
+
               if (value === 'all' || isConservationStatus(value)) {
                 setStatus(value)
               }

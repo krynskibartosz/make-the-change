@@ -72,8 +72,6 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
               </div>
             ))}
           </div>
-
-        
         </div>
       </div>
 

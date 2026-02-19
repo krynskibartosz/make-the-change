@@ -25,7 +25,10 @@ import { useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 import { CartLineItem } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-line-item'
 import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
-import { useCart, useCartTotals } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
+import {
+  useCart,
+  useCartTotals,
+} from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { Link, useRouter } from '@/i18n/navigation'
 import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 
@@ -60,6 +63,20 @@ export default function CartPage() {
         ? t('cart_page.mobile_bar.remove_unavailable')
         : t('cart_page.mobile_bar.continue_to_address')
   const mobileCtaContext = !hydrated
+    ? tCommon('loading')
+    : itemsCount === 0
+      ? t('cart_page.mobile_bar.empty_state')
+      : hasOutOfStock
+        ? t('cart_page.mobile_bar.out_of_stock_state')
+        : t('cart_page.mobile_bar.next_step')
+  const desktopCtaLabel = !hydrated
+    ? tCommon('loading')
+    : itemsCount === 0
+      ? t('empty.cta')
+      : hasOutOfStock
+        ? t('cart_page.mobile_bar.remove_unavailable')
+        : t('cart_page.mobile_bar.continue_to_address')
+  const desktopCtaContext = !hydrated
     ? tCommon('loading')
     : itemsCount === 0
       ? t('cart_page.mobile_bar.empty_state')
@@ -118,7 +135,7 @@ export default function CartPage() {
     })
   }
 
-  const handleMobilePrimaryAction = () => {
+  const handlePrimaryAction = () => {
     if (!hydrated) return
     if (itemsCount === 0) {
       router.push('/products')
@@ -144,74 +161,91 @@ export default function CartPage() {
 
       <div className="container relative z-10 mx-auto px-4 pt-8 pb-40 md:pt-10 md:pb-12 lg:py-24">
         {/* Header Section */}
-        <div className="mb-8 md:mb-16">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleBack}
-            className="mb-6 hover:bg-primary/10 hover:text-primary transition-colors rounded-full"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('cart_page.continue_shopping')}
-          </Button>
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-bold text-primary backdrop-blur-md mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <Sparkles className="h-3 w-3" />
-                <span className="uppercase tracking-widest">{t('cart_page.badge')}</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-foreground animate-in fade-in slide-in-from-bottom-6 duration-700">
-                {t('cart_page.hero_title_prefix')}{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-client-teal-400">
-                  {t('cart_page.hero_title_highlight')}
-                </span>
-              </h1>
+        <div className="mb-8 md:mb-10">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleBack}
+                className="hover:bg-primary/10 hover:text-primary transition-colors rounded-full"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t('cart_page.continue_shopping')}
+              </Button>
+              <Badge
+                variant="secondary"
+                className="hidden md:inline-flex rounded-full border border-border/60 bg-background/80 text-muted-foreground"
+              >
+                {t('summary.items_label', { count: itemsCount })}
+              </Badge>
             </div>
 
             {itemsCount > 0 && (
               <Button
                 variant="outline"
                 onClick={handleClear}
-                className="hidden md:inline-flex text-muted-foreground hover:text-destructive hover:border-destructive/30 hover:bg-destructive/5 rounded-full transition-all animate-in fade-in slide-in-from-right-4 duration-700 delay-100"
+                className="hidden md:inline-flex text-muted-foreground hover:text-destructive hover:border-destructive/30 hover:bg-destructive/5 rounded-full transition-all"
               >
                 {t('cart_page.clear_cart')}
               </Button>
             )}
           </div>
 
-          <div className="mt-8 hidden md:grid gap-3 md:grid-cols-3">
-            {checkoutSteps.map((step) => {
-              const isCurrent = step.id === currentStep
-              return (
-                <div
-                  key={step.id}
-                  className={cn(
-                    'rounded-2xl border px-4 py-3 transition-all',
-                    isCurrent
-                      ? 'border-primary/50 bg-primary/10'
-                      : 'border-border/60 bg-background/60',
-                  )}
-                >
-                  <div className="flex items-start gap-3">
+          <div className="mt-4 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+            <div>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-bold text-primary backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <Sparkles className="h-3 w-3" />
+                <span className="uppercase tracking-widest">{t('cart_page.badge')}</span>
+              </div>
+              <h1 className="text-4xl sm:text-5xl xl:text-[4.25rem] font-black tracking-tight text-foreground animate-in fade-in slide-in-from-bottom-6 duration-700">
+                {t('cart_page.hero_title_prefix')}{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-client-teal-400">
+                  {t('cart_page.hero_title_highlight')}
+                </span>
+              </h1>
+              <p className="mt-2 hidden md:block text-sm font-medium text-muted-foreground">
+                {desktopCtaContext}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 hidden md:block sticky top-16 z-20">
+            <div className="rounded-2xl border border-border/60 bg-background/85 p-2 backdrop-blur-xl">
+              <div className="grid gap-2 md:grid-cols-3">
+                {checkoutSteps.map((step) => {
+                  const isCurrent = step.id === currentStep
+                  return (
                     <div
+                      key={step.id}
                       className={cn(
-                        'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black',
+                        'rounded-xl border px-3 py-2 transition-all',
                         isCurrent
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-muted-foreground',
+                          ? 'border-primary/50 bg-primary/10'
+                          : 'border-border/60 bg-background/60',
                       )}
                     >
-                      {step.id}
+                      <div className="flex items-start gap-2">
+                        <div
+                          className={cn(
+                            'inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-black',
+                            isCurrent
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-muted text-muted-foreground',
+                          )}
+                        >
+                          {step.id}
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-foreground">{step.label}</p>
+                          <p className="text-[11px] text-muted-foreground">{step.hint}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-foreground">{step.label}</p>
-                      <p className="text-xs text-muted-foreground">{step.hint}</p>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -312,29 +346,56 @@ export default function CartPage() {
                   </div>
                 )}
 
-                {items.map((item, index) => (
-                  <div
-                    key={item.productId}
-                    className="group relative transition-all duration-300 hover:-translate-y-1"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <CartLineItem
-                      item={item}
-                      onQuantityChange={(next) => setQuantity(item.productId, next)}
-                      onRemove={() => handleRemove(item.productId)}
-                      className="border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 rounded-[2rem] transition-all duration-300"
-                    />
-                  </div>
-                ))}
+                <div className="hidden md:grid grid-cols-[minmax(0,1fr)_176px_140px_44px] items-center rounded-xl border border-border/60 bg-background/70 px-6 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  <span>{t('cart_page.desktop_columns.product')}</span>
+                  <span className="text-center">{t('cart_page.desktop_columns.quantity')}</span>
+                  <span className="text-right">{t('cart_page.desktop_columns.total')}</span>
+                  <span />
+                </div>
+
+                <div className="space-y-4 md:hidden">
+                  {items.map((item, index) => (
+                    <div
+                      key={`mobile-item-${item.productId}`}
+                      className="group relative transition-all duration-300 hover:-translate-y-1"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <CartLineItem
+                        item={item}
+                        onQuantityChange={(next) => setQuantity(item.productId, next)}
+                        onRemove={() => handleRemove(item.productId)}
+                        className="border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 rounded-[2rem] transition-all duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="hidden space-y-4 md:block">
+                  {items.map((item, index) => (
+                    <div
+                      key={`desktop-item-${item.productId}`}
+                      className="group relative transition-all duration-300"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <CartLineItem
+                        item={item}
+                        layout="desktop"
+                        onQuantityChange={(next) => setQuantity(item.productId, next)}
+                        onRemove={() => handleRemove(item.productId)}
+                        className="rounded-[2rem] border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
 
           {/* Right Column: Summary (Sticky) */}
           <div className="hidden md:block lg:col-span-4">
-            <div className="sticky top-24 space-y-6 animate-in fade-in slide-in-from-right-8 duration-700 delay-300">
+            <div className="sticky top-24 space-y-4 animate-in fade-in slide-in-from-right-8 duration-700 delay-300 xl:max-w-[430px] xl:ml-auto">
               <Card className="border-border/50 bg-background/80 backdrop-blur-xl shadow-2xl shadow-primary/5 rounded-[2.5rem] overflow-hidden">
-                <CardHeader className="bg-muted/30 border-b border-border/50 pb-6">
+                <CardHeader className="bg-muted/30 border-b border-border/50 pb-5">
                   <div className="flex items-center justify-between gap-3">
                     <CardTitle className="text-xl font-black tracking-tight flex items-center gap-2">
                       <CreditCard className="h-5 w-5 text-primary" />
@@ -348,7 +409,14 @@ export default function CartPage() {
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="p-8 space-y-6">
+                <CardContent className="p-6 xl:p-7 space-y-5">
+                  <div className="rounded-2xl border border-border/60 bg-background/70 px-4 py-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      {t('summary.items_label', { count: itemsCount })}
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{desktopCtaContext}</p>
+                  </div>
+
                   <div className="space-y-4">
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground font-medium">
@@ -385,11 +453,13 @@ export default function CartPage() {
                   <Button
                     className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all bg-gradient-to-r from-primary to-client-teal-500 border-none"
                     size="lg"
-                    disabled={!canCheckout}
-                    onClick={handleProceedToCheckout}
+                    disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
+                    onClick={handlePrimaryAction}
                   >
-                    {t('cart_page.checkout')}
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    {desktopCtaLabel}
+                    {itemsCount > 0 && !hasOutOfStock ? (
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    ) : null}
                   </Button>
 
                   {!canCheckout && hasOutOfStock ? (
@@ -398,8 +468,12 @@ export default function CartPage() {
                     </p>
                   ) : null}
 
+                  <p className="text-xs text-muted-foreground font-medium">
+                    {t('footer.no_hidden_fees')} • {t('cart_page.free_shipping')}
+                  </p>
+
                   {/* Trust Badges */}
-                  <div className="grid grid-cols-2 gap-3 pt-4">
+                  <div className="grid grid-cols-2 gap-2 pt-2">
                     <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-muted/50 border border-border/50 text-center">
                       <ShieldCheck className="h-5 w-5 text-client-emerald-500 mb-2" />
                       <span className="text-[10px] font-bold uppercase text-muted-foreground">
@@ -417,7 +491,7 @@ export default function CartPage() {
               </Card>
 
               {/* Additional Info */}
-              <div className="rounded-3xl bg-client-blue-500/5 border border-client-blue-500/10 p-6 backdrop-blur-sm">
+              <div className="rounded-3xl bg-client-blue-500/5 border border-client-blue-500/10 p-5 backdrop-blur-sm">
                 <div className="flex items-start gap-4">
                   <div className="p-3 rounded-2xl bg-client-blue-500/10 text-client-blue-500">
                     <Truck className="h-5 w-5" />
@@ -454,7 +528,9 @@ export default function CartPage() {
                 ? t('cart_page.mobile_bar.hide_details')
                 : t('cart_page.mobile_bar.view_details')}
             </span>
-            <span className="font-bold text-foreground tabular-nums">{formatPoints(totalPoints)} pts</span>
+            <span className="font-bold text-foreground tabular-nums">
+              {formatPoints(totalPoints)} pts
+            </span>
           </button>
 
           {isMobileSummaryOpen ? (
@@ -468,7 +544,9 @@ export default function CartPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span>{t('cart_page.shipping')}</span>
-                  <span className="font-semibold text-client-emerald-500">{t('cart_page.free_shipping')}</span>
+                  <span className="font-semibold text-client-emerald-500">
+                    {t('cart_page.free_shipping')}
+                  </span>
                 </div>
               </div>
               <Separator className="my-3 bg-border/50" />
@@ -485,12 +563,18 @@ export default function CartPage() {
 
           <div className="mt-3 flex items-end justify-between gap-3">
             <div className="min-w-0">
-              <p className="truncate text-[11px] font-medium text-muted-foreground">{mobileCtaContext}</p>
+              <p className="truncate text-[11px] font-medium text-muted-foreground">
+                {mobileCtaContext}
+              </p>
               <p className="text-xl font-black leading-tight text-foreground tabular-nums">
-                {formatPoints(totalPoints)} <span className="text-sm font-semibold text-muted-foreground">pts</span>
+                {formatPoints(totalPoints)}{' '}
+                <span className="text-sm font-semibold text-muted-foreground">pts</span>
               </p>
             </div>
-            <Badge variant="secondary" className="shrink-0 rounded-full border border-primary/20 bg-primary/10 text-primary">
+            <Badge
+              variant="secondary"
+              className="shrink-0 rounded-full border border-primary/20 bg-primary/10 text-primary"
+            >
               {t('steps.step_indicator', { current: currentStep, total: checkoutSteps.length })}
             </Badge>
           </div>
@@ -499,7 +583,7 @@ export default function CartPage() {
             type="button"
             className="mt-3 h-12 w-full rounded-xl border-none bg-gradient-to-r from-primary to-client-teal-500 text-sm font-bold shadow-lg shadow-primary/20"
             disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
-            onClick={handleMobilePrimaryAction}
+            onClick={handlePrimaryAction}
           >
             {mobileCtaLabel}
             {itemsCount > 0 && !hasOutOfStock ? <ArrowRight className="ml-2 h-4 w-4" /> : null}

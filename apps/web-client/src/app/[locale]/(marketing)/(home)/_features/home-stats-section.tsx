@@ -76,4 +76,4 @@ export const HomeStatsSection = ({ title, stats, variant = 'default' }: HomeStat
       ))}
     </dl>
   </MarketingSection>
-);
+)

@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPublicProjectBySlug } from './project-detail-data'
 import { ProjectDetails } from './project-details'

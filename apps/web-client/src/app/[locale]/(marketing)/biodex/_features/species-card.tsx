@@ -39,6 +39,8 @@ export function SpeciesCard({ species }: SpeciesCardProps) {
   const name = getLocalizedContent(species.name_i18n, locale, tBiodex('default_species_name'))
   const statusConfig = getStatusConfig(species.conservation_status)
   const statusCode = resolveStatusCode(species.conservation_status)
+  const familyLabel =
+    typeof species.content_levels?.family === 'string' ? species.content_levels.family : null
 
   return (
     <Link href={`/biodex/${species.id}`} className="group block h-full">
@@ -74,7 +76,7 @@ export function SpeciesCard({ species }: SpeciesCardProps) {
           <div className="absolute bottom-6 left-6 right-6 space-y-2">
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-client-white/10 backdrop-blur-md border border-client-white/20 text-[9px] font-bold uppercase tracking-tight text-client-white/90">
               <ShieldAlert className="h-3 w-3" />
-              {species.content_levels?.family || tBiodex('protected_species_badge')}
+              {familyLabel || tBiodex('protected_species_badge')}
             </div>
             <h3 className="text-2xl font-black text-client-white tracking-tight leading-tight group-hover:text-primary transition-colors">
               {name}

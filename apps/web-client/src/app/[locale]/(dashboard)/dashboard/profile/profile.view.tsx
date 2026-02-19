@@ -9,20 +9,18 @@ import {
   CardTitle,
   Input,
 } from '@make-the-change/core/ui'
-import { Check, Shield, User, MapPin, Key } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
-import { ProfileFormValues, PasswordFormValues } from './schemas'
-import { SaveStatusIndicator } from '@/app/[locale]/(dashboard)/_features/save-status-indicator'
+import { Check, Key, MapPin, Shield, User } from 'lucide-react'
+import type { UseFormReturn } from 'react-hook-form'
 import type { AutoSaveReturn } from '@/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save'
+import { SaveStatusIndicator } from '@/app/[locale]/(dashboard)/_features/save-status-indicator'
+import type { PasswordFormValues, ProfileFormValues } from './schemas'
 
 interface ProfileViewProps {
   profileForm: UseFormReturn<ProfileFormValues>
   passwordForm: UseFormReturn<PasswordFormValues>
   onProfileSubmit: (data: ProfileFormValues) => void
   onPasswordSubmit: (data: PasswordFormValues) => void
-  isProfileSubmitting: boolean
   isPasswordSubmitting: boolean
-  profileStatus: { error?: string; success?: string }
   passwordStatus: { error?: string; success?: string }
   userEmail?: string
   autoSave: AutoSaveReturn
@@ -34,16 +32,20 @@ export function ProfileView({
   passwordForm,
   onProfileSubmit,
   onPasswordSubmit,
-  isProfileSubmitting,
   isPasswordSubmitting,
-  profileStatus,
   passwordStatus,
   userEmail,
   autoSave,
-  t
+  t,
 }: ProfileViewProps) {
-  const { register: registerProfile, formState: { errors: profileErrors } } = profileForm
-  const { register: registerPassword, formState: { errors: passwordErrors } } = passwordForm
+  const {
+    register: registerProfile,
+    formState: { errors: profileErrors },
+  } = profileForm
+  const {
+    register: registerPassword,
+    formState: { errors: passwordErrors },
+  } = passwordForm
 
   return (
     <div className="space-y-8">

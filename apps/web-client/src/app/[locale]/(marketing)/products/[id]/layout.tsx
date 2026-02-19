@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react'
-import { Header } from '@/components/layout/header'
-import { MainContent } from '@/components/layout/main-content'
 import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
 import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
 import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
+import { Header } from '@/components/layout/header'
+import { MainContent } from '@/components/layout/main-content'
 import { getHeaderData } from '@/lib/get-header-data'
 
 export default async function ProductDetailLayout({ children }: PropsWithChildren) {

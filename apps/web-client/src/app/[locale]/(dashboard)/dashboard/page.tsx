@@ -9,15 +9,43 @@ import {
 } from '@make-the-change/core/ui'
 import { Leaf, ShoppingBag, TrendingUp, Trophy, Wallet } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { ActivityTimeline } from '../_features/activity-timeline'
-import { DashboardWelcome } from '../_features/dashboard-welcome'
-import { StatCard } from '../_features/stat-card'
-import { BadgesSection } from '../_features/badges-section'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
 import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatPoints } from '@/lib/utils'
+import { ActivityTimeline } from '../_features/activity-timeline'
+import { BadgesSection } from '../_features/badges-section'
+import { DashboardWelcome } from '../_features/dashboard-welcome'
+import { StatCard } from '../_features/stat-card'
+
+type ClaimedChallenge = {
+  claimed_at: string | null
+  challenges:
+    | {
+        title: string | null
+        reward_badge: string | null
+      }
+    | Array<{
+        title: string | null
+        reward_badge: string | null
+      }>
+    | null
+}
+
+type RecentInvestment = {
+  id: string
+  created_at: string | null
+  amount_eur_equivalent: number | string | null
+  project:
+    | {
+        name_default: string | null
+      }
+    | Array<{
+        name_default: string | null
+      }>
+    | null
+}
 
 export default async function DashboardPage() {
   const t = await getTranslations('dashboard')
@@ -33,11 +61,7 @@ export default async function DashboardPage() {
   }
 
   // Fetch user profile from Supabase to get all fields correctly (points_balance, kyc_status, user_level)
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
   // Fetch claimed badges from gamification schema
   const { data: claimedChallenges } = await supabase
@@ -61,7 +85,10 @@ export default async function DashboardPage() {
   const investmentsList = allInvestments || []
 
   // Calculate stats in JS (PostgREST limitation for simple queries, acceptable for per-user data)
-  const totalInvested = investmentsList.reduce((sum, inv) => sum + (Number(inv.amount_eur_equivalent) || 0), 0)
+  const totalInvested = investmentsList.reduce(
+    (sum, inv) => sum + (Number(inv.amount_eur_equivalent) || 0),
+    0,
+  )
   const projectsSupported = investmentsList.length
 
   // Get recent 3 for timeline
@@ -87,13 +114,17 @@ export default async function DashboardPage() {
     points: pointsBalance,
     projects: projectsSupported,
     invested: totalInvested,
-  }).map(name => ({ name, iconType: 'medal' as const }))
+  }).map((name) => ({ name, iconType: 'medal' as const }))
 
-  const challengeBadges = (claimedChallenges || []).map((uc: any) => ({
-    name: uc.challenges?.reward_badge || uc.challenges?.title || 'Challenge Réussi',
-    date: uc.claimed_at ? new Date(uc.claimed_at).toLocaleDateString('fr-FR') : undefined,
-    iconType: 'trophy' as const
-  }))
+  const challengeBadges = ((claimedChallenges || []) as ClaimedChallenge[]).map((uc) => {
+    const challenge = Array.isArray(uc.challenges) ? uc.challenges[0] : uc.challenges
+
+    return {
+      name: challenge?.reward_badge || challenge?.title || 'Challenge Réussi',
+      date: uc.claimed_at ? new Date(uc.claimed_at).toLocaleDateString('fr-FR') : undefined,
+      iconType: 'trophy' as const,
+    }
+  })
 
   const allBadges = [...milestoneBadges, ...challengeBadges]
 
@@ -104,7 +135,7 @@ export default async function DashboardPage() {
   ]
 
   const activityItems =
-    recentInvestments?.map((investment: any) => {
+    (recentInvestments as RecentInvestment[] | undefined)?.map((investment) => {
       // Handle Supabase join which might return array or object
       const project = Array.isArray(investment.project) ? investment.project[0] : investment.project
 
@@ -114,7 +145,9 @@ export default async function DashboardPage() {
         title: project?.name_default || 'Projet',
         subtitle: new Date(investment.created_at ?? new Date()).toLocaleDateString('fr-FR'),
         value: (
-          <Badge variant="success">+{formatCurrency(Number(investment.amount_eur_equivalent))}</Badge>
+          <Badge variant="success">
+            +{formatCurrency(Number(investment.amount_eur_equivalent))}
+          </Badge>
         ),
       }
     }) || []
@@ -165,7 +198,10 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <BadgesSection className="lg:col-span-12 border bg-background/70 shadow-sm backdrop-blur" badges={allBadges} />
+        <BadgesSection
+          className="lg:col-span-12 border bg-background/70 shadow-sm backdrop-blur"
+          badges={allBadges}
+        />
 
         <div className="lg:col-span-12 flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible xl:grid-cols-4">
           <StatCard

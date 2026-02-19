@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage, Badge, Card, CardContent } from '@make-the-change/core/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, CardContent } from '@make-the-change/core/ui'
 import { Crown, Medal, Trophy } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn, formatPoints } from '@/lib/utils'
@@ -81,7 +81,10 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
 
   return (
     <div className="flex h-[calc(100svh-4rem-6rem)] flex-col md:h-[calc(100svh-4rem)]">
-      <div className="relative flex-1 overflow-hidden bg-background/70 shadow-sm backdrop-blur" style={{ paddingBottom: '0px' }}>
+      <div
+        className="relative flex-1 overflow-hidden bg-background/70 shadow-sm backdrop-blur"
+        style={{ paddingBottom: '0px' }}
+      >
         <div className="pointer-events-none absolute -top-28 right-[-160px] h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 left-[-160px] h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--client-white)/0.10),_transparent_55%)]" />
@@ -103,10 +106,18 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
           </div>
 
           {/* Podium 3D */}
-          <div className="px-4 pt-4 bg-gradient-to-b from-muted/20 to-transparent" style={{ paddingBottom: '0px', marginBottom: '0px' }}>
-            <div className="relative" style={{ perspective: '1000px', perspectiveOrigin: '50% 50%', marginBottom: '0px' }}>
-              <div className="relative flex justify-center items-end gap-2 sm:gap-4" style={{ transformStyle: 'preserve-3d', marginBottom: '0px', paddingBottom: '0px' }}>
-                
+          <div
+            className="px-4 pt-4 bg-gradient-to-b from-muted/20 to-transparent"
+            style={{ paddingBottom: '0px', marginBottom: '0px' }}
+          >
+            <div
+              className="relative"
+              style={{ perspective: '1000px', perspectiveOrigin: '50% 50%', marginBottom: '0px' }}
+            >
+              <div
+                className="relative flex justify-center items-end gap-2 sm:gap-4"
+                style={{ transformStyle: 'preserve-3d', marginBottom: '0px', paddingBottom: '0px' }}
+              >
                 {podiumSlots.map((leader) => {
                   if (!leader) return null
                   const meta = podiumMeta[leader.rank as 1 | 2 | 3]
@@ -114,10 +125,7 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                   const isFirst = leader.rank === 1
 
                   return (
-                    <div
-                      key={leader.id}
-                      className="relative flex flex-col items-center flex-1"
-                    >
+                    <div key={leader.id} className="relative flex flex-col items-center flex-1">
                       {/* Avatar et infos au-dessus du bloc */}
                       <div className="relative z-20 mb-2 flex flex-col items-center">
                         <div className="relative">
@@ -133,10 +141,12 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                               </AvatarFallback>
                             </Avatar>
                             {/* Badge de rang */}
-                            <div className={cn(
-                              'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-client-white',
-                              meta.bg
-                            )}>
+                            <div
+                              className={cn(
+                                'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-client-white',
+                                meta.bg,
+                              )}
+                            >
                               <Icon className="h-3 w-3 text-client-white" />
                             </div>
                           </div>
@@ -148,12 +158,12 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                       </div>
 
                       {/* Bloc de podium 3D */}
-                      <div 
+                      <div
                         className="relative w-full"
                         style={{
                           transform: 'rotateX(-20deg) translateZ(0)',
                           transformStyle: 'preserve-3d',
-                          marginBottom: '0px'
+                          marginBottom: '0px',
                         }}
                       >
                         {/* Face avant du bloc */}
@@ -163,23 +173,23 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                             isFirst ? 'h-32' : leader.rank === 2 ? 'h-28' : 'h-24',
                             'w-20 sm:w-24 flex items-center justify-center',
                             'bg-gradient-to-b',
-                            meta.gradient
+                            meta.gradient,
                           )}
                         >
                           {/* Numéro de rang sur le bloc */}
                           <span className="text-3xl sm:text-4xl font-bold text-client-white/60">
                             {leader.rank}
                           </span>
-                          
+
                           {/* Effet de brillance */}
                           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-client-white/10 to-transparent rounded-t-lg" />
                         </div>
-                        
+
                         {/* Ombre portée */}
-                        <div 
-                          className="absolute bottom-0 left-1 right-1 bg-client-black/15 rounded-full blur-sm" 
+                        <div
+                          className="absolute bottom-0 left-1 right-1 bg-client-black/15 rounded-full blur-sm"
                           style={{
-                            height: isFirst ? '12px' : leader.rank === 2 ? '10px' : '8px'
+                            height: isFirst ? '12px' : leader.rank === 2 ? '10px' : '8px',
                           }}
                         />
                       </div>
@@ -192,9 +202,9 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
 
           {/* List (internal scroll) */}
           <div className="flex-1 min-h-0 ">
-            <div className="h-full overflow-y-auto divide-y divide-border/70 border-t -translate-y-1 z-20" >
+            <div className="h-full overflow-y-auto divide-y divide-border/70 border-t -translate-y-1 z-20">
               {currentUserRank ? (
-                <div className="sticky top-0 z-10 border-b bg-background/55 px-4 py-3 backdrop-blur" >
+                <div className="sticky top-0 z-10 border-b bg-background/55 px-4 py-3 backdrop-blur">
                   <div className="flex items-center justify-between gap-3 rounded-full border bg-gradient-to-r from-primary/10 via-transparent to-accent/10 px-4 py-2">
                     <span className="text-xs font-semibold text-muted-foreground">Votre rang</span>
                     <span className="inline-flex items-baseline gap-2 tabular-nums">

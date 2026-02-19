@@ -426,6 +426,11 @@
         "remove_unavailable": "Niet-beschikbaar artikel verwijderen",
         "view_details": "Besteldetails tonen",
         "hide_details": "Besteldetails verbergen"
+      },
+      "desktop_columns": {
+        "product": "Product",
+        "quantity": "Aantal",
+        "total": "Totaal"
       }
     }
   },

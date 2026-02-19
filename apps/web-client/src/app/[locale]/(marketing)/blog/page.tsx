@@ -1,9 +1,9 @@
 import { getTranslations } from 'next-intl/server'
+import { getBlogPosts } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
+import { BlogCard } from '@/app/[locale]/(marketing)/blog/_features/components/blog-card'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
-import { getBlogPosts } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
-import { BlogCard } from '@/app/[locale]/(marketing)/blog/_features/components/blog-card'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 

@@ -22,7 +22,10 @@ import {
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Save, Trash } from 'lucide-react'
 import { useState, useTransition } from 'react'
-import { deleteBlogPost, updateBlogPost } from '@/app/[locale]/(marketing)/blog/_features/actions/blog-actions'
+import {
+  deleteBlogPost,
+  updateBlogPost,
+} from '@/app/[locale]/(marketing)/blog/_features/actions/blog-actions'
 import { EditorComponent } from '@/app/[locale]/admin/cms/_features/components/editor/editor-component'
 import { useToast } from '@/components/ui/use-toast'
 import { Link, useRouter } from '@/i18n/navigation'
@@ -103,10 +106,11 @@ export function BlogEditor({ post }: BlogEditorProps) {
           <h1 className="text-2xl font-bold truncate max-w-md">{data.title || 'Sans titre'}</h1>
           <div className="flex items-center gap-2">
             <span
-              className={`px-2 py-1 rounded-full text-xs font-medium ${data.status === 'published'
+              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                data.status === 'published'
                   ? 'bg-client-green-100 text-client-green-700'
                   : 'bg-client-yellow-100 text-client-yellow-700'
-                }`}
+              }`}
             >
               {data.status}
             </span>

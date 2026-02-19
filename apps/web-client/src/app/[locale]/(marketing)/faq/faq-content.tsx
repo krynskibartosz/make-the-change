@@ -52,23 +52,20 @@ export function FaqContent() {
 
   return (
     <div className="min-h-screen bg-marketing-neutral-50 font-sans text-marketing-neutral-900 transition-colors duration-300 selection:bg-marketing-positive-500/30 dark:bg-marketing-surface-strong dark:text-marketing-overlay-light">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: filteredFaqs.map((faq) => ({
-              '@type': 'Question',
-              name: faq.q,
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: faq.a,
-              },
-            })),
-          }),
-        }}
-      />
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: filteredFaqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.q,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.a,
+            },
+          })),
+        })}
+      </script>
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute left-0 top-0 h-[500px] w-full bg-gradient-to-b from-marketing-positive-500/5 to-transparent dark:from-marketing-positive-900/10" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-10" />

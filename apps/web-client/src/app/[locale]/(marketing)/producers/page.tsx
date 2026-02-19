@@ -7,6 +7,17 @@ import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { createClient } from '@/lib/supabase/server'
 
+type ProducerRow = {
+  id: string
+  slug: string | null
+  name_default: string | null
+  images: unknown
+  address_city: string | null
+  address_country_code: string | null
+  type: string | null
+  description_default: string | null
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'producers' })
@@ -21,10 +32,8 @@ export default async function ProducersPage() {
   const supabase = await createClient()
   const t = await getTranslations('producers')
 
-  const { data: producers } = await supabase
-    .from('public_producers' as any)
-    .select('*')
-    .order('name_default') as any
+  const { data } = await supabase.from('public_producers').select('*').order('name_default')
+  const producers = (data ?? []) as ProducerRow[]
 
   return (
     <>
@@ -36,11 +45,11 @@ export default async function ProducersPage() {
       />
       <SectionContainer size="lg" className="pt-0 pb-20">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {producers?.map((producer: any) => {
+          {producers.map((producer) => {
             const hasValidSlug =
               typeof producer.slug === 'string' && producer.slug.trim().length > 0
             const images = Array.isArray(producer.images)
-              ? producer.images.filter((image: any): image is string => typeof image === 'string')
+              ? producer.images.filter((image): image is string => typeof image === 'string')
               : []
 
             const content = (
@@ -98,7 +107,7 @@ export default async function ProducersPage() {
           })}
         </div>
 
-        {(!producers || producers.length === 0) && (
+        {producers.length === 0 && (
           <div className="py-20 text-center">
             <Tractor className="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
             <h3 className="mt-4 text-lg font-semibold">{t('no_producers')}</h3>

@@ -39,7 +39,7 @@ export const ImageUploader = forwardRef<HTMLDivElement, ImageUploaderProps>(
     ref,
   ) => {
     // Basic translations fallback if not available
-    const t = useTranslations('profile') || ((key: string) => key)
+    const _t = useTranslations('profile') || ((key: string) => key)
 
     const defaultAddLabel = size === 'cover' ? 'Ajouter une couverture' : 'Ajouter'
     const defaultEditLabel = size === 'cover' ? 'Modifier' : 'Modifier'

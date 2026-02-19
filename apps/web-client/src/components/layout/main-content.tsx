@@ -14,5 +14,9 @@ export function MainContent({ children, className }: PropsWithChildren<{ classNa
   const hideBottomNav =
     hiddenRoutes.some((route) => pathname.startsWith(route)) || isProjectDetail || isProductDetail
 
-  return <main className={cn(hideBottomNav ? 'flex-1' : 'flex-1 pb-24 md:pb-0', className)}>{children}</main>
+  return (
+    <main className={cn(hideBottomNav ? 'flex-1' : 'flex-1 pb-24 md:pb-0', className)}>
+      {children}
+    </main>
+  )
 }

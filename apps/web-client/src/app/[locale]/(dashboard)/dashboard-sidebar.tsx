@@ -1,10 +1,9 @@
 'use client'
 
 import type { Messages } from '@make-the-change/core/i18n'
-import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Card, CardContent, CardHeader } from '@make-the-change/core/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, Button } from '@make-the-change/core/ui'
 import {
   ArrowUpRight,
-  Bell,
   Coins,
   CreditCard,
   Home,
@@ -98,8 +97,12 @@ const SidebarNavLink: FC<SidebarNavLinkProps> = ({
     <span
       className={cn(
         'flex h-8 w-8 items-center justify-center rounded-lg bg-muted/30 text-muted-foreground transition-colors',
-        active ? 'bg-primary/10 text-primary' : 'group-hover:bg-muted/50 group-hover:text-foreground',
-        tone === 'danger' && !active && 'group-hover:bg-destructive/15 group-hover:text-destructive',
+        active
+          ? 'bg-primary/10 text-primary'
+          : 'group-hover:bg-muted/50 group-hover:text-foreground',
+        tone === 'danger' &&
+          !active &&
+          'group-hover:bg-destructive/15 group-hover:text-destructive',
       )}
     >
       <Icon className="h-4 w-4" />
@@ -237,7 +240,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
           </div>
         </div>
       </div>
-      
+
       <div className="flex-1 overflow-y-auto p-3">
         <div className="space-y-4">
           <div>

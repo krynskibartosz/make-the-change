@@ -2,28 +2,16 @@
 
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { motion } from 'framer-motion'
-import {
-  ArrowRight,
-  Check,
-  CreditCard,
-  Crown,
-  Leaf,
-  MousePointer2,
-  Search,
-  Shield,
-  Sparkles,
-  TrendingUp,
-} from 'lucide-react'
+import { Check, Crown, Leaf, Shield } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { PageHero } from '@/components/ui/page-hero'
 import { Link } from '@/i18n/navigation'
-import { placeholderImages } from '@/lib/placeholder-images'
 
 export default function HowItWorksPage() {
   const t = useTranslations('how_it_works')
 
-  const containerVariants = {
+  const _containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -33,26 +21,19 @@ export default function HowItWorksPage() {
     },
   }
 
-  const itemVariants = {
+  const _itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   }
 
   return (
     <>
-      <PageHero
-
-        title={t('title')}
-        description={t('subtitle')}
-        size="lg"
-        variant="gradient"
-      >
+      <PageHero title={t('title')} description={t('subtitle')} size="lg" variant="gradient">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-20">
           <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-primary/30 blur-[120px] animate-pulse" />
           <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[30%] rounded-full bg-marketing-positive-500/20 blur-[100px]" />
         </div>
       </PageHero>
-
 
       <MarketingSection
         title={t('tiers.title')}
@@ -214,8 +195,6 @@ export default function HowItWorksPage() {
           </motion.div>
         </div>
       </MarketingSection>
-
-
     </>
   )
 }

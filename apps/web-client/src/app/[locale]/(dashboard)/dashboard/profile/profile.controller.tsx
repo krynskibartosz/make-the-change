@@ -1,18 +1,18 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslations } from 'next-intl'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useOptimisticAutoSave } from '@/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save'
+import { updatePassword, updateProfile } from './actions'
 import { ProfileView } from './profile.view'
 import {
-  profileSchema,
-  passwordSchema,
+  type PasswordFormValues,
   type ProfileFormValues,
-  type PasswordFormValues
+  passwordSchema,
+  profileSchema,
 } from './schemas'
-import { updateProfile, updatePassword } from './actions'
 
 interface Profile {
   id: string
@@ -33,7 +33,6 @@ interface ProfileControllerProps {
 
 export function ProfileController({ profile, userEmail }: ProfileControllerProps) {
   const t = useTranslations('profile')
-  const [profileStatus, setProfileStatus] = useState<{ error?: string; success?: string }>({})
   const [passwordStatus, setPasswordStatus] = useState<{ error?: string; success?: string }>({})
 
   const profileForm = useForm<ProfileFormValues>({
@@ -48,7 +47,7 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
       postalCode: profile?.address_postal_code || '',
       country: profile?.address_country_code || '',
       bio: profile?.bio || '',
-    }
+    },
   })
 
   const autoSave = useOptimisticAutoSave({
@@ -67,10 +66,9 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
       }
     })
     return () => subscription.unsubscribe()
-  }, [profileForm.watch, profileForm.formState.isDirty, autoSave.markDirty])
+  }, [profileForm.watch, profileForm.formState.isDirty, autoSave.markDirty, profileForm, autoSave])
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
-    setProfileStatus({})
     await autoSave.saveNow()
     profileForm.reset(data)
   }
@@ -89,8 +87,8 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
     resolver: zodResolver(passwordSchema),
     defaultValues: {
       newPassword: '',
-      confirmPassword: ''
-    }
+      confirmPassword: '',
+    },
   })
 
   return (
@@ -99,9 +97,7 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
       passwordForm={passwordForm}
       onProfileSubmit={onProfileSubmit}
       onPasswordSubmit={onPasswordSubmit}
-      isProfileSubmitting={profileForm.formState.isSubmitting || autoSave.status === 'saving'}
       isPasswordSubmitting={passwordForm.formState.isSubmitting}
-      profileStatus={profileStatus}
       passwordStatus={passwordStatus}
       userEmail={userEmail}
       autoSave={autoSave}

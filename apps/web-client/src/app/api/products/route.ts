@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     const supabase = await createClient()
 
     let query = supabase
-      .from('public_products' as any)
+      .from('public_products')
       .select('*')
       .order('featured', { ascending: false })
       .order('created_at', { ascending: false })

@@ -3,7 +3,6 @@
 import { Button } from '@make-the-change/core/ui'
 import { Clock, ShoppingCart } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { QuantityStepper } from '@/components/ui/quantity-stepper'
 import { formatCurrency } from '@/lib/utils'
@@ -47,7 +46,6 @@ function useProductAddToCart({
 }: ProductCartPayload) {
   const t = useTranslations('products')
   const { addItem, items, removeItem, setQuantity } = useCart()
-  const { openCart, showSnackbar } = useCartUI()
 
   const cartItem = items.find((item) => item.productId === productId)
   const quantity = cartItem?.quantity || 0
@@ -91,8 +89,7 @@ export function ProductDetailAddToCartButton({
   className,
   ...payload
 }: ProductDetailAddToCartButtonProps) {
-  const { addToCart, handleIncrement, handleDecrement, quantity, t } =
-    useProductAddToCart(payload)
+  const { addToCart, handleIncrement, handleDecrement, quantity, t } = useProductAddToCart(payload)
 
   if (quantity > 0) {
     return (
@@ -124,8 +121,7 @@ export function ProductDetailAddToCartButton({
 }
 
 export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActionButtonsProps) {
-  const { addToCart, handleIncrement, handleDecrement, quantity, t } =
-    useProductAddToCart(payload)
+  const { addToCart, handleIncrement, handleDecrement, quantity, t } = useProductAddToCart(payload)
 
   if (quantity > 0) {
     return (

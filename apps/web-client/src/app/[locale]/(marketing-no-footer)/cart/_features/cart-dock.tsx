@@ -2,7 +2,7 @@
 
 import { ShoppingCart } from 'lucide-react'
 import { usePathname } from '@/i18n/navigation'
-import { cn, formatPoints, formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 import { useCartUI } from './cart-ui-provider'
 import { useCartTotals } from './use-cart'
 

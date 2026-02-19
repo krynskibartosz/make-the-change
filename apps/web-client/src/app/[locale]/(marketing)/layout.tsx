@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from 'react'
+import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
+import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
+import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { MainContent } from '@/components/layout/main-content'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
-import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
-import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
-import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 import { getHeaderData } from '@/lib/get-header-data'
 
 export default async function MarketingLayout({ children }: PropsWithChildren) {
@@ -23,12 +23,12 @@ export default async function MarketingLayout({ children }: PropsWithChildren) {
       contactType: 'customer service',
       email: 'contact@make-the-change.com',
       areaServed: ['BE', 'FR', 'NL'],
-      availableLanguage: ['English', 'French', 'Dutch']
+      availableLanguage: ['English', 'French', 'Dutch'],
     },
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Brussels',
-      addressCountry: 'BE'
+      addressCountry: 'BE',
       // Note: Full address pending from business owner
     },
     location: {
@@ -38,31 +38,28 @@ export default async function MarketingLayout({ children }: PropsWithChildren) {
         '@type': 'PostalAddress',
         streetAddress: '123 Avenue de France (Example)', // Placeholder or remove if strictly unknown
         addressLocality: 'Paris',
-        addressCountry: 'FR'
+        addressCountry: 'FR',
       },
       geo: {
         '@type': 'GeoCoordinates',
         latitude: 48.8566,
-        longitude: 2.3522
-      }
+        longitude: 2.3522,
+      },
     },
     sameAs: [
       'https://x.com/makethechange',
       'https://www.linkedin.com/company/makethechange',
       'https://www.instagram.com/mtc_impact',
       'https://facebook.com/makethechange',
-      'https://tiktok.com/@makethechange'
-    ]
+      'https://tiktok.com/@makethechange',
+    ],
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <Header user={user} menuData={menuData} />
       <MainContent>{children}</MainContent>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       <CartSheet />
       <CartSnackbar />
       <CartDock />

@@ -1,5 +1,13 @@
 import { Badge } from '@make-the-change/core/ui'
-import { ArrowRight, Facebook, Instagram, Linkedin, Music, Users, type LucideIcon } from 'lucide-react'
+import {
+  ArrowRight,
+  Facebook,
+  Instagram,
+  Linkedin,
+  type LucideIcon,
+  Music,
+  Users,
+} from 'lucide-react'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { Link } from '@/i18n/navigation'
 import { placeholderImages } from '@/lib/placeholder-images'
@@ -92,7 +100,9 @@ export const HomeUniverseSection = ({
             />
             <div className="absolute bottom-0 left-0 space-y-2 p-8">
               <h3 className="text-2xl font-black text-marketing-overlay-light">{products.title}</h3>
-              <p className="text-sm font-medium text-marketing-overlay-light/70">{products.description}</p>
+              <p className="text-sm font-medium text-marketing-overlay-light/70">
+                {products.description}
+              </p>
             </div>
           </Link>
         </article>
@@ -140,4 +150,4 @@ export const HomeUniverseSection = ({
       </div>
     </div>
   </MarketingSection>
-);
+)

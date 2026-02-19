@@ -29,7 +29,10 @@ const defaultProjectImages = [
   'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
 ]
 
-export function MarketingStepsSection({ placeholderImages, variant = 'default' }: MarketingStepsSectionProps) {
+export function MarketingStepsSection({
+  placeholderImages,
+  variant = 'default',
+}: MarketingStepsSectionProps) {
   const t = useTranslations('home')
 
   const projectImages =
@@ -129,7 +132,10 @@ export function MarketingStepsSection({ placeholderImages, variant = 'default' }
             </p>
             <ul className="m-0 list-none space-y-3 p-0 pt-2">
               {investFeatures.map((feature, index) => (
-                <li key={`${feature}-${index}`} className="flex items-center gap-2 text-sm font-bold opacity-80">
+                <li
+                  key={`${feature}-${index}`}
+                  className="flex items-center gap-2 text-sm font-bold opacity-80"
+                >
                   <span
                     className="flex h-5 w-5 items-center justify-center rounded-full bg-marketing-positive-500/10"
                     aria-hidden="true"
@@ -204,7 +210,9 @@ export function MarketingStepsSection({ placeholderImages, variant = 'default' }
                   className="flex flex-col-reverse gap-1 rounded-xl border bg-muted/50 p-4 text-center"
                 >
                   <dt className="m-0 text-xs font-bold uppercase opacity-60">{metric.label}</dt>
-                  <dd className={`m-0 text-2xl font-black ${metric.valueClassName}`}>{metric.value}</dd>
+                  <dd className={`m-0 text-2xl font-black ${metric.valueClassName}`}>
+                    {metric.value}
+                  </dd>
                 </div>
               ))}
             </dl>

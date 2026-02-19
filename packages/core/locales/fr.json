@@ -1109,6 +1109,11 @@
         "remove_unavailable": "Retirer l'article indisponible",
         "view_details": "Voir le détail de la commande",
         "hide_details": "Masquer le détail de la commande"
+      },
+      "desktop_columns": {
+        "product": "Produit",
+        "quantity": "Quantité",
+        "total": "Total"
       }
     }
   },

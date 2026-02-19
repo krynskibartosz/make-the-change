@@ -39,35 +39,38 @@ export const ImageUpload: FC<ImageUploadProps> = ({
   const [dragActive, setDragActive] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const uploadFiles = async (files: File[]) => {
-    try {
-      const formData = new FormData()
-      formData.set('bucket', bucket)
-      formData.set('entityId', entityId)
-      if (folder) formData.set('folder', folder)
-      for (const file of files) {
-        formData.append('files', file)
+  const uploadFiles = useCallback(
+    async (files: File[]) => {
+      try {
+        const formData = new FormData()
+        formData.set('bucket', bucket)
+        formData.set('entityId', entityId)
+        if (folder) formData.set('folder', folder)
+        for (const file of files) {
+          formData.append('files', file)
+        }
+
+        const result = await uploadImages(formData)
+        const successfulUploads = result.success && result.urls ? result.urls : []
+
+        if (successfulUploads.length > 0) {
+          onImagesChange([...currentImages, ...successfulUploads])
+        }
+
+        // Nettoyer les fichiers en cours d'upload
+        setUploadingFiles((prev) => prev.filter((uploading) => !files.includes(uploading.file)))
+
+        // Gérer les erreurs
+        if (!result.success) {
+          console.error('Upload errors:', result.error)
+        }
+      } catch (error) {
+        console.error('Upload failed:', error)
+        setUploadingFiles((prev) => prev.filter((uploading) => !files.includes(uploading.file)))
       }
-
-      const result = await uploadImages(formData)
-      const successfulUploads = result.success && result.urls ? result.urls : []
-
-      if (successfulUploads.length > 0) {
-        onImagesChange([...currentImages, ...successfulUploads])
-      }
-
-      // Nettoyer les fichiers en cours d'upload
-      setUploadingFiles((prev) => prev.filter((uploading) => !files.includes(uploading.file)))
-
-      // Gérer les erreurs
-      if (!result.success) {
-        console.error('Upload errors:', result.error)
-      }
-    } catch (error) {
-      console.error('Upload failed:', error)
-      setUploadingFiles((prev) => prev.filter((uploading) => !files.includes(uploading.file)))
-    }
-  }
+    },
+    [bucket, entityId, folder, onImagesChange, currentImages],
+  )
 
   const handleFileSelect = useCallback(
     (files: File[]) => {

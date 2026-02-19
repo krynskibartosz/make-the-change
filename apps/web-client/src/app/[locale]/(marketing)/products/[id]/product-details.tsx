@@ -1,5 +1,4 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import Image from 'next/image'
 import {
   ArrowLeft,
   Award,
@@ -13,6 +12,7 @@ import {
   Sparkles,
   Star,
 } from 'lucide-react'
+import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing-cta-band'
 import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
@@ -45,8 +45,8 @@ export async function ProductDetails({
       : undefined)
   const producerImage =
     product.producer?.images &&
-      Array.isArray(product.producer.images) &&
-      product.producer.images.length > 0
+    Array.isArray(product.producer.images) &&
+    product.producer.images.length > 0
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
@@ -95,11 +95,12 @@ export async function ProductDetails({
             <h1
               className={`
                 font-black tracking-tighter mb-8 text-foreground animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 drop-shadow-sm
-                ${productName.length > 40
-                  ? 'text-4xl sm:text-5xl lg:text-6xl'
-                  : productName.length > 25
-                    ? 'text-5xl sm:text-6xl lg:text-7xl'
-                    : 'text-6xl sm:text-7xl lg:text-8xl'
+                ${
+                  productName.length > 40
+                    ? 'text-4xl sm:text-5xl lg:text-6xl'
+                    : productName.length > 25
+                      ? 'text-5xl sm:text-6xl lg:text-7xl'
+                      : 'text-6xl sm:text-7xl lg:text-8xl'
                 }
               `}
               style={{ viewTransitionName: titleTransitionName }}

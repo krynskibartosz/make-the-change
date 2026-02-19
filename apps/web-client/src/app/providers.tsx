@@ -2,9 +2,9 @@
 
 import { type Brand, AppThemeProvider as ThemeProvider } from '@make-the-change/core'
 import type { PropsWithChildren } from 'react'
-import { Toaster } from '@/components/ui/toaster'
 import { CartProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-provider'
 import { CartUIProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
+import { Toaster } from '@/components/ui/toaster'
 
 interface ProvidersProps extends PropsWithChildren {
   initialBrand?: Brand

@@ -1057,6 +1057,11 @@
         "remove_unavailable": "Remove unavailable item",
         "view_details": "View order details",
         "hide_details": "Hide order details"
+      },
+      "desktop_columns": {
+        "product": "Product",
+        "quantity": "Quantity",
+        "total": "Total"
       }
     }
   },

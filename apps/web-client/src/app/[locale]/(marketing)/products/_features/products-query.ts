@@ -14,6 +14,16 @@ export type ProductsPaginationData = {
   totalPages: number
 }
 
+type ProductsQueryLike = {
+  eq: (column: string, value: unknown) => ProductsQueryLike
+  contains: (
+    column: string,
+    value: string | readonly unknown[] | Record<string, unknown>,
+  ) => ProductsQueryLike
+  ilike: (column: string, pattern: string) => ProductsQueryLike
+  order: (column: string, options: { ascending: boolean }) => ProductsQueryLike
+}
+
 export const getTotalPages = (totalItems: number, pageSize = PRODUCTS_PAGE_SIZE): number => {
   if (totalItems <= 0) return 1
   return Math.max(1, Math.ceil(totalItems / pageSize))
@@ -51,7 +61,7 @@ export const applyProductsFilters = <TQuery>(
   query: TQuery,
   filters: ProductsServerFilters,
 ): TQuery => {
-  let nextQuery: any = query
+  let nextQuery = query as unknown as ProductsQueryLike
 
   if (filters.category) {
     nextQuery = nextQuery.eq('category_id', filters.category)
@@ -69,25 +79,28 @@ export const applyProductsFilters = <TQuery>(
     nextQuery = nextQuery.ilike('name_default', `%${filters.search}%`)
   }
 
-  return nextQuery
+  return nextQuery as TQuery
 }
 
 export const applyProductsSort = <TQuery>(query: TQuery, sort: ProductSort): TQuery => {
-  const q = query as any
+  const sortableQuery = query as unknown as ProductsQueryLike
+
   switch (sort) {
     case 'name_asc':
-      return q.order('name_default', { ascending: true })
+      return sortableQuery.order('name_default', { ascending: true }) as TQuery
     case 'name_desc':
-      return q.order('name_default', { ascending: false })
+      return sortableQuery.order('name_default', { ascending: false }) as TQuery
     case 'price_asc':
-      return q
+      return sortableQuery
         .order('price_points', { ascending: true })
-        .order('name_default', { ascending: true })
+        .order('name_default', { ascending: true }) as TQuery
     case 'price_desc':
-      return q
+      return sortableQuery
         .order('price_points', { ascending: false })
-        .order('name_default', { ascending: true })
+        .order('name_default', { ascending: true }) as TQuery
     default:
-      return q.order('featured', { ascending: false }).order('created_at', { ascending: false })
+      return sortableQuery
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false }) as TQuery
   }
 }

@@ -85,21 +85,15 @@ interface ProductsClientProps {
   initialQueryState: ProductsQueryState
 }
 
-// Add PageHero props to ProductsClient
-interface PageHeroProps {
-  title: string
-  description: string
-}
-
 type SelectOption = { value: string; label: string }
 
 const createSelectOptions = <T extends { id: string; name_default: string }>(
   items: T[] | undefined,
   allLabel: string,
 ): SelectOption[] => [
-    { value: '', label: allLabel },
-    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
-  ]
+  { value: '', label: allLabel },
+  ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
+]
 
 const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
   { value: 'featured_first', label: tProducts('sort.featured') },
@@ -458,9 +452,7 @@ export const ProductsClient: FC<ProductsClientProps> = ({
             <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               {tProducts('title')}
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
-              {tProducts('subtitle')}
-            </p>
+            <p className="mt-4 text-lg text-muted-foreground">{tProducts('subtitle')}</p>
           </div>
         </div>
       </div>
@@ -471,7 +463,10 @@ export const ProductsClient: FC<ProductsClientProps> = ({
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
               <search role="search" className="relative w-full lg:w-[320px]">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                <Search
+                  className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                  aria-hidden="true"
+                />
                 <Input
                   type="search"
                   className="h-10 bg-background pl-9"
