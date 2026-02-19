@@ -1,9 +1,10 @@
 import { getTranslations } from 'next-intl/server'
+import { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
-import { createClient } from '@/lib/supabase/server'
 import { ProjectsClient } from './projects-client'
+import { getProjects } from './_features/get-projects'
 
 interface ProjectsPageProps {
   searchParams: Promise<{
@@ -12,32 +13,28 @@ interface ProjectsPageProps {
   }>
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('projects')
+  return {
+    title: t('title'),
+    description: t('subtitle'),
+    openGraph: {
+      title: t('title'),
+      description: t('subtitle'),
+    },
+  }
+}
+
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const t = await getTranslations('projects')
   const navT = await getTranslations('navigation')
   const params = await searchParams
   const status = params.status === 'active' || params.status === 'completed' ? params.status : 'all'
-  const supabase = await createClient()
 
-  // Build query
-  let projectsQuery = supabase
-    .from('public_projects')
-    .select(`
-      *,
-      producer:public_producers!producer_id(*)
-    `)
-    .order('created_at', { ascending: false })
-
-  // Apply filters
-  if (status !== 'all') {
-    projectsQuery = projectsQuery.eq('status', status)
-  }
-
-  if (params.search) {
-    projectsQuery = projectsQuery.ilike('name_default', `%${params.search}%`)
-  }
-
-  const { data: projectsList } = await projectsQuery
+  const projectsList = await getProjects({
+    status,
+    search: params.search,
+  })
 
   return (
     <>

@@ -4,7 +4,7 @@ import { Button, Textarea } from '@make-the-change/core/ui'
 import { useState, useTransition } from 'react'
 import { updateMenu } from '@/app/[locale]/admin/cms/_features/actions/cms-actions'
 import type { MainMenuStructure } from '@/app/[locale]/admin/cms/_features/types'
-import { useToast } from '@/hooks/use-toast'
+import { useToast } from '@/components/ui/use-toast'
 
 interface MenuEditorProps {
   initialData: MainMenuStructure | null

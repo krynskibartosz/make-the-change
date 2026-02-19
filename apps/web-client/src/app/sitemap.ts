@@ -1,10 +1,12 @@
 import { locales } from '@make-the-change/core/i18n'
-import { createClient } from '@/lib/supabase/server'
+import { createStaticClient } from '@/lib/supabase/static'
 import type { MetadataRoute } from 'next'
+
+export const dynamic = 'force-static'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app'
-    const supabase = await createClient()
+    const supabase = createStaticClient()
 
     // Base routes to include in sitemap
     const routes = [
@@ -15,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/how-it-works',
         '/login',
         '/register',
+        '/blog',
     ]
 
     // Fetch active projects
@@ -30,6 +33,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .from('products')
         .select('slug, id, updated_at')
         .eq('is_active', true)
+
+    // Fetch published blog posts
+    const { data: posts } = await supabase
+        .schema('content')
+        .from('blog_posts')
+        .select('slug, id, published_at')
+        .eq('status', 'published')
 
     const sitemapEntry: MetadataRoute.Sitemap = []
 
@@ -70,6 +80,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                     lastModified: new Date(product.updated_at || new Date()),
                     changeFrequency: 'daily',
                     priority: 0.9,
+                })
+            })
+        })
+    }
+
+    // 4. Dynamic Blog Posts
+    if (posts) {
+        posts.forEach((post) => {
+            const slugOrId = post.slug || post.id
+            // Use published_at as last modified if updated_at is not available, or just use published_at
+            // The blog_posts schema we saw had published_at but not explicitly updated_at in the SELECT const, 
+            // though it likely exists. Let's strictly use what we saw: published_at.
+            const date = post.published_at ? new Date(post.published_at) : new Date()
+
+            locales.forEach((locale) => {
+                sitemapEntry.push({
+                    url: `${baseUrl}/${locale}/blog/${slugOrId}`,
+                    lastModified: date,
+                    changeFrequency: 'weekly',
+                    priority: 0.7,
                 })
             })
         })

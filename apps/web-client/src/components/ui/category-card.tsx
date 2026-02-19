@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import type { FC } from 'react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -33,11 +34,11 @@ export const CategoryCard: FC<CategoryCardProps> = ({
         )}
       >
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src={image}
             alt={title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50" />
         </div>
@@ -60,11 +61,11 @@ export const CategoryCard: FC<CategoryCardProps> = ({
       )}
     >
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={image}
           alt={title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50" />
       </div>

@@ -1,0 +1,261 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img "Make the Change" [ref=e7]
+          - generic [ref=e8]: Make the Change
+        - navigation "Navigation principale" [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Home" [ref=e12] [cursor=pointer]:
+                - /url: /en
+            - listitem [ref=e13]:
+              - button "Projects" [ref=e14]:
+                - text: Projects
+                - img [ref=e15]
+            - listitem [ref=e17]:
+              - button "Products" [ref=e18]:
+                - text: Products
+                - img [ref=e19]
+            - listitem [ref=e21]:
+              - button "Discover" [ref=e22]:
+                - text: Discover
+                - img [ref=e23]
+        - generic [ref=e25]:
+          - link "Login" [ref=e27] [cursor=pointer]:
+            - /url: /en/login
+            - button "Login" [ref=e28]:
+              - generic [ref=e30]: Login
+          - link "Open cart" [ref=e32] [cursor=pointer]:
+            - /url: /en/cart
+            - img [ref=e33]
+          - button "Activer le mode sombre" [ref=e320] [cursor=pointer]:
+            - img [ref=e321]
+    - main [ref=e41]:
+      - generic [ref=e42]:
+        - generic [ref=e44]:
+          - link "Make the Change Make the Change" [ref=e45] [cursor=pointer]:
+            - /url: /en
+            - img "Make the Change" [ref=e47]
+            - generic [ref=e48]: Make the Change
+          - navigation "Navigation principale" [ref=e49]:
+            - list [ref=e50]:
+              - listitem [ref=e51]:
+                - link "Home" [ref=e52] [cursor=pointer]:
+                  - /url: /en
+              - listitem [ref=e53]:
+                - button "Projects" [ref=e54]:
+                  - text: Projects
+                  - img [ref=e55]
+              - listitem [ref=e57]:
+                - button "Products" [ref=e58]:
+                  - text: Products
+                  - img [ref=e59]
+              - listitem [ref=e61]:
+                - button "Discover" [ref=e62]:
+                  - text: Discover
+                  - img [ref=e63]
+          - generic [ref=e65]:
+            - link "Login" [ref=e67] [cursor=pointer]:
+              - /url: /en/login
+              - button "Login" [ref=e68]:
+                - generic [ref=e70]: Login
+            - link "Open cart" [ref=e72] [cursor=pointer]:
+              - /url: /en/cart
+              - img [ref=e73]
+            - button "Activer le mode sombre" [ref=e323] [cursor=pointer]:
+              - img [ref=e324]
+        - main [ref=e81]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - img [ref=e91]
+                - generic [ref=e94]: Authentic product
+              - heading "Panier Légumes Bio" [level=1] [ref=e95]
+              - paragraph [ref=e96]: Assortiment de légumes de saison.
+              - generic [ref=e97]:
+                - generic [ref=e98]:
+                  - img [ref=e99]
+                  - generic [ref=e103]: Alimentation
+                - generic [ref=e104]:
+                  - img [ref=e105]
+                  - generic [ref=e109]: Ferme de la Nature
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - text: Featured
+            - generic [ref=e113]:
+              - img "Panier Légumes Bio" [ref=e115]
+              - generic [ref=e118]:
+                - img [ref=e120]
+                - generic [ref=e124]:
+                  - paragraph [ref=e125]: 8,00 €
+                  - paragraph [ref=e126]: 20 available
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - generic [ref=e133]:
+                - generic [ref=e134]:
+                  - generic [ref=e135]:
+                    - img [ref=e136]
+                    - generic [ref=e139]: Description
+                  - heading "Description" [level=2] [ref=e140]
+                - paragraph [ref=e142]: Assortiment de légumes de saison.
+              - generic [ref=e145]:
+                - generic [ref=e146]:
+                  - img [ref=e148]
+                  - generic [ref=e152]: 8,00 €or 800 pts
+                  - paragraph [ref=e154]: 20 available
+                - generic [ref=e156]:
+                  - button "Add to cart" [ref=e157] [cursor=pointer]:
+                    - generic [ref=e159]:
+                      - img [ref=e160]
+                      - text: Add to cart
+                  - button "Exchange" [ref=e164] [cursor=pointer]:
+                    - generic [ref=e166]:
+                      - img [ref=e167]
+                      - text: Exchange
+                - generic [ref=e173]:
+                  - generic [ref=e174]:
+                    - img [ref=e175]
+                    - generic [ref=e179]: Producer
+                  - generic [ref=e181]:
+                    - generic [ref=e182]: F
+                    - generic [ref=e183]:
+                      - generic [ref=e184]: Ferme de la Nature
+                      - generic [ref=e185]: Une ferme bio au cœur de la Provence.
+            - link "Back to shop" [ref=e187] [cursor=pointer]:
+              - /url: /en/products
+              - button "Back to shop" [ref=e188]:
+                - generic [ref=e190]:
+                  - img [ref=e191]
+                  - generic [ref=e193]: Back to shop
+          - region "Call to action" [ref=e195]:
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - img [ref=e200]
+                - generic [ref=e203]: Sustainable impact
+              - heading "Support local producers." [level=2] [ref=e204]:
+                - generic [ref=e205]: Support
+                - generic [ref=e206]: local producers.
+              - paragraph [ref=e207]: Every purchase is a vote for a more sustainable and fair future.
+              - generic [ref=e208]:
+                - link "Discover more products" [ref=e209] [cursor=pointer]:
+                  - /url: /en/products
+                  - button "Discover more products" [ref=e210]:
+                    - generic [ref=e212]: Discover more products
+                - link "Learn more" [ref=e213] [cursor=pointer]:
+                  - /url: /en/about
+                  - button "Learn more" [ref=e214]:
+                    - generic [ref=e216]: Learn more
+    - contentinfo [ref=e217]:
+      - generic [ref=e218]:
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - link "Make the Change Make the Change" [ref=e221] [cursor=pointer]:
+              - /url: /en
+              - img "Make the Change" [ref=e223]
+              - generic [ref=e224]: Make the Change
+            - paragraph [ref=e225]: Invest in biodiversity, reap tangible rewards.
+          - navigation "Quick links" [ref=e226]:
+            - heading "Quick links" [level=3] [ref=e227]
+            - list [ref=e228]:
+              - listitem [ref=e229]:
+                - link "Projects" [ref=e230] [cursor=pointer]:
+                  - /url: /en/projects
+              - listitem [ref=e231]:
+                - link "Products" [ref=e232] [cursor=pointer]:
+                  - /url: /en/products
+              - listitem [ref=e233]:
+                - link "Leaderboard" [ref=e234] [cursor=pointer]:
+                  - /url: /en/leaderboard
+              - listitem [ref=e235]:
+                - link "Blog" [ref=e236] [cursor=pointer]:
+                  - /url: /en/blog
+              - listitem [ref=e237]:
+                - link "About" [ref=e238] [cursor=pointer]:
+                  - /url: /en/about
+              - listitem [ref=e239]:
+                - link "How it works" [ref=e240] [cursor=pointer]:
+                  - /url: /en/how-it-works
+              - listitem [ref=e241]:
+                - link "Brand guidelines" [ref=e242] [cursor=pointer]:
+                  - /url: /en/brand-guidelines
+              - listitem [ref=e243]:
+                - link "BioDex" [ref=e244] [cursor=pointer]:
+                  - /url: /en/biodex
+              - listitem [ref=e245]:
+                - link "Challenges" [ref=e246] [cursor=pointer]:
+                  - /url: /en/challenges
+              - listitem [ref=e247]:
+                - link "Menu" [ref=e248] [cursor=pointer]:
+                  - /url: /en/menu
+          - navigation "Account & Shopping" [ref=e249]:
+            - heading "Account & Shopping" [level=3] [ref=e250]
+            - list [ref=e251]:
+              - listitem [ref=e252]:
+                - link "Cart" [ref=e253] [cursor=pointer]:
+                  - /url: /en/cart
+              - listitem [ref=e254]:
+                - link "Login" [ref=e255] [cursor=pointer]:
+                  - /url: /en/login
+              - listitem [ref=e256]:
+                - link "Register" [ref=e257] [cursor=pointer]:
+                  - /url: /en/register
+          - navigation "Support" [ref=e258]:
+            - heading "Support" [level=3] [ref=e259]
+            - list [ref=e260]:
+              - listitem [ref=e261]:
+                - link "FAQ" [ref=e262] [cursor=pointer]:
+                  - /url: /en/faq
+              - listitem [ref=e263]:
+                - link "Contact" [ref=e264] [cursor=pointer]:
+                  - /url: /en/contact
+              - listitem [ref=e265]:
+                - link "Privacy" [ref=e266] [cursor=pointer]:
+                  - /url: /en/privacy
+              - listitem [ref=e267]:
+                - link "Terms" [ref=e268] [cursor=pointer]:
+                  - /url: /en/terms
+          - generic [ref=e269]:
+            - heading "Contact us" [level=3] [ref=e270]
+            - generic [ref=e271]:
+              - link "contact@make-the-change.com" [ref=e272] [cursor=pointer]:
+                - /url: mailto:contact@make-the-change.com
+                - img [ref=e273]
+                - text: contact@make-the-change.com
+              - link "Brussels, Belgium" [ref=e276] [cursor=pointer]:
+                - /url: https://www.google.com/maps/search/?api=1&query=Brussels%2C%20Belgium
+                - img [ref=e277]
+                - text: Brussels, Belgium
+            - generic [ref=e280]:
+              - heading "Follow us" [level=4] [ref=e281]
+              - navigation "Réseaux sociaux" [ref=e282]:
+                - list [ref=e283]:
+                  - listitem [ref=e284]:
+                    - link "Instagram" [ref=e285] [cursor=pointer]:
+                      - /url: https://instagram.com/makethechange
+                      - img [ref=e286]
+                  - listitem [ref=e289]:
+                    - link "Facebook" [ref=e290] [cursor=pointer]:
+                      - /url: https://facebook.com/makethechange
+                      - img [ref=e291]
+                  - listitem [ref=e293]:
+                    - link "LinkedIn" [ref=e294] [cursor=pointer]:
+                      - /url: https://linkedin.com/company/makethechange
+                      - img [ref=e295]
+                  - listitem [ref=e299]:
+                    - link "TikTok" [ref=e300] [cursor=pointer]:
+                      - /url: https://tiktok.com/@makethechange
+                      - img [ref=e301]
+        - generic [ref=e305]:
+          - paragraph [ref=e306]: © 2026 Make the CHANGE. All rights reserved.
+          - generic [ref=e307]:
+            - link "Privacy" [ref=e308] [cursor=pointer]:
+              - /url: /en/privacy
+            - link "Terms" [ref=e309] [cursor=pointer]:
+              - /url: /en/terms
+  - region "Notifications" [ref=e310]
+  - button "Open Next.js Dev Tools" [ref=e316] [cursor=pointer]:
+    - img [ref=e317]
+  - alert [ref=e326]

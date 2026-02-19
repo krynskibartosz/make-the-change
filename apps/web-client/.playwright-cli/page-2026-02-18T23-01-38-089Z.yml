@@ -1,0 +1,601 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e988] [cursor=pointer]:
+          - /url: /fr
+          - img "Make the Change" [ref=e989]
+          - generic [ref=e8]: Make the Change
+        - navigation "Navigation principale" [ref=e990]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Accueil" [ref=e991] [cursor=pointer]:
+                - /url: /fr
+            - listitem [ref=e13]:
+              - button "Projets" [ref=e992]:
+                - text: Projets
+                - img [ref=e15]
+            - listitem [ref=e17]:
+              - button "Produits" [ref=e993]:
+                - text: Produits
+                - img [ref=e19]
+            - listitem [ref=e21]:
+              - button "Découvrir" [ref=e994]:
+                - text: Découvrir
+                - img [ref=e23]
+        - generic [ref=e25]:
+          - link "Connexion" [ref=e995] [cursor=pointer]:
+            - /url: /fr/login
+            - button "Connexion" [ref=e996]:
+              - generic [ref=e30]: Connexion
+          - link "Ouvrir le panier" [ref=e997] [cursor=pointer]:
+            - /url: /fr/cart
+            - img [ref=e33]
+          - button "Activer le mode sombre" [ref=e998] [cursor=pointer]:
+            - img [ref=e691]
+    - main [ref=e41]:
+      - generic [ref=e43]:
+        - heading "Nos projets" [level=1] [ref=e999]
+        - paragraph [ref=e45]: Découvrez et soutenez des projets de biodiversité vérifiés
+      - generic [ref=e47]:
+        - navigation "Breadcrumb" [ref=e1000]:
+          - list [ref=e49]:
+            - listitem [ref=e50]:
+              - link "Home" [ref=e1001] [cursor=pointer]:
+                - /url: /fr
+                - img [ref=e52]
+                - generic [ref=e55]: Home
+            - listitem [ref=e56]:
+              - img [ref=e57]
+              - generic [ref=e59]: Projets
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - search [ref=e62]:
+              - img [ref=e63]
+              - searchbox "projects.filter.search_placeholder" [ref=e1002]
+            - generic [ref=e69]:
+              - button "projects.filter.status.all" [ref=e1003] [cursor=pointer]:
+                - generic [ref=e72]: projects.filter.status.all
+              - button "projects.filter.status.active" [ref=e1004] [cursor=pointer]:
+                - generic [ref=e75]: projects.filter.status.active
+              - button "projects.filter.status.completed" [ref=e1005] [cursor=pointer]:
+                - generic [ref=e78]: projects.filter.status.completed
+          - generic [ref=e79]:
+            - button "Sauvons les Abeilles projects.filter.featured projects.filter.status.active Sauvons les Abeilles Installation de ruches pour la pollinisation. projects.filter.progress.label 25% €12500.00 projects.filter.progress.collected projects.filter.progress.goal €50000.00 beehive Ferme de la Nature projects.filter.cta" [ref=e1006] [cursor=pointer]:
+              - link "Sauvons les Abeilles" [active] [ref=e1007]:
+                - /url: /projects/sauvons-les-abeilles
+              - generic [ref=e84]:
+                - generic [ref=e85]:
+                  - img [ref=e87]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Sauvons les Abeilles" [level=3] [ref=e1008]
+                - generic [ref=e95]:
+                  - paragraph [ref=e96]: Installation de ruches pour la pollinisation.
+                  - generic [ref=e97]:
+                    - generic [ref=e98]:
+                      - generic [ref=e99]: projects.filter.progress.label
+                      - generic [ref=e100]: 25%
+                    - generic [ref=e103]:
+                      - generic [ref=e104]: €12500.00 projects.filter.progress.collected
+                      - generic [ref=e105]: projects.filter.progress.goal €50000.00
+                  - generic [ref=e106]:
+                    - generic [ref=e107]: beehive
+                    - generic [ref=e108]: Ferme de la Nature
+                - generic [ref=e110]:
+                  - text: projects.filter.cta
+                  - img [ref=e111]
+            - button "Protection Mangroves projects.filter.status.active Protection Mangroves Conservation des mangroves côtières. projects.filter.progress.label 67% €80000.00 projects.filter.progress.collected projects.filter.progress.goal €120000.00 marine Océan Bleu projects.filter.cta" [ref=e1009] [cursor=pointer]:
+              - link "Protection Mangroves" [ref=e1010]:
+                - /url: /projects/protection-mangroves
+              - generic [ref=e117]:
+                - generic [ref=e118]:
+                  - img [ref=e706]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Protection Mangroves" [level=3] [ref=e1011]
+                - generic [ref=e124]:
+                  - paragraph [ref=e125]: Conservation des mangroves côtières.
+                  - generic [ref=e126]:
+                    - generic [ref=e127]:
+                      - generic [ref=e128]: projects.filter.progress.label
+                      - generic [ref=e129]: 67%
+                    - generic [ref=e132]:
+                      - generic [ref=e133]: €80000.00 projects.filter.progress.collected
+                      - generic [ref=e134]: projects.filter.progress.goal €120000.00
+                  - generic [ref=e135]:
+                    - generic [ref=e136]: marine
+                    - generic [ref=e137]: Océan Bleu
+                - generic [ref=e139]:
+                  - text: projects.filter.cta
+                  - img [ref=e140]
+            - button "Vignoble Bio Bordeaux Vignoble Bio Bordeaux projects.filter.status.active Vignoble Bio Bordeaux Transition vers la viticulture biodynamique. projects.filter.progress.label 40% €30000.00 projects.filter.progress.collected projects.filter.progress.goal €75000.00 vineyard Ferme de la Nature projects.filter.cta" [ref=e1012] [cursor=pointer]:
+              - link "Vignoble Bio Bordeaux" [ref=e1013]:
+                - /url: /projects/vignoble-bio-bordeaux
+              - generic [ref=e146]:
+                - generic [ref=e147]:
+                  - img "Vignoble Bio Bordeaux" [ref=e1014]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Vignoble Bio Bordeaux" [level=3] [ref=e1015]
+                - generic [ref=e153]:
+                  - paragraph [ref=e154]: Transition vers la viticulture biodynamique.
+                  - generic [ref=e155]:
+                    - generic [ref=e156]:
+                      - generic [ref=e157]: projects.filter.progress.label
+                      - generic [ref=e158]: 40%
+                    - generic [ref=e161]:
+                      - generic [ref=e162]: €30000.00 projects.filter.progress.collected
+                      - generic [ref=e163]: projects.filter.progress.goal €75000.00
+                  - generic [ref=e164]:
+                    - generic [ref=e165]: vineyard
+                    - generic [ref=e166]: Ferme de la Nature
+                - generic [ref=e168]:
+                  - text: projects.filter.cta
+                  - img [ref=e169]
+            - button "Reboisement Amazonie Reboisement Amazonie projects.filter.featured projects.filter.status.active Reboisement Amazonie Plantation d'arbres natifs. projects.filter.progress.label 75% €150000.00 projects.filter.progress.collected projects.filter.progress.goal €200000.00 forest Forêt Vivante projects.filter.cta" [ref=e1016] [cursor=pointer]:
+              - link "Reboisement Amazonie" [ref=e1017]:
+                - /url: /projects/reboisement-amazonie
+              - generic [ref=e175]:
+                - generic [ref=e176]:
+                  - img "Reboisement Amazonie" [ref=e1018]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Reboisement Amazonie" [level=3] [ref=e1019]
+                - generic [ref=e182]:
+                  - paragraph [ref=e183]: Plantation d'arbres natifs.
+                  - generic [ref=e184]:
+                    - generic [ref=e185]:
+                      - generic [ref=e186]: projects.filter.progress.label
+                      - generic [ref=e187]: 75%
+                    - generic [ref=e190]:
+                      - generic [ref=e191]: €150000.00 projects.filter.progress.collected
+                      - generic [ref=e192]: projects.filter.progress.goal €200000.00
+                  - generic [ref=e193]:
+                    - generic [ref=e194]: forest
+                    - generic [ref=e195]: Forêt Vivante
+                - generic [ref=e197]:
+                  - text: projects.filter.cta
+                  - img [ref=e198]
+            - button "Restauration Corail Restauration Corail projects.filter.featured projects.filter.status.active Restauration Corail Replantation de coraux en Indonésie. projects.filter.progress.label 45% €45000.00 projects.filter.progress.collected projects.filter.progress.goal €100000.00 marine Océan Bleu projects.filter.cta" [ref=e1020] [cursor=pointer]:
+              - link "Restauration Corail" [ref=e1021]:
+                - /url: /projects/restauration-corail
+              - generic [ref=e204]:
+                - generic [ref=e205]:
+                  - img "Restauration Corail" [ref=e1022]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Restauration Corail" [level=3] [ref=e1023]
+                - generic [ref=e211]:
+                  - paragraph [ref=e212]: Replantation de coraux en Indonésie.
+                  - generic [ref=e213]:
+                    - generic [ref=e214]:
+                      - generic [ref=e215]: projects.filter.progress.label
+                      - generic [ref=e216]: 45%
+                    - generic [ref=e219]:
+                      - generic [ref=e220]: €45000.00 projects.filter.progress.collected
+                      - generic [ref=e221]: projects.filter.progress.goal €100000.00
+                  - generic [ref=e222]:
+                    - generic [ref=e223]: marine
+                    - generic [ref=e224]: Océan Bleu
+                - generic [ref=e226]:
+                  - text: projects.filter.cta
+                  - img [ref=e227]
+            - button "Vignes refuges pour la Tortue Vignes refuges pour la Tortue projects.filter.status.active Vignes refuges pour la Tortue Aménagement de zones refuges au sein des vignobles pour protéger les tortues lors des vendanges et favoriser leur reproduction. projects.filter.progress.label 15% €15000.00 projects.filter.progress.collected projects.filter.progress.goal €100000.00 vineyard Coopérative des Ardennes projects.filter.cta" [ref=e1024] [cursor=pointer]:
+              - link "Vignes refuges pour la Tortue" [ref=e1025]:
+                - /url: /projects/refuge-tortues
+              - generic [ref=e233]:
+                - generic [ref=e234]:
+                  - img "Vignes refuges pour la Tortue" [ref=e1026]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Vignes refuges pour la Tortue" [level=3] [ref=e1027]
+                - generic [ref=e240]:
+                  - paragraph [ref=e241]: Aménagement de zones refuges au sein des vignobles pour protéger les tortues lors des vendanges et favoriser leur reproduction.
+                  - generic [ref=e242]:
+                    - generic [ref=e243]:
+                      - generic [ref=e244]: projects.filter.progress.label
+                      - generic [ref=e245]: 15%
+                    - generic [ref=e248]:
+                      - generic [ref=e249]: €15000.00 projects.filter.progress.collected
+                      - generic [ref=e250]: projects.filter.progress.goal €100000.00
+                  - generic [ref=e251]:
+                    - generic [ref=e252]: vineyard
+                    - generic [ref=e253]: Coopérative des Ardennes
+                - generic [ref=e255]:
+                  - text: projects.filter.cta
+                  - img [ref=e256]
+            - button "Sauvons l'Abeille Noire en Bretagne projects.filter.status.active Sauvons l'Abeille Noire en Bretagne Parrainez des ruches pour préserver l'abeille noire locale et soutenir la pollinisation. Ce projet vise à installer 50 ruches dans des zones protégées. projects.filter.progress.label 30% €45000.00 projects.filter.progress.collected projects.filter.progress.goal €150000.00 beehive Coopérative des Ardennes projects.filter.cta" [ref=e1028] [cursor=pointer]:
+              - link "Sauvons l'Abeille Noire en Bretagne" [ref=e1029]:
+                - /url: /projects/sauvons-abeille-noire
+              - generic [ref=e262]:
+                - generic [ref=e263]:
+                  - img [ref=e730]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Sauvons l'Abeille Noire en Bretagne" [level=3] [ref=e1030]
+                - generic [ref=e269]:
+                  - paragraph [ref=e270]: Parrainez des ruches pour préserver l'abeille noire locale et soutenir la pollinisation. Ce projet vise à installer 50 ruches dans des zones protégées.
+                  - generic [ref=e271]:
+                    - generic [ref=e272]:
+                      - generic [ref=e273]: projects.filter.progress.label
+                      - generic [ref=e274]: 30%
+                    - generic [ref=e277]:
+                      - generic [ref=e278]: €45000.00 projects.filter.progress.collected
+                      - generic [ref=e279]: projects.filter.progress.goal €150000.00
+                  - generic [ref=e280]:
+                    - generic [ref=e281]: beehive
+                    - generic [ref=e282]: Coopérative des Ardennes
+                - generic [ref=e284]:
+                  - text: projects.filter.cta
+                  - img [ref=e285]
+            - button "Corridors écologiques pour le Lynx Corridors écologiques pour le Lynx projects.filter.status.active Corridors écologiques pour le Lynx Plantation d'arbres pour reconnecter les massifs forestiers et permettre au lynx de circuler en toute sécurité. projects.filter.progress.label 24% €120000.00 projects.filter.progress.collected projects.filter.progress.goal €500000.00 forest Coopérative des Ardennes projects.filter.cta" [ref=e1031] [cursor=pointer]:
+              - link "Corridors écologiques pour le Lynx" [ref=e1032]:
+                - /url: /projects/reforestation-lynx
+              - generic [ref=e291]:
+                - generic [ref=e292]:
+                  - img "Corridors écologiques pour le Lynx" [ref=e1033]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Corridors écologiques pour le Lynx" [level=3] [ref=e1034]
+                - generic [ref=e298]:
+                  - paragraph [ref=e299]: Plantation d'arbres pour reconnecter les massifs forestiers et permettre au lynx de circuler en toute sécurité.
+                  - generic [ref=e300]:
+                    - generic [ref=e301]:
+                      - generic [ref=e302]: projects.filter.progress.label
+                      - generic [ref=e303]: 24%
+                    - generic [ref=e306]:
+                      - generic [ref=e307]: €120000.00 projects.filter.progress.collected
+                      - generic [ref=e308]: projects.filter.progress.goal €500000.00
+                  - generic [ref=e309]:
+                    - generic [ref=e310]: forest
+                    - generic [ref=e311]: Coopérative des Ardennes
+                - generic [ref=e313]:
+                  - text: projects.filter.cta
+                  - img [ref=e314]
+            - button "Sanctuaire de Posidonie Sanctuaire de Posidonie projects.filter.status.active Sanctuaire de Posidonie Installation de mouillages écologiques pour protéger les herbiers de posidonie des ancres de bateaux. projects.filter.progress.label 93% €280000.00 projects.filter.progress.collected projects.filter.progress.goal €300000.00 marine Coopérative des Ardennes projects.filter.cta" [ref=e1035] [cursor=pointer]:
+              - link "Sanctuaire de Posidonie" [ref=e1036]:
+                - /url: /projects/protection-herbiers
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - img "Sanctuaire de Posidonie" [ref=e1037]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Sanctuaire de Posidonie" [level=3] [ref=e1038]
+                - generic [ref=e327]:
+                  - paragraph [ref=e328]: Installation de mouillages écologiques pour protéger les herbiers de posidonie des ancres de bateaux.
+                  - generic [ref=e329]:
+                    - generic [ref=e330]:
+                      - generic [ref=e331]: projects.filter.progress.label
+                      - generic [ref=e332]: 93%
+                    - generic [ref=e335]:
+                      - generic [ref=e336]: €280000.00 projects.filter.progress.collected
+                      - generic [ref=e337]: projects.filter.progress.goal €300000.00
+                  - generic [ref=e338]:
+                    - generic [ref=e339]: marine
+                    - generic [ref=e340]: Coopérative des Ardennes
+                - generic [ref=e342]:
+                  - text: projects.filter.cta
+                  - img [ref=e343]
+            - button "Reforestation Ylang-Ylang Reforestation Ylang-Ylang projects.filter.featured projects.filter.status.active Reforestation Ylang-Ylang Plantation durable à Madagascar. projects.filter.progress.label 34% €3400.00 projects.filter.progress.collected projects.filter.progress.goal €10000.00 olive_tree Ilanga Nature projects.filter.cta" [ref=e1039] [cursor=pointer]:
+              - link "Reforestation Ylang-Ylang" [ref=e1040]:
+                - /url: /projects/reforestation-ylang-2026
+              - generic [ref=e349]:
+                - generic [ref=e350]:
+                  - img "Reforestation Ylang-Ylang" [ref=e1041]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Reforestation Ylang-Ylang" [level=3] [ref=e1042]
+                - generic [ref=e356]:
+                  - paragraph [ref=e357]: Plantation durable à Madagascar.
+                  - generic [ref=e358]:
+                    - generic [ref=e359]:
+                      - generic [ref=e360]: projects.filter.progress.label
+                      - generic [ref=e361]: 34%
+                    - generic [ref=e364]:
+                      - generic [ref=e365]: €3400.00 projects.filter.progress.collected
+                      - generic [ref=e366]: projects.filter.progress.goal €10000.00
+                  - generic [ref=e367]:
+                    - generic [ref=e368]: olive_tree
+                    - generic [ref=e369]: Ilanga Nature
+                - generic [ref=e371]:
+                  - text: projects.filter.cta
+                  - img [ref=e372]
+            - button "Parrainage de Ruche - Printemps 2026 Parrainage de Ruche - Printemps 2026 projects.filter.featured projects.filter.status.active Parrainage de Ruche - Printemps 2026 Soutenez le développement d'une nouvelle colonie. projects.filter.progress.label 24% €1200.00 projects.filter.progress.collected projects.filter.progress.goal €5000.00 beehive Habeebee projects.filter.cta" [ref=e1043] [cursor=pointer]:
+              - link "Parrainage de Ruche - Printemps 2026" [ref=e1044]:
+                - /url: /projects/parrainage-ruche-2026
+              - generic [ref=e378]:
+                - generic [ref=e379]:
+                  - img "Parrainage de Ruche - Printemps 2026" [ref=e1045]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Parrainage de Ruche - Printemps 2026" [level=3] [ref=e1046]
+                - generic [ref=e385]:
+                  - paragraph [ref=e386]: Soutenez le développement d'une nouvelle colonie.
+                  - generic [ref=e387]:
+                    - generic [ref=e388]:
+                      - generic [ref=e389]: projects.filter.progress.label
+                      - generic [ref=e390]: 24%
+                    - generic [ref=e393]:
+                      - generic [ref=e394]: €1200.00 projects.filter.progress.collected
+                      - generic [ref=e395]: projects.filter.progress.goal €5000.00
+                  - generic [ref=e396]:
+                    - generic [ref=e397]: beehive
+                    - generic [ref=e398]: Habeebee
+                - generic [ref=e400]:
+                  - text: projects.filter.cta
+                  - img [ref=e401]
+            - button "Krynski Krynski projects.filter.status.active Krynski Lasne, BE forward-logs-shared.ts:95 [HMR] connected installHook.js:1 Server Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server. overrideMethod @ installHook.js:1 installHook.js:1 A tree hydrated but some attr projects.filter.progress.label 0% €0.00 projects.filter.progress.collected projects.filter.progress.goal €3.00 olive_tree Coopérative des Ardennes Lasne, BE projects.filter.cta" [ref=e1047] [cursor=pointer]:
+              - link "Krynski" [ref=e1048]:
+                - /url: /projects/krynski
+              - generic [ref=e407]:
+                - generic [ref=e408]:
+                  - img "Krynski" [ref=e1049]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - generic [ref=e412]:
+                  - heading "Krynski" [level=3] [ref=e1050]
+                  - paragraph [ref=e414]: Lasne, BE
+                - generic [ref=e415]:
+                  - paragraph [ref=e416]: forward-logs-shared.ts:95 [HMR] connected installHook.js:1 Server Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server. overrideMethod @ installHook.js:1 installHook.js:1 A tree hydrated but some attr
+                  - generic [ref=e417]:
+                    - generic [ref=e418]:
+                      - generic [ref=e419]: projects.filter.progress.label
+                      - generic [ref=e420]: 0%
+                    - generic [ref=e422]:
+                      - generic [ref=e423]: €0.00 projects.filter.progress.collected
+                      - generic [ref=e424]: projects.filter.progress.goal €3.00
+                  - generic [ref=e425]:
+                    - generic [ref=e426]: olive_tree
+                    - generic [ref=e427]: Coopérative des Ardennes
+                    - generic [ref=e428]: Lasne, BE
+                - generic [ref=e430]:
+                  - text: projects.filter.cta
+                  - img [ref=e431]
+            - button "rearre rearre projects.filter.status.active rearre rezreaz projects.filter.progress.label 0% €0.00 projects.filter.progress.collected projects.filter.progress.goal €1001.00 beehive Apiculteur Martin projects.filter.cta" [ref=e1051] [cursor=pointer]:
+              - link "rearre" [ref=e1052]:
+                - /url: /projects/rearre
+              - generic [ref=e437]:
+                - generic [ref=e438]:
+                  - img "rearre" [ref=e1053]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "rearre" [level=3] [ref=e1054]
+                - generic [ref=e444]:
+                  - paragraph [ref=e445]: rezreaz
+                  - generic [ref=e446]:
+                    - generic [ref=e447]:
+                      - generic [ref=e448]: projects.filter.progress.label
+                      - generic [ref=e449]: 0%
+                    - generic [ref=e451]:
+                      - generic [ref=e452]: €0.00 projects.filter.progress.collected
+                      - generic [ref=e453]: projects.filter.progress.goal €1001.00
+                  - generic [ref=e454]:
+                    - generic [ref=e455]: beehive
+                    - generic [ref=e456]: Apiculteur Martin
+                - generic [ref=e458]:
+                  - text: projects.filter.cta
+                  - img [ref=e459]
+            - button "Ruches Urbaines Bruxelles Ruches Urbaines Bruxelles projects.filter.featured projects.filter.status.active Ruches Urbaines Bruxelles Développement de l'apiculture urbaine à Bruxelles avec 30 ruches projects.filter.progress.label 80% €28000.00 projects.filter.progress.collected projects.filter.progress.goal €35000.00 beehive Apiculteur Martin projects.filter.cta" [ref=e1055] [cursor=pointer]:
+              - link "Ruches Urbaines Bruxelles" [ref=e1056]:
+                - /url: /projects/ruches-urbaines-bruxelles
+              - generic [ref=e465]:
+                - generic [ref=e466]:
+                  - img "Ruches Urbaines Bruxelles" [ref=e1057]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Ruches Urbaines Bruxelles" [level=3] [ref=e1058]
+                - generic [ref=e472]:
+                  - paragraph [ref=e473]: Développement de l'apiculture urbaine à Bruxelles avec 30 ruches
+                  - generic [ref=e474]:
+                    - generic [ref=e475]:
+                      - generic [ref=e476]: projects.filter.progress.label
+                      - generic [ref=e477]: 80%
+                    - generic [ref=e480]:
+                      - generic [ref=e481]: €28000.00 projects.filter.progress.collected
+                      - generic [ref=e482]: projects.filter.progress.goal €35000.00
+                  - generic [ref=e483]:
+                    - generic [ref=e484]: beehive
+                    - generic [ref=e485]: Apiculteur Martin
+                - generic [ref=e487]:
+                  - text: projects.filter.cta
+                  - img [ref=e488]
+            - button "Oliviers de Provence 2024 Oliviers de Provence 2024 projects.filter.featured projects.filter.status.active Oliviers de Provence 2024 Plantation de 100 oliviers centenaires en Provence projects.filter.progress.label 60% €45000.00 projects.filter.progress.collected projects.filter.progress.goal €75000.00 olive_tree Ferme Bio Dupont projects.filter.cta" [ref=e1059] [cursor=pointer]:
+              - link "Oliviers de Provence 2024" [ref=e1060]:
+                - /url: /projects/oliviers-provence-2024
+              - generic [ref=e494]:
+                - generic [ref=e495]:
+                  - img "Oliviers de Provence 2024" [ref=e1061]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Oliviers de Provence 2024" [level=3] [ref=e1062]
+                - generic [ref=e501]:
+                  - paragraph [ref=e502]: Plantation de 100 oliviers centenaires en Provence
+                  - generic [ref=e503]:
+                    - generic [ref=e504]:
+                      - generic [ref=e505]: projects.filter.progress.label
+                      - generic [ref=e506]: 60%
+                    - generic [ref=e509]:
+                      - generic [ref=e510]: €45000.00 projects.filter.progress.collected
+                      - generic [ref=e511]: projects.filter.progress.goal €75000.00
+                  - generic [ref=e512]:
+                    - generic [ref=e513]: olive_tree
+                    - generic [ref=e514]: Ferme Bio Dupont
+                - generic [ref=e516]:
+                  - text: projects.filter.cta
+                  - img [ref=e517]
+            - button "Ruches des Ardennes 2024 Ruches des Ardennes 2024 projects.filter.featured projects.filter.status.active Ruches des Ardennes 2024 Installation de 50 nouvelles ruches dans les Ardennes belges projects.filter.progress.label 30% €15000.00 projects.filter.progress.collected projects.filter.progress.goal €50000.00 beehive Apiculteur Martin projects.filter.cta" [ref=e1063] [cursor=pointer]:
+              - link "Ruches des Ardennes 2024" [ref=e1064]:
+                - /url: /projects/ruches-ardennes-2024
+              - generic [ref=e523]:
+                - generic [ref=e524]:
+                  - img "Ruches des Ardennes 2024" [ref=e1065]
+                  - generic:
+                    - generic: projects.filter.featured
+                    - generic: projects.filter.status.active
+                - heading "Ruches des Ardennes 2024" [level=3] [ref=e1066]
+                - generic [ref=e530]:
+                  - paragraph [ref=e531]: Installation de 50 nouvelles ruches dans les Ardennes belges
+                  - generic [ref=e532]:
+                    - generic [ref=e533]:
+                      - generic [ref=e534]: projects.filter.progress.label
+                      - generic [ref=e535]: 30%
+                    - generic [ref=e538]:
+                      - generic [ref=e539]: €15000.00 projects.filter.progress.collected
+                      - generic [ref=e540]: projects.filter.progress.goal €50000.00
+                  - generic [ref=e541]:
+                    - generic [ref=e542]: beehive
+                    - generic [ref=e543]: Apiculteur Martin
+                - generic [ref=e545]:
+                  - text: projects.filter.cta
+                  - img [ref=e546]
+            - button "Vignoble Bio 2024 Vignoble Bio 2024 projects.filter.status.active Vignoble Bio 2024 Conversion d'un vignoble de 5 hectares en agriculture biologique projects.filter.progress.label 30% €30000.00 projects.filter.progress.collected projects.filter.progress.goal €100000.00 vineyard Coopérative des Ardennes projects.filter.cta" [ref=e1067] [cursor=pointer]:
+              - link "Vignoble Bio 2024" [ref=e1068]:
+                - /url: /projects/vignoble-bio-2024
+              - generic [ref=e552]:
+                - generic [ref=e553]:
+                  - img "Vignoble Bio 2024" [ref=e1069]
+                  - generic:
+                    - generic: projects.filter.status.active
+                - heading "Vignoble Bio 2024" [level=3] [ref=e1070]
+                - generic [ref=e559]:
+                  - paragraph [ref=e560]: Conversion d'un vignoble de 5 hectares en agriculture biologique
+                  - generic [ref=e561]:
+                    - generic [ref=e562]:
+                      - generic [ref=e563]: projects.filter.progress.label
+                      - generic [ref=e564]: 30%
+                    - generic [ref=e567]:
+                      - generic [ref=e568]: €30000.00 projects.filter.progress.collected
+                      - generic [ref=e569]: projects.filter.progress.goal €100000.00
+                  - generic [ref=e570]:
+                    - generic [ref=e571]: vineyard
+                    - generic [ref=e572]: Coopérative des Ardennes
+                - generic [ref=e574]:
+                  - text: projects.filter.cta
+                  - img [ref=e575]
+    - contentinfo [ref=e577]:
+      - generic [ref=e578]:
+        - generic [ref=e579]:
+          - generic [ref=e580]:
+            - link "Make the Change Make the Change" [ref=e1071] [cursor=pointer]:
+              - /url: /fr
+              - img "Make the Change" [ref=e1072]
+              - generic [ref=e584]: Make the Change
+            - paragraph [ref=e585]: Investissez dans la biodiversité, récoltez des récompenses tangibles.
+          - navigation "Liens rapides" [ref=e1073]:
+            - heading "Liens rapides" [level=3] [ref=e1074]
+            - list [ref=e588]:
+              - listitem [ref=e589]:
+                - link "Projets" [ref=e1075] [cursor=pointer]:
+                  - /url: /fr/projects
+              - listitem [ref=e591]:
+                - link "Produits" [ref=e1076] [cursor=pointer]:
+                  - /url: /fr/products
+              - listitem [ref=e593]:
+                - link "Classement" [ref=e1077] [cursor=pointer]:
+                  - /url: /fr/leaderboard
+              - listitem [ref=e595]:
+                - link "Blog" [ref=e1078] [cursor=pointer]:
+                  - /url: /fr/blog
+              - listitem [ref=e597]:
+                - link "À propos" [ref=e1079] [cursor=pointer]:
+                  - /url: /fr/about
+              - listitem [ref=e599]:
+                - link "Comment ça marche" [ref=e1080] [cursor=pointer]:
+                  - /url: /fr/how-it-works
+              - listitem [ref=e601]:
+                - link "Guide de marque" [ref=e1081] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines
+              - listitem [ref=e603]:
+                - link "BioDex" [ref=e1082] [cursor=pointer]:
+                  - /url: /fr/biodex
+              - listitem [ref=e605]:
+                - link "Challenges" [ref=e1083] [cursor=pointer]:
+                  - /url: /fr/challenges
+              - listitem [ref=e607]:
+                - link "Menu" [ref=e1084] [cursor=pointer]:
+                  - /url: /fr/menu
+          - navigation "Account & Shopping" [ref=e1085]:
+            - heading "Account & Shopping" [level=3] [ref=e1086]
+            - list [ref=e611]:
+              - listitem [ref=e612]:
+                - link "Panier" [ref=e1087] [cursor=pointer]:
+                  - /url: /fr/cart
+              - listitem [ref=e614]:
+                - link "Connexion" [ref=e1088] [cursor=pointer]:
+                  - /url: /fr/login
+              - listitem [ref=e616]:
+                - link "Inscription" [ref=e1089] [cursor=pointer]:
+                  - /url: /fr/register
+          - navigation "Support" [ref=e1090]:
+            - heading "Support" [level=3] [ref=e1091]
+            - list [ref=e620]:
+              - listitem [ref=e621]:
+                - link "FAQ" [ref=e1092] [cursor=pointer]:
+                  - /url: /fr/faq
+              - listitem [ref=e623]:
+                - link "Contact" [ref=e1093] [cursor=pointer]:
+                  - /url: /fr/contact
+              - listitem [ref=e625]:
+                - link "Confidentialité" [ref=e1094] [cursor=pointer]:
+                  - /url: /fr/privacy
+              - listitem [ref=e627]:
+                - link "Conditions" [ref=e1095] [cursor=pointer]:
+                  - /url: /fr/terms
+          - generic [ref=e629]:
+            - heading "Nous contacter" [level=3] [ref=e1096]
+            - generic [ref=e631]:
+              - link "contact@make-the-change.com" [ref=e1097] [cursor=pointer]:
+                - /url: mailto:contact@make-the-change.com
+                - img [ref=e633]
+                - text: contact@make-the-change.com
+              - paragraph [ref=e636]:
+                - img [ref=e637]
+                - text: Brussels, Belgium
+            - generic [ref=e640]:
+              - heading "Suivez-nous" [level=4] [ref=e1098]
+              - navigation "Réseaux sociaux" [ref=e1099]:
+                - list [ref=e643]:
+                  - listitem [ref=e644]:
+                    - link "Instagram" [ref=e1100] [cursor=pointer]:
+                      - /url: https://instagram.com/makethechange
+                      - img [ref=e646]
+                  - listitem [ref=e649]:
+                    - link "Facebook" [ref=e1101] [cursor=pointer]:
+                      - /url: https://facebook.com/makethechange
+                      - img [ref=e651]
+                  - listitem [ref=e653]:
+                    - link "LinkedIn" [ref=e1102] [cursor=pointer]:
+                      - /url: https://linkedin.com/company/makethechange
+                      - img [ref=e655]
+                  - listitem [ref=e659]:
+                    - link "TikTok" [ref=e1103] [cursor=pointer]:
+                      - /url: https://tiktok.com/@makethechange
+                      - img [ref=e661]
+        - generic [ref=e665]:
+          - paragraph [ref=e666]: © 2026 Make the CHANGE. Tous droits réservés.
+          - generic [ref=e667]:
+            - link "Confidentialité" [ref=e1104] [cursor=pointer]:
+              - /url: /fr/privacy
+            - link "Conditions" [ref=e1105] [cursor=pointer]:
+              - /url: /fr/terms
+  - region "Notifications" [ref=e670]
+  - generic [ref=e675] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e676]:
+      - img [ref=e677]
+    - generic [ref=e810]:
+      - button "Open issues overlay" [ref=e811]:
+        - generic [ref=e812]:
+          - generic [ref=e813]: "0"
+          - generic [ref=e814]: "1"
+        - generic [ref=e815]: Issue
+      - button "Collapse issues badge" [ref=e816]:
+        - img [ref=e817]
+  - alert [ref=e819]

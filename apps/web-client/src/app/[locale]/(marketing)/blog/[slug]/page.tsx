@@ -1,11 +1,31 @@
 import { Badge, Button } from '@make-the-change/core/ui'
 import { ArrowLeft, User } from 'lucide-react'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { getBlogPostBySlug } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
 import { RenderTipTapContent } from '@/app/[locale]/(marketing)/blog/_features/content/render-tiptap-content'
 import { Link } from '@/i18n/navigation'
 import { formatDate } from '@/lib/utils'
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const post = await getBlogPostBySlug(slug)
+
+  if (!post) {
+    return {}
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: post.coverImage ? [post.coverImage] : [],
+    },
+  }
+}
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

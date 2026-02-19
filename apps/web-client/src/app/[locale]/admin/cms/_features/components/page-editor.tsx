@@ -13,7 +13,7 @@ import {
 import { useState, useTransition } from 'react'
 import { updatePageContent } from '@/app/[locale]/admin/cms/_features/actions/cms-actions'
 import type { HomePageContent } from '@/app/[locale]/admin/cms/_features/types'
-import { useToast } from '@/hooks/use-toast'
+import { useToast } from '@/components/ui/use-toast'
 import { EditorComponent } from './editor/editor-component'
 
 interface PageEditorProps {

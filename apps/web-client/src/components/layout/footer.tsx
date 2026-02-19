@@ -231,10 +231,17 @@ export function Footer() {
                 <Mail className="h-4 w-4" />
                 contact@make-the-change.com
               </a>
-              <p className="flex items-center gap-2 text-muted-foreground">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  t('address')
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <MapPin className="h-4 w-4" />
                 {t('address')}
-              </p>
+              </a>
             </address>
 
             <div className="mt-4">

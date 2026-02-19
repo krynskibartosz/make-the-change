@@ -1,0 +1,258 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e5] [cursor=pointer]:
+          - /url: /fr
+          - img "Make the Change" [ref=e7]
+          - generic [ref=e8]: Make the Change
+        - navigation "Navigation principale" [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Accueil" [ref=e12] [cursor=pointer]:
+                - /url: /fr
+            - listitem [ref=e13]:
+              - button "Projets" [ref=e14]:
+                - text: Projets
+                - img [ref=e15]
+            - listitem [ref=e17]:
+              - button "Produits" [ref=e18]:
+                - text: Produits
+                - img [ref=e19]
+            - listitem [ref=e21]:
+              - button "Découvrir" [ref=e22]:
+                - text: Découvrir
+                - img [ref=e23]
+        - generic [ref=e25]:
+          - link "Connexion" [ref=e27] [cursor=pointer]:
+            - /url: /fr/login
+            - button "Connexion" [ref=e28]:
+              - generic [ref=e30]: Connexion
+          - link "Ouvrir le panier" [ref=e32] [cursor=pointer]:
+            - /url: /fr/cart
+            - img [ref=e33]
+          - button "Toggle theme" [ref=e37] [cursor=pointer]
+    - main [ref=e41]:
+      - generic [ref=e42]:
+        - generic [ref=e44]:
+          - link "Make the Change Make the Change" [ref=e45] [cursor=pointer]:
+            - /url: /fr
+            - img "Make the Change" [ref=e47]
+            - generic [ref=e48]: Make the Change
+          - navigation "Navigation principale" [ref=e49]:
+            - list [ref=e50]:
+              - listitem [ref=e51]:
+                - link "Accueil" [ref=e52] [cursor=pointer]:
+                  - /url: /fr
+              - listitem [ref=e53]:
+                - button "Projets" [ref=e54]:
+                  - text: Projets
+                  - img [ref=e55]
+              - listitem [ref=e57]:
+                - button "Produits" [ref=e58]:
+                  - text: Produits
+                  - img [ref=e59]
+              - listitem [ref=e61]:
+                - button "Découvrir" [ref=e62]:
+                  - text: Découvrir
+                  - img [ref=e63]
+          - generic [ref=e65]:
+            - link "Connexion" [ref=e67] [cursor=pointer]:
+              - /url: /fr/login
+              - button "Connexion" [ref=e68]:
+                - generic [ref=e70]: Connexion
+            - link "Ouvrir le panier" [ref=e72] [cursor=pointer]:
+              - /url: /fr/cart
+              - img [ref=e73]
+            - button "Toggle theme" [ref=e77] [cursor=pointer]
+        - main [ref=e81]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - img [ref=e91]
+                - generic [ref=e94]: Produit authentique
+              - heading "Gourde Inox" [level=1] [ref=e95]
+              - paragraph [ref=e96]: Gourde réutilisable zéro déchet.
+              - generic [ref=e97]:
+                - generic [ref=e98]:
+                  - img [ref=e99]
+                  - generic [ref=e103]: Maison
+                - generic [ref=e104]:
+                  - img [ref=e105]
+                  - generic [ref=e109]: Océan Bleu
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - text: Mis en avant
+            - generic [ref=e113]:
+              - img [ref=e116]
+              - generic [ref=e123]:
+                - img [ref=e125]
+                - generic [ref=e129]:
+                  - paragraph [ref=e130]: 10,00 €
+                  - paragraph [ref=e131]: 200 disponibles
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - generic [ref=e138]:
+                - generic [ref=e139]:
+                  - generic [ref=e140]:
+                    - img [ref=e141]
+                    - generic [ref=e144]: Description
+                  - heading "Description" [level=2] [ref=e145]
+                - paragraph [ref=e147]: Gourde réutilisable zéro déchet.
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - img [ref=e153]
+                  - generic [ref=e157]: 10,00 €ou 1000 pts
+                  - paragraph [ref=e159]: 200 disponibles
+                - generic [ref=e161]:
+                  - button "Ajouter au panier" [ref=e162] [cursor=pointer]:
+                    - generic [ref=e164]:
+                      - img [ref=e165]
+                      - text: Ajouter au panier
+                  - button "Échanger" [ref=e169] [cursor=pointer]:
+                    - generic [ref=e171]:
+                      - img [ref=e172]
+                      - text: Échanger
+                - generic [ref=e178]:
+                  - generic [ref=e179]:
+                    - img [ref=e180]
+                    - generic [ref=e184]: Producteur
+                  - generic [ref=e186]:
+                    - generic [ref=e187]: O
+                    - generic [ref=e188]:
+                      - generic [ref=e189]: Océan Bleu
+                      - generic [ref=e190]: Protection des écosystèmes marins.
+            - link "Retour à la boutique" [ref=e192] [cursor=pointer]:
+              - /url: /fr/products
+              - button "Retour à la boutique" [ref=e193]:
+                - generic [ref=e195]:
+                  - img [ref=e196]
+                  - generic [ref=e198]: Retour à la boutique
+          - region "Call to action" [ref=e200]:
+            - generic [ref=e203]:
+              - generic [ref=e204]:
+                - img [ref=e205]
+                - generic [ref=e208]: Impact durable
+              - heading "Soutenir les producteurs locaux." [level=2] [ref=e209]:
+                - generic [ref=e210]: Soutenir les
+                - generic [ref=e211]: producteurs locaux.
+              - paragraph [ref=e212]: Chaque achat est un vote pour un avenir plus durable et équitable.
+              - generic [ref=e213]:
+                - link "Découvrir plus de produits" [ref=e214] [cursor=pointer]:
+                  - /url: /fr/products
+                  - button "Découvrir plus de produits" [ref=e215]:
+                    - generic [ref=e217]: Découvrir plus de produits
+                - link "En savoir plus" [ref=e218] [cursor=pointer]:
+                  - /url: /fr/about
+                  - button "En savoir plus" [ref=e219]:
+                    - generic [ref=e221]: En savoir plus
+    - contentinfo [ref=e222]:
+      - generic [ref=e223]:
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - link "Make the Change Make the Change" [ref=e226] [cursor=pointer]:
+              - /url: /fr
+              - img "Make the Change" [ref=e228]
+              - generic [ref=e229]: Make the Change
+            - paragraph [ref=e230]: Investissez dans la biodiversité, récoltez des récompenses tangibles.
+          - navigation "Liens rapides" [ref=e231]:
+            - heading "Liens rapides" [level=3] [ref=e232]
+            - list [ref=e233]:
+              - listitem [ref=e234]:
+                - link "Projets" [ref=e235] [cursor=pointer]:
+                  - /url: /fr/projects
+              - listitem [ref=e236]:
+                - link "Produits" [ref=e237] [cursor=pointer]:
+                  - /url: /fr/products
+              - listitem [ref=e238]:
+                - link "Classement" [ref=e239] [cursor=pointer]:
+                  - /url: /fr/leaderboard
+              - listitem [ref=e240]:
+                - link "Blog" [ref=e241] [cursor=pointer]:
+                  - /url: /fr/blog
+              - listitem [ref=e242]:
+                - link "À propos" [ref=e243] [cursor=pointer]:
+                  - /url: /fr/about
+              - listitem [ref=e244]:
+                - link "Comment ça marche" [ref=e245] [cursor=pointer]:
+                  - /url: /fr/how-it-works
+              - listitem [ref=e246]:
+                - link "Guide de marque" [ref=e247] [cursor=pointer]:
+                  - /url: /fr/brand-guidelines
+              - listitem [ref=e248]:
+                - link "BioDex" [ref=e249] [cursor=pointer]:
+                  - /url: /fr/biodex
+              - listitem [ref=e250]:
+                - link "Challenges" [ref=e251] [cursor=pointer]:
+                  - /url: /fr/challenges
+              - listitem [ref=e252]:
+                - link "Menu" [ref=e253] [cursor=pointer]:
+                  - /url: /fr/menu
+          - navigation "Account & Shopping" [ref=e254]:
+            - heading "Account & Shopping" [level=3] [ref=e255]
+            - list [ref=e256]:
+              - listitem [ref=e257]:
+                - link "Panier" [ref=e258] [cursor=pointer]:
+                  - /url: /fr/cart
+              - listitem [ref=e259]:
+                - link "Connexion" [ref=e260] [cursor=pointer]:
+                  - /url: /fr/login
+              - listitem [ref=e261]:
+                - link "Inscription" [ref=e262] [cursor=pointer]:
+                  - /url: /fr/register
+          - navigation "Support" [ref=e263]:
+            - heading "Support" [level=3] [ref=e264]
+            - list [ref=e265]:
+              - listitem [ref=e266]:
+                - link "FAQ" [ref=e267] [cursor=pointer]:
+                  - /url: /fr/faq
+              - listitem [ref=e268]:
+                - link "Contact" [ref=e269] [cursor=pointer]:
+                  - /url: /fr/contact
+              - listitem [ref=e270]:
+                - link "Confidentialité" [ref=e271] [cursor=pointer]:
+                  - /url: /fr/privacy
+              - listitem [ref=e272]:
+                - link "Conditions" [ref=e273] [cursor=pointer]:
+                  - /url: /fr/terms
+          - generic [ref=e274]:
+            - heading "Nous contacter" [level=3] [ref=e275]
+            - generic [ref=e276]:
+              - link "contact@make-the-change.com" [ref=e277] [cursor=pointer]:
+                - /url: mailto:contact@make-the-change.com
+                - img [ref=e278]
+                - text: contact@make-the-change.com
+              - link "Brussels, Belgium" [ref=e281] [cursor=pointer]:
+                - /url: https://www.google.com/maps/search/?api=1&query=Brussels%2C%20Belgium
+                - img [ref=e282]
+                - text: Brussels, Belgium
+            - generic [ref=e285]:
+              - heading "Suivez-nous" [level=4] [ref=e286]
+              - navigation "Réseaux sociaux" [ref=e287]:
+                - list [ref=e288]:
+                  - listitem [ref=e289]:
+                    - link "Instagram" [ref=e290] [cursor=pointer]:
+                      - /url: https://instagram.com/makethechange
+                      - img [ref=e291]
+                  - listitem [ref=e294]:
+                    - link "Facebook" [ref=e295] [cursor=pointer]:
+                      - /url: https://facebook.com/makethechange
+                      - img [ref=e296]
+                  - listitem [ref=e298]:
+                    - link "LinkedIn" [ref=e299] [cursor=pointer]:
+                      - /url: https://linkedin.com/company/makethechange
+                      - img [ref=e300]
+                  - listitem [ref=e304]:
+                    - link "TikTok" [ref=e305] [cursor=pointer]:
+                      - /url: https://tiktok.com/@makethechange
+                      - img [ref=e306]
+        - generic [ref=e310]:
+          - paragraph [ref=e311]: © 2026 Make the CHANGE. Tous droits réservés.
+          - generic [ref=e312]:
+            - link "Confidentialité" [ref=e313] [cursor=pointer]:
+              - /url: /fr/privacy
+            - link "Conditions" [ref=e314] [cursor=pointer]:
+              - /url: /fr/terms
+  - region "Notifications" [ref=e315]
+  - button "Open Next.js Dev Tools" [ref=e321] [cursor=pointer]:
+    - img [ref=e322]

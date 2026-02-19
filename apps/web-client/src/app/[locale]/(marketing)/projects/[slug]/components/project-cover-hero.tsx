@@ -1,4 +1,5 @@
 import { Badge, Button } from '@make-the-change/core/ui'
+import Image from 'next/image'
 import { Calendar, Leaf, MapPin, Sparkles } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
@@ -111,10 +112,12 @@ export async function ProjectCoverHero({
       <div className="relative order-1 lg:order-2">
         <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0">
           {coverImage ? (
-            <img
+            <Image
               src={coverImage}
               alt={project.name_default}
-              className="h-full w-full object-cover scale-110 transition-transform duration-700 hover:scale-100"
+              fill
+              priority
+              className="object-cover scale-110 transition-transform duration-700 hover:scale-100"
             />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-primary/20 to-muted flex items-center justify-center">
@@ -142,6 +145,6 @@ export async function ProjectCoverHero({
 
         <div className="absolute inset-0 bg-primary/20 blur-[80px] -z-10 rounded-full scale-125" />
       </div>
-    </div>
+    </div >
   )
 }

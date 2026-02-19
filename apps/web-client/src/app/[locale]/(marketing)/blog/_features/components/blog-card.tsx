@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage, Badge, Card, CardContent } from '@make-the-change/core/ui'
+import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { formatDate } from '@/lib/utils'
 import type { BlogPost } from '../blog-types'
@@ -16,10 +17,11 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
       <Link href={`/blog/${post.slug}`} className="group relative block h-full overflow-hidden rounded-3xl" itemScope itemType="https://schema.org/BlogPosting">
         <div className="absolute inset-0 bg-muted">
           {post.coverImage && (
-            <img
+            <Image
               src={post.coverImage}
               alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
               itemProp="image"
             />
           )}
@@ -68,10 +70,11 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
       <Link href={`/blog/${post.slug}`} className="group flex gap-4 items-start">
         <div className="relative aspect-square w-24 sm:w-32 shrink-0 overflow-hidden rounded-xl bg-muted">
           {post.coverImage && (
-            <img
+            <Image
               src={post.coverImage}
               alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
           )}
         </div>
@@ -99,11 +102,11 @@ export function BlogCard({ post, className, variant = 'default' }: BlogCardProps
       <div className="h-full flex flex-col overflow-hidden rounded-2xl bg-card border border-border/50 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5">
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
           {post.coverImage ? (
-            <img
+            <Image
               src={post.coverImage}
               alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
               itemProp="image"
             />
           ) : null}
