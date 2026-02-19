@@ -19,6 +19,7 @@ import type {
   ProductCardProps,
   ProductCardView,
 } from './product-card.types'
+import { getEntityViewTransitionName } from './view-transition'
 
 const gridCardClasses: Record<ProductCardContext, string> = {
   admin: 'h-full rounded-2xl p-4 md:p-5',
@@ -189,9 +190,10 @@ const ProductMedia: FC<{
       outOfStockLabel,
       lowStockLabel,
     })
+    const mediaTransitionName = getEntityViewTransitionName('product', model.id, 'media')
 
     return (
-      <div className={getMediaContainerClasses(context, view)}>
+      <div className={getMediaContainerClasses(context, view)} style={{ viewTransitionName: mediaTransitionName }}>
         {hasMainImage ? (
           <>
             <Image
@@ -362,6 +364,7 @@ const ProductCardGrid: FC<ProductCardProps> = ({
   testId,
 }) => {
   const hasFooter = !!slots?.footerActions || labels.viewLabel.trim().length > 0
+  const titleTransitionName = getEntityViewTransitionName('product', model.id, 'title')
 
   return (
     <div data-testid={testId} className="h-full">
@@ -384,7 +387,9 @@ const ProductCardGrid: FC<ProductCardProps> = ({
         <DataCard.Header className={cn('mb-2', context === 'admin' && 'mb-3')}>
           <div className="flex w-full items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <h3 className={titleClasses[context]}>{model.title}</h3>
+              <h3 className={titleClasses[context]} style={{ viewTransitionName: titleTransitionName }}>
+                {model.title}
+              </h3>
               {model.subtitle && <p className={subtitleClasses[context]}>{model.subtitle}</p>}
             </div>
             {context !== 'clientCatalog' && (
@@ -439,6 +444,7 @@ const ProductCardList: FC<ProductCardProps> = ({
   testId,
 }) => {
   const hasFooter = !!slots?.footerActions || labels.viewLabel.trim().length > 0
+  const titleTransitionName = getEntityViewTransitionName('product', model.id, 'title')
 
   return (
     <div data-testid={testId} className={listContainerClasses[context]}>
@@ -458,7 +464,9 @@ const ProductCardList: FC<ProductCardProps> = ({
               lowStockLabel={labels.lowStockLabel}
             />
             <div className="min-w-0 flex-1">
-              <h3 className={titleClasses[context]}>{model.title}</h3>
+              <h3 className={titleClasses[context]} style={{ viewTransitionName: titleTransitionName }}>
+                {model.title}
+              </h3>
               {model.subtitle && <p className={subtitleClasses[context]}>{model.subtitle}</p>}
             </div>
             {slots?.topRight && (

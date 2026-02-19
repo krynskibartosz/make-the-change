@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { cn, formatCurrency } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
+import { Link } from '@/i18n/navigation'
 import { ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
 
@@ -136,31 +137,36 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {product.producer && (
-              <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
-                <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-                  {t('detail.producer')}
-                </h2>
-                <div className="flex items-start gap-3">
-                  {producerImage ? (
-                    <img
-                      src={producerImage}
-                      alt={product.producer.name_default || 'Producer'}
-                      className="h-14 w-14 rounded-xl object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary">
-                      {product.producer.name_default?.[0]?.toUpperCase() || 'P'}
+              <section className="rounded-2xl border border-white/10 bg-background/40 p-4 transition-colors hover:bg-background/60">
+                <Link href={`/producers/${product.producer.slug || product.producer.id}`}>
+                  <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
+                    {t('detail.producer')}
+                  </h2>
+                  <div className="flex items-start gap-3">
+                    {producerImage ? (
+                      <img
+                        src={producerImage}
+                        alt={product.producer.name_default || 'Producer'}
+                        className="h-14 w-14 rounded-xl object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary">
+                        {product.producer.name_default?.[0]?.toUpperCase() || 'P'}
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="truncate text-base font-bold text-foreground underline-offset-4 group-hover:underline">
+                          {product.producer.name_default || ''}
+                        </p>
+                        <Share2 className="h-4 w-4 text-muted-foreground opacity-50" />
+                      </div>
+                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                        {product.producer.description_default || ''}
+                      </p>
                     </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="truncate text-base font-bold text-foreground">
-                      {product.producer.name_default || ''}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {product.producer.description_default || ''}
-                    </p>
                   </div>
-                </div>
+                </Link>
               </section>
             )}
 

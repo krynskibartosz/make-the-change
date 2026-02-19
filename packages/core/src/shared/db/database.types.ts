@@ -176,6 +176,7 @@ type GeneratedDatabase = {
           phone: string | null
           points_balance: number
           social_links: Json | null
+          theme_config: Json | null
           timezone: string | null
           updated_at: string
           user_level: "explorateur" | "protecteur" | "ambassadeur" | null
@@ -206,6 +207,7 @@ type GeneratedDatabase = {
           phone?: string | null
           points_balance?: number
           social_links?: Json | null
+          theme_config?: Json | null
           timezone?: string | null
           updated_at?: string
           user_level?: "explorateur" | "protecteur" | "ambassadeur" | null
@@ -236,6 +238,7 @@ type GeneratedDatabase = {
           phone?: string | null
           points_balance?: number
           social_links?: Json | null
+          theme_config?: Json | null
           timezone?: string | null
           updated_at?: string
           user_level?: "explorateur" | "protecteur" | "ambassadeur" | null
@@ -1305,6 +1308,10 @@ type GeneratedDatabase = {
       refresh_user_rankings: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      count_total_members: {
+        Args: Record<PropertyKey, never>
+        Returns: number
       }
       get_total_points_generated: {
         Args: Record<PropertyKey, never>

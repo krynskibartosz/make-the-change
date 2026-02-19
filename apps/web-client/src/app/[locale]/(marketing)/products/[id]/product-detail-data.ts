@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 
 export type ProductProducer = {
+  id: string
+  slug: string | null
   name_default: string | null
   description_default: string | null
   images: string[] | null

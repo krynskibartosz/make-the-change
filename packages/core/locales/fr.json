@@ -888,6 +888,7 @@
     "card": {
       "points": "points",
       "add_to_cart": "Ajouter au panier",
+      "in_stock": "En stock",
       "out_of_stock": "Rupture de stock",
       "best_seller": "Best Seller",
       "low_stock": "Stock faible",

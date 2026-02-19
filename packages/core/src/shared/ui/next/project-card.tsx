@@ -19,6 +19,7 @@ import type {
   ProjectCardProps,
   ProjectCardView,
 } from './project-card.types'
+import { getEntityViewTransitionName } from './view-transition'
 
 const gridCardClasses: Record<ProjectCardContext, string> = {
   admin: 'h-full rounded-2xl p-4 md:p-5',
@@ -199,9 +200,10 @@ const ProjectMedia: FC<{
       activeLabel,
       fundedLabel,
     })
+    const mediaTransitionName = getEntityViewTransitionName('project', model.id, 'media')
 
     return (
-      <div className={getMediaContainerClasses(context, view)}>
+      <div className={getMediaContainerClasses(context, view)} style={{ viewTransitionName: mediaTransitionName }}>
         {hasImage ? (
           <Image
             src={imageSrc}
@@ -352,6 +354,7 @@ const ProjectCardGrid: FC<ProjectCardProps> = ({
   testId,
 }) => {
   const hasFooter = !!slots?.footerActions || labels.viewLabel.trim().length > 0
+  const titleTransitionName = getEntityViewTransitionName('project', model.id, 'title')
 
   return (
     <div data-testid={testId} className="h-full">
@@ -374,7 +377,9 @@ const ProjectCardGrid: FC<ProjectCardProps> = ({
         <DataCard.Header className={cn('mb-2', context === 'admin' && 'mb-3')}>
           <div className="flex w-full items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <h3 className={titleClasses[context]}>{model.title}</h3>
+              <h3 className={titleClasses[context]} style={{ viewTransitionName: titleTransitionName }}>
+                {model.title}
+              </h3>
               {model.subtitle && <p className={subtitleClasses[context]}>{model.subtitle}</p>}
             </div>
           </div>
@@ -423,6 +428,7 @@ const ProjectCardList: FC<ProjectCardProps> = ({
   testId,
 }) => {
   const hasFooter = !!slots?.footerActions || labels.viewLabel.trim().length > 0
+  const titleTransitionName = getEntityViewTransitionName('project', model.id, 'title')
   const badges = resolveBadges(model, {
     featuredLabel: labels.featuredLabel,
     activeLabel: labels.activeLabel,
@@ -447,7 +453,9 @@ const ProjectCardList: FC<ProjectCardProps> = ({
               fundedLabel={labels.fundedLabel}
             />
             <div className="min-w-0 flex-1">
-              <h3 className={titleClasses[context]}>{model.title}</h3>
+              <h3 className={titleClasses[context]} style={{ viewTransitionName: titleTransitionName }}>
+                {model.title}
+              </h3>
               {model.subtitle && <p className={subtitleClasses[context]}>{model.subtitle}</p>}
               {badges.length > 0 && (
                 <div className="mt-1 flex flex-wrap gap-1">

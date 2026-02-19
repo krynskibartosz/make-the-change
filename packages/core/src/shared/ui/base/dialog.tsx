@@ -1,9 +1,15 @@
 'use client'
 
 import { Dialog } from '@base-ui/react/dialog'
+import { clsx, type ClassValue } from 'clsx'
 import { X } from 'lucide-react'
 import type { ComponentPropsWithoutRef, ElementRef, FC, HTMLAttributes } from 'react'
 import { forwardRef } from 'react'
+import { twMerge } from 'tailwind-merge'
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
 const baseOverlay =
   'fixed inset-0 z-50 bg-black/20 backdrop-blur-sm transition-all duration-300 ' +
@@ -13,7 +19,7 @@ const baseOverlay =
 const baseContent =
   'overlay-dialog fixed left-[50%] top-[50%] z-50 grid w-full ' +
   'translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-200 ' +
-  'dark:bg-card/95 dark:shadow-2xl data-[open]:animate-in data-[closed]:animate-out ' +
+  'bg-background dark:bg-card/95 dark:shadow-2xl data-[open]:animate-in data-[closed]:animate-out ' +
   'data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 ' +
   'data-[open]:zoom-in-95 data-[closed]:slide-out-to-left-1/2 ' +
   'data-[closed]:slide-out-to-top-[48%] data-[open]:slide-in-from-left-1/2 ' +
@@ -30,7 +36,7 @@ const DialogOverlay = forwardRef<
 >(({ className, ...props }, ref) => (
   <Dialog.Backdrop
     ref={ref}
-    className={`${baseOverlay}${className ? ` ${className}` : ''}`}
+    className={cn(baseOverlay, className)}
     {...props}
   />
 ))
@@ -62,7 +68,7 @@ const DialogContent = forwardRef<
         <Dialog.Viewport className="fixed inset-0 z-50">
           <Dialog.Popup
             ref={ref}
-            className={`${baseContent} ${sizeClasses[size]}${className ? ` ${className}` : ''}`}
+            className={cn(baseContent, sizeClasses[size], className)}
             {...props}
           >
             {children}
@@ -82,7 +88,7 @@ DialogContent.displayName = 'DialogContent'
 
 const DialogHeader: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => (
   <div
-    className={`flex flex-col space-y-1.5 text-center sm:text-left${className ? ` ${className}` : ''}`}
+    className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)}
     {...props}
   />
 )
@@ -90,7 +96,7 @@ DialogHeader.displayName = 'DialogHeader'
 
 const DialogFooter: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => (
   <div
-    className={`flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2${className ? ` ${className}` : ''}`}
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
     {...props}
   />
 )
@@ -102,7 +108,7 @@ const DialogTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <Dialog.Title
     ref={ref}
-    className={`text-lg font-semibold leading-none tracking-tight text-foreground${className ? ` ${className}` : ''}`}
+    className={cn('text-lg font-semibold leading-none tracking-tight text-foreground', className)}
     {...props}
   />
 ))
@@ -114,7 +120,7 @@ const DialogDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <Dialog.Description
     ref={ref}
-    className={`text-sm text-muted-foreground${className ? ` ${className}` : ''}`}
+    className={cn('text-sm text-muted-foreground', className)}
     {...props}
   />
 ))

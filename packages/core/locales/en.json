@@ -836,6 +836,7 @@
     "card": {
       "points": "points",
       "add_to_cart": "Add to cart",
+      "in_stock": "In stock",
       "out_of_stock": "Out of stock",
       "best_seller": "Best Seller",
       "low_stock": "Low Stock",
