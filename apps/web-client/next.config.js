@@ -14,6 +14,9 @@ try {
 const nextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
+  experimental: {
+    viewTransition: true,
+  },
   typescript: {
     // Temporarily allow production builds with TypeScript errors
     // Remove this after the underlying type issues are fixed.

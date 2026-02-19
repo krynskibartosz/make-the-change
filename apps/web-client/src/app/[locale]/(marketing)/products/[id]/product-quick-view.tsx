@@ -2,7 +2,8 @@ import { Badge, Button } from '@make-the-change/core/ui'
 import { Award, Building2, Package, Share2, Sparkles, Star } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
+import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
 
@@ -21,8 +22,8 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
 
   const producerImage =
     product.producer?.images &&
-    Array.isArray(product.producer.images) &&
-    product.producer.images.length > 0
+      Array.isArray(product.producer.images) &&
+      product.producer.images.length > 0
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
@@ -30,12 +31,19 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
   const displayPrice = displayPoints > 0 ? displayPoints / 100 : 0
 
   const inStock = (product.stock_quantity || 0) > 0
+  const LOW_STOCK_THRESHOLD = 10
+  const isLowStock = (product.stock_quantity || 0) <= LOW_STOCK_THRESHOLD
+
   const stockStatus = inStock
-    ? t('detail_page.stock_available', { count: product.stock_quantity || 0 })
+    ? isLowStock
+      ? t('detail_page.stock_available', { count: product.stock_quantity || 0 }) // "Only X left" if translation supports it, or similar
+      : t('card.in_stock') // Generic "In Stock" message
     : t('card.out_of_stock')
 
   const productName = product.name_default || t('card.default_name')
   const productDescription = product.description_default || ''
+  const mediaTransitionName = getEntityViewTransitionName('product', product.id, 'media')
+  const titleTransitionName = getEntityViewTransitionName('product', product.id, 'title')
 
   const parsedPriceEuros =
     product.price_eur_equivalent === null || product.price_eur_equivalent === undefined
@@ -44,17 +52,20 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
   const priceEuros = Number.isFinite(parsedPriceEuros) ? parsedPriceEuros : null
 
   return (
-    <div className="relative h-full min-h-[calc(100dvh-2rem)] bg-background/95 backdrop-blur-xl">
+    <div className="relative flex h-full min-h-[calc(100dvh-2rem)] flex-col bg-transparent">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-marketing-positive-500/10 blur-3xl" />
       </div>
 
       <div className="relative flex h-full flex-col">
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4 pb-4 pt-4 sm:px-5 sm:pt-5 lg:px-6 lg:pt-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain pb-4 sm:px-5 sm:pt-5 lg:px-6 lg:pt-6">
           <div className="grid gap-4 md:grid-cols-[1.08fr_0.92fr] lg:gap-6">
             <section>
-              <div className="relative h-[clamp(220px,34vh,360px)] overflow-hidden rounded-3xl border border-border/50 bg-muted/40">
+              <div
+                className="relative h-[clamp(220px,34vh,360px)] overflow-hidden rounded-none border-b border-border/50 bg-muted/40 sm:rounded-3xl sm:border"
+                style={{ viewTransitionName: mediaTransitionName }}
+              >
                 {coverImage ? (
                   <img src={coverImage} alt={productName} className="h-full w-full object-cover" />
                 ) : (
@@ -66,14 +77,17 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
               </div>
             </section>
 
-            <aside className="space-y-4">
+            <aside className="space-y-4 px-4 sm:px-0">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>{t('detail_page.authentic_badge')}</span>
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl">
+                <h1
+                  className="text-3xl font-black tracking-tight text-foreground sm:text-4xl"
+                  style={{ viewTransitionName: titleTransitionName }}
+                >
                   {productName}
                 </h1>
                 <div className="flex flex-wrap gap-2">
@@ -109,9 +123,9 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             </aside>
           </div>
 
-          <div className="mt-4 space-y-4 pb-36 sm:pb-40">
+          <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
             {productDescription && (
-              <section className="rounded-2xl border border-border/50 bg-background/70 p-4">
+              <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
                 <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-muted-foreground">
                   {t('detail.description')}
                 </h2>
@@ -122,7 +136,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {product.producer && (
-              <section className="rounded-2xl border border-border/50 bg-background/70 p-4">
+              <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
                 <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
                   {t('detail.producer')}
                 </h2>
@@ -151,7 +165,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {product.certifications && product.certifications.length > 0 && (
-              <section className="rounded-2xl border border-border/50 bg-background/70 p-4">
+              <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
                 <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
                   {t('detail.certifications')}
                 </h2>
@@ -171,8 +185,8 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
           </div>
         </div>
 
-        <div className="relative shrink-0 border-t border-border/50 bg-background/95 p-4 backdrop-blur-2xl sm:p-5">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-transparent to-background/90" />
+        <div className="relative shrink-0 border-t border-white/10 bg-background/40 p-4 backdrop-blur-xl sm:p-5">
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-transparent to-background/5" />
           <div className="grid items-end gap-3 md:grid-cols-[1fr_auto]">
             <div>
               <div className="flex items-end justify-between gap-3">
@@ -187,13 +201,20 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
               </div>
               <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
                 <span>{stockStatus}</span>
-                {inStock && <span className="h-2 w-2 rounded-full bg-marketing-positive-500" />}
+                {inStock && (
+                  <span
+                    className={cn(
+                      'h-2 w-2 rounded-full',
+                      isLowStock ? 'bg-marketing-warning-500' : 'bg-marketing-positive-500',
+                    )}
+                  />
+                )}
               </div>
             </div>
 
-            <div className="grid w-full gap-2 md:w-[360px]">
+            <div className="flex w-full gap-2 md:w-[360px]">
               <ProductDetailAddToCartButton
-                className="h-12 w-full rounded-xl text-base font-bold"
+                className="h-12 flex-1 rounded-xl text-base font-bold"
                 productId={product.id}
                 productName={productName}
                 productSlug={product.slug}
@@ -204,9 +225,14 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                 stockQuantity={product.stock_quantity}
                 inStock={inStock}
               />
-              <Button variant="outline" className="h-12 w-full rounded-xl text-base font-semibold">
-                <Share2 className="mr-2 h-4 w-4" />
-                {t('detail.exchange')}
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 shrink-0 rounded-xl"
+                title={t('detail.exchange')}
+              >
+                <Share2 className="h-5 w-5" />
+                <span className="sr-only">{t('detail.exchange')}</span>
               </Button>
             </div>
           </div>

@@ -22,7 +22,7 @@ export function InterceptedRouteDialog({
     <Dialog open={true} onOpenChange={(open) => !open && router.back()}>
       <DialogContent
         className={cn(
-          'w-[min(100vw-1.5rem,72rem)] max-h-[90vh] overflow-y-auto p-0',
+          'w-[min(100vw-1.5rem,72rem)] max-h-[90vh] overflow-y-auto p-0 border-white/20 !bg-background/80 backdrop-blur-md shadow-2xl',
           contentClassName,
         )}
       >

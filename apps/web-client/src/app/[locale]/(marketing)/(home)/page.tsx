@@ -3,6 +3,7 @@ import { Button } from '@make-the-change/core/ui'
 import { ArrowDown, ArrowRight, Leaf, Sparkles, Users, Zap } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { cn } from '@/lib/utils'
+import { Logo } from '@/components/ui/logo'
 
 import { PageHero } from '@/components/ui/page-hero'
 import { getBlogPosts } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
@@ -105,7 +106,7 @@ export default async function HomePage() {
       .from('products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true),
-    supabase.rpc('count_total_members' as any, {}, { count: 'exact' }) as unknown as Promise<NumericRpcResponse>,
+    supabase.rpc('count_total_members', {}, { count: 'exact' }),
     supabase
       .schema('investment')
       .from('projects')
@@ -127,17 +128,17 @@ export default async function HomePage() {
       .eq('status', 'active')
       .order('created_at', { ascending: false }),
     getPageContent('home'),
-    supabase.rpc('get_total_points_generated') as unknown as Promise<NumericRpcResponse>,
+    supabase.rpc('get_total_points_generated'),
     getBlogPosts(),
   ])
 
-  const content = homeContent as HomePageContent | null
+  const content = homeContent
   const projectsCount = activeProjectsCount || 0
   const productsCount = activeProductsCount || 0
   const membersCount = membersCountData || 0
   const pointsGenerated = pointsData || 0
 
-  const featuredProjects = ((featuredProjectsRaw || []) as RawFeaturedProject[]).map((project) => ({
+  const featuredProjects = featuredProjectsRaw.map((project) => ({
     id: project.id,
     slug: project.slug || project.id,
     name_default: project.name_default,
@@ -149,12 +150,20 @@ export default async function HomePage() {
     featured: project.featured,
   }))
 
-  const featuredProducts = (featuredProductsRaw || []) as unknown as Product[]
-  const blogPosts = (latestPosts || []) as BlogPost[]
-  const activeProducers = (activeProducersRaw || []) as any[]
+  const featuredProducts = featuredProductsRaw
+  const blogPosts = latestPosts
+  const activeProducers = activeProducersRaw
 
   return (
     <>
+      {/* Mobile Logo - Matches Desktop Header Style */}
+      <div className="absolute top-4 left-0 right-0 flex justify-center md:hidden z-50">
+        <Link href="/" className="flex items-center gap-2">
+          <Logo variant="icon" width={32} height={32} className="h-8 w-8" />
+          <span className="text-lg font-bold">Make the Change</span>
+        </Link>
+      </div>
+
       <PageHero
         badge={
           <span className="inline-flex items-center gap-2 px-1 py-1">
@@ -168,7 +177,7 @@ export default async function HomePage() {
         description={content?.hero.subtitle || t('hero.subtitle')}
         size="lg"
         variant="gradient"
-        className="min-h-[100dvh] flex flex-col justify-center"
+        className="min-h-[100dvh] flex flex-col justify-center relative pt-32 md:pt-0"
       >
         <div className="space-y-8 relative z-10">
           <div className="flex flex-col justify-center gap-4 sm:flex-row items-center">
@@ -309,11 +318,11 @@ export default async function HomePage() {
         />
       ) : null}
 
-      {featuredProducts.length > 0 ? (
+      {featuredProducts && featuredProducts.length > 0 ? (
         <HomeFeaturedProductsSection
           title={t('featured_products')}
           viewAllLabel={t('view_all_products')}
-          products={featuredProducts}
+          products={featuredProducts as Product[]}
           variant={featuredProjects.length > 0 ? 'default' : 'muted'}
         />
       ) : null}

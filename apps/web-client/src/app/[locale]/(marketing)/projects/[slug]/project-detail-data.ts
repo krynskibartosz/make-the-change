@@ -8,6 +8,7 @@ export type ProjectProducer = {
 }
 
 export type PublicProject = {
+  id: string
   slug: string
   status: string | null
   type: string | null

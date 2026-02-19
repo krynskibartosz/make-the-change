@@ -5,6 +5,7 @@ import { Clock, ShoppingCart } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
+import { QuantityStepper } from '@/components/ui/quantity-stepper'
 import { formatCurrency } from '@/lib/utils'
 
 interface ProductCartPayload {
@@ -45,11 +46,15 @@ function useProductAddToCart({
   inStock,
 }: ProductCartPayload) {
   const t = useTranslations('products')
-  const { addItem } = useCart()
+  const { addItem, items, removeItem, setQuantity } = useCart()
   const { openCart, showSnackbar } = useCartUI()
 
-  const addToCart = () => {
+  const cartItem = items.find((item) => item.productId === productId)
+  const quantity = cartItem?.quantity || 0
+
+  const handleIncrement = () => {
     if (!inStock) return
+    if (stockQuantity && quantity >= stockQuantity) return
 
     addItem({
       productId,
@@ -64,23 +69,42 @@ function useProductAddToCart({
         stockQuantity,
       },
     })
-
-    showSnackbar({
-      message: t('card.added_message'),
-      actionLabel: t('card.view_action'),
-      onAction: openCart,
-      durationMs: 3000,
-    })
   }
 
-  return { addToCart, t }
+  const handleDecrement = () => {
+    if (quantity <= 1) {
+      removeItem(productId)
+    } else {
+      setQuantity(productId, quantity - 1)
+    }
+  }
+
+  const addToCart = () => {
+    handleIncrement()
+    // Only show snackbar on initial add if desired, or relying on stepper feedback
+  }
+
+  return { addToCart, handleIncrement, handleDecrement, quantity, t }
 }
 
 export function ProductDetailAddToCartButton({
   className,
   ...payload
 }: ProductDetailAddToCartButtonProps) {
-  const { addToCart, t } = useProductAddToCart(payload)
+  const { addToCart, handleIncrement, handleDecrement, quantity, t } =
+    useProductAddToCart(payload)
+
+  if (quantity > 0) {
+    return (
+      <QuantityStepper
+        quantity={quantity}
+        maxQuantity={payload.stockQuantity}
+        onIncrement={handleIncrement}
+        onDecrement={handleDecrement}
+        className={className}
+      />
+    )
+  }
 
   return (
     <Button className={className} size="lg" disabled={!payload.inStock} onClick={addToCart}>
@@ -100,12 +124,27 @@ export function ProductDetailAddToCartButton({
 }
 
 export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActionButtonsProps) {
-  const { addToCart, t } = useProductAddToCart(payload)
+  const { addToCart, handleIncrement, handleDecrement, quantity, t } =
+    useProductAddToCart(payload)
+
+  if (quantity > 0) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-background/95 p-4 backdrop-blur-lg md:hidden">
+        <QuantityStepper
+          quantity={quantity}
+          maxQuantity={payload.stockQuantity}
+          onIncrement={handleIncrement}
+          onDecrement={handleDecrement}
+          className="h-14 w-full shadow-lg"
+        />
+      </div>
+    )
+  }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-t border-border/50 p-4 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-background/95 p-4 backdrop-blur-lg md:hidden">
       <Button
-        className="w-full h-14 rounded-full bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg text-marketing-overlay-light font-bold text-lg"
+        className="h-14 w-full rounded-full bg-primary text-lg font-bold text-marketing-overlay-light shadow-lg transition-all duration-300 hover:bg-primary/90"
         disabled={!payload.inStock}
         onClick={addToCart}
       >

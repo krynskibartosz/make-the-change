@@ -20,6 +20,7 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { formatCurrency } from '@/lib/utils'
+import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { FloatingActionButtons, ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
 
@@ -60,6 +61,8 @@ export async function ProductDetails({
     : t('card.out_of_stock')
   const productName = product.name_default || ''
   const productDescription = product.description_default || ''
+  const mediaTransitionName = getEntityViewTransitionName('product', product.id, 'media')
+  const titleTransitionName = getEntityViewTransitionName('product', product.id, 'title')
   const parsedPriceEuros =
     product.price_eur_equivalent === null || product.price_eur_equivalent === undefined
       ? Number.NaN
@@ -99,6 +102,7 @@ export async function ProductDetails({
                     : 'text-6xl sm:text-7xl lg:text-8xl'
                 }
               `}
+              style={{ viewTransitionName: titleTransitionName }}
             >
               {productName}
             </h1>
@@ -153,7 +157,10 @@ export async function ProductDetails({
 
           {/* Image Column */}
           <div className="relative order-1 lg:order-2">
-            <div className="aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0">
+            <div
+              className="aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0"
+              style={{ viewTransitionName: mediaTransitionName }}
+            >
               {coverImage ? (
                 <Image
                   src={coverImage}

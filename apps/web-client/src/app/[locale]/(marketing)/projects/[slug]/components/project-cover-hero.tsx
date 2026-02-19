@@ -4,8 +4,10 @@ import { Calendar, Leaf, MapPin, Sparkles } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { cn, formatCurrency } from '@/lib/utils'
+import { getEntityViewTransitionName } from '@/lib/view-transition'
 
 type ProjectCoverHeroProject = {
+  id: string
   slug: string
   status: string | null
   type: string | null
@@ -36,6 +38,8 @@ export async function ProjectCoverHero({
   const t = await getTranslations('projects')
   const statusLabel =
     project.status === 'active' ? t('filter.status.active') : t('filter.status.completed')
+  const mediaTransitionName = getEntityViewTransitionName('project', project.id, 'media')
+  const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
 
   return (
     <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -70,6 +74,7 @@ export async function ProjectCoverHero({
               ? 'text-4xl sm:text-5xl lg:text-6xl'
               : 'text-5xl sm:text-6xl lg:text-7xl',
           )}
+          style={{ viewTransitionName: titleTransitionName }}
         >
           {project.name_default}
         </h1>
@@ -110,7 +115,10 @@ export async function ProjectCoverHero({
       </div>
 
       <div className="relative order-1 lg:order-2">
-        <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0">
+        <div
+          className="aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/20 border border-border/50 bg-muted relative z-10 rotate-3 transition-transform duration-700 hover:rotate-0"
+          style={{ viewTransitionName: mediaTransitionName }}
+        >
           {coverImage ? (
             <Image
               src={coverImage}
