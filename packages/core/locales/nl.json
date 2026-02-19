@@ -417,6 +417,15 @@
       "instant_delivery": {
         "title": "Directe levering",
         "description": "Je impactcredits worden direct na bevestiging op je account bijgeschreven."
+      },
+      "mobile_bar": {
+        "next_step": "Volgende stap: voeg je verzendgegevens toe.",
+        "empty_state": "Voeg een product toe om verder te gaan.",
+        "out_of_stock_state": "Verwijder niet-beschikbare artikelen om door te gaan.",
+        "continue_to_address": "Verder naar adres",
+        "remove_unavailable": "Niet-beschikbaar artikel verwijderen",
+        "view_details": "Besteldetails tonen",
+        "hide_details": "Besteldetails verbergen"
       }
     }
   },

@@ -1,0 +1,67 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - img "Nature background" [ref=e5]
+      - link "Make the Change Make the Change" [ref=e9] [cursor=pointer]:
+        - /url: /en
+        - img "Make the Change" [ref=e11]
+        - generic [ref=e12]: Make the Change
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: Certified platform
+          - heading "The future of biodiversity is in your hands." [level=1] [ref=e16]
+          - paragraph [ref=e17]: Turn your savings into concrete impact and join the largest community of committed investors.
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - img [ref=e21]
+            - generic [ref=e23]: Secure and transparent investments
+          - generic [ref=e24]:
+            - img [ref=e26]
+            - generic [ref=e29]: Real-time impact and biodiversity tracking
+          - generic [ref=e30]:
+            - img [ref=e32]
+            - generic [ref=e35]: Exclusive rewards and collectible BioDex
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - heading "Create account" [level=3] [ref=e40]
+        - paragraph [ref=e41]: Join the movement for a sustainable future.
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - img [ref=e47]
+          - img [ref=e50]
+          - img [ref=e54]
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - text: Email
+              - generic [ref=e62]: "*"
+            - textbox "Email *" [ref=e64]:
+              - /placeholder: your@email.com
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - text: Password
+              - generic [ref=e67]: "*"
+            - textbox "Password *" [ref=e69]:
+              - /placeholder: ••••••••
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - text: Confirm password
+              - generic [ref=e72]: "*"
+            - textbox "Confirm password *" [ref=e74]:
+              - /placeholder: ••••••••
+        - generic [ref=e75]:
+          - button "Continue" [disabled]:
+            - generic:
+              - text: Continue
+              - img
+          - button "Previous step" [ref=e76] [cursor=pointer]:
+            - generic [ref=e78]:
+              - img [ref=e79]
+              - text: Previous step
+      - paragraph [ref=e82]:
+        - text: Already have an account?
+        - link "Login" [ref=e83] [cursor=pointer]:
+          - /url: /en/login
+  - region "Notifications" [ref=e84]
+  - button "Open Next.js Dev Tools" [ref=e90] [cursor=pointer]:
+    - img [ref=e91]

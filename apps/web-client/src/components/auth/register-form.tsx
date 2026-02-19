@@ -25,7 +25,15 @@ import {
 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { type FormEvent, useActionState, useMemo, useState } from 'react'
+import {
+  type FormEvent,
+  useActionState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { type AuthState, register } from '@/app/[locale]/(auth)/actions'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -52,6 +60,32 @@ function getEmailProvider(email: string) {
   return emailProviders[domain] || null
 }
 
+const REGISTER_WIZARD_STORAGE_KEY = 'register_wizard'
+const WIZARD_MIN_STEP = 1
+const WIZARD_MAX_STEP = 3
+
+type RegisterWizardDraft = {
+  firstName: string
+  lastName: string
+  email: string
+  terms: boolean
+  step: number
+}
+
+const clampWizardStep = (value: number) =>
+  Math.min(WIZARD_MAX_STEP, Math.max(WIZARD_MIN_STEP, value))
+
+const parseWizardStep = (value: string | null): number | null => {
+  if (value === null) return null
+
+  const parsed = Number.parseInt(value, 10)
+  if (Number.isNaN(parsed)) return null
+
+  return clampWizardStep(parsed)
+}
+
+const isString = (value: unknown): value is string => typeof value === 'string'
+
 type RegisterFormProps = {
   modal?: boolean
 }
@@ -60,10 +94,12 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(register, {})
   const searchParams = useSearchParams()
+  const urlStep = useMemo(() => parseWizardStep(searchParams.get('step')), [searchParams])
   const returnTo = searchParams.get('returnTo') || ''
   const loginHref = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : '/login'
+  const hasInitializedWizard = useRef(false)
   const [submittedEmail, setSubmittedEmail] = useState('')
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(urlStep ?? WIZARD_MIN_STEP)
   const [formValues, setFormValues] = useState({
     firstName: '',
     lastName: '',
@@ -72,7 +108,116 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
     confirmPassword: '',
     terms: false,
   })
-  const totalSteps = 3
+  const totalSteps = WIZARD_MAX_STEP
+
+  const syncStepInHistory = useCallback(
+    (nextStep: number, mode: 'push' | 'replace' = 'replace') => {
+      if (typeof window === 'undefined') return
+
+      const normalizedStep = clampWizardStep(nextStep)
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('step') === String(normalizedStep)) {
+        return
+      }
+
+      params.set('step', String(normalizedStep))
+      const query = params.toString()
+      const href = query ? `${window.location.pathname}?${query}` : window.location.pathname
+      if (mode === 'push') {
+        window.history.pushState(window.history.state, '', href)
+        return
+      }
+
+      window.history.replaceState(window.history.state, '', href)
+    },
+    [],
+  )
+
+  const goToStep = useCallback(
+    (nextStep: number) => {
+      const normalizedStep = clampWizardStep(nextStep)
+      setStep(normalizedStep)
+      syncStepInHistory(normalizedStep, 'push')
+    },
+    [syncStepInHistory],
+  )
+
+  useEffect(() => {
+    if (hasInitializedWizard.current) return
+    hasInitializedWizard.current = true
+
+    let restoredStep = urlStep ?? WIZARD_MIN_STEP
+
+    try {
+      const rawDraft = window.sessionStorage.getItem(REGISTER_WIZARD_STORAGE_KEY)
+      if (rawDraft) {
+        const parsedDraft = JSON.parse(rawDraft) as Partial<RegisterWizardDraft>
+
+        setFormValues((prev) => ({
+          ...prev,
+          firstName: isString(parsedDraft.firstName) ? parsedDraft.firstName : prev.firstName,
+          lastName: isString(parsedDraft.lastName) ? parsedDraft.lastName : prev.lastName,
+          email: isString(parsedDraft.email) ? parsedDraft.email : prev.email,
+          terms: typeof parsedDraft.terms === 'boolean' ? parsedDraft.terms : prev.terms,
+        }))
+
+        if (urlStep === null && typeof parsedDraft.step === 'number') {
+          restoredStep = clampWizardStep(parsedDraft.step)
+        }
+      }
+    } catch {
+      // Ignore malformed drafts in session storage.
+    }
+
+    setStep(restoredStep)
+    if (urlStep !== restoredStep) {
+      syncStepInHistory(restoredStep, 'replace')
+    }
+  }, [syncStepInHistory, urlStep])
+
+  useEffect(() => {
+    if (urlStep === null) return
+
+    setStep((currentStep) => (currentStep === urlStep ? currentStep : urlStep))
+  }, [urlStep])
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const nextStep = parseWizardStep(new URLSearchParams(window.location.search).get('step'))
+      setStep(nextStep ?? WIZARD_MIN_STEP)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  useEffect(() => {
+    if (!hasInitializedWizard.current) return
+
+    const draft: RegisterWizardDraft = {
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      email: formValues.email,
+      terms: formValues.terms,
+      step,
+    }
+
+    try {
+      window.sessionStorage.setItem(REGISTER_WIZARD_STORAGE_KEY, JSON.stringify(draft))
+    } catch {
+      // Ignore storage quota / access errors.
+    }
+  }, [formValues.email, formValues.firstName, formValues.lastName, formValues.terms, step])
+
+  useEffect(() => {
+    if (!state.success) return
+
+    try {
+      window.sessionStorage.removeItem(REGISTER_WIZARD_STORAGE_KEY)
+    } catch {
+      // Ignore storage access errors.
+    }
+  }, [state.success])
 
   const canProceed = useMemo(() => {
     if (step === 1) {
@@ -98,7 +243,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
     if (step < totalSteps) {
       event.preventDefault()
       if (canProceed) {
-        setStep((prev) => Math.min(prev + 1, totalSteps))
+        goToStep(step + 1)
       }
       return
     }
@@ -366,7 +511,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
               className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform"
               onClick={() => {
                 if (step < totalSteps && canProceed) {
-                  setStep((prev) => Math.min(prev + 1, totalSteps))
+                  goToStep(step + 1)
                 }
               }}
               disabled={!canProceed || isPending}
@@ -381,7 +526,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
                 type="button"
                 variant="ghost"
                 className="w-full h-10 font-bold uppercase tracking-widest text-[10px] opacity-60 hover:opacity-100"
-                onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
+                onClick={() => goToStep(step - 1)}
               >
                 <ArrowLeft className="mr-2 h-3 w-3" />
                 {t('previous_step')}

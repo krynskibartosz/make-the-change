@@ -1048,6 +1048,15 @@
       "instant_delivery": {
         "title": "Instant delivery",
         "description": "Your impact credits are added to your account immediately after confirmation."
+      },
+      "mobile_bar": {
+        "next_step": "Next step: add your shipping details.",
+        "empty_state": "Add a product to continue.",
+        "out_of_stock_state": "Remove unavailable items to continue.",
+        "continue_to_address": "Continue to address",
+        "remove_unavailable": "Remove unavailable item",
+        "view_details": "View order details",
+        "hide_details": "Hide order details"
       }
     }
   },

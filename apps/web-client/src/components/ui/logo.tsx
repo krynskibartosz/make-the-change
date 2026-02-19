@@ -9,13 +9,13 @@ interface LogoProps {
   height?: number;
 }
 
-export function Logo({ 
+export const Logo = ({ 
   className, 
   variant = "full", 
   colorMode = "default",
   width, 
   height 
-}: LogoProps) {
+}: LogoProps) => {
   // Dimensions par défaut basées sur le type
   const defaultWidth = variant === "full" ? 180 : 40;
   const defaultHeight = variant === "full" ? 50 : 40;
@@ -51,4 +51,4 @@ export function Logo({
       />
     </div>
   );
-}
+};

@@ -6,14 +6,7 @@ import type { ProductCardProduct } from '@/app/[locale]/(marketing)/products/_fe
 import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { createClient } from '@/lib/supabase/server'
-import type {
-  DataState,
-  HomeActiveProducerSource,
-  HomeFeaturedProductSource,
-  HomeFeaturedProject,
-  HomeFeaturedProjectSource,
-  HomePartnerProducer,
-} from './home.types'
+import type { DataState, HomeFeaturedProject, HomePartnerProducer } from './home.types'
 
 type AsyncResult<T> = {
   data: T | null
@@ -89,117 +82,17 @@ const toArrayState = <T>(data: T[] | null, error: unknown): DataState<T[]> => {
   return { status: 'ready', value: data }
 }
 
-const isNonEmptyString = (value: unknown): value is string =>
-  typeof value === 'string' && value.trim().length > 0
-
-const toNullableString = (value: unknown): string | null =>
-  typeof value === 'string' ? value : null
-
-const toNullableNumber = (value: unknown): number | null =>
-  typeof value === 'number' && Number.isFinite(value) ? value : null
-
-const toNullableBoolean = (value: unknown): boolean | null =>
-  typeof value === 'boolean' ? value : null
-
-const toStringArray = (value: unknown): string[] => {
-  if (!Array.isArray(value)) {
-    return []
-  }
-
-  return value.filter((entry): entry is string => typeof entry === 'string')
-}
-
-const normalizeArrayState = <TRaw, TNormalized>(
+const mapReadyState = <TRaw, TNormalized>(
   state: DataState<TRaw[]>,
-  label: string,
-  normalize: (row: TRaw) => TNormalized | null,
+  mapper: (row: TRaw) => TNormalized,
 ): DataState<TNormalized[]> => {
-  if (state.status === 'unknown') {
+  if (state.status !== 'ready') {
     return state
   }
 
-  if (state.status === 'empty') {
-    return state
-  }
-
-  const normalized: TNormalized[] = []
-  state.value.forEach((row, index) => {
-    const value = normalize(row)
-    if (value === null) {
-      console.error('[home][dropped_row]', { label, index })
-      return
-    }
-
-    normalized.push(value)
-  })
-
-  if (normalized.length === 0) {
-    return { status: 'empty' }
-  }
-
-  return { status: 'ready', value: normalized }
-}
-
-const normalizeFeaturedProject = (
-  project: HomeFeaturedProjectSource,
-): HomeFeaturedProject | null => {
-  if (!isNonEmptyString(project.id)) {
-    return null
-  }
-
   return {
-    id: project.id,
-    slug: isNonEmptyString(project.slug) ? project.slug : project.id,
-    name_default: toNullableString(project.name_default),
-    description_default: toNullableString(project.description_default),
-    hero_image_url: sanitizeImageUrl(toNullableString(project.hero_image_url)),
-    target_budget: toNullableNumber(project.target_budget),
-    current_funding: toNullableNumber(project.current_funding),
-    status: toNullableString(project.status),
-    featured: toNullableBoolean(project.featured),
-  }
-}
-
-const normalizeFeaturedProduct = (
-  product: HomeFeaturedProductSource,
-): ProductCardProduct | null => {
-  if (!isNonEmptyString(product.id)) {
-    return null
-  }
-
-  return {
-    id: product.id,
-    slug: toNullableString(product.slug),
-    name_default: toNullableString(product.name_default),
-    short_description_default: toNullableString(product.short_description_default),
-    price_points: toNullableNumber(product.price_points),
-    price_eur_equivalent: toNullableNumber(product.price_eur_equivalent),
-    stock_quantity: toNullableNumber(product.stock_quantity),
-    featured: toNullableBoolean(product.featured),
-    fulfillment_method: toNullableString(product.fulfillment_method),
-    metadata: product.metadata,
-    images: product.images,
-    tags: toStringArray(product.tags),
-  }
-}
-
-const normalizeActiveProducer = (
-  producer: HomeActiveProducerSource,
-): HomePartnerProducer | null => {
-  if (!isNonEmptyString(producer.id)) {
-    return null
-  }
-
-  if (!isNonEmptyString(producer.name_default)) {
-    return null
-  }
-
-  return {
-    id: producer.id,
-    name_default: producer.name_default,
-    description_default: toNullableString(producer.description_default) ?? '',
-    contact_website: toNullableString(producer.contact_website) ?? undefined,
-    images: toStringArray(producer.images),
+    status: 'ready',
+    value: state.value.map(mapper),
   }
 }
 
@@ -290,22 +183,48 @@ export async function getHomeServerData(): Promise<HomeServerData> {
   const membersCountState = toRpcNumberState(membersCountResult.data, membersCountResult.error)
   const pointsGeneratedState = toRpcNumberState(pointsResult.data, pointsResult.error)
 
-  const featuredProjectsState = normalizeArrayState(
+  const featuredProjectsState = mapReadyState(
     toArrayState<FeaturedProjectRow>(featuredProjectsResult.data, featuredProjectsResult.error),
-    'featured_project',
-    normalizeFeaturedProject,
+    (project): HomeFeaturedProject => ({
+      id: project.id,
+      slug: project.slug,
+      name_default: project.name_default,
+      description_default: project.description_default,
+      hero_image_url: sanitizeImageUrl(project.hero_image_url),
+      target_budget: project.target_budget,
+      current_funding: project.current_funding,
+      status: project.status,
+      featured: project.featured,
+    }),
   )
 
-  const featuredProductsState = normalizeArrayState(
+  const featuredProductsState = mapReadyState(
     toArrayState<FeaturedProductRow>(featuredProductsResult.data, featuredProductsResult.error),
-    'featured_product',
-    normalizeFeaturedProduct,
+    (product): ProductCardProduct => ({
+      id: product.id,
+      slug: product.slug,
+      name_default: product.name_default,
+      short_description_default: product.short_description_default,
+      price_points: product.price_points,
+      price_eur_equivalent: product.price_eur_equivalent,
+      stock_quantity: product.stock_quantity,
+      featured: product.featured,
+      fulfillment_method: product.fulfillment_method,
+      metadata: product.metadata,
+      images: product.images ?? [],
+      tags: product.tags ?? [],
+    }),
   )
 
-  const activeProducersState = normalizeArrayState(
+  const activeProducersState = mapReadyState(
     toArrayState<ActiveProducerRow>(activeProducersResult.data, activeProducersResult.error),
-    'active_producer',
-    normalizeActiveProducer,
+    (producer): HomePartnerProducer => ({
+      id: producer.id,
+      name_default: producer.name_default,
+      description_default: producer.description_default ?? '',
+      contact_website: producer.contact_website ?? undefined,
+      images: producer.images ?? [],
+    }),
   )
 
   const blogPostsState = toArrayState<BlogPost>(latestPosts.data, latestPosts.error)

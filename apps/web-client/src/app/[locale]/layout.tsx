@@ -43,7 +43,7 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
   // Optimization: Only pass essential namespaces to client to reduce HTML payload size
   // 'marketing' is included because this layout wraps marketing pages which are client-components heavy
   // 'dashboard' and other feature-specific namespaces should be loaded in their specific layouts if needed
-  const messages = pick(allMessages, ['common', 'navigation', 'footer', 'ui', 'auth', 'errors', 'marketing', 'home', 'products', 'marketing_pages'])
+  const messages = pick(allMessages, ['common', 'navigation', 'footer', 'ui', 'auth', 'errors', 'marketing', 'home', 'products', 'marketing_pages', 'checkout'])
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

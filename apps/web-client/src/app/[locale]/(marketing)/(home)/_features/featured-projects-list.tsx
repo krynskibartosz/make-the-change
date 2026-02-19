@@ -23,12 +23,16 @@ type FeaturedProjectsListProps = {
   fundedLabel: string
 }
 
+type ProjectCardLabels = {
+  activeLabel: string
+  fundedLabel: string
+}
+
+const EMPTY_FEATURED_PROJECTS_MESSAGE = 'Aucun projet en vedette pour le moment.'
+
 const renderProjectCard = (
   project: FeaturedProject,
-  labels: {
-    activeLabel: string
-    fundedLabel: string
-  },
+  labels: ProjectCardLabels,
   priority = false,
 ) => {
   const title = project.name_default || 'Project'
@@ -80,12 +84,12 @@ export function FeaturedProjectsList({
   activeLabel,
   fundedLabel,
 }: FeaturedProjectsListProps) {
-  const labels = { activeLabel, fundedLabel }
+  const labels: ProjectCardLabels = { activeLabel, fundedLabel }
 
   if (projects.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-border/80 bg-muted/30 p-8 text-center">
-        <p className="text-sm text-muted-foreground">Aucun projet en vedette pour le moment.</p>
+        <p className="text-sm text-muted-foreground">{EMPTY_FEATURED_PROJECTS_MESSAGE}</p>
       </div>
     )
   }
@@ -112,7 +116,7 @@ export function FeaturedProjectsList({
           renderSkeleton={() => <div className="h-64 rounded-3xl bg-muted animate-pulse" />}
           emptyState={{
             title: 'Aucun projet',
-            description: 'Aucun projet en vedette pour le moment.',
+            description: EMPTY_FEATURED_PROJECTS_MESSAGE,
           }}
         />
       </div>

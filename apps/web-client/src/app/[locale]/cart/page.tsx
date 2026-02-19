@@ -12,6 +12,8 @@ import {
 import {
   ArrowLeft,
   ArrowRight,
+  ChevronDown,
+  ChevronUp,
   CreditCard,
   Leaf,
   ShieldCheck,
@@ -20,7 +22,7 @@ import {
   Truck,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { CartLineItem } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-line-item'
 import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { useCart, useCartTotals } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
@@ -32,23 +34,45 @@ const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
 
 export default function CartPage() {
   const t = useTranslations('checkout')
+  const tCommon = useTranslations('common')
   const router = useRouter()
   const { items, hydrated, setQuantity, removeItem, replaceItems, clear } = useCart()
   const { itemsCount, totalPoints, totalEuros } = useCartTotals()
   const { showSnackbar } = useCartUI()
   const itemsRef = useRef(items)
+  const [isMobileSummaryOpen, setIsMobileSummaryOpen] = useState(false)
   itemsRef.current = items
 
+  const currentStep = 1
   const hasOutOfStock = items.some((i) => isOutOfStockSnapshot(i.snapshot.stockQuantity))
+  const firstOutOfStockItem = items.find((i) => isOutOfStockSnapshot(i.snapshot.stockQuantity))
   const canCheckout = itemsCount > 0 && !hasOutOfStock
   const checkoutSteps = [
     { id: 1, label: t('steps.cart'), hint: t('steps.hints.cart') },
     { id: 2, label: t('steps.address'), hint: t('steps.hints.address') },
     { id: 3, label: t('steps.confirm'), hint: t('steps.hints.confirm') },
   ]
+  const mobileCtaLabel = !hydrated
+    ? tCommon('loading')
+    : itemsCount === 0
+      ? t('empty.cta')
+      : hasOutOfStock
+        ? t('cart_page.mobile_bar.remove_unavailable')
+        : t('cart_page.mobile_bar.continue_to_address')
+  const mobileCtaContext = !hydrated
+    ? tCommon('loading')
+    : itemsCount === 0
+      ? t('cart_page.mobile_bar.empty_state')
+      : hasOutOfStock
+        ? t('cart_page.mobile_bar.out_of_stock_state')
+        : t('cart_page.mobile_bar.next_step')
 
   const handleBack = () => {
     router.push('/products')
+  }
+
+  const handleProceedToCheckout = () => {
+    router.push('/checkout')
   }
 
   const handleClear = () => {
@@ -94,6 +118,21 @@ export default function CartPage() {
     })
   }
 
+  const handleMobilePrimaryAction = () => {
+    if (!hydrated) return
+    if (itemsCount === 0) {
+      router.push('/products')
+      return
+    }
+
+    if (hasOutOfStock && firstOutOfStockItem) {
+      handleRemove(firstOutOfStockItem.productId)
+      return
+    }
+
+    handleProceedToCheckout()
+  }
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background selection:bg-primary/20">
       {/* Background Elements (Dribbble 2026 Style) */}
@@ -103,9 +142,9 @@ export default function CartPage() {
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-4 py-8 sm:py-10 lg:py-24">
+      <div className="container relative z-10 mx-auto px-4 pt-8 pb-40 md:pt-10 md:pb-12 lg:py-24">
         {/* Header Section */}
-        <div className="mb-10 md:mb-16">
+        <div className="mb-8 md:mb-16">
           <Button
             variant="ghost"
             size="sm"
@@ -134,16 +173,16 @@ export default function CartPage() {
               <Button
                 variant="outline"
                 onClick={handleClear}
-                className="text-muted-foreground hover:text-destructive hover:border-destructive/30 hover:bg-destructive/5 rounded-full transition-all animate-in fade-in slide-in-from-right-4 duration-700 delay-100"
+                className="hidden md:inline-flex text-muted-foreground hover:text-destructive hover:border-destructive/30 hover:bg-destructive/5 rounded-full transition-all animate-in fade-in slide-in-from-right-4 duration-700 delay-100"
               >
                 {t('cart_page.clear_cart')}
               </Button>
             )}
           </div>
 
-          <div className="mt-8 grid gap-3 md:grid-cols-3">
+          <div className="mt-8 hidden md:grid gap-3 md:grid-cols-3">
             {checkoutSteps.map((step) => {
-              const isCurrent = step.id === 1
+              const isCurrent = step.id === currentStep
               return (
                 <div
                   key={step.id}
@@ -170,6 +209,53 @@ export default function CartPage() {
                       <p className="text-xs text-muted-foreground">{step.hint}</p>
                     </div>
                   </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="sticky top-14 z-30 -mx-4 mb-6 border-y border-border/60 bg-background/90 px-4 py-3 backdrop-blur-xl md:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              {t('steps.step_indicator', { current: currentStep, total: checkoutSteps.length })}
+            </p>
+            {itemsCount > 0 ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleClear}
+                className="h-7 rounded-full px-3 text-[11px] font-semibold"
+              >
+                {t('cart_page.clear_cart')}
+              </Button>
+            ) : null}
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {checkoutSteps.map((step) => {
+              const isCurrent = step.id === currentStep
+              return (
+                <div
+                  key={`mobile-step-${step.id}`}
+                  className={cn(
+                    'rounded-xl border px-2 py-2 text-center transition-colors',
+                    isCurrent
+                      ? 'border-primary/40 bg-primary/10 text-foreground'
+                      : 'border-border/60 bg-background/70 text-muted-foreground',
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'mx-auto mb-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black',
+                      isCurrent
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                  >
+                    {step.id}
+                  </div>
+                  <p className="truncate text-[11px] font-semibold">{step.label}</p>
                 </div>
               )
             })}
@@ -245,7 +331,7 @@ export default function CartPage() {
           </div>
 
           {/* Right Column: Summary (Sticky) */}
-          <div className="lg:col-span-4">
+          <div className="hidden md:block lg:col-span-4">
             <div className="sticky top-24 space-y-6 animate-in fade-in slide-in-from-right-8 duration-700 delay-300">
               <Card className="border-border/50 bg-background/80 backdrop-blur-xl shadow-2xl shadow-primary/5 rounded-[2.5rem] overflow-hidden">
                 <CardHeader className="bg-muted/30 border-b border-border/50 pb-6">
@@ -300,7 +386,7 @@ export default function CartPage() {
                     className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all bg-gradient-to-r from-primary to-client-teal-500 border-none"
                     size="lg"
                     disabled={!canCheckout}
-                    onClick={() => router.push('/checkout')}
+                    onClick={handleProceedToCheckout}
                   >
                     {t('cart_page.checkout')}
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -348,6 +434,76 @@ export default function CartPage() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/90 backdrop-blur-xl md:hidden">
+        <div className="mx-auto w-full max-w-2xl px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-background/70 px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+            onClick={() => setIsMobileSummaryOpen((prev) => !prev)}
+          >
+            <span className="inline-flex items-center gap-2">
+              {isMobileSummaryOpen ? (
+                <ChevronDown className="h-3.5 w-3.5" />
+              ) : (
+                <ChevronUp className="h-3.5 w-3.5" />
+              )}
+              {isMobileSummaryOpen
+                ? t('cart_page.mobile_bar.hide_details')
+                : t('cart_page.mobile_bar.view_details')}
+            </span>
+            <span className="font-bold text-foreground tabular-nums">{formatPoints(totalPoints)} pts</span>
+          </button>
+
+          {isMobileSummaryOpen ? (
+            <div className="mt-3 rounded-2xl border border-border/50 bg-background/70 p-3 text-xs">
+              <div className="space-y-2 text-muted-foreground">
+                <div className="flex items-center justify-between">
+                  <span>{t('cart_page.subtotal')}</span>
+                  <span className="font-semibold text-foreground tabular-nums">
+                    {formatPoints(totalPoints)} pts
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>{t('cart_page.shipping')}</span>
+                  <span className="font-semibold text-client-emerald-500">{t('cart_page.free_shipping')}</span>
+                </div>
+              </div>
+              <Separator className="my-3 bg-border/50" />
+              <div className="grid grid-cols-2 gap-2 text-[10px] font-bold uppercase text-muted-foreground">
+                <div className="rounded-xl border border-border/50 bg-muted/40 px-2 py-2 text-center">
+                  {t('cart_page.trust.payment_secure')}
+                </div>
+                <div className="rounded-xl border border-border/50 bg-muted/40 px-2 py-2 text-center">
+                  {t('cart_page.trust.impact')}
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="mt-3 flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <p className="truncate text-[11px] font-medium text-muted-foreground">{mobileCtaContext}</p>
+              <p className="text-xl font-black leading-tight text-foreground tabular-nums">
+                {formatPoints(totalPoints)} <span className="text-sm font-semibold text-muted-foreground">pts</span>
+              </p>
+            </div>
+            <Badge variant="secondary" className="shrink-0 rounded-full border border-primary/20 bg-primary/10 text-primary">
+              {t('steps.step_indicator', { current: currentStep, total: checkoutSteps.length })}
+            </Badge>
+          </div>
+
+          <Button
+            type="button"
+            className="mt-3 h-12 w-full rounded-xl border-none bg-gradient-to-r from-primary to-client-teal-500 text-sm font-bold shadow-lg shadow-primary/20"
+            disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
+            onClick={handleMobilePrimaryAction}
+          >
+            {mobileCtaLabel}
+            {itemsCount > 0 && !hasOutOfStock ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
+          </Button>
         </div>
       </div>
     </div>

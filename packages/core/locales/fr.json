@@ -1100,6 +1100,15 @@
       "instant_delivery": {
         "title": "Livraison instantanée",
         "description": "Vos crédits d'impact sont crédités sur votre compte immédiatement après validation."
+      },
+      "mobile_bar": {
+        "next_step": "Étape suivante : ajoutez vos informations de livraison.",
+        "empty_state": "Ajoutez un produit pour continuer.",
+        "out_of_stock_state": "Retirez les articles indisponibles pour continuer.",
+        "continue_to_address": "Continuer vers l'adresse",
+        "remove_unavailable": "Retirer l'article indisponible",
+        "view_details": "Voir le détail de la commande",
+        "hide_details": "Masquer le détail de la commande"
       }
     }
   },

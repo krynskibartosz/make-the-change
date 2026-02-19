@@ -2,7 +2,7 @@
 
 import { Button } from '@make-the-change/core/ui'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { HomePartnerProducer } from './home.types'
@@ -28,55 +28,74 @@ type HomePartnersEmptyProps = HomePartnersSectionBaseProps & {
 
 type HomePartnersSectionProps = HomePartnersCarouselProps | HomePartnersEmptyProps
 
+const AUTO_SCROLL_RESUME_DELAY_MS = 3000
+const carouselButtonClassName =
+  'absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card'
+
 function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCarouselProps) {
   const scrollContainerRef = useRef<HTMLUListElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [isAutoScrolling, setIsAutoScrolling] = useState(true)
 
-  const duplicatedProducers = [...producers, ...producers, ...producers, ...producers, ...producers]
+  const duplicatedProducers = useMemo(
+    () => Array.from({ length: 5 }).flatMap(() => producers),
+    [producers],
+  )
 
   const checkScrollButtons = useCallback(() => {
     const container = scrollContainerRef.current
-    if (container) {
-      setCanScrollLeft(container.scrollLeft > 0)
-      setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth)
+    if (!container) {
+      return
     }
+
+    setCanScrollLeft(container.scrollLeft > 0)
+    setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth)
   }, [])
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = useCallback((direction: 'left' | 'right') => {
     setIsAutoScrolling(false)
+
     const container = scrollContainerRef.current
-    if (container) {
-      const scrollAmount = container.clientWidth * 0.8
-      container.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      })
-      setTimeout(() => setIsAutoScrolling(true), 3000)
+    if (!container) {
+      return
     }
-  }
+
+    const scrollAmount = container.clientWidth * 0.8
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    })
+
+    setTimeout(() => setIsAutoScrolling(true), AUTO_SCROLL_RESUME_DELAY_MS)
+  }, [])
 
   const autoScroll = useCallback(() => {
     const container = scrollContainerRef.current
-    if (container && isAutoScrolling) {
-      const currentScroll = container.scrollLeft
-      const maxScroll = container.scrollWidth - container.clientWidth
-
-      if (currentScroll >= maxScroll) {
-        container.scrollLeft = 0
-      } else {
-        container.scrollLeft += 1
-      }
+    if (!container || !isAutoScrolling) {
+      return
     }
+
+    const maxScroll = container.scrollWidth - container.clientWidth
+    if (container.scrollLeft >= maxScroll) {
+      container.scrollLeft = 0
+      return
+    }
+
+    container.scrollLeft += 1
   }, [isAutoScrolling])
 
   useEffect(() => {
     const container = scrollContainerRef.current
-    if (container) {
-      checkScrollButtons()
-      container.addEventListener('scroll', checkScrollButtons)
-      return () => container.removeEventListener('scroll', checkScrollButtons)
+    if (!container) {
+      return
+    }
+
+    checkScrollButtons()
+    container.addEventListener('scroll', checkScrollButtons)
+
+    return () => {
+      container.removeEventListener('scroll', checkScrollButtons)
     }
   }, [checkScrollButtons])
 
@@ -86,13 +105,17 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
     }
 
     let animationFrameId = 0
+
     const animate = () => {
       autoScroll()
       animationFrameId = requestAnimationFrame(animate)
     }
 
     animationFrameId = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animationFrameId)
+
+    return () => {
+      cancelAnimationFrame(animationFrameId)
+    }
   }, [autoScroll, isAutoScrolling])
 
   return (
@@ -111,9 +134,11 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
             variant="ghost"
             size="icon"
             aria-label="Précédent"
-            className={`absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card ${
-              !canScrollLeft ? 'pointer-events-none opacity-0' : 'opacity-100'
-            }`}
+            className={cn(
+              carouselButtonClassName,
+              'left-0',
+              canScrollLeft ? 'opacity-100' : 'pointer-events-none opacity-0',
+            )}
             onClick={() => scroll('left')}
           >
             <ChevronLeft className="h-5 w-5" />
@@ -123,9 +148,11 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
             variant="ghost"
             size="icon"
             aria-label="Suivant"
-            className={`absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card ${
-              !canScrollRight ? 'pointer-events-none opacity-0' : 'opacity-100'
-            }`}
+            className={cn(
+              carouselButtonClassName,
+              'right-0',
+              canScrollRight ? 'opacity-100' : 'pointer-events-none opacity-0',
+            )}
             onClick={() => scroll('right')}
           >
             <ChevronRight className="h-5 w-5" />
@@ -174,33 +201,29 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
   )
 }
 
-export function HomePartnersSection(props: HomePartnersSectionProps) {
-  if (props.mode === 'empty') {
-    return (
-      <section className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
-            <h2 className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
-            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-              {props.emptyDescription}
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild className="w-full sm:w-auto">
-                <Link href={props.primaryCtaHref}>{props.primaryCtaLabel}</Link>
+export const HomePartnersSection = (props: HomePartnersSectionProps) => {
+  if (props.mode === 'empty') return (
+    <section className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
+          <h2 className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
+          <p className="mt-4 text-base text-muted-foreground sm:text-lg">{props.emptyDescription}</p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button asChild className="w-full sm:w-auto">
+              <Link href={props.primaryCtaHref}>{props.primaryCtaLabel}</Link>
+            </Button>
+            {props.secondaryCtaLabel && props.secondaryCtaHref ? (
+              <Button asChild variant="outline" className="w-full sm:w-auto">
+                <a href={props.secondaryCtaHref} target="_blank" rel="noreferrer">
+                  {props.secondaryCtaLabel}
+                </a>
               </Button>
-              {props.secondaryCtaLabel && props.secondaryCtaHref ? (
-                <Button asChild variant="outline" className="w-full sm:w-auto">
-                  <a href={props.secondaryCtaHref} target="_blank" rel="noreferrer">
-                    {props.secondaryCtaLabel}
-                  </a>
-                </Button>
-              ) : null}
-            </div>
+            ) : null}
           </div>
         </div>
-      </section>
-    )
-  }
+      </div>
+    </section>
+  )
 
   return <HomePartnersCarousel producers={props.producers} variant={props.variant} />
 }

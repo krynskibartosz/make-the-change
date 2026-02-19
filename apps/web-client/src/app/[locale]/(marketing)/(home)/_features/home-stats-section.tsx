@@ -17,57 +17,63 @@ type HomeStatsSectionProps = {
   variant?: 'default' | 'muted'
 }
 
-export function HomeStatsSection({ title, stats, variant = 'default' }: HomeStatsSectionProps) {
-  return (
-    <MarketingSection
-      title={title}
-      size="lg"
-      variant={variant}
-      className="py-32 mt-24 md:mt-0 relative overflow-hidden"
-    >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse duration-[8000ms]" aria-hidden="true" />
+const numberFormatter = new Intl.NumberFormat('fr-FR')
 
-      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 relative z-10 m-0">
-        {stats.map((stat) => (
+const formatStatValue = (value: string | number) => {
+  if (typeof value === 'string' && value.includes(' ')) {
+    return value
+  }
+
+  const numericValue = typeof value === 'number' ? value : Number(value)
+  return Number.isNaN(numericValue) ? value : numberFormatter.format(numericValue)
+}
+
+export const HomeStatsSection = ({ title, stats, variant = 'default' }: HomeStatsSectionProps) => (
+  <MarketingSection
+    title={title}
+    size="lg"
+    variant={variant}
+    className="relative mt-24 overflow-hidden py-32 md:mt-0"
+  >
+    <div
+      className="absolute left-1/2 top-1/2 -z-10 h-200 w-200 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-primary/10 blur-[120px] duration-8000"
+      aria-hidden="true"
+    />
+
+    <dl className="relative z-10 m-0 grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-8">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className="group relative rounded-[2.5rem] border border-border/70 bg-card/80 p-8 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-xl"
+        >
           <div
-            key={stat.label}
-            className="group relative p-8 rounded-[2.5rem] border border-border/70 bg-card/80 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-xl"
-          >
+            className={cn(
+              'absolute inset-0 rounded-[2.5rem] border opacity-0 transition-opacity duration-500 group-hover:opacity-100',
+              stat.border,
+            )}
+            aria-hidden="true"
+          />
+
+          <div className="flex flex-col items-center justify-center space-y-6 text-center">
             <div
               className={cn(
-                'absolute inset-0 rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 border',
-                stat.border,
+                'flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg backdrop-blur-md transition-all duration-500 group-hover:scale-110 group-hover:rotate-12',
+                stat.bg,
               )}
               aria-hidden="true"
-            />
-
-            <div className="flex flex-col items-center justify-center text-center space-y-6">
-              <div
-                className={cn(
-                  'h-16 w-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg backdrop-blur-md',
-                  stat.bg,
-                )}
-                aria-hidden="true"
-              >
-                <stat.icon className={cn('h-8 w-8 transition-colors duration-500', stat.color)} />
-              </div>
+            >
+              <stat.icon className={cn('h-8 w-8 transition-colors duration-500', stat.color)} />
             </div>
-
-            <dt className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground group-hover:text-foreground transition-colors duration-300 m-0 text-center order-2 mt-2">
-              {stat.label}
-            </dt>
-            <dd className="text-4xl md:text-5xl font-black tracking-tighter text-foreground m-0 text-center order-1 mt-6">
-              {(() => {
-                if (typeof stat.value === 'string' && stat.value.includes(' ')) {
-                  return stat.value;
-                }
-                const numValue = typeof stat.value === 'number' ? stat.value : Number(stat.value);
-                return isNaN(numValue) ? stat.value : new Intl.NumberFormat('fr-FR').format(numValue);
-              })()}
-            </dd>
           </div>
-        ))}
-      </dl>
-    </MarketingSection>
-  )
-}
+
+          <dt className="order-2 mt-2 m-0 text-center text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+            {stat.label}
+          </dt>
+          <dd className="order-1 mt-6 m-0 text-center text-4xl font-black tracking-tighter text-foreground md:text-5xl">
+            {formatStatValue(stat.value)}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </MarketingSection>
+);

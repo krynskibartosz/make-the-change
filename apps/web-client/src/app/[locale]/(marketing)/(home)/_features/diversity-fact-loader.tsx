@@ -1,20 +1,36 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Lightbulb } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
+const FACT_ROTATION_INTERVAL_MS = 5000
+const TYPEWRITER_SPEED_MS = 50
 
 const diversityFacts = [
-  "Plus de 7 000 langues sont parlées dans le monde",
-  "1 personne sur 4 dans le monde est bilingue",
-  "Il existe plus de 195 pays dans le monde",
-  "La diversité culturelle augmente la créativité de 83%",
-  "Les équipes diversifiées sont 35% plus performantes",
-  "Plus de 180 nationalités collaborent sur des projets durables",
-  "La diversité génère 2,3x plus de cash flow par employé",
-  "Les entreprises inclusives ont 2,6x plus de revenus",
-  "80% des consommateurs préfèrent les marques inclusives",
-  "La biodiversité compte 8,7 millions d'espèces sur Terre"
+  'Plus de 7 000 langues sont parlées dans le monde',
+  '1 personne sur 4 dans le monde est bilingue',
+  'Il existe plus de 195 pays dans le monde',
+  'La diversité culturelle augmente la créativité de 83%',
+  'Les équipes diversifiées sont 35% plus performantes',
+  'Plus de 180 nationalités collaborent sur des projets durables',
+  'La diversité génère 2,3x plus de cash flow par employé',
+  'Les entreprises inclusives ont 2,6x plus de revenus',
+  '80% des consommateurs préfèrent les marques inclusives',
+  "La biodiversité compte 8,7 millions d'espèces sur Terre",
 ]
+
+const getRandomFact = (previousFact?: string) => {
+  if (diversityFacts.length <= 1) {
+    return diversityFacts[0] ?? ''
+  }
+
+  let nextFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
+  while (nextFact === previousFact) {
+    nextFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
+  }
+
+  return nextFact
+}
 
 export function DiversityFactLoader() {
   const [currentFact, setCurrentFact] = useState('')
@@ -22,52 +38,57 @@ export function DiversityFactLoader() {
   const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
-    // Affiche un fun fact aléatoire au début
-    const initialFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
+    const initialFact = getRandomFact()
     setCurrentFact(initialFact)
     setIsTyping(true)
 
-    // Change de fun fact toutes les 5 secondes
     const interval = setInterval(() => {
-      const randomFact = diversityFacts[Math.floor(Math.random() * diversityFacts.length)]
-      setCurrentFact(randomFact)
+      setCurrentFact((previousFact) => getRandomFact(previousFact))
       setIsTyping(true)
-    }, 5000)
+    }, FACT_ROTATION_INTERVAL_MS)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
 
-  // Effet typewriter
   useEffect(() => {
-    if (!isTyping || !currentFact) return
+    if (!isTyping || !currentFact) {
+      return
+    }
 
     setDisplayedText('')
     let index = 0
-    const typingSpeed = 50 // ms par caractère
 
     const typingInterval = setInterval(() => {
       if (index < currentFact.length) {
         setDisplayedText(currentFact.slice(0, index + 1))
-        index++
-      } else {
-        setIsTyping(false)
-        clearInterval(typingInterval)
+        index += 1
+        return
       }
-    }, typingSpeed)
 
-    return () => clearInterval(typingInterval)
+      setIsTyping(false)
+      clearInterval(typingInterval)
+    }, TYPEWRITER_SPEED_MS)
+
+    return () => {
+      clearInterval(typingInterval)
+    }
   }, [currentFact, isTyping])
-
-
 
   return (
     <div aria-label="Le saviez-vous ?" className="flex justify-center pt-8">
-      <div className="flex items-center gap-4 px-6 py-3 rounded-full bg-primary/5 backdrop-blur-sm border border-primary/10 shadow-sm max-w-lg min-h-[52px]">
-        <Lightbulb className="h-5 w-5 text-primary flex-shrink-0 animate-pulse" aria-hidden="true" />
-        <p className="text-sm font-medium text-foreground/80 leading-snug">
-          <span className="font-bold text-primary mr-2">Le saviez-vous ?</span>
+      <div className="flex min-h-[52px] max-w-lg items-center gap-4 rounded-full border border-primary/10 bg-primary/5 px-6 py-3 shadow-sm backdrop-blur-sm">
+        <Lightbulb className="h-5 w-5 flex-shrink-0 animate-pulse text-primary" aria-hidden="true" />
+        <p className="text-sm font-medium leading-snug text-foreground/80">
+          <span className="mr-2 font-bold text-primary">Le saviez-vous ?</span>
           {displayedText}
-          {isTyping && <span className="inline-block w-1 h-4 align-middle bg-primary ml-1 animate-pulse" aria-hidden="true" />}
+          {isTyping ? (
+            <span
+              className="ml-1 inline-block h-4 w-1 animate-pulse bg-primary align-middle"
+              aria-hidden="true"
+            />
+          ) : null}
         </p>
       </div>
     </div>

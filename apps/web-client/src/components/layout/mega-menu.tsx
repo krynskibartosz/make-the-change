@@ -51,8 +51,8 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
   }, [onClose])
 
   return (
-    <div className={cn('absolute left-0 right-0 top-full z-50', className)} onMouseLeave={onClose}>
-      <Card className="mx-auto w-full max-w-[90rem] border-t-0 border-x-0 border-b bg-background/75 backdrop-blur-xl p-6 shadow-2xl supports-[backdrop-filter]:bg-background/75">
+    <div className={cn('absolute  left-0 right-0 top-full z-50', className)} onMouseLeave={onClose}>
+      <Card className="mx-auto w-full max-w-360 border-t-0 border-x-0 border-b bg-background/75  backdrop-blur-3xl p-6 shadow-2xl supports-backdrop-filter:bg-background/75">
         <div className="grid gap-6 md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
           <div>
             <div className="mb-6">

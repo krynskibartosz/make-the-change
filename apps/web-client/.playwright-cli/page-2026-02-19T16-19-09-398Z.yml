@@ -1,0 +1,750 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img "Make the Change" [ref=e7]
+          - generic [ref=e8]: Make the Change
+        - navigation "Navigation principale" [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Home" [ref=e12] [cursor=pointer]:
+                - /url: /en
+            - listitem [ref=e13]:
+              - button "Projects" [ref=e14]:
+                - text: Projects
+                - img [ref=e15]
+            - listitem [ref=e17]:
+              - button "Products" [ref=e18]:
+                - text: Products
+                - img [ref=e19]
+            - listitem [ref=e21]:
+              - button "Discover" [ref=e22]:
+                - text: Discover
+                - img [ref=e23]
+        - generic [ref=e25]:
+          - link "Login" [ref=e27] [cursor=pointer]:
+            - /url: /en/login
+            - button "Login" [ref=e28]:
+              - generic [ref=e30]: Login
+          - link "Open cart" [ref=e32] [cursor=pointer]:
+            - /url: /en/cart
+            - img [ref=e33]
+          - button "Activer le mode sombre" [ref=e37] [cursor=pointer]:
+            - img [ref=e40]
+    - main [ref=e42]:
+      - generic [ref=e44]:
+        - generic [ref=e46]:
+          - img [ref=e47]
+          - generic [ref=e50]: Rejoignez le mouvement
+        - heading "Investissez dans la nature, récoltez l'impact" [level=1] [ref=e51]
+        - paragraph [ref=e52]: La première plateforme qui vous permet d'investir directement dans des producteurs durables et de suivre votre impact en temps réel.
+        - generic [ref=e53]:
+          - list [ref=e54]:
+            - listitem [ref=e55]:
+              - link "17 Projects" [ref=e56] [cursor=pointer]:
+                - /url: /en/projects
+                - generic [ref=e57]:
+                  - img [ref=e58]
+                  - generic [ref=e60]: 17 Projects
+            - listitem [ref=e61]:
+              - link "107 Members" [ref=e62] [cursor=pointer]:
+                - /url: /en/leaderboard
+                - generic [ref=e63]:
+                  - img [ref=e64]
+                  - generic [ref=e69]: 107 Members
+          - generic "Le saviez-vous ?" [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - paragraph [ref=e74]: Le saviez-vous ?80%
+          - img [ref=e77] [cursor=pointer]
+      - generic [ref=e80]:
+        - generic [ref=e82]:
+          - heading "L'Univers Make the Change" [level=2] [ref=e83]
+          - paragraph [ref=e84]: Une plateforme complète pour agir concrètement en faveur de la transition écologique.
+        - generic [ref=e86]:
+          - article [ref=e87]:
+            - link "Projets à impact Investir Projets à impact Financez des producteurs engagés et suivez l'évolution de vos investissements. Explorer les projets" [ref=e88] [cursor=pointer]:
+              - /url: /en/projects
+              - img "Projets à impact" [ref=e89]
+              - generic [ref=e91]:
+                - generic [ref=e92]: Investir
+                - heading "Projets à impact" [level=3] [ref=e93]
+                - paragraph [ref=e94]: Financez des producteurs engagés et suivez l'évolution de vos investissements.
+                - generic [ref=e95]:
+                  - text: Explorer les projets
+                  - img [ref=e96]
+          - generic [ref=e98]:
+            - article [ref=e99]:
+              - link "Boutique Responsable Boutique Responsable Utilisez vos points pour acheter des produits éthiques et durables." [ref=e100] [cursor=pointer]:
+                - /url: /en/products
+                - img "Boutique Responsable" [ref=e101]
+                - generic [ref=e103]:
+                  - heading "Boutique Responsable" [level=3] [ref=e104]
+                  - paragraph [ref=e105]: Utilisez vos points pour acheter des produits éthiques et durables.
+            - article [ref=e106]:
+              - generic [ref=e108]:
+                - img [ref=e110]
+                - heading "Communauté" [level=3] [ref=e115]
+                - paragraph [ref=e116]: Rejoignez un mouvement de citoyens engagés pour le changement.
+                - generic [ref=e117]: En savoir plus
+                - navigation "Réseaux sociaux" [ref=e118]:
+                  - list [ref=e119]:
+                    - listitem [ref=e120]:
+                      - link "Instagram" [ref=e121] [cursor=pointer]:
+                        - /url: https://instagram.com
+                        - img [ref=e122]
+                    - listitem [ref=e125]:
+                      - link "Facebook" [ref=e126] [cursor=pointer]:
+                        - /url: https://facebook.com
+                        - img [ref=e127]
+                    - listitem [ref=e129]:
+                      - link "TikTok" [ref=e130] [cursor=pointer]:
+                        - /url: https://tiktok.com
+                        - img [ref=e131]
+                    - listitem [ref=e135]:
+                      - link "LinkedIn" [ref=e136] [cursor=pointer]:
+                        - /url: https://linkedin.com
+                        - img [ref=e137]
+      - generic [ref=e142]:
+        - heading "Global Impact" [level=2] [ref=e145]
+        - generic [ref=e148]:
+          - generic [ref=e149]:
+            - img [ref=e153]
+            - term [ref=e156]: Active Projects
+            - definition [ref=e157]: "17"
+          - generic [ref=e158]:
+            - img [ref=e162]
+            - term [ref=e167]: Engaged Members
+            - definition [ref=e168]: "107"
+          - generic [ref=e169]:
+            - img [ref=e173]
+            - term [ref=e176]: Ethical Products
+            - definition [ref=e177]: "51"
+          - generic [ref=e178]:
+            - img [ref=e182]
+            - term [ref=e184]: Points Generated
+            - definition [ref=e185]: 115 334
+      - generic [ref=e187]:
+        - heading "How it works" [level=2] [ref=e190]
+        - list [ref=e193]:
+          - listitem [ref=e194]:
+            - figure [ref=e195]:
+              - generic [ref=e197]:
+                - img "Choose a project" [ref=e198]
+                - img [ref=e201]
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - generic [ref=e206]: "1"
+                - heading "Choose a project" [level=3] [ref=e207]
+              - paragraph [ref=e208]: Browse our catalog of verified projects and select the ones you care about.
+              - generic [ref=e209]:
+                - generic [ref=e210]: Verified catalog
+                - generic [ref=e211]: Advanced filters
+          - listitem [ref=e212]:
+            - generic [ref=e213]:
+              - generic [ref=e214]:
+                - generic [ref=e215]: "2"
+                - heading "Invest" [level=3] [ref=e216]
+              - paragraph [ref=e217]: Support projects with one-time investments or a monthly subscription.
+              - list [ref=e218]:
+                - listitem [ref=e219]:
+                  - img [ref=e221]
+                  - text: 100% secure payment
+                - listitem [ref=e223]:
+                  - img [ref=e225]
+                  - text: Full transaction transparency
+                - listitem [ref=e227]:
+                  - img [ref=e229]
+                  - text: Measurable impact from €1
+            - figure [ref=e231]:
+              - generic [ref=e233]:
+                - img "Invest" [ref=e234]
+                - img [ref=e237]
+          - listitem [ref=e239]:
+            - figure [ref=e240]:
+              - generic [ref=e242]:
+                - img "Make an Impact" [ref=e243]
+                - img [ref=e246]
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]: "3"
+                - heading "Enjoy" [level=3] [ref=e252]
+              - paragraph [ref=e253]: Track your investment impact and exchange your points for products.
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - term [ref=e256]: Rewards
+                  - definition [ref=e257]: Points
+                - generic [ref=e258]:
+                  - term [ref=e259]: Impact
+                  - definition [ref=e260]: Badges
+      - generic [ref=e262]:
+        - generic [ref=e263]:
+          - heading "Featured projects" [level=2] [ref=e265]
+          - link "View all projects" [ref=e266] [cursor=pointer]:
+            - /url: /en/projects
+            - button "View all projects" [ref=e267]:
+              - generic [ref=e269]:
+                - text: View all projects
+                - img [ref=e270]
+        - generic [ref=e275]:
+          - button "Sauvons les Abeilles Active Sauvons les Abeilles Installation de ruches pour la pollinisation. 25% €12500.00 funded €50000.00" [ref=e278] [cursor=pointer]:
+            - link "Sauvons les Abeilles" [ref=e279]:
+              - /url: /projects/sauvons-les-abeilles
+            - generic [ref=e280]:
+              - generic [ref=e281]:
+                - img [ref=e283]
+                - generic:
+                  - generic: Active
+              - heading "Sauvons les Abeilles" [level=3] [ref=e290]
+              - generic [ref=e291]:
+                - paragraph [ref=e292]: Installation de ruches pour la pollinisation.
+                - generic [ref=e293]:
+                  - generic [ref=e295]: 25%
+                  - generic [ref=e298]:
+                    - generic [ref=e299]: €12500.00 funded
+                    - generic [ref=e300]: €50000.00
+          - button "Restauration Corail Restauration Corail Active Restauration Corail Replantation de coraux en Indonésie. 45% €45000.00 funded €100000.00" [ref=e303] [cursor=pointer]:
+            - link "Restauration Corail" [ref=e304]:
+              - /url: /projects/restauration-corail
+            - generic [ref=e305]:
+              - generic [ref=e306]:
+                - img "Restauration Corail" [ref=e307]
+                - generic:
+                  - generic: Active
+              - heading "Restauration Corail" [level=3] [ref=e311]
+              - generic [ref=e312]:
+                - paragraph [ref=e313]: Replantation de coraux en Indonésie.
+                - generic [ref=e314]:
+                  - generic [ref=e316]: 45%
+                  - generic [ref=e319]:
+                    - generic [ref=e320]: €45000.00 funded
+                    - generic [ref=e321]: €100000.00
+          - button "Reboisement Amazonie Reboisement Amazonie Active Reboisement Amazonie Plantation d'arbres natifs. 75% €150000.00 funded €200000.00" [ref=e324] [cursor=pointer]:
+            - link "Reboisement Amazonie" [ref=e325]:
+              - /url: /projects/reboisement-amazonie
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - img "Reboisement Amazonie" [ref=e328]
+                - generic:
+                  - generic: Active
+              - heading "Reboisement Amazonie" [level=3] [ref=e332]
+              - generic [ref=e333]:
+                - paragraph [ref=e334]: Plantation d'arbres natifs.
+                - generic [ref=e335]:
+                  - generic [ref=e337]: 75%
+                  - generic [ref=e340]:
+                    - generic [ref=e341]: €150000.00 funded
+                    - generic [ref=e342]: €200000.00
+      - generic [ref=e344]:
+        - generic [ref=e345]:
+          - heading "Popular products" [level=2] [ref=e347]
+          - link "View all products" [ref=e348] [cursor=pointer]:
+            - /url: /en/products
+            - button "View all products" [ref=e349]:
+              - generic [ref=e351]:
+                - text: View all products
+                - img [ref=e352]
+        - list [ref=e355]:
+          - listitem [ref=e356]:
+            - button "Gourde Inox Gourde Inox Best Seller Add to wishlist Add to cart Gourde Inox 1,000 points Product description" [ref=e358] [cursor=pointer]:
+              - link "Gourde Inox" [ref=e359]:
+                - /url: /products/3e23f67b-e870-48e9-9e6e-027a452ed647
+              - generic [ref=e360]:
+                - generic [ref=e361]:
+                  - img "Gourde Inox" [ref=e362]
+                  - generic:
+                    - generic: Best Seller
+                  - button "Add to wishlist" [ref=e364]:
+                    - img [ref=e365]
+                  - generic:
+                    - generic:
+                      - button "Add to cart":
+                        - generic:
+                          - img
+                          - text: Add to cart
+                - generic [ref=e368]:
+                  - heading "Gourde Inox" [level=3] [ref=e370]
+                  - generic [ref=e372]: 1,000 points
+                - paragraph [ref=e374]: Product description
+          - listitem [ref=e375]:
+            - button "Panier Légumes Bio Panier Légumes Bio Best Seller Add to wishlist Add to cart Panier Légumes Bio 800 points Product description" [ref=e377] [cursor=pointer]:
+              - link "Panier Légumes Bio" [ref=e378]:
+                - /url: /products/a7942614-42f5-4013-8a76-d74fd2fa6217
+              - generic [ref=e379]:
+                - generic [ref=e380]:
+                  - img "Panier Légumes Bio" [ref=e381]
+                  - generic:
+                    - generic: Best Seller
+                  - button "Add to wishlist" [ref=e383]:
+                    - img [ref=e384]
+                  - generic:
+                    - generic:
+                      - button "Add to cart":
+                        - generic:
+                          - img
+                          - text: Add to cart
+                - generic [ref=e387]:
+                  - heading "Panier Légumes Bio" [level=3] [ref=e389]
+                  - generic [ref=e391]: 800 points
+                - paragraph [ref=e393]: Product description
+          - listitem [ref=e394]:
+            - button "Shampoing Solide Shampoing Solide Best Seller Add to wishlist Add to cart Shampoing Solide 300 points Product description" [ref=e396] [cursor=pointer]:
+              - link "Shampoing Solide" [ref=e397]:
+                - /url: /products/c96b7819-730f-48b5-bd93-ec10371dbc2e
+              - generic [ref=e398]:
+                - generic [ref=e399]:
+                  - img "Shampoing Solide" [ref=e400]
+                  - generic:
+                    - generic: Best Seller
+                  - button "Add to wishlist" [ref=e402]:
+                    - img [ref=e403]
+                  - generic:
+                    - generic:
+                      - button "Add to cart":
+                        - generic:
+                          - img
+                          - text: Add to cart
+                - generic [ref=e406]:
+                  - heading "Shampoing Solide" [level=3] [ref=e408]
+                  - generic [ref=e410]: 300 points
+                - paragraph [ref=e412]: Product description
+          - listitem [ref=e413]:
+            - button "Miel de Lavande Miel de Lavande Best Seller Add to wishlist Add to cart Miel de Lavande 500 points Product description" [ref=e415] [cursor=pointer]:
+              - link "Miel de Lavande" [ref=e416]:
+                - /url: /products/f6a92215-e5d7-4e97-b91d-a83cd6d61838
+              - generic [ref=e417]:
+                - generic [ref=e418]:
+                  - img "Miel de Lavande" [ref=e419]
+                  - generic:
+                    - generic: Best Seller
+                  - button "Add to wishlist" [ref=e421]:
+                    - img [ref=e422]
+                  - generic:
+                    - generic:
+                      - button "Add to cart":
+                        - generic:
+                          - img
+                          - text: Add to cart
+                - generic [ref=e425]:
+                  - heading "Miel de Lavande" [level=3] [ref=e427]
+                  - generic [ref=e429]: 500 points
+                - paragraph [ref=e431]: Product description
+      - generic [ref=e433]:
+        - generic [ref=e434]:
+          - heading "Nos Partenaires" [level=2] [ref=e435]
+          - paragraph [ref=e436]: Nous collaborons avec les meilleurs partenaires pour vous offrir des solutions innovantes et durables
+        - generic [ref=e437]:
+          - button "Précédent":
+            - generic:
+              - img
+          - button "Suivant" [ref=e438] [cursor=pointer]:
+            - img [ref=e441]
+          - list "Liste des partenaires" [ref=e443]:
+            - listitem [ref=e444]:
+              - link "F Ferme de la Nature" [ref=e445] [cursor=pointer]:
+                - /url: /en/producers/f489eb6d-7345-477a-b600-4ecb130249fc
+                - generic [ref=e446]:
+                  - generic [ref=e448]: F
+                  - heading "Ferme de la Nature" [level=3] [ref=e450]
+            - listitem [ref=e451]:
+              - link "F Forêt Vivante" [ref=e452] [cursor=pointer]:
+                - /url: /en/producers/2a2bc6a6-4529-405e-9a5a-36eb5bac75dc
+                - generic [ref=e453]:
+                  - generic [ref=e455]: F
+                  - heading "Forêt Vivante" [level=3] [ref=e457]
+            - listitem [ref=e458]:
+              - link "O Océan Bleu" [ref=e459] [cursor=pointer]:
+                - /url: /en/producers/be98aeac-2f41-46e9-9af7-647f8e120c6c
+                - generic [ref=e460]:
+                  - generic [ref=e462]: O
+                  - heading "Océan Bleu" [level=3] [ref=e464]
+            - listitem [ref=e465]:
+              - link "I Ilanga Nature" [ref=e466] [cursor=pointer]:
+                - /url: /en/producers/f099aadb-55d0-4771-a66c-c61730e07531
+                - generic [ref=e467]:
+                  - generic [ref=e469]: I
+                  - heading "Ilanga Nature" [level=3] [ref=e471]
+            - listitem [ref=e472]:
+              - link "H Habeebee" [ref=e473] [cursor=pointer]:
+                - /url: /en/producers/df258062-f21a-40d2-9adc-01e6b73089ba
+                - generic [ref=e474]:
+                  - generic [ref=e476]: H
+                  - heading "Habeebee" [level=3] [ref=e478]
+            - listitem [ref=e479]:
+              - link "C Coopérative des Ardennes" [ref=e480] [cursor=pointer]:
+                - /url: /en/producers/496058a4-c771-4eb4-8972-977b5a0587c5
+                - generic [ref=e481]:
+                  - generic [ref=e483]: C
+                  - heading "Coopérative des Ardennes" [level=3] [ref=e485]
+            - listitem [ref=e486]:
+              - link "F Ferme Bio Dupont" [ref=e487] [cursor=pointer]:
+                - /url: /en/producers/5ab16f58-aa7a-4deb-9c8f-27739fa1cae5
+                - generic [ref=e488]:
+                  - generic [ref=e490]: F
+                  - heading "Ferme Bio Dupont" [level=3] [ref=e492]
+            - listitem [ref=e493]:
+              - link "A Apiculteur Martin" [ref=e494] [cursor=pointer]:
+                - /url: /en/producers/7e6794b7-d769-41ef-a54a-e5db8e436889
+                - generic [ref=e495]:
+                  - generic [ref=e497]: A
+                  - heading "Apiculteur Martin" [level=3] [ref=e499]
+            - listitem [ref=e500]:
+              - link "F Ferme de la Nature" [ref=e501] [cursor=pointer]:
+                - /url: /en/producers/f489eb6d-7345-477a-b600-4ecb130249fc
+                - generic [ref=e502]:
+                  - generic [ref=e504]: F
+                  - heading "Ferme de la Nature" [level=3] [ref=e506]
+            - listitem [ref=e507]:
+              - link "F Forêt Vivante" [ref=e508] [cursor=pointer]:
+                - /url: /en/producers/2a2bc6a6-4529-405e-9a5a-36eb5bac75dc
+                - generic [ref=e509]:
+                  - generic [ref=e511]: F
+                  - heading "Forêt Vivante" [level=3] [ref=e513]
+            - listitem [ref=e514]:
+              - link "O Océan Bleu" [ref=e515] [cursor=pointer]:
+                - /url: /en/producers/be98aeac-2f41-46e9-9af7-647f8e120c6c
+                - generic [ref=e516]:
+                  - generic [ref=e518]: O
+                  - heading "Océan Bleu" [level=3] [ref=e520]
+            - listitem [ref=e521]:
+              - link "I Ilanga Nature" [ref=e522] [cursor=pointer]:
+                - /url: /en/producers/f099aadb-55d0-4771-a66c-c61730e07531
+                - generic [ref=e523]:
+                  - generic [ref=e525]: I
+                  - heading "Ilanga Nature" [level=3] [ref=e527]
+            - listitem [ref=e528]:
+              - link "H Habeebee" [ref=e529] [cursor=pointer]:
+                - /url: /en/producers/df258062-f21a-40d2-9adc-01e6b73089ba
+                - generic [ref=e530]:
+                  - generic [ref=e532]: H
+                  - heading "Habeebee" [level=3] [ref=e534]
+            - listitem [ref=e535]:
+              - link "C Coopérative des Ardennes" [ref=e536] [cursor=pointer]:
+                - /url: /en/producers/496058a4-c771-4eb4-8972-977b5a0587c5
+                - generic [ref=e537]:
+                  - generic [ref=e539]: C
+                  - heading "Coopérative des Ardennes" [level=3] [ref=e541]
+            - listitem [ref=e542]:
+              - link "F Ferme Bio Dupont" [ref=e543] [cursor=pointer]:
+                - /url: /en/producers/5ab16f58-aa7a-4deb-9c8f-27739fa1cae5
+                - generic [ref=e544]:
+                  - generic [ref=e546]: F
+                  - heading "Ferme Bio Dupont" [level=3] [ref=e548]
+            - listitem [ref=e549]:
+              - link "A Apiculteur Martin" [ref=e550] [cursor=pointer]:
+                - /url: /en/producers/7e6794b7-d769-41ef-a54a-e5db8e436889
+                - generic [ref=e551]:
+                  - generic [ref=e553]: A
+                  - heading "Apiculteur Martin" [level=3] [ref=e555]
+            - listitem [ref=e556]:
+              - link "F Ferme de la Nature" [ref=e557] [cursor=pointer]:
+                - /url: /en/producers/f489eb6d-7345-477a-b600-4ecb130249fc
+                - generic [ref=e558]:
+                  - generic [ref=e560]: F
+                  - heading "Ferme de la Nature" [level=3] [ref=e562]
+            - listitem [ref=e563]:
+              - link "F Forêt Vivante" [ref=e564] [cursor=pointer]:
+                - /url: /en/producers/2a2bc6a6-4529-405e-9a5a-36eb5bac75dc
+                - generic [ref=e565]:
+                  - generic [ref=e567]: F
+                  - heading "Forêt Vivante" [level=3] [ref=e569]
+            - listitem [ref=e570]:
+              - link "O Océan Bleu" [ref=e571] [cursor=pointer]:
+                - /url: /en/producers/be98aeac-2f41-46e9-9af7-647f8e120c6c
+                - generic [ref=e572]:
+                  - generic [ref=e574]: O
+                  - heading "Océan Bleu" [level=3] [ref=e576]
+            - listitem [ref=e577]:
+              - link "I Ilanga Nature" [ref=e578] [cursor=pointer]:
+                - /url: /en/producers/f099aadb-55d0-4771-a66c-c61730e07531
+                - generic [ref=e579]:
+                  - generic [ref=e581]: I
+                  - heading "Ilanga Nature" [level=3] [ref=e583]
+            - listitem [ref=e584]:
+              - link "H Habeebee" [ref=e585] [cursor=pointer]:
+                - /url: /en/producers/df258062-f21a-40d2-9adc-01e6b73089ba
+                - generic [ref=e586]:
+                  - generic [ref=e588]: H
+                  - heading "Habeebee" [level=3] [ref=e590]
+            - listitem [ref=e591]:
+              - link "C Coopérative des Ardennes" [ref=e592] [cursor=pointer]:
+                - /url: /en/producers/496058a4-c771-4eb4-8972-977b5a0587c5
+                - generic [ref=e593]:
+                  - generic [ref=e595]: C
+                  - heading "Coopérative des Ardennes" [level=3] [ref=e597]
+            - listitem [ref=e598]:
+              - link "F Ferme Bio Dupont" [ref=e599] [cursor=pointer]:
+                - /url: /en/producers/5ab16f58-aa7a-4deb-9c8f-27739fa1cae5
+                - generic [ref=e600]:
+                  - generic [ref=e602]: F
+                  - heading "Ferme Bio Dupont" [level=3] [ref=e604]
+            - listitem [ref=e605]:
+              - link "A Apiculteur Martin" [ref=e606] [cursor=pointer]:
+                - /url: /en/producers/7e6794b7-d769-41ef-a54a-e5db8e436889
+                - generic [ref=e607]:
+                  - generic [ref=e609]: A
+                  - heading "Apiculteur Martin" [level=3] [ref=e611]
+            - listitem [ref=e612]:
+              - link "F Ferme de la Nature" [ref=e613] [cursor=pointer]:
+                - /url: /en/producers/f489eb6d-7345-477a-b600-4ecb130249fc
+                - generic [ref=e614]:
+                  - generic [ref=e616]: F
+                  - heading "Ferme de la Nature" [level=3] [ref=e618]
+            - listitem [ref=e619]:
+              - link "F Forêt Vivante" [ref=e620] [cursor=pointer]:
+                - /url: /en/producers/2a2bc6a6-4529-405e-9a5a-36eb5bac75dc
+                - generic [ref=e621]:
+                  - generic [ref=e623]: F
+                  - heading "Forêt Vivante" [level=3] [ref=e625]
+            - listitem [ref=e626]:
+              - link "O Océan Bleu" [ref=e627] [cursor=pointer]:
+                - /url: /en/producers/be98aeac-2f41-46e9-9af7-647f8e120c6c
+                - generic [ref=e628]:
+                  - generic [ref=e630]: O
+                  - heading "Océan Bleu" [level=3] [ref=e632]
+            - listitem [ref=e633]:
+              - link "I Ilanga Nature" [ref=e634] [cursor=pointer]:
+                - /url: /en/producers/f099aadb-55d0-4771-a66c-c61730e07531
+                - generic [ref=e635]:
+                  - generic [ref=e637]: I
+                  - heading "Ilanga Nature" [level=3] [ref=e639]
+            - listitem [ref=e640]:
+              - link "H Habeebee" [ref=e641] [cursor=pointer]:
+                - /url: /en/producers/df258062-f21a-40d2-9adc-01e6b73089ba
+                - generic [ref=e642]:
+                  - generic [ref=e644]: H
+                  - heading "Habeebee" [level=3] [ref=e646]
+            - listitem [ref=e647]:
+              - link "C Coopérative des Ardennes" [ref=e648] [cursor=pointer]:
+                - /url: /en/producers/496058a4-c771-4eb4-8972-977b5a0587c5
+                - generic [ref=e649]:
+                  - generic [ref=e651]: C
+                  - heading "Coopérative des Ardennes" [level=3] [ref=e653]
+            - listitem [ref=e654]:
+              - link "F Ferme Bio Dupont" [ref=e655] [cursor=pointer]:
+                - /url: /en/producers/5ab16f58-aa7a-4deb-9c8f-27739fa1cae5
+                - generic [ref=e656]:
+                  - generic [ref=e658]: F
+                  - heading "Ferme Bio Dupont" [level=3] [ref=e660]
+            - listitem [ref=e661]:
+              - link "A Apiculteur Martin" [ref=e662] [cursor=pointer]:
+                - /url: /en/producers/7e6794b7-d769-41ef-a54a-e5db8e436889
+                - generic [ref=e663]:
+                  - generic [ref=e665]: A
+                  - heading "Apiculteur Martin" [level=3] [ref=e667]
+            - listitem [ref=e668]:
+              - link "F Ferme de la Nature" [ref=e669] [cursor=pointer]:
+                - /url: /en/producers/f489eb6d-7345-477a-b600-4ecb130249fc
+                - generic [ref=e670]:
+                  - generic [ref=e672]: F
+                  - heading "Ferme de la Nature" [level=3] [ref=e674]
+            - listitem [ref=e675]:
+              - link "F Forêt Vivante" [ref=e676] [cursor=pointer]:
+                - /url: /en/producers/2a2bc6a6-4529-405e-9a5a-36eb5bac75dc
+                - generic [ref=e677]:
+                  - generic [ref=e679]: F
+                  - heading "Forêt Vivante" [level=3] [ref=e681]
+            - listitem [ref=e682]:
+              - link "O Océan Bleu" [ref=e683] [cursor=pointer]:
+                - /url: /en/producers/be98aeac-2f41-46e9-9af7-647f8e120c6c
+                - generic [ref=e684]:
+                  - generic [ref=e686]: O
+                  - heading "Océan Bleu" [level=3] [ref=e688]
+            - listitem [ref=e689]:
+              - link "I Ilanga Nature" [ref=e690] [cursor=pointer]:
+                - /url: /en/producers/f099aadb-55d0-4771-a66c-c61730e07531
+                - generic [ref=e691]:
+                  - generic [ref=e693]: I
+                  - heading "Ilanga Nature" [level=3] [ref=e695]
+            - listitem [ref=e696]:
+              - link "H Habeebee" [ref=e697] [cursor=pointer]:
+                - /url: /en/producers/df258062-f21a-40d2-9adc-01e6b73089ba
+                - generic [ref=e698]:
+                  - generic [ref=e700]: H
+                  - heading "Habeebee" [level=3] [ref=e702]
+            - listitem [ref=e703]:
+              - link "C Coopérative des Ardennes" [ref=e704] [cursor=pointer]:
+                - /url: /en/producers/496058a4-c771-4eb4-8972-977b5a0587c5
+                - generic [ref=e705]:
+                  - generic [ref=e707]: C
+                  - heading "Coopérative des Ardennes" [level=3] [ref=e709]
+            - listitem [ref=e710]:
+              - link "F Ferme Bio Dupont" [ref=e711] [cursor=pointer]:
+                - /url: /en/producers/5ab16f58-aa7a-4deb-9c8f-27739fa1cae5
+                - generic [ref=e712]:
+                  - generic [ref=e714]: F
+                  - heading "Ferme Bio Dupont" [level=3] [ref=e716]
+            - listitem [ref=e717]:
+              - link "A Apiculteur Martin" [ref=e718] [cursor=pointer]:
+                - /url: /en/producers/7e6794b7-d769-41ef-a54a-e5db8e436889
+                - generic [ref=e719]:
+                  - generic [ref=e721]: A
+                  - heading "Apiculteur Martin" [level=3] [ref=e723]
+      - generic [ref=e725]:
+        - generic [ref=e726]:
+          - heading "Latest News" [level=2] [ref=e728]
+          - link "View all articles" [ref=e729] [cursor=pointer]:
+            - /url: /en/blog
+            - button "View all articles" [ref=e730]:
+              - generic [ref=e732]:
+                - text: View all articles
+                - img [ref=e733]
+        - list [ref=e736]:
+          - listitem [ref=e737]:
+            - link "L'avenir de l'investissement à impact ★ Featured L'avenir de l'investissement à impact Découvrez comment les petits gestes peuvent transformer l'économie mondiale vers un modèle plus durable. 10 février 2026" [ref=e738] [cursor=pointer]:
+              - /url: /en/blog/avenir-investissement-impact
+              - generic [ref=e739]:
+                - generic [ref=e740]:
+                  - img "L'avenir de l'investissement à impact" [ref=e741]
+                  - generic [ref=e743]: ★ Featured
+                - generic [ref=e744]:
+                  - generic [ref=e745]:
+                    - heading "L'avenir de l'investissement à impact" [level=2] [ref=e746]
+                    - paragraph [ref=e747]: Découvrez comment les petits gestes peuvent transformer l'économie mondiale vers un modèle plus durable.
+                  - generic [ref=e751]: 10 février 2026
+          - listitem [ref=e752]:
+            - link "Les 10 gestes pour la planète Les 10 gestes pour la planète Guide pratique pour réduire votre empreinte carbone au quotidien. 8 février 2026" [ref=e753] [cursor=pointer]:
+              - /url: /en/blog/10-gestes-planete
+              - generic [ref=e754]:
+                - img "Les 10 gestes pour la planète" [ref=e756]
+                - generic [ref=e758]:
+                  - generic [ref=e759]:
+                    - heading "Les 10 gestes pour la planète" [level=2] [ref=e760]
+                    - paragraph [ref=e761]: Guide pratique pour réduire votre empreinte carbone au quotidien.
+                  - generic [ref=e765]: 8 février 2026
+          - listitem [ref=e766]:
+            - 'link "Vivre zéro déchet : par où commencer ? ★ Featured Vivre zéro déchet : par où commencer ? Un guide simple pour réduire ses déchets au quotidien sans se priver. 7 février 2026" [ref=e767] [cursor=pointer]':
+              - /url: /en/blog/vivre-zero-dechet-guide
+              - generic [ref=e768]:
+                - generic [ref=e769]:
+                  - 'img "Vivre zéro déchet : par où commencer ?" [ref=e770]'
+                  - generic [ref=e772]: ★ Featured
+                - generic [ref=e773]:
+                  - generic [ref=e774]:
+                    - 'heading "Vivre zéro déchet : par où commencer ?" [level=2] [ref=e775]'
+                    - paragraph [ref=e776]: Un guide simple pour réduire ses déchets au quotidien sans se priver.
+                  - generic [ref=e780]: 7 février 2026
+      - region "Call to action" [ref=e783]:
+        - generic [ref=e786]:
+          - heading "Prêt à faire la différence ?" [level=2] [ref=e787]
+          - paragraph [ref=e788]: Rejoignez dès maintenant la communauté Make the Change et commencez à avoir un impact positif.
+          - list [ref=e790]:
+            - listitem [ref=e791]:
+              - generic [ref=e793]: Engagement vérifié
+            - listitem [ref=e794]:
+              - generic [ref=e796]: Transparence totale
+            - listitem [ref=e797]:
+              - generic [ref=e799]: Communauté active
+    - contentinfo [ref=e800]:
+      - generic [ref=e801]:
+        - generic [ref=e802]:
+          - generic [ref=e803]:
+            - link "Make the Change Make the Change" [ref=e804] [cursor=pointer]:
+              - /url: /en
+              - img "Make the Change" [ref=e806]
+              - generic [ref=e807]: Make the Change
+            - paragraph [ref=e808]: Invest in biodiversity, reap tangible rewards.
+          - navigation "Quick links" [ref=e809]:
+            - heading "Quick links" [level=3] [ref=e810]
+            - list [ref=e811]:
+              - listitem [ref=e812]:
+                - link "Projects" [ref=e813] [cursor=pointer]:
+                  - /url: /en/projects
+              - listitem [ref=e814]:
+                - link "Products" [ref=e815] [cursor=pointer]:
+                  - /url: /en/products
+              - listitem [ref=e816]:
+                - link "Leaderboard" [ref=e817] [cursor=pointer]:
+                  - /url: /en/leaderboard
+              - listitem [ref=e818]:
+                - link "Blog" [ref=e819] [cursor=pointer]:
+                  - /url: /en/blog
+              - listitem [ref=e820]:
+                - link "About" [ref=e821] [cursor=pointer]:
+                  - /url: /en/about
+              - listitem [ref=e822]:
+                - link "How it works" [ref=e823] [cursor=pointer]:
+                  - /url: /en/how-it-works
+              - listitem [ref=e824]:
+                - link "Brand guidelines" [ref=e825] [cursor=pointer]:
+                  - /url: /en/brand-guidelines
+              - listitem [ref=e826]:
+                - link "BioDex" [ref=e827] [cursor=pointer]:
+                  - /url: /en/biodex
+              - listitem [ref=e828]:
+                - link "Challenges" [ref=e829] [cursor=pointer]:
+                  - /url: /en/challenges
+              - listitem [ref=e830]:
+                - link "Menu" [ref=e831] [cursor=pointer]:
+                  - /url: /en/menu
+          - navigation "Account & Shopping" [ref=e832]:
+            - heading "Account & Shopping" [level=3] [ref=e833]
+            - list [ref=e834]:
+              - listitem [ref=e835]:
+                - link "Cart" [ref=e836] [cursor=pointer]:
+                  - /url: /en/cart
+              - listitem [ref=e837]:
+                - link "Login" [ref=e838] [cursor=pointer]:
+                  - /url: /en/login
+              - listitem [ref=e839]:
+                - link "Register" [ref=e840] [cursor=pointer]:
+                  - /url: /en/register
+          - navigation "Support" [ref=e841]:
+            - heading "Support" [level=3] [ref=e842]
+            - list [ref=e843]:
+              - listitem [ref=e844]:
+                - link "FAQ" [ref=e845] [cursor=pointer]:
+                  - /url: /en/faq
+              - listitem [ref=e846]:
+                - link "Contact" [ref=e847] [cursor=pointer]:
+                  - /url: /en/contact
+              - listitem [ref=e848]:
+                - link "Privacy" [ref=e849] [cursor=pointer]:
+                  - /url: /en/privacy
+              - listitem [ref=e850]:
+                - link "Terms" [ref=e851] [cursor=pointer]:
+                  - /url: /en/terms
+          - generic [ref=e852]:
+            - heading "Contact us" [level=3] [ref=e853]
+            - generic [ref=e854]:
+              - link "contact@make-the-change.com" [ref=e855] [cursor=pointer]:
+                - /url: mailto:contact@make-the-change.com
+                - img [ref=e856]
+                - text: contact@make-the-change.com
+              - link "Brussels, Belgium" [ref=e859] [cursor=pointer]:
+                - /url: https://www.google.com/maps/search/?api=1&query=Brussels%2C%20Belgium
+                - img [ref=e860]
+                - text: Brussels, Belgium
+            - generic [ref=e863]:
+              - heading "Follow us" [level=4] [ref=e864]
+              - navigation "Réseaux sociaux" [ref=e865]:
+                - list [ref=e866]:
+                  - listitem [ref=e867]:
+                    - link "Instagram" [ref=e868] [cursor=pointer]:
+                      - /url: https://instagram.com/makethechange
+                      - img [ref=e869]
+                  - listitem [ref=e872]:
+                    - link "Facebook" [ref=e873] [cursor=pointer]:
+                      - /url: https://facebook.com/makethechange
+                      - img [ref=e874]
+                  - listitem [ref=e876]:
+                    - link "LinkedIn" [ref=e877] [cursor=pointer]:
+                      - /url: https://linkedin.com/company/makethechange
+                      - img [ref=e878]
+                  - listitem [ref=e882]:
+                    - link "TikTok" [ref=e883] [cursor=pointer]:
+                      - /url: https://tiktok.com/@makethechange
+                      - img [ref=e884]
+        - generic [ref=e888]:
+          - paragraph [ref=e889]: © 2026 Make the CHANGE. All rights reserved.
+          - generic [ref=e890]:
+            - link "Privacy" [ref=e891] [cursor=pointer]:
+              - /url: /en/privacy
+            - link "Terms" [ref=e892] [cursor=pointer]:
+              - /url: /en/terms
+  - region "Notifications" [ref=e893]
+  - button "Open Next.js Dev Tools" [ref=e899] [cursor=pointer]:
+    - img [ref=e900]
+  - alert [ref=e903]

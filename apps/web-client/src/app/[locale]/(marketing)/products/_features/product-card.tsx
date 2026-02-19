@@ -1,5 +1,6 @@
 'use client'
 
+import type { Json } from '@make-the-change/core/database-types'
 import { Button } from '@make-the-change/core/ui'
 import { ProductCard as SharedProductCard } from '@make-the-change/core/ui/next'
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
@@ -21,8 +22,8 @@ export type ProductCardProduct = {
   stock_quantity: number | null
   featured: boolean | null
   fulfillment_method: string | null
-  metadata: unknown
-  images: unknown
+  metadata: Json | null
+  images: string[]
   tags: string[]
 }
 
@@ -63,7 +64,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   const isOutOfStock = product.stock_quantity !== null && product.stock_quantity <= 0
 
   const metadata = toRecord(product.metadata)
-  const columnImages = toStringArray(product.images)
+  const columnImages = product.images
   const metadataImages = toStringArray(metadata?.images)
   const mainImage =
     sanitizeImageUrl(columnImages[0]) ||
