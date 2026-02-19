@@ -1,6 +1,5 @@
 'use client'
 
-import type { Product } from '@make-the-change/core/schema'
 import { Button } from '@make-the-change/core/ui'
 import { ProductCard as SharedProductCard } from '@make-the-change/core/ui/next'
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
@@ -9,13 +8,50 @@ import { useState } from 'react'
 import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { buildProductCardBadges } from '@/app/[locale]/(marketing)/products/_features/product-card-badges'
-import { getRandomProductImage } from '@/lib/placeholder-images'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { getRandomProductImage } from '@/lib/placeholder-images'
+
+export type ProductCardProduct = {
+  id: string
+  slug: string | null
+  name_default: string | null
+  short_description_default: string | null
+  price_points: number | null
+  price_eur_equivalent: number | null
+  stock_quantity: number | null
+  featured: boolean | null
+  fulfillment_method: string | null
+  metadata: unknown
+  images: unknown
+  tags: string[]
+}
 
 type ProductCardProps = {
-  product: Product
+  product: ProductCardProduct
   className?: string
   priority?: boolean
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const toRecord = (value: unknown): Record<string, unknown> | null =>
+  isRecord(value) ? value : null
+
+const toStringArray = (value: unknown): string[] => {
+  if (!Array.isArray(value)) {
+    return []
+  }
+
+  return value.filter((entry): entry is string => typeof entry === 'string')
+}
+
+const getFirstString = (value: unknown): string | undefined => {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    return undefined
+  }
+
+  return value
 }
 
 export function ProductCard({ product, className, priority = false }: ProductCardProps) {
@@ -26,15 +62,16 @@ export function ProductCard({ product, className, priority = false }: ProductCar
 
   const isOutOfStock = product.stock_quantity !== null && product.stock_quantity <= 0
 
-  const metadata = product.metadata as Record<string, unknown> | null
-  const columnImages = (product.images as string[] | null | undefined) || []
-  const metadataImages = (metadata?.images as string[] | undefined) || []
+  const metadata = toRecord(product.metadata)
+  const columnImages = toStringArray(product.images)
+  const metadataImages = toStringArray(metadata?.images)
   const mainImage =
     sanitizeImageUrl(columnImages[0]) ||
-    sanitizeImageUrl(metadata?.image_url as string | undefined) ||
+    sanitizeImageUrl(getFirstString(metadata?.image_url)) ||
     sanitizeImageUrl(metadataImages[0]) ||
     getRandomProductImage(product.name_default?.length || 0)
-  const secondaryImage = sanitizeImageUrl(columnImages[1]) || sanitizeImageUrl(metadataImages[1]) || mainImage
+  const secondaryImage =
+    sanitizeImageUrl(columnImages[1]) || sanitizeImageUrl(metadataImages[1]) || mainImage
   const badges = buildProductCardBadges({
     featured: product.featured,
     stockQuantity: product.stock_quantity,
@@ -161,7 +198,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
           </>
         ),
         metaChips:
-          product.tags && product.tags.length > 0 ? (
+          product.tags.length > 0 ? (
             <div className="flex flex-wrap gap-1 pt-1">
               {product.tags.slice(0, 2).map((tag) => (
                 <span

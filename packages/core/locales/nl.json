@@ -133,6 +133,10 @@
       "ethical_products": "Ethische Producten",
       "points_generated": "Gegenereerde Punten"
     },
+    "blog_section": {
+      "title": "Laatste nieuws",
+      "view_all": "Bekijk alle artikelen"
+    },
     "featured_projects": "Uitgelichte projecten",
     "view_all_projects": "Alle projecten bekijken",
     "project_card": {
@@ -141,6 +145,29 @@
     },
     "featured_products": "Populaire producten",
     "view_all_products": "Alle producten bekijken",
+    "empty": {
+      "featured_projects": {
+        "title": "Nog geen uitgelichte projecten",
+        "description": "Onze selecties komen binnenkort online. Ontdek intussen alle beschikbare projecten.",
+        "cta": "Ontdek projecten"
+      },
+      "featured_products": {
+        "title": "Nog geen uitgelichte producten",
+        "description": "Populaire keuzes verschijnen hier binnenkort. Bekijk ondertussen de volledige winkel.",
+        "cta": "Winkel bekijken"
+      },
+      "blog": {
+        "title": "Nog geen gepubliceerde artikelen",
+        "description": "Nieuwe content komt eraan. Kom binnenkort terug op de blog.",
+        "cta": "Bekijk de blog"
+      },
+      "partners": {
+        "title": "Word onze eerste partner",
+        "description": "We openen ons partnernetwerk. Neem contact op om je bij Make the Change aan te sluiten.",
+        "cta_primary": "Partner worden",
+        "cta_secondary": "Partnerruimte"
+      }
+    },
     "cta": {
       "title": "Klaar om het verschil te maken?",
       "description": "Sluit je aan bij onze gemeenschap van verantwoorde investeerders en draag bij aan het behoud van biodiversiteit.",
@@ -429,6 +456,7 @@
       "impact": "Impact",
       "updates": "Updates",
       "invest_now": "Nu investeren",
+      "funding_closed": "Financiering gesloten",
       "share": "Delen"
     },
     "empty": "Geen projecten gevonden",

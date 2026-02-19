@@ -1,11 +1,13 @@
 import { Badge, Button } from '@make-the-change/core/ui'
 import { Award, Building2, Package, Share2, Sparkles, Star } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { cn, formatCurrency } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { Link } from '@/i18n/navigation'
 import { ProductDetailAddToCartButton } from './floating-action-buttons'
+import { ProductShareButton } from './product-share-button'
+import { ProductFavoriteButton } from './product-favorite-button'
 import type { ProductWithRelations } from './product-detail-data'
 
 type ProductQuickViewProps = {
@@ -14,6 +16,7 @@ type ProductQuickViewProps = {
 
 export async function ProductQuickView({ product }: ProductQuickViewProps) {
   const t = await getTranslations('products')
+  const locale = await getLocale()
 
   const coverImage =
     sanitizeImageUrl(product.image_url) ||
@@ -53,7 +56,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
   const priceEuros = Number.isFinite(parsedPriceEuros) ? parsedPriceEuros : null
 
   return (
-    <div className="relative flex h-full min-h-[calc(100dvh-2rem)] flex-col bg-transparent">
+    <div className="relative flex h-full min-h-full flex-col bg-transparent">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-marketing-positive-500/10 blur-3xl" />
@@ -101,12 +104,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                       {product.category.name_default}
                     </Badge>
                   )}
-                  {product.producer?.name_default && (
-                    <Badge variant="outline" className="border-border/60 bg-muted/40">
-                      <Building2 className="mr-1 h-3.5 w-3.5" />
-                      {product.producer.name_default}
-                    </Badge>
-                  )}
+                  {/* Partner badge removed - duplicate info */}
                   {product.featured && (
                     <Badge className="border-none bg-marketing-warning-500 text-marketing-overlay-light">
                       <Star className="mr-1 h-3.5 w-3.5" />
@@ -127,9 +125,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
             {productDescription && (
               <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
-                <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-                  {t('detail.description')}
-                </h2>
+
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground sm:text-base">
                   {productDescription}
                 </p>
@@ -137,20 +133,18 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {product.producer && (
-              <section className="rounded-2xl border border-white/10 bg-background/40 p-4 transition-colors hover:bg-background/60">
-                <Link href={`/producers/${product.producer.slug || product.producer.id}`}>
-                  <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-                    {t('detail.producer')}
-                  </h2>
+              <section className="group rounded-2xl border border-white/10 bg-background/40 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-background/60 hover:shadow-lg">
+                <a href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}>
+
                   <div className="flex items-start gap-3">
                     {producerImage ? (
                       <img
                         src={producerImage}
                         alt={product.producer.name_default || 'Producer'}
-                        className="h-14 w-14 rounded-xl object-cover"
+                        className="h-14 w-14 rounded-xl object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-105">
                         {product.producer.name_default?.[0]?.toUpperCase() || 'P'}
                       </div>
                     )}
@@ -159,14 +153,13 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                         <p className="truncate text-base font-bold text-foreground underline-offset-4 group-hover:underline">
                           {product.producer.name_default || ''}
                         </p>
-                        <Share2 className="h-4 w-4 text-muted-foreground opacity-50" />
                       </div>
                       <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                         {product.producer.description_default || ''}
                       </p>
                     </div>
                   </div>
-                </Link>
+                </a>
               </section>
             )}
 
@@ -195,7 +188,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-transparent to-background/5" />
           <div className="grid items-end gap-3 md:grid-cols-[1fr_auto]">
             <div>
-              <div className="flex items-end justify-between gap-3">
+              <div className="flex items-baseline gap-4">
                 <div className="text-4xl font-black text-primary">
                   {formatCurrency(displayPrice)}
                 </div>
@@ -231,15 +224,16 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                 stockQuantity={product.stock_quantity}
                 inStock={inStock}
               />
-              <Button
-                variant="outline"
-                size="icon"
+              <ProductShareButton
+                productName={productName}
+                productId={product.id}
                 className="h-12 w-12 shrink-0 rounded-xl"
-                title={t('detail.exchange')}
-              >
-                <Share2 className="h-5 w-5" />
-                <span className="sr-only">{t('detail.exchange')}</span>
-              </Button>
+              />
+              <ProductFavoriteButton
+                productName={productName}
+                productId={product.id}
+                className="h-12 w-12 shrink-0 rounded-xl"
+              />
             </div>
           </div>
         </div>

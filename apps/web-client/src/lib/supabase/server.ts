@@ -1,10 +1,9 @@
 import 'server-only'
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 import type { Database } from '@make-the-change/core/database-types'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { createServerClient, type SetAllCookies } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-export const createClient = async (): Promise<SupabaseClient<Database>> => {
+export const createClient = async () => {
   const cookieStore = await cookies()
 
   return createServerClient<Database>(
@@ -12,23 +11,16 @@ export const createClient = async (): Promise<SupabaseClient<Database>> => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
+        getAll() {
+          return cookieStore.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
+        setAll(cookiesToSet: Parameters<SetAllCookies>[0]) {
           try {
-            cookieStore.set({ name, value, ...options })
-          } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
-            // The `delete` method was called from a Server Component.
+            for (const { name, value, options } of cookiesToSet) {
+              cookieStore.set({ name, value, ...options })
+            }
+          } catch (_error) {
+            // The `setAll` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.
           }

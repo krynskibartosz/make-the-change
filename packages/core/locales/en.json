@@ -474,6 +474,29 @@
     },
     "featured_products": "Popular products",
     "view_all_products": "View all products",
+    "empty": {
+      "featured_projects": {
+        "title": "No featured projects yet",
+        "description": "Our curated highlights are coming soon. Explore all available projects right now.",
+        "cta": "Discover projects"
+      },
+      "featured_products": {
+        "title": "No featured products yet",
+        "description": "Popular picks will appear here soon. Browse the full catalog in the meantime.",
+        "cta": "Browse shop"
+      },
+      "blog": {
+        "title": "No published articles yet",
+        "description": "Fresh content is on the way. Check back on the blog very soon.",
+        "cta": "View the blog"
+      },
+      "partners": {
+        "title": "Become our first partner",
+        "description": "We are opening our partner network. Contact us to join Make the Change.",
+        "cta_primary": "Become a partner",
+        "cta_secondary": "Partner space"
+      }
+    },
     "cta": {
       "title": "Ready to make a difference?",
       "description": "Join our community of responsible investors and contribute to biodiversity preservation.",
@@ -734,6 +757,7 @@
       "impact": "Impact",
       "updates": "Updates",
       "invest_now": "Invest now",
+      "funding_closed": "Funding closed",
       "share": "Share"
     },
     "empty": "No projects found",
@@ -857,8 +881,17 @@
     "detail_page": {
       "stock_available": "{count} available",
       "authentic_badge": "Authentic product",
-      "hero_product_badge": "Featured product",
+      "hero_product_badge": "Hero Product",
       "or_points": "or {points} pts",
+      "share": "Share",
+      "share_success": "Link copied to clipboard!",
+      "share_error": "Could not copy link",
+      "add_to_favorites": "Add to favorites",
+      "remove_from_favorites": "Remove from favorites",
+      "added_to_favorites": "Added to favorites",
+      "added_to_favorites_desc": "{name} was added to your favorites.",
+      "removed_from_favorites": "Removed from favorites",
+      "removed_from_favorites_desc": "{name} was removed from your favorites.",
       "visit_website": "Visit website",
       "back_to_products": "Back to shop",
       "cta": {

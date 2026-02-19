@@ -73,8 +73,8 @@ const DialogContent = forwardRef<
           >
             {children}
             {showCloseButton && (
-              <DialogClose className="absolute right-4 top-4 rounded-lg p-1 opacity-70 transition-all hover:opacity-100 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-background disabled:pointer-events-none">
-                <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+              <DialogClose className="absolute right-4 top-4 z-50 rounded-full border border-border/50 bg-background/50 p-2 shadow-sm backdrop-blur-md transition-all hover:scale-105 hover:border-border hover:bg-background hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+                <X className="h-4 w-4 opacity-70 transition-opacity hover:opacity-100" />
                 <span className="sr-only">{closeLabel}</span>
               </DialogClose>
             )}

@@ -1,25 +1,15 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-} from '@make-the-change/core/ui'
+import { InterceptedRouteDialog } from '@/app/[locale]/@modal/_components/intercepted-route-dialog'
 import { RegisterForm } from '@/components/auth/register-form'
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
 export default function InterceptedRegister() {
-    const router = useRouter()
-
-    return (
-        <Dialog open={true} onOpenChange={() => router.back()}>
-            <DialogContent className="sm:max-w-[425px] md:max-w-lg p-0 bg-transparent border-none shadow-none">
-                <VisuallyHidden>
-                    <DialogTitle>Register</DialogTitle>
-                </VisuallyHidden>
-                <RegisterForm />
-            </DialogContent>
-        </Dialog>
-    )
+  return (
+    <InterceptedRouteDialog
+      title="Register"
+      contentClassName="overflow-hidden p-0 !bg-background/95 sm:w-[calc(100vw-2rem)] sm:max-h-[calc(100dvh-2rem)] sm:max-w-lg sm:rounded-[28px] sm:border sm:border-border/60 sm:shadow-[0_25px_100px_hsl(var(--marketing-overlay-dark)/0.5)] sm:backdrop-blur-2xl"
+    >
+      <RegisterForm modal />
+    </InterceptedRouteDialog>
+  )
 }

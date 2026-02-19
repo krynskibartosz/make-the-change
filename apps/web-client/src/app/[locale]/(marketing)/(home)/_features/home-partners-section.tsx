@@ -1,45 +1,51 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import Link from 'next/link'
 import { Button } from '@make-the-change/core/ui'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import type { HomePartnerProducer } from './home.types'
 
-type Producer = {
-  id: string
-  name_default: string
-  description_default: string
-  contact_website?: string
-  images: string[]
-}
-
-type HomePartnersSectionProps = {
-  producers: Producer[]
+type HomePartnersSectionBaseProps = {
+  producers: HomePartnerProducer[]
   variant?: 'default' | 'muted'
 }
 
-export function HomePartnersSection({ producers, variant = 'default' }: HomePartnersSectionProps) {
+type HomePartnersCarouselProps = HomePartnersSectionBaseProps & {
+  mode?: 'carousel'
+}
+
+type HomePartnersEmptyProps = HomePartnersSectionBaseProps & {
+  mode: 'empty'
+  emptyTitle: string
+  emptyDescription: string
+  primaryCtaLabel: string
+  primaryCtaHref: string
+  secondaryCtaLabel?: string
+  secondaryCtaHref?: string | null
+}
+
+type HomePartnersSectionProps = HomePartnersCarouselProps | HomePartnersEmptyProps
+
+function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCarouselProps) {
   const scrollContainerRef = useRef<HTMLUListElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [isAutoScrolling, setIsAutoScrolling] = useState(true)
 
-  // Dupliquer les producteurs pour créer un effet infini
   const duplicatedProducers = [...producers, ...producers, ...producers, ...producers, ...producers]
 
-  const checkScrollButtons = () => {
+  const checkScrollButtons = useCallback(() => {
     const container = scrollContainerRef.current
     if (container) {
       setCanScrollLeft(container.scrollLeft > 0)
-      setCanScrollRight(
-        container.scrollLeft < container.scrollWidth - container.clientWidth
-      )
+      setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth)
     }
-  }
+  }, [])
 
   const scroll = (direction: 'left' | 'right') => {
-    setIsAutoScrolling(false) // Pause le défilement automatique
+    setIsAutoScrolling(false)
     const container = scrollContainerRef.current
     if (container) {
       const scrollAmount = container.clientWidth * 0.8
@@ -47,34 +53,23 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
       })
-      // Reprendre le défilement après 3 secondes
       setTimeout(() => setIsAutoScrolling(true), 3000)
     }
   }
 
-  const autoScroll = () => {
+  const autoScroll = useCallback(() => {
     const container = scrollContainerRef.current
     if (container && isAutoScrolling) {
-      const scrollAmount = 1 // Vitesse plus visible pour tester
       const currentScroll = container.scrollLeft
       const maxScroll = container.scrollWidth - container.clientWidth
 
-      // Logique simple : si on atteint la fin, revenir au début
       if (currentScroll >= maxScroll) {
         container.scrollLeft = 0
       } else {
-        container.scrollLeft += scrollAmount
-      }
-
-      // Debug plus fréquent pour voir ce qui se passe
-      if (Math.random() < 0.02) {
-        console.log('AutoScroll - currentScroll:', currentScroll, 'maxScroll:', maxScroll, 'isAutoScrolling:', isAutoScrolling)
+        container.scrollLeft += 1
       }
     }
-  }
-
-  // Debug temporaire
-  console.log('HomePartnersSection - isAutoScrolling:', isAutoScrolling, 'producers length:', producers.length)
+  }, [isAutoScrolling])
 
   useEffect(() => {
     const container = scrollContainerRef.current
@@ -83,52 +78,42 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
       container.addEventListener('scroll', checkScrollButtons)
       return () => container.removeEventListener('scroll', checkScrollButtons)
     }
-  }, [])
+  }, [checkScrollButtons])
 
   useEffect(() => {
-    let animationFrameId: number
+    if (!isAutoScrolling) {
+      return
+    }
 
+    let animationFrameId = 0
     const animate = () => {
       autoScroll()
       animationFrameId = requestAnimationFrame(animate)
     }
 
-    console.log('useEffect autoScroll - isAutoScrolling:', isAutoScrolling)
-
-    // Démarrer immédiatement si isAutoScrolling est true
-    if (isAutoScrolling) {
-      console.log('Démarrage de l\'animation')
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId)
-      }
-    }
-  }, [isAutoScrolling, duplicatedProducers])
+    animationFrameId = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [autoScroll, isAutoScrolling])
 
   return (
     <section className={cn('py-16', variant === 'muted' && 'bg-muted/30')}>
-      <div className="container  mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Nos Partenaires
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+      <div className="container mx-auto px-4">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">Nos Partenaires</h2>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Nous collaborons avec les meilleurs partenaires pour vous offrir des solutions
             innovantes et durables
           </p>
         </div>
 
         <div className="relative">
-          {/* Navigation buttons */}
           <Button
             variant="ghost"
             size="icon"
             aria-label="Précédent"
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border border-border rounded-full transition-all backdrop-blur-sm ${!canScrollLeft ? 'opacity-0 pointer-events-none' : 'opacity-100'
-              }`}
+            className={`absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card ${
+              !canScrollLeft ? 'pointer-events-none opacity-0' : 'opacity-100'
+            }`}
             onClick={() => scroll('left')}
           >
             <ChevronLeft className="h-5 w-5" />
@@ -138,49 +123,45 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
             variant="ghost"
             size="icon"
             aria-label="Suivant"
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border border-border rounded-full transition-all backdrop-blur-sm ${!canScrollRight ? 'opacity-0 pointer-events-none' : 'opacity-100'
-              }`}
+            className={`absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card ${
+              !canScrollRight ? 'pointer-events-none opacity-0' : 'opacity-100'
+            }`}
             onClick={() => scroll('right')}
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
 
-          {/* Carousel container */}
           <ul
             ref={scrollContainerRef}
             aria-label="Liste des partenaires"
-            className="flex gap-8 overflow-x-auto scrollbar-hide scroll-smooth px-12 m-0 p-0 list-none"
+            className="m-0 flex list-none gap-8 overflow-x-auto px-12 py-1 scrollbar-hide scroll-smooth"
             onMouseEnter={() => setIsAutoScrolling(false)}
             onMouseLeave={() => setIsAutoScrolling(true)}
           >
-            {duplicatedProducers.map((producer: Producer, index: number) => (
-              <li
-                key={`${producer.id}-${index}`}
-                className="flex-shrink-0"
-              >
+            {duplicatedProducers.map((producer, index) => (
+              <li key={`${producer.id}-${index}`} className="flex-shrink-0">
                 <Link
                   href={`/producers/${producer.id}`}
-                  className="block w-64 h-32 bg-card/50 border border-border rounded-2xl flex items-center justify-center hover:bg-card transition-all duration-300 group cursor-pointer backdrop-blur-sm"
+                  className="group block h-32 w-64 cursor-pointer rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-all duration-300 hover:bg-card"
                 >
-                  <div className="text-center px-6 flex items-center gap-4">
-                    {producer.images && producer.images.length > 0 ? (
+                  <div className="flex items-center gap-4 px-6 py-6 text-center">
+                    {producer.images.length > 0 ? (
                       <img
                         src={producer.images[0]}
                         alt={producer.name_default}
-                        className="w-12 h-12 rounded-lg object-cover"
+                        className="h-12 w-12 rounded-lg object-cover"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                        <span className="text-foreground text-lg font-bold">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+                        <span className="text-lg font-bold text-foreground">
                           {producer.name_default.charAt(0).toUpperCase()}
                         </span>
                       </div>
                     )}
                     <div className="text-left">
-                      <h3 className="text-foreground font-bold text-lg group-hover:scale-105 transition-transform">
+                      <h3 className="text-lg font-bold text-foreground transition-transform group-hover:scale-105">
                         {producer.name_default}
                       </h3>
-
                     </div>
                   </div>
                 </Link>
@@ -188,9 +169,38 @@ export function HomePartnersSection({ producers, variant = 'default' }: HomePart
             ))}
           </ul>
         </div>
-
-
       </div>
     </section>
   )
+}
+
+export function HomePartnersSection(props: HomePartnersSectionProps) {
+  if (props.mode === 'empty') {
+    return (
+      <section className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
+            <h2 className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+              {props.emptyDescription}
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button asChild className="w-full sm:w-auto">
+                <Link href={props.primaryCtaHref}>{props.primaryCtaLabel}</Link>
+              </Button>
+              {props.secondaryCtaLabel && props.secondaryCtaHref ? (
+                <Button asChild variant="outline" className="w-full sm:w-auto">
+                  <a href={props.secondaryCtaHref} target="_blank" rel="noreferrer">
+                    {props.secondaryCtaLabel}
+                  </a>
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  return <HomePartnersCarousel producers={props.producers} variant={props.variant} />
 }

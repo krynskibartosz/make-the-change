@@ -1,52 +1,43 @@
-import type { Product } from '@make-the-change/core/schema'
+import type { Locale } from '@make-the-change/core/i18n'
+import { defaultLocale, isLocale } from '@make-the-change/core/i18n'
 import { Button } from '@make-the-change/core/ui'
-import { ArrowDown, ArrowRight, Leaf, Sparkles, Users, Zap } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { cn } from '@/lib/utils'
-import { Logo } from '@/components/ui/logo'
-
-import { PageHero } from '@/components/ui/page-hero'
-import { getBlogPosts } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
-import type { BlogPost } from '@/app/[locale]/(marketing)/blog/_features/blog-types'
-import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
-import type { HomePageContent } from '@/app/[locale]/admin/cms/_features/types'
-import { Link } from '@/i18n/navigation'
-import { createClient } from '@/lib/supabase/server'
-import { sanitizeImageUrl } from '@/lib/image-url'
-import { formatPoints } from '@/lib/utils'
-
-type NumericRpcResponse = {
-  data: number | null
-  error: unknown
-}
-
-type RawFeaturedProject = {
-  id: string
-  slug: string | null
-  name_default: string | null
-  description_default: string | null
-  hero_image_url: string | null
-  target_budget: number | null
-  current_funding: number | null
-  status: string | null
-  featured: boolean | null
-}
-
+import { ArrowDown, ArrowRight, Leaf, type LucideIcon, Sparkles, Users, Zap } from 'lucide-react'
 import type { Metadata } from 'next'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { Logo } from '@/components/ui/logo'
+import { PageHero } from '@/components/ui/page-hero'
+import { Link } from '@/i18n/navigation'
+import { buildPartnerDashboardUrl } from '@/lib/partner-app-url'
+import { cn, formatPoints } from '@/lib/utils'
 import { MarketingCtaBand } from '../_features/marketing-cta-band'
 import { DiversityFactLoader } from './_features/diversity-fact-loader'
+import { getHomeServerData } from './_features/home.server-data'
 import { HomeBlogSection } from './_features/home-blog-section'
 import { HomeFeaturedProductsSection } from './_features/home-featured-products-section'
 import { HomeFeaturedProjectsSection } from './_features/home-featured-projects-section'
 import { HomePartnersSection } from './_features/home-partners-section'
+import { HomeSectionEmptyState } from './_features/home-section-empty-state'
 import { HomeStatsSection } from './_features/home-stats-section'
 import { HomeUniverseSection } from './_features/home-universe-section'
 import { MarketingStepsSection } from './_features/marketing-steps-section'
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+type HeroStat = {
+  key: 'projects' | 'members'
+  href: string
+  icon: LucideIcon
+  value: number
+  label: string
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata' })
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app'
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app'
   return {
     title: t('title'),
     description: t('description'),
@@ -72,10 +63,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage() {
   const t = await getTranslations('home')
-  const supabase = await createClient()
-
-  // Check if user is authenticated
-  const { data: { user } } = await supabase.auth.getUser()
+  const localeValue = await getLocale()
+  const locale: Locale = isLocale(localeValue) ? localeValue : defaultLocale
+  const {
+    user,
+    homeContent,
+    activeProjectsState,
+    activeProductsState,
+    membersCountState,
+    pointsGeneratedState,
+    featuredProjectsState,
+    featuredProductsState,
+    activeProducersState,
+    blogPostsState,
+  } = await getHomeServerData()
 
   const placeholderImages = {
     projects: [
@@ -85,79 +86,95 @@ export default async function HomePage() {
     ],
   }
 
-  const [
-    { count: activeProjectsCount },
-    { count: activeProductsCount },
-    { data: membersCountData },
-    { data: featuredProjectsRaw },
-    { data: featuredProductsRaw },
-    { data: activeProducersRaw },
-    homeContent,
-    { data: pointsData },
-    latestPosts,
-  ] = await Promise.all([
-    supabase
-      .schema('investment')
-      .from('projects')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active'),
-    supabase
-      .schema('commerce')
-      .from('products')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true),
-    supabase.rpc('count_total_members', {}, { count: 'exact' }),
-    supabase
-      .schema('investment')
-      .from('projects')
-      .select('*')
-      .eq('featured', true)
-      .limit(3)
-      .order('created_at', { ascending: false }),
-    supabase
-      .schema('commerce')
-      .from('products')
-      .select('*')
-      .eq('featured', true)
-      .limit(4)
-      .order('created_at', { ascending: false }),
-    supabase
-      .schema('investment')
-      .from('producers')
-      .select('*')
-      .eq('status', 'active')
-      .order('created_at', { ascending: false }),
-    getPageContent('home'),
-    supabase.rpc('get_total_points_generated'),
-    getBlogPosts(),
-  ])
+  const partnerAppBaseUrl =
+    process.env.NEXT_PUBLIC_PARTNER_APP_BASE_URL || process.env.NEXT_PUBLIC_ADMIN_URL
+  const partnerDashboardUrl = buildPartnerDashboardUrl(partnerAppBaseUrl, locale)
 
-  const content = homeContent
-  const projectsCount = activeProjectsCount || 0
-  const productsCount = activeProductsCount || 0
-  const membersCount = membersCountData || 0
-  const pointsGenerated = pointsData || 0
+  const heroStats: HeroStat[] = []
+  if (activeProjectsState.status === 'ready') {
+    heroStats.push({
+      key: 'projects',
+      href: '/projects',
+      icon: Zap,
+      value: activeProjectsState.value,
+      label: t('stats.projects'),
+    })
+  }
+  if (membersCountState.status === 'ready') {
+    heroStats.push({
+      key: 'members',
+      href: '/leaderboard',
+      icon: Users,
+      value: membersCountState.value,
+      label: t('stats.members'),
+    })
+  }
 
-  const featuredProjects = featuredProjectsRaw.map((project) => ({
-    id: project.id,
-    slug: project.slug || project.id,
-    name_default: project.name_default,
-    description_default: project.description_default,
-    hero_image_url: sanitizeImageUrl(project.hero_image_url),
-    target_budget: project.target_budget,
-    current_funding: project.current_funding,
-    status: project.status,
-    featured: project.featured,
-  }))
+  const statsItems = []
+  if (activeProjectsState.status === 'ready') {
+    statsItems.push({
+      value: activeProjectsState.value,
+      label: t('stats_section.active_projects'),
+      icon: Leaf,
+      color: 'text-marketing-positive-400',
+      bg: 'bg-marketing-positive-400/10',
+      border: 'border-marketing-positive-400/20',
+    })
+  }
+  if (membersCountState.status === 'ready') {
+    statsItems.push({
+      value: membersCountState.value,
+      label: t('stats_section.engaged_members'),
+      icon: Users,
+      color: 'text-marketing-info-400',
+      bg: 'bg-marketing-info-400/10',
+      border: 'border-marketing-info-400/20',
+    })
+  }
+  if (activeProductsState.status === 'ready') {
+    statsItems.push({
+      value: activeProductsState.value,
+      label: t('stats_section.ethical_products'),
+      icon: Sparkles,
+      color: 'text-marketing-warning-400',
+      bg: 'bg-marketing-warning-400/10',
+      border: 'border-marketing-warning-400/20',
+    })
+  }
+  if (pointsGeneratedState.status === 'ready') {
+    statsItems.push({
+      value: formatPoints(pointsGeneratedState.value),
+      label: t('stats_section.points_generated'),
+      icon: Zap,
+      color: 'text-primary',
+      bg: 'bg-primary/10',
+      border: 'border-primary/20',
+    })
+  }
 
-  const featuredProducts = featuredProductsRaw
-  const blogPosts = latestPosts
-  const activeProducers = activeProducersRaw
+  const featuredProjectsVisible = featuredProjectsState.status !== 'unknown'
+  const featuredProductsVisible = featuredProductsState.status !== 'unknown'
+  const partnersVisible = activeProducersState.status !== 'unknown'
+  const blogVisible = blogPostsState.status !== 'unknown'
+
+  const featuredSectionsVisibleCount =
+    (featuredProjectsVisible ? 1 : 0) + (featuredProductsVisible ? 1 : 0)
+  const partnersVariant: 'default' | 'muted' =
+    featuredSectionsVisibleCount % 2 === 0 ? 'muted' : 'default'
+  const blogVariant: 'default' | 'muted' =
+    (featuredSectionsVisibleCount + (partnersVisible ? 1 : 0)) % 2 === 0 ? 'muted' : 'default'
+  const ctaSectionClassName = cn(
+    'py-24',
+    (featuredSectionsVisibleCount + (partnersVisible ? 1 : 0) + (blogVisible ? 1 : 0)) % 2 === 0
+      ? 'bg-muted/30'
+      : 'bg-background',
+  )
+
+  const content = homeContent.data
 
   return (
     <>
-      {/* Mobile Logo - Matches Desktop Header Style */}
-      <div className="absolute top-4 left-0 right-0 flex justify-center md:hidden z-50">
+      <div className="absolute left-0 right-0 top-4 z-50 flex justify-center md:hidden">
         <Link href="/" className="flex items-center gap-2">
           <Logo variant="icon" width={32} height={32} className="h-8 w-8" />
           <span className="text-lg font-bold">Make the Change</span>
@@ -167,8 +184,8 @@ export default async function HomePage() {
       <PageHero
         badge={
           <span className="inline-flex items-center gap-2 px-1 py-1">
-            <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-            <span className="font-bold tracking-widest uppercase text-[10px]">
+            <Sparkles className="h-3.5 w-3.5 animate-pulse text-primary" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">
               {content?.hero.badge || t('hero.badge')}
             </span>
           </span>
@@ -177,14 +194,14 @@ export default async function HomePage() {
         description={content?.hero.subtitle || t('hero.subtitle')}
         size="lg"
         variant="gradient"
-        className="min-h-[100dvh] flex flex-col justify-center relative pt-32 md:pt-0"
+        className="relative flex min-h-[100dvh] flex-col justify-center pt-32 md:pt-0"
       >
-        <div className="space-y-8 relative z-10">
-          <div className="flex flex-col justify-center gap-4 sm:flex-row items-center">
+        <div className="relative z-10 space-y-8">
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
               asChild
               size="lg"
-              className="flex items-center justify-center w-full sm:w-auto h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-sm shadow-2xl shadow-primary/20 hover:scale-105 transition-transform"
+              className="flex h-14 w-full items-center justify-center rounded-2xl px-8 text-sm font-black uppercase tracking-widest shadow-2xl shadow-primary/20 transition-transform hover:scale-105 sm:w-auto"
             >
               <Link href="/projects">
                 {content?.hero.cta_primary || t('hero.cta_primary')}
@@ -195,40 +212,32 @@ export default async function HomePage() {
               asChild
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-sm border-2 backdrop-blur-md hover:bg-background/50"
+              className="h-14 w-full rounded-2xl border-2 px-8 text-sm font-black uppercase tracking-widest backdrop-blur-md hover:bg-background/50 sm:w-auto"
             >
-              <Link href="/about">
-                {content?.hero.cta_secondary || t('hero.cta_secondary')}
-              </Link>
+              <Link href="/about">{content?.hero.cta_secondary || t('hero.cta_secondary')}</Link>
             </Button>
           </div>
 
-          <ul className="flex flex-wrap justify-center gap-4 pt-4 list-none m-0 p-0">
-            <li>
-              <Link href="/projects">
-                <span className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-                  <Zap className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-bold uppercase tracking-tight">
-                    {projectsCount} {content?.stats.projects || t('stats.projects')}
-                  </span>
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/leaderboard">
-                <span className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-background/40 backdrop-blur-md border border-marketing-overlay-light/10 shadow-sm">
-                  <Users className="h-4 w-4 text-primary" />
-                  <span className="text-xs font-bold uppercase tracking-tight">
-                    {membersCount} {content?.stats.members || t('stats.members')}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          </ul>
+          {heroStats.length > 0 ? (
+            <ul className="m-0 flex list-none flex-wrap justify-center gap-4 p-0 pt-4">
+              {heroStats.map((heroStat) => (
+                <li key={heroStat.key}>
+                  <Link href={heroStat.href}>
+                    <span className="flex items-center gap-2 rounded-2xl border border-marketing-overlay-light/10 bg-background/40 px-4 py-2 shadow-sm backdrop-blur-md">
+                      <heroStat.icon className="h-4 w-4 text-primary" />
+                      <span className="text-xs font-bold uppercase tracking-tight">
+                        {heroStat.value} {heroStat.label}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
 
           <DiversityFactLoader />
 
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 animate-bounce cursor-pointer mt-16">
+          <div className="mx-auto mt-16 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-primary/20 bg-primary/10 backdrop-blur-sm animate-bounce">
             <ArrowDown className="h-6 w-6 text-primary" />
           </div>
         </div>
@@ -265,96 +274,96 @@ export default async function HomePage() {
         variant="default"
       />
 
-
-      <HomeStatsSection
-        title={`${t('stats_section.title')} - section à revoir, quelle infos afficher ?`}
-        stats={[
-          {
-            value: projectsCount,
-            label: content?.stats.projects || t('stats_section.active_projects'),
-            icon: Leaf,
-            color: 'text-marketing-positive-400',
-            bg: 'bg-marketing-positive-400/10',
-            border: 'border-marketing-positive-400/20',
-          },
-          {
-            value: membersCount,
-            label: content?.stats.members || t('stats_section.engaged_members'),
-            icon: Users,
-            color: 'text-marketing-info-400',
-            bg: 'bg-marketing-info-400/10',
-            border: 'border-marketing-info-400/20',
-          },
-          {
-            value: productsCount,
-            label: content?.stats.global_impact || t('stats_section.ethical_products'),
-            icon: Sparkles,
-            color: 'text-marketing-warning-400',
-            bg: 'bg-marketing-warning-400/10',
-            border: 'border-marketing-warning-400/20',
-          },
-          {
-            value: formatPoints(pointsGenerated),
-            label: content?.stats.points_label || t('stats_section.points_generated'),
-            icon: Zap,
-            color: 'text-primary',
-            bg: 'bg-primary/10',
-            border: 'border-primary/20',
-          },
-        ]}
-        variant="muted"
-      />
+      {statsItems.length > 0 ? (
+        <HomeStatsSection title={t('stats_section.title')} stats={statsItems} variant="muted" />
+      ) : null}
 
       <MarketingStepsSection variant="default" placeholderImages={placeholderImages} />
 
-      {featuredProjects.length > 0 ? (
+      {featuredProjectsState.status === 'ready' ? (
         <HomeFeaturedProjectsSection
           title={t('featured_projects')}
           viewAllLabel={t('view_all_projects')}
           fundedLabel={t('project_card.funded')}
           activeLabel={t('project_card.active')}
-          projects={featuredProjects}
+          projects={featuredProjectsState.value}
+          variant="muted"
+        />
+      ) : featuredProjectsState.status === 'empty' ? (
+        <HomeSectionEmptyState
+          title={t('empty.featured_projects.title')}
+          description={t('empty.featured_projects.description')}
+          primaryCtaLabel={t('empty.featured_projects.cta')}
+          primaryCtaHref="/projects"
           variant="muted"
         />
       ) : null}
 
-      {featuredProducts && featuredProducts.length > 0 ? (
+      {featuredProductsState.status === 'ready' ? (
         <HomeFeaturedProductsSection
           title={t('featured_products')}
           viewAllLabel={t('view_all_products')}
-          products={featuredProducts as Product[]}
-          variant={featuredProjects.length > 0 ? 'default' : 'muted'}
+          products={featuredProductsState.value}
+          variant={featuredProjectsVisible ? 'default' : 'muted'}
+        />
+      ) : featuredProductsState.status === 'empty' ? (
+        <HomeSectionEmptyState
+          title={t('empty.featured_products.title')}
+          description={t('empty.featured_products.description')}
+          primaryCtaLabel={t('empty.featured_products.cta')}
+          primaryCtaHref="/products"
+          variant={featuredProjectsVisible ? 'default' : 'muted'}
         />
       ) : null}
 
-      <HomePartnersSection
-        producers={activeProducers}
-        variant={((featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0)) % 2 === 0 ? 'muted' : 'default'}
-      />
+      {activeProducersState.status === 'ready' ? (
+        <HomePartnersSection
+          mode="carousel"
+          producers={activeProducersState.value}
+          variant={partnersVariant}
+        />
+      ) : activeProducersState.status === 'empty' ? (
+        <HomePartnersSection
+          mode="empty"
+          producers={[]}
+          variant={partnersVariant}
+          emptyTitle={t('empty.partners.title')}
+          emptyDescription={t('empty.partners.description')}
+          primaryCtaLabel={t('empty.partners.cta_primary')}
+          primaryCtaHref="/contact"
+          secondaryCtaLabel={partnerDashboardUrl ? t('empty.partners.cta_secondary') : undefined}
+          secondaryCtaHref={partnerDashboardUrl}
+        />
+      ) : null}
 
-      {blogPosts.length > 0 ? (
+      {blogPostsState.status === 'ready' ? (
         <HomeBlogSection
           title={content?.blog?.title || t('blog_section.title')}
           viewAllLabel={t('blog_section.view_all')}
-          posts={blogPosts}
-          variant={((featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) + 1) % 2 === 0 ? 'muted' : 'default'}
+          posts={blogPostsState.value}
+          variant={blogVariant}
+        />
+      ) : blogPostsState.status === 'empty' ? (
+        <HomeSectionEmptyState
+          title={t('empty.blog.title')}
+          description={t('empty.blog.description')}
+          primaryCtaLabel={t('empty.blog.cta')}
+          primaryCtaHref="/blog"
+          variant={blogVariant}
         />
       ) : null}
 
-      {/* CTA Section - Conditionally rendered based on authentication */}
-      <section className={cn('py-24', ((featuredProjects.length > 0 ? 1 : 0) + (featuredProducts.length > 0 ? 1 : 0) + 2) % 2 === 0 ? 'bg-muted/30' : 'bg-background')}>
+      <section className={ctaSectionClassName}>
         <div className="container mx-auto px-4">
           <MarketingCtaBand
             title={content?.cta.title || t('cta.title')}
             description={content?.cta.description || t('cta.description')}
             primaryAction={
               user ? (
-                // Authenticated user - encourage investing in projects
-                // Authenticated user - encourage investing in projects
                 <Button
                   asChild
                   size="lg"
-                  className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                  className="flex h-16 w-full items-center justify-center rounded-2xl px-12 text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 transition-transform hover:scale-105"
                 >
                   <Link href="/projects" className="w-full sm:w-auto">
                     Investir dans des projets
@@ -362,12 +371,10 @@ export default async function HomePage() {
                   </Link>
                 </Button>
               ) : (
-                // Non-authenticated user - encourage joining
-                // Non-authenticated user - encourage joining
                 <Button
                   asChild
                   size="lg"
-                  className="flex items-center justify-center w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 hover:scale-105 transition-transform"
+                  className="flex h-16 w-full items-center justify-center rounded-2xl px-12 text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 transition-transform hover:scale-105"
                 >
                   <Link href="/register" className="w-full sm:w-auto">
                     Nous rejoindre
@@ -381,7 +388,7 @@ export default async function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="w-full h-16 px-12 rounded-2xl text-lg font-black uppercase tracking-widest border-2 border-marketing-overlay-light/10 hover:bg-marketing-overlay-light/5 transition-all"
+                className="h-16 w-full rounded-2xl border-2 border-marketing-overlay-light/10 px-12 text-lg font-black uppercase tracking-widest transition-all hover:bg-marketing-overlay-light/5"
               >
                 <Link href="/about" className="w-full sm:w-auto">
                   {content?.hero.cta_secondary || t('hero.cta_secondary')}
@@ -389,7 +396,7 @@ export default async function HomePage() {
               </Button>
             }
             footer={
-              <ul className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-40 list-none m-0 p-0">
+              <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-8 p-0 opacity-40 md:gap-16">
                 <li className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
                   <span className="text-[10px] font-bold uppercase tracking-[0.3em]">

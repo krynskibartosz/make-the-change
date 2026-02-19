@@ -1,14 +1,16 @@
-import type { Product } from '@make-the-change/core/schema'
 import { Button } from '@make-the-change/core/ui'
 import { ArrowRight } from 'lucide-react'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
-import { ProductCard } from '@/app/[locale]/(marketing)/products/_features/product-card'
+import {
+  ProductCard,
+  type ProductCardProduct,
+} from '@/app/[locale]/(marketing)/products/_features/product-card'
 import { Link } from '@/i18n/navigation'
 
 type HomeFeaturedProductsSectionProps = {
   title: string
   viewAllLabel: string
-  products: Product[]
+  products: ProductCardProduct[]
   variant?: 'default' | 'muted'
 }
 
@@ -21,6 +23,7 @@ export function HomeFeaturedProductsSection({
   return (
     <MarketingSection
       title={title}
+      variant={variant}
       action={
         <Link href="/products" aria-label={viewAllLabel}>
           <Button

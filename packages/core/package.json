@@ -33,7 +33,8 @@
     "lint": "biome check .",
     "type-check": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "db:types:generate": "if [ -z \"$SUPABASE_PROJECT_ID\" ]; then echo \"SUPABASE_PROJECT_ID is required\"; exit 1; fi; pnpm dlx supabase@2.76.7 gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/shared/db/database.types.ts"
+    "db:types:generate": "if [ -z \"$SUPABASE_PROJECT_ID\" ]; then echo \"SUPABASE_PROJECT_ID is required\"; exit 1; fi; tmp_file=src/shared/db/.database.generated.tmp.ts; pnpm dlx supabase@2.76.7 gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" --schema public,commerce,investment,content,identity,gamification > \"$tmp_file\" || { rm -f \"$tmp_file\"; exit 1; }; pnpm exec biome format --write \"$tmp_file\" || { rm -f \"$tmp_file\"; exit 1; }; mv \"$tmp_file\" src/shared/db/database.generated.ts",
+    "db:types:check": "if [ -z \"$SUPABASE_PROJECT_ID\" ]; then echo \"SUPABASE_PROJECT_ID is required\"; exit 1; fi; tmp_file=src/shared/db/.database.generated.tmp.ts; pnpm dlx supabase@2.76.7 gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" --schema public,commerce,investment,content,identity,gamification > \"$tmp_file\" || { rm -f \"$tmp_file\"; exit 1; }; pnpm exec biome format --write \"$tmp_file\" || { rm -f \"$tmp_file\"; exit 1; }; if ! cmp -s \"$tmp_file\" src/shared/db/database.generated.ts; then echo \"Supabase type drift detected. Run: pnpm --filter @make-the-change/core db:types:generate\"; diff -u src/shared/db/database.generated.ts \"$tmp_file\" || true; rm -f \"$tmp_file\"; exit 1; fi; rm -f \"$tmp_file\""
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 
 export type ProjectProducer = {
+  id: string
+  slug: string | null
   name_default: string
   description_default: string | null
   contact_website: string | null

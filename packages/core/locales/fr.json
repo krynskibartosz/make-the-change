@@ -525,6 +525,29 @@
     },
     "featured_products": "Produits populaires",
     "view_all_products": "Voir tous les produits",
+    "empty": {
+      "featured_projects": {
+        "title": "Aucun projet en vedette pour le moment",
+        "description": "Nos sélections arrivent bientôt. Découvrez tous les projets disponibles dès maintenant.",
+        "cta": "Découvrir les projets"
+      },
+      "featured_products": {
+        "title": "Aucun produit en vedette pour le moment",
+        "description": "Nos produits populaires seront bientôt mis en avant. Explorez la boutique complète.",
+        "cta": "Explorer la boutique"
+      },
+      "blog": {
+        "title": "Aucun article publié pour le moment",
+        "description": "Nos prochains contenus arrivent bientôt. Consultez le blog dès qu'ils sont en ligne.",
+        "cta": "Voir le blog"
+      },
+      "partners": {
+        "title": "Soyez notre premier partenaire",
+        "description": "Nous ouvrons notre réseau de partenaires. Contactez-nous pour rejoindre l'aventure Make the Change.",
+        "cta_primary": "Devenir partenaire",
+        "cta_secondary": "Espace partenaire"
+      }
+    },
     "cta": {
       "title": "Prêt à faire la différence ?",
       "description": "Rejoignez notre communauté d'investisseurs responsables et contribuez à la préservation de la biodiversité.",
@@ -786,6 +809,7 @@
       "impact": "Impact",
       "updates": "Actualités",
       "invest_now": "Investir maintenant",
+      "funding_closed": "Financement clôturé",
       "share": "Partager"
     },
     "empty": "Aucun projet trouvé",
@@ -907,10 +931,19 @@
       "exchange": "Échanger"
     },
     "detail_page": {
-      "stock_available": "{count} disponibles",
+      "stock_available": "Plus que {count} !",
       "authentic_badge": "Produit authentique",
-      "hero_product_badge": "Produit vedette",
+      "hero_product_badge": "Produit Héro",
       "or_points": "ou {points} pts",
+      "share": "Partager",
+      "share_success": "Lien copié dans le presse-papier !",
+      "share_error": "Échec du partage",
+      "add_to_favorites": "Ajouter aux favoris",
+      "remove_from_favorites": "Retirer des favoris",
+      "added_to_favorites": "Ajouté aux favoris",
+      "added_to_favorites_desc": "{name} a été ajouté à vos favoris.",
+      "removed_from_favorites": "Retiré des favoris",
+      "removed_from_favorites_desc": "{name} a été retiré de vos favoris.",
       "visit_website": "Visiter le site web",
       "back_to_products": "Retour à la boutique",
       "cta": {

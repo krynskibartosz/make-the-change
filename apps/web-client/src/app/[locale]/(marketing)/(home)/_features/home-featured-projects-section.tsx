@@ -1,27 +1,16 @@
 import { Button } from '@make-the-change/core/ui'
 import { ArrowRight } from 'lucide-react'
-import { FeaturedProjectsList } from '@/app/[locale]/(marketing)/(home)/_features/featured-projects-list'
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
+import { FeaturedProjectsList } from '@/app/[locale]/(marketing)/(home)/_features/featured-projects-list'
 import { Link } from '@/i18n/navigation'
-
-type FeaturedProject = {
-  id: string
-  slug: string
-  name_default: string | null
-  hero_image_url: string | null
-  target_budget: number | null
-  current_funding: number | null
-  description_default: string | null
-  status?: string | null
-  featured?: boolean | null
-}
+import type { HomeFeaturedProject } from './home.types'
 
 type HomeFeaturedProjectsSectionProps = {
   title: string
   viewAllLabel: string
   fundedLabel: string
   activeLabel: string
-  projects: FeaturedProject[]
+  projects: HomeFeaturedProject[]
   variant?: 'default' | 'muted'
 }
 
