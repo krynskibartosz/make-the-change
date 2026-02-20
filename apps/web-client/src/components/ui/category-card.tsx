@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import type { FC } from 'react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -10,16 +9,18 @@ type CategoryCardProps = {
   description?: string | null
   image: string
   href: string
+  onClick?: () => void
   className?: string
 }
 
-export const CategoryCard: FC<CategoryCardProps> = ({
+export const CategoryCard = ({
   title,
   description,
   image,
   href,
+  onClick,
   className,
-}) => {
+}: CategoryCardProps) => {
   const isExternal = href.startsWith('http')
 
   if (isExternal) {
@@ -28,6 +29,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={onClick}
         className={cn(
           'group relative flex min-h-40 h-auto overflow-hidden rounded-xl border bg-background/70 shadow-sm backdrop-blur transition-all hover:bg-accent/50 hover:shadow-md',
           className,
@@ -55,6 +57,7 @@ export const CategoryCard: FC<CategoryCardProps> = ({
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
         'group relative flex min-h-40 h-auto overflow-hidden rounded-xl border bg-background/70 shadow-sm backdrop-blur transition-all hover:bg-accent/50 hover:shadow-md',
         className,

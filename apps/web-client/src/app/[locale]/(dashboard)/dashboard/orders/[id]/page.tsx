@@ -52,7 +52,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     product_snapshot: unknown
   }
 
-  const items = (order.items ?? []) as unknown as OrderItemRow[]
+  const items = (order.items ?? []) as OrderItemRow[]
   const address = (order.shipping_address || {}) as Record<string, unknown>
 
   const totalEuros = items.reduce((sum, item) => {

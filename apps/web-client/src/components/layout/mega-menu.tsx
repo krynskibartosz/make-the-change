@@ -1,7 +1,6 @@
 'use client'
 
 import { Card } from '@make-the-change/core/ui'
-import type { FC } from 'react'
 import { useEffect } from 'react'
 import { CategoryCard } from '@/components/ui/category-card'
 import { Link } from '@/i18n/navigation'
@@ -39,7 +38,7 @@ export type MegaMenuProps = {
   className?: string
 }
 
-export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => {
+export const MegaMenu = ({ content, onClose, className }: MegaMenuProps) => {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -51,8 +50,8 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
   }, [onClose])
 
   return (
-    <div className={cn('absolute  left-0 right-0 top-full z-50', className)} onMouseLeave={onClose}>
-      <Card className="mx-auto w-full max-w-360 border-t-0 border-x-0 border-b bg-background/75  backdrop-blur-3xl p-6 shadow-2xl supports-backdrop-filter:bg-background/75">
+    <div className={cn('w-full', className)}>
+      <Card className="mx-auto w-full max-w-360 border border-border/80 bg-background/92 p-6 shadow-2xl backdrop-blur-3xl supports-[backdrop-filter]:bg-background/82">
         <div className="grid gap-6 md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
           <div>
             <div className="mb-6">
@@ -100,6 +99,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
                           description={item.description}
                           image={item.image}
                           href={item.href}
+                          onClick={onClose}
                         />
                       </li>
                     ))}
@@ -112,6 +112,7 @@ export const MegaMenu: FC<MegaMenuProps> = ({ content, onClose, className }) => 
           {content.featured && (
             <Link
               href={content.featured.href}
+              onClick={onClose}
               className="group relative flex h-full max-h-[400px] flex-col overflow-hidden rounded-2xl border bg-muted/30"
             >
               <img

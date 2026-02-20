@@ -1,6 +1,6 @@
 'use client'
 
-import type { FC, PropsWithChildren, ReactNode } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 // --- Root Component ---
@@ -8,7 +8,7 @@ type DashboardPageLayoutProps = PropsWithChildren<{
   className?: string
 }>
 
-const DashboardPageLayoutRoot: FC<DashboardPageLayoutProps> = ({ children, className }) => (
+const DashboardPageLayoutRoot = ({ children, className }: DashboardPageLayoutProps) => (
   <div className={cn('space-y-8', className)}>{children}</div>
 )
 
@@ -20,7 +20,7 @@ type HeaderProps = {
   className?: string
 }
 
-const Header: FC<HeaderProps> = ({ title, description, action, className }) => (
+const Header = ({ title, description, action, className }: HeaderProps) => (
   <div className={cn('flex items-center justify-between', className)}>
     <div>
       <h1 className="text-3xl font-bold">{title}</h1>
@@ -35,7 +35,7 @@ type ContentProps = PropsWithChildren<{
   className?: string
 }>
 
-const Content: FC<ContentProps> = ({ children, className }) => (
+const Content = ({ children, className }: ContentProps) => (
   <div className={cn('space-y-6', className)}>{children}</div>
 )
 

@@ -315,28 +315,21 @@ const HomePage = async () => {
             title={content?.cta.title ?? t('cta.title')}
             description={content?.cta.description ?? t('cta.description')}
             primaryAction={
-              <Button
-                asChild
-                size="lg"
-                className="flex h-16 w-full items-center justify-center rounded-2xl px-12 text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/40 transition-transform hover:scale-105"
+              <Link
+                href={primaryCta.href}
+                className="inline-flex h-16 w-full items-center justify-center rounded-2xl bg-primary px-12 text-lg font-black uppercase tracking-widest text-primary-foreground shadow-2xl shadow-primary/40 transition-transform hover:scale-105 sm:w-auto"
               >
-                <Link href={primaryCta.href} className="w-full sm:w-auto">
-                  {primaryCta.label}
-                  <ArrowRight className="ml-3 h-5 w-5" />
-                </Link>
-              </Button>
+                {primaryCta.label}
+                <ArrowRight className="ml-3 h-5 w-5" />
+              </Link>
             }
             secondaryAction={
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="h-16 w-full rounded-2xl border-2 border-marketing-overlay-light/10 px-12 text-lg font-black uppercase tracking-widest transition-all hover:bg-marketing-overlay-light/5"
+              <Link
+                href="/about"
+                className="inline-flex h-16 w-full items-center justify-center rounded-2xl border-2 border-marketing-overlay-light/10 px-12 text-lg font-black uppercase tracking-widest transition-all hover:bg-marketing-overlay-light/5 sm:w-auto"
               >
-                <Link href="/about" className="w-full sm:w-auto">
-                  {content?.hero.cta_secondary ?? t('hero.cta_secondary')}
-                </Link>
-              </Button>
+                {content?.hero.cta_secondary ?? t('hero.cta_secondary')}
+              </Link>
             }
             footer={
               <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-8 p-0 opacity-40 md:gap-16">

@@ -61,7 +61,7 @@ export const applyProductsFilters = <TQuery>(
   query: TQuery,
   filters: ProductsServerFilters,
 ): TQuery => {
-  let nextQuery = query as unknown as ProductsQueryLike
+  let nextQuery = query as ProductsQueryLike
 
   if (filters.category) {
     nextQuery = nextQuery.eq('category_id', filters.category)
@@ -83,7 +83,7 @@ export const applyProductsFilters = <TQuery>(
 }
 
 export const applyProductsSort = <TQuery>(query: TQuery, sort: ProductSort): TQuery => {
-  const sortableQuery = query as unknown as ProductsQueryLike
+  const sortableQuery = query as ProductsQueryLike
 
   switch (sort) {
     case 'name_asc':

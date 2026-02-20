@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
 import { cn } from '@/lib/utils'
 
@@ -16,7 +16,7 @@ type MarketingHeroProps = {
   descriptionClassName?: string
 }
 
-export const MarketingHero: FC<MarketingHeroProps> = ({
+export const MarketingHero = ({
   title,
   description,
   badge,
@@ -28,7 +28,7 @@ export const MarketingHero: FC<MarketingHeroProps> = ({
   contentClassName = 'mx-auto max-w-4xl',
   titleClassName,
   descriptionClassName,
-}) => {
+}: MarketingHeroProps) => {
   return (
     <MarketingHeroShell
       background={background}

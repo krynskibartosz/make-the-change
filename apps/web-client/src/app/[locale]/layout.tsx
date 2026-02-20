@@ -74,7 +74,7 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
       .eq('id', user.id)
       .single()
 
-    const config = profile?.theme_config as unknown as ThemeConfig
+    const config = profile?.theme_config as ThemeConfig | null | undefined
     if (config) {
       if (config.activeThemeId) {
         // Multi-theme structure

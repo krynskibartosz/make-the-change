@@ -6,8 +6,12 @@ import {
   AvatarImage,
   Button,
   NavigationMenu,
+  NavigationMenuBackdrop,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -63,15 +67,12 @@ export function Header({ user, menuData }: HeaderProps) {
     ]
   }, [menuData, t, discoverMenu])
 
-  const activeMegaMenu = useMemo(
-    () => navigation.find((item) => item.id === activeMenu)?.mega,
-    [activeMenu, navigation],
-  )
   const closeMegaMenu = () => setActiveMenu(null)
 
   useEffect(() => {
+    if (!pathname) return
     setActiveMenu(null)
-  }, [])
+  }, [pathname])
 
   const avatarUrl = user?.avatarUrl ?? null
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
@@ -95,30 +96,33 @@ export function Header({ user, menuData }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <NavigationMenu aria-label="Navigation principale" className="hidden md:flex">
+        <NavigationMenu
+          aria-label="Navigation principale"
+          className="relative hidden md:flex"
+          value={activeMenu}
+          delay={80}
+          closeDelay={180}
+          onValueChange={(value) => setActiveMenu(typeof value === 'string' ? value : null)}
+        >
           <NavigationMenuList className="items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
               const label = item.label ?? t(item.name)
               if (item.mega) {
                 return (
-                  <NavigationMenuItem key={item.id}>
-                    <button
-                      type="button"
+                  <NavigationMenuItem key={item.id} value={item.id}>
+                    <NavigationMenuTrigger
                       className={cn(
                         'flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
                         (isActive || activeMenu === item.id) && 'bg-accent text-accent-foreground',
                       )}
-                      aria-expanded={activeMenu === item.id}
-                      aria-controls={`mega-menu-${item.id}`}
-                      aria-haspopup="true"
-                      onMouseEnter={() => setActiveMenu(item.id)}
-                      onFocus={() => setActiveMenu(item.id)}
-                      onClick={() => setActiveMenu((prev) => (prev === item.id ? null : item.id))}
                     >
                       {label}
                       <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                    </button>
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent className="w-screen border-0 bg-transparent p-0 shadow-none">
+                      <MegaMenu content={item.mega} onClose={closeMegaMenu} />
+                    </NavigationMenuContent>
                   </NavigationMenuItem>
                 )
               }
@@ -139,6 +143,12 @@ export function Header({ user, menuData }: HeaderProps) {
               )
             })}
           </NavigationMenuList>
+          <NavigationMenuViewport className="absolute left-1/2 top-full z-50 w-screen -translate-x-1/2" />
+          <NavigationMenuBackdrop
+            className="fixed inset-0 top-16 z-40 bg-background/45 backdrop-blur-sm transition-opacity duration-200 data-[closed]:opacity-0 data-[open]:opacity-100"
+            onPointerDown={closeMegaMenu}
+            onClick={closeMegaMenu}
+          />
         </NavigationMenu>
 
         {/* Right Side Actions */}
@@ -196,20 +206,7 @@ export function Header({ user, menuData }: HeaderProps) {
           {/* Mobile Menu is now handled mostly by BottomNav in layouts, but kept here for fallback if needed on other pages */}
           {/* Since we hide the entire header on mobile (hidden md:block), this part won't be visible anyway */}
         </div>
-        {activeMegaMenu && (
-          <div id={`mega-menu-${activeMenu}`} className="absolute left-0 right-0 top-full">
-            <MegaMenu content={activeMegaMenu} onClose={closeMegaMenu} />
-          </div>
-        )}
       </div>
-
-      {activeMegaMenu && (
-        <div
-          className="fixed inset-0 top-16 z-40 bg-background/40 backdrop-blur-sm"
-          onClick={closeMegaMenu}
-          onMouseEnter={closeMegaMenu}
-        />
-      )}
     </header>
   )
 }

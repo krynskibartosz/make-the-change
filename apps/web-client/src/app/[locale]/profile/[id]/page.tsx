@@ -55,7 +55,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     project: PublicProjectRef | PublicProjectRef[] | null
   }
 
-  const investments = (rawInvestments ?? []) as unknown as InvestmentRow[]
+  const investments = (rawInvestments ?? []) as InvestmentRow[]
 
   // Calculate legitimate stats
   const points = profile.points_balance || 0

@@ -33,7 +33,7 @@ import { ProductCardSkeleton } from '@make-the-change/core/ui/next'
 import { ArrowUpDown, Filter, Package, Search } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { type FC, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import {
   type ActiveFilterChip,
   ProductsActiveFilters,
@@ -125,7 +125,7 @@ type ProductsFiltersSidebarProps = {
   onTagChange: (value: string) => void
 }
 
-const ProductsFiltersSidebar: FC<ProductsFiltersSidebarProps> = ({
+const ProductsFiltersSidebar = ({
   title,
   clearLabel,
   categoryLabel,
@@ -145,7 +145,7 @@ const ProductsFiltersSidebar: FC<ProductsFiltersSidebarProps> = ({
   onCategoryChange,
   onProducerChange,
   onTagChange,
-}) => (
+}: ProductsFiltersSidebarProps) => (
   <div className="p-4 md:p-5">
     <div className="mb-4 flex items-center justify-between gap-3">
       <h3 className="text-lg font-black tracking-tight">{title}</h3>
@@ -272,14 +272,14 @@ const ProductsFiltersSidebar: FC<ProductsFiltersSidebarProps> = ({
   </div>
 )
 
-export const ProductsClient: FC<ProductsClientProps> = ({
+export const ProductsClient = ({
   products,
   categories,
   producers,
   availableTags,
   pagination,
   initialQueryState,
-}) => {
+}: ProductsClientProps) => {
   const tProducts = useTranslations('products')
   const tCommon = useTranslations('common')
   const router = useRouter()

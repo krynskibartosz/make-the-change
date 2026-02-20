@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { SectionContainer } from '@/components/ui/section-container'
 import { cn } from '@/lib/utils'
 
@@ -14,7 +14,7 @@ type MarketingSectionProps = {
   contentClassName?: string
 }
 
-export const MarketingSection: FC<MarketingSectionProps> = ({
+export const MarketingSection = ({
   title,
   description,
   hideDescriptionOnMobile = false,
@@ -24,7 +24,7 @@ export const MarketingSection: FC<MarketingSectionProps> = ({
   size = 'md',
   className,
   contentClassName,
-}) => {
+}: MarketingSectionProps) => {
   return (
     <SectionContainer
       title={title}

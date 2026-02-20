@@ -36,7 +36,7 @@ export async function saveUserTheme(
       .eq('id', user.id)
       .single()) as { data: ProfileThemeRow | null }
 
-    let config: ThemeConfig = (profile?.theme_config as unknown as ThemeConfig) || {
+    let config: ThemeConfig = (profile?.theme_config as ThemeConfig | null) || {
       activeThemeId: 'default',
       customThemes: [],
     }
@@ -124,7 +124,7 @@ export async function deleteUserTheme(themeId: string): Promise<ThemeState> {
       .eq('id', user.id)
       .single()) as { data: ProfileThemeRow | null }
 
-    const config = profile?.theme_config as unknown as ThemeConfig
+    const config = profile?.theme_config as ThemeConfig | null
     if (!config || !config.customThemes) return { error: 'Configuration introuvable' }
 
     config.customThemes = config.customThemes.filter((t) => t.id !== themeId)

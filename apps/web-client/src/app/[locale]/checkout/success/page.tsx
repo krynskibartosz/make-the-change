@@ -58,7 +58,7 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
     product_snapshot: unknown
   }
 
-  const items = (order.items ?? []) as unknown as OrderItemRow[]
+  const items = (order.items ?? []) as OrderItemRow[]
   const dateLocale = locale === 'fr' ? 'fr-FR' : locale === 'nl' ? 'nl-NL' : 'en-US'
 
   const getSnapshotEuroPrice = (snapshot: Record<string, unknown>) => {

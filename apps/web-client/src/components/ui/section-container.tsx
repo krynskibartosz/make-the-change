@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type SectionContainerProps = {
@@ -27,7 +27,7 @@ const variantClasses = {
   glass: 'bg-background/70 backdrop-blur',
 }
 
-export const SectionContainer: FC<SectionContainerProps> = ({
+export const SectionContainer = ({
   title,
   description,
   hideDescriptionOnMobile = false,
@@ -36,7 +36,7 @@ export const SectionContainer: FC<SectionContainerProps> = ({
   className,
   variant = 'default',
   size = 'md',
-}) => {
+}: SectionContainerProps) => {
   return (
     <section className={cn(sizeClasses[size], variantClasses[variant], className)}>
       <div className="container mx-auto px-4">

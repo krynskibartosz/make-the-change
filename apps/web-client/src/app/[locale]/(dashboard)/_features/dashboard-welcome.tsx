@@ -2,7 +2,6 @@
 
 import { Badge } from '@make-the-change/core/ui'
 import { Sparkles } from 'lucide-react'
-import type { FC } from 'react'
 import { cn } from '@/lib/utils'
 
 type DashboardWelcomeProps = {
@@ -38,7 +37,7 @@ const kycColors: Record<string, string> = {
   rejected: 'bg-destructive/10 text-destructive border-destructive/20',
 }
 
-export const DashboardWelcome: FC<DashboardWelcomeProps> = ({
+export const DashboardWelcome = ({
   firstName,
   userLevel,
   kycStatus,
@@ -47,7 +46,7 @@ export const DashboardWelcome: FC<DashboardWelcomeProps> = ({
   title,
   summary,
   className,
-}) => {
+}: DashboardWelcomeProps) => {
   const level = levelColors[userLevel] || levelColors.explorateur
   const displayTitle = title || `Bonjour, ${firstName} !`
 

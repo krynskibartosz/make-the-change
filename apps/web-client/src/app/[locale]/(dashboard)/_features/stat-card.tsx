@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type StatCardProps = {
@@ -32,14 +32,14 @@ const variantClasses = {
   },
 }
 
-export const StatCard: FC<StatCardProps> = ({
+export const StatCard = ({
   title,
   value,
   icon,
   trend,
   variant = 'default',
   className,
-}) => {
+}: StatCardProps) => {
   const styles = variantClasses[variant]
 
   return (

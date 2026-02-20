@@ -2,12 +2,11 @@
 
 import { Button } from '@make-the-change/core/ui'
 import { Menu } from 'lucide-react'
-import type { FC } from 'react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Logo } from '@/components/ui/logo'
 import { useDashboardSidebar } from './dashboard-sidebar-context'
 
-export const DashboardMobileHeader: FC = () => {
+export const DashboardMobileHeader = () => {
   const { toggleMobileSidebar } = useDashboardSidebar()
 
   return (

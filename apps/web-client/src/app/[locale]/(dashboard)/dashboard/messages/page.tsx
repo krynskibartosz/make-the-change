@@ -37,7 +37,7 @@ export default async function SentMessagesPage() {
     producer: ProducerRef[] | ProducerRef | null
   }
 
-  const messages = (rawMessages ?? []) as unknown as ProducerMessageRow[]
+  const messages = (rawMessages ?? []) as ProducerMessageRow[]
 
   return (
     <div className="container max-w-4xl py-12 px-4">

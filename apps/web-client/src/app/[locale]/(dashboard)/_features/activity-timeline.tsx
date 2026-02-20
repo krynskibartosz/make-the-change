@@ -2,7 +2,7 @@
 
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { ArrowRight } from 'lucide-react'
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -24,7 +24,7 @@ type ActivityTimelineProps = {
   className?: string
 }
 
-export const ActivityTimeline: FC<ActivityTimelineProps> = ({
+export const ActivityTimeline = ({
   items,
   title = 'Activité récente',
   viewAllHref,
@@ -32,7 +32,7 @@ export const ActivityTimeline: FC<ActivityTimelineProps> = ({
   emptyMessage = 'Aucune activité récente',
   emptyAction,
   className,
-}) => {
+}: ActivityTimelineProps) => {
   return (
     <Card className={cn('border bg-background/70 shadow-sm backdrop-blur', className)}>
       <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-8">

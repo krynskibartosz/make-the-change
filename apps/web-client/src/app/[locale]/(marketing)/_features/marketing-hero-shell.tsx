@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type MarketingHeroShellProps = {
@@ -10,14 +10,14 @@ type MarketingHeroShellProps = {
   paddingClassName?: string
 }
 
-export const MarketingHeroShell: FC<MarketingHeroShellProps> = ({
+export const MarketingHeroShell = ({
   background,
   children,
   className,
   containerClassName,
   minHeightClassName = 'min-h-[70vh]',
   paddingClassName = 'pt-32 pb-20 lg:pt-48 lg:pb-32',
-}) => {
+}: MarketingHeroShellProps) => {
   return (
     <section
       className={cn(

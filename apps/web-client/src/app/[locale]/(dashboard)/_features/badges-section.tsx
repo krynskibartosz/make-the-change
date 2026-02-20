@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { Award, Medal, Trophy } from 'lucide-react'
-import type { FC } from 'react'
 
 type BadgeItem = {
   name: string
@@ -13,7 +12,7 @@ type BadgesSectionProps = {
   className?: string
 }
 
-export const BadgesSection: FC<BadgesSectionProps> = ({ badges, className }) => {
+export const BadgesSection = ({ badges, className }: BadgesSectionProps) => {
   if (badges.length === 0) return null
 
   return (

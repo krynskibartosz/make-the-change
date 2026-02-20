@@ -39,29 +39,9 @@ export type ProductWithRelations = PublicProduct & {
   category: ProductCategory | null
 }
 
-type PublicProductsClient = {
-  from: (table: string) => {
-    select: (columns: string) => {
-      eq: (
-        column: string,
-        value: unknown,
-      ) => {
-        eq: (
-          column: string,
-          value: unknown,
-        ) => {
-          single: () => Promise<{ data: PublicProduct | null; error: unknown }>
-        }
-      }
-    }
-  }
-}
-
 export async function getPublicProductById(id: string): Promise<ProductWithRelations | null> {
   const supabase = await createClient()
-  const publicProductsClient = supabase as unknown as PublicProductsClient
-
-  const { data: productData, error } = await publicProductsClient
+  const { data: productData, error } = await supabase
     .from('public_products')
     .select('*')
     .eq('id', id)

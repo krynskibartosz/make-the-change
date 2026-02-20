@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, type FC, type PropsWithChildren, useContext, useState } from 'react'
+import { createContext, type PropsWithChildren, useContext, useState } from 'react'
 
 type DashboardSidebarContextType = {
   isMobileOpen: boolean
@@ -10,7 +10,7 @@ type DashboardSidebarContextType = {
 
 const DashboardSidebarContext = createContext<DashboardSidebarContextType | undefined>(undefined)
 
-export const DashboardSidebarProvider: FC<PropsWithChildren> = ({ children }) => {
+export const DashboardSidebarProvider = ({ children }: PropsWithChildren) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const toggleMobileSidebar = () => setIsMobileOpen((prev) => !prev)
 

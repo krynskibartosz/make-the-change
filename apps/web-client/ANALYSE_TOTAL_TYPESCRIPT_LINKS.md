@@ -29,28 +29,28 @@ Conclusion globale:
 
 Constats vérifiés sur `src/**/*.ts(x)`:
 
-- `interface`: **44** occurrences
-- `type`: **143** occurrences
+- `interface`: **56** occurrences
+- `type`: **568** occurrences
 - déclarations `enum`: **0**
-- usages `React.FC` / `FC<...>`: **42**
-- usages `satisfies`: **3**
+- usages `React.FC` / `FC<...>`: **0**
+- usages `satisfies`: **5**
 - usages `ComponentProps*`: **0**
 - usages `Extract`: **0**
 - usages `Exclude`: **0**
 - usages `NoInfer`: **0**
 - imports relatifs avec extension explicite (`.js`, `.ts`, ...): **0**
-- imports relatifs totaux: **108**
+- imports relatifs totaux: **110**
 
 Exemples concrets observés:
 
-- `React.FC` fortement présent dans `src/components/ui/page-hero.tsx` et plusieurs composants layout/UI.
-- `satisfies` déjà utilisé en rédaction de contenu blog: `src/app/[locale]/(marketing)/blog/_features/actions/blog-actions.ts`.
-- `as const` présent dans plusieurs zones de config: `src/app/[locale]/(marketing)/(home)/_features/marketing-steps-section.tsx`, `src/lib/placeholder-images.ts`, etc.
+- `React.FC` n’est plus utilisé dans `src` (migration vers props explicites).
+- `satisfies` est utilisé sur des zones de config typées (ex: home marketing + blog).
+- `as const` est présent dans plusieurs zones de config: `src/app/[locale]/(marketing)/(home)/_features/marketing-steps-section.tsx`, `src/lib/placeholder-images.ts`, etc.
 
 Contexte `tsconfig` actuel (`apps/web-client/tsconfig.json`):
 
-- `strict: true`, `moduleResolution: bundler`, `noEmit: true`, `isolatedModules: true`.
-- Pas d’activation explicite locale de réglages comme `noUncheckedIndexedAccess`, `noImplicitOverride`, `verbatimModuleSyntax`, `rewriteRelativeImportExtensions`.
+- `strict: true`, `moduleResolution: bundler`, `noEmit: true`, `isolatedModules: true`, `verbatimModuleSyntax: true`.
+- Toujours pas d’activation explicite locale de réglages comme `noUncheckedIndexedAccess`, `noImplicitOverride`, `rewriteRelativeImportExtensions`.
 
 ## Fiches détaillées (30/30)
 

@@ -1,7 +1,6 @@
 'use client'
 
 import { ProductCard } from '@make-the-change/core/ui/next'
-import type { FC } from 'react'
 import { buildProductCardBadges } from '@/app/[locale]/(marketing)/products/_features/product-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -26,14 +25,14 @@ type ClientCatalogProductCardProps = {
   viewLabel: string
 }
 
-export const ClientCatalogProductCard: FC<ClientCatalogProductCardProps> = ({
+export const ClientCatalogProductCard = ({
   product,
   featuredLabel,
   outOfStockLabel,
   lowStockLabel,
   pointsLabel,
   viewLabel,
-}) => {
+}: ClientCatalogProductCardProps) => {
   const imageUrl = sanitizeImageUrl(product.image_url)
   const badges = buildProductCardBadges({
     featured: product.featured,

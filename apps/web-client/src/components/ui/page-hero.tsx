@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type PageHeroSize = 'sm' | 'md' | 'lg'
@@ -39,12 +39,12 @@ const variantClasses: Record<PageHeroVariant, string> = {
   muted: 'bg-muted/30',
 }
 
-const PageHeroLayout: FC<PageHeroLayoutProps> = ({
+const PageHeroLayout = ({
   children,
   className,
   size = 'md',
   variant = 'default',
-}) => (
+}: PageHeroLayoutProps) => (
   <section
     className={cn(
       'relative flex flex-col items-center justify-center',
@@ -59,11 +59,11 @@ const PageHeroLayout: FC<PageHeroLayoutProps> = ({
   </section>
 )
 
-const PageHeroBadge: FC<PageHeroSlotProps> = ({ children, className }) => (
+const PageHeroBadge = ({ children, className }: PageHeroSlotProps) => (
   <div className={cn('mb-6 animate-fade-in', className)}>{children}</div>
 )
 
-const PageHeroTitle: FC<PageHeroSlotProps> = ({ children, className }) => (
+const PageHeroTitle = ({ children, className }: PageHeroSlotProps) => (
   <h1
     className={cn(
       'mb-6 max-w-4xl text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl',
@@ -74,11 +74,11 @@ const PageHeroTitle: FC<PageHeroSlotProps> = ({ children, className }) => (
   </h1>
 )
 
-const PageHeroDescription: FC<PageHeroDescriptionProps> = ({
+const PageHeroDescription = ({
   children,
   className,
   hideOnMobile = false,
-}) => (
+}: PageHeroDescriptionProps) => (
   <p
     className={cn(
       'mb-8 max-w-2xl text-lg text-muted-foreground font-medium leading-relaxed sm:text-xl md:text-2xl',
@@ -90,21 +90,21 @@ const PageHeroDescription: FC<PageHeroDescriptionProps> = ({
   </p>
 )
 
-const PageHeroContent: FC<PageHeroSlotProps> = ({ children, className }) => (
+const PageHeroContent = ({ children, className }: PageHeroSlotProps) => (
   <div className={cn('relative z-10', className)}>{children}</div>
 )
 
-const PageHeroActions: FC<PageHeroSlotProps> = ({ children, className }) => (
+const PageHeroActions = ({ children, className }: PageHeroSlotProps) => (
   <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row', className)}>
     {children}
   </div>
 )
 
-const PageHeroCTA: FC<PageHeroSlotProps> = ({ children, className }) => (
+const PageHeroCTA = ({ children, className }: PageHeroSlotProps) => (
   <div className={cn('w-full sm:w-auto', className)}>{children}</div>
 )
 
-const PageHeroRoot: FC<PageHeroProps> = ({
+const PageHeroRoot = ({
   badge,
   title,
   description,
@@ -113,7 +113,7 @@ const PageHeroRoot: FC<PageHeroProps> = ({
   className,
   size = 'md',
   variant = 'default',
-}) => {
+}: PageHeroProps) => {
   const hasLegacySlots = badge !== undefined || title !== undefined || description !== undefined
 
   if (!hasLegacySlots)
@@ -137,14 +137,14 @@ const PageHeroRoot: FC<PageHeroProps> = ({
   )
 }
 
-type PageHeroComponent = FC<PageHeroProps> & {
-  Layout: FC<PageHeroLayoutProps>
-  Badge: FC<PageHeroSlotProps>
-  Title: FC<PageHeroSlotProps>
-  Description: FC<PageHeroDescriptionProps>
-  Content: FC<PageHeroSlotProps>
-  Actions: FC<PageHeroSlotProps>
-  CTA: FC<PageHeroSlotProps>
+type PageHeroComponent = ((props: PageHeroProps) => ReactNode) & {
+  Layout: (props: PageHeroLayoutProps) => ReactNode
+  Badge: (props: PageHeroSlotProps) => ReactNode
+  Title: (props: PageHeroSlotProps) => ReactNode
+  Description: (props: PageHeroDescriptionProps) => ReactNode
+  Content: (props: PageHeroSlotProps) => ReactNode
+  Actions: (props: PageHeroSlotProps) => ReactNode
+  CTA: (props: PageHeroSlotProps) => ReactNode
 }
 
 export const PageHero = Object.assign(PageHeroRoot, {

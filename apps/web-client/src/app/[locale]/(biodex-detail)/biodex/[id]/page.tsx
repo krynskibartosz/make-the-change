@@ -36,7 +36,7 @@ export async function generateMetadata({
   if (!species) return { title: 'Espèce non trouvée' }
 
   // Cast to unknown then Species to access name_i18n safely
-  const s = species as unknown as Species
+  const s = species as Species
   const name = getLocalizedContent(s.name_i18n, locale, 'Espèce')
 
   return {
@@ -65,7 +65,7 @@ export default async function SpeciesPage({
     notFound()
   }
 
-  const species = speciesData as unknown as Species
+  const species = speciesData as Species
   const name = getLocalizedContent(species.name_i18n, locale, 'Espèce inconnue')
   const description = getLocalizedContent(species.description_i18n, locale, '')
   const statusConfig = getStatusConfig(species.conservation_status)

@@ -19,7 +19,6 @@ import {
   X,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import type { FC } from 'react'
 import { useDashboardSidebar } from '@/components/layout/dashboard-sidebar-context'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -73,7 +72,7 @@ type SidebarNavLinkProps = {
   onClick?: () => void
 }
 
-const SidebarNavLink: FC<SidebarNavLinkProps> = ({
+const SidebarNavLink = ({
   href,
   icon: Icon,
   label,
@@ -81,7 +80,7 @@ const SidebarNavLink: FC<SidebarNavLinkProps> = ({
   endIcon: EndIcon,
   tone = 'default',
   onClick,
-}) => (
+}: SidebarNavLinkProps) => (
   <Link
     href={href}
     onClick={onClick}
@@ -127,13 +126,13 @@ type SidebarActionButtonProps = {
   tone?: 'default' | 'danger'
 }
 
-const SidebarActionButton: FC<SidebarActionButtonProps> = ({
+const SidebarActionButton = ({
   icon: Icon,
   label,
   type = 'button',
   onClick,
   tone = 'default',
-}) => (
+}: SidebarActionButtonProps) => (
   <button
     type={type}
     onClick={onClick}

@@ -1,6 +1,5 @@
 'use client'
 
-import type { FC } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -55,12 +54,14 @@ const useCountUp = (target: number, duration = 1200) => {
   return value
 }
 
-const StatValue: FC<{
+type StatValueProps = {
   value: number | string
   prefix?: string
   suffix?: string
   format?: (value: number) => string
-}> = ({ value, prefix, suffix, format }) => {
+}
+
+const StatValue = ({ value, prefix, suffix, format }: StatValueProps) => {
   const numeric = useMemo(() => {
     if (typeof value === 'number') return value
     const parsed = Number(value)
@@ -84,7 +85,7 @@ const StatValue: FC<{
   )
 }
 
-export const StatsSection: FC<StatsSectionProps> = ({ stats, className, variant = 'default' }) => {
+export const StatsSection = ({ stats, className, variant = 'default' }: StatsSectionProps) => {
   return (
     <dl
       className={cn(

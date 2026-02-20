@@ -1,7 +1,6 @@
 'use client'
 
 import { ProjectCard } from '@make-the-change/core/ui/next'
-import type { FC } from 'react'
 import { buildProjectCardBadges } from '@/app/[locale]/(marketing)/projects/_features/project-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -60,10 +59,7 @@ const getProgressPercent = (project: ClientCatalogProject): number | null => {
   return null
 }
 
-export const ClientCatalogProjectCard: FC<ClientCatalogProjectCardProps> = ({
-  project,
-  labels,
-}) => {
+export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProjectCardProps) => {
   const imageUrl = sanitizeImageUrl(project.hero_image_url)
   const badges = buildProjectCardBadges({
     featured: project.featured,

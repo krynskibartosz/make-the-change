@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type MarketingCtaBandProps = {
@@ -17,7 +17,7 @@ const toneClasses = {
   primary: 'bg-primary text-primary-foreground shadow-2xl shadow-primary/30',
 }
 
-export const MarketingCtaBand: FC<MarketingCtaBandProps> = ({
+export const MarketingCtaBand = ({
   badge,
   title,
   description,
@@ -26,7 +26,7 @@ export const MarketingCtaBand: FC<MarketingCtaBandProps> = ({
   footer,
   tone = 'dark',
   className,
-}) => (
+}: MarketingCtaBandProps) => (
   <section
     aria-label="Call to action"
     className={cn(

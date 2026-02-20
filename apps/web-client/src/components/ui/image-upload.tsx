@@ -1,7 +1,7 @@
 'use client'
 
 import { Loader2, Upload, X } from 'lucide-react'
-import { type FC, useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { deleteImage, uploadImages } from '@/app/actions/upload-images'
 
@@ -24,7 +24,7 @@ type UploadingFile = {
   error?: string
 }
 
-export const ImageUpload: FC<ImageUploadProps> = ({
+export const ImageUpload = ({
   entityId,
   bucket,
   folder,
@@ -34,7 +34,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({
   className = '',
   multiple = true,
   acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
-}) => {
+}: ImageUploadProps) => {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
   const [dragActive, setDragActive] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
