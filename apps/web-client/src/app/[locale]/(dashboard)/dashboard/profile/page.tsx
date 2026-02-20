@@ -17,6 +17,7 @@ import { ProfileHeader } from '@/components/profile/profile-header'
 import { Link } from '@/i18n/navigation'
 import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
+import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import { ProfileController } from './profile.controller'
 
 export default async function ProfilePage() {
@@ -46,10 +47,10 @@ export default async function ProfilePage() {
     0,
   )
 
-  const metadata = (profile?.metadata || {}) as Record<string, unknown>
-  const avatarUrl = metadata.avatar_url as string | undefined
-  const coverUrl = metadata.cover_url as string | undefined
-  const pointsBalance = (metadata.points_balance as number | undefined) ?? 0
+  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
+  const avatarUrl = asString(metadata.avatar_url) || undefined
+  const coverUrl = asString(metadata.cover_url) || undefined
+  const pointsBalance = asNumber(metadata.points_balance, 0)
   const impactScore = calculateImpactScore({
     points: pointsBalance,
     projects: projectsSupported,
@@ -63,9 +64,8 @@ export default async function ProfilePage() {
     projects: projectsSupported,
     invested: totalInvested,
   })
-  const badges = computedBadges.length
-    ? computedBadges
-    : (metadata.badges as string[] | undefined) || []
+  const metadataBadges = asStringArray(metadata.badges)
+  const badges = computedBadges.length ? computedBadges : metadataBadges
 
   const displayName = profile?.first_name
     ? `${profile.first_name} ${profile.last_name || ''}`.trim()

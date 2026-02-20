@@ -24,11 +24,11 @@ export type ProductsQueryState = {
 }
 
 type SearchTextField = Extract<keyof ProductsQueryState, 'search' | 'tag'>
-type UuidQueryField = Extract<keyof ProductsQueryState, 'category' | 'producer'>
+type UuidQueryField = Extract<keyof ProductsQueryState, 'producer'>
 type PersistedProductsQueryField = Exclude<keyof ProductsQueryState, 'page'>
 
 const SEARCH_TEXT_FIELDS = ['search', 'tag'] as const satisfies readonly SearchTextField[]
-const UUID_QUERY_FIELDS = ['category', 'producer'] as const satisfies readonly UuidQueryField[]
+const UUID_QUERY_FIELDS = ['producer'] as const satisfies readonly UuidQueryField[]
 
 export const DEFAULT_PRODUCTS_QUERY_STATE = {
   search: '',
@@ -41,17 +41,24 @@ export const DEFAULT_PRODUCTS_QUERY_STATE = {
 
 type SearchParamsRecord = Record<string, string | string[] | undefined>
 type SearchParamsSource = SearchParamsRecord | URLSearchParams | ReadonlyURLSearchParams
+type SearchParamsWithGet = URLSearchParams | ReadonlyURLSearchParams
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
+const hasGetMethod = (source: SearchParamsSource): source is SearchParamsWithGet =>
+  source instanceof URLSearchParams ||
+  (typeof source === 'object' &&
+    source !== null &&
+    'get' in source &&
+    typeof source.get === 'function')
+
 const getRawParam = (source: SearchParamsSource, key: string): string | undefined => {
-  const maybeGet = (source as { get?: unknown }).get
-  if (typeof maybeGet === 'function') {
-    const result = maybeGet.call(source, key)
+  if (hasGetMethod(source)) {
+    const result = source.get(key)
     return typeof result === 'string' ? result : undefined
   }
 
-  const value = (source as SearchParamsRecord)[key]
+  const value = source[key]
 
   if (Array.isArray(value)) {
     return value[0]
@@ -73,6 +80,21 @@ const sanitizeTag = (value?: string): string => {
 const sanitizeUuid = (value?: string): string => {
   if (!value) return ''
   return UUID_REGEX.test(value) ? value : ''
+}
+
+const CATEGORY_TOKEN_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i
+
+const sanitizeCategory = (value?: string): string => {
+  if (!value) return ''
+
+  const trimmed = value.trim().slice(0, 80)
+  if (!trimmed) return ''
+
+  if (UUID_REGEX.test(trimmed)) {
+    return trimmed.toLowerCase()
+  }
+
+  return CATEGORY_TOKEN_REGEX.test(trimmed) ? trimmed.toLowerCase() : ''
 }
 
 const sanitizePage = (value?: string): number => {
@@ -101,28 +123,34 @@ export const toPersistedProductsQueryState = (
   sort: state.sort,
 })
 
-export const isProductSort = (value: string | undefined): value is ProductSort => {
+export const isProductSort = (value: string | null | undefined): value is ProductSort => {
   if (!value) return false
-  return PRODUCT_SORT_VALUES.includes(value as ProductSort)
+  return PRODUCT_SORT_VALUES.some((sort) => sort === value)
 }
 
 export const parseProductsQueryState = (source: SearchParamsSource): ProductsQueryState => {
-  const textFilters = Object.fromEntries(
-    SEARCH_TEXT_FIELDS.map((field) => [
-      field,
-      sanitizeTextField(field, getRawParam(source, field)),
-    ]),
-  ) as Record<SearchTextField, string>
-  const identityFilters = Object.fromEntries(
-    UUID_QUERY_FIELDS.map((field) => [field, sanitizeUuid(getRawParam(source, field))]),
-  ) as Record<UuidQueryField, string>
+  const textFilters: Record<SearchTextField, string> = {
+    search: '',
+    tag: '',
+  }
+  for (const field of SEARCH_TEXT_FIELDS) {
+    textFilters[field] = sanitizeTextField(field, getRawParam(source, field))
+  }
+
+  const identityFilters: Record<UuidQueryField, string> = {
+    producer: '',
+  }
+  for (const field of UUID_QUERY_FIELDS) {
+    identityFilters[field] = sanitizeUuid(getRawParam(source, field))
+  }
+
   const sortParam = getRawParam(source, 'sort')
   const sort = withFallback(isProductSort(sortParam) ? sortParam : undefined, DEFAULT_PRODUCT_SORT)
   const page = sanitizePage(getRawParam(source, 'page'))
 
   return {
     search: textFilters.search,
-    category: identityFilters.category,
+    category: sanitizeCategory(getRawParam(source, 'category')),
     producer: identityFilters.producer,
     tag: textFilters.tag,
     sort,
@@ -140,6 +168,11 @@ export const buildProductsSearchParams = (state: ProductsQueryState): URLSearchP
     }
   }
 
+  const category = sanitizeCategory(state.category)
+  if (category.length > 0) {
+    params.set('category', category)
+  }
+
   for (const field of UUID_QUERY_FIELDS) {
     const value = sanitizeUuid(state[field])
     if (value.length > 0) {
@@ -147,7 +180,10 @@ export const buildProductsSearchParams = (state: ProductsQueryState): URLSearchP
     }
   }
 
-  const sort = withFallback(isProductSort(state.sort) ? state.sort : undefined, DEFAULT_PRODUCT_SORT)
+  const sort = withFallback(
+    isProductSort(state.sort) ? state.sort : undefined,
+    DEFAULT_PRODUCT_SORT,
+  )
   const page = Number.isFinite(state.page) && state.page > 0 ? Math.floor(state.page) : 1
 
   if (sort !== DEFAULT_PRODUCT_SORT) {

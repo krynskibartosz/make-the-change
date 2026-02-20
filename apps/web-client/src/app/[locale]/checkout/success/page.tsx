@@ -2,6 +2,7 @@ import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-t
 import { ArrowRight, CheckCircle2, ShoppingBag, Sparkles } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
+import { parseOrderItems } from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link, redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
@@ -50,36 +51,11 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
 
   if (!order) notFound()
 
-  type OrderItemRow = {
-    id: string
-    quantity: number
-    unit_price_points: number | null
-    total_price_points: number | null
-    product_snapshot: unknown
-  }
-
-  const items = (order.items ?? []) as OrderItemRow[]
+  const items = parseOrderItems(order.items)
   const dateLocale = locale === 'fr' ? 'fr-FR' : locale === 'nl' ? 'nl-NL' : 'en-US'
 
-  const getSnapshotEuroPrice = (snapshot: Record<string, unknown>) => {
-    const raw = snapshot.priceEuros ?? snapshot.price_eur_equivalent
-    if (typeof raw === 'number') return raw
-    if (typeof raw === 'string') {
-      const parsed = Number(raw)
-      return Number.isFinite(parsed) ? parsed : 0
-    }
-    return 0
-  }
-
-  const getSnapshotName = (snapshot: Record<string, unknown>) =>
-    (snapshot.name as string | undefined) ||
-    (snapshot.name_default as string | undefined) ||
-    t('fallback_product')
-
   const totalEuros = items.reduce((sum, item) => {
-    const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
-    const priceEuros = getSnapshotEuroPrice(snapshot)
-    return sum + priceEuros * item.quantity
+    return sum + item.snapshot.priceEuros * item.quantity
   }, 0)
 
   const totalPoints = Number(order.total_points || 0)
@@ -163,10 +139,9 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
             <CardContent className="space-y-4 p-5">
               <div className="space-y-3">
                 {items.slice(0, 4).map((item) => {
-                  const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
-                  const name = getSnapshotName(snapshot)
-                  const priceEuros = getSnapshotEuroPrice(snapshot)
-                  const itemPoints = Number(item.total_price_points || 0)
+                  const name = item.snapshot.name || t('fallback_product')
+                  const priceEuros = item.snapshot.priceEuros
+                  const itemPoints = item.totalPricePoints
                   const itemEuros = priceEuros * item.quantity
                   const showItemEuroAsPrimary = itemEuros > 0 && itemPoints <= 0
                   return (

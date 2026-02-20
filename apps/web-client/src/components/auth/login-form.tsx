@@ -17,7 +17,7 @@ import { useRouter as useNextRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useActionState, useEffect } from 'react'
 import { type AuthState, login } from '@/app/[locale]/(auth)/actions'
-import { Link, useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 type LoginFormProps = {
@@ -28,25 +28,28 @@ export function LoginForm({ modal = false }: LoginFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(login, {})
   const searchParams = useSearchParams()
-  const router = useRouter()
   const nextRouter = useNextRouter()
   const returnTo = searchParams.get('returnTo') || ''
   const registerHref = returnTo ? `/register?returnTo=${encodeURIComponent(returnTo)}` : '/register'
 
   useEffect(() => {
-    if (state.success && state.redirectUrl) {
-      if (modal) {
-        nextRouter.back()
-        setTimeout(() => {
-          router.push(state.redirectUrl as any)
-          nextRouter.refresh()
-        }, 100)
-      } else {
-        router.push(state.redirectUrl as any)
-        nextRouter.refresh()
-      }
+    const redirectUrl = state.redirectUrl
+
+    if (!state.success || !redirectUrl) {
+      return
     }
-  }, [state, modal, router, nextRouter])
+
+    if (modal) {
+      nextRouter.back()
+      setTimeout(() => {
+        nextRouter.push(redirectUrl)
+        nextRouter.refresh()
+      }, 100)
+    } else {
+      nextRouter.push(redirectUrl)
+      nextRouter.refresh()
+    }
+  }, [state, modal, nextRouter])
 
   return (
     <Card
@@ -76,7 +79,7 @@ export function LoginForm({ modal = false }: LoginFormProps) {
 
           <div className="space-y-4">
             <Field className="relative group">
-              <Mail className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+              <Mail className="absolute left-4 top-9.5 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <Input
                 id="email"
                 name="email"
@@ -90,7 +93,7 @@ export function LoginForm({ modal = false }: LoginFormProps) {
             </Field>
 
             <Field className="relative group">
-              <Lock className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
+              <Lock className="absolute left-4 top-9.5 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <Input
                 id="password"
                 name="password"

@@ -14,6 +14,7 @@ import { useState, useTransition } from 'react'
 import { updatePageContent } from '@/app/[locale]/admin/cms/_features/actions/cms-actions'
 import type { HomePageContent } from '@/app/[locale]/admin/cms/_features/types'
 import { useToast } from '@/components/ui/use-toast'
+import { isRecord } from '@/lib/type-guards'
 import { EditorComponent } from './editor/editor-component'
 
 interface PageEditorProps {
@@ -21,9 +22,52 @@ interface PageEditorProps {
   slug: string
 }
 
+const EMPTY_HOME_PAGE_CONTENT: HomePageContent = {
+  hero: {
+    badge: '',
+    title: '',
+    subtitle: '',
+    cta_primary: '',
+    cta_secondary: '',
+  },
+  stats: {
+    projects: '',
+    members: '',
+    global_impact: '',
+    points_generated: '',
+    points_label: '',
+  },
+  universe: {
+    title: '',
+    description: '',
+    cards: {
+      projects: { title: '', description: '', cta: '' },
+      products: { title: '', description: '', cta: '' },
+      community: { title: '', description: '', cta: '' },
+    },
+  },
+  features: {
+    title: '',
+    invest: { title: '', description: '' },
+    earn: { title: '', description: '' },
+    redeem: { title: '', description: '' },
+    explore: '',
+  },
+  cta: {
+    title: '',
+    description: '',
+    button: '',
+    stats: {
+      engagement: '',
+      transparency: '',
+      community: '',
+    },
+  },
+}
+
 export function PageEditor({ initialData, slug }: PageEditorProps) {
   // We keep a local copy of the full object to update
-  const [content, setContent] = useState<HomePageContent>(initialData || ({} as HomePageContent))
+  const [content, setContent] = useState<HomePageContent>(initialData ?? EMPTY_HOME_PAGE_CONTENT)
   const [jsonMode, setJsonMode] = useState(false)
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
@@ -51,23 +95,31 @@ export function PageEditor({ initialData, slug }: PageEditorProps) {
     setContent((prev) => {
       const newData = { ...prev }
       const keys = path.split('.')
-      let current: Record<string, unknown> = newData as Record<string, unknown>
+      let current: unknown = newData
 
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i]
         if (!key) continue
 
+        if (!isRecord(current)) {
+          return newData
+        }
+
         const nextValue = current[key]
 
-        if (typeof nextValue !== 'object' || nextValue === null || Array.isArray(nextValue)) {
+        if (!isRecord(nextValue)) {
           current[key] = {}
         }
 
-        current = current[key] as Record<string, unknown>
+        current = current[key]
       }
 
       const lastKey = keys[keys.length - 1]
       if (!lastKey) return newData
+
+      if (!isRecord(current)) {
+        return newData
+      }
 
       current[lastKey] = value
       return newData
@@ -80,9 +132,8 @@ export function PageEditor({ initialData, slug }: PageEditorProps) {
     let current: unknown = content
 
     for (const key of keys) {
-      if (current === undefined || current === null) return ''
-      if (typeof current !== 'object' || Array.isArray(current)) return ''
-      current = (current as Record<string, unknown>)[key]
+      if (!isRecord(current)) return ''
+      current = current[key]
     }
 
     if (typeof current === 'string') return current

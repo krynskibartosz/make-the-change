@@ -36,7 +36,7 @@ export interface AutoSaveOptions<T> {
   debug?: boolean
 }
 
-export interface AutoSaveReturn {
+export interface AutoSaveReturn<T> {
   // Statut actuel de la sauvegarde
   status: SaveStatus
 
@@ -50,7 +50,7 @@ export interface AutoSaveReturn {
   saveNow: () => Promise<void>
 
   // Marquer qu'il y a des modifications (lance le debounce)
-  markDirty: (data?: unknown) => void
+  markDirty: (data: T) => void
 
   // Annuler le debounce en cours
   cancel: () => void
@@ -73,7 +73,7 @@ export function useOptimisticAutoSave<T = unknown>({
   enableRetry = true,
   maxRetries = 3,
   debug = false,
-}: AutoSaveOptions<T>): AutoSaveReturn {
+}: AutoSaveOptions<T>): AutoSaveReturn<T> {
   const { toast } = useToast()
 
   // State
@@ -113,7 +113,12 @@ export function useOptimisticAutoSave<T = unknown>({
 
   // Core save function with retry logic
   const executeSave = useCallback(
-    async (data?: T) => {
+    async (data: T | null) => {
+      if (data === null) {
+        log('No data queued, skipping save')
+        return
+      }
+
       if (isSavingRef.current) {
         log('Save already in progress, skipping')
         return
@@ -128,7 +133,7 @@ export function useOptimisticAutoSave<T = unknown>({
         log('Executing save...', { retryCount: retryCountRef.current })
 
         // Execute save function
-        await saveFn(data as T)
+        await saveFn(data)
 
         // Success
         isSavingRef.current = false
@@ -191,17 +196,15 @@ export function useOptimisticAutoSave<T = unknown>({
     clearTimers()
 
     // Execute immediately
-    await executeSave(dataQueueRef.current as T)
+    await executeSave(dataQueueRef.current)
   }, [executeSave, clearTimers, log])
 
   // Mark dirty (triggers debounce)
   const markDirty = useCallback(
-    (data?: unknown) => {
+    (data: T) => {
       log('markDirty() called')
 
-      if (data !== undefined) {
-        dataQueueRef.current = data as T
-      }
+      dataQueueRef.current = data
 
       // Clear existing debounce
       if (debounceTimerRef.current) {
@@ -217,7 +220,7 @@ export function useOptimisticAutoSave<T = unknown>({
       // Schedule save
       debounceTimerRef.current = setTimeout(() => {
         log('Debounce elapsed, executing save')
-        void executeSave(dataQueueRef.current as T)
+        void executeSave(dataQueueRef.current)
       }, debounceMs)
     },
     [debounceMs, executeSave, log],

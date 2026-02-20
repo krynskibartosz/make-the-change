@@ -15,6 +15,7 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 type ProducerRow = {
   id: string
@@ -47,6 +48,67 @@ type ProjectRow = {
 const normalizeStringArray = (value: unknown): string[] =>
   Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []
 
+const toProducerRow = (value: unknown): ProducerRow | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  if (!id) {
+    return null
+  }
+
+  return {
+    id,
+    slug: asString(value.slug) || null,
+    name_default: asString(value.name_default) || null,
+    description_default: asString(value.description_default) || null,
+    address_city: asString(value.address_city) || null,
+    address_country_code: asString(value.address_country_code) || null,
+    type: asString(value.type) || null,
+    images: value.images,
+    certifications: value.certifications,
+    contact_website: asString(value.contact_website) || null,
+  }
+}
+
+const toProductRow = (value: unknown): ProductRow | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  if (!id) {
+    return null
+  }
+
+  return {
+    id,
+    slug: asString(value.slug) || null,
+    name_default: asString(value.name_default) || null,
+    image_url: asString(value.image_url) || null,
+  }
+}
+
+const toProjectRow = (value: unknown): ProjectRow | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  if (!id) {
+    return null
+  }
+
+  return {
+    id,
+    slug: asString(value.slug) || null,
+    name_default: asString(value.name_default) || null,
+    hero_image_url: asString(value.hero_image_url) || null,
+    status: asString(value.status) || null,
+  }
+}
+
 export default async function ProducerDetailPage({
   params,
 }: {
@@ -66,7 +128,11 @@ export default async function ProducerDetailPage({
     notFound()
   }
 
-  const producer = producerRaw as ProducerRow
+  const producer = toProducerRow(producerRaw)
+  if (!producer) {
+    notFound()
+  }
+
   const location = [producer.address_city, producer.address_country_code].filter(Boolean).join(', ')
   const images = normalizeStringArray(producer.images)
   const certifications = normalizeStringArray(producer.certifications)
@@ -86,8 +152,16 @@ export default async function ProducerDetailPage({
       .limit(6),
   ])
 
-  const products = (productsRaw || []) as ProductRow[]
-  const projects = (projectsRaw || []) as ProjectRow[]
+  const products = Array.isArray(productsRaw)
+    ? productsRaw
+        .map((entry) => toProductRow(entry))
+        .filter((entry): entry is ProductRow => entry !== null)
+    : []
+  const projects = Array.isArray(projectsRaw)
+    ? projectsRaw
+        .map((entry) => toProjectRow(entry))
+        .filter((entry): entry is ProjectRow => entry !== null)
+    : []
 
   return (
     <>

@@ -3,6 +3,10 @@ import { ArrowLeft, Package, Truck } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { getOrderStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
+import {
+  parseOrderItems,
+  parseShippingAddress,
+} from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
@@ -44,21 +48,11 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
   if (!order) notFound()
 
-  type OrderItemRow = {
-    id: string
-    quantity: number
-    unit_price_points: number | null
-    total_price_points: number | null
-    product_snapshot: unknown
-  }
-
-  const items = (order.items ?? []) as OrderItemRow[]
-  const address = (order.shipping_address || {}) as Record<string, unknown>
+  const items = parseOrderItems(order.items)
+  const address = parseShippingAddress(order.shipping_address)
 
   const totalEuros = items.reduce((sum, item) => {
-    const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
-    const priceEuros = (snapshot.priceEuros as number) || 0
-    return sum + priceEuros * item.quantity
+    return sum + item.snapshot.priceEuros * item.quantity
   }, 0)
 
   return (
@@ -90,9 +84,8 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
         <DetailView.Section title="Articles" icon={Package} span={3}>
           <div className="space-y-3">
             {items.map((item) => {
-              const snapshot = (item.product_snapshot || {}) as Record<string, unknown>
-              const name = (snapshot.name as string | undefined) || 'Produit'
-              const priceEuros = (snapshot.priceEuros as number) || 0
+              const name = item.snapshot.name || 'Produit'
+              const priceEuros = item.snapshot.priceEuros
               return (
                 <div
                   key={item.id}
@@ -101,12 +94,12 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                   <div className="min-w-0">
                     <p className="truncate font-medium">{name}</p>
                     <p className="text-sm text-muted-foreground">
-                      x{item.quantity} • {formatPoints(Number(item.unit_price_points || 0))} pts
+                      x{item.quantity} • {formatPoints(item.unitPricePoints)} pts
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
                     <p className="text-sm font-semibold text-primary tabular-nums">
-                      {formatPoints(Number(item.total_price_points || 0))} pts
+                      {formatPoints(item.totalPricePoints)} pts
                     </p>
                     {priceEuros > 0 && (
                       <p className="text-xs text-muted-foreground tabular-nums">
@@ -127,20 +120,16 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                 Destinataire
               </p>
               <p className="mt-2 text-sm font-semibold">
-                {(address.firstName as string | undefined) || ''}{' '}
-                {(address.lastName as string | undefined) || ''}
+                {address.firstName} {address.lastName}
               </p>
             </div>
             <div className="rounded-xl border bg-muted/30 p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Adresse</p>
-              <p className="mt-2 text-sm">{(address.street as string | undefined) || '—'}</p>
+              <p className="mt-2 text-sm">{address.street || '—'}</p>
               <p className="text-sm text-muted-foreground">
-                {(address.postalCode as string | undefined) || ''}{' '}
-                {(address.city as string | undefined) || ''}
+                {address.postalCode} {address.city}
               </p>
-              <p className="text-sm text-muted-foreground">
-                {(address.country as string | undefined) || ''}
-              </p>
+              <p className="text-sm text-muted-foreground">{address.country}</p>
             </div>
             <div className="rounded-xl border bg-muted/30 p-4 sm:col-span-2">
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Tracking</p>

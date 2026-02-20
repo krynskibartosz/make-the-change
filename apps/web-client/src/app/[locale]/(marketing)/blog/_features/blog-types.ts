@@ -37,7 +37,9 @@ export type BlogPost = {
   id: string
   slug: string
   title: string
+  titleI18n?: Record<string, string> | null
   excerpt: string
+  excerptI18n?: Record<string, string> | null
   content: BlogPostContent
   rawContent: string
   coverImage: string | null

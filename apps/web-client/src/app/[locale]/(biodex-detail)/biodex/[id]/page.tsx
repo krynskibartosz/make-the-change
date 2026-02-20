@@ -1,13 +1,14 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import { AlertTriangle, ArrowLeft, Leaf, ShieldCheck, Sparkles } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import type { Species } from '@/app/[locale]/(marketing)/biodex/_features/types'
+import { toSpecies } from '@/app/[locale]/(marketing)/biodex/_features/species-parsers'
 import {
   getLocalizedContent,
   getStatusConfig,
 } from '@/app/[locale]/(marketing)/biodex/_features/utils'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 type ContentLevel = {
   title?: string
@@ -17,6 +18,18 @@ type ContentLevel = {
 
 const isContentLevel = (value: unknown): value is ContentLevel =>
   typeof value === 'object' && value !== null
+
+const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      (entry): entry is [string, string] => typeof entry[1] === 'string',
+    ),
+  )
+}
 
 export async function generateMetadata({
   params,
@@ -35,13 +48,13 @@ export async function generateMetadata({
 
   if (!species) return { title: 'Espèce non trouvée' }
 
-  // Cast to unknown then Species to access name_i18n safely
-  const s = species as Species
-  const name = getLocalizedContent(s.name_i18n, locale, 'Espèce')
+  const speciesNameI18n = toLocalizedRecord(species.name_i18n)
+  const scientificName = asString(species.scientific_name)
+  const name = getLocalizedContent(speciesNameI18n, locale, 'Espèce')
 
   return {
     title: `${name} - Biodex`,
-    description: `Fiche descriptive de ${name} (${s.scientific_name})`,
+    description: `Fiche descriptive de ${name} (${scientificName})`,
   }
 }
 
@@ -65,12 +78,16 @@ export default async function SpeciesPage({
     notFound()
   }
 
-  const species = speciesData as Species
+  const species = toSpecies(speciesData)
+  if (!species) {
+    notFound()
+  }
+
   const name = getLocalizedContent(species.name_i18n, locale, 'Espèce inconnue')
   const description = getLocalizedContent(species.description_i18n, locale, '')
   const statusConfig = getStatusConfig(species.conservation_status)
-  const familyLabel =
-    typeof species.content_levels?.family === 'string' ? species.content_levels.family : null
+  const contentLevels = isRecord(species.content_levels) ? species.content_levels : null
+  const familyLabel = typeof contentLevels?.family === 'string' ? contentLevels.family : null
 
   // 2. Fetch Related Projects
   const { data: projects } = await supabase
@@ -79,6 +96,40 @@ export default async function SpeciesPage({
     .select('id, slug, name_default, hero_image_url')
     .eq('species_id', id)
     .limit(3)
+
+  const projectsList = Array.isArray(projects)
+    ? projects
+        .map((project) => {
+          if (!isRecord(project)) {
+            return null
+          }
+
+          const projectId = asString(project.id)
+          const projectSlug = asString(project.slug)
+          const projectName = asString(project.name_default)
+
+          if (!projectId || !projectSlug) {
+            return null
+          }
+
+          return {
+            id: projectId,
+            slug: projectSlug,
+            name_default: projectName || 'Projet',
+            hero_image_url: asString(project.hero_image_url) || null,
+          }
+        })
+        .filter(
+          (
+            project,
+          ): project is {
+            id: string
+            slug: string
+            name_default: string
+            hero_image_url: string | null
+          } => project !== null,
+        )
+    : []
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -176,7 +227,7 @@ export default async function SpeciesPage({
         </section>
 
         {/* Content Levels (Gamification/Education) */}
-        {species.content_levels && Object.keys(species.content_levels).length > 0 && (
+        {contentLevels && Object.keys(contentLevels).length > 0 && (
           <section>
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -186,7 +237,7 @@ export default async function SpeciesPage({
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              {Object.entries(species.content_levels as Record<string, unknown>)
+              {Object.entries(contentLevels)
                 .filter(([key]) => key !== 'family' && key !== 'kingdom' && key !== 'metadata') // Filter out metadata fields
                 .map(([level, content]) => {
                   if (!isContentLevel(content)) return null
@@ -219,7 +270,7 @@ export default async function SpeciesPage({
         )}
 
         {/* Related Projects */}
-        {projects && projects.length > 0 && (
+        {projectsList.length > 0 && (
           <section>
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -229,7 +280,7 @@ export default async function SpeciesPage({
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
+              {projectsList.map((project) => (
                 <Link key={project.id} href={`/projects/${project.slug}`} className="group block">
                   <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow transition-all hover:shadow-lg">
                     <div className="aspect-video w-full overflow-hidden">

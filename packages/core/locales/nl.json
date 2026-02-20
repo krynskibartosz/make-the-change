@@ -27,6 +27,8 @@
     "dashboard": "Dashboard",
     "products": "Producten",
     "projects": "Projecten",
+    "shop": "Shop",
+    "invest": "Investeren",
     "subscriptions": "Abonnementen",
     "users": "Gebruikers",
     "settings": "Instellingen",
@@ -60,12 +62,15 @@
         "mission": "Onze missie",
         "how_it_works": "Hoe het werkt",
         "producers": "Onze producenten",
+        "pricing": "Tarieven",
         "challenges": "Uitdagingen",
         "leaderboard": "Klassement",
         "biodex": "BioDex",
         "blog": "Blog",
         "faq": "FAQ",
-        "contact": "Contact"
+        "contact": "Contact",
+        "privacy": "Privacybeleid",
+        "terms": "Gebruiksvoorwaarden"
       },
       "featured": {
         "title": "Uitgelichte projecten",
@@ -145,6 +150,10 @@
     },
     "featured_products": "Populaire producten",
     "view_all_products": "Alle producten bekijken",
+    "partners": {
+      "title": "Onze Partners",
+      "description": "Wij werken samen met de beste partners om u innovatieve en duurzame oplossingen te bieden"
+    },
     "empty": {
       "featured_projects": {
         "title": "Nog geen uitgelichte projecten",

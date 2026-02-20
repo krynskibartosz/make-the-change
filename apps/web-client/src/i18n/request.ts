@@ -6,9 +6,9 @@ import type { AbstractIntlMessages } from 'next-intl'
 import { getRequestConfig } from 'next-intl/server'
 
 const messagesByLocale: Record<Locale, AbstractIntlMessages> = {
-  en: en as AbstractIntlMessages,
-  fr: fr as AbstractIntlMessages,
-  nl: nl as AbstractIntlMessages,
+  en,
+  fr,
+  nl,
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {

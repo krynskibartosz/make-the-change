@@ -57,16 +57,17 @@ export function ProfileController({ profile, userEmail }: ProfileControllerProps
     },
     debounceMs: 2000,
   })
+  const { markDirty } = autoSave
 
   // Watch for changes to trigger markDirty
   useEffect(() => {
-    const subscription = profileForm.watch((value) => {
+    const subscription = profileForm.watch(() => {
       if (profileForm.formState.isDirty) {
-        autoSave.markDirty(value)
+        markDirty(profileForm.getValues())
       }
     })
     return () => subscription.unsubscribe()
-  }, [profileForm.watch, profileForm.formState.isDirty, autoSave.markDirty, profileForm, autoSave])
+  }, [profileForm, profileForm.formState.isDirty, markDirty])
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
     await autoSave.saveNow()

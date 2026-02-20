@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type MarketingCtaBandTone = 'dark' | 'primary'
-type MarketingCtaBandRootProps = Omit<ComponentPropsWithoutRef<'section'>, 'children'>
+type MarketingCtaBandRootProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'title'>
 type MarketingCtaBandFooterProps = ComponentPropsWithoutRef<'footer'>
 
 type MarketingCtaBandProps = MarketingCtaBandRootProps & {

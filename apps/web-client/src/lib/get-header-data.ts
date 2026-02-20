@@ -1,5 +1,6 @@
 import { getMenu } from '@/app/[locale]/admin/cms/_features/cms.service'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 export type HeaderUser = {
   id: string
@@ -31,10 +32,10 @@ export async function getHeaderData(): Promise<HeaderData> {
 
   const headerProfile = profileData.data
 
-  const headerMetadata = headerProfile?.metadata as Record<string, unknown> | null | undefined
-  const metadataAvatarUrl = headerMetadata?.avatar_url
+  const headerMetadata = isRecord(headerProfile?.metadata) ? headerProfile.metadata : null
+  const metadataAvatarUrl = headerMetadata ? asString(headerMetadata.avatar_url) : ''
   const headerAvatarUrl =
-    typeof metadataAvatarUrl === 'string'
+    metadataAvatarUrl.length > 0
       ? metadataAvatarUrl
       : typeof headerProfile?.avatar_url === 'string'
         ? headerProfile.avatar_url

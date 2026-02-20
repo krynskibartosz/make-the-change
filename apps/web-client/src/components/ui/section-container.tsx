@@ -43,7 +43,7 @@ export const SectionContainer = ({
   ...rest
 }: SectionContainerProps) => (
   <section {...rest} className={cn(sizeClasses[size], variantClasses[variant], className)}>
-    <div className="container mx-auto px-4">
+    <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
       {(title || action) && (
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>

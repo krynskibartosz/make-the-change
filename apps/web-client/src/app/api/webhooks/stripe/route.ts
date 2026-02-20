@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { type NextRequest, NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
+import { isRecord } from '@/lib/type-guards'
 
 const getSupabaseAdmin = () => {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -11,6 +12,16 @@ const getSupabaseAdmin = () => {
   }
   return createClient(url, serviceKey)
 }
+
+const isPaymentIntent = (value: unknown): value is Stripe.PaymentIntent =>
+  isRecord(value) &&
+  value.object === 'payment_intent' &&
+  typeof value.id === 'string' &&
+  typeof value.amount === 'number' &&
+  isRecord(value.metadata)
+
+const isCharge = (value: unknown): value is Stripe.Charge =>
+  isRecord(value) && value.object === 'charge' && typeof value.id === 'string'
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe()
@@ -38,7 +49,14 @@ export async function POST(req: NextRequest) {
   try {
     switch (event.type) {
       case 'payment_intent.succeeded': {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent
+        if (!isPaymentIntent(event.data.object)) {
+          console.error('Invalid Stripe payload for payment_intent.succeeded', {
+            eventId: event.id,
+          })
+          return NextResponse.json({ error: 'Invalid event payload' }, { status: 400 })
+        }
+
+        const paymentIntent = event.data.object
 
         // Use P7 Transactional RPC
         const { error } = await supabaseAdmin.rpc('handle_payment_intent_succeeded', {
@@ -60,7 +78,14 @@ export async function POST(req: NextRequest) {
       }
 
       case 'payment_intent.payment_failed': {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent
+        if (!isPaymentIntent(event.data.object)) {
+          console.error('Invalid Stripe payload for payment_intent.payment_failed', {
+            eventId: event.id,
+          })
+          return NextResponse.json({ error: 'Invalid event payload' }, { status: 400 })
+        }
+
+        const paymentIntent = event.data.object
         console.error(
           'Payment failed:',
           paymentIntent.id,
@@ -70,7 +95,12 @@ export async function POST(req: NextRequest) {
       }
 
       case 'charge.refunded': {
-        const charge = event.data.object as Stripe.Charge
+        if (!isCharge(event.data.object)) {
+          console.error('Invalid Stripe payload for charge.refunded', { eventId: event.id })
+          return NextResponse.json({ error: 'Invalid event payload' }, { status: 400 })
+        }
+
+        const charge = event.data.object
         console.log('Charge refunded:', charge.id, 'Refund logic not yet implemented via RPC')
         break
       }

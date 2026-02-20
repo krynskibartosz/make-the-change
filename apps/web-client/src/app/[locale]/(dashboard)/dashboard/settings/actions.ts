@@ -5,11 +5,17 @@ import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 export type SettingsState = {
   error?: string
   success?: string
   locale?: Locale
+}
+
+const getFormDataString = (formData: FormData, key: string): string => {
+  const value = formData.get(key)
+  return typeof value === 'string' ? asString(value) : ''
 }
 
 export async function updateSettings(
@@ -23,16 +29,16 @@ export async function updateSettings(
 
   if (!user) return { error: 'Not authenticated' }
 
-  const requestedLanguage = (formData.get('languageCode') as string) || defaultLocale
+  const requestedLanguage = getFormDataString(formData, 'languageCode') || defaultLocale
   const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
-  const timezone = (formData.get('timezone') as string) || 'Europe/Paris'
+  const timezone = getFormDataString(formData, 'timezone') || 'Europe/Paris'
   const publicProfile = formData.get('publicProfile') === 'on'
 
   // Social links
   const socialLinks = {
-    linkedin: (formData.get('social_linkedin') as string) || '',
-    instagram: (formData.get('social_instagram') as string) || '',
-    twitter: (formData.get('social_twitter') as string) || '',
+    linkedin: getFormDataString(formData, 'social_linkedin'),
+    instagram: getFormDataString(formData, 'social_instagram'),
+    twitter: getFormDataString(formData, 'social_twitter'),
   }
 
   const { data: currentProfile } = await supabase
@@ -41,7 +47,7 @@ export async function updateSettings(
     .eq('id', user.id)
     .single()
 
-  const metadata = (currentProfile?.metadata || {}) as Record<string, unknown>
+  const metadata = isRecord(currentProfile?.metadata) ? currentProfile.metadata : {}
   const nextMetadata = {
     ...metadata,
     is_public_profile: publicProfile,

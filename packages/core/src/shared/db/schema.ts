@@ -301,7 +301,7 @@ export const species = investment.table('species', {
   iucn_status: conservationStatusEnum('iucn_status'),
   habitat: text('habitat'),
   image_url: text('image_url'),
-  
+
   // I18n & Gamification
   name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
   description_i18n: jsonb('description_i18n').default({ en: '' }),
@@ -450,7 +450,9 @@ export const blogPosts = content.table('blog_posts', {
   id: uuid('id').primaryKey().defaultRandom(),
   slug: text('slug').notNull(),
   title: text('title').notNull(),
+  title_i18n: jsonb('title_i18n').default({ en: '', fr: '', nl: '' }),
   excerpt: text('excerpt'),
+  excerpt_i18n: jsonb('excerpt_i18n').default({ en: '', fr: '', nl: '' }),
   content: text('content'),
   cover_image: text('cover_image'),
   author_id: uuid('author_id'),

@@ -36,6 +36,7 @@ import {
 } from 'react'
 import { type AuthState, register } from '@/app/[locale]/(auth)/actions'
 import { Link } from '@/i18n/navigation'
+import { isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 
 // Map email domains to their webmail URLs
@@ -85,6 +86,25 @@ const parseWizardStep = (value: string | null): number | null => {
 }
 
 const isString = (value: unknown): value is string => typeof value === 'string'
+
+const parseRegisterWizardDraft = (value: string): Partial<RegisterWizardDraft> | null => {
+  try {
+    const parsed: unknown = JSON.parse(value)
+    if (!isRecord(parsed)) {
+      return null
+    }
+
+    return {
+      firstName: isString(parsed.firstName) ? parsed.firstName : undefined,
+      lastName: isString(parsed.lastName) ? parsed.lastName : undefined,
+      email: isString(parsed.email) ? parsed.email : undefined,
+      terms: typeof parsed.terms === 'boolean' ? parsed.terms : undefined,
+      step: typeof parsed.step === 'number' ? parsed.step : undefined,
+    }
+  } catch {
+    return null
+  }
+}
 
 type RegisterFormProps = {
   modal?: boolean
@@ -151,18 +171,19 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
     try {
       const rawDraft = window.sessionStorage.getItem(REGISTER_WIZARD_STORAGE_KEY)
       if (rawDraft) {
-        const parsedDraft = JSON.parse(rawDraft) as Partial<RegisterWizardDraft>
+        const parsedDraft = parseRegisterWizardDraft(rawDraft)
+        if (parsedDraft) {
+          setFormValues((prev) => ({
+            ...prev,
+            firstName: isString(parsedDraft.firstName) ? parsedDraft.firstName : prev.firstName,
+            lastName: isString(parsedDraft.lastName) ? parsedDraft.lastName : prev.lastName,
+            email: isString(parsedDraft.email) ? parsedDraft.email : prev.email,
+            terms: typeof parsedDraft.terms === 'boolean' ? parsedDraft.terms : prev.terms,
+          }))
 
-        setFormValues((prev) => ({
-          ...prev,
-          firstName: isString(parsedDraft.firstName) ? parsedDraft.firstName : prev.firstName,
-          lastName: isString(parsedDraft.lastName) ? parsedDraft.lastName : prev.lastName,
-          email: isString(parsedDraft.email) ? parsedDraft.email : prev.email,
-          terms: typeof parsedDraft.terms === 'boolean' ? parsedDraft.terms : prev.terms,
-        }))
-
-        if (urlStep === null && typeof parsedDraft.step === 'number') {
-          restoredStep = clampWizardStep(parsedDraft.step)
+          if (urlStep === null && typeof parsedDraft.step === 'number') {
+            restoredStep = clampWizardStep(parsedDraft.step)
+          }
         }
       }
     } catch {

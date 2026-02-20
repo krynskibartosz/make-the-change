@@ -8,8 +8,9 @@ import {
   ToastTitle,
 } from '@make-the-change/core/ui'
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react'
-import type { ComponentType } from 'react'
+import { type ComponentType, isValidElement, type ReactNode } from 'react'
 import type { ManagedToast, ToastData, ToastVariant } from '@/components/ui/use-toast'
+import { isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 
 const toastIcons: Record<ToastVariant, ComponentType<{ className?: string }>> = {
@@ -32,10 +33,49 @@ export type ToastWithIconProps = {
   toast: ManagedToast
 }
 
+const isToastVariant = (value: unknown): value is ToastVariant =>
+  typeof value === 'string' && Object.hasOwn(toastIcons, value)
+
+const isRenderableNode = (value: unknown): value is ReactNode => {
+  if (value === null) return true
+
+  switch (typeof value) {
+    case 'string':
+    case 'number':
+    case 'boolean':
+      return true
+    case 'undefined':
+      return false
+    default:
+      break
+  }
+
+  if (isValidElement(value)) {
+    return true
+  }
+
+  if (Array.isArray(value)) {
+    return value.every((entry) => isRenderableNode(entry))
+  }
+
+  return false
+}
+
+const toToastData = (value: unknown): ToastData => {
+  if (!isRecord(value)) {
+    return {}
+  }
+
+  return {
+    showIcon: typeof value.showIcon === 'boolean' ? value.showIcon : undefined,
+    action: isRenderableNode(value.action) ? value.action : undefined,
+  }
+}
+
 export function ToastWithIcon({ toast }: ToastWithIconProps) {
-  const variant = (toast.type as ToastVariant | undefined) ?? 'default'
+  const variant = isToastVariant(toast.type) ? toast.type : 'default'
   const Icon = toastIcons[variant] ?? Info
-  const data = (toast.data ?? {}) as ToastData
+  const data = toToastData(toast.data)
   const showIcon = data.showIcon ?? true
 
   return (

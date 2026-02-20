@@ -8,6 +8,7 @@ import { Logo } from '@/components/ui/logo'
 import { PageHero } from '@/components/ui/page-hero'
 import { Link } from '@/i18n/navigation'
 import { buildPartnerDashboardUrl } from '@/lib/partner-app-url'
+import { getLocalizedContent } from '@/lib/utils'
 import { MarketingCtaBand } from '../_features/marketing-cta-band'
 import { DiversityFactLoader } from './_features/diversity-fact-loader'
 import { getHomeServerData } from './_features/home.server-data'
@@ -211,8 +212,12 @@ const HomePage = async () => {
         description={localizedCmsContent?.universe.description ?? t('universe.description')}
         projects={{
           image: universeCards?.projects.image,
-          badge: localizedCmsContent?.universe.cards.projects.badge ?? t('universe.cards.projects.badge'),
-          title: localizedCmsContent?.universe.cards.projects.title ?? t('universe.cards.projects.title'),
+          badge:
+            localizedCmsContent?.universe.cards.projects.badge ??
+            t('universe.cards.projects.badge'),
+          title:
+            localizedCmsContent?.universe.cards.projects.title ??
+            t('universe.cards.projects.title'),
           description:
             localizedCmsContent?.universe.cards.projects.description ??
             t('universe.cards.projects.description'),
@@ -220,19 +225,26 @@ const HomePage = async () => {
         }}
         products={{
           image: universeCards?.products.image,
-          badge: localizedCmsContent?.universe.cards.products.badge ?? t('universe.cards.products.badge'),
-          title: localizedCmsContent?.universe.cards.products.title ?? t('universe.cards.products.title'),
+          badge:
+            localizedCmsContent?.universe.cards.products.badge ??
+            t('universe.cards.products.badge'),
+          title:
+            localizedCmsContent?.universe.cards.products.title ??
+            t('universe.cards.products.title'),
           description:
             localizedCmsContent?.universe.cards.products.description ??
             t('universe.cards.products.description'),
           cta: localizedCmsContent?.universe.cards.products.cta ?? t('universe.cards.products.cta'),
         }}
         community={{
-          title: localizedCmsContent?.universe.cards.community.title ?? t('universe.cards.community.title'),
+          title:
+            localizedCmsContent?.universe.cards.community.title ??
+            t('universe.cards.community.title'),
           description:
             localizedCmsContent?.universe.cards.community.description ??
             t('universe.cards.community.description'),
-          cta: localizedCmsContent?.universe.cards.community.cta ?? t('universe.cards.community.cta'),
+          cta:
+            localizedCmsContent?.universe.cards.community.cta ?? t('universe.cards.community.cta'),
         }}
         variant="default"
       />
@@ -249,7 +261,19 @@ const HomePage = async () => {
           viewAllLabel={t('view_all_projects')}
           fundedLabel={t('project_card.funded')}
           activeLabel={t('project_card.active')}
-          projects={featuredProjectsState.value}
+          projects={featuredProjectsState.value.map((project) => ({
+            ...project,
+            name_default: getLocalizedContent(
+              project.name_i18n,
+              locale,
+              project.name_default || '',
+            ),
+            description_default: getLocalizedContent(
+              project.description_i18n,
+              locale,
+              project.description_default || '',
+            ),
+          }))}
           variant="muted"
         />
       ) : featuredProjectsState.status === 'empty' ? (
@@ -283,6 +307,8 @@ const HomePage = async () => {
           mode="carousel"
           producers={activeProducersState.value}
           variant={partnersVariant}
+          title={t('partners.title')}
+          description={t('partners.description')}
         />
       ) : activeProducersState.status === 'empty' ? (
         <HomePartnersSection
@@ -302,7 +328,11 @@ const HomePage = async () => {
         <HomeBlogSection
           title={localizedCmsContent?.blog?.title ?? t('blog_section.title')}
           viewAllLabel={t('blog_section.view_all')}
-          posts={blogPostsState.value}
+          posts={blogPostsState.value.map((post) => ({
+            ...post,
+            title: getLocalizedContent(post.titleI18n, locale, post.title),
+            excerpt: getLocalizedContent(post.excerptI18n, locale, post.excerpt),
+          }))}
           variant={blogVariant}
         />
       ) : blogPostsState.status === 'empty' ? (

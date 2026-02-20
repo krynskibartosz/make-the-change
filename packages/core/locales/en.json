@@ -27,6 +27,8 @@
     "dashboard": "Dashboard",
     "products": "Products",
     "projects": "Projects",
+    "shop": "Shop",
+    "invest": "Invest",
     "subscriptions": "Subscriptions",
     "users": "Users",
     "settings": "Settings",
@@ -474,6 +476,10 @@
     },
     "featured_products": "Popular products",
     "view_all_products": "View all products",
+    "partners": {
+      "title": "Our Partners",
+      "description": "We collaborate with the best partners to offer you innovative and sustainable solutions"
+    },
     "empty": {
       "featured_projects": {
         "title": "No featured projects yet",

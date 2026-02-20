@@ -5,6 +5,7 @@ import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing
 import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
+import { getLocalizedContent } from '@/lib/utils'
 import { ProjectCoverHero } from './components/project-cover-hero'
 import { ProjectMainContent } from './components/project-main-content'
 import { ProjectSidebar } from './components/project-sidebar'
@@ -40,11 +41,28 @@ export async function ProjectDetails({
     project.producer.images.length > 0
       ? project.producer.images[0]
       : undefined
+  const localizedTitle = getLocalizedContent(project.name_i18n, locale, project.name_default)
+  const defaultDesc = project.description_default || project.long_description_default || ''
+  const localizedLongDesc = getLocalizedContent(
+    project.long_description_i18n,
+    locale,
+    project.long_description_default || '',
+  )
+  const localizedDesc = getLocalizedContent(
+    project.description_i18n,
+    locale,
+    localizedLongDesc || defaultDesc,
+  )
+
+  const producerName = project.producer
+    ? getLocalizedContent(project.producer.name_i18n, locale, project.producer.name_default)
+    : 'Make the Change'
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Project',
-    name: project.name_default,
-    description: project.description_default,
+    name: localizedTitle,
+    description: localizedDesc,
     image: coverImage ? [coverImage] : [],
     url: `${process.env.NEXT_PUBLIC_SITE_URL}/projects/${project.slug}`,
     location:
@@ -61,7 +79,7 @@ export async function ProjectDetails({
     organizer: project.producer
       ? {
           '@type': 'Organization',
-          name: project.producer.name_default,
+          name: producerName,
           url: project.producer.contact_website,
           image: producerImage,
         }
@@ -140,13 +158,13 @@ export async function ProjectDetails({
           }
           title={
             <>
-              <span className="block text-marketing-overlay-light">{project.name_default}</span>
+              <span className="block text-marketing-overlay-light">{localizedTitle}</span>
               <span className="block mt-2 text-transparent bg-clip-text bg-linear-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-300% animate-gradient">
                 {t('detail.invest_now')}
               </span>
             </>
           }
-          description={project.description_default || t('subtitle')}
+          description={localizedDesc || t('subtitle')}
           primaryAction={
             <Link href={`/projects/${project.slug}/invest`}>
               <Button
@@ -171,9 +189,7 @@ export async function ProjectDetails({
         />
       </div>
 
-      {includeStructuredData && (
-        <script type="application/ld+json">{structuredDataJson}</script>
-      )}
+      {includeStructuredData && <script type="application/ld+json">{structuredDataJson}</script>}
     </>
   )
 }

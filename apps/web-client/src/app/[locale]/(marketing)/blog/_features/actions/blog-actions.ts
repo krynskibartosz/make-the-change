@@ -3,8 +3,14 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { asString } from '@/lib/type-guards'
 import type { TipTapDoc } from '../blog-types'
 import { blogContentToText, parseBlogContent } from '../content/parse-blog-content'
+
+const getFormDataString = (formData: FormData, key: string): string => {
+  const value = formData.get(key)
+  return typeof value === 'string' ? asString(value).trim() : ''
+}
 
 export async function createBlogPost(formData: FormData) {
   const supabase = await createClient()
@@ -16,8 +22,8 @@ export async function createBlogPost(formData: FormData) {
     throw new Error('Unauthorized')
   }
 
-  const title = formData.get('title') as string
-  const slug = formData.get('slug') as string
+  const title = getFormDataString(formData, 'title')
+  const slug = getFormDataString(formData, 'slug')
 
   if (!title || !slug) {
     throw new Error('Title and Slug are required')

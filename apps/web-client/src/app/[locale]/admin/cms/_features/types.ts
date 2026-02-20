@@ -70,6 +70,10 @@ export interface HomePageContent {
       community: string
     }
   }
+  partners?: {
+    title: string
+    description: string
+  }
   blog?: {
     title: string
   }

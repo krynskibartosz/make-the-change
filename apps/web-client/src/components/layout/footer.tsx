@@ -15,7 +15,7 @@ export function Footer() {
 
   return (
     <footer className="hidden border-t bg-card md:block">
-      <div className="container mx-auto px-4 py-12">
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-12">
         <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-5">
           {/* Brand */}
           <div className="space-y-4">

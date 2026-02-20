@@ -37,6 +37,7 @@ export const SaveStatusIndicator = ({
       bgColor: '',
       show: false,
       message: '',
+      animate: false,
     },
     pending: {
       icon: Dot,
@@ -47,6 +48,7 @@ export const SaveStatusIndicator = ({
         pendingChanges > 0
           ? `${pendingChanges} modification${pendingChanges > 1 ? 's' : ''}`
           : 'Modifications en attente',
+      animate: false,
     },
     saving: {
       icon: Upload,
@@ -62,6 +64,7 @@ export const SaveStatusIndicator = ({
       bgColor: 'bg-success/10',
       show: true,
       message: 'Enregistré',
+      animate: false,
     },
     error: {
       icon: AlertCircle,
@@ -69,6 +72,7 @@ export const SaveStatusIndicator = ({
       bgColor: 'bg-destructive/10',
       show: true,
       message: errorMessage || 'Erreur',
+      animate: false,
     },
   } satisfies Record<SaveStatus, StatusConfigItem>
 

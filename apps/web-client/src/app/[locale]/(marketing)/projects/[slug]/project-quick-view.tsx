@@ -4,7 +4,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { createClient } from '@/lib/supabase/server'
-import { cn, formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import type { PublicProject } from './project-detail-data'
 import { ProjectFavoriteButton } from './project-favorite-button'
@@ -110,11 +110,32 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
     ? new Date(project.maturity_date).toLocaleDateString(locale)
     : null
 
-  const projectName = project.name_default
-  const projectDescription = project.description_default || project.long_description_default || ''
+  const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
 
-  const organizerName = project.producer?.name_default || 'Make the Change'
-  const organizerDescription = project.producer?.description_default || t('subtitle')
+  const defaultDesc = project.description_default || project.long_description_default || ''
+  const localizedLongDesc = getLocalizedContent(
+    project.long_description_i18n,
+    locale,
+    project.long_description_default || '',
+  )
+  const projectDescription = getLocalizedContent(
+    project.description_i18n,
+    locale,
+    localizedLongDesc || defaultDesc,
+  )
+
+  const producerName = project.producer
+    ? getLocalizedContent(project.producer.name_i18n, locale, project.producer.name_default)
+    : 'Make the Change'
+  const organizerName = producerName
+  const producerDescription = project.producer
+    ? getLocalizedContent(
+        project.producer.description_i18n,
+        locale,
+        project.producer.description_default || '',
+      )
+    : t('subtitle')
+  const organizerDescription = producerDescription || t('subtitle')
   const websiteUrl = project.producer?.contact_website || null
   const websiteLabel = getWebsiteLabel(websiteUrl)
   const producerHref =

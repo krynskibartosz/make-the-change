@@ -19,11 +19,14 @@ export const CONSERVATION_STATUS_CONFIG: Record<
   EX: { label: 'Éteint', color: 'text-client-black', bg: 'bg-client-gray-200' },
 }
 
+const isConservationStatus = (value: string): value is ConservationStatus =>
+  value in CONSERVATION_STATUS_CONFIG
+
 export function getStatusConfig(status: string | null) {
-  if (!status || !CONSERVATION_STATUS_CONFIG[status as ConservationStatus]) {
+  if (!status || !isConservationStatus(status)) {
     return CONSERVATION_STATUS_CONFIG.NE
   }
-  return CONSERVATION_STATUS_CONFIG[status as ConservationStatus]
+  return CONSERVATION_STATUS_CONFIG[status]
 }
 
 export function getLocalizedContent(

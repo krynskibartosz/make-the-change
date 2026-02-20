@@ -13,6 +13,7 @@ import { DashboardPageContainer } from '@/components/layout/dashboard-page-conta
 import { Link } from '@/i18n/navigation'
 import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
+import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { formatCurrency, formatPoints } from '@/lib/utils'
 import { ActivityTimeline } from '../_features/activity-timeline'
 import { BadgesSection } from '../_features/badges-section'
@@ -32,19 +33,78 @@ type ClaimedChallenge = {
       }>
     | null
 }
+type ClaimedChallengeData = {
+  title: string | null
+  reward_badge: string | null
+}
 
 type RecentInvestment = {
   id: string
   created_at: string | null
   amount_eur_equivalent: number | string | null
-  project:
-    | {
-        name_default: string | null
-      }
-    | Array<{
-        name_default: string | null
-      }>
-    | null
+  project: {
+    name_default: string | null
+  } | null
+}
+
+const toClaimedChallenge = (value: unknown): ClaimedChallenge | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const toChallenge = (challenge: unknown): ClaimedChallengeData | null => {
+    if (!isRecord(challenge)) {
+      return null
+    }
+
+    return {
+      title: asString(challenge.title) || null,
+      reward_badge: asString(challenge.reward_badge) || null,
+    }
+  }
+
+  const challengesRaw = value.challenges
+  const challenges = Array.isArray(challengesRaw)
+    ? challengesRaw
+        .map((challenge) => toChallenge(challenge))
+        .filter((challenge): challenge is ClaimedChallengeData => challenge !== null)
+    : toChallenge(challengesRaw)
+
+  return {
+    claimed_at: asString(value.claimed_at) || null,
+    challenges: challenges,
+  }
+}
+
+const toRecentInvestment = (value: unknown): RecentInvestment | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  if (!id) {
+    return null
+  }
+
+  const toProject = (projectValue: unknown): { name_default: string | null } | null => {
+    if (!isRecord(projectValue)) {
+      return null
+    }
+
+    return {
+      name_default: asString(projectValue.name_default) || null,
+    }
+  }
+
+  const projectRaw = value.project
+  const project = Array.isArray(projectRaw) ? toProject(projectRaw[0]) : toProject(projectRaw)
+
+  return {
+    id,
+    created_at: asString(value.created_at) || null,
+    amount_eur_equivalent: asNumber(value.amount_eur_equivalent, 0),
+    project,
+  }
 }
 
 export default async function DashboardPage() {
@@ -116,7 +176,13 @@ export default async function DashboardPage() {
     invested: totalInvested,
   }).map((name) => ({ name, iconType: 'medal' as const }))
 
-  const challengeBadges = ((claimedChallenges || []) as ClaimedChallenge[]).map((uc) => {
+  const challengeRows = Array.isArray(claimedChallenges)
+    ? claimedChallenges
+        .map((entry) => toClaimedChallenge(entry))
+        .filter((entry): entry is ClaimedChallenge => entry !== null)
+    : []
+
+  const challengeBadges = challengeRows.map((uc) => {
     const challenge = Array.isArray(uc.challenges) ? uc.challenges[0] : uc.challenges
 
     return {
@@ -134,23 +200,19 @@ export default async function DashboardPage() {
     { label: t('overview.projects_supported'), value: projectsSupported.toString() },
   ]
 
-  const activityItems =
-    (recentInvestments as RecentInvestment[] | undefined)?.map((investment) => {
-      // Handle Supabase join which might return array or object
-      const project = Array.isArray(investment.project) ? investment.project[0] : investment.project
+  const activityRows = recentInvestments
+    .map((investment) => toRecentInvestment(investment))
+    .filter((investment): investment is RecentInvestment => investment !== null)
 
-      return {
-        id: investment.id,
-        icon: <Leaf className="h-4 w-4 text-client-emerald-600 dark:text-client-emerald-400" />,
-        title: project?.name_default || 'Projet',
-        subtitle: new Date(investment.created_at ?? new Date()).toLocaleDateString('fr-FR'),
-        value: (
-          <Badge variant="success">
-            +{formatCurrency(Number(investment.amount_eur_equivalent))}
-          </Badge>
-        ),
-      }
-    }) || []
+  const activityItems = activityRows.map((investment) => ({
+    id: investment.id,
+    icon: <Leaf className="h-4 w-4 text-client-emerald-600 dark:text-client-emerald-400" />,
+    title: investment.project?.name_default || 'Projet',
+    subtitle: new Date(investment.created_at ?? new Date()).toLocaleDateString('fr-FR'),
+    value: (
+      <Badge variant="success">+{formatCurrency(Number(investment.amount_eur_equivalent))}</Badge>
+    ),
+  }))
 
   const nextLevel = levelProgress.nextLevel
   const monthlyGoal = 5

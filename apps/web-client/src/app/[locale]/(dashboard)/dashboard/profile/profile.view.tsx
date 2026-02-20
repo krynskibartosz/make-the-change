@@ -23,7 +23,7 @@ interface ProfileViewProps {
   isPasswordSubmitting: boolean
   passwordStatus: { error?: string; success?: string }
   userEmail?: string
-  autoSave: AutoSaveReturn
+  autoSave: AutoSaveReturn<ProfileFormValues>
   t: (key: string) => string
 }
 

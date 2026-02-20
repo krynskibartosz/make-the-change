@@ -45,7 +45,6 @@ import {
   DEFAULT_PRODUCT_SORT,
   DEFAULT_PRODUCTS_QUERY_STATE,
   isProductSort,
-  type ProductSort,
   type ProductsQueryState,
 } from '@/app/[locale]/(marketing)/products/_features/query-state'
 import { ClientCatalogProductCard } from './components/client-catalog-product-card'
@@ -62,6 +61,7 @@ export interface Product {
   category_id?: string | null
   producer_id?: string | null
   image_url?: string | null
+  images?: string[] | null
   tags?: string[] | null
   created_at: string
 }
@@ -91,9 +91,9 @@ const createSelectOptions = <T extends { id: string; name_default: string }>(
   items: T[] | undefined,
   allLabel: string,
 ): SelectOption[] => [
-  { value: '', label: allLabel },
-  ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
-]
+    { value: '', label: allLabel },
+    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
+  ]
 
 const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
   { value: 'featured_first', label: tProducts('sort.featured') },
@@ -104,7 +104,7 @@ const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
 ]
 
 type ProductsFiltersSidebarProps = {
-  title: string
+  title?: string
   clearLabel: string
   categoryLabel: string
   producerLabel: string
@@ -146,9 +146,10 @@ const ProductsFiltersSidebar = ({
   onProducerChange,
   onTagChange,
 }: ProductsFiltersSidebarProps) => (
-  <div className="p-4 md:p-5">
+  <div className="pb-4 md:pb-5">
     <div className="mb-4 flex items-center justify-between gap-3">
-      <h3 className="text-lg font-black tracking-tight">{title}</h3>
+      {title && <h3 className="text-lg font-black tracking-tight">{title}</h3>}
+
       {showClear && (
         <Button
           type="button"
@@ -168,7 +169,7 @@ const ProductsFiltersSidebar = ({
       className="w-full"
     >
       <AccordionItem value="categories">
-        <AccordionTrigger className="text-sm font-bold">{categoryLabel}</AccordionTrigger>
+        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">{categoryLabel}</AccordionTrigger>
         <AccordionContent>
           <button
             type="button"
@@ -202,7 +203,7 @@ const ProductsFiltersSidebar = ({
       </AccordionItem>
 
       <AccordionItem value="producers">
-        <AccordionTrigger className="text-sm font-bold">{producerLabel}</AccordionTrigger>
+        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">{producerLabel}</AccordionTrigger>
         <AccordionContent>
           <button
             type="button"
@@ -236,7 +237,7 @@ const ProductsFiltersSidebar = ({
       </AccordionItem>
 
       <AccordionItem value="tags">
-        <AccordionTrigger className="text-sm font-bold">{tagLabel}</AccordionTrigger>
+        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">{tagLabel}</AccordionTrigger>
         <AccordionContent>
           <button
             type="button"
@@ -459,9 +460,10 @@ export const ProductsClient = ({
 
       {/* Fixed Search and Filters Bar */}
       <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
-        <div className="px-4 py-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-4">
+            {/* Search and Tag (Left Side Desktop, Top Row Mobile) */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">
               <search role="search" className="relative w-full lg:w-[320px]">
                 <Search
                   className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -469,7 +471,7 @@ export const ProductsClient = ({
                 />
                 <Input
                   type="search"
-                  className="h-10 bg-background pl-9"
+                  className="h-10 bg-background pl-9 w-full"
                   placeholder={tProducts('search_placeholder')}
                   value={searchInput}
                   onChange={(event) => setSearchInput(event.target.value)}
@@ -477,136 +479,64 @@ export const ProductsClient = ({
                 />
               </search>
 
-              <Combobox
-                value={activeTagValue}
-                onValueChange={(value) => {
-                  if (typeof value === 'string') {
-                    updateQuery({ tag: value === '__all__' ? '' : value })
-                  }
-                }}
-              >
-                <div className="relative w-full lg:w-[220px]">
-                  <ComboboxInput
-                    className="h-10 w-full rounded-md border border-input bg-background pl-3 pr-9 text-sm"
-                    placeholder={tProducts('filters.tag_label')}
-                  />
-                  <ComboboxTrigger className="absolute right-1 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted">
-                    <ArrowUpDown className="h-3.5 w-3.5" />
-                  </ComboboxTrigger>
-                </div>
-                <ComboboxPortal>
-                  <ComboboxPositioner>
-                    <ComboboxPopup className="z-[60] mt-1 w-[220px] rounded-md border border-border bg-popover p-1 shadow-md">
-                      <ComboboxList>
-                        <ComboboxItem
-                          value="__all__"
-                          className="cursor-pointer rounded-sm px-2 py-1.5 text-sm hover:bg-muted"
-                        >
-                          {tProducts('filters.all_tags')}
-                        </ComboboxItem>
-                        {tagOptions
-                          .filter((option) => option.value)
-                          .map((option) => (
-                            <ComboboxItem
-                              key={option.value}
-                              value={option.value}
-                              className="cursor-pointer rounded-sm px-2 py-1.5 text-sm hover:bg-muted"
-                            >
-                              {option.label}
-                            </ComboboxItem>
-                          ))}
-                      </ComboboxList>
-                    </ComboboxPopup>
-                  </ComboboxPositioner>
-                </ComboboxPortal>
-              </Combobox>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <Select
-                value={sort}
-                onValueChange={(value) => updateQuery({ sort: value as ProductSort })}
-              >
-                <SelectTrigger className="h-10 w-full lg:w-[220px] bg-background">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                    <span className="truncate text-sm font-semibold">{sortLabel}</span>
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  {sortOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <div className="hidden lg:flex">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={clearAllFilters}
-                  className="h-10"
+              <div className="hidden lg:block">
+                <Combobox
+                  value={activeTagValue}
+                  onValueChange={(value) => {
+                    if (typeof value === 'string') {
+                      updateQuery({ tag: value === '__all__' ? '' : value })
+                    }
+                  }}
                 >
-                  {tProducts('filters.clear_filters')}
-                </Button>
+                  <div className="relative w-full lg:w-[220px]">
+                    <ComboboxInput
+                      className="h-10 w-full rounded-md border border-input bg-background pl-3 pr-9 text-sm"
+                      placeholder={tProducts('filters.tag_label')}
+                    />
+                    <ComboboxTrigger className="absolute right-1 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted">
+                      <ArrowUpDown className="h-3.5 w-3.5" />
+                    </ComboboxTrigger>
+                  </div>
+                  <ComboboxPortal>
+                    <ComboboxPositioner>
+                      <ComboboxPopup className="z-[60] mt-1 w-[220px] rounded-md border border-border bg-popover p-1 shadow-md">
+                        <ComboboxList>
+                          <ComboboxItem
+                            value="__all__"
+                            className="cursor-pointer rounded-sm px-2 py-1.5 text-sm hover:bg-muted"
+                          >
+                            {tProducts('filters.all_tags')}
+                          </ComboboxItem>
+                          {tagOptions
+                            .filter((option) => option.value)
+                            .map((option) => (
+                              <ComboboxItem
+                                key={option.value}
+                                value={option.value}
+                                className="cursor-pointer rounded-sm px-2 py-1.5 text-sm hover:bg-muted"
+                              >
+                                {option.label}
+                              </ComboboxItem>
+                            ))}
+                        </ComboboxList>
+                      </ComboboxPopup>
+                    </ComboboxPositioner>
+                  </ComboboxPortal>
+                </Combobox>
               </div>
             </div>
-          </div>
 
-          {/* Active Filters */}
-          {hasActiveFilters && (
-            <div className="mt-4">
-              <ProductsActiveFilters
-                title={tProducts('filters.active_filters')}
-                chips={activeFilterChips}
-                clearAllLabel={tProducts('filters.clear_all')}
-                onClearAll={clearAllFilters}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="px-4 pb-24 sm:px-6 lg:px-0 lg:pb-16">
-        <div className="grid gap-y-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-x-0 lg:items-start">
-          {/* Sidebar - Fixed on Left */}
-          <aside className="hidden lg:sticky lg:top-24 lg:block lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
-            <ProductsFiltersSidebar
-              title={tCommon('filter')}
-              clearLabel={tProducts('filters.clear_filters')}
-              categoryLabel={tProducts('filters.category_label')}
-              producerLabel={tProducts('filters.producer_label')}
-              tagLabel={tProducts('filters.tag_label')}
-              allCategoriesLabel={tProducts('filters.all_categories')}
-              allProducersLabel={tProducts('filters.all_producers')}
-              allTagsLabel={tProducts('filters.all_tags')}
-              showClear={hasActiveFilters}
-              onReset={clearAllFilters}
-              categoryOptions={categoryOptions}
-              producerOptions={producerOptions}
-              tagOptions={tagOptions}
-              category={initialQueryState.category}
-              producer={initialQueryState.producer}
-              tag={initialQueryState.tag}
-              onCategoryChange={(value) => updateQuery({ category: value })}
-              onProducerChange={(value) => updateQuery({ producer: value })}
-              onTagChange={(value) => updateQuery({ tag: value })}
-            />
-          </aside>
-
-          {/* Product Grid Area */}
-          <div className="min-w-0 space-y-4 px-4 sm:px-6 lg:px-8">
-            {/* Mobile Filter Bar */}
-            <div className="sticky top-0 z-20 -mx-4 -mx-6 lg:-mx-8 border-y border-border/70 bg-background/95 px-4 py-3 backdrop-blur sm:px-6 lg:px-8 lg:hidden">
-              <div className="flex items-center gap-2">
+            {/* Mobile Filter Button and Sort (Right Side Desktop, Bottom Row Mobile) */}
+            <div className="flex items-center gap-2 w-full lg:w-auto lg:gap-4">
+              <div className="flex-1 lg:hidden">
                 <BottomSheet>
                   <BottomSheetTrigger>
-                    <div className="inline-flex">
-                      <Button type="button" variant="outline" className="h-10 gap-2">
+                    <div className="inline-flex w-full">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-10 w-full gap-2 bg-background"
+                      >
                         <Filter className="h-4 w-4" />
                         {tCommon('filter')}
                         {hasActiveFilters && (
@@ -646,12 +576,18 @@ export const ProductsClient = ({
                     </BottomSheetBody>
                   </BottomSheetContent>
                 </BottomSheet>
+              </div>
 
+              <div className="flex-1 lg:flex-none">
                 <Select
                   value={sort}
-                  onValueChange={(value) => updateQuery({ sort: value as ProductSort })}
+                  onValueChange={(value) => {
+                    if (isProductSort(value)) {
+                      updateQuery({ sort: value })
+                    }
+                  }}
                 >
-                  <SelectTrigger className="h-10 min-w-0 flex-1 bg-background">
+                  <SelectTrigger className="h-10 w-full lg:w-[220px] bg-background">
                     <div className="flex min-w-0 items-center gap-2">
                       <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
                       <span className="truncate text-sm font-semibold">{sortLabel}</span>
@@ -666,8 +602,64 @@ export const ProductsClient = ({
                   </SelectContent>
                 </Select>
               </div>
-            </div>
 
+              <div className="hidden lg:flex">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={clearAllFilters}
+                  className="h-10"
+                >
+                  {tProducts('filters.clear_filters')}
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Filters */}
+          {hasActiveFilters && (
+            <div className="mt-4">
+              <ProductsActiveFilters
+                title={tProducts('filters.active_filters')}
+                chips={activeFilterChips}
+                clearAllLabel={tProducts('filters.clear_all')}
+                onClearAll={clearAllFilters}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
+        <div className="grid gap-y-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-12 lg:items-start">
+          {/* Sidebar - Fixed on Left */}
+          <aside className="hidden lg:sticky lg:top-24 lg:block lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto pr-4">
+            <ProductsFiltersSidebar
+              clearLabel={tProducts('filters.clear_filters')}
+              categoryLabel={tProducts('filters.category_label')}
+              producerLabel={tProducts('filters.producer_label')}
+              tagLabel={tProducts('filters.tag_label')}
+              allCategoriesLabel={tProducts('filters.all_categories')}
+              allProducersLabel={tProducts('filters.all_producers')}
+              allTagsLabel={tProducts('filters.all_tags')}
+              showClear={hasActiveFilters}
+              onReset={clearAllFilters}
+              categoryOptions={categoryOptions}
+              producerOptions={producerOptions}
+              tagOptions={tagOptions}
+              category={initialQueryState.category}
+              producer={initialQueryState.producer}
+              tag={initialQueryState.tag}
+              onCategoryChange={(value) => updateQuery({ category: value })}
+              onProducerChange={(value) => updateQuery({ producer: value })}
+              onTagChange={(value) => updateQuery({ tag: value })}
+            />
+          </aside>
+
+          {/* Product Grid Area */}
+          <div className="min-w-0 space-y-4">
             {/* Product Count */}
             <div className="space-y-1">
               <p className="text-xs font-black uppercase tracking-wide text-muted-foreground">

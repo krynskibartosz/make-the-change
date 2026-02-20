@@ -176,7 +176,7 @@
 
     --transition-normal: 300ms;
 
-    --z-overlay: 30;
+    --z-overlay: 50;
   }
 
   .dark {

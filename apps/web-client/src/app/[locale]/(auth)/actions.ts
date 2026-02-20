@@ -6,6 +6,7 @@ import { getLocale } from 'next-intl/server'
 import { redirect } from '@/i18n/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { asString } from '@/lib/type-guards'
 
 export type AuthState = {
   error?: string
@@ -13,13 +14,17 @@ export type AuthState = {
   redirectUrl?: string
 }
 
+const getFormDataString = (formData: FormData, key: string): string => {
+  const value = formData.get(key)
+  return typeof value === 'string' ? asString(value) : ''
+}
+
 export async function login(_prevState: AuthState, formData: FormData): Promise<AuthState> {
   const supabase = await createClient()
-  const locale = await getLocale()
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const returnToRaw = formData.get('returnTo') as string | null
+  const email = getFormDataString(formData, 'email')
+  const password = getFormDataString(formData, 'password')
+  const returnToRaw = getFormDataString(formData, 'returnTo')
 
   if (!email || !password) {
     return { error: 'Email and password are required' }
@@ -46,11 +51,11 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
 export async function register(_prevState: AuthState, formData: FormData): Promise<AuthState> {
   const supabase = await createClient()
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const confirmPassword = formData.get('confirmPassword') as string
-  const firstName = formData.get('firstName') as string
-  const lastName = formData.get('lastName') as string
+  const email = getFormDataString(formData, 'email')
+  const password = getFormDataString(formData, 'password')
+  const confirmPassword = getFormDataString(formData, 'confirmPassword')
+  const firstName = getFormDataString(formData, 'firstName')
+  const lastName = getFormDataString(formData, 'lastName')
 
   if (!email || !password) {
     return { error: 'Email and password are required' }
@@ -127,7 +132,7 @@ export async function forgotPassword(
 ): Promise<AuthState> {
   const supabase = await createClient()
 
-  const email = formData.get('email') as string
+  const email = getFormDataString(formData, 'email')
 
   if (!email) {
     return { error: 'Email is required' }

@@ -2,7 +2,7 @@ import { Badge } from '@make-the-change/core/ui'
 import { Award, Package, Sparkles, Star } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { cn, formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
@@ -43,8 +43,32 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
       : t('card.in_stock') // Generic "In Stock" message
     : t('card.out_of_stock')
 
-  const productName = product.name_default || t('card.default_name')
-  const productDescription = product.description_default || ''
+  const productName = getLocalizedContent(
+    product.name_i18n,
+    locale,
+    product.name_default || t('card.default_name'),
+  )
+  const productDescription = getLocalizedContent(
+    product.description_i18n,
+    locale,
+    product.description_default || '',
+  )
+  const producerName = getLocalizedContent(
+    product.producer?.name_i18n,
+    locale,
+    product.producer?.name_default || 'Producer',
+  )
+  const producerDescription = getLocalizedContent(
+    product.producer?.description_i18n,
+    locale,
+    product.producer?.description_default || '',
+  )
+  const categoryName = getLocalizedContent(
+    product.category?.name_i18n,
+    locale,
+    product.category?.name_default || '',
+  )
+
   const mediaTransitionName = getEntityViewTransitionName('product', product.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('product', product.id, 'title')
 
@@ -72,11 +96,11 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                 {coverImage ? (
                   <img src={coverImage} alt={productName} className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/10 to-muted">
+                  <div className="flex h-full items-center justify-center bg-linear-to-br from-primary/10 to-muted">
                     <Package className="h-16 w-16 text-primary/50" />
                   </div>
                 )}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/30 via-transparent to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-marketing-overlay-dark/30 via-transparent to-transparent" />
               </div>
             </section>
 
@@ -94,13 +118,13 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                   {productName}
                 </h1>
                 <div className="flex flex-wrap gap-2">
-                  {product.category?.name_default && (
+                  {categoryName && (
                     <Badge
                       variant="outline"
                       className="border-primary/25 bg-primary/5 text-primary"
                     >
                       <Package className="mr-1 h-3.5 w-3.5" />
-                      {product.category.name_default}
+                      {categoryName}
                     </Badge>
                   )}
                   {/* Partner badge removed - duplicate info */}
@@ -137,22 +161,22 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                     {producerImage ? (
                       <img
                         src={producerImage}
-                        alt={product.producer.name_default || 'Producer'}
+                        alt={producerName}
                         className="h-14 w-14 rounded-xl object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
                       <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-105">
-                        {product.producer.name_default?.[0]?.toUpperCase() || 'P'}
+                        {producerName[0]?.toUpperCase() || 'P'}
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
                         <p className="truncate text-base font-bold text-foreground underline-offset-4 group-hover:underline">
-                          {product.producer.name_default || ''}
+                          {producerName}
                         </p>
                       </div>
                       <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                        {product.producer.description_default || ''}
+                        {producerDescription}
                       </p>
                     </div>
                   </div>
@@ -182,7 +206,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
         </div>
 
         <div className="relative shrink-0 border-t border-white/10 bg-background/40 p-4 backdrop-blur-xl sm:p-5">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-transparent to-background/5" />
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-linear-to-t from-transparent to-background/5" />
           <div className="grid items-end gap-3 md:grid-cols-[1fr_auto]">
             <div>
               <div className="flex items-baseline gap-4">
@@ -208,7 +232,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
               </div>
             </div>
 
-            <div className="flex w-full gap-2 md:w-[360px]">
+            <div className="flex w-full gap-2 md:w-90">
               <ProductDetailAddToCartButton
                 className="h-12 flex-1 rounded-xl text-base font-bold"
                 productId={product.id}

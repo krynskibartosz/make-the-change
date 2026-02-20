@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getStripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 const MobileSheetSchema = z.object({
   amount: z.number().min(50).max(99999999),
@@ -48,8 +49,8 @@ export async function POST(req: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    const profileMetadata = (profile?.metadata || {}) as Record<string, unknown>
-    let customerId = profileMetadata.stripe_customer_id as string | undefined
+    const profileMetadata = isRecord(profile?.metadata) ? profile.metadata : {}
+    let customerId = asString(profileMetadata.stripe_customer_id)
 
     if (!customerId) {
       const customer = await stripe.customers.create({

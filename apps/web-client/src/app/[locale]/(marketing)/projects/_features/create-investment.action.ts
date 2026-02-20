@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { getStripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 const CreateInvestmentSchema = z.object({
   projectId: z.string().uuid(),
@@ -16,6 +17,9 @@ export type CreateInvestmentInput = z.infer<typeof CreateInvestmentSchema>
 export type CreateInvestmentResult =
   | { investmentId: string; clientSecret: string; pointsEarned: number }
   | { errorCode: 'UNAUTHENTICATED' | 'INVALID' | 'UNKNOWN'; message: string }
+
+const isInvestmentType = (value: unknown): value is investment.InvestmentType =>
+  value === 'beehive' || value === 'olive_tree' || value === 'vineyard'
 
 export async function createInvestmentAction(
   input: CreateInvestmentInput,
@@ -41,7 +45,11 @@ export async function createInvestmentAction(
     return { errorCode: 'UNKNOWN', message: 'Projet introuvable.' }
   }
 
-  const type = project.type as investment.InvestmentType
+  if (!isInvestmentType(project.type)) {
+    return { errorCode: 'UNKNOWN', message: 'Type de projet invalide.' }
+  }
+
+  const type = project.type
   const rules = investment.getInvestmentRules(type)
   if (!rules) return { errorCode: 'UNKNOWN', message: 'Type de projet invalide.' }
 
@@ -87,9 +95,8 @@ export async function createInvestmentAction(
       .eq('id', user.id)
       .single()
 
-    const metadata = profile?.metadata as Record<string, unknown> | null | undefined
-    const customerIdValue = metadata?.stripe_customer_id
-    const customerId = typeof customerIdValue === 'string' ? customerIdValue : undefined
+    const metadata = isRecord(profile?.metadata) ? profile.metadata : null
+    const customerId = metadata ? asString(metadata.stripe_customer_id) || undefined : undefined
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Cents

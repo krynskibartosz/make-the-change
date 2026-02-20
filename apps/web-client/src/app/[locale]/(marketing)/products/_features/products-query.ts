@@ -14,14 +14,12 @@ export type ProductsPaginationData = {
   totalPages: number
 }
 
-type ProductsQueryLike = {
-  eq: (column: string, value: unknown) => ProductsQueryLike
-  contains: (
-    column: string,
-    value: string | readonly unknown[] | Record<string, unknown>,
-  ) => ProductsQueryLike
-  ilike: (column: string, pattern: string) => ProductsQueryLike
-  order: (column: string, options: { ascending: boolean }) => ProductsQueryLike
+type QueryLike<TQuery> = {
+  eq: (column: string, value: unknown) => TQuery
+  contains: (column: string, value: string | readonly unknown[] | Record<string, unknown>) => TQuery
+  ilike: (column: string, pattern: string) => TQuery
+  or: (filters: string) => TQuery
+  order: (column: string, options: { ascending: boolean }) => TQuery
 }
 
 export const getTotalPages = (totalItems: number, pageSize = PRODUCTS_PAGE_SIZE): number => {
@@ -57,11 +55,11 @@ export const toProductsPagination = (
   }
 }
 
-export const applyProductsFilters = <TQuery>(
+export const applyProductsFilters = <TQuery extends QueryLike<TQuery>>(
   query: TQuery,
   filters: ProductsServerFilters,
 ): TQuery => {
-  let nextQuery = query as ProductsQueryLike
+  let nextQuery = query
 
   if (filters.category) {
     nextQuery = nextQuery.eq('category_id', filters.category)
@@ -76,31 +74,32 @@ export const applyProductsFilters = <TQuery>(
   }
 
   if (filters.search.length >= 2) {
-    nextQuery = nextQuery.ilike('name_default', `%${filters.search}%`)
+    nextQuery = nextQuery.or(
+      `name_default.ilike.%${filters.search}%,name_i18n.ilike.%${filters.search}%`,
+    )
   }
 
-  return nextQuery as TQuery
+  return nextQuery
 }
 
-export const applyProductsSort = <TQuery>(query: TQuery, sort: ProductSort): TQuery => {
-  const sortableQuery = query as ProductsQueryLike
-
+export const applyProductsSort = <TQuery extends QueryLike<TQuery>>(
+  query: TQuery,
+  sort: ProductSort,
+): TQuery => {
   switch (sort) {
     case 'name_asc':
-      return sortableQuery.order('name_default', { ascending: true }) as TQuery
+      return query.order('name_default', { ascending: true })
     case 'name_desc':
-      return sortableQuery.order('name_default', { ascending: false }) as TQuery
+      return query.order('name_default', { ascending: false })
     case 'price_asc':
-      return sortableQuery
+      return query
         .order('price_points', { ascending: true })
-        .order('name_default', { ascending: true }) as TQuery
+        .order('name_default', { ascending: true })
     case 'price_desc':
-      return sortableQuery
+      return query
         .order('price_points', { ascending: false })
-        .order('name_default', { ascending: true }) as TQuery
+        .order('name_default', { ascending: true })
     default:
-      return sortableQuery
-        .order('featured', { ascending: false })
-        .order('created_at', { ascending: false }) as TQuery
+      return query.order('featured', { ascending: false }).order('created_at', { ascending: false })
   }
 }

@@ -1,3 +1,5 @@
+import { isRecord } from '@/lib/type-guards'
+
 export { cn } from '@make-the-change/core/shared/utils'
 
 export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
@@ -29,4 +31,25 @@ export const formatDate = (date: string | Date, locale = 'fr-FR'): string => {
     month: 'long',
     day: 'numeric',
   }).format(new Date(date))
+}
+
+export function getLocalizedContent(content: unknown, locale: string, fallback = ''): string {
+  if (!isRecord(content)) return fallback
+
+  const localValue = content[locale]
+  if (typeof localValue === 'string') {
+    return localValue
+  }
+
+  const frenchValue = content['fr']
+  if (typeof frenchValue === 'string') {
+    return frenchValue
+  }
+
+  const englishValue = content['en']
+  if (typeof englishValue === 'string') {
+    return englishValue
+  }
+
+  return fallback
 }

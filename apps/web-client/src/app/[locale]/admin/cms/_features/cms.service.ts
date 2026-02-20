@@ -1,5 +1,6 @@
 import 'server-only'
 import { createClient } from '@/lib/supabase/server'
+import { homePageContentSchema, mainMenuStructureSchema } from './cms.schemas'
 import type { HomePageContent, MainMenuStructure } from './types'
 
 export async function getMenu(slug: string): Promise<MainMenuStructure | null> {
@@ -20,7 +21,16 @@ export async function getMenu(slug: string): Promise<MainMenuStructure | null> {
       return null
     }
 
-    return data?.structure as MainMenuStructure
+    const parsed = mainMenuStructureSchema.safeParse(data?.structure)
+
+    if (!parsed.success) {
+      console.error(`Invalid menu ${slug} payload`, {
+        issues: parsed.error.issues,
+      })
+      return null
+    }
+
+    return parsed.data
   } catch (error) {
     console.error(`Unexpected error fetching menu ${slug}:`, error)
     return null
@@ -42,7 +52,16 @@ export async function getPageContent(slug: string): Promise<HomePageContent | nu
       return null
     }
 
-    return data?.sections as HomePageContent
+    const parsed = homePageContentSchema.safeParse(data?.sections)
+
+    if (!parsed.success) {
+      console.error(`Invalid page ${slug} payload`, {
+        issues: parsed.error.issues,
+      })
+      return null
+    }
+
+    return parsed.data
   } catch (error) {
     console.error(`Unexpected error fetching page ${slug}:`, error)
     return null

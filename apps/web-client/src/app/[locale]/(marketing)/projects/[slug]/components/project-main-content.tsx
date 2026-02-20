@@ -1,12 +1,14 @@
 import { Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { Leaf, Sparkles, TrendingUp } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { cn, formatCurrency } from '@/lib/utils'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { cn, formatCurrency, getLocalizedContent } from '@/lib/utils'
 
 type ProjectMainContentProject = {
   name_default: string
   description_default: string | null
+  description_i18n?: Record<string, string> | null
   long_description_default: string | null
+  long_description_i18n?: Record<string, string> | null
   images: string[] | null
   status: string | null
 }
@@ -25,8 +27,21 @@ export async function ProjectMainContent({
   targetBudget,
 }: ProjectMainContentProps) {
   const t = await getTranslations('projects')
+  const locale = await getLocale()
   const statusLabel =
     project.status === 'active' ? t('filter.status.active') : t('filter.status.completed')
+
+  const defaultDesc = project.long_description_default || project.description_default || ''
+  const localizedLongDesc = getLocalizedContent(
+    project.long_description_i18n,
+    locale,
+    project.long_description_default || '',
+  )
+  const projectDescription = getLocalizedContent(
+    project.description_i18n,
+    locale,
+    localizedLongDesc || defaultDesc,
+  )
 
   return (
     <div className="lg:col-span-8 space-y-8">
@@ -42,7 +57,7 @@ export async function ProjectMainContent({
 
             <div className="prose prose-lg max-w-none">
               <p className="whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground font-medium">
-                {project.long_description_default || project.description_default}
+                {projectDescription}
               </p>
             </div>
           </CardContent>

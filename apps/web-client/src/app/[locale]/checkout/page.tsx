@@ -3,6 +3,7 @@ import { CheckoutClient } from '@/app/[locale]/(marketing-no-footer)/checkout/_f
 import { SectionContainer } from '@/components/ui/section-container'
 import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { asNumber, isRecord } from '@/lib/type-guards'
 
 export default async function CheckoutPage() {
   const supabase = await createClient()
@@ -24,8 +25,8 @@ export default async function CheckoutPage() {
     .eq('id', user.id)
     .single()
 
-  const metadata = (profile?.metadata || {}) as Record<string, unknown>
-  const pointsBalance = Number((metadata.points_balance as number | undefined) ?? 0)
+  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
+  const pointsBalance = asNumber(metadata.points_balance, 0)
 
   const defaultAddress = {
     firstName: profile?.first_name || '',
@@ -39,8 +40,8 @@ export default async function CheckoutPage() {
   return (
     <section className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-muted/25">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-40 top-0 h-[440px] w-[440px] rounded-full bg-primary/10 blur-[100px]" />
-        <div className="absolute -right-40 bottom-0 h-[420px] w-[420px] rounded-full bg-marketing-positive-500/10 blur-[100px]" />
+        <div className="absolute -left-40 top-0 h-110 w-110 rounded-full bg-primary/10 blur-[100px]" />
+        <div className="absolute -right-40 bottom-0 h-105 w-105 rounded-full bg-marketing-positive-500/10 blur-[100px]" />
       </div>
 
       <SectionContainer size="lg" className="relative py-6 sm:py-10">

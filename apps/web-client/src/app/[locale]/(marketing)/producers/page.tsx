@@ -1,11 +1,10 @@
 import { Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { ArrowRight, MapPin, Tractor } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { PageHero } from '@/components/ui/page-hero'
-import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 type ProducerRow = {
   id: string
@@ -16,6 +15,28 @@ type ProducerRow = {
   address_country_code: string | null
   type: string | null
   description_default: string | null
+}
+
+const toProducerRow = (value: unknown): ProducerRow | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  if (!id) {
+    return null
+  }
+
+  return {
+    id,
+    slug: asString(value.slug) || null,
+    name_default: asString(value.name_default) || null,
+    images: value.images,
+    address_city: asString(value.address_city) || null,
+    address_country_code: asString(value.address_country_code) || null,
+    type: asString(value.type) || null,
+    description_default: asString(value.description_default) || null,
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -33,18 +54,29 @@ export default async function ProducersPage() {
   const t = await getTranslations('producers')
 
   const { data } = await supabase.from('public_producers').select('*').order('name_default')
-  const producers = (data ?? []) as ProducerRow[]
+  const producers = Array.isArray(data)
+    ? data
+      .map((entry) => toProducerRow(entry))
+      .filter((entry): entry is ProducerRow => entry !== null)
+    : []
 
   return (
-    <>
-      <PageHero
-        title={t('intro_title')}
-        description={t('intro_description')}
-        size="md"
-        variant="gradient"
-      />
-      <SectionContainer size="lg" className="pt-0 pb-20">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <section className="pb-12 pt-0 md:pb-16 md:pt-2">
+      {/* Page Hero Section */}
+      <div className="py-8 md:pb-12 md:pt-24">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+              {t('intro_title')}
+            </h1>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">{t('intro_description')}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
           {producers.map((producer) => {
             const hasValidSlug =
               typeof producer.slug === 'string' && producer.slug.trim().length > 0
@@ -108,13 +140,13 @@ export default async function ProducersPage() {
         </div>
 
         {producers.length === 0 && (
-          <div className="py-20 text-center">
+          <div className="py-20 text-center col-span-full">
             <Tractor className="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
             <h3 className="mt-4 text-lg font-semibold">{t('no_producers')}</h3>
             <p className="text-muted-foreground">{t('no_producers_desc')}</p>
           </div>
         )}
-      </SectionContainer>
-    </>
+      </div>
+    </section>
   )
 }

@@ -14,6 +14,8 @@ type HomePartnersSectionBaseProps = {
 
 type HomePartnersCarouselProps = HomePartnersSectionBaseProps & {
   mode?: 'carousel'
+  title: string
+  description: string
 }
 
 type HomePartnersEmptyProps = HomePartnersSectionBaseProps & {
@@ -32,7 +34,12 @@ const AUTO_SCROLL_RESUME_DELAY_MS = 3000
 const carouselButtonClassName =
   'absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card'
 
-function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCarouselProps) {
+function HomePartnersCarousel({
+  producers,
+  variant = 'default',
+  title,
+  description,
+}: HomePartnersCarouselProps) {
   const scrollContainerRef = useRef<HTMLUListElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
@@ -122,11 +129,8 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
     <section className={cn('py-16', variant === 'muted' && 'bg-muted/30')}>
       <div className="container mx-auto px-4">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">Nos Partenaires</h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Nous collaborons avec les meilleurs partenaires pour vous offrir des solutions
-            innovantes et durables
-          </p>
+          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">{title}</h2>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">{description}</p>
         </div>
 
         <div className="relative">
@@ -166,7 +170,7 @@ function HomePartnersCarousel({ producers, variant = 'default' }: HomePartnersCa
             onMouseLeave={() => setIsAutoScrolling(true)}
           >
             {duplicatedProducers.map((producer, index) => (
-              <li key={`${producer.id}-${index}`} className="flex-shrink-0">
+              <li key={`${producer.id}-${index}`} className="shrink-0">
                 <Link
                   href={`/producers/${producer.id}`}
                   className="group block h-32 w-64 cursor-pointer rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-all duration-300 hover:bg-card"
@@ -228,5 +232,12 @@ export const HomePartnersSection = (props: HomePartnersSectionProps) => {
       </section>
     )
 
-  return <HomePartnersCarousel producers={props.producers} variant={props.variant} />
+  return (
+    <HomePartnersCarousel
+      producers={props.producers}
+      variant={props.variant}
+      title={props.title}
+      description={props.description}
+    />
+  )
 }

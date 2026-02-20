@@ -30,10 +30,15 @@ const investmentStatusColors = {
   pending: 'default',
 } satisfies Record<InvestmentStatus, BadgeVariant>
 
+const isOrderStatus = (value: string): value is OrderStatus => value in orderStatusColors
+
+const isInvestmentStatus = (value: string): value is InvestmentStatus =>
+  value in investmentStatusColors
+
 export function getOrderStatusColor(status: string): BadgeVariant {
-  return orderStatusColors[status as OrderStatus] ?? 'secondary'
+  return isOrderStatus(status) ? orderStatusColors[status] : 'secondary'
 }
 
 export function getInvestmentStatusColor(status: string): BadgeVariant {
-  return investmentStatusColors[status as InvestmentStatus] ?? 'secondary'
+  return isInvestmentStatus(status) ? investmentStatusColors[status] : 'secondary'
 }

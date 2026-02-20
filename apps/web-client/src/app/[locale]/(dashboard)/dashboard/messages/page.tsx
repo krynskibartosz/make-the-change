@@ -3,6 +3,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { asString, isRecord } from '@/lib/type-guards'
 
 export default async function SentMessagesPage() {
   const supabase = await createClient()
@@ -37,7 +38,49 @@ export default async function SentMessagesPage() {
     producer: ProducerRef[] | ProducerRef | null
   }
 
-  const messages = (rawMessages ?? []) as ProducerMessageRow[]
+  const toProducerRef = (value: unknown): ProducerRef | null => {
+    if (!isRecord(value)) {
+      return null
+    }
+
+    return {
+      name: asString(value.name) || null,
+      slug: asString(value.slug) || null,
+    }
+  }
+
+  const toProducerMessageRow = (value: unknown): ProducerMessageRow | null => {
+    if (!isRecord(value)) {
+      return null
+    }
+
+    const id = asString(value.id)
+    const createdAt = asString(value.created_at)
+
+    if (!id || !createdAt) {
+      return null
+    }
+
+    const producerRaw = value.producer
+    const producer = Array.isArray(producerRaw)
+      ? toProducerRef(producerRaw[0])
+      : toProducerRef(producerRaw)
+
+    return {
+      id,
+      subject: asString(value.subject) || null,
+      message: asString(value.message) || null,
+      status: asString(value.status) || null,
+      created_at: createdAt,
+      producer,
+    }
+  }
+
+  const messages = Array.isArray(rawMessages)
+    ? rawMessages
+        .map((entry) => toProducerMessageRow(entry))
+        .filter((entry): entry is ProducerMessageRow => entry !== null)
+    : []
 
   return (
     <div className="container max-w-4xl py-12 px-4">

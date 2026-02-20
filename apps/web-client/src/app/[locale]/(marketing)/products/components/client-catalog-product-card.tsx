@@ -14,6 +14,7 @@ type ClientCatalogProduct = {
   stock_quantity?: number | null
   featured?: boolean | null
   image_url?: string | null
+  images?: string[] | null
 }
 
 type ClientCatalogProductCardProps = {
@@ -33,7 +34,12 @@ export const ClientCatalogProductCard = ({
   pointsLabel,
   viewLabel,
 }: ClientCatalogProductCardProps) => {
-  const imageUrl = sanitizeImageUrl(product.image_url)
+  const imageUrl =
+    sanitizeImageUrl(product.image_url) ||
+    (Array.isArray(product.images) && product.images.length > 0
+      ? sanitizeImageUrl(product.images[0])
+      : undefined)
+
   const badges = buildProductCardBadges({
     featured: product.featured,
     stockQuantity: product.stock_quantity,

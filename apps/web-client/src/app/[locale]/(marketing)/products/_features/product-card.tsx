@@ -4,19 +4,22 @@ import type { Json } from '@make-the-change/core/database-types'
 import { Button } from '@make-the-change/core/ui'
 import { ProductCard as SharedProductCard } from '@make-the-change/core/ui/next'
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { buildProductCardBadges } from '@/app/[locale]/(marketing)/products/_features/product-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getRandomProductImage } from '@/lib/placeholder-images'
+import { getLocalizedContent } from '@/lib/utils'
 
 export type ProductCardProduct = {
   id: string
   slug: string | null
   name_default: string | null
+  name_i18n?: Record<string, string> | null
   short_description_default: string | null
+  short_description_i18n?: Record<string, string> | null
   price_points: number | null
   price_eur_equivalent: number | null
   stock_quantity: number | null
@@ -57,9 +60,21 @@ const getFirstString = (value: unknown): string | null => {
 
 export function ProductCard({ product, className, priority = false }: ProductCardProps) {
   const t = useTranslations('products.card')
+  const locale = useLocale()
   const { addItem } = useCart()
   const { openCart, showSnackbar } = useCartUI()
   const [isAdding, setIsAdding] = useState(false)
+
+  const localizedName = getLocalizedContent(
+    product.name_i18n,
+    locale,
+    product.name_default || t('default_name'),
+  )
+  const localizedDescription = getLocalizedContent(
+    product.short_description_i18n,
+    locale,
+    product.short_description_default || t('default_description'),
+  )
 
   const isOutOfStock = product.stock_quantity !== null && product.stock_quantity <= 0
 
@@ -99,7 +114,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         productId: product.id,
         quantity: 1,
         snapshot: {
-          name: product.name_default || t('default_name'),
+          name: localizedName,
           slug: product.slug || '',
           pricePoints: Number(product.price_points || 0),
           priceEuros: product.price_eur_equivalent
@@ -128,11 +143,11 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       model={{
         id: product.id,
         href: `/products/${product.id}`,
-        title: product.name_default || t('default_name'),
-        description: product.short_description_default || t('default_description'),
+        title: localizedName,
+        description: localizedDescription,
         image: {
           src: mainImage,
-          alt: product.name_default || t('default_name'),
+          alt: localizedName,
         },
         imagePriority: priority,
         hoverImageSrc: secondaryImage !== mainImage ? secondaryImage : null,

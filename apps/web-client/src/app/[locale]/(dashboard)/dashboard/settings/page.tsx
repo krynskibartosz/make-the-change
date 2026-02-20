@@ -1,6 +1,8 @@
 import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { parseThemeConfig } from '@/lib/theme-config'
+import { asBoolean, asString, isRecord } from '@/lib/type-guards'
 import { SettingsClient } from './settings-client'
 
 export default async function SettingsPage() {
@@ -19,10 +21,12 @@ export default async function SettingsPage() {
     .eq('id', user.id)
     .single()
 
-  const metadata = (profile?.metadata || {}) as Record<string, unknown>
-  const publicProfile = Boolean(metadata.is_public_profile)
-  const notificationPrefs = (profile?.notification_preferences || {}) as Record<string, boolean>
-  const socialLinks = (profile?.social_links || {}) as Record<string, string>
+  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
+  const publicProfile = asBoolean(metadata.is_public_profile, false)
+  const notificationPrefs = isRecord(profile?.notification_preferences)
+    ? profile.notification_preferences
+    : {}
+  const socialLinks = isRecord(profile?.social_links) ? profile.social_links : {}
   const requestedLanguage = profile?.language_code || defaultLocale
   const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
 
@@ -47,16 +51,16 @@ export default async function SettingsPage() {
         publicProfile,
         marketingConsent,
         notificationPrefs: {
-          email: notificationPrefs.email ?? true,
-          push: notificationPrefs.push ?? false,
-          monthly_report: notificationPrefs.monthly_report ?? true,
+          email: asBoolean(notificationPrefs.email, true),
+          push: asBoolean(notificationPrefs.push, false),
+          monthly_report: asBoolean(notificationPrefs.monthly_report, true),
         },
         socialLinks: {
-          linkedin: socialLinks.linkedin || '',
-          instagram: socialLinks.instagram || '',
-          twitter: socialLinks.twitter || '',
+          linkedin: asString(socialLinks.linkedin),
+          instagram: asString(socialLinks.instagram),
+          twitter: asString(socialLinks.twitter),
         },
-        themeConfig: profile?.theme_config || null,
+        themeConfig: parseThemeConfig(profile?.theme_config),
       }}
     />
   )

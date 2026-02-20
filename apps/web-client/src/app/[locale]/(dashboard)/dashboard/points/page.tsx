@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { asNumber, isRecord } from '@/lib/type-guards'
 import { formatDate, formatPoints } from '@/lib/utils'
 
 export default async function PointsPage() {
@@ -24,8 +25,8 @@ export default async function PointsPage() {
     .eq('id', user.id)
     .single()
 
-  const metadata = (profile?.metadata || {}) as Record<string, unknown>
-  const walletBalance = Number((metadata.points_balance as number | undefined) ?? 0)
+  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
+  const walletBalance = asNumber(metadata.points_balance, 0)
 
   // Fetch orders to deduce points history using RLS
   const { data: userOrders } = await supabase

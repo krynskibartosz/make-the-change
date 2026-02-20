@@ -1,8 +1,5 @@
-import { Sparkles } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import type { Species } from '@/app/[locale]/(marketing)/biodex/_features/types'
-import { PageHero } from '@/components/ui/page-hero'
-import { SectionContainer } from '@/components/ui/section-container'
+import { toSpecies } from '@/app/[locale]/(marketing)/biodex/_features/species-parsers'
 import { createClient } from '@/lib/supabase/server'
 import { BiodexClient } from './biodex-client'
 
@@ -30,29 +27,17 @@ export default async function BiodexPage() {
     console.error('Error fetching species:', error)
   }
 
+  const speciesList = Array.isArray(species)
+    ? species
+      .map((entry) => toSpecies(entry))
+      .filter((entry): entry is NonNullable<ReturnType<typeof toSpecies>> => entry !== null)
+    : []
+
   return (
     <>
-      <PageHero
-        badge={
-          <span className="flex items-center gap-2">
-            <Sparkles className="h-3 w-3 animate-pulse text-primary" />
-            {t('badge')}
-          </span>
-        }
-        title={t('title')}
-        description={t('description')}
-        size="lg"
-        variant="gradient"
-      >
-        <div className="absolute left-0 top-0 -z-10 h-full w-full overflow-hidden opacity-20">
-          <div className="absolute left-[-5%] top-[-10%] h-[40%] w-[40%] rounded-full bg-marketing-positive-500/20 blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-5%] h-[30%] w-[30%] rounded-full bg-primary/20 blur-[100px]" />
-        </div>
-      </PageHero>
-
-      <SectionContainer size="lg" className="relative -mt-12 z-20">
-        <BiodexClient species={(species || []) as Species[]} />
-      </SectionContainer>
+      <section className="pb-12 pt-0 md:pb-16 md:pt-2">
+        <BiodexClient species={speciesList} />
+      </section>
     </>
   )
 }

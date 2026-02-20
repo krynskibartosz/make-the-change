@@ -16,12 +16,12 @@ export async function getLeaderboardTop(limit = 50): Promise<LeaderboardEntry[]>
 
   return data
     .filter(
-      (entry): entry is typeof entry & { id: string } =>
+      (entry): entry is typeof entry & { id: string; rank: number } =>
         typeof entry.rank === 'number' && entry.rank > 0 && typeof entry.id === 'string',
     )
     .map((entry) => ({
       id: entry.id,
-      rank: entry.rank as number,
+      rank: entry.rank,
       displayName: entry.display_name || 'Utilisateur',
       points: entry.points_balance || 0,
       avatarUrl: entry.avatar_url,

@@ -6,7 +6,6 @@ import {
   AvatarImage,
   Button,
   NavigationMenu,
-  NavigationMenuBackdrop,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
@@ -20,6 +19,7 @@ import { ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CartButton } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-button'
 import type { MainMenuStructure } from '@/app/[locale]/admin/cms/_features/types'
 import { MegaMenu } from '@/components/layout/mega-menu'
@@ -33,10 +33,9 @@ import { cn } from '@/lib/utils'
 type HeaderElementProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>
 type AppLinkProps = ComponentProps<typeof Link>
 type HeaderNavigationItem = {
-  id: 'home' | 'projects' | 'products' | 'discover'
-  name: 'home' | 'projects' | 'products' | 'discover'
+  id: 'projects' | 'products' | 'discover'
   href: AppLinkProps['href'] | '#'
-  label?: string
+  label: string
   mega?: MainMenuStructure[keyof MainMenuStructure]
 }
 
@@ -45,41 +44,108 @@ type HeaderProps = HeaderElementProps & {
   menuData?: MainMenuStructure | null
 }
 
+const toCategoryQueryToken = (value: string): string =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
 export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
   const t = useTranslations('navigation')
   const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const [isClient, setIsClient] = useState(false)
   const navigationMenuRef = useRef<HTMLElement | null>(null)
   const { isVisible } = useScrollHeader()
 
   const discoverMenu = useDiscoverMenu()
+  const investMenu = useMemo(() => {
+    const projectsMenu = menuData?.projects
+    if (!projectsMenu) return undefined
+
+    const categoryItems =
+      projectsMenu.sections.find((section) => section.items.length > 0)?.items ??
+      projectsMenu.sections.flatMap((section) => section.items)
+
+    const normalizedItems = categoryItems.map((item) => ({
+      ...item,
+      href: '/projects',
+    }))
+
+    return {
+      ...projectsMenu,
+      eyebrow: undefined,
+      title: '',
+      sections: [
+        {
+          title: '',
+          items: normalizedItems,
+        },
+      ],
+    } satisfies MainMenuStructure['projects']
+  }, [menuData?.projects])
+  const shopMenu = useMemo(() => {
+    const productsMenu = menuData?.products
+    if (!productsMenu) return undefined
+
+    const categoryItems =
+      productsMenu.sections.find((section) => section.items.length > 0)?.items ??
+      productsMenu.sections.flatMap((section) => section.items)
+
+    const normalizedItems = categoryItems.map((item) => ({
+      ...item,
+      href: item.href.includes('category=')
+        ? item.href
+        : (() => {
+          const categoryToken = toCategoryQueryToken(item.title)
+          if (!categoryToken) return '/products'
+          return `/products?category=${encodeURIComponent(categoryToken)}`
+        })(),
+    }))
+
+    return {
+      ...productsMenu,
+      eyebrow: undefined,
+      title: '',
+      sections: [
+        {
+          title: '',
+          items: normalizedItems,
+        },
+      ],
+    } satisfies MainMenuStructure['products']
+  }, [menuData?.products])
 
   const navigation = useMemo(() => {
     return [
-      { id: 'home', name: 'home', href: '/' },
       {
         id: 'projects',
-        name: 'projects',
         href: '/projects',
-        mega: menuData?.projects,
+        label: t('invest'),
+        mega: investMenu,
       },
       {
         id: 'products',
-        name: 'products',
         href: '/products',
-        mega: menuData?.products,
+        label: t('shop'),
+        mega: shopMenu,
       },
       {
         id: 'discover',
-        name: 'discover',
         href: '#',
         label: t('discover'),
         mega: discoverMenu,
       },
     ] satisfies HeaderNavigationItem[]
-  }, [menuData, t, discoverMenu])
+  }, [investMenu, shopMenu, t, discoverMenu])
 
   const closeMegaMenu = useCallback(() => setActiveMenu(null), [])
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     if (!pathname) return
@@ -114,104 +180,119 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
     <header
       {...rest}
       className={cn(
-        'hidden md:block fixed top-0 left-0 right-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 transition-all duration-300 ease-in-out',
-        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0',
+        'hidden md:block fixed left-0 right-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 transition-all duration-300 ease-in-out',
+        isVisible ? 'top-0 opacity-100' : '-top-20 opacity-0',
         className,
       )}
-      style={{
-        transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
-        opacity: isVisible ? 1 : 0,
-      }}
     >
-      <div className="container relative mx-auto flex h-16 items-center justify-between px-4">
+      <div className="w-full max-w-[1920px] relative mx-auto flex h-16 items-center justify-between px-4 md:px-8 lg:px-12">
         {/* Logo */}
-        <Link href="/" className="flex cursor-pointer items-center gap-3">
+        <Link
+          href="/"
+          className="flex cursor-pointer items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        >
           <Logo variant="icon" height={40} width={40} className="h-10" />
           <span className="text-xl font-bold text-foreground">Make the Change</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <NavigationMenu
-          ref={navigationMenuRef}
-          aria-label="Navigation principale"
-          className="relative hidden md:flex"
-          value={activeMenu}
-          delay={0}
-          closeDelay={0}
-          onValueChange={(value, eventDetails) => {
-            if (eventDetails.reason === 'trigger-hover') return
-            const nextValue = typeof value === 'string' ? value : null
-            if (eventDetails.reason === 'trigger-press' && nextValue === activeMenu) {
-              setActiveMenu(null)
-              return
-            }
-            setActiveMenu(nextValue)
-          }}
-        >
-          <NavigationMenuList className="items-center gap-1">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-              const label = item.label ?? t(item.name)
-              if (item.mega) {
-                const isMegaOpen = activeMenu === item.id
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 hidden items-center justify-center md:flex">
+          <NavigationMenu
+            ref={navigationMenuRef}
+            aria-label="Navigation principale"
+            className="pointer-events-auto relative z-10 flex items-center"
+            value={activeMenu}
+            delay={0}
+            closeDelay={0}
+            onValueChange={(value, eventDetails) => {
+              if (eventDetails.reason === 'trigger-hover') return
+              const nextValue = typeof value === 'string' ? value : null
+              if (eventDetails.reason === 'trigger-press' && nextValue === activeMenu) {
+                setActiveMenu(null)
+                return
+              }
+              setActiveMenu(nextValue)
+            }}
+          >
+            <NavigationMenuList className="items-center gap-1">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+                const label = item.label
+                if (item.mega) {
+                  const isMegaOpen = activeMenu === item.id
+                  return (
+                    <NavigationMenuItem key={item.id} value={item.id}>
+                      <NavigationMenuTrigger
+                        className={cn(
+                          'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60',
+                          (isActive || isMegaOpen) && 'bg-accent text-accent-foreground',
+                        )}
+                        onClick={(event) => {
+                          if (!isMegaOpen) return
+                          event.preventDefault()
+                          closeMegaMenu()
+                        }}
+                        onKeyDown={(event) => {
+                          if (!isMegaOpen) return
+                          if (event.key !== 'Enter' && event.key !== ' ') return
+                          event.preventDefault()
+                          closeMegaMenu()
+                        }}
+                      >
+                        {label}
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent className="pointer-events-none w-full border-0 bg-transparent p-0 shadow-none">
+                        <MegaMenu content={item.mega} onClose={closeMegaMenu} />
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  )
+                }
                 return (
-                  <NavigationMenuItem key={item.id} value={item.id}>
-                    <NavigationMenuTrigger
+                  <NavigationMenuItem key={item.id}>
+                    <Link
+                      href={item.href}
                       className={cn(
-                        'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                        (isActive || isMegaOpen) && 'bg-accent text-accent-foreground',
+                        'cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60',
+                        isActive && 'bg-accent text-accent-foreground',
                       )}
-                      onClick={(event) => {
-                        if (!isMegaOpen) return
-                        event.preventDefault()
-                        closeMegaMenu()
-                      }}
-                      onKeyDown={(event) => {
-                        if (!isMegaOpen) return
-                        if (event.key !== 'Enter' && event.key !== ' ') return
-                        event.preventDefault()
-                        closeMegaMenu()
-                      }}
+                      onMouseEnter={closeMegaMenu}
+                      onFocus={closeMegaMenu}
                     >
                       {label}
-                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent className="pointer-events-none w-full border-0 bg-transparent p-0 shadow-none">
-                      <MegaMenu content={item.mega} onClose={closeMegaMenu} />
-                    </NavigationMenuContent>
+                    </Link>
                   </NavigationMenuItem>
                 )
-              }
-              return (
-                <NavigationMenuItem key={item.id}>
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      'cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                      isActive && 'bg-accent text-accent-foreground',
-                    )}
-                    onMouseEnter={closeMegaMenu}
-                    onFocus={closeMegaMenu}
-                  >
-                    {label}
-                  </Link>
-                </NavigationMenuItem>
-              )
-            })}
-          </NavigationMenuList>
-          <NavigationMenuViewport className="fixed inset-x-0 top-[4.5rem] z-50 px-4" />
-          <NavigationMenuBackdrop
-            className="fixed inset-0 top-16 z-40 bg-gradient-to-b from-black/5 to-black/15 backdrop-blur-[3px] transition-opacity duration-200 data-closed:opacity-0 data-open:opacity-100 dark:from-black/35 dark:to-black/65"
-            onPointerDown={closeMegaMenu}
-            onClick={closeMegaMenu}
-          />
-        </NavigationMenu>
+              })}
+            </NavigationMenuList>
+            <NavigationMenuViewport className="fixed inset-x-0 top-18 z-50 px-4" />
+            {activeMenu &&
+              isClient &&
+              createPortal(
+                <div
+                  className="fixed inset-0 top-16 z-40 bg-background/82 backdrop-blur-2xl supports-backdrop-filter:bg-background/74 transition-opacity duration-200"
+                  style={{
+                    backdropFilter: 'blur(24px) saturate(125%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(125%)',
+                  }}
+                  onPointerDown={closeMegaMenu}
+                  onClick={closeMegaMenu}
+                />,
+                document.body,
+              )}
+          </NavigationMenu>
+        </div>
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-2">
           {user ? (
             <div className="hidden items-center gap-2 sm:flex">
-              <Button asChild variant="ghost" size="sm" className="h-11 cursor-pointer gap-2 px-2.5">
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="h-11 cursor-pointer gap-2 px-2.5"
+              >
                 <Link href="/dashboard" className="cursor-pointer">
                   <Avatar className="h-8 w-8 ring-1 ring-border">
                     <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
@@ -265,4 +346,4 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       </div>
     </header>
   )
-};
+}

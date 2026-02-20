@@ -34,13 +34,13 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     {
       href: '/products',
       icon: ShoppingBag,
-      label: t('products'),
+      label: t('shop'),
       isActive: isProducts,
     },
     {
       href: '/projects',
       icon: PiggyBank,
-      label: t('projects'),
+      label: t('invest'),
       isActive: isProjects,
     },
     user

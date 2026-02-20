@@ -7,8 +7,8 @@ import { useParams, usePathname } from 'next/navigation'
 
 export function SettingsNav() {
   const pathname = usePathname()
-  const params = useParams()
-  const locale = params.locale as string
+  const params = useParams<{ locale?: string | string[] }>()
+  const locale = Array.isArray(params.locale) ? (params.locale[0] ?? '') : (params.locale ?? '')
 
   const items = [
     {

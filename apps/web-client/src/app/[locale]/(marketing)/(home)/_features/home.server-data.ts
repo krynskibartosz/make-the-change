@@ -6,6 +6,7 @@ import type { ProductCardProduct } from '@/app/[locale]/(marketing)/products/_fe
 import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { createClient } from '@/lib/supabase/server'
+import { isRecord } from '@/lib/type-guards'
 import type { DataState, HomeFeaturedProject, HomePartnerProducer } from './home.types'
 
 type AsyncResult<T> = {
@@ -102,6 +103,18 @@ const logUnknownState = (label: string, state: DataState<unknown>) => {
   }
 }
 
+const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      (entry): entry is [string, string] => typeof entry[1] === 'string',
+    ),
+  )
+}
+
 export async function getHomeServerData(): Promise<HomeServerData> {
   const supabase = await createClient()
 
@@ -123,7 +136,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .schema('investment')
     .from('projects')
     .select(
-      'id,slug,name_default,description_default,hero_image_url,target_budget,current_funding,status,featured',
+      'id,slug,name_default,name_i18n,description_default,description_i18n,hero_image_url,target_budget,current_funding,status,featured',
     )
     .eq('featured', true)
     .limit(3)
@@ -133,7 +146,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .schema('commerce')
     .from('products')
     .select(
-      'id,slug,name_default,short_description_default,price_points,price_eur_equivalent,stock_quantity,featured,fulfillment_method,metadata,images,tags',
+      'id,slug,name_default,name_i18n,short_description_default,short_description_i18n,price_points,price_eur_equivalent,stock_quantity,featured,fulfillment_method,metadata,images,tags',
     )
     .eq('featured', true)
     .limit(4)
@@ -189,7 +202,9 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       id: project.id,
       slug: project.slug,
       name_default: project.name_default,
+      name_i18n: toLocalizedRecord(project.name_i18n),
       description_default: project.description_default,
+      description_i18n: toLocalizedRecord(project.description_i18n),
       hero_image_url: sanitizeImageUrl(project.hero_image_url),
       target_budget: project.target_budget,
       current_funding: project.current_funding,
@@ -204,7 +219,9 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       id: product.id,
       slug: product.slug,
       name_default: product.name_default,
+      name_i18n: toLocalizedRecord(product.name_i18n),
       short_description_default: product.short_description_default,
+      short_description_i18n: toLocalizedRecord(product.short_description_i18n),
       price_points: product.price_points,
       price_eur_equivalent: product.price_eur_equivalent,
       stock_quantity: product.stock_quantity,

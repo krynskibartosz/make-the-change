@@ -35,7 +35,7 @@ import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
   stockQuantity != null && stockQuantity <= 0
 
- const CartPage = () => {
+const CartPage = () => {
   const t = useTranslations('checkout')
   const tCommon = useTranslations('common')
   const router = useRouter()
@@ -311,10 +311,7 @@ const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
               // Loading State
               <div className="space-y-4 animate-pulse">
                 {[1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="h-32 rounded-4xl bg-muted/50 border border-border/50"
-                  />
+                  <div key={i} className="h-32 rounded-4xl bg-muted/50 border border-border/50" />
                 ))}
               </div>
             ) : itemsCount === 0 ? (
@@ -599,6 +596,6 @@ const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
       </div>
     </div>
   )
-};
+}
 
 export default CartPage

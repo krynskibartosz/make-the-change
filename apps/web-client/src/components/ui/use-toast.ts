@@ -21,7 +21,7 @@ export type ToastInput = {
 }
 
 export type ManagedToast = ReturnType<typeof useToastManager>['toasts'][number] & {
-  data?: ToastData
+  data?: unknown
 }
 
 export const toastManager = createToastManager()
@@ -77,7 +77,7 @@ export function useToast() {
   }
 
   return {
-    toasts: toasts as ManagedToast[],
+    toasts,
     toast,
     dismiss,
   }

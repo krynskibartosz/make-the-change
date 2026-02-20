@@ -15,9 +15,9 @@ type PageHeroLayoutProps = Omit<SectionElementProps, 'children'> & {
   variant?: PageHeroVariant
 }
 
-type PageHeroSlotProps = PropsWithChildren<Omit<DivElementProps, 'children'>> 
+type PageHeroSlotProps = PropsWithChildren<Omit<DivElementProps, 'children'>>
 
-type PageHeroTitleProps = Omit<HeadingElementProps, 'children'>
+type PageHeroTitleProps = PropsWithChildren<Omit<HeadingElementProps, 'children'>>
 
 type PageHeroDescriptionProps = Omit<ParagraphElementProps, 'children'> & {
   children?: ReactNode
@@ -59,7 +59,7 @@ const PageHeroLayout = ({
       className,
     )}
   >
-    <div className="container relative z-10 mx-auto flex flex-col items-center px-4 text-center">
+    <div className="w-full max-w-[1920px] relative z-10 mx-auto flex flex-col items-center px-4 md:px-8 lg:px-12 text-center">
       {children}
     </div>
   </section>
@@ -71,7 +71,7 @@ const PageHeroBadge = ({ children, className, ...rest }: PageHeroSlotProps) => (
   </div>
 )
 
-const PageHeroTitle = ({ children, className, ...rest }: PropsWithChildren<PageHeroTitleProps>) => (
+const PageHeroTitle = ({ children, className, ...rest }: PageHeroTitleProps) => (
   <h1
     {...rest}
     className={cn(

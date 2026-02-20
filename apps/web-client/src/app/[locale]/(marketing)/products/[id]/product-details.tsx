@@ -13,13 +13,13 @@ import {
   Star,
 } from 'lucide-react'
 import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing-cta-band'
 import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { FloatingActionButtons, ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
@@ -36,6 +36,7 @@ export async function ProductDetails({
   includeStructuredData = true,
 }: ProductDetailsProps) {
   const t = await getTranslations('products')
+  const locale = await getLocale()
 
   // Determine cover image using image_url from public_products view
   const coverImage =
@@ -59,8 +60,29 @@ export async function ProductDetails({
   const stockStatus = inStock
     ? t('detail_page.stock_available', { count: product.stock_quantity || 0 })
     : t('card.out_of_stock')
-  const productName = product.name_default || ''
-  const productDescription = product.description_default || ''
+
+  const productName = getLocalizedContent(product.name_i18n, locale, product.name_default || '')
+  const productDescription = getLocalizedContent(
+    product.description_i18n,
+    locale,
+    product.description_default || '',
+  )
+  const producerName = getLocalizedContent(
+    product.producer?.name_i18n,
+    locale,
+    product.producer?.name_default || 'Make the Change',
+  )
+  const producerDescription = getLocalizedContent(
+    product.producer?.description_i18n,
+    locale,
+    product.producer?.description_default || '',
+  )
+  const categoryName = getLocalizedContent(
+    product.category?.name_i18n,
+    locale,
+    product.category?.name_default || '',
+  )
+
   const mediaTransitionName = getEntityViewTransitionName('product', product.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('product', product.id, 'title')
   const parsedPriceEuros =
@@ -77,7 +99,7 @@ export async function ProductDetails({
     sku: product.id,
     brand: {
       '@type': 'Brand',
-      name: product.producer?.name_default || 'Make the Change',
+      name: producerName,
     },
     offers: {
       '@type': 'Offer',
@@ -138,13 +160,13 @@ export async function ProductDetails({
               {product.category && (
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
                   <Package className="h-4 w-4 text-primary" />
-                  <span className="font-medium">{product.category?.name_default || ''}</span>
+                  <span className="font-medium">{categoryName}</span>
                 </div>
               )}
               {product.producer && (
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border/50">
                   <Building2 className="h-4 w-4 text-primary" />
-                  <span className="font-medium">{product.producer?.name_default || ''}</span>
+                  <span className="font-medium">{producerName}</span>
                 </div>
               )}
               {product.featured && (
@@ -239,7 +261,7 @@ export async function ProductDetails({
 
                 <div className="prose prose-lg max-w-none">
                   <p className="whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground font-medium">
-                    {product.description_default}
+                    {productDescription}
                   </p>
                 </div>
               </CardContent>
@@ -313,22 +335,22 @@ export async function ProductDetails({
                           <div className="h-16 w-16 rounded-2xl overflow-hidden bg-muted shrink-0 border border-border/50 group-hover:scale-110 transition-transform">
                             <Image
                               src={producerImage}
-                              alt={product.producer?.name_default || 'Producer'}
+                              alt={producerName}
                               fill
                               className="object-cover"
                             />
                           </div>
                         ) : (
                           <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary font-bold shrink-0 text-xl">
-                            {product.producer?.name_default?.[0]?.toUpperCase() || 'P'}
+                            {producerName[0]?.toUpperCase() || 'P'}
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
                           <div className="font-black text-xl leading-tight mb-2">
-                            {product.producer?.name_default || ''}
+                            {producerName}
                           </div>
                           <div className="text-sm text-muted-foreground line-clamp-3 leading-relaxed mb-3">
-                            {product.producer?.description_default || ''}
+                            {producerDescription}
                           </div>
                           {product.producer.address_city && (
                             <div className="text-xs text-muted-foreground mb-2">
@@ -453,9 +475,7 @@ export async function ProductDetails({
         />
       )}
 
-      {includeStructuredData && (
-        <script type="application/ld+json">{structuredDataJson}</script>
-      )}
+      {includeStructuredData && <script type="application/ld+json">{structuredDataJson}</script>}
     </>
   )
 }

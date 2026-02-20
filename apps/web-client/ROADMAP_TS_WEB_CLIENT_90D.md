@@ -245,3 +245,30 @@ Critère d’acceptation global:
 4. Scope externe autorisé: uniquement blocages minimaux (`packages/core`).
 5. Priorité de travail: strict type safety d’abord, patterns ensuite, puis SEO/Supabase gouvernance.
 6. Politique de refactor: incrémentale, mesurée par KPI, sans big-bang.
+
+### D. Playbook de refactor TS (run mode)
+1. Toujours commencer par une baseline locale:
+- `pnpm --filter @make-the-change/web-client type-check`
+- `pnpm --filter @make-the-change/web-client lint`
+- `pnpm --filter @make-the-change/web-client exec tsc --noEmit --noUncheckedIndexedAccess`
+- `pnpm --filter @make-the-change/web-client ts:metrics`
+2. Corriger d’abord les erreurs de sûreté type (`TS*`) avant le style/format.
+3. Après chaque lot:
+- relancer les 3 gates statiques,
+- puis relancer `ts:metrics:check`.
+4. Éviter les régressions:
+- ne pas introduire `React.FC`, `as unknown as`, `dangerouslySetInnerHTML`,
+- préférer `satisfies`/`ComponentProps*`/types utilitaires uniquement sur cas justifiés.
+5. Pour toute dépendance au schéma Supabase:
+- vérifier `pnpm --filter @make-the-change/core db:types:check` (si secrets disponibles),
+- régénérer en cas de dérive confirmée.
+
+### E. Backlog maintenance trimestrielle
+1. Passe KPI mensuelle:
+- comparaison tendances `ComponentProps*`, `satisfies`, utilitaires TS.
+2. Passe “strictness”:
+- vérifier qu’aucune règle TS stricte n’a été contournée.
+3. Passe sécurité front:
+- vérifier les scripts JSON-LD et l’absence de réintroduction `dangerouslySetInnerHTML`.
+4. Passe Supabase:
+- valider le drift check CI et la cohérence des types DB versionnés.

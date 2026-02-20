@@ -78,24 +78,21 @@ const SelectContent = forwardRef<
   <Select.Portal>
     <Select.Positioner
       alignItemWithTrigger={position !== 'popper'}
-      className={`z-[var(--z-overlay)]${
-        position === 'popper'
+      className={`z-[var(--z-overlay)]${position === 'popper'
           ? ' data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2'
           : ''
-      }`}
+        }`}
     >
       <Select.Popup
         ref={ref}
-        className={`relative max-h-96 min-w-[12rem] overflow-hidden rounded-[var(--radius-overlay)] border border-[hsl(var(--border)/0.4)] bg-background/98 backdrop-blur-xl text-foreground shadow-[var(--shadow-dialog)] shadow-primary/8 data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[open]:duration-300 data-[closed]:duration-200${
-          className ? ` ${className}` : ''
-        }`}
+        className={`relative max-h-96 min-w-[12rem] overflow-hidden rounded-xl border border-border bg-background backdrop-blur-xl text-foreground shadow-xl shadow-primary/8 data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0 data-[closed]:zoom-out-95 data-[open]:zoom-in-95 data-[open]:duration-300 data-[closed]:duration-200${className ? ` ${className}` : ''
+          }`}
         {...props}
       >
         <SelectScrollUpButton />
         <Select.List
-          className={`p-[var(--density-spacing-sm)]${
-            position === 'popper' ? ' w-full min-w-[var(--anchor-width)]' : ''
-          }`}
+          className={`p-[var(--density-spacing-sm)]${position === 'popper' ? ' w-full min-w-[var(--anchor-width)]' : ''
+            }`}
         >
           {children}
         </Select.List>
@@ -112,9 +109,8 @@ const SelectLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <Select.GroupLabel
     ref={ref}
-    className={`py-[var(--density-spacing-sm)] pl-10 pr-[var(--density-spacing-sm)] text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider leading-tight${
-      className ? ` ${className}` : ''
-    }`}
+    className={`py-[var(--density-spacing-sm)] pl-10 pr-[var(--density-spacing-sm)] text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider leading-tight${className ? ` ${className}` : ''
+      }`}
     {...props}
   />
 ))
@@ -126,9 +122,8 @@ const SelectItem = forwardRef<
 >(({ className, children, ...props }, ref) => (
   <Select.Item
     ref={ref}
-    className={`relative flex w-full cursor-pointer select-none items-center rounded-[var(--radius-control)] py-[var(--density-spacing-sm)] pl-10 pr-[var(--density-spacing-sm)] text-sm font-medium text-foreground leading-relaxed tracking-wide outline-none will-change-transform transition-all duration-[var(--transition-normal)] ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-gradient-to-r hover:from-primary/8 hover:to-accent/4 hover:text-foreground hover:scale-[1.02] hover:shadow-sm data-[highlighted]:bg-primary/10 data-[highlighted]:text-foreground data-[highlighted]:scale-[1.02] data-[highlighted]:shadow-[var(--shadow-surface)] data-[highlighted]:shadow-primary/10 data-[selected]:bg-primary/15 data-[selected]:text-primary data-[selected]:font-semibold data-[selected]:shadow-sm data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[disabled]:hover:scale-100 data-[disabled]:hover:bg-transparent${
-      className ? ` ${className}` : ''
-    }`}
+    className={`relative flex w-full cursor-pointer select-none items-center rounded-[var(--radius-control)] py-[var(--density-spacing-sm)] pl-10 pr-[var(--density-spacing-sm)] text-sm font-medium text-foreground leading-relaxed tracking-wide outline-none will-change-transform transition-all duration-[var(--transition-normal)] ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-gradient-to-r hover:from-primary/8 hover:to-accent/4 hover:text-foreground hover:scale-[1.02] hover:shadow-sm data-[highlighted]:bg-primary/10 data-[highlighted]:text-foreground data-[highlighted]:scale-[1.02] data-[highlighted]:shadow-[var(--shadow-surface)] data-[highlighted]:shadow-primary/10 data-[selected]:bg-primary/15 data-[selected]:text-primary data-[selected]:font-semibold data-[selected]:shadow-sm data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[disabled]:hover:scale-100 data-[disabled]:hover:bg-transparent${className ? ` ${className}` : ''
+      }`}
     {...props}
   >
     <span className="absolute left-3 flex h-4 w-4 items-center justify-center">
@@ -147,9 +142,8 @@ const SelectSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <Select.Separator
     ref={ref}
-    className={`-mx-[var(--density-spacing-sm)] my-[var(--density-spacing-sm)] h-px bg-gradient-to-r from-transparent via-border/60 to-transparent${
-      className ? ` ${className}` : ''
-    }`}
+    className={`-mx-[var(--density-spacing-sm)] my-[var(--density-spacing-sm)] h-px bg-gradient-to-r from-transparent via-border/60 to-transparent${className ? ` ${className}` : ''
+      }`}
     {...props}
   />
 ))

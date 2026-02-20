@@ -1,12 +1,14 @@
+import type { Locale } from '@make-the-change/core/i18n'
+import { defaultLocale, isLocale } from '@make-the-change/core/i18n'
 import { Badge, Button } from '@make-the-change/core/ui'
 import { ArrowLeft, User } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { getBlogPostBySlug } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
 import { RenderTipTapContent } from '@/app/[locale]/(marketing)/blog/_features/content/render-tiptap-content'
 import { Link } from '@/i18n/navigation'
-import { formatDate } from '@/lib/utils'
+import { formatDate, getLocalizedContent } from '@/lib/utils'
 
 export async function generateMetadata({
   params,
@@ -20,12 +22,17 @@ export async function generateMetadata({
     return {}
   }
 
+  const localeValue = await getLocale()
+  const locale: Locale = isLocale(localeValue) ? localeValue : defaultLocale
+  const localizedTitle = getLocalizedContent(post.titleI18n, locale, post.title)
+  const localizedExcerpt = getLocalizedContent(post.excerptI18n, locale, post.excerpt)
+
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: localizedTitle,
+    description: localizedExcerpt,
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: localizedTitle,
+      description: localizedExcerpt,
       images: post.coverImage ? [post.coverImage] : [],
     },
   }
@@ -33,8 +40,20 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = await getBlogPostBySlug(slug)
+  const rawPost = await getBlogPostBySlug(slug)
   const t = await getTranslations('marketing_pages.blog_post')
+  const localeValue = await getLocale()
+  const locale: Locale = isLocale(localeValue) ? localeValue : defaultLocale
+
+  if (!rawPost) {
+    notFound()
+  }
+
+  const post = {
+    ...rawPost,
+    title: getLocalizedContent(rawPost.titleI18n, locale, rawPost.title),
+    excerpt: getLocalizedContent(rawPost.excerptI18n, locale, rawPost.excerpt),
+  }
 
   if (!post) {
     notFound()

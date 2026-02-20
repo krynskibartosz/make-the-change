@@ -221,4 +221,4 @@ export const MarketingStepsSection = ({
       </motion.ol>
     </MarketingSection>
   )
-};
+}

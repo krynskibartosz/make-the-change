@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { isRecord } from '@/lib/type-guards'
 
 export type NotificationState = {
   error?: string
@@ -26,7 +27,9 @@ export async function updateNotifications(
     .eq('id', user.id)
     .single()
 
-  const currentPrefs = (profile?.notification_preferences || {}) as Record<string, boolean>
+  const currentPrefs = isRecord(profile?.notification_preferences)
+    ? profile.notification_preferences
+    : {}
 
   const newPrefs = {
     ...currentPrefs,

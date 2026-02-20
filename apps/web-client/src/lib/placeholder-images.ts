@@ -29,15 +29,13 @@ export const placeholderImages = {
 
 export const getCategoryImage = (name?: string | null) => {
   if (!name) return placeholderImages.categories.default
+  const categories: Record<string, string> = placeholderImages.categories
   const key = name
     .toLowerCase()
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .replace(/[^a-z0-9]+/g, '_')
-  return (
-    (placeholderImages.categories as Record<string, string>)[key] ||
-    placeholderImages.categories.default
-  )
+  return categories[key] || placeholderImages.categories.default
 }
 
 export const getRandomProductImage = (seed?: number) => {

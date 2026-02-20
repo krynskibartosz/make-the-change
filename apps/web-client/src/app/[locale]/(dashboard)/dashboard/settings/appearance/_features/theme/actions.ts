@@ -3,15 +3,12 @@
 import { THEMES, type ThemeConfig, type UserTheme } from '@make-the-change/core'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { parseThemeConfig } from '@/lib/theme-config'
 
 export type ThemeState = {
   success?: string
   error?: string
   themeConfig?: ThemeConfig
-}
-
-type ProfileThemeRow = {
-  theme_config: ThemeConfig | null
 }
 
 export async function saveUserTheme(
@@ -30,13 +27,13 @@ export async function saveUserTheme(
     }
 
     // 1. Get existing config
-    const { data: profile } = (await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('theme_config')
       .eq('id', user.id)
-      .single()) as { data: ProfileThemeRow | null }
+      .single()
 
-    let config: ThemeConfig = (profile?.theme_config as ThemeConfig | null) || {
+    let config: ThemeConfig = parseThemeConfig(profile?.theme_config) || {
       activeThemeId: 'default',
       customThemes: [],
     }
@@ -127,13 +124,13 @@ export async function deleteUserTheme(themeId: string): Promise<ThemeState> {
 
     if (!user) return { error: 'Non autorisé' }
 
-    const { data: profile } = (await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('theme_config')
       .eq('id', user.id)
-      .single()) as { data: ProfileThemeRow | null }
+      .single()
 
-    const config = profile?.theme_config as ThemeConfig | null
+    const config = parseThemeConfig(profile?.theme_config)
     if (!config || !config.customThemes) return { error: 'Configuration introuvable' }
 
     config.customThemes = config.customThemes.filter((t) => t.id !== themeId)

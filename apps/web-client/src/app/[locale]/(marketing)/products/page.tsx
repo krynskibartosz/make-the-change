@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { parseProductsQueryState } from '@/app/[locale]/(marketing)/products/_features/query-state'
-import { Breadcrumbs } from '@/components/ui/breadcrumbs'
+import { getLocalizedContent } from '@/lib/utils'
 import { getProductStaticResources, getProducts } from './_features/get-products'
 import { type Category, type Producer, type Product, ProductsClient } from './products-client'
 
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const _t = await getTranslations('products')
-  const navT = await getTranslations('navigation')
+  const locale = await getLocale()
   const params = await searchParams
   const queryState = parseProductsQueryState(params)
 
@@ -32,28 +32,47 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ])
 
   const { categories, producers, availableTags } = staticData
-  const { products: productsList, pagination } = productsData
+  const { products: productsList, pagination, resolvedCategory } = productsData
 
-  const products = (productsList || []).map((product) => ({
+  const products: Product[] = productsList.map((product) => ({
     ...product,
+    name_default: getLocalizedContent(product.name_i18n, locale, product.name_default),
+    short_description_default: getLocalizedContent(
+      product.short_description_i18n,
+      locale,
+      product.short_description_default || '',
+    ),
+    description_default: getLocalizedContent(
+      product.description_i18n,
+      locale,
+      product.description_default || '',
+    ),
     price: product.price_points ? product.price_points / 100 : 0,
-    price_points: product.price_points || 0,
-  })) as Product[]
+    price_points: product.price_points ?? 0,
+  }))
 
-  const serializedProducts = JSON.parse(JSON.stringify(products))
+  const localizedCategories: Category[] = categories.map((category) => ({
+    ...category,
+    name_default: getLocalizedContent(category.name_i18n, locale, category.name_default),
+  }))
+
+  const localizedProducers: Producer[] = producers.map((producer) => ({
+    ...producer,
+    name_default: getLocalizedContent(producer.name_i18n, locale, producer.name_default),
+  }))
 
   return (
     <>
-      <section className="container pb-12 pt-0 md:pb-16 md:pt-2">
-        <Breadcrumbs items={[{ label: navT('products'), href: '/products' }]} />
+      <section className="pb-12 pt-0 md:pb-16 md:pt-2">
         <ProductsClient
-          products={serializedProducts}
-          categories={(categories || []) as Category[]}
-          producers={(producers || []) as Producer[]}
+          products={products}
+          categories={localizedCategories}
+          producers={localizedProducers}
           availableTags={availableTags}
           pagination={pagination}
           initialQueryState={{
             ...queryState,
+            category: resolvedCategory,
             page: pagination.currentPage,
           }}
         />

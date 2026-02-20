@@ -30,6 +30,10 @@ const levelColors = {
   },
 }
 
+type UserLevel = keyof typeof levelColors
+
+const isUserLevel = (value: string): value is UserLevel => Object.hasOwn(levelColors, value)
+
 const kycColors: Record<string, string> = {
   pending: 'bg-warning/10 text-warning border-warning/20',
   light: 'bg-info/10 text-info border-info/20',
@@ -48,8 +52,7 @@ export const DashboardWelcome = ({
   className,
 }: DashboardWelcomeProps) => {
   const fallbackLevel = levelColors.explorateur
-  const level =
-    userLevel in levelColors ? levelColors[userLevel as keyof typeof levelColors] : fallbackLevel
+  const level = isUserLevel(userLevel) ? levelColors[userLevel] : fallbackLevel
   const displayTitle = title || `Bonjour, ${firstName} !`
 
   return (

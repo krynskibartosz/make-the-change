@@ -18,11 +18,17 @@ export type MegaMenuSection = {
   items: MegaMenuItem[]
 }
 
+export type MegaMenuFooterLink = {
+  title: string
+  href: string
+}
+
 export type MegaMenuContent = {
   eyebrow?: string
   title: string
   description?: string
   sections: MegaMenuSection[]
+  footerLinks?: MegaMenuFooterLink[]
   featured?: {
     title: string
     description?: string
@@ -39,6 +45,11 @@ export type MegaMenuProps = {
 }
 
 export const MegaMenu = ({ content, onClose, className }: MegaMenuProps) => {
+  const hasIntro =
+    (content.eyebrow && content.eyebrow.trim().length > 0) ||
+    content.title.trim().length > 0 ||
+    (content.description && content.description.trim().length > 0)
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -53,21 +64,29 @@ export const MegaMenu = ({ content, onClose, className }: MegaMenuProps) => {
     <div className={cn('pointer-events-none w-full', className)}>
       <Card
         data-mega-menu-surface="true"
-        className="pointer-events-auto mx-auto w-full max-w-[82rem] rounded-3xl border border-border/70 bg-background/98 p-6 shadow-[0_24px_80px_-36px_rgba(0,0,0,0.55)] backdrop-blur-2xl ring-1 ring-black/5 supports-[backdrop-filter]:bg-background/94 dark:ring-white/10"
+        className="pointer-events-auto relative overflow-hidden mx-auto w-full max-w-[82rem] rounded-[1.75rem] border border-border/70 bg-background/92 p-6 shadow-[0_32px_90px_-38px_rgba(15,23,42,0.45)] backdrop-blur-xl supports-backdrop-filter:bg-background/74"
+        style={{
+          backdropFilter: 'blur(16px) saturate(122%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(122%)',
+        }}
       >
-        <div className="grid gap-6 md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
+        <div className="relative grid gap-6 md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
           <div>
-            <div className="mb-6">
-              {content.eyebrow && (
-                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-                  {content.eyebrow}
-                </p>
-              )}
-              <h3 className="text-2xl font-semibold text-foreground">{content.title}</h3>
-              {content.description && (
-                <p className="mt-2 text-sm text-muted-foreground">{content.description}</p>
-              )}
-            </div>
+            {hasIntro && (
+              <div className="mb-6">
+                {content.eyebrow && (
+                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+                    {content.eyebrow}
+                  </p>
+                )}
+                {content.title.trim().length > 0 && (
+                  <h3 className="text-2xl font-semibold text-foreground">{content.title}</h3>
+                )}
+                {content.description && (
+                  <p className="mt-2 text-sm text-muted-foreground">{content.description}</p>
+                )}
+              </div>
+            )}
 
             <div
               className={cn(
@@ -88,11 +107,17 @@ export const MegaMenu = ({ content, onClose, className }: MegaMenuProps) => {
                     section.items.length > 3 && 'col-span-2',
                   )}
                 >
-                  <p className="text-sm font-semibold text-foreground">{section.title}</p>
+                  {section.title.trim().length > 0 && (
+                    <p className="text-sm font-semibold text-foreground">{section.title}</p>
+                  )}
                   <ul
                     className={cn(
                       'grid gap-3 list-none m-0 p-0',
-                      section.items.length > 3 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1',
+                      section.items.length > 3
+                        ? 'grid-cols-1 sm:grid-cols-2'
+                        : section.items.length === 2
+                          ? 'grid-cols-1 md:grid-cols-2'
+                          : 'grid-cols-1',
                     )}
                   >
                     {section.items.map((item) => (
@@ -110,6 +135,24 @@ export const MegaMenu = ({ content, onClose, className }: MegaMenuProps) => {
                 </div>
               ))}
             </div>
+
+            {content.footerLinks && content.footerLinks.length > 0 && (
+              <div className="mt-5 border-t border-border/60 pt-3">
+                <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0">
+                  {content.footerLinks.map((link) => (
+                    <li key={`${link.title}-${link.href}`}>
+                      <Link
+                        href={link.href}
+                        onClick={onClose}
+                        className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {content.featured && (

@@ -23,6 +23,7 @@ import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
 import { useDashboardSidebar } from '@/components/layout/dashboard-sidebar-context'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Link, usePathname } from '@/i18n/navigation'
+import { asString, isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 import { logout } from '../(auth)/actions'
 
@@ -42,9 +43,7 @@ interface DashboardSidebarProps {
 
 type NavigationKey = keyof Messages['navigation']
 
-type AccountNavItem =
-  | { href: string; icon: LucideIcon; labelKey: NavigationKey }
-  | { href: string; icon: LucideIcon; labelText: string }
+type AccountNavItem = { href: string; icon: LucideIcon; labelKey: NavigationKey }
 
 const accountNavPrimaryItems = [
   { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
@@ -52,7 +51,7 @@ const accountNavPrimaryItems = [
   { href: '/dashboard/investments', labelKey: 'my_investments', icon: PiggyBank },
   { href: '/dashboard/orders', labelKey: 'my_orders', icon: ShoppingBag },
   { href: '/dashboard/points', labelKey: 'my_points', icon: Coins },
- ] satisfies AccountNavItem[]
+] satisfies AccountNavItem[]
 
 const accountNavSecondaryItems = [
   { href: '/dashboard/subscription', labelKey: 'subscriptions', icon: CreditCard },
@@ -134,6 +133,10 @@ const levelColorClasses = {
   ambassadeur: 'bg-warning/15 text-warning',
 } satisfies Record<string, string>
 
+type UserLevelKey = keyof typeof levelColorClasses
+
+const isUserLevelKey = (value: string): value is UserLevelKey => value in levelColorClasses
+
 const SidebarActionButton = ({
   icon: Icon,
   label,
@@ -177,10 +180,14 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
     : user.email
 
   const userLevel = profile?.user_level || 'explorateur'
+  const userLevelColor = isUserLevelKey(userLevel)
+    ? levelColorClasses[userLevel]
+    : levelColorClasses.explorateur
   const secondaryLine = profile?.first_name ? user.email : null
   const initial = (displayName || '?').trim().charAt(0).toUpperCase()
-  const avatarUrl =
-    (profile?.metadata?.avatar_url as string | undefined) || profile?.avatar_url || null
+  const metadata = isRecord(profile?.metadata) ? profile.metadata : null
+  const metadataAvatarUrl = metadata ? asString(metadata.avatar_url) : ''
+  const avatarUrl = metadataAvatarUrl || profile?.avatar_url || null
 
   const handleNavClick = () => {
     setIsMobileOpen(false)
@@ -217,12 +224,7 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
               {secondaryLine ? (
                 <p className="mt-1 truncate text-xs text-muted-foreground">{secondaryLine}</p>
               ) : null}
-              <Badge
-                className={cn(
-                  'mt-2 rounded-full px-2.5 py-0.5 text-[11px]',
-                  levelColorClasses[userLevel],
-                )}
-              >
+              <Badge className={cn('mt-2 rounded-full px-2.5 py-0.5 text-[11px]', userLevelColor)}>
                 {tDashboard(`overview.levels.${userLevel}`)}
               </Badge>
             </div>
@@ -256,7 +258,7 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
                   key={item.href}
                   href={item.href}
                   icon={item.icon}
-                  label={'labelKey' in item ? t(item.labelKey) : item.labelText}
+                  label={t(item.labelKey)}
                   active={isActiveAccountRoute(item.href)}
                   onClick={handleNavClick}
                 />
@@ -271,7 +273,7 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
                   key={item.href}
                   href={item.href}
                   icon={item.icon}
-                  label={'labelKey' in item ? t(item.labelKey) : item.labelText}
+                  label={t(item.labelKey)}
                   active={isActiveAccountRoute(item.href)}
                   onClick={handleNavClick}
                 />
@@ -338,4 +340,4 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
       )}
     </>
   )
-};
+}

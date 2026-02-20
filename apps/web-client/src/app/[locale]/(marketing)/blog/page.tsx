@@ -1,11 +1,13 @@
-import { getTranslations } from 'next-intl/server'
+import type { Locale } from '@make-the-change/core/i18n'
+import { defaultLocale, isLocale } from '@make-the-change/core/i18n'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { getBlogPosts } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
 import { BlogCard } from '@/app/[locale]/(marketing)/blog/_features/components/blog-card'
 import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
+import { cn, getLocalizedContent } from '@/lib/utils'
 
 interface BlogPageProps {
   searchParams: Promise<{
@@ -16,8 +18,16 @@ interface BlogPageProps {
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const t = await getTranslations('marketing_pages.blog_list')
   const navT = await getTranslations('navigation')
+  const localeValue = await getLocale()
+  const locale: Locale = isLocale(localeValue) ? localeValue : defaultLocale
   const params = await searchParams
-  const posts = await getBlogPosts()
+
+  const rawPosts = await getBlogPosts()
+  const posts = rawPosts.map((post) => ({
+    ...post,
+    title: getLocalizedContent(post.titleI18n, locale, post.title),
+    excerpt: getLocalizedContent(post.excerptI18n, locale, post.excerpt),
+  }))
 
   const selectedCategory = params.category?.trim() || 'all'
   const normalizedCategory = selectedCategory.toLowerCase()

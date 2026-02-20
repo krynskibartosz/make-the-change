@@ -3,6 +3,7 @@
 import { Lightbulb } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { useEffect, useState } from 'react'
+import { resolveLocaleKey } from '@/lib/resolve-locale-key'
 
 const FACT_ROTATION_INTERVAL_MS = 5000
 const TYPEWRITER_SPEED_MS = 50
@@ -35,7 +36,7 @@ const diversityFactsByLocale = {
       'Diversity generates 2.3x more cash flow per employee',
       'Inclusive companies generate 2.6x more revenue',
       '80% of consumers prefer inclusive brands',
-      "Biodiversity includes around 8.7 million species on Earth",
+      'Biodiversity includes around 8.7 million species on Earth',
     ],
   },
   nl: {
@@ -73,8 +74,7 @@ const getRandomFact = (facts: readonly string[], previousFact?: string): string 
 
 export function DiversityFactLoader() {
   const locale = useLocale()
-  const factsConfig =
-    diversityFactsByLocale[locale as keyof typeof diversityFactsByLocale] ?? diversityFactsByLocale.en
+  const factsConfig = diversityFactsByLocale[resolveLocaleKey(diversityFactsByLocale, locale, 'en')]
 
   const [currentFact, setCurrentFact] = useState('')
   const [displayedText, setDisplayedText] = useState('')

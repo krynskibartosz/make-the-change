@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 import type { MegaMenuContent } from '@/components/layout/mega-menu'
-import { placeholderImages } from '@/lib/placeholder-images'
 
 export function useDiscoverMenu() {
   const t = useTranslations('navigation')
@@ -77,19 +76,25 @@ export function useDiscoverMenu() {
               image:
                 'https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&q=80&w=400',
             },
-            {
-              title: t('discover_menu.items.privacy'),
-              href: '/privacy',
-              image:
-                'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=400',
-            },
-            {
-              title: t('discover_menu.items.terms'),
-              href: '/terms',
-              image:
-                'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=400',
-            },
           ],
+        },
+      ],
+      footerLinks: [
+        {
+          title: t('discover_menu.items.producers'),
+          href: '/producers',
+        },
+        {
+          title: t('discover_menu.items.privacy'),
+          href: '/privacy',
+        },
+        {
+          title: t('discover_menu.items.terms'),
+          href: '/terms',
+        },
+        {
+          title: t('brand_guidelines'),
+          href: '/brand-guidelines',
         },
       ],
       featured: {
@@ -102,35 +107,7 @@ export function useDiscoverMenu() {
       },
     }
 
-    const brandGuidelinesItem = {
-      title: t('brand_guidelines'),
-      href: '/brand-guidelines',
-      image: placeholderImages.categories.default,
-    }
-
-    const baseDiscoverMenu = fallbackDiscoverMenu
-    const alreadyInDiscover = baseDiscoverMenu.sections.some((section) =>
-      section.items.some((item) => item.href === '/brand-guidelines'),
-    )
-
-    return alreadyInDiscover
-      ? baseDiscoverMenu
-      : {
-          ...baseDiscoverMenu,
-          sections:
-            baseDiscoverMenu.sections.length > 0
-              ? baseDiscoverMenu.sections.map((section, index, sections) =>
-                  index === sections.length - 1
-                    ? { ...section, items: [...section.items, brandGuidelinesItem] }
-                    : section,
-                )
-              : [
-                  {
-                    title: t('discover_menu.sections.help_resources'),
-                    items: [brandGuidelinesItem],
-                  },
-                ],
-        }
+    return fallbackDiscoverMenu
   }, [t])
 
   return discoverMenu

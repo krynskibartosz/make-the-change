@@ -6,6 +6,7 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
+import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -55,7 +56,54 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     project: PublicProjectRef | PublicProjectRef[] | null
   }
 
-  const investments = (rawInvestments ?? []) as InvestmentRow[]
+  const toProjectRef = (value: unknown): PublicProjectRef | null => {
+    if (!isRecord(value)) {
+      return null
+    }
+
+    const nameDefault = asString(value.name_default)
+    const slugValue = asString(value.slug)
+    if (!nameDefault || !slugValue) {
+      return null
+    }
+
+    return {
+      name_default: nameDefault,
+      slug: slugValue,
+      location_city: asString(value.location_city) || null,
+      location_country: asString(value.location_country) || null,
+    }
+  }
+
+  const toInvestmentRow = (value: unknown): InvestmentRow | null => {
+    if (!isRecord(value)) {
+      return null
+    }
+
+    const idValue = asString(value.id)
+    const createdAt = asString(value.created_at)
+    if (!idValue || !createdAt) {
+      return null
+    }
+
+    const projectRaw = value.project
+    const project = Array.isArray(projectRaw)
+      ? toProjectRef(projectRaw[0])
+      : toProjectRef(projectRaw)
+
+    return {
+      id: idValue,
+      amount_points: asNumber(value.amount_points, 0),
+      created_at: createdAt,
+      project,
+    }
+  }
+
+  const investments = Array.isArray(rawInvestments)
+    ? rawInvestments
+        .map((entry) => toInvestmentRow(entry))
+        .filter((entry): entry is InvestmentRow => entry !== null)
+    : []
 
   // Calculate legitimate stats
   const points = profile.points_balance || 0

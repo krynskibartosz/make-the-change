@@ -13,6 +13,7 @@ import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 
 type ChallengeProgressRow = {
@@ -32,6 +33,45 @@ type ChallengeRow = {
   user_challenges?: ChallengeProgressRow[] | ChallengeProgressRow | null
 }
 
+const toChallengeProgress = (value: unknown): ChallengeProgressRow => {
+  const record = isRecord(value) ? value : {}
+
+  return {
+    progress: asNumber(record.progress, 0),
+    target: asNumber(record.target, 100),
+    completed_at: asString(record.completed_at) || null,
+    claimed_at: asString(record.claimed_at) || null,
+  }
+}
+
+const toChallengeRow = (value: unknown): ChallengeRow | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  if (!id) {
+    return null
+  }
+
+  const rawUserChallenges = value.user_challenges
+  const userChallenges = Array.isArray(rawUserChallenges)
+    ? rawUserChallenges.map((entry) => toChallengeProgress(entry))
+    : rawUserChallenges
+      ? toChallengeProgress(rawUserChallenges)
+      : null
+
+  return {
+    id,
+    slug: asString(value.slug),
+    type: asString(value.type),
+    reward_points: Math.max(0, Math.floor(asNumber(value.reward_points, 0))),
+    title: asString(value.title),
+    description: asString(value.description),
+    user_challenges: userChallenges,
+  }
+}
+
 export default async function ChallengesPage() {
   const supabase = await createClient()
 
@@ -46,7 +86,13 @@ export default async function ChallengesPage() {
     console.error('Error fetching challenges:', error)
   }
 
-  const items = ((challenges || []) as ChallengeRow[]).map((c) => {
+  const challengeRows = Array.isArray(challenges)
+    ? challenges
+        .map((challenge) => toChallengeRow(challenge))
+        .filter((challenge): challenge is ChallengeRow => challenge !== null)
+    : []
+
+  const items = challengeRows.map((c) => {
     const progressEntry = Array.isArray(c.user_challenges)
       ? c.user_challenges[0]
       : (c.user_challenges ?? null)

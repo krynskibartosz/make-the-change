@@ -27,6 +27,8 @@
     "dashboard": "Tableau de bord",
     "products": "Produits",
     "projects": "Projets",
+    "shop": "Shop",
+    "invest": "Investir",
     "subscriptions": "Abonnements",
     "users": "Utilisateurs",
     "settings": "Paramètres",
@@ -525,6 +527,10 @@
     },
     "featured_products": "Produits populaires",
     "view_all_products": "Voir tous les produits",
+    "partners": {
+      "title": "Nos Partenaires",
+      "description": "Nous collaborons avec les meilleurs partenaires pour vous offrir des solutions innovantes et durables"
+    },
     "empty": {
       "featured_projects": {
         "title": "Aucun projet en vedette pour le moment",

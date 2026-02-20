@@ -11,7 +11,9 @@
     "start": "next start -p 3001",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "ts:metrics": "node ./scripts/ts-metrics.mjs",
+    "ts:metrics:check": "node ./scripts/ts-metrics.mjs --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

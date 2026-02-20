@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { createClient } from '@/lib/supabase/server'
+import { asBoolean, asString, isRecord } from '@/lib/type-guards'
 import type { BlogPost, BlogPostStatus } from './blog-types'
 import { parseBlogContent } from './content/parse-blog-content'
 
@@ -19,7 +20,9 @@ type BlogPostRow = {
   id: string
   slug: string
   title: string | null
+  title_i18n?: Record<string, string> | null
   excerpt: string | null
+  excerpt_i18n?: Record<string, string> | null
   content: unknown
   cover_image_url: string | null
   published_at: string | null
@@ -29,11 +32,84 @@ type BlogPostRow = {
   blog_post_tags?: BlogTagRelationRow[] | null
 }
 
+const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      (entry): entry is [string, string] => typeof entry[1] === 'string',
+    ),
+  )
+}
+
+const toBlogPostRow = (value: unknown): BlogPostRow | null => {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  const slug = asString(value.slug)
+  if (!id || !slug) {
+    return null
+  }
+
+  const toAuthorRow = (authorValue: unknown): BlogAuthorRow => {
+    if (!isRecord(authorValue)) {
+      return null
+    }
+
+    return {
+      name: asString(authorValue.name) || null,
+      avatar_url: asString(authorValue.avatar_url) || null,
+    }
+  }
+
+  const toTagRelationRow = (tagValue: unknown): BlogTagRelationRow => {
+    if (!isRecord(tagValue)) {
+      return null
+    }
+
+    const tag = isRecord(tagValue.tag)
+      ? {
+          name: asString(tagValue.tag.name) || null,
+        }
+      : null
+
+    return { tag }
+  }
+
+  return {
+    id,
+    slug,
+    title: asString(value.title) || null,
+    title_i18n: toLocalizedRecord(value.title_i18n),
+    excerpt: asString(value.excerpt) || null,
+    excerpt_i18n: toLocalizedRecord(value.excerpt_i18n),
+    content: value.content,
+    cover_image_url: asString(value.cover_image_url) || null,
+    published_at: asString(value.published_at) || null,
+    featured: asBoolean(value.featured, false),
+    status: toStatus(value.status),
+    author: Array.isArray(value.author)
+      ? value.author.map((author) => toAuthorRow(author)).filter((author) => author !== null)
+      : toAuthorRow(value.author),
+    blog_post_tags: Array.isArray(value.blog_post_tags)
+      ? value.blog_post_tags
+          .map((relation) => toTagRelationRow(relation))
+          .filter((relation) => relation !== null)
+      : null,
+  }
+}
+
 const BLOG_POST_SELECT = `
   id,
   slug,
   title,
+  title_i18n,
   excerpt,
+  excerpt_i18n,
   content,
   cover_image_url,
   published_at,
@@ -53,7 +129,9 @@ const BLOG_POST_ADMIN_SELECT = `
   id,
   slug,
   title,
+  title_i18n,
   excerpt,
+  excerpt_i18n,
   content,
   cover_image_url,
   published_at,
@@ -128,7 +206,9 @@ const mapPost = (row: BlogPostRow): BlogPost => {
     id: String(row.id),
     slug: String(row.slug),
     title: String(row.title || ''),
+    titleI18n: row.title_i18n || null,
     excerpt: String(row.excerpt || ''),
+    excerptI18n: row.excerpt_i18n || null,
     content: parseBlogContent(row.content),
     rawContent,
     coverImage: row.cover_image_url || null,
@@ -155,7 +235,10 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       return []
     }
 
-    return data.map((row) => mapPost(row as BlogPostRow))
+    return data
+      .map((row) => toBlogPostRow(row))
+      .filter((row): row is BlogPostRow => row !== null)
+      .map((row) => mapPost(row))
   } catch {
     return []
   }
@@ -175,7 +258,8 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
       return null
     }
 
-    return mapPost(data as BlogPostRow)
+    const row = toBlogPostRow(data)
+    return row ? mapPost(row) : null
   } catch {
     return null
   }
@@ -195,7 +279,8 @@ export async function getBlogPostById(id: string): Promise<BlogPost | null> {
       return null
     }
 
-    return mapPost(data as BlogPostRow)
+    const row = toBlogPostRow(data)
+    return row ? mapPost(row) : null
   } catch {
     return null
   }

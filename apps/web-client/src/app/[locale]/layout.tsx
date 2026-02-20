@@ -1,4 +1,4 @@
-import type { Brand, ThemeConfig } from '@make-the-change/core'
+import type { Brand } from '@make-the-change/core'
 import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -8,6 +8,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import type { PropsWithChildren } from 'react'
 import { Providers } from '@/app/providers'
 import { createClient } from '@/lib/supabase/server'
+import { isBrand, parseThemeConfig } from '@/lib/theme-config'
 import { pick } from '@/lib/utils'
 import '@/app/globals.css'
 
@@ -74,7 +75,7 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
       .eq('id', user.id)
       .single()
 
-    const config = profile?.theme_config as ThemeConfig | null | undefined
+    const config = parseThemeConfig(profile?.theme_config)
     if (config) {
       if (config.activeThemeId) {
         // Multi-theme structure
@@ -82,12 +83,16 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
         if (customTheme) {
           initialBrand = 'custom'
           initialCustomVars = customTheme.customVars
+        } else if (isBrand(config.activeThemeId)) {
+          initialBrand = config.activeThemeId
+        } else if (isBrand(config.brand)) {
+          initialBrand = config.brand
         } else {
-          initialBrand = config.activeThemeId as Brand
+          initialBrand = 'default'
         }
-      } else if (config.brand) {
+      } else if (isBrand(config.brand)) {
         // Legacy structure fallback
-        initialBrand = config.brand as Brand
+        initialBrand = config.brand
         initialCustomVars = config.customVars || {}
       }
     }

@@ -2,11 +2,13 @@ import { Badge, Button, Card, CardContent, Progress, Separator } from '@make-the
 import { Calendar, Globe, Leaf, Share2, Target } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, getLocalizedContent } from '@/lib/utils'
 
 type ProjectProducer = {
   name_default: string
+  name_i18n?: Record<string, string> | null
   description_default: string | null
+  description_i18n?: Record<string, string> | null
   contact_website: string | null
 }
 
@@ -57,6 +59,16 @@ export async function ProjectSidebar({
     ? new Date(project.maturity_date).toLocaleDateString(locale)
     : null
 
+  const producerName = project.producer
+    ? getLocalizedContent(project.producer.name_i18n, locale, project.producer.name_default)
+    : 'Make the Change'
+  const producerDescription = project.producer
+    ? getLocalizedContent(
+        project.producer.description_i18n,
+        locale,
+        project.producer.description_default || '',
+      )
+    : t('subtitle')
   const websiteLabel = getWebsiteLabel(project.producer?.contact_website || null)
 
   return (
@@ -161,22 +173,20 @@ export async function ProjectSidebar({
                   <div className="h-16 w-16 rounded-2xl overflow-hidden border border-border/50 bg-muted flex-shrink-0">
                     <img
                       src={producerImage}
-                      alt={project.producer.name_default}
+                      alt={producerName}
                       className="h-full w-full object-cover"
                     />
                   </div>
                 ) : (
                   <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary font-bold text-xl flex-shrink-0">
-                    {project.producer.name_default?.[0]?.toUpperCase()}
+                    {producerName?.[0]?.toUpperCase()}
                   </div>
                 )}
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-xl font-black tracking-tight">
-                    {project.producer.name_default}
-                  </h3>
+                  <h3 className="text-xl font-black tracking-tight">{producerName}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-3">
-                    {project.producer.description_default}
+                    {producerDescription}
                   </p>
 
                   {project.producer.contact_website && websiteLabel ? (

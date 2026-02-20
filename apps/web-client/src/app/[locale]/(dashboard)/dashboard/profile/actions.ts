@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { isRecord } from '@/lib/type-guards'
 import {
   type PasswordFormValues,
   type ProfileFormValues,
@@ -15,6 +16,11 @@ export type ProfileState = {
 }
 
 const MAX_UPLOAD_SIZE = 2 * 1024 * 1024
+
+const getFormDataFile = (formData: FormData, key: string): File | null => {
+  const value = formData.get(key)
+  return value instanceof File ? value : null
+}
 
 export async function updateProfile(data: ProfileFormValues): Promise<ProfileState> {
   const result = profileSchema.safeParse(data)
@@ -76,8 +82,8 @@ export async function updateProfileMedia(
     return { error: 'Not authenticated' }
   }
 
-  const avatarFile = formData.get('avatar') as File | null
-  const coverFile = formData.get('cover') as File | null
+  const avatarFile = getFormDataFile(formData, 'avatar')
+  const coverFile = getFormDataFile(formData, 'cover')
 
   if (
     (avatarFile && avatarFile.size > MAX_UPLOAD_SIZE) ||
@@ -123,7 +129,7 @@ export async function updateProfileMedia(
       .eq('id', user.id)
       .single()
 
-    const currentMetadata = (currentProfile?.metadata || {}) as Record<string, unknown>
+    const currentMetadata = isRecord(currentProfile?.metadata) ? currentProfile.metadata : {}
 
     const { error: updateError } = await supabase
       .from('profiles')
@@ -164,7 +170,7 @@ export async function updateProfileImages(images: {
       .eq('id', user.id)
       .single()
 
-    const currentMetadata = (currentProfile?.metadata || {}) as Record<string, unknown>
+    const currentMetadata = isRecord(currentProfile?.metadata) ? currentProfile.metadata : {}
     const newMetadata = { ...currentMetadata }
 
     if (images.avatarUrl) newMetadata.avatar_url = images.avatarUrl

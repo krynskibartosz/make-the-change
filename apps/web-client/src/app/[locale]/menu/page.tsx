@@ -9,6 +9,7 @@ import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
 import { CategoryCard } from '@/components/ui/category-card'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { asString, isRecord } from '@/lib/type-guards'
 
 export default function MenuPage() {
   const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(
@@ -27,20 +28,21 @@ export default function MenuPage() {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (user) {
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('avatar_url')
-          .eq('id', user.id)
-          .single()
+      if (!user) return
 
-        const profile = profileData as { avatar_url: string | null } | null
-        setUser({
-          id: user.id,
-          email: user.email || '',
-          avatarUrl: profile?.avatar_url,
-        })
-      }
+      const { data: profileDataRaw } = await supabase
+        .from('profiles')
+        .select('avatar_url')
+        .eq('id', user.id)
+        .single()
+
+      const profileData: unknown = profileDataRaw
+      const avatarUrl = isRecord(profileData) ? asString(profileData.avatar_url) || null : null
+      setUser({
+        id: user.id,
+        email: user.email || '',
+        avatarUrl,
+      })
     }
     getUser()
   }, [])
