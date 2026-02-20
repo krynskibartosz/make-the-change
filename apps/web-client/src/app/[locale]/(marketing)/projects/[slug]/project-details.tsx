@@ -40,6 +40,44 @@ export async function ProjectDetails({
     project.producer.images.length > 0
       ? project.producer.images[0]
       : undefined
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Project',
+    name: project.name_default,
+    description: project.description_default,
+    image: coverImage ? [coverImage] : [],
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/projects/${project.slug}`,
+    location:
+      project.address_city || project.address_country_code
+        ? {
+            '@type': 'Place',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: project.address_city,
+              addressCountry: project.address_country_code,
+            },
+          }
+        : undefined,
+    organizer: project.producer
+      ? {
+          '@type': 'Organization',
+          name: project.producer.name_default,
+          url: project.producer.contact_website,
+          image: producerImage,
+        }
+      : {
+          '@type': 'Organization',
+          name: 'Make the Change',
+        },
+    startDate: project.launch_date,
+    endDate: project.maturity_date,
+    funding: {
+      '@type': 'MonetaryAmount',
+      currency: 'EUR',
+      value: project.target_budget,
+    },
+  }
+  const structuredDataJson = JSON.stringify(structuredData).replace(/</g, '\\u003c')
 
   return (
     <>
@@ -48,8 +86,8 @@ export async function ProjectDetails({
         paddingClassName="pt-28 pb-20 lg:pt-40 lg:pb-24"
         background={
           <>
-            <div className="absolute top-[-20%] left-[-10%] h-[760px] w-[760px] rounded-full bg-primary/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-3000" />
-            <div className="absolute bottom-[-20%] right-[-10%] h-[760px] w-[760px] rounded-full bg-marketing-gradient-mid-400/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-5000 delay-1000" />
+            <div className="absolute top-[-20%] left-[-10%] h-190 w-190 rounded-full bg-primary/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-3000" />
+            <div className="absolute bottom-[-20%] right-[-10%] h-190 w-190 rounded-full bg-marketing-gradient-mid-400/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-5000 delay-1000" />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9ImN1cnJlbnRDb2xvciIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-100 text-foreground/20 mask-image-gradient" />
           </>
         }
@@ -103,7 +141,7 @@ export async function ProjectDetails({
           title={
             <>
               <span className="block text-marketing-overlay-light">{project.name_default}</span>
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-300% animate-gradient">
+              <span className="block mt-2 text-transparent bg-clip-text bg-linear-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-300% animate-gradient">
                 {t('detail.invest_now')}
               </span>
             </>
@@ -134,49 +172,7 @@ export async function ProjectDetails({
       </div>
 
       {includeStructuredData && (
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be injected as raw script content.
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Project',
-              name: project.name_default,
-              description: project.description_default,
-              image: coverImage ? [coverImage] : [],
-              url: `${process.env.NEXT_PUBLIC_SITE_URL}/projects/${project.slug}`,
-              location:
-                project.address_city || project.address_country_code
-                  ? {
-                      '@type': 'Place',
-                      address: {
-                        '@type': 'PostalAddress',
-                        addressLocality: project.address_city,
-                        addressCountry: project.address_country_code,
-                      },
-                    }
-                  : undefined,
-              organizer: project.producer
-                ? {
-                    '@type': 'Organization',
-                    name: project.producer.name_default,
-                    url: project.producer.contact_website,
-                    image: producerImage,
-                  }
-                : {
-                    '@type': 'Organization',
-                    name: 'Make the Change',
-                  },
-              startDate: project.launch_date,
-              endDate: project.maturity_date,
-              funding: {
-                '@type': 'MonetaryAmount',
-                currency: 'EUR',
-                value: project.target_budget,
-              },
-            }),
-          }}
-        />
+        <script type="application/ld+json">{structuredDataJson}</script>
       )}
     </>
   )

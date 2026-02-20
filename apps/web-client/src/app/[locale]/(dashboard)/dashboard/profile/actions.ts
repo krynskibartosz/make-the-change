@@ -191,7 +191,7 @@ export async function updatePassword(data: PasswordFormValues): Promise<ProfileS
   const result = passwordSchema.safeParse(data)
 
   if (!result.success) {
-    return { error: result.error.errors[0].message }
+    return { error: result.error.errors[0]?.message ?? 'Données invalides' }
   }
 
   const { newPassword } = result.data

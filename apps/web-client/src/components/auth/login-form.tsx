@@ -13,11 +13,11 @@ import {
   Input,
 } from '@make-the-change/core/ui'
 import { ArrowRight, Lock, Mail } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter as useNextRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { type AuthState, login } from '@/app/[locale]/(auth)/actions'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 type LoginFormProps = {
@@ -28,8 +28,25 @@ export function LoginForm({ modal = false }: LoginFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(login, {})
   const searchParams = useSearchParams()
+  const router = useRouter()
+  const nextRouter = useNextRouter()
   const returnTo = searchParams.get('returnTo') || ''
   const registerHref = returnTo ? `/register?returnTo=${encodeURIComponent(returnTo)}` : '/register'
+
+  useEffect(() => {
+    if (state.success && state.redirectUrl) {
+      if (modal) {
+        nextRouter.back()
+        setTimeout(() => {
+          router.push(state.redirectUrl as any)
+          nextRouter.refresh()
+        }, 100)
+      } else {
+        router.push(state.redirectUrl as any)
+        nextRouter.refresh()
+      }
+    }
+  }, [state, modal, router, nextRouter])
 
   return (
     <Card

@@ -30,7 +30,7 @@ export const SaveStatusIndicator = ({
     animate?: boolean
   }
 
-  const statusConfig: Record<SaveStatus, StatusConfigItem> = {
+  const statusConfig = {
     pristine: {
       icon: null,
       color: 'text-muted-foreground',
@@ -70,7 +70,7 @@ export const SaveStatusIndicator = ({
       show: true,
       message: errorMessage || 'Erreur',
     },
-  }
+  } satisfies Record<SaveStatus, StatusConfigItem>
 
   const config = statusConfig[status]
 

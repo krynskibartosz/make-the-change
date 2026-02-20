@@ -61,26 +61,35 @@ export async function saveUserTheme(
         const existingIndex = config.customThemes.findIndex(
           (t) => t.id === themeId || t.name === name,
         )
+        const createNewTheme = (): UserTheme => ({
+          id: crypto.randomUUID(),
+          name,
+          brand: 'custom',
+          customVars,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
 
         if (existingIndex >= 0) {
           // Update
-          config.customThemes[existingIndex] = {
-            ...config.customThemes[existingIndex],
-            name,
-            customVars,
-            updated_at: new Date().toISOString(),
+          const existingTheme = config.customThemes[existingIndex]
+          if (existingTheme) {
+            const updatedTheme: UserTheme = {
+              ...existingTheme,
+              name,
+              customVars,
+              updated_at: new Date().toISOString(),
+            }
+            config.customThemes[existingIndex] = updatedTheme
+            config.activeThemeId = updatedTheme.id
+          } else {
+            const newTheme = createNewTheme()
+            config.customThemes.push(newTheme)
+            config.activeThemeId = newTheme.id
           }
-          config.activeThemeId = config.customThemes[existingIndex].id
         } else {
           // Create new
-          const newTheme: UserTheme = {
-            id: crypto.randomUUID(),
-            name,
-            brand: 'custom',
-            customVars,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          }
+          const newTheme = createNewTheme()
           config.customThemes.push(newTheme)
           config.activeThemeId = newTheme.id
         }

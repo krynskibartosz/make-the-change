@@ -11,6 +11,7 @@
     "noEmit": true,
     "incremental": true,
     "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,

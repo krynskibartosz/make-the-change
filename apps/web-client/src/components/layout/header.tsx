@@ -18,7 +18,8 @@ import {
 } from '@make-the-change/core/ui'
 import { ChevronDown } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
+import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CartButton } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-button'
 import type { MainMenuStructure } from '@/app/[locale]/admin/cms/_features/types'
 import { MegaMenu } from '@/components/layout/mega-menu'
@@ -29,15 +30,26 @@ import { Logo } from '@/components/ui/logo'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
-interface HeaderProps {
+type HeaderElementProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>
+type AppLinkProps = ComponentProps<typeof Link>
+type HeaderNavigationItem = {
+  id: 'home' | 'projects' | 'products' | 'discover'
+  name: 'home' | 'projects' | 'products' | 'discover'
+  href: AppLinkProps['href'] | '#'
+  label?: string
+  mega?: MainMenuStructure[keyof MainMenuStructure]
+}
+
+type HeaderProps = HeaderElementProps & {
   user?: { id: string; email: string; avatarUrl?: string | null } | null
   menuData?: MainMenuStructure | null
 }
 
-export function Header({ user, menuData }: HeaderProps) {
+export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
   const t = useTranslations('navigation')
   const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const navigationMenuRef = useRef<HTMLElement | null>(null)
   const { isVisible } = useScrollHeader()
 
   const discoverMenu = useDiscoverMenu()
@@ -64,24 +76,47 @@ export function Header({ user, menuData }: HeaderProps) {
         label: t('discover'),
         mega: discoverMenu,
       },
-    ]
+    ] satisfies HeaderNavigationItem[]
   }, [menuData, t, discoverMenu])
 
-  const closeMegaMenu = () => setActiveMenu(null)
+  const closeMegaMenu = useCallback(() => setActiveMenu(null), [])
 
   useEffect(() => {
     if (!pathname) return
     setActiveMenu(null)
   }, [pathname])
 
+  useEffect(() => {
+    if (!isVisible) {
+      closeMegaMenu()
+    }
+  }, [isVisible, closeMegaMenu])
+
+  useEffect(() => {
+    if (!activeMenu) return
+
+    const onDocumentPointerDown = (event: PointerEvent) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      if (target.closest('[data-mega-menu-surface="true"]')) return
+      if (navigationMenuRef.current?.contains(target)) return
+      setActiveMenu(null)
+    }
+
+    document.addEventListener('pointerdown', onDocumentPointerDown, true)
+    return () => document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+  }, [activeMenu])
+
   const avatarUrl = user?.avatarUrl ?? null
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
 
   return (
     <header
+      {...rest}
       className={cn(
-        'hidden md:block fixed top-0 left-0 right-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out',
+        'hidden md:block fixed top-0 left-0 right-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 transition-all duration-300 ease-in-out',
         isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0',
+        className,
       )}
       style={{
         transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
@@ -90,37 +125,58 @@ export function Header({ user, menuData }: HeaderProps) {
     >
       <div className="container relative mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex cursor-pointer items-center gap-3">
           <Logo variant="icon" height={40} width={40} className="h-10" />
           <span className="text-xl font-bold text-foreground">Make the Change</span>
         </Link>
 
         {/* Desktop Navigation */}
         <NavigationMenu
+          ref={navigationMenuRef}
           aria-label="Navigation principale"
           className="relative hidden md:flex"
           value={activeMenu}
-          delay={80}
-          closeDelay={180}
-          onValueChange={(value) => setActiveMenu(typeof value === 'string' ? value : null)}
+          delay={0}
+          closeDelay={0}
+          onValueChange={(value, eventDetails) => {
+            if (eventDetails.reason === 'trigger-hover') return
+            const nextValue = typeof value === 'string' ? value : null
+            if (eventDetails.reason === 'trigger-press' && nextValue === activeMenu) {
+              setActiveMenu(null)
+              return
+            }
+            setActiveMenu(nextValue)
+          }}
         >
           <NavigationMenuList className="items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
               const label = item.label ?? t(item.name)
               if (item.mega) {
+                const isMegaOpen = activeMenu === item.id
                 return (
                   <NavigationMenuItem key={item.id} value={item.id}>
                     <NavigationMenuTrigger
                       className={cn(
-                        'flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                        (isActive || activeMenu === item.id) && 'bg-accent text-accent-foreground',
+                        'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                        (isActive || isMegaOpen) && 'bg-accent text-accent-foreground',
                       )}
+                      onClick={(event) => {
+                        if (!isMegaOpen) return
+                        event.preventDefault()
+                        closeMegaMenu()
+                      }}
+                      onKeyDown={(event) => {
+                        if (!isMegaOpen) return
+                        if (event.key !== 'Enter' && event.key !== ' ') return
+                        event.preventDefault()
+                        closeMegaMenu()
+                      }}
                     >
                       {label}
                       <ChevronDown className="h-4 w-4 text-muted-foreground" />
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent className="w-screen border-0 bg-transparent p-0 shadow-none">
+                    <NavigationMenuContent className="pointer-events-none w-full border-0 bg-transparent p-0 shadow-none">
                       <MegaMenu content={item.mega} onClose={closeMegaMenu} />
                     </NavigationMenuContent>
                   </NavigationMenuItem>
@@ -131,7 +187,7 @@ export function Header({ user, menuData }: HeaderProps) {
                   <Link
                     href={item.href}
                     className={cn(
-                      'rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                      'cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
                       isActive && 'bg-accent text-accent-foreground',
                     )}
                     onMouseEnter={closeMegaMenu}
@@ -143,9 +199,9 @@ export function Header({ user, menuData }: HeaderProps) {
               )
             })}
           </NavigationMenuList>
-          <NavigationMenuViewport className="absolute left-1/2 top-full z-50 w-screen -translate-x-1/2" />
+          <NavigationMenuViewport className="fixed inset-x-0 top-[4.5rem] z-50 px-4" />
           <NavigationMenuBackdrop
-            className="fixed inset-0 top-16 z-40 bg-background/45 backdrop-blur-sm transition-opacity duration-200 data-[closed]:opacity-0 data-[open]:opacity-100"
+            className="fixed inset-0 top-16 z-40 bg-gradient-to-b from-black/5 to-black/15 backdrop-blur-[3px] transition-opacity duration-200 data-closed:opacity-0 data-open:opacity-100 dark:from-black/35 dark:to-black/65"
             onPointerDown={closeMegaMenu}
             onClick={closeMegaMenu}
           />
@@ -155,11 +211,11 @@ export function Header({ user, menuData }: HeaderProps) {
         <div className="flex items-center gap-2">
           {user ? (
             <div className="hidden items-center gap-2 sm:flex">
-              <Button asChild variant="ghost" size="sm" className="h-11 gap-2 px-2.5">
-                <Link href="/dashboard">
+              <Button asChild variant="ghost" size="sm" className="h-11 cursor-pointer gap-2 px-2.5">
+                <Link href="/dashboard" className="cursor-pointer">
                   <Avatar className="h-8 w-8 ring-1 ring-border">
                     <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
-                    <AvatarFallback className="bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 text-xs font-bold text-primary">
+                    <AvatarFallback className="bg-linear-to-br from-primary/10 via-secondary/10 to-accent/10 text-xs font-bold text-primary">
                       {initial}
                     </AvatarFallback>
                   </Avatar>
@@ -170,20 +226,20 @@ export function Header({ user, menuData }: HeaderProps) {
               <Popover>
                 <PopoverTrigger
                   aria-label="Menu utilisateur"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+                  className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
                 >
                   <ChevronDown className="h-4 w-4" />
                 </PopoverTrigger>
                 <PopoverContent className="w-44 p-1">
                   <Link
                     href="/dashboard/profile"
-                    className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                    className="block cursor-pointer rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                   >
                     Profil
                   </Link>
                   <Link
                     href="/dashboard/settings"
-                    className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                    className="block cursor-pointer rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                   >
                     Paramètres
                   </Link>
@@ -193,7 +249,7 @@ export function Header({ user, menuData }: HeaderProps) {
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
               <Link href="/login" aria-label={t('login')}>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="cursor-pointer">
                   {t('login')}
                 </Button>
               </Link>
@@ -209,4 +265,4 @@ export function Header({ user, menuData }: HeaderProps) {
       </div>
     </header>
   )
-}
+};

@@ -33,9 +33,9 @@ import { Link, useRouter } from '@/i18n/navigation'
 import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 
 const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
-  stockQuantity !== null && stockQuantity !== undefined && stockQuantity <= 0
+  stockQuantity != null && stockQuantity <= 0
 
-export default function CartPage() {
+ const CartPage = () => {
   const t = useTranslations('checkout')
   const tCommon = useTranslations('common')
   const router = useRouter()
@@ -118,6 +118,13 @@ export default function CartPage() {
         if (existingIndex >= 0) {
           const next = [...current]
           const existing = next[existingIndex]
+          if (!existing) {
+            const insertAt = Math.min(Math.max(0, removedIndex), next.length)
+            next.splice(insertAt, 0, removedItem)
+            replaceItems(next)
+            return
+          }
+
           next[existingIndex] = {
             ...existing,
             quantity: (existing.quantity || 0) + (removedItem.quantity || 0),
@@ -154,8 +161,8 @@ export default function CartPage() {
     <div className="relative min-h-screen overflow-hidden bg-background selection:bg-primary/20">
       {/* Background Elements (Dribbble 2026 Style) */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] h-[500px] w-[500px] rounded-full bg-primary/5 blur-[100px] animate-pulse duration-[4000ms]" />
-        <div className="absolute bottom-[-10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-client-teal-400/5 blur-[120px] animate-pulse duration-[6000ms]" />
+        <div className="absolute top-[-10%] right-[-5%] h-125 w-125 rounded-full bg-primary/5 blur-[100px] animate-pulse duration-4000" />
+        <div className="absolute bottom-[-10%] left-[-10%] h-150 w-150 rounded-full bg-client-teal-400/5 blur-[120px] animate-pulse duration-6000" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
       </div>
 
@@ -200,7 +207,7 @@ export default function CartPage() {
               </div>
               <h1 className="text-4xl sm:text-5xl xl:text-[4.25rem] font-black tracking-tight text-foreground animate-in fade-in slide-in-from-bottom-6 duration-700">
                 {t('cart_page.hero_title_prefix')}{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-client-teal-400">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-client-teal-400">
                   {t('cart_page.hero_title_highlight')}
                 </span>
               </h1>
@@ -306,7 +313,7 @@ export default function CartPage() {
                 {[1, 2].map((i) => (
                   <div
                     key={i}
-                    className="h-32 rounded-[2rem] bg-muted/50 border border-border/50"
+                    className="h-32 rounded-4xl bg-muted/50 border border-border/50"
                   />
                 ))}
               </div>
@@ -316,7 +323,7 @@ export default function CartPage() {
                 <CardContent className="flex flex-col items-center justify-center gap-6 py-14 sm:py-20 text-center">
                   <div className="relative">
                     <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-                    <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-background to-muted border border-client-white/10 shadow-inner">
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-linear-to-br from-background to-muted border border-client-white/10 shadow-inner">
                       <ShoppingBag className="h-10 w-10 text-primary" />
                     </div>
                   </div>
@@ -364,7 +371,7 @@ export default function CartPage() {
                         item={item}
                         onQuantityChange={(next) => setQuantity(item.productId, next)}
                         onRemove={() => handleRemove(item.productId)}
-                        className="border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 rounded-[2rem] transition-all duration-300"
+                        className="border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 rounded-4xl transition-all duration-300"
                       />
                     </div>
                   ))}
@@ -382,7 +389,7 @@ export default function CartPage() {
                         layout="desktop"
                         onQuantityChange={(next) => setQuantity(item.productId, next)}
                         onRemove={() => handleRemove(item.productId)}
-                        className="rounded-[2rem] border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300"
+                        className="rounded-4xl border-border/50 bg-background/60 backdrop-blur-md shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300"
                       />
                     </div>
                   ))}
@@ -393,7 +400,7 @@ export default function CartPage() {
 
           {/* Right Column: Summary (Sticky) */}
           <div className="hidden md:block lg:col-span-4">
-            <div className="sticky top-24 space-y-4 animate-in fade-in slide-in-from-right-8 duration-700 delay-300 xl:max-w-[430px] xl:ml-auto">
+            <div className="sticky top-24 space-y-4 animate-in fade-in slide-in-from-right-8 duration-700 delay-300 xl:max-w-107.5 xl:ml-auto">
               <Card className="border-border/50 bg-background/80 backdrop-blur-xl shadow-2xl shadow-primary/5 rounded-[2.5rem] overflow-hidden">
                 <CardHeader className="bg-muted/30 border-b border-border/50 pb-5">
                   <div className="flex items-center justify-between gap-3">
@@ -451,7 +458,7 @@ export default function CartPage() {
                   </div>
 
                   <Button
-                    className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all bg-gradient-to-r from-primary to-client-teal-500 border-none"
+                    className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all bg-linear-to-r from-primary to-client-teal-500 border-none"
                     size="lg"
                     disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
                     onClick={handlePrimaryAction}
@@ -581,7 +588,7 @@ export default function CartPage() {
 
           <Button
             type="button"
-            className="mt-3 h-12 w-full rounded-xl border-none bg-gradient-to-r from-primary to-client-teal-500 text-sm font-bold shadow-lg shadow-primary/20"
+            className="mt-3 h-12 w-full rounded-xl border-none bg-linear-to-r from-primary to-client-teal-500 text-sm font-bold shadow-lg shadow-primary/20"
             disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
             onClick={handlePrimaryAction}
           >
@@ -592,4 +599,6 @@ export default function CartPage() {
       </div>
     </div>
   )
-}
+};
+
+export default CartPage

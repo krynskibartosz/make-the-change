@@ -1,22 +1,26 @@
-import type { ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, PropsWithChildren, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type PageHeroSize = 'sm' | 'md' | 'lg'
 type PageHeroVariant = 'default' | 'gradient' | 'muted'
 
-type PageHeroLayoutProps = {
+type SectionElementProps = ComponentPropsWithoutRef<'section'>
+type DivElementProps = ComponentPropsWithoutRef<'div'>
+type HeadingElementProps = ComponentPropsWithoutRef<'h1'>
+type ParagraphElementProps = ComponentPropsWithoutRef<'p'>
+
+type PageHeroLayoutProps = Omit<SectionElementProps, 'children'> & {
   children?: ReactNode
-  className?: string
   size?: PageHeroSize
   variant?: PageHeroVariant
 }
 
-type PageHeroSlotProps = {
-  children?: ReactNode
-  className?: string
-}
+type PageHeroSlotProps = PropsWithChildren<Omit<DivElementProps, 'children'>> 
 
-type PageHeroDescriptionProps = PageHeroSlotProps & {
+type PageHeroTitleProps = Omit<HeadingElementProps, 'children'>
+
+type PageHeroDescriptionProps = Omit<ParagraphElementProps, 'children'> & {
+  children?: ReactNode
   hideOnMobile?: boolean
 }
 
@@ -27,25 +31,27 @@ type PageHeroProps = PageHeroLayoutProps & {
   hideDescriptionOnMobile?: boolean
 }
 
-const sizeClasses: Record<PageHeroSize, string> = {
+const sizeClasses = {
   sm: 'py-12 md:py-16',
   md: 'py-16 md:py-24',
   lg: 'py-20 md:pb-32',
-}
+} satisfies Record<PageHeroSize, string>
 
-const variantClasses: Record<PageHeroVariant, string> = {
+const variantClasses = {
   default: 'bg-background',
   gradient: 'bg-gradient-to-br from-primary/5 via-background to-secondary/5',
   muted: 'bg-muted/30',
-}
+} satisfies Record<PageHeroVariant, string>
 
 const PageHeroLayout = ({
   children,
   className,
   size = 'md',
   variant = 'default',
+  ...rest
 }: PageHeroLayoutProps) => (
   <section
+    {...rest}
     className={cn(
       'relative flex flex-col items-center justify-center',
       sizeClasses[size],
@@ -59,12 +65,15 @@ const PageHeroLayout = ({
   </section>
 )
 
-const PageHeroBadge = ({ children, className }: PageHeroSlotProps) => (
-  <div className={cn('mb-6 animate-fade-in', className)}>{children}</div>
+const PageHeroBadge = ({ children, className, ...rest }: PageHeroSlotProps) => (
+  <div {...rest} className={cn('mb-6 animate-fade-in', className)}>
+    {children}
+  </div>
 )
 
-const PageHeroTitle = ({ children, className }: PageHeroSlotProps) => (
+const PageHeroTitle = ({ children, className, ...rest }: PropsWithChildren<PageHeroTitleProps>) => (
   <h1
+    {...rest}
     className={cn(
       'mb-6 max-w-4xl text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl',
       className,
@@ -78,8 +87,10 @@ const PageHeroDescription = ({
   children,
   className,
   hideOnMobile = false,
+  ...rest
 }: PageHeroDescriptionProps) => (
   <p
+    {...rest}
     className={cn(
       'mb-8 max-w-2xl text-lg text-muted-foreground font-medium leading-relaxed sm:text-xl md:text-2xl',
       hideOnMobile && 'hidden sm:block',
@@ -90,18 +101,25 @@ const PageHeroDescription = ({
   </p>
 )
 
-const PageHeroContent = ({ children, className }: PageHeroSlotProps) => (
-  <div className={cn('relative z-10', className)}>{children}</div>
-)
-
-const PageHeroActions = ({ children, className }: PageHeroSlotProps) => (
-  <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row', className)}>
+const PageHeroContent = ({ children, className, ...rest }: PageHeroSlotProps) => (
+  <div {...rest} className={cn('relative z-10', className)}>
     {children}
   </div>
 )
 
-const PageHeroCTA = ({ children, className }: PageHeroSlotProps) => (
-  <div className={cn('w-full sm:w-auto', className)}>{children}</div>
+const PageHeroActions = ({ children, className, ...rest }: PageHeroSlotProps) => (
+  <div
+    {...rest}
+    className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row', className)}
+  >
+    {children}
+  </div>
+)
+
+const PageHeroCTA = ({ children, className, ...rest }: PageHeroSlotProps) => (
+  <div {...rest} className={cn('w-full sm:w-auto', className)}>
+    {children}
+  </div>
 )
 
 const PageHeroRoot = ({
@@ -140,7 +158,7 @@ const PageHeroRoot = ({
 type PageHeroComponent = ((props: PageHeroProps) => ReactNode) & {
   Layout: (props: PageHeroLayoutProps) => ReactNode
   Badge: (props: PageHeroSlotProps) => ReactNode
-  Title: (props: PageHeroSlotProps) => ReactNode
+  Title: (props: PageHeroTitleProps) => ReactNode
   Description: (props: PageHeroDescriptionProps) => ReactNode
   Content: (props: PageHeroSlotProps) => ReactNode
   Actions: (props: PageHeroSlotProps) => ReactNode

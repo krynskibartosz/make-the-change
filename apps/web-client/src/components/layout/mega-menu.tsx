@@ -50,8 +50,11 @@ export const MegaMenu = ({ content, onClose, className }: MegaMenuProps) => {
   }, [onClose])
 
   return (
-    <div className={cn('w-full', className)}>
-      <Card className="mx-auto w-full max-w-360 border border-border/80 bg-background/92 p-6 shadow-2xl backdrop-blur-3xl supports-[backdrop-filter]:bg-background/82">
+    <div className={cn('pointer-events-none w-full', className)}>
+      <Card
+        data-mega-menu-surface="true"
+        className="pointer-events-auto mx-auto w-full max-w-[82rem] rounded-3xl border border-border/70 bg-background/98 p-6 shadow-[0_24px_80px_-36px_rgba(0,0,0,0.55)] backdrop-blur-2xl ring-1 ring-black/5 supports-[backdrop-filter]:bg-background/94 dark:ring-white/10"
+      >
         <div className="grid gap-6 md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
           <div>
             <div className="mb-6">

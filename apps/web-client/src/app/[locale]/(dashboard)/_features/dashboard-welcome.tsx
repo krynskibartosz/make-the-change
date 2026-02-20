@@ -15,7 +15,7 @@ type DashboardWelcomeProps = {
   className?: string
 }
 
-const levelColors: Record<string, { badge: string; glow: string }> = {
+const levelColors = {
   explorateur: {
     badge: 'bg-muted text-muted-foreground',
     glow: 'from-muted/50',
@@ -47,13 +47,15 @@ export const DashboardWelcome = ({
   summary,
   className,
 }: DashboardWelcomeProps) => {
-  const level = levelColors[userLevel] || levelColors.explorateur
+  const fallbackLevel = levelColors.explorateur
+  const level =
+    userLevel in levelColors ? levelColors[userLevel as keyof typeof levelColors] : fallbackLevel
   const displayTitle = title || `Bonjour, ${firstName} !`
 
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-accent/10 to-transparent p-6 shadow-sm md:p-8',
+        'relative overflow-hidden rounded-3xl border bg-linear-to-br from-primary/10 via-accent/10 to-transparent p-6 shadow-sm md:p-8',
         className,
       )}
     >
@@ -61,10 +63,10 @@ export const DashboardWelcome = ({
       <div
         className={cn(
           'absolute -right-20 -top-20 h-56 w-56 animate-pulse rounded-full blur-3xl',
-          `bg-gradient-to-br ${level.glow} via-transparent to-transparent`,
+          `bg-linear-to-br ${level.glow} via-transparent to-transparent`,
         )}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 opacity-60" />
+      <div className="absolute inset-0 bg-linear-to-r from-primary/10 via-transparent to-accent/10 opacity-60" />
 
       <div className="relative z-10 space-y-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -96,7 +98,7 @@ export const DashboardWelcome = ({
             {summary.map((item) => (
               <div
                 key={item.label}
-                className="min-w-[180px] rounded-2xl border bg-background/70 px-4 py-3 text-left shadow-sm backdrop-blur sm:min-w-0"
+                className="min-w-45 rounded-2xl border bg-background/70 px-4 py-3 text-left shadow-sm backdrop-blur sm:min-w-0"
               >
                 <div className="text-xs uppercase tracking-wide text-muted-foreground">
                   {item.label}

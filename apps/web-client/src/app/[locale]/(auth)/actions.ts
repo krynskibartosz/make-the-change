@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 export type AuthState = {
   error?: string
   success?: string
+  redirectUrl?: string
 }
 
 export async function login(_prevState: AuthState, formData: FormData): Promise<AuthState> {
@@ -39,10 +40,7 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
       ? returnToRaw
       : '/dashboard'
 
-  redirect({ href: safeReturnTo, locale })
-
-  // This line will never be reached due to redirect, but satisfies TypeScript
-  return {}
+  return { success: 'true', redirectUrl: safeReturnTo }
 }
 
 export async function register(_prevState: AuthState, formData: FormData): Promise<AuthState> {

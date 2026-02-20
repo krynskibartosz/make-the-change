@@ -29,10 +29,10 @@ const defaultProjectImages = [
   'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
 ]
 
-export function MarketingStepsSection({
+export const MarketingStepsSection = ({
   placeholderImages,
   variant = 'default',
-}: MarketingStepsSectionProps) {
+}: MarketingStepsSectionProps) => {
   const t = useTranslations('home')
 
   const projectImages =
@@ -221,4 +221,4 @@ export function MarketingStepsSection({
       </motion.ol>
     </MarketingSection>
   )
-}
+};

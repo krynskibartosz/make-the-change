@@ -47,6 +47,13 @@ export function CartSheet() {
         if (existingIndex >= 0) {
           const next = [...current]
           const existing = next[existingIndex]
+          if (!existing) {
+            const insertAt = Math.min(Math.max(0, removedIndex), next.length)
+            next.splice(insertAt, 0, removedItem)
+            replaceItems(next)
+            return
+          }
+
           next[existingIndex] = {
             ...existing,
             quantity: (existing.quantity || 0) + (removedItem.quantity || 0),

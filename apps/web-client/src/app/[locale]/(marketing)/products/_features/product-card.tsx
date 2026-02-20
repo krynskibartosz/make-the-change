@@ -47,9 +47,9 @@ const toStringArray = (value: unknown): string[] => {
   return value.filter((entry): entry is string => typeof entry === 'string')
 }
 
-const getFirstString = (value: unknown): string | undefined => {
+const getFirstString = (value: unknown): string | null => {
   if (typeof value !== 'string' || value.trim().length === 0) {
-    return undefined
+    return null
   }
 
   return value
@@ -67,12 +67,13 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   const columnImages = product.images
   const metadataImages = toStringArray(metadata?.images)
   const mainImage =
-    sanitizeImageUrl(columnImages[0]) ||
-    sanitizeImageUrl(getFirstString(metadata?.image_url)) ||
-    sanitizeImageUrl(metadataImages[0]) ||
-    getRandomProductImage(product.name_default?.length || 0)
+    sanitizeImageUrl(columnImages[0]) ??
+    sanitizeImageUrl(getFirstString(metadata?.image_url)) ??
+    sanitizeImageUrl(metadataImages[0]) ??
+    getRandomProductImage(product.name_default?.length || 0) ??
+    null
   const secondaryImage =
-    sanitizeImageUrl(columnImages[1]) || sanitizeImageUrl(metadataImages[1]) || mainImage
+    sanitizeImageUrl(columnImages[1]) ?? sanitizeImageUrl(metadataImages[1]) ?? mainImage
   const badges = buildProductCardBadges({
     featured: product.featured,
     stockQuantity: product.stock_quantity,

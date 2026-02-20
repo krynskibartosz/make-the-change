@@ -47,6 +47,8 @@ export const ProfileHeader = ({
     if (!fileList || fileList.length === 0 || !userId || readonly) return
 
     const file = fileList[0]
+    if (!file) return
+
     const setLoading = type === 'avatar' ? setIsAvatarLoading : setIsCoverLoading
 
     setLoading(true)
@@ -96,7 +98,7 @@ export const ProfileHeader = ({
   }
 
   return (
-    <div className="relative -mt-[1px] bg-background/80 backdrop-blur-md transition-all duration-300 group/header">
+    <div className="relative -mt-px bg-background/80 backdrop-blur-md transition-all duration-300 group/header">
       {/* Cover Image */}
       <div className="relative h-48 w-full lg:h-64">
         <ImageUploader
@@ -108,7 +110,7 @@ export const ProfileHeader = ({
           className="h-full w-full"
           containerClassName="h-full w-full"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent pointer-events-none" />
       </div>
 
       {/* Profile Info Overlay */}
@@ -144,7 +146,7 @@ export const ProfileHeader = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-1 rounded-2xl border bg-background/60 p-4 sm:p-6 backdrop-blur-md shadow-xl lg:min-w-[200px]">
+        <div className="flex flex-col gap-1 rounded-2xl border bg-background/60 p-4 sm:p-6 backdrop-blur-md shadow-xl lg:min-w-50">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/70">
             Impact score
           </p>

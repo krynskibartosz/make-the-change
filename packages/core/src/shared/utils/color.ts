@@ -51,11 +51,11 @@ export function hslToHex(h: number, s: number, l: number): string {
 }
 
 export function parseHsl(hslStr: string): { h: number; s: number; l: number } {
-  const parts = hslStr.replace(/%/g, '').split(' ')
+  const [hRaw = '0', sRaw = '0', lRaw = '0'] = hslStr.replace(/%/g, '').trim().split(/\s+/)
   return {
-    h: parseInt(parts[0]) || 0,
-    s: parseInt(parts[1]) || 0,
-    l: parseInt(parts[2]) || 0,
+    h: parseInt(hRaw, 10) || 0,
+    s: parseInt(sRaw, 10) || 0,
+    l: parseInt(lRaw, 10) || 0,
   }
 }
 

@@ -93,8 +93,9 @@ const HomePage = async () => {
     process.env.NEXT_PUBLIC_PARTNER_APP_BASE_URL || process.env.NEXT_PUBLIC_ADMIN_URL
   const partnerDashboardUrl = buildPartnerDashboardUrl(partnerAppBaseUrl, locale)
 
-  const content = homeContent.data
-  const universeCards = content?.universe.cards
+  const cmsContent = homeContent.data
+  const localizedCmsContent = locale === defaultLocale ? cmsContent : null
+  const universeCards = cmsContent?.universe.cards
 
   const labels = {
     heroInvestCta: t('steps.invest.title'),
@@ -105,8 +106,8 @@ const HomePage = async () => {
     statsEngagedMembers: t('stats_section.engaged_members'),
     statsEthicalProducts: t('stats_section.ethical_products'),
     statsPointsGenerated: t('stats_section.points_generated'),
-    primaryCtaAuthed: 'Investir dans des projets',
-    primaryCtaGuest: 'Nous rejoindre',
+    primaryCtaAuthed: t('hero.cta_primary'),
+    primaryCtaGuest: t('cta.button'),
   } satisfies HomeViewModelLabels
 
   const {
@@ -132,9 +133,9 @@ const HomePage = async () => {
   })
 
   const ctaFooterItems = [
-    content?.cta.stats.engagement ?? t('cta.stats.engagement'),
-    content?.cta.stats.transparency ?? t('cta.stats.transparency'),
-    content?.cta.stats.community ?? t('cta.stats.community'),
+    localizedCmsContent?.cta.stats.engagement ?? t('cta.stats.engagement'),
+    localizedCmsContent?.cta.stats.transparency ?? t('cta.stats.transparency'),
+    localizedCmsContent?.cta.stats.community ?? t('cta.stats.community'),
   ]
 
   return (
@@ -155,13 +156,15 @@ const HomePage = async () => {
           <span className="inline-flex items-center gap-2 px-1 py-1">
             <Sparkles className="h-3.5 w-3.5 animate-pulse text-primary" />
             <span className="text-[10px] font-bold uppercase tracking-widest">
-              {content?.hero.badge ?? t('hero.badge')}
+              {localizedCmsContent?.hero.badge ?? t('hero.badge')}
             </span>
           </span>
         </PageHero.Badge>
 
-        <PageHero.Title>{content?.hero.title ?? t('hero.title')}</PageHero.Title>
-        <PageHero.Description>{content?.hero.subtitle ?? t('hero.subtitle')}</PageHero.Description>
+        <PageHero.Title>{localizedCmsContent?.hero.title ?? t('hero.title')}</PageHero.Title>
+        <PageHero.Description>
+          {localizedCmsContent?.hero.subtitle ?? t('hero.subtitle')}
+        </PageHero.Description>
 
         <PageHero.Content>
           <PageHero.Actions>
@@ -204,29 +207,32 @@ const HomePage = async () => {
       </PageHero.Layout>
 
       <HomeUniverseSection
-        title={content?.universe.title ?? t('universe.title')}
-        description={content?.universe.description ?? t('universe.description')}
+        title={localizedCmsContent?.universe.title ?? t('universe.title')}
+        description={localizedCmsContent?.universe.description ?? t('universe.description')}
         projects={{
           image: universeCards?.projects.image,
-          badge: universeCards?.projects.badge ?? t('universe.cards.projects.badge'),
-          title: universeCards?.projects.title ?? t('universe.cards.projects.title'),
+          badge: localizedCmsContent?.universe.cards.projects.badge ?? t('universe.cards.projects.badge'),
+          title: localizedCmsContent?.universe.cards.projects.title ?? t('universe.cards.projects.title'),
           description:
-            universeCards?.projects.description ?? t('universe.cards.projects.description'),
-          cta: universeCards?.projects.cta ?? t('universe.cards.projects.cta'),
+            localizedCmsContent?.universe.cards.projects.description ??
+            t('universe.cards.projects.description'),
+          cta: localizedCmsContent?.universe.cards.projects.cta ?? t('universe.cards.projects.cta'),
         }}
         products={{
           image: universeCards?.products.image,
-          badge: universeCards?.products.badge ?? t('universe.cards.products.badge'),
-          title: universeCards?.products.title ?? t('universe.cards.products.title'),
+          badge: localizedCmsContent?.universe.cards.products.badge ?? t('universe.cards.products.badge'),
+          title: localizedCmsContent?.universe.cards.products.title ?? t('universe.cards.products.title'),
           description:
-            universeCards?.products.description ?? t('universe.cards.products.description'),
-          cta: universeCards?.products.cta ?? t('universe.cards.products.cta'),
+            localizedCmsContent?.universe.cards.products.description ??
+            t('universe.cards.products.description'),
+          cta: localizedCmsContent?.universe.cards.products.cta ?? t('universe.cards.products.cta'),
         }}
         community={{
-          title: universeCards?.community.title ?? t('universe.cards.community.title'),
+          title: localizedCmsContent?.universe.cards.community.title ?? t('universe.cards.community.title'),
           description:
-            universeCards?.community.description ?? t('universe.cards.community.description'),
-          cta: universeCards?.community.cta ?? t('universe.cards.community.cta'),
+            localizedCmsContent?.universe.cards.community.description ??
+            t('universe.cards.community.description'),
+          cta: localizedCmsContent?.universe.cards.community.cta ?? t('universe.cards.community.cta'),
         }}
         variant="default"
       />
@@ -294,7 +300,7 @@ const HomePage = async () => {
 
       {blogPostsState.status === 'ready' ? (
         <HomeBlogSection
-          title={content?.blog?.title ?? t('blog_section.title')}
+          title={localizedCmsContent?.blog?.title ?? t('blog_section.title')}
           viewAllLabel={t('blog_section.view_all')}
           posts={blogPostsState.value}
           variant={blogVariant}
@@ -312,8 +318,8 @@ const HomePage = async () => {
       <section className={ctaSectionClassName}>
         <div className="container mx-auto px-4">
           <MarketingCtaBand
-            title={content?.cta.title ?? t('cta.title')}
-            description={content?.cta.description ?? t('cta.description')}
+            title={localizedCmsContent?.cta.title ?? t('cta.title')}
+            description={localizedCmsContent?.cta.description ?? t('cta.description')}
             primaryAction={
               <Link
                 href={primaryCta.href}
@@ -328,7 +334,7 @@ const HomePage = async () => {
                 href="/about"
                 className="inline-flex h-16 w-full items-center justify-center rounded-2xl border-2 border-marketing-overlay-light/10 px-12 text-lg font-black uppercase tracking-widest transition-all hover:bg-marketing-overlay-light/5 sm:w-auto"
               >
-                {content?.hero.cta_secondary ?? t('hero.cta_secondary')}
+                {localizedCmsContent?.hero.cta_secondary ?? t('hero.cta_secondary')}
               </Link>
             }
             footer={

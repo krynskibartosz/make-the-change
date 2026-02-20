@@ -23,14 +23,21 @@ export type ProductsQueryState = {
   page: number
 }
 
-export const DEFAULT_PRODUCTS_QUERY_STATE: ProductsQueryState = {
+type SearchTextField = Extract<keyof ProductsQueryState, 'search' | 'tag'>
+type UuidQueryField = Extract<keyof ProductsQueryState, 'category' | 'producer'>
+type PersistedProductsQueryField = Exclude<keyof ProductsQueryState, 'page'>
+
+const SEARCH_TEXT_FIELDS = ['search', 'tag'] as const satisfies readonly SearchTextField[]
+const UUID_QUERY_FIELDS = ['category', 'producer'] as const satisfies readonly UuidQueryField[]
+
+export const DEFAULT_PRODUCTS_QUERY_STATE = {
   search: '',
   category: '',
   producer: '',
   tag: '',
   sort: DEFAULT_PRODUCT_SORT,
   page: 1,
-}
+} satisfies ProductsQueryState
 
 type SearchParamsRecord = Record<string, string | string[] | undefined>
 type SearchParamsSource = SearchParamsRecord | URLSearchParams | ReadonlyURLSearchParams
@@ -79,25 +86,45 @@ const sanitizePage = (value?: string): number => {
   return parsed
 }
 
+const sanitizeTextField = (field: SearchTextField, value?: string): string =>
+  field === 'search' ? sanitizeSearch(value) : sanitizeTag(value)
+
+const withFallback = <T>(value: T | undefined, fallback: NoInfer<T>): T => value ?? fallback
+
+export const toPersistedProductsQueryState = (
+  state: ProductsQueryState,
+): Pick<ProductsQueryState, PersistedProductsQueryField> => ({
+  search: state.search,
+  category: state.category,
+  producer: state.producer,
+  tag: state.tag,
+  sort: state.sort,
+})
+
 export const isProductSort = (value: string | undefined): value is ProductSort => {
   if (!value) return false
   return PRODUCT_SORT_VALUES.includes(value as ProductSort)
 }
 
 export const parseProductsQueryState = (source: SearchParamsSource): ProductsQueryState => {
-  const search = sanitizeSearch(getRawParam(source, 'search'))
-  const category = sanitizeUuid(getRawParam(source, 'category'))
-  const producer = sanitizeUuid(getRawParam(source, 'producer'))
-  const tag = sanitizeTag(getRawParam(source, 'tag'))
+  const textFilters = Object.fromEntries(
+    SEARCH_TEXT_FIELDS.map((field) => [
+      field,
+      sanitizeTextField(field, getRawParam(source, field)),
+    ]),
+  ) as Record<SearchTextField, string>
+  const identityFilters = Object.fromEntries(
+    UUID_QUERY_FIELDS.map((field) => [field, sanitizeUuid(getRawParam(source, field))]),
+  ) as Record<UuidQueryField, string>
   const sortParam = getRawParam(source, 'sort')
-  const sort = isProductSort(sortParam) ? sortParam : DEFAULT_PRODUCT_SORT
+  const sort = withFallback(isProductSort(sortParam) ? sortParam : undefined, DEFAULT_PRODUCT_SORT)
   const page = sanitizePage(getRawParam(source, 'page'))
 
   return {
-    search,
-    category,
-    producer,
-    tag,
+    search: textFilters.search,
+    category: identityFilters.category,
+    producer: identityFilters.producer,
+    tag: textFilters.tag,
     sort,
     page,
   }
@@ -106,28 +133,22 @@ export const parseProductsQueryState = (source: SearchParamsSource): ProductsQue
 export const buildProductsSearchParams = (state: ProductsQueryState): URLSearchParams => {
   const params = new URLSearchParams()
 
-  const search = sanitizeSearch(state.search)
-  const category = sanitizeUuid(state.category)
-  const producer = sanitizeUuid(state.producer)
-  const tag = sanitizeTag(state.tag)
-  const sort = isProductSort(state.sort) ? state.sort : DEFAULT_PRODUCT_SORT
+  for (const field of SEARCH_TEXT_FIELDS) {
+    const value = sanitizeTextField(field, state[field])
+    if (value.length > 0) {
+      params.set(field, value)
+    }
+  }
+
+  for (const field of UUID_QUERY_FIELDS) {
+    const value = sanitizeUuid(state[field])
+    if (value.length > 0) {
+      params.set(field, value)
+    }
+  }
+
+  const sort = withFallback(isProductSort(state.sort) ? state.sort : undefined, DEFAULT_PRODUCT_SORT)
   const page = Number.isFinite(state.page) && state.page > 0 ? Math.floor(state.page) : 1
-
-  if (search.length > 0) {
-    params.set('search', search)
-  }
-
-  if (category) {
-    params.set('category', category)
-  }
-
-  if (producer) {
-    params.set('producer', producer)
-  }
-
-  if (tag) {
-    params.set('tag', tag)
-  }
 
   if (sort !== DEFAULT_PRODUCT_SORT) {
     params.set('sort', sort)

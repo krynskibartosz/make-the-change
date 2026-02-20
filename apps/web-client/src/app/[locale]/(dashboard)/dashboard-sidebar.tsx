@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
 import { useDashboardSidebar } from '@/components/layout/dashboard-sidebar-context'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -45,22 +46,25 @@ type AccountNavItem =
   | { href: string; icon: LucideIcon; labelKey: NavigationKey }
   | { href: string; icon: LucideIcon; labelText: string }
 
-const accountNavPrimaryItems: AccountNavItem[] = [
+const accountNavPrimaryItems = [
   { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
   { href: '/dashboard/profile', labelKey: 'profile', icon: User },
   { href: '/dashboard/investments', labelKey: 'my_investments', icon: PiggyBank },
   { href: '/dashboard/orders', labelKey: 'my_orders', icon: ShoppingBag },
   { href: '/dashboard/points', labelKey: 'my_points', icon: Coins },
-]
+ ] satisfies AccountNavItem[]
 
-const accountNavSecondaryItems: AccountNavItem[] = [
+const accountNavSecondaryItems = [
   { href: '/dashboard/subscription', labelKey: 'subscriptions', icon: CreditCard },
   { href: '/dashboard/settings', labelKey: 'settings', icon: Settings },
-]
+] satisfies AccountNavItem[]
 
 const sidebarItemClass =
   'group relative flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors ' +
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:ring-offset-2 focus-visible:ring-offset-background'
+
+type AppLinkProps = ComponentProps<typeof Link>
+type SidebarButtonProps = ComponentPropsWithoutRef<'button'>
 
 type SidebarNavLinkProps = {
   href: string
@@ -69,7 +73,7 @@ type SidebarNavLinkProps = {
   active: boolean
   endIcon?: LucideIcon
   tone?: 'default' | 'danger'
-  onClick?: () => void
+  onClick?: AppLinkProps['onClick']
 }
 
 const SidebarNavLink = ({
@@ -121,10 +125,14 @@ const SidebarNavLink = ({
 type SidebarActionButtonProps = {
   icon: LucideIcon
   label: string
-  type?: 'button' | 'submit'
-  onClick?: () => void
   tone?: 'default' | 'danger'
-}
+} & Pick<SidebarButtonProps, 'type' | 'onClick' | 'disabled'>
+
+const levelColorClasses = {
+  explorateur: 'bg-muted text-muted-foreground',
+  protecteur: 'bg-success/15 text-success',
+  ambassadeur: 'bg-warning/15 text-warning',
+} satisfies Record<string, string>
 
 const SidebarActionButton = ({
   icon: Icon,
@@ -158,7 +166,7 @@ const SidebarActionButton = ({
   </button>
 )
 
-export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
+export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
   const t = useTranslations('navigation')
   const tDashboard = useTranslations('dashboard')
   const pathname = usePathname()
@@ -173,22 +181,18 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
   const initial = (displayName || '?').trim().charAt(0).toUpperCase()
   const avatarUrl =
     (profile?.metadata?.avatar_url as string | undefined) || profile?.avatar_url || null
-  const levelColors: Record<string, string> = {
-    explorateur: 'bg-muted text-muted-foreground',
-    protecteur: 'bg-success/15 text-success',
-    ambassadeur: 'bg-warning/15 text-warning',
-  }
 
   const handleNavClick = () => {
     setIsMobileOpen(false)
   }
 
-  const exploreNavItems: Array<{ href: string; icon: LucideIcon; label: string }> = [
+  type ExploreNavItem = { href: string; icon: LucideIcon; label: string }
+  const exploreNavItems = [
     { href: '/', icon: Home, label: t('home') },
     { href: '/projects', icon: Leaf, label: t('projects') },
     { href: '/products', icon: ShoppingBag, label: t('products') },
     { href: '/leaderboard', icon: Trophy, label: t('leaderboard') },
-  ]
+  ] satisfies ExploreNavItem[]
 
   const isActiveAccountRoute = (href: string) =>
     pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
@@ -198,10 +202,10 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
       <div className="p-4 pb-4 border-b">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 ring-1 ring-border">
+            <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-primary/15 via-secondary/10 to-accent/10 ring-1 ring-border">
               <Avatar className="h-12 w-12">
                 <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
-                <AvatarFallback className="bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 text-sm font-bold text-primary">
+                <AvatarFallback className="bg-linear-to-br from-primary/15 via-secondary/10 to-accent/10 text-sm font-bold text-primary">
                   {initial}
                 </AvatarFallback>
               </Avatar>
@@ -216,7 +220,7 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
               <Badge
                 className={cn(
                   'mt-2 rounded-full px-2.5 py-0.5 text-[11px]',
-                  levelColors[userLevel],
+                  levelColorClasses[userLevel],
                 )}
               >
                 {tDashboard(`overview.levels.${userLevel}`)}
@@ -334,4 +338,4 @@ export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
       )}
     </>
   )
-}
+};

@@ -48,6 +48,11 @@ export function CartProvider({ children }: PropsWithChildren) {
         const index = next.findIndex((i) => i.productId === loadedItem.productId)
         if (index >= 0) {
           const existing = next[index]
+          if (!existing) {
+            next.push(loadedItem)
+            continue
+          }
+
           next[index] = {
             productId: existing.productId,
             quantity: clampQuantity(
@@ -87,6 +92,10 @@ export function CartProvider({ children }: PropsWithChildren) {
       const existingIndex = next.findIndex((i) => i.productId === productId)
       if (existingIndex >= 0) {
         const existing = next[existingIndex]
+        if (!existing) {
+          return next
+        }
+
         const mergedQty = clampQuantity(
           (existing.quantity || 0) + quantity,
           snapshot.stockQuantity ?? existing.snapshot.stockQuantity,
@@ -115,6 +124,8 @@ export function CartProvider({ children }: PropsWithChildren) {
       if (index < 0) return prev
 
       const item = next[index]
+      if (!item) return prev
+
       const qty = clampQuantity(quantity, item.snapshot.stockQuantity)
       next[index] = { ...item, quantity: qty }
       return next

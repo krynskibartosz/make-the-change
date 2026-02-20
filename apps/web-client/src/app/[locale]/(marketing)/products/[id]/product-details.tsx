@@ -68,6 +68,27 @@ export async function ProductDetails({
       ? Number.NaN
       : Number(product.price_eur_equivalent)
   const priceEuros = Number.isFinite(parsedPriceEuros) ? parsedPriceEuros : null
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: productName,
+    description: productDescription,
+    image: coverImage ? [coverImage] : [],
+    sku: product.id,
+    brand: {
+      '@type': 'Brand',
+      name: product.producer?.name_default || 'Make the Change',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.id}`,
+      priceCurrency: 'EUR',
+      price: displayPrice,
+      availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  }
+  const structuredDataJson = JSON.stringify(structuredData).replace(/</g, '\\u003c')
 
   return (
     <>
@@ -76,8 +97,8 @@ export async function ProductDetails({
         minHeightClassName="min-h-[90vh]"
         background={
           <>
-            <div className="absolute top-[-20%] left-[-10%] h-[800px] w-[800px] rounded-full bg-primary/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-3000" />
-            <div className="absolute bottom-[-20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-marketing-positive-400/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-5000 delay-1000" />
+            <div className="absolute top-[-20%] left-[-10%] h-200 w-200 rounded-full bg-primary/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-3000" />
+            <div className="absolute bottom-[-20%] right-[-10%] h-200 w-200 rounded-full bg-marketing-positive-400/10 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse duration-5000 delay-1000" />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9ImN1cnJlbnRDb2xvciIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] opacity-100 text-foreground/20 mask-image-gradient" />
           </>
         }
@@ -127,13 +148,13 @@ export async function ProductDetails({
                 </div>
               )}
               {product.featured && (
-                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-gradient-to-r from-marketing-warning-500 to-marketing-warning-500 text-marketing-overlay-light border-none">
+                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-linear-to-r from-marketing-warning-500 to-marketing-warning-500 text-marketing-overlay-light border-none">
                   <Star className="h-3 w-3 mr-1" />
                   {t('featured')}
                 </Badge>
               )}
               {product.is_hero_product && (
-                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-gradient-to-r from-marketing-accent-alt-500 to-marketing-accent-alt-500 text-marketing-overlay-light border-none">
+                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-linear-to-r from-marketing-accent-alt-500 to-marketing-accent-alt-500 text-marketing-overlay-light border-none">
                   <Award className="h-3 w-3 mr-1" />
                   {t('detail_page.hero_product_badge')}
                 </Badge>
@@ -171,17 +192,17 @@ export async function ProductDetails({
                   className="object-cover scale-110 transition-transform duration-700 hover:scale-100"
                 />
               ) : (
-                <div className="h-full w-full bg-gradient-to-br from-primary/20 to-muted flex items-center justify-center">
+                <div className="h-full w-full bg-linear-to-br from-primary/20 to-muted flex items-center justify-center">
                   <Package className="h-24 w-24 text-primary/50" />
                 </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent opacity-60" />
+              <div className="absolute inset-0 bg-linear-to-t from-marketing-overlay-dark/60 via-transparent to-transparent opacity-60" />
             </div>
 
             {/* Floating Element - Price & Stock Badge */}
             <div className="absolute -bottom-10 -left-10 z-20 p-6 rounded-3xl bg-background/90 backdrop-blur-xl shadow-[0_8px_30px_hsl(var(--marketing-overlay-dark) / 0.12)] border border-marketing-overlay-light/20 animate-in slide-in-from-left-4 duration-1000 delay-300">
               <div className="flex items-center gap-4">
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-marketing-positive-600 flex items-center justify-center text-marketing-overlay-light shadow-lg shadow-primary/30">
+                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-primary to-marketing-positive-600 flex items-center justify-center text-marketing-overlay-light shadow-lg shadow-primary/30">
                   {inStock ? <ShoppingCart className="h-7 w-7" /> : <Clock className="h-7 w-7" />}
                 </div>
                 <div>
@@ -227,7 +248,7 @@ export async function ProductDetails({
 
           {/* Enhanced Sidebar */}
           <div className="space-y-6">
-            <Card className="group sticky top-24 relative overflow-hidden rounded-[2.5rem] border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:bg-background/80 hover:shadow-xl hover:-translate-y-1">
+            <Card className="group top-24 relative overflow-hidden rounded-[2.5rem] border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:bg-background/80 hover:shadow-xl hover:-translate-y-1">
               <CardContent className="p-8 space-y-8">
                 {/* Price Section */}
                 <div className="relative">
@@ -289,7 +310,7 @@ export async function ProductDetails({
                     <div className="group relative overflow-hidden p-6 rounded-3xl border border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:bg-background/80 hover:shadow-xl hover:-translate-y-1">
                       <div className="flex items-start gap-4">
                         {producerImage ? (
-                          <div className="h-16 w-16 rounded-2xl overflow-hidden bg-muted flex-shrink-0 border border-border/50 group-hover:scale-110 transition-transform">
+                          <div className="h-16 w-16 rounded-2xl overflow-hidden bg-muted shrink-0 border border-border/50 group-hover:scale-110 transition-transform">
                             <Image
                               src={producerImage}
                               alt={product.producer?.name_default || 'Producer'}
@@ -298,7 +319,7 @@ export async function ProductDetails({
                             />
                           </div>
                         ) : (
-                          <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary font-bold flex-shrink-0 text-xl">
+                          <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary font-bold shrink-0 text-xl">
                             {product.producer?.name_default?.[0]?.toUpperCase() || 'P'}
                           </div>
                         )}
@@ -387,7 +408,7 @@ export async function ProductDetails({
               <span className="block text-marketing-overlay-light">
                 {t('detail_page.cta.title_line1')}
               </span>
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-300% animate-gradient">
+              <span className="block mt-2 text-transparent bg-clip-text bg-linear-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-300% animate-gradient">
                 {t('detail_page.cta.title_line2')}
               </span>
             </>
@@ -433,34 +454,7 @@ export async function ProductDetails({
       )}
 
       {includeStructuredData && (
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be injected as raw script content.
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Product',
-              name: productName,
-              description: productDescription,
-              image: coverImage ? [coverImage] : [],
-              sku: product.id,
-              brand: {
-                '@type': 'Brand',
-                name: product.producer?.name_default || 'Make the Change',
-              },
-              offers: {
-                '@type': 'Offer',
-                url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.id}`,
-                priceCurrency: 'EUR',
-                price: displayPrice,
-                availability: inStock
-                  ? 'https://schema.org/InStock'
-                  : 'https://schema.org/OutOfStock',
-                itemCondition: 'https://schema.org/NewCondition',
-              },
-            }),
-          }}
-        />
+        <script type="application/ld+json">{structuredDataJson}</script>
       )}
     </>
   )

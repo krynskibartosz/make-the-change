@@ -55,6 +55,8 @@ export function PageEditor({ initialData, slug }: PageEditorProps) {
 
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i]
+        if (!key) continue
+
         const nextValue = current[key]
 
         if (typeof nextValue !== 'object' || nextValue === null || Array.isArray(nextValue)) {
@@ -64,7 +66,10 @@ export function PageEditor({ initialData, slug }: PageEditorProps) {
         current = current[key] as Record<string, unknown>
       }
 
-      current[keys[keys.length - 1]] = value
+      const lastKey = keys[keys.length - 1]
+      if (!lastKey) return newData
+
+      current[lastKey] = value
       return newData
     })
   }
@@ -113,7 +118,7 @@ export function PageEditor({ initialData, slug }: PageEditorProps) {
               // Ignore parse errors while typing
             }
           }}
-          className="font-mono min-h-[800px]"
+          className="font-mono min-h-200"
         />
       </div>
     )
@@ -134,7 +139,7 @@ export function PageEditor({ initialData, slug }: PageEditorProps) {
       </div>
 
       <Tabs defaultValue="hero" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:w-[600px]">
+        <TabsList className="grid w-full grid-cols-4 lg:w-150">
           <TabsTrigger value="hero">Hero</TabsTrigger>
           <TabsTrigger value="stats">Statistiques</TabsTrigger>
           <TabsTrigger value="features">Fonctionnalités</TabsTrigger>
