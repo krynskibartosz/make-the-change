@@ -11,7 +11,7 @@ import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { asString, isRecord } from '@/lib/type-guards'
 
-export default function MenuPage() {
+ const MenuPage = () => {
   const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(
     null,
   )
@@ -226,4 +226,7 @@ export default function MenuPage() {
       </div>
     </div>
   )
-}
+};
+
+
+export default MenuPage

@@ -306,15 +306,26 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
 
   const avatarUrl = user?.avatarUrl ?? null
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
+  const headerStyle = activeMegaContent
+    ? {
+        ...rest.style,
+        backdropFilter: 'blur(34px) saturate(165%)',
+        WebkitBackdropFilter: 'blur(34px) saturate(165%)',
+      }
+    : rest.style
 
   return (
     <header
       {...rest}
       className={cn(
-        'hidden md:block fixed left-0 right-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 transition-all duration-300 ease-in-out',
+        'hidden md:block fixed left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out',
+        activeMegaContent
+          ? 'border-b-0 bg-white/34 backdrop-blur-3xl supports-backdrop-filter:bg-white/20 dark:bg-slate-950/56 dark:supports-backdrop-filter:bg-slate-950/38'
+          : 'border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60',
         isVisible ? 'top-0 opacity-100' : '-top-20 opacity-0',
         className,
       )}
+      style={headerStyle}
     >
       <div className="w-full max-w-[1920px] relative mx-auto flex h-16 items-center justify-between px-4 md:px-8 lg:px-12">
         {/* Logo */}
@@ -399,17 +410,21 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
                 <>
                   <div
                     data-mega-menu-overlay="true"
-                    className="fixed inset-x-0 bottom-0 top-16 z-40 bg-background/28 transition-opacity duration-200"
+                    className="fixed inset-x-0 bottom-0 top-16 z-40 bg-background/16 transition-opacity duration-200"
                     onPointerDown={closeMegaMenu}
                     onClick={closeMegaMenu}
                   />
                   <div
-                    className="pointer-events-none fixed inset-x-0 top-18 z-[60] isolate px-4"
+                    className="pointer-events-none fixed inset-x-0 top-16 z-[60] isolate"
                     style={{
                       transform: 'translateZ(0)',
                     }}
                   >
-                    <MegaMenu content={activeMegaContent} onClose={closeMegaMenu} />
+                    <MegaMenu
+                      content={activeMegaContent}
+                      onClose={closeMegaMenu}
+                      variant="header-attached"
+                    />
                   </div>
                 </>,
                 document.body,
