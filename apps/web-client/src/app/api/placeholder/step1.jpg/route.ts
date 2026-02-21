@@ -2,7 +2,7 @@
 export async function GET() {
   // Rediriger vers une image placeholder fiable
   return Response.redirect(
-    'https://images.unsplash.com/photo-1551888192-3cf5d6a5e1c?w=800&h=600&fit=crop&auto=format',
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80',
     307,
   )
 }

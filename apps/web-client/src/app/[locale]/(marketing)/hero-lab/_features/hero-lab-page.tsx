@@ -1,26 +1,30 @@
 import type { Locale } from '@make-the-change/core/i18n'
 import { defaultLocale, isLocale } from '@make-the-change/core/i18n'
-import { Button } from '@make-the-change/core/ui'
-import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react'
-import type { Metadata } from 'next'
+import { ArrowRight } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { Logo } from '@/components/ui/logo'
-import { PageHero } from '@/components/ui/page-hero'
+import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing-cta-band'
+import { getHomeServerData } from '@/app/[locale]/(marketing)/(home)/_features/home.server-data'
+import {
+  buildHomeViewModel,
+  type HomeViewModelLabels,
+} from '@/app/[locale]/(marketing)/(home)/_features/home.view-model'
+import { HomeBlogSection } from '@/app/[locale]/(marketing)/(home)/_features/home-blog-section'
+import { HomeFeaturedProductsSection } from '@/app/[locale]/(marketing)/(home)/_features/home-featured-products-section'
+import { HomeFeaturedProjectsSection } from '@/app/[locale]/(marketing)/(home)/_features/home-featured-projects-section'
+import { HomePartnersSection } from '@/app/[locale]/(marketing)/(home)/_features/home-partners-section'
+import { HomeSectionEmptyState } from '@/app/[locale]/(marketing)/(home)/_features/home-section-empty-state'
+import { HomeStatsSection } from '@/app/[locale]/(marketing)/(home)/_features/home-stats-section'
+import { HomeUniverseSection } from '@/app/[locale]/(marketing)/(home)/_features/home-universe-section'
+import { MarketingStepsSection } from '@/app/[locale]/(marketing)/(home)/_features/marketing-steps-section'
 import { Link } from '@/i18n/navigation'
 import { buildPartnerDashboardUrl } from '@/lib/partner-app-url'
 import { getLocalizedContent } from '@/lib/utils'
-import { MarketingCtaBand } from '../_features/marketing-cta-band'
-import { DiversityFactLoader } from './_features/diversity-fact-loader'
-import { getHomeServerData } from './_features/home.server-data'
-import { buildHomeViewModel, type HomeViewModelLabels } from './_features/home.view-model'
-import { HomeBlogSection } from './_features/home-blog-section'
-import { HomeFeaturedProductsSection } from './_features/home-featured-products-section'
-import { HomeFeaturedProjectsSection } from './_features/home-featured-projects-section'
-import { HomePartnersSection } from './_features/home-partners-section'
-import { HomeSectionEmptyState } from './_features/home-section-empty-state'
-import { HomeStatsSection } from './_features/home-stats-section'
-import { HomeUniverseSection } from './_features/home-universe-section'
-import { MarketingStepsSection } from './_features/marketing-steps-section'
+import type { HeroLabVariant } from './hero-lab.types'
+import { getHeroLabCopy } from './hero-lab-copy'
+import { HeroLabNav } from './hero-lab-nav'
+import { HeroVariantV1 } from './hero-variant-v1'
+import { HeroVariantV2 } from './hero-variant-v2'
+import { HeroVariantV3 } from './hero-variant-v3'
 
 type MarketingStepPlaceholderImages = {
   projects: string[]
@@ -34,49 +38,21 @@ const marketingStepPlaceholderImages = {
   ],
 } satisfies MarketingStepPlaceholderImages
 
-const toLocaleForOpenGraph = (locale: string) => {
-  if (locale === 'fr') return 'fr_FR'
-  if (locale === 'nl') return 'nl_NL'
-  return 'en_US'
+const heroVariantById = {
+  v1: HeroVariantV1,
+  v2: HeroVariantV2,
+  v3: HeroVariantV3,
+} satisfies Record<HeroLabVariant, typeof HeroVariantV1>
+
+type HeroLabPageProps = {
+  variant: HeroLabVariant
 }
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> => {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'metadata' })
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://make-the-change-web-client.vercel.app'
-
-  return {
-    title: t('title'),
-    description: t('description'),
-    openGraph: {
-      type: 'website',
-      siteName: 'Make the Change',
-      locale: toLocaleForOpenGraph(locale),
-      url: `${baseUrl}/${locale}`,
-    },
-    twitter: {
-      card: 'summary_large_image',
-    },
-    alternates: {
-      canonical: `${baseUrl}/${locale}`,
-      languages: {
-        fr: `${baseUrl}/fr`,
-        en: `${baseUrl}/en`,
-        nl: `${baseUrl}/nl`,
-      },
-    },
-  }
-}
-
-const HomePage = async () => {
+export async function HeroLabPage({ variant }: HeroLabPageProps) {
   const t = await getTranslations('home')
   const localeValue = await getLocale()
   const locale: Locale = isLocale(localeValue) ? localeValue : defaultLocale
+  const heroLabCopy = getHeroLabCopy(locale)
   const {
     user,
     homeContent,
@@ -158,73 +134,20 @@ const HomePage = async () => {
     cta: localizedCmsContent?.universe.cards.products.cta ?? t('universe.cards.products.cta'),
   }
 
+  const HeroVariant = heroVariantById[variant]
+
   return (
     <>
-      <div className="absolute left-0 right-0 top-4 z-50 flex justify-center md:hidden">
-        <Link href="/" className="flex items-center gap-2">
-          <Logo variant="icon" width={32} height={32} className="h-8 w-8" />
-          <span className="text-lg font-bold">Make the Change</span>
-        </Link>
-      </div>
+      <section className="container mx-auto px-4 pb-6 pt-24">
+        <HeroLabNav labels={heroLabCopy.nav} />
+      </section>
 
-      <PageHero.Layout
-        size="lg"
-        variant="gradient"
-        className="relative flex min-h-dvh flex-col justify-center pt-32 md:pt-44"
-      >
-        <PageHero.Badge>
-          <span className="inline-flex items-center gap-2 px-1 py-1">
-            <Sparkles className="h-3.5 w-3.5 animate-pulse text-primary" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              {localizedCmsContent?.hero.badge ?? t('hero.badge')}
-            </span>
-          </span>
-        </PageHero.Badge>
-
-        <PageHero.Title>{localizedCmsContent?.hero.title ?? t('hero.title')}</PageHero.Title>
-        <PageHero.Description>
-          {localizedCmsContent?.hero.subtitle ?? t('hero.subtitle')}
-        </PageHero.Description>
-
-        <PageHero.Content>
-          <PageHero.Actions>
-            <PageHero.CTA>
-              <Link href={heroContextualCta.href} className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="h-14 w-full rounded-2xl px-8 text-sm font-black uppercase tracking-widest sm:w-auto"
-                >
-                  {heroContextualCta.label}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-            </PageHero.CTA>
-          </PageHero.Actions>
-
-          {heroStats.length > 0 ? (
-            <ul className="m-0 flex list-none flex-wrap justify-center gap-4 p-0 pt-4">
-              {heroStats.map((heroStat) => (
-                <li key={heroStat.key}>
-                  <Link href={heroStat.href}>
-                    <span className="flex items-center gap-2 rounded-2xl border border-marketing-overlay-light/10 bg-background/40 px-4 py-2 shadow-sm backdrop-blur-md">
-                      <heroStat.icon className="h-4 w-4 text-primary" />
-                      <span className="text-xs font-bold uppercase tracking-tight">
-                        {heroStat.value} {heroStat.label}
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-
-          <DiversityFactLoader />
-
-          <div className="mx-auto mt-16 flex h-12 w-12 cursor-pointer animate-bounce items-center justify-center rounded-full border border-primary/20 bg-primary/10 backdrop-blur-sm">
-            <ArrowDown className="h-6 w-6 text-primary" />
-          </div>
-        </PageHero.Content>
-      </PageHero.Layout>
+      <HeroVariant
+        copy={heroLabCopy.variants[variant]}
+        secondaryCtaLabel={localizedCmsContent?.hero.cta_secondary ?? t('hero.cta_secondary')}
+        heroContextualCta={heroContextualCta}
+        heroStats={heroStats}
+      />
 
       <HomeUniverseSection
         title={localizedCmsContent?.universe.title ?? t('universe.title')}
@@ -382,5 +305,3 @@ const HomePage = async () => {
     </>
   )
 }
-
-export default HomePage
