@@ -1,22 +1,21 @@
 'use client'
 
+import type { Locale } from '@make-the-change/core/i18n'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Button,
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@make-the-change/core/ui'
 import { ChevronDown } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -52,8 +51,106 @@ const toCategoryQueryToken = (value: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+type CmsTextTranslations = {
+  fr: string
+  en: string
+  nl: string
+  aliases: string[]
+}
+
+const CMS_MENU_TEXT_TRANSLATIONS: CmsTextTranslations[] = [
+  {
+    fr: 'Investir',
+    en: 'Invest',
+    nl: 'Investeren',
+    aliases: ['investir', 'invest', 'investeren'],
+  },
+  {
+    fr: 'Biodiversité',
+    en: 'Biodiversity',
+    nl: 'Biodiversiteit',
+    aliases: ['biodiversite', 'biodiversity', 'biodiversiteit'],
+  },
+  {
+    fr: 'Agriculture durable',
+    en: 'Sustainable farming',
+    nl: 'Duurzame landbouw',
+    aliases: ['agriculture durable', 'sustainable farming', 'duurzame landbouw'],
+  },
+  {
+    fr: 'Investir dans la biodiversité',
+    en: 'Invest in biodiversity',
+    nl: 'Investeer in biodiversiteit',
+    aliases: [
+      'investir dans la biodiversite',
+      'invest in biodiversity',
+      'investeer in biodiversiteit',
+    ],
+  },
+  {
+    fr: 'Voir tous les projets',
+    en: 'View all projects',
+    nl: 'Bekijk alle projecten',
+    aliases: ['voir tous les projets', 'view all projects', 'bekijk alle projecten'],
+  },
+  {
+    fr: 'Boutique',
+    en: 'Shop',
+    nl: 'Winkel',
+    aliases: ['boutique', 'shop', 'winkel'],
+  },
+  {
+    fr: 'Alimentation',
+    en: 'Food',
+    nl: 'Voeding',
+    aliases: ['alimentation', 'food', 'voeding'],
+  },
+  {
+    fr: 'Maison',
+    en: 'Home',
+    nl: 'Huis',
+    aliases: ['maison', 'home', 'huis'],
+  },
+  {
+    fr: 'Découvrez la boutique',
+    en: 'Discover the shop',
+    nl: 'Ontdek de winkel',
+    aliases: [
+      'decouvrez la boutique',
+      'découvrez la boutique',
+      'discover the shop',
+      'ontdek de winkel',
+    ],
+  },
+  {
+    fr: 'Voir la boutique',
+    en: 'View shop',
+    nl: 'Bekijk de winkel',
+    aliases: ['voir la boutique', 'view shop', 'bekijk de winkel'],
+  },
+]
+
+const normalizeCmsLabel = (value: string): string =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, ' ')
+
+const localizeCmsLabel = (value: string, locale: Locale): string => {
+  const normalizedValue = normalizeCmsLabel(value)
+  const matchingEntry = CMS_MENU_TEXT_TRANSLATIONS.find((entry) =>
+    entry.aliases.some((alias) => normalizeCmsLabel(alias) === normalizedValue),
+  )
+
+  if (!matchingEntry) return value
+  return matchingEntry[locale]
+}
+
 export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
   const t = useTranslations('navigation')
+  const locale = useLocale() as Locale
   const pathname = usePathname()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [isClient, setIsClient] = useState(false)
@@ -71,12 +168,15 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
 
     const normalizedItems = categoryItems.map((item) => ({
       ...item,
+      title: localizeCmsLabel(item.title, locale),
       href: '/projects',
     }))
 
     return {
       ...projectsMenu,
-      eyebrow: undefined,
+      ...(projectsMenu.eyebrow !== undefined
+        ? { eyebrow: localizeCmsLabel(projectsMenu.eyebrow, locale) }
+        : {}),
       title: '',
       sections: [
         {
@@ -84,8 +184,17 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
           items: normalizedItems,
         },
       ],
+      ...(projectsMenu.featured !== undefined
+        ? {
+            featured: {
+              ...projectsMenu.featured,
+              title: localizeCmsLabel(projectsMenu.featured.title, locale),
+              ctaLabel: localizeCmsLabel(projectsMenu.featured.ctaLabel, locale),
+            },
+          }
+        : {}),
     } satisfies MainMenuStructure['projects']
-  }, [menuData?.projects])
+  }, [locale, menuData?.projects])
   const shopMenu = useMemo(() => {
     const productsMenu = menuData?.products
     if (!productsMenu) return undefined
@@ -96,18 +205,21 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
 
     const normalizedItems = categoryItems.map((item) => ({
       ...item,
+      title: localizeCmsLabel(item.title, locale),
       href: item.href.includes('category=')
         ? item.href
         : (() => {
-          const categoryToken = toCategoryQueryToken(item.title)
-          if (!categoryToken) return '/products'
-          return `/products?category=${encodeURIComponent(categoryToken)}`
-        })(),
+            const categoryToken = toCategoryQueryToken(item.title)
+            if (!categoryToken) return '/products'
+            return `/products?category=${encodeURIComponent(categoryToken)}`
+          })(),
     }))
 
     return {
       ...productsMenu,
-      eyebrow: undefined,
+      ...(productsMenu.eyebrow !== undefined
+        ? { eyebrow: localizeCmsLabel(productsMenu.eyebrow, locale) }
+        : {}),
       title: '',
       sections: [
         {
@@ -115,31 +227,50 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
           items: normalizedItems,
         },
       ],
+      ...(productsMenu.featured !== undefined
+        ? {
+            featured: {
+              ...productsMenu.featured,
+              title: localizeCmsLabel(productsMenu.featured.title, locale),
+              ctaLabel: localizeCmsLabel(productsMenu.featured.ctaLabel, locale),
+            },
+          }
+        : {}),
     } satisfies MainMenuStructure['products']
-  }, [menuData?.products])
+  }, [locale, menuData?.products])
 
   const navigation = useMemo(() => {
+    const projectsNavigationItem: HeaderNavigationItem = {
+      id: 'projects',
+      href: '/projects',
+      label: t('invest'),
+      ...(investMenu !== undefined ? { mega: investMenu } : {}),
+    }
+
+    const productsNavigationItem: HeaderNavigationItem = {
+      id: 'products',
+      href: '/products',
+      label: t('shop'),
+      ...(shopMenu !== undefined ? { mega: shopMenu } : {}),
+    }
+
+    const discoverNavigationItem: HeaderNavigationItem = {
+      id: 'discover',
+      href: '#',
+      label: t('discover'),
+      ...(discoverMenu !== undefined ? { mega: discoverMenu } : {}),
+    }
+
     return [
-      {
-        id: 'projects',
-        href: '/projects',
-        label: t('invest'),
-        mega: investMenu,
-      },
-      {
-        id: 'products',
-        href: '/products',
-        label: t('shop'),
-        mega: shopMenu,
-      },
-      {
-        id: 'discover',
-        href: '#',
-        label: t('discover'),
-        mega: discoverMenu,
-      },
+      projectsNavigationItem,
+      productsNavigationItem,
+      discoverNavigationItem,
     ] satisfies HeaderNavigationItem[]
   }, [investMenu, shopMenu, t, discoverMenu])
+  const activeMegaContent = useMemo(() => {
+    const activeItem = navigation.find((item) => item.id === activeMenu)
+    return activeItem?.mega ?? null
+  }, [activeMenu, navigation])
 
   const closeMegaMenu = useCallback(() => setActiveMenu(null), [])
 
@@ -242,9 +373,6 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
                         {label}
                         <ChevronDown className="h-4 w-4 text-muted-foreground" />
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent className="pointer-events-none w-full border-0 bg-transparent p-0 shadow-none">
-                        <MegaMenu content={item.mega} onClose={closeMegaMenu} />
-                      </NavigationMenuContent>
                     </NavigationMenuItem>
                   )
                 }
@@ -265,19 +393,25 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
                 )
               })}
             </NavigationMenuList>
-            <NavigationMenuViewport className="fixed inset-x-0 top-18 z-50 px-4" />
-            {activeMenu &&
+            {activeMegaContent &&
               isClient &&
               createPortal(
-                <div
-                  className="fixed inset-0 top-16 z-40 bg-background/82 backdrop-blur-2xl supports-backdrop-filter:bg-background/74 transition-opacity duration-200"
-                  style={{
-                    backdropFilter: 'blur(24px) saturate(125%)',
-                    WebkitBackdropFilter: 'blur(24px) saturate(125%)',
-                  }}
-                  onPointerDown={closeMegaMenu}
-                  onClick={closeMegaMenu}
-                />,
+                <>
+                  <div
+                    data-mega-menu-overlay="true"
+                    className="fixed inset-x-0 bottom-0 top-16 z-40 bg-background/28 transition-opacity duration-200"
+                    onPointerDown={closeMegaMenu}
+                    onClick={closeMegaMenu}
+                  />
+                  <div
+                    className="pointer-events-none fixed inset-x-0 top-18 z-[60] isolate px-4"
+                    style={{
+                      transform: 'translateZ(0)',
+                    }}
+                  >
+                    <MegaMenu content={activeMegaContent} onClose={closeMegaMenu} />
+                  </div>
+                </>,
                 document.body,
               )}
           </NavigationMenu>

@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type FieldValues, type UseFormProps, useForm } from 'react-hook-form'
-import type { ZodTypeAny } from 'zod'
+import type { ZodType } from 'zod'
 
 import { useToast } from '@/components/ui/use-toast'
 
 type UseFormWithToastOptions<TData extends FieldValues> = UseFormProps<TData> & {
-  schema?: ZodTypeAny
+  schema?: ZodType<TData>
   toasts?: {
     success?: { title: string; description: string }
     error?: { title: string; description: string }
@@ -18,14 +18,15 @@ export function useFormWithToast<TData extends FieldValues>(
 ) {
   const { toast } = useToast()
   const { onSubmit, toasts, schema, ...formOptions } = options
+  const resolver = schema ? zodResolver(schema) : formOptions.resolver
 
   const form = useForm<TData>({
     mode: formOptions.mode ?? 'onChange',
     ...formOptions,
-    resolver: schema ? zodResolver(schema) : formOptions.resolver,
+    ...(resolver !== undefined ? { resolver } : {}),
   })
 
-  const handleSubmit = form.handleSubmit(async (value) => {
+  const handleSubmit = form.handleSubmit(async (value: TData) => {
     try {
       if (onSubmit) {
         await onSubmit(value)

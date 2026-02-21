@@ -25,16 +25,18 @@ export const MarketingSection = ({
   className,
   contentClassName,
 }: MarketingSectionProps) => {
+  const sectionProps = {
+    hideDescriptionOnMobile,
+    variant,
+    size,
+    className: cn('relative', className),
+    ...(title !== undefined ? { title } : {}),
+    ...(description !== undefined ? { description } : {}),
+    ...(action !== undefined ? { action } : {}),
+  }
+
   return (
-    <SectionContainer
-      title={title}
-      description={description}
-      hideDescriptionOnMobile={hideDescriptionOnMobile}
-      action={action}
-      variant={variant}
-      size={size}
-      className={cn('relative', className)}
-    >
+    <SectionContainer {...sectionProps}>
       <div className={cn('mx-auto w-full', contentClassName)}>{children}</div>
     </SectionContainer>
   )

@@ -37,10 +37,9 @@ const renderProjectCard = (
 ) => {
   const title = project.name_default || 'Project'
   const badges = buildProjectCardBadges({
-    featured: project.featured,
-    status: project.status,
+    featured: project.featured ?? null,
+    status: project.status ?? null,
     labels: {
-      featuredLabel: undefined,
       activeLabel: labels.activeLabel,
       fundedLabel: labels.fundedLabel,
     },
@@ -59,8 +58,8 @@ const renderProjectCard = (
           alt: title,
         },
         imagePriority: priority,
-        status: project.status,
-        featured: project.featured,
+        status: project.status ?? null,
+        featured: project.featured ?? null,
         progressPercent:
           project.target_budget && project.target_budget > 0
             ? ((project.current_funding || 0) / project.target_budget) * 100

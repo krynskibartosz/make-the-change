@@ -1,0 +1,717 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img "Make the Change" [ref=e7]
+          - generic [ref=e8]: Make the Change
+        - navigation "Navigation principale" [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - button "Invest" [ref=e12] [cursor=pointer]:
+                - text: Invest
+                - img [ref=e13]
+            - listitem [ref=e15]:
+              - button "Shop" [ref=e16] [cursor=pointer]:
+                - text: Shop
+                - img [ref=e17]
+            - listitem [ref=e19]:
+              - button "Discover" [ref=e20] [cursor=pointer]:
+                - text: Discover
+                - img [ref=e21]
+        - generic [ref=e23]:
+          - link "Login" [ref=e25] [cursor=pointer]:
+            - /url: /en/login
+            - button "Login" [ref=e26]:
+              - generic [ref=e28]: Login
+          - link "Open cart" [ref=e30] [cursor=pointer]:
+            - /url: /en/cart
+            - img [ref=e31]
+          - button "Toggle theme" [ref=e35] [cursor=pointer]
+    - main [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e43]:
+          - heading "Our shop" [level=1] [ref=e44]
+          - paragraph [ref=e45]: Exchange your points for sustainable products from our partners
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - search [ref=e50]:
+              - img [ref=e51]
+              - searchbox "Search products..." [ref=e56]
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - textbox "Tag" [ref=e59]: __all__
+                - combobox [ref=e60]:
+                  - img [ref=e61]
+              - textbox [ref=e64]: __all__
+          - generic [ref=e65]:
+            - combobox [ref=e66] [cursor=pointer]:
+              - generic [ref=e67]:
+                - img [ref=e68]
+                - generic [ref=e71]: Featured
+              - img [ref=e73]
+            - textbox [ref=e75]: featured_first
+          - button "Clear filters" [ref=e77] [cursor=pointer]:
+            - generic [ref=e79]: Clear filters
+  - generic [ref=e81]:
+    - complementary [ref=e82]:
+      - region [ref=e84]:
+        - generic [ref=e85]:
+          - heading "Category" [level=3] [ref=e86]:
+            - button "Category" [expanded] [ref=e87] [cursor=pointer]:
+              - text: Category
+              - img [ref=e88]
+          - region "Category" [ref=e90]:
+            - generic [ref=e91]:
+              - button "All categories" [ref=e92]
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - checkbox [ref=e96] [cursor=pointer]
+                  - checkbox [ref=e97]
+                  - generic [ref=e98] [cursor=pointer]: Accessoires
+                - generic [ref=e99]:
+                  - checkbox [ref=e100] [cursor=pointer]
+                  - checkbox [ref=e101]
+                  - generic [ref=e102] [cursor=pointer]: Food
+                - generic [ref=e103]:
+                  - checkbox [ref=e104] [cursor=pointer]
+                  - checkbox [ref=e105]
+                  - generic [ref=e106] [cursor=pointer]: Baumes
+                - generic [ref=e107]:
+                  - checkbox [ref=e108] [cursor=pointer]
+                  - checkbox [ref=e109]
+                  - generic [ref=e110] [cursor=pointer]: Cadeaux
+                - generic [ref=e111]:
+                  - checkbox [ref=e112] [cursor=pointer]
+                  - checkbox [ref=e113]
+                  - generic [ref=e114] [cursor=pointer]: Coffrets Cadeaux
+                - generic [ref=e115]:
+                  - checkbox [ref=e116] [cursor=pointer]
+                  - checkbox [ref=e117]
+                  - generic [ref=e118] [cursor=pointer]: copeaux savon
+                - generic [ref=e119]:
+                  - checkbox [ref=e120] [cursor=pointer]
+                  - checkbox [ref=e121]
+                  - generic [ref=e122] [cursor=pointer]: Cosmetics
+                - generic [ref=e123]:
+                  - checkbox [ref=e124] [cursor=pointer]
+                  - checkbox [ref=e125]
+                  - generic [ref=e126] [cursor=pointer]: Épicerie
+                - generic [ref=e127]:
+                  - checkbox [ref=e128] [cursor=pointer]
+                  - checkbox [ref=e129]
+                  - generic [ref=e130] [cursor=pointer]: Épices
+                - generic [ref=e131]:
+                  - checkbox [ref=e132] [cursor=pointer]
+                  - checkbox [ref=e133]
+                  - generic [ref=e134] [cursor=pointer]: Fruits & Vegetables
+                - generic [ref=e135]:
+                  - checkbox [ref=e136] [cursor=pointer]
+                  - checkbox [ref=e137]
+                  - generic [ref=e138] [cursor=pointer]: Gamme Liquide
+                - generic [ref=e139]:
+                  - checkbox [ref=e140] [cursor=pointer]
+                  - checkbox [ref=e141]
+                  - generic [ref=e142] [cursor=pointer]: Oils & Vinegars
+                - generic [ref=e143]:
+                  - checkbox [ref=e144] [cursor=pointer]
+                  - checkbox [ref=e145]
+                  - generic [ref=e146] [cursor=pointer]: La gamme liquide
+                - generic [ref=e147]:
+                  - checkbox [ref=e148] [cursor=pointer]
+                  - checkbox [ref=e149]
+                  - generic [ref=e150] [cursor=pointer]: Home
+                - generic [ref=e151]:
+                  - checkbox [ref=e152] [cursor=pointer]
+                  - checkbox [ref=e153]
+                  - generic [ref=e154] [cursor=pointer]: Honey & Hive Products
+                - generic [ref=e155]:
+                  - checkbox [ref=e156] [cursor=pointer]
+                  - checkbox [ref=e157]
+                  - generic [ref=e158] [cursor=pointer]: Miels
+                - generic [ref=e159]:
+                  - checkbox [ref=e160] [cursor=pointer]
+                  - checkbox [ref=e161]
+                  - generic [ref=e162] [cursor=pointer]: Savons
+                - generic [ref=e163]:
+                  - checkbox [ref=e164] [cursor=pointer]
+                  - checkbox [ref=e165]
+                  - generic [ref=e166] [cursor=pointer]: Scout Toujours
+                - generic [ref=e167]:
+                  - checkbox [ref=e168] [cursor=pointer]
+                  - checkbox [ref=e169]
+                  - generic [ref=e170] [cursor=pointer]: Shampoings
+                - generic [ref=e171]:
+                  - checkbox [ref=e172] [cursor=pointer]
+                  - checkbox [ref=e173]
+                  - generic [ref=e174] [cursor=pointer]: Soins
+                - generic [ref=e175]:
+                  - checkbox [ref=e176] [cursor=pointer]
+                  - checkbox [ref=e177]
+                  - generic [ref=e178] [cursor=pointer]: Wines & Spirits
+        - generic [ref=e180]:
+          - heading "Producer" [level=3] [ref=e181]:
+            - button "Producer" [expanded] [ref=e182] [cursor=pointer]:
+              - text: Producer
+              - img [ref=e183]
+          - region "Producer" [ref=e185]:
+            - generic [ref=e186]:
+              - button "All producers" [ref=e187]
+              - generic [ref=e189]:
+                - generic [ref=e190]:
+                  - checkbox [ref=e191] [cursor=pointer]
+                  - checkbox [ref=e192]
+                  - generic [ref=e193] [cursor=pointer]: Martin Beekeeper
+                - generic [ref=e194]:
+                  - checkbox [ref=e195] [cursor=pointer]
+                  - checkbox [ref=e196]
+                  - generic [ref=e197] [cursor=pointer]: Ardennes Cooperative
+                - generic [ref=e198]:
+                  - checkbox [ref=e199] [cursor=pointer]
+                  - checkbox [ref=e200]
+                  - generic [ref=e201] [cursor=pointer]: Dupont Organic Farm
+                - generic [ref=e202]:
+                  - checkbox [ref=e203] [cursor=pointer]
+                  - checkbox [ref=e204]
+                  - generic [ref=e205] [cursor=pointer]: Nature Farm
+                - generic [ref=e206]:
+                  - checkbox [ref=e207] [cursor=pointer]
+                  - checkbox [ref=e208]
+                  - generic [ref=e209] [cursor=pointer]: Living Forest
+                - generic [ref=e210]:
+                  - checkbox [ref=e211] [cursor=pointer]
+                  - checkbox [ref=e212]
+                  - generic [ref=e213] [cursor=pointer]: Habeebee
+                - generic [ref=e214]:
+                  - checkbox [ref=e215] [cursor=pointer]
+                  - checkbox [ref=e216]
+                  - generic [ref=e217] [cursor=pointer]: Ilanga Nature
+                - generic [ref=e218]:
+                  - checkbox [ref=e219] [cursor=pointer]
+                  - checkbox [ref=e220]
+                  - generic [ref=e221] [cursor=pointer]: Blue Ocean
+        - generic [ref=e223]:
+          - heading "Tag" [level=3] [ref=e224]:
+            - button "Tag" [expanded] [ref=e225] [cursor=pointer]:
+              - text: Tag
+              - img [ref=e226]
+          - region "Tag" [ref=e228]:
+            - generic [ref=e229]:
+              - button "All tags" [ref=e230]
+              - generic [ref=e232]:
+                - generic [ref=e233]:
+                  - checkbox [ref=e234] [cursor=pointer]
+                  - checkbox [ref=e235]
+                  - generic [ref=e236] [cursor=pointer]: artisanal
+                - generic [ref=e237]:
+                  - checkbox [ref=e238] [cursor=pointer]
+                  - checkbox [ref=e239]
+                  - generic [ref=e240] [cursor=pointer]: bio
+                - generic [ref=e241]:
+                  - checkbox [ref=e242] [cursor=pointer]
+                  - checkbox [ref=e243]
+                  - generic [ref=e244] [cursor=pointer]: educatif
+                - generic [ref=e245]:
+                  - checkbox [ref=e246] [cursor=pointer]
+                  - checkbox [ref=e247]
+                  - generic [ref=e248] [cursor=pointer]: experience
+                - generic [ref=e249]:
+                  - checkbox [ref=e250] [cursor=pointer]
+                  - checkbox [ref=e251]
+                  - generic [ref=e252] [cursor=pointer]: intense
+                - generic [ref=e253]:
+                  - checkbox [ref=e254] [cursor=pointer]
+                  - checkbox [ref=e255]
+                  - generic [ref=e256] [cursor=pointer]: local
+                - generic [ref=e257]:
+                  - checkbox [ref=e258] [cursor=pointer]
+                  - checkbox [ref=e259]
+                  - generic [ref=e260] [cursor=pointer]: premium
+                - generic [ref=e261]:
+                  - checkbox [ref=e262] [cursor=pointer]
+                  - checkbox [ref=e263]
+                  - generic [ref=e264] [cursor=pointer]: visite
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - paragraph [ref=e268]: products
+        - paragraph [ref=e269]: 51 products
+      - generic [ref=e271]:
+        - button "Stainless Bottle Featured Stainless Bottle Reusable zero-waste bottle. 1,000 points €10.00 View" [ref=e275] [cursor=pointer]:
+          - link "Stainless Bottle" [ref=e276]:
+            - /url: /products/3e23f67b-e870-48e9-9e6e-027a452ed647
+          - generic [ref=e277]:
+            - generic [ref=e278]:
+              - img [ref=e280]
+              - generic:
+                - generic: Featured
+            - heading "Stainless Bottle" [level=3] [ref=e287]
+            - generic [ref=e288]:
+              - paragraph [ref=e289]: Reusable zero-waste bottle.
+              - generic [ref=e291]:
+                - generic [ref=e292]: 1,000 points
+                - generic [ref=e293]: €10.00
+            - generic [ref=e295]:
+              - text: View
+              - img [ref=e296]
+        - button "Lavender Honey Lavender Honey Featured Lavender Honey Pure honey harvested in Provence. 500 points €5.00 View" [ref=e301] [cursor=pointer]:
+          - link "Lavender Honey" [ref=e302]:
+            - /url: /products/f6a92215-e5d7-4e97-b91d-a83cd6d61838
+          - generic [ref=e303]:
+            - generic [ref=e304]:
+              - img "Lavender Honey" [ref=e305]
+              - generic:
+                - generic: Featured
+            - heading "Lavender Honey" [level=3] [ref=e309]
+            - generic [ref=e310]:
+              - paragraph [ref=e311]: Pure honey harvested in Provence.
+              - generic [ref=e313]:
+                - generic [ref=e314]: 500 points
+                - generic [ref=e315]: €5.00
+            - generic [ref=e317]:
+              - text: View
+              - img [ref=e318]
+        - button "Solid Shampoo Solid Shampoo Featured Solid Shampoo Zero plastic, 100% natural. 300 points €3.00 View" [ref=e323] [cursor=pointer]:
+          - link "Solid Shampoo" [ref=e324]:
+            - /url: /products/c96b7819-730f-48b5-bd93-ec10371dbc2e
+          - generic [ref=e325]:
+            - generic [ref=e326]:
+              - img "Solid Shampoo" [ref=e327]
+              - generic:
+                - generic: Featured
+            - heading "Solid Shampoo" [level=3] [ref=e331]
+            - generic [ref=e332]:
+              - paragraph [ref=e333]: Zero plastic, 100% natural.
+              - generic [ref=e335]:
+                - generic [ref=e336]: 300 points
+                - generic [ref=e337]: €3.00
+            - generic [ref=e339]:
+              - text: View
+              - img [ref=e340]
+        - button "Organic Veggie Box Organic Veggie Box Featured Organic Veggie Box Assortment of seasonal vegetables. 800 points €8.00 View" [ref=e345] [cursor=pointer]:
+          - link "Organic Veggie Box" [ref=e346]:
+            - /url: /products/a7942614-42f5-4013-8a76-d74fd2fa6217
+          - generic [ref=e347]:
+            - generic [ref=e348]:
+              - img "Organic Veggie Box" [ref=e349]
+              - generic:
+                - generic: Featured
+            - heading "Organic Veggie Box" [level=3] [ref=e353]
+            - generic [ref=e354]:
+              - paragraph [ref=e355]: Assortment of seasonal vegetables.
+              - generic [ref=e357]:
+                - generic [ref=e358]: 800 points
+                - generic [ref=e359]: €8.00
+            - generic [ref=e361]:
+              - text: View
+              - img [ref=e362]
+        - button "Guided Farm Tour Guided Farm Tour Featured Guided Farm Tour Farm experience 2,000 points €20.00 View" [ref=e367] [cursor=pointer]:
+          - link "Guided Farm Tour" [ref=e368]:
+            - /url: /products/1cabd434-9d3f-4032-b5d8-18a3d94af628
+          - generic [ref=e369]:
+            - generic [ref=e370]:
+              - img "Guided Farm Tour" [ref=e371]
+              - generic:
+                - generic: Featured
+            - heading "Guided Farm Tour" [level=3] [ref=e375]
+            - generic [ref=e376]:
+              - paragraph [ref=e377]: Farm experience
+              - generic [ref=e379]:
+                - generic [ref=e380]: 2,000 points
+                - generic [ref=e381]: €20.00
+            - generic [ref=e383]:
+              - text: View
+              - img [ref=e384]
+        - button "Extra Virgin Olive Oil 750ml Extra Virgin Olive Oil 750ml Featured Extra Virgin Olive Oil 750ml Premium olive oil 1,800 points €18.00 View" [ref=e389] [cursor=pointer]:
+          - link "Extra Virgin Olive Oil 750ml" [ref=e390]:
+            - /url: /products/e8f78510-93f8-4f08-a020-87d08d4b438d
+          - generic [ref=e391]:
+            - generic [ref=e392]:
+              - img "Extra Virgin Olive Oil 750ml" [ref=e393]
+              - generic:
+                - generic: Featured
+            - heading "Extra Virgin Olive Oil 750ml" [level=3] [ref=e397]
+            - generic [ref=e398]:
+              - paragraph [ref=e399]: Premium olive oil
+              - generic [ref=e401]:
+                - generic [ref=e402]: 1,800 points
+                - generic [ref=e403]: €18.00
+            - generic [ref=e405]:
+              - text: View
+              - img [ref=e406]
+        - button "Organic Soap Organic Soap Organic Soap Handmade soap with essential oils. 250 points €2.50 View" [ref=e411] [cursor=pointer]:
+          - link "Organic Soap" [ref=e412]:
+            - /url: /products/5ee85c90-852d-4ee7-af8e-ca1c96fe199a
+          - generic [ref=e413]:
+            - img "Organic Soap" [ref=e415]
+            - heading "Organic Soap" [level=3] [ref=e419]
+            - generic [ref=e420]:
+              - paragraph [ref=e421]: Handmade soap with essential oils.
+              - generic [ref=e423]:
+                - generic [ref=e424]: 250 points
+                - generic [ref=e425]: €2.50
+            - generic [ref=e427]:
+              - text: View
+              - img [ref=e428]
+        - button "Extra Virgin Olive Oil Extra Virgin Olive Oil Cold pressed oil. 1,200 points €12.00 View" [ref=e433] [cursor=pointer]:
+          - link "Extra Virgin Olive Oil" [ref=e434]:
+            - /url: /products/d0bf9323-89ba-4e24-aa58-03ebe5ebeb32
+          - generic [ref=e435]:
+            - img [ref=e438]
+            - heading "Extra Virgin Olive Oil" [level=3] [ref=e445]
+            - generic [ref=e446]:
+              - paragraph [ref=e447]: Cold pressed oil.
+              - generic [ref=e449]:
+                - generic [ref=e450]: 1,200 points
+                - generic [ref=e451]: €12.00
+            - generic [ref=e453]:
+              - text: View
+              - img [ref=e454]
+        - button "Miel de Niaouli Miel de Niaouli Miel de Niaouli Produit authentique de Madagascar. Miel de Niaouli. 50 points €0.50 View" [ref=e459] [cursor=pointer]:
+          - link "Miel de Niaouli" [ref=e460]:
+            - /url: /products/23fe2209-661c-411e-b025-4f89afb7678c
+          - generic [ref=e461]:
+            - img "Miel de Niaouli" [ref=e463]
+            - heading "Miel de Niaouli" [level=3] [ref=e467]
+            - generic [ref=e468]:
+              - paragraph [ref=e469]: Produit authentique de Madagascar. Miel de Niaouli.
+              - generic [ref=e471]:
+                - generic [ref=e472]: 50 points
+                - generic [ref=e473]: €0.50
+            - generic [ref=e475]:
+              - text: View
+              - img [ref=e476]
+        - button "Miel de Forêts Sèches Miel de Forêts Sèches Miel de Forêts Sèches Produit authentique de Madagascar. Miel de Forêts Sèches. 50 points €0.50 View" [ref=e481] [cursor=pointer]:
+          - link "Miel de Forêts Sèches" [ref=e482]:
+            - /url: /products/836d05ee-fdb1-4475-bf49-dea2d5abeeef
+          - generic [ref=e483]:
+            - img "Miel de Forêts Sèches" [ref=e485]
+            - heading "Miel de Forêts Sèches" [level=3] [ref=e489]
+            - generic [ref=e490]:
+              - paragraph [ref=e491]: Produit authentique de Madagascar. Miel de Forêts Sèches.
+              - generic [ref=e493]:
+                - generic [ref=e494]: 50 points
+                - generic [ref=e495]: €0.50
+            - generic [ref=e497]:
+              - text: View
+              - img [ref=e498]
+        - button "Miel de Cactus Miel de Cactus Miel de Cactus Produit authentique de Madagascar. Miel de Cactus. 50 points €0.50 View" [ref=e503] [cursor=pointer]:
+          - link "Miel de Cactus" [ref=e504]:
+            - /url: /products/8c6b2765-7512-4244-99e4-be233b3279b7
+          - generic [ref=e505]:
+            - img "Miel de Cactus" [ref=e507]
+            - heading "Miel de Cactus" [level=3] [ref=e511]
+            - generic [ref=e512]:
+              - paragraph [ref=e513]: Produit authentique de Madagascar. Miel de Cactus.
+              - generic [ref=e515]:
+                - generic [ref=e516]: 50 points
+                - generic [ref=e517]: €0.50
+            - generic [ref=e519]:
+              - text: View
+              - img [ref=e520]
+        - button "Miel de Baies Roses Miel de Baies Roses Miel de Baies Roses Produit authentique de Madagascar. Miel de Baies Roses. 50 points €0.50 View" [ref=e525] [cursor=pointer]:
+          - link "Miel de Baies Roses" [ref=e526]:
+            - /url: /products/30d6eece-5d10-4b8d-b674-8c23ca920d7d
+          - generic [ref=e527]:
+            - img "Miel de Baies Roses" [ref=e529]
+            - heading "Miel de Baies Roses" [level=3] [ref=e533]
+            - generic [ref=e534]:
+              - paragraph [ref=e535]: Produit authentique de Madagascar. Miel de Baies Roses.
+              - generic [ref=e537]:
+                - generic [ref=e538]: 50 points
+                - generic [ref=e539]: €0.50
+            - generic [ref=e541]:
+              - text: View
+              - img [ref=e542]
+        - button "Miel de Mokarana Miel de Mokarana Miel de Mokarana Produit authentique de Madagascar. Miel de Mokarana. 50 points €0.50 View" [ref=e547] [cursor=pointer]:
+          - link "Miel de Mokarana" [ref=e548]:
+            - /url: /products/c9712e94-a8e4-4a78-a391-75b3587c483a
+          - generic [ref=e549]:
+            - img "Miel de Mokarana" [ref=e551]
+            - heading "Miel de Mokarana" [level=3] [ref=e555]
+            - generic [ref=e556]:
+              - paragraph [ref=e557]: Produit authentique de Madagascar. Miel de Mokarana.
+              - generic [ref=e559]:
+                - generic [ref=e560]: 50 points
+                - generic [ref=e561]: €0.50
+            - generic [ref=e563]:
+              - text: View
+              - img [ref=e564]
+        - button "Poivre Noir en Grains - BIO Poivre Noir en Grains - BIO Poivre Noir en Grains - BIO Produit authentique de Madagascar. Poivre Noir en Grains - BIO. 49 points €0.49 View" [ref=e569] [cursor=pointer]:
+          - link "Poivre Noir en Grains - BIO" [ref=e570]:
+            - /url: /products/59d7b57c-f784-4438-9fa4-e35cde17ffd0
+          - generic [ref=e571]:
+            - img "Poivre Noir en Grains - BIO" [ref=e573]
+            - heading "Poivre Noir en Grains - BIO" [level=3] [ref=e577]
+            - generic [ref=e578]:
+              - paragraph [ref=e579]: Produit authentique de Madagascar. Poivre Noir en Grains - BIO.
+              - generic [ref=e581]:
+                - generic [ref=e582]: 49 points
+                - generic [ref=e583]: €0.49
+            - generic [ref=e585]:
+              - text: View
+              - img [ref=e586]
+        - button "Coarse Salt 175g Coarse Salt 175g Coarse Salt 175g Produit authentique de Madagascar. Coarse Salt 175g. 45 points €0.45 View" [ref=e591] [cursor=pointer]:
+          - link "Coarse Salt 175g" [ref=e592]:
+            - /url: /products/9c5d8714-bac3-4f79-a437-c88a651cbf3b
+          - generic [ref=e593]:
+            - img "Coarse Salt 175g" [ref=e595]
+            - heading "Coarse Salt 175g" [level=3] [ref=e599]
+            - generic [ref=e600]:
+              - paragraph [ref=e601]: Produit authentique de Madagascar. Coarse Salt 175g.
+              - generic [ref=e603]:
+                - generic [ref=e604]: 45 points
+                - generic [ref=e605]: €0.45
+            - generic [ref=e607]:
+              - text: View
+              - img [ref=e608]
+        - button "Ground Black Pepper 60g Ground Black Pepper 60g Ground Black Pepper 60g Produit authentique de Madagascar. Ground Black Pepper 60g. 45 points €0.45 View" [ref=e613] [cursor=pointer]:
+          - link "Ground Black Pepper 60g" [ref=e614]:
+            - /url: /products/d000343c-f36f-48da-8c3a-af8fbab5e7b7
+          - generic [ref=e615]:
+            - img "Ground Black Pepper 60g" [ref=e617]
+            - heading "Ground Black Pepper 60g" [level=3] [ref=e621]
+            - generic [ref=e622]:
+              - paragraph [ref=e623]: Produit authentique de Madagascar. Ground Black Pepper 60g.
+              - generic [ref=e625]:
+                - generic [ref=e626]: 45 points
+                - generic [ref=e627]: €0.45
+            - generic [ref=e629]:
+              - text: View
+              - img [ref=e630]
+        - button "Green Peppercorns in Brine 135g Green Peppercorns in Brine 135g Green Peppercorns in Brine 135g Produit authentique de Madagascar. Green Peppercorns in Brine 135g. 45 points €0.45 View" [ref=e635] [cursor=pointer]:
+          - link "Green Peppercorns in Brine 135g" [ref=e636]:
+            - /url: /products/896761a3-8aa8-428c-bc1b-ca9933e67708
+          - generic [ref=e637]:
+            - img "Green Peppercorns in Brine 135g" [ref=e639]
+            - heading "Green Peppercorns in Brine 135g" [level=3] [ref=e643]
+            - generic [ref=e644]:
+              - paragraph [ref=e645]: Produit authentique de Madagascar. Green Peppercorns in Brine 135g.
+              - generic [ref=e647]:
+                - generic [ref=e648]: 45 points
+                - generic [ref=e649]: €0.45
+            - generic [ref=e651]:
+              - text: View
+              - img [ref=e652]
+        - button "Poivre Noir en Grains Poivre Noir en Grains Poivre Noir en Grains Produit authentique de Madagascar. Poivre Noir en Grains. 45 points €0.45 View" [ref=e657] [cursor=pointer]:
+          - link "Poivre Noir en Grains" [ref=e658]:
+            - /url: /products/85530c9a-3987-4911-9274-572d3b9726e6
+          - generic [ref=e659]:
+            - img "Poivre Noir en Grains" [ref=e661]
+            - heading "Poivre Noir en Grains" [level=3] [ref=e665]
+            - generic [ref=e666]:
+              - paragraph [ref=e667]: Produit authentique de Madagascar. Poivre Noir en Grains.
+              - generic [ref=e669]:
+                - generic [ref=e670]: 45 points
+                - generic [ref=e671]: €0.45
+            - generic [ref=e673]:
+              - text: View
+              - img [ref=e674]
+        - button "Coarse Salt 500g Coarse Salt 500g Coarse Salt 500g Produit authentique de Madagascar. Coarse Salt 500g. 42 points €0.42 View" [ref=e679] [cursor=pointer]:
+          - link "Coarse Salt 500g" [ref=e680]:
+            - /url: /products/e03f3004-26a0-475f-b371-f6fea03a38b3
+          - generic [ref=e681]:
+            - img "Coarse Salt 500g" [ref=e683]
+            - heading "Coarse Salt 500g" [level=3] [ref=e687]
+            - generic [ref=e688]:
+              - paragraph [ref=e689]: Produit authentique de Madagascar. Coarse Salt 500g.
+              - generic [ref=e691]:
+                - generic [ref=e692]: 42 points
+                - generic [ref=e693]: €0.42
+            - generic [ref=e695]:
+              - text: View
+              - img [ref=e696]
+        - button "Coriander Seeds 35g Coriander Seeds 35g Coriander Seeds 35g Produit authentique de Madagascar. Coriander Seeds 35g. 30 points €0.30 View" [ref=e701] [cursor=pointer]:
+          - link "Coriander Seeds 35g" [ref=e702]:
+            - /url: /products/0ff05e4c-4ecf-4710-87c2-d184a3e53c3e
+          - generic [ref=e703]:
+            - img "Coriander Seeds 35g" [ref=e705]
+            - heading "Coriander Seeds 35g" [level=3] [ref=e709]
+            - generic [ref=e710]:
+              - paragraph [ref=e711]: Produit authentique de Madagascar. Coriander Seeds 35g.
+              - generic [ref=e713]:
+                - generic [ref=e714]: 30 points
+                - generic [ref=e715]: €0.30
+            - generic [ref=e717]:
+              - text: View
+              - img [ref=e718]
+        - button "Savon bébé HABABY Savon bébé HABABY Savon bébé HABABY Savon Hababy saponifié à froid (surgras 8%) pour votre bébé. À l'extrait de calendula, il est idéal pour prendre le plus grand soin de la peau si fragile des bébés. Convient également aux adultes. 75 points €0.75 View" [ref=e723] [cursor=pointer]:
+          - link "Savon bébé HABABY" [ref=e724]:
+            - /url: /products/eb9f6623-37f3-4cc8-9cce-f1426f7ac319
+          - generic [ref=e725]:
+            - img "Savon bébé HABABY" [ref=e727]
+            - heading "Savon bébé HABABY" [level=3] [ref=e731]
+            - generic [ref=e732]:
+              - paragraph [ref=e733]: Savon Hababy saponifié à froid (surgras 8%) pour votre bébé. À l'extrait de calendula, il est idéal pour prendre le plus grand soin de la peau si fragile des bébés. Convient également aux adultes.
+              - generic [ref=e735]:
+                - generic [ref=e736]: 75 points
+                - generic [ref=e737]: €0.75
+            - generic [ref=e739]:
+              - text: View
+              - img [ref=e740]
+        - button "Coffret 7 mini savons (50g) Coffret 7 mini savons (50g) Coffret 7 mini savons (50g) Joyeux et coloré, à l'image d'Habeebee, ce pack composé des 7 savons de Habeebee en format de 50g est super mimi et de taille idéale pour chaque point d'eau de la maison. A offrir ou à s'offrir; c'est un beau voyage dans l'univers incroyable de la savonnerie artisanale d'Habeebee. 290 points €2.90 View" [ref=e745] [cursor=pointer]:
+          - link "Coffret 7 mini savons (50g)" [ref=e746]:
+            - /url: /products/0295a229-245c-4ecc-8324-105f320b6602
+          - generic [ref=e747]:
+            - img "Coffret 7 mini savons (50g)" [ref=e749]
+            - heading "Coffret 7 mini savons (50g)" [level=3] [ref=e753]
+            - generic [ref=e754]:
+              - paragraph [ref=e755]: Joyeux et coloré, à l'image d'Habeebee, ce pack composé des 7 savons de Habeebee en format de 50g est super mimi et de taille idéale pour chaque point d'eau de la maison. A offrir ou à s'offrir; c'est un beau voyage dans l'univers incroyable de la savonnerie artisanale d'Habeebee.
+              - generic [ref=e757]:
+                - generic [ref=e758]: 290 points
+                - generic [ref=e759]: €2.90
+            - generic [ref=e761]:
+              - text: View
+              - img [ref=e762]
+        - 'button "Coffret bougies BELDI Coffret bougies BELDI Coffret bougies BELDI Coffret composé de 4 bougies Beldi à la cire d’abeille, coulées dans des verres recyclés soufflés traditionnels du Maroc. La lumière Habeebee belle et naturelle qui purifie l’air et brille longtemps. Un lien d’amitié entre deux belles cultures. Exclusivité boutique et marchés de Noël Conseil d’utilisation : ne pas laisser la bougie brûler jusqu’au bout.Chaque verre est soufflé artisanalement ; une chaleur excessive peut altérer sa résistance. 290 points €2.90 View" [ref=e767] [cursor=pointer]':
+          - link "Coffret bougies BELDI" [ref=e768]:
+            - /url: /products/1821dc13-8d56-44e8-b98d-55a7f6c588c5
+          - generic [ref=e769]:
+            - img "Coffret bougies BELDI" [ref=e771]
+            - heading "Coffret bougies BELDI" [level=3] [ref=e775]
+            - generic [ref=e776]:
+              - paragraph [ref=e777]: "Coffret composé de 4 bougies Beldi à la cire d’abeille, coulées dans des verres recyclés soufflés traditionnels du Maroc. La lumière Habeebee belle et naturelle qui purifie l’air et brille longtemps. Un lien d’amitié entre deux belles cultures. Exclusivité boutique et marchés de Noël Conseil d’utilisation : ne pas laisser la bougie brûler jusqu’au bout.Chaque verre est soufflé artisanalement ; une chaleur excessive peut altérer sa résistance."
+              - generic [ref=e779]:
+                - generic [ref=e780]: 290 points
+                - generic [ref=e781]: €2.90
+            - generic [ref=e783]:
+              - text: View
+              - img [ref=e784]
+        - button "Baume hiver rhume & nez bouché SAPIN DE NOËL Baume hiver rhume & nez bouché SAPIN DE NOËL Baume hiver rhume & nez bouché SAPIN DE NOËL Baume qui réconforte tout l'hiver. Idéal pour passer l'hiver, ce baume aux 3 huiles essentielles géniales de Sapin Baumier, Ravintsara et Eucalyptus connues pour lutter contre le nez bouché, les rhumes et les petits bobos de l'hiver. A appliquer sur le dos et le torse. Convient aux enfants à partir de 6 ans. Déconseillé aux femmes enceintes. 120 points €1.20 View" [ref=e789] [cursor=pointer]:
+          - link "Baume hiver rhume & nez bouché SAPIN DE NOËL" [ref=e790]:
+            - /url: /products/02e89240-01e1-433c-809c-d5ef42614689
+          - generic [ref=e791]:
+            - img "Baume hiver rhume & nez bouché SAPIN DE NOËL" [ref=e793]
+            - heading "Baume hiver rhume & nez bouché SAPIN DE NOËL" [level=3] [ref=e797]
+            - generic [ref=e798]:
+              - paragraph [ref=e799]: Baume qui réconforte tout l'hiver. Idéal pour passer l'hiver, ce baume aux 3 huiles essentielles géniales de Sapin Baumier, Ravintsara et Eucalyptus connues pour lutter contre le nez bouché, les rhumes et les petits bobos de l'hiver. A appliquer sur le dos et le torse. Convient aux enfants à partir de 6 ans. Déconseillé aux femmes enceintes.
+              - generic [ref=e801]:
+                - generic [ref=e802]: 120 points
+                - generic [ref=e803]: €1.20
+            - generic [ref=e805]:
+              - text: View
+              - img [ref=e806]
+      - navigation "Products pagination" [ref=e808]:
+        - generic [ref=e809]:
+          - paragraph [ref=e810]: Page 1 of 3 • 51 products
+          - generic [ref=e811]:
+            - button "Previous" [disabled] [ref=e812]:
+              - img [ref=e813]
+              - generic [ref=e815]: Previous
+            - generic [ref=e816]:
+              - button "1" [ref=e817]
+              - button "2" [ref=e818]
+              - button "3" [ref=e819]
+            - button "Next" [ref=e820]:
+              - generic [ref=e821]: Next
+              - img [ref=e822]
+  - contentinfo [ref=e824]:
+    - generic [ref=e825]:
+      - generic [ref=e826]:
+        - generic [ref=e827]:
+          - link "Make the Change Make the Change" [ref=e828] [cursor=pointer]:
+            - /url: /en
+            - img "Make the Change" [ref=e830]
+            - generic [ref=e831]: Make the Change
+          - paragraph [ref=e832]: Invest in biodiversity, reap tangible rewards.
+        - navigation "Quick links" [ref=e833]:
+          - heading "Quick links" [level=3] [ref=e834]
+          - list [ref=e835]:
+            - listitem [ref=e836]:
+              - link "Projects" [ref=e837] [cursor=pointer]:
+                - /url: /en/projects
+            - listitem [ref=e838]:
+              - link "Products" [ref=e839] [cursor=pointer]:
+                - /url: /en/products
+            - listitem [ref=e840]:
+              - link "Leaderboard" [ref=e841] [cursor=pointer]:
+                - /url: /en/leaderboard
+            - listitem [ref=e842]:
+              - link "Blog" [ref=e843] [cursor=pointer]:
+                - /url: /en/blog
+            - listitem [ref=e844]:
+              - link "About" [ref=e845] [cursor=pointer]:
+                - /url: /en/about
+            - listitem [ref=e846]:
+              - link "How it works" [ref=e847] [cursor=pointer]:
+                - /url: /en/how-it-works
+            - listitem [ref=e848]:
+              - link "Brand guidelines" [ref=e849] [cursor=pointer]:
+                - /url: /en/brand-guidelines
+            - listitem [ref=e850]:
+              - link "BioDex" [ref=e851] [cursor=pointer]:
+                - /url: /en/biodex
+            - listitem [ref=e852]:
+              - link "Challenges" [ref=e853] [cursor=pointer]:
+                - /url: /en/challenges
+            - listitem [ref=e854]:
+              - link "Menu" [ref=e855] [cursor=pointer]:
+                - /url: /en/menu
+        - navigation "Account & Shopping" [ref=e856]:
+          - heading "Account & Shopping" [level=3] [ref=e857]
+          - list [ref=e858]:
+            - listitem [ref=e859]:
+              - link "Cart" [ref=e860] [cursor=pointer]:
+                - /url: /en/cart
+            - listitem [ref=e861]:
+              - link "Login" [ref=e862] [cursor=pointer]:
+                - /url: /en/login
+            - listitem [ref=e863]:
+              - link "Register" [ref=e864] [cursor=pointer]:
+                - /url: /en/register
+        - navigation "Support" [ref=e865]:
+          - heading "Support" [level=3] [ref=e866]
+          - list [ref=e867]:
+            - listitem [ref=e868]:
+              - link "FAQ" [ref=e869] [cursor=pointer]:
+                - /url: /en/faq
+            - listitem [ref=e870]:
+              - link "Contact" [ref=e871] [cursor=pointer]:
+                - /url: /en/contact
+            - listitem [ref=e872]:
+              - link "Privacy" [ref=e873] [cursor=pointer]:
+                - /url: /en/privacy
+            - listitem [ref=e874]:
+              - link "Terms" [ref=e875] [cursor=pointer]:
+                - /url: /en/terms
+        - generic [ref=e876]:
+          - heading "Contact us" [level=3] [ref=e877]
+          - generic [ref=e878]:
+            - link "contact@make-the-change.com" [ref=e879] [cursor=pointer]:
+              - /url: mailto:contact@make-the-change.com
+              - img [ref=e880]
+              - text: contact@make-the-change.com
+            - link "Brussels, Belgium" [ref=e883] [cursor=pointer]:
+              - /url: https://www.google.com/maps/search/?api=1&query=Brussels%2C%20Belgium
+              - img [ref=e884]
+              - text: Brussels, Belgium
+          - generic [ref=e887]:
+            - heading "Follow us" [level=4] [ref=e888]
+            - navigation "Réseaux sociaux" [ref=e889]:
+              - list [ref=e890]:
+                - listitem [ref=e891]:
+                  - link "Instagram" [ref=e892] [cursor=pointer]:
+                    - /url: https://instagram.com/makethechange
+                    - img [ref=e893]
+                - listitem [ref=e896]:
+                  - link "Facebook" [ref=e897] [cursor=pointer]:
+                    - /url: https://facebook.com/makethechange
+                    - img [ref=e898]
+                - listitem [ref=e900]:
+                  - link "LinkedIn" [ref=e901] [cursor=pointer]:
+                    - /url: https://linkedin.com/company/makethechange
+                    - img [ref=e902]
+                - listitem [ref=e906]:
+                  - link "TikTok" [ref=e907] [cursor=pointer]:
+                    - /url: https://tiktok.com/@makethechange
+                    - img [ref=e908]
+      - generic [ref=e912]:
+        - paragraph [ref=e913]: © 2026 Make the CHANGE. All rights reserved.
+        - generic [ref=e914]:
+          - link "Privacy" [ref=e915] [cursor=pointer]:
+            - /url: /en/privacy
+          - link "Terms" [ref=e916] [cursor=pointer]:
+            - /url: /en/terms
+  - region "Notifications" [ref=e917]
+  - button "Open Next.js Dev Tools" [ref=e923] [cursor=pointer]:
+    - img [ref=e924]

@@ -31,19 +31,28 @@ const sanitizeTipTapNode = (value: unknown): TipTapNode | null => {
   const marks = Array.isArray(value.marks)
     ? value.marks
         .filter(isRecord)
-        .map((mark) => ({
-          type: typeof mark.type === 'string' ? mark.type : '',
-          attrs: isRecord(mark.attrs) ? mark.attrs : undefined,
-        }))
+        .map((mark) => {
+          const type = typeof mark.type === 'string' ? mark.type : ''
+
+          if (!type) {
+            return null
+          }
+
+          return {
+            type,
+            ...(isRecord(mark.attrs) ? { attrs: mark.attrs } : {}),
+          }
+        })
+        .filter((mark): mark is NonNullable<typeof mark> => mark !== null)
         .filter((mark) => mark.type.length > 0)
     : undefined
 
   return {
     type: value.type,
-    attrs: isRecord(value.attrs) ? value.attrs : undefined,
-    text: typeof value.text === 'string' ? value.text : undefined,
-    marks,
-    content,
+    ...(isRecord(value.attrs) ? { attrs: value.attrs } : {}),
+    ...(typeof value.text === 'string' ? { text: value.text } : {}),
+    ...(marks !== undefined ? { marks } : {}),
+    ...(content !== undefined ? { content } : {}),
   }
 }
 

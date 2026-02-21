@@ -91,7 +91,7 @@ const toBlogPostRow = (value: unknown): BlogPostRow | null => {
     cover_image_url: asString(value.cover_image_url) || null,
     published_at: asString(value.published_at) || null,
     featured: asBoolean(value.featured, false),
-    status: toStatus(value.status),
+    status: toStatus(value.status) ?? null,
     author: Array.isArray(value.author)
       ? value.author.map((author) => toAuthorRow(author)).filter((author) => author !== null)
       : toAuthorRow(value.author),
@@ -201,6 +201,7 @@ const toStatus = (value: unknown): BlogPostStatus | undefined => {
 
 const mapPost = (row: BlogPostRow): BlogPost => {
   const rawContent = toRawContent(row.content)
+  const status = toStatus(row.status)
 
   return {
     id: String(row.id),
@@ -216,7 +217,7 @@ const mapPost = (row: BlogPostRow): BlogPost => {
     publishedAt: row.published_at ? String(row.published_at) : null,
     tags: toTags(row.blog_post_tags),
     featured: Boolean(row.featured),
-    status: toStatus(row.status),
+    ...(status !== undefined ? { status } : {}),
   }
 }
 

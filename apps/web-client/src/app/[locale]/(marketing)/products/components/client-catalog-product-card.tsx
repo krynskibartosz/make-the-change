@@ -41,8 +41,8 @@ export const ClientCatalogProductCard = ({
       : undefined)
 
   const badges = buildProductCardBadges({
-    featured: product.featured,
-    stockQuantity: product.stock_quantity,
+    featured: product.featured ?? null,
+    stockQuantity: product.stock_quantity ?? null,
     labels: {
       featuredLabel,
       outOfStockLabel,
@@ -65,7 +65,7 @@ export const ClientCatalogProductCard = ({
           },
           pricePoints: product.price_points || 0,
           priceEuro: product.price || 0,
-          stockQuantity: product.stock_quantity,
+          stockQuantity: product.stock_quantity ?? null,
           featured: !!product.featured,
           badges,
         }}

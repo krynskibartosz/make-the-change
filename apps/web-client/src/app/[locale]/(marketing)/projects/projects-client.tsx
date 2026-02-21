@@ -30,14 +30,14 @@ type RawClientProject = {
   hero_image_url: string | null
   type: string | null
   producer?:
-  | {
-    name_default?: string | null
-    name_i18n?: Record<string, string> | null
-    description_default?: string | null
-    description_i18n?: Record<string, string> | null
-  }
-  | Record<string, unknown>
-  | null
+    | {
+        name_default?: string | null
+        name_i18n?: Record<string, string> | null
+        description_default?: string | null
+        description_i18n?: Record<string, string> | null
+      }
+    | Record<string, unknown>
+    | null
 }
 
 interface ProjectsClientProps {
@@ -56,13 +56,13 @@ const normalizeProject = (
   const producerRecord = isRecord(project.producer) ? project.producer : null
   const producerName = producerRecord
     ? getLocalizedContent(
-      isRecord(producerRecord.name_i18n) ? producerRecord.name_i18n : null,
-      locale,
-      asString(producerRecord.name_default),
-    )
+        isRecord(producerRecord.name_i18n) ? producerRecord.name_i18n : null,
+        locale,
+        asString(producerRecord.name_default),
+      )
     : undefined
 
-  const producer = producerName ? { name_default: producerName } : undefined
+  const producer = producerName ? { name_default: producerName } : null
 
   return {
     id,
@@ -86,7 +86,7 @@ const normalizeProject = (
     status: project.status,
     hero_image_url: project.hero_image_url,
     type: project.type,
-    producer,
+    ...(producer !== null ? { producer } : {}),
   }
 }
 
@@ -190,7 +190,6 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
 
       {/* Main Content Area */}
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
-
         {normalizedProjects.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8 bg-muted/30 rounded-3xl border-2 border-dashed">
             <Target className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />

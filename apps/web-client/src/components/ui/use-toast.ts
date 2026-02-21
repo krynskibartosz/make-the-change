@@ -34,15 +34,16 @@ const buildData = (input: ToastInput): ToastData | undefined => {
 }
 
 function toast(input: ToastInput) {
+  const initialData = buildData(input)
   const id = toastManager.add({
-    title: input.title,
-    description: input.description,
     type: input.variant ?? 'default',
-    timeout: input.timeout,
-    priority: input.priority,
-    data: buildData(input),
+    ...(input.title !== undefined ? { title: input.title } : {}),
+    ...(input.description !== undefined ? { description: input.description } : {}),
+    ...(input.timeout !== undefined ? { timeout: input.timeout } : {}),
+    ...(input.priority !== undefined ? { priority: input.priority } : {}),
+    ...(initialData !== undefined ? { data: initialData } : {}),
   })
-  let currentData = buildData(input)
+  let currentData = initialData
 
   const update = (updates: ToastInput) => {
     const nextData = buildData(updates)

@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.exact-optional.pilot.base.json",
+  "include": [
+    "src/app/[locale]/(marketing)/**/*",
+    "src/app/[locale]/(marketing-no-footer)/cart/**/*",
+    "src/components/layout/**/*",
+    "src/components/ui/toast.tsx",
+    "src/components/ui/use-toast.ts",
+    "src/components/ui/use-form-with-toast.ts",
+    "src/components/ui/stats-section.tsx",
+    "src/app/providers.tsx",
+    "src/app/[locale]/admin/cms/_features/cms.schemas.ts"
+  ]
+}

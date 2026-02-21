@@ -12,6 +12,8 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "type-check": "tsc --noEmit",
+    "type-check:exact-optional:pilot:marketing": "pnpm --filter @make-the-change/core build && tsc -p tsconfig.exact-optional.pilot.marketing.json --noEmit",
+    "type-check:exact-optional:pilot": "pnpm --filter @make-the-change/web-client type-check:exact-optional:pilot:marketing",
     "ts:metrics": "node ./scripts/ts-metrics.mjs",
     "ts:metrics:check": "node ./scripts/ts-metrics.mjs --check"
   },

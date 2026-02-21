@@ -1,0 +1,255 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Make the Change Make the Change" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img "Make the Change" [ref=e7]
+          - generic [ref=e8]: Make the Change
+        - navigation "Navigation principale" [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - button "Invest" [ref=e12] [cursor=pointer]:
+                - text: Invest
+                - img [ref=e13]
+            - listitem [ref=e15]:
+              - button "Shop" [ref=e16] [cursor=pointer]:
+                - text: Shop
+                - img [ref=e17]
+            - listitem [ref=e19]:
+              - button "Discover" [ref=e20] [cursor=pointer]:
+                - text: Discover
+                - img [ref=e21]
+        - generic [ref=e23]:
+          - link "Login" [ref=e25] [cursor=pointer]:
+            - /url: /en/login
+            - button "Login" [ref=e26]:
+              - generic [ref=e28]: Login
+          - link "Open cart" [ref=e30] [cursor=pointer]:
+            - /url: /en/cart
+            - img [ref=e31]
+          - button "Activer le mode sombre" [ref=e35] [cursor=pointer]:
+            - img [ref=e38]
+    - main [ref=e40]:
+      - generic [ref=e41]:
+        - generic [ref=e44]:
+          - heading "Our Producers" [level=1] [ref=e45]
+          - paragraph [ref=e46]: Meet the people growing the future with care for soil, biodiversity, and communities.
+        - generic [ref=e48]:
+          - link "Apiculteur Martin Apiculteur Martin Bruxelles, BE Apiculture artisanale et durable Discover" [ref=e49] [cursor=pointer]:
+            - /url: /en/producers/apiculteur-martin
+            - generic [ref=e50]:
+              - img "Apiculteur Martin" [ref=e52]
+              - generic [ref=e53]:
+                - generic [ref=e55]:
+                  - heading "Apiculteur Martin" [level=3] [ref=e56]
+                  - generic [ref=e57]:
+                    - img [ref=e58]
+                    - generic [ref=e61]: Bruxelles, BE
+                - paragraph [ref=e63]: Apiculture artisanale et durable
+                - generic [ref=e64]:
+                  - text: Discover
+                  - img [ref=e65]
+          - link "Coopérative des Ardennes Coopérative des Ardennes Liège, BE Coopérative de producteurs locaux Discover" [ref=e67] [cursor=pointer]:
+            - /url: /en/producers/cooperative-ardennes
+            - generic [ref=e68]:
+              - img "Coopérative des Ardennes" [ref=e70]
+              - generic [ref=e71]:
+                - generic [ref=e73]:
+                  - heading "Coopérative des Ardennes" [level=3] [ref=e74]
+                  - generic [ref=e75]:
+                    - img [ref=e76]
+                    - generic [ref=e79]: Liège, BE
+                - paragraph [ref=e81]: Coopérative de producteurs locaux
+                - generic [ref=e82]:
+                  - text: Discover
+                  - img [ref=e83]
+          - link "Ferme Bio Dupont Ferme Bio Dupont Namur, BE Ferme familiale bio depuis 1985 Discover" [ref=e85] [cursor=pointer]:
+            - /url: /en/producers/ferme-bio-dupont
+            - generic [ref=e86]:
+              - img "Ferme Bio Dupont" [ref=e88]
+              - generic [ref=e89]:
+                - generic [ref=e91]:
+                  - heading "Ferme Bio Dupont" [level=3] [ref=e92]
+                  - generic [ref=e93]:
+                    - img [ref=e94]
+                    - generic [ref=e97]: Namur, BE
+                - paragraph [ref=e99]: Ferme familiale bio depuis 1985
+                - generic [ref=e100]:
+                  - text: Discover
+                  - img [ref=e101]
+          - link "Ferme de la Nature Ferme de la Nature Une ferme bio au cœur de la Provence. Discover" [ref=e103] [cursor=pointer]:
+            - /url: /en/producers/nature-farm
+            - generic [ref=e104]:
+              - img "Ferme de la Nature" [ref=e106]
+              - generic [ref=e107]:
+                - generic [ref=e109]:
+                  - heading "Ferme de la Nature" [level=3] [ref=e110]
+                  - img [ref=e112]
+                - paragraph [ref=e116]: Une ferme bio au cœur de la Provence.
+                - generic [ref=e117]:
+                  - text: Discover
+                  - img [ref=e118]
+          - link "Forêt Vivante Forêt Vivante Gestion durable des forêts. Discover" [ref=e120] [cursor=pointer]:
+            - /url: /en/producers/living-forest
+            - generic [ref=e121]:
+              - img "Forêt Vivante" [ref=e123]
+              - generic [ref=e124]:
+                - generic [ref=e126]:
+                  - heading "Forêt Vivante" [level=3] [ref=e127]
+                  - img [ref=e129]
+                - paragraph [ref=e133]: Gestion durable des forêts.
+                - generic [ref=e134]:
+                  - text: Discover
+                  - img [ref=e135]
+          - link "Habeebee Habeebee Bruxelles, BE Savonnerie artisanale belge qui valorise la cire d'abeille. Discover" [ref=e137] [cursor=pointer]:
+            - /url: /en/producers/habeebee
+            - generic [ref=e138]:
+              - img "Habeebee" [ref=e140]
+              - generic [ref=e141]:
+                - generic [ref=e143]:
+                  - heading "Habeebee" [level=3] [ref=e144]
+                  - generic [ref=e145]:
+                    - img [ref=e146]
+                    - generic [ref=e149]: Bruxelles, BE
+                - paragraph [ref=e151]: Savonnerie artisanale belge qui valorise la cire d'abeille.
+                - generic [ref=e152]:
+                  - text: Discover
+                  - img [ref=e153]
+          - link "Ilanga Nature Ilanga Nature Antananarivo, MG Produits naturels et éthiques de Madagascar. Discover" [ref=e155] [cursor=pointer]:
+            - /url: /en/producers/ilanga-nature
+            - generic [ref=e156]:
+              - img "Ilanga Nature" [ref=e158]
+              - generic [ref=e159]:
+                - generic [ref=e161]:
+                  - heading "Ilanga Nature" [level=3] [ref=e162]
+                  - generic [ref=e163]:
+                    - img [ref=e164]
+                    - generic [ref=e167]: Antananarivo, MG
+                - paragraph [ref=e169]: Produits naturels et éthiques de Madagascar.
+                - generic [ref=e170]:
+                  - text: Discover
+                  - img [ref=e171]
+          - link "Océan Bleu Océan Bleu Protection des écosystèmes marins. Discover" [ref=e173] [cursor=pointer]:
+            - /url: /en/producers/blue-ocean
+            - generic [ref=e174]:
+              - img "Océan Bleu" [ref=e176]
+              - generic [ref=e177]:
+                - generic [ref=e179]:
+                  - heading "Océan Bleu" [level=3] [ref=e180]
+                  - img [ref=e182]
+                - paragraph [ref=e186]: Protection des écosystèmes marins.
+                - generic [ref=e187]:
+                  - text: Discover
+                  - img [ref=e188]
+    - contentinfo [ref=e190]:
+      - generic [ref=e191]:
+        - generic [ref=e192]:
+          - generic [ref=e193]:
+            - link "Make the Change Make the Change" [ref=e194] [cursor=pointer]:
+              - /url: /en
+              - img "Make the Change" [ref=e196]
+              - generic [ref=e197]: Make the Change
+            - paragraph [ref=e198]: Invest in biodiversity, reap tangible rewards.
+          - navigation "Quick links" [ref=e199]:
+            - heading "Quick links" [level=3] [ref=e200]
+            - list [ref=e201]:
+              - listitem [ref=e202]:
+                - link "Projects" [ref=e203] [cursor=pointer]:
+                  - /url: /en/projects
+              - listitem [ref=e204]:
+                - link "Products" [ref=e205] [cursor=pointer]:
+                  - /url: /en/products
+              - listitem [ref=e206]:
+                - link "Leaderboard" [ref=e207] [cursor=pointer]:
+                  - /url: /en/leaderboard
+              - listitem [ref=e208]:
+                - link "Blog" [ref=e209] [cursor=pointer]:
+                  - /url: /en/blog
+              - listitem [ref=e210]:
+                - link "About" [ref=e211] [cursor=pointer]:
+                  - /url: /en/about
+              - listitem [ref=e212]:
+                - link "How it works" [ref=e213] [cursor=pointer]:
+                  - /url: /en/how-it-works
+              - listitem [ref=e214]:
+                - link "Brand guidelines" [ref=e215] [cursor=pointer]:
+                  - /url: /en/brand-guidelines
+              - listitem [ref=e216]:
+                - link "BioDex" [ref=e217] [cursor=pointer]:
+                  - /url: /en/biodex
+              - listitem [ref=e218]:
+                - link "Challenges" [ref=e219] [cursor=pointer]:
+                  - /url: /en/challenges
+              - listitem [ref=e220]:
+                - link "Menu" [ref=e221] [cursor=pointer]:
+                  - /url: /en/menu
+          - navigation "Account & Shopping" [ref=e222]:
+            - heading "Account & Shopping" [level=3] [ref=e223]
+            - list [ref=e224]:
+              - listitem [ref=e225]:
+                - link "Cart" [ref=e226] [cursor=pointer]:
+                  - /url: /en/cart
+              - listitem [ref=e227]:
+                - link "Login" [ref=e228] [cursor=pointer]:
+                  - /url: /en/login
+              - listitem [ref=e229]:
+                - link "Register" [ref=e230] [cursor=pointer]:
+                  - /url: /en/register
+          - navigation "Support" [ref=e231]:
+            - heading "Support" [level=3] [ref=e232]
+            - list [ref=e233]:
+              - listitem [ref=e234]:
+                - link "FAQ" [ref=e235] [cursor=pointer]:
+                  - /url: /en/faq
+              - listitem [ref=e236]:
+                - link "Contact" [ref=e237] [cursor=pointer]:
+                  - /url: /en/contact
+              - listitem [ref=e238]:
+                - link "Privacy" [ref=e239] [cursor=pointer]:
+                  - /url: /en/privacy
+              - listitem [ref=e240]:
+                - link "Terms" [ref=e241] [cursor=pointer]:
+                  - /url: /en/terms
+          - generic [ref=e242]:
+            - heading "Contact us" [level=3] [ref=e243]
+            - generic [ref=e244]:
+              - link "contact@make-the-change.com" [ref=e245] [cursor=pointer]:
+                - /url: mailto:contact@make-the-change.com
+                - img [ref=e246]
+                - text: contact@make-the-change.com
+              - link "Brussels, Belgium" [ref=e249] [cursor=pointer]:
+                - /url: https://www.google.com/maps/search/?api=1&query=Brussels%2C%20Belgium
+                - img [ref=e250]
+                - text: Brussels, Belgium
+            - generic [ref=e253]:
+              - heading "Follow us" [level=4] [ref=e254]
+              - navigation "Réseaux sociaux" [ref=e255]:
+                - list [ref=e256]:
+                  - listitem [ref=e257]:
+                    - link "Instagram" [ref=e258] [cursor=pointer]:
+                      - /url: https://instagram.com/makethechange
+                      - img [ref=e259]
+                  - listitem [ref=e262]:
+                    - link "Facebook" [ref=e263] [cursor=pointer]:
+                      - /url: https://facebook.com/makethechange
+                      - img [ref=e264]
+                  - listitem [ref=e266]:
+                    - link "LinkedIn" [ref=e267] [cursor=pointer]:
+                      - /url: https://linkedin.com/company/makethechange
+                      - img [ref=e268]
+                  - listitem [ref=e272]:
+                    - link "TikTok" [ref=e273] [cursor=pointer]:
+                      - /url: https://tiktok.com/@makethechange
+                      - img [ref=e274]
+        - generic [ref=e278]:
+          - paragraph [ref=e279]: © 2026 Make the CHANGE. All rights reserved.
+          - generic [ref=e280]:
+            - link "Privacy" [ref=e281] [cursor=pointer]:
+              - /url: /en/privacy
+            - link "Terms" [ref=e282] [cursor=pointer]:
+              - /url: /en/terms
+  - region "Notifications" [ref=e283]
+  - button "Open Next.js Dev Tools" [ref=e289] [cursor=pointer]:
+    - img [ref=e290]
+  - alert [ref=e293]

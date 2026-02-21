@@ -101,7 +101,6 @@ export async function createInvestmentAction(
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Cents
       currency: 'eur',
-      customer: customerId, // Optional
       metadata: {
         order_type: 'investment',
         reference_id: created.id,
@@ -109,6 +108,7 @@ export async function createInvestmentAction(
         // No points_used for investment flow usually
       },
       automatic_payment_methods: { enabled: true },
+      ...(customerId !== undefined ? { customer: customerId } : {}),
     })
 
     if (!paymentIntent.client_secret) {

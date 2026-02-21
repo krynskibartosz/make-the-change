@@ -1,3 +1,4 @@
+import { getLocale } from 'next-intl/server'
 import type { PropsWithChildren } from 'react'
 import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
 import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
@@ -8,7 +9,8 @@ import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { getHeaderData } from '@/lib/get-header-data'
 
 export default async function MarketingNoFooterLayout({ children }: PropsWithChildren) {
-  const { user, menuData } = await getHeaderData()
+  const locale = await getLocale()
+  const { user, menuData } = await getHeaderData(locale)
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">

@@ -26,7 +26,7 @@ type ProjectListItem = {
   status: string | null
   hero_image_url: string | null
   type: string | null
-  producer?:
+  producer:
     | {
         name_default?: string | null
         name_i18n?: Record<string, string> | null

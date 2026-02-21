@@ -29,13 +29,15 @@ export const MarketingHero = ({
   titleClassName,
   descriptionClassName,
 }: MarketingHeroProps) => {
+  const shellProps = {
+    minHeightClassName,
+    containerClassName: cn('text-center', containerClassName),
+    ...(background !== undefined ? { background } : {}),
+    ...(className !== undefined ? { className } : {}),
+  }
+
   return (
-    <MarketingHeroShell
-      background={background}
-      className={className}
-      minHeightClassName={minHeightClassName}
-      containerClassName={cn('text-center', containerClassName)}
-    >
+    <MarketingHeroShell {...shellProps}>
       <header className={contentClassName}>
         {badge}
         <h1

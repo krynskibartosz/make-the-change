@@ -15,7 +15,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function BiodexPage() {
   const supabase = await createClient()
-  const t = await getTranslations('marketing_pages.biodex')
 
   const { data: species, error } = await supabase
     .schema('investment')
@@ -29,8 +28,8 @@ export default async function BiodexPage() {
 
   const speciesList = Array.isArray(species)
     ? species
-      .map((entry) => toSpecies(entry))
-      .filter((entry): entry is NonNullable<ReturnType<typeof toSpecies>> => entry !== null)
+        .map((entry) => toSpecies(entry))
+        .filter((entry): entry is NonNullable<ReturnType<typeof toSpecies>> => entry !== null)
     : []
 
   return (

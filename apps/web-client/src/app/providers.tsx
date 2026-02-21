@@ -18,8 +18,8 @@ export function Providers({ children, initialBrand, initialCustomVars }: Provide
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
-      initialBrand={initialBrand}
-      initialCustomVars={initialCustomVars}
+      {...(initialBrand !== undefined ? { initialBrand } : {})}
+      {...(initialCustomVars !== undefined ? { initialCustomVars } : {})}
     >
       <CartProvider>
         <CartUIProvider>

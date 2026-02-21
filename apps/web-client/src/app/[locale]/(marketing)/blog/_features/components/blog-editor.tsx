@@ -64,7 +64,7 @@ export function BlogEditor({ post }: BlogEditorProps) {
           excerpt: data.excerpt,
           status: data.status,
           featured: data.featured,
-          cover_image_url: data.cover_image_url,
+          ...(data.cover_image_url !== undefined ? { cover_image_url: data.cover_image_url } : {}),
         })
         toast({
           title: 'Succès',

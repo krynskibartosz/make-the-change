@@ -91,9 +91,9 @@ const createSelectOptions = <T extends { id: string; name_default: string }>(
   items: T[] | undefined,
   allLabel: string,
 ): SelectOption[] => [
-    { value: '', label: allLabel },
-    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
-  ]
+  { value: '', label: allLabel },
+  ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
+]
 
 const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
   { value: 'featured_first', label: tProducts('sort.featured') },
@@ -169,7 +169,9 @@ const ProductsFiltersSidebar = ({
       className="w-full"
     >
       <AccordionItem value="categories">
-        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">{categoryLabel}</AccordionTrigger>
+        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
+          {categoryLabel}
+        </AccordionTrigger>
         <AccordionContent>
           <button
             type="button"
@@ -203,7 +205,9 @@ const ProductsFiltersSidebar = ({
       </AccordionItem>
 
       <AccordionItem value="producers">
-        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">{producerLabel}</AccordionTrigger>
+        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
+          {producerLabel}
+        </AccordionTrigger>
         <AccordionContent>
           <button
             type="button"
@@ -237,7 +241,9 @@ const ProductsFiltersSidebar = ({
       </AccordionItem>
 
       <AccordionItem value="tags">
-        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">{tagLabel}</AccordionTrigger>
+        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
+          {tagLabel}
+        </AccordionTrigger>
         <AccordionContent>
           <button
             type="button"

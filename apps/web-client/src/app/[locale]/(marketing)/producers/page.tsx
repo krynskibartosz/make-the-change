@@ -56,8 +56,8 @@ export default async function ProducersPage() {
   const { data } = await supabase.from('public_producers').select('*').order('name_default')
   const producers = Array.isArray(data)
     ? data
-      .map((entry) => toProducerRow(entry))
-      .filter((entry): entry is ProducerRow => entry !== null)
+        .map((entry) => toProducerRow(entry))
+        .filter((entry): entry is ProducerRow => entry !== null)
     : []
 
   return (
@@ -69,7 +69,9 @@ export default async function ProducersPage() {
             <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               {t('intro_title')}
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">{t('intro_description')}</p>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              {t('intro_description')}
+            </p>
           </div>
         </div>
       </div>

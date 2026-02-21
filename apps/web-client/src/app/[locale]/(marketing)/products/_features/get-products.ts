@@ -257,8 +257,8 @@ export const getProducts = unstable_cache(
 
     const products = Array.isArray(productsList)
       ? productsList
-        .map((product) => toPublicProduct(product))
-        .filter((product): product is PublicProduct => product !== null)
+          .map((product) => toPublicProduct(product))
+          .filter((product): product is PublicProduct => product !== null)
       : []
 
     return {
@@ -294,18 +294,18 @@ export const getProductStaticResources = unstable_cache(
 
     const categories = Array.isArray(categoriesResult.data)
       ? categoriesResult.data
-        .map((category) => toStaticCategory(category))
-        .filter((category): category is StaticCategory => category !== null)
+          .map((category) => toStaticCategory(category))
+          .filter((category): category is StaticCategory => category !== null)
       : []
     const producers = Array.isArray(producersResult.data)
       ? producersResult.data
-        .map((producer) => toStaticProducer(producer))
-        .filter((producer): producer is StaticProducer => producer !== null)
+          .map((producer) => toStaticProducer(producer))
+          .filter((producer): producer is StaticProducer => producer !== null)
       : []
     const tagsRows = Array.isArray(tagsResult.data)
       ? tagsResult.data
-        .map((row) => toProductTagsRow(row))
-        .filter((row): row is ProductTagsRow => row !== null)
+          .map((row) => toProductTagsRow(row))
+          .filter((row): row is ProductTagsRow => row !== null)
       : []
     const availableTags = Array.from(
       new Set<string>(tagsRows.flatMap((row) => row.tags || [])),

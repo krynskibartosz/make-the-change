@@ -97,6 +97,7 @@ const HomePage = async () => {
   const cmsContent = homeContent.data
   const localizedCmsContent = locale === defaultLocale ? cmsContent : null
   const universeCards = cmsContent?.universe.cards
+  const partnerDashboardHref = partnerDashboardUrl ?? null
 
   const labels = {
     heroInvestCta: t('steps.invest.title'),
@@ -138,6 +139,24 @@ const HomePage = async () => {
     localizedCmsContent?.cta.stats.transparency ?? t('cta.stats.transparency'),
     localizedCmsContent?.cta.stats.community ?? t('cta.stats.community'),
   ]
+  const projectsUniverseCard = {
+    ...(universeCards?.projects.image !== undefined ? { image: universeCards.projects.image } : {}),
+    badge: localizedCmsContent?.universe.cards.projects.badge ?? t('universe.cards.projects.badge'),
+    title: localizedCmsContent?.universe.cards.projects.title ?? t('universe.cards.projects.title'),
+    description:
+      localizedCmsContent?.universe.cards.projects.description ??
+      t('universe.cards.projects.description'),
+    cta: localizedCmsContent?.universe.cards.projects.cta ?? t('universe.cards.projects.cta'),
+  }
+  const productsUniverseCard = {
+    ...(universeCards?.products.image !== undefined ? { image: universeCards.products.image } : {}),
+    badge: localizedCmsContent?.universe.cards.products.badge ?? t('universe.cards.products.badge'),
+    title: localizedCmsContent?.universe.cards.products.title ?? t('universe.cards.products.title'),
+    description:
+      localizedCmsContent?.universe.cards.products.description ??
+      t('universe.cards.products.description'),
+    cta: localizedCmsContent?.universe.cards.products.cta ?? t('universe.cards.products.cta'),
+  }
 
   return (
     <>
@@ -210,32 +229,8 @@ const HomePage = async () => {
       <HomeUniverseSection
         title={localizedCmsContent?.universe.title ?? t('universe.title')}
         description={localizedCmsContent?.universe.description ?? t('universe.description')}
-        projects={{
-          image: universeCards?.projects.image,
-          badge:
-            localizedCmsContent?.universe.cards.projects.badge ??
-            t('universe.cards.projects.badge'),
-          title:
-            localizedCmsContent?.universe.cards.projects.title ??
-            t('universe.cards.projects.title'),
-          description:
-            localizedCmsContent?.universe.cards.projects.description ??
-            t('universe.cards.projects.description'),
-          cta: localizedCmsContent?.universe.cards.projects.cta ?? t('universe.cards.projects.cta'),
-        }}
-        products={{
-          image: universeCards?.products.image,
-          badge:
-            localizedCmsContent?.universe.cards.products.badge ??
-            t('universe.cards.products.badge'),
-          title:
-            localizedCmsContent?.universe.cards.products.title ??
-            t('universe.cards.products.title'),
-          description:
-            localizedCmsContent?.universe.cards.products.description ??
-            t('universe.cards.products.description'),
-          cta: localizedCmsContent?.universe.cards.products.cta ?? t('universe.cards.products.cta'),
-        }}
+        projects={projectsUniverseCard}
+        products={productsUniverseCard}
         community={{
           title:
             localizedCmsContent?.universe.cards.community.title ??
@@ -319,8 +314,10 @@ const HomePage = async () => {
           emptyDescription={t('empty.partners.description')}
           primaryCtaLabel={t('empty.partners.cta_primary')}
           primaryCtaHref="/contact"
-          secondaryCtaLabel={partnerDashboardUrl ? t('empty.partners.cta_secondary') : undefined}
-          secondaryCtaHref={partnerDashboardUrl}
+          {...(partnerDashboardHref
+            ? { secondaryCtaLabel: t('empty.partners.cta_secondary') }
+            : {})}
+          {...(partnerDashboardHref ? { secondaryCtaHref: partnerDashboardHref } : {})}
         />
       ) : null}
 

@@ -1,0 +1,94 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - heading "menu_page.title" [level=1] [ref=e4]
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "Login" [ref=e7] [cursor=pointer]:
+          - /url: /en/login
+          - img [ref=e8]
+          - text: Login
+        - link "Sign up" [ref=e11] [cursor=pointer]:
+          - /url: /en/register
+          - img [ref=e12]
+          - text: Sign up
+      - link "menu_page.auth.forgot_password" [ref=e16] [cursor=pointer]:
+        - /url: /en/forgot-password
+        - img [ref=e17]
+        - text: menu_page.auth.forgot_password
+    - generic [ref=e20]:
+      - heading "Concept" [level=3] [ref=e21]
+      - generic [ref=e22]:
+        - link "Our mission Our mission" [ref=e23] [cursor=pointer]:
+          - /url: /en/about
+          - img "Our mission" [ref=e25]
+          - heading "Our mission" [level=3] [ref=e28]
+        - link "Our producers Our producers" [ref=e29] [cursor=pointer]:
+          - /url: /en/producers
+          - img "Our producers" [ref=e31]
+          - heading "Our producers" [level=3] [ref=e34]
+        - link "Pricing Pricing" [ref=e35] [cursor=pointer]:
+          - /url: /en/pricing
+          - img "Pricing" [ref=e37]
+          - heading "Pricing" [level=3] [ref=e40]
+    - generic [ref=e41]:
+      - heading "Experience" [level=3] [ref=e42]
+      - generic [ref=e43]:
+        - link "Challenges Challenges" [ref=e44] [cursor=pointer]:
+          - /url: /en/challenges
+          - img "Challenges" [ref=e46]
+          - heading "Challenges" [level=3] [ref=e49]
+        - link "Leaderboard Leaderboard" [ref=e50] [cursor=pointer]:
+          - /url: /en/leaderboard
+          - img "Leaderboard" [ref=e52]
+          - heading "Leaderboard" [level=3] [ref=e55]
+        - link "BioDex BioDex" [ref=e56] [cursor=pointer]:
+          - /url: /en/biodex
+          - img "BioDex" [ref=e58]
+          - heading "BioDex" [level=3] [ref=e61]
+    - generic [ref=e62]:
+      - heading "Help & resources" [level=3] [ref=e63]
+      - generic [ref=e64]:
+        - link "Blog Blog" [ref=e65] [cursor=pointer]:
+          - /url: /en/blog
+          - img "Blog" [ref=e67]
+          - heading "Blog" [level=3] [ref=e70]
+        - link "FAQ FAQ" [ref=e71] [cursor=pointer]:
+          - /url: /en/faq
+          - img "FAQ" [ref=e73]
+          - heading "FAQ" [level=3] [ref=e76]
+        - link "Contact Contact" [ref=e77] [cursor=pointer]:
+          - /url: /en/contact
+          - img "Contact" [ref=e79]
+          - heading "Contact" [level=3] [ref=e82]
+    - generic [ref=e83]:
+      - heading "Featured Projects" [level=3] [ref=e84]
+      - link "Featured Projects Featured Projects Explore our flagship projects and invest in a sustainable future. View projects" [ref=e85] [cursor=pointer]:
+        - /url: /en/projects
+        - img "Featured Projects" [ref=e86]
+        - generic [ref=e88]:
+          - heading "Featured Projects" [level=4] [ref=e89]
+          - paragraph [ref=e90]: Explore our flagship projects and invest in a sustainable future.
+          - generic [ref=e91]: View projects
+    - generic [ref=e92]:
+      - generic [ref=e93]: menu_page.theme
+      - button "Toggle theme" [ref=e94] [cursor=pointer]
+    - generic [ref=e98]:
+      - paragraph [ref=e99]: menu_page.version
+      - generic [ref=e100]:
+        - link "Terms" [ref=e101] [cursor=pointer]:
+          - /url: /en/terms
+        - link "Privacy" [ref=e102] [cursor=pointer]:
+          - /url: /en/privacy
+  - region "Notifications" [ref=e103]
+  - generic [ref=e108] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e109]:
+      - img [ref=e110]
+    - generic [ref=e113]:
+      - button "Open issues overlay" [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]: "0"
+          - generic [ref=e117]: "1"
+        - generic [ref=e118]: Issue
+      - button "Collapse issues badge" [ref=e119]:
+        - img [ref=e120]
+  - alert [ref=e122]

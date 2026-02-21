@@ -23,13 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
-  const t = await getTranslations('projects')
   const params = await searchParams
   const status = params.status === 'active' || params.status === 'completed' ? params.status : 'all'
 
   const projectsList = await getProjects({
     status,
-    search: params.search,
+    ...(params.search !== undefined ? { search: params.search } : {}),
   })
 
   return (

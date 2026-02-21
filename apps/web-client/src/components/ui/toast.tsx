@@ -66,10 +66,17 @@ const toToastData = (value: unknown): ToastData => {
     return {}
   }
 
-  return {
-    showIcon: typeof value.showIcon === 'boolean' ? value.showIcon : undefined,
-    action: isRenderableNode(value.action) ? value.action : undefined,
+  const data: ToastData = {}
+
+  if (typeof value.showIcon === 'boolean') {
+    data.showIcon = value.showIcon
   }
+
+  if (isRenderableNode(value.action)) {
+    data.action = value.action
+  }
+
+  return data
 }
 
 export function ToastWithIcon({ toast }: ToastWithIconProps) {

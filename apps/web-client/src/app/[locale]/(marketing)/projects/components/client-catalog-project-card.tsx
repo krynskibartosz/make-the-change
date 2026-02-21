@@ -61,9 +61,10 @@ const getProgressPercent = (project: ClientCatalogProject): number | null => {
 
 export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProjectCardProps) => {
   const imageUrl = sanitizeImageUrl(project.hero_image_url)
+  const locationLabel = getLocationLabel(project)
   const badges = buildProjectCardBadges({
-    featured: project.featured,
-    status: project.status,
+    featured: project.featured ?? null,
+    status: project.status ?? null,
     labels: {
       featuredLabel: labels.featuredLabel,
       activeLabel: labels.activeLabel,
@@ -79,21 +80,23 @@ export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProje
           id: project.id,
           href: `/projects/${project.slug}`,
           title: project.name_default,
-          subtitle: getLocationLabel(project),
           description: project.description_default || '',
           image: {
             src: imageUrl || '',
             alt: project.name_default,
           },
-          status: project.status,
-          featured: project.featured,
-          projectType: project.type || undefined,
-          producerName: project.producer?.name_default || undefined,
-          locationLabel: getLocationLabel(project),
+          status: project.status ?? null,
+          featured: project.featured ?? null,
           progressPercent: getProgressPercent(project),
-          currentFundingEuro: project.current_funding,
-          targetBudgetEuro: project.target_budget,
+          currentFundingEuro: project.current_funding ?? null,
+          targetBudgetEuro: project.target_budget ?? null,
           badges,
+          ...(locationLabel !== undefined ? { subtitle: locationLabel } : {}),
+          ...(locationLabel !== undefined ? { locationLabel } : {}),
+          ...(project.type ? { projectType: project.type } : {}),
+          ...(project.producer?.name_default
+            ? { producerName: project.producer.name_default }
+            : {}),
         }}
         labels={{
           viewLabel: labels.viewLabel,

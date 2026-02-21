@@ -31,7 +31,7 @@ const normalizePricePoints = (value: number) =>
   Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0
 
 const normalizePriceEuros = (value: number | null | undefined) =>
-  typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : undefined
+  typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : null
 
 function useProductAddToCart({
   productId,
@@ -54,6 +54,8 @@ function useProductAddToCart({
     if (!inStock) return
     if (stockQuantity && quantity >= stockQuantity) return
 
+    const normalizedPriceEuros = normalizePriceEuros(priceEuros)
+
     addItem({
       productId,
       quantity: 1,
@@ -61,10 +63,10 @@ function useProductAddToCart({
         name: productName || t('card.default_name'),
         slug: productSlug || '',
         pricePoints: normalizePricePoints(pricePoints),
-        priceEuros: normalizePriceEuros(priceEuros),
         imageUrl,
-        fulfillmentMethod,
-        stockQuantity,
+        ...(normalizedPriceEuros !== null ? { priceEuros: normalizedPriceEuros } : {}),
+        ...(fulfillmentMethod !== undefined ? { fulfillmentMethod } : {}),
+        ...(stockQuantity !== undefined ? { stockQuantity } : {}),
       },
     })
   }
@@ -92,15 +94,15 @@ export function ProductDetailAddToCartButton({
   const { addToCart, handleIncrement, handleDecrement, quantity, t } = useProductAddToCart(payload)
 
   if (quantity > 0) {
-    return (
-      <QuantityStepper
-        quantity={quantity}
-        maxQuantity={payload.stockQuantity}
-        onIncrement={handleIncrement}
-        onDecrement={handleDecrement}
-        className={className}
-      />
-    )
+    const quantityStepperProps = {
+      quantity,
+      onIncrement: handleIncrement,
+      onDecrement: handleDecrement,
+      ...(payload.stockQuantity !== undefined ? { maxQuantity: payload.stockQuantity } : {}),
+      ...(className !== undefined ? { className } : {}),
+    }
+
+    return <QuantityStepper {...quantityStepperProps} />
   }
 
   return (
@@ -124,15 +126,17 @@ export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActi
   const { addToCart, handleIncrement, handleDecrement, quantity, t } = useProductAddToCart(payload)
 
   if (quantity > 0) {
+    const quantityStepperProps = {
+      quantity,
+      onIncrement: handleIncrement,
+      onDecrement: handleDecrement,
+      className: 'h-14 w-full shadow-lg',
+      ...(payload.stockQuantity !== undefined ? { maxQuantity: payload.stockQuantity } : {}),
+    }
+
     return (
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-background/95 p-4 backdrop-blur-lg md:hidden">
-        <QuantityStepper
-          quantity={quantity}
-          maxQuantity={payload.stockQuantity}
-          onIncrement={handleIncrement}
-          onDecrement={handleDecrement}
-          className="h-14 w-full shadow-lg"
-        />
+        <QuantityStepper {...quantityStepperProps} />
       </div>
     )
   }

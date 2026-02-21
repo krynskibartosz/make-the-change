@@ -235,9 +235,9 @@ export const HomePartnersSection = (props: HomePartnersSectionProps) => {
   return (
     <HomePartnersCarousel
       producers={props.producers}
-      variant={props.variant}
       title={props.title}
       description={props.description}
+      {...(props.variant !== undefined ? { variant: props.variant } : {})}
     />
   )
 }

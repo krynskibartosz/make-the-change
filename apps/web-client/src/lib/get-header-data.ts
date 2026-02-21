@@ -17,14 +17,14 @@ export type HeaderData = {
  * Fetches all data needed by the Header component.
  * Centralised to avoid duplicating this logic across 4+ layouts.
  */
-export async function getHeaderData(): Promise<HeaderData> {
+export async function getHeaderData(locale?: string): Promise<HeaderData> {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   const [menuData, profileData] = await Promise.all([
-    getMenu('main-header'),
+    getMenu('main-header', locale),
     user
       ? supabase.from('profiles').select('avatar_url, metadata').eq('id', user.id).single()
       : Promise.resolve({ data: null }),

@@ -1,7 +1,7 @@
 'use client'
 
 import { z } from 'zod'
-import type { CartItemSnapshot, PersistedCart } from './cart-types'
+import type { CartItemSnapshot, CartProductSnapshot, PersistedCart } from './cart-types'
 
 export const CART_STORAGE_KEY = 'mtc:cart:v1'
 
@@ -35,26 +35,42 @@ export const clampQuantity = (quantity: number, stockQuantity?: number | null) =
   return clamp(safe, 1, Math.max(1, stockQuantity))
 }
 
-export const normalizeCartItems = (items: CartItemSnapshot[]): CartItemSnapshot[] => {
+export const normalizeCartItems = (items: readonly unknown[]): CartItemSnapshot[] => {
   const normalized: CartItemSnapshot[] = []
 
   for (const raw of items) {
-    if (!raw?.productId) continue
     const parsed = CartItemSchema.safeParse(raw)
     if (!parsed.success) continue
     if (!parsed.data.productId) continue
 
     const qty = clampQuantity(parsed.data.quantity, parsed.data.snapshot.stockQuantity)
+    const normalizedPriceEuros =
+      parsed.data.snapshot.priceEuros !== undefined
+        ? Math.max(0, parsed.data.snapshot.priceEuros)
+        : null
+    const normalizedSnapshot: CartProductSnapshot = {
+      name: parsed.data.snapshot.name,
+      slug: parsed.data.snapshot.slug,
+      pricePoints: Math.max(0, Math.round(parsed.data.snapshot.pricePoints)),
+      imageUrl: parsed.data.snapshot.imageUrl,
+    }
+
+    if (normalizedPriceEuros !== null) {
+      normalizedSnapshot.priceEuros = normalizedPriceEuros
+    }
+
+    if (parsed.data.snapshot.fulfillmentMethod !== undefined) {
+      normalizedSnapshot.fulfillmentMethod = parsed.data.snapshot.fulfillmentMethod
+    }
+
+    if (parsed.data.snapshot.stockQuantity !== undefined) {
+      normalizedSnapshot.stockQuantity = parsed.data.snapshot.stockQuantity
+    }
+
     normalized.push({
       productId: parsed.data.productId,
       quantity: qty,
-      snapshot: {
-        ...parsed.data.snapshot,
-        pricePoints: Math.max(0, Math.round(parsed.data.snapshot.pricePoints)),
-        priceEuros: parsed.data.snapshot.priceEuros
-          ? Math.max(0, parsed.data.snapshot.priceEuros)
-          : undefined,
-      },
+      snapshot: normalizedSnapshot,
     })
   }
 

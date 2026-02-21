@@ -43,6 +43,17 @@ Constats mesurés (source repo actuelle):
 - `src/app/[locale]/(marketing)/products/_features/product-card.tsx` (1)
 - `src/app/[locale]/(dashboard)/dashboard/profile/actions.ts` (1)
 
+### Baseline pilote `exactOptionalPropertyTypes` (marketing, local-only)
+1. Infra pilote ajoutée:
+- `tsconfig.exact-optional.pilot.base.json`
+- `tsconfig.exact-optional.pilot.marketing.json`
+- scripts `type-check:exact-optional:pilot:marketing` et `type-check:exact-optional:pilot`
+2. Résultat actuel:
+- `pnpm --filter @make-the-change/web-client type-check:exact-optional:pilot:marketing` = vert.
+- `pnpm --filter @make-the-change/web-client type-check` = vert.
+- `pnpm --filter @make-the-change/web-client lint` = vert.
+- `pnpm --filter @make-the-change/web-client exec tsc --noEmit --noUncheckedIndexedAccess` = vert.
+
 ## 3) Objectifs 30/60/90 jours
 
 ### Objectif 30 jours

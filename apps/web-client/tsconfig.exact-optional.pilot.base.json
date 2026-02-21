@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@make-the-change/core": ["../../packages/core/dist/src/index.d.ts"],
+      "@make-the-change/core/ui": ["../../packages/core/dist/src/shared/ui/index.d.ts"],
+      "@make-the-change/core/ui/next": ["../../packages/core/dist/src/shared/ui/next/index.d.ts"],
+      "@make-the-change/core/ui/rhf": ["../../packages/core/dist/src/shared/ui/rhf/index.d.ts"],
+      "@make-the-change/core/shared/utils": [
+        "../../packages/core/dist/src/shared/utils/index.d.ts"
+      ],
+      "@make-the-change/core/shared/hooks": [
+        "../../packages/core/dist/src/shared/hooks/index.d.ts"
+      ],
+      "@make-the-change/core/i18n": ["../../packages/core/dist/src/shared/i18n.d.ts"],
+      "@make-the-change/core/locales/*": ["../../packages/core/dist/locales/*"],
+      "@make-the-change/core/database-types": [
+        "../../packages/core/dist/src/shared/db/database.types.d.ts"
+      ],
+      "@make-the-change/core/schema": ["../../packages/core/dist/src/shared/db/schema.d.ts"]
+    }
+  }
+}

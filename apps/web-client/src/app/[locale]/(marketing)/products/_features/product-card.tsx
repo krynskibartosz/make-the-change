@@ -90,8 +90,8 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   const secondaryImage =
     sanitizeImageUrl(columnImages[1]) ?? sanitizeImageUrl(metadataImages[1]) ?? mainImage
   const badges = buildProductCardBadges({
-    featured: product.featured,
-    stockQuantity: product.stock_quantity,
+    featured: product.featured ?? null,
+    stockQuantity: product.stock_quantity ?? null,
     labels: {
       featuredLabel: t('best_seller'),
       lowStockLabel: t('low_stock'),
@@ -110,6 +110,10 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     setIsAdding(true)
 
     setTimeout(() => {
+      const normalizedPriceEuros = product.price_eur_equivalent
+        ? Number(product.price_eur_equivalent)
+        : null
+
       addItem({
         productId: product.id,
         quantity: 1,
@@ -117,12 +121,14 @@ export function ProductCard({ product, className, priority = false }: ProductCar
           name: localizedName,
           slug: product.slug || '',
           pricePoints: Number(product.price_points || 0),
-          priceEuros: product.price_eur_equivalent
-            ? Number(product.price_eur_equivalent)
-            : undefined,
           imageUrl: mainImage,
-          fulfillmentMethod: product.fulfillment_method,
-          stockQuantity: product.stock_quantity,
+          ...(normalizedPriceEuros !== null ? { priceEuros: normalizedPriceEuros } : {}),
+          ...(product.fulfillment_method !== undefined
+            ? { fulfillmentMethod: product.fulfillment_method }
+            : {}),
+          ...(product.stock_quantity !== undefined
+            ? { stockQuantity: product.stock_quantity }
+            : {}),
         },
       })
 
@@ -164,7 +170,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
         lowStockLabel: t('low_stock'),
         outOfStockLabel: t('sold_out'),
       }}
-      className={className}
+      {...(className !== undefined ? { className } : {})}
       slots={{
         topRight: (
           <button

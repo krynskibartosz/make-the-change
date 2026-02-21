@@ -110,9 +110,9 @@ export const StatsSection = ({ stats, className, variant = 'default' }: StatsSec
             >
               <StatValue
                 value={stat.value}
-                prefix={stat.prefix}
-                suffix={stat.suffix}
-                format={stat.format}
+                {...(stat.prefix !== undefined ? { prefix: stat.prefix } : {})}
+                {...(stat.suffix !== undefined ? { suffix: stat.suffix } : {})}
+                {...(stat.format !== undefined ? { format: stat.format } : {})}
               />
             </dd>
           </div>
