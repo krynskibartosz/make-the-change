@@ -1,0 +1,439 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "Tree-Nation logo" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e7]
+        - generic [ref=e8]:
+          - link "Tree Feed" [ref=e9] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e11] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e13] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e15]:
+          - link "Subscribe" [ref=e16] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e17] [cursor=pointer]
+          - button "Log in" [ref=e18] [cursor=pointer]
+          - button [ref=e19] [cursor=pointer]
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - heading "Plant Trees" [level=1] [ref=e23]
+        - paragraph [ref=e24]:
+          - text: Plant & offer trees around the world in a few clicks
+          - link [ref=e25] [cursor=pointer]:
+            - /url: https://kb.tree-nation.com/knowledge/plant-and-offer-trees
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - generic [ref=e34]:
+              - generic [ref=e35]:
+                - generic [ref=e36]: "1"
+                - heading "Choose location" [level=4] [ref=e37]
+              - paragraph [ref=e38]: Where would you like to plant your trees?
+            - generic [ref=e41]:
+              - generic:
+                - generic [ref=e43]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/amazonia-rioterra-brazil/updates
+                    - generic:
+                      - heading "Reforest the Amazon Basin" [level=3]
+                      - paragraph: Brazil
+                      - paragraph: From 5 €
+                - generic [ref=e45]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/big-scrub-rainforest-australia/updates
+                    - generic:
+                      - heading "Big Scrub Rainforest Restoration" [level=3]
+                      - paragraph: Australia
+                      - paragraph: From 5 €
+                - generic [ref=e47]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/formigas-de-embauba/updates
+                    - generic:
+                      - heading "Miniforests in Schools" [level=3]
+                      - paragraph: Brazil
+                      - paragraph: From 6.50 €
+                - generic [ref=e49]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/reforestation-of-national-forests-usa/updates
+                    - generic:
+                      - heading "Reforestation of National Forests" [level=3]
+                      - paragraph: United States
+                      - paragraph: From 2 €
+                - generic [ref=e51]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/ireland-community-tree-planting/updates
+                    - generic:
+                      - heading "Ireland Community Tree Planting" [level=3]
+                      - paragraph: Ireland
+                      - paragraph: From 7.80 €
+                - generic [ref=e53]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/trees-for-the-future-tanzania/updates
+                    - generic:
+                      - heading "Forest Gardens - Simiyu Region" [level=3]
+                      - paragraph: Tanzania
+                      - paragraph: From 1 €
+                - generic [ref=e55]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/community-reforestation-in-java-1/updates
+                    - generic:
+                      - heading "Community Reforestation in Java" [level=3]
+                      - paragraph: Indonesia
+                      - paragraph: From 2 €
+                - generic [ref=e59]:
+                  - heading "Tree-Nation selection" [level=3] [ref=e60]
+                  - paragraph [ref=e61]: We prepared this selection for you
+                - generic [ref=e63]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/restoration-and-social-empowerment-mexico/updates
+                    - generic:
+                      - heading "Restoration and Social Empowerment" [level=3]
+                      - paragraph: Mexico
+                      - paragraph: From 1.70 €
+                - generic [ref=e65]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/boreal-forest-habitat-restauration-canada/updates
+                    - generic:
+                      - heading "Boreal Forest Habitat Restauration" [level=3]
+                      - paragraph: Canada
+                      - paragraph: From 1.40 €
+                - generic [ref=e67]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/preservation-mt-elgon-uganda/updates
+                    - generic:
+                      - heading "Preservation of Mt. Elgon Ecosystem" [level=3]
+                      - paragraph: Uganda
+                      - paragraph: From 2 €
+                - generic [ref=e69]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/restoration-of-ala-forest-reserve/updates
+                    - generic:
+                      - heading "Restoration of Ala Forest Reserve" [level=3]
+                      - paragraph: Nigeria
+                      - paragraph: From 2 €
+                - generic [ref=e71]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/agroforestry-tree-plantation/updates
+                    - generic:
+                      - heading "Agroforestry Tree Plantation" [level=3]
+                      - paragraph: India
+                      - paragraph: From 5 €
+                - generic [ref=e73]:
+                  - generic:
+                    - link:
+                      - /url: https://tree-nation.com/projects/zimbabwe-reforestation-initiative/updates
+                    - generic:
+                      - heading "Zimbabwe Reforestation Initiative" [level=3]
+                      - paragraph: Zimbabwe
+                      - paragraph: From 5 €
+                - generic [ref=e75]:
+                  - button "See more projects":
+                    - generic:
+                      - generic:
+                        - paragraph: See more projects
+          - generic [ref=e79]:
+            - generic [ref=e80]:
+              - generic [ref=e81]: "2"
+              - heading "Select species" [level=4] [ref=e82]
+            - paragraph [ref=e83]: What kind of tree would you like to plant?
+            - generic [ref=e86]:
+              - generic:
+                - generic [ref=e88]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Fast-growing
+                          - button
+                        - generic:
+                          - img "Picea abies"
+                          - generic: CO2 10 Kg
+                        - generic:
+                          - heading "Picea abies" [level=3]
+                          - generic: 2.20 €
+                      - generic: Bear Groves in Transylvania, Romania
+                - generic [ref=e90]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Fast-growing
+                          - button
+                        - generic:
+                          - img "Betula pendula"
+                          - generic: CO2 50 Kg
+                        - generic:
+                          - heading "Betula pendula" [level=3]
+                          - generic: 7.80 €
+                      - generic: Ireland Community Tree Planting, Ireland
+                - generic [ref=e92]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Nutritional
+                          - button
+                        - generic:
+                          - img "Pistacia lentiscus"
+                          - generic: CO2 10 Kg
+                        - generic:
+                          - heading "Pistacia lentiscus" [level=3]
+                          - generic: 7 €
+                      - generic: Alvelal, Spain
+                - generic [ref=e94]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Fauna protection
+                          - button
+                        - generic:
+                          - img "Pinus ponderosa"
+                          - generic: CO2 50 Kg
+                        - generic:
+                          - heading "Pinus ponderosa" [level=3]
+                          - generic: 2 €
+                      - generic: Reforestation of National Forests, United States
+                - generic [ref=e98]:
+                  - generic [ref=e99] [cursor=pointer]:
+                    - generic [ref=e100]:
+                      - generic [ref=e101]: Fast-growing
+                      - button [ref=e102]
+                    - generic [ref=e104]:
+                      - img "Croton megalocarpus" [ref=e105]
+                      - generic [ref=e106]: CO2 150 Kg
+                    - generic [ref=e107]:
+                      - heading "Croton megalocarpus" [level=3] [ref=e108]
+                      - generic [ref=e109]: 2 €
+                  - generic [ref=e110]: Mlola Biodiversity Restoration, Tanzania
+                - generic [ref=e112]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Nutritional
+                          - button
+                        - generic:
+                          - img "Syzygium aromaticum"
+                          - generic: CO2 10 Kg
+                        - generic:
+                          - heading "Syzygium aromaticum" [level=3]
+                          - generic: 2 €
+                      - generic: Community Reforestation in Java, Indonesia
+                - generic [ref=e114]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Agroforestry
+                          - button
+                        - generic:
+                          - img "Pinus montezumae"
+                          - generic: CO2 100 Kg
+                        - generic:
+                          - heading "Pinus montezumae" [level=3]
+                          - generic: 5 €
+                      - generic: Heroes of "La Malinche", Mexico
+                - generic [ref=e116]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Fast-growing
+                          - button
+                        - generic:
+                          - img "Crataegus monogyna"
+                          - generic: CO2 10 Kg
+                        - generic:
+                          - heading "Crataegus monogyna" [level=3]
+                          - generic: 6 €
+                      - generic: Community Tree Planting, United Kingdom
+                - generic [ref=e118]:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Fast-growing
+                          - button
+                        - generic:
+                          - img "Croton megalocarpus"
+                          - generic: CO2 50 Kg
+                        - generic:
+                          - heading "Croton megalocarpus" [level=3]
+                          - generic: 0.50 €
+                      - generic: Save the Aberdare Forest, Kenya
+                - generic [ref=e120]:
+                  - button "See more species":
+                    - generic:
+                      - paragraph: See more species
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - generic [ref=e125]: "3"
+              - heading "Do you want to offer these trees?" [level=4] [ref=e126]
+            - paragraph [ref=e127]: Do you want to send these trees as a gift to one or more people?
+            - generic [ref=e128]:
+              - radio "No, I'm planting for myself." [ref=e129]
+              - generic [ref=e130]: No, I'm planting for myself.
+            - generic [ref=e131]:
+              - radio "Yes, I want to offer these trees." [checked] [ref=e132]
+              - generic [ref=e133]: Yes, I want to offer these trees.
+          - generic [ref=e320]:
+            - generic [ref=e321]:
+              - generic [ref=e322]: "4"
+              - heading "Recipients" [level=4] [ref=e323]
+            - generic [ref=e324]:
+              - generic [ref=e325]:
+                - generic:
+                  - generic [ref=e326]:
+                    - heading "Recipient 1" [level=5] [ref=e328]
+                    - generic [ref=e329]:
+                      - textbox "Name..." [ref=e331]
+                      - textbox "Email..." [ref=e333]
+                    - button "See other sending options" [ref=e335] [cursor=pointer]
+                  - generic [ref=e336]:
+                    - heading "Select a sending option:" [level=5] [ref=e337]
+                    - generic [ref=e338]:
+                      - generic [ref=e339]:
+                        - radio "Standard (name and email)" [checked] [ref=e340]
+                        - generic [ref=e341]: Standard (name and email)
+                      - generic [ref=e342]:
+                        - radio "I don’t know their email" [ref=e343]
+                        - generic [ref=e344]: I don’t know their email
+                    - button "Accept" [ref=e346] [cursor=pointer]
+              - generic [ref=e347]:
+                - button "Add another recipient" [ref=e348] [cursor=pointer]: Add another recipient
+                - button "Offer to a large group" [active] [ref=e350] [cursor=pointer]: Offer to a large group
+              - generic [ref=e481]:
+                - generic [ref=e482]:
+                  - heading "Want to send the trees yourself?" [level=5] [ref=e483]
+                  - button [ref=e484] [cursor=pointer]
+                - paragraph [ref=e487]: We will provide you an Excel list with a unique URL for each tree. To offer the trees, just send the URL and the code to your recipients using your own method (e-mail, print, etc.).
+                - generic [ref=e489]:
+                  - button "Cancel" [ref=e490] [cursor=pointer]
+                  - button "Send the trees myself" [ref=e491] [cursor=pointer]
+          - generic [ref=e352]:
+            - generic [ref=e353]:
+              - generic [ref=e354]: "5"
+              - heading "Number of trees per recipient" [level=4] [ref=e355]
+            - paragraph [ref=e356]: How many trees will each recipient receive?
+            - generic [ref=e357]:
+              - button "1" [ref=e358] [cursor=pointer]
+              - button "5" [ref=e359] [cursor=pointer]
+              - button "10" [ref=e360] [cursor=pointer]
+              - button "50" [ref=e361] [cursor=pointer]
+              - button "100" [ref=e362] [cursor=pointer]
+              - textbox "Other quantity" [ref=e364]
+          - generic [ref=e365]:
+            - generic [ref=e366]:
+              - generic [ref=e367]: "6"
+              - heading "Dedicate the tree" [level=4] [ref=e368]
+            - paragraph [ref=e369]: Add a message and a picture to dedicate the tree.
+            - generic [ref=e370]:
+              - generic [ref=e374]:
+                - button "Add a picture / video" [ref=e376] [cursor=pointer]:
+                  - generic [ref=e379]: Add a picture / video
+                - generic [ref=e382]:
+                  - generic [ref=e384]: What inspires you to plant trees? Share your planting motivation with the community.
+                  - button [ref=e385] [cursor=pointer]
+                - generic [ref=e389]: "#"
+                - generic [ref=e393]:
+                  - paragraph [ref=e394]: "Trending hashtags:"
+                  - navigation [ref=e395]:
+                    - list [ref=e396]:
+                      - listitem [ref=e397]:
+                        - 'button "🎂 # VictorHugo 1" [ref=e398] [cursor=pointer]':
+                          - generic [ref=e399]: 🎂
+                          - generic [ref=e400]: "#"
+                          - paragraph [ref=e401]: VictorHugo
+                          - paragraph [ref=e403]: "1"
+                      - listitem [ref=e405]:
+                        - button "# TreesForTomorrow 2301602" [ref=e406] [cursor=pointer]:
+                          - generic [ref=e407]: "#"
+                          - paragraph [ref=e408]: TreesForTomorrow
+                          - paragraph [ref=e410]: "2301602"
+                      - listitem [ref=e412]:
+                        - button "# HappyDay 10917" [ref=e413] [cursor=pointer]:
+                          - generic [ref=e414]: "#"
+                          - paragraph [ref=e415]: HappyDay
+                          - paragraph [ref=e417]: "10917"
+                      - listitem [ref=e419]:
+                        - button "# HappyBirthday 20534" [ref=e420] [cursor=pointer]:
+                          - generic [ref=e421]: "#"
+                          - paragraph [ref=e422]: HappyBirthday
+                          - paragraph [ref=e424]: "20534"
+                      - listitem [ref=e426]:
+                        - button "# NatureLovers 15011" [ref=e427] [cursor=pointer]:
+                          - generic [ref=e428]: "#"
+                          - paragraph [ref=e429]: NatureLovers
+                          - paragraph [ref=e431]: "15011"
+                      - listitem [ref=e433]:
+                        - button "# InMemoryOf 161339" [ref=e434] [cursor=pointer]:
+                          - generic [ref=e435]: "#"
+                          - paragraph [ref=e436]: InMemoryOf
+                          - paragraph [ref=e438]: "161339"
+                      - listitem [ref=e440]:
+                        - button "# BestFriends 419" [ref=e441] [cursor=pointer]:
+                          - generic [ref=e442]: "#"
+                          - paragraph [ref=e443]: BestFriends
+                          - paragraph [ref=e445]: "419"
+              - text: /
+        - generic [ref=e157]:
+          - list [ref=e158]:
+            - listitem [ref=e159]:
+              - heading "Project:" [level=4] [ref=e160]
+              - heading "Mlola Biodiversity Restoration" [level=4] [ref=e161]
+            - listitem [ref=e162]:
+              - generic [ref=e163]: "Species:"
+              - generic [ref=e164]: Croton megalocarpus
+            - listitem [ref=e447]:
+              - generic [ref=e448]: "Trees per recipient:"
+              - generic [ref=e449]: "1"
+            - listitem [ref=e450]:
+              - generic [ref=e451]: "Number of recipients:"
+              - generic [ref=e452]: "1"
+            - listitem [ref=e165]:
+              - generic [ref=e166]: "Trees to plant:"
+              - generic [ref=e167]: "1"
+            - listitem [ref=e168]:
+              - generic [ref=e169]: "Total CO2 offset:"
+              - generic [ref=e170]: 150 Kg
+            - listitem [ref=e171]:
+              - generic [ref=e172]: "Total (Before VAT):"
+              - generic [ref=e173]: 2 €
+          - button "Plant your trees" [ref=e174] [cursor=pointer]
+          - generic [ref=e175]:
+            - generic [ref=e176]: "Credits in your account:"
+            - generic [ref=e177]:
+              - generic [ref=e178]: 0 €
+              - button [ref=e179] [cursor=pointer]
+  - region "Chat Widget" [ref=e181]:
+    - iframe [ref=e182]:
+      - generic [ref=f90e2]:
+        - generic [ref=f90e23]:
+          - button "Open live chat" [ref=f90e24]:
+            - img "Avatar of Tree AI" [ref=f90e30]
+            - paragraph [ref=f90e31]: Hello, how can I help you?
+          - button "Close welcome page" [ref=f90e32]:
+            - img [ref=f90e34]
+        - button "Open live chat" [ref=f90e5]:
+          - img [ref=f90e8]
+          - img [ref=f90e15]

@@ -1,0 +1,503 @@
+- generic [active] [ref=e1]:
+  - alertdialog "Cookie Consent Prompt" [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - text: We use essential cookies to make our site work. With your consent, we may also use non-essential cookies to improve user experience and analyze website traffic. By clicking “Accept,” you agree to our website's cookie use as described in our
+        - button "Cookie Policy" [ref=e6] [cursor=pointer]
+        - text: . You can change your cookie settings at any time by clicking “
+        - button "Preferences" [ref=e7] [cursor=pointer]
+        - text: .”
+      - generic [ref=e8]:
+        - button "Preferences" [ref=e9] [cursor=pointer]
+        - button "Accept" [ref=e10] [cursor=pointer]
+  - generic [ref=e11]:
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - link "Tree-Nation logo" [ref=e14] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e16]
+        - generic [ref=e17]:
+          - link "Tree Feed" [ref=e18] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e20] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e22] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e24]:
+          - link "Subscribe" [ref=e25] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e26] [cursor=pointer]
+          - button "Log in" [ref=e27] [cursor=pointer]
+          - button [ref=e28] [cursor=pointer]
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - heading "Join us to reforest the world" [level=1] [ref=e33]
+          - paragraph [ref=e34]: The simplest way for citizens and companies to plant trees around the world and offset their CO2 emissions
+          - button "Create your forest" [ref=e35] [cursor=pointer]:
+            - generic [ref=e36]: Create your forest
+          - generic [ref=e37]:
+            - paragraph [ref=e38]: 46,640,393
+            - paragraph [ref=e39]: trees planted and counting...
+        - generic [ref=e40]:
+          - img "VCS Subsistence Farmer Program" [ref=e41]
+          - link "Project VCS Subsistence Farmer Program Kenya" [ref=e42] [cursor=pointer]:
+            - /url: https://tree-nation.com/projects/vcs-smallholder-agroforestry/updates
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - heading "On a mission to plant 1 trillion trees by 2050" [level=2] [ref=e46]
+          - paragraph [ref=e47]:
+            - text: There is no solving climate change without solving deforestation. Discover our
+            - link "Master Plan" [ref=e48] [cursor=pointer]:
+              - /url: /projects/inside-tree-nation/article/19297-on-a-mission-to-plant-1-trillion-trees-by-2050
+            - text: on how we aim to achieve this monster goal.
+        - generic [ref=e49]:
+          - generic [ref=e51]:
+            - heading "24,128" [level=3] [ref=e52]
+            - paragraph [ref=e53]: Trees planted today
+            - progressbar [ref=e55]
+            - paragraph [ref=e56]: Today's objective 10,714
+            - generic [ref=e58]: 09h 15min 54s left
+          - generic [ref=e60]:
+            - heading "310,778" [level=3] [ref=e61]
+            - paragraph [ref=e62]: Trees planted this month
+            - progressbar [ref=e64]
+            - paragraph [ref=e65]: This month's objective 300,000
+            - generic [ref=e67]: 2 days left
+          - generic [ref=e69]:
+            - heading "698,253" [level=3] [ref=e70]
+            - paragraph [ref=e71]: Trees planted this year
+            - progressbar [ref=e73]
+            - paragraph [ref=e74]: "This year's objective: 5,000,000"
+            - generic [ref=e76]: 308 days left
+        - link "Plant trees" [ref=e78] [cursor=pointer]:
+          - /url: https://tree-nation.com/plant/myself
+      - generic [ref=e81]:
+        - generic [ref=e83]:
+          - heading "Start your forest" [level=2] [ref=e84]
+          - paragraph [ref=e85]: Plant trees around the world and track them all in one place.
+          - generic [ref=e86]:
+            - button "Create your Citizen Forest" [ref=e87] [cursor=pointer]
+            - button "Create your Company Forest" [ref=e88] [cursor=pointer]
+        - img [ref=e91]
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - heading "We manage verified reforestation projects worldwide" [level=2] [ref=e96]
+          - generic [ref=e97]: "Together with local experts, we design exclusive programs and ensure their long-term impact to:"
+        - generic [ref=e98]:
+          - generic [ref=e102]:
+            - heading "Stop deforestation" [level=3] [ref=e103]
+            - text: Each of our projects fights back against the alarming rates of global deforestation.
+          - generic [ref=e107]:
+            - heading "Fight climate change" [level=3] [ref=e108]
+            - text: Planting trees has been recognized by the scientific community as a vital pillar to tackle climate change.
+          - generic [ref=e112]:
+            - heading "Support local communities" [level=3] [ref=e113]
+            - text: Our projects also generate a positive economic impact on local populations.
+        - link "See all reforestation projects" [ref=e115] [cursor=pointer]:
+          - /url: /projects
+        - generic [ref=e117]:
+          - region "Map" [ref=e118]
+          - generic [ref=e119]:
+            - generic [ref=e175]:
+              - generic:
+                - generic:
+                  - generic:
+                    - button "Dosso" [ref=e177] [cursor=pointer]:
+                      - img [ref=e178]
+                    - button "Rio Blanco" [ref=e179] [cursor=pointer]:
+                      - img [ref=e180]
+                    - button "La Pedregoza" [ref=e181] [cursor=pointer]:
+                      - img [ref=e182]
+                    - button "Sacred Seeds Garden" [ref=e183] [cursor=pointer]:
+                      - img [ref=e184]
+                    - button "Alamanga" [ref=e185] [cursor=pointer]:
+                      - img [ref=e186]
+                    - button "Bore" [ref=e187] [cursor=pointer]:
+                      - img [ref=e188]
+                    - button "CommuniTree" [ref=e189] [cursor=pointer]:
+                      - img [ref=e190]
+                    - button "Ne perdons pas le Nord..." [ref=e191] [cursor=pointer]:
+                      - img [ref=e192]
+                    - button "Oso Pardo" [ref=e193] [cursor=pointer]:
+                      - img [ref=e194]
+                    - button "Agroforestry to Stop the Desert" [ref=e195] [cursor=pointer]:
+                      - img [ref=e196]
+                    - button "Reforest the Bolivian Amazon" [ref=e197] [cursor=pointer]:
+                      - img [ref=e198]
+                    - button "Protect Amazonian Biodiversity" [ref=e199] [cursor=pointer]:
+                      - img [ref=e200]
+                    - button "Mount Kenya Trust" [ref=e201] [cursor=pointer]:
+                      - img [ref=e202]
+                    - button "Save the Aberdare Forest" [ref=e203] [cursor=pointer]:
+                      - img [ref=e204]
+                    - button "Escola Fluvià- Barcelona" [ref=e205] [cursor=pointer]:
+                      - img [ref=e206]
+                    - button "Usambara Biodiversity Conservation" [ref=e207] [cursor=pointer]:
+                      - img [ref=e208]
+                    - button "Bosques Yungas" [ref=e209] [cursor=pointer]:
+                      - img [ref=e210]
+                    - button "ARBA Sistema Litoral" [ref=e211] [cursor=pointer]:
+                      - img [ref=e212]
+                    - button "Saint Jean d'Illac" [ref=e213] [cursor=pointer]:
+                      - img [ref=e214]
+                    - button "Tumacoco" [ref=e215] [cursor=pointer]:
+                      - img [ref=e216]
+                    - button "Trees for Slender Loris" [ref=e217] [cursor=pointer]:
+                      - img [ref=e218]
+                    - button "Agroforesterie et Boisement" [ref=e219] [cursor=pointer]:
+                      - img [ref=e220]
+                    - button "Eden Reforestation Projects" [ref=e221] [cursor=pointer]:
+                      - img [ref=e222]
+                    - button "Trees for Tribals" [ref=e223] [cursor=pointer]:
+                      - img [ref=e224]
+                    - button "Conserve Natural Forests" [ref=e225] [cursor=pointer]:
+                      - img [ref=e226]
+                    - button "Alvelal" [ref=e227] [cursor=pointer]:
+                      - img [ref=e228]
+                    - button "Habitat Recovery Project" [ref=e229] [cursor=pointer]:
+                      - img [ref=e230]
+                    - button "Reforest the Mata Atlântica" [ref=e231] [cursor=pointer]:
+                      - img [ref=e232]
+                    - button "Sowing Water" [ref=e233] [cursor=pointer]:
+                      - img [ref=e234]
+                    - button "Replanting the burnt Mkussu Forest" [ref=e235] [cursor=pointer]:
+                      - img [ref=e236]
+                    - button "Trees for Water" [ref=e237] [cursor=pointer]:
+                      - img [ref=e238]
+                    - button "One Tree Matters" [ref=e239] [cursor=pointer]:
+                      - img [ref=e240]
+                    - button "Reforest the Amazon Basin" [ref=e241] [cursor=pointer]:
+                      - img [ref=e242]
+                    - button "Trees for Tigers" [ref=e243] [cursor=pointer]:
+                      - img [ref=e244]
+                    - button "Restauration Forêts dégradées" [ref=e245] [cursor=pointer]:
+                      - img [ref=e246]
+                    - button "Amazon Windshields" [ref=e247] [cursor=pointer]:
+                      - img [ref=e248]
+                    - button "Eden Reforestation Projects" [ref=e249] [cursor=pointer]:
+                      - img [ref=e250]
+                    - button "Eden Reforestation Projects" [ref=e251] [cursor=pointer]:
+                      - img [ref=e252]
+                    - button "Daintree Life Revegetation" [ref=e253] [cursor=pointer]:
+                      - img [ref=e254]
+                    - button "Recover the Mediterranean Diversity" [ref=e255] [cursor=pointer]:
+                      - img [ref=e256]
+                    - button "Amazonia VCS Conservation Project" [ref=e257] [cursor=pointer]:
+                      - img [ref=e258]
+                    - button "Plant to Stop Poverty" [ref=e259] [cursor=pointer]:
+                      - img [ref=e260]
+                    - button "Community Forest Sowing" [ref=e261] [cursor=pointer]:
+                      - img [ref=e262]
+                    - button "National Forest Recovery" [ref=e263] [cursor=pointer]:
+                      - img [ref=e264]
+                    - button "Community Tree Planting" [ref=e265] [cursor=pointer]:
+                      - img [ref=e266]
+                    - button "Indian Ocean Mangrove Restoration" [ref=e267] [cursor=pointer]:
+                      - img [ref=e268]
+                    - button "Geita Tree Plantation for Community" [ref=e269] [cursor=pointer]:
+                      - img [ref=e270]
+                    - button "VCS Afforestation Program" [ref=e271] [cursor=pointer]:
+                      - img [ref=e272]
+                    - button "Big Scrub Rainforest Restoration" [ref=e273] [cursor=pointer]:
+                      - img [ref=e274]
+                    - button "Reforestation and Conservation" [ref=e275] [cursor=pointer]:
+                      - img [ref=e276]
+                    - button "Forest Garden Program" [ref=e277] [cursor=pointer]:
+                      - img [ref=e278]
+                    - button "Cocoa Farmer Agroforestry" [ref=e279] [cursor=pointer]:
+                      - img [ref=e280]
+                    - button "Miniforests in Schools" [ref=e281] [cursor=pointer]:
+                      - img [ref=e282]
+                    - button "Wildfire Recovery in California" [ref=e283] [cursor=pointer]:
+                      - img [ref=e284]
+                    - button "VCS Subsistence Farmer Program" [ref=e285] [cursor=pointer]:
+                      - img [ref=e286]
+                    - button "Bosques de Agua" [ref=e287] [cursor=pointer]:
+                      - img [ref=e288]
+                    - button "Mlola Biodiversity Restoration" [ref=e289] [cursor=pointer]:
+                      - img [ref=e290]
+                    - button "Heroes of \"La Malinche\"" [ref=e291] [cursor=pointer]:
+                      - img [ref=e292]
+                    - button "Mangrove Restoration Project" [ref=e293] [cursor=pointer]:
+                      - img [ref=e294]
+                    - button "Agroforestry Systems" [ref=e295] [cursor=pointer]:
+                      - img [ref=e296]
+                    - button "Mangrove Forest Samut Songkram" [ref=e297] [cursor=pointer]:
+                      - img [ref=e298]
+                    - button "Holm Oak Grove Restoration" [ref=e299] [cursor=pointer]:
+                      - img [ref=e300]
+                    - button "Reforestation of National Forests" [ref=e301] [cursor=pointer]:
+                      - img [ref=e302]
+                    - button "Ireland Community Tree Planting" [ref=e303] [cursor=pointer]:
+                      - img [ref=e304]
+                    - button "VCS Mai Ndombe REDD+/CCB Gold" [ref=e305] [cursor=pointer]:
+                      - img [ref=e306]
+                    - button "VCS Tumring REDD+/CCB Project" [ref=e307] [cursor=pointer]:
+                      - img [ref=e308]
+                    - button "Forest Gardens - Mount Elgon Region" [ref=e309] [cursor=pointer]:
+                      - img [ref=e310]
+                    - button "Forest Gardens - Simiyu Region" [ref=e311] [cursor=pointer]:
+                      - img [ref=e312]
+                    - button "Bear Groves in Transylvania" [ref=e313] [cursor=pointer]:
+                      - img [ref=e314]
+                    - button "Community Reforestation in Java" [ref=e315] [cursor=pointer]:
+                      - img [ref=e316]
+                    - button "Restoration and Social Empowerment" [ref=e317] [cursor=pointer]:
+                      - img [ref=e318]
+                    - button "Lost Forests Recovery in California" [ref=e319] [cursor=pointer]:
+                      - img [ref=e320]
+                    - button "Swahili Coast Mangrove Restoration" [ref=e321] [cursor=pointer]:
+                      - img [ref=e322]
+                    - button "Boreal Forest Habitat Restauration" [ref=e323] [cursor=pointer]:
+                      - img [ref=e324]
+                    - button "Preservation of Mt. Elgon Ecosystem" [ref=e325] [cursor=pointer]:
+                      - img [ref=e326]
+                    - button "Mangrove Reforesting Activity" [ref=e327] [cursor=pointer]:
+                      - img [ref=e328]
+                    - button "Restoration of Ala Forest Reserve" [ref=e329] [cursor=pointer]:
+                      - img [ref=e330]
+                    - button "Agroforestry Tree Plantation" [ref=e331] [cursor=pointer]:
+                      - img [ref=e332]
+                    - button "Zimbabwe Reforestation Initiative" [ref=e333] [cursor=pointer]:
+                      - img [ref=e334]
+            - iframe [ref=e335]:
+              
+      - generic [ref=e337]:
+        - generic [ref=e338]:
+          - heading "A platform built for all" [level=2] [ref=e339]
+          - paragraph [ref=e340]: We make reforesting the world and fighting climate change easy. Here is how.
+        - generic [ref=e341]:
+          - generic [ref=e343]:
+            - button "I’m a Citizen" [ref=e344] [cursor=pointer]
+            - button "I’m a Company" [ref=e345] [cursor=pointer]
+          - generic [ref=e348]:
+            - generic [ref=e350]:
+              - generic [ref=e351]:
+                - heading "Plant & OfferTrees" [level=3] [ref=e352]:
+                  - generic [ref=e353]: Plant & OfferTrees
+                - paragraph [ref=e354]: Plant & offer trees around the world in a few clicks
+              - generic [ref=e357]:
+                - paragraph [ref=e358]: From 0.35 € /tree *
+                - paragraph [ref=e360]: One time / Monthly / Yearly
+              - button "Plant & Offer Trees" [ref=e362] [cursor=pointer]
+            - generic [ref=e364]:
+              - generic [ref=e365]:
+                - heading "OffsetCitizen" [level=3] [ref=e366]:
+                  - generic [ref=e367]: OffsetCitizen
+                - paragraph [ref=e368]: Get a monthly plan and offset your CO2 emissions in the easiest way
+              - generic [ref=e371]:
+                - paragraph [ref=e372]: From 5 € /month
+                - paragraph [ref=e374]: Automatic
+              - button "Offset Citizen" [ref=e376] [cursor=pointer]
+      - generic [ref=e379]:
+        - generic [ref=e380]:
+          - generic [ref=e381]:
+            - heading "Connect your company to the internet of trees" [level=2] [ref=e382]
+            - paragraph [ref=e383]: For every business action, we create an equal tree-planting reaction.
+          - generic [ref=e384]:
+            - paragraph [ref=e386]: Plant trees for every…
+            - tablist [ref=e388]:
+              - tab "Product sold" [selected] [ref=e389] [cursor=pointer]: Product sold
+              - tab "Team member" [ref=e391] [cursor=pointer]: Team member
+              - tab "Website pageview" [ref=e393] [cursor=pointer]: Website pageview
+              - tab "Anything!" [ref=e395] [cursor=pointer]: Anything!
+        - tabpanel "Product sold" [ref=e399]:
+          - generic [ref=e400]:
+            - img [ref=e402]
+            - generic [ref=e403]:
+              - heading "Turn every sale into climate action" [level=3] [ref=e404]
+              - link "Learn more" [ref=e405] [cursor=pointer]:
+                - /url: https://tree-nation.com/offset-products
+          - img [ref=e406]
+      - generic [ref=e408]:
+        - generic [ref=e409]:
+          - heading "29,151 companies are changing the world" [level=2] [ref=e410]
+          - paragraph [ref=e411]: Discover the forests of some of our amazing sponsors
+          - generic [ref=e412] [cursor=pointer]: Create your Company Forest
+        - generic [ref=e414]:
+          - generic:
+            - generic [ref=e416]:
+              - generic:
+                - generic:
+                  - generic:
+                    - img "GROUPE NUXE"
+                  - generic:
+                    - generic:
+                      - text: "1478"
+                      - paragraph: Trees planted
+                    - generic:
+                      - text: "414.05"
+                      - paragraph: Tonnes of CO2 offset
+            - generic [ref=e418]:
+              - generic:
+                - generic:
+                  - generic:
+                    - img "Bimbo QSR"
+                  - generic:
+                    - generic:
+                      - text: "28190"
+                      - paragraph: Trees planted
+                    - generic:
+                      - text: "2944.65"
+                      - paragraph: Tonnes of CO2 offset
+            - generic [ref=e423]:
+              - img "LAVAZZA GROUP" [ref=e425]
+              - generic [ref=e426]:
+                - generic [ref=e427]:
+                  - text: "55488"
+                  - paragraph [ref=e428]: Trees planted
+                - generic [ref=e429]:
+                  - text: "4588.77"
+                  - paragraph [ref=e430]: Tonnes of CO2 offset
+            - generic [ref=e432]:
+              - generic:
+                - generic:
+                  - generic:
+                    - img "COFIDIS"
+                  - generic:
+                    - generic:
+                      - text: "270080"
+                      - paragraph: Trees planted
+                    - generic:
+                      - text: "10081.95"
+                      - paragraph: Tonnes of CO2 offset
+            - generic [ref=e434]:
+              - generic:
+                - generic:
+                  - generic:
+                    - img "Arsenal Football Club"
+                  - generic:
+                    - generic:
+                      - text: "28435"
+                      - paragraph: Trees planted
+                    - generic:
+                      - text: "6822.5"
+                      - paragraph: Tonnes of CO2 offset
+      - generic [ref=e438]:
+        - generic [ref=e439]:
+          - heading "Technology may have caused climate change, but it can also solve it" [level=2] [ref=e440]
+          - paragraph [ref=e441]: Here is the impact on our journey to reforest the world.
+        - generic [ref=e442]:
+          - generic [ref=e443]:
+            - generic [ref=e444]: 46,640,393
+            - heading "Trees planted" [level=4] [ref=e445]
+          - generic [ref=e446]:
+            - text: 6,160,155
+            - heading "Tonnes of CO2 offset" [level=4] [ref=e447]
+          - generic [ref=e448]:
+            - text: 3,031
+            - heading "Offset Team members" [level=4] [ref=e449]
+          - generic [ref=e450]:
+            - text: 3,843,373
+            - heading "Offset Product" [level=4] [ref=e451]
+          - generic [ref=e452]:
+            - text: 1,369,270
+            - heading "Trees planted via API" [level=4] [ref=e453]
+          - generic [ref=e454]:
+            - text: 1,806,551
+            - heading "Tree-gift emails sent" [level=4] [ref=e455]
+      - generic [ref=e464]:
+        - generic [ref=e465]:
+          - heading "Unlock the Tree-Nation ecosystem" [level=2] [ref=e466]
+          - paragraph [ref=e467]: Discover our tools
+          - button "Join Tree-Nation" [ref=e468] [cursor=pointer]
+        - generic [ref=e469]:
+          - generic [ref=e471]:
+            - heading "Your personal forest" [level=3] [ref=e473]
+            - paragraph [ref=e474]: As a citizen or company, you have your own personalized forest! This is the place where you can see and collect all the trees you plant.
+          - generic [ref=e476]:
+            - heading "Your impact page" [level=3] [ref=e478]
+            - paragraph [ref=e479]: Every time you plant a tree, we meticulously calculate the amount of CO2 you offset to help you keep track of your impact.
+          - generic [ref=e481]:
+            - heading "Tree-Gift sending" [level=3] [ref=e483]
+            - paragraph [ref=e484]: On all occasions, trees make beautiful gifts. Tree-Nation delivers your customized Tree-Gifts via email or API. For friends, employees, or customers, they are always a success!
+          - generic [ref=e486]:
+            - heading "Tree certificate" [level=3] [ref=e488]
+            - paragraph [ref=e489]: Our digital trees serve as modern-day certificates for the trees we plant for you. Each tree on the ground has its unique digital tree.
+    - generic [ref=e491]:
+      - generic [ref=e492]:
+        - generic [ref=e493]:
+          - img "Tree-Nation logo" [ref=e494]
+          - generic [ref=e495]:
+            - link [ref=e496] [cursor=pointer]:
+              - /url: https://www.instagram.com/treenation/
+            - link [ref=e498] [cursor=pointer]:
+              - /url: https://www.x.com/treenation
+            - link [ref=e500] [cursor=pointer]:
+              - /url: https://www.facebook.com/treenation
+            - link [ref=e502] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/tree-nation
+          - button "English" [ref=e505] [cursor=pointer]
+          - iframe [ref=e507]:
+            - generic [ref=f5e4]:
+              - img "CO₂ Neutral Website" [ref=f5e6]
+              - generic [ref=f5e7]:
+                - paragraph [ref=f5e8]: Climate Action
+                - paragraph [ref=f5e9]: Website
+                - paragraph [ref=f5e10]: Certified by Tree-Nation
+        - generic [ref=e508]:
+          - generic [ref=e509]:
+            - generic [ref=e510]: Discover
+            - generic [ref=e511]:
+              - link "Projects" [ref=e512] [cursor=pointer]:
+                - /url: https://tree-nation.com/projects
+              - link "Forum" [ref=e513] [cursor=pointer]:
+                - /url: /forum
+              - link "#Hashtags" [ref=e514] [cursor=pointer]:
+                - /url: https://tree-nation.com/trees
+              - link "The Challenge" [ref=e515] [cursor=pointer]:
+                - /url: /the-challenge
+          - generic [ref=e516]:
+            - generic [ref=e517]: About
+            - generic [ref=e518]:
+              - link "About Us" [ref=e519] [cursor=pointer]:
+                - /url: /about-us
+              - link "Our Blog" [ref=e520] [cursor=pointer]:
+                - /url: https://tree-nation.com/projects/inside-tree-nation/updates
+              - link "Contact Us" [ref=e521] [cursor=pointer]:
+                - /url: /contact-us
+              - link "Work with us" [ref=e522] [cursor=pointer]:
+                - /url: https://treenation.recruitee.com/
+          - generic [ref=e523]:
+            - generic [ref=e524]: Collaborate
+            - generic [ref=e525]:
+              - link "Plant" [ref=e526] [cursor=pointer]:
+                - /url: https://tree-nation.com/plant/myself
+              - link "Offset your CO2" [ref=e527] [cursor=pointer]:
+                - /url: https://tree-nation.com/plant-companies
+              - link "Involve your company" [ref=e528] [cursor=pointer]:
+                - /url: /companies-presentation
+              - link "Reforestation partners" [ref=e529] [cursor=pointer]:
+                - /url: /reforestation-partners
+        - generic [ref=e530]:
+          - link "UNCCD logo" [ref=e531] [cursor=pointer]:
+            - /url: https://www.unccd.int/
+            - img "UNCCD logo" [ref=e532]
+          - link "Unep logo" [ref=e533] [cursor=pointer]:
+            - /url: https://www.decadeonrestoration.org/
+            - img "Unep logo" [ref=e534]
+      - generic [ref=e535]:
+        - link "Terms of Use" [ref=e536] [cursor=pointer]:
+          - /url: /legal/terms-of-use
+        - generic [ref=e537]: ·
+        - link "Terms of Service" [ref=e538] [cursor=pointer]:
+          - /url: /legal/terms-of-service
+        - generic [ref=e539]: ·
+        - link "Privacy policy" [ref=e540] [cursor=pointer]:
+          - /url: /legal/privacy-policy
+        - generic [ref=e541]: ·
+        - link "Cookies policy" [ref=e542] [cursor=pointer]:
+          - /url: /legal/cookies-policy
+        - generic [ref=e543]: ·
+        - button "Consent preferences" [ref=e544] [cursor=pointer]
+        - generic [ref=e545]: ·
+        - generic [ref=e546]: Copyright © 2006 - 2026 Tree-Nation NEOVEE SOLUTIONS, SL
+  - region "Chat Widget" [ref=e547]:
+    - iframe [ref=e548]:
+      - button "Open live chat" [ref=f6e5]:
+        - img [ref=f6e8]
+        - img [ref=f6e15]

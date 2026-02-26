@@ -1,0 +1,330 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "Tree-Nation logo" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e7]
+        - generic [ref=e8]:
+          - link "Tree Feed" [ref=e9] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e11] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e13] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e15]:
+          - link "Subscribe" [ref=e16] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e17] [cursor=pointer]
+          - button "Log in" [ref=e18] [cursor=pointer]
+          - button [ref=e19] [cursor=pointer]
+    - generic [ref=e20]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - heading "1 trees planted for" [level=1] [ref=e24]:
+            - generic [ref=e25]: "1"
+            - generic [ref=e26]: trees planted for
+          - generic [ref=e29] [cursor=pointer]:
+            - textbox [ref=e31]: VictorHugo
+            - button [ref=e33]
+        - generic [ref=e35]:
+          - text: Inspire new Planting Habits
+          - link [ref=e36] [cursor=pointer]:
+            - /url: "#"
+      - generic [ref=e38]:
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - button "Best trees" [ref=e44] [cursor=pointer]: Best trees
+            - button "Filters" [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: Filters
+            - generic [ref=e310] [cursor=pointer]:
+              - textbox [ref=e312]: VictorHugo
+              - button [ref=e314]
+          - 'link "Plant for #VictorHugo" [ref=e51] [cursor=pointer]':
+            - /url: https://tree-nation.com/plant/myself?hashtag=VictorHugo
+            - text: "Plant for #VictorHugo"
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57]:
+                - 'heading "Last trees on #VictorHugo" [level=6] [ref=e58]'
+                - text: Number of trees planted with this hashtag
+              - generic [ref=e59]:
+                - generic [ref=e60]: Today
+                - generic [ref=e62]: "1"
+              - generic [ref=e64]:
+                - generic [ref=e65]: This month
+                - generic [ref=e67]: "1"
+              - generic [ref=e69]:
+                - generic [ref=e70]: This year
+                - generic [ref=e72]: "1"
+            - generic [ref=e75]:
+              - heading "Top contributors" [level=6] [ref=e77]
+              - generic [ref=e78]:
+                - generic [ref=e80]:
+                  - button "All" [ref=e81] [cursor=pointer]
+                  - button "Citizens" [ref=e82] [cursor=pointer]
+                  - button "Companies" [ref=e83] [cursor=pointer]
+                - generic [ref=e89]:
+                  - link "User image" [ref=e90] [cursor=pointer]:
+                    - /url: /profile/aymen-tahir
+                    - img "User image" [ref=e92]
+                  - link "Ãymēñ Tåhìr" [ref=e95] [cursor=pointer]:
+                    - /url: /profile/aymen-tahir
+                  - generic [ref=e97]: "1"
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]:
+                - link "User image" [ref=e108] [cursor=pointer]:
+                  - /url: /profile/aymen-tahir
+                  - img "User image" [ref=e110]
+                - generic [ref=e111]:
+                  - link "Ãymēñ Tåhìr" [ref=e112] [cursor=pointer]:
+                    - /url: /profile/aymen-tahir
+                  - generic [ref=e113]:
+                    - text: planted
+                    - button "1 Tree" [ref=e114] [cursor=pointer]
+                - button "1" [ref=e116] [cursor=pointer]:
+                  - generic [ref=e117]: "1"
+              - button [ref=e119] [cursor=pointer]:
+                - img [ref=e120]
+              - generic [ref=e121]:
+                - generic [ref=e123]:
+                  - text: “La nature parle, mais le genre humain n’écoute pas.”
+                  - text: — Victor Hugo
+                  - text: (“Nature speaks, but humankind doesn’t listen.”)
+                - link "#VictorHugo" [ref=e125] [cursor=pointer]:
+                  - /url: /hashtag/VictorHugo
+              - generic [ref=e127]: "9 hours ago - Score: 658.54"
+              - generic [ref=e128]:
+                - generic "Like" [ref=e129] [cursor=pointer]:
+                  - button [ref=e130]
+                  - button "2" [ref=e132]
+                - button "0" [ref=e133] [cursor=pointer]:
+                  - generic [ref=e135]: "0"
+                - button "0" [ref=e136] [cursor=pointer]:
+                  - generic [ref=e138]: "0"
+                - button "Share" [ref=e140] [cursor=pointer]:
+                  - button "Share" [ref=e141]
+                - button "Replant" [ref=e143] [cursor=pointer]:
+                  - generic [ref=e144]: Replant
+            - generic [ref=e317]:
+              - generic [ref=e320]: Activity
+              - generic [ref=e321]:
+                - generic [ref=e322]:
+                  - link "User image" [ref=e323] [cursor=pointer]:
+                    - /url: /profile/aymen-tahir
+                    - img "User image" [ref=e325]
+                  - generic [ref=e326]:
+                    - link "Ãymēñ Tåhìr" [ref=e329] [cursor=pointer]:
+                      - /url: /profile/aymen-tahir
+                    - generic [ref=e330]:
+                      - generic [ref=e332]: planted
+                      - text: 1 Tree · 9 hours ago
+                  - button [ref=e334] [cursor=pointer]
+                - 'button "1 Ceriops tagal CO2 20 Kg Kenya Certificate No.: 8852009 View Tree Details" [ref=e337] [cursor=pointer]':
+                  - img [ref=e338]
+                  - generic [ref=e339]:
+                    - generic [ref=e340]: 1 Ceriops tagal
+                    - generic [ref=e342]: CO2 20 Kg
+                    - generic [ref=e344]: Kenya
+                    - generic [ref=e346]: "Certificate No.: 8852009"
+                    - button "View Tree Details" [active] [ref=e348]: View Tree Details
+                - generic [ref=e350]:
+                  - button "All Activity" [ref=e351] [cursor=pointer]
+                  - button "Likes" [ref=e352] [cursor=pointer]
+                  - button "Comments" [ref=e353] [cursor=pointer]
+                  - button "Replants" [ref=e354] [cursor=pointer]
+                - generic [ref=e355]:
+                  - generic [ref=e359]:
+                    - textbox "Add a comment here" [ref=e360]
+                    - button [ref=e361] [cursor=pointer]
+                  - button "Reply" [ref=e362] [cursor=pointer]
+                - generic [ref=e363]:
+                  - generic [ref=e365]:
+                    - link "User image" [ref=e366] [cursor=pointer]:
+                      - /url: /profile/nicola-gowing
+                      - img "User image" [ref=e368]
+                    - generic [ref=e369]:
+                      - link "Nicci Gowing" [ref=e371] [cursor=pointer]:
+                        - /url: /profile/nicola-gowing
+                      - generic [ref=e372]: Liked this tree · 3 hours ago
+                    - button [ref=e375] [cursor=pointer]
+                  - generic [ref=e378]:
+                    - link "User image" [ref=e379] [cursor=pointer]:
+                      - /url: /profile/stephanie-bisiaux
+                      - img "User image" [ref=e381]
+                    - generic [ref=e382]:
+                      - link "stéphanie bisiaux" [ref=e384] [cursor=pointer]:
+                        - /url: /profile/stephanie-bisiaux
+                      - generic [ref=e385]: Liked this tree · 6 hours ago
+                    - button [ref=e388] [cursor=pointer]
+          - generic [ref=e150]:
+            - heading "Trending" [level=6] [ref=e151]: Trending
+            - 'link "🎂 #VictorHugo 1" [ref=e153] [cursor=pointer]':
+              - /url: /hashtag/VictorHugo
+              - generic [ref=e154]: "🎂 #VictorHugo"
+              - generic [ref=e156]: "1"
+            - link "#OffsetTonnes 738,608" [ref=e158] [cursor=pointer]:
+              - /url: /hashtag/OffsetTonnes
+              - generic [ref=e159]: "#OffsetTonnes"
+              - generic [ref=e161]: 738,608
+            - link "#NetZeroProduct 1,029,947" [ref=e163] [cursor=pointer]:
+              - /url: /hashtag/NetZeroProduct
+              - generic [ref=e164]: "#NetZeroProduct"
+              - generic [ref=e166]: 1,029,947
+            - link "#Scarpinando4Planet 12,172" [ref=e168] [cursor=pointer]:
+              - /url: /hashtag/Scarpinando4Planet
+              - generic [ref=e169]: "#Scarpinando4Planet"
+              - generic [ref=e171]: 12,172
+            - link "#TreesForTomorrow 2,301,601" [ref=e173] [cursor=pointer]:
+              - /url: /hashtag/TreesForTomorrow
+              - generic [ref=e174]: "#TreesForTomorrow"
+              - generic [ref=e176]: 2,301,601
+            - link "#NetZeroCitizen 305,786" [ref=e178] [cursor=pointer]:
+              - /url: /hashtag/NetZeroCitizen
+              - generic [ref=e179]: "#NetZeroCitizen"
+              - generic [ref=e181]: 305,786
+            - link "#ResponsibleTravel 140,975" [ref=e183] [cursor=pointer]:
+              - /url: /hashtag/ResponsibleTravel
+              - generic [ref=e184]: "#ResponsibleTravel"
+              - generic [ref=e186]: 140,975
+  - region "Chat Widget" [ref=e188]:
+    - iframe [ref=e189]:
+      - generic [ref=f69e2]:
+        - generic [ref=f69e23]:
+          - button "Open live chat" [ref=f69e24]:
+            - img "Avatar of Tree AI" [ref=f69e30]
+            - paragraph [ref=f69e31]: Hello, how can I help you?
+          - button "Close welcome page" [ref=f69e32]:
+            - img [ref=f69e34]
+        - button "Open live chat" [ref=f69e5]:
+          - img [ref=f69e8]
+          - img [ref=f69e15]
+  - generic [ref=e391]:
+    - button [ref=e393] [cursor=pointer]
+    - generic [ref=e396]:
+      - generic [ref=e397]:
+        - 'heading "Certificate No.: 8852009" [level=6] [ref=e398]'
+        - link "Open Tree Certificate" [ref=e399] [cursor=pointer]:
+          - /url: https://tree-nation.com/certificate/980eea178c125f2a
+          - text: Open Tree Certificate
+      - generic [ref=e402]:
+        - link "User image" [ref=e403] [cursor=pointer]:
+          - /url: /profile/aymen-tahir
+          - img "User image" [ref=e405]
+        - generic [ref=e406]:
+          - link "Ãymēñ" [ref=e407] [cursor=pointer]:
+            - /url: /profile/aymen-tahir
+          - generic [ref=e408]:
+            - text: planted
+            - button "1 Tree" [ref=e409]
+      - generic [ref=e410]:
+        - generic [ref=e411]:
+          - generic [ref=e412]: Quantity
+          - heading "1 Tree" [level=6] [ref=e413]
+        - generic [ref=e414]:
+          - generic [ref=e415]: "Total CO2 offset:"
+          - heading "20 Kg" [level=6] [ref=e416]
+        - generic [ref=e417]:
+          - generic [ref=e418]: Tree Birthday
+          - heading "26/02/2026" [level=6] [ref=e419]
+        - generic [ref=e420]:
+          - generic [ref=e421]: Location
+          - heading "Kenya" [level=6] [ref=e422]
+      - separator [ref=e423]
+      - heading "Location of the tree" [level=6] [ref=e424]
+      - generic [ref=e425]:
+        - generic [ref=e428]:
+          - generic:
+            - button "Keyboard shortcuts"
+          - region "Map" [ref=e429]
+          - generic [ref=e430]:
+            - generic [ref=e449]:
+              - generic:
+                - generic:
+                  - generic:
+                    - button
+            - iframe [ref=e451]:
+              
+            - menubar [ref=e452] [cursor=pointer]:
+              - menuitemradio "Show street map" [ref=e454]: Map
+              - menuitemradio "Show satellite imagery" [checked] [ref=e456]: Satellite
+            - button "Toggle fullscreen view" [ref=e457] [cursor=pointer]
+            - button "Map camera controls" [ref=e459] [cursor=pointer]
+            - link "Open this area in Google Maps (opens a new window)" [ref=e461] [cursor=pointer]:
+              - /url: https://maps.google.com/maps?ll=-2.509402,40.501726&z=11&t=k&hl=en-US&gl=US&mapclient=apiv3
+              - img "Google" [ref=e463]
+            - generic [ref=e464]:
+              - button "Keyboard shortcuts" [ref=e470] [cursor=pointer]
+              - button "Map Data" [ref=e476] [cursor=pointer]
+              - link "Terms (opens in new tab)" [ref=e481] [cursor=pointer]:
+                - /url: https://www.google.com/intl/en-US_US/help/terms_maps.html
+                - text: Terms
+              - link "Report errors in the road map or imagery to Google" [ref=e486] [cursor=pointer]:
+                - /url: https://www.google.com/maps/@-2.5094021,40.5017259,11z/data=!3m1!1e3!10m1!1e1!12b1?source=apiv3&rapsrc=apiv3
+        - generic [ref=e487]:
+          - heading "Region’s state of biodiversity:" [level=6] [ref=e488]
+          - generic [ref=e489]: Mangrove ecosystems in Kenya are essential for coastal protection, biodiversity, and carbon sequestration, yet they face significant threats from overexploitation, land conversion, pollution, and climate change. Spanning approximately 61,271 hectares—about 3% of the country’s natural forests—Kenya’s mangroves are primarily concentrated in Lamu County, with smaller populations found in Kilifi, Mombasa, and Kwale counties. Over the years, these vital ecosystems have suffered extensive degradation. Between 1990 and 2010, Kenya saw a 40% decline in mangrove cover, largely driven by over-harvesting and land conversion. Today, ongoing challenges like pollution and the impacts of climate change continue to jeopardize the health and sustainability of these critical coastal forests.
+      - separator [ref=e490]
+      - heading "The project’s main goal" [level=6] [ref=e491]
+      - generic [ref=e492]:
+        - img "Swahili Coast Mangrove Restoration" [ref=e493]
+        - generic [ref=e494]:
+          - link "Swahili Coast Mangrove Restoration" [ref=e495] [cursor=pointer]:
+            - /url: https://tree-nation.com/projects/eden-reforestation-kenya/updates
+          - generic [ref=e496]: Quality Score 66.1
+          - generic [ref=e500]: 78 % trees funded
+          - generic [ref=e501]: "What is the project main objective:"
+          - paragraph [ref=e502]: We restore degraded land through community-driven development, creating sustainable livelihoods that benefit both people and the environment. Kenya, with just 8% forest cover, has one of the lowest rates in the world due to logging, charcoal burning, and illegal settlements. This deforestation threatens both biodiversity and local communities. By offering sustainable alternatives, we reduce these harmful practices and restore the balance between human activity and nature.
+      - separator [ref=e503]
+      - heading "Your planted species" [level=6] [ref=e504]
+      - generic [ref=e505]:
+        - generic [ref=e506]: Ceriops tagal
+        - generic [ref=e507]: "Common names: Yellow mangrove"
+        - generic [ref=e508]:
+          - img [ref=e509]
+          - generic [ref=e510]:
+            - generic [ref=e511]:
+              - generic [ref=e513]: CO2 Removal Capacity
+              - generic [ref=e515]: Lifetime
+              - generic [ref=e516]:
+                - text: 20 Kg
+                - generic "The Lifetime CO2 offset represent the total estimated amount of CO2 the tree will sequester throughout its lifetime. To reach this estimate we multiply the yearly CO2 offset by the period of main CO2 sequestration activity. In order to keep a simple estimation model, this period corresponds to the most significant years of the tree’s volume growth." [ref=e517]
+              - generic [ref=e519]: Yearly
+              - generic [ref=e520]: 2.00 Kg / year
+              - generic [ref=e521]: CO2 capture period
+              - generic [ref=e522]: 0 years - 10 years
+            - generic [ref=e523]:
+              - generic [ref=e524]: "More Info:"
+              - generic [ref=e525]: Productivity period
+              - generic [ref=e526]: 0 years - 0 years
+              - generic [ref=e527]: Average natural life span
+              - generic [ref=e528]: 25 years
+      - heading "Species particularities" [level=6] [ref=e529]
+      - paragraph [ref=e530]: Ceriops tagal is a small tree with a distinctive root growth. It´s a compact branched tree with thin breathing roots. It occurs in estuaries, swamps and lagoons in the coastal areas of the Indian Ocean from Africa to Asia, Australia and the Pacific. Ceriops tagal was once used as a source of tannins and dyes. Nowadays it is still used as a source of these products and as well as medicines, once numerous applications in traditional medicine have been reported. Ceriops tagal and other mangrove species support rich biodiversity by providing nesting and foraging grounds for various bird species and serving as a home to unique and often endangered flora and fauna.
+      - heading "What the planter likes about it" [level=6] [ref=e531]
+      - paragraph [ref=e532]: Ceriops tagal has an extensive root system that helps stabilize coastal soil and prevent erosion. Mangrove roots filter and trap sediments and pollutants, improving water quality in coastal areas. This benefits both marine ecosystems and communities relying on clean water sources. Planting Ceriops tagal can provide sustainable livelihoods for local communities. Mangroves are often used for traditional resource extraction activities, such as fishing and collecting honey and wood.
+      - generic [ref=e533]:
+        - generic [ref=e534]: "Details:"
+        - generic [ref=e535]:
+          - generic [ref=e536]: Rhizophoraceae
+          - generic [ref=e537]: Least concern (LC) (LC)
+          - generic [ref=e538]: "Height: 2 - 9 m"
+          - generic [ref=e539]: "Diameter: 10 - 45 cm"
+          - generic [ref=e540]: "Growth: Moderate"
+      - generic [ref=e541]:
+        - generic [ref=e542]: "Uses:"
+        - generic [ref=e543]:
+          - generic [ref=e544]: Animal nutrition
+          - generic [ref=e545]: Shade
+          - generic [ref=e546]: Cultural importance
+          - generic [ref=e547]: Historical importance
+          - generic [ref=e548]: Land reclamation
+      - generic [ref=e549]:
+        - text: Please note that trees are planted according to the project’s planting season. Your sponsorship may correspond to a tree that is already planted or one that will be planted in the upcoming planting season.
+        - link "Learn more" [ref=e550] [cursor=pointer]:
+          - /url: https://kb.tree-nation.com/knowledge/plantation-timing

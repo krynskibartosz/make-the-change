@@ -1,0 +1,41 @@
+- generic [active] [ref=e1]:
+  - alertdialog "Cookie Consent Prompt" [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - text: We use essential cookies to make our site work. With your consent, we may also use non-essential cookies to improve user experience and analyze website traffic. By clicking “Accept,” you agree to our website's cookie use as described in our
+        - button "Cookie Policy" [ref=e6] [cursor=pointer]
+        - text: . You can change your cookie settings at any time by clicking “
+        - button "Preferences" [ref=e7] [cursor=pointer]
+        - text: .”
+      - generic [ref=e8]:
+        - button "Preferences" [ref=e9] [cursor=pointer]
+        - button "Accept" [ref=e10] [cursor=pointer]
+  - generic [ref=e11]:
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - link "Tree-Nation logo" [ref=e14] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e16]
+        - generic [ref=e17]:
+          - link "Tree Feed" [ref=e18] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e20] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e22] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e24]:
+          - link "Subscribe" [ref=e25] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e26] [cursor=pointer]
+          - button "Log in" [ref=e27] [cursor=pointer]
+          - button [ref=e28] [cursor=pointer]
+    - generic [ref=e31]:
+      - heading "trees planted for" [level=1] [ref=e33]:
+        - generic [ref=e34]: trees planted for
+      - generic [ref=e41]:
+        - text: Inspire new Planting Habits
+        - link [ref=e42] [cursor=pointer]:
+          - /url: "#"

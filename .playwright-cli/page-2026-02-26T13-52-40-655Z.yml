@@ -1,0 +1,139 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "Tree-Nation logo" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e7]
+        - generic [ref=e8]:
+          - link "Tree Feed" [ref=e9] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e11] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e13] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e15]:
+          - link "Subscribe" [ref=e16] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e17] [cursor=pointer]
+          - button "Log in" [ref=e18] [cursor=pointer]
+          - button [ref=e19] [cursor=pointer]
+    - generic [ref=e175]:
+      - generic [ref=e177]:
+        - button "Go back" [ref=e178] [cursor=pointer]: Go back
+        - generic [ref=e180]:
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - link "User image" [ref=e183] [cursor=pointer]:
+                - /url: /profile/zoikz-mcspoing
+                - img "User image" [ref=e185]
+              - generic [ref=e186]:
+                - link "Brian P" [ref=e187] [cursor=pointer]:
+                  - /url: /profile/zoikz-mcspoing
+                - generic [ref=e188]: 22 February 2026
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - button [ref=e191] [cursor=pointer]
+                - generic [ref=e193]: "3"
+              - generic [ref=e194]:
+                - button [ref=e195] [cursor=pointer]
+                - generic [ref=e197]: "4"
+              - button [ref=e200] [cursor=pointer]
+          - generic [ref=e203]:
+            - heading "European tree of the year competition!" [level=1] [ref=e204]
+            - paragraph [ref=e205]:
+              - text: https://www.bbc.com/news/articles/cly90l175l1o
+              - text: All trees are awesome but some are awesomer than others.
+            - generic [ref=e206]:
+              - generic [ref=e207]:
+                - heading "General" [level=5] [ref=e208]
+                - text: Category
+              - generic [ref=e209]:
+                - heading "23 February 2026" [level=5] [ref=e210]
+                - text: Latest activity
+      - generic [ref=e212]:
+        - generic [ref=e213]:
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - link "User image" [ref=e216] [cursor=pointer]:
+                - /url: /profile/nim-mccoan
+                - img "User image" [ref=e218]
+              - generic [ref=e219]:
+                - link "Nim McCoan" [ref=e220] [cursor=pointer]:
+                  - /url: /profile/nim-mccoan
+                - generic [ref=e221]: February 23rd
+            - generic [ref=e223]:
+              - button [ref=e224] [cursor=pointer]
+              - generic [ref=e226]: "2"
+          - paragraph [ref=e228]:
+            - text: That looks really awesome. Glasgow is my nearest city, so I'd love to give that tree a drop of water in real life.
+            - text: I've been chasing the link round in circles, but cannot find where to vote.
+        - generic [ref=e229]:
+          - generic [ref=e230]:
+            - generic [ref=e231]:
+              - link "User image" [ref=e232] [cursor=pointer]:
+                - /url: /profile/pepijn-verpalen
+                - img "User image" [ref=e234]
+              - generic [ref=e235]:
+                - link "Pepijn Verpalen TN" [ref=e236] [cursor=pointer]:
+                  - /url: /profile/pepijn-verpalen
+                - generic [ref=e237]: February 23rd
+            - generic [ref=e239]:
+              - button [ref=e240] [cursor=pointer]
+              - generic [ref=e242]: "2"
+          - paragraph [ref=e244]: Love it! Thanks for sharing @Brain P 🌳 That is a massive tree which should indeed receive some votes 🙌
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - generic [ref=e247]:
+              - link "User image" [ref=e248] [cursor=pointer]:
+                - /url: /profile/zoikz-mcspoing
+                - img "User image" [ref=e250]
+              - generic [ref=e251]:
+                - link "Brian P" [ref=e252] [cursor=pointer]:
+                  - /url: /profile/zoikz-mcspoing
+                - generic [ref=e253]: February 23rd
+            - generic [ref=e255]:
+              - button [ref=e256] [cursor=pointer]
+              - generic [ref=e258]: "1"
+          - paragraph [ref=e260]:
+            - text: Looks like voting has ended.
+            - text: Still great info on the candidate trees here...
+            - text: https://www.treeoftheyear.org/vote
+        - generic [ref=e261]:
+          - generic [ref=e262]:
+            - generic [ref=e263]:
+              - link "User image" [ref=e264] [cursor=pointer]:
+                - /url: /profile/sara-paoluzzi-1
+                - img "User image" [ref=e266]
+              - generic [ref=e267]:
+                - link "Sara Paoluzzi" [ref=e268] [cursor=pointer]:
+                  - /url: /profile/sara-paoluzzi-1
+                - generic [ref=e269]: February 23rd
+            - generic [ref=e271]:
+              - button [ref=e272] [cursor=pointer]
+              - generic [ref=e274]: "1"
+          - paragraph [ref=e276]: Brian, thank you, I'm sorry to be late but yes, great info about amazing precious trees!!!
+  - region "Chat Widget" [ref=e277]:
+    - iframe [ref=e278]:
+      - generic [ref=f105e2]:
+        - generic [ref=f105e6]:
+          - button "Open live chat" [ref=f105e7]:
+            - img "Avatar of Tree AI" [ref=f105e13]
+            - paragraph [ref=f105e14]: Hello, how can I help you?
+          - button "Close welcome page" [ref=f105e15]:
+            - img [ref=f105e17]
+        - button "Open live chat" [ref=f105e24]:
+          - img [ref=f105e27]
+          - img [ref=f105e34]
+  - generic [ref=e279]:
+    - generic [ref=e280]:
+      - img [ref=e282]
+      - generic [ref=e283]:
+        - generic [ref=e284]: Our Ambassador Products!
+        - generic [ref=e285]: Wear the mission with beautiful t-shirts, hoodies and much more. Each product plants 10 trees.
+        - link "Take me there" [ref=e287] [cursor=pointer]:
+          - /url: https://tree-nation.myspreadshop.net
+    - generic [ref=e288] [cursor=pointer]: 

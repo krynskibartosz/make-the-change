@@ -3,7 +3,7 @@ project_id = "pbgqswbyqzspqjmwqksc"
 [api]
 enabled = true
 port = 54321
-schemas = ["public", "commerce", "investment", "content", "identity"]
+schemas = ["public", "commerce", "investment", "content", "identity", "social", "gamification"]
 
 [db]
 port = 54322

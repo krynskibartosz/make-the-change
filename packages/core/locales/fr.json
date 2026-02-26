@@ -22,6 +22,7 @@
     }
   },
   "navigation": {
+    "community": "Communauté",
     "home": "Accueil",
     "admin": "Administration",
     "dashboard": "Tableau de bord",
@@ -444,6 +445,10 @@
     "contact_us": "Nous contacter",
     "rights_reserved": "Tous droits réservés.",
     "leaderboard": "Classement",
+    "community": "Communauté",
+    "community_trending": "Tendances communauté",
+    "community_guilds": "Guildes",
+    "community_publish": "Publier",
     "blog": "Blog",
     "address": "Brussels, Belgium",
     "brand_guidelines": "Guide de marque",
@@ -861,6 +866,11 @@
       "back_to_project": "Retour au projet",
       "title": "Investir dans l'avenir",
       "supporting": "Vous soutenez {project}",
+      "steps": {
+        "invest": "Investir",
+        "payment": "Paiement",
+        "confirm": "Confirmation"
+      },
       "amount_label": "Combien souhaitez-vous investir ?",
       "custom_amount_placeholder": "Montant libre (min. 10€)",
       "impact_title": "Impact estimé",
@@ -1855,6 +1865,114 @@
           "cta": "contact@make-the-change.com"
         }
       }
+    }
+  },
+  "community": {
+    "actions": {
+      "back_to_feed": "Retour au feed",
+      "share": "Partager",
+      "cancel": "Annuler"
+    },
+    "sidebar": {
+      "more": "Plus",
+      "update_post": "Mettre à jour",
+      "trending": "Tendances",
+      "guilds": "Guildes"
+    },
+    "leaderboard": {
+      "top_contributors": "Top Contributeurs",
+      "full_leaderboard": "Voir le classement complet",
+      "trends_for_you": "Tendances pour vous",
+      "supported_project_popular": "Projet soutenu • Populaire",
+      "sample_project_title": "Agroforesterie au Sénégal",
+      "sample_project_metric": "+450 plantations",
+      "shop_trending": "Boutique • Tendance",
+      "sample_product_title": "Gourde réutilisable inox",
+      "sample_product_metric": "4.9/5 (24 avis)",
+      "show_more": "Afficher plus",
+      "follow": "Suivre"
+    },
+    "create_post": {
+      "meta_title": "Communauté | Nouvelle publication",
+      "heading": "Nouvelle publication",
+      "placeholder": "Partagez une avancée, une idée ou une question avec la communauté...",
+      "publish": "Publier",
+      "publishing": "Publication...",
+      "success_title": "Publication créée",
+      "success_description": "Votre message est maintenant visible dans la communauté.",
+      "error_title": "Impossible de publier",
+      "error_description": "Vérifiez votre connexion puis réessayez."
+    },
+    "feed": {
+      "placeholder": "Que voulez-vous partager avec la communauté ?",
+      "image_label": "Image",
+      "empty": "Aucune actualité pour le moment.",
+      "login_required_title": "Connexion requise",
+      "login_required_description": "Vous devez être connecté pour aimer une publication.",
+      "super_like_success_title": "Super !",
+      "super_like_success_description": "Vous avez planté une graine sur ce post.",
+      "super_like_error_title": "Action impossible",
+      "super_like_error_default": "Vous n'avez pas assez de graines (inventaire insuffisant)"
+    },
+    "thread": {
+      "comments_label": "Commentaires ({count})",
+      "comment_placeholder": "Écrire un commentaire...",
+      "comment_publish": "Publier le commentaire",
+      "comment_sending": "Envoi...",
+      "no_comments": "Aucun commentaire pour le moment.",
+      "login_required_title": "Connexion requise",
+      "login_required_description": "Vous devez être connecté pour aimer une publication.",
+      "super_like_success_title": "Super !",
+      "super_like_success_description": "Vous avez planté une graine sur ce post.",
+      "super_like_error_title": "Action impossible",
+      "super_like_error_default": "Vous n'avez pas assez de graines",
+      "comment_error_title": "Erreur",
+      "comment_error_description": "Impossible d'ajouter le commentaire. Vérifiez votre connexion.",
+      "you_label": "Vous",
+      "user_fallback": "Utilisateur"
+    },
+    "post": {
+      "default_title": "Publication communauté",
+      "share_default_title": "Partager la publication",
+      "share_prefix": "Partager",
+      "share_fallback_title": "Publication Make the Change"
+    },
+    "share": {
+      "description": "Partagez cette publication avec votre réseau pour amplifier son impact.",
+      "copy_link": "Copier le lien",
+      "native_share": "Partager via le téléphone",
+      "share_on_x": "Partager sur X",
+      "share_on_linkedin": "Partager sur LinkedIn",
+      "share_on_facebook": "Partager sur Facebook",
+      "link_unavailable_title": "Lien indisponible",
+      "link_unavailable_description": "Impossible de copier le lien pour le moment.",
+      "link_copied_title": "Lien copié",
+      "link_copied_description": "Le lien de la publication a été copié.",
+      "link_copy_error_title": "Copie impossible",
+      "link_copy_error_description": "Autorisez l’accès au presse-papiers puis réessayez."
+    },
+    "guilds": {
+      "meta_title": "Communauté | Guildes",
+      "title": "Guildes communautaires",
+      "description": "Rejoignez un collectif, partagez vos avancées et atteignez des objectifs communs.",
+      "members_label": "membres",
+      "join_and_post": "Rejoindre et publier",
+      "sample_name_tech": "Tech for Forests",
+      "sample_name_campus": "Campus Biodiversité",
+      "sample_name_family": "Family Green Circle",
+      "sample_goal_tech": "Planter 2 000 arbres ce trimestre",
+      "sample_goal_campus": "Financer 3 projets agricoles",
+      "sample_goal_family": "Atteindre 100 commentaires utiles"
+    },
+    "trending": {
+      "meta_title": "Communauté | Tendances",
+      "title": "Tendances de la communauté",
+      "description": "Les publications qui génèrent le plus d’interactions en ce moment.",
+      "post_without_text": "Publication sans texte",
+      "likes_suffix": "likes",
+      "by_prefix": "Par",
+      "open": "Ouvrir",
+      "no_trending": "Aucune tendance disponible pour le moment."
     }
   },
   "menu_page": {

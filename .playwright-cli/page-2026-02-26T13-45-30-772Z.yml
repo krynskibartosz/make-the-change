@@ -1,0 +1,65 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "Tree-Nation logo" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Tree-Nation logo" [ref=e7]
+      - generic [ref=e8]:
+        - link "Tree Feed" [ref=e9] [cursor=pointer]:
+          - /url: /trees
+          - text: Tree Feed
+        - link "habits" [ref=e11] [cursor=pointer]:
+          - /url: /hashtag
+          - text: habits
+        - link "Plant" [ref=e13] [cursor=pointer]:
+          - /url: /plant/myself
+          - text: Plant
+      - generic [ref=e15]:
+        - link "Subscribe" [ref=e16] [cursor=pointer]:
+          - /url: /pledge
+        - button "Register" [ref=e17] [cursor=pointer]
+        - button "Log in" [ref=e18] [cursor=pointer]
+        - button [ref=e19] [cursor=pointer]
+  - generic [ref=e20]:
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - heading "738,608 trees planted for" [level=1] [ref=e24]:
+          - generic [ref=e25]: 738,608
+          - generic [ref=e26]: trees planted for
+        - generic [ref=e29] [cursor=pointer]:
+          - textbox [ref=e31]: OffsetTonnes
+          - button [ref=e33]
+      - generic [ref=e35]:
+        - text: Inspire new Planting Habits
+        - link [ref=e36] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=e38]:
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - button "Best trees" [disabled]: Best trees
+          - button "Filters" [disabled] [ref=e44]:
+            - generic [ref=e45]: Filters
+        - 'link "Plant for #OffsetTonnes" [ref=e48] [cursor=pointer]':
+          - /url: https://tree-nation.com/plant/myself?hashtag=OffsetTonnes
+          - text: "Plant for #OffsetTonnes"
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - 'heading "Last trees on #OffsetTonnes" [level=6] [ref=e55]'
+            - text: Number of trees planted with this hashtag
+          - generic [ref=e56]:
+            - generic [ref=e57]: Today
+            - generic [ref=e59]: 20,801
+          - generic [ref=e61]:
+            - generic [ref=e62]: This month
+            - generic [ref=e64]: 27,742
+          - generic [ref=e66]:
+            - generic [ref=e67]: This year
+            - generic [ref=e69]: 292,140
+        - generic [ref=e72]:
+          - heading "Top contributors" [level=6] [ref=e74]
+          - generic [ref=e77]:
+            - button "All" [ref=e78] [cursor=pointer]
+            - button "Citizens" [ref=e79] [cursor=pointer]
+            - button "Companies" [ref=e80] [cursor=pointer]

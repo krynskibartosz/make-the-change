@@ -1,0 +1,291 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "Tree-Nation logo" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e7]
+        - generic [ref=e8]:
+          - link "Tree Feed" [ref=e9] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e11] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e13] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e15]:
+          - link "Subscribe" [ref=e16] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e17] [cursor=pointer]
+          - button "Log in" [ref=e18] [cursor=pointer]
+          - button [ref=e19] [cursor=pointer]
+    - generic [ref=e24]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]: 46,640,396
+          - generic [ref=e30]: trees planted and counting...
+        - link "Plant & Offer Trees" [ref=e31] [cursor=pointer]:
+          - /url: https://tree-nation.com/plant/myself
+      - generic [ref=e33]:
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - link "User image" [ref=e40] [cursor=pointer]:
+              - /url: /profile/pepijn-verpalen
+              - img "User image" [ref=e42]
+            - link "Pepijn Verpalen TN" [ref=e43] [cursor=pointer]:
+              - /url: /profile/pepijn-verpalen
+            - generic [ref=e45]:
+              - generic [ref=e46]: Replanted
+              - button "1 Tree" [ref=e48] [cursor=pointer]
+            - button "1 of 12" [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]: 1 of
+              - generic [ref=e52]: "12"
+          - generic [ref=e54]:
+            - link "User image" [ref=e55] [cursor=pointer]:
+              - /url: /profile/oriana-medina-1
+              - img "User image" [ref=e57]
+            - generic [ref=e58]:
+              - link "Oriana Medina TN" [ref=e59] [cursor=pointer]:
+                - /url: /profile/oriana-medina-1
+              - generic [ref=e60]:
+                - text: planted
+                - button "1 Tree" [ref=e61] [cursor=pointer]
+              - generic [ref=e62]:
+                - text: and inspired
+                - button "2 others" [ref=e63] [cursor=pointer]
+          - button [ref=e64] [cursor=pointer]:
+            - img [ref=e65]
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e68]:
+                - text: Every year we review the progress of our sites through our MRV process, which includes, among other aspects, the Enhanced Vegetation Index. This helps us assess how vigorous the vegetation is and understand whether the site is improving or not.
+                - text: "In this case, what you see above is one of our many planting sites in Brazil: 40,000 trees planted in 2021 close to the Rio Jacundá, in a previously deforested area due to agricultural activities."
+                - text: After just four years, you can see the difference — from very low vegetation vigor to dense, high vegetation. This means there is positive progress, and it has been maintained throughout the years.
+              - button "Show more" [ref=e70] [cursor=pointer]
+            - link "#TreeNationVerification" [ref=e72] [cursor=pointer]:
+              - /url: /hashtag/TreeNationVerification
+          - generic [ref=e74]: "4 hours ago - Score: 19755.47"
+          - generic [ref=e75]:
+            - generic "Like" [ref=e76] [cursor=pointer]:
+              - button [ref=e77]
+              - button "7" [ref=e79]
+            - button "1" [ref=e80] [cursor=pointer]:
+              - generic [ref=e82]: "1"
+            - button "2" [ref=e83] [cursor=pointer]:
+              - generic [ref=e85]: "2"
+            - button "Share" [ref=e87] [cursor=pointer]:
+              - button "Share" [ref=e88]
+            - button "Replant" [ref=e90] [cursor=pointer]:
+              - generic [ref=e91]: Replant
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - link "User image" [ref=e99] [cursor=pointer]:
+              - /url: /profile/melanie-62
+              - img "User image" [ref=e101]
+            - generic [ref=e102]:
+              - link "Melanie" [ref=e103] [cursor=pointer]:
+                - /url: /profile/melanie-62
+              - generic [ref=e104]:
+                - text: planted
+                - button "1 Tree" [ref=e105] [cursor=pointer]
+            - button "1" [ref=e107] [cursor=pointer]:
+              - generic [ref=e108]: "1"
+          - button [ref=e110] [cursor=pointer]:
+            - img [ref=e111]
+          - generic [ref=e114]: Please help my seed
+          - generic [ref=e116]: "February 25th - Score: 12325.35"
+          - generic [ref=e117]:
+            - generic "Like" [ref=e118] [cursor=pointer]:
+              - button [ref=e119]
+              - button "0" [ref=e121]
+            - button "9" [ref=e122] [cursor=pointer]:
+              - generic [ref=e124]: "9"
+            - button "0" [ref=e125] [cursor=pointer]:
+              - generic [ref=e127]: "0"
+            - button "Share" [ref=e129] [cursor=pointer]:
+              - button "Share" [ref=e130]
+            - button "Replant" [ref=e132] [cursor=pointer]:
+              - generic [ref=e133]: Replant
+        - generic [ref=e139]:
+          - generic [ref=e140]:
+            - link "User image" [ref=e141] [cursor=pointer]:
+              - /url: /profile/valerie-macraigne
+              - img "User image" [ref=e143]
+            - generic [ref=e144]:
+              - link "Valérie M" [ref=e145] [cursor=pointer]:
+                - /url: /profile/valerie-macraigne
+              - generic [ref=e146]:
+                - text: planted
+                - button "1 Tree" [ref=e147] [cursor=pointer]
+            - button "1" [ref=e149] [cursor=pointer]:
+              - generic [ref=e150]: "1"
+          - button [ref=e152] [cursor=pointer]:
+            - img [ref=e153]
+          - generic [ref=e154]:
+            - generic [ref=e156]: Pour tous ceux qui s'émerveillent encore, les amoureux de la nature, et ceux qui voient plus loin que demain 💚☘️🌳
+            - link "#NatureLovers" [ref=e158] [cursor=pointer]:
+              - /url: /hashtag/NatureLovers
+          - generic [ref=e160]: "February 25th - Score: 12218.95"
+          - generic [ref=e161]:
+            - generic "Like" [ref=e162] [cursor=pointer]:
+              - button [ref=e163]
+              - button "0" [ref=e165]
+            - button "8" [ref=e166] [cursor=pointer]:
+              - generic [ref=e168]: "8"
+            - button "0" [ref=e169] [cursor=pointer]:
+              - generic [ref=e171]: "0"
+            - button "Share" [ref=e173] [cursor=pointer]:
+              - button "Share" [ref=e174]
+            - button "Replant" [ref=e176] [cursor=pointer]:
+              - generic [ref=e177]: Replant
+        - generic [ref=e183]:
+          - generic [ref=e184]:
+            - link "User image" [ref=e185] [cursor=pointer]:
+              - /url: /profile/studio-legale-tedioli
+              - img "User image" [ref=e187]
+            - generic [ref=e188]:
+              - link "Studio legale Tedioli" [ref=e189] [cursor=pointer]:
+                - /url: /profile/studio-legale-tedioli
+              - generic [ref=e190]:
+                - text: planted
+                - button "1 Tree" [ref=e191] [cursor=pointer]
+            - button "1" [ref=e193] [cursor=pointer]:
+              - generic [ref=e194]: "1"
+          - button [ref=e196] [cursor=pointer]:
+            - img [ref=e197]
+          - generic [ref=e198]:
+            - generic [ref=e200]: Parco delle Bertone - Mantova
+            - link "#TreesForTomorrow" [ref=e202] [cursor=pointer]:
+              - /url: /hashtag/TreesForTomorrow
+          - generic [ref=e204]: "February 25th - Score: 11718.95"
+          - generic [ref=e205]:
+            - generic "Like" [ref=e206] [cursor=pointer]:
+              - button [ref=e207]
+              - button "0" [ref=e209]
+            - button "8" [ref=e210] [cursor=pointer]:
+              - generic [ref=e212]: "8"
+            - button "0" [ref=e213] [cursor=pointer]:
+              - generic [ref=e215]: "0"
+            - button "Share" [ref=e217] [cursor=pointer]:
+              - button "Share" [ref=e218]
+            - button "Replant" [ref=e220] [cursor=pointer]:
+              - generic [ref=e221]: Replant
+        - generic [ref=e227]:
+          - generic [ref=e228]:
+            - link "User image" [ref=e229] [cursor=pointer]:
+              - /url: /profile/pepijn-verpalen
+              - img "User image" [ref=e231]
+            - link "Pepijn Verpalen TN" [ref=e232] [cursor=pointer]:
+              - /url: /profile/pepijn-verpalen
+            - generic [ref=e234]:
+              - generic [ref=e235]: Replanted
+              - button "1 Tree" [ref=e237] [cursor=pointer]
+            - button "1 of 20801" [ref=e239] [cursor=pointer]:
+              - generic [ref=e240]: 1 of
+              - generic [ref=e241]: "20801"
+          - generic [ref=e243]:
+            - link "User image" [ref=e244] [cursor=pointer]:
+              - /url: /profile/communaute-de-communes-entre-juine-et-renarde
+              - img "User image" [ref=e246]
+            - generic [ref=e247]:
+              - link "Communauté de communes Entre Juine et Renarde" [ref=e248] [cursor=pointer]:
+                - /url: /profile/communaute-de-communes-entre-juine-et-renarde
+              - generic [ref=e249]:
+                - text: planted
+                - button "20800 Trees" [ref=e250] [cursor=pointer]
+              - generic [ref=e251]:
+                - text: and inspired
+                - button "1 other" [ref=e252] [cursor=pointer]
+          - button [ref=e253] [cursor=pointer]:
+            - img [ref=e254]
+          - generic [ref=e255]:
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - text: Chères habitants de la Communauté de communes Entre Juine et Renarde,
+                - text: "Quand vous voyez un arbre planté quelque part au bout du monde, ne voyez pas seulement ce petit plant : voyez l’ombre qu’il fournira, les fruits qu’il portera, la terre qu’il maintiendra, le cours d’eau qu’il protègera, et les familles qui y travailleront."
+                - text: "Chaque arbre planté s'emploie à compenser les 2000 TeqCO2 émis chaque année par nos activités. Notre engagement carbone n’est pas un geste symbolique. C’est un lien concret avec des personnes, avec un territoire, avec un avenir. C’est notre façon de dire : nous prenons soin du climat, oui, mais aussi de l’humanité, de la solidarité, et de la solidarité intercontinentale."
+              - button "Show more" [ref=e258] [cursor=pointer]
+            - link "#OffsetTonnes" [ref=e260] [cursor=pointer]:
+              - /url: /hashtag/OffsetTonnes
+          - generic [ref=e262]: "5 hours ago - Score: 3334.90"
+          - generic [ref=e263]:
+            - generic "Like" [ref=e264] [cursor=pointer]:
+              - button [ref=e265]
+              - button "4" [ref=e267]
+            - button "2" [ref=e268] [cursor=pointer]:
+              - generic [ref=e270]: "2"
+            - button "1" [ref=e271] [cursor=pointer]:
+              - generic [ref=e273]: "1"
+            - button "Share" [ref=e275] [cursor=pointer]:
+              - button "Share" [ref=e276]
+            - button "Replant" [ref=e278] [cursor=pointer]:
+              - generic [ref=e279]: Replant
+        - generic [ref=e285]:
+          - generic [ref=e286]:
+            - link "User image" [ref=e287] [cursor=pointer]:
+              - /url: /profile/karsten-strympe
+              - img "User image" [ref=e289]
+            - generic [ref=e290]:
+              - link "Karsten Strympe" [ref=e291] [cursor=pointer]:
+                - /url: /profile/karsten-strympe
+              - generic [ref=e292]:
+                - text: planted
+                - button "1 Tree" [ref=e293] [cursor=pointer]
+            - button "1" [ref=e295] [cursor=pointer]:
+              - generic [ref=e296]: "1"
+          - button [ref=e298] [cursor=pointer]:
+            - img [ref=e299]
+          - generic [ref=e300]:
+            - generic [ref=e302]: 💖💖🤗 endlich sind sie da 🤗💖💖
+            - link "#NatureLovers" [ref=e304] [cursor=pointer]:
+              - /url: /hashtag/NatureLovers
+          - generic [ref=e306]: "February 25th - Score: 3121.96"
+          - generic [ref=e307]:
+            - generic "Like" [ref=e308] [cursor=pointer]:
+              - button [ref=e309]
+              - button "1" [ref=e311]
+            - button "17" [ref=e312] [cursor=pointer]:
+              - generic [ref=e314]: "17"
+            - button "0" [ref=e315] [cursor=pointer]:
+              - generic [ref=e317]: "0"
+            - button "Share" [ref=e319] [cursor=pointer]:
+              - button "Share" [ref=e320]
+            - button "Replant" [ref=e322] [cursor=pointer]:
+              - generic [ref=e323]: Replant
+      - generic [ref=e329]:
+        - heading "Trending" [level=6] [ref=e330]: Trending
+        - 'link "🎂 #VictorHugo 1" [ref=e332] [cursor=pointer]':
+          - /url: /hashtag/VictorHugo
+          - generic [ref=e333]: "🎂 #VictorHugo"
+          - generic [ref=e335]: "1"
+        - link "#OffsetTonnes 738,608" [ref=e337] [cursor=pointer]:
+          - /url: /hashtag/OffsetTonnes
+          - generic [ref=e338]: "#OffsetTonnes"
+          - generic [ref=e340]: 738,608
+        - link "#NetZeroProduct 1,029,946" [ref=e342] [cursor=pointer]:
+          - /url: /hashtag/NetZeroProduct
+          - generic [ref=e343]: "#NetZeroProduct"
+          - generic [ref=e345]: 1,029,946
+        - link "#Scarpinando4Planet 12,172" [ref=e347] [cursor=pointer]:
+          - /url: /hashtag/Scarpinando4Planet
+          - generic [ref=e348]: "#Scarpinando4Planet"
+          - generic [ref=e350]: 12,172
+        - link "#TreesForTomorrow 2,301,601" [ref=e352] [cursor=pointer]:
+          - /url: /hashtag/TreesForTomorrow
+          - generic [ref=e353]: "#TreesForTomorrow"
+          - generic [ref=e355]: 2,301,601
+        - link "#NetZeroCitizen 305,786" [ref=e357] [cursor=pointer]:
+          - /url: /hashtag/NetZeroCitizen
+          - generic [ref=e358]: "#NetZeroCitizen"
+          - generic [ref=e360]: 305,786
+        - link "#ResponsibleTravel 140,975" [ref=e362] [cursor=pointer]:
+          - /url: /hashtag/ResponsibleTravel
+          - generic [ref=e363]: "#ResponsibleTravel"
+          - generic [ref=e365]: 140,975
+  - region "Chat Widget" [ref=e367]:
+    - iframe [ref=e368]:
+      - button "Open live chat" [ref=f44e5]:
+        - img [ref=f44e8]
+        - img [ref=f44e15]

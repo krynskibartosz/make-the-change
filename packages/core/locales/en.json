@@ -22,6 +22,7 @@
     }
   },
   "navigation": {
+    "community": "Community",
     "home": "Home",
     "admin": "Administration",
     "dashboard": "Dashboard",
@@ -72,7 +73,11 @@
         "cta": "View projects"
       }
     },
-    "leaderboard": "Leaderboard"
+    "leaderboard": "Leaderboard",
+    "close_menu": "Close menu",
+    "account_section": "My Account",
+    "explore_section": "Explore",
+    "public_profile": "Public Profile"
   },
   "admin": {
     "common": {
@@ -393,6 +398,10 @@
     "contact_us": "Contact us",
     "rights_reserved": "All rights reserved.",
     "leaderboard": "Leaderboard",
+    "community": "Community",
+    "community_trending": "Community trends",
+    "community_guilds": "Guilds",
+    "community_publish": "Publish",
     "blog": "Blog",
     "address": "Brussels, Belgium",
     "brand_guidelines": "Brand guidelines",
@@ -809,6 +818,11 @@
       "back_to_project": "Back to project",
       "title": "Invest in the future",
       "supporting": "You are supporting {project}",
+      "steps": {
+        "invest": "Invest",
+        "payment": "Payment",
+        "confirm": "Confirm"
+      },
       "amount_label": "How much would you like to invest?",
       "custom_amount_placeholder": "Custom amount (min. €10)",
       "impact_title": "Estimated impact",
@@ -1797,6 +1811,114 @@
           "cta": "contact@make-the-change.com"
         }
       }
+    }
+  },
+  "community": {
+    "actions": {
+      "back_to_feed": "Back to feed",
+      "share": "Share",
+      "cancel": "Cancel"
+    },
+    "sidebar": {
+      "more": "More",
+      "update_post": "Post update",
+      "trending": "Trending",
+      "guilds": "Guilds"
+    },
+    "leaderboard": {
+      "top_contributors": "Top Contributors",
+      "full_leaderboard": "View full leaderboard",
+      "trends_for_you": "Trends for you",
+      "supported_project_popular": "Supported project • Popular",
+      "sample_project_title": "Agroforestry in Senegal",
+      "sample_project_metric": "+450 plantations",
+      "shop_trending": "Shop • Trending",
+      "sample_product_title": "Reusable stainless bottle",
+      "sample_product_metric": "4.9/5 (24 reviews)",
+      "show_more": "Show more",
+      "follow": "Follow"
+    },
+    "create_post": {
+      "meta_title": "Community | New post",
+      "heading": "New post",
+      "placeholder": "Share an update, an idea, or a question with the community...",
+      "publish": "Publish",
+      "publishing": "Publishing...",
+      "success_title": "Post published",
+      "success_description": "Your message is now visible in the community.",
+      "error_title": "Unable to publish",
+      "error_description": "Check your connection and try again."
+    },
+    "feed": {
+      "placeholder": "What do you want to share with the community?",
+      "image_label": "Image",
+      "empty": "No activity yet.",
+      "login_required_title": "Login required",
+      "login_required_description": "You must be logged in to like a post.",
+      "super_like_success_title": "Great!",
+      "super_like_success_description": "You planted a seed on this post.",
+      "super_like_error_title": "Action unavailable",
+      "super_like_error_default": "You do not have enough seeds (inventory too low)"
+    },
+    "thread": {
+      "comments_label": "Comments ({count})",
+      "comment_placeholder": "Write a comment...",
+      "comment_publish": "Publish comment",
+      "comment_sending": "Sending...",
+      "no_comments": "No comments yet.",
+      "login_required_title": "Login required",
+      "login_required_description": "You must be logged in to like a post.",
+      "super_like_success_title": "Great!",
+      "super_like_success_description": "You planted a seed on this post.",
+      "super_like_error_title": "Action unavailable",
+      "super_like_error_default": "You do not have enough seeds",
+      "comment_error_title": "Error",
+      "comment_error_description": "Unable to add the comment. Check your connection.",
+      "you_label": "You",
+      "user_fallback": "User"
+    },
+    "post": {
+      "default_title": "Community post",
+      "share_default_title": "Share this post",
+      "share_prefix": "Share",
+      "share_fallback_title": "Make the Change post"
+    },
+    "share": {
+      "description": "Share this post with your network to amplify its impact.",
+      "copy_link": "Copy link",
+      "native_share": "Share from your phone",
+      "share_on_x": "Share on X",
+      "share_on_linkedin": "Share on LinkedIn",
+      "share_on_facebook": "Share on Facebook",
+      "link_unavailable_title": "Link unavailable",
+      "link_unavailable_description": "Cannot copy the link right now.",
+      "link_copied_title": "Link copied",
+      "link_copied_description": "The post link has been copied.",
+      "link_copy_error_title": "Copy failed",
+      "link_copy_error_description": "Allow clipboard access and try again."
+    },
+    "guilds": {
+      "meta_title": "Community | Guilds",
+      "title": "Community guilds",
+      "description": "Join a collective, share your progress, and reach common goals.",
+      "members_label": "members",
+      "join_and_post": "Join and post",
+      "sample_name_tech": "Tech for Forests",
+      "sample_name_campus": "Campus Biodiversity",
+      "sample_name_family": "Family Green Circle",
+      "sample_goal_tech": "Plant 2,000 trees this quarter",
+      "sample_goal_campus": "Fund 3 agriculture projects",
+      "sample_goal_family": "Reach 100 meaningful comments"
+    },
+    "trending": {
+      "meta_title": "Community | Trending",
+      "title": "Community trends",
+      "description": "Posts generating the most interactions right now.",
+      "post_without_text": "Post without text",
+      "likes_suffix": "likes",
+      "by_prefix": "By",
+      "open": "Open",
+      "no_trending": "No trending posts available right now."
     }
   },
   "menu_page": {

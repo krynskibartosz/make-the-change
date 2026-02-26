@@ -22,6 +22,7 @@
     }
   },
   "navigation": {
+    "community": "Gemeenschap",
     "home": "Home",
     "admin": "Beheer",
     "dashboard": "Dashboard",
@@ -525,6 +526,11 @@
       "back_to_project": "Terug naar project",
       "title": "Investeer in de toekomst",
       "supporting": "Je steunt {project}",
+      "steps": {
+        "invest": "Investeren",
+        "payment": "Betaling",
+        "confirm": "Bevestiging"
+      },
       "amount_label": "Hoeveel wil je investeren?",
       "custom_amount_placeholder": "Vrij bedrag (min. €10)",
       "impact_title": "Geschatte impact",
@@ -631,6 +637,10 @@
     "contact_us": "Neem contact op",
     "rights_reserved": "Alle rechten voorbehouden.",
     "leaderboard": "Klassement",
+    "community": "Gemeenschap",
+    "community_trending": "Trends community",
+    "community_guilds": "Guilds",
+    "community_publish": "Publiceren",
     "blog": "Blog",
     "address": "Brussel, België",
     "brand_guidelines": "Merkrichtlijnen",
@@ -1716,6 +1726,114 @@
           "cta": "contact@make-the-change.com"
         }
       }
+    }
+  },
+  "community": {
+    "actions": {
+      "back_to_feed": "Terug naar feed",
+      "share": "Delen",
+      "cancel": "Annuleren"
+    },
+    "sidebar": {
+      "more": "Meer",
+      "update_post": "Update plaatsen",
+      "trending": "Trending",
+      "guilds": "Guilds"
+    },
+    "leaderboard": {
+      "top_contributors": "Top bijdragers",
+      "full_leaderboard": "Volledig klassement bekijken",
+      "trends_for_you": "Trends voor jou",
+      "supported_project_popular": "Ondersteund project • Populair",
+      "sample_project_title": "Agrobosbouw in Senegal",
+      "sample_project_metric": "+450 aanplantingen",
+      "shop_trending": "Shop • Trend",
+      "sample_product_title": "Herbruikbare inox fles",
+      "sample_product_metric": "4.9/5 (24 reviews)",
+      "show_more": "Meer tonen",
+      "follow": "Volgen"
+    },
+    "create_post": {
+      "meta_title": "Gemeenschap | Nieuwe post",
+      "heading": "Nieuwe post",
+      "placeholder": "Deel een update, idee of vraag met de community...",
+      "publish": "Publiceren",
+      "publishing": "Publiceren...",
+      "success_title": "Post gepubliceerd",
+      "success_description": "Je bericht is nu zichtbaar in de community.",
+      "error_title": "Publiceren mislukt",
+      "error_description": "Controleer je verbinding en probeer opnieuw."
+    },
+    "feed": {
+      "placeholder": "Wat wil je delen met de community?",
+      "image_label": "Afbeelding",
+      "empty": "Nog geen activiteit.",
+      "login_required_title": "Inloggen vereist",
+      "login_required_description": "Je moet ingelogd zijn om een post te liken.",
+      "super_like_success_title": "Top!",
+      "super_like_success_description": "Je hebt een zaadje geplant op deze post.",
+      "super_like_error_title": "Actie niet beschikbaar",
+      "super_like_error_default": "Je hebt niet genoeg zaadjes (onvoldoende voorraad)"
+    },
+    "thread": {
+      "comments_label": "Reacties ({count})",
+      "comment_placeholder": "Schrijf een reactie...",
+      "comment_publish": "Reactie publiceren",
+      "comment_sending": "Verzenden...",
+      "no_comments": "Nog geen reacties.",
+      "login_required_title": "Inloggen vereist",
+      "login_required_description": "Je moet ingelogd zijn om een post te liken.",
+      "super_like_success_title": "Top!",
+      "super_like_success_description": "Je hebt een zaadje geplant op deze post.",
+      "super_like_error_title": "Actie niet beschikbaar",
+      "super_like_error_default": "Je hebt niet genoeg zaadjes",
+      "comment_error_title": "Fout",
+      "comment_error_description": "Reactie toevoegen is niet gelukt. Controleer je verbinding.",
+      "you_label": "Jij",
+      "user_fallback": "Gebruiker"
+    },
+    "post": {
+      "default_title": "Communitypost",
+      "share_default_title": "Deze post delen",
+      "share_prefix": "Delen",
+      "share_fallback_title": "Make the Change post"
+    },
+    "share": {
+      "description": "Deel deze post met je netwerk om de impact te vergroten.",
+      "copy_link": "Link kopiëren",
+      "native_share": "Delen via telefoon",
+      "share_on_x": "Delen op X",
+      "share_on_linkedin": "Delen op LinkedIn",
+      "share_on_facebook": "Delen op Facebook",
+      "link_unavailable_title": "Link niet beschikbaar",
+      "link_unavailable_description": "De link kan nu niet worden gekopieerd.",
+      "link_copied_title": "Link gekopieerd",
+      "link_copied_description": "De link van de post is gekopieerd.",
+      "link_copy_error_title": "Kopiëren mislukt",
+      "link_copy_error_description": "Geef toegang tot klembord en probeer opnieuw."
+    },
+    "guilds": {
+      "meta_title": "Gemeenschap | Guilds",
+      "title": "Community-guilds",
+      "description": "Word lid van een collectief, deel je voortgang en bereik gezamenlijke doelen.",
+      "members_label": "leden",
+      "join_and_post": "Lid worden en posten",
+      "sample_name_tech": "Tech for Forests",
+      "sample_name_campus": "Campus Biodiversiteit",
+      "sample_name_family": "Family Green Circle",
+      "sample_goal_tech": "Plant 2.000 bomen dit kwartaal",
+      "sample_goal_campus": "Financier 3 landbouwprojecten",
+      "sample_goal_family": "Bereik 100 nuttige reacties"
+    },
+    "trending": {
+      "meta_title": "Gemeenschap | Trends",
+      "title": "Trends in de community",
+      "description": "Posts die nu de meeste interactie genereren.",
+      "post_without_text": "Post zonder tekst",
+      "likes_suffix": "likes",
+      "by_prefix": "Door",
+      "open": "Openen",
+      "no_trending": "Momenteel geen trending posts."
     }
   },
   "menu_page": {

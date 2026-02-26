@@ -1,0 +1,1046 @@
+diff --git a/apps/_legacy/apps-backup/web/apps/web-v3 b/apps/_legacy/apps-backup/web/apps/web-v3
+--- a/apps/_legacy/apps-backup/web/apps/web-v3
++++ b/apps/_legacy/apps-backup/web/apps/web-v3
+@@ -1 +1 @@
+-Subproject commit 63099a65b6f7e3029f0c949ace1b3a8cb47c23d8
++Subproject commit 63099a65b6f7e3029f0c949ace1b3a8cb47c23d8-dirty
+diff --git a/apps/web-client/package.json b/apps/web-client/package.json
+index 949aa8a..4b27015 100644
+--- a/apps/web-client/package.json
++++ b/apps/web-client/package.json
+@@ -22,6 +22,7 @@
+     "@hookform/resolvers": "^3.6.0",
+     "@make-the-change/core": "workspace:*",
+     "@radix-ui/react-visually-hidden": "^1.2.4",
++    "@splidejs/splide": "^4.1.4",
+     "@stripe/react-stripe-js": "^5.6.0",
+     "@stripe/stripe-js": "^8.7.0",
+     "@supabase/ssr": "^0.6.1",
+@@ -33,6 +34,9 @@
+     "@tiptap/starter-kit": "^2.0.0",
+     "date-fns": "^4.1.0",
+     "framer-motion": "^12.23.12",
++    "gsap": "^3.14.2",
++    "lenis": "^1.3.17",
++    "lottie-web": "^5.13.0",
+     "lucide-react": "^0.542.0",
+     "next": "16.1.0",
+     "next-intl": "^4.8.2",
+@@ -42,6 +46,7 @@
+     "react-hook-form": "^7.52.2",
+     "server-only": "^0.0.1",
+     "sonner": "^2.0.7",
++    "split-type": "^0.3.4",
+     "stripe": "^20.3.0",
+     "zod": "^3.24.1"
+   },
+diff --git a/apps/web-client/src/app/[locale]/(dashboard)/_features/dashboard-welcome.tsx b/apps/web-client/src/app/[locale]/(dashboard)/_features/dashboard-welcome.tsx
+index 44eb22e..3c0128d 100644
+--- a/apps/web-client/src/app/[locale]/(dashboard)/_features/dashboard-welcome.tsx
++++ b/apps/web-client/src/app/[locale]/(dashboard)/_features/dashboard-welcome.tsx
+@@ -1,7 +1,8 @@
+ 'use client'
+ 
+ import { Badge } from '@make-the-change/core/ui'
+-import { Sparkles } from 'lucide-react'
++import { Progress } from '@make-the-change/core/ui'
++import { Sparkles, TrendingUp } from 'lucide-react'
+ import { cn } from '@/lib/utils'
+ 
+ type DashboardWelcomeProps = {
+@@ -13,6 +14,9 @@ type DashboardWelcomeProps = {
+   title?: string
+   summary?: Array<{ label: string; value: string }>
+   className?: string
++  xpProgress?: number // 0-100
++  currentXp?: number
++  nextLevelXp?: number
+ }
+ 
+ const levelColors = {
+@@ -28,11 +32,32 @@ const levelColors = {
+     badge: 'bg-warning/15 text-warning',
+     glow: 'from-warning/20',
+   },
++  // Fallback for new levels
++  graine: {
++    badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
++    glow: 'from-amber-200/50',
++  },
++  germe: {
++    badge: 'bg-lime-100 text-lime-700 dark:bg-lime-900/30 dark:text-lime-400',
++    glow: 'from-lime-200/50',
++  },
++  pousse: {
++    badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
++    glow: 'from-green-200/50',
++  },
++  arbre: {
++    badge: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
++    glow: 'from-emerald-200/50',
++  },
++  foret: {
++    badge: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
++    glow: 'from-teal-200/50',
++  }
+ }
+ 
+-type UserLevel = keyof typeof levelColors
+-
+-const isUserLevel = (value: string): value is UserLevel => Object.hasOwn(levelColors, value)
++// Helper to normalize level key (remove accents, lowercase)
++const normalizeLevel = (level: string) => 
++  level.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+ 
+ const kycColors: Record<string, string> = {
+   pending: 'bg-warning/10 text-warning border-warning/20',
+@@ -50,9 +75,13 @@ export const DashboardWelcome = ({
+   title,
+   summary,
+   className,
++  xpProgress = 0,
++  currentXp,
++  nextLevelXp
+ }: DashboardWelcomeProps) => {
+-  const fallbackLevel = levelColors.explorateur
+-  const level = isUserLevel(userLevel) ? levelColors[userLevel] : fallbackLevel
++  const normalizedLevel = normalizeLevel(userLevel)
++  // @ts-ignore - Dynamic access
++  const levelStyle = levelColors[normalizedLevel] || levelColors.explorateur
+   const displayTitle = title || `Bonjour, ${firstName} !`
+ 
+   return (
+@@ -66,7 +95,7 @@ export const DashboardWelcome = ({
+       <div
+         className={cn(
+           'absolute -right-20 -top-20 h-56 w-56 animate-pulse rounded-full blur-3xl',
+-          `bg-linear-to-br ${level.glow} via-transparent to-transparent`,
++          `bg-linear-to-br ${levelStyle.glow} via-transparent to-transparent`,
+         )}
+       />
+       <div className="absolute inset-0 bg-linear-to-r from-primary/10 via-transparent to-accent/10 opacity-60" />
+@@ -81,21 +110,36 @@ export const DashboardWelcome = ({
+             <h1 className="text-2xl font-bold md:text-3xl">{displayTitle}</h1>
+           </div>
+ 
+-          <div className="flex flex-wrap gap-2">
+-            {kycStatus && (
+-              <Badge
+-                variant="outline"
+-                className={cn('rounded-full font-medium', kycColors[kycStatus])}
+-              >
+-                KYC: {kycLabel || kycStatus}
++          <div className="flex flex-col items-end gap-2">
++            <div className="flex flex-wrap gap-2">
++              {kycStatus && (
++                <Badge
++                  variant="outline"
++                  className={cn('rounded-full font-medium', kycColors[kycStatus])}
++                >
++                  KYC: {kycLabel || kycStatus}
++                </Badge>
++              )}
++              <Badge className={cn('rounded-full px-3 py-1 text-sm font-semibold capitalize', levelStyle.badge)}>
++                {userLevel}
+               </Badge>
+-            )}
+-            <Badge className={cn('rounded-full', level.badge)}>
+-              {userLevel.charAt(0).toUpperCase() + userLevel.slice(1)}
+-            </Badge>
++            </div>
+           </div>
+         </div>
+ 
++        {/* XP Progress Bar */}
++        {(currentXp !== undefined && nextLevelXp !== undefined) && (
++          <div className="max-w-md space-y-2">
++            <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
++              <span className="flex items-center gap-1">
++                <TrendingUp className="h-3 w-3" /> XP: {currentXp}
++              </span>
++              <span>Prochain niveau: {nextLevelXp} XP</span>
++            </div>
++            <Progress value={xpProgress} className="h-2" />
++          </div>
++        )}
++
+         {summary && summary.length > 0 && (
+           <div className="flex gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible">
+             {summary.map((item) => (
+diff --git a/apps/web-client/src/app/[locale]/(dashboard)/dashboard/page.tsx b/apps/web-client/src/app/[locale]/(dashboard)/dashboard/page.tsx
+index e39d29b..334c39f 100644
+--- a/apps/web-client/src/app/[locale]/(dashboard)/dashboard/page.tsx
++++ b/apps/web-client/src/app/[locale]/(dashboard)/dashboard/page.tsx
+@@ -15,6 +15,7 @@ import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/li
+ import { createClient } from '@/lib/supabase/server'
+ import { asNumber, asString, isRecord } from '@/lib/type-guards'
+ import { formatCurrency, formatPoints } from '@/lib/utils'
++import { Feed } from '@/components/social/feed'
+ import { ActivityTimeline } from '../_features/activity-timeline'
+ import { BadgesSection } from '../_features/badges-section'
+ import { DashboardWelcome } from '../_features/dashboard-welcome'
+@@ -296,14 +297,22 @@ export default async function DashboardPage() {
+           />
+         </div>
+ 
+-        <ActivityTimeline
+-          className="lg:col-span-7"
+-          items={activityItems}
+-          viewAllHref="/dashboard/investments"
+-          title={t('recent_activity')}
+-          emptyMessage="Aucune activité récente"
+-          emptyAction={{ label: 'Découvrir les projets', href: '/projects' }}
+-        />
++        <div className="space-y-6 lg:col-span-7">
++          <div>
++            <div className="mb-4 flex items-center justify-between">
++              <h2 className="text-lg font-semibold">Fil d'actualité</h2>
++            </div>
++            <Feed />
++          </div>
++
++          <ActivityTimeline
++            items={activityItems}
++            viewAllHref="/dashboard/investments"
++            title={t('recent_activity')}
++            emptyMessage="Aucune activité récente"
++            emptyAction={{ label: 'Découvrir les projets', href: '/projects' }}
++          />
++        </div>
+ 
+         <Card className="lg:col-span-5 border bg-background/70 shadow-sm backdrop-blur">
+           <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
+diff --git a/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-copy.ts b/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-copy.ts
+index 861f970..98447d6 100644
+--- a/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-copy.ts
++++ b/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-copy.ts
+@@ -5,6 +5,7 @@ const heroLabCopyByLocale = {
+     nav: {
+       title: 'Hero Lab',
+       index: 'Index',
++      farmMinerals: 'Farm Minerals',
+       v1: 'V1 Manifesto',
+       v3: 'V3 Community',
+       awwwards: 'Awwwards',
+@@ -18,6 +19,14 @@ const heroLabCopyByLocale = {
+       openHome: 'Open main homepage',
+     },
+     cards: [
++      {
++        id: 'farmminerals',
++        href: '/hero-lab/farmminerals',
++        cta: 'Open Farm Minerals',
++        title: 'Farm Minerals - Pixel Clone',
++        summary:
++          'Exact local clone of farmminerals.com with mirrored assets, timeline behavior and original section structure.',
++      },
+       {
+         id: 'awwwards',
+         href: '/hero-lab/awwwards',
+@@ -69,6 +78,7 @@ const heroLabCopyByLocale = {
+     nav: {
+       title: 'Hero Lab',
+       index: 'Index',
++      farmMinerals: 'Farm Minerals',
+       v1: 'V1 Manifeste',
+       v3: 'V3 Communauté',
+       awwwards: 'Awwwards',
+@@ -82,6 +92,14 @@ const heroLabCopyByLocale = {
+       openHome: 'Voir la homepage principale',
+     },
+     cards: [
++      {
++        id: 'farmminerals',
++        href: '/hero-lab/farmminerals',
++        cta: 'Ouvrir Farm Minerals',
++        title: 'Farm Minerals - Clone pixel',
++        summary:
++          'Clone local exact de farmminerals.com avec assets mirroirs, comportement scroll et structure de sections identiques.',
++      },
+       {
+         id: 'awwwards',
+         href: '/hero-lab/awwwards',
+@@ -133,6 +151,7 @@ const heroLabCopyByLocale = {
+     nav: {
+       title: 'Hero Lab',
+       index: 'Index',
++      farmMinerals: 'Farm Minerals',
+       v1: 'V1 Manifest',
+       v3: 'V3 Community',
+       awwwards: 'Awwwards',
+@@ -146,6 +165,14 @@ const heroLabCopyByLocale = {
+       openHome: 'Open hoofdpagina',
+     },
+     cards: [
++      {
++        id: 'farmminerals',
++        href: '/hero-lab/farmminerals',
++        cta: 'Open Farm Minerals',
++        title: 'Farm Minerals - Pixel clone',
++        summary:
++          'Exacte lokale kloon van farmminerals.com met gemirrorde assets, scroll-gedrag en dezelfde sectiestructuur.',
++      },
+       {
+         id: 'awwwards',
+         href: '/hero-lab/awwwards',
+diff --git a/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-nav.tsx b/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-nav.tsx
+index f0be841..bfaaa02 100644
+--- a/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-nav.tsx
++++ b/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab-nav.tsx
+@@ -15,6 +15,7 @@ export function HeroLabNav({ labels, className }: HeroLabNavProps) {
+ 
+   const links = [
+     { href: '/hero-lab', label: labels.index },
++    { href: '/hero-lab/farmminerals', label: labels.farmMinerals },
+     { href: '/hero-lab/awwwards', label: labels.awwwards },
+     { href: '/hero-lab/v3', label: labels.v3 },
+     { href: '/hero-lab/v1', label: labels.v1 },
+diff --git a/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab.types.ts b/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab.types.ts
+index 6e13da5..3f6089e 100644
+--- a/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab.types.ts
++++ b/apps/web-client/src/app/[locale]/(marketing)/hero-lab/_features/hero-lab.types.ts
+@@ -14,6 +14,7 @@ export type HeroVariantCopy = {
+ export type HeroLabNavLabels = {
+   title: string
+   index: string
++  farmMinerals: string
+   v1: string
+   v3: string
+   awwwards: string
+diff --git a/apps/web-client/src/app/[locale]/layout.tsx b/apps/web-client/src/app/[locale]/layout.tsx
+index 48fd7f0..382154e 100644
+--- a/apps/web-client/src/app/[locale]/layout.tsx
++++ b/apps/web-client/src/app/[locale]/layout.tsx
+@@ -58,6 +58,8 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
+     'products',
+     'marketing_pages',
+     'checkout',
++    'dashboard',
++    'system_pages',
+   ])
+ 
+   const supabase = await createClient()
+diff --git a/apps/web-client/src/components/profile/profile-header.tsx b/apps/web-client/src/components/profile/profile-header.tsx
+index 91b7bbf..6351567 100644
+--- a/apps/web-client/src/components/profile/profile-header.tsx
++++ b/apps/web-client/src/components/profile/profile-header.tsx
+@@ -1,9 +1,11 @@
+ 'use client'
+ 
+-import { Badge } from '@make-the-change/core/ui'
++import { Badge, Button } from '@make-the-change/core/ui'
++import { ExternalLink } from 'lucide-react'
+ import { useState } from 'react'
+ import { updateProfileImages } from '@/app/[locale]/(dashboard)/dashboard/profile/actions'
+ import { uploadImages } from '@/app/actions/upload-images'
++import { Link } from '@/i18n/navigation'
+ import { getRandomCoverImage } from '@/lib/placeholder-images'
+ import { cn } from '@/lib/utils'
+ import { ImageUploader } from './image-uploader'
+@@ -143,6 +145,16 @@ export const ProfileHeader = ({
+                 {level.charAt(0).toUpperCase() + level.slice(1)}
+               </Badge>
+             </div>
++            {!readonly && (
++              <div className="mt-4 flex justify-center sm:justify-start">
++                <Link href="/u/me" target="_blank">
++                  <Button variant="outline" size="sm" className="gap-2">
++                    <ExternalLink className="h-3 w-3" />
++                    Voir mon profil public
++                  </Button>
++                </Link>
++              </div>
++            )}
+           </div>
+         </div>
+ 
+diff --git a/apps/web-client/src/lib/supabase/client.ts b/apps/web-client/src/lib/supabase/client.ts
+index e25794c..f41b330 100644
+--- a/apps/web-client/src/lib/supabase/client.ts
++++ b/apps/web-client/src/lib/supabase/client.ts
+@@ -5,5 +5,10 @@ export function createClient() {
+   return createBrowserClient<Database>(
+     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
++    {
++      db: {
++        schema: 'public',
++      },
++    },
+   )
+ }
+diff --git a/apps/web-client/src/lib/supabase/server.ts b/apps/web-client/src/lib/supabase/server.ts
+index d0fee56..5ab04ab 100644
+--- a/apps/web-client/src/lib/supabase/server.ts
++++ b/apps/web-client/src/lib/supabase/server.ts
+@@ -9,6 +9,9 @@ export const createClient = async () => {
+     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+     {
++      db: {
++        schema: 'public',
++      },
+       cookies: {
+         getAll() {
+           return cookieStore.getAll()
+diff --git a/apps/web/package.json b/apps/web/package.json
+index 93870c2..d7ef4fb 100755
+--- a/apps/web/package.json
++++ b/apps/web/package.json
+@@ -31,6 +31,7 @@
+     "@tanstack/react-query-devtools": "^5.85.6",
+     "class-variance-authority": "^0.7.1",
+     "clsx": "^2.1.1",
++    "csv-parse": "^6.1.0",
+     "date-fns": "^4.1.0",
+     "dnd-kit": "^0.0.2",
+     "drizzle-orm": "^0.45.1",
+@@ -41,6 +42,7 @@
+     "next-intl": "^4.8.2",
+     "next-themes": "^0.4.6",
+     "nuqs": "^2.8.8",
++    "postgres": "^3.4.8",
+     "react": "^19.0.0",
+     "react-dom": "^19.0.0",
+     "react-easy-crop": "^5.5.6",
+@@ -55,6 +57,7 @@
+     "@biomejs/biome": "^2.3.14",
+     "@tailwindcss/container-queries": "^0.1.1",
+     "@tailwindcss/postcss": "^4.1.12",
++    "@types/csv-parse": "^1.2.5",
+     "@types/leaflet": "^1.9.20",
+     "@types/node": "^22.10.2",
+     "@types/react": "^19.0.1",
+diff --git a/formidable-mobile b/formidable-mobile
+--- a/formidable-mobile
++++ b/formidable-mobile
+@@ -1 +1 @@
+-Subproject commit f585f9ff89e88d8134bf14f66de2d8373db4c39a
++Subproject commit f585f9ff89e88d8134bf14f66de2d8373db4c39a-dirty
+diff --git a/package.json b/package.json
+index bf198dd..7c2742b 100644
+--- a/package.json
++++ b/package.json
+@@ -21,6 +21,8 @@
+     "dev": "turbo dev --filter=@make-the-change/web --filter=@make-the-change/web-client",
+     "lint": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && pnpm guard:ui && turbo lint --filter=@make-the-change/web --filter=@make-the-change/web-client",
+     "type-check": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && pnpm guard:ui && turbo type-check --filter=@make-the-change/web --filter=@make-the-change/web-client",
++    "farmminerals:mirror": "node tools/farmminerals/build-local-mirror.mjs",
++    "farmminerals:parity": "node tools/farmminerals/visual-parity-capture.mjs",
+     "clean": "turbo clean && rm -rf node_modules",
+     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+     "guard:no-sql": "node ./tools/guard-no-sql.mjs",
+diff --git a/packages/core/locales/en.json b/packages/core/locales/en.json
+index 3da07b6..a15eb9b 100755
+--- a/packages/core/locales/en.json
++++ b/packages/core/locales/en.json
+@@ -72,7 +72,11 @@
+         "cta": "View projects"
+       }
+     },
+-    "leaderboard": "Leaderboard"
++    "leaderboard": "Leaderboard",
++    "close_menu": "Close menu",
++    "account_section": "My Account",
++    "explore_section": "Explore",
++    "public_profile": "Public Profile"
+   },
+   "admin": {
+     "common": {
+diff --git a/packages/core/package.json b/packages/core/package.json
+index 0efbb45..439be4e 100644
+--- a/packages/core/package.json
++++ b/packages/core/package.json
+@@ -46,6 +46,7 @@
+     "next-themes": "^0.4.6",
+     "postgres": "^3.4.8",
+     "react-hook-form": "^7.52.2",
++    "server-only": "^0.0.1",
+     "tailwind-merge": "^3.3.1",
+     "zod": "^3.24.1"
+   },
+diff --git a/packages/core/src/shared/db/relations.ts b/packages/core/src/shared/db/relations.ts
+index 314e149..6f7beab 100644
+--- a/packages/core/src/shared/db/relations.ts
++++ b/packages/core/src/shared/db/relations.ts
+@@ -9,6 +9,12 @@ import {
+   profiles,
+   projects,
+   subscriptions,
++  ecosystems,
++  species,
++  items,
++  userInventory,
++  properties,
++  quests,
+ } from './schema'
+ 
+ // Products Relations
+@@ -54,11 +60,69 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
+ }))
+ 
+ // Projects Relations
+-export const projectsRelations = relations(projects, ({ one }) => ({
++export const projectsRelations = relations(projects, ({ one, many }) => ({
+   producer: one(producers, {
+     fields: [projects.producer_id],
+     references: [producers.id],
+   }),
++  ecosystem: one(ecosystems, {
++    fields: [projects.ecosystem_id],
++    references: [ecosystems.id],
++  }),
++  species: one(species, {
++    fields: [projects.species_id],
++    references: [species.id],
++  }),
++  properties: many(properties),
++  quests: many(quests),
++}))
++
++// Properties Relations
++export const propertiesRelations = relations(properties, ({ one, many }) => ({
++  project: one(projects, {
++    fields: [properties.project_id],
++    references: [projects.id],
++  }),
++  quests: many(quests),
++}))
++
++// Quests Relations
++export const questsRelations = relations(quests, ({ one }) => ({
++  project: one(projects, {
++    fields: [quests.project_id],
++    references: [projects.id],
++  }),
++  property: one(properties, {
++    fields: [quests.property_id],
++    references: [properties.id],
++  }),
++}))
++
++// Items Relations
++export const itemsRelations = relations(items, ({ many }) => ({
++  inventory: many(userInventory),
++}))
++
++// User Inventory Relations
++export const userInventoryRelations = relations(userInventory, ({ one }) => ({
++  user: one(profiles, {
++    fields: [userInventory.user_id],
++    references: [profiles.id],
++  }),
++  item: one(items, {
++    fields: [userInventory.item_id],
++    references: [items.id],
++  }),
++}))
++
++// Ecosystems Relations
++export const ecosystemsRelations = relations(ecosystems, ({ many }) => ({
++  projects: many(projects),
++}))
++
++// Species Relations
++export const speciesRelations = relations(species, ({ many }) => ({
++  projects: many(projects),
+ }))
+ 
+ // Investments Relations
+diff --git a/packages/core/src/shared/db/schema.ts b/packages/core/src/shared/db/schema.ts
+index 1a81be1..4a96626 100644
+--- a/packages/core/src/shared/db/schema.ts
++++ b/packages/core/src/shared/db/schema.ts
+@@ -44,6 +44,7 @@ export const challengeTypeEnum = gamification.enum('challenge_type', [
+   'monthly',
+   'season',
+   'special',
++  'quest', // Added for project-specific quests
+ ])
+ 
+ export const challengeStatusEnum = gamification.enum('challenge_status', [
+@@ -273,8 +274,8 @@ export const producers = investment.table('producers', {
+   name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
+   description_i18n: jsonb('description_i18n').default({ en: '' }),
+   story_i18n: jsonb('story_i18n').default({ en: '' }),
+-  name_default: text('name_default').notNull(),
+-  description_default: text('description_default'),
++  name_default: text('name_default').generatedAlwaysAs(''),
++  description_default: text('description_default').generatedAlwaysAs(''),
+ 
+   // Address fields
+   address_street: text('address_street'),
+@@ -290,16 +291,14 @@ export const producers = investment.table('producers', {
+   owner_user_id: uuid('owner_user_id'),
+   created_by: uuid('created_by'),
+   updated_by: uuid('updated_by'),
+-  story_default: text('story_default'),
++  story_default: text('story_default').generatedAlwaysAs(''),
+ })
+ 
+ export const species = investment.table('species', {
+   id: uuid('id').primaryKey().defaultRandom(),
+-  name: text('name'),
+   scientific_name: text('scientific_name'),
+-  description: text('description'),
+   iucn_status: conservationStatusEnum('iucn_status'),
+-  habitat: text('habitat'),
++  habitat: text('habitat').array(),
+   image_url: text('image_url'),
+ 
+   // I18n & Gamification
+@@ -307,6 +306,8 @@ export const species = investment.table('species', {
+   description_i18n: jsonb('description_i18n').default({ en: '' }),
+   habitat_i18n: jsonb('habitat_i18n').default({ en: '' }),
+   content_levels: jsonb('content_levels').default({}),
++  bioscore: integer('bioscore'),
++  characteristics: jsonb('characteristics').default({}),
+   is_featured: boolean('is_featured').default(false),
+   is_endemic: boolean('is_endemic').default(false),
+ 
+@@ -314,6 +315,11 @@ export const species = investment.table('species', {
+   updated_at: timestamp('updated_at'),
+   created_by: uuid('created_by'),
+   updated_by: uuid('updated_by'),
++  
++  // Generated columns (read-only)
++  name_default: text('name_default').generatedAlwaysAs(''), // Placeholder for generated
++  description_default: text('description_default').generatedAlwaysAs(''), // Placeholder
++  habitat_default: text('habitat_default').generatedAlwaysAs(''), // Placeholder
+ })
+ 
+ export const projectUpdates = investment.table('project_updates', {
+@@ -330,12 +336,38 @@ export const projectUpdates = investment.table('project_updates', {
+   updated_by: uuid('updated_by'),
+ })
+ 
++export const ecosystems = investment.table('ecosystems', {
++  id: uuid('id').primaryKey().defaultRandom(),
++  slug: text('slug').notNull().unique(),
++  
++  // I18n
++  name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
++  description_i18n: jsonb('description_i18n').default({ en: '' }),
++  
++  // Metadata & Attributes (climat, sol, altitude...)
++  attributes: jsonb('attributes').default({}), 
++  
++  // Visuals
++  image_url: text('image_url'),
++  icon_name: text('icon_name'), // For UI rendering
++
++  created_at: timestamp('created_at').defaultNow(),
++  updated_at: timestamp('updated_at'),
++  
++  // Generated columns (read-only)
++  name_default: text('name_default').generatedAlwaysAs(''),
++  description_default: text('description_default').generatedAlwaysAs(''),
++})
++
+ export const projects = investment.table('projects', {
+   id: uuid('id').primaryKey().defaultRandom(),
+   type: projectTypeEnum('type').notNull(),
+   slug: text('slug').notNull(),
+   location: text('location'),
+-  producer_id: uuid('producer_id').notNull(),
++  producer_id: uuid('producer_id').references(() => producers.id).notNull(),
++  // Link to Ecosystem Reference
++  ecosystem_id: uuid('ecosystem_id').references(() => ecosystems.id), 
++  species_id: uuid('species_id').references(() => species.id),
+   target_budget: bigint('target_budget', { mode: 'number' }).notNull(),
+   current_funding: bigint('current_funding', { mode: 'number' }).notNull().default(0),
+   launch_date: date('launch_date'),
+@@ -348,7 +380,6 @@ export const projects = investment.table('projects', {
+   featured: boolean('featured').notNull().default(false),
+   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+-  species_id: uuid('species_id'),
+   deleted_at: timestamp('deleted_at', { withTimezone: true }),
+   name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
+   description_i18n: jsonb('description_i18n').default({ en: '' }),
+@@ -375,6 +406,25 @@ export const projects = investment.table('projects', {
+   long_description_default: text('long_description_default'),
+ })
+ 
++export const properties = investment.table('properties', {
++  id: uuid('id').primaryKey().defaultRandom(),
++  project_id: uuid('project_id').references(() => projects.id).notNull(),
++  name: text('name').notNull(),
++  slug: text('slug').notNull(),
++  location: text('location'), // Full address
++  address_city: text('address_city'),
++  address_country_code: text('address_country_code'),
++  manager_name: text('manager_name'), // e.g. "Alexia Van Innis"
++  contact_email: text('contact_email'),
++  capacity: integer('capacity'), // e.g. Number of hives
++  funding_goal: bigint('funding_goal', { mode: 'number' }),
++  current_funding: bigint('current_funding', { mode: 'number' }).default(0),
++  status: projectStatusEnum('status').default('active'),
++  metadata: jsonb('metadata').default({}),
++  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
++  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
++})
++
+ export const investments = investment.table('investments', {
+   id: uuid('id').primaryKey().defaultRandom(),
+   user_id: uuid('user_id'),
+@@ -412,8 +462,8 @@ export const categories = commerce.table('categories', {
+   root_id: uuid('root_id'),
+   name_i18n: jsonb('name_i18n'),
+   description_i18n: jsonb('description_i18n'),
+-  name_default: text('name_default'),
+-  description_default: text('description_default'),
++  name_default: text('name_default').generatedAlwaysAs(''),
++  description_default: text('description_default').generatedAlwaysAs(''),
+   deleted_at: timestamp('deleted_at'),
+   created_by: uuid('created_by'),
+   updated_by: uuid('updated_by'),
+@@ -531,8 +581,8 @@ export const products = commerce.table('products', {
+   short_description_i18n: jsonb('short_description_i18n').default({ en: '' }),
+   seo_title_i18n: jsonb('seo_title_i18n').default({ en: '' }),
+   seo_description_i18n: jsonb('seo_description_i18n').default({ en: '' }),
+-  name_default: text('name_default'),
+-  description_default: text('description_default'),
++  name_default: text('name_default').generatedAlwaysAs(''),
++  description_default: text('description_default').generatedAlwaysAs(''),
+   search_vector: tsvector('search_vector'),
+   origin_country: text('origin_country'), // bpchar in DB, mapped to text
+   created_by: uuid('created_by'),
+@@ -718,16 +768,40 @@ export const challenges = gamification.table('challenges', {
+   type: challengeTypeEnum('type').notNull().default('monthly'),
+   reward_points: integer('reward_points').notNull().default(0),
+   reward_badge: text('reward_badge'),
++  reward_items: jsonb('reward_items').default([]), // New: List of item IDs or descriptors
+   status: challengeStatusEnum('status').notNull().default('active'),
+   start_date: timestamp('start_date', { withTimezone: true }),
+   end_date: timestamp('end_date', { withTimezone: true }),
+   metadata: jsonb('metadata').default({}),
++  project_id: uuid('project_id').references(() => projects.id), // New: Link to a specific project (quest)
++  property_id: uuid('property_id').references(() => properties.id), // New: Link to a specific property/parcel
+   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+   created_by: uuid('created_by'),
+   updated_by: uuid('updated_by'),
+ })
+ 
++export const items = gamification.table('items', {
++  id: uuid('id').primaryKey().defaultRandom(),
++  slug: text('slug').notNull().unique(),
++  name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
++  description_i18n: jsonb('description_i18n').default({ en: '' }),
++  type: text('type').default('collectible'), // e.g. 'tool', 'resource', 'badge'
++  image_url: text('image_url'),
++  rarity: text('rarity').default('common'),
++  metadata: jsonb('metadata').default({}),
++  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
++})
++
++export const userInventory = gamification.table('user_inventory', {
++  id: uuid('id').primaryKey().defaultRandom(),
++  user_id: uuid('user_id').notNull(), // Should reference profile/user
++  item_id: uuid('item_id').references(() => items.id).notNull(),
++  quantity: integer('quantity').default(1).notNull(),
++  acquired_at: timestamp('acquired_at', { withTimezone: true }).defaultNow().notNull(),
++  metadata: jsonb('metadata').default({}),
++})
++
+ export const userChallenges = gamification.table('user_challenges', {
+   id: uuid('id').primaryKey().defaultRandom(),
+   user_id: uuid('user_id').notNull(),
+@@ -740,6 +814,36 @@ export const userChallenges = gamification.table('user_challenges', {
+   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+ })
+ 
++export const quests = gamification.table('quests', {
++  id: uuid('id').primaryKey().defaultRandom(),
++  slug: text('slug').notNull().unique(),
++  title: text('title').notNull(),
++  description: text('description'),
++  type: challengeTypeEnum('type').notNull().default('quest'),
++  reward_points: integer('reward_points').notNull().default(0),
++  reward_items: jsonb('reward_items').default([]), 
++  status: challengeStatusEnum('status').notNull().default('active'),
++  valid_from: timestamp('valid_from', { withTimezone: true }),
++  valid_until: timestamp('valid_until', { withTimezone: true }),
++  project_id: uuid('project_id').references(() => projects.id),
++  property_id: uuid('property_id').references(() => properties.id),
++  metadata: jsonb('metadata').default({}),
++  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
++  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
++})
++
++export const userQuests = gamification.table('user_quests', {
++  id: uuid('id').primaryKey().defaultRandom(),
++  user_id: uuid('user_id').notNull(),
++  quest_id: uuid('quest_id').references(() => quests.id).notNull(),
++  status: challengeStatusEnum('status').default('active'),
++  progress: integer('progress').default(0),
++  completed_at: timestamp('completed_at', { withTimezone: true }),
++  claimed_at: timestamp('claimed_at', { withTimezone: true }),
++  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
++  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
++})
++
+ // Export Types
+ export type User = typeof users.$inferSelect
+ export type NewUser = typeof users.$inferInsert
+@@ -756,6 +860,8 @@ export type Category = typeof categories.$inferSelect
+ export type Producer = typeof producers.$inferSelect
+ export type Project = typeof projects.$inferSelect
+ export type NewProject = typeof projects.$inferInsert
++export type Ecosystem = typeof ecosystems.$inferSelect
++export type NewEcosystem = typeof ecosystems.$inferInsert
+ export type Order = typeof orders.$inferSelect
+ export type OrderItem = typeof orderItems.$inferSelect
+ export type Subscription = typeof subscriptions.$inferSelect
+diff --git a/packages/core/src/shared/index.ts b/packages/core/src/shared/index.ts
+index b602e0b..7e48d4a 100644
+--- a/packages/core/src/shared/index.ts
++++ b/packages/core/src/shared/index.ts
+@@ -7,3 +7,4 @@ export * from './i18n'
+ export * from './utils'
+ export * from './providers/theme-provider'
+ export * from './providers/theme-config'
++export * from './types/social'
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 153b599..31e8a79 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -96,6 +96,9 @@ importers:
+       clsx:
+         specifier: ^2.1.1
+         version: 2.1.1
++      csv-parse:
++        specifier: ^6.1.0
++        version: 6.1.0
+       date-fns:
+         specifier: ^4.1.0
+         version: 4.1.0
+@@ -126,6 +129,9 @@ importers:
+       nuqs:
+         specifier: ^2.8.8
+         version: 2.8.8(next@16.1.0(@playwright/test@1.58.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
++      postgres:
++        specifier: ^3.4.8
++        version: 3.4.8
+       react:
+         specifier: ^19.0.0
+         version: 19.2.4
+@@ -163,6 +169,9 @@ importers:
+       '@tailwindcss/postcss':
+         specifier: ^4.1.12
+         version: 4.1.18
++      '@types/csv-parse':
++        specifier: ^1.2.5
++        version: 1.2.5
+       '@types/leaflet':
+         specifier: ^1.9.20
+         version: 1.9.21
+@@ -211,6 +220,9 @@ importers:
+       '@radix-ui/react-visually-hidden':
+         specifier: ^1.2.4
+         version: 1.2.4(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
++      '@splidejs/splide':
++        specifier: ^4.1.4
++        version: 4.1.4
+       '@stripe/react-stripe-js':
+         specifier: ^5.6.0
+         version: 5.6.0(@stripe/stripe-js@8.7.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+@@ -244,6 +256,15 @@ importers:
+       framer-motion:
+         specifier: ^12.23.12
+         version: 12.31.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
++      gsap:
++        specifier: ^3.14.2
++        version: 3.14.2
++      lenis:
++        specifier: ^1.3.17
++        version: 1.3.17(react@19.2.4)
++      lottie-web:
++        specifier: ^5.13.0
++        version: 5.13.0
+       lucide-react:
+         specifier: ^0.542.0
+         version: 0.542.0(react@19.2.4)
+@@ -271,6 +292,9 @@ importers:
+       sonner:
+         specifier: ^2.0.7
+         version: 2.0.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
++      split-type:
++        specifier: ^0.3.4
++        version: 0.3.4
+       stripe:
+         specifier: ^20.3.0
+         version: 20.3.0(@types/node@22.19.8)
+@@ -338,6 +362,9 @@ importers:
+       react-hook-form:
+         specifier: ^7.52.2
+         version: 7.71.1(react@19.2.4)
++      server-only:
++        specifier: ^0.0.1
++        version: 0.0.1
+       tailwind-merge:
+         specifier: ^3.3.1
+         version: 3.4.0
+@@ -1713,6 +1740,9 @@ packages:
+   '@schummar/icu-type-parser@1.21.5':
+     resolution: {integrity: sha512-bXHSaW5jRTmke9Vd0h5P7BtWZG9Znqb8gSDxZnxaGSJnGwPLDPfS+3g0BKzeWqzgZPsIVZkM7m2tbo18cm5HBw==}
+ 
++  '@splidejs/splide@4.1.4':
++    resolution: {integrity: sha512-5I30evTJcAJQXt6vJ26g2xEkG+l1nXcpEw4xpKh0/FWQ8ozmAeTbtniVtVmz2sH1Es3vgfC4SS8B2X4o5JMptA==}
++
+   '@standard-schema/spec@1.0.0':
+     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
+ 
+@@ -2127,6 +2157,10 @@ packages:
+   '@types/chai@5.2.3':
+     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
+ 
++  '@types/csv-parse@1.2.5':
++    resolution: {integrity: sha512-3PoFyWeuFGqale09vFydLQ6IGdvD+mizcXcB8s6ImWv+830IF0HckvewgcGVfGnTFImqvfvhpYZYod2QqGGGdg==}
++    deprecated: This is a stub types definition. csv-parse provides its own type definitions, so you do not need this installed.
++
+   '@types/d3-color@3.1.3':
+     resolution: {integrity: sha512-iO90scth9WAbmgv7ogoq57O9YpKmFBbmoEoCHDB2xMBY0+/KVrqAaCDyCE16dUspeOvIxFFRI+0sEtqDqy2b4A==}
+ 
+@@ -2358,6 +2392,9 @@ packages:
+   csstype@3.2.3:
+     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+ 
++  csv-parse@6.1.0:
++    resolution: {integrity: sha512-CEE+jwpgLn+MmtCpVcPtiCZpVtB6Z2OKPTr34pycYYoL7sxdOkXDdQ4lRiw6ioC0q6BLqhc6cKweCVvral8yhw==}
++
+   d3-array@3.2.4:
+     resolution: {integrity: sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==}
+     engines: {node: '>=12'}
+@@ -2700,6 +2737,9 @@ packages:
+   graceful-fs@4.2.11:
+     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+ 
++  gsap@3.14.2:
++    resolution: {integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==}
++
+   html-encoding-sniffer@6.0.0:
+     resolution: {integrity: sha512-CV9TW3Y3f8/wT0BRFc1/KAVQ3TUHiXmaAb6VW9vtiMFf7SLoMd1PdAc4W3KFOFETBJUb90KatHqlsZMWV+R9Gg==}
+     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
+@@ -2798,6 +2838,20 @@ packages:
+   leaflet@1.9.4:
+     resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
+ 
++  lenis@1.3.17:
++    resolution: {integrity: sha512-k9T9rgcxne49ggJOvXCraWn5dt7u2mO+BNkhyu6yxuEnm9c092kAW5Bus5SO211zUvx7aCCEtzy9UWr0RB+oJw==}
++    peerDependencies:
++      '@nuxt/kit': '>=3.0.0'
++      react: '>=17.0.0'
++      vue: '>=3.0.0'
++    peerDependenciesMeta:
++      '@nuxt/kit':
++        optional: true
++      react:
++        optional: true
++      vue:
++        optional: true
++
+   lightningcss-android-arm64@1.30.2:
+     resolution: {integrity: sha512-BH9sEdOCahSgmkVhBLeU7Hc9DWeZ1Eb6wNS6Da8igvUwAe0sqROHddIlvU06q3WyXVEOYDZ6ykBZQnjTbmo4+A==}
+     engines: {node: '>= 12.0.0'}
+@@ -2888,6 +2942,9 @@ packages:
+     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+     hasBin: true
+ 
++  lottie-web@5.13.0:
++    resolution: {integrity: sha512-+gfBXl6sxXMPe8tKQm7qzLnUy5DUPJPKIyRHwtpCpyUEYjHYRJC/5gjUvdkuO2c3JllrPtHXH5UJJK8LRYl5yQ==}
++
+   lru-cache@11.2.6:
+     resolution: {integrity: sha512-ESL2CrkS/2wTPfuend7Zhkzo2u0daGJ/A2VucJOgQ/C48S/zB8MMeMHSGKYpXhIjbPxfuezITkaBH1wqv00DDQ==}
+     engines: {node: 20 || >=22}
+@@ -3372,6 +3429,9 @@ packages:
+   spawndamnit@3.0.1:
+     resolution: {integrity: sha512-MmnduQUuHCoFckZoWnXsTg7JaiLBJrKFj9UI2MbRPGaJeVpsLcVBu6P/IGZovziM/YBsellCmsprgNA+w0CzVg==}
+ 
++  split-type@0.3.4:
++    resolution: {integrity: sha512-otEk9vnD8qwfLsk3Lx0gz+qRkNIJCx0mlyL47ImP/DjMuV39d75Lpfwjn9fHteDRz0aoOblSzQjSNT9+Sswxcg==}
++
+   sprintf-js@1.0.3:
+     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
+ 
+@@ -4874,6 +4934,8 @@ snapshots:
+ 
+   '@schummar/icu-type-parser@1.21.5': {}
+ 
++  '@splidejs/splide@4.1.4': {}
++
+   '@standard-schema/spec@1.0.0': {}
+ 
+   '@stripe/react-stripe-js@5.6.0(@stripe/stripe-js@8.7.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+@@ -5282,6 +5344,10 @@ snapshots:
+       '@types/deep-eql': 4.0.2
+       assertion-error: 2.0.1
+ 
++  '@types/csv-parse@1.2.5':
++    dependencies:
++      csv-parse: 6.1.0
++
+   '@types/d3-color@3.1.3': {}
+ 
+   '@types/d3-delaunay@6.0.4': {}
+@@ -5502,6 +5568,8 @@ snapshots:
+ 
+   csstype@3.2.3: {}
+ 
++  csv-parse@6.1.0: {}
++
+   d3-array@3.2.4:
+     dependencies:
+       internmap: 2.0.3
+@@ -5801,6 +5869,8 @@ snapshots:
+ 
+   graceful-fs@4.2.11: {}
+ 
++  gsap@3.14.2: {}
++
+   html-encoding-sniffer@6.0.0:
+     dependencies:
+       '@exodus/bytes': 1.13.0
+@@ -5909,6 +5979,10 @@ snapshots:
+ 
+   leaflet@1.9.4: {}
+ 
++  lenis@1.3.17(react@19.2.4):
++    optionalDependencies:
++      react: 19.2.4
++
+   lightningcss-android-arm64@1.30.2:
+     optional: true
+ 
+@@ -5976,6 +6050,8 @@ snapshots:
+     dependencies:
+       js-tokens: 4.0.0
+ 
++  lottie-web@5.13.0: {}
++
+   lru-cache@11.2.6: {}
+ 
+   lucide-react@0.542.0(react@19.2.4):
+@@ -6480,6 +6556,8 @@ snapshots:
+       cross-spawn: 7.0.6
+       signal-exit: 4.1.0
+ 
++  split-type@0.3.4: {}
++
+   sprintf-js@1.0.3: {}
+ 
+   stackback@0.0.2: {}
+diff --git a/supabase/config.toml b/supabase/config.toml
+index 772b218..1f2599c 100644
+--- a/supabase/config.toml
++++ b/supabase/config.toml
+@@ -3,7 +3,7 @@ project_id = "pbgqswbyqzspqjmwqksc"
+ [api]
+ enabled = true
+ port = 54321
+-schemas = ["public", "commerce", "investment", "content", "identity"]
++schemas = ["public", "commerce", "investment", "content", "identity", "social", "gamification"]
+ 
+ [db]
+ port = 54322

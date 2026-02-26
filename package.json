@@ -21,6 +21,8 @@
     "dev": "turbo dev --filter=@make-the-change/web --filter=@make-the-change/web-client",
     "lint": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && pnpm guard:ui && turbo lint --filter=@make-the-change/web --filter=@make-the-change/web-client",
     "type-check": "pnpm guard:no-sql && pnpm guard:no-hardcoded-colors && pnpm guard:ui && turbo type-check --filter=@make-the-change/web --filter=@make-the-change/web-client",
+    "farmminerals:mirror": "node tools/farmminerals/build-local-mirror.mjs",
+    "farmminerals:parity": "node tools/farmminerals/visual-parity-capture.mjs",
     "clean": "turbo clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "guard:no-sql": "node ./tools/guard-no-sql.mjs",

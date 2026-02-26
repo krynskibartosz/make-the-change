@@ -9,6 +9,12 @@ import {
   profiles,
   projects,
   subscriptions,
+  ecosystems,
+  species,
+  items,
+  userInventory,
+  properties,
+  quests,
 } from './schema'
 
 // Products Relations
@@ -54,11 +60,69 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
 }))
 
 // Projects Relations
-export const projectsRelations = relations(projects, ({ one }) => ({
+export const projectsRelations = relations(projects, ({ one, many }) => ({
   producer: one(producers, {
     fields: [projects.producer_id],
     references: [producers.id],
   }),
+  ecosystem: one(ecosystems, {
+    fields: [projects.ecosystem_id],
+    references: [ecosystems.id],
+  }),
+  species: one(species, {
+    fields: [projects.species_id],
+    references: [species.id],
+  }),
+  properties: many(properties),
+  quests: many(quests),
+}))
+
+// Properties Relations
+export const propertiesRelations = relations(properties, ({ one, many }) => ({
+  project: one(projects, {
+    fields: [properties.project_id],
+    references: [projects.id],
+  }),
+  quests: many(quests),
+}))
+
+// Quests Relations
+export const questsRelations = relations(quests, ({ one }) => ({
+  project: one(projects, {
+    fields: [quests.project_id],
+    references: [projects.id],
+  }),
+  property: one(properties, {
+    fields: [quests.property_id],
+    references: [properties.id],
+  }),
+}))
+
+// Items Relations
+export const itemsRelations = relations(items, ({ many }) => ({
+  inventory: many(userInventory),
+}))
+
+// User Inventory Relations
+export const userInventoryRelations = relations(userInventory, ({ one }) => ({
+  user: one(profiles, {
+    fields: [userInventory.user_id],
+    references: [profiles.id],
+  }),
+  item: one(items, {
+    fields: [userInventory.item_id],
+    references: [items.id],
+  }),
+}))
+
+// Ecosystems Relations
+export const ecosystemsRelations = relations(ecosystems, ({ many }) => ({
+  projects: many(projects),
+}))
+
+// Species Relations
+export const speciesRelations = relations(species, ({ many }) => ({
+  projects: many(projects),
 }))
 
 // Investments Relations

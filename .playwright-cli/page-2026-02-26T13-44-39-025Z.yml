@@ -1,0 +1,151 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e11]:
+    - navigation [ref=e12]:
+      - generic [ref=e13]:
+        - link "Tree-Nation logo" [ref=e14] [cursor=pointer]:
+          - /url: /
+          - img "Tree-Nation logo" [ref=e16]
+        - generic [ref=e17]:
+          - link "Tree Feed" [ref=e18] [cursor=pointer]:
+            - /url: /trees
+            - text: Tree Feed
+          - link "habits" [ref=e20] [cursor=pointer]:
+            - /url: /hashtag
+            - text: habits
+          - link "Plant" [ref=e22] [cursor=pointer]:
+            - /url: /plant/myself
+            - text: Plant
+        - generic [ref=e24]:
+          - link "Subscribe" [ref=e25] [cursor=pointer]:
+            - /url: /pledge
+          - button "Register" [ref=e26] [cursor=pointer]
+          - button "Log in" [ref=e27] [cursor=pointer]
+          - button [ref=e28] [cursor=pointer]
+    - generic [ref=e29]:
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - heading "1 trees planted for" [level=1] [ref=e44]:
+            - generic [ref=e45]: "1"
+            - generic [ref=e34]: trees planted for
+          - generic [ref=e37] [cursor=pointer]:
+            - textbox [ref=e46]: VictorHugo
+            - button [ref=e47]
+        - generic [ref=e41]:
+          - text: Inspire new Planting Habits
+          - link [ref=e42] [cursor=pointer]:
+            - /url: "#"
+      - generic [ref=e49]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - button "Best trees" [ref=e55] [cursor=pointer]: Best trees
+            - button "Filters" [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]: Filters
+          - 'link "Plant for #VictorHugo" [ref=e62] [cursor=pointer]':
+            - /url: https://tree-nation.com/plant/myself?hashtag=VictorHugo
+            - text: "Plant for #VictorHugo"
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e68]:
+                - 'heading "Last trees on #VictorHugo" [level=6] [ref=e69]'
+                - text: Number of trees planted with this hashtag
+              - generic [ref=e70]:
+                - generic [ref=e71]: Today
+                - generic [ref=e73]: "1"
+              - generic [ref=e75]:
+                - generic [ref=e76]: This month
+                - generic [ref=e78]: "1"
+              - generic [ref=e80]:
+                - generic [ref=e81]: This year
+                - generic [ref=e83]: "1"
+            - generic [ref=e86]:
+              - heading "Top contributors" [level=6] [ref=e88]
+              - generic [ref=e89]:
+                - generic [ref=e91]:
+                  - button "All" [ref=e92] [cursor=pointer]
+                  - button "Citizens" [ref=e93] [cursor=pointer]
+                  - button "Companies" [ref=e94] [cursor=pointer]
+                - generic [ref=e100]:
+                  - link "User image" [ref=e101] [cursor=pointer]:
+                    - /url: /profile/aymen-tahir
+                    - img "User image" [ref=e103]
+                  - link "Ãymēñ Tåhìr" [ref=e106] [cursor=pointer]:
+                    - /url: /profile/aymen-tahir
+                  - generic [ref=e108]: "1"
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - link "User image" [ref=e119] [cursor=pointer]:
+                - /url: /profile/aymen-tahir
+                - img "User image" [ref=e121]
+              - generic [ref=e122]:
+                - link "Ãymēñ Tåhìr" [ref=e123] [cursor=pointer]:
+                  - /url: /profile/aymen-tahir
+                - generic [ref=e124]:
+                  - text: planted
+                  - button "1 Tree" [ref=e125] [cursor=pointer]
+              - button "1" [ref=e127] [cursor=pointer]:
+                - generic [ref=e128]: "1"
+            - button [ref=e130] [cursor=pointer]:
+              - img [ref=e131]
+            - generic [ref=e132]:
+              - generic [ref=e134]:
+                - text: “La nature parle, mais le genre humain n’écoute pas.”
+                - text: — Victor Hugo
+                - text: (“Nature speaks, but humankind doesn’t listen.”)
+              - link "#VictorHugo" [ref=e136] [cursor=pointer]:
+                - /url: /hashtag/VictorHugo
+            - generic [ref=e138]: "9 hours ago - Score: 658.54"
+            - generic [ref=e139]:
+              - generic "Like" [ref=e140] [cursor=pointer]:
+                - button [ref=e141]
+                - button "2" [ref=e143]
+              - button "0" [ref=e144] [cursor=pointer]:
+                - generic [ref=e146]: "0"
+              - button "0" [ref=e147] [cursor=pointer]:
+                - generic [ref=e149]: "0"
+              - button "Share" [ref=e151] [cursor=pointer]:
+                - button "Share" [ref=e152]
+              - button "Replant" [ref=e154] [cursor=pointer]:
+                - generic [ref=e155]: Replant
+          - generic [ref=e161]:
+            - heading "Trending" [level=6] [ref=e162]: Trending
+            - 'link "🎂 #VictorHugo 1" [ref=e164] [cursor=pointer]':
+              - /url: /hashtag/VictorHugo
+              - generic [ref=e165]: "🎂 #VictorHugo"
+              - generic [ref=e167]: "1"
+            - link "#OffsetTonnes 738,608" [ref=e169] [cursor=pointer]:
+              - /url: /hashtag/OffsetTonnes
+              - generic [ref=e170]: "#OffsetTonnes"
+              - generic [ref=e172]: 738,608
+            - link "#NetZeroProduct 1,029,946" [ref=e174] [cursor=pointer]:
+              - /url: /hashtag/NetZeroProduct
+              - generic [ref=e175]: "#NetZeroProduct"
+              - generic [ref=e177]: 1,029,946
+            - link "#Scarpinando4Planet 12,172" [ref=e179] [cursor=pointer]:
+              - /url: /hashtag/Scarpinando4Planet
+              - generic [ref=e180]: "#Scarpinando4Planet"
+              - generic [ref=e182]: 12,172
+            - link "#TreesForTomorrow 2,301,601" [ref=e184] [cursor=pointer]:
+              - /url: /hashtag/TreesForTomorrow
+              - generic [ref=e185]: "#TreesForTomorrow"
+              - generic [ref=e187]: 2,301,601
+            - link "#NetZeroCitizen 305,786" [ref=e189] [cursor=pointer]:
+              - /url: /hashtag/NetZeroCitizen
+              - generic [ref=e190]: "#NetZeroCitizen"
+              - generic [ref=e192]: 305,786
+            - link "#ResponsibleTravel 140,975" [ref=e194] [cursor=pointer]:
+              - /url: /hashtag/ResponsibleTravel
+              - generic [ref=e195]: "#ResponsibleTravel"
+              - generic [ref=e197]: 140,975
+  - region "Chat Widget" [ref=e199]:
+    - iframe [ref=e200]:
+      - generic [ref=f22e2]:
+        - generic [ref=f22e6]:
+          - button "Open live chat" [ref=f22e7]:
+            - img "Avatar of Tree AI" [ref=f22e13]
+            - paragraph [ref=f22e14]: Hello, how can I help you?
+          - button "Close welcome page" [ref=f22e15]:
+            - img [ref=f22e17]
+        - button "Open live chat" [ref=f22e24]:
+          - img [ref=f22e27]
+          - img [ref=f22e34]

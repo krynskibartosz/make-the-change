@@ -44,6 +44,7 @@ export const challengeTypeEnum = gamification.enum('challenge_type', [
   'monthly',
   'season',
   'special',
+  'quest', // Added for project-specific quests
 ])
 
 export const challengeStatusEnum = gamification.enum('challenge_status', [
@@ -273,8 +274,8 @@ export const producers = investment.table('producers', {
   name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
   description_i18n: jsonb('description_i18n').default({ en: '' }),
   story_i18n: jsonb('story_i18n').default({ en: '' }),
-  name_default: text('name_default').notNull(),
-  description_default: text('description_default'),
+  name_default: text('name_default').generatedAlwaysAs(''),
+  description_default: text('description_default').generatedAlwaysAs(''),
 
   // Address fields
   address_street: text('address_street'),
@@ -290,16 +291,14 @@ export const producers = investment.table('producers', {
   owner_user_id: uuid('owner_user_id'),
   created_by: uuid('created_by'),
   updated_by: uuid('updated_by'),
-  story_default: text('story_default'),
+  story_default: text('story_default').generatedAlwaysAs(''),
 })
 
 export const species = investment.table('species', {
   id: uuid('id').primaryKey().defaultRandom(),
-  name: text('name'),
   scientific_name: text('scientific_name'),
-  description: text('description'),
   iucn_status: conservationStatusEnum('iucn_status'),
-  habitat: text('habitat'),
+  habitat: text('habitat').array(),
   image_url: text('image_url'),
 
   // I18n & Gamification
@@ -307,6 +306,8 @@ export const species = investment.table('species', {
   description_i18n: jsonb('description_i18n').default({ en: '' }),
   habitat_i18n: jsonb('habitat_i18n').default({ en: '' }),
   content_levels: jsonb('content_levels').default({}),
+  bioscore: integer('bioscore'),
+  characteristics: jsonb('characteristics').default({}),
   is_featured: boolean('is_featured').default(false),
   is_endemic: boolean('is_endemic').default(false),
 
@@ -314,6 +315,11 @@ export const species = investment.table('species', {
   updated_at: timestamp('updated_at'),
   created_by: uuid('created_by'),
   updated_by: uuid('updated_by'),
+  
+  // Generated columns (read-only)
+  name_default: text('name_default').generatedAlwaysAs(''), // Placeholder for generated
+  description_default: text('description_default').generatedAlwaysAs(''), // Placeholder
+  habitat_default: text('habitat_default').generatedAlwaysAs(''), // Placeholder
 })
 
 export const projectUpdates = investment.table('project_updates', {
@@ -330,12 +336,38 @@ export const projectUpdates = investment.table('project_updates', {
   updated_by: uuid('updated_by'),
 })
 
+export const ecosystems = investment.table('ecosystems', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  slug: text('slug').notNull().unique(),
+  
+  // I18n
+  name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
+  description_i18n: jsonb('description_i18n').default({ en: '' }),
+  
+  // Metadata & Attributes (climat, sol, altitude...)
+  attributes: jsonb('attributes').default({}), 
+  
+  // Visuals
+  image_url: text('image_url'),
+  icon_name: text('icon_name'), // For UI rendering
+
+  created_at: timestamp('created_at').defaultNow(),
+  updated_at: timestamp('updated_at'),
+  
+  // Generated columns (read-only)
+  name_default: text('name_default').generatedAlwaysAs(''),
+  description_default: text('description_default').generatedAlwaysAs(''),
+})
+
 export const projects = investment.table('projects', {
   id: uuid('id').primaryKey().defaultRandom(),
   type: projectTypeEnum('type').notNull(),
   slug: text('slug').notNull(),
   location: text('location'),
-  producer_id: uuid('producer_id').notNull(),
+  producer_id: uuid('producer_id').references(() => producers.id).notNull(),
+  // Link to Ecosystem Reference
+  ecosystem_id: uuid('ecosystem_id').references(() => ecosystems.id), 
+  species_id: uuid('species_id').references(() => species.id),
   target_budget: bigint('target_budget', { mode: 'number' }).notNull(),
   current_funding: bigint('current_funding', { mode: 'number' }).notNull().default(0),
   launch_date: date('launch_date'),
@@ -348,7 +380,6 @@ export const projects = investment.table('projects', {
   featured: boolean('featured').notNull().default(false),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
-  species_id: uuid('species_id'),
   deleted_at: timestamp('deleted_at', { withTimezone: true }),
   name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
   description_i18n: jsonb('description_i18n').default({ en: '' }),
@@ -373,6 +404,25 @@ export const projects = investment.table('projects', {
   avatar_image_url: text('avatar_image_url'),
   gallery_image_urls: text('gallery_image_urls').array(),
   long_description_default: text('long_description_default'),
+})
+
+export const properties = investment.table('properties', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  project_id: uuid('project_id').references(() => projects.id).notNull(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull(),
+  location: text('location'), // Full address
+  address_city: text('address_city'),
+  address_country_code: text('address_country_code'),
+  manager_name: text('manager_name'), // e.g. "Alexia Van Innis"
+  contact_email: text('contact_email'),
+  capacity: integer('capacity'), // e.g. Number of hives
+  funding_goal: bigint('funding_goal', { mode: 'number' }),
+  current_funding: bigint('current_funding', { mode: 'number' }).default(0),
+  status: projectStatusEnum('status').default('active'),
+  metadata: jsonb('metadata').default({}),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
 
 export const investments = investment.table('investments', {
@@ -412,8 +462,8 @@ export const categories = commerce.table('categories', {
   root_id: uuid('root_id'),
   name_i18n: jsonb('name_i18n'),
   description_i18n: jsonb('description_i18n'),
-  name_default: text('name_default'),
-  description_default: text('description_default'),
+  name_default: text('name_default').generatedAlwaysAs(''),
+  description_default: text('description_default').generatedAlwaysAs(''),
   deleted_at: timestamp('deleted_at'),
   created_by: uuid('created_by'),
   updated_by: uuid('updated_by'),
@@ -531,8 +581,8 @@ export const products = commerce.table('products', {
   short_description_i18n: jsonb('short_description_i18n').default({ en: '' }),
   seo_title_i18n: jsonb('seo_title_i18n').default({ en: '' }),
   seo_description_i18n: jsonb('seo_description_i18n').default({ en: '' }),
-  name_default: text('name_default'),
-  description_default: text('description_default'),
+  name_default: text('name_default').generatedAlwaysAs(''),
+  description_default: text('description_default').generatedAlwaysAs(''),
   search_vector: tsvector('search_vector'),
   origin_country: text('origin_country'), // bpchar in DB, mapped to text
   created_by: uuid('created_by'),
@@ -718,14 +768,38 @@ export const challenges = gamification.table('challenges', {
   type: challengeTypeEnum('type').notNull().default('monthly'),
   reward_points: integer('reward_points').notNull().default(0),
   reward_badge: text('reward_badge'),
+  reward_items: jsonb('reward_items').default([]), // New: List of item IDs or descriptors
   status: challengeStatusEnum('status').notNull().default('active'),
   start_date: timestamp('start_date', { withTimezone: true }),
   end_date: timestamp('end_date', { withTimezone: true }),
   metadata: jsonb('metadata').default({}),
+  project_id: uuid('project_id').references(() => projects.id), // New: Link to a specific project (quest)
+  property_id: uuid('property_id').references(() => properties.id), // New: Link to a specific property/parcel
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   created_by: uuid('created_by'),
   updated_by: uuid('updated_by'),
+})
+
+export const items = gamification.table('items', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  slug: text('slug').notNull().unique(),
+  name_i18n: jsonb('name_i18n').default({ en: '', fr: '' }),
+  description_i18n: jsonb('description_i18n').default({ en: '' }),
+  type: text('type').default('collectible'), // e.g. 'tool', 'resource', 'badge'
+  image_url: text('image_url'),
+  rarity: text('rarity').default('common'),
+  metadata: jsonb('metadata').default({}),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const userInventory = gamification.table('user_inventory', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  user_id: uuid('user_id').notNull(), // Should reference profile/user
+  item_id: uuid('item_id').references(() => items.id).notNull(),
+  quantity: integer('quantity').default(1).notNull(),
+  acquired_at: timestamp('acquired_at', { withTimezone: true }).defaultNow().notNull(),
+  metadata: jsonb('metadata').default({}),
 })
 
 export const userChallenges = gamification.table('user_challenges', {
@@ -734,6 +808,36 @@ export const userChallenges = gamification.table('user_challenges', {
   challenge_id: uuid('challenge_id').notNull(),
   progress: integer('progress').default(0),
   target: integer('target').default(100),
+  completed_at: timestamp('completed_at', { withTimezone: true }),
+  claimed_at: timestamp('claimed_at', { withTimezone: true }),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const quests = gamification.table('quests', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  description: text('description'),
+  type: challengeTypeEnum('type').notNull().default('quest'),
+  reward_points: integer('reward_points').notNull().default(0),
+  reward_items: jsonb('reward_items').default([]), 
+  status: challengeStatusEnum('status').notNull().default('active'),
+  valid_from: timestamp('valid_from', { withTimezone: true }),
+  valid_until: timestamp('valid_until', { withTimezone: true }),
+  project_id: uuid('project_id').references(() => projects.id),
+  property_id: uuid('property_id').references(() => properties.id),
+  metadata: jsonb('metadata').default({}),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const userQuests = gamification.table('user_quests', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  user_id: uuid('user_id').notNull(),
+  quest_id: uuid('quest_id').references(() => quests.id).notNull(),
+  status: challengeStatusEnum('status').default('active'),
+  progress: integer('progress').default(0),
   completed_at: timestamp('completed_at', { withTimezone: true }),
   claimed_at: timestamp('claimed_at', { withTimezone: true }),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
@@ -756,6 +860,8 @@ export type Category = typeof categories.$inferSelect
 export type Producer = typeof producers.$inferSelect
 export type Project = typeof projects.$inferSelect
 export type NewProject = typeof projects.$inferInsert
+export type Ecosystem = typeof ecosystems.$inferSelect
+export type NewEcosystem = typeof ecosystems.$inferInsert
 export type Order = typeof orders.$inferSelect
 export type OrderItem = typeof orderItems.$inferSelect
 export type Subscription = typeof subscriptions.$inferSelect
