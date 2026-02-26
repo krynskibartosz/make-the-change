@@ -5,6 +5,7 @@ const heroLabCopyByLocale = {
     nav: {
       title: 'Hero Lab',
       index: 'Index',
+      farmMinerals: 'Farm Minerals',
       v1: 'V1 Manifesto',
       v3: 'V3 Community',
       awwwards: 'Awwwards',
@@ -18,6 +19,14 @@ const heroLabCopyByLocale = {
       openHome: 'Open main homepage',
     },
     cards: [
+      {
+        id: 'farmminerals',
+        href: '/hero-lab/farmminerals',
+        cta: 'Open Farm Minerals',
+        title: 'Farm Minerals - Pixel Clone',
+        summary:
+          'Exact local clone of farmminerals.com with mirrored assets, timeline behavior and original section structure.',
+      },
       {
         id: 'awwwards',
         href: '/hero-lab/awwwards',
@@ -69,6 +78,7 @@ const heroLabCopyByLocale = {
     nav: {
       title: 'Hero Lab',
       index: 'Index',
+      farmMinerals: 'Farm Minerals',
       v1: 'V1 Manifeste',
       v3: 'V3 Communauté',
       awwwards: 'Awwwards',
@@ -82,6 +92,14 @@ const heroLabCopyByLocale = {
       openHome: 'Voir la homepage principale',
     },
     cards: [
+      {
+        id: 'farmminerals',
+        href: '/hero-lab/farmminerals',
+        cta: 'Ouvrir Farm Minerals',
+        title: 'Farm Minerals - Clone pixel',
+        summary:
+          'Clone local exact de farmminerals.com avec assets mirroirs, comportement scroll et structure de sections identiques.',
+      },
       {
         id: 'awwwards',
         href: '/hero-lab/awwwards',
@@ -133,6 +151,7 @@ const heroLabCopyByLocale = {
     nav: {
       title: 'Hero Lab',
       index: 'Index',
+      farmMinerals: 'Farm Minerals',
       v1: 'V1 Manifest',
       v3: 'V3 Community',
       awwwards: 'Awwwards',
@@ -146,6 +165,14 @@ const heroLabCopyByLocale = {
       openHome: 'Open hoofdpagina',
     },
     cards: [
+      {
+        id: 'farmminerals',
+        href: '/hero-lab/farmminerals',
+        cta: 'Open Farm Minerals',
+        title: 'Farm Minerals - Pixel clone',
+        summary:
+          'Exacte lokale kloon van farmminerals.com met gemirrorde assets, scroll-gedrag en dezelfde sectiestructuur.',
+      },
       {
         id: 'awwwards',
         href: '/hero-lab/awwwards',

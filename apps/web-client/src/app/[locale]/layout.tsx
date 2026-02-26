@@ -56,8 +56,12 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
     'marketing',
     'home',
     'products',
+    'projects',
     'marketing_pages',
     'checkout',
+    'dashboard',
+    'community',
+    'system_pages',
   ])
 
   const supabase = await createClient()

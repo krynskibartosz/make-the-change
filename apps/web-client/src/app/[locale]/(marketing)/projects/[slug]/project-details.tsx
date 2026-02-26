@@ -10,6 +10,10 @@ import { ProjectCoverHero } from './components/project-cover-hero'
 import { ProjectMainContent } from './components/project-main-content'
 import { ProjectSidebar } from './components/project-sidebar'
 import type { PublicProject } from './project-detail-data'
+import { getEcosystemById, getPropertiesByProjectId } from '@/lib/investment/ecosystem.actions'
+import { EcosystemCard } from '@/components/investment/ecosystem-card'
+import { createClient } from '@/lib/supabase/server'
+import { MapPin } from 'lucide-react'
 
 type ProjectDetailsProps = {
   project: PublicProject
@@ -37,8 +41,8 @@ export async function ProjectDetails({
 
   const producerImage =
     project.producer?.images &&
-    Array.isArray(project.producer.images) &&
-    project.producer.images.length > 0
+      Array.isArray(project.producer.images) &&
+      project.producer.images.length > 0
       ? project.producer.images[0]
       : null
   const localizedTitle = getLocalizedContent(project.name_i18n, locale, project.name_default)
@@ -58,6 +62,18 @@ export async function ProjectDetails({
     ? getLocalizedContent(project.producer.name_i18n, locale, project.producer.name_default)
     : 'Make the Change'
 
+  // Fetch ecosystem and properties
+  const supabase = await createClient()
+  const { data: coreProject } = await supabase
+    .schema('investment')
+    .from('projects')
+    .select('ecosystem_id')
+    .eq('id', project.id)
+    .single()
+
+  const ecosystem = coreProject?.ecosystem_id ? await getEcosystemById(coreProject.ecosystem_id) : null
+  const properties = await getPropertiesByProjectId(project.id)
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Project',
@@ -68,25 +84,25 @@ export async function ProjectDetails({
     location:
       project.address_city || project.address_country_code
         ? {
-            '@type': 'Place',
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: project.address_city,
-              addressCountry: project.address_country_code,
-            },
-          }
+          '@type': 'Place',
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: project.address_city,
+            addressCountry: project.address_country_code,
+          },
+        }
         : undefined,
     organizer: project.producer
       ? {
-          '@type': 'Organization',
-          name: producerName,
-          url: project.producer.contact_website,
-          image: producerImage,
-        }
+        '@type': 'Organization',
+        name: producerName,
+        url: project.producer.contact_website,
+        image: producerImage,
+      }
       : {
-          '@type': 'Organization',
-          name: 'Make the Change',
-        },
+        '@type': 'Organization',
+        name: 'Make the Change',
+      },
     startDate: project.launch_date,
     endDate: project.maturity_date,
     funding: {
@@ -134,6 +150,40 @@ export async function ProjectDetails({
             fundingProgress={fundingProgress}
             {...(producerImage ? { producerImage } : {})}
           />
+        </div>
+
+        {/* ECOSYSTEM & PROPERTIES SECTION */}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+          {ecosystem && (
+            <div className="lg:col-span-4 space-y-4">
+              <h3 className="text-xl font-bold">{t('detail.ecosystem') || 'Écosystème'}</h3>
+              <EcosystemCard ecosystem={ecosystem} />
+            </div>
+          )}
+
+          {properties && properties.length > 0 && (
+            <div className={`space-y-4 ${ecosystem ? 'lg:col-span-8' : 'lg:col-span-12'}`}>
+              <h3 className="text-xl font-bold">{t('detail.properties') || 'Parcelles & Propriétés'}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {properties.map((prop: any) => (
+                  <div key={prop.id} className="flex flex-col p-5 rounded-2xl border border-border/50 bg-background/50 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-2 mb-2">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      <h4 className="font-semibold text-lg">{prop.name}</h4>
+                    </div>
+                    {prop.location && (
+                      <p className="text-sm text-muted-foreground">{prop.location}</p>
+                    )}
+                    {prop.capacity && (
+                      <div className="mt-3 inline-flex self-start items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                        Capacité: {prop.capacity}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="mt-16">

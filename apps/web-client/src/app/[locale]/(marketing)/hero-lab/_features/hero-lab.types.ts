@@ -14,6 +14,7 @@ export type HeroVariantCopy = {
 export type HeroLabNavLabels = {
   title: string
   index: string
+  farmMinerals: string
   v1: string
   v3: string
   awwwards: string

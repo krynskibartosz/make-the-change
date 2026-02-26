@@ -15,6 +15,7 @@ export function HeroLabNav({ labels, className }: HeroLabNavProps) {
 
   const links = [
     { href: '/hero-lab', label: labels.index },
+    { href: '/hero-lab/farmminerals', label: labels.farmMinerals },
     { href: '/hero-lab/awwwards', label: labels.awwwards },
     { href: '/hero-lab/v3', label: labels.v3 },
     { href: '/hero-lab/v1', label: labels.v1 },

@@ -15,23 +15,28 @@ import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/li
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { formatCurrency, formatPoints } from '@/lib/utils'
+import { Feed } from '@/components/social/feed'
 import { ActivityTimeline } from '../_features/activity-timeline'
 import { BadgesSection } from '../_features/badges-section'
 import { DashboardWelcome } from '../_features/dashboard-welcome'
 import { StatCard } from '../_features/stat-card'
+import { UserInventory } from '../_features/user-inventory'
+import { UserQuests } from '../_features/user-quests'
+import { getUserInventory } from '@/lib/gamification/inventory.actions'
+import { getActiveQuests } from '@/lib/gamification/quest.actions'
 
 type ClaimedChallenge = {
   claimed_at: string | null
   challenges:
-    | {
-        title: string | null
-        reward_badge: string | null
-      }
-    | Array<{
-        title: string | null
-        reward_badge: string | null
-      }>
-    | null
+  | {
+    title: string | null
+    reward_badge: string | null
+  }
+  | Array<{
+    title: string | null
+    reward_badge: string | null
+  }>
+  | null
 }
 type ClaimedChallengeData = {
   title: string | null
@@ -66,8 +71,8 @@ const toClaimedChallenge = (value: unknown): ClaimedChallenge | null => {
   const challengesRaw = value.challenges
   const challenges = Array.isArray(challengesRaw)
     ? challengesRaw
-        .map((challenge) => toChallenge(challenge))
-        .filter((challenge): challenge is ClaimedChallengeData => challenge !== null)
+      .map((challenge) => toChallenge(challenge))
+      .filter((challenge): challenge is ClaimedChallengeData => challenge !== null)
     : toChallenge(challengesRaw)
 
   return {
@@ -130,6 +135,12 @@ export default async function DashboardPage() {
     .select('*, challenges(title, reward_badge)')
     .not('claimed_at', 'is', null)
 
+  // Fetch Inventory & Quests
+  const [userInventory, activeQuests] = await Promise.all([
+    getUserInventory(),
+    getActiveQuests()
+  ])
+
   // Fetch investments stats and recent activity using Supabase Client (Zero-Bundle architecture)
   const { data: allInvestments, error: investmentsError } = await supabase
     .schema('investment')
@@ -178,8 +189,8 @@ export default async function DashboardPage() {
 
   const challengeRows = Array.isArray(claimedChallenges)
     ? claimedChallenges
-        .map((entry) => toClaimedChallenge(entry))
-        .filter((entry): entry is ClaimedChallenge => entry !== null)
+      .map((entry) => toClaimedChallenge(entry))
+      .filter((entry): entry is ClaimedChallenge => entry !== null)
     : []
 
   const challengeBadges = challengeRows.map((uc) => {
@@ -296,14 +307,22 @@ export default async function DashboardPage() {
           />
         </div>
 
-        <ActivityTimeline
-          className="lg:col-span-7"
-          items={activityItems}
-          viewAllHref="/dashboard/investments"
-          title={t('recent_activity')}
-          emptyMessage="Aucune activité récente"
-          emptyAction={{ label: 'Découvrir les projets', href: '/projects' }}
-        />
+        <div className="space-y-6 lg:col-span-7">
+          <div>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Fil d'actualité</h2>
+            </div>
+            <Feed />
+          </div>
+
+          <ActivityTimeline
+            items={activityItems}
+            viewAllHref="/dashboard/investments"
+            title={t('recent_activity')}
+            emptyMessage="Aucune activité récente"
+            emptyAction={{ label: 'Découvrir les projets', href: '/projects' }}
+          />
+        </div>
 
         <Card className="lg:col-span-5 border bg-background/70 shadow-sm backdrop-blur">
           <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
@@ -353,6 +372,14 @@ export default async function DashboardPage() {
             </Link>
           </CardContent>
         </Card>
+
+        <div className="lg:col-span-7">
+          <UserQuests quests={activeQuests} />
+        </div>
+
+        <div className="lg:col-span-5">
+          <UserInventory inventory={userInventory} />
+        </div>
       </div>
     </DashboardPageContainer>
   )

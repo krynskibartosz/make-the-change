@@ -32,7 +32,7 @@ import { cn } from '@/lib/utils'
 type HeaderElementProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>
 type AppLinkProps = ComponentProps<typeof Link>
 type HeaderNavigationItem = {
-  id: 'projects' | 'products' | 'discover'
+  id: 'projects' | 'products' | 'community' | 'discover'
   href: AppLinkProps['href'] | '#'
   label: string
   mega?: MainMenuStructure[keyof MainMenuStructure]
@@ -186,12 +186,12 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       ],
       ...(projectsMenu.featured !== undefined
         ? {
-            featured: {
-              ...projectsMenu.featured,
-              title: localizeCmsLabel(projectsMenu.featured.title, locale),
-              ctaLabel: localizeCmsLabel(projectsMenu.featured.ctaLabel, locale),
-            },
-          }
+          featured: {
+            ...projectsMenu.featured,
+            title: localizeCmsLabel(projectsMenu.featured.title, locale),
+            ctaLabel: localizeCmsLabel(projectsMenu.featured.ctaLabel, locale),
+          },
+        }
         : {}),
     } satisfies MainMenuStructure['projects']
   }, [locale, menuData?.projects])
@@ -209,10 +209,10 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       href: item.href.includes('category=')
         ? item.href
         : (() => {
-            const categoryToken = toCategoryQueryToken(item.title)
-            if (!categoryToken) return '/products'
-            return `/products?category=${encodeURIComponent(categoryToken)}`
-          })(),
+          const categoryToken = toCategoryQueryToken(item.title)
+          if (!categoryToken) return '/products'
+          return `/products?category=${encodeURIComponent(categoryToken)}`
+        })(),
     }))
 
     return {
@@ -229,12 +229,12 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       ],
       ...(productsMenu.featured !== undefined
         ? {
-            featured: {
-              ...productsMenu.featured,
-              title: localizeCmsLabel(productsMenu.featured.title, locale),
-              ctaLabel: localizeCmsLabel(productsMenu.featured.ctaLabel, locale),
-            },
-          }
+          featured: {
+            ...productsMenu.featured,
+            title: localizeCmsLabel(productsMenu.featured.title, locale),
+            ctaLabel: localizeCmsLabel(productsMenu.featured.ctaLabel, locale),
+          },
+        }
         : {}),
     } satisfies MainMenuStructure['products']
   }, [locale, menuData?.products])
@@ -254,6 +254,12 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       ...(shopMenu !== undefined ? { mega: shopMenu } : {}),
     }
 
+    const communityNavigationItem: HeaderNavigationItem = {
+      id: 'community',
+      href: '/community',
+      label: t('community'),
+    }
+
     const discoverNavigationItem: HeaderNavigationItem = {
       id: 'discover',
       href: '#',
@@ -265,6 +271,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       projectsNavigationItem,
       productsNavigationItem,
       discoverNavigationItem,
+      communityNavigationItem,
     ] satisfies HeaderNavigationItem[]
   }, [investMenu, shopMenu, t, discoverMenu])
   const activeMegaContent = useMemo(() => {
@@ -308,10 +315,10 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
   const headerStyle = activeMegaContent
     ? {
-        ...rest.style,
-        backdropFilter: 'blur(34px) saturate(165%)',
-        WebkitBackdropFilter: 'blur(34px) saturate(165%)',
-      }
+      ...rest.style,
+      backdropFilter: 'blur(34px) saturate(165%)',
+      WebkitBackdropFilter: 'blur(34px) saturate(165%)',
+    }
     : rest.style
 
   return (

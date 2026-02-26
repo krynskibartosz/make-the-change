@@ -48,10 +48,42 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/community"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('community')}
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/leaderboard"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {t('leaderboard')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/community/trending"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('community_trending')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/community/guilds"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('community_guilds')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/community/posts/new"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('community_publish')}
                 </Link>
               </li>
               <li>

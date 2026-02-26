@@ -1,9 +1,11 @@
 'use client'
 
-import { Badge } from '@make-the-change/core/ui'
+import { Badge, Button } from '@make-the-change/core/ui'
+import { ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { updateProfileImages } from '@/app/[locale]/(dashboard)/dashboard/profile/actions'
 import { uploadImages } from '@/app/actions/upload-images'
+import { Link } from '@/i18n/navigation'
 import { getRandomCoverImage } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
 import { ImageUploader } from './image-uploader'
@@ -143,6 +145,16 @@ export const ProfileHeader = ({
                 {level.charAt(0).toUpperCase() + level.slice(1)}
               </Badge>
             </div>
+            {!readonly && (
+              <div className="mt-4 flex justify-center sm:justify-start">
+                <Link href="/profile/me" target="_blank">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <ExternalLink className="h-3 w-3" />
+                    Voir mon profil public
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
