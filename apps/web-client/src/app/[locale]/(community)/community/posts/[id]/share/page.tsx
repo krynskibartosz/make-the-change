@@ -15,11 +15,28 @@ export async function generateMetadata({ params }: CommunityPostSharePageProps) 
   const { id } = await params
   const post = await getPostById(id)
   const t = await getTranslations('community')
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3001')
+
+  const ogImageUrl = `${appUrl}/api/og/community/post/${id}`
+  const postUrl = `${appUrl}/community/posts/${id}`
+  const title = post?.content
+    ? `${t('post.share_prefix')}: ${post.content.slice(0, 32)}`
+    : t('post.share_default_title')
 
   return {
-    title: post?.content
-      ? `${t('post.share_prefix')}: ${post.content.slice(0, 32)}`
-      : t('post.share_default_title'),
+    title,
+    openGraph: {
+      title,
+      url: postUrl,
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      images: [ogImageUrl],
+    },
   }
 }
 
@@ -41,8 +58,8 @@ export default async function CommunityPostSharePage({ params }: CommunityPostSh
         </Link>
       </Button>
 
-      <PostCard post={post} />
-      <SharePostActions title={post.content || t('post.share_fallback_title')} />
+      <PostCard post={post} readonlyActions />
+      <SharePostActions postId={post.id} title={post.content || t('post.share_fallback_title')} />
     </div>
   )
 }

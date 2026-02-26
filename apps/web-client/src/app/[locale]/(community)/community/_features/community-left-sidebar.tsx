@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage, Button } from '@make-the-change/co
 import {
   Feather,
   Flame,
+  Hash,
   Home,
   Leaf,
   LogIn,
@@ -32,7 +33,7 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
 
   const navItems = [
     { icon: Home, label: t('home'), href: '/' as const },
-    { icon: Search, label: t('discover') || 'Explorer', href: '/products' as const },
+    { icon: Search, label: t('discover'), href: '/products' as const },
     { icon: Leaf, label: t('projects'), href: '/projects' as const },
     { icon: ShoppingBag, label: t('shop'), href: '/products' as const },
     { icon: MessageSquare, label: t('community'), href: '/community' as const },
@@ -71,14 +72,21 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
           className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
         >
           <Flame className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.trending') || 'Tendances'}</span>
+          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.trending')}</span>
         </Link>
         <Link
           href="/community/guilds"
           className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
         >
           <Users className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.guilds') || 'Guildes'}</span>
+          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.guilds')}</span>
+        </Link>
+        <Link
+          href="/community/hashtags"
+          className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
+        >
+          <Hash className="w-7 h-7 stroke-[1.5px]" />
+          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.hashtags')}</span>
         </Link>
       </nav>
 

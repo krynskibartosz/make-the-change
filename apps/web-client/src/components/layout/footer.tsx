@@ -80,6 +80,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/community/hashtags"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('community_hashtags')}
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/community/posts/new"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
@@ -123,7 +131,7 @@ export function Footer() {
                   href="/biodex"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  BioDex
+                  {t('biodex')}
                 </Link>
               </li>
               <li>
@@ -131,7 +139,7 @@ export function Footer() {
                   href="/challenges"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Challenges
+                  {t('challenges')}
                 </Link>
               </li>
               <li>
@@ -146,8 +154,8 @@ export function Footer() {
           </nav>
 
           {/* Account & Shopping */}
-          <nav aria-label="Account & Shopping">
-            <h3 className="mb-4 font-semibold">Account & Shopping</h3>
+          <nav aria-label={t('account_shopping')}>
+            <h3 className="mb-4 font-semibold">{t('account_shopping')}</h3>
             <ul className="space-y-2 text-sm">
               {user ? (
                 <>

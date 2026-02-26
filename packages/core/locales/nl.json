@@ -640,8 +640,12 @@
     "community": "Gemeenschap",
     "community_trending": "Trends community",
     "community_guilds": "Guilds",
+    "community_hashtags": "Hashtags",
     "community_publish": "Publiceren",
+    "account_shopping": "Account & shoppen",
     "blog": "Blog",
+    "biodex": "BioDex",
+    "challenges": "Uitdagingen",
     "address": "Brussel, België",
     "brand_guidelines": "Merkrichtlijnen",
     "menu": "Menu",
@@ -1738,8 +1742,11 @@
       "more": "Meer",
       "update_post": "Update plaatsen",
       "trending": "Trending",
-      "guilds": "Guilds"
+      "guilds": "Guilds",
+      "hashtags": "Hashtags",
+      "trending_hashtags": "Trending hashtags"
     },
+    "mobile_nav_label": "Mobiele communitynavigatie",
     "leaderboard": {
       "top_contributors": "Top bijdragers",
       "full_leaderboard": "Volledig klassement bekijken",
@@ -1751,7 +1758,11 @@
       "sample_product_title": "Herbruikbare inox fles",
       "sample_product_metric": "4.9/5 (24 reviews)",
       "show_more": "Meer tonen",
-      "follow": "Volgen"
+      "follow": "Volgen",
+      "scope_all": "Alle",
+      "scope_citizens": "Burgers",
+      "scope_companies": "Bedrijven",
+      "no_contributors": "Nog geen bijdragers."
     },
     "create_post": {
       "meta_title": "Gemeenschap | Nieuwe post",
@@ -1762,7 +1773,8 @@
       "success_title": "Post gepubliceerd",
       "success_description": "Je bericht is nu zichtbaar in de community.",
       "error_title": "Publiceren mislukt",
-      "error_description": "Controleer je verbinding en probeer opnieuw."
+      "error_description": "Controleer je verbinding en probeer opnieuw.",
+      "suggested_hashtags": "impact,klimaat,biodiversiteit,community,actie"
     },
     "feed": {
       "placeholder": "Wat wil je delen met de community?",
@@ -1773,7 +1785,8 @@
       "super_like_success_title": "Top!",
       "super_like_success_description": "Je hebt een zaadje geplant op deze post.",
       "super_like_error_title": "Actie niet beschikbaar",
-      "super_like_error_default": "Je hebt niet genoeg zaadjes (onvoldoende voorraad)"
+      "super_like_error_default": "Je hebt niet genoeg zaadjes (onvoldoende voorraad)",
+      "write_login_prompt": "Log in om te posten, te reageren en commentaar te geven in de community."
     },
     "thread": {
       "comments_label": "Reacties ({count})",
@@ -1796,7 +1809,17 @@
       "default_title": "Communitypost",
       "share_default_title": "Deze post delen",
       "share_prefix": "Delen",
-      "share_fallback_title": "Make the Change post"
+      "share_fallback_title": "Make the Change post",
+      "project_update_badge": "Projectupdate",
+      "image_alt": "Postafbeelding van {name}"
+    },
+    "feed_controls": {
+      "sort_best": "Beste",
+      "sort_newest": "Nieuwste",
+      "sort_oldest": "Oudste",
+      "scope_all": "Alle posts",
+      "scope_my_guilds": "Mijn guilds",
+      "open_hashtags": "Ontdek hashtags"
     },
     "share": {
       "description": "Deel deze post met je netwerk om de impact te vergroten.",
@@ -1814,16 +1837,52 @@
     },
     "guilds": {
       "meta_title": "Gemeenschap | Guilds",
+      "detail_meta_title": "Guild | {slug}",
       "title": "Community-guilds",
       "description": "Word lid van een collectief, deel je voortgang en bereik gezamenlijke doelen.",
       "members_label": "leden",
+      "points_suffix": "pt",
       "join_and_post": "Lid worden en posten",
+      "join": "Lid worden",
+      "leave": "Verlaten",
+      "open": "Openen",
+      "member_badge": "Lid",
+      "members_title": "Leden",
+      "no_members": "Nog geen leden.",
+      "no_guilds": "Momenteel geen guilds beschikbaar.",
+      "no_description": "Nog geen beschrijving.",
+      "membership_loading": "Bijwerken...",
+      "membership_error_title": "Lidmaatschap bijwerken mislukt",
+      "membership_error_description": "Je guild-lidmaatschap kon niet worden bijgewerkt.",
+      "join_success_title": "Guild gejoined",
+      "join_success_description": "Je bent lid geworden van de guild.",
+      "leave_success_title": "Guild verlaten",
+      "leave_success_description": "Je hebt de guild verlaten.",
       "sample_name_tech": "Tech for Forests",
       "sample_name_campus": "Campus Biodiversiteit",
       "sample_name_family": "Family Green Circle",
       "sample_goal_tech": "Plant 2.000 bomen dit kwartaal",
       "sample_goal_campus": "Financier 3 landbouwprojecten",
       "sample_goal_family": "Bereik 100 nuttige reacties"
+    },
+    "hashtags": {
+      "meta_title": "Gemeenschap | Hashtags",
+      "title": "Hashtags",
+      "description": "Verken actieve hashtags en neem deel aan gesprekken met echte impact.",
+      "search_placeholder": "Zoek een hashtag...",
+      "total_suffix": "totaal",
+      "month_suffix": "deze maand",
+      "open": "Openen",
+      "empty": "Geen hashtag gevonden.",
+      "detail_meta_title": "Hashtag | #{slug}",
+      "detail_description": "Volg de activiteit rond #{slug} en steun gerelateerde acties.",
+      "today": "Vandaag",
+      "month": "Deze maand",
+      "year": "Dit jaar",
+      "total": "Totaal",
+      "support_title": "Steun deze hashtag",
+      "support_description": "Zet dit gesprek om in impact door projecten te steunen die aan #{slug} gekoppeld zijn.",
+      "support_cta": "Projecten ontdekken"
     },
     "trending": {
       "meta_title": "Gemeenschap | Trends",

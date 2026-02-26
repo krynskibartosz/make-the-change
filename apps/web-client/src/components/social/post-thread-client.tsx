@@ -11,9 +11,9 @@ import {
   Textarea,
 } from '@make-the-change/core/ui'
 import { formatDistanceToNow } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { enUS, fr, nl as nlLocale } from 'date-fns/locale'
 import { Loader2, MessageCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { addComment, toggleLike, toggleSuperLike } from '@/lib/social/feed.actions'
@@ -38,6 +38,8 @@ type PostThreadClientProps = {
 export function PostThreadClient({ post, initialComments }: PostThreadClientProps) {
   const { toast } = useToast()
   const t = useTranslations('community')
+  const locale = useLocale()
+  const dateFnsLocale = locale === 'fr' ? fr : locale === 'nl' ? nlLocale : enUS
   const [postState, setPostState] = useState(post)
   const [comments, setComments] = useState(initialComments)
   const [newComment, setNewComment] = useState('')
@@ -170,7 +172,7 @@ export function PostThreadClient({ post, initialComments }: PostThreadClientProp
                 const authorInitial = authorName.slice(0, 1).toUpperCase()
                 const createdAt = formatDistanceToNow(new Date(comment.created_at), {
                   addSuffix: true,
-                  locale: fr,
+                  locale: dateFnsLocale,
                 })
 
                 return (

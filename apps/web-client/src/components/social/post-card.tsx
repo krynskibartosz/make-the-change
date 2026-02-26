@@ -3,14 +3,17 @@
 import type { Post } from '@make-the-change/core/shared'
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button } from '@make-the-change/core/ui'
 import { formatDistanceToNow } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { enUS, fr, nl as nlLocale } from 'date-fns/locale'
 import { Heart, MessageCircle, MoreHorizontal, Share2, Sprout } from 'lucide-react'
 import Image from 'next/image'
+import { useLocale, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import { extractHashtagsFromText } from '@/lib/social/hashtags'
 
 interface PostCardProps {
   post: Post
   postHref?: string
+  readonlyActions?: boolean
   onLike?: (postId: string) => void
   onSuperLike?: (postId: string) => void
   onComment?: (postId: string) => void
@@ -20,15 +23,25 @@ interface PostCardProps {
 export function PostCard({
   post,
   postHref,
+  readonlyActions = false,
   onLike,
   onSuperLike,
   onComment,
   onShare,
 }: PostCardProps) {
-  const authorName = post.author?.full_name || 'Utilisateur inconnu'
+  const t = useTranslations('community')
+  const locale = useLocale()
+  const dateFnsLocale = locale === 'fr' ? fr : locale === 'nl' ? nlLocale : enUS
+  const authorName = post.author?.full_name || t('thread.user_fallback')
   const authorAvatar = post.author?.avatar_url || '/images/avatars/default.png'
-  const timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: fr })
+  const timeAgo = formatDistanceToNow(new Date(post.created_at), {
+    addSuffix: true,
+    locale: dateFnsLocale,
+  })
   const authorHref = `/profile/${post.author?.id || post.author_id}`
+  const hashtags = (
+    post.hashtags?.length ? post.hashtags : extractHashtagsFromText(post.content)
+  ).slice(0, 8)
 
   return (
     <article className="border-b border-border bg-background transition-colors hover:bg-muted/30">
@@ -86,7 +99,7 @@ export function PostCard({
                     >
                       <Image
                         src={url}
-                        alt={`Image du post de ${authorName}`}
+                        alt={t('post.image_alt', { name: authorName })}
                         fill
                         className="object-cover transition-transform hover:scale-105"
                       />
@@ -123,7 +136,7 @@ export function PostCard({
                     >
                       <Image
                         src={url}
-                        alt={`Image du post de ${authorName}`}
+                        alt={t('post.image_alt', { name: authorName })}
                         fill
                         className="object-cover transition-transform hover:scale-105"
                       />
@@ -137,8 +150,22 @@ export function PostCard({
           {/* Project Update Context Badge */}
           {post.type === 'project_update_share' && (
             <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
-              Update Projet
+              {t('post.project_update_badge')}
             </Badge>
+          )}
+
+          {hashtags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {hashtags.map((slug) => (
+                <Link
+                  key={slug}
+                  href={`/community/hashtags/${slug}`}
+                  className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
+                >
+                  #{slug}
+                </Link>
+              ))}
+            </div>
           )}
         </div>
 
@@ -150,6 +177,7 @@ export function PostCard({
               size="sm"
               className={`gap-2 ${post.user_has_reacted ? 'text-red-500 hover:text-red-600 hover:bg-red-50' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => onLike?.(post.id)}
+              disabled={readonlyActions || !onLike}
             >
               <Heart className={`h-4 w-4 ${post.user_has_reacted ? 'fill-current' : ''}`} />
               <span className="text-xs font-medium">{post.reactions_count || 0}</span>
@@ -159,6 +187,7 @@ export function PostCard({
               size="sm"
               className="gap-2 text-green-600 hover:text-green-700 hover:bg-green-50"
               onClick={() => onSuperLike?.(post.id)}
+              disabled={readonlyActions || !onSuperLike}
             >
               <Sprout className="h-4 w-4" />
             </Button>
@@ -168,6 +197,7 @@ export function PostCard({
               size="sm"
               className="gap-2 text-muted-foreground hover:text-foreground"
               onClick={() => onComment?.(post.id)}
+              disabled={readonlyActions || !onComment}
             >
               <MessageCircle className="h-4 w-4" />
               <span className="text-xs font-medium">{post.comments_count || 0}</span>
@@ -179,9 +209,10 @@ export function PostCard({
             size="sm"
             className="gap-2 text-muted-foreground hover:text-foreground"
             onClick={() => onShare?.(post.id)}
+            disabled={readonlyActions || !onShare}
           >
             <Share2 className="h-4 w-4" />
-            <span className="text-xs font-medium">Partager</span>
+            <span className="text-xs font-medium">{t('actions.share')}</span>
           </Button>
         </div>
       </div>

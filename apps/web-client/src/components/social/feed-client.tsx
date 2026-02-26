@@ -13,11 +13,13 @@ import { PostCard } from './post-card'
 interface FeedProps {
   initialPosts: Post[]
   hideCreatePost?: boolean
+  canWrite?: boolean
 }
 
 type OptimisticAction = { type: 'like'; postId: string } | { type: 'post'; post: Post }
+type FeedOptimisticAction = OptimisticAction | { type: 'remove_post'; postId: string }
 
-export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) {
+export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = false }: FeedProps) {
   const { toast } = useToast()
   const router = useRouter()
   const t = useTranslations('community')
@@ -25,9 +27,13 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
 
   const [newPostContent, setNewPostContent] = useState('')
   const [isPosting, setIsPosting] = useState(false)
+  const hashtagSuggestions = t('create_post.suggested_hashtags')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0)
 
   // Optimistic State
-  const [optimisticPosts, setOptimisticPosts] = useOptimistic<Post[], OptimisticAction>(
+  const [optimisticPosts, setOptimisticPosts] = useOptimistic<Post[], FeedOptimisticAction>(
     initialPosts,
     (currentPosts, action) => {
       if (action.type === 'like') {
@@ -46,6 +52,9 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
       if (action.type === 'post') {
         return [action.post, ...currentPosts]
       }
+      if (action.type === 'remove_post') {
+        return currentPosts.filter((post) => post.id !== action.postId)
+      }
       return currentPosts
     },
   )
@@ -60,6 +69,10 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
     try {
       await toggleLike(postId)
     } catch (_error) {
+      startTransition(() => {
+        setOptimisticPosts({ type: 'like', postId })
+      })
+
       toast({
         title: t('feed.login_required_title'),
         description: t('feed.login_required_description'),
@@ -92,16 +105,33 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newPostContent.trim()) return
+    if (!canWrite) {
+      toast({
+        title: t('feed.login_required_title'),
+        description: t('feed.login_required_description'),
+        action: (
+          <Button variant="outline" size="sm" onClick={() => router.push('/login')}>
+            {tNav('login')}
+          </Button>
+        ),
+      })
+      return
+    }
+
+    const contentToPost = newPostContent.trim()
+    if (!contentToPost) return
 
     setIsPosting(true)
+    let tempPostId: string | null = null
+    setNewPostContent('')
+
     try {
-      const tempPostId = `temp-${Date.now()}`
+      tempPostId = `temp-${Date.now()}`
 
       // Fake a post for optimistic UI
       const tempPost: Post = {
         id: tempPostId,
-        content: newPostContent,
+        content: contentToPost,
         author_id: 'temp',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -110,7 +140,11 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
         image_urls: [],
         project_update_id: null,
         metadata: {},
-        author: { id: 'temp', full_name: 'Vous', avatar_url: '/images/avatars/default.png' },
+        author: {
+          id: 'temp',
+          full_name: t('thread.you_label'),
+          avatar_url: '/images/avatars/default.png',
+        },
         reactions_count: 0,
         comments_count: 0,
         user_has_reacted: false,
@@ -120,20 +154,45 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
         setOptimisticPosts({ type: 'post', post: tempPost })
       })
 
-      const contentToPost = newPostContent
-      setNewPostContent('')
-
       await createPost(contentToPost)
       router.refresh()
-    } catch (_error) {
+    } catch (error: unknown) {
+      if (tempPostId) {
+        const postIdToRemove = tempPostId
+        startTransition(() => {
+          setOptimisticPosts({ type: 'remove_post', postId: postIdToRemove })
+        })
+      }
+
+      setNewPostContent(contentToPost)
+
+      const errorMessage = error instanceof Error ? error.message : ''
+      const isLoginError = errorMessage.toLowerCase().includes('connect')
+
       toast({
-        title: t('create_post.error_title'),
-        description: t('create_post.error_description'),
+        title: isLoginError ? t('feed.login_required_title') : t('create_post.error_title'),
+        description: isLoginError
+          ? t('feed.login_required_description')
+          : t('create_post.error_description'),
         variant: 'destructive',
+        action: isLoginError ? (
+          <Button variant="outline" size="sm" onClick={() => router.push('/login')}>
+            {tNav('login')}
+          </Button>
+        ) : undefined,
       })
     } finally {
       setIsPosting(false)
     }
+  }
+
+  const addSuggestedHashtag = (slug: string) => {
+    const hashtag = `#${slug.replace(/^#/, '')}`
+    if (newPostContent.includes(hashtag)) {
+      return
+    }
+
+    setNewPostContent((current) => `${current.trim()}${current.trim() ? ' ' : ''}${hashtag}`)
   }
 
   const handleComment = (postId: string) => {
@@ -149,46 +208,71 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
       {/* Create Post Form */}
       {!hideCreatePost && (
         <div className="border-b border-border bg-background p-4 sm:p-6">
-          <form onSubmit={handleCreatePost} className="space-y-4">
-            <div className="flex gap-4">
-              <Avatar className="h-10 w-10 shrink-0">
-                <AvatarImage src="/images/avatars/default.png" alt="Vous" />
-                <AvatarFallback>V</AvatarFallback>
-              </Avatar>
-              <Textarea
-                placeholder={t('feed.placeholder')}
-                className="min-h-[100px] resize-none border-border/50 bg-background/50 text-base"
-                value={newPostContent}
-                onChange={(e) => setNewPostContent(e.target.value)}
-                disabled={isPosting}
-              />
-            </div>
-            <div className="flex items-center justify-between border-t border-border/50 pt-3">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="gap-2 text-muted-foreground"
-                disabled
-              >
-                <ImageIcon className="h-4 w-4" />
-                {t('feed.image_label')}
+          {canWrite ? (
+            <form onSubmit={handleCreatePost} className="space-y-4">
+              <div className="flex gap-4">
+                <Avatar className="h-10 w-10 shrink-0">
+                  <AvatarImage src="/images/avatars/default.png" alt={t('thread.you_label')} />
+                  <AvatarFallback>V</AvatarFallback>
+                </Avatar>
+                <Textarea
+                  placeholder={t('feed.placeholder')}
+                  className="min-h-[100px] resize-none border-border/50 bg-background/50 text-base"
+                  value={newPostContent}
+                  onChange={(e) => setNewPostContent(e.target.value)}
+                  disabled={isPosting}
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {hashtagSuggestions.map((slug) => (
+                  <Button
+                    key={slug}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full px-3 text-xs"
+                    onClick={() => addSuggestedHashtag(slug)}
+                  >
+                    #{slug}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between border-t border-border/50 pt-3">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 text-muted-foreground"
+                  disabled
+                >
+                  <ImageIcon className="h-4 w-4" />
+                  {t('feed.image_label')}
+                </Button>
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="gap-2 rounded-full px-6"
+                  disabled={isPosting || !newPostContent.trim()}
+                >
+                  {isPosting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                  {isPosting ? t('create_post.publishing') : t('create_post.publish')}
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <div className="rounded-xl border border-dashed p-4 text-sm text-muted-foreground">
+              <p>{t('feed.write_login_prompt')}</p>
+              <Button className="mt-3" size="sm" onClick={() => router.push('/login')}>
+                {tNav('login')}
               </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="gap-2 rounded-full px-6"
-                disabled={isPosting || !newPostContent.trim()}
-              >
-                {isPosting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-                {isPosting ? t('create_post.publishing') : t('create_post.publish')}
-              </Button>
             </div>
-          </form>
+          )}
         </div>
       )}
 
@@ -199,17 +283,22 @@ export function FeedClient({ initialPosts, hideCreatePost = false }: FeedProps) 
             <p>{t('feed.empty')}</p>
           </div>
         ) : (
-          optimisticPosts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              postHref={post.id.startsWith('temp-') ? undefined : `/community/posts/${post.id}`}
-              onLike={() => handleLike(post.id)}
-              onSuperLike={() => handleSuperLike(post.id)}
-              onComment={() => handleComment(post.id)}
-              onShare={() => handleShare(post.id)}
-            />
-          ))
+          optimisticPosts.map((post) => {
+            const isTemporaryPost = post.id.startsWith('temp-')
+
+            return (
+              <PostCard
+                key={post.id}
+                post={post}
+                postHref={isTemporaryPost ? undefined : `/community/posts/${post.id}`}
+                readonlyActions={isTemporaryPost}
+                onLike={() => handleLike(post.id)}
+                onSuperLike={() => handleSuperLike(post.id)}
+                onComment={() => handleComment(post.id)}
+                onShare={() => handleShare(post.id)}
+              />
+            )
+          })
         )}
       </div>
     </div>

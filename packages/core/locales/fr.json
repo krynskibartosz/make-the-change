@@ -448,8 +448,12 @@
     "community": "Communauté",
     "community_trending": "Tendances communauté",
     "community_guilds": "Guildes",
+    "community_hashtags": "Hashtags",
     "community_publish": "Publier",
+    "account_shopping": "Compte & achats",
     "blog": "Blog",
+    "biodex": "BioDex",
+    "challenges": "Défis",
     "address": "Brussels, Belgium",
     "brand_guidelines": "Guide de marque",
     "menu": "Menu",
@@ -1877,8 +1881,11 @@
       "more": "Plus",
       "update_post": "Mettre à jour",
       "trending": "Tendances",
-      "guilds": "Guildes"
+      "guilds": "Guildes",
+      "hashtags": "Hashtags",
+      "trending_hashtags": "Hashtags tendances"
     },
+    "mobile_nav_label": "Navigation mobile communauté",
     "leaderboard": {
       "top_contributors": "Top Contributeurs",
       "full_leaderboard": "Voir le classement complet",
@@ -1890,7 +1897,11 @@
       "sample_product_title": "Gourde réutilisable inox",
       "sample_product_metric": "4.9/5 (24 avis)",
       "show_more": "Afficher plus",
-      "follow": "Suivre"
+      "follow": "Suivre",
+      "scope_all": "Tous",
+      "scope_citizens": "Citoyens",
+      "scope_companies": "Entreprises",
+      "no_contributors": "Aucun contributeur pour le moment."
     },
     "create_post": {
       "meta_title": "Communauté | Nouvelle publication",
@@ -1901,7 +1912,8 @@
       "success_title": "Publication créée",
       "success_description": "Votre message est maintenant visible dans la communauté.",
       "error_title": "Impossible de publier",
-      "error_description": "Vérifiez votre connexion puis réessayez."
+      "error_description": "Vérifiez votre connexion puis réessayez.",
+      "suggested_hashtags": "impact,climat,biodiversite,communaute,action"
     },
     "feed": {
       "placeholder": "Que voulez-vous partager avec la communauté ?",
@@ -1912,7 +1924,8 @@
       "super_like_success_title": "Super !",
       "super_like_success_description": "Vous avez planté une graine sur ce post.",
       "super_like_error_title": "Action impossible",
-      "super_like_error_default": "Vous n'avez pas assez de graines (inventaire insuffisant)"
+      "super_like_error_default": "Vous n'avez pas assez de graines (inventaire insuffisant)",
+      "write_login_prompt": "Connectez-vous pour publier, réagir et commenter dans la communauté."
     },
     "thread": {
       "comments_label": "Commentaires ({count})",
@@ -1935,7 +1948,17 @@
       "default_title": "Publication communauté",
       "share_default_title": "Partager la publication",
       "share_prefix": "Partager",
-      "share_fallback_title": "Publication Make the Change"
+      "share_fallback_title": "Publication Make the Change",
+      "project_update_badge": "Mise à jour projet",
+      "image_alt": "Image de publication de {name}"
+    },
+    "feed_controls": {
+      "sort_best": "Top",
+      "sort_newest": "Plus récents",
+      "sort_oldest": "Plus anciens",
+      "scope_all": "Tous les posts",
+      "scope_my_guilds": "Mes guildes",
+      "open_hashtags": "Voir les hashtags"
     },
     "share": {
       "description": "Partagez cette publication avec votre réseau pour amplifier son impact.",
@@ -1953,16 +1976,52 @@
     },
     "guilds": {
       "meta_title": "Communauté | Guildes",
+      "detail_meta_title": "Guilde | {slug}",
       "title": "Guildes communautaires",
       "description": "Rejoignez un collectif, partagez vos avancées et atteignez des objectifs communs.",
       "members_label": "membres",
+      "points_suffix": "pts",
       "join_and_post": "Rejoindre et publier",
+      "join": "Rejoindre",
+      "leave": "Quitter",
+      "open": "Ouvrir",
+      "member_badge": "Membre",
+      "members_title": "Membres",
+      "no_members": "Aucun membre pour le moment.",
+      "no_guilds": "Aucune guilde disponible pour le moment.",
+      "no_description": "Aucune description pour le moment.",
+      "membership_loading": "Mise à jour...",
+      "membership_error_title": "Impossible de mettre à jour l'adhésion",
+      "membership_error_description": "Impossible de mettre à jour votre adhésion à la guilde.",
+      "join_success_title": "Guilde rejointe",
+      "join_success_description": "Vous avez rejoint la guilde.",
+      "leave_success_title": "Guilde quittée",
+      "leave_success_description": "Vous avez quitté la guilde.",
       "sample_name_tech": "Tech for Forests",
       "sample_name_campus": "Campus Biodiversité",
       "sample_name_family": "Family Green Circle",
       "sample_goal_tech": "Planter 2 000 arbres ce trimestre",
       "sample_goal_campus": "Financer 3 projets agricoles",
       "sample_goal_family": "Atteindre 100 commentaires utiles"
+    },
+    "hashtags": {
+      "meta_title": "Communauté | Hashtags",
+      "title": "Hashtags",
+      "description": "Explorez les hashtags actifs et rejoignez des conversations liées à un impact réel.",
+      "search_placeholder": "Rechercher un hashtag...",
+      "total_suffix": "total",
+      "month_suffix": "ce mois-ci",
+      "open": "Ouvrir",
+      "empty": "Aucun hashtag trouvé.",
+      "detail_meta_title": "Hashtag | #{slug}",
+      "detail_description": "Suivez l'activité autour de #{slug} et soutenez les actions associées.",
+      "today": "Aujourd'hui",
+      "month": "Ce mois-ci",
+      "year": "Cette année",
+      "total": "Total",
+      "support_title": "Soutenir ce hashtag",
+      "support_description": "Transformez cette conversation en impact en soutenant des projets liés à #{slug}.",
+      "support_cta": "Découvrir les projets"
     },
     "trending": {
       "meta_title": "Communauté | Tendances",

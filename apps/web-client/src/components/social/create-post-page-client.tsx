@@ -21,6 +21,10 @@ export function CreatePostPageClient() {
   const { toast } = useToast()
   const router = useRouter()
   const t = useTranslations('community')
+  const suggestedHashtags = t('create_post.suggested_hashtags')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0)
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -55,6 +59,15 @@ export function CreatePostPageClient() {
     }
   }
 
+  const addSuggestedHashtag = (slug: string) => {
+    const hashtag = `#${slug.replace(/^#/, '')}`
+    if (content.includes(hashtag)) {
+      return
+    }
+
+    setContent((current) => `${current.trim()}${current.trim() ? ' ' : ''}${hashtag}`)
+  }
+
   return (
     <div className="mx-auto w-full max-w-2xl space-y-4">
       <Button asChild variant="ghost" size="sm" className="w-fit gap-2">
@@ -77,6 +90,21 @@ export function CreatePostPageClient() {
               className="min-h-[180px]"
               disabled={isSubmitting}
             />
+
+            <div className="flex flex-wrap items-center gap-2">
+              {suggestedHashtags.map((slug) => (
+                <Button
+                  key={slug}
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full px-3 text-xs"
+                  onClick={() => addSuggestedHashtag(slug)}
+                >
+                  #{slug}
+                </Button>
+              ))}
+            </div>
 
             <div className="flex items-center justify-end gap-2">
               <Button asChild type="button" variant="outline">

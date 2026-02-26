@@ -401,8 +401,12 @@
     "community": "Community",
     "community_trending": "Community trends",
     "community_guilds": "Guilds",
+    "community_hashtags": "Hashtags",
     "community_publish": "Publish",
+    "account_shopping": "Account & shopping",
     "blog": "Blog",
+    "biodex": "BioDex",
+    "challenges": "Challenges",
     "address": "Brussels, Belgium",
     "brand_guidelines": "Brand guidelines",
     "menu": "Menu",
@@ -1823,8 +1827,11 @@
       "more": "More",
       "update_post": "Post update",
       "trending": "Trending",
-      "guilds": "Guilds"
+      "guilds": "Guilds",
+      "hashtags": "Hashtags",
+      "trending_hashtags": "Trending hashtags"
     },
+    "mobile_nav_label": "Community mobile navigation",
     "leaderboard": {
       "top_contributors": "Top Contributors",
       "full_leaderboard": "View full leaderboard",
@@ -1836,7 +1843,11 @@
       "sample_product_title": "Reusable stainless bottle",
       "sample_product_metric": "4.9/5 (24 reviews)",
       "show_more": "Show more",
-      "follow": "Follow"
+      "follow": "Follow",
+      "scope_all": "All",
+      "scope_citizens": "Citizens",
+      "scope_companies": "Companies",
+      "no_contributors": "No contributors yet."
     },
     "create_post": {
       "meta_title": "Community | New post",
@@ -1847,7 +1858,8 @@
       "success_title": "Post published",
       "success_description": "Your message is now visible in the community.",
       "error_title": "Unable to publish",
-      "error_description": "Check your connection and try again."
+      "error_description": "Check your connection and try again.",
+      "suggested_hashtags": "impact,climate,biodiversity,community,action"
     },
     "feed": {
       "placeholder": "What do you want to share with the community?",
@@ -1858,7 +1870,8 @@
       "super_like_success_title": "Great!",
       "super_like_success_description": "You planted a seed on this post.",
       "super_like_error_title": "Action unavailable",
-      "super_like_error_default": "You do not have enough seeds (inventory too low)"
+      "super_like_error_default": "You do not have enough seeds (inventory too low)",
+      "write_login_prompt": "Log in to publish, react, and comment in the community."
     },
     "thread": {
       "comments_label": "Comments ({count})",
@@ -1881,7 +1894,17 @@
       "default_title": "Community post",
       "share_default_title": "Share this post",
       "share_prefix": "Share",
-      "share_fallback_title": "Make the Change post"
+      "share_fallback_title": "Make the Change post",
+      "project_update_badge": "Project update",
+      "image_alt": "Post image from {name}"
+    },
+    "feed_controls": {
+      "sort_best": "Best",
+      "sort_newest": "Newest",
+      "sort_oldest": "Oldest",
+      "scope_all": "All posts",
+      "scope_my_guilds": "My guilds",
+      "open_hashtags": "Explore hashtags"
     },
     "share": {
       "description": "Share this post with your network to amplify its impact.",
@@ -1899,16 +1922,52 @@
     },
     "guilds": {
       "meta_title": "Community | Guilds",
+      "detail_meta_title": "Guild | {slug}",
       "title": "Community guilds",
       "description": "Join a collective, share your progress, and reach common goals.",
       "members_label": "members",
+      "points_suffix": "pts",
       "join_and_post": "Join and post",
+      "join": "Join",
+      "leave": "Leave",
+      "open": "Open",
+      "member_badge": "Member",
+      "members_title": "Members",
+      "no_members": "No members yet.",
+      "no_guilds": "No guild available right now.",
+      "no_description": "No description yet.",
+      "membership_loading": "Updating...",
+      "membership_error_title": "Membership update failed",
+      "membership_error_description": "Unable to update your guild membership.",
+      "join_success_title": "Guild joined",
+      "join_success_description": "You joined the guild.",
+      "leave_success_title": "Guild left",
+      "leave_success_description": "You left the guild.",
       "sample_name_tech": "Tech for Forests",
       "sample_name_campus": "Campus Biodiversity",
       "sample_name_family": "Family Green Circle",
       "sample_goal_tech": "Plant 2,000 trees this quarter",
       "sample_goal_campus": "Fund 3 agriculture projects",
       "sample_goal_family": "Reach 100 meaningful comments"
+    },
+    "hashtags": {
+      "meta_title": "Community | Hashtags",
+      "title": "Hashtags",
+      "description": "Explore active hashtags and join conversations tied to real impact.",
+      "search_placeholder": "Search a hashtag...",
+      "total_suffix": "total",
+      "month_suffix": "this month",
+      "open": "Open",
+      "empty": "No hashtag found.",
+      "detail_meta_title": "Hashtag | #{slug}",
+      "detail_description": "Follow activity around #{slug} and support related actions.",
+      "today": "Today",
+      "month": "This month",
+      "year": "This year",
+      "total": "Total",
+      "support_title": "Support this hashtag",
+      "support_description": "Turn this conversation into impact by supporting projects linked to #{slug}.",
+      "support_cta": "Discover projects"
     },
     "trending": {
       "meta_title": "Community | Trending",
