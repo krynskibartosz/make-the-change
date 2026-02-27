@@ -1,6 +1,10 @@
 'use client'
 
+import type { Post } from '@make-the-change/core/shared'
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Button,
   Card,
   CardContent,
@@ -13,9 +17,19 @@ import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { Link, useRouter } from '@/i18n/navigation'
-import { createPost } from '@/lib/social/feed.actions'
+import { createPost, createQuoteRepost } from '@/lib/social/feed.actions'
 
-export function CreatePostPageClient() {
+type CreatePostPageClientProps = {
+  quotePostId?: string
+  quotedPost?: Post | null
+  renderMode?: 'page' | 'modal'
+}
+
+export function CreatePostPageClient({
+  quotePostId,
+  quotedPost = null,
+  renderMode = 'page',
+}: CreatePostPageClientProps) {
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
@@ -25,6 +39,16 @@ export function CreatePostPageClient() {
     .split(',')
     .map((entry) => entry.trim())
     .filter((entry) => entry.length > 0)
+  const isModal = renderMode === 'modal'
+
+  const closeComposer = () => {
+    if (isModal && typeof window !== 'undefined' && window.history.length > 1) {
+      router.back()
+      return
+    }
+
+    router.push('/community')
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -34,9 +58,21 @@ export function CreatePostPageClient() {
       return
     }
 
+    if (quotePostId && !quotedPost) {
+      toast({
+        title: t('create_post.error_title'),
+        description: t('create_post.quote_not_found'),
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsSubmitting(true)
     try {
-      const post = await createPost(trimmed)
+      const post = quotePostId
+        ? await createQuoteRepost(quotePostId, trimmed)
+        : await createPost(trimmed)
+
       toast({
         title: t('create_post.success_title'),
         description: t('create_post.success_description'),
@@ -68,21 +104,63 @@ export function CreatePostPageClient() {
     setContent((current) => `${current.trim()}${current.trim() ? ' ' : ''}${hashtag}`)
   }
 
+  const quoteAuthorName = quotedPost?.author?.full_name || t('thread.user_fallback')
+  const submitLabel = quotePostId ? t('create_post.publish_quote') : t('create_post.publish')
+  const cardTitle = quotePostId ? t('create_post.quote_heading') : t('create_post.heading')
+
   return (
     <div className="mx-auto w-full max-w-2xl space-y-4">
-      <Button asChild variant="ghost" size="sm" className="w-fit gap-2">
-        <Link href="/community">
-          <ArrowLeft className="h-4 w-4" />
-          {t('actions.back_to_feed')}
-        </Link>
-      </Button>
+      {!isModal ? (
+        <Button asChild variant="ghost" size="sm" className="w-fit gap-2">
+          <Link href="/community">
+            <ArrowLeft className="h-4 w-4" />
+            {t('actions.back_to_feed')}
+          </Link>
+        </Button>
+      ) : null}
 
       <Card>
-        <CardHeader>
-          <CardTitle>{t('create_post.heading')}</CardTitle>
+        <CardHeader className="space-y-2">
+          <CardTitle>{cardTitle}</CardTitle>
+          {quotePostId ? (
+            <p className="text-sm text-muted-foreground">{t('create_post.quote_helper')}</p>
+          ) : null}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {quotePostId ? (
+              <div className="rounded-xl border border-border/80 bg-muted/30 p-3">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('create_post.quote_source_label')}
+                </p>
+
+                {quotedPost ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={quotedPost.author?.avatar_url || undefined} alt={quoteAuthorName} />
+                        <AvatarFallback>{quoteAuthorName.slice(0, 1).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{quoteAuthorName}</p>
+                        <Link
+                          href={`/community/posts/${quotedPost.id}`}
+                          className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+                        >
+                          {t('share.open_original_post')}
+                        </Link>
+                      </div>
+                    </div>
+                    {quotedPost.content ? (
+                      <p className="line-clamp-3 text-sm text-foreground/90">{quotedPost.content}</p>
+                    ) : null}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">{t('create_post.quote_not_found')}</p>
+                )}
+              </div>
+            ) : null}
+
             <Textarea
               placeholder={t('create_post.placeholder')}
               value={content}
@@ -107,8 +185,8 @@ export function CreatePostPageClient() {
             </div>
 
             <div className="flex items-center justify-end gap-2">
-              <Button asChild type="button" variant="outline">
-                <Link href="/community">{t('actions.cancel')}</Link>
+              <Button type="button" variant="outline" onClick={closeComposer}>
+                {t('actions.cancel')}
               </Button>
               <Button type="submit" disabled={isSubmitting || !content.trim()} className="gap-2">
                 {isSubmitting ? (
@@ -119,7 +197,7 @@ export function CreatePostPageClient() {
                 ) : (
                   <>
                     <Send className="h-4 w-4" />
-                    {t('create_post.publish')}
+                    {submitLabel}
                   </>
                 )}
               </Button>

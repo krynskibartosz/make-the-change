@@ -1,8 +1,9 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
-import { Flame, Hash, Home, Plus, User, Users } from 'lucide-react'
+import { Flame, Home, Plus, User, Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -12,21 +13,26 @@ interface CommunityMobileBottomNavProps {
 
 export function CommunityMobileBottomNav({ user }: CommunityMobileBottomNavProps) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const t = useTranslations('navigation')
   const tCommunity = useTranslations('community')
+  const currentSort = searchParams.get('sort')
 
   const navItems = [
     {
       href: '/community',
       icon: Home,
       label: t('home'),
-      isActive: pathname === '/community',
+      isActive: pathname === '/community' && currentSort !== 'best',
     },
     {
-      href: '/community/trending',
+      href: '/community?sort=best',
       icon: Flame,
       label: tCommunity('sidebar.trending'),
-      isActive: pathname.startsWith('/community/trending'),
+      isActive:
+        pathname === '/community'
+          ? currentSort === 'best'
+          : pathname.startsWith('/community/trending'),
     },
     {
       href: '/community/posts/new',
@@ -40,12 +46,6 @@ export function CommunityMobileBottomNav({ user }: CommunityMobileBottomNavProps
       icon: Users,
       label: tCommunity('sidebar.guilds'),
       isActive: pathname.startsWith('/community/guilds'),
-    },
-    {
-      href: '/community/hashtags',
-      icon: Hash,
-      label: tCommunity('sidebar.hashtags'),
-      isActive: pathname.startsWith('/community/hashtags'),
     },
   ]
 

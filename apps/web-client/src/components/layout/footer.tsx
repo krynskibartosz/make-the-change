@@ -64,7 +64,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/community/trending"
+                  href="/community?sort=best"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {t('community_trending')}

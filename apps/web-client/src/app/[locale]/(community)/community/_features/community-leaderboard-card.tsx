@@ -2,7 +2,7 @@ import type { ContributorScope } from '@make-the-change/core/shared'
 import { Avatar, AvatarFallback, AvatarImage, Badge } from '@make-the-change/core/ui'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { getTopContributors, getTrendingHashtags } from '@/lib/social/feed.actions'
+import { getTopContributors, getTrendingHashtags } from '@/lib/social/feed.reads'
 
 type CommunityLeaderboardCardProps = {
   contributorScope?: ContributorScope
@@ -32,6 +32,13 @@ const buildQueryHref = (
   return queryString ? `${basePath}?${queryString}` : basePath
 }
 
+const buildHashtagFeedHref = (slug: string) => {
+  const params = new URLSearchParams()
+  params.set('tag', slug)
+  params.set('sort', 'best')
+  return `/community?${params.toString()}`
+}
+
 export async function CommunityLeaderboardCard({
   contributorScope = 'all',
   basePath = '/community',
@@ -54,6 +61,7 @@ export async function CommunityLeaderboardCard({
             <Link
               key={scope}
               href={buildQueryHref(basePath, 'contributors', scope, extraQuery)}
+              prefetch={false}
               className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                 contributorScope === scope
                   ? 'bg-primary text-primary-foreground'
@@ -71,6 +79,7 @@ export async function CommunityLeaderboardCard({
               <div key={contributor.user_id} className="flex items-center justify-between gap-3">
                 <Link
                   href={`/profile/${contributor.user_id}`}
+                  prefetch={false}
                   className="group flex min-w-0 items-center gap-3"
                 >
                   <Avatar className="h-10 w-10">
@@ -97,6 +106,7 @@ export async function CommunityLeaderboardCard({
 
           <Link
             href="/leaderboard"
+            prefetch={false}
             className="mt-2 inline-block text-sm text-primary hover:underline"
           >
             {t('leaderboard.full_leaderboard')}
@@ -111,7 +121,8 @@ export async function CommunityLeaderboardCard({
             trendingHashtags.map((hashtag) => (
               <Link
                 key={hashtag.slug}
-                href={`/community/hashtags/${hashtag.slug}`}
+                href={buildHashtagFeedHref(hashtag.slug)}
+                prefetch={false}
                 className="flex items-center justify-between rounded-lg bg-background px-3 py-2 text-sm transition-colors hover:bg-background/70"
               >
                 <span className="font-medium text-foreground">#{hashtag.slug}</span>
@@ -126,7 +137,8 @@ export async function CommunityLeaderboardCard({
         </div>
 
         <Link
-          href="/community/hashtags"
+          href="/community"
+          prefetch={false}
           className="mt-3 inline-block text-sm text-primary hover:underline"
         >
           {t('leaderboard.show_more')}

@@ -120,5 +120,4 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true })
 }
 
-// Disable body parsing for raw webhook verification
-export const runtime = 'nodejs'
+// No route segment config here because Cache Components is enabled globally.

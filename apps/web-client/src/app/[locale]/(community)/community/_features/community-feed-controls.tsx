@@ -54,38 +54,44 @@ export function CommunityFeedControls({
   )
 
   return (
-    <div className="space-y-3 rounded-xl border border-border/70 bg-background/80 p-3">
-      <div className="flex flex-wrap gap-2">
-        {sortItems.map((item) => (
-          <Button
-            key={item.value}
-            type="button"
-            variant={sort === item.value ? 'default' : 'outline'}
-            size="sm"
-            className={cn('rounded-full px-4', sort === item.value && 'shadow-sm')}
-            onClick={() => updateQueryParam('sort', item.value)}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </div>
-
-      {showScope && (
-        <div className="flex flex-wrap gap-2">
-          {scopeItems.map((item) => (
+    <div className="space-y-2 rounded-xl border border-border/70 bg-background/80 p-2.5 sm:p-3">
+      <div className={cn('grid gap-2', showScope && 'sm:grid-cols-[3fr_2fr]')}>
+        <div className="grid grid-cols-3 gap-1.5">
+          {sortItems.map((item) => (
             <Button
               key={item.value}
               type="button"
-              variant={scope === item.value ? 'secondary' : 'outline'}
+              variant={sort === item.value ? 'default' : 'outline'}
               size="sm"
-              className="rounded-full px-3"
-              onClick={() => updateQueryParam('scope', item.value)}
+              className={cn(
+                'h-9 min-h-9 w-full rounded-full px-2 text-sm sm:px-3 whitespace-nowrap',
+                sort === item.value && 'shadow-sm',
+              )}
+              onClick={() => updateQueryParam('sort', item.value)}
             >
               {item.label}
             </Button>
           ))}
         </div>
-      )}
+
+        {showScope && (
+          <div className="grid grid-cols-2 gap-1.5">
+            {scopeItems.map((item) => (
+              <Button
+                key={item.value}
+                type="button"
+                variant={scope === item.value ? 'secondary' : 'outline'}
+                size="sm"
+                className="h-9 min-h-9 w-full rounded-full px-2 text-sm sm:px-3 whitespace-nowrap"
+                onClick={() => updateQueryParam('scope', item.value)}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
   )
 }

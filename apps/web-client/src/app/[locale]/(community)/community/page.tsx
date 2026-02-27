@@ -1,7 +1,11 @@
 import type { ContributorScope, FeedScope, FeedSort } from '@make-the-change/core/shared'
+import { Button } from '@make-the-change/core/ui'
+import { Search } from 'lucide-react'
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Feed } from '@/components/social/feed'
 import { Link } from '@/i18n/navigation'
+import { sanitizeHashtagSlug } from '@/lib/social/hashtags'
 import { createClient } from '@/lib/supabase/server'
 import { CommunityFeedControls } from './_features/community-feed-controls'
 import { CommunityLeaderboardCard } from './_features/community-leaderboard-card'
@@ -16,6 +20,7 @@ type CommunityPageProps = {
     sort?: string
     scope?: string
     contributors?: string
+    tag?: string
   }>
 }
 
@@ -28,7 +33,31 @@ const parseFeedScope = (value: string | undefined): FeedScope =>
 const parseContributorScope = (value: string | undefined): ContributorScope =>
   CONTRIBUTOR_SCOPE_VALUES.includes(value as ContributorScope) ? (value as ContributorScope) : 'all'
 
-export async function generateMetadata() {
+const buildCommunityHref = ({
+  sort,
+  scope,
+  contributors,
+  tag,
+}: {
+  sort: FeedSort
+  scope: FeedScope
+  contributors: ContributorScope
+  tag?: string
+}) => {
+  const params = new URLSearchParams()
+  params.set('sort', sort)
+  params.set('scope', scope)
+  params.set('contributors', contributors)
+
+  const normalizedTag = tag ? sanitizeHashtagSlug(tag) : ''
+  if (normalizedTag) {
+    params.set('tag', normalizedTag)
+  }
+
+  return `/community?${params.toString()}`
+}
+
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('navigation')
   return {
     title: `${t('community')} | Make the Change`,
@@ -43,6 +72,7 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
   const sort = parseFeedSort(params.sort)
   const scope = parseFeedScope(params.scope)
   const contributorScope = parseContributorScope(params.contributors)
+  const activeTag = sanitizeHashtagSlug(params.tag || '')
 
   const supabase = await createClient()
   const {
@@ -77,7 +107,7 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
   return (
     <div className="relative bg-background">
       <div className="mx-auto flex w-full max-w-[1260px] justify-center">
-        <div className="hidden w-[88px] shrink-0 sm:block xl:w-[275px]">
+        <div className="hidden shrink-0 sm:block sm:w-[240px] lg:w-[275px]">
           <header className="sticky top-0 flex h-screen flex-col justify-between overflow-y-auto">
             <CommunityLeftSidebar user={sidebarUser} />
           </header>
@@ -87,24 +117,61 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
           <div className="sticky top-0 z-20 space-y-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-md">
             <h1 className="text-xl font-bold">{t('community')}</h1>
             <CommunityFeedControls sort={sort} scope={scope} showScope={!!user} />
+            <form
+              method="get"
+              className="flex items-center gap-2 rounded-xl border border-border/70 bg-background px-3 py-2"
+            >
+              <input type="hidden" name="sort" value={sort} />
+              <input type="hidden" name="scope" value={scope} />
+              <input type="hidden" name="contributors" value={contributorScope} />
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <input
+                name="tag"
+                defaultValue={activeTag ? `#${activeTag}` : ''}
+                placeholder={tCommunity('hashtags.search_placeholder')}
+                className="h-8 w-full border-0 bg-transparent p-0 text-sm outline-none"
+              />
+              <Button type="submit" size="sm" variant="outline" className="rounded-full">
+                #
+              </Button>
+              {activeTag ? (
+                <Link
+                  href={buildCommunityHref({ sort, scope, contributors: contributorScope })}
+                  className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+                >
+                  {tCommunity('actions.cancel')}
+                </Link>
+              ) : null}
+            </form>
+            {activeTag ? (
+              <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs">
+                <span className="font-medium text-foreground">#{activeTag}</span>
+                <span className="text-muted-foreground">
+                  {tCommunity('feed_controls.open_hashtags')}
+                </span>
+              </div>
+            ) : null}
           </div>
 
           <div className="relative z-0 w-full">
-            <Feed sort={sort} scope={scope} />
+            <Feed sort={sort} scope={scope} hashtagSlug={activeTag} />
           </div>
         </main>
 
         <div className="hidden w-[350px] shrink-0 lg:block">
           <aside className="sticky top-0 h-screen overflow-y-auto px-6 py-4">
-            <div className="mb-4 rounded-full border border-border/70 bg-muted/30 px-4 py-2 text-sm text-muted-foreground">
-              <Link href="/community/hashtags" className="hover:text-foreground">
-                {tCommunity('feed_controls.open_hashtags')}
-              </Link>
-            </div>
+            {activeTag ? (
+              <div className="mb-4 rounded-2xl border border-primary/20 bg-primary/5 p-3">
+                <p className="text-xs text-muted-foreground">
+                  {tCommunity('feed_controls.open_hashtags')}
+                </p>
+                <p className="text-sm font-semibold text-foreground">#{activeTag}</p>
+              </div>
+            ) : null}
             <CommunityLeaderboardCard
               contributorScope={contributorScope}
               basePath="/community"
-              extraQuery={{ sort, scope }}
+              extraQuery={{ sort, scope, tag: activeTag }}
             />
           </aside>
         </div>

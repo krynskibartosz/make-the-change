@@ -1,7 +1,5 @@
 import type { FeedScope, FeedSort } from '@make-the-change/core/shared'
-import { Loader2 } from 'lucide-react'
-import { Suspense } from 'react'
-import { getFeed } from '@/lib/social/feed.actions'
+import { getFeed } from '@/lib/social/feed.reads'
 import { createClient } from '@/lib/supabase/server'
 import { FeedClient } from './feed-client'
 
@@ -30,14 +28,11 @@ export async function Feed({
   ])
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-64 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      }
-    >
-      <FeedClient initialPosts={posts} hideCreatePost={hideCreatePost} canWrite={!!authData.user} />
-    </Suspense>
+    <FeedClient
+      initialPosts={posts}
+      hideCreatePost={hideCreatePost}
+      canWrite={!!authData.user}
+      guildId={guildId || undefined}
+    />
   )
 }

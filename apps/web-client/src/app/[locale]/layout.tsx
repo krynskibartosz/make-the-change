@@ -1,5 +1,5 @@
 import type { Brand } from '@make-the-change/core'
-import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
+import { defaultLocale, isLocale, locales, type Locale } from '@make-the-change/core/i18n'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { notFound } from 'next/navigation'
@@ -32,6 +32,10 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-inter',
 })
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }))
+}
 
 export default async function LocaleLayout({ children, modal, params }: LocaleLayoutProps) {
   const resolvedParams = await params

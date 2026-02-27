@@ -2,24 +2,30 @@
 
 import type { Post } from '@make-the-change/core/shared'
 import { Avatar, AvatarFallback, AvatarImage, Button, Textarea } from '@make-the-change/core/ui'
-import { Image as ImageIcon, Loader2, Send } from 'lucide-react'
+import { Loader2, Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { startTransition, useOptimistic, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from '@/i18n/navigation'
-import { createPost, toggleLike, toggleSuperLike } from '@/lib/social/feed.actions'
+import { createPost, toggleLike } from '@/lib/social/feed.actions'
 import { PostCard } from './post-card'
 
 interface FeedProps {
   initialPosts: Post[]
   hideCreatePost?: boolean
   canWrite?: boolean
+  guildId?: string
 }
 
 type OptimisticAction = { type: 'like'; postId: string } | { type: 'post'; post: Post }
 type FeedOptimisticAction = OptimisticAction | { type: 'remove_post'; postId: string }
 
-export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = false }: FeedProps) {
+export function FeedClient({
+  initialPosts,
+  hideCreatePost = false,
+  canWrite = false,
+  guildId,
+}: FeedProps) {
   const { toast } = useToast()
   const router = useRouter()
   const t = useTranslations('community')
@@ -85,24 +91,6 @@ export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = fa
     }
   }
 
-  const handleSuperLike = async (postId: string) => {
-    try {
-      await toggleSuperLike(postId)
-      toast({
-        title: t('feed.super_like_success_title'),
-        description: t('feed.super_like_success_description'),
-      })
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : t('feed.super_like_error_default')
-      toast({
-        title: t('feed.super_like_error_title'),
-        description: errorMessage,
-        variant: 'destructive',
-      })
-    }
-  }
-
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!canWrite) {
@@ -143,7 +131,7 @@ export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = fa
         author: {
           id: 'temp',
           full_name: t('thread.you_label'),
-          avatar_url: '/images/avatars/default.png',
+          avatar_url: '',
         },
         reactions_count: 0,
         comments_count: 0,
@@ -154,7 +142,7 @@ export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = fa
         setOptimisticPosts({ type: 'post', post: tempPost })
       })
 
-      await createPost(contentToPost)
+      await createPost(contentToPost, [], { guildId: guildId || null })
       router.refresh()
     } catch (error: unknown) {
       if (tempPostId) {
@@ -212,7 +200,7 @@ export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = fa
             <form onSubmit={handleCreatePost} className="space-y-4">
               <div className="flex gap-4">
                 <Avatar className="h-10 w-10 shrink-0">
-                  <AvatarImage src="/images/avatars/default.png" alt={t('thread.you_label')} />
+                  <AvatarImage alt={t('thread.you_label')} />
                   <AvatarFallback>V</AvatarFallback>
                 </Avatar>
                 <Textarea
@@ -239,17 +227,7 @@ export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = fa
                 ))}
               </div>
 
-              <div className="flex items-center justify-between border-t border-border/50 pt-3">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="gap-2 text-muted-foreground"
-                  disabled
-                >
-                  <ImageIcon className="h-4 w-4" />
-                  {t('feed.image_label')}
-                </Button>
+              <div className="flex items-center justify-end border-t border-border/50 pt-3">
                 <Button
                   type="submit"
                   size="sm"
@@ -293,7 +271,6 @@ export function FeedClient({ initialPosts, hideCreatePost = false, canWrite = fa
                 postHref={isTemporaryPost ? undefined : `/community/posts/${post.id}`}
                 readonlyActions={isTemporaryPost}
                 onLike={() => handleLike(post.id)}
-                onSuperLike={() => handleSuperLike(post.id)}
                 onComment={() => handleComment(post.id)}
                 onShare={() => handleShare(post.id)}
               />

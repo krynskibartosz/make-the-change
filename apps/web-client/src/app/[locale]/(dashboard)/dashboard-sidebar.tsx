@@ -16,6 +16,7 @@ import {
   ShoppingBag,
   Trophy,
   User,
+  Users,
   X,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -198,6 +199,7 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
     { href: '/', icon: Home, label: t('home') },
     { href: '/projects', icon: Leaf, label: t('projects') },
     { href: '/products', icon: ShoppingBag, label: t('products') },
+    { href: '/community', icon: Users, label: t('community') },
     { href: '/leaderboard', icon: Trophy, label: t('leaderboard') },
   ] satisfies ExploreNavItem[]
 

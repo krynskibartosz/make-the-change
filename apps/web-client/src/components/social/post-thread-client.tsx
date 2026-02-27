@@ -16,7 +16,7 @@ import { Loader2, MessageCircle } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
-import { addComment, toggleLike, toggleSuperLike } from '@/lib/social/feed.actions'
+import { addComment, toggleLike } from '@/lib/social/feed.actions'
 import { PostCard } from './post-card'
 
 type PostComment = {
@@ -62,24 +62,6 @@ export function PostThreadClient({ post, initialComments }: PostThreadClientProp
       toast({
         title: t('thread.login_required_title'),
         description: t('thread.login_required_description'),
-      })
-    }
-  }
-
-  const handleSuperLike = async () => {
-    try {
-      await toggleSuperLike(postState.id)
-      toast({
-        title: t('thread.super_like_success_title'),
-        description: t('thread.super_like_success_description'),
-      })
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : t('thread.super_like_error_default')
-      toast({
-        title: t('thread.super_like_error_title'),
-        description: errorMessage,
-        variant: 'destructive',
       })
     }
   }
@@ -132,7 +114,7 @@ export function PostThreadClient({ post, initialComments }: PostThreadClientProp
 
   return (
     <div className="space-y-6">
-      <PostCard post={postState} onLike={handleLike} onSuperLike={handleSuperLike} />
+      <PostCard post={postState} onLike={handleLike} />
 
       <Card>
         <CardContent className="space-y-4 p-4 sm:p-6">

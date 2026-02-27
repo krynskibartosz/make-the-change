@@ -2,11 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage, Button } from '@make-the-change/co
 import {
   Feather,
   Flame,
-  Hash,
   Home,
-  Leaf,
   LogIn,
-  MessageSquare,
+  Newspaper,
   MoreHorizontal,
   Search,
   ShoppingBag,
@@ -34,82 +32,78 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
   const navItems = [
     { icon: Home, label: t('home'), href: '/' as const },
     { icon: Search, label: t('discover'), href: '/products' as const },
-    { icon: Leaf, label: t('projects'), href: '/projects' as const },
     { icon: ShoppingBag, label: t('shop'), href: '/products' as const },
-    { icon: MessageSquare, label: t('community'), href: '/community' as const },
+    { icon: Newspaper, label: t('community'), href: '/community' as const },
   ]
 
   const initial = user ? (user.displayName || user.email || '?').charAt(0).toUpperCase() : '?'
 
   return (
-    <div className="flex flex-col h-full bg-background pt-4 pb-2 xl:px-4">
+    <div className="flex h-full flex-col bg-background pt-4 pb-2 sm:px-3 lg:px-4">
       {/* Logo */}
       <Link
         href="/"
-        className="flex items-center gap-3 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit mb-2"
+        className="mb-2 flex w-fit items-center gap-3 rounded-full p-3 transition-colors hover:bg-muted sm:px-4 sm:py-3"
       >
         <Logo variant="icon" height={32} width={32} className="h-8 w-8" />
-        <span className="hidden xl:inline text-xl font-bold">Make the Change</span>
+        <span className="hidden text-lg font-bold sm:inline lg:text-xl">Make the Change</span>
       </Link>
 
       {/* Navigation */}
-      <nav className="flex flex-col gap-1 items-center xl:items-start">
+      <nav className="flex flex-col items-center gap-1 sm:items-start">
         {navItems.map((item) => {
           const Icon = item.icon
           return (
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
+              title={item.label}
+              aria-label={item.label}
+              className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
             >
               <Icon className="w-7 h-7 stroke-[1.5px]" />
-              <span className="hidden xl:inline text-xl">{item.label}</span>
+              <span className="hidden text-lg sm:inline">{item.label}</span>
             </Link>
           )
         })}
         <Link
-          href="/community/trending"
-          className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
+          href="/community?sort=best"
+          title={tCommunity('sidebar.trending')}
+          aria-label={tCommunity('sidebar.trending')}
+          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
         >
           <Flame className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.trending')}</span>
+          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.trending')}</span>
         </Link>
         <Link
           href="/community/guilds"
-          className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
+          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
         >
           <Users className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.guilds')}</span>
-        </Link>
-        <Link
-          href="/community/hashtags"
-          className="group flex items-center gap-5 p-3 xl:px-4 xl:py-3 rounded-full hover:bg-muted transition-colors w-fit"
-        >
-          <Hash className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden xl:inline text-xl">{tCommunity('sidebar.hashtags')}</span>
+          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.guilds')}</span>
         </Link>
       </nav>
 
       {/* CTA Button */}
-      <div className="mt-6 w-full flex justify-center xl:block">
+      <div className="mt-6 flex w-full justify-center sm:block">
         <Button
           asChild
           size="lg"
-          className="w-[52px] h-[52px] xl:w-full xl:h-[52px] rounded-full p-0 xl:px-8 text-[17px] font-bold shadow-md"
+          className="h-[52px] w-[52px] rounded-full p-0 text-[17px] font-bold shadow-md sm:h-[52px] sm:w-full sm:px-6 lg:px-8"
         >
           <Link href="/community/posts/new">
-            <span className="hidden xl:inline">{tCommunity('sidebar.update_post')}</span>
-            <Feather className="w-6 h-6 xl:hidden" />
+            <span className="hidden sm:inline">{tCommunity('sidebar.update_post')}</span>
+            <Feather className="h-6 w-6 sm:hidden" />
           </Link>
         </Button>
       </div>
 
       {/* Profile / Login at bottom */}
-      <div className="mt-auto pt-4 w-full flex justify-center xl:block">
+      <div className="mt-auto flex w-full justify-center pt-4 sm:block">
         {user ? (
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 p-3 mt-2 rounded-full hover:bg-muted transition-colors w-fit xl:w-full justify-between"
+            className="mt-2 flex w-fit items-center justify-between gap-3 rounded-full p-3 transition-colors hover:bg-muted sm:w-full"
           >
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10">
@@ -118,7 +112,7 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
                   {initial}
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden xl:flex flex-col items-start overflow-hidden">
+              <div className="hidden flex-col items-start overflow-hidden sm:flex">
                 <span className="font-bold text-[15px] leading-tight truncate">
                   {user.displayName}
                 </span>
@@ -127,15 +121,15 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
                 </span>
               </div>
             </div>
-            <MoreHorizontal className="hidden xl:block w-5 h-5 text-muted-foreground" />
+            <MoreHorizontal className="hidden h-5 w-5 text-muted-foreground sm:block" />
           </Link>
         ) : (
           <Link
             href="/login"
-            className="flex items-center gap-3 p-3 mt-2 rounded-full hover:bg-muted transition-colors w-fit xl:w-full"
+            className="mt-2 flex w-fit items-center gap-3 rounded-full p-3 transition-colors hover:bg-muted sm:w-full"
           >
-            <LogIn className="w-7 h-7 stroke-[1.5px]" />
-            <span className="hidden xl:inline text-xl font-semibold">{t('login')}</span>
+            <LogIn className="h-7 w-7 stroke-[1.5px]" />
+            <span className="hidden text-lg font-semibold sm:inline">{t('login')}</span>
           </Link>
         )}
       </div>

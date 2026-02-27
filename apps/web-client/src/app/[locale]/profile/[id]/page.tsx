@@ -9,7 +9,7 @@ import { FeedClient } from '@/components/social/feed-client'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { createClient } from '@/lib/supabase/server'
-import { getUserFeed } from '@/lib/social/feed.actions'
+import { getUserFeed } from '@/lib/social/feed.reads'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
