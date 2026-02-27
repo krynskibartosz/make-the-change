@@ -14,7 +14,6 @@ try {
 const nextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
-  cacheComponents: true,
   experimental: {
     viewTransition: true,
   },
