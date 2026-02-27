@@ -1,5 +1,6 @@
 import { CheckCircle2, Shield, Sparkles, TrendingUp } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { connection } from 'next/server'
 import type { PropsWithChildren } from 'react'
 import { Logo } from '@/components/ui/logo'
 import { Link } from '@/i18n/navigation'
@@ -7,6 +8,7 @@ import { placeholderImages } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
 
 export default async function AuthLayout({ children }: PropsWithChildren) {
+  await connection()
   const t = await getTranslations('auth')
   const features = [
     { icon: Shield, text: t('layout.features.secure'), color: 'text-client-emerald-400' },
