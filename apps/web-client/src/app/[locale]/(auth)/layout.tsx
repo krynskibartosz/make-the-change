@@ -1,15 +1,15 @@
+'use client'
+
 import { CheckCircle2, Shield, Sparkles, TrendingUp } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { connection } from 'next/server'
+import { useTranslations } from 'next-intl'
 import type { PropsWithChildren } from 'react'
 import { Logo } from '@/components/ui/logo'
 import { Link } from '@/i18n/navigation'
 import { placeholderImages } from '@/lib/placeholder-images'
 import { cn } from '@/lib/utils'
 
-export default async function AuthLayout({ children }: PropsWithChildren) {
-  await connection()
-  const t = await getTranslations('auth')
+export default function AuthLayout({ children }: PropsWithChildren) {
+  const t = useTranslations('auth')
   const features = [
     { icon: Shield, text: t('layout.features.secure'), color: 'text-client-emerald-400' },
     { icon: TrendingUp, text: t('layout.features.tracking'), color: 'text-client-blue-400' },

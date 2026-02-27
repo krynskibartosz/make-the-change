@@ -1,8 +1,7 @@
 'use client'
 
 import type { PropsWithChildren } from 'react'
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { usePathname } from '@/i18n/navigation'
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
 
 type CartSnackbar = {
   id: string
@@ -26,7 +25,6 @@ const CartUIContext = createContext<CartUIContextValue | null>(null)
 let snackbarId = 0
 
 export function CartUIProvider({ children }: PropsWithChildren) {
-  const pathname = usePathname()
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [snackbar, setSnackbar] = useState<CartSnackbar | null>(null)
   const dismissTimerRef = useRef<number | null>(null)
@@ -68,14 +66,6 @@ export function CartUIProvider({ children }: PropsWithChildren) {
   const closeCart = useCallback(() => {
     setIsCartOpen(false)
   }, [])
-
-  useEffect(() => {
-    // Keep the "app surface" clean: the cart drawer should never be open on
-    // the dedicated cart/checkout routes.
-    if (pathname.startsWith('/cart') || pathname.startsWith('/checkout')) {
-      setIsCartOpen(false)
-    }
-  }, [pathname])
 
   const value = useMemo<CartUIContextValue>(
     () => ({
