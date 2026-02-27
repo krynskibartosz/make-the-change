@@ -11,7 +11,6 @@ import type {
   HashtagStats,
   Post,
 } from '@make-the-change/core/shared'
-import { cacheLife, cacheTag } from 'next/cache'
 import { cache } from 'react'
 import { getPublicAppUrl } from '@/lib/public-url'
 import {
@@ -600,11 +599,6 @@ const fetchPostsWindowDynamic = async (
 }
 
 const fetchPublicPostsWindowCached = async (sort: FeedSort, from: number, to: number) => {
-  'use cache'
-
-  cacheLife('minutes')
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-
   const supabase = createStaticClient()
   const query = supabase
     .schema('social')
@@ -740,11 +734,6 @@ const hydrateQuoteSourcePosts = async (posts: Post[]): Promise<Post[]> => {
 }
 
 const getFeedPublic = async (options: Required<FeedQueryOptions>) => {
-  'use cache'
-
-  cacheLife('minutes')
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-
   const inMemoryProcessing =
     options.sort === 'best' ||
     !!options.hashtagSlug ||
@@ -965,12 +954,6 @@ export const getPostById = cache(async (postId: string): Promise<Post | null> =>
 })
 
 export async function getPostPublicById(postId: string): Promise<Post | null> {
-  'use cache'
-
-  cacheLife('minutes')
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-  cacheTag(COMMUNITY_CACHE_TAGS.post(postId))
-
   const normalizedPostId = asString(postId).trim()
   if (!normalizedPostId) {
     return null
@@ -1104,12 +1087,6 @@ export async function getViewerBookmarkedPosts(limit = 40): Promise<Post[]> {
 }
 
 export async function getTrendingHashtags(limit = 8): Promise<HashtagStats[]> {
-  'use cache'
-
-  cacheLife('minutes')
-  cacheTag(COMMUNITY_CACHE_TAGS.hashtags)
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-
   const normalizedLimit = Math.max(1, limit)
   const supabase = createStaticClient()
 
@@ -1187,12 +1164,6 @@ export async function getTrendingHashtags(limit = 8): Promise<HashtagStats[]> {
 }
 
 export async function getHashtagStats(slug: string): Promise<HashtagStats> {
-  'use cache'
-
-  cacheLife('minutes')
-  cacheTag(COMMUNITY_CACHE_TAGS.hashtags)
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-
   const normalizedSlug = sanitizeHashtagSlug(slug)
   if (!normalizedSlug) {
     return {
@@ -1277,12 +1248,6 @@ export async function getTopContributors(
   limit = 5,
   hashtagSlug?: string,
 ): Promise<ContributorRank[]> {
-  'use cache'
-
-  cacheLife('minutes')
-  cacheTag(COMMUNITY_CACHE_TAGS.leaderboard)
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-
   const normalizedScope: ContributorScope = isContributorScope(scope) ? scope : 'all'
   const normalizedLimit = Math.max(1, limit)
 
@@ -1354,12 +1319,6 @@ const buildPostOgImageUrl = (postId: string, variant: string = 'default') =>
   `${getPublicAppUrl()}/api/og/community/post/${postId}?variant=${encodeURIComponent(variant)}`
 
 export async function getPostEmbedData(postId: string) {
-  'use cache'
-
-  cacheLife('hours')
-  cacheTag(COMMUNITY_CACHE_TAGS.feed)
-  cacheTag(COMMUNITY_CACHE_TAGS.post(postId))
-
   const post = await getPostPublicById(postId)
   if (!post) {
     return null
@@ -1450,12 +1409,6 @@ const mapGuildRow = (
 }
 
 const getGuildsPublic = async (limit: number): Promise<Guild[]> => {
-  'use cache'
-
-  cacheLife('hours')
-  cacheTag(COMMUNITY_CACHE_TAGS.guilds)
-  cacheTag(COMMUNITY_CACHE_TAGS.leaderboard)
-
   const normalizedLimit = Math.max(1, limit)
   const supabase = createStaticClient()
 
@@ -1660,12 +1613,6 @@ export async function getGuildLeaderboard(
   period: 'weekly' | 'monthly' = 'monthly',
   limit = 10,
 ): Promise<GuildLeaderboardEntry[]> {
-  'use cache'
-
-  cacheLife('hours')
-  cacheTag(COMMUNITY_CACHE_TAGS.guilds)
-  cacheTag(COMMUNITY_CACHE_TAGS.leaderboard)
-
   const normalizedLimit = Math.max(1, limit)
   const supabase = createStaticClient()
 
