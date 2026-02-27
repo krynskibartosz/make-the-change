@@ -1821,7 +1821,8 @@
     "actions": {
       "back_to_feed": "Back to feed",
       "share": "Share",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "retry": "Retry"
     },
     "sidebar": {
       "more": "More",
@@ -1852,8 +1853,14 @@
     "create_post": {
       "meta_title": "Community | New post",
       "heading": "New post",
+      "quote_heading": "Quote repost with your message",
+      "quote_helper": "Add your own context before reposting this post to the community.",
+      "quote_source_label": "Source post",
+      "quote_loading": "Loading source post...",
+      "quote_not_found": "The source post is no longer available.",
       "placeholder": "Share an update, an idea, or a question with the community...",
       "publish": "Publish",
+      "publish_quote": "Repost",
       "publishing": "Publishing...",
       "success_title": "Post published",
       "success_description": "Your message is now visible in the community.",
@@ -1896,7 +1903,15 @@
       "share_prefix": "Share",
       "share_fallback_title": "Make the Change post",
       "project_update_badge": "Project update",
-      "image_alt": "Post image from {name}"
+      "quote_badge": "Quote repost",
+      "quote_source_label": "Original post · {name}",
+      "open_original": "Open original",
+      "image_alt": "Post image from {name}",
+      "action_like": "Like this post",
+      "action_super_like": "Plant a seed",
+      "action_comment": "Open comments",
+      "action_share": "Share this post",
+      "action_more": "More actions"
     },
     "feed_controls": {
       "sort_best": "Best",
@@ -1907,18 +1922,35 @@
       "open_hashtags": "Explore hashtags"
     },
     "share": {
+      "title": "Share this post",
       "description": "Share this post with your network to amplify its impact.",
+      "preview_label": "Share preview",
+      "preview_image_alt": "Shared post preview",
+      "recommended_channels": "Recommended channels",
+      "more_channels": "More channels",
       "copy_link": "Copy link",
       "native_share": "Share from your phone",
       "share_on_x": "Share on X",
       "share_on_linkedin": "Share on LinkedIn",
       "share_on_facebook": "Share on Facebook",
+      "share_on_whatsapp": "Share on WhatsApp",
+      "share_on_telegram": "Share on Telegram",
+      "share_on_reddit": "Share on Reddit",
+      "share_via_email": "Share by email",
+      "embed_on_site": "Embed on my site",
+      "quote_repost": "Repost inside MTC",
+      "open_original_post": "Open original post",
+      "embed_help_link": "Embedding help (oEmbed)",
       "link_unavailable_title": "Link unavailable",
       "link_unavailable_description": "Cannot copy the link right now.",
       "link_copied_title": "Link copied",
       "link_copied_description": "The post link has been copied.",
+      "embed_copied_title": "Embed code copied",
+      "embed_copied_description": "The iframe snippet has been copied to your clipboard.",
       "link_copy_error_title": "Copy failed",
-      "link_copy_error_description": "Allow clipboard access and try again."
+      "link_copy_error_description": "Allow clipboard access and try again.",
+      "share_error_title": "Share unavailable",
+      "share_error_description": "Unable to launch this share action right now."
     },
     "guilds": {
       "meta_title": "Community | Guilds",

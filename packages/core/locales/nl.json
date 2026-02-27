@@ -1736,7 +1736,8 @@
     "actions": {
       "back_to_feed": "Terug naar feed",
       "share": "Delen",
-      "cancel": "Annuleren"
+      "cancel": "Annuleren",
+      "retry": "Opnieuw proberen"
     },
     "sidebar": {
       "more": "Meer",
@@ -1767,8 +1768,14 @@
     "create_post": {
       "meta_title": "Gemeenschap | Nieuwe post",
       "heading": "Nieuwe post",
+      "quote_heading": "Quote repost met je bericht",
+      "quote_helper": "Voeg je eigen context toe voordat je deze post opnieuw deelt in de community.",
+      "quote_source_label": "Bronpost",
+      "quote_loading": "Bronpost laden...",
+      "quote_not_found": "De bronpost is niet meer beschikbaar.",
       "placeholder": "Deel een update, idee of vraag met de community...",
       "publish": "Publiceren",
+      "publish_quote": "Opnieuw delen",
       "publishing": "Publiceren...",
       "success_title": "Post gepubliceerd",
       "success_description": "Je bericht is nu zichtbaar in de community.",
@@ -1811,7 +1818,15 @@
       "share_prefix": "Delen",
       "share_fallback_title": "Make the Change post",
       "project_update_badge": "Projectupdate",
-      "image_alt": "Postafbeelding van {name}"
+      "quote_badge": "Quote repost",
+      "quote_source_label": "Originele post · {name}",
+      "open_original": "Origineel openen",
+      "image_alt": "Postafbeelding van {name}",
+      "action_like": "Deze post liken",
+      "action_super_like": "Een zaadje planten",
+      "action_comment": "Reacties openen",
+      "action_share": "Deze post delen",
+      "action_more": "Meer acties"
     },
     "feed_controls": {
       "sort_best": "Beste",
@@ -1822,18 +1837,35 @@
       "open_hashtags": "Ontdek hashtags"
     },
     "share": {
+      "title": "Deze post delen",
       "description": "Deel deze post met je netwerk om de impact te vergroten.",
+      "preview_label": "Voorbeeld van delen",
+      "preview_image_alt": "Voorbeeld van gedeelde post",
+      "recommended_channels": "Aanbevolen kanalen",
+      "more_channels": "Meer kanalen",
       "copy_link": "Link kopiëren",
       "native_share": "Delen via telefoon",
       "share_on_x": "Delen op X",
       "share_on_linkedin": "Delen op LinkedIn",
       "share_on_facebook": "Delen op Facebook",
+      "share_on_whatsapp": "Delen op WhatsApp",
+      "share_on_telegram": "Delen op Telegram",
+      "share_on_reddit": "Delen op Reddit",
+      "share_via_email": "Delen via e-mail",
+      "embed_on_site": "Insluiten op mijn site",
+      "quote_repost": "Opnieuw delen in MTC",
+      "open_original_post": "Originele post openen",
+      "embed_help_link": "Insluit-hulp (oEmbed)",
       "link_unavailable_title": "Link niet beschikbaar",
       "link_unavailable_description": "De link kan nu niet worden gekopieerd.",
       "link_copied_title": "Link gekopieerd",
       "link_copied_description": "De link van de post is gekopieerd.",
+      "embed_copied_title": "Embed-code gekopieerd",
+      "embed_copied_description": "De iframe-snippet is naar je klembord gekopieerd.",
       "link_copy_error_title": "Kopiëren mislukt",
-      "link_copy_error_description": "Geef toegang tot klembord en probeer opnieuw."
+      "link_copy_error_description": "Geef toegang tot klembord en probeer opnieuw.",
+      "share_error_title": "Delen niet beschikbaar",
+      "share_error_description": "Deze deelactie kan nu niet worden gestart."
     },
     "guilds": {
       "meta_title": "Gemeenschap | Guilds",

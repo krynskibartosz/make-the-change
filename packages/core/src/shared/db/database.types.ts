@@ -123,9 +123,286 @@ type GamificationSchema = {
   CompositeTypes: GeneratedDatabase['public']['CompositeTypes']
 }
 
+type SocialSchema = {
+  Tables: {
+    posts: {
+      Row: {
+        id: string
+        author_id: string
+        content: string | null
+        image_urls: string[] | null
+        project_update_id: string | null
+        type: string
+        visibility: string
+        metadata: Json | null
+        shares_count: number | null
+        share_kind: 'original' | 'quote' | null
+        source_post_id: string | null
+        created_at: string
+        updated_at: string
+      }
+      Insert: {
+        id?: string
+        author_id: string
+        content?: string | null
+        image_urls?: string[] | null
+        project_update_id?: string | null
+        type?: string
+        visibility?: string
+        metadata?: Json | null
+        shares_count?: number | null
+        share_kind?: 'original' | 'quote' | null
+        source_post_id?: string | null
+        created_at?: string
+        updated_at?: string
+      }
+      Update: {
+        id?: string
+        author_id?: string
+        content?: string | null
+        image_urls?: string[] | null
+        project_update_id?: string | null
+        type?: string
+        visibility?: string
+        metadata?: Json | null
+        shares_count?: number | null
+        share_kind?: 'original' | 'quote' | null
+        source_post_id?: string | null
+        created_at?: string
+        updated_at?: string
+      }
+      Relationships: []
+    }
+    comments: {
+      Row: {
+        id: string
+        post_id: string
+        author_id: string
+        content: string
+        metadata: Json | null
+        created_at: string
+        updated_at: string
+      }
+      Insert: {
+        id?: string
+        post_id: string
+        author_id: string
+        content: string
+        metadata?: Json | null
+        created_at?: string
+        updated_at?: string
+      }
+      Update: {
+        id?: string
+        post_id?: string
+        author_id?: string
+        content?: string
+        metadata?: Json | null
+        created_at?: string
+        updated_at?: string
+      }
+      Relationships: []
+    }
+    reactions: {
+      Row: {
+        id: string
+        user_id: string
+        post_id: string | null
+        comment_id: string | null
+        type: string
+        created_at: string
+      }
+      Insert: {
+        id?: string
+        user_id: string
+        post_id?: string | null
+        comment_id?: string | null
+        type: string
+        created_at?: string
+      }
+      Update: {
+        id?: string
+        user_id?: string
+        post_id?: string | null
+        comment_id?: string | null
+        type?: string
+        created_at?: string
+      }
+      Relationships: []
+    }
+    post_shares: {
+      Row: {
+        id: string
+        post_id: string
+        user_id: string | null
+        channel: string
+        metadata: Json | null
+        created_at: string
+      }
+      Insert: {
+        id?: string
+        post_id: string
+        user_id?: string | null
+        channel: string
+        metadata?: Json | null
+        created_at?: string
+      }
+      Update: {
+        id?: string
+        post_id?: string
+        user_id?: string | null
+        channel?: string
+        metadata?: Json | null
+        created_at?: string
+      }
+      Relationships: []
+    }
+    post_share_events: {
+      Row: {
+        id: string
+        post_id: string
+        actor_user_id: string | null
+        channel: string
+        event_type: string
+        share_token: string | null
+        target_url: string | null
+        referrer: string | null
+        user_agent: string | null
+        metadata: Json | null
+        created_at: string
+      }
+      Insert: {
+        id?: string
+        post_id: string
+        actor_user_id?: string | null
+        user_id?: string | null
+        channel: string
+        event_type: string
+        share_token?: string | null
+        target_url?: string | null
+        referrer?: string | null
+        user_agent?: string | null
+        metadata?: Json | null
+        created_at?: string
+      }
+      Update: {
+        id?: string
+        post_id?: string
+        actor_user_id?: string | null
+        user_id?: string | null
+        channel?: string
+        event_type?: string
+        share_token?: string | null
+        target_url?: string | null
+        referrer?: string | null
+        user_agent?: string | null
+        metadata?: Json | null
+        created_at?: string
+      }
+      Relationships: []
+    }
+    hashtags: {
+      Row: {
+        id: string
+        slug: string
+        label: string | null
+        usage_count: number | null
+        created_at: string
+      }
+      Insert: {
+        id?: string
+        slug: string
+        label?: string | null
+        usage_count?: number | null
+        created_at?: string
+      }
+      Update: {
+        id?: string
+        slug?: string
+        label?: string | null
+        usage_count?: number | null
+        created_at?: string
+      }
+      Relationships: []
+    }
+    post_hashtags: {
+      Row: {
+        post_id: string
+        hashtag_id: string
+        hashtag_slug: string | null
+        created_at: string
+      }
+      Insert: {
+        post_id: string
+        hashtag_id: string
+        hashtag_slug?: string | null
+        created_at?: string
+      }
+      Update: {
+        post_id?: string
+        hashtag_id?: string
+        hashtag_slug?: string | null
+        created_at?: string
+      }
+      Relationships: []
+    }
+  }
+  Views: {
+    posts_with_authors: {
+      Row: {
+        id: string | null
+        author_id: string | null
+        content: string | null
+        image_urls: string[] | null
+        project_update_id: string | null
+        type: string | null
+        visibility: string | null
+        metadata: Json | null
+        shares_count: number | null
+        share_kind: 'original' | 'quote' | null
+        source_post_id: string | null
+        created_at: string | null
+        updated_at: string | null
+        author_full_name: string | null
+        author_avatar_url: string | null
+        author_type: 'citizen' | 'company' | null
+        guild_id: string | null
+        hashtags: string[] | null
+      }
+    }
+    comments_with_authors: {
+      Row: {
+        id: string | null
+        post_id: string | null
+        author_id: string | null
+        content: string | null
+        metadata: Json | null
+        created_at: string | null
+        updated_at: string | null
+        author_full_name: string | null
+        author_avatar_url: string | null
+      }
+    }
+    hashtag_stats: {
+      Row: {
+        slug: string | null
+        label: string | null
+        total_count: number | null
+        usage_count: number | null
+        today_count: number | null
+        month_count: number | null
+        year_count: number | null
+      }
+    }
+  }
+  Functions: Record<string, never>
+  Enums: Record<never, never>
+  CompositeTypes: Record<never, never>
+}
+
 export type Database = Omit<
   GeneratedDatabase,
-  'commerce' | 'investment' | 'cms' | 'content' | 'identity'
+  'commerce' | 'investment' | 'cms' | 'content' | 'identity' | 'social'
 > & {
   commerce: SchemaWithFunctions<GeneratedDatabase['commerce']>
   investment: SchemaWithFunctions<GeneratedDatabase['investment']>
@@ -133,6 +410,7 @@ export type Database = Omit<
   content: SchemaWithFunctions<GeneratedDatabase['content']>
   identity: SchemaWithFunctions<GeneratedDatabase['identity']>
   gamification: GamificationSchema
+  social: SocialSchema
 }
 
 export type {

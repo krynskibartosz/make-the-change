@@ -1875,7 +1875,8 @@
     "actions": {
       "back_to_feed": "Retour au feed",
       "share": "Partager",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "retry": "Réessayer"
     },
     "sidebar": {
       "more": "Plus",
@@ -1906,8 +1907,14 @@
     "create_post": {
       "meta_title": "Communauté | Nouvelle publication",
       "heading": "Nouvelle publication",
+      "quote_heading": "Repartager avec un message",
+      "quote_helper": "Ajoutez votre point de vue avant de republier ce post dans la communauté.",
+      "quote_source_label": "Post source",
+      "quote_loading": "Chargement du post source...",
+      "quote_not_found": "Le post source n'est plus disponible.",
       "placeholder": "Partagez une avancée, une idée ou une question avec la communauté...",
       "publish": "Publier",
+      "publish_quote": "Repartager",
       "publishing": "Publication...",
       "success_title": "Publication créée",
       "success_description": "Votre message est maintenant visible dans la communauté.",
@@ -1950,7 +1957,15 @@
       "share_prefix": "Partager",
       "share_fallback_title": "Publication Make the Change",
       "project_update_badge": "Mise à jour projet",
-      "image_alt": "Image de publication de {name}"
+      "quote_badge": "Quote repost",
+      "quote_source_label": "Post d'origine · {name}",
+      "open_original": "Voir l'original",
+      "image_alt": "Image de publication de {name}",
+      "action_like": "Aimer cette publication",
+      "action_super_like": "Planter une graine",
+      "action_comment": "Ouvrir les commentaires",
+      "action_share": "Partager cette publication",
+      "action_more": "Plus d’actions"
     },
     "feed_controls": {
       "sort_best": "Top",
@@ -1961,18 +1976,35 @@
       "open_hashtags": "Voir les hashtags"
     },
     "share": {
+      "title": "Partager ce post",
       "description": "Partagez cette publication avec votre réseau pour amplifier son impact.",
+      "preview_label": "Aperçu du partage",
+      "preview_image_alt": "Aperçu du post partagé",
+      "recommended_channels": "Canaux recommandés",
+      "more_channels": "Autres canaux",
       "copy_link": "Copier le lien",
       "native_share": "Partager via le téléphone",
       "share_on_x": "Partager sur X",
       "share_on_linkedin": "Partager sur LinkedIn",
       "share_on_facebook": "Partager sur Facebook",
+      "share_on_whatsapp": "Partager sur WhatsApp",
+      "share_on_telegram": "Partager sur Telegram",
+      "share_on_reddit": "Partager sur Reddit",
+      "share_via_email": "Partager par e-mail",
+      "embed_on_site": "Intégrer sur mon site",
+      "quote_repost": "Repartager dans MTC",
+      "open_original_post": "Voir le post original",
+      "embed_help_link": "Aide intégration (oEmbed)",
       "link_unavailable_title": "Lien indisponible",
       "link_unavailable_description": "Impossible de copier le lien pour le moment.",
       "link_copied_title": "Lien copié",
       "link_copied_description": "Le lien de la publication a été copié.",
+      "embed_copied_title": "Code d'intégration copié",
+      "embed_copied_description": "Le snippet iframe a été copié dans le presse-papiers.",
       "link_copy_error_title": "Copie impossible",
-      "link_copy_error_description": "Autorisez l’accès au presse-papiers puis réessayez."
+      "link_copy_error_description": "Autorisez l’accès au presse-papiers puis réessayez.",
+      "share_error_title": "Partage indisponible",
+      "share_error_description": "Impossible de lancer ce partage pour le moment."
     },
     "guilds": {
       "meta_title": "Communauté | Guildes",

@@ -7,8 +7,39 @@ export type PostVisibility = 'public' | 'guild_only' | 'private'
 export type ReactionType = 'like' | 'super_like' | 'plant'
 export type FeedSort = 'best' | 'newest' | 'oldest'
 export type FeedScope = 'all' | 'my_guilds'
-export type ShareChannel = 'copy' | 'x' | 'linkedin' | 'facebook' | 'native'
+export type ShareChannel =
+  | 'copy'
+  | 'x'
+  | 'linkedin'
+  | 'facebook'
+  | 'native'
+  | 'whatsapp'
+  | 'telegram'
+  | 'email'
+  | 'reddit'
+  | 'embed'
+  | 'internal_quote'
+export type ShareEventType =
+  | 'initiated'
+  | 'channel_clicked'
+  | 'link_copied'
+  | 'target_opened'
+  | 'landing'
+  | 'conversion'
+export type ShareKind = 'original' | 'quote'
 export type ContributorScope = 'all' | 'citizens' | 'companies'
+
+export interface QuotedPostSummary {
+  id: string
+  content: string | null
+  image_urls: string[]
+  created_at: string
+  author: {
+    id: string
+    full_name: string
+    avatar_url: string | null
+  }
+}
 
 export interface Post {
   id: string
@@ -31,6 +62,11 @@ export interface Post {
   score?: number
   shares_count?: number
   author_type?: 'citizen' | 'company'
+  share_kind?: ShareKind
+  source_post_id?: string | null
+  source_post?: QuotedPostSummary | null
+  share_url?: string
+  og_image_url?: string
   guild_id?: string | null
   comments_count?: number
   reactions_count?: number
