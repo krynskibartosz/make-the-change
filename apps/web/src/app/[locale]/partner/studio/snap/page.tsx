@@ -11,7 +11,7 @@ import { Textarea } from '@make-the-change/core/ui'
 import { Camera, X, Check, Loader2, Image as ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import { createProjectUpdate } from '../actions'
-import { useToast } from '@make-the-change/core/ui'
+import { useToast } from '@/hooks/use-toast'
 
 // Mock Projects (should be fetched from server)
 const MY_PROJECTS = [
