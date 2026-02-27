@@ -1744,6 +1744,8 @@
       "update_post": "Update plaatsen",
       "trending": "Trending",
       "guilds": "Guilds",
+      "likes": "Likes",
+      "bookmarks": "Bladwijzers",
       "hashtags": "Hashtags",
       "trending_hashtags": "Trending hashtags"
     },
@@ -1823,10 +1825,23 @@
       "open_original": "Origineel openen",
       "image_alt": "Postafbeelding van {name}",
       "action_like": "Deze post liken",
+      "action_bookmark": "Deze post opslaan",
       "action_super_like": "Een zaadje planten",
       "action_comment": "Reacties openen",
       "action_share": "Deze post delen",
       "action_more": "Meer acties"
+    },
+    "likes": {
+      "meta_title": "Gemeenschap | Mijn likes",
+      "title": "Posts die je leuk vond",
+      "description": "Bekijk snel de posts waarop je hebt gereageerd.",
+      "shortcut": "Mijn likes"
+    },
+    "bookmarks": {
+      "meta_title": "Gemeenschap | Bladwijzers",
+      "title": "Opgeslagen posts",
+      "description": "Bewaar belangrijke community-posts en kom later terug.",
+      "shortcut": "Bladwijzers"
     },
     "feed_controls": {
       "sort_best": "Beste",

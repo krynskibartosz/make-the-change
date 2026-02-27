@@ -71,6 +71,32 @@ export interface Post {
   comments_count?: number
   reactions_count?: number
   user_has_reacted?: boolean
+  user_has_bookmarked?: boolean
+}
+
+export interface PostMedia {
+  id: string
+  post_id: string
+  public_url: string
+  mime_type: string
+  size_bytes: number
+  width: number | null
+  height: number | null
+  alt_text: string | null
+  sort_order: number
+  status: string
+}
+
+export interface UserLikedPost {
+  user_id: string
+  post_id: string
+  liked_at: string
+}
+
+export interface UserBookmarkedPost {
+  user_id: string
+  post_id: string
+  bookmarked_at: string
 }
 
 export interface Comment {

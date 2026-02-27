@@ -1,5 +1,4 @@
-import type { Database as GeneratedDatabase } from './database.generated'
-import type { Json } from './database.generated'
+import type { Database as GeneratedDatabase, Json } from './database.generated'
 
 type SchemaWithFunctions<TSchema> = TSchema extends {
   Tables: infer Tables
@@ -346,6 +345,84 @@ type SocialSchema = {
       }
       Relationships: []
     }
+    bookmarks: {
+      Row: {
+        id: string
+        user_id: string
+        post_id: string
+        created_at: string
+      }
+      Insert: {
+        id?: string
+        user_id: string
+        post_id: string
+        created_at?: string
+      }
+      Update: {
+        id?: string
+        user_id?: string
+        post_id?: string
+        created_at?: string
+      }
+      Relationships: []
+    }
+    post_media: {
+      Row: {
+        id: string
+        post_id: string
+        owner_id: string
+        public_url: string
+        storage_bucket: string
+        storage_path: string
+        mime_type: string
+        size_bytes: number
+        width: number | null
+        height: number | null
+        blurhash: string | null
+        alt_text: string | null
+        sort_order: number
+        status: string
+        moderation: Json
+        created_at: string
+      }
+      Insert: {
+        id?: string
+        post_id: string
+        owner_id: string
+        public_url: string
+        storage_bucket: string
+        storage_path: string
+        mime_type: string
+        size_bytes: number
+        width?: number | null
+        height?: number | null
+        blurhash?: string | null
+        alt_text?: string | null
+        sort_order?: number
+        status?: string
+        moderation?: Json
+        created_at?: string
+      }
+      Update: {
+        id?: string
+        post_id?: string
+        owner_id?: string
+        public_url?: string
+        storage_bucket?: string
+        storage_path?: string
+        mime_type?: string
+        size_bytes?: number
+        width?: number | null
+        height?: number | null
+        blurhash?: string | null
+        alt_text?: string | null
+        sort_order?: number
+        status?: string
+        moderation?: Json
+        created_at?: string
+      }
+      Relationships: []
+    }
   }
   Views: {
     posts_with_authors: {
@@ -394,6 +471,20 @@ type SocialSchema = {
         year_count: number | null
       }
     }
+    user_liked_posts: {
+      Row: {
+        user_id: string | null
+        post_id: string | null
+        liked_at: string | null
+      }
+    }
+    user_bookmarked_posts: {
+      Row: {
+        user_id: string | null
+        post_id: string | null
+        bookmarked_at: string | null
+      }
+    }
   }
   Functions: Record<string, never>
   Enums: Record<never, never>
@@ -402,11 +493,10 @@ type SocialSchema = {
 
 export type Database = Omit<
   GeneratedDatabase,
-  'commerce' | 'investment' | 'cms' | 'content' | 'identity' | 'social'
+  'commerce' | 'investment' | 'content' | 'identity' | 'social'
 > & {
   commerce: SchemaWithFunctions<GeneratedDatabase['commerce']>
   investment: SchemaWithFunctions<GeneratedDatabase['investment']>
-  cms: SchemaWithFunctions<GeneratedDatabase['cms']>
   content: SchemaWithFunctions<GeneratedDatabase['content']>
   identity: SchemaWithFunctions<GeneratedDatabase['identity']>
   gamification: GamificationSchema

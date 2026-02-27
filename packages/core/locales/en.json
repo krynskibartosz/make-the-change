@@ -1829,6 +1829,8 @@
       "update_post": "Post update",
       "trending": "Trending",
       "guilds": "Guilds",
+      "likes": "Likes",
+      "bookmarks": "Bookmarks",
       "hashtags": "Hashtags",
       "trending_hashtags": "Trending hashtags"
     },
@@ -1908,10 +1910,23 @@
       "open_original": "Open original",
       "image_alt": "Post image from {name}",
       "action_like": "Like this post",
+      "action_bookmark": "Save this post",
       "action_super_like": "Plant a seed",
       "action_comment": "Open comments",
       "action_share": "Share this post",
       "action_more": "More actions"
+    },
+    "likes": {
+      "meta_title": "Community | My likes",
+      "title": "Posts you liked",
+      "description": "Quickly revisit the posts you reacted to.",
+      "shortcut": "My likes"
+    },
+    "bookmarks": {
+      "meta_title": "Community | Bookmarks",
+      "title": "Saved posts",
+      "description": "Keep important community posts and come back anytime.",
+      "shortcut": "Bookmarks"
     },
     "feed_controls": {
       "sort_best": "Best",

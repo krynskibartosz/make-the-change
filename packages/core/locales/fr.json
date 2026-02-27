@@ -1883,6 +1883,8 @@
       "update_post": "Mettre à jour",
       "trending": "Tendances",
       "guilds": "Guildes",
+      "likes": "Likes",
+      "bookmarks": "Signets",
       "hashtags": "Hashtags",
       "trending_hashtags": "Hashtags tendances"
     },
@@ -1962,10 +1964,23 @@
       "open_original": "Voir l'original",
       "image_alt": "Image de publication de {name}",
       "action_like": "Aimer cette publication",
+      "action_bookmark": "Enregistrer cette publication",
       "action_super_like": "Planter une graine",
       "action_comment": "Ouvrir les commentaires",
       "action_share": "Partager cette publication",
       "action_more": "Plus d’actions"
+    },
+    "likes": {
+      "meta_title": "Communauté | Mes likes",
+      "title": "Publications likées",
+      "description": "Retrouvez rapidement les publications auxquelles vous avez réagi.",
+      "shortcut": "Mes likes"
+    },
+    "bookmarks": {
+      "meta_title": "Communauté | Signets",
+      "title": "Publications enregistrées",
+      "description": "Gardez les posts importants de la communauté et revenez-y quand vous voulez.",
+      "shortcut": "Mes signets"
     },
     "feed_controls": {
       "sort_best": "Top",
