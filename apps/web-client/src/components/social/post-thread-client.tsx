@@ -16,7 +16,7 @@ import { Loader2, MessageCircle } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
-import { addComment, toggleLike } from '@/lib/social/feed.actions'
+import { addComment, toggleBookmark, toggleLike } from '@/lib/social/feed.actions'
 import { PostCard } from './post-card'
 
 type PostComment = {
@@ -112,9 +112,28 @@ export function PostThreadClient({ post, initialComments }: PostThreadClientProp
     }
   }
 
+  const handleBookmark = async () => {
+    const previous = postState
+
+    setPostState((current) => ({
+      ...current,
+      user_has_bookmarked: !current.user_has_bookmarked,
+    }))
+
+    try {
+      await toggleBookmark(postState.id)
+    } catch (_error) {
+      setPostState(previous)
+      toast({
+        title: t('thread.login_required_title'),
+        description: t('thread.login_required_description'),
+      })
+    }
+  }
+
   return (
     <div className="space-y-6">
-      <PostCard post={postState} onLike={handleLike} />
+      <PostCard post={postState} onLike={handleLike} onBookmark={handleBookmark} />
 
       <Card>
         <CardContent className="space-y-4 p-4 sm:p-6">

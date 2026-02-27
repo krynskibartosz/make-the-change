@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import { startTransition, useOptimistic, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from '@/i18n/navigation'
-import { createPost, toggleLike } from '@/lib/social/feed.actions'
+import { createPost, toggleBookmark, toggleLike } from '@/lib/social/feed.actions'
 import { PostCard } from './post-card'
 
 interface FeedProps {
@@ -17,7 +17,10 @@ interface FeedProps {
   guildId?: string
 }
 
-type OptimisticAction = { type: 'like'; postId: string } | { type: 'post'; post: Post }
+type OptimisticAction =
+  | { type: 'like'; postId: string }
+  | { type: 'bookmark'; postId: string }
+  | { type: 'post'; post: Post }
 type FeedOptimisticAction = OptimisticAction | { type: 'remove_post'; postId: string }
 
 export function FeedClient({
@@ -58,6 +61,18 @@ export function FeedClient({
       if (action.type === 'post') {
         return [action.post, ...currentPosts]
       }
+      if (action.type === 'bookmark') {
+        return currentPosts.map((post) => {
+          if (post.id !== action.postId) {
+            return post
+          }
+
+          return {
+            ...post,
+            user_has_bookmarked: !post.user_has_bookmarked,
+          }
+        })
+      }
       if (action.type === 'remove_post') {
         return currentPosts.filter((post) => post.id !== action.postId)
       }
@@ -77,6 +92,30 @@ export function FeedClient({
     } catch (_error) {
       startTransition(() => {
         setOptimisticPosts({ type: 'like', postId })
+      })
+
+      toast({
+        title: t('feed.login_required_title'),
+        description: t('feed.login_required_description'),
+        action: (
+          <Button variant="outline" size="sm" onClick={() => router.push('/login')}>
+            {tNav('login')}
+          </Button>
+        ),
+      })
+    }
+  }
+
+  const handleBookmark = async (postId: string) => {
+    startTransition(() => {
+      setOptimisticPosts({ type: 'bookmark', postId })
+    })
+
+    try {
+      await toggleBookmark(postId)
+    } catch (_error) {
+      startTransition(() => {
+        setOptimisticPosts({ type: 'bookmark', postId })
       })
 
       toast({
@@ -136,6 +175,7 @@ export function FeedClient({
         reactions_count: 0,
         comments_count: 0,
         user_has_reacted: false,
+        user_has_bookmarked: false,
       }
 
       startTransition(() => {
@@ -271,6 +311,7 @@ export function FeedClient({
                 postHref={isTemporaryPost ? undefined : `/community/posts/${post.id}`}
                 readonlyActions={isTemporaryPost}
                 onLike={() => handleLike(post.id)}
+                onBookmark={() => handleBookmark(post.id)}
                 onComment={() => handleComment(post.id)}
                 onShare={() => handleShare(post.id)}
               />

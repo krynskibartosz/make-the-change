@@ -117,6 +117,22 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
           <div className="sticky top-0 z-20 space-y-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-md">
             <h1 className="text-xl font-bold">{t('community')}</h1>
             <CommunityFeedControls sort={sort} scope={scope} showScope={!!user} />
+            {user ? (
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <Link
+                  href="/community/likes"
+                  className="rounded-full border border-border/70 bg-background px-3 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {tCommunity('likes.shortcut')}
+                </Link>
+                <Link
+                  href="/community/bookmarks"
+                  className="rounded-full border border-border/70 bg-background px-3 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {tCommunity('bookmarks.shortcut')}
+                </Link>
+              </div>
+            ) : null}
             <form
               method="get"
               className="flex items-center gap-2 rounded-xl border border-border/70 bg-background px-3 py-2"

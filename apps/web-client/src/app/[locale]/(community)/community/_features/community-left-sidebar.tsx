@@ -1,11 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@make-the-change/core/ui'
 import {
+  Bookmark,
   Feather,
   Flame,
+  Heart,
   Home,
   LogIn,
-  Newspaper,
   MoreHorizontal,
+  Newspaper,
   Search,
   ShoppingBag,
   Users,
@@ -81,6 +83,20 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
         >
           <Users className="w-7 h-7 stroke-[1.5px]" />
           <span className="hidden text-lg sm:inline">{tCommunity('sidebar.guilds')}</span>
+        </Link>
+        <Link
+          href="/community/likes"
+          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
+        >
+          <Heart className="w-7 h-7 stroke-[1.5px]" />
+          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.likes')}</span>
+        </Link>
+        <Link
+          href="/community/bookmarks"
+          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
+        >
+          <Bookmark className="w-7 h-7 stroke-[1.5px]" />
+          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.bookmarks')}</span>
         </Link>
       </nav>
 

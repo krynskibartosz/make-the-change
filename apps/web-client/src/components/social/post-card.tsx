@@ -4,7 +4,7 @@ import type { Post } from '@make-the-change/core/shared'
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button } from '@make-the-change/core/ui'
 import { formatDistanceToNow } from 'date-fns'
 import { enUS, fr, nl as nlLocale } from 'date-fns/locale'
-import { Heart, MessageCircle, Share2 } from 'lucide-react'
+import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import type { MouseEvent } from 'react'
@@ -16,6 +16,7 @@ interface PostCardProps {
   postHref?: string
   readonlyActions?: boolean
   onLike?: (postId: string) => void
+  onBookmark?: (postId: string) => void
   onComment?: (postId: string) => void
   onShare?: (postId: string) => void
 }
@@ -25,6 +26,7 @@ export function PostCard({
   postHref,
   readonlyActions = false,
   onLike,
+  onBookmark,
   onComment,
   onShare,
 }: PostCardProps) {
@@ -46,6 +48,7 @@ export function PostCard({
   const quoteAuthorName = quoteSource?.author.full_name || t('thread.user_fallback')
   const quoteSourceImage = quoteSource?.image_urls[0]
   const likeActionLabel = t('post.action_like')
+  const bookmarkActionLabel = t('post.action_bookmark')
   const commentActionLabel = t('post.action_comment')
   const shareActionLabel = t('post.action_share')
 
@@ -260,6 +263,16 @@ export function PostCard({
             >
               <MessageCircle className="h-4 w-4" />
               <span className="text-xs font-medium">{post.comments_count || 0}</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label={bookmarkActionLabel}
+              className={`min-h-11 min-w-11 text-muted-foreground hover:text-foreground ${post.user_has_bookmarked ? 'text-primary hover:text-primary' : ''}`}
+              onClick={() => onBookmark?.(post.id)}
+              disabled={readonlyActions || !onBookmark}
+            >
+              <Bookmark className={`h-4 w-4 ${post.user_has_bookmarked ? 'fill-current' : ''}`} />
             </Button>
           </div>
 

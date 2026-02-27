@@ -162,35 +162,9 @@ const upsertHashtagRelations = async (postId: string, hashtags: string[]) => {
   }
 }
 
-const insertPostWithSchemaFallback = async (payload: Record<string, unknown>) => {
+const insertPost = async (payload: Record<string, unknown>) => {
   const supabase = await createClient()
-  const insertWithQuoteColumns = await supabase
-    .schema('social')
-    .from('posts')
-    .insert(payload)
-    .select()
-    .single()
-
-  if (!insertWithQuoteColumns.error && insertWithQuoteColumns.data) {
-    return insertWithQuoteColumns
-  }
-
-  const fallbackPayload = { ...payload }
-  delete fallbackPayload.share_kind
-  delete fallbackPayload.source_post_id
-
-  const fallbackInsert = await supabase
-    .schema('social')
-    .from('posts')
-    .insert(fallbackPayload)
-    .select()
-    .single()
-
-  if (!fallbackInsert.error && fallbackInsert.data) {
-    return fallbackInsert
-  }
-
-  return insertWithQuoteColumns
+  return supabase.schema('social').from('posts').insert(payload).select().single()
 }
 
 export async function toggleLike(postId: string) {
@@ -237,6 +211,51 @@ export async function toggleLike(postId: string) {
   revalidatePath('/profile/[id]')
 
   return isLiked
+}
+
+export async function toggleBookmark(postId: string) {
+  const normalizedPostId = asString(postId).trim()
+  if (!normalizedPostId) {
+    throw new Error('Publication invalide')
+  }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('Vous devez être connecté')
+  }
+
+  const { data: existing } = await supabase
+    .schema('social')
+    .from('bookmarks')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('post_id', normalizedPostId)
+    .maybeSingle()
+
+  let isBookmarked = false
+
+  if (existing?.id) {
+    await supabase.schema('social').from('bookmarks').delete().eq('id', existing.id)
+    isBookmarked = false
+  } else {
+    await supabase
+      .schema('social')
+      .from('bookmarks')
+      .insert({ user_id: user.id, post_id: normalizedPostId })
+    isBookmarked = true
+  }
+
+  invalidateCommunityCaches({ postId: normalizedPostId })
+  revalidatePath('/community')
+  revalidatePath('/community/bookmarks')
+  revalidatePath('/dashboard')
+  revalidatePath('/profile/[id]')
+
+  return isBookmarked
 }
 
 export async function createPost(
@@ -300,7 +319,7 @@ export async function createPost(
     metadata,
   }
 
-  const insertResponse = await insertPostWithSchemaFallback(payload)
+  const insertResponse = await insertPost(payload)
 
   if (insertResponse.error || !insertResponse.data) {
     console.error('Error creating post:', JSON.stringify(insertResponse.error, null, 2))
@@ -384,7 +403,7 @@ export async function createQuoteRepost(
     metadata,
   }
 
-  const insertResponse = await insertPostWithSchemaFallback(payload)
+  const insertResponse = await insertPost(payload)
 
   if (insertResponse.error || !insertResponse.data) {
     console.error('Error creating quote repost:', JSON.stringify(insertResponse.error, null, 2))

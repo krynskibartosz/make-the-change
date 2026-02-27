@@ -44,6 +44,10 @@ type CommentViewRow = Database['social']['Views']['comments_with_authors']['Row'
 type HashtagStatsViewRow = Database['social']['Views']['hashtag_stats']['Row'] & {
   hashtag_slug?: string | null
 }
+type PostMediaRow = Pick<
+  Database['social']['Tables']['post_media']['Row'],
+  'post_id' | 'public_url' | 'sort_order' | 'status'
+>
 
 type ContributorAggregation = {
   user_id: string
@@ -311,6 +315,7 @@ const mapRowToPost = (row: unknown, userHasReacted: boolean): Post | null => {
     reactions_count: reactionsCount,
     comments_count: commentsCount,
     user_has_reacted: userHasReacted,
+    user_has_bookmarked: false,
   }
 
   mapped.score = Number.isFinite(asNumber(row.score, Number.NaN))
@@ -420,6 +425,135 @@ const extractUserReactionsMap = async (
     },
     {} as Record<string, boolean>,
   )
+}
+
+const extractUserBookmarksMap = async (
+  userId: string | undefined,
+  postIds: string[],
+): Promise<Record<string, boolean>> => {
+  if (!userId || postIds.length === 0) {
+    return {}
+  }
+
+  const supabase = await createClient()
+  const { data: bookmarks } = await supabase
+    .schema('social')
+    .from('bookmarks')
+    .select('post_id')
+    .eq('user_id', userId)
+    .in('post_id', postIds)
+
+  if (!bookmarks) {
+    return {}
+  }
+
+  return bookmarks.reduce(
+    (acc: Record<string, boolean>, bookmark: { post_id: string | null }) => {
+      if (bookmark.post_id) {
+        acc[bookmark.post_id] = true
+      }
+
+      return acc
+    },
+    {} as Record<string, boolean>,
+  )
+}
+
+const fetchPostMediaRows = async (
+  postIds: string[],
+  useStaticClient: boolean,
+): Promise<PostMediaRow[]> => {
+  if (postIds.length === 0) {
+    return []
+  }
+
+  const supabase = useStaticClient ? createStaticClient() : await createClient()
+  const { data, error } = await supabase
+    .schema('social')
+    .from('post_media')
+    .select('post_id, public_url, sort_order, status')
+    .in('post_id', postIds)
+    .order('sort_order', { ascending: true })
+
+  if (error || !data) {
+    return []
+  }
+
+  return data
+}
+
+const mergePostMediaIntoPosts = async (
+  posts: Post[],
+  useStaticClient: boolean,
+): Promise<Post[]> => {
+  if (posts.length === 0) {
+    return posts
+  }
+
+  const postIds = [...new Set(posts.map((post) => post.id).filter(Boolean))]
+  const mediaRows = await fetchPostMediaRows(postIds, useStaticClient)
+  if (mediaRows.length === 0) {
+    return posts
+  }
+
+  const mediaByPostId = new Map<string, string[]>()
+
+  for (const media of mediaRows) {
+    const postId = asString(media.post_id).trim()
+    const publicUrl = asString(media.public_url).trim()
+    if (!postId || !publicUrl) {
+      continue
+    }
+
+    const status = asString(media.status).trim().toLowerCase()
+    if (status && status !== 'ready') {
+      continue
+    }
+
+    const existing = mediaByPostId.get(postId) || []
+    if (!existing.includes(publicUrl)) {
+      existing.push(publicUrl)
+      mediaByPostId.set(postId, existing)
+    }
+  }
+
+  return posts.map((post) => {
+    const postMediaUrls = mediaByPostId.get(post.id)
+    if (!postMediaUrls || postMediaUrls.length === 0) {
+      return post
+    }
+
+    return {
+      ...post,
+      image_urls: [...new Set([...(post.image_urls || []), ...postMediaUrls])],
+    }
+  })
+}
+
+const applyViewerStateToPosts = async (posts: Post[], userId?: string): Promise<Post[]> => {
+  if (!userId || posts.length === 0) {
+    return posts.map((post) => ({
+      ...post,
+      user_has_reacted: !!post.user_has_reacted,
+      user_has_bookmarked: !!post.user_has_bookmarked,
+    }))
+  }
+
+  const postIds = [...new Set(posts.map((post) => post.id).filter(Boolean))]
+  if (postIds.length === 0) {
+    return posts
+  }
+
+  const [reactionsMap, bookmarksMap] = await Promise.all([
+    extractUserReactionsMap(userId, postIds),
+    extractUserBookmarksMap(userId, postIds),
+  ])
+
+  return posts.map((post) => ({
+    ...post,
+    user_has_reacted: !!reactionsMap[post.id],
+    user_has_bookmarked: !!bookmarksMap[post.id],
+  }))
 }
 
 const getUserGuildIds = async (userId: string): Promise<string[]> => {
@@ -580,7 +714,9 @@ const hydrateQuoteSourcePosts = async (posts: Post[]): Promise<Post[]> => {
       share_kind: 'original' as const,
     }))
 
-  const sourceMap = new Map<string, Post>(sourcePosts.map((post) => [post.id, post]))
+  const sourcePostsWithMedia = await mergePostMediaIntoPosts(sourcePosts, true)
+
+  const sourceMap = new Map<string, Post>(sourcePostsWithMedia.map((post) => [post.id, post]))
 
   for (const post of posts) {
     sourceMap.set(post.id, post)
@@ -627,6 +763,7 @@ const getFeedPublic = async (options: Required<FeedQueryOptions>) => {
     .map((row: unknown) => mapRowToPost(row, false))
     .filter((post): post is Post => post !== null)
 
+  posts = await mergePostMediaIntoPosts(posts, true)
   posts = filterPostsByHashtag(posts, options.hashtagSlug)
   posts = filterPostsByGuildId(posts, options.guildId)
   posts = await hydrateQuoteSourcePosts(posts)
@@ -691,25 +828,21 @@ export async function getFeed(
       ...filterRowsByGuildIds(guildResult.data || [], guildIds),
     ])
   } else {
-    return getFeedPublic(options)
+    const publicPosts = await getFeedPublic(options)
+    return applyViewerStateToPosts(publicPosts, user?.id)
   }
 
-  const postIds = rawRows
-    .map((row) => (isRecord(row) ? asString(row.id) : ''))
-    .filter((postId): postId is string => postId.length > 0)
-
-  const userReactionsMap = await extractUserReactionsMap(user?.id, postIds)
-
   let posts = rawRows
-    .map((row) => mapRowToPost(row, !!userReactionsMap[isRecord(row) ? asString(row.id) : '']))
+    .map((row) => mapRowToPost(row, false))
     .filter((post): post is Post => post !== null)
 
+  posts = await mergePostMediaIntoPosts(posts, false)
   posts = filterPostsByHashtag(posts, options.hashtagSlug)
   posts = filterPostsByGuildId(posts, options.guildId)
   posts = await hydrateQuoteSourcePosts(posts)
   posts = sortPosts(posts, options.sort)
-
-  return posts.slice(from, to + 1)
+  const paginatedPosts = posts.slice(from, to + 1)
+  return applyViewerStateToPosts(paginatedPosts, user?.id)
 }
 
 export async function getHashtagFeed(
@@ -748,17 +881,13 @@ export async function getUserFeed(userId: string, page = 1, limit = 20) {
     throw new Error("Impossible de charger le fil d'actualité de l'utilisateur")
   }
 
-  const postIds = (posts || [])
-    .map((post: PostRowWithCounts) => asString(post.id))
-    .filter((postId): postId is string => postId.length > 0)
-
-  const userReactionsMap = await extractUserReactionsMap(user?.id, postIds)
-
-  const mappedPosts = (posts || [])
-    .map((post: PostRowWithCounts) => mapRowToPost(post, !!userReactionsMap[asString(post.id)]))
+  let mappedPosts = (posts || [])
+    .map((post: PostRowWithCounts) => mapRowToPost(post, false))
     .filter((post): post is Post => post !== null)
 
-  return hydrateQuoteSourcePosts(mappedPosts)
+  mappedPosts = await mergePostMediaIntoPosts(mappedPosts, false)
+  mappedPosts = await hydrateQuoteSourcePosts(mappedPosts)
+  return applyViewerStateToPosts(mappedPosts, user?.id)
 }
 
 /**
@@ -824,14 +953,15 @@ export const getPostById = cache(async (postId: string): Promise<Post | null> =>
     }
   }
 
-  const userReactionsMap = await extractUserReactionsMap(user?.id, [asString(post.id)])
-  const mappedPost = mapRowToPost(post, !!userReactionsMap[asString(post.id)])
+  const mappedPost = mapRowToPost(post, false)
   if (!mappedPost) {
     return null
   }
 
-  const hydrated = await hydrateQuoteSourcePosts([mappedPost])
-  return hydrated[0] || null
+  const withMedia = await mergePostMediaIntoPosts([mappedPost], false)
+  const hydrated = await hydrateQuoteSourcePosts(withMedia)
+  const viewerStatePosts = await applyViewerStateToPosts(hydrated, user?.id)
+  return viewerStatePosts[0] || null
 })
 
 export async function getPostPublicById(postId: string): Promise<Post | null> {
@@ -864,8 +994,113 @@ export async function getPostPublicById(postId: string): Promise<Post | null> {
     return null
   }
 
-  const hydrated = await hydrateQuoteSourcePosts([mapped])
+  const withMedia = await mergePostMediaIntoPosts([mapped], true)
+  const hydrated = await hydrateQuoteSourcePosts(withMedia)
   return hydrated[0] || null
+}
+
+const canViewerReadPost = (post: Post, viewerId: string, viewerGuildIds: Set<string>): boolean => {
+  if (post.visibility === 'public') {
+    return true
+  }
+
+  if (post.visibility === 'private') {
+    return post.author_id === viewerId
+  }
+
+  const guildId = asString(post.guild_id).trim() || asString(post.metadata.guild_id).trim()
+  return !!guildId && viewerGuildIds.has(guildId)
+}
+
+const orderPostsByIds = (posts: Post[], orderedIds: string[]): Post[] => {
+  const postById = new Map(posts.map((post) => [post.id, post] as const))
+  return orderedIds.map((postId) => postById.get(postId)).filter((post): post is Post => !!post)
+}
+
+const getViewerSavedPosts = async (kind: 'likes' | 'bookmarks', limit: number): Promise<Post[]> => {
+  const normalizedLimit = Math.max(1, limit)
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return []
+  }
+
+  let savedRows: Array<{ post_id: string | null }> = []
+
+  if (kind === 'likes') {
+    const { data, error } = await supabase
+      .schema('social')
+      .from('user_liked_posts')
+      .select('post_id, liked_at')
+      .eq('user_id', user.id)
+      .order('liked_at', { ascending: false })
+      .limit(normalizedLimit)
+
+    if (error || !data) {
+      return []
+    }
+
+    savedRows = data
+  } else {
+    const { data, error } = await supabase
+      .schema('social')
+      .from('user_bookmarked_posts')
+      .select('post_id, bookmarked_at')
+      .eq('user_id', user.id)
+      .order('bookmarked_at', { ascending: false })
+      .limit(normalizedLimit)
+
+    if (error || !data) {
+      return []
+    }
+
+    savedRows = data
+  }
+
+  const orderedPostIds = [
+    ...new Set(
+      savedRows
+        .map((row) => asString(row.post_id).trim())
+        .filter((postId): postId is string => postId.length > 0),
+    ),
+  ]
+
+  if (orderedPostIds.length === 0) {
+    return []
+  }
+
+  const { data: postRows, error: postRowsError } = await supabase
+    .schema('social')
+    .from('posts_with_authors')
+    .select(POSTS_SELECT_EXPRESSION)
+    .in('id', orderedPostIds)
+
+  if (postRowsError || !postRows) {
+    return []
+  }
+
+  let posts = postRows
+    .map((row: unknown) => mapRowToPost(row, false))
+    .filter((post): post is Post => post !== null)
+
+  posts = await mergePostMediaIntoPosts(posts, false)
+  posts = await hydrateQuoteSourcePosts(posts)
+  posts = await applyViewerStateToPosts(posts, user.id)
+
+  const viewerGuildIds = new Set(await getUserGuildIds(user.id))
+  const visiblePosts = posts.filter((post) => canViewerReadPost(post, user.id, viewerGuildIds))
+  return orderPostsByIds(visiblePosts, orderedPostIds).slice(0, normalizedLimit)
+}
+
+export async function getViewerLikedPosts(limit = 40): Promise<Post[]> {
+  return getViewerSavedPosts('likes', limit)
+}
+
+export async function getViewerBookmarkedPosts(limit = 40): Promise<Post[]> {
+  return getViewerSavedPosts('bookmarks', limit)
 }
 
 export async function getTrendingHashtags(limit = 8): Promise<HashtagStats[]> {
