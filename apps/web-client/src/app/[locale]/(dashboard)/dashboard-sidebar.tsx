@@ -288,7 +288,9 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
               {t('explore_section')}
             </p>
             <nav className="space-y-1">
-              {exploreNavItems.map((item) => (
+              {exploreNavItems
+                .filter((item) => !(pathname.startsWith('/community') && item.href === '/community'))
+                .map((item) => (
                 <SidebarNavLink
                   key={item.href}
                   href={item.href}

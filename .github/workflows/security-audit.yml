@@ -1,0 +1,58 @@
+name: Security Audit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan tracked files for high-risk secret patterns
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          REGEX='(sk_(live|test)_[A-Za-z0-9]{20,}|sk-proj-[A-Za-z0-9_-]{20,}|sbp_[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC )?PRIVATE KEY-----)'
+
+          EXCLUDES='(^pnpm-lock.yaml$|^package-lock.json$|^yarn.lock$|^llms/|\.pdf$|^docs/)'
+
+          if git ls-files | rg -v --pcre2 "$EXCLUDES" | xargs -r rg -n --pcre2 "$REGEX"; then
+            echo "Potential secrets detected in tracked files."
+            exit 1
+          fi
+
+          echo "Secret scan passed."
+
+  dependency-audit:
+    name: Dependency Audit (high+)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependencies (high and above)
+        run: pnpm audit --audit-level high

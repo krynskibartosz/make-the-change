@@ -6,7 +6,6 @@
       "WebFetch(domain:habeebee.be)",
       "WebFetch(domain:www.ilanga-nature.com)",
       "WebFetch(domain:www.linkedin.com)",
-      "WebFetch(domain:www.linkedin.com)",
       "Bash(rm:*)",
       "WebFetch(domain:developer.apple.com)",
       "WebFetch(domain:developer.android.com)",
@@ -22,21 +21,17 @@
       "Read(/Users/bartoszkrynski/**)",
       "Bash(pkill:*)",
       "Bash(env)",
-      "Bash(export SUPABASE_ACCESS_TOKEN=\"sbp_a2e2ca1329bfaf23bc4279becba1ffa5cb481af2\")",
       "Bash(supabase projects:*)",
       "Bash(supabase status:*)",
       "Bash(supabase link:*)",
       "mcp__supabase__list_tables",
-      "Bash(SUPABASE_ACCESS_TOKEN=\"sbp_a2e2ca1329bfaf23bc4279becba1ffa5cb481af2\" supabase inspect db tables)",
       "Bash(supabase inspect db:*)",
       "Bash(psql:*)",
       "Bash(curl:*)",
       "Bash(npx playwright:*)",
       "WebFetch(domain:github.com)",
-      "Bash(SUPABASE_ACCESS_TOKEN=\"sbp_a2e2ca1329bfaf23bc4279becba1ffa5cb481af2\" supabase projects list)",
       "Bash(npm info:*)",
       "Bash(npx:*)",
-      "Bash(SUPABASE_ACCESS_TOKEN=\"sbp_a2e2ca1329bfaf23bc4279becba1ffa5cb481af2\" npx -y @supabase/mcp-server-supabase@latest --read-only --project-ref=ebmjxinsyyjwshnynwwu)",
       "Bash(tree:*)",
       "Bash(npm list:*)",
       "Bash(pnpm test:*)",
@@ -54,5 +49,7 @@
     "ask": []
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["supabase"]
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }

@@ -201,3 +201,8 @@ sk_test_*
 pk_test_*
 .vercel
 .env*.local
+
+# Local AI assistant configs (keep untracked after cleanup)
+.claude/settings.local.json
+.cursor/mcp.json
+.mcp.local.json

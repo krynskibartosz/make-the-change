@@ -35,7 +35,6 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
     { icon: Home, label: t('home'), href: '/' as const },
     { icon: Search, label: t('discover'), href: '/products' as const },
     { icon: ShoppingBag, label: t('shop'), href: '/products' as const },
-    { icon: Newspaper, label: t('community'), href: '/community' as const },
   ]
 
   const initial = user ? (user.displayName || user.email || '?').charAt(0).toUpperCase() : '?'
