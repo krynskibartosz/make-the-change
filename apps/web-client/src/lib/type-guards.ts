@@ -29,3 +29,10 @@ export const asStringArray = (value: unknown): string[] => {
 
   return value.filter((entry): entry is string => typeof entry === 'string')
 }
+
+export const asArray = (value: unknown): unknown[] => {
+  if (Array.isArray(value)) {
+    return value
+  }
+  return []
+}

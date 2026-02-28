@@ -2,6 +2,11 @@ import { Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { Leaf, Sparkles, TrendingUp } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { cn, formatCurrency, getLocalizedContent } from '@/lib/utils'
+import { ProjectSpeciesSection } from './project-species-section'
+import { ProjectChallengesSection } from './project-challenges-section'
+import { ProjectImpactSection } from './project-impact-section'
+import { ProjectProducerProductsSection } from './project-producer-products-section'
+import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/types/context'
 
 type ProjectMainContentProject = {
   name_default: string
@@ -11,6 +16,10 @@ type ProjectMainContentProject = {
   long_description_i18n?: Record<string, string> | null
   images: string[] | null
   status: string | null
+  species?: ProjectSpecies[] | null
+  challenges?: ProjectChallenge[] | null
+  producer_products?: ProducerProduct[] | null
+  expected_impact?: ProjectImpact | null
 }
 
 type ProjectMainContentProps = {
@@ -63,6 +72,23 @@ export async function ProjectMainContent({
           </CardContent>
         </Card>
       </section>
+
+      {/* New Enhanced Sections */}
+      {project.expected_impact && (
+        <ProjectImpactSection impact={project.expected_impact} />
+      )}
+
+      {project.species && project.species.length > 0 && (
+        <ProjectSpeciesSection species={project.species} />
+      )}
+      
+      {project.challenges && project.challenges.length > 0 && (
+        <ProjectChallengesSection challenges={project.challenges} />
+      )}
+      
+      {project.producer_products && project.producer_products.length > 0 && (
+        <ProjectProducerProductsSection products={project.producer_products} />
+      )}
 
       {project.images && project.images.length > 0 && (
         <section>

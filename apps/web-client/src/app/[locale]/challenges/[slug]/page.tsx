@@ -1,5 +1,5 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { ArrowLeft, Calendar, CheckCircle2, Flame, Sparkles, Trophy, Zap } from 'lucide-react'
+import { ArrowLeft, Calendar, CheckCircle2, Flame, Sparkles, Target, Trophy, Zap } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
@@ -130,19 +130,20 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
     >
       <div className="space-y-6">
         <Link href="/challenges">
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="hover:bg-muted/50">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Challenges
+            Retour aux challenges
           </Button>
         </Link>
 
-        <Card className="border bg-background/70 shadow-sm backdrop-blur">
-          <CardContent className="space-y-5 p-6 sm:p-8">
-            <div className="flex items-start justify-between gap-4">
-              <div className="space-y-2">
+        <Card className="border-border/60 bg-card/95 shadow-lg backdrop-blur-sm rounded-3xl overflow-hidden">
+          <CardContent className="space-y-6 p-6 sm:p-8">
+            {/* Header Section */}
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="space-y-3 flex-1">
                 <div
                   className={cn(
-                    'inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em]',
+                    'inline-flex w-fit items-center gap-2 rounded-full border backdrop-blur-sm px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em]',
                     challenge.type === 'daily'
                       ? 'border-info/20 bg-info/10 text-info'
                       : challenge.type === 'monthly'
@@ -150,84 +151,125 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
                         : 'border-primary/20 bg-primary/10 text-primary',
                   )}
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-4 w-4" />
                   {challenge.type === 'daily'
                     ? 'Quotidien'
                     : challenge.type === 'monthly'
                       ? 'Mensuel'
                       : 'Saisonnier'}
                 </div>
-                <h1 className="text-3xl font-bold tracking-tight">{challenge.title}</h1>
-                <p className="text-sm text-muted-foreground">{challenge.description}</p>
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">{challenge.title}</h1>
+                <p className="text-sm sm:text-base text-muted-foreground font-medium leading-relaxed">{challenge.description}</p>
               </div>
-              <Badge className="rounded-full">{rewardLabel}</Badge>
+              <div className="flex-shrink-0">
+                <Badge className="rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white border-0 px-4 py-2 text-sm font-bold shadow-lg">
+                  <Trophy className="mr-2 h-4 w-4" />
+                  {rewardLabel}
+                </Badge>
+              </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border bg-muted/30 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Conseil</p>
-                <p className="mt-2 text-sm">{hint}</p>
+            {/* Stats Grid */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="relative rounded-2xl border border-border/40 bg-muted/30 p-4 backdrop-blur-sm">
+                <div className="absolute top-2 right-2">
+                  <div className="h-8 w-8 rounded-full bg-info/10 flex items-center justify-center">
+                    <Sparkles className="h-4 w-4 text-info" />
+                  </div>
+                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">Conseil</p>
+                <p className="text-sm leading-relaxed pr-8">{hint}</p>
               </div>
-              <div className="rounded-2xl border bg-muted/30 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              
+              <div className="relative rounded-2xl border border-border/40 bg-muted/30 p-4 backdrop-blur-sm">
+                <div className="absolute top-2 right-2">
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Flame className="h-4 w-4 text-primary" />
+                  </div>
+                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">
                   Progression
                 </p>
-                <p className="mt-2 inline-flex items-center gap-2 text-sm font-semibold">
-                  <Flame className="h-4 w-4 text-client-amber-500" /> {Math.round(percentage)}%
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {progress} / {target}
-                </p>
-              </div>
-              <div className="rounded-2xl border bg-muted/30 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Statut</p>
-                <p className="mt-2 inline-flex items-center gap-2 text-sm font-semibold">
-                  {isClaimed ? (
-                    <>
-                      <CheckCircle2 className="h-4 w-4 text-success" /> Récompense réclamée
-                    </>
-                  ) : isCompleted ? (
-                    <>
-                      <Zap className="h-4 w-4 text-primary" /> Récompense à réclamer
-                    </>
-                  ) : (
-                    <>
-                      <Flame className="h-4 w-4 text-client-amber-500" /> En cours
-                    </>
-                  )}
-                </p>
-                {dateLabel ? (
-                  <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
-                    <Calendar className="h-3.5 w-3.5" />
-                    {dateLabel}
+                <div className="space-y-1">
+                  <p className="text-2xl font-black text-primary">{Math.round(percentage)}%</p>
+                  <p className="text-xs text-muted-foreground">
+                    {progress} / {target}
                   </p>
-                ) : null}
+                </div>
+              </div>
+              
+              <div className="relative rounded-2xl border border-border/40 bg-muted/30 p-4 backdrop-blur-sm">
+                <div className="absolute top-2 right-2">
+                  <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                    isClaimed ? 'bg-success/10' : isCompleted ? 'bg-primary/10' : 'bg-warning/10'
+                  }`}>
+                    {isClaimed ? (
+                      <CheckCircle2 className="h-4 w-4 text-success" />
+                    ) : isCompleted ? (
+                      <Zap className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Flame className="h-4 w-4 text-warning" />
+                    )}
+                  </div>
+                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">Statut</p>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold">
+                    {isClaimed ? (
+                      <span className="text-success">Récompense réclamée</span>
+                    ) : isCompleted ? (
+                      <span className="text-primary">Récompense à réclamer</span>
+                    ) : (
+                      <span className="text-warning">En cours</span>
+                    )}
+                  </p>
+                  {dateLabel ? (
+                    <p className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {dateLabel}
+                    </p>
+                  ) : null}
+                </div>
               </div>
             </div>
 
-            <div className="space-y-2">
+            {/* Progress Section */}
+            <div className="space-y-4 p-6 rounded-2xl bg-gradient-to-r from-muted/20 to-muted/10 border border-border/30">
               <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                <span>Avancement</span>
-                <span>{Math.round(percentage)}%</span>
+                <span className="flex items-center gap-2">
+                  <Target className="h-4 w-4" />
+                  Avancement
+                </span>
+                <span className="text-primary font-black">{Math.round(percentage)}%</span>
               </div>
-              <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div className="relative h-3 w-full overflow-hidden rounded-full bg-muted/50">
                 <div
-                  className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-700"
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-700 shadow-sm"
                   style={{ width: `${percentage}%` }}
                 />
+                {percentage > 0 && (
+                  <div 
+                    className="absolute top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-white shadow-md transition-all duration-300"
+                    style={{ left: `calc(${percentage}% - 4px)` }}
+                  />
+                )}
               </div>
-              <p className="text-sm text-muted-foreground">{nextStep}</p>
+              <p className="text-sm text-muted-foreground font-medium leading-relaxed">{nextStep}</p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Button asChild className="w-full">
-                <Link href="/projects">
+            {/* Action Buttons */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Button asChild className="w-full h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-lg hover:shadow-xl transition-all duration-300">
+                <Link href="/projects" className="flex items-center justify-center gap-2">
+                  <Trophy className="h-4 w-4" />
                   Découvrir des projets
-                  <Trophy className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="w-full">
-                <Link href="/leaderboard">Voir le classement</Link>
+              <Button asChild variant="outline" className="w-full h-12 rounded-2xl font-bold uppercase tracking-widest text-xs border-border/60 hover:bg-muted/50 transition-all duration-300">
+                <Link href="/leaderboard" className="flex items-center justify-center gap-2">
+                  <Target className="h-4 w-4" />
+                  Voir le classement
+                </Link>
               </Button>
             </div>
           </CardContent>

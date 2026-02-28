@@ -14,6 +14,9 @@ import {
   getCommunitySidebarUser,
 } from './_features/community-page-frame'
 import { CommunityRightRail } from './_features/community-right-rail'
+import { getPostContextList } from '@/lib/api/post-context.service'
+import { CommunityEnhanced } from './components/community-enhanced'
+import type { PostContext } from '@/types/context'
 
 const FEED_SORT_VALUES: FeedSort[] = ['best', 'newest', 'oldest']
 const FEED_SCOPE_VALUES: FeedScope[] = ['all', 'following', 'my_guilds']
@@ -46,6 +49,7 @@ type CommunityResolvedProps = {
   activeTag: string
   copy: CommunityCopy
   sidebarUser: CommunitySidebarUser
+  posts: PostContext[]
 }
 
 const parseFeedSort = (value: string | undefined): FeedSort =>
@@ -111,6 +115,7 @@ function CommunityResolved({
   activeTag,
   copy,
   sidebarUser,
+  posts,
 }: CommunityResolvedProps) {
   const hasUser = !!sidebarUser
 
@@ -181,51 +186,28 @@ function CommunityResolved({
       </div>
 
       <div className="relative z-0 w-full">
-        <Feed
-          sort={sort}
-          scope={scope}
-          hashtagSlug={activeTag}
-          emptyMessage={scope === 'following' ? copy.followingEmptyLabel : undefined}
-        />
+        {/* Use Enhanced Community Feed */}
+        <CommunityEnhanced posts={posts} />
       </div>
-    </CommunityPageFrame>
-  )
-}
-
-function CommunityFallback({ copy }: { copy: CommunityCopy }) {
-  return (
-    <CommunityPageFrame
-      sidebarUser={null}
-      rightRail={
-        <div className="space-y-4">
-          <div className="h-80 animate-pulse rounded-2xl bg-muted/60" />
-          <div className="h-60 animate-pulse rounded-2xl bg-muted/60" />
-        </div>
-      }
-    >
-      <div className="sticky top-0 z-20 space-y-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-md">
-        <h1 className="text-xl font-bold">{copy.communityTitle}</h1>
-        <div className="h-11 rounded-xl border border-border/70 bg-background/80" />
-      </div>
-      <div className="px-4 py-6 text-sm text-muted-foreground">{copy.loadingLabel}</div>
     </CommunityPageFrame>
   )
 }
 
 export default async function CommunityPage({ searchParams }: CommunityPageProps) {
-  const [params, copy, sidebarUser] = await Promise.all([
-    searchParams,
-    getCommunityCopy(),
-    getCommunitySidebarUser(),
-  ])
-
+  const params = await searchParams
   const sort = parseFeedSort(params.sort)
   const scope = parseFeedScope(params.scope)
   const contributorScope = parseContributorScope(params.contributors)
-  const activeTag = sanitizeHashtagSlug(params.tag || '')
+  const activeTag = sanitizeHashtagSlug(params.tag)
+
+  const [copy, sidebarUser, posts] = await Promise.all([
+    getCommunityCopy(),
+    getCommunitySidebarUser(),
+    getPostContextList() // Fetching enhanced posts
+  ])
 
   return (
-    <Suspense fallback={<CommunityFallback copy={copy} />}>
+    <Suspense fallback={<div>{copy.loadingLabel}</div>}>
       <CommunityResolved
         sort={sort}
         scope={scope}
@@ -233,6 +215,7 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
         activeTag={activeTag}
         copy={copy}
         sidebarUser={sidebarUser}
+        posts={posts}
       />
     </Suspense>
   )

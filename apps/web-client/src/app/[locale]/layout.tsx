@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import type { PropsWithChildren } from 'react'
 import { Providers } from '@/app/providers'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 import '@/app/globals.css'
 
 export const metadata: Metadata = {
@@ -51,8 +52,10 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
       >
         <NextIntlClientProvider locale={locale} messages={allMessages}>
           <Providers>
-            {children}
-            {modal}
+            <ErrorBoundary>
+              {children}
+              {modal}
+            </ErrorBoundary>
           </Providers>
         </NextIntlClientProvider>
         <script type="application/ld+json">

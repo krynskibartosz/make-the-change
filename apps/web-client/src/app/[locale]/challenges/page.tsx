@@ -151,78 +151,101 @@ export default async function ChallengesPage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((c) => (
               <Link key={c.id} href={`/challenges/${c.slug}`} className="group block h-full">
-                <Card className="h-full border bg-background/60 shadow-xl backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl rounded-[2.5rem] overflow-hidden">
-                  <CardContent className="space-y-6 p-8">
-                    <div className="flex items-center justify-between">
-                      <div
-                        className={cn(
-                          'px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border',
-                          c.type === 'daily'
-                            ? 'bg-info/10 text-info border-info/20'
-                            : c.type === 'monthly'
-                              ? 'bg-accent/10 text-accent border-accent/20'
-                              : 'bg-primary/10 text-primary border-primary/20',
-                        )}
-                      >
-                        {c.type === 'daily'
-                          ? 'Quotidien'
+                <Card className="relative h-full border-border/60 bg-card/95 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-primary/20 rounded-3xl overflow-hidden">
+                  {/* Card Header with Type Badge and Reward */}
+                  <div className="absolute left-4 top-4 z-10">
+                    <div
+                      className={cn(
+                        'inline-flex items-center gap-1.5 rounded-full border backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-widest',
+                        c.type === 'daily'
+                          ? 'bg-info/90 text-info-foreground border-info/20'
                           : c.type === 'monthly'
-                            ? 'Mensuel'
-                            : 'Saisonnier'}
-                      </div>
-                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-client-amber-500/10 text-client-amber-600 border border-client-amber-500/20 text-[10px] font-black uppercase tracking-tight">
-                        <Sparkles className="h-3 w-3" />
-                        {c.reward_points > 0 ? `+${c.reward_points} pts` : 'Badge'}
-                      </div>
+                            ? 'bg-accent/90 text-accent-foreground border-accent/20'
+                            : 'bg-primary/90 text-primary-foreground border-primary/20',
+                      )}
+                    >
+                      <Sparkles className="h-3 w-3" />
+                      {c.type === 'daily'
+                        ? 'Quotidien'
+                        : c.type === 'monthly'
+                          ? 'Mensuel'
+                          : 'Saisonnier'}
                     </div>
+                  </div>
+                  
+                  <div className="absolute right-4 top-4 z-10">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500/90 to-amber-600/90 text-white border border-amber-400/20 backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-tight shadow-lg">
+                      <Trophy className="h-3 w-3" />
+                      {c.reward_points > 0 ? `+${c.reward_points} pts` : 'Badge'}
+                    </div>
+                  </div>
 
-                    <div className="space-y-2">
-                      <h3 className="text-2xl font-black tracking-tight group-hover:text-primary transition-colors flex items-center gap-2">
+                  <CardContent className="space-y-6 p-6 pt-16">
+                    {/* Title Section */}
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-black tracking-tight text-foreground group-hover:text-primary transition-colors duration-300 flex items-center gap-2">
                         {c.title}
                         {c.userProgress.isCompleted && (
-                          <div className="bg-success text-client-white rounded-full p-0.5">
+                          <div className="bg-success text-success-foreground rounded-full p-1 shadow-lg">
                             <CheckCircle2 className="h-4 w-4" />
                           </div>
                         )}
                       </h3>
-                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-2">
+                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-3">
                         {c.description}
                       </p>
                     </div>
 
-                    <div className="space-y-3 pt-2">
-                      <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
-                        <span className="text-muted-foreground">Progression</span>
-                        <span className="text-foreground">
+                    {/* Progress Section */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Flame className="h-3 w-3" />
+                          Progression
+                        </span>
+                        <span className="text-foreground font-bold">
                           {c.userProgress.progress} / {c.userProgress.target}
                         </span>
                       </div>
-                      <div className="relative h-2 w-full rounded-full bg-muted overflow-hidden">
+                      <div className="relative h-3 w-full rounded-full bg-muted/50 overflow-hidden">
                         <div
-                          className="absolute inset-0 bg-primary transition-all duration-1000 ease-out"
+                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-1000 ease-out shadow-sm"
                           style={{ width: `${c.userProgress.percentage}%` }}
                         />
+                        {c.userProgress.percentage > 0 && (
+                          <div 
+                            className="absolute top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-white shadow-md transition-all duration-300"
+                            style={{ left: `calc(${c.userProgress.percentage}% - 4px)` }}
+                          />
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <span className="text-xs font-bold text-primary">
+                          {Math.round(c.userProgress.percentage)}%
+                        </span>
                       </div>
                     </div>
 
+                    {/* Status Section */}
                     <div className="flex items-center justify-between pt-4 border-t border-border/50">
                       <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                         <Calendar className="h-3.5 w-3.5" />
-                        Expire bientôt
+                        {c.type === 'daily' ? 'Expire aujourd\'hui' : c.type === 'monthly' ? 'Expire ce mois' : 'Expire bientôt'}
                       </div>
 
                       {c.userProgress.isCompleted && !c.userProgress.isClaimed ? (
-                        <div className="flex items-center gap-1.5 text-primary font-black text-[10px] uppercase tracking-widest animate-pulse">
+                        <div className="flex items-center gap-1.5 text-primary font-black text-[10px] uppercase tracking-widest animate-pulse bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
                           <Zap className="h-3.5 w-3.5" />
                           Réclamer !
                         </div>
                       ) : c.userProgress.isClaimed ? (
-                        <div className="text-success font-black text-[10px] uppercase tracking-widest">
+                        <div className="flex items-center gap-1.5 text-success font-black text-[10px] uppercase tracking-widest bg-success/10 px-3 py-1.5 rounded-full border border-success/20">
+                          <CheckCircle2 className="h-3.5 w-3.5" />
                           Récupéré
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1.5 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
-                          <Flame className="h-3.5 w-3.5 text-warning" />
+                        <div className="flex items-center gap-1.5 text-warning font-black text-[10px] uppercase tracking-widest bg-warning/10 px-3 py-1.5 rounded-full border border-warning/20">
+                          <Flame className="h-3.5 w-3.5" />
                           En cours
                         </div>
                       )}

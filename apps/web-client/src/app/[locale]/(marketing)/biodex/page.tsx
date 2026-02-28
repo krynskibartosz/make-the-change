@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server'
-import { toSpecies } from '@/app/[locale]/(marketing)/biodex/_features/species-parsers'
-import { createClient } from '@/lib/supabase/server'
-import { BiodexClient } from './biodex-client'
+import { getSpeciesContextList } from '@/lib/api/species-context.service'
+import { BiodexEnhanced } from './components/biodex-enhanced'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -14,28 +13,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function BiodexPage() {
-  const supabase = await createClient()
-
-  const { data: species, error } = await supabase
-    .schema('investment')
-    .from('species')
-    .select('*')
-    .order('created_at', { ascending: false })
-
-  if (error) {
-    console.error('Error fetching species:', error)
-  }
-
-  const speciesList = Array.isArray(species)
-    ? species
-        .map((entry) => toSpecies(entry))
-        .filter((entry): entry is NonNullable<ReturnType<typeof toSpecies>> => entry !== null)
-    : []
+  const speciesList = await getSpeciesContextList()
 
   return (
     <>
       <section className="pb-12 pt-0 md:pb-16 md:pt-2">
-        <BiodexClient species={speciesList} />
+        <BiodexEnhanced species={speciesList} />
       </section>
     </>
   )

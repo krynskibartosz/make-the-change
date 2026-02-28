@@ -1101,73 +1101,89 @@ export async function getReelsFeed(options: ReelsFeedQueryOptions = {}): Promise
   const limit = Math.max(1, asNumber(options.limit, 20))
   const scope: ReelsFeedScope = options.scope === 'following' ? 'following' : 'all'
 
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const { data, error } = await supabase.schema('social').rpc('get_reels_feed', {
-    p_page: page,
-    p_limit: limit,
-    p_scope: scope,
-    p_user_id: user?.id || null,
-  })
-
-  if (error) {
-    console.error('Error fetching reels feed:', error)
-    return []
+  // For public reels, use static client to avoid authentication issues
+  const useStaticClient = scope === 'all'
+  const supabase = useStaticClient ? createStaticClient() : await createClient()
+  
+  let user = null
+  if (!useStaticClient) {
+    const { data: userData } = await supabase.auth.getUser()
+    user = userData?.user || null
   }
 
-  if (!data || data.length === 0) {
+  try {
+    const { data, error } = await supabase.schema('social').rpc('get_reels_feed', {
+      p_page: page,
+      p_limit: limit,
+      p_scope: scope,
+      p_user_id: user?.id || null,
+    })
+
+    if (error) {
+      console.error('Error fetching reels feed:', error)
+      // If it's a timeout error, return empty array gracefully
+      if (error.code === '57014' || error.message?.includes('timeout')) {
+        console.warn('Reels feed timed out, returning empty result')
+        return []
+      }
+      return []
+    }
+
+    if (!data || data.length === 0) {
+      return []
+    }
+
+    // Mapper les résultats vers le format Post
+    const posts = (data as ReelsFeedRow[]).map((row) => ({
+      id: row.id,
+      author_id: row.author_id,
+      content: row.content,
+      image_urls: row.image_urls || [],
+      project_update_id: row.project_update_id,
+      type: row.type,
+      visibility: row.visibility,
+      metadata: row.metadata || {},
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      author: {
+        id: row.author_id,
+        full_name: row.author_full_name || 'Utilisateur',
+        avatar_url: asString(row.author_avatar_url),
+      },
+      hashtags: [],
+      shares_count: row.shares_count || 0,
+      author_type: 'citizen' as const,
+      share_kind: row.share_kind || 'original',
+      source_post_id: row.source_post_id,
+      source_post: null,
+      guild_id: null,
+      reactions_count: row.reactions_count || 0,
+      comments_count: row.comments_count || 0,
+      user_has_reacted: false,
+      user_has_bookmarked: false,
+      media: row.public_url
+        ? [
+            {
+              url: row.public_url,
+              mime_type: row.mime_type,
+              kind: getMediaKind(asString(row.mime_type)),
+              width: null,
+              height: null,
+              sort_order: 0,
+            },
+          ]
+        : [],
+      primary_video_url: row.public_url || null,
+      primary_video_mime_type: row.mime_type || null,
+      score: 0,
+    }))
+
+    const postsWithMedia = await mergePostMediaIntoPosts(posts, useStaticClient)
+    return applyViewerStateToPosts(postsWithMedia, user?.id)
+  } catch (error) {
+    console.error('Unexpected error fetching reels feed:', error)
     return []
   }
-
-  // Mapper les résultats vers le format Post
-  const posts = (data as ReelsFeedRow[]).map((row) => ({
-    id: row.id,
-    author_id: row.author_id,
-    content: row.content,
-    image_urls: row.image_urls || [],
-    project_update_id: row.project_update_id,
-    type: row.type,
-    visibility: row.visibility,
-    metadata: row.metadata || {},
-    created_at: row.created_at,
-    updated_at: row.updated_at,
-    author: {
-      id: row.author_id,
-      full_name: row.author_full_name || 'Utilisateur',
-      avatar_url: asString(row.author_avatar_url),
-    },
-    hashtags: [],
-    shares_count: row.shares_count || 0,
-    author_type: 'citizen' as const,
-    share_kind: row.share_kind || 'original',
-    source_post_id: row.source_post_id,
-    source_post: null,
-    guild_id: null,
-    reactions_count: row.reactions_count || 0,
-    comments_count: row.comments_count || 0,
-    user_has_reacted: false,
-    user_has_bookmarked: false,
-    media: row.public_url
-      ? [
-          {
-            url: row.public_url,
-            mime_type: row.mime_type,
-            kind: getMediaKind(asString(row.mime_type)),
-            width: null,
-            height: null,
-            sort_order: 0,
-          },
-        ]
-      : [],
-    primary_video_url: row.public_url || null,
-    primary_video_mime_type: row.mime_type || null,
-    score: 0,
-  }))
-
-  return applyViewerStateToPosts(posts, user?.id)
 }
 
 /**

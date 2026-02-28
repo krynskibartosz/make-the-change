@@ -159,7 +159,75 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .eq('status', 'active')
     .order('created_at', { ascending: false })
 
-  const homeContentPromise = toAsyncResult(getPageContent('home'))
+  const homeContentPromise = toAsyncResult(
+  getPageContent('home').catch(async (error) => {
+    console.warn('[home] Failed to fetch page content, using fallback:', error)
+    // Return minimal fallback content to prevent crashes
+    return {
+      hero: {
+        badge: 'Welcome',
+        title: 'Make the Change',
+        subtitle: 'Building a sustainable future together',
+        cta_primary: 'Get Started',
+        cta_secondary: 'Learn More'
+      },
+      stats: {
+        projects: 'Active Projects',
+        members: 'Community Members',
+        global_impact: 'Global Impact',
+        points_generated: 'Points Generated',
+        points_label: 'Points'
+      },
+      universe: {
+        title: 'Our Universe',
+        description: 'Explore our ecosystem of change',
+        cards: {
+          projects: {
+            title: 'Projects',
+            description: 'Support impactful initiatives',
+            cta: 'Explore Projects'
+          },
+          products: {
+            title: 'Products',
+            description: 'Ethical and sustainable choices',
+            cta: 'Shop Products'
+          },
+          community: {
+            title: 'Community',
+            description: 'Join like-minded changemakers',
+            cta: 'Join Community'
+          }
+        }
+      },
+      features: {
+        title: 'Features',
+        invest: {
+          title: 'Invest',
+          description: 'Put your money where it matters'
+        },
+        earn: {
+          title: 'Earn',
+          description: 'Get rewarded for your impact'
+        },
+        redeem: {
+          title: 'Redeem',
+          description: 'Turn points into real rewards'
+        },
+        explore: 'Explore Opportunities'
+      },
+      cta: {
+        title: 'Ready to Make a Difference?',
+        description: 'Join our community of changemakers',
+        button: 'Get Started Now',
+        stats: {
+          engagement: 'Engaged Community',
+          transparency: 'Full Transparency',
+          community: 'Growing Community'
+        }
+      }
+    }
+  })
+)
   const pointsGeneratedQuery = supabase.rpc('get_total_points_generated')
   const latestPostsPromise = toAsyncResult(getBlogPosts())
 

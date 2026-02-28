@@ -14,6 +14,7 @@ import { getEcosystemById, getPropertiesByProjectId } from '@/lib/investment/eco
 import { EcosystemCard } from '@/components/investment/ecosystem-card'
 import { createClient } from '@/lib/supabase/server'
 import { MapPin } from 'lucide-react'
+import { getProjectContext } from '@/lib/api/project-context.service'
 
 type ProjectDetailsProps = {
   project: PublicProject
@@ -29,6 +30,9 @@ export async function ProjectDetails({
   const t = await getTranslations('projects')
   const tCommon = await getTranslations('common')
   const tNav = await getTranslations('navigation')
+
+  // Fetch enhanced context
+  const projectContext = await getProjectContext(project.slug)
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
@@ -139,7 +143,13 @@ export async function ProjectDetails({
       <SectionContainer size="lg" className="relative pt-6 md:pt-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           <ProjectMainContent
-            project={project}
+            project={{
+              ...project,
+              species: projectContext?.species,
+              challenges: projectContext?.challenges,
+              producer_products: projectContext?.producer_products,
+              expected_impact: projectContext?.expected_impact
+            }}
             fundingProgress={fundingProgress}
             currentFunding={currentFunding}
             targetBudget={targetBudget}

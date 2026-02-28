@@ -58,10 +58,15 @@ export default async function CommunityGuildsPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {guilds.length > 0 ? (
             guilds.map((guild) => (
-              <Card
+              <Link
                 key={guild.id}
-                className="overflow-hidden border-border/70 bg-linear-to-b from-background to-muted/30"
+                href={`/community/guilds/${guild.slug}`}
+                prefetch={false}
+                className="block transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
+                <Card
+                  className="overflow-hidden border-border/70 bg-linear-to-b from-background to-muted/30"
+                >
                 <GuildCover
                   name={guild.name}
                   bannerUrl={guild.banner_url}
@@ -114,8 +119,10 @@ export default async function CommunityGuildsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <GuildMembershipButton guildId={guild.id} isMember={!!guild.is_member} />
-                    <Button asChild variant="outline" className="w-full">
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <GuildMembershipButton guildId={guild.id} isMember={!!guild.is_member} />
+                    </div>
+                    <Button asChild variant="outline" className="w-full" onClick={(e) => e.stopPropagation()}>
                       <Link href={`/community/guilds/${guild.slug}`} prefetch={false}>
                         {t('guilds.open')}
                       </Link>
@@ -123,6 +130,7 @@ export default async function CommunityGuildsPage() {
                   </div>
                 </CardContent>
               </Card>
+              </Link>
             ))
           ) : (
             <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground md:col-span-2">

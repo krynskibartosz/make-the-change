@@ -23,6 +23,10 @@ import { formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { FloatingActionButtons, ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
+import { getProductContext } from '@/lib/api/product-context.service'
+import { ProductImpactSection } from './components/product-impact-section'
+import { ProductSupportedProjectsSection } from './components/product-supported-projects-section'
+import { ProductLinkedSpeciesSection } from './components/product-linked-species-section'
 
 type ProductDetailsProps = {
   product: ProductWithRelations
@@ -37,6 +41,9 @@ export async function ProductDetails({
 }: ProductDetailsProps) {
   const t = await getTranslations('products')
   const locale = await getLocale()
+  
+  // Fetch enhanced context
+  const productContext = await getProductContext(product.id)
 
   // Determine cover image using image_url from public_products view
   const coverImage =
@@ -266,6 +273,19 @@ export async function ProductDetails({
                 </div>
               </CardContent>
             </Card>
+
+            {/* Enhanced Sections */}
+            {productContext?.impact && (
+              <ProductImpactSection impact={productContext.impact} locale={locale} />
+            )}
+
+            {productContext?.supported_projects && productContext.supported_projects.length > 0 && (
+              <ProductSupportedProjectsSection projects={productContext.supported_projects} locale={locale} />
+            )}
+
+            {productContext?.linked_species && productContext.linked_species.length > 0 && (
+              <ProductLinkedSpeciesSection species={productContext.linked_species} locale={locale} />
+            )}
           </div>
 
           {/* Enhanced Sidebar */}

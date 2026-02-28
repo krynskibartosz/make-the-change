@@ -71,7 +71,15 @@ export async function getPageContent(slug: string): Promise<HomePageContent | nu
     if (!parsed.success) {
       const log = slug === 'home' ? console.warn : console.error
       log(`Invalid page ${slug} payload`, {
-        issues: parsed.error.issues,
+        issues: parsed.error.issues.map(issue => ({
+          code: issue.code,
+          path: issue.path,
+          message: issue.message,
+          ...(issue.code === 'invalid_type' ? {
+            expected: (issue as any).expected,
+            received: (issue as any).received
+          } : {})
+        })),
       })
       return null
     }
