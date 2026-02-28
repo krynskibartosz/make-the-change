@@ -1,18 +1,21 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@make-the-change/core/ui'
 import {
   Bookmark,
+  Clapperboard,
   Feather,
   Flame,
   Heart,
   Home,
   LogIn,
   MoreHorizontal,
-  Newspaper,
   Search,
   ShoppingBag,
   Users,
+  Rss,
 } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 import { Logo } from '@/components/ui/logo'
 import { Link } from '@/i18n/navigation'
 
@@ -27,13 +30,13 @@ interface CommunityLeftSidebarProps {
   user: SidebarUser
 }
 
-export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) {
-  const t = await getTranslations('navigation')
-  const tCommunity = await getTranslations('community')
+export function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) {
+  const t = useTranslations('navigation')
+  const tCommunity = useTranslations('community')
 
   const navItems = [
     { icon: Home, label: t('home'), href: '/' as const },
-    { icon: Search, label: t('discover'), href: '/products' as const },
+    { icon: Search, label: t('invest'), href: '/projects' as const },
     { icon: ShoppingBag, label: t('shop'), href: '/products' as const },
   ]
 
@@ -68,6 +71,15 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
           )
         })}
         <Link
+          href="/community"
+          title={tCommunity('sidebar.feed')}
+          aria-label={tCommunity('sidebar.feed')}
+          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
+        >
+          <Rss className="w-7 h-7 stroke-[1.5px]" />
+          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.feed')}</span>
+        </Link>
+        <Link
           href="/community?sort=best"
           title={tCommunity('sidebar.trending')}
           aria-label={tCommunity('sidebar.trending')}
@@ -75,6 +87,13 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
         >
           <Flame className="w-7 h-7 stroke-[1.5px]" />
           <span className="hidden text-lg sm:inline">{tCommunity('sidebar.trending')}</span>
+        </Link>
+        <Link
+          href="/community/reels"
+          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
+        >
+          <Clapperboard className="w-7 h-7 stroke-[1.5px]" />
+          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.reels')}</span>
         </Link>
         <Link
           href="/community/guilds"
@@ -110,6 +129,9 @@ export async function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) 
             <span className="hidden sm:inline">{tCommunity('sidebar.update_post')}</span>
             <Feather className="h-6 w-6 sm:hidden" />
           </Link>
+        </Button>
+        <Button asChild variant="outline" size="sm" className="mt-2 hidden w-full sm:inline-flex">
+          <Link href="/community/reels/new">{tCommunity('sidebar.post_reel')}</Link>
         </Button>
       </div>
 

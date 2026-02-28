@@ -42,12 +42,6 @@ export function useDiscoverMenu() {
                 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=400',
             },
             {
-              title: t('discover_menu.items.leaderboard'),
-              href: '/leaderboard',
-              image:
-                'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&q=80&w=400',
-            },
-            {
               title: t('discover_menu.items.biodex'),
               href: '/biodex',
               image:

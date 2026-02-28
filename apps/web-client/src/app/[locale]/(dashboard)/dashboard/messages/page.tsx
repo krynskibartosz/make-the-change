@@ -26,6 +26,7 @@ export default async function SentMessagesPage() {
       producer:public_producers!producer_id(name, slug)
     `,
     )
+    .eq('sender_user_id', user.id)
     .order('created_at', { ascending: false })
 
   type ProducerRef = { name: string | null; slug: string | null }

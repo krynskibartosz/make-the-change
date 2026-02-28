@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { Logo } from '@/components/ui/logo'
 import { Link } from '@/i18n/navigation'
+import { CHECKOUT_AVAILABLE } from '@/lib/checkout-status'
 import { useUser } from './use-user'
 
 export function Footer() {
@@ -187,7 +188,7 @@ export function Footer() {
                 </Link>
               </li>
 
-              {items.length > 0 ? (
+              {items.length > 0 && CHECKOUT_AVAILABLE ? (
                 <li>
                   <Link
                     href="/checkout"

@@ -23,6 +23,7 @@ import { CartButton } from '@/app/[locale]/(marketing-no-footer)/cart/_features/
 import type { MainMenuStructure } from '@/app/[locale]/admin/cms/_features/types'
 import { MegaMenu } from '@/components/layout/mega-menu'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
+import { useCommunityMenu } from '@/components/layout/use-community-menu'
 import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
 import { useScrollHeader } from '@/components/layout/use-scroll-header'
 import { Logo } from '@/components/ui/logo'
@@ -158,6 +159,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
   const { isVisible } = useScrollHeader()
 
   const discoverMenu = useDiscoverMenu()
+  const communityMenu = useCommunityMenu()
   const investMenu = useMemo(() => {
     const projectsMenu = menuData?.projects
     if (!projectsMenu) return undefined
@@ -186,12 +188,12 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       ],
       ...(projectsMenu.featured !== undefined
         ? {
-          featured: {
-            ...projectsMenu.featured,
-            title: localizeCmsLabel(projectsMenu.featured.title, locale),
-            ctaLabel: localizeCmsLabel(projectsMenu.featured.ctaLabel, locale),
-          },
-        }
+            featured: {
+              ...projectsMenu.featured,
+              title: localizeCmsLabel(projectsMenu.featured.title, locale),
+              ctaLabel: localizeCmsLabel(projectsMenu.featured.ctaLabel, locale),
+            },
+          }
         : {}),
     } satisfies MainMenuStructure['projects']
   }, [locale, menuData?.projects])
@@ -209,10 +211,10 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       href: item.href.includes('category=')
         ? item.href
         : (() => {
-          const categoryToken = toCategoryQueryToken(item.title)
-          if (!categoryToken) return '/products'
-          return `/products?category=${encodeURIComponent(categoryToken)}`
-        })(),
+            const categoryToken = toCategoryQueryToken(item.title)
+            if (!categoryToken) return '/products'
+            return `/products?category=${encodeURIComponent(categoryToken)}`
+          })(),
     }))
 
     return {
@@ -229,12 +231,12 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       ],
       ...(productsMenu.featured !== undefined
         ? {
-          featured: {
-            ...productsMenu.featured,
-            title: localizeCmsLabel(productsMenu.featured.title, locale),
-            ctaLabel: localizeCmsLabel(productsMenu.featured.ctaLabel, locale),
-          },
-        }
+            featured: {
+              ...productsMenu.featured,
+              title: localizeCmsLabel(productsMenu.featured.title, locale),
+              ctaLabel: localizeCmsLabel(productsMenu.featured.ctaLabel, locale),
+            },
+          }
         : {}),
     } satisfies MainMenuStructure['products']
   }, [locale, menuData?.products])
@@ -258,6 +260,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       id: 'community',
       href: '/community',
       label: t('community'),
+      ...(communityMenu !== undefined ? { mega: communityMenu } : {}),
     }
 
     const discoverNavigationItem: HeaderNavigationItem = {
@@ -273,7 +276,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
       discoverNavigationItem,
       communityNavigationItem,
     ] satisfies HeaderNavigationItem[]
-  }, [investMenu, shopMenu, t, discoverMenu])
+  }, [investMenu, shopMenu, t, discoverMenu, communityMenu])
   const activeMegaContent = useMemo(() => {
     const activeItem = navigation.find((item) => item.id === activeMenu)
     return activeItem?.mega ?? null
@@ -315,10 +318,10 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
   const headerStyle = activeMegaContent
     ? {
-      ...rest.style,
-      backdropFilter: 'blur(34px) saturate(165%)',
-      WebkitBackdropFilter: 'blur(34px) saturate(165%)',
-    }
+        ...rest.style,
+        backdropFilter: 'blur(34px) saturate(165%)',
+        WebkitBackdropFilter: 'blur(34px) saturate(165%)',
+      }
     : rest.style
 
   return (

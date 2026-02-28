@@ -1,5 +1,5 @@
 import { getLocale } from 'next-intl/server'
-import type { PropsWithChildren } from 'react'
+import { Suspense, type PropsWithChildren } from 'react'
 import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
 import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
 import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
@@ -7,12 +7,14 @@ import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { MainContent } from '@/components/layout/main-content'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
-import { getHeaderData } from '@/lib/get-header-data'
+import { getHeaderData, type HeaderData } from '@/lib/get-header-data'
 
-export default async function MarketingLayout({ children }: PropsWithChildren) {
-  const locale = await getLocale()
-  const { user, menuData } = await getHeaderData(locale)
+type MarketingScaffoldProps = PropsWithChildren<{
+  user: HeaderData['user']
+  menuData: HeaderData['menuData']
+}>
 
+function MarketingScaffold({ children, user, menuData }: MarketingScaffoldProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -68,5 +70,32 @@ export default async function MarketingLayout({ children }: PropsWithChildren) {
       <MobileBottomNav user={user ? { id: user.id, email: user.email } : null} />
       <Footer />
     </div>
+  )
+}
+
+async function MarketingResolvedLayout({ children }: PropsWithChildren) {
+  const locale = await getLocale()
+  const { user, menuData } = await getHeaderData(locale)
+
+  return (
+    <MarketingScaffold user={user} menuData={menuData}>
+      {children}
+    </MarketingScaffold>
+  )
+}
+
+function MarketingFallbackLayout({ children }: PropsWithChildren) {
+  return (
+    <MarketingScaffold user={null} menuData={null}>
+      {children}
+    </MarketingScaffold>
+  )
+}
+
+export default function MarketingLayout({ children }: PropsWithChildren) {
+  return (
+    <Suspense fallback={<MarketingFallbackLayout>{children}</MarketingFallbackLayout>}>
+      <MarketingResolvedLayout>{children}</MarketingResolvedLayout>
+    </Suspense>
   )
 }

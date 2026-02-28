@@ -60,11 +60,11 @@ function AvatarCircle({
   )
 }
 
-function PointsInline({ points }: { points: number }) {
+function ScoreInline({ score }: { score: number }) {
   return (
     <span className="inline-flex items-baseline gap-1 tabular-nums">
-      <span className="text-sm font-semibold text-foreground">{formatPoints(points)}</span>
-      <span className="text-[11px] font-medium text-muted-foreground">pts</span>
+      <span className="text-sm font-semibold text-foreground">{formatPoints(score)}</span>
+      <span className="text-[11px] font-medium text-muted-foreground">score</span>
     </span>
   )
 }
@@ -154,7 +154,10 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                         <p className="mt-1 text-xs font-semibold text-foreground text-center max-w-20 truncate">
                           {leader.displayName}
                         </p>
-                        <PointsInline points={leader.points} />
+                        <ScoreInline score={leader.score} />
+                        <p className="text-[11px] text-muted-foreground">
+                          Portefeuille: {formatPoints(leader.pointsBalance)} pts
+                        </p>
                       </div>
 
                       {/* Bloc de podium 3D */}
@@ -211,7 +214,10 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                       <span className="text-xs font-semibold text-foreground">
                         #{currentUserRank.rank}
                       </span>
-                      <PointsInline points={currentUserRank.points} />
+                      <ScoreInline score={currentUserRank.score} />
+                      <span className="text-[11px] text-muted-foreground">
+                        {formatPoints(currentUserRank.pointsBalance)} pts
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -240,7 +246,12 @@ export function LeaderboardView({ leaders, currentUserRank }: LeaderboardViewPro
                         </p>
                       </div>
                     </div>
-                    <PointsInline points={leader.points} />
+                    <div className="flex flex-col items-end">
+                      <ScoreInline score={leader.score} />
+                      <span className="text-[11px] text-muted-foreground">
+                        {formatPoints(leader.pointsBalance)} pts
+                      </span>
+                    </div>
                   </Link>
                 ))
               ) : (

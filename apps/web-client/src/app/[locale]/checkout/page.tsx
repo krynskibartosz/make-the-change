@@ -3,7 +3,6 @@ import { CheckoutClient } from '@/app/[locale]/(marketing-no-footer)/checkout/_f
 import { SectionContainer } from '@/components/ui/section-container'
 import { redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { asNumber, isRecord } from '@/lib/type-guards'
 
 export default async function CheckoutPage() {
   const supabase = await createClient()
@@ -20,13 +19,12 @@ export default async function CheckoutPage() {
   const { data: profile } = await supabase
     .from('profiles')
     .select(
-      'first_name, last_name, address_street, address_city, address_postal_code, address_country_code, metadata',
+      'first_name, last_name, address_street, address_city, address_postal_code, address_country_code, points_balance',
     )
     .eq('id', user.id)
     .single()
 
-  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
-  const pointsBalance = asNumber(metadata.points_balance, 0)
+  const pointsBalance = Number(profile?.points_balance || 0)
 
   const defaultAddress = {
     firstName: profile?.first_name || '',

@@ -2,6 +2,7 @@ import 'server-only'
 
 import type { Database } from '@make-the-change/core/database-types'
 import type {
+  Comment,
   ContributorRank,
   ContributorScope,
   FeedScope,
@@ -10,6 +11,7 @@ import type {
   GuildMember,
   HashtagStats,
   Post,
+  PostMediaAsset,
 } from '@make-the-change/core/shared'
 import { cache } from 'react'
 import { getPublicAppUrl } from '@/lib/public-url'
@@ -31,6 +33,19 @@ export type FeedQueryOptions = {
   scope?: FeedScope
 }
 
+export type ReelsFeedScope = Extract<FeedScope, 'all' | 'following'>
+export type ReelsFeedQueryOptions = {
+  page?: number
+  limit?: number
+  scope?: ReelsFeedScope
+}
+export type CommentSort = 'top' | 'newest'
+export type CommentsPageQueryOptions = {
+  page?: number
+  limit?: number
+  sort?: CommentSort
+}
+
 type PostViewRow = Database['social']['Views']['posts_with_authors']['Row']
 type PostRowWithCounts = PostViewRow & {
   reactions?: Array<{ count?: number | null }> | null
@@ -45,7 +60,7 @@ type HashtagStatsViewRow = Database['social']['Views']['hashtag_stats']['Row'] &
 }
 type PostMediaRow = Pick<
   Database['social']['Tables']['post_media']['Row'],
-  'post_id' | 'public_url' | 'sort_order' | 'status'
+  'post_id' | 'public_url' | 'sort_order' | 'status' | 'mime_type' | 'width' | 'height'
 >
 
 type ContributorAggregation = {
@@ -68,11 +83,34 @@ type GuildLeaderboardEntry = {
   guild_id: string
   guild_name: string
   guild_slug: string
+  guild_logo_url: string | null
   members_count: number
   posts_count: number
   reactions_received: number
   comments_received: number
   score: number
+}
+
+type ReelsFeedRow = {
+  id: string
+  author_id: string
+  content: string | null
+  image_urls: string[] | null
+  project_update_id: string | null
+  type: Post['type']
+  visibility: Post['visibility']
+  metadata: Record<string, unknown> | null
+  created_at: string
+  updated_at: string
+  author_full_name: string | null
+  author_avatar_url: string | null
+  shares_count: number | null
+  share_kind: Post['share_kind']
+  source_post_id: string | null
+  reactions_count: number | null
+  comments_count: number | null
+  public_url: string | null
+  mime_type: string | null
 }
 
 const FEED_WINDOW_SIZE = 300
@@ -97,10 +135,15 @@ const isPostVisibility = (value: unknown): value is Post['visibility'] =>
 const isFeedSort = (value: unknown): value is FeedSort =>
   value === 'best' || value === 'newest' || value === 'oldest'
 
-const isFeedScope = (value: unknown): value is FeedScope => value === 'all' || value === 'my_guilds'
+const isFeedScope = (value: unknown): value is FeedScope =>
+  value === 'all' || value === 'my_guilds' || value === 'following'
 
 const isContributorScope = (value: unknown): value is ContributorScope =>
   value === 'all' || value === 'citizens' || value === 'companies'
+
+const normalizeMimeType = (value: unknown) => asString(value).trim().toLowerCase()
+const getMediaKind = (mimeType: string): PostMediaAsset['kind'] =>
+  mimeType.startsWith('video/') ? 'video' : 'image'
 
 const extractCount = (value: unknown): number => {
   if (!Array.isArray(value) || value.length === 0) {
@@ -114,6 +157,27 @@ const extractCount = (value: unknown): number => {
 
   return asNumber(firstEntry.count, 0)
 }
+
+const mapCommentRow = (comment: CommentViewRow): Comment => ({
+  id: asString(comment.id),
+  author_id: asString(comment.author_id),
+  post_id: asString(comment.post_id) || null,
+  project_update_id:
+    (isRecord(comment)
+      ? asString((comment as Record<string, unknown>).project_update_id).trim()
+      : '') || null,
+  content: asString(comment.content),
+  metadata: isRecord(comment.metadata) ? comment.metadata : {},
+  created_at: asString(comment.created_at) || new Date().toISOString(),
+  updated_at: asString(comment.updated_at) || new Date().toISOString(),
+  author: {
+    id: asString(comment.author_id),
+    full_name: asString(comment.author_full_name, 'Utilisateur'),
+    avatar_url: asString(comment.author_avatar_url),
+  },
+  reactions_count: 0,
+  user_has_reacted: false,
+})
 
 const computePostScore = (
   post: Pick<Post, 'created_at' | 'reactions_count' | 'comments_count' | 'shares_count'>,
@@ -315,6 +379,9 @@ const mapRowToPost = (row: unknown, userHasReacted: boolean): Post | null => {
     comments_count: commentsCount,
     user_has_reacted: userHasReacted,
     user_has_bookmarked: false,
+    media: [],
+    primary_video_url: null,
+    primary_video_mime_type: null,
   }
 
   mapped.score = Number.isFinite(asNumber(row.score, Number.NaN))
@@ -363,6 +430,27 @@ const filterRowsByGuildIds = (rows: unknown[], guildIds: string[]): unknown[] =>
     const metadata = isRecord(row.metadata) ? row.metadata : {}
     const guildId = extractGuildIdFromRow(row, metadata)
     return !!guildId && guildIdsSet.has(guildId)
+  })
+}
+
+const filterRowsByAuthorIds = (rows: unknown[], authorIds: Set<string>): unknown[] => {
+  if (authorIds.size === 0) {
+    return []
+  }
+
+  return rows.filter((row) => {
+    if (!isRecord(row)) {
+      return false
+    }
+
+    const authorId = asString(row.author_id).trim()
+    if (authorId && authorIds.has(authorId)) {
+      return true
+    }
+
+    const metadata = isRecord(row.metadata) ? row.metadata : {}
+    const producerId = asString(metadata.producer_id).trim()
+    return !!producerId && authorIds.has(producerId)
   })
 }
 
@@ -470,7 +558,7 @@ const fetchPostMediaRows = async (
   const { data, error } = await supabase
     .schema('social')
     .from('post_media')
-    .select('post_id, public_url, sort_order, status')
+    .select('post_id, public_url, sort_order, status, mime_type, width, height')
     .in('post_id', postIds)
     .order('sort_order', { ascending: true })
 
@@ -491,11 +579,7 @@ const mergePostMediaIntoPosts = async (
 
   const postIds = [...new Set(posts.map((post) => post.id).filter(Boolean))]
   const mediaRows = await fetchPostMediaRows(postIds, useStaticClient)
-  if (mediaRows.length === 0) {
-    return posts
-  }
-
-  const mediaByPostId = new Map<string, string[]>()
+  const mediaByPostId = new Map<string, PostMediaAsset[]>()
 
   for (const media of mediaRows) {
     const postId = asString(media.post_id).trim()
@@ -509,22 +593,54 @@ const mergePostMediaIntoPosts = async (
       continue
     }
 
+    const mimeType = normalizeMimeType(media.mime_type) || null
+    const kind = getMediaKind(mimeType || '')
+    const asset: PostMediaAsset = {
+      url: publicUrl,
+      mime_type: mimeType,
+      kind,
+      width: media.width ?? null,
+      height: media.height ?? null,
+      sort_order: asNumber(media.sort_order, 0),
+    }
+
     const existing = mediaByPostId.get(postId) || []
-    if (!existing.includes(publicUrl)) {
-      existing.push(publicUrl)
-      mediaByPostId.set(postId, existing)
+    if (!existing.some((entry) => entry.url === asset.url)) {
+      existing.push(asset)
+      mediaByPostId.set(
+        postId,
+        existing.sort((a, b) => a.sort_order - b.sort_order),
+      )
     }
   }
 
   return posts.map((post) => {
-    const postMediaUrls = mediaByPostId.get(post.id)
-    if (!postMediaUrls || postMediaUrls.length === 0) {
-      return post
-    }
+    const postMedia = mediaByPostId.get(post.id) || []
+    const mergedMedia = [...(post.media || []), ...postMedia]
+      .filter((entry) => asString(entry.url).trim().length > 0)
+      .reduce<PostMediaAsset[]>((acc, entry) => {
+        if (acc.some((existing) => existing.url === entry.url)) {
+          return acc
+        }
+
+        acc.push(entry)
+        return acc
+      }, [])
+      .sort((a, b) => a.sort_order - b.sort_order)
+
+    const mediaImages = mergedMedia
+      .filter((asset) => asset.kind === 'image')
+      .map((asset) => asset.url)
+
+    const imageUrls = [...new Set([...(post.image_urls || []), ...mediaImages])]
+    const primaryVideo = mergedMedia.find((asset) => asset.kind === 'video') || null
 
     return {
       ...post,
-      image_urls: [...new Set([...(post.image_urls || []), ...postMediaUrls])],
+      image_urls: imageUrls,
+      media: mergedMedia,
+      primary_video_url: primaryVideo?.url || null,
+      primary_video_mime_type: primaryVideo?.mime_type || null,
     }
   })
 }
@@ -555,6 +671,83 @@ const applyViewerStateToPosts = async (posts: Post[], userId?: string): Promise<
   }))
 }
 
+const getCommentReactionCounts = async (commentIds: string[]): Promise<Record<string, number>> => {
+  if (commentIds.length === 0) {
+    return {}
+  }
+
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .schema('social')
+    .from('reactions')
+    .select('comment_id')
+    .eq('type', 'like')
+    .in('comment_id', commentIds)
+
+  if (error || !data) {
+    return {}
+  }
+
+  return data.reduce((acc: Record<string, number>, reaction: { comment_id: string | null }) => {
+    const commentId = asString(reaction.comment_id).trim()
+    if (commentId) {
+      acc[commentId] = (acc[commentId] || 0) + 1
+    }
+    return acc
+  }, {})
+}
+
+const getUserCommentReactionsMap = async (
+  userId: string | undefined,
+  commentIds: string[],
+): Promise<Record<string, boolean>> => {
+  if (!userId || commentIds.length === 0) {
+    return {}
+  }
+
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .schema('social')
+    .from('reactions')
+    .select('comment_id')
+    .eq('user_id', userId)
+    .eq('type', 'like')
+    .in('comment_id', commentIds)
+
+  if (error || !data) {
+    return {}
+  }
+
+  return data.reduce((acc: Record<string, boolean>, reaction: { comment_id: string | null }) => {
+    const commentId = asString(reaction.comment_id).trim()
+    if (commentId) {
+      acc[commentId] = true
+    }
+    return acc
+  }, {})
+}
+
+const augmentCommentsWithReactions = async (
+  comments: Comment[],
+  userId?: string,
+): Promise<Comment[]> => {
+  if (comments.length === 0) {
+    return comments
+  }
+
+  const commentIds = comments.map((comment) => comment.id).filter(Boolean)
+  const [reactionCounts, userReactionsMap] = await Promise.all([
+    getCommentReactionCounts(commentIds),
+    getUserCommentReactionsMap(userId, commentIds),
+  ])
+
+  return comments.map((comment) => ({
+    ...comment,
+    reactions_count: reactionCounts[comment.id] || 0,
+    user_has_reacted: !!userReactionsMap[comment.id],
+  }))
+}
+
 const getUserGuildIds = async (userId: string): Promise<string[]> => {
   const supabase = await createClient()
 
@@ -571,6 +764,36 @@ const getUserGuildIds = async (userId: string): Promise<string[]> => {
   return data
     .map((entry: { guild_id: string | null }) => asString(entry.guild_id))
     .filter((guildId): guildId is string => guildId.length > 0)
+}
+
+const getFollowedAuthorIds = async (userId: string): Promise<Set<string>> => {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .schema('social')
+    .from('follows')
+    .select('following_id, producer_id')
+    .eq('follower_id', userId)
+
+  if (error || !data) {
+    return new Set()
+  }
+
+  const authorIds = new Set<string>()
+
+  for (const follow of data) {
+    const followingId = asString(follow.following_id).trim()
+    if (followingId) {
+      authorIds.add(followingId)
+    }
+
+    const producerId = asString(follow.producer_id).trim()
+    if (producerId) {
+      authorIds.add(producerId)
+    }
+  }
+
+  return authorIds
 }
 
 const POSTS_SELECT_EXPRESSION = `
@@ -738,7 +961,8 @@ const getFeedPublic = async (options: Required<FeedQueryOptions>) => {
     options.sort === 'best' ||
     !!options.hashtagSlug ||
     !!options.guildId ||
-    options.scope === 'my_guilds'
+    options.scope === 'my_guilds' ||
+    options.scope === 'following'
   const from = (options.page - 1) * options.limit
   const to = from + options.limit - 1
   const windowTo = inMemoryProcessing ? Math.max(CACHED_FEED_WINDOW_SIZE - 1, to) : to
@@ -783,14 +1007,45 @@ export async function getFeed(
     options.sort === 'best' ||
     !!options.hashtagSlug ||
     !!options.guildId ||
-    options.scope === 'my_guilds'
+    options.scope === 'my_guilds' ||
+    options.scope === 'following'
   const from = (options.page - 1) * options.limit
   const to = from + options.limit - 1
   const windowTo = inMemoryProcessing ? Math.max(FEED_WINDOW_SIZE - 1, to) : to
 
   let rawRows: unknown[] = []
 
-  if (options.scope === 'my_guilds') {
+  if (options.scope === 'following') {
+    if (!user) {
+      return []
+    }
+
+    const [followedAuthorIds, guildIds, publicRows, guildResult] = await Promise.all([
+      getFollowedAuthorIds(user.id),
+      getUserGuildIds(user.id),
+      fetchPublicPostsWindowCached(options.sort, 0, windowTo),
+      fetchPostsWindowDynamic(options.sort, 'guild_only', 0, windowTo),
+    ])
+
+    if (followedAuthorIds.size === 0) {
+      return []
+    }
+
+    if (guildResult.error) {
+      console.error('Error fetching following scoped feed:', {
+        guildError: guildResult.error,
+      })
+      throw new Error("Impossible de charger le fil d'actualité")
+    }
+
+    rawRows = mergeAndDeduplicatePostRows([
+      ...filterRowsByAuthorIds(publicRows, followedAuthorIds),
+      ...filterRowsByAuthorIds(
+        filterRowsByGuildIds(guildResult.data || [], guildIds),
+        followedAuthorIds,
+      ),
+    ])
+  } else if (options.scope === 'my_guilds') {
     if (!user) {
       return []
     }
@@ -839,6 +1094,80 @@ export async function getHashtagFeed(
   options: Omit<FeedQueryOptions, 'hashtagSlug'> = {},
 ) {
   return getFeed({ ...options, hashtagSlug: slug })
+}
+
+export async function getReelsFeed(options: ReelsFeedQueryOptions = {}): Promise<Post[]> {
+  const page = Math.max(1, asNumber(options.page, 1))
+  const limit = Math.max(1, asNumber(options.limit, 20))
+  const scope: ReelsFeedScope = options.scope === 'following' ? 'following' : 'all'
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { data, error } = await supabase.schema('social').rpc('get_reels_feed', {
+    p_page: page,
+    p_limit: limit,
+    p_scope: scope,
+    p_user_id: user?.id || null,
+  })
+
+  if (error) {
+    console.error('Error fetching reels feed:', error)
+    return []
+  }
+
+  if (!data || data.length === 0) {
+    return []
+  }
+
+  // Mapper les résultats vers le format Post
+  const posts = (data as ReelsFeedRow[]).map((row) => ({
+    id: row.id,
+    author_id: row.author_id,
+    content: row.content,
+    image_urls: row.image_urls || [],
+    project_update_id: row.project_update_id,
+    type: row.type,
+    visibility: row.visibility,
+    metadata: row.metadata || {},
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    author: {
+      id: row.author_id,
+      full_name: row.author_full_name || 'Utilisateur',
+      avatar_url: asString(row.author_avatar_url),
+    },
+    hashtags: [],
+    shares_count: row.shares_count || 0,
+    author_type: 'citizen' as const,
+    share_kind: row.share_kind || 'original',
+    source_post_id: row.source_post_id,
+    source_post: null,
+    guild_id: null,
+    reactions_count: row.reactions_count || 0,
+    comments_count: row.comments_count || 0,
+    user_has_reacted: false,
+    user_has_bookmarked: false,
+    media: row.public_url
+      ? [
+          {
+            url: row.public_url,
+            mime_type: row.mime_type,
+            kind: getMediaKind(asString(row.mime_type)),
+            width: null,
+            height: null,
+            sort_order: 0,
+          },
+        ]
+      : [],
+    primary_video_url: row.public_url || null,
+    primary_video_mime_type: row.mime_type || null,
+    score: 0,
+  }))
+
+  return applyViewerStateToPosts(posts, user?.id)
 }
 
 /**
@@ -1341,6 +1670,9 @@ export async function getPostEmbedData(postId: string) {
  */
 export async function getComments(postId: string) {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const { data: comments, error } = await supabase
     .schema('social')
@@ -1354,14 +1686,105 @@ export async function getComments(postId: string) {
     throw new Error('Impossible de charger les commentaires')
   }
 
-  return (comments || []).map((comment: CommentViewRow) => ({
-    ...comment,
-    author: {
-      id: asString(comment.author_id),
-      full_name: asString(comment.author_full_name, 'Utilisateur'),
-      avatar_url: asString(comment.author_avatar_url) || null,
-    },
-  }))
+  const mappedComments = (comments || []).map((comment: CommentViewRow) => mapCommentRow(comment))
+  return augmentCommentsWithReactions(mappedComments, user?.id)
+}
+
+export async function getCommentsPage(
+  postId: string,
+  options: CommentsPageQueryOptions = {},
+): Promise<{
+  comments: Comment[]
+  hasMore: boolean
+  totalCount: number
+  page: number
+}> {
+  const normalizedPostId = asString(postId).trim()
+  if (!normalizedPostId) {
+    return {
+      comments: [],
+      hasMore: false,
+      totalCount: 0,
+      page: 1,
+    }
+  }
+
+  const page = Math.max(1, asNumber(options.page, 1))
+  const limit = Math.min(50, Math.max(1, asNumber(options.limit, 20)))
+  const sort: CommentSort = options.sort === 'top' ? 'top' : 'newest'
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (sort === 'newest') {
+    const from = (page - 1) * limit
+    const to = from + limit - 1
+
+    const { data, count, error } = await supabase
+      .schema('social')
+      .from('comments_with_authors')
+      .select('*', { count: 'exact' })
+      .eq('post_id', normalizedPostId)
+      .order('created_at', { ascending: false })
+      .range(from, to)
+
+    if (error) {
+      console.error('Error fetching paginated comments:', JSON.stringify(error, null, 2))
+      throw new Error('Impossible de charger les commentaires')
+    }
+
+    const slicedRows = (data || []).slice(0, limit)
+    const mappedComments = slicedRows.map((comment: CommentViewRow) => mapCommentRow(comment))
+    const augmentedComments = await augmentCommentsWithReactions(mappedComments, user?.id)
+
+    return {
+      comments: augmentedComments,
+      hasMore: (count || 0) > from + slicedRows.length,
+      totalCount: count || augmentedComments.length,
+      page,
+    }
+  }
+
+  const maxWindow = Math.min(200, Math.max(page * limit * 3, 60))
+  const { data, count, error } = await supabase
+    .schema('social')
+    .from('comments_with_authors')
+    .select('*', { count: 'exact' })
+    .eq('post_id', normalizedPostId)
+    .order('created_at', { ascending: false })
+    .range(0, maxWindow - 1)
+
+  if (error) {
+    console.error('Error fetching top comments:', JSON.stringify(error, null, 2))
+    throw new Error('Impossible de charger les commentaires')
+  }
+
+  const mappedComments = (data || []).map((comment: CommentViewRow) => mapCommentRow(comment))
+  const augmentedComments = await augmentCommentsWithReactions(mappedComments, user?.id)
+
+  const sortedComments = [...augmentedComments].sort((first, second) => {
+    const firstReactions = asNumber(first.reactions_count, 0)
+    const secondReactions = asNumber(second.reactions_count, 0)
+
+    if (firstReactions === secondReactions) {
+      return new Date(second.created_at).getTime() - new Date(first.created_at).getTime()
+    }
+
+    return secondReactions - firstReactions
+  })
+
+  const from = (page - 1) * limit
+  const to = from + limit
+  const paginatedComments = sortedComments.slice(from, to)
+
+  return {
+    comments: paginatedComments,
+    hasMore: (count || sortedComments.length) > to,
+    totalCount: count || sortedComments.length,
+    page,
+  }
 }
 const mapGuildRow = (
   row: unknown,
@@ -1648,6 +2071,7 @@ export async function getGuildLeaderboard(
         guild_id: guild.id,
         guild_name: guild.name,
         guild_slug: guild.slug,
+        guild_logo_url: guild.logo_url || null,
         members_count: guild.members_count || 0,
         posts_count: 0,
         reactions_received: 0,
@@ -1665,6 +2089,7 @@ export async function getGuildLeaderboard(
       guild_id: guild.id,
       guild_name: guild.name,
       guild_slug: guild.slug,
+      guild_logo_url: guild.logo_url || null,
       members_count: guild.members_count || 0,
       posts_count: 0,
       reactions_received: 0,

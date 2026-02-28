@@ -7,6 +7,9 @@ Stack active : **Next.js 16**, **Drizzle**, **Supabase**, **Base UI**, **Tailwin
 - Index de navigation : `docs/NAVIGATION-INDEX.md`
 - Design system canonique : `docs/03-technical/design-system.md`
 - Scope & gouvernance DB : `docs/03-technical/active-scope-and-db-governance.md`
+- Audit complet `web-client` + DB : `docs/03-technical/2026-02-28-web-client-and-db-comprehensive-audit.md`
+- Modèle produit missions / BioDex / leaderboard : `docs/02-product/impact-gamification-product-model.md`
+- Règles métier missions / BioDex / leaderboard : `docs/03-technical/impact-gamification-rules.md`
 
 ## Sections actives
 - `01-strategy/` — Vision, business model, pricing

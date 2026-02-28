@@ -1,15 +1,11 @@
-import type { Brand } from '@make-the-change/core'
 import { defaultLocale, isLocale, locales, type Locale } from '@make-the-change/core/i18n'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
-import { Suspense, type PropsWithChildren, type ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 import { Providers } from '@/app/providers'
-import { createClient } from '@/lib/supabase/server'
-import { isBrand, parseThemeConfig } from '@/lib/theme-config'
-import { pick } from '@/lib/utils'
 import '@/app/globals.css'
 
 export const metadata: Metadata = {
@@ -24,13 +20,8 @@ export const metadata: Metadata = {
 
 type LocaleLayoutProps = PropsWithChildren<{
   params: Promise<{ locale: string }>
-  modal: ReactNode
+  modal: React.ReactNode
 }>
-
-type AppShellProps = {
-  children: ReactNode
-  modal: ReactNode
-}
 
 const inter = Inter({
   subsets: ['latin'],
@@ -40,67 +31,6 @@ const inter = Inter({
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
-}
-
-function ProvidersShell({ children, modal, initialBrand, initialCustomVars }: AppShellProps & {
-  initialBrand: Brand
-  initialCustomVars: Record<string, string>
-}) {
-  return (
-    <Providers initialBrand={initialBrand} initialCustomVars={initialCustomVars}>
-      {children}
-      {modal}
-    </Providers>
-  )
-}
-
-async function UserThemeProviders({ children, modal }: AppShellProps) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  let initialBrand: Brand = 'default'
-  let initialCustomVars: Record<string, string> = {}
-
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('theme_config')
-      .eq('id', user.id)
-      .single()
-
-    const config = parseThemeConfig(profile?.theme_config)
-    if (config) {
-      if (config.activeThemeId) {
-        // Multi-theme structure
-        const customTheme = config.customThemes?.find((t) => t.id === config.activeThemeId)
-        if (customTheme) {
-          initialBrand = 'custom'
-          initialCustomVars = customTheme.customVars
-        } else if (isBrand(config.activeThemeId)) {
-          initialBrand = config.activeThemeId
-        } else if (isBrand(config.brand)) {
-          initialBrand = config.brand
-        } else {
-          initialBrand = 'default'
-        }
-      } else if (isBrand(config.brand)) {
-        // Legacy structure fallback
-        initialBrand = config.brand
-        initialCustomVars = config.customVars || {}
-      }
-    }
-  }
-
-  return (
-    <ProvidersShell
-      initialBrand={initialBrand}
-      initialCustomVars={initialCustomVars}
-      children={children}
-      modal={modal}
-    />
-  )
 }
 
 export default async function LocaleLayout({ children, modal, params }: LocaleLayoutProps) {
@@ -113,45 +43,17 @@ export default async function LocaleLayout({ children, modal, params }: LocaleLa
 
   setRequestLocale(locale)
   const allMessages = await getMessages({ locale })
-  // Optimization: Only pass essential namespaces to client to reduce HTML payload size
-  // 'marketing' is included because this layout wraps marketing pages which are client-components heavy
-  // 'dashboard' and other feature-specific namespaces should be loaded in their specific layouts if needed
-  const messages = pick(allMessages, [
-    'common',
-    'navigation',
-    'footer',
-    'ui',
-    'auth',
-    'errors',
-    'marketing',
-    'home',
-    'products',
-    'projects',
-    'marketing_pages',
-    'checkout',
-    'dashboard',
-    'community',
-    'system_pages',
-  ])
 
   return (
     <html lang={locale} suppressHydrationWarning className="m-0 p-0 w-full h-full">
       <body
         className={`m-0 p-0 bg-background text-foreground w-full h-full ${inter.className} ${inter.variable}`}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Suspense
-            fallback={
-              <ProvidersShell
-                initialBrand="default"
-                initialCustomVars={{}}
-                children={children}
-                modal={modal}
-              />
-            }
-          >
-            <UserThemeProviders children={children} modal={modal} />
-          </Suspense>
+        <NextIntlClientProvider locale={locale} messages={allMessages}>
+          <Providers>
+            {children}
+            {modal}
+          </Providers>
         </NextIntlClientProvider>
         <script type="application/ld+json">
           {JSON.stringify({

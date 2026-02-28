@@ -1,21 +1,33 @@
-import { Badge, Card, CardContent, Progress } from '@make-the-change/core/ui'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@make-the-change/core/ui'
-import { Crown, Leaf, MapPin, Sparkles, Trophy, Wallet, Loader2 } from 'lucide-react'
+import {
+  Badge,
+  Card,
+  CardContent,
+  Progress,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@make-the-change/core/ui'
+import { Crown, Leaf, Loader2, MapPin, Sparkles, Trophy, Wallet } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { ProfileHeader } from '@/components/profile/profile-header'
-import { SectionContainer } from '@/components/ui/section-container'
 import { FeedClient } from '@/components/social/feed-client'
+import { FollowToggleButton } from '@/components/social/follow-toggle-button'
+import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
-import { createClient } from '@/lib/supabase/server'
 import { getUserFeed } from '@/lib/social/feed.reads'
+import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
+  const {
+    data: { user: viewer },
+  } = await supabase.auth.getUser()
 
   // Fetch public profile data from the secure view
   const { data: profile } = await supabase
@@ -26,6 +38,21 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   if (!profile) {
     notFound()
+  }
+
+  const isOwnProfile = viewer?.id === id
+
+  let isFollowingProfile = false
+  if (viewer && !isOwnProfile) {
+    const { data: existingFollow } = await supabase
+      .schema('social')
+      .from('follows')
+      .select('id')
+      .eq('follower_id', viewer.id)
+      .eq('following_id', id)
+      .maybeSingle()
+
+    isFollowingProfile = !!existingFollow?.id
   }
 
   // Fetch recent public investments
@@ -105,8 +132,8 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   const investments = Array.isArray(rawInvestments)
     ? rawInvestments
-      .map((entry) => toInvestmentRow(entry))
-      .filter((entry): entry is InvestmentRow => entry !== null)
+        .map((entry) => toInvestmentRow(entry))
+        .filter((entry): entry is InvestmentRow => entry !== null)
     : []
 
   // Calculate legitimate stats
@@ -114,8 +141,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const projects = profile.projects_count || 0
   const invested = profile.total_invested_eur || 0
 
-  // Calculate impact score using formula (same as database view)
-  const impactScore = profile.biodiversity_impact || 0
+  const impactScore = profile.impact_score || profile.biodiversity_impact || 0
 
   const levelProgress = getLevelProgress(impactScore)
   const badgeLabels = getMilestoneBadges({
@@ -163,6 +189,15 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
         impactScore={impactScore}
         readonly={true}
       />
+      {!isOwnProfile ? (
+        <div className="-mt-3 flex justify-end">
+          <FollowToggleButton
+            targetType="user"
+            targetId={id}
+            initialFollowing={isFollowingProfile}
+          />
+        </div>
+      ) : null}
 
       <Tabs defaultValue="impact" className="w-full">
         <TabsList className="mb-6">
@@ -198,8 +233,8 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                         </div>
                         <Progress value={levelProgress.progress} className="h-2 bg-primary/10" />
                         <p className="text-xs text-primary/60">
-                          {formatPoints(levelProgress.nextMin - impactScore)} points pour le prochain
-                          niveau
+                          {formatPoints(levelProgress.nextMin - impactScore)} points pour le
+                          prochain niveau
                         </p>
                       </div>
                     </div>
@@ -327,7 +362,9 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                   <dl className="space-y-4 text-sm">
                     <div>
                       <dt className="text-muted-foreground">Membre depuis</dt>
-                      <dd className="font-medium">{formatDate(profile.created_at || new Date())}</dd>
+                      <dd className="font-medium">
+                        {formatDate(profile.created_at || new Date())}
+                      </dd>
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Ville</dt>
@@ -345,7 +382,13 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
         </TabsContent>
 
         <TabsContent value="activite">
-          <Suspense fallback={<div className="flex h-48 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+          <Suspense
+            fallback={
+              <div className="flex h-48 items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            }
+          >
             <FeedClient initialPosts={userPosts} hideCreatePost />
           </Suspense>
         </TabsContent>

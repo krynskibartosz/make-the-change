@@ -14,6 +14,8 @@ Documentation centralisée du produit, design system, parcours utilisateurs et a
 |----------|-------------|--------|--------------|
 | [user-journeys.md](./user-journeys.md) | Parcours utilisateurs optimisés | ✅ Final | 2025-01-XX |
 | [partners-catalog.md](./partners-catalog.md) | Catalogue partenaires & catégories | ✅ Final | 2025-01-XX |
+| [impact-gamification-product-model.md](./impact-gamification-product-model.md) | Modèle produit unifié entre investissement, missions, BioDex et leaderboard | ✅ Proposition 2026 | 2026-02-28 |
+| [impact-gamification-user-stories.md](./impact-gamification-user-stories.md) | 10 user stories produit pour missions, BioDex et classements | ✅ Proposition 2026 | 2026-02-28 |
 | **ux-research-2025/** | **Recherche UX Stratégique 2025** ⭐ **NOUVEAU** | | |
 | [ux-research-2025/README.md](./ux-research-2025/README.md) | Hub recherche UX 2025 | ✅ **Final** | 2025-08-27 |
 | [ux-research-2025/ui-trends-analysis.md](./ux-research-2025/ui-trends-analysis.md) | Top 10 tendances UI/UX 2025 | ✅ **Final** | 2025-08-27 |
@@ -36,6 +38,12 @@ Documentation centralisée du produit, design system, parcours utilisateurs et a
 
 ### Mission
 Démocratiser l'investissement dans la biodiversité avec un modèle "Invest-to-Earn" transparent et impactant.
+
+### Décisions 2026 à intégrer
+- `Missions` comme système transverse et non comme sous-feature communauté
+- `BioDex` comme mix encyclopédie publique + collection personnelle
+- `Leaderboard` par vues (`Impact`, `Communauté`, `BioDex`) avec `Impact` comme vue principale
+- `Projet` avec une espèce principale obligatoire et des espèces secondaires optionnelles en phase 2
 
 ### Phases de Développement
 

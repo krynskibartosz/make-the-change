@@ -8,7 +8,7 @@ export async function getLeaderboardTop(limit = 50): Promise<LeaderboardEntry[]>
 
   const { data, error } = await supabase
     .from('public_user_rankings')
-    .select('id, rank, display_name, points_balance, avatar_url')
+    .select('id, rank, display_name, impact_score, points_balance, avatar_url')
     .order('rank', { ascending: true })
     .limit(limit)
 
@@ -23,7 +23,8 @@ export async function getLeaderboardTop(limit = 50): Promise<LeaderboardEntry[]>
       id: entry.id,
       rank: entry.rank,
       displayName: entry.display_name || 'Utilisateur',
-      points: entry.points_balance || 0,
+      score: entry.impact_score || entry.points_balance || 0,
+      pointsBalance: entry.points_balance || 0,
       avatarUrl: entry.avatar_url,
     }))
 }
@@ -35,7 +36,7 @@ export async function getCurrentUserRank(userId: string): Promise<CurrentUserRan
 
   const { data, error } = await supabase
     .from('public_user_rankings')
-    .select('rank, points_balance')
+    .select('rank, impact_score, points_balance')
     .eq('id', userId)
     .maybeSingle()
 
@@ -44,6 +45,7 @@ export async function getCurrentUserRank(userId: string): Promise<CurrentUserRan
 
   return {
     rank: data.rank,
-    points: data.points_balance || 0,
+    score: data.impact_score || data.points_balance || 0,
+    pointsBalance: data.points_balance || 0,
   }
 }

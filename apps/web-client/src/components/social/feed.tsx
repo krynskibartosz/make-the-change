@@ -10,6 +10,7 @@ interface FeedProps {
   guildId?: string
   hideCreatePost?: boolean
   limit?: number
+  emptyMessage?: string
 }
 
 export async function Feed({
@@ -19,6 +20,7 @@ export async function Feed({
   guildId = '',
   hideCreatePost = false,
   limit = 20,
+  emptyMessage,
 }: FeedProps) {
   const supabase = await createClient()
 
@@ -33,6 +35,7 @@ export async function Feed({
       hideCreatePost={hideCreatePost}
       canWrite={!!authData.user}
       guildId={guildId || undefined}
+      emptyMessage={emptyMessage}
     />
   )
 }

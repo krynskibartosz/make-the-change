@@ -2,6 +2,7 @@ import { Badge, Button, DetailView } from '@make-the-change/core/ui'
 import { ArrowLeft, Package, Truck } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getOrderStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
 import {
   parseOrderItems,
@@ -18,6 +19,7 @@ interface OrderDetailPageProps {
 export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
   const { id } = await params
   const t = await getTranslations('orders')
+  const user = await requireAuth()
   const supabase = await createClient()
 
   const { data: order } = await supabase
@@ -44,6 +46,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     `,
     )
     .eq('id', id)
+    .eq('user_id', user.id)
     .single()
 
   if (!order) notFound()

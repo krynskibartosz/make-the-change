@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { buildPublicAppUrl } from '@/lib/public-url'
 import { getPostById } from '@/lib/social/feed.reads'
+import { CommunityPageFrame } from '../../../_features/community-page-frame'
+import { CommunityRightRail } from '../../../_features/community-right-rail'
 import { CommunityPostShareContent } from './_features/community-post-share-content'
 
 type CommunityPostSharePageProps = {
@@ -45,6 +47,8 @@ export default async function CommunityPostSharePage({ params }: CommunityPostSh
   const post = await getPostById(id)
 
   return (
-    <CommunityPostShareContent postId={id} locale={locale} mode="page" initialPost={post} />
+    <CommunityPageFrame rightRail={<CommunityRightRail variant="default" />}>
+      <CommunityPostShareContent postId={id} locale={locale} mode="page" initialPost={post} />
+    </CommunityPageFrame>
   )
 }

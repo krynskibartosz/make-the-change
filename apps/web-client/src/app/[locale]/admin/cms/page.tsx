@@ -1,8 +1,10 @@
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+import { connection } from 'next/server'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 
 export default async function AdminCmsPage() {
+  await connection()
   const _t = await getTranslations('admin')
 
   return (

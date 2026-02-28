@@ -47,6 +47,7 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
     `,
     )
     .eq('id', orderId)
+    .eq('user_id', user.id)
     .single()
 
   if (!order) notFound()

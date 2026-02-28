@@ -76,11 +76,11 @@ function AvatarCircle({
   )
 }
 
-function PointsInline({ points }: { points: number }) {
+function ScoreInline({ score }: { score: number }) {
   return (
     <span className="inline-flex items-baseline gap-1 tabular-nums">
-      <span className="text-sm font-semibold text-foreground">{formatPoints(points)}</span>
-      <span className="text-[11px] font-medium text-muted-foreground">pts</span>
+      <span className="text-sm font-semibold text-foreground">{formatPoints(score)}</span>
+      <span className="text-[11px] font-medium text-muted-foreground">score</span>
     </span>
   )
 }
@@ -125,7 +125,7 @@ export function PodiumTestView({ leaders, currentUserRank }: PodiumTestViewProps
                     <p className="mt-2 text-sm font-semibold text-foreground text-center max-w-20 truncate">
                       {leader.displayName}
                     </p>
-                    <PointsInline points={leader.points} />
+                    <ScoreInline score={leader.score} />
                   </div>
 
                   {/* Bloc de podium 3D */}
@@ -180,7 +180,7 @@ export function PodiumTestView({ leaders, currentUserRank }: PodiumTestViewProps
                 <span className="text-sm font-semibold text-foreground">
                   #{currentUserRank.rank}
                 </span>
-                <PointsInline points={currentUserRank.points} />
+                <ScoreInline score={currentUserRank.score} />
               </span>
             </div>
           </div>

@@ -10,7 +10,7 @@ import { formatCurrency, formatDate } from '@/lib/utils'
 
 export default async function InvestmentsPage() {
   const t = await getTranslations('investments')
-  const _user = await requireAuth()
+  const user = await requireAuth()
   const supabase = await createClient()
 
   // Fetch user investments with project details using RLS
@@ -29,6 +29,7 @@ export default async function InvestmentsPage() {
         status
       )
     `)
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
   // Calculate total invested

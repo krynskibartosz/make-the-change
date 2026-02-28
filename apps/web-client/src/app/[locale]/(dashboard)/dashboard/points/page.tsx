@@ -4,8 +4,36 @@ import { getTranslations } from 'next-intl/server'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { asNumber, isRecord } from '@/lib/type-guards'
+import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { formatDate, formatPoints } from '@/lib/utils'
+
+type LedgerTransaction = {
+  id: string
+  label: string
+  delta: number
+  createdAt: string
+}
+
+const getLedgerReasonLabel = (reason: string) => {
+  switch (reason) {
+    case 'purchase':
+      return 'Commande'
+    case 'refund':
+      return 'Remboursement'
+    case 'investment':
+      return 'Investissement'
+    case 'investment_returns':
+      return 'Retour sur investissement'
+    case 'welcome_bonus':
+      return 'Bonus de bienvenue'
+    case 'referral':
+      return 'Parrainage'
+    case 'admin_adjustment':
+      return 'Ajustement manuel'
+    default:
+      return 'Transaction'
+  }
+}
 
 export default async function PointsPage() {
   const t = await getTranslations('points')
@@ -21,22 +49,96 @@ export default async function PointsPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('metadata')
+    .select('points_balance')
     .eq('id', user.id)
     .single()
 
-  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
-  const walletBalance = asNumber(metadata.points_balance, 0)
+  const walletBalance = asNumber(profile?.points_balance, 0)
 
-  // Fetch orders to deduce points history using RLS
-  const { data: userOrders } = await supabase
-    .from('orders')
-    .select('id, points_earned, points_used, created_at')
+  const { data: ledgerRows, error: ledgerError } = await supabase
+    .schema('commerce')
+    .from('points_ledger')
+    .select('id, delta, reason, created_at')
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  // Calculate totals from orders
-  const totalEarned = (userOrders || []).reduce((sum, o) => sum + (o.points_earned || 0), 0)
-  const totalSpent = (userOrders || []).reduce((sum, o) => sum + (o.points_used || 0), 0)
+  // Fallback legacy history derived from orders if ledger is not available yet.
+  const { data: userOrders } = await supabase
+    .from('orders')
+    .select('id, user_id, points_earned, points_used, created_at')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+
+  const transactionsFromLedger: LedgerTransaction[] =
+    !ledgerError && Array.isArray(ledgerRows)
+      ? ledgerRows
+          .map((row) => {
+            if (!isRecord(row)) {
+              return null
+            }
+
+            const id = asString(row.id)
+            const createdAt = asString(row.created_at)
+
+            if (!id || !createdAt) {
+              return null
+            }
+
+            return {
+              id,
+              label: getLedgerReasonLabel(asString(row.reason)),
+              delta: asNumber(row.delta, 0),
+              createdAt,
+            }
+          })
+          .filter((row): row is LedgerTransaction => row !== null)
+      : []
+
+  const transactionsFromOrders: LedgerTransaction[] = Array.isArray(userOrders)
+    ? userOrders.flatMap((order) => {
+        const orderId = asString(order.id)
+        const createdAt = asString(order.created_at)
+        if (!orderId || !createdAt) {
+          return []
+        }
+
+        const earned = asNumber(order.points_earned, 0)
+        const spent = asNumber(order.points_used, 0)
+
+        return [
+          ...(earned > 0
+            ? [
+                {
+                  id: `${orderId}-earned`,
+                  label: `Commande #${orderId.slice(0, 8)} (gain)`,
+                  delta: earned,
+                  createdAt,
+                },
+              ]
+            : []),
+          ...(spent > 0
+            ? [
+                {
+                  id: `${orderId}-spent`,
+                  label: `Commande #${orderId.slice(0, 8)} (utilisation)`,
+                  delta: -spent,
+                  createdAt,
+                },
+              ]
+            : []),
+        ]
+      })
+    : []
+
+  const transactions =
+    transactionsFromLedger.length > 0 ? transactionsFromLedger : transactionsFromOrders
+
+  const totalEarned = transactions.reduce((sum, transaction) => {
+    return transaction.delta > 0 ? sum + transaction.delta : sum
+  }, 0)
+  const totalSpent = transactions.reduce((sum, transaction) => {
+    return transaction.delta < 0 ? sum + Math.abs(transaction.delta) : sum
+  }, 0)
   const currentBalance = walletBalance
 
   return (
@@ -104,54 +206,44 @@ export default async function PointsPage() {
           <CardTitle className="text-base sm:text-lg">{t('history')}</CardTitle>
         </CardHeader>
         <CardContent className="p-5 pt-3 sm:p-8 sm:pt-4">
-          {userOrders && userOrders.length > 0 ? (
+          {transactions.length > 0 ? (
             <div className="space-y-3">
-              {userOrders.map((order) => {
-                // Show separate entries for Earned vs Spent if both happened?
-                // For simplicity, row per order.
-                const earned = order.points_earned || 0
-                const spent = order.points_used || 0
+              {transactions.map((transaction) => {
+                const isPositive = transaction.delta >= 0
 
                 return (
-                  <div key={order.id} className="space-y-2">
-                    {earned > 0 && (
-                      <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-client-emerald-100 dark:bg-client-emerald-900/30">
-                            <ArrowUp className="h-5 w-5 text-client-emerald-600 dark:text-client-emerald-400" />
-                          </div>
-                          <div>
-                            <p className="font-medium">Commande #{order.id.slice(0, 8)} (Gain)</p>
-                            <p className="text-sm text-muted-foreground">
-                              {formatDate(order.created_at || new Date())}
-                            </p>
-                          </div>
-                        </div>
-                        <Badge variant="success" className="text-sm font-bold">
-                          +{formatPoints(earned)} pts
-                        </Badge>
+                  <div
+                    key={transaction.id}
+                    className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`flex h-10 w-10 items-center justify-center rounded-full ${
+                          isPositive
+                            ? 'bg-client-emerald-100 dark:bg-client-emerald-900/30'
+                            : 'bg-client-orange-100 dark:bg-client-orange-900/30'
+                        }`}
+                      >
+                        {isPositive ? (
+                          <ArrowUp className="h-5 w-5 text-client-emerald-600 dark:text-client-emerald-400" />
+                        ) : (
+                          <ArrowDown className="h-5 w-5 text-client-orange-600 dark:text-client-orange-400" />
+                        )}
                       </div>
-                    )}
-                    {spent > 0 && (
-                      <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-client-orange-100 dark:bg-client-orange-900/30">
-                            <ArrowDown className="h-5 w-5 text-client-orange-600 dark:text-client-orange-400" />
-                          </div>
-                          <div>
-                            <p className="font-medium">
-                              Commande #{order.id.slice(0, 8)} (Utilisation)
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {formatDate(order.created_at || new Date())}
-                            </p>
-                          </div>
-                        </div>
-                        <Badge variant="destructive" className="text-sm font-bold">
-                          -{formatPoints(spent)} pts
-                        </Badge>
+                      <div>
+                        <p className="font-medium">{transaction.label}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {formatDate(transaction.createdAt)}
+                        </p>
                       </div>
-                    )}
+                    </div>
+                    <Badge
+                      variant={isPositive ? 'success' : 'destructive'}
+                      className="text-sm font-bold"
+                    >
+                      {isPositive ? '+' : '-'}
+                      {formatPoints(Math.abs(transaction.delta))} pts
+                    </Badge>
                   </div>
                 )
               })}

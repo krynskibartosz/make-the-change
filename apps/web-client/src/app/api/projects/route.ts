@@ -1,14 +1,15 @@
-import { createClient } from '@/lib/supabase/client'
+import { createStaticClient } from '@/lib/supabase/static'
 
 export async function GET(request: Request) {
   try {
-    const supabase = createClient()
+    const supabase = createStaticClient()
     const { searchParams } = new URL(request.url)
 
     const search = searchParams.get('search')
     const featured = searchParams.get('featured')
     const status = searchParams.get('status')
-    const limit = parseInt(searchParams.get('limit') || '24')
+    const parsedLimit = Number.parseInt(searchParams.get('limit') || '24', 10)
+    const limit = Number.isFinite(parsedLimit) ? Math.min(Math.max(parsedLimit, 1), 100) : 24
 
     let query = supabase
       .from('public_projects')

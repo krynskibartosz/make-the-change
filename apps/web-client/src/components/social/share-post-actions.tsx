@@ -18,6 +18,7 @@ type SharePostActionsProps = {
   embedUrl?: string | null
   oEmbedUrl?: string | null
   ogImageUrl?: string | null
+  onShareRecorded?: (channel: ShareChannel) => void
 }
 
 type ShareActionKind = 'external' | 'copy' | 'native' | 'embed' | 'internal_quote'
@@ -39,8 +40,20 @@ const trimToLength = (value: string, maxLength: number) => {
   return `${value.slice(0, Math.max(0, maxLength - 1)).trim()}…`
 }
 
+const toAbsoluteUrl = (value: string) => {
+  if (/^https?:\/\//i.test(value)) {
+    return value
+  }
+
+  if (typeof window !== 'undefined') {
+    return new URL(value, window.location.origin).toString()
+  }
+
+  return `http://localhost:3000${value.startsWith('/') ? value : `/${value}`}`
+}
+
 const buildTrackedPostUrl = (baseUrl: string, channel: ShareChannel, shareToken: string | null) => {
-  const url = new URL(baseUrl)
+  const url = new URL(toAbsoluteUrl(baseUrl))
   url.searchParams.set('utm_source', 'community')
   url.searchParams.set('utm_medium', 'social')
   url.searchParams.set('utm_campaign', 'post_share')
@@ -61,7 +74,6 @@ const buildExternalShareUrl = (
 ) => {
   const encodedUrl = encodeURIComponent(shareUrl)
   const encodedTitle = encodeURIComponent(shareTitle)
-  const encodedDescription = encodeURIComponent(shareDescription)
   const emailBody = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`)
 
   if (channel === 'x') {
@@ -130,6 +142,7 @@ export function SharePostActions({
   embedUrl,
   oEmbedUrl,
   ogImageUrl,
+  onShareRecorded,
 }: SharePostActionsProps) {
   const { toast } = useToast()
   const t = useTranslations('community')
@@ -141,10 +154,7 @@ export function SharePostActions({
   const resolvedOEmbedUrl = (oEmbedUrl || '').trim()
   const resolvedOgImageUrl = (ogImageUrl || '').trim()
   const resolvedTitle = trimToLength(title || t('post.share_fallback_title'), 110)
-  const resolvedDescription = trimToLength(
-    description || title || t('share.description'),
-    180,
-  )
+  const resolvedDescription = trimToLength(description || title || t('share.description'), 180)
 
   useEffect(() => {
     setCanNativeShare(typeof navigator.share === 'function')
@@ -178,7 +188,11 @@ export function SharePostActions({
 
   const recommendedChannels = useMemo<ShareChannel[]>(() => {
     if (!SHARE_V2_ENABLED) {
-      return ['copy', ...(canNativeShare ? (['native'] as ShareChannel[]) : []), ...LEGACY_SHARE_CHANNELS]
+      return [
+        'copy',
+        ...(canNativeShare ? (['native'] as ShareChannel[]) : []),
+        ...LEGACY_SHARE_CHANNELS,
+      ]
     }
 
     return canNativeShare ? ['native', 'copy', 'whatsapp'] : ['copy', 'x', 'facebook']
@@ -246,6 +260,7 @@ export function SharePostActions({
           share_token: shareToken,
           target_url: trackedPostUrl,
         })
+        onShareRecorded?.(action.channel)
         toast({
           title: t('share.link_copied_title'),
           description: t('share.link_copied_description'),
@@ -272,6 +287,7 @@ export function SharePostActions({
           share_token: shareToken,
           target_url: resolvedEmbedUrl,
         })
+        onShareRecorded?.(action.channel)
         toast({
           title: t('share.embed_copied_title'),
           description: t('share.embed_copied_description'),
@@ -284,6 +300,7 @@ export function SharePostActions({
           share_token: shareToken,
           target_url: `/community/posts/new?quote=${postId}`,
         })
+        onShareRecorded?.(action.channel)
         router.push(
           `/community/posts/new?quote=${postId}&share_channel=internal_quote${shareToken ? `&share_token=${encodeURIComponent(shareToken)}` : ''}`,
         )
@@ -307,6 +324,7 @@ export function SharePostActions({
             share_token: shareToken,
             target_url: trackedPostUrl,
           })
+          onShareRecorded?.(action.channel)
         } catch {
           // User can cancel the native share dialog.
         }
@@ -336,6 +354,7 @@ export function SharePostActions({
         share_token: shareToken,
         target_url: trackedPostUrl,
       })
+      onShareRecorded?.(action.channel)
     } catch (_error) {
       toast({
         title: t('share.share_error_title'),
@@ -350,7 +369,9 @@ export function SharePostActions({
   const recommendedActions = shareActions.filter((action) =>
     recommendedChannels.includes(action.channel),
   )
-  const secondaryActions = shareActions.filter((action) => !recommendedChannels.includes(action.channel))
+  const secondaryActions = shareActions.filter(
+    (action) => !recommendedChannels.includes(action.channel),
+  )
   const previewImage = imageUrl || resolvedOgImageUrl
 
   return (
@@ -457,7 +478,12 @@ export function SharePostActions({
 
         {SHARE_V2_ENABLED && resolvedOEmbedUrl ? (
           <p className="text-xs text-muted-foreground">
-            <a href={resolvedOEmbedUrl} target="_blank" rel="noreferrer" className="hover:underline">
+            <a
+              href={resolvedOEmbedUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:underline"
+            >
               {t('share.embed_help_link')}
             </a>
           </p>

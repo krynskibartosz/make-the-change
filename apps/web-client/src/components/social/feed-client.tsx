@@ -15,6 +15,7 @@ interface FeedProps {
   hideCreatePost?: boolean
   canWrite?: boolean
   guildId?: string
+  emptyMessage?: string
 }
 
 type OptimisticAction =
@@ -28,6 +29,7 @@ export function FeedClient({
   hideCreatePost = false,
   canWrite = false,
   guildId,
+  emptyMessage,
 }: FeedProps) {
   const { toast } = useToast()
   const router = useRouter()
@@ -298,7 +300,7 @@ export function FeedClient({
       <div>
         {optimisticPosts.length === 0 ? (
           <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
-            <p>{t('feed.empty')}</p>
+            <p>{emptyMessage || t('feed.empty')}</p>
           </div>
         ) : (
           optimisticPosts.map((post) => {

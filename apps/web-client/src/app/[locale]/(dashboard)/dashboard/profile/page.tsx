@@ -34,6 +34,12 @@ export default async function ProfilePage() {
   // Fetch profile using RLS
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
+  const { data: publicRanking } = await supabase
+    .from('public_user_rankings')
+    .select('rank, impact_score')
+    .eq('id', user.id)
+    .maybeSingle()
+
   // Fetch investment stats using RLS
   const { data: userInvestments } = await supabase
     .from('investments')
@@ -48,14 +54,17 @@ export default async function ProfilePage() {
   )
 
   const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
-  const avatarUrl = asString(metadata.avatar_url) || undefined
-  const coverUrl = asString(metadata.cover_url) || undefined
-  const pointsBalance = asNumber(metadata.points_balance, 0)
-  const impactScore = calculateImpactScore({
-    points: pointsBalance,
-    projects: projectsSupported,
-    invested: totalInvested,
-  })
+  const avatarUrl = profile?.avatar_url || asString(metadata.avatar_url) || undefined
+  const coverUrl = profile?.cover_url || asString(metadata.cover_url) || undefined
+  const pointsBalance = asNumber(profile?.points_balance, 0)
+  const impactScore =
+    asNumber(publicRanking?.impact_score, 0) ||
+    calculateImpactScore({
+      points: pointsBalance,
+      projects: projectsSupported,
+      invested: totalInvested,
+    })
+  const publicRank = asNumber(publicRanking?.rank, 0)
   const levelProgress = getLevelProgress(impactScore)
   const pointsToNextLevel =
     levelProgress.nextLevel === null ? 0 : Math.max(levelProgress.nextMin - impactScore, 0)
@@ -98,14 +107,18 @@ export default async function ProfilePage() {
                 <CardContent className="space-y-4 p-5 pt-3 text-sm text-muted-foreground sm:p-8 sm:pt-4">
                   <div className="flex items-center justify-between">
                     <span>Rang global</span>
-                    <span className="font-bold text-foreground text-lg">#42</span>
+                    <span className="font-bold text-foreground text-lg">
+                      {publicRank > 0 ? `#${publicRank}` : '—'}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between border-t border-border/50 pt-4">
-                    <span>Rang mensuel</span>
-                    <span className="font-bold text-foreground text-lg">#8</span>
+                    <span>Impact score</span>
+                    <span className="font-bold text-foreground text-lg">
+                      {new Intl.NumberFormat('fr-FR').format(impactScore)}
+                    </span>
                   </div>
                   <p className="text-xs italic opacity-70">
-                    Continuez à investir pour grimper dans le classement.
+                    Le classement public suit votre impact score actuel.
                   </p>
                   <Link href="/leaderboard">
                     <Button

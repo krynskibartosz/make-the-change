@@ -1,9 +1,8 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
-import { Flame, Home, Plus, User, Users } from 'lucide-react'
+import { Clapperboard, Plus, Rss, User, Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -13,32 +12,27 @@ interface CommunityMobileBottomNavProps {
 
 export function CommunityMobileBottomNav({ user }: CommunityMobileBottomNavProps) {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const t = useTranslations('navigation')
   const tCommunity = useTranslations('community')
-  const currentSort = searchParams.get('sort')
 
   const navItems = [
     {
       href: '/community',
-      icon: Home,
-      label: t('home'),
-      isActive: pathname === '/community' && currentSort !== 'best',
+      icon: Rss,
+      label: tCommunity('sidebar.feed'),
+      isActive: pathname === '/community',
     },
     {
-      href: '/community?sort=best',
-      icon: Flame,
-      label: tCommunity('sidebar.trending'),
-      isActive:
-        pathname === '/community'
-          ? currentSort === 'best'
-          : pathname.startsWith('/community/trending'),
+      href: '/community/reels',
+      icon: Clapperboard,
+      label: tCommunity('sidebar.reels'),
+      isActive: pathname.startsWith('/community/reels'),
     },
     {
-      href: '/community/posts/new',
+      href: '/community/reels/new',
       icon: Plus,
-      label: tCommunity('sidebar.update_post'),
-      isActive: pathname.startsWith('/community/posts/new'),
+      label: tCommunity('sidebar.post_reel'),
+      isActive: pathname.startsWith('/community/reels/new'),
       isAction: true,
     },
     {

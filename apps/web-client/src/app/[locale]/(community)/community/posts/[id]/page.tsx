@@ -6,6 +6,8 @@ import { getTranslations } from 'next-intl/server'
 import { buildPublicAppUrl } from '@/lib/public-url'
 import { recordShareEvent } from '@/lib/social/feed.actions'
 import { getComments, getPostById } from '@/lib/social/feed.reads'
+import { CommunityPageFrame } from '../../_features/community-page-frame'
+import { CommunityRightRail } from '../../_features/community-right-rail'
 import { CommunityPostThreadContent } from './_features/community-post-thread-content'
 
 type CommunityPostPageProps = {
@@ -108,11 +110,13 @@ export default async function CommunityPostPage({ params, searchParams }: Commun
   }
 
   return (
-    <CommunityPostThreadContent
-      postId={id}
-      mode="page"
-      initialPost={post}
-      initialComments={comments}
-    />
+    <CommunityPageFrame rightRail={<CommunityRightRail variant="default" />}>
+      <CommunityPostThreadContent
+        postId={id}
+        mode="page"
+        initialPost={post}
+        initialComments={comments}
+      />
+    </CommunityPageFrame>
   )
 }

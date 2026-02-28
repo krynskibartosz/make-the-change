@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { FollowToggleButton } from '@/components/social/follow-toggle-button'
 import { PageHero } from '@/components/ui/page-hero'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
@@ -117,6 +118,9 @@ export default async function ProducerDetailPage({
   const { slug } = await params
   const supabase = await createClient()
   const t = await getTranslations('producers')
+  const {
+    data: { user: viewer },
+  } = await supabase.auth.getUser()
 
   const { data: producerRaw, error: producerError } = await supabase
     .from('public_producers')
@@ -131,6 +135,19 @@ export default async function ProducerDetailPage({
   const producer = toProducerRow(producerRaw)
   if (!producer) {
     notFound()
+  }
+
+  let isFollowingProducer = false
+  if (viewer) {
+    const { data: existingFollow } = await supabase
+      .schema('social')
+      .from('follows')
+      .select('id')
+      .eq('follower_id', viewer.id)
+      .eq('producer_id', producer.id)
+      .maybeSingle()
+
+    isFollowingProducer = !!existingFollow?.id
   }
 
   const location = [producer.address_city, producer.address_country_code].filter(Boolean).join(', ')
@@ -183,6 +200,13 @@ export default async function ProducerDetailPage({
             <Factory className="h-4 w-4" />
             {t('producer_label')}
           </span>
+        </div>
+        <div className="mt-4 flex justify-center">
+          <FollowToggleButton
+            targetType="producer"
+            targetId={producer.id}
+            initialFollowing={isFollowingProducer}
+          />
         </div>
       </PageHero>
 

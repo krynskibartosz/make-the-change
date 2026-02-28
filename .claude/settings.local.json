@@ -43,13 +43,26 @@
       "Bash(pnpm lint:*)",
       "WebFetch(domain:www.npmjs.com)",
       "Bash(pnpm remove:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "mcp__vercel__check_domain_availability_and_price",
+      "mcp__vercel__deploy_to_vercel",
+      "mcp__vercel__get_access_to_vercel_url",
+      "mcp__vercel__get_deployment",
+      "mcp__vercel__get_deployment_build_logs",
+      "mcp__vercel__get_project",
+      "mcp__vercel__get_runtime_logs",
+      "mcp__vercel__list_deployments",
+      "mcp__vercel__list_projects",
+      "mcp__vercel__list_teams",
+      "mcp__vercel__search_vercel_documentation",
+      "mcp__vercel__web_fetch_vercel_url"
     ],
     "deny": [],
     "ask": []
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "supabase"
+    "supabase",
+    "vercel"
   ]
 }

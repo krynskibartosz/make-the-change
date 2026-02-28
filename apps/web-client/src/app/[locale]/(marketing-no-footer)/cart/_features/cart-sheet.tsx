@@ -10,8 +10,10 @@ import {
   Skeleton,
 } from '@make-the-change/core/ui'
 import { ShoppingBag, X } from 'lucide-react'
+import { useLocale } from 'next-intl'
 import { useRef } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
+import { CHECKOUT_AVAILABLE, getCheckoutUnavailableCopy } from '@/lib/checkout-status'
 import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 import { CartLineItem } from './cart-line-item'
 import { useCartUI } from './cart-ui-provider'
@@ -21,15 +23,17 @@ const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
   stockQuantity !== null && stockQuantity !== undefined && stockQuantity <= 0
 
 export function CartSheet() {
+  const locale = useLocale()
   const router = useRouter()
   const { items, hydrated, setQuantity, removeItem, replaceItems, clear } = useCart()
   const { itemsCount, totalPoints, totalEuros } = useCartTotals()
   const { isCartOpen, openCart, closeCart, showSnackbar } = useCartUI()
+  const checkoutCopy = getCheckoutUnavailableCopy(locale)
   const itemsRef = useRef(items)
   itemsRef.current = items
 
   const hasOutOfStock = items.some((i) => isOutOfStockSnapshot(i.snapshot.stockQuantity))
-  const canCheckout = itemsCount > 0 && !hasOutOfStock
+  const canCheckout = itemsCount > 0 && !hasOutOfStock && CHECKOUT_AVAILABLE
 
   const handleRemove = (productId: string) => {
     const removedIndex = items.findIndex((i) => i.productId === productId)
@@ -176,6 +180,11 @@ export function CartSheet() {
                     Un article est en rupture. Retirez-le pour continuer.
                   </div>
                 ) : null}
+                {!CHECKOUT_AVAILABLE && itemsCount > 0 && !hasOutOfStock ? (
+                  <div className="rounded-2xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning">
+                    {checkoutCopy.cartNotice}
+                  </div>
+                ) : null}
 
                 {items.map((item) => (
                   <CartLineItem
@@ -230,10 +239,12 @@ export function CartSheet() {
                 disabled={!canCheckout}
                 onClick={() => {
                   closeCart()
-                  router.push('/checkout')
+                  if (CHECKOUT_AVAILABLE) {
+                    router.push('/checkout')
+                  }
                 }}
               >
-                Passer commande
+                {CHECKOUT_AVAILABLE ? 'Passer commande' : checkoutCopy.cartActionLabel}
                 {itemsCount > 0 ? (
                   <Badge
                     variant="secondary"
@@ -246,6 +257,9 @@ export function CartSheet() {
                   </Badge>
                 ) : null}
               </Button>
+              {!CHECKOUT_AVAILABLE && itemsCount > 0 && !hasOutOfStock ? (
+                <p className="text-xs text-warning">{checkoutCopy.cartActionHint}</p>
+              ) : null}
             </div>
           </div>
         </div>

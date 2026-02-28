@@ -1,9 +1,9 @@
 'use client'
 
-import { Button } from '@make-the-change/core/ui'
 import type { FeedScope, FeedSort } from '@make-the-change/core/shared'
-import { useTranslations } from 'next-intl'
+import { Button } from '@make-the-change/core/ui'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -15,7 +15,7 @@ type CommunityFeedControlsProps = {
 }
 
 const SORT_VALUES: FeedSort[] = ['best', 'newest', 'oldest']
-const SCOPE_VALUES: FeedScope[] = ['all', 'my_guilds']
+const TAB_SCOPE_VALUES: Array<Extract<FeedScope, 'all' | 'following'>> = ['all', 'following']
 
 export function CommunityFeedControls({
   sort,
@@ -46,52 +46,54 @@ export function CommunityFeedControls({
 
   const scopeItems = useMemo(
     () =>
-      SCOPE_VALUES.map((value) => ({
+      TAB_SCOPE_VALUES.map((value) => ({
         value,
-        label: t(`feed_controls.scope_${value}`),
+        label: value === 'all' ? t('feed_controls.tab_for_you') : t('feed_controls.tab_following'),
       })),
     [t],
   )
 
+  const activeScope: 'all' | 'following' = scope === 'following' ? 'following' : 'all'
+
   return (
     <div className="space-y-2 rounded-xl border border-border/70 bg-background/80 p-2.5 sm:p-3">
-      <div className={cn('grid gap-2', showScope && 'sm:grid-cols-[3fr_2fr]')}>
-        <div className="grid grid-cols-3 gap-1.5">
-          {sortItems.map((item) => (
+      {showScope ? (
+        <div className="grid grid-cols-2 gap-1.5 rounded-full border border-border/60 bg-background/70 p-1">
+          {scopeItems.map((item) => (
             <Button
               key={item.value}
               type="button"
-              variant={sort === item.value ? 'default' : 'outline'}
+              variant={activeScope === item.value ? 'default' : 'ghost'}
               size="sm"
               className={cn(
-                'h-9 min-h-9 w-full rounded-full px-2 text-sm sm:px-3 whitespace-nowrap',
-                sort === item.value && 'shadow-sm',
+                'h-9 min-h-9 w-full rounded-full px-3 text-sm whitespace-nowrap',
+                activeScope === item.value && 'shadow-sm',
               )}
-              onClick={() => updateQueryParam('sort', item.value)}
+              onClick={() => updateQueryParam('scope', item.value)}
             >
               {item.label}
             </Button>
           ))}
         </div>
+      ) : null}
 
-        {showScope && (
-          <div className="grid grid-cols-2 gap-1.5">
-            {scopeItems.map((item) => (
-              <Button
-                key={item.value}
-                type="button"
-                variant={scope === item.value ? 'secondary' : 'outline'}
-                size="sm"
-                className="h-9 min-h-9 w-full rounded-full px-2 text-sm sm:px-3 whitespace-nowrap"
-                onClick={() => updateQueryParam('scope', item.value)}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </div>
-        )}
+      <div className="grid grid-cols-3 gap-1.5">
+        {sortItems.map((item) => (
+          <Button
+            key={item.value}
+            type="button"
+            variant={sort === item.value ? 'default' : 'outline'}
+            size="sm"
+            className={cn(
+              'h-9 min-h-9 w-full rounded-full px-2 text-sm sm:px-3 whitespace-nowrap',
+              sort === item.value && 'shadow-sm',
+            )}
+            onClick={() => updateQueryParam('sort', item.value)}
+          >
+            {item.label}
+          </Button>
+        ))}
       </div>
-
     </div>
   )
 }

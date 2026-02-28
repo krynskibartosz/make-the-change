@@ -128,11 +128,18 @@ export default async function DashboardPage() {
   // Fetch user profile from Supabase to get all fields correctly (points_balance, kyc_status, user_level)
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
+  const { data: publicRanking } = await supabase
+    .from('public_user_rankings')
+    .select('impact_score')
+    .eq('id', user.id)
+    .maybeSingle()
+
   // Fetch claimed badges from gamification schema
   const { data: claimedChallenges } = await supabase
     .schema('gamification')
     .from('user_challenges')
     .select('*, challenges(title, reward_badge)')
+    .eq('user_id', user.id)
     .not('claimed_at', 'is', null)
 
   // Fetch Inventory & Quests
@@ -168,11 +175,13 @@ export default async function DashboardPage() {
   const firstName = profile?.first_name || 'Utilisateur'
   const pointsBalance = profile?.points_balance ?? 0
 
-  const impactScore = calculateImpactScore({
-    points: pointsBalance,
-    projects: projectsSupported,
-    invested: totalInvested,
-  })
+  const impactScore =
+    Number(publicRanking?.impact_score || 0) ||
+    calculateImpactScore({
+      points: pointsBalance,
+      projects: projectsSupported,
+      invested: totalInvested,
+    })
 
   const levelProgress = getLevelProgress(impactScore)
 

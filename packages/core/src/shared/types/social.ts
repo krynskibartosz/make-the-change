@@ -6,7 +6,8 @@ export type PostType = 'user_post' | 'project_update_share' | 'system_event'
 export type PostVisibility = 'public' | 'guild_only' | 'private'
 export type ReactionType = 'like' | 'super_like' | 'plant'
 export type FeedSort = 'best' | 'newest' | 'oldest'
-export type FeedScope = 'all' | 'my_guilds'
+export type FeedScope = 'all' | 'my_guilds' | 'following'
+export type PostMediaKind = 'image' | 'video'
 export type ShareChannel =
   | 'copy'
   | 'x'
@@ -72,6 +73,18 @@ export interface Post {
   reactions_count?: number
   user_has_reacted?: boolean
   user_has_bookmarked?: boolean
+  media?: PostMediaAsset[]
+  primary_video_url?: string | null
+  primary_video_mime_type?: string | null
+}
+
+export interface PostMediaAsset {
+  url: string
+  mime_type: string | null
+  kind: PostMediaKind
+  width: number | null
+  height: number | null
+  sort_order: number
 }
 
 export interface PostMedia {
@@ -114,6 +127,8 @@ export interface Comment {
     full_name: string
     avatar_url: string
   }
+  reactions_count?: number
+  user_has_reacted?: boolean
 }
 
 export interface Reaction {

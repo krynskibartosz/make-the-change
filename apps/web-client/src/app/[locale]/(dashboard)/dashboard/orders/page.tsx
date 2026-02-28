@@ -11,7 +11,7 @@ import { formatDate, formatPoints } from '@/lib/utils'
 
 export default async function OrdersPage() {
   const t = await getTranslations('orders')
-  const _user = await requireAuth()
+  const user = await requireAuth()
   const supabase = await createClient()
 
   // Fetch user orders with items using RLS
@@ -33,8 +33,9 @@ export default async function OrdersPage() {
           name_default,
           slug
         )
-      )
+        )
     `)
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
   // Status colors now centralized in lib/status-colors.ts

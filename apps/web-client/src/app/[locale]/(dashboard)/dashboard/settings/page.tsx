@@ -31,17 +31,23 @@ export default async function SettingsPage() {
   const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
 
   // Fetch marketing consent
-  const adminSupabase = createAdminClient()
-  const { data: consents } = await adminSupabase
-    .schema('identity')
-    .from('user_consents')
-    .select('granted')
-    .eq('user_id', user.id)
-    .eq('consent_type', 'marketing')
-    .order('decision_at', { ascending: false })
-    .limit(1)
+  let marketingConsent = false
 
-  const marketingConsent = consents?.[0]?.granted ?? false
+  try {
+    const adminSupabase = createAdminClient()
+    const { data: consents } = await adminSupabase
+      .schema('identity')
+      .from('user_consents')
+      .select('granted')
+      .eq('user_id', user.id)
+      .eq('consent_type', 'marketing')
+      .order('decision_at', { ascending: false })
+      .limit(1)
+
+    marketingConsent = consents?.[0]?.granted ?? false
+  } catch (error) {
+    console.error('Failed to fetch marketing consent', error)
+  }
 
   return (
     <SettingsClient

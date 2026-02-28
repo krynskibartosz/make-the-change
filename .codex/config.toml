@@ -1,0 +1,17 @@
+# Project-level Codex configuration for Make the Change
+
+model = "o4-mini"
+model_provider = "openai"
+
+# Enable streamable HTTP MCP servers.
+experimental_use_rmcp_client = true
+
+[permissions]
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+
+[mcp_servers.vercel]
+url = "https://mcp.vercel.com"
+
+[features]
+web_search_request = true

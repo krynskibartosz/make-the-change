@@ -9,7 +9,7 @@ import {
   MapPin,
   ShoppingBag,
 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRef } from 'react'
 import { CartLineItem } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-line-item'
 import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
@@ -18,6 +18,7 @@ import {
   useCartTotals,
 } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { Link, useRouter } from '@/i18n/navigation'
+import { CHECKOUT_AVAILABLE, getCheckoutUnavailableCopy } from '@/lib/checkout-status'
 import { cn, formatCurrency, formatPoints } from '@/lib/utils'
 
 const isOutOfStockSnapshot = (stockQuantity?: number | null) =>
@@ -28,17 +29,19 @@ type StepState = 'completed' | 'active' | 'disabled'
 const CartPage = () => {
   const t = useTranslations('checkout')
   const tCommon = useTranslations('common')
+  const locale = useLocale()
   const router = useRouter()
   const { items, hydrated, setQuantity, removeItem, replaceItems, clear } = useCart()
   const { itemsCount, totalPoints, totalEuros } = useCartTotals()
   const { showSnackbar } = useCartUI()
+  const checkoutCopy = getCheckoutUnavailableCopy(locale)
   const itemsRef = useRef(items)
   itemsRef.current = items
 
   const currentStep = 1
   const hasOutOfStock = items.some((i) => isOutOfStockSnapshot(i.snapshot.stockQuantity))
   const firstOutOfStockItem = items.find((i) => isOutOfStockSnapshot(i.snapshot.stockQuantity))
-  const canCheckout = itemsCount > 0 && !hasOutOfStock
+  const canCheckout = itemsCount > 0 && !hasOutOfStock && CHECKOUT_AVAILABLE
   const checkoutSteps: Array<{ id: number; label: string; icon: LucideIcon }> = [
     { id: 1, label: t('steps.cart'), icon: ShoppingBag },
     { id: 2, label: t('steps.address'), icon: MapPin },
@@ -50,7 +53,9 @@ const CartPage = () => {
       ? t('empty.cta')
       : hasOutOfStock
         ? t('cart_page.mobile_bar.remove_unavailable')
-        : t('cart_page.mobile_bar.continue_to_address')
+        : CHECKOUT_AVAILABLE
+          ? t('cart_page.mobile_bar.continue_to_address')
+          : checkoutCopy.cartActionLabel
 
   const handleBack = () => {
     router.push('/products')
@@ -122,8 +127,17 @@ const CartPage = () => {
       return
     }
 
+    if (!CHECKOUT_AVAILABLE) {
+      return
+    }
+
     handleProceedToCheckout()
   }
+
+  const primaryActionDisabled =
+    !hydrated ||
+    (!CHECKOUT_AVAILABLE && itemsCount > 0 && !hasOutOfStock) ||
+    (hasOutOfStock && !firstOutOfStockItem)
 
   const getStepState = (stepId: number): StepState => {
     if (stepId < currentStep) return 'completed'
@@ -224,6 +238,11 @@ const CartPage = () => {
                 {t('cart_page.out_of_stock_alert')}
               </div>
             ) : null}
+            {!CHECKOUT_AVAILABLE && itemsCount > 0 && !hasOutOfStock ? (
+              <div className="mx-3 border-y border-warning/30 bg-warning/10 px-4 py-3 text-sm font-medium text-warning md:mx-4 lg:mx-5">
+                {checkoutCopy.cartNotice}
+              </div>
+            ) : null}
 
             <div className="mx-3 hidden md:grid grid-cols-[minmax(0,1fr)_176px_140px_44px] items-center border-y border-border/60 bg-background/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground md:mx-4 lg:mx-5">
               <span>{t('cart_page.desktop_columns.product')}</span>
@@ -308,16 +327,21 @@ const CartPage = () => {
             <div className="mt-auto space-y-3">
               <Button
                 className="h-12 w-full border-none bg-linear-to-r from-primary to-client-teal-500 text-base font-bold"
-                disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
+                disabled={primaryActionDisabled}
                 onClick={handlePrimaryAction}
               >
                 {primaryCtaLabel}
-                {itemsCount > 0 && !hasOutOfStock ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
+                {itemsCount > 0 && !hasOutOfStock && CHECKOUT_AVAILABLE ? (
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                ) : null}
               </Button>
               {!canCheckout && hasOutOfStock ? (
                 <p className="text-xs font-medium text-destructive">
                   {t('cart_page.out_of_stock_alert')}
                 </p>
+              ) : null}
+              {!CHECKOUT_AVAILABLE && itemsCount > 0 && !hasOutOfStock ? (
+                <p className="text-xs font-medium text-warning">{checkoutCopy.cartActionHint}</p>
               ) : null}
             </div>
           </div>
@@ -337,7 +361,7 @@ const CartPage = () => {
           <Button
             type="button"
             className="h-11 min-w-[180px] border-none bg-linear-to-r from-primary to-client-teal-500 text-sm font-bold"
-            disabled={!hydrated || (hasOutOfStock && !firstOutOfStockItem)}
+            disabled={primaryActionDisabled}
             onClick={handlePrimaryAction}
           >
             {primaryCtaLabel}
