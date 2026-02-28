@@ -7,6 +7,7 @@ import { getGuilds } from '@/lib/social/feed.reads'
 import { CommunityPageFrame } from '../_features/community-page-frame'
 import { CommunityRightRail } from '../_features/community-right-rail'
 import { GuildMembershipButton } from './_features/guild-membership-button'
+import { GuildOpenButton } from './_features/guild-open-button'
 import { GuildAvatar, GuildCover } from './_features/guild-visuals'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -119,14 +120,8 @@ export default async function CommunityGuildsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <GuildMembershipButton guildId={guild.id} isMember={!!guild.is_member} />
-                    </div>
-                    <Button asChild variant="outline" className="w-full" onClick={(e) => e.stopPropagation()}>
-                      <Link href={`/community/guilds/${guild.slug}`} prefetch={false}>
-                        {t('guilds.open')}
-                      </Link>
-                    </Button>
+                    <GuildMembershipButton guildId={guild.id} isMember={!!guild.is_member} />
+                    <GuildOpenButton guildSlug={guild.slug} />
                   </div>
                 </CardContent>
               </Card>

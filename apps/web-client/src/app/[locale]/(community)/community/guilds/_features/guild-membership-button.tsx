@@ -20,7 +20,10 @@ export function GuildMembershipButton({ guildId, isMember }: GuildMembershipButt
   const [pendingState, setPendingState] = useState(isMember)
   const [isPending, startTransition] = useTransition()
 
-  const handleToggleMembership = () => {
+  const handleToggleMembership = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     startTransition(async () => {
       try {
         if (pendingState) {
