@@ -6,6 +6,7 @@ import { FeedClient } from '@/components/social/feed-client'
 import { Link } from '@/i18n/navigation'
 import { CommunityPageFrame } from '../_features/community-page-frame'
 import { CommunityRightRail } from '../_features/community-right-rail'
+import { getUserLikedPosts } from '@/lib/social/user-content.service'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('community')
@@ -16,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CommunityLikesPage() {
   const t = await getTranslations('community')
+  const likedPosts = await getUserLikedPosts(20)
 
   return (
     <CommunityPageFrame rightRail={<CommunityRightRail variant="default" />}>
@@ -36,7 +38,7 @@ export default async function CommunityLikesPage() {
         </header>
 
         <section className="overflow-hidden rounded-2xl border border-border/70 bg-background">
-          <FeedClient initialPosts={[]} hideCreatePost canWrite={false} />
+          <FeedClient initialPosts={likedPosts} hideCreatePost canWrite={false} />
         </section>
       </div>
     </CommunityPageFrame>
