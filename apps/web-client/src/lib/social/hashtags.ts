@@ -10,7 +10,10 @@ const normalizeHashtag = (value: string) =>
     .toLowerCase()
     .trim()
 
-export const sanitizeHashtagSlug = (value: string): string => normalizeHashtag(value)
+export const sanitizeHashtagSlug = (value: string | undefined): string => {
+  if (!value) return ''
+  return normalizeHashtag(value)
+}
 
 export const extractHashtagsFromText = (content: string | null | undefined): string[] => {
   if (!content) {

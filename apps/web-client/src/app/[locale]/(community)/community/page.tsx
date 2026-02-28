@@ -194,29 +194,34 @@ function CommunityResolved({
 }
 
 export default async function CommunityPage({ searchParams }: CommunityPageProps) {
-  const params = await searchParams
-  const sort = parseFeedSort(params.sort)
-  const scope = parseFeedScope(params.scope)
-  const contributorScope = parseContributorScope(params.contributors)
-  const activeTag = sanitizeHashtagSlug(params.tag)
+  try {
+    const params = await searchParams
+    const sort = parseFeedSort(params.sort)
+    const scope = parseFeedScope(params.scope)
+    const contributorScope = parseContributorScope(params.contributors)
+    const activeTag = sanitizeHashtagSlug(params.tag)
 
-  const [copy, sidebarUser, posts] = await Promise.all([
-    getCommunityCopy(),
-    getCommunitySidebarUser(),
-    getPostContextList() // Fetching enhanced posts
-  ])
+    const [copy, sidebarUser, posts] = await Promise.all([
+      getCommunityCopy(),
+      getCommunitySidebarUser(),
+      getPostContextList() // Fetching enhanced posts
+    ])
 
-  return (
-    <Suspense fallback={<div>{copy.loadingLabel}</div>}>
-      <CommunityResolved
-        sort={sort}
-        scope={scope}
-        contributorScope={contributorScope}
-        activeTag={activeTag}
-        copy={copy}
-        sidebarUser={sidebarUser}
-        posts={posts}
-      />
-    </Suspense>
-  )
+    return (
+      <Suspense fallback={<div>{copy.loadingLabel}</div>}>
+        <CommunityResolved
+          sort={sort}
+          scope={scope}
+          contributorScope={contributorScope}
+          activeTag={activeTag}
+          copy={copy}
+          sidebarUser={sidebarUser}
+          posts={posts}
+        />
+      </Suspense>
+    )
+  } catch (error) {
+    console.error('Error loading community page:', error)
+    throw error // Let Next.js error boundary handle it
+  }
 }

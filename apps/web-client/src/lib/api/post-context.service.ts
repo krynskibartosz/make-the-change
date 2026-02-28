@@ -43,53 +43,63 @@ export async function getPostContext(id: string): Promise<PostContext | null> {
 export async function getPostContextList(filters?: PostFilters): Promise<PostContext[]> {
   const supabase = await createClient()
   
-  let query = supabase.from('v_post_context').select('*')
-  
-  if (filters?.sourceType) {
-    // Assuming JSONB query or column filter
-    // query = query.eq('source_type', filters.sourceType)
-  }
-  
-  if (filters?.sourceId) {
-    // query = query.eq('source_id', filters.sourceId)
-  }
-  
-  if (filters?.authorId) {
-    // query = query.eq('author_id', filters.authorId)
-  }
-  
-  query = query.order('created_at', { ascending: false })
+  try {
+    let query = supabase.from('v_post_context').select('*')
+    
+    if (filters?.sourceType) {
+      // Assuming JSONB query or column filter
+      // query = query.eq('source_type', filters.sourceType)
+    }
+    
+    if (filters?.sourceId) {
+      // query = query.eq('source_id', filters.sourceId)
+    }
+    
+    if (filters?.authorId) {
+      // query = query.eq('author_id', filters.authorId)
+    }
+    
+    query = query.order('created_at', { ascending: false })
 
-  const { data, error } = await query
-  
-  if (error) {
-    console.error('Error fetching post list:', error)
+    const { data, error } = await query
+    
+    if (error) {
+      console.error('Error fetching post list:', error)
+      return []
+    }
+    
+    return mapArray(data, mapPostContext)
+  } catch (err) {
+    console.error('Unexpected error in getPostContextList:', err)
     return []
   }
-  
-  return mapArray(data, mapPostContext)
 }
 
 function mapPostContext(data: unknown): PostContext | null {
-  if (!isRecord(data)) return null
-  
-  const id = asString(data.id)
-  const content = asString(data.content)
-  
-  if (!id) return null
-  
-  return {
-    id,
-    content,
-    type: asString(data.type),
-    visibility: asString(data.visibility),
-    created_at: asString(data.created_at),
-    author_name: asString(data.author_name),
-    author_avatar: toNullableString(data.author_avatar),
-    source_badge: mapSourceBadge(data.source_badge),
-    linked_entity: mapLinkedEntity(data.linked_entity),
-    engagement: mapPostEngagement(data.engagement),
-    user_state: mapUserPostState(data.user_state)
+  try {
+    if (!isRecord(data)) return null
+    
+    const id = asString(data.id)
+    const content = asString(data.content)
+    
+    if (!id) return null
+    
+    return {
+      id,
+      content,
+      type: asString(data.type),
+      visibility: asString(data.visibility),
+      created_at: asString(data.created_at),
+      author_name: asString(data.author_name),
+      author_avatar: toNullableString(data.author_avatar),
+      source_badge: mapSourceBadge(data.source_badge),
+      linked_entity: mapLinkedEntity(data.linked_entity),
+      engagement: mapPostEngagement(data.engagement),
+      user_state: mapUserPostState(data.user_state)
+    }
+  } catch (error) {
+    console.error('Error mapping post context:', error)
+    return null
   }
 }
 
@@ -99,65 +109,85 @@ function mapArray<T>(data: unknown, mapper: (item: unknown) => T | null): T[] {
 }
 
 function mapSourceBadge(data: unknown): SourceBadge | null {
-  if (!isRecord(data)) return null
-  
-  const id = asString(data.id)
-  const name = asString(data.name)
-  
-  if (!id || !name) return null
-  
-  return {
-    id,
-    name,
-    type: asString(data.type),
-    icon: toNullableString(data.icon),
-    color: toNullableString(data.color),
-    link: asString(data.link)
+  try {
+    if (!isRecord(data)) return null
+    
+    const id = asString(data.id)
+    const name = asString(data.name)
+    
+    if (!id || !name) return null
+    
+    return {
+      id,
+      name,
+      type: asString(data.type),
+      icon: toNullableString(data.icon),
+      color: toNullableString(data.color),
+      link: asString(data.link)
+    }
+  } catch (error) {
+    console.error('Error mapping source badge:', error)
+    return null
   }
 }
 
 function mapLinkedEntity(data: unknown): LinkedEntity | null {
-  if (!isRecord(data)) return null
-  
-  const id = asString(data.id)
-  const name = asString(data.name)
-  
-  if (!id || !name) return null
-  
-  return {
-    id,
-    name,
-    type: asString(data.type),
-    description: toNullableString(data.description),
-    image: toNullableString(data.image),
-    link: asString(data.link)
+  try {
+    if (!isRecord(data)) return null
+    
+    const id = asString(data.id)
+    const name = asString(data.name)
+    
+    if (!id || !name) return null
+    
+    return {
+      id,
+      name,
+      type: asString(data.type),
+      description: toNullableString(data.description),
+      image: toNullableString(data.image),
+      link: asString(data.link)
+    }
+  } catch (error) {
+    console.error('Error mapping linked entity:', error)
+    return null
   }
 }
 
 function mapPostEngagement(data: unknown): PostEngagement {
-  if (!isRecord(data)) {
+  try {
+    if (!isRecord(data)) {
+      return { likes: 0, comments: 0, shares: 0, bookmarks: 0, views: 0 }
+    }
+    
+    return {
+      likes: asNumber(data.likes),
+      comments: asNumber(data.comments),
+      shares: asNumber(data.shares),
+      bookmarks: asNumber(data.bookmarks),
+      views: asNumber(data.views)
+    }
+  } catch (error) {
+    console.error('Error mapping post engagement:', error)
     return { likes: 0, comments: 0, shares: 0, bookmarks: 0, views: 0 }
-  }
-  
-  return {
-    likes: asNumber(data.likes),
-    comments: asNumber(data.comments),
-    shares: asNumber(data.shares),
-    bookmarks: asNumber(data.bookmarks),
-    views: asNumber(data.views)
   }
 }
 
 function mapUserPostState(data: unknown): UserPostState {
-  if (!isRecord(data)) {
+  try {
+    if (!isRecord(data)) {
+      return { hasLiked: false, hasBookmarked: false, hasShared: false, canComment: false, canEdit: false }
+    }
+    
+    return {
+      hasLiked: Boolean(data.hasLiked),
+      hasBookmarked: Boolean(data.hasBookmarked),
+      hasShared: Boolean(data.hasShared),
+      canComment: Boolean(data.canComment),
+      canEdit: Boolean(data.canEdit)
+    }
+  } catch (error) {
+    console.error('Error mapping user post state:', error)
     return { hasLiked: false, hasBookmarked: false, hasShared: false, canComment: false, canEdit: false }
-  }
-  
-  return {
-    hasLiked: Boolean(data.hasLiked),
-    hasBookmarked: Boolean(data.hasBookmarked),
-    hasShared: Boolean(data.hasShared),
-    canComment: Boolean(data.canComment),
-    canEdit: Boolean(data.canEdit)
   }
 }
