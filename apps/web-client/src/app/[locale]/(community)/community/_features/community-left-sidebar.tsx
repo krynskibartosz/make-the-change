@@ -79,16 +79,7 @@ export function CommunityLeftSidebar({ user }: CommunityLeftSidebarProps) {
           <Rss className="w-7 h-7 stroke-[1.5px]" />
           <span className="hidden text-lg sm:inline">{tCommunity('sidebar.feed')}</span>
         </Link>
-        <Link
-          href="/community?sort=best"
-          title={tCommunity('sidebar.trending')}
-          aria-label={tCommunity('sidebar.trending')}
-          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
-        >
-          <Flame className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.trending')}</span>
-        </Link>
-        <Link
+                <Link
           href="/community/reels"
           className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
         >
