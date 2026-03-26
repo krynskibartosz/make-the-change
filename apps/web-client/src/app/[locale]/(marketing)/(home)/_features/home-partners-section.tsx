@@ -45,18 +45,18 @@ function HomePartnersCarousel({
   )
 
   return (
-    <section className={cn('py-16 md:py-24 overflow-hidden', variant === 'muted' && 'bg-[#0f1214]')}>
+    <section className={cn('py-16 md:py-24 overflow-hidden', variant === 'muted' ? 'bg-muted/30' : 'bg-background')}>
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
         <div className="mb-12 text-left">
-          <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">{title}</h2>
-          <p className="max-w-2xl text-lg text-white/70">{description}</p>
+          <h2 className="mb-4 text-3xl font-bold text-foreground dark:text-white md:text-4xl">{title}</h2>
+          <p className="max-w-2xl text-lg text-muted-foreground dark:text-white/70">{description}</p>
         </div>
       </div>
 
       <div className="relative flex w-full flex-col overflow-hidden py-4">
         {/* Masques de fondu sur les bords pour l'effet d'apparition/disparition du marquee */}
-        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
-        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-24 bg-gradient-to-r from-background via-background/80 to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-24 bg-gradient-to-l from-background via-background/80 to-transparent" />
 
         <motion.ul
           className="flex w-max items-center py-6"
@@ -69,7 +69,7 @@ function HomePartnersCarousel({
             <li key={`${producer.id}-${index}`} className="flex items-center justify-center px-8">
               <Link
                 href={`/producers/${producer.id}`}
-                className="whitespace-nowrap text-xl font-black uppercase tracking-widest text-white/30 transition-colors duration-300 hover:text-white md:text-2xl"
+                className="whitespace-nowrap text-xl font-black uppercase tracking-widest text-muted-foreground/40 transition-colors duration-300 hover:text-foreground dark:text-muted-foreground/30 dark:hover:text-white md:text-2xl"
               >
                 {producer.name_default}
               </Link>
