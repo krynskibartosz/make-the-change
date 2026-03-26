@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { getLocale } from 'next-intl/server'
 import { redirect } from '@/i18n/navigation'
+import { buildPublicAppUrl } from '@/lib/public-url'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { asString } from '@/lib/type-guards'
@@ -139,7 +140,7 @@ export async function forgotPassword(
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
+    redirectTo: buildPublicAppUrl('/reset-password'),
   })
 
   if (error) {

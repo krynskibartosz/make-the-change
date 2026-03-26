@@ -19,6 +19,7 @@ import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketi
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { buildPublicAppUrl } from '@/lib/public-url'
 import { formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { FloatingActionButtons, ProductDetailAddToCartButton } from './floating-action-buttons'
@@ -110,7 +111,7 @@ export async function ProductDetails({
     },
     offers: {
       '@type': 'Offer',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.id}`,
+      url: buildPublicAppUrl(`/products/${product.id}`),
       priceCurrency: 'EUR',
       price: displayPrice,
       availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',

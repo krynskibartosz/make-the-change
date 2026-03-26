@@ -344,7 +344,9 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
           className="flex cursor-pointer items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
         >
           <Logo variant="icon" height={40} width={40} className="h-10" />
-          <span className="text-xl font-bold text-foreground">Make the Change</span>
+          <span className="notranslate text-xl font-bold text-foreground" translate="no">
+                Make the Change
+              </span>
         </Link>
 
         {/* Desktop Navigation */}

@@ -14,6 +14,7 @@ import { HomeReveal } from '@/app/[locale]/(marketing)/(home)/_features/home-rev
 import { MarketingStepsSection } from '@/app/[locale]/(marketing)/(home)/_features/marketing-steps-section'
 import { Logo } from '@/components/ui/logo'
 import { Link } from '@/i18n/navigation'
+import { getPublicAppUrl } from '@/lib/public-url'
 import { getLocalizedContent } from '@/lib/utils'
 import { getHomeServerData } from './_features/home.server-data'
 import { HeroParallaxBackground } from './_features/hero-parallax-background'
@@ -34,8 +35,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata' })
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://make-the-change-web-client.vercel.app'
+  const baseUrl = getPublicAppUrl()
 
   return {
     title: t('title'),

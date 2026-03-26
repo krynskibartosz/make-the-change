@@ -5,6 +5,7 @@ import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing
 import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
+import { buildPublicAppUrl } from '@/lib/public-url'
 import { getLocalizedContent } from '@/lib/utils'
 import { ProjectCoverHero } from './components/project-cover-hero'
 import { ProjectMainContent } from './components/project-main-content'
@@ -84,7 +85,7 @@ export async function ProjectDetails({
     name: localizedTitle,
     description: localizedDesc,
     image: coverImage ? [coverImage] : [],
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/projects/${project.slug}`,
+    url: buildPublicAppUrl(`/projects/${project.slug}`),
     location:
       project.address_city || project.address_country_code
         ? {
