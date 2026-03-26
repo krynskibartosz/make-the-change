@@ -1,224 +1,125 @@
 'use client'
 
-import { Badge } from '@make-the-change/core/ui'
-import { motion } from 'framer-motion'
-import { Check, CreditCard, Search, TrendingUp } from 'lucide-react'
+import { motion, useReducedMotion, useScroll } from 'framer-motion'
+import { Check, Gift, HandCoins, Leaf } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useRef } from 'react'
 import { MarketingSection } from '../../_features/marketing-section'
 
 type MarketingStepsSectionProps = {
-  placeholderImages?: {
-    projects: string[]
-  }
   variant?: 'default' | 'muted'
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-} as const
+export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSectionProps) => {
+  const t = useTranslations('home_v2')
+  const prefersReducedMotion = useReducedMotion()
+  const containerRef = useRef<HTMLDivElement>(null)
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-} as const
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start center', 'end center'],
+  })
 
-const defaultProjectImages = [
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
-]
-
-export const MarketingStepsSection = ({
-  placeholderImages,
-  variant = 'default',
-}: MarketingStepsSectionProps) => {
-  const t = useTranslations('home')
-
-  const projectImages =
-    placeholderImages && placeholderImages.projects.length >= 3
-      ? placeholderImages.projects
-      : defaultProjectImages
-
-  const investFeatures = [
-    t('steps.invest.features.payment_secure'),
-    t('steps.invest.features.total_transparency'),
-    t('steps.invest.features.measurable_impact'),
-  ]
-
-  const enjoyMetrics = [
+  const steps = [
     {
-      label: t('steps.enjoy.metrics.rewards'),
-      value: t('steps.enjoy.metrics.points'),
-      valueClassName: 'text-primary',
+      id: 'step-1',
+      title: t('how_it_works.step_1.title'),
+      description: t('how_it_works.step_1.description'),
+      icon: Leaf,
     },
     {
-      label: t('steps.enjoy.metrics.impact'),
-      value: t('steps.enjoy.metrics.badges'),
-      valueClassName: 'text-marketing-positive-600',
+      id: 'step-2',
+      title: '2. Soutenez & Cumulez',
+      description: t('how_it_works.step_2.description'),
+      icon: HandCoins,
+      checks: [t('how_it_works.step_2.check_secure'), t('how_it_works.step_2.check_verified')],
     },
-  ]
+    {
+      id: 'step-3',
+      title: t('how_it_works.step_3.title'),
+      description: t('how_it_works.step_3.description'),
+      icon: Gift,
+    },
+  ] as const
 
   return (
-    <MarketingSection title="How it works" size="lg" className="relative" variant={variant}>
-      <div
-        className="absolute bottom-0 left-1/2 top-0 -z-10 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-border to-transparent lg:block"
-        aria-hidden="true"
-      />
-
-      <motion.ol
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="m-0 list-none space-y-12 p-0 lg:space-y-24"
-      >
-        <motion.li variants={itemVariants} className="grid items-center gap-8 lg:grid-cols-2">
-          <figure className="group relative m-0">
-            <div
-              className="absolute -inset-4 rounded-3xl bg-primary/5 blur-2xl transition-colors duration-500 group-hover:bg-primary/10"
-              aria-hidden="true"
-            />
-            <div className="relative aspect-video overflow-hidden rounded-2xl border shadow-2xl">
-              <img
-                src={projectImages[0]}
-                alt={t('steps.choose.title')}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+    <MarketingSection
+      title={t('how_it_works.title')}
+      variant={variant}
+      size="lg"
+      className="py-20 md:py-24"
+    >
+      <div className="mx-auto max-w-3xl">
+        <div className="relative" ref={containerRef}>
+          {prefersReducedMotion ? (
+            <div className="absolute left-6 top-2 h-[calc(100%-0.5rem)] w-px bg-muted dark:bg-primary/20" />
+          ) : (
+            <>
+              {/* Track fixe transparent */}
               <div
-                className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent"
+                className="absolute left-6 top-2 h-[calc(100%-0.5rem)] w-px bg-muted dark:bg-primary/20"
                 aria-hidden="true"
               />
-              <div className="absolute bottom-4 left-4 rounded-xl border border-marketing-overlay-light/20 bg-marketing-overlay-light/10 p-3 backdrop-blur-md">
-                <Search className="h-6 w-6 text-marketing-overlay-light" aria-hidden="true" />
-              </div>
-            </div>
-          </figure>
-
-          <div className="space-y-4 lg:pl-12">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground shadow-lg shadow-primary/20">
-                1
-              </div>
-              <h3 className="text-3xl font-black tracking-tight">{t('steps.choose.title')}</h3>
-            </div>
-            <p className="text-lg font-medium leading-relaxed text-muted-foreground">
-              {t('steps.choose.description')}
-            </p>
-            <div className="flex items-center gap-4 pt-2">
-              <Badge variant="secondary" className="border-primary/10 bg-primary/5 text-primary">
-                {t('steps.choose.badges.verified_catalog')}
-              </Badge>
-              <Badge
-                variant="secondary"
-                className="border-marketing-positive-500/10 bg-marketing-positive-500/5 text-marketing-positive-600"
-              >
-                {t('steps.choose.badges.advanced_filters')}
-              </Badge>
-            </div>
-          </div>
-        </motion.li>
-
-        <motion.li variants={itemVariants} className="grid items-center gap-8 lg:grid-cols-2">
-          <div className="order-2 space-y-4 lg:order-1 lg:pr-12">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground shadow-lg shadow-primary/20">
-                2
-              </div>
-              <h3 className="text-3xl font-black tracking-tight">{t('steps.invest.title')}</h3>
-            </div>
-            <p className="text-lg font-medium leading-relaxed text-muted-foreground">
-              {t('steps.invest.description')}
-            </p>
-            <ul className="m-0 list-none space-y-3 p-0 pt-2">
-              {investFeatures.map((feature, index) => (
-                <li
-                  key={`${feature}-${index}`}
-                  className="flex items-center gap-2 text-sm font-bold opacity-80"
-                >
-                  <span
-                    className="flex h-5 w-5 items-center justify-center rounded-full bg-marketing-positive-500/10"
-                    aria-hidden="true"
-                  >
-                    <Check className="h-3 w-3 text-marketing-positive-600" />
-                  </span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <figure className="group relative order-1 m-0 lg:order-2">
-            <div
-              className="absolute -inset-4 rounded-3xl bg-marketing-positive-500/5 blur-2xl transition-colors duration-500 group-hover:bg-marketing-positive-500/10"
-              aria-hidden="true"
-            />
-            <div className="relative aspect-video overflow-hidden rounded-2xl border shadow-2xl">
-              <img
-                src={projectImages[1]}
-                alt={t('steps.invest.title')}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent"
+              {/* Ligne animée Framer Motion */}
+              <motion.div
                 aria-hidden="true"
+                className="absolute left-6 top-2 h-[calc(100%-0.5rem)] w-px origin-top bg-lime-500"
+                style={{ scaleY: scrollYProgress }}
               />
-              <div className="absolute bottom-4 left-4 rounded-xl border border-marketing-overlay-light/20 bg-marketing-overlay-light/10 p-3 backdrop-blur-md">
-                <CreditCard className="h-6 w-6 text-marketing-overlay-light" aria-hidden="true" />
-              </div>
-            </div>
-          </figure>
-        </motion.li>
+            </>
+          )}
 
-        <motion.li variants={itemVariants} className="grid items-center gap-8 lg:grid-cols-2">
-          <figure className="group relative m-0">
-            <div
-              className="absolute -inset-4 rounded-3xl bg-marketing-warning-500/5 blur-2xl transition-colors duration-500 group-hover:bg-marketing-warning-500/10"
-              aria-hidden="true"
-            />
-            <div className="relative aspect-video overflow-hidden rounded-2xl border shadow-2xl">
-              <img
-                src={projectImages[2]}
-                alt={t('steps.impact.title')}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-marketing-overlay-dark/60 via-transparent to-transparent"
-                aria-hidden="true"
-              />
-              <div className="absolute bottom-4 left-4 rounded-xl border border-marketing-overlay-light/20 bg-marketing-overlay-light/10 p-3 backdrop-blur-md">
-                <TrendingUp className="h-6 w-6 text-marketing-overlay-light" aria-hidden="true" />
-              </div>
-            </div>
-          </figure>
+          <ol className="m-0 list-none space-y-7 p-0">
+            {steps.map((step, index) => {
+              const Icon = step.icon
 
-          <div className="space-y-4 lg:pl-12">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground shadow-lg shadow-primary/20">
-                3
-              </div>
-              <h3 className="text-3xl font-black tracking-tight">{t('steps.enjoy.title')}</h3>
-            </div>
-            <p className="text-lg font-medium leading-relaxed text-muted-foreground">
-              {t('steps.enjoy.description')}
-            </p>
-
-            <dl className="grid grid-cols-2 gap-4 pt-2">
-              {enjoyMetrics.map((metric) => (
-                <div
-                  key={metric.label}
-                  className="flex flex-col-reverse gap-1 rounded-xl border bg-muted/50 p-4 text-center"
-                >
-                  <dt className="m-0 text-xs font-bold uppercase opacity-60">{metric.label}</dt>
-                  <dd className={`m-0 text-2xl font-black ${metric.valueClassName}`}>
-                    {metric.value}
-                  </dd>
+              const content = (
+                <div className="py-2">
+                  <h3 className="mb-2 text-left text-xl font-bold text-foreground">
+                    {step.title}
+                  </h3>
+                  <p className="text-left text-base text-muted-foreground text-pretty">
+                    {step.description}
+                  </p>
+                  {'checks' in step ? (
+                    <ul className="m-0 mt-4 flex flex-col gap-2 list-none p-0 text-left text-sm font-medium text-muted-foreground">
+                      {step.checks.map((check) => (
+                        <li key={check} className="flex items-center gap-2">
+                          <Check size={16} className="shrink-0 text-lime-600 dark:text-lime-500" aria-hidden="true" />
+                          <span>{check}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
-              ))}
-            </dl>
-          </div>
-        </motion.li>
-      </motion.ol>
+              )
+
+              return (
+                <li key={step.id} className="relative pl-16">
+                  {/* Glassmorphism Icon Circle */}
+                  <div className="absolute left-0 top-1.5 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-lime-200 bg-lime-100 text-lime-600 backdrop-blur-sm dark:border-lime-500/50 dark:bg-lime-900/30 dark:text-lime-400">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                    <span className="sr-only">{index + 1}</span>
+                  </div>
+
+                  {prefersReducedMotion ? (
+                    content
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-100px' }}
+                      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.1 }}
+                    >
+                      {content}
+                    </motion.div>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
+        </div>
+      </div>
     </MarketingSection>
   )
 }

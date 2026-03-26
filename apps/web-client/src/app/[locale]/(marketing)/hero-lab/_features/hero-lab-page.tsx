@@ -26,18 +26,6 @@ import { HeroVariantV1 } from './hero-variant-v1'
 import { HeroVariantV2 } from './hero-variant-v2'
 import { HeroVariantV3 } from './hero-variant-v3'
 
-type MarketingStepPlaceholderImages = {
-  projects: string[]
-}
-
-const marketingStepPlaceholderImages = {
-  projects: [
-    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
-  ],
-} satisfies MarketingStepPlaceholderImages
-
 const heroVariantById = {
   v1: HeroVariantV1,
   v2: HeroVariantV2,
@@ -171,14 +159,15 @@ export async function HeroLabPage({ variant }: HeroLabPageProps) {
         <HomeStatsSection title={t('stats_section.title')} stats={statsItems} variant="muted" />
       ) : null}
 
-      <MarketingStepsSection variant="default" placeholderImages={marketingStepPlaceholderImages} />
+      <MarketingStepsSection variant="default" />
 
       {featuredProjectsState.status === 'ready' ? (
         <HomeFeaturedProjectsSection
           title={t('featured_projects')}
           viewAllLabel={t('view_all_projects')}
-          fundedLabel={t('project_card.funded')}
-          activeLabel={t('project_card.active')}
+          supportLabel={t('empty.featured_projects.cta')}
+          collectedLabel={t('project_card.funded')}
+          goalLabel="Objectif :"
           projects={featuredProjectsState.value.map((project) => ({
             ...project,
             name_default: getLocalizedContent(
@@ -208,6 +197,8 @@ export async function HeroLabPage({ variant }: HeroLabPageProps) {
         <HomeFeaturedProductsSection
           title={t('featured_products')}
           viewAllLabel={t('view_all_products')}
+          discoverLabel={t('features.explore')}
+          pointsLabel={t('stats.points_label')}
           products={featuredProductsState.value}
         />
       ) : featuredProductsState.status === 'empty' ? (

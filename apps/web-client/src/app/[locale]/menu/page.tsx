@@ -221,6 +221,9 @@ import { asString, isRecord } from '@/lib/type-guards'
             <Link href="/privacy" className="hover:underline">
               {tFooter('privacy')}
             </Link>
+            <Link href="/contact" className="hover:underline">
+              {tFooter('contact')}
+            </Link>
           </div>
         </div>
       </div>

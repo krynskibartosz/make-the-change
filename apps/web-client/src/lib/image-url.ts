@@ -38,6 +38,10 @@ export function sanitizeImageUrl(url: string | null | undefined): string | null 
 
     return parsed.toString()
   } catch {
+    // Legacy assets path from previous versions should trigger fallback
+    if (trimmed.startsWith('/greg-mtc-assets/')) {
+      return null
+    }
     return trimmed
   }
 }

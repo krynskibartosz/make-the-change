@@ -30,9 +30,7 @@ type HomePartnersEmptyProps = HomePartnersSectionBaseProps & {
 
 type HomePartnersSectionProps = HomePartnersCarouselProps | HomePartnersEmptyProps
 
-const AUTO_SCROLL_RESUME_DELAY_MS = 3000
-const carouselButtonClassName =
-  'absolute top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-card/80 text-foreground backdrop-blur-sm transition-all hover:bg-card'
+import { motion } from 'framer-motion'
 
 function HomePartnersCarousel({
   producers,
@@ -40,166 +38,44 @@ function HomePartnersCarousel({
   title,
   description,
 }: HomePartnersCarouselProps) {
-  const scrollContainerRef = useRef<HTMLUListElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-  const [isAutoScrolling, setIsAutoScrolling] = useState(true)
-
+  // On crée une liste très longue pour s'assurer que l'écran est rempli et que l'animation boucle de manière fluide
   const duplicatedProducers = useMemo(
-    () => Array.from({ length: 5 }).flatMap(() => producers),
+    () => Array.from({ length: 15 }).flatMap(() => producers),
     [producers],
   )
 
-  const checkScrollButtons = useCallback(() => {
-    const container = scrollContainerRef.current
-    if (!container) {
-      return
-    }
-
-    setCanScrollLeft(container.scrollLeft > 0)
-    setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth)
-  }, [])
-
-  const scroll = useCallback((direction: 'left' | 'right') => {
-    setIsAutoScrolling(false)
-
-    const container = scrollContainerRef.current
-    if (!container) {
-      return
-    }
-
-    const scrollAmount = container.clientWidth * 0.8
-    container.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    })
-
-    setTimeout(() => setIsAutoScrolling(true), AUTO_SCROLL_RESUME_DELAY_MS)
-  }, [])
-
-  const autoScroll = useCallback(() => {
-    const container = scrollContainerRef.current
-    if (!container || !isAutoScrolling) {
-      return
-    }
-
-    const maxScroll = container.scrollWidth - container.clientWidth
-    if (container.scrollLeft >= maxScroll) {
-      container.scrollLeft = 0
-      return
-    }
-
-    container.scrollLeft += 1
-  }, [isAutoScrolling])
-
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (!container) {
-      return
-    }
-
-    checkScrollButtons()
-    container.addEventListener('scroll', checkScrollButtons)
-
-    return () => {
-      container.removeEventListener('scroll', checkScrollButtons)
-    }
-  }, [checkScrollButtons])
-
-  useEffect(() => {
-    if (!isAutoScrolling) {
-      return
-    }
-
-    let animationFrameId = 0
-
-    const animate = () => {
-      autoScroll()
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animationFrameId = requestAnimationFrame(animate)
-
-    return () => {
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [autoScroll, isAutoScrolling])
-
   return (
-    <section className={cn('py-16', variant === 'muted' && 'bg-muted/30')}>
-      <div className="container mx-auto px-4">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">{title}</h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">{description}</p>
+    <section className={cn('py-16 md:py-24 overflow-hidden', variant === 'muted' && 'bg-[#0f1214]')}>
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
+        <div className="mb-12 text-left">
+          <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">{title}</h2>
+          <p className="max-w-2xl text-lg text-white/70">{description}</p>
         </div>
+      </div>
 
-        <div className="relative">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Précédent"
-            className={cn(
-              carouselButtonClassName,
-              'left-0',
-              canScrollLeft ? 'opacity-100' : 'pointer-events-none opacity-0',
-            )}
-            onClick={() => scroll('left')}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
+      <div className="relative flex w-full flex-col overflow-hidden py-4">
+        {/* Masques de fondu sur les bords pour l'effet d'apparition/disparition du marquee */}
+        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
 
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Suivant"
-            className={cn(
-              carouselButtonClassName,
-              'right-0',
-              canScrollRight ? 'opacity-100' : 'pointer-events-none opacity-0',
-            )}
-            onClick={() => scroll('right')}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
-
-          <ul
-            ref={scrollContainerRef}
-            aria-label="Liste des partenaires"
-            className="m-0 flex list-none gap-8 overflow-x-auto px-12 py-1 scrollbar-hide scroll-smooth"
-            onMouseEnter={() => setIsAutoScrolling(false)}
-            onMouseLeave={() => setIsAutoScrolling(true)}
-          >
-            {duplicatedProducers.map((producer, index) => (
-              <li key={`${producer.id}-${index}`} className="shrink-0">
-                <Link
-                  href={`/producers/${producer.id}`}
-                  className="group block h-32 w-64 cursor-pointer rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-all duration-300 hover:bg-card"
-                >
-                  <div className="flex items-center gap-4 px-6 py-6 text-center">
-                    {producer.images.length > 0 ? (
-                      <img
-                        src={producer.images[0]}
-                        alt={producer.name_default}
-                        className="h-12 w-12 rounded-lg object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-                        <span className="text-lg font-bold text-foreground">
-                          {producer.name_default.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                    )}
-                    <div className="text-left">
-                      <h3 className="text-lg font-bold text-foreground transition-transform group-hover:scale-105">
-                        {producer.name_default}
-                      </h3>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <motion.ul
+          className="flex w-max items-center py-6"
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ repeat: Infinity, ease: 'linear', duration: 40 }}
+          whileHover={{ animationPlayState: 'paused' }}
+        >
+          {/* On duplique le contenu 2 fois pour un loop parfait de 0% à 50% */}
+          {[...duplicatedProducers, ...duplicatedProducers].map((producer, index) => (
+            <li key={`${producer.id}-${index}`} className="flex items-center justify-center px-8">
+              <Link
+                href={`/producers/${producer.id}`}
+                className="whitespace-nowrap text-xl font-black uppercase tracking-widest text-white/30 transition-colors duration-300 hover:text-white md:text-2xl"
+              >
+                {producer.name_default}
+              </Link>
+            </li>
+          ))}
+        </motion.ul>
       </div>
     </section>
   )

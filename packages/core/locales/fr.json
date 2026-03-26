@@ -29,7 +29,7 @@
     "products": "Produits",
     "projects": "Projets",
     "shop": "Shop",
-    "invest": "Investir",
+    "invest": "Projets",
     "subscriptions": "Abonnements",
     "users": "Utilisateurs",
     "settings": "Paramètres",
@@ -1193,6 +1193,94 @@
         "author": "Marie D. • Protectrice"
       },
       "community_proof": "Impact vérifié par la communauté"
+    }
+  },
+  "home_v2": {
+    "hero": {
+      "title": "Faites un geste pour la nature, on vous le rend en produits.",
+      "subtitle": "Soutenez des projets locaux. Votre contribution est instantanément convertie en points pour vous offrir des produits éthiques.",
+      "cta": "Découvrir les projets"
+    },
+    "how_it_works": {
+      "title": "Votre impact, récompensé en 3 étapes.",
+      "step_1": {
+        "title": "1. Choisissez un projet",
+        "description": "Sélectionnez une cause locale qui vous tient à cœur (forêt, océan, apiculture...)."
+      },
+      "step_2": {
+        "title": "2. Parrainez & Cumulez",
+        "description": "Soutenez le projet à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte (1€ = 1 point).",
+        "check_secure": "Paiement sécurisé",
+        "check_verified": "Impact vérifié"
+      },
+      "step_3": {
+        "title": "3. Faites-vous plaisir",
+        "description": "Dépensez vos points dans notre boutique engagée. Miel, cosmétiques bio, artisanat : c'est notre façon de vous dire merci."
+      }
+    },
+    "projects": {
+      "title": "Ils ont besoin de vous",
+      "view_all": "Voir tous les projets",
+      "support_cta": "Soutenir ce projet",
+      "collected_suffix": "collectés",
+      "goal_prefix": "Objectif :"
+    },
+    "shop": {
+      "title": "Faites-vous plaisir avec vos points",
+      "view_all": "Voir toute la boutique",
+      "discover": "Découvrir",
+      "points_label": "points"
+    },
+    "gamification": {
+      "title": "L'écologie devient (enfin) un jeu collectif.",
+      "description": "Parce que sauver la biodiversité ne devrait pas être solitaire. Complétez votre BioDex, maintenez vos Séries et rejoignez une Tribu pour décupler votre impact.",
+      "cta": "Découvrir la communauté",
+      "biodex": {
+        "title": "Le BioDex (Chouette Effraie)",
+        "subtitle": "Collection vivante",
+        "description": "Collectionnez les espèces que vous aidez à protéger."
+      },
+      "streak": {
+        "title": "Les Séries",
+        "description": "Gardez le rythme au quotidien et gagnez des points bonus."
+      },
+      "tribes": {
+        "title": "Les Tribus",
+        "description": "Atteignez des objectifs communs avec votre tribu."
+      }
+    },
+    "ecosystem": {
+      "title": "Ils rendent cette aventure possible.",
+      "subtitle": "ONG certifiées, producteurs locaux et marques éthiques de confiance."
+    },
+    "faq": {
+      "title": "En toute transparence.",
+      "subtitle": "Vous avez des questions ? C'est normal. Voici nos réponses.",
+      "items": {
+        "model": {
+          "question": "Comment pouvez-vous m'offrir des produits contre mon soutien ?",
+          "answer": "C'est le principe du circuit vertueux. Votre contribution financière va directement soutenir le projet sur le terrain. En échange, nos producteurs et artisans partenaires mettent à disposition des produits de leurs récoltes. 1€ soutenu = 1 point à dépenser, sans frais cachés."
+        },
+        "freedom": {
+          "question": "Suis-je obligé(e) de m'engager tous les mois ?",
+          "answer": "Absolument pas. Vous êtes totalement libre. Vous pouvez faire une action ponctuelle ou mettre en place une contribution mensuelle. Vous arrêtez quand vous voulez, en un clic."
+        },
+        "impact": {
+          "question": "Comment être sûr que mon action a un vrai impact ?",
+          "answer": "Dans l'application, vous suivez l'avancée de vos projets via le fil d'actualité. Votre BioDex et les statistiques de votre tribu se mettent à jour avec des données terrain vérifiées."
+        }
+      }
+    },
+    "final_cta": {
+      "title": "Prêt à faire la différence ?",
+      "subtitle": "Rejoignez notre communauté de citoyens engagés et contribuez concrètement à la préservation de la biodiversité.",
+      "cta": "Découvrir les projets",
+      "microtext": "Inscription gratuite en 30 secondes.",
+      "reassurance": {
+        "secure": "Paiement 100% sécurisé",
+        "impact": "Impact vérifié et mesurable",
+        "points": "1€ engagé = 1 point boutique"
+      }
     }
   },
   "dashboard": {

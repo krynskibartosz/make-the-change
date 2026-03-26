@@ -1147,6 +1147,94 @@
       "community_proof": "Impact verified by the community"
     }
   },
+  "home_v2": {
+    "hero": {
+      "title": "Do something for nature, and get rewarded with products.",
+      "subtitle": "Support local projects. Your contribution is instantly converted into points to unlock ethical products.",
+      "cta": "Discover projects"
+    },
+    "how_it_works": {
+      "title": "Your impact, rewarded in 3 steps.",
+      "step_1": {
+        "title": "1. Choose a project",
+        "description": "Pick a local cause you care about (forest, ocean, beekeeping...)."
+      },
+      "step_2": {
+        "title": "2. Support & Earn",
+        "description": "Support from €1. Your amount is instantly converted into points on your account (€1 = 1 point).",
+        "check_secure": "Secure payment",
+        "check_verified": "Verified impact"
+      },
+      "step_3": {
+        "title": "3. Treat yourself",
+        "description": "Spend your points in our ethical store. Honey, organic cosmetics, crafts: our way of saying thank you."
+      }
+    },
+    "projects": {
+      "title": "They need you",
+      "view_all": "View all projects",
+      "support_cta": "Support this project",
+      "collected_suffix": "collected",
+      "goal_prefix": "Goal:"
+    },
+    "shop": {
+      "title": "Treat yourself with your points",
+      "view_all": "View the full store",
+      "discover": "Discover",
+      "points_label": "points"
+    },
+    "gamification": {
+      "title": "Ecology finally becomes a collective game.",
+      "description": "Saving biodiversity should not be lonely. Complete your BioDex, keep your streaks, and join a tribe to multiply your impact.",
+      "cta": "Discover the community",
+      "biodex": {
+        "title": "BioDex (Barn Owl)",
+        "subtitle": "Living collection",
+        "description": "Collect the species you help protect."
+      },
+      "streak": {
+        "title": "Streaks",
+        "description": "Stay consistent and earn bonus points."
+      },
+      "tribes": {
+        "title": "Tribes",
+        "description": "Reach shared goals with your tribe."
+      }
+    },
+    "ecosystem": {
+      "title": "They make this journey possible.",
+      "subtitle": "Certified NGOs, local producers and trusted ethical brands."
+    },
+    "faq": {
+      "title": "Full transparency.",
+      "subtitle": "Questions are normal. Here are clear answers.",
+      "items": {
+        "model": {
+          "question": "How can you offer products in exchange for support?",
+          "answer": "It is a virtuous loop. Your financial contribution supports field projects directly. In return, our producers and artisan partners provide products from their harvests. €1 supported = 1 point, with no hidden fees."
+        },
+        "freedom": {
+          "question": "Do I have to commit every month?",
+          "answer": "Not at all. You are fully free. You can support once or set a monthly contribution for regular impact. You can stop anytime in one click."
+        },
+        "impact": {
+          "question": "How can I be sure my action has real impact?",
+          "answer": "In the app, you follow project progress through the activity feed. Your BioDex and tribe statistics update with verified field data."
+        }
+      }
+    },
+    "final_cta": {
+      "title": "Ready to make a difference?",
+      "subtitle": "Join our community of committed citizens and contribute concretely to biodiversity preservation.",
+      "cta": "Discover projects",
+      "microtext": "Free signup in 30 seconds.",
+      "reassurance": {
+        "secure": "100% secure payment",
+        "impact": "Verified and measurable impact",
+        "points": "€1 supported = 1 store point"
+      }
+    }
+  },
   "dashboard": {
     "title": "My dashboard",
     "welcome": "Welcome",

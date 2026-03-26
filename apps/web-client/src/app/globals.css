@@ -83,4 +83,22 @@ body {
   ::view-transition-new(*) {
     animation-duration: 1ms;
   }
+
+  .ecosystem-marquee {
+    animation: none !important;
+  }
+}
+
+@keyframes ecosystem-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ecosystem-marquee {
+  width: max-content;
+  animation: ecosystem-marquee 26s linear infinite;
 }

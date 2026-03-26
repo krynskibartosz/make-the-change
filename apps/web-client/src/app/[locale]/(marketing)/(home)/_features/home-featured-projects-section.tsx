@@ -1,13 +1,14 @@
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
 import { FeaturedProjectsList } from '@/app/[locale]/(marketing)/(home)/_features/featured-projects-list'
+import { Link } from '@/i18n/navigation'
 import type { HomeFeaturedProject } from './home.types'
-import { HomeSectionViewAllAction } from './home-section-view-all-action'
 
 type HomeFeaturedProjectsSectionProps = {
   title: string
   viewAllLabel: string
-  fundedLabel: string
-  activeLabel: string
+  supportLabel: string
+  collectedLabel: string
+  goalLabel: string
   projects: HomeFeaturedProject[]
   variant?: 'default' | 'muted'
 }
@@ -15,17 +16,19 @@ type HomeFeaturedProjectsSectionProps = {
 export const HomeFeaturedProjectsSection = ({
   title,
   viewAllLabel,
-  fundedLabel,
-  activeLabel,
+  supportLabel,
+  collectedLabel,
+  goalLabel,
   projects,
   variant = 'default',
 }: HomeFeaturedProjectsSectionProps) => (
-  <MarketingSection
-    title={title}
-    action={<HomeSectionViewAllAction href="/projects" label={viewAllLabel} />}
-    variant={variant}
-    size="lg"
-  >
-    <FeaturedProjectsList projects={projects} activeLabel={activeLabel} fundedLabel={fundedLabel} />
+  <MarketingSection title={title} variant={variant} size="lg" className="dark:!bg-black">
+    <FeaturedProjectsList
+      projects={projects}
+      supportLabel={supportLabel}
+      collectedLabel={collectedLabel}
+      goalLabel={goalLabel}
+      viewAllLabel={viewAllLabel}
+    />
   </MarketingSection>
 )

@@ -245,7 +245,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
     const projectsNavigationItem: HeaderNavigationItem = {
       id: 'projects',
       href: '/projects',
-      label: t('invest'),
+      label: t('projects'),
       ...(investMenu !== undefined ? { mega: investMenu } : {}),
     }
 

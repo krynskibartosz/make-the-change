@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
-import { Home, Menu, PiggyBank, ShoppingBag, Trophy, User } from 'lucide-react'
+import { Home, Menu, ShoppingCart, User, Users, Wallet } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -14,15 +14,14 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const pathname = usePathname()
   const t = useTranslations('navigation')
 
-  // Specific check for tabs
   const isHome = pathname === '/'
   const isProducts = pathname.startsWith('/products')
   const isProjects = pathname.startsWith('/projects')
-  const isLeaderboard = pathname.startsWith('/leaderboard')
+  const isCommunity = pathname.startsWith('/community') || pathname.startsWith('/leaderboard')
   const isDashboard = pathname.startsWith('/dashboard')
-
-  // If none of the main tabs are active, we assume we are in the "Menu" context (except for specific flows like checkout maybe)
-  const isMenuActive = !isHome && !isProducts && !isProjects && !isLeaderboard && !isDashboard
+  const isMenuActive = !isHome && !isProducts && !isProjects && !isCommunity && !isDashboard
+  const navLinkClass =
+    'flex min-h-[44px] flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-1.5 text-[10px] font-medium transition-colors'
 
   const navItems = [
     {
@@ -33,29 +32,22 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     },
     {
       href: '/products',
-      icon: ShoppingBag,
+      icon: ShoppingCart,
       label: t('shop'),
       isActive: isProducts,
     },
     {
       href: '/projects',
-      icon: PiggyBank,
-      label: t('invest'),
+      icon: Wallet,
+      label: t('projects'),
       isActive: isProjects,
     },
-    user
-      ? {
-          href: '/dashboard',
-          icon: User,
-          label: t('profile'),
-          isActive: isDashboard,
-        }
-      : {
-          href: '/leaderboard',
-          icon: Trophy,
-          label: t('leaderboard'),
-          isActive: isLeaderboard,
-        },
+    {
+      href: '/community',
+      icon: Users,
+      label: t('community'),
+      isActive: isCommunity,
+    },
   ]
 
   const avatarUrl = user?.avatarUrl ?? null
@@ -63,63 +55,62 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-safe md:hidden">
       <nav aria-label="Navigation mobile">
-        <ul className="flex h-16 items-center justify-around px-2 m-0 p-0 list-none">
+        <ul className="m-0 flex h-16 list-none items-stretch gap-1 px-2 py-2">
           {navItems.map((item) => {
             const Icon = item.icon
             return (
-              <li key={item.href} className="flex-1">
+              <li key={item.href} className="flex min-w-0 flex-1">
                 <Link
                   href={item.href}
+                  aria-current={item.isActive ? 'page' : undefined}
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-medium transition-colors w-full',
-                    item.isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
+                    navLinkClass,
+                    item.isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
                   )}
                 >
-                  <div
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-xl transition-all',
-                      item.isActive ? 'bg-primary/10' : 'bg-transparent',
-                    )}
-                  >
-                    <Icon className={cn('h-5 w-5', item.isActive && 'fill-primary/20')} />
-                  </div>
-                  <span className={item.isActive ? 'font-semibold' : ''}>{item.label}</span>
+                  <span className="flex h-6 w-6 items-center justify-center">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className={cn('truncate', item.isActive && 'font-semibold')}>
+                    {item.label}
+                  </span>
                 </Link>
               </li>
             )
           })}
 
-          {/* Menu Tab */}
-          <li className="flex-1">
+          <li className="flex min-w-0 flex-1">
             <Link
               href="/menu"
+              aria-current={isMenuActive ? 'page' : undefined}
               className={cn(
-                'flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-medium transition-colors w-full',
-                isMenuActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
+                navLinkClass,
+                isMenuActive
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
               )}
             >
-              <div
-                className={cn(
-                  'flex h-8 w-8 items-center justify-center rounded-xl transition-all',
-                  isMenuActive ? 'bg-primary/10' : 'bg-transparent',
-                )}
-              >
+              <span className="flex h-6 w-6 items-center justify-center">
                 {user ? (
                   avatarUrl ? (
                     <Avatar className="h-6 w-6">
                       <AvatarImage src={avatarUrl} alt="" className="object-cover" />
                       <AvatarFallback>
-                        <User className={cn('h-4 w-4', isMenuActive && 'fill-primary/20')} />
+                        <User className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
                   ) : (
-                    <User className={cn('h-5 w-5', isMenuActive && 'fill-primary/20')} />
+                    <User className="h-5 w-5" />
                   )
                 ) : (
-                  <Menu className={cn('h-5 w-5', isMenuActive && 'fill-primary/20')} />
+                  <Menu className="h-5 w-5" />
                 )}
-              </div>
-              <span className={isMenuActive ? 'font-semibold' : ''}>{t('menu')}</span>
+              </span>
+              <span className={cn('truncate', isMenuActive && 'font-semibold')}>
+                {t('menu')}
+              </span>
             </Link>
           </li>
         </ul>

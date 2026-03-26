@@ -227,6 +227,94 @@
       }
     }
   },
+  "home_v2": {
+    "hero": {
+      "title": "Doe iets voor de natuur, en krijg producten terug.",
+      "subtitle": "Steun lokale projecten. Je bijdrage wordt meteen omgezet in punten voor ethische producten.",
+      "cta": "Ontdek projecten"
+    },
+    "how_it_works": {
+      "title": "Jouw impact, beloond in 3 stappen.",
+      "step_1": {
+        "title": "1. Kies een project",
+        "description": "Kies een lokaal doel dat je raakt (bos, oceaan, bijenteelt...)."
+      },
+      "step_2": {
+        "title": "2. Steun & spaar punten",
+        "description": "Steun vanaf €1. Het bedrag wordt direct omgezet in punten op je account (€1 = 1 punt).",
+        "check_secure": "Veilige betaling",
+        "check_verified": "Geverifieerde impact"
+      },
+      "step_3": {
+        "title": "3. Verwen jezelf",
+        "description": "Gebruik je punten in onze ethische shop. Honing, bio-cosmetica en ambachtelijke producten als dank."
+      }
+    },
+    "projects": {
+      "title": "Ze hebben je nodig",
+      "view_all": "Bekijk alle projecten",
+      "support_cta": "Steun dit project",
+      "collected_suffix": "ingezameld",
+      "goal_prefix": "Doel:"
+    },
+    "shop": {
+      "title": "Verwen jezelf met je punten",
+      "view_all": "Bekijk de volledige shop",
+      "discover": "Ontdekken",
+      "points_label": "punten"
+    },
+    "gamification": {
+      "title": "Ecologie wordt eindelijk een collectief spel.",
+      "description": "Biodiversiteit redden hoeft niet alleen. Vul je BioDex aan, houd je series vol en sluit je aan bij een tribe.",
+      "cta": "Ontdek de community",
+      "biodex": {
+        "title": "BioDex (Kerkuil)",
+        "subtitle": "Levende collectie",
+        "description": "Verzamel de soorten die je helpt beschermen."
+      },
+      "streak": {
+        "title": "Series",
+        "description": "Blijf consequent en verdien bonuspunten."
+      },
+      "tribes": {
+        "title": "Tribes",
+        "description": "Bereik gezamenlijke doelen met je tribe."
+      }
+    },
+    "ecosystem": {
+      "title": "Zij maken dit avontuur mogelijk.",
+      "subtitle": "Gecertificeerde NGO's, lokale producenten en betrouwbare ethische merken."
+    },
+    "faq": {
+      "title": "Volledige transparantie.",
+      "subtitle": "Vragen zijn normaal. Hier zijn heldere antwoorden.",
+      "items": {
+        "model": {
+          "question": "Hoe kunnen jullie producten aanbieden in ruil voor steun?",
+          "answer": "Het is een positieve kringloop. Je bijdrage gaat rechtstreeks naar projecten op het terrein. In ruil stellen onze producenten en ambachtslieden producten beschikbaar. €1 steun = 1 punt, zonder verborgen kosten."
+        },
+        "freedom": {
+          "question": "Moet ik me maandelijks engageren?",
+          "answer": "Nee. Je bent volledig vrij. Je kunt eenmalig steunen of maandelijks bijdragen voor regelmatige impact. Stoppen kan op elk moment met één klik."
+        },
+        "impact": {
+          "question": "Hoe weet ik dat mijn actie echt impact heeft?",
+          "answer": "In de app volg je projectvoortgang via de activity feed. Je BioDex en tribe-statistieken worden bijgewerkt met geverifieerde velddata."
+        }
+      }
+    },
+    "final_cta": {
+      "title": "Klaar om het verschil te maken?",
+      "subtitle": "Word deel van onze gemeenschap van betrokken burgers en draag concreet bij aan biodiversiteit.",
+      "cta": "Ontdek projecten",
+      "microtext": "Gratis registratie in 30 seconden.",
+      "reassurance": {
+        "secure": "100% veilige betaling",
+        "impact": "Geverifieerde en meetbare impact",
+        "points": "€1 steun = 1 shop punt"
+      }
+    }
+  },
   "dashboard": {
     "title": "Mijn dashboard",
     "welcome": "Welkom",

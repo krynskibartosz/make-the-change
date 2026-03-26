@@ -115,6 +115,50 @@ const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
   )
 }
 
+const HOME_B2C_DEFAULT_KEYWORDS = [
+  'miel',
+  'honey',
+  'cosmet',
+  'soap',
+  'savon',
+  'baume',
+  'gift',
+  'cadeau',
+  'gourmand',
+  'food',
+  'artisan',
+  'bio',
+]
+
+const HOME_B2C_KEYWORDS = (
+  process.env.HOME_B2C_KEYWORDS ||
+  process.env.NEXT_PUBLIC_HOME_B2C_KEYWORDS ||
+  HOME_B2C_DEFAULT_KEYWORDS.join(',')
+)
+  .split(',')
+  .map((keyword) => keyword.trim().toLowerCase())
+  .filter((keyword) => keyword.length > 0)
+
+const HOME_B2C_STRICT = process.env.HOME_B2C_STRICT === 'true'
+
+const isB2CDesirableProduct = (product: ProductCardProduct): boolean => {
+  const haystack = [
+    product.name_default || '',
+    product.short_description_default || '',
+    ...(product.tags || []),
+  ]
+    .join(' ')
+    .toLowerCase()
+
+  return HOME_B2C_KEYWORDS.some((keyword) => haystack.includes(keyword))
+}
+
+const filterHomeProducts = (products: ProductCardProduct[]): ProductCardProduct[] => {
+  const matches = products.filter(isB2CDesirableProduct)
+  if (matches.length > 0) return matches
+  return HOME_B2C_STRICT ? [] : products
+}
+
 export async function getHomeServerData(): Promise<HomeServerData> {
   const supabase = await createClient()
 
@@ -146,9 +190,11 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .schema('commerce')
     .from('products')
     .select(
-      'id,slug,name_default,name_i18n,short_description_default,short_description_i18n,price_points,price_eur_equivalent,stock_quantity,featured,fulfillment_method,metadata,images,tags',
+      'id,slug,name_default,name_i18n,short_description_default,short_description_i18n,price_points,price_eur_equivalent,stock_quantity,featured,fulfillment_method,metadata,images,tags,is_active',
     )
     .eq('featured', true)
+    .eq('is_active', true)
+    .gt('stock_quantity', 0)
     .limit(4)
     .order('created_at', { ascending: false })
 
@@ -281,7 +327,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     }),
   )
 
-  const featuredProductsState = mapReadyState(
+  const featuredProductsStateRaw = mapReadyState(
     toArrayState<FeaturedProductRow>(featuredProductsResult.data, featuredProductsResult.error),
     (product): ProductCardProduct => ({
       id: product.id,
@@ -300,6 +346,8 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       tags: product.tags ?? [],
     }),
   )
+
+  const featuredProductsState = featuredProductsStateRaw
 
   const activeProducersState = mapReadyState(
     toArrayState<ActiveProducerRow>(activeProducersResult.data, activeProducersResult.error),
