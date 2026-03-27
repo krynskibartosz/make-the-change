@@ -47,7 +47,7 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
       title={t('how_it_works.title')}
       variant={variant}
       size="lg"
-      className="py-20 md:py-24 dark:!bg-black"
+      className="py-20 md:py-24"
     >
       <div className="mx-auto max-w-3xl">
         <div className="relative" ref={containerRef}>

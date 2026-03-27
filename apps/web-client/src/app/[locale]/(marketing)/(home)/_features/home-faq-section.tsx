@@ -60,7 +60,7 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
                   onClick={() => setOpenItem((current) => (current === item.id ? null : item.id))}
                   aria-expanded={isOpen}
                 >
-                  <span className="text-base font-bold text-foreground dark:text-white sm:text-lg">{item.question}</span>
+                  <span className="text-base font-bold text-foreground sm:text-lg">{item.question}</span>
                   <span
                     className={cn(
                       'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 transition-all duration-300 group-hover:border-lime-200 group-hover:bg-lime-50 group-hover:text-lime-600 dark:border-white/10 dark:bg-white/5 dark:text-white dark:group-hover:border-lime-500/30 dark:group-hover:bg-lime-500/20 dark:group-hover:text-lime-400',
@@ -80,7 +80,7 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
                       transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                     >
                       <div className="px-5 pb-6 pr-16">
-                        <p className="text-sm leading-relaxed text-muted-foreground dark:text-white/70 text-pretty sm:text-base">
+                        <p className="text-sm leading-relaxed text-muted-foreground text-pretty sm:text-base">
                           {item.answer}
                         </p>
                       </div>

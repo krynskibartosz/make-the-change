@@ -84,7 +84,7 @@ export const HomeFeaturedProductsSection = ({
                           key={tag}
                           className={
                             i === 0
-                              ? 'inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-white/70'
+                              ? 'inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground'
                               : 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border-lime-200 bg-lime-100 text-lime-700 dark:border-lime-500/20 dark:bg-lime-900/30 dark:text-lime-400'
                           }
                         >
@@ -93,7 +93,7 @@ export const HomeFeaturedProductsSection = ({
                       ))
                     ) : (
                       <>
-                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-white/70">
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground">
                           Artisan local
                         </span>
                         {product.stock_quantity && product.stock_quantity < 20 && (
