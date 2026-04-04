@@ -538,10 +538,9 @@ export const ProductsClient = ({
                 <BottomSheet>
                   <BottomSheetTrigger>
                     <div className="inline-flex w-full">
-                      <Button
+                      <button
                         type="button"
-                        variant="outline"
-                        className="h-10 w-full gap-2 bg-background"
+                        className="rounded-full bg-white/5 border border-white/10 px-5 py-2.5 text-sm transition-transform active:scale-95 flex items-center justify-center gap-2 w-full text-foreground hover:bg-white/10"
                       >
                         <Filter className="h-4 w-4" />
                         {tCommon('filter')}
@@ -550,7 +549,7 @@ export const ProductsClient = ({
                             {activeFilterChips.length}
                           </span>
                         )}
-                      </Button>
+                      </button>
                     </div>
                   </BottomSheetTrigger>
                   <BottomSheetContent showHandle>
@@ -593,10 +592,10 @@ export const ProductsClient = ({
                     }
                   }}
                 >
-                  <SelectTrigger className="h-10 w-full lg:w-[220px] bg-background">
-                    <div className="flex min-w-0 items-center gap-2">
-                      <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                      <span className="truncate text-sm font-semibold">{sortLabel}</span>
+                  <SelectTrigger className="rounded-full bg-white/5 border border-white/10 px-5 py-2.5 text-sm transition-transform active:scale-95 flex items-center gap-2 w-full lg:w-[220px] text-foreground hover:bg-white/10 data-[placeholder]:text-foreground">
+                    <div className="flex min-w-0 items-center gap-2 w-full justify-center">
+                      <ArrowUpDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <span className="truncate font-medium">{sortLabel}</span>
                     </div>
                   </SelectTrigger>
                   <SelectContent>
@@ -610,15 +609,13 @@ export const ProductsClient = ({
               </div>
 
               <div className="hidden lg:flex">
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  size="sm"
                   onClick={clearAllFilters}
-                  className="h-10"
+                  className="rounded-full bg-white/5 border border-white/10 px-5 py-2.5 text-sm font-medium transition-transform active:scale-95 flex items-center gap-2 text-foreground hover:bg-white/10 whitespace-nowrap"
                 >
                   {tProducts('filters.clear_filters')}
-                </Button>
+                </button>
               </div>
             </div>
           </div>
@@ -667,12 +664,9 @@ export const ProductsClient = ({
           {/* Product Grid Area */}
           <div className="min-w-0 space-y-4">
             {/* Product Count */}
-            <div className="space-y-1">
-              <p className="text-xs font-black uppercase tracking-wide text-muted-foreground">
-                {tProducts('product_list')}
-              </p>
-              <p className="text-lg font-black tracking-tight text-foreground">
-                {pagination.totalItems.toLocaleString()} {tProducts('product_list')}
+            <div className="mb-4">
+              <p className="text-sm font-medium text-muted-foreground">
+                {pagination.totalItems.toLocaleString()} récompenses disponibles
               </p>
             </div>
 

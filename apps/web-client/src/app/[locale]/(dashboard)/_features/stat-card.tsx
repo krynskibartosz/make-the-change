@@ -43,36 +43,32 @@ export const StatCard = ({
   const styles = variantClasses[variant]
 
   return (
-    <Card
+    <div
       className={cn(
-        'group relative overflow-hidden border bg-background/70 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-lg',
+        'group relative overflow-hidden bg-white/5 rounded-2xl p-5 border border-white/5 transition-all duration-300 hover:bg-white/10 flex flex-col gap-3',
         className,
       )}
     >
-      {/* Hover Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-      <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-primary/10 blur-2xl opacity-0 transition-opacity group-hover:opacity-100" />
-
-      <CardHeader className="relative flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+      <div className="flex flex-row items-center justify-between">
+        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
         <div
           className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-xl shadow-sm',
+            'flex h-10 w-10 items-center justify-center rounded-xl',
             styles.icon,
           )}
         >
           {icon}
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent className="relative">
+      <div>
         <div className={cn('text-2xl font-bold', styles.value)}>{value}</div>
         {trend && (
           <p className={cn('mt-1 text-xs', trend.positive ? 'text-success' : 'text-destructive')}>
             {trend.positive ? '↑' : '↓'} {trend.value}
           </p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

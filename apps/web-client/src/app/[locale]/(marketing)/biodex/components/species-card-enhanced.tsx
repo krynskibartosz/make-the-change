@@ -1,5 +1,5 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { SpeciesContext } from '@/types/context'
+import type { SpeciesContext } from '@/types/context'
 import Link from 'next/link'
 
 interface SpeciesCardEnhancedProps {
@@ -8,6 +8,7 @@ interface SpeciesCardEnhancedProps {
 }
 
 export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesCardEnhancedProps) {
+  const isLocked = showUserStatus && !species.user_status?.isUnlocked
   return (
     <Card className="group relative overflow-hidden rounded-3xl border border-border/50 bg-background/50 hover:bg-background/80 hover:shadow-lg transition-all">
       <CardContent className="p-6">
@@ -16,9 +17,15 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
               {species.image_url ? (
-                <img src={species.image_url} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={species.image_url}
+                  alt=""
+                  className={`h-full w-full object-cover transition-all duration-500 ${
+                    isLocked ? 'brightness-0 opacity-50 contrast-125' : ''
+                  }`}
+                />
               ) : (
-                <span className="text-2xl">🦋</span>
+                <span className="text-2xl">{isLocked ? '🌿' : '🦋'}</span>
               )}
             </div>
             <div>
@@ -35,9 +42,15 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
         </div>
         
         {/* Description */}
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-3 min-h-[3rem]">
-          {species.description_default}
-        </p>
+        {isLocked ? (
+          <p className="text-sm text-muted-foreground italic mb-4 min-h-[3rem] leading-relaxed">
+            Soutenez un projet lié à cet habitat pour débloquer les secrets de cette espèce.
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-3 min-h-[3rem]">
+            {species.description_default}
+          </p>
+        )}
         
         {/* Statut de conservation */}
         <div className="flex items-center gap-2 mb-4">

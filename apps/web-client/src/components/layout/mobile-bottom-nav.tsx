@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
-import { Home, Menu, ShoppingCart, User, Users, Wallet } from 'lucide-react'
+import { Home, Menu, ShoppingCart, User, Users, Wallet, Compass } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -44,8 +44,8 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     },
     {
       href: '/community',
-      icon: Users,
-      label: t('community'),
+      icon: Compass,
+      label: 'Aventure',
       isActive: isCommunity,
     },
   ]

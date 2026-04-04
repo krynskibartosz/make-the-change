@@ -174,7 +174,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
             href="/community"
             className="group flex w-full items-center justify-center gap-2 rounded-3xl border border-gray-200 bg-white p-5 font-bold text-foreground shadow-sm transition-all duration-200 hover:bg-gray-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:shadow-none dark:hover:bg-white/10"
           >
-            Découvrir la communauté
+            Découvrir l'aventure
             <ArrowRight className="h-5 w-5 text-lime-500 transition-transform group-hover:translate-x-1 dark:text-lime-400" />
           </Link>
         </motion.div>

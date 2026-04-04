@@ -1,7 +1,8 @@
 'use client'
 
-import { ProjectCard } from '@make-the-change/core/ui/next'
-import { buildProjectCardBadges } from '@/app/[locale]/(marketing)/projects/_features/project-card-badges'
+import { Target } from 'lucide-react'
+import Image from 'next/image'
+import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 export type ClientCatalogProject = {
@@ -62,58 +63,80 @@ const getProgressPercent = (project: ClientCatalogProject): number | null => {
 export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProjectCardProps) => {
   const imageUrl = sanitizeImageUrl(project.hero_image_url)
   const locationLabel = getLocationLabel(project)
-  const badges = buildProjectCardBadges({
-    featured: project.featured ?? null,
-    status: project.status ?? null,
-    labels: {
-      featuredLabel: labels.featuredLabel,
-      activeLabel: labels.activeLabel,
-      fundedLabel: labels.fundedLabel,
-    },
-  })
+  const progressPercent = getProgressPercent(project)
 
   return (
-    <div itemScope itemType="https://schema.org/Project">
-      <ProjectCard
-        context="clientCatalog"
-        model={{
-          id: project.id,
-          href: `/projects/${project.slug}`,
-          title: project.name_default,
-          description: project.description_default || '',
-          image: {
-            src: imageUrl || '',
-            alt: project.name_default,
-          },
-          status: project.status ?? null,
-          featured: project.featured ?? null,
-          progressPercent: getProgressPercent(project),
-          currentFundingEuro: project.current_funding ?? null,
-          targetBudgetEuro: project.target_budget ?? null,
-          badges,
-          ...(locationLabel !== undefined ? { subtitle: locationLabel } : {}),
-          ...(locationLabel !== undefined ? { locationLabel } : {}),
-          ...(project.type ? { projectType: project.type } : {}),
-          ...(project.producer?.name_default
-            ? { producerName: project.producer.name_default }
-            : {}),
-        }}
-        labels={{
-          viewLabel: labels.viewLabel,
-          progressLabel: labels.progressLabel,
-          fundedLabel: labels.fundedLabel,
-          goalLabel: labels.goalLabel,
-        }}
-      />
-      <meta itemProp="name" content={project.name_default} />
-      <meta itemProp="description" content={project.description_default || ''} />
-      <meta itemProp="image" content={imageUrl || ''} />
-      {project.address_city && project.address_country_code && (
-        <meta
-          itemProp="location"
-          content={`${project.address_city}, ${project.address_country_code}`}
-        />
-      )}
+    <div itemScope itemType="https://schema.org/Project" className="h-full">
+      <Link href={`/projects/${project.slug}`} className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-card transition-all hover:border-white/20 hover:shadow-xl">
+        <meta itemProp="name" content={project.name_default} />
+        <meta itemProp="description" content={project.description_default || ''} />
+        <meta itemProp="image" content={imageUrl || ''} />
+        {project.address_city && project.address_country_code && (
+          <meta
+            itemProp="location"
+            content={`${project.address_city}, ${project.address_country_code}`}
+          />
+        )}
+        
+        {/* Badges Flottants */}
+        <div className="absolute left-4 top-4 z-10 flex gap-2">
+          {project.featured && (
+            <span className="rounded-full bg-lime-500/20 border border-lime-500/30 px-3 py-1 text-xs font-bold uppercase tracking-wider text-lime-400 backdrop-blur-sm shadow-sm">
+              Coup de cœur
+            </span>
+          )}
+        </div>
+
+        {/* Zone Image */}
+        <div className="relative aspect-video w-full overflow-hidden bg-muted flex-shrink-0">
+          <Image
+            src={imageUrl || ''}
+            alt={project.name_default}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        {/* Contenu - Avec un padding généreux */}
+        <div className="flex flex-1 flex-col p-5">
+          <div className="mb-2 flex items-center gap-3">
+            <Target className="h-5 w-5 text-muted-foreground shrink-0" />
+            <h3 className="line-clamp-1 text-xl font-bold tracking-tight text-foreground">
+              {project.name_default}
+            </h3>
+          </div>
+
+          <p className="line-clamp-2 text-sm text-muted-foreground mb-6">
+            {project.description_default}
+          </p>
+
+          <div className="mt-auto flex flex-col gap-3">
+            {project.current_funding !== null && project.current_funding !== undefined && (
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between items-end">
+                  <span className="font-bold text-lg leading-none">{project.current_funding.toLocaleString()} €</span>
+                  {project.target_budget !== null && project.target_budget !== undefined && (
+                    <span className="text-sm font-medium text-muted-foreground">
+                      {project.target_budget.toLocaleString()} € {labels.goalLabel}
+                    </span>
+                  )}
+                </div>
+                {progressPercent !== null && (
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+                    <div
+                      className="h-full bg-lime-400 transition-all duration-1000 ease-out"
+                      style={{ width: `${Math.min(Math.max(progressPercent, 0), 100)}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="font-medium text-lime-400 text-sm mt-1 mb-1 self-start group-hover:underline">
+              {labels.viewLabel} &rarr;
+            </div>
+          </div>
+        </div>
+      </Link>
     </div>
   )
 }

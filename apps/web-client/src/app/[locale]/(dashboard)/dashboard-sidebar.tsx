@@ -44,20 +44,20 @@ interface DashboardSidebarProps {
 
 type NavigationKey = keyof Messages['navigation']
 
-type AccountNavItem = { href: string; icon: LucideIcon; labelKey: NavigationKey }
+type AccountNavItem = { href: string; icon: LucideIcon; labelKey?: NavigationKey; label?: string }
 
-const accountNavPrimaryItems = [
+const accountNavPrimaryItems: AccountNavItem[] = [
   { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
   { href: '/dashboard/profile', labelKey: 'profile', icon: User },
-  { href: '/dashboard/investments', labelKey: 'my_investments', icon: PiggyBank },
+  { href: '/dashboard/investments', label: 'Mes contributions', icon: PiggyBank },
   { href: '/dashboard/orders', labelKey: 'my_orders', icon: ShoppingBag },
   { href: '/dashboard/points', labelKey: 'my_points', icon: Coins },
-] satisfies AccountNavItem[]
+]
 
-const accountNavSecondaryItems = [
+const accountNavSecondaryItems: AccountNavItem[] = [
   { href: '/dashboard/subscription', labelKey: 'subscriptions', icon: CreditCard },
   { href: '/dashboard/settings', labelKey: 'settings', icon: Settings },
-] satisfies AccountNavItem[]
+]
 
 const sidebarItemClass =
   'group relative flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors ' +
@@ -92,20 +92,20 @@ const SidebarNavLink = ({
     className={cn(
       sidebarItemClass,
       active
-        ? "bg-primary/10 text-foreground shadow-sm shadow-primary/10 before:absolute before:left-1 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-full before:bg-primary before:content-['']"
-        : 'text-muted-foreground hover:text-foreground hover:bg-muted/30',
-      tone === 'danger' && !active && 'hover:bg-destructive/10 hover:text-destructive',
+        ? "text-lime-400"
+        : 'text-muted-foreground hover:text-foreground',
+      tone === 'danger' && !active && 'hover:text-destructive',
     )}
   >
     <span
       className={cn(
-        'flex h-8 w-8 items-center justify-center rounded-lg bg-muted/30 text-muted-foreground transition-colors',
+        'flex h-8 w-8 items-center justify-center rounded-lg transition-colors',
         active
-          ? 'bg-primary/10 text-primary'
-          : 'group-hover:bg-muted/50 group-hover:text-foreground',
+          ? 'text-lime-400'
+          : 'text-muted-foreground group-hover:text-foreground',
         tone === 'danger' &&
           !active &&
-          'group-hover:bg-destructive/15 group-hover:text-destructive',
+          'group-hover:text-destructive',
       )}
     >
       <Icon className="h-4 w-4" />
@@ -176,15 +176,13 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
   const pathname = usePathname()
   const { isMobileOpen, setIsMobileOpen } = useDashboardSidebar()
 
-  const displayName = profile?.first_name
-    ? `${profile.first_name} ${profile.last_name || ''}`
-    : user.email
+  const rawDisplayName = profile?.first_name
+    ? `${profile.first_name} ${profile.last_name || ''}`.trim()
+    : ''
+  const displayName = rawDisplayName || 'Mon Profil'
 
   const userLevel = profile?.user_level || 'explorateur'
-  const userLevelColor = isUserLevelKey(userLevel)
-    ? levelColorClasses[userLevel]
-    : levelColorClasses.explorateur
-  const secondaryLine = profile?.first_name ? user.email : null
+  const secondaryLine = user.email || null
   const initial = (displayName || '?').trim().charAt(0).toUpperCase()
   const metadata = isRecord(profile?.metadata) ? profile.metadata : null
   const metadataAvatarUrl = metadata ? asString(metadata.avatar_url) : ''
@@ -193,15 +191,6 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
   const handleNavClick = () => {
     setIsMobileOpen(false)
   }
-
-  type ExploreNavItem = { href: string; icon: LucideIcon; label: string }
-  const exploreNavItems = [
-    { href: '/', icon: Home, label: t('home') },
-    { href: '/projects', icon: Leaf, label: t('projects') },
-    { href: '/products', icon: ShoppingBag, label: t('products') },
-    { href: '/community', icon: Users, label: t('community') },
-    { href: '/leaderboard', icon: Trophy, label: t('leaderboard') },
-  ] satisfies ExploreNavItem[]
 
   const isActiveAccountRoute = (href: string) =>
     pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
@@ -226,14 +215,13 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
               {secondaryLine ? (
                 <p className="mt-1 truncate text-xs text-muted-foreground">{secondaryLine}</p>
               ) : null}
-              <Badge className={cn('mt-2 rounded-full px-2.5 py-0.5 text-[11px]', userLevelColor)}>
-                {tDashboard(`overview.levels.${userLevel}`)}
+              <Badge className={cn('mt-2 rounded-full px-2.5 py-0.5 text-[11px] bg-lime-500/10 text-lime-400 border-none capitalize')}>
+                {userLevel}
               </Badge>
             </div>
           </div>
 
           <div className="flex items-center gap-1">
-            <ThemeToggle />
             {/* Mobile close button */}
             <Button
               variant="ghost"
@@ -260,7 +248,7 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
                   key={item.href}
                   href={item.href}
                   icon={item.icon}
-                  label={t(item.labelKey)}
+                  label={item.label || t(item.labelKey as any)}
                   active={isActiveAccountRoute(item.href)}
                   onClick={handleNavClick}
                 />
@@ -275,31 +263,21 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
                   key={item.href}
                   href={item.href}
                   icon={item.icon}
-                  label={t(item.labelKey)}
+                  label={item.label || t(item.labelKey as any)}
                   active={isActiveAccountRoute(item.href)}
                   onClick={handleNavClick}
                 />
               ))}
-            </nav>
-          </div>
 
-          <div>
-            <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {t('explore_section')}
-            </p>
-            <nav className="space-y-1">
-              {exploreNavItems
-                .filter((item) => !(pathname.startsWith('/community') && item.href === '/community'))
-                .map((item) => (
-                <SidebarNavLink
-                  key={item.href}
-                  href={item.href}
-                  icon={item.icon}
-                  label={item.label}
-                  active={pathname === item.href || pathname.startsWith(`${item.href}/`)}
-                  onClick={handleNavClick}
-                />
-              ))}
+              <div className="group relative flex h-11 w-full items-center justify-between gap-3 rounded-xl px-3 text-sm font-medium transition-colors text-muted-foreground">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors">
+                    <Settings className="h-4 w-4" />
+                  </span>
+                  <span className="truncate">Thème de l'application</span>
+                </div>
+                <ThemeToggle />
+              </div>
             </nav>
           </div>
         </div>

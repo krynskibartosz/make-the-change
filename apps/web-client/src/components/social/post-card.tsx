@@ -34,7 +34,8 @@ export function PostCard({
   const router = useRouter()
   const locale = useLocale()
   const dateFnsLocale = locale === 'fr' ? fr : locale === 'nl' ? nlLocale : enUS
-  const authorName = post.author?.full_name || t('thread.user_fallback')
+  const rawName = post.author?.full_name;
+  const authorName = !rawName || rawName.includes('User') ? 'Membre Engagé' : rawName;
   const authorAvatar = post.author?.avatar_url || ''
   const timeAgo = formatDistanceToNow(new Date(post.created_at), {
     addSuffix: true,
@@ -67,7 +68,7 @@ export function PostCard({
 
   return (
     <article
-      className={`border-b border-border bg-background transition-colors hover:bg-muted/30 ${postHref ? 'cursor-pointer' : ''}`}
+      className={`border-b border-white/5 bg-background transition-colors hover:bg-muted/30 ${postHref ? 'cursor-pointer' : ''}`}
       onClick={handleCardClick}
     >
       <div className="p-4 sm:p-6">
@@ -240,13 +241,13 @@ export function PostCard({
         </div>
 
         {/* Actions */}
-        <div className="mt-6 flex items-center justify-between border-t border-border/50 pt-4">
+        <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-4">
           <div className="flex gap-1">
             <Button
               variant="ghost"
               size="sm"
               aria-label={likeActionLabel}
-              className={`min-h-11 min-w-11 gap-2 ${post.user_has_reacted ? 'text-red-500 hover:text-red-600 hover:bg-red-50' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`min-h-11 min-w-11 gap-2 transition-colors ${post.user_has_reacted ? 'text-red-500 hover:text-red-600 hover:bg-white/5' : 'text-muted-foreground hover:text-white'}`}
               onClick={() => onLike?.(post.id)}
               disabled={readonlyActions || !onLike}
             >
@@ -257,7 +258,7 @@ export function PostCard({
               variant="ghost"
               size="sm"
               aria-label={commentActionLabel}
-              className="min-h-11 min-w-11 gap-2 text-muted-foreground hover:text-foreground"
+              className="min-h-11 min-w-11 gap-2 text-muted-foreground hover:text-white transition-colors"
               onClick={() => onComment?.(post.id)}
               disabled={readonlyActions || !onComment}
             >
@@ -268,7 +269,7 @@ export function PostCard({
               variant="ghost"
               size="sm"
               aria-label={bookmarkActionLabel}
-              className={`min-h-11 min-w-11 text-muted-foreground hover:text-foreground ${post.user_has_bookmarked ? 'text-primary hover:text-primary' : ''}`}
+              className={`min-h-11 min-w-11 text-muted-foreground hover:text-white transition-colors ${post.user_has_bookmarked ? 'text-primary hover:text-primary' : ''}`}
               onClick={() => onBookmark?.(post.id)}
               disabled={readonlyActions || !onBookmark}
             >
@@ -280,12 +281,11 @@ export function PostCard({
             variant="ghost"
             size="sm"
             aria-label={shareActionLabel}
-            className="min-h-11 min-w-11 gap-2 text-muted-foreground hover:text-foreground"
+            className="min-h-11 min-w-11 gap-2 text-muted-foreground hover:text-white transition-colors"
             onClick={() => onShare?.(post.id)}
             disabled={readonlyActions || !onShare}
           >
             <Share2 className="h-4 w-4" />
-            <span className="text-xs font-medium">{t('actions.share')}</span>
           </Button>
         </div>
       </div>

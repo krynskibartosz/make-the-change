@@ -82,7 +82,10 @@ export const DashboardWelcome = ({
   const normalizedLevel = normalizeLevel(userLevel)
   // @ts-ignore - Dynamic access
   const levelStyle = levelColors[normalizedLevel] || levelColors.explorateur
-  const displayTitle = title || `Bonjour, ${firstName} !`
+  
+  // Custom emotional display logic
+  const isDefaultName = !firstName || firstName.trim().toLowerCase() === 'utilisateur' || firstName.includes('@');
+  const displayTitle = title || (isDefaultName ? 'Ravis de vous revoir !' : `Bonjour, ${firstName} !`)
 
   return (
     <div
@@ -101,26 +104,22 @@ export const DashboardWelcome = ({
       <div className="absolute inset-0 bg-linear-to-r from-primary/10 via-transparent to-accent/10 opacity-60" />
 
       <div className="relative z-10 space-y-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <div className="mb-2 flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium text-muted-foreground">{eyebrow}</span>
-            </div>
             <h1 className="text-2xl font-bold md:text-3xl">{displayTitle}</h1>
+            <p className="text-muted-foreground mt-1">Voici le résumé de votre impact.</p>
           </div>
 
           <div className="flex flex-col items-end gap-2">
             <div className="flex flex-wrap gap-2">
               {kycStatus && (
                 <Badge
-                  variant="outline"
-                  className={cn('rounded-full font-medium', kycColors[kycStatus])}
+                  className={cn('rounded-full font-medium bg-lime-500/10 text-lime-400 border-none')}
                 >
                   KYC: {kycLabel || kycStatus}
                 </Badge>
               )}
-              <Badge className={cn('rounded-full px-3 py-1 text-sm font-semibold capitalize', levelStyle.badge)}>
+              <Badge className={cn('rounded-full px-3 py-1 text-sm font-semibold capitalize bg-lime-500/10 text-lime-400 border-none')}>
                 {userLevel}
               </Badge>
             </div>

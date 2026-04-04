@@ -237,7 +237,7 @@ export function FeedClient({
     <div className="mx-auto max-w-2xl">
       {/* Create Post Form */}
       {!hideCreatePost && (
-        <div className="border-b border-border bg-background p-4 sm:p-6">
+        <div className="border-b border-white/5 bg-background p-4 sm:p-6">
           {canWrite ? (
             <form onSubmit={handleCreatePost} className="space-y-4">
               <div className="flex gap-4">
@@ -247,29 +247,28 @@ export function FeedClient({
                 </Avatar>
                 <Textarea
                   placeholder={t('feed.placeholder')}
-                  className="min-h-[100px] resize-none border-border/50 bg-background/50 text-base"
+                  className="min-h-[60px] resize-none bg-white/5 rounded-xl border-none text-base"
                   value={newPostContent}
                   onChange={(e) => setNewPostContent(e.target.value)}
                   disabled={isPosting}
+                  rows={2}
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 pl-14">
                 {hashtagSuggestions.map((slug) => (
-                  <Button
+                  <button
                     key={slug}
                     type="button"
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full px-3 text-xs"
+                    className="text-xs bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white transition-colors rounded-full px-3 py-1"
                     onClick={() => addSuggestedHashtag(slug)}
                   >
                     #{slug}
-                  </Button>
+                  </button>
                 ))}
               </div>
 
-              <div className="flex items-center justify-end border-t border-border/50 pt-3">
+              <div className="flex items-center justify-end pt-2">
                 <Button
                   type="submit"
                   size="sm"

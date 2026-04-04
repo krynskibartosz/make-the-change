@@ -168,20 +168,23 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
             </div>
 
             {/* Status Filters */}
-            <div className="flex gap-2 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide mb-6 w-full lg:w-auto pb-2 lg:pb-0">
               {[
                 { id: 'all', label: t('filter.status.all') },
                 { id: 'active', label: t('filter.status.active') },
-                { id: 'completed', label: t('filter.status.completed') },
+                { id: 'completed', label: 'Financés' },
               ].map((option) => (
-                <Button
+                <button
                   key={option.id}
-                  variant={status === option.id ? 'default' : 'outline'}
                   onClick={() => handleStatusChange(option.id)}
-                  className="whitespace-nowrap"
+                  className={`whitespace-nowrap outline-none ${
+                    status === option.id
+                      ? 'rounded-full bg-lime-400 text-black font-bold px-5 py-2 transition-transform active:scale-95'
+                      : 'rounded-full bg-white/5 border border-white/10 text-muted-foreground px-5 py-2 font-medium transition-all hover:text-white active:scale-95'
+                  }`}
                 >
                   {option.label}
-                </Button>
+                </button>
               ))}
             </div>
           </div>

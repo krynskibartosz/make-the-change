@@ -124,10 +124,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
       </div>
 
       <div className="relative flex h-full min-h-0 flex-col">
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4">
-
-          {/* ── 4. Drag Handle (Bottom Sheet feel) ── */}
-          <div className="w-12 h-1.5 bg-muted rounded-full mx-auto my-3" />
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4 ">
 
           {/* ── Hero Image avec Like en overlay ── */}
           <section>
@@ -146,16 +143,16 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
               {/* ── Share + Like repositionnés sur l'image ── */}
-              <div className="absolute top-4 right-4 z-20 flex gap-2">
+              <div className="absolute bottom-4 right-4 z-20 flex gap-2">
                 <ProjectShareButton
                   projectName={projectName}
                   projectSlug={project.slug}
-                  className="w-10 h-10 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all active:scale-95 hover:bg-black/70"
+                  className="w-10 h-10 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center transition-all active:scale-95 hover:bg-black/70"
                 />
                 <ProjectFavoriteButton
                   projectName={projectName}
                   projectId={project.id}
-                  className="w-10 h-10 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all active:scale-95 hover:bg-black/70"
+                  className="w-10 h-10 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center transition-all active:scale-95 hover:bg-black/70"
                 />
               </div>
             </div>
@@ -296,16 +293,16 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
           <div className="pointer-events-none absolute inset-x-0 -top-12 h-12 bg-gradient-to-t from-background/60 to-transparent" />
 
           {/* Ligne 1 : métriques full-width */}
-          <div className="flex items-baseline gap-3 mb-4">
-            <span className="text-4xl font-black text-lime-400">
-              {formatAmount(currentFunding)}
-            </span>
-            <span className="text-lg font-bold text-muted-foreground">
-              / {formatAmount(targetBudget)}
-            </span>
-            <span className="ml-auto text-sm font-semibold text-muted-foreground">
-              {Math.round(fundingProgress)}% de l&apos;objectif
-            </span>
+          <div className="flex items-baseline justify-between mb-4 px-1">
+            {/* Pôle Gauche : L'argent */}
+            <div>
+              <span className="text-3xl font-black text-lime-400">{formatAmount(currentFunding)}</span>
+              <span className="text-sm font-medium text-muted-foreground ml-1">/ {formatAmount(targetBudget)}</span>
+            </div>
+            {/* Pôle Droite : La progression */}
+            <div className="text-right">
+              <span className="text-sm font-bold text-foreground">{Math.round(fundingProgress)}% de l&apos;objectif</span>
+            </div>
           </div>
 
           {/* CTA seul, pleine largeur */}

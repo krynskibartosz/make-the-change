@@ -1,18 +1,12 @@
 'use client'
 
-import {
-  Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@make-the-change/core/ui'
-import { Filter, Leaf, Search, Sparkles } from 'lucide-react'
+import { Input } from '@make-the-change/core/ui'
+import { Leaf, Search, Sparkles } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { SpeciesCardEnhanced } from './species-card-enhanced'
 import type { SpeciesContext } from '@/types/context'
+import { cn } from '@/lib/utils'
 
 const ALL_STATUSES = ['NE', 'DD', 'LC', 'NT', 'VU', 'EN', 'CR', 'EW', 'EX'] as const
 const CONSERVATION_STATUSES: ReadonlySet<string> = new Set(ALL_STATUSES)
@@ -67,74 +61,54 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 
   return (
     <>
-      {/* Page Hero Section */}
-      <div className="relative py-8 md:pb-12 md:pt-24 overflow-hidden">
-        <div className="absolute left-0 top-0 -z-10 h-full w-full opacity-20">
-          <div className="absolute left-[-5%] top-[-10%] h-[40%] w-[40%] rounded-full bg-marketing-positive-500/20 blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-5%] h-[30%] w-[30%] rounded-full bg-primary/20 blur-[100px]" />
-        </div>
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="text-center flex flex-col items-center">
-            <span className="mb-6 animate-fade-in flex items-center gap-2 rounded-full border bg-background/50 px-3 py-1 text-sm shadow-sm backdrop-blur">
-              <Sparkles className="h-3 w-3 animate-pulse text-primary" />
-              {t('badge')}
-            </span>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-              {t('title')}
-            </h1>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl">{t('description')}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Fixed Search and Filters Bar */}
+      {/* Search and Filters Bar */}
       <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
         <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Search */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">
-              <search role="search" className="relative w-full lg:w-[320px]">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                  placeholder={t('search_placeholder')}
-                  className="pl-9 h-10 bg-background w-full"
-                />
-              </search>
-            </div>
+          {/* Search + count inline */}
+          <div className="flex items-center gap-3">
+            <search role="search" className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="🔍 Rechercher dans le BioDex..."
+                className="pl-9 h-10 bg-background w-full"
+              />
+            </search>
+            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap shrink-0">
+              {t('results_count', { shown: filteredSpecies.length, total: species.length })}
+            </span>
+          </div>
 
-            {/* Status Filters */}
-            <div className="flex w-full items-center justify-between gap-4 lg:w-auto">
-              <p className="text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:block">
-                {t('results_count', { shown: filteredSpecies.length, total: species.length })}
-              </p>
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <div className="inline-flex h-10 items-center gap-2 rounded-md bg-muted/50 px-3 text-sm font-medium text-muted-foreground shrink-0 hidden sm:flex">
-                  <Filter className="h-4 w-4" />
-                  <span>{t('filters.label')}</span>
-                </div>
-                <Select
-                  value={status}
-                  onValueChange={(value) => {
-                    if (!value) return
-                    if (value === 'all' || isConservationStatus(value)) setStatus(value)
-                  }}
-                >
-                  <SelectTrigger className="h-10 w-full sm:w-56 bg-background">
-                    <SelectValue placeholder={t('filters.all_statuses')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">{t('filters.all_statuses')}</SelectItem>
-                    {availableStatuses.map((value) => (
-                      <SelectItem key={value} value={value}>
-                        {t(`status.${value}`)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+          {/* Chip Filters — horizontal scrollable */}
+          <div className="flex gap-2 overflow-x-auto mt-4 pb-1 scrollbar-hide -mx-1 px-1">
+            {/* "Toutes" chip */}
+            <button
+              onClick={() => setStatus('all')}
+              className={cn(
+                'shrink-0 rounded-full px-4 py-1.5 text-sm font-bold transition-all duration-200 whitespace-nowrap',
+                status === 'all'
+                  ? 'bg-lime-500/15 text-lime-400 border border-lime-500/20'
+                  : 'bg-white/5 border border-white/10 text-muted-foreground hover:text-white transition-colors',
+              )}
+            >
+              Toutes
+            </button>
+
+            {availableStatuses.map((s) => (
+              <button
+                key={s}
+                onClick={() => setStatus(s)}
+                className={cn(
+                  'shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 whitespace-nowrap',
+                  status === s
+                    ? 'bg-lime-500/15 text-lime-400 border border-lime-500/20 font-bold'
+                    : 'bg-white/5 border border-white/10 text-muted-foreground hover:text-white transition-colors',
+                )}
+              >
+                {t(`status.${s}`)}
+              </button>
+            ))}
           </div>
         </div>
       </div>

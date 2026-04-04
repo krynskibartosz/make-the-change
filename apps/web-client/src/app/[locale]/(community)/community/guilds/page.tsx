@@ -30,31 +30,13 @@ export default async function CommunityGuildsPage() {
       rightRail={<CommunityRightRail variant="guilds" basePath="/community/guilds" />}
     >
       <div className="space-y-6 px-4 py-6 sm:px-6 sm:py-8">
-        <Button asChild variant="ghost" size="sm" className="w-fit gap-2">
-          <Link href="/community">
-            <ArrowLeft className="h-4 w-4" />
-            {t('actions.back_to_feed')}
-          </Link>
-        </Button>
-
-        <header className="overflow-hidden rounded-3xl border border-border/70 bg-linear-to-br from-emerald-100/70 via-background to-sky-100/60 p-5 sm:p-7">
-          <h1 className="text-2xl font-black tracking-tight text-foreground sm:text-4xl">
-            {t('guilds.title')}
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            {t('guilds.description')}
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <div className="rounded-2xl border border-border/60 bg-background/80 px-4 py-3">
-              <p className="text-xl font-bold text-foreground">{totalMembers.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground">{t('guilds.members_label')}</p>
-            </div>
-            <div className="rounded-2xl border border-border/60 bg-background/80 px-4 py-3">
-              <p className="text-xl font-bold text-foreground">{totalPoints.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground">{t('guilds.points_suffix')}</p>
-            </div>
+        <div className="sticky top-0 z-20 space-y-3 bg-background/95 pb-2 backdrop-blur-md">
+          <h1 className="text-xl font-bold">Communauté</h1>
+          <div className="flex gap-6 border-b border-white/10 mb-6 mt-4">
+            <Link href="/community" className="text-muted-foreground pb-2 hover:text-foreground font-medium">Le Fil</Link>
+            <Link href="/community/guilds" className="border-b-2 border-lime-400 text-foreground pb-2 font-medium">Mes Guildes</Link>
           </div>
-        </header>
+        </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           {guilds.length > 0 ? (
@@ -97,31 +79,16 @@ export default async function CommunityGuildsPage() {
                     <p className="text-sm text-muted-foreground">{t('guilds.no_description')}</p>
                   )}
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="rounded-xl border border-border/60 bg-background/80 p-3">
-                      <p className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                        <Users className="h-3.5 w-3.5" />
-                        {t('guilds.members_label')}
-                      </p>
-                      <p className="mt-1 text-lg font-semibold">
-                        {(guild.members_count || 0).toLocaleString()}
-                      </p>
+                <CardContent>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-4">
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-4 w-4" />
+                      <span className="font-bold text-foreground">{(guild.members_count || 0).toLocaleString()}</span> {t('guilds.members_label').toLowerCase()}
                     </div>
-                    <div className="rounded-xl border border-border/60 bg-background/80 p-3">
-                      <p className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                        <Target className="h-3.5 w-3.5" />
-                        {t('guilds.points_suffix')}
-                      </p>
-                      <p className="mt-1 text-lg font-semibold">
-                        {Math.round(guild.xp_total || 0).toLocaleString()}
-                      </p>
+                    <div className="flex items-center gap-1.5">
+                      <Target className="h-4 w-4" />
+                      <span className="font-bold text-foreground">{Math.round(guild.xp_total || 0).toLocaleString()}</span> {t('guilds.points_suffix').toLowerCase()}
                     </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <GuildMembershipButton guildId={guild.id} isMember={!!guild.is_member} />
-                    <GuildOpenButton guildSlug={guild.slug} />
                   </div>
                 </CardContent>
               </Card>

@@ -1,13 +1,22 @@
 'use client'
 
-import { motion, useReducedMotion, useScroll } from 'framer-motion'
-import { Check, Gift, HandCoins, Leaf } from 'lucide-react'
+import { motion, useReducedMotion, useScroll, useInView } from 'framer-motion'
+import { Check, Gift, HandCoins, Leaf, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useRef } from 'react'
 import { MarketingSection } from '../../_features/marketing-section'
+import { cn } from '@/lib/utils'
 
 type MarketingStepsSectionProps = {
   variant?: 'default' | 'muted'
+}
+
+type StepItem = {
+  id: string
+  title: string
+  description: string
+  icon: LucideIcon
+  checks?: string[]
 }
 
 export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSectionProps) => {
@@ -20,7 +29,7 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
     offset: ['start center', 'end center'],
   })
 
-  const steps = [
+  const steps: StepItem[] = [
     {
       id: 'step-1',
       title: t('how_it_works.step_1.title'),
@@ -29,7 +38,7 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
     },
     {
       id: 'step-2',
-      title: '2. Soutenez & Cumulez',
+      title: t('how_it_works.step_2.title'),
       description: t('how_it_works.step_2.description'),
       icon: HandCoins,
       checks: [t('how_it_works.step_2.check_secure'), t('how_it_works.step_2.check_verified')],
@@ -40,7 +49,7 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
       description: t('how_it_works.step_3.description'),
       icon: Gift,
     },
-  ] as const
+  ]
 
   return (
     <MarketingSection
@@ -70,56 +79,90 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
           )}
 
           <ol className="m-0 list-none space-y-7 p-0">
-            {steps.map((step, index) => {
-              const Icon = step.icon
-
-              const content = (
-                <div className="py-2">
-                  <h3 className="mb-2 text-left text-xl font-bold text-foreground">
-                    {step.title}
-                  </h3>
-                  <p className="text-left text-base text-muted-foreground text-pretty">
-                    {step.description}
-                  </p>
-                  {'checks' in step ? (
-                    <ul className="m-0 mt-4 flex flex-col gap-2 list-none p-0 text-left text-sm font-medium text-muted-foreground">
-                      {step.checks.map((check) => (
-                        <li key={check} className="flex items-center gap-2">
-                          <Check size={16} className="shrink-0 text-lime-600 dark:text-lime-500" aria-hidden="true" />
-                          <span>{check}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-              )
-
-              return (
-                <li key={step.id} className="relative pl-16">
-                  {/* Glassmorphism Icon Circle */}
-                  <div className="absolute left-0 top-1.5 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-lime-200 bg-lime-100 text-lime-600 backdrop-blur-sm dark:border-lime-500/50 dark:bg-lime-900/30 dark:text-lime-400">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                    <span className="sr-only">{index + 1}</span>
-                  </div>
-
-                  {prefersReducedMotion ? (
-                    content
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-100px' }}
-                      transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.1 }}
-                    >
-                      {content}
-                    </motion.div>
-                  )}
-                </li>
-              )
-            })}
+            {steps.map((step, index) => (
+              <StepListItem
+                key={step.id}
+                step={step}
+                index={index}
+                prefersReducedMotion={prefersReducedMotion}
+              />
+            ))}
           </ol>
         </div>
       </div>
     </MarketingSection>
+  )
+}
+
+function StepListItem({
+  step,
+  index,
+  prefersReducedMotion,
+}: {
+  step: StepItem
+  index: number
+  prefersReducedMotion: boolean | null
+}) {
+  const ref = useRef<HTMLLIElement>(null)
+  // L'élément s'active (isInView) au moment où il croise le milieu de l'écran (centre).
+  const isInView = useInView(ref, { once: false, margin: '0px 0px -50% 0px' })
+
+  const isActive = prefersReducedMotion ? true : isInView
+
+  const Icon = step.icon
+
+  const content = (
+    <div className="py-2">
+      <h3 className="mb-2 text-left text-xl font-bold text-foreground">
+        {step.title}
+      </h3>
+      <p className="text-left text-base text-muted-foreground text-pretty">
+        {step.description}
+      </p>
+      {step.checks ? (
+        <ul className="m-0 mt-4 flex flex-col gap-2 list-none p-0 text-left text-sm font-medium text-muted-foreground">
+          {step.checks.map((check) => (
+            <li key={check} className="flex items-center gap-2">
+              <Check
+                size={16}
+                className="shrink-0 text-lime-600 dark:text-lime-500"
+                aria-hidden="true"
+              />
+              <span>{check}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  )
+
+  return (
+    <li ref={ref} className="relative pl-16">
+      {/* Dynamic Glassmorphism Icon Circle */}
+      <div
+        className={cn(
+          'absolute left-0 top-1.5 z-10 flex h-12 w-12 items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-500 ease-in-out',
+          isActive
+            ? 'border-lime-200 bg-lime-100 text-lime-600 shadow-[0_0_15px_rgba(132,204,22,0.3)] dark:border-lime-500 dark:bg-lime-900/30 dark:text-lime-400'
+            : 'border-gray-200 bg-transparent text-gray-400 dark:border-white/10 dark:text-white/30',
+        )}
+      >
+        <Icon className="h-5 w-5" aria-hidden="true" />
+        <span className="sr-only">{index + 1}</span>
+      </div>
+
+      {prefersReducedMotion ? (
+        content
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.4, ease: 'easeOut', delay: index * 0.1 }}
+        >
+          {content}
+        </motion.div>
+      )}
+    </li>
   )
 }

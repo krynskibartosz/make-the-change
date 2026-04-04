@@ -4,7 +4,8 @@ import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/ca
 import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
 import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 import { createClient } from '@/lib/supabase/server'
-import { CommunityMobileBottomNav } from './_features/community-mobile-nav'
+import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
+
 
 type CommunityNavUser = {
   id: string
@@ -25,9 +26,7 @@ function CommunityLayoutShell({ children, user }: CommunityLayoutShellProps) {
       <Suspense fallback={null}>
         <CartDock />
       </Suspense>
-      <Suspense fallback={null}>
-        <CommunityMobileBottomNav user={user} />
-      </Suspense>
+      <MobileBottomNav user={user} />
     </div>
   )
 }

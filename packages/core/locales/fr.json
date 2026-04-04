@@ -1791,29 +1791,29 @@
         "title": "BioDex - Catalogue des especes",
         "description": "Explorez les especes protegees par nos projets biodiversite."
       },
-      "badge": "Encyclopedie du vivant",
+      "badge": "Encyclopédie du vivant",
       "title": "BioDex",
-      "description": "Explorez la diversite du vivant. Decouvrez les especes protegees, leur habitat et leur role dans les ecosystemes.",
-      "results_count": "{shown} / {total} especes",
-      "search_placeholder": "Rechercher une espece, une famille...",
+      "description": "Explorez la diversité du vivant. Découvrez les espèces protégées, leur habitat et leur rôle dans les écosystèmes.",
+      "results_count": "{shown} / {total} espèces",
+      "search_placeholder": "Rechercher une espèce, une famille...",
       "filters": {
         "label": "Filtres",
         "all_statuses": "Tous les statuts"
       },
       "status": {
-        "NE": "Non evalue",
-        "DD": "Donnees insuffisantes",
-        "LC": "Preoccupation mineure",
-        "NT": "Quasi menace",
-        "VU": "Vulnerable",
+        "NE": "Non évalué",
+        "DD": "Données insuffisantes",
+        "LC": "Préoccupation mineure",
+        "NT": "Quasi menacé",
+        "VU": "Vulnérable",
         "EN": "En danger",
         "CR": "En danger critique",
-        "EW": "Eteint a l etat sauvage",
-        "EX": "Eteint"
+        "EW": "Éteint à l'état sauvage",
+        "EX": "Éteint"
       },
       "empty_title": "Le BioDex est encore vide",
-      "empty_description": "Les especes seront repertoriees ici des que nos premiers projets seront documentes.",
-      "empty_filtered_title": "Aucune espece ne correspond",
+      "empty_description": "Les espèces seront répertoriées ici dès que nos premiers projets seront documentés.",
+      "empty_filtered_title": "Aucune espèce ne correspond",
       "empty_filtered_description": "Essayez un autre terme ou changez le filtre de conservation."
     },
     "faq": {

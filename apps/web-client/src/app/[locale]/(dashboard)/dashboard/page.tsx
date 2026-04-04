@@ -252,67 +252,38 @@ export default async function DashboardPage() {
           summary={quickStats}
         />
 
-        <Card className="lg:col-span-4 border bg-background/70 shadow-sm backdrop-blur">
-          <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
-            <CardTitle className="text-base sm:text-lg">{t('quick_actions.title')}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 p-5 pt-3 sm:p-8 sm:pt-4">
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-1">
-              <Link href="/projects">
-                <Button className="w-full justify-start">
-                  <Leaf className="mr-2 h-4 w-4" />
-                  {t('quick_actions.browse_projects')}
-                </Button>
-              </Link>
-              <Link href="/products">
-                <Button variant="outline" className="w-full justify-start">
-                  <ShoppingBag className="mr-2 h-4 w-4" />
-                  {t('quick_actions.browse_products')}
-                </Button>
-              </Link>
-            </div>
-            <Link href="/dashboard/investments" className="hidden sm:block">
-              <Button variant="ghost" className="w-full justify-start text-muted-foreground">
-                <TrendingUp className="mr-2 h-4 w-4" />
-                {t('quick_actions.view_investments')}
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <div className="lg:col-span-4 flex items-center">
+          <Link href="/projects" className="w-full">
+            <button className="w-full bg-lime-400 text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2">
+              <Leaf className="w-5 h-5" /> Explorer les projets
+            </button>
+          </Link>
+        </div>
 
         <BadgesSection
           className="lg:col-span-12 border bg-background/70 shadow-sm backdrop-blur"
           badges={allBadges}
         />
 
-        <div className="lg:col-span-12 flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible xl:grid-cols-4">
+        <div className="lg:col-span-12 grid grid-cols-2 gap-4">
           <StatCard
-            title="Impact score"
+            title="Score d'impact"
             value={impactScore}
             icon={<Trophy className="h-5 w-5" />}
             variant="warning"
-            className="min-w-[220px] sm:min-w-0"
+            className="col-span-2"
           />
           <StatCard
-            title={t('overview.total_invested')}
-            value={formatCurrency(totalInvested)}
+            title="Contributions"
+            value={new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(totalInvested)}
             icon={<TrendingUp className="h-5 w-5" />}
             variant="primary"
-            className="min-w-[220px] sm:min-w-0"
           />
           <StatCard
-            title={t('overview.points_balance')}
+            title="Solde de points"
             value={`${formatPoints(pointsBalance)} pts`}
             icon={<Wallet className="h-5 w-5" />}
             variant="success"
-            className="min-w-[220px] sm:min-w-0"
-          />
-          <StatCard
-            title={t('overview.projects_supported')}
-            value={projectsSupported}
-            icon={<Leaf className="h-5 w-5" />}
-            variant="default"
-            className="min-w-[220px] sm:min-w-0"
           />
         </div>
 

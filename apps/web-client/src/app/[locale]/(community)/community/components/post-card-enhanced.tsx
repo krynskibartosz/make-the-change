@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { PostContext } from '@/types/context'
+import type { PostContext } from '@/types/context'
 import Link from 'next/link'
 import { Heart, MessageCircle, Share2, Bookmark } from 'lucide-react'
 
@@ -41,11 +41,13 @@ export function PostCardEnhanced({ post }: PostCardEnhancedProps) {
         <div className="flex items-start gap-3 mb-4">
           <Avatar>
             <AvatarImage src={post.author_avatar || undefined} />
-            <AvatarFallback>{post.author_name[0]}</AvatarFallback>
+            <AvatarFallback>{(post.author_name?.[0]) || 'E'}</AvatarFallback>
           </Avatar>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <span className="font-semibold">{post.author_name}</span>
+              <span className="font-semibold">
+                {post.author_name && post.author_name.length < 20 ? post.author_name : "Explorateur engagé"}
+              </span>
             </div>
             <p className="text-sm text-muted-foreground">
               {formatDate(post.created_at)}
@@ -86,28 +88,11 @@ export function PostCardEnhanced({ post }: PostCardEnhancedProps) {
         )}
         
         {/* Engagement */}
-        <div className="flex items-center gap-6 text-sm text-muted-foreground mb-4 pt-2 border-t border-border/50">
+        <div className="flex items-center gap-6 text-muted-foreground mt-4">
           <span className="flex items-center gap-1"><Heart className="w-4 h-4" /> {post.engagement.likes}</span>
           <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" /> {post.engagement.comments}</span>
           <span className="flex items-center gap-1"><Share2 className="w-4 h-4" /> {post.engagement.shares}</span>
           <span className="flex items-center gap-1"><Bookmark className="w-4 h-4" /> {post.engagement.bookmarks}</span>
-        </div>
-        
-        {/* Actions utilisateur */}
-        <div className="flex gap-2">
-          <Button 
-            size="sm" 
-            variant={post.user_state.hasLiked ? "default" : "outline"}
-            className="flex-1"
-          >
-            {post.user_state.hasLiked ? 'Aimé' : 'J\'aime'}
-          </Button>
-          <Button size="sm" variant="outline" className="flex-1">
-            Commenter
-          </Button>
-          <Button size="sm" variant="outline" className="flex-1">
-            Partager
-          </Button>
         </div>
       </CardContent>
     </Card>

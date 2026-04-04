@@ -212,17 +212,6 @@ export default async function ChallengesPage() {
                           className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-1000 ease-out shadow-sm"
                           style={{ width: `${c.userProgress.percentage}%` }}
                         />
-                        {c.userProgress.percentage > 0 && (
-                          <div 
-                            className="absolute top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-white shadow-md transition-all duration-300"
-                            style={{ left: `calc(${c.userProgress.percentage}% - 4px)` }}
-                          />
-                        )}
-                      </div>
-                      <div className="text-center">
-                        <span className="text-xs font-bold text-primary">
-                          {Math.round(c.userProgress.percentage)}%
-                        </span>
                       </div>
                     </div>
 
