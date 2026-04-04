@@ -17,7 +17,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const isHome = pathname === '/'
   const isProducts = pathname.startsWith('/products')
   const isProjects = pathname.startsWith('/projects')
-  const isCommunity = pathname.startsWith('/community') || pathname.startsWith('/leaderboard')
+  const isCommunity = pathname.startsWith('/aventure') || pathname.startsWith('/community') || pathname.startsWith('/leaderboard')
   const isDashboard = pathname.startsWith('/dashboard')
   const isMenuActive = !isHome && !isProducts && !isProjects && !isCommunity && !isDashboard
   const navLinkClass =
@@ -43,7 +43,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
       isActive: isProjects,
     },
     {
-      href: '/community',
+      href: '/aventure',
       icon: Compass,
       label: 'Aventure',
       isActive: isCommunity,

@@ -82,6 +82,66 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      // Hub Aventure — route principale
+      // L'URL publique /aventure est un alias propre de /community
+      // Redirections permanentes des anciennes routes standalone
+      {
+        source: '/challenges',
+        destination: '/aventure?tab=defis',
+        permanent: true,
+      },
+      {
+        source: '/challenges/:slug',
+        destination: '/aventure?tab=defis',
+        permanent: true,
+      },
+      {
+        source: '/biodex',
+        destination: '/aventure?tab=biodex',
+        permanent: true,
+      },
+      {
+        source: '/biodex/:slug',
+        destination: '/aventure?tab=biodex',
+        permanent: true,
+      },
+      // Support i18n (préfixes locales)
+      {
+        source: '/:locale/challenges',
+        destination: '/:locale/aventure?tab=defis',
+        permanent: true,
+      },
+      {
+        source: '/:locale/biodex',
+        destination: '/:locale/aventure?tab=biodex',
+        permanent: true,
+      },
+    ]
+  },
+  async rewrites() {
+    return [
+      // /aventure → /community (côté Next.js, URL publique reste /aventure)
+      {
+        source: '/aventure',
+        destination: '/community',
+      },
+      {
+        source: '/aventure/:path*',
+        destination: '/community/:path*',
+      },
+      // Support i18n
+      {
+        source: '/:locale/aventure',
+        destination: '/:locale/community',
+      },
+      {
+        source: '/:locale/aventure/:path*',
+        destination: '/:locale/community/:path*',
+      },
+    ]
+  },
 }
 
 export default withNextIntl(nextConfig)
