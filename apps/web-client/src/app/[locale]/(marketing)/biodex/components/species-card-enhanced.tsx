@@ -1,4 +1,4 @@
-import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
+import { Button, Card, CardContent } from '@make-the-change/core/ui'
 import type { SpeciesContext } from '@/types/context'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
@@ -71,7 +71,7 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
                   src={species.image_url}
                   alt=""
                   className={`h-full w-full object-cover transition-all duration-500 ${
-                    isLocked ? 'brightness-0 opacity-50 contrast-125' : ''
+                    isLocked ? 'brightness-0 opacity-40 contrast-125' : ''
                   }`}
                 />
               ) : (
@@ -79,8 +79,8 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
               )}
             </div>
             <div>
-              <h3 className="font-bold text-lg leading-tight line-clamp-1">{species.name_default}</h3>
-              <p className="text-sm text-muted-foreground italic line-clamp-1">{species.scientific_name}</p>
+              <h3 className="font-bold text-lg leading-tight tracking-tight line-clamp-1">{species.name_default}</h3>
+              <p className="text-sm text-white/50 italic line-clamp-1">{species.scientific_name}</p>
             </div>
           </div>
 
@@ -97,64 +97,50 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
 
         {/* Description */}
         {isLocked ? (
-          <p className="text-sm text-muted-foreground italic mb-4 min-h-[3rem] leading-relaxed">
+          <p className="text-sm not-italic text-slate-300 mb-4 min-h-[3rem] leading-relaxed">
             Soutenez un projet lié à cet habitat pour débloquer les secrets de cette espèce.
           </p>
         ) : (
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-3 min-h-[3rem]">
+          <p className="text-sm text-slate-300 mb-4 line-clamp-3 min-h-[3rem] leading-relaxed">
             {species.description_default}
           </p>
         )}
 
-        {/* Statut de conservation */}
-        <div className="flex items-center gap-2 mb-4">
-          <Badge variant={getConservationStatusVariant(species.conservation_status)}>
-            {species.conservation_status}
-          </Badge>
-        </div>
+
 
         {/* Projets associés */}
         {species.associated_projects && species.associated_projects.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs font-semibold mb-2 uppercase tracking-wider text-muted-foreground">
+            <p className="text-xs font-semibold mb-2 text-muted-foreground">
               Projets ({species.associated_projects.length})
             </p>
             <div className="flex flex-wrap gap-1">
               {species.associated_projects.slice(0, 3).map((project) => (
                 <Link key={project.id} href={`/projects/${project.id}`}>
-                  <Badge variant="outline" className="text-xs hover:bg-muted cursor-pointer">
+                  <span className="text-xs font-medium px-3 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 cursor-pointer transition-colors">
                     {project.name}
-                  </Badge>
+                  </span>
                 </Link>
               ))}
               {species.associated_projects.length > 3 && (
-                <Badge variant="outline" className="text-xs">
+                <span className="text-xs font-medium px-3 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted-foreground">
                   +{species.associated_projects.length - 3}
-                </Badge>
+                </span>
               )}
             </div>
           </div>
         )}
 
-        {/* Actions */}
-        <div className="flex gap-2 mt-auto pt-2">
-          {showUserStatus && species.user_status?.isUnlocked ? (
-            <>
-              <Link href={`/biodex/${species.id}`} className="flex-1">
-                <Button size="sm" variant="outline" className="w-full">
-                  Observer
-                </Button>
-              </Link>
-              <Button size="sm" className="flex-1">
-                Contribuer
-              </Button>
-            </>
+        {/* Actions - Zero Friction Flow */}
+        <div className="flex mt-auto pt-2">
+          {!isLocked ? (
+            <Button asChild className="w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-500 border border-lime-500/20 shadow-none">
+              <Link href={`/aventure/biodex/${species.id}`}>📖 Explorer la fiche</Link>
+            </Button>
           ) : (
-            <Link href={`/biodex/${species.id}`} className="w-full">
-              <Button size="sm" variant="secondary" className="w-full opacity-80">
-                🔒 Voir détails
-              </Button>
-            </Link>
+            <Button asChild className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/10 shadow-none font-medium">
+              <Link href="/projets">🌱 Découvrir les projets</Link>
+            </Button>
           )}
         </div>
       </CardContent>
@@ -162,16 +148,4 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
   )
 }
 
-function getConservationStatusVariant(status: string): 'default' | 'secondary' | 'destructive' | 'outline' {
-  switch (status?.toUpperCase()) {
-    case 'CR':
-    case 'EN':
-    case 'VU':
-      return 'destructive'
-    case 'NT':
-    case 'LC':
-      return 'secondary'
-    default:
-      return 'outline'
-  }
-}
+

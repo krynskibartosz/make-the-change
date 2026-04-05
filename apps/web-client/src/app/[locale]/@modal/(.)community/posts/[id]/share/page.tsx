@@ -1,17 +1,17 @@
 import { getLocale, getTranslations } from 'next-intl/server'
 import { InterceptedRouteDialog } from '@/app/[locale]/@modal/_components/intercepted-route-dialog'
 import { COMMUNITY_SHARE_MODAL_CONTENT_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
-import { CommunityPostShareContent } from '@/app/[locale]/(community)/community/posts/[id]/share/_features/community-post-share-content'
+import { AdventurePostShareContent } from '@/app/[locale]/(adventure)/community/posts/[id]/share/_features/adventure-post-share-content'
 
-type InterceptedCommunityPostSharePageProps = {
+type InterceptedAdventurePostSharePageProps = {
   params: Promise<{
     id: string
   }>
 }
 
-export default async function InterceptedCommunityPostSharePage({
+export default async function InterceptedAdventurePostSharePage({
   params,
-}: InterceptedCommunityPostSharePageProps) {
+}: InterceptedAdventurePostSharePageProps) {
   const [{ id }, locale, t] = await Promise.all([
     params,
     getLocale(),
@@ -24,7 +24,7 @@ export default async function InterceptedCommunityPostSharePage({
       contentClassName={COMMUNITY_SHARE_MODAL_CONTENT_CLASSNAME}
       fallbackHref="/community"
     >
-      <CommunityPostShareContent postId={id} locale={locale} mode="modal" />
+      <AdventurePostShareContent postId={id} locale={locale} mode="modal" />
     </InterceptedRouteDialog>
   )
 }

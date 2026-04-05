@@ -62,23 +62,27 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
   return (
     <>
       {/* Search and Filters Bar */}
-      <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
-        <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-4">
-          {/* Search + count inline */}
-          <div className="flex items-center gap-3">
-            <search role="search" className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="🔍 Rechercher dans le BioDex..."
-                className="pl-9 h-10 bg-background w-full"
-              />
-            </search>
-            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap shrink-0">
+      <div className="sticky top-[calc(52px_+_env(safe-area-inset-top))] sm:top-[56px] z-30 border-b border-white/5 bg-background/95 backdrop-blur pb-2">
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold tracking-tight tabular-nums">
               {t('results_count', { shown: filteredSpecies.length, total: species.length })}
-            </span>
+            </h2>
           </div>
+
+          {species.length > 20 && (
+            <div className="mb-4">
+              <search role="search" className="relative w-full max-w-md">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="🔍 Rechercher dans le BioDex..."
+                  className="pl-9 h-10 bg-background/50 w-full"
+                />
+              </search>
+            </div>
+          )}
 
           {/* Chip Filters — horizontal scrollable */}
           <div className="flex gap-2 overflow-x-auto mt-4 pb-1 scrollbar-hide -mx-1 px-1">
@@ -114,7 +118,7 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
+      <div className="w-full max-w-7xl mx-auto pb-24 pt-6">
         {filteredSpecies.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredSpecies.map((item) => (
