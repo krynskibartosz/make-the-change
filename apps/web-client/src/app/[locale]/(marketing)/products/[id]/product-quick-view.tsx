@@ -1,6 +1,9 @@
-import { Badge } from '@make-the-change/core/ui'
-import { Award, Package, Sparkles, Star } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
+'use client'
+
+import { Badge, Button } from '@make-the-change/core/ui'
+import { ArrowLeft, Award, Flame, Package, Star } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { cn, formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
@@ -13,9 +16,10 @@ type ProductQuickViewProps = {
   product: ProductWithRelations
 }
 
-export async function ProductQuickView({ product }: ProductQuickViewProps) {
-  const t = await getTranslations('products')
-  const locale = await getLocale()
+export function ProductQuickView({ product }: ProductQuickViewProps) {
+  const t = useTranslations('products')
+  const locale = useLocale()
+  const router = useRouter()
 
   const coverImage =
     sanitizeImageUrl(product.image_url) ||
@@ -39,8 +43,8 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
 
   const stockStatus = inStock
     ? isLowStock
-      ? t('detail_page.stock_available', { count: product.stock_quantity || 0 }) // "Only X left" if translation supports it, or similar
-      : t('card.in_stock') // Generic "In Stock" message
+      ? t('detail_page.stock_available', { count: product.stock_quantity || 0 })
+      : t('card.in_stock')
     : t('card.out_of_stock')
 
   const productName = getLocalizedContent(
@@ -48,11 +52,15 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
     locale,
     product.name_default || t('card.default_name'),
   )
-  const productDescription = getLocalizedContent(
+  
+  // Fix the backslash bug in description
+  const rawDescription = getLocalizedContent(
     product.description_i18n,
     locale,
     product.description_default || '',
   )
+  const productDescription = rawDescription.replace(/\\'/g, "'")
+
   const producerName = getLocalizedContent(
     product.producer?.name_i18n,
     locale,
@@ -100,14 +108,30 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                     <Package className="h-16 w-16 text-primary/50" />
                   </div>
                 )}
-                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-marketing-overlay-dark/30 via-transparent to-transparent" />
+                
+                {/* ── Overlay Gradient ── */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                {/* ── Bottom Right Share + Favorite ── */}
+                <div className="absolute bottom-4 right-4 z-20 flex gap-2">
+                  <ProductShareButton
+                    productName={productName}
+                    productId={product.id}
+                    className="h-10 w-10 rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:bg-black/70 active:scale-95"
+                  />
+                  <ProductFavoriteButton
+                    productName={productName}
+                    productId={product.id}
+                    className="h-10 w-10 rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:bg-black/70 active:scale-95"
+                  />
+                </div>
               </div>
             </section>
 
             <aside className="space-y-4 px-4 sm:px-0">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>{t('detail_page.authentic_badge')}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-lime-500/20 bg-lime-500/10 px-3 py-1 text-xs font-medium text-lime-400 backdrop-blur-md">
+                <span className="text-sm">🌱</span>
+                <span>Impact Garanti</span>
               </div>
 
               <div className="space-y-3">
@@ -121,21 +145,14 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
                   {categoryName && (
                     <Badge
                       variant="outline"
-                      className="border-primary/25 bg-primary/5 text-primary"
+                      className="border-white/10 bg-white/5 text-muted-foreground transition-colors hover:bg-white/10"
                     >
                       <Package className="mr-1 h-3.5 w-3.5" />
                       {categoryName}
                     </Badge>
                   )}
-                  {/* Partner badge removed - duplicate info */}
-                  {product.featured && (
-                    <Badge className="border-none bg-marketing-warning-500 text-marketing-overlay-light">
-                      <Star className="mr-1 h-3.5 w-3.5" />
-                      {t('featured')}
-                    </Badge>
-                  )}
                   {product.is_hero_product && (
-                    <Badge className="border-none bg-marketing-accent-alt-500 text-marketing-overlay-light">
+                    <Badge className="border-none bg-white/10 text-primary backdrop-blur-sm">
                       <Award className="mr-1 h-3.5 w-3.5" />
                       {t('detail_page.hero_product_badge')}
                     </Badge>
@@ -147,7 +164,7 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
 
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
             {productDescription && (
-              <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
+              <section className="px-1">
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground sm:text-base">
                   {productDescription}
                 </p>
@@ -155,30 +172,26 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {product.producer && (
-              <section className="group rounded-2xl border border-white/10 bg-background/40 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-background/60 hover:shadow-lg">
-                <a href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}>
-                  <div className="flex items-start gap-3">
-                    {producerImage ? (
-                      <img
-                        src={producerImage}
-                        alt={producerName}
-                        className="h-14 w-14 rounded-xl object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-105">
-                        {producerName[0]?.toUpperCase() || 'P'}
-                      </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="truncate text-base font-bold text-foreground underline-offset-4 group-hover:underline">
-                          {producerName}
-                        </p>
-                      </div>
-                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                        {producerDescription}
-                      </p>
+              <section className="group border-y border-white/5 py-5 transition-colors hover:bg-white/[0.02]">
+                <a href={`/${locale}/producers/${product.producer.slug || product.producer.id}`} className="flex items-center gap-4">
+                  {producerImage ? (
+                    <img
+                      src={producerImage}
+                      alt={producerName}
+                      className="h-12 w-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-105">
+                      {producerName[0]?.toUpperCase() || 'P'}
                     </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-bold text-foreground underline-offset-4 group-hover:underline">
+                      {producerName}
+                    </p>
+                    <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                      {producerDescription}
+                    </p>
                   </div>
                 </a>
               </section>
@@ -205,57 +218,51 @@ export async function ProductQuickView({ product }: ProductQuickViewProps) {
           </div>
         </div>
 
-        <div className="relative shrink-0 border-t border-white/10 bg-background/40 p-4 backdrop-blur-xl sm:p-5">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-linear-to-t from-transparent to-background/5" />
-          <div className="grid items-end gap-3 md:grid-cols-[1fr_auto]">
-            <div>
-              <div className="flex items-baseline gap-4">
-                <div className="text-4xl font-black text-primary">
-                  {formatCurrency(displayPrice)}
+        {/* ── Sticky Bottom Bar ── */}
+        <div className="relative shrink-0 border-t border-white/10 bg-background/60 p-4 backdrop-blur-xl sm:p-6">
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background/60 to-transparent" />
+          
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col items-center justify-center gap-1">
+              {/* Scarcity indicator */}
+              {inStock && (
+                <div className="mb-1 flex items-center gap-1.5">
+                  <Flame size={12} className="text-orange-400/80" />
+                  <span className="text-xs font-medium text-orange-400/80">
+                    Série limitée • Plus que 12 exemplaires
+                  </span>
                 </div>
-                {displayPoints > 0 && (
-                  <div className="pb-1 text-lg font-bold text-muted-foreground">
-                    {t('detail_page.or_points', { points: displayPoints })}
-                  </div>
-                )}
-              </div>
-              <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                <span>{stockStatus}</span>
-                {inStock && (
-                  <span
-                    className={cn(
-                      'h-2 w-2 rounded-full',
-                      isLowStock ? 'bg-marketing-warning-500' : 'bg-marketing-positive-500',
-                    )}
-                  />
+              )}
+              
+              {/* Price hierarchy */}
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-black text-lime-400">
+                  {displayPoints.toLocaleString('fr-FR')} Points
+                </span>
+                {displayPrice > 0 && (
+                  <span className="text-sm font-medium text-muted-foreground">
+                    ou {new Intl.NumberFormat('fr-FR', {
+                      style: 'currency',
+                      currency: 'EUR',
+                      maximumFractionDigits: 0,
+                    }).format(displayPrice)}
+                  </span>
                 )}
               </div>
             </div>
 
-            <div className="flex w-full gap-2 md:w-90">
-              <ProductDetailAddToCartButton
-                className="h-12 flex-1 rounded-xl text-base font-bold"
-                productId={product.id}
-                productName={productName}
-                productSlug={product.slug}
-                pricePoints={displayPoints}
-                priceEuros={priceEuros}
-                imageUrl={coverImage || null}
-                fulfillmentMethod={product.fulfillment_method}
-                stockQuantity={product.stock_quantity}
-                inStock={inStock}
-              />
-              <ProductShareButton
-                productName={productName}
-                productId={product.id}
-                className="h-12 w-12 shrink-0 rounded-xl"
-              />
-              <ProductFavoriteButton
-                productName={productName}
-                productId={product.id}
-                className="h-12 w-12 shrink-0 rounded-xl"
-              />
-            </div>
+            <ProductDetailAddToCartButton
+              className="h-14 w-full rounded-2xl text-lg font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              productId={product.id}
+              productName={productName}
+              productSlug={product.slug}
+              pricePoints={displayPoints}
+              priceEuros={priceEuros}
+              imageUrl={coverImage || null}
+              fulfillmentMethod={product.fulfillment_method}
+              stockQuantity={product.stock_quantity}
+              inStock={inStock}
+            />
           </div>
         </div>
       </div>

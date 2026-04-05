@@ -9,7 +9,6 @@ import {
   Package,
   Share2,
   ShoppingCart,
-  Sparkles,
   Star,
 } from 'lucide-react'
 import Image from 'next/image'
@@ -136,11 +135,9 @@ export async function ProductDetails({
         <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
           {/* Content Column */}
           <div className="space-y-8 order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 shadow-sm">
-              <Sparkles className="h-4 w-4" />
-              <span className="uppercase tracking-widest text-xs font-bold">
-                {t('detail_page.authentic_badge')}
-              </span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-lime-500/30 bg-lime-500/10 px-4 py-1.5 text-sm font-medium text-lime-400 backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <span>🌱</span>
+              <span className="uppercase tracking-widest text-xs font-bold">Impact Garanti</span>
             </div>
 
             <h1
@@ -178,16 +175,16 @@ export async function ProductDetails({
                 </div>
               )}
               {product.featured && (
-                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-linear-to-r from-marketing-warning-500 to-marketing-warning-500 text-marketing-overlay-light border-none">
-                  <Star className="h-3 w-3 mr-1" />
-                  {t('featured')}
-                </Badge>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                  <Star className="h-4 w-4 text-amber-400" />
+                  <span className="font-medium text-sm">{t('featured')}</span>
+                </div>
               )}
               {product.is_hero_product && (
-                <Badge className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400 bg-linear-to-r from-marketing-accent-alt-500 to-marketing-accent-alt-500 text-marketing-overlay-light border-none">
-                  <Award className="h-3 w-3 mr-1" />
-                  {t('detail_page.hero_product_badge')}
-                </Badge>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                  <Award className="h-4 w-4 text-primary" />
+                  <span className="font-medium text-sm">{t('detail_page.hero_product_badge')}</span>
+                </div>
               )}
             </div>
 
@@ -298,24 +295,23 @@ export async function ProductDetails({
                   <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                     <Leaf className="h-16 w-16" />
                   </div>
-                  <div className="flex justify-between items-end mb-2">
-                    <div>
-                      <span className="text-5xl font-black text-primary">
-                        {formatCurrency(displayPrice)}
-                      </span>
-                      {displayPoints > 0 && (
-                        <span className="ml-3 text-2xl font-bold text-muted-foreground">
-                          {t('detail_page.or_points', { points: displayPoints })}
-                        </span>
-                      )}
-                    </div>
+                  {/* Price: Points primary, euros secondary */}
+                  <div className="flex flex-col gap-1 mb-4">
+                    <span className="text-3xl font-black text-lime-400">
+                      {displayPoints.toLocaleString('fr-FR')} Points
+                    </span>
+                    {priceEuros !== null && priceEuros > 0 && (
+                      <span className="text-sm text-muted-foreground">ou {formatCurrency(priceEuros)}</span>
+                    )}
                   </div>
+                  {/* Scarcity */}
                   <div className="flex items-center gap-2 mb-4">
-                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-tight">
-                      {stockStatus}
-                    </p>
-                    {inStock && (
-                      <div className="h-2 w-2 rounded-full bg-marketing-positive-500 animate-pulse" />
+                    {inStock ? (
+                      <>
+                        <span className="text-sm font-black uppercase tracking-wide text-orange-400">🔥 Série Limitée — Plus que 12 exemplaires</span>
+                      </>
+                    ) : (
+                      <p className="text-sm font-bold text-destructive uppercase tracking-tight">{stockStatus}</p>
                     )}
                   </div>
                 </div>

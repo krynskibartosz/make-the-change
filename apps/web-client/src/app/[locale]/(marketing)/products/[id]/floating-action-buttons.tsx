@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@make-the-change/core/ui'
-import { Clock, ShoppingCart } from 'lucide-react'
+import { Clock, Flame, ShoppingCart } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { QuantityStepper } from '@/components/ui/quantity-stepper'
@@ -124,6 +124,7 @@ export function ProductDetailAddToCartButton({
 
 export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActionButtonsProps) {
   const { addToCart, handleIncrement, handleDecrement, quantity, t } = useProductAddToCart(payload)
+  const displayPoints = payload.pricePoints ?? 0
 
   if (quantity > 0) {
     const quantityStepperProps = {
@@ -143,6 +144,24 @@ export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActi
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-background/95 p-4 backdrop-blur-lg md:hidden">
+      {/* Scarcity indicator */}
+      {payload.inStock && (
+        <div className="mb-3 flex items-center justify-center gap-1.5">
+          <Flame className="h-3.5 w-3.5 text-orange-400" />
+          <span className="text-[11px] font-black uppercase tracking-wide text-orange-400">
+            Série Limitée — Plus que 12 exemplaires
+          </span>
+        </div>
+      )}
+      {/* Price hierarchy: Points primary, euros secondary */}
+      <div className="mb-3 flex items-baseline justify-center gap-2">
+        <span className="text-2xl font-bold text-lime-400">
+          {displayPoints.toLocaleString('fr-FR')} Points
+        </span>
+        {displayPrice > 0 && (
+          <span className="text-sm text-muted-foreground">ou {formatCurrency(displayPrice)}</span>
+        )}
+      </div>
       <Button
         className="h-14 w-full rounded-full bg-primary text-lg font-bold text-marketing-overlay-light shadow-lg transition-all duration-300 hover:bg-primary/90"
         disabled={!payload.inStock}
@@ -151,7 +170,7 @@ export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActi
         {payload.inStock ? (
           <>
             <ShoppingCart className="mr-3 h-6 w-6" />
-            {t('card.add_to_cart')} - {formatCurrency(displayPrice)}
+            {t('card.add_to_cart')}
           </>
         ) : (
           <>

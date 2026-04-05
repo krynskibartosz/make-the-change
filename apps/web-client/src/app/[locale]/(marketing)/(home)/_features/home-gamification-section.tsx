@@ -56,7 +56,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
             {/* Dark gradient overlay — cross-platform safe (no WebKit `to-transparent` bug) */}
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
             <img
-              src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80"
+              src="/images/chouette-effrai.png"
               alt="Chouette Effraie"
               className="h-full w-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-80"
             />
