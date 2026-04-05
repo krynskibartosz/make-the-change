@@ -32,10 +32,10 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
       description={t('gamification.description')}
       variant={variant}
       size="lg"
-      className="overflow-hidden bg-lime-50/30 text-foreground dark:bg-[#121619] dark:text-white"
+      className="overflow-hidden bg-[#121619] text-white"
     >
       <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(126,211,33,0.15),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(126,211,33,0.12),transparent_60%)]"
         aria-hidden="true"
       />
 
@@ -49,28 +49,31 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
         {/* Card 1: BioDex */}
         <motion.article
           variants={itemVariants}
-          className="group relative mb-4 flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none"
+          className="group relative mb-4 flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-md"
         >
+          {/* Image layer */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 z-10 bg-gradient-to-r from-white via-white via-40% to-transparent/10 dark:from-[#121619] dark:via-[#121619]/70 dark:to-transparent" />
+            {/* Dark gradient overlay — cross-platform safe (no WebKit `to-transparent` bug) */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
             <img
               src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80"
               alt="Chouette Effraie"
-              className="h-full w-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100 dark:opacity-40 dark:group-hover:opacity-60"
+              className="h-full w-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-80"
             />
           </div>
 
-          <div className="relative z-10">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-200 bg-lime-50 px-3 py-1.5 backdrop-blur-md dark:border-white/20 dark:bg-transparent">
-              <Bird className="h-4 w-4 text-lime-900 dark:text-lime-400" />
-              <span className="text-xs font-bold uppercase tracking-widest text-lime-900 dark:text-white">
+          {/* Text content — z-20 to stay above gradient */}
+          <div className="relative z-20">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-500/30 bg-lime-500/20 px-3 py-1.5 backdrop-blur-md">
+              <Bird className="h-4 w-4 text-lime-400" />
+              <span className="text-xs font-bold uppercase tracking-widest text-lime-400">
                 BioDex
               </span>
             </div>
-            <h3 className="text-2xl font-black tracking-tight text-foreground dark:text-white md:text-3xl">
+            <h3 className="text-2xl font-black tracking-tight text-white md:text-3xl">
               Chouette Effraie
             </h3>
-            <p className="mt-2 max-w-[200px] text-sm font-bold text-lime-700 dark:text-lime-400">
+            <p className="mt-2 max-w-[200px] text-sm font-bold text-lime-400">
               Espèce découverte !
             </p>
           </div>
@@ -80,7 +83,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           {/* Card 2: Streak */}
           <motion.article
             variants={itemVariants}
-            className="flex flex-col justify-between rounded-3xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none"
+            className="flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-md"
           >
             <div>
               <div className="mb-4 flex items-center justify-between">
@@ -92,25 +95,25 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
-                  className="rounded-full bg-lime-500/20 flex items-center gap-1 px-2.5 py-1 text-[11px] font-black tracking-wide text-lime-600 ring-1 ring-lime-500/50 ring-offset-1 ring-offset-white shadow-[0_0_12px_rgba(132,204,22,0.3)] dark:text-lime-400 dark:ring-offset-[#1a1f24]"
+                  className="inline-flex items-center gap-1 rounded-full border border-lime-500/30 bg-lime-500/20 px-2.5 py-1 text-[11px] font-black tracking-wide text-lime-400 shadow-[0_0_12px_rgba(132,204,22,0.25)]"
                 >
                   +150 Graines 🌱
                 </motion.span>
               </div>
-              <h3 className="text-left text-lg font-bold text-foreground dark:text-white">Série 7 jours</h3>
+              <h3 className="text-left text-lg font-bold text-white">Série 7 jours</h3>
 
               <div className="relative mt-3 h-1.5 w-full">
-                {/* 1. La jauge de fond (Vide) */}
+                {/* Track (empty) */}
                 <div className="absolute inset-0 flex gap-1">
                   {[...Array(7)].map((_, i) => (
-                    <div key={i} className="h-1.5 flex-1 rounded-full bg-black/5 dark:bg-white/10" />
+                    <div key={i} className="h-1.5 flex-1 rounded-full bg-white/10" />
                   ))}
                 </div>
-                
-                {/* 2. Le conteneur animé des barres pleines (Pincement visuel/Reveil progressif) */}
+
+                {/* Animated filled segments */}
                 <motion.div
                   initial={{ width: '0%' }}
-                  whileInView={{ width: '71.4%' /* Correspond exactement à 5 des 7 segments (5/7 ≈ 71.4%) */ }}
+                  whileInView={{ width: '71.4%' }}
                   viewport={{ once: true }}
                   transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
                   className="absolute left-0 top-0 flex h-1.5 w-full gap-1 overflow-hidden"
@@ -129,7 +132,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
               </div>
             </div>
 
-            <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-muted-foreground dark:text-white/70">
+            <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-white/60">
               <span aria-hidden="true">🔥</span> Gardez le rythme au quotidien et gagnez des Graines bonus.
             </p>
           </motion.article>
@@ -137,7 +140,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           {/* Card 3: Tribes */}
           <motion.article
             variants={itemVariants}
-            className="flex flex-col justify-between rounded-3xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none"
+            className="flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-md"
           >
             <div>
               <div className="mb-4 flex items-center justify-between">
@@ -160,10 +163,10 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                   </div>
                 </div>
               </div>
-              <h3 className="text-left text-lg font-bold text-foreground dark:text-white">Agroforest Pioneers</h3>
+              <h3 className="text-left text-lg font-bold text-white">Agroforest Pioneers</h3>
             </div>
 
-            <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-muted-foreground dark:text-white/70">
+            <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-white/60">
               <span aria-hidden="true">🤝</span> Atteignez des objectifs communs avec votre tribu.
             </p>
           </motion.article>
@@ -172,10 +175,10 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
         <motion.div variants={itemVariants} className="mt-4">
           <Link
             href="/community"
-            className="group flex w-full items-center justify-center gap-2 rounded-3xl border border-gray-200 bg-white p-5 font-bold text-foreground shadow-sm transition-all duration-200 hover:bg-gray-50 active:scale-[0.98] dark:border-white/10 dark:bg-white/5 dark:text-white dark:shadow-none dark:hover:bg-white/10"
+            className="group flex w-full items-center justify-center gap-2 rounded-3xl border border-white/10 bg-white/5 p-5 font-bold text-white backdrop-blur-md transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
           >
             Découvrir l'aventure
-            <ArrowRight className="h-5 w-5 text-lime-500 transition-transform group-hover:translate-x-1 dark:text-lime-400" />
+            <ArrowRight className="h-5 w-5 text-lime-400 transition-transform group-hover:translate-x-1" />
           </Link>
         </motion.div>
       </motion.div>
