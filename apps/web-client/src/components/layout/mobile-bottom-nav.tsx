@@ -21,7 +21,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const isDashboard = pathname.startsWith('/dashboard')
   const isMenuActive = !isHome && !isProducts && !isProjects && !isCommunity && !isDashboard
   const navLinkClass =
-    'flex min-h-[44px] flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-1.5 text-[10px] font-medium transition-colors'
+    'flex-1 h-full w-full flex flex-col justify-center items-center text-[10px] font-medium transition-colors'
 
   const navItems = [
     {
@@ -53,9 +53,9 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const avatarUrl = user?.avatarUrl ?? null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-safe md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-[env(safe-area-inset-bottom)] md:hidden">
       <nav aria-label="Navigation mobile">
-        <ul className="m-0 flex h-16 list-none items-stretch gap-1 px-2 py-2">
+        <ul className="m-0 flex h-16 list-none items-stretch">
           {navItems.map((item) => {
             const Icon = item.icon
             return (
@@ -66,13 +66,11 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
                   className={cn(
                     navLinkClass,
                     item.isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
+                      ? 'border-t-2 border-primary text-primary'
+                      : 'border-t-2 border-transparent text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  <span className="flex h-6 w-6 items-center justify-center">
-                    <Icon className="h-5 w-5" />
-                  </span>
+                  <Icon size={22} />
                   <span className={cn('truncate', item.isActive && 'font-semibold')}>
                     {item.label}
                   </span>
@@ -88,26 +86,24 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
               className={cn(
                 navLinkClass,
                 isMenuActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
+                  ? 'border-t-2 border-primary text-primary'
+                  : 'border-t-2 border-transparent text-muted-foreground hover:text-foreground',
               )}
             >
-              <span className="flex h-6 w-6 items-center justify-center">
-                {user ? (
-                  avatarUrl ? (
-                    <Avatar className="h-6 w-6">
-                      <AvatarImage src={avatarUrl} alt="" className="object-cover" />
-                      <AvatarFallback>
-                        <User className="h-4 w-4" />
-                      </AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <User className="h-5 w-5" />
-                  )
+              {user ? (
+                avatarUrl ? (
+                  <Avatar className="h-6 w-6">
+                    <AvatarImage src={avatarUrl} alt="" className="object-cover" />
+                    <AvatarFallback>
+                      <User size={22} />
+                    </AvatarFallback>
+                  </Avatar>
                 ) : (
-                  <Menu className="h-5 w-5" />
-                )}
-              </span>
+                  <User size={22} />
+                )
+              ) : (
+                <Menu size={22} />
+              )}
               <span className={cn('truncate', isMenuActive && 'font-semibold')}>
                 {t('menu')}
               </span>

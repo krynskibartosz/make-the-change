@@ -41,7 +41,6 @@ function parseActiveMission(metadata: unknown): ActiveMission | null {
     ends_at: asString(raw.ends_at) || '',
     reward_species_name: asString(raw.reward_species_name) || '',
     reward_species_emoji: asString(raw.reward_species_emoji) || '🌿',
-    reward_points: asNumber(raw.reward_points, 500),
   }
 }
 

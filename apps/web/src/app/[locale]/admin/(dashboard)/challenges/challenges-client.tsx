@@ -20,7 +20,7 @@ type Challenge = {
   slug: string
   type: string
   status: string
-  reward_points: number
+  reward_graines: number
   reward_badge: string | null
   created_at: string
 }
@@ -122,7 +122,7 @@ export const ChallengesClient: FC<ChallengesClientProps> = ({ initialData }) => 
                               {challenge.type}
                             </Badge>
                             <Badge className="rounded-full">
-                              {challenge.reward_points > 0 ? `+${challenge.reward_points} pts` : challenge.reward_badge || 'Badge'}
+                              {challenge.reward_graines > 0 ? `+${challenge.reward_graines} Graines 🌱` : challenge.reward_badge || 'Badge'}
                             </Badge>
                             <Badge variant={challenge.status === 'active' ? 'success' : 'outline'} className="rounded-full">
                               {challenge.status}

@@ -91,10 +91,10 @@ export async function claimQuestReward(questId: string) {
     if (!quest) throw new Error('Quête source introuvable')
 
     // Example: Grant XP
-    if (quest.reward_points && quest.reward_points > 0) {
+    if (quest.reward_graines && quest.reward_graines > 0) {
         await supabase.schema('gamification').from('xp_ledger').insert({
             user_id: user.id,
-            amount: quest.reward_points,
+            amount: quest.reward_graines,
             source_type: 'quest',
             source_id: quest.id,
             description: `Récompense de la quête: ${quest.title}`
@@ -135,5 +135,5 @@ export async function claimQuestReward(questId: string) {
 
     revalidatePath('/dashboard')
 
-    return { success: true, reward_points: quest.reward_points }
+    return { success: true, reward_graines: quest.reward_graines }
 }

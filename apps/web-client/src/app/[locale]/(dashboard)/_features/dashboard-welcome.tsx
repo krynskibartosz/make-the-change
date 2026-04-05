@@ -14,9 +14,9 @@ type DashboardWelcomeProps = {
   title?: string
   summary?: Array<{ label: string; value: string }>
   className?: string
-  xpProgress?: number // 0-100
-  currentXp?: number
-  nextLevelXp?: number
+  grainesProgress?: number // 0-100
+  currentGraines?: number
+  nextLevelGraines?: number
 }
 
 const levelColors = {
@@ -75,9 +75,9 @@ export const DashboardWelcome = ({
   title,
   summary,
   className,
-  xpProgress = 0,
-  currentXp,
-  nextLevelXp
+  grainesProgress = 0,
+  currentGraines,
+  nextLevelGraines
 }: DashboardWelcomeProps) => {
   const normalizedLevel = normalizeLevel(userLevel)
   // @ts-ignore - Dynamic access
@@ -126,16 +126,16 @@ export const DashboardWelcome = ({
           </div>
         </div>
 
-        {/* XP Progress Bar */}
-        {(currentXp !== undefined && nextLevelXp !== undefined) && (
+        {/* Graines Progress Bar */}
+        {(currentGraines !== undefined && nextLevelGraines !== undefined) && (
           <div className="max-w-md space-y-2">
             <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
               <span className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3" /> XP: {currentXp}
+                <TrendingUp className="h-3 w-3" /> Graines : {currentGraines} 🌱
               </span>
-              <span>Prochain niveau: {nextLevelXp} XP</span>
+              <span>Prochain niveau: {nextLevelGraines} Graines 🌱</span>
             </div>
-            <Progress value={xpProgress} className="h-2" />
+            <Progress value={grainesProgress} className="h-2" />
           </div>
         )}
 

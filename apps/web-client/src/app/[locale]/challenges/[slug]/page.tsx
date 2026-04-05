@@ -13,7 +13,7 @@ type ChallengeDetailRow = {
   title: string
   description: string
   type: string
-  reward_points: number
+  reward_graines: number
   reward_badge: string | null
   start_date: string | null
   end_date: string | null
@@ -45,7 +45,7 @@ const toChallengeDetail = (value: unknown): ChallengeDetailRow | null => {
     title: asString(value.title) || 'Challenge',
     description: asString(value.description) || 'Aucune description disponible.',
     type: asString(value.type) || 'seasonal',
-    reward_points: Math.max(0, Math.floor(asNumber(value.reward_points, 0))),
+    reward_graines: Math.max(0, Math.floor(asNumber(value.reward_graines, 0))),
     reward_badge: asString(value.reward_badge) || null,
     start_date: asString(value.start_date) || null,
     end_date: asString(value.end_date) || null,
@@ -104,8 +104,8 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
   const isCompleted = Boolean(userChallenge?.completed_at)
   const isClaimed = Boolean(userChallenge?.claimed_at)
   const rewardLabel =
-    challenge.reward_points > 0
-      ? `+${challenge.reward_points} pts`
+    challenge.reward_graines > 0
+      ? `+${challenge.reward_graines} Graines 🌱`
       : challenge.reward_badge || 'Badge'
   const hint =
     asString(challenge.metadata.hint) ||

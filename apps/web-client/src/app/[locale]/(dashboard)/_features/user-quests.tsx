@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle, Progress, Button, Badge } from '@make-the-change/core/ui'
-import { Target, CheckCircle2, Navigation, Gift } from 'lucide-react'
+import { Target, CheckCircle2, Navigation, Gift, Sprout } from 'lucide-react'
 import { useOptimistic, startTransition, useState } from 'react'
 import { claimQuestReward } from '@/lib/gamification/quest.actions'
 import { useToast } from '@/components/ui/use-toast'
@@ -26,7 +26,7 @@ export function UserQuests({ quests }: { quests: any[] }) {
             const res = await claimQuestReward(questId)
             toast({
                 title: "Récompense réclamée !",
-                description: `Vous avez gagné ${res.reward_points} XP.`,
+                description: `Vous avez gagné ${res.reward_graines} Graines 🌱.`,
                 variant: "success"
             })
         } catch (error: any) {
@@ -94,9 +94,9 @@ export function UserQuests({ quests }: { quests: any[] }) {
                             </div>
 
                             <div className="flex flex-col gap-2 shrink-0">
-                                <div className="text-xs font-medium bg-muted/50 px-3 py-1.5 rounded-md flex items-center justify-center gap-1.5">
-                                    <Gift className="h-3.5 w-3.5 mt-[-1px]" />
-                                    <span>{quest.reward_points} XP</span>
+                                <div className="text-[10px] uppercase font-black tracking-widest bg-green-500/10 text-green-400 border border-green-500/20 px-3 py-1.5 rounded-full flex items-center justify-center gap-1.5">
+                                    <Sprout className="h-3.5 w-3.5" />
+                                    <span>{quest.reward_graines} Graines</span>
                                 </div>
 
                                 {isCompleted && !isClaimed && (

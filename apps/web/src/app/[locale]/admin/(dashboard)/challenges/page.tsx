@@ -84,7 +84,7 @@ export default async function AdminChallengesPage(props: {
     slug: c.slug,
     type: c.type,
     status: c.status,
-    reward_points: c.reward_points,
+    reward_graines: c.reward_graines,
     reward_badge: c.reward_badge,
     created_at: c.created_at?.toISOString() ?? new Date().toISOString(),
   }))

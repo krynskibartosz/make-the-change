@@ -1390,7 +1390,7 @@ export type Database = {
           id: string
           metadata: Json | null
           reward_badge: string | null
-          reward_points: number
+          reward_graines: number
           slug: string
           start_date: string | null
           status: Database["gamification"]["Enums"]["challenge_status"]
@@ -1407,7 +1407,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reward_badge?: string | null
-          reward_points?: number
+          reward_graines?: number
           slug: string
           start_date?: string | null
           status?: Database["gamification"]["Enums"]["challenge_status"]
@@ -1424,7 +1424,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reward_badge?: string | null
-          reward_points?: number
+          reward_graines?: number
           slug?: string
           start_date?: string | null
           status?: Database["gamification"]["Enums"]["challenge_status"]
@@ -1504,7 +1504,7 @@ export type Database = {
           project_id: string | null
           property_id: string | null
           reward_items: Json | null
-          reward_points: number
+          reward_graines: number
           slug: string
           status: string | null
           title: string
@@ -1521,7 +1521,7 @@ export type Database = {
           project_id?: string | null
           property_id?: string | null
           reward_items?: Json | null
-          reward_points?: number
+          reward_graines?: number
           slug: string
           status?: string | null
           title: string
@@ -1538,7 +1538,7 @@ export type Database = {
           project_id?: string | null
           property_id?: string | null
           reward_items?: Json | null
-          reward_points?: number
+          reward_graines?: number
           slug?: string
           status?: string | null
           title?: string

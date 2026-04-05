@@ -87,7 +87,7 @@ export default async function CommunityGuildsPage() {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Target className="h-4 w-4" />
-                      <span className="font-bold text-foreground">{Math.round(guild.xp_total || 0).toLocaleString()}</span> {t('guilds.points_suffix').toLowerCase()}
+                      <span className="font-bold text-foreground">{Math.round(guild.xp_total || 0).toLocaleString()}</span> XP
                     </div>
                   </div>
                 </CardContent>

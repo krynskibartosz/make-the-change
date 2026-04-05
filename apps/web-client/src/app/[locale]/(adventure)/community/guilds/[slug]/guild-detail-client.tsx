@@ -17,7 +17,6 @@ export type ActiveMission = {
   ends_at: string
   reward_species_name: string
   reward_species_emoji: string
-  reward_points: number
 }
 
 export type GuildDetailMember = {
@@ -244,7 +243,7 @@ export function GuildDetailClient({
               <div>
                 <p className="text-xs text-muted-foreground">Récompense si mission accomplie</p>
                 <p className="text-sm font-semibold text-white">
-                  {activeMission.reward_species_name} + {activeMission.reward_points} pts
+                  {activeMission.reward_species_name}
                 </p>
               </div>
             </div>

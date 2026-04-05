@@ -24,7 +24,7 @@ type GamificationSchema = {
         title: string
         description: string | null
         type: 'daily' | 'monthly' | 'season' | 'special'
-        reward_points: number
+        reward_graines: number
         reward_badge: string | null
         status: 'active' | 'inactive' | 'archived'
         start_date: string | null
@@ -41,7 +41,7 @@ type GamificationSchema = {
         title: string
         description?: string | null
         type?: 'daily' | 'monthly' | 'season' | 'special'
-        reward_points?: number
+        reward_graines?: number
         reward_badge?: string | null
         status?: 'active' | 'inactive' | 'archived'
         start_date?: string | null
@@ -58,7 +58,7 @@ type GamificationSchema = {
         title?: string
         description?: string | null
         type?: 'daily' | 'monthly' | 'season' | 'special'
-        reward_points?: number
+        reward_graines?: number
         reward_badge?: string | null
         status?: 'active' | 'inactive' | 'archived'
         start_date?: string | null

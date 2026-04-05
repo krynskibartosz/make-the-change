@@ -766,7 +766,7 @@ export const challenges = gamification.table('challenges', {
   title: text('title').notNull(),
   description: text('description'),
   type: challengeTypeEnum('type').notNull().default('monthly'),
-  reward_points: integer('reward_points').notNull().default(0),
+  reward_graines: integer('reward_graines').notNull().default(0),
   reward_badge: text('reward_badge'),
   reward_items: jsonb('reward_items').default([]), // New: List of item IDs or descriptors
   status: challengeStatusEnum('status').notNull().default('active'),
@@ -820,7 +820,7 @@ export const quests = gamification.table('quests', {
   title: text('title').notNull(),
   description: text('description'),
   type: challengeTypeEnum('type').notNull().default('quest'),
-  reward_points: integer('reward_points').notNull().default(0),
+  reward_graines: integer('reward_graines').notNull().default(0),
   reward_items: jsonb('reward_items').default([]), 
   status: challengeStatusEnum('status').notNull().default('active'),
   valid_from: timestamp('valid_from', { withTimezone: true }),

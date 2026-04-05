@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Flame,
   Sparkles,
+  Sprout,
   Target,
   Trophy,
   Zap,
@@ -25,7 +26,7 @@ type ChallengeRow = {
   id: string
   slug: string
   type: string
-  reward_points: number
+  reward_graines: number
   title: string
   description: string
   user_challenges?: ChallengeProgressRow[] | ChallengeProgressRow | null
@@ -63,7 +64,7 @@ const toChallengeRow = (value: unknown): ChallengeRow | null => {
     id,
     slug: asString(value.slug),
     type: asString(value.type),
-    reward_points: Math.max(0, Math.floor(asNumber(value.reward_points, 0))),
+    reward_graines: Math.max(0, Math.floor(asNumber(value.reward_graines, 0))),
     title: asString(value.title),
     description: asString(value.description),
     user_challenges: userChallenges,
@@ -146,9 +147,18 @@ export async function AdventureChallenges() {
                 </div>
                 
                 <div className="absolute right-4 top-4 z-10">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-lime-500/15 text-lime-400 border border-lime-500/20 backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-tight shadow-md">
-                    <Trophy className="h-3 w-3" />
-                    {c.reward_points > 0 ? `+${c.reward_points} PTS` : 'Badge'}
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-tight shadow-md">
+                    {c.reward_graines > 0 ? (
+                      <>
+                        <Sprout className="h-3 w-3" />
+                        +{c.reward_graines} Graines
+                      </>
+                    ) : (
+                      <>
+                        <Trophy className="h-3 w-3" />
+                        Badge
+                      </>
+                    )}
                   </div>
                 </div>
 

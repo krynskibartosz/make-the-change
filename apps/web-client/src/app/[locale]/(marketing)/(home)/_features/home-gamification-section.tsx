@@ -92,9 +92,9 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
-                  className="rounded-full bg-lime-500/20 px-2.5 py-1 text-[11px] font-black tracking-wide text-lime-600 ring-1 ring-lime-500/50 ring-offset-1 ring-offset-white shadow-[0_0_12px_rgba(132,204,22,0.3)] dark:text-lime-400 dark:ring-offset-[#1a1f24]"
+                  className="rounded-full bg-lime-500/20 flex items-center gap-1 px-2.5 py-1 text-[11px] font-black tracking-wide text-lime-600 ring-1 ring-lime-500/50 ring-offset-1 ring-offset-white shadow-[0_0_12px_rgba(132,204,22,0.3)] dark:text-lime-400 dark:ring-offset-[#1a1f24]"
                 >
-                  +150 PTS
+                  +150 Graines 🌱
                 </motion.span>
               </div>
               <h3 className="text-left text-lg font-bold text-foreground dark:text-white">Série 7 jours</h3>
@@ -130,7 +130,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
             </div>
 
             <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-muted-foreground dark:text-white/70">
-              <span aria-hidden="true">🔥</span> Gardez le rythme au quotidien et gagnez des points bonus.
+              <span aria-hidden="true">🔥</span> Gardez le rythme au quotidien et gagnez des Graines bonus.
             </p>
           </motion.article>
 
