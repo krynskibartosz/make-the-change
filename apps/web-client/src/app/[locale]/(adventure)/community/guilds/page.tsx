@@ -30,7 +30,7 @@ export default async function CommunityGuildsPage() {
       rightRail={<AdventureRightRail variant="guilds" basePath="/community/guilds" />}
     >
       <div className="space-y-6 px-4 py-6 sm:px-6 sm:py-8">
-        <div className="sticky top-0 z-20 space-y-3 bg-background/95 pb-2 backdrop-blur-md">
+        <div className="md:sticky md:top-0 z-20 space-y-3 bg-background pb-2 md:backdrop-blur-md">
           <h1 className="text-xl font-bold">Communauté</h1>
           <div className="flex gap-6 border-b border-white/10 mb-6 mt-4">
             <Link href="/community" className="text-muted-foreground pb-2 hover:text-foreground font-medium">Le Fil</Link>

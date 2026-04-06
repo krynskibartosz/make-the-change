@@ -464,11 +464,10 @@ export const ProductsClient = ({
         </div>
       </div>
 
-      {/* Fixed Search and Filters Bar */}
-      <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur pt-[env(safe-area-inset-top)]">
-        <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-4">
+      {/* Desktop sticky top search bar — hidden on mobile */}
+      <div className="hidden md:block sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+        <div className="w-full max-w-[1920px] mx-auto px-8 lg:px-12 py-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Search and Tag (Left Side Desktop, Top Row Mobile) */}
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">
               <search role="search" className="relative w-full lg:w-[320px]">
                 <Search
@@ -532,57 +531,7 @@ export const ProductsClient = ({
               </div>
             </div>
 
-            {/* Mobile Filter Button and Sort (Right Side Desktop, Bottom Row Mobile) */}
             <div className="flex items-center gap-2 w-full lg:w-auto lg:gap-4">
-              <div className="flex-1 lg:hidden">
-                <BottomSheet>
-                  <BottomSheetTrigger>
-                    <div className="inline-flex w-full">
-                      <button
-                        type="button"
-                        className="rounded-full bg-white/5 border border-white/10 px-5 py-2.5 text-sm transition-transform active:scale-95 flex items-center justify-center gap-2 w-full text-foreground hover:bg-white/10"
-                      >
-                        <Filter className="h-4 w-4" />
-                        {tCommon('filter')}
-                        {hasActiveFilters && (
-                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
-                            {activeFilterChips.length}
-                          </span>
-                        )}
-                      </button>
-                    </div>
-                  </BottomSheetTrigger>
-                  <BottomSheetContent showHandle>
-                    <BottomSheetHeader className="px-0 pb-3">
-                      <BottomSheetTitle>{tCommon('filter')}</BottomSheetTitle>
-                    </BottomSheetHeader>
-                    <BottomSheetBody className="px-0 pb-4">
-                      <ProductsFiltersSidebar
-                        title={tCommon('filter')}
-                        clearLabel={tProducts('filters.clear_filters')}
-                        categoryLabel={tProducts('filters.category_label')}
-                        producerLabel={tProducts('filters.producer_label')}
-                        tagLabel={tProducts('filters.tag_label')}
-                        allCategoriesLabel={tProducts('filters.all_categories')}
-                        allProducersLabel={tProducts('filters.all_producers')}
-                        allTagsLabel={tProducts('filters.all_tags')}
-                        showClear={hasActiveFilters}
-                        onReset={clearAllFilters}
-                        categoryOptions={categoryOptions}
-                        producerOptions={producerOptions}
-                        tagOptions={tagOptions}
-                        category={initialQueryState.category}
-                        producer={initialQueryState.producer}
-                        tag={initialQueryState.tag}
-                        onCategoryChange={(value) => updateQuery({ category: value })}
-                        onProducerChange={(value) => updateQuery({ producer: value })}
-                        onTagChange={(value) => updateQuery({ tag: value })}
-                      />
-                    </BottomSheetBody>
-                  </BottomSheetContent>
-                </BottomSheet>
-              </div>
-
               <div className="flex-1 lg:flex-none">
                 <Select
                   value={sort}
@@ -619,27 +568,117 @@ export const ProductsClient = ({
               </div>
             </div>
           </div>
-
-          {/* Active Filters */}
-          {hasActiveFilters && (
-            <div className="mt-4">
-              <ProductsActiveFilters
-                title={tProducts('filters.active_filters')}
-                chips={activeFilterChips}
-                clearAllLabel={tProducts('filters.clear_all')}
-                onClearAll={clearAllFilters}
-              />
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
+      {/* iOS 26 — Mobile floating search and filter bar at the bottom (above bottom nav) */}
+      <div
+        className="md:hidden fixed left-0 right-0 z-40 px-4"
+        style={{ bottom: 'calc(4rem + env(safe-area-inset-bottom) + 0.5rem)' }}
+      >
+        <div className="rounded-2xl border border-white/10 bg-background/90 backdrop-blur-xl shadow-2xl p-3 flex flex-col gap-3">
+          {/* Search bar */}
+          <div className="flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2">
+            <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+            <input
+              type="search"
+              placeholder={tProducts('search_placeholder')}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
+            />
+          </div>
+          {/* Action buttons (Filters and Sort) */}
+          <div className="flex items-center gap-2">
+            {/* Filter BottomSheet */}
+            <BottomSheet>
+              <BottomSheetTrigger className="flex-1">
+                <button
+                  className="flex items-center justify-center gap-2 w-full bg-white/5 border border-white/10 py-2.5 rounded-xl text-xs font-semibold"
+                >
+                  <Filter className="h-4 w-4" />
+                  {tCommon('filter')}
+                  {hasActiveFilters && (
+                    <span className="bg-lime-400 text-black px-1.5 py-0.5 rounded-full text-[10px]">
+                      {activeFilterChips.length}
+                    </span>
+                  )}
+                </button>
+              </BottomSheetTrigger>
+              <BottomSheetContent showHandle>
+                <BottomSheetHeader className="px-0 pb-3">
+                  <BottomSheetTitle>{tCommon('filter')}</BottomSheetTitle>
+                </BottomSheetHeader>
+                <BottomSheetBody className="px-0 pb-4">
+                  <ProductsFiltersSidebar
+                    title={tCommon('filter')}
+                    clearLabel={tProducts('filters.clear_filters')}
+                    categoryLabel={tProducts('filters.category_label')}
+                    producerLabel={tProducts('filters.producer_label')}
+                    tagLabel={tProducts('filters.tag_label')}
+                    allCategoriesLabel={tProducts('filters.all_categories')}
+                    allProducersLabel={tProducts('filters.all_producers')}
+                    allTagsLabel={tProducts('filters.all_tags')}
+                    showClear={hasActiveFilters}
+                    onReset={clearAllFilters}
+                    categoryOptions={categoryOptions}
+                    producerOptions={producerOptions}
+                    tagOptions={tagOptions}
+                    category={initialQueryState.category}
+                    producer={initialQueryState.producer}
+                    tag={initialQueryState.tag}
+                    onCategoryChange={(value) => updateQuery({ category: value })}
+                    onProducerChange={(value) => updateQuery({ producer: value })}
+                    onTagChange={(value) => updateQuery({ tag: value })}
+                  />
+                </BottomSheetBody>
+              </BottomSheetContent>
+            </BottomSheet>
+
+            {/* Sort select */}
+            <Select
+              value={sort}
+              onValueChange={(value) => {
+                if (isProductSort(value)) {
+                  updateQuery({ sort: value })
+                }
+              }}
+            >
+              <SelectTrigger className="flex-1 flex items-center justify-center gap-2 bg-white/5 border border-white/10 py-2.5 rounded-xl text-xs font-semibold h-auto decoration-none focus:ring-0">
+                <ArrowUpDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="truncate">{sortLabel}</span>
+              </SelectTrigger>
+              <SelectContent>
+                {sortOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      {/* Product Grid Area — Fixed structure */}
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-10 pb-64 md:pb-16 lg:pt-14">
+        {/* Active Filters Bar (Desktop/Tablet) */}
+        {hasActiveFilters && (
+          <div className="mb-6 hidden md:block">
+            <ProductsActiveFilters
+              title={tProducts('filters.active_filters')}
+              chips={activeFilterChips}
+              clearAllLabel={tProducts('filters.clear_all')}
+              onClearAll={clearAllFilters}
+            />
+          </div>
+        )}
+
         <div className="grid gap-y-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-12 lg:items-start">
-          {/* Sidebar - Fixed on Left */}
+          {/* Desktop Sidebar — Hidden on Mobile */}
           <aside className="hidden lg:sticky lg:top-24 lg:block lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto pr-4">
             <ProductsFiltersSidebar
+              title={tCommon('filter')}
               clearLabel={tProducts('filters.clear_filters')}
               categoryLabel={tProducts('filters.category_label')}
               producerLabel={tProducts('filters.producer_label')}
@@ -666,7 +705,7 @@ export const ProductsClient = ({
             {/* Product Count */}
             <div className="mb-4">
               <p className="text-sm font-medium text-muted-foreground">
-                {pagination.totalItems.toLocaleString()} récompenses disponibles
+                {pagination.totalItems.toLocaleString()} {tProducts('product_list')}
               </p>
             </div>
 
@@ -675,7 +714,7 @@ export const ProductsClient = ({
               isLoading={isPending}
               items={products}
               getItemKey={(product) => product.id}
-              gridCols={4 as const}
+              gridCols={3 as const}
               emptyState={{
                 icon: Package,
                 title: tProducts('empty_state.title'),
@@ -700,18 +739,20 @@ export const ProductsClient = ({
             />
 
             {/* Pagination */}
-            <ProductsPagination
-              pagination={pagination}
-              isPending={isPending}
-              onPageChange={(page) => updateQuery({ page }, { resetPage: false })}
-              labels={{
-                previous: tProducts('pagination.previous'),
-                next: tProducts('pagination.next'),
-                page: tProducts('pagination.page'),
-                of: tProducts('pagination.of'),
-                itemsCount: (count) => `${count.toLocaleString()} ${tProducts('product_list')}`,
-              }}
-            />
+            <div className="mt-8">
+              <ProductsPagination
+                pagination={pagination}
+                isPending={isPending}
+                onPageChange={(page) => updateQuery({ page }, { resetPage: false })}
+                labels={{
+                  previous: tProducts('pagination.previous'),
+                  next: tProducts('pagination.next'),
+                  page: tProducts('pagination.page'),
+                  of: tProducts('pagination.of'),
+                  itemsCount: (count) => `${count.toLocaleString()} ${tProducts('product_list')}`,
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

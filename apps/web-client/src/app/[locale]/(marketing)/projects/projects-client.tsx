@@ -145,11 +145,10 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
         </div>
       </div>
 
-      {/* Fixed Search and Filters Bar */}
-      <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur pt-[env(safe-area-inset-top)]">
-        <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-4">
+      {/* Desktop sticky top search bar — hidden on mobile */}
+      <div className="hidden md:block sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+        <div className="w-full max-w-[1920px] mx-auto px-8 lg:px-12 py-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Search */}
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">
               <search role="search" className="relative w-full lg:w-[320px]">
                 <Search
@@ -166,9 +165,7 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
                 />
               </search>
             </div>
-
-            {/* Status Filters */}
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide mb-6 w-full lg:w-auto pb-2 lg:pb-0">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide w-full lg:w-auto pb-2 lg:pb-0">
               {[
                 { id: 'all', label: t('filter.status.all') },
                 { id: 'active', label: t('filter.status.active') },
@@ -191,8 +188,49 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
+      {/* iOS 26 — Mobile floating search bar at the bottom (above bottom nav) */}
+      <div
+        className="md:hidden fixed left-0 right-0 z-40 px-4"
+        style={{ bottom: 'calc(4rem + env(safe-area-inset-bottom))' }}
+      >
+        <div className="rounded-2xl border border-white/10 bg-background/90 backdrop-blur-xl shadow-2xl overflow-hidden">
+          {/* Search Input */}
+          <div className="flex items-center gap-3 px-4 pt-3 pb-2">
+            <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+            <input
+              type="search"
+              placeholder={t('filter.search_placeholder')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label={t('filter.search_placeholder')}
+              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
+            />
+          </div>
+          {/* Filter Chips */}
+          <div className="flex items-center gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
+            {[
+              { id: 'all', label: t('filter.status.all') },
+              { id: 'active', label: t('filter.status.active') },
+              { id: 'completed', label: 'Financés' },
+            ].map((option) => (
+              <button
+                key={option.id}
+                onClick={() => handleStatusChange(option.id)}
+                className={`shrink-0 whitespace-nowrap text-xs font-semibold outline-none rounded-full px-4 py-1.5 transition-all active:scale-95 ${
+                  status === option.id
+                    ? 'bg-lime-400 text-black'
+                    : 'bg-white/5 border border-white/10 text-muted-foreground'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area — extra bottom padding on mobile for the floating search bar */}
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-8 pb-48 md:pb-16 lg:pt-10">
         {normalizedProjects.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8 bg-muted/30 rounded-3xl border-2 border-dashed">
             <Target className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
