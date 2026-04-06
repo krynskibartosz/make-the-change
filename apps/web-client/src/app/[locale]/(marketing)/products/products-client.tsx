@@ -465,7 +465,7 @@ export const ProductsClient = ({
       </div>
 
       {/* Fixed Search and Filters Bar */}
-      <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+      <div className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur pt-[env(safe-area-inset-top)]">
         <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 py-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             {/* Search and Tag (Left Side Desktop, Top Row Mobile) */}

@@ -26,7 +26,7 @@ export function AdventureTabs() {
   )
 
   return (
-    <div className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg pt-safe mb-6 -mx-4 sm:-mx-6">
+    <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg pt-[env(safe-area-inset-top)] mb-6 -mx-4 sm:-mx-6">
       <div className="flex w-full border-b border-white/5">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id
