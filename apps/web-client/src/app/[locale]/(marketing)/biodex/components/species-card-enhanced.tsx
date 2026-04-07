@@ -60,17 +60,8 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
       return `Soutenez "${firstProject.name}" pour découvrir les secrets de cette espèce.`
     }
 
-    // Si espèce légendaire → message spécial
-    if (rarity === 'legendary') {
-      return `Espèce rare ! Accomplissez des défis environnementaux pour l'apercevoir.`
-    }
-
-    // Si espèce rare → message badge
-    if (rarity === 'rare') {
-      return `Gagnez un badge de protection pour révéler les détails de cette espèce.`
-    }
-
-    // Défaut : message générique
+    // RÈGLE MANIFESTE : Espèces débloquées UNIQUEMENT via dons financiers
+    // PAS via défis gratuits (qui donnent uniquement des badges)
     return `Soutenez un projet lié à cet habitat pour débloquer les secrets de cette espèce.`
   }
 
