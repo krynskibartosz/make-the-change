@@ -3,6 +3,8 @@ import {
   ArrowRight,
   CalendarClock,
   CheckCircle2,
+  Flame,
+  Leaf,
   Sprout,
   Target,
   Trophy,
@@ -94,10 +96,28 @@ export async function AdventureChallenges() {
       ? c.user_challenges[0]
       : (c.user_challenges ?? null)
     const progress = progressEntry?.progress ?? 0
-    const target = progressEntry?.target ?? 100
+    
+    // FIX : Cohérence mathématique selon titre
+    const target = c.title.toLowerCase().includes('7 jours') || c.title.toLowerCase().includes('série')
+      ? 7
+      : c.title.toLowerCase().includes('3 projet')
+        ? 3
+        : progressEntry?.target ?? 100
+    
     const percentage = Math.min((progress / target) * 100, 100)
     const isCompleted = !!progressEntry?.completed_at
     const isClaimed = !!progressEntry?.claimed_at
+
+    // Icône selon type de défi
+    const getIcon = () => {
+      if (c.title.toLowerCase().includes('série') || c.title.toLowerCase().includes('streak')) {
+        return Flame
+      }
+      if (c.title.toLowerCase().includes('projet')) {
+        return Sprout
+      }
+      return Target
+    }
 
     return {
       ...c,
@@ -108,6 +128,7 @@ export async function AdventureChallenges() {
         isCompleted,
         isClaimed,
       },
+      icon: getIcon(),
     }
   })
 
@@ -124,80 +145,78 @@ export async function AdventureChallenges() {
           </div>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((c) => (
-            <div key={c.id} className="group block h-full">
-              <Card className="relative h-full border-border/60 bg-card/95 shadow-md backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/20 rounded-3xl overflow-hidden">
-                {/* Récompense (haut droite) */}
-                <div className="absolute right-4 top-4 z-10">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-tight shadow-md">
-                    {c.reward_graines > 0 ? (
-                      <>
-                        <Sprout className="h-3 w-3" />
-                        +{c.reward_graines} Graines
-                      </>
-                    ) : (
-                      <>
-                        <Trophy className="h-3 w-3" />
-                        Badge
-                      </>
-                    )}
-                  </div>
+        <div className="space-y-3">
+          {items.map((c) => {
+            const Icon = c.icon
+            const unitLabel = c.title.toLowerCase().includes('jour')
+              ? 'jours'
+              : c.title.toLowerCase().includes('projet')
+                ? 'projets'
+                : ''
+
+            return (
+              <div
+                key={c.id}
+                className="flex flex-row items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-lime-500/30 transition-all duration-300 group"
+              >
+                {/* Icône gauche (Squircle) */}
+                <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center bg-white/10 group-hover:bg-lime-500/20 transition-colors">
+                  <Icon size={24} className="text-white group-hover:text-lime-400 transition-colors" />
                 </div>
 
-                <CardContent className="space-y-6 p-6 pt-16">
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-bold tracking-tight text-white group-hover:text-primary transition-colors duration-300 flex items-center gap-2">
+                {/* Contenu central */}
+                <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+                  {/* Titre */}
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-semibold text-foreground tracking-tight truncate">
                       {c.title === 'Streak 7 jours' || c.title === 'Série 7 jours' ? 'Série de 7 jours' : c.title}
-                      {c.userProgress.isCompleted && (
-                        <div className="bg-success text-success-foreground rounded-full p-1 shadow-md">
-                          <CheckCircle2 className="h-4 w-4" />
-                        </div>
-                      )}
                     </h3>
+                    {c.userProgress.isCompleted && (
+                      <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
+                    )}
                   </div>
 
-                  <div className="space-y-3">
-                    {/* Barre de progression (pas de label "Progression") */}
-                    <div className="flex items-center justify-end text-xs font-semibold text-white tabular-nums">
-                      {c.userProgress.progress} / {c.userProgress.target}{' '}
-                      {c.title.toLowerCase().includes('jour') ? 'jours' : c.title.toLowerCase().includes('projet') ? 'projets' : ''}
-                    </div>
-                    <div className="relative h-2 w-full bg-slate-700/40 rounded-full overflow-hidden">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-full bg-lime-400 transition-all duration-1000 ease-out shadow-sm"
-                        style={{ width: `${c.userProgress.percentage}%` }}
-                      />
-                    </div>
+                  {/* Barre de progression */}
+                  <div className="relative h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="absolute inset-y-0 left-0 bg-lime-500 rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: `${c.userProgress.percentage}%` }}
+                    />
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                    {/* Countdown réel UNIQUEMENT si type=daily (< 24h) */}
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      {c.type === 'daily' && (
-                        <>
-                          <CalendarClock size={14} className="opacity-80" />
-                          <span className="font-medium">Expire aujourd'hui</span>
-                        </>
-                      )}
-                    </div>
+                  {/* Sous-texte fusionné */}
+                  <p className="text-xs text-muted-foreground font-medium">
+                    {c.userProgress.progress} / {c.userProgress.target} {unitLabel}
+                    {c.type === 'daily' && ' • Expire aujourd\'hui'}
+                  </p>
+                </div>
 
-                    {c.userProgress.isCompleted && !c.userProgress.isClaimed ? (
-                      <div className="flex items-center gap-1.5 text-primary font-black text-[10px] uppercase tracking-widest animate-pulse bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
-                        <Zap className="h-3.5 w-3.5" />
-                        Réclamer !
-                      </div>
-                    ) : c.userProgress.isClaimed ? (
-                      <div className="flex items-center gap-1.5 text-success font-black text-[10px] uppercase tracking-widest bg-success/10 px-3 py-1.5 rounded-full border border-success/20">
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                        Validé
-                      </div>
-                    ) : null}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
+                {/* Récompense droite */}
+                <div className="flex-shrink-0 text-right">
+                  {c.userProgress.isClaimed ? (
+                    <div className="flex items-center gap-1.5 text-success font-bold text-xs uppercase">
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Validé</span>
+                    </div>
+                  ) : c.userProgress.isCompleted ? (
+                    <div className="flex items-center gap-1.5 text-lime-400 font-bold text-xs uppercase animate-pulse">
+                      <Zap className="w-4 h-4" />
+                      <span>Réclamer</span>
+                    </div>
+                  ) : c.reward_graines > 0 ? (
+                    <span className="font-bold text-lime-400 text-sm">
+                      +{c.reward_graines} 🌱
+                    </span>
+                  ) : (
+                    <div className="flex items-center gap-1 text-amber-400 font-bold text-xs">
+                      <Trophy className="w-4 h-4" />
+                      <span>Badge</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
 
