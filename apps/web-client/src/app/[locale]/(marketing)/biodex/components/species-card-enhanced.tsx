@@ -52,13 +52,75 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
   const rarity = getRarity(species.conservation_status)
   const rarityStyle = RARITY_STYLES[rarity]
 
+  // ─── Description dynamique selon contexte ────────────────────────────────────
+  const getLockedDescription = (): string => {
+    // Si a des projets associés → message spécifique avec nom du projet
+    if (species.associated_projects && species.associated_projects.length > 0) {
+      const firstProject = species.associated_projects[0]
+      return `Soutenez "${firstProject.name}" pour découvrir les secrets de cette espèce.`
+    }
+
+    // Si espèce légendaire → message spécial
+    if (rarity === 'legendary') {
+      return `Espèce rare ! Accomplissez des défis environnementaux pour l'apercevoir.`
+    }
+
+    // Si espèce rare → message badge
+    if (rarity === 'rare') {
+      return `Gagnez un badge de protection pour révéler les détails de cette espèce.`
+    }
+
+    // Défaut : message générique
+    return `Soutenez un projet lié à cet habitat pour débloquer les secrets de cette espèce.`
+  }
+
+  // ─── CTA dynamique selon contexte ────────────────────────────────────────────
+  const getCTA = (): { text: string; href: string; show: boolean } => {
+    if (!isLocked) {
+      // Espèce débloquée → Explorer la fiche
+      return {
+        text: '📖 Explorer la fiche',
+        href: `/aventure/biodex/${species.id}`,
+        show: true,
+      }
+    }
+
+    // Espèce locked avec projets → Voir les projets
+    if (species.associated_projects && species.associated_projects.length > 0) {
+      return {
+        text: '🌱 Voir les projets',
+        href: '/projets',
+        show: true,
+      }
+    }
+
+    // Espèce locked avec challenges → Voir les défis
+    if (species.associated_challenges && species.associated_challenges.length > 0) {
+      return {
+        text: '⚡ Voir les défis',
+        href: '/aventure?tab=defis',
+        show: true,
+      }
+    }
+
+    // Espèce locked sans action spécifique → Pas de bouton
+    return {
+      text: '',
+      href: '',
+      show: false,
+    }
+  }
+
+  const lockedDescription = getLockedDescription()
+  const cta = getCTA()
+
   return (
     <Card
       className={cn(
         'group relative overflow-hidden rounded-3xl border bg-background/50 hover:bg-background/80 transition-all duration-300',
         rarityStyle.border,
         rarityStyle.halo,
-        'hover:scale-[1.01]',
+        'hover:scale-[1.01] active:scale-[0.99]',
       )}
     >
       <CardContent className="p-6">
@@ -95,10 +157,10 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
           </span>
         </div>
 
-        {/* Description */}
+        {/* Description dynamique */}
         {isLocked ? (
           <p className="text-sm not-italic text-slate-300 mb-4 min-h-[3rem] leading-relaxed">
-            Soutenez un projet lié à cet habitat pour débloquer les secrets de cette espèce.
+            {lockedDescription}
           </p>
         ) : (
           <p className="text-sm text-slate-300 mb-4 line-clamp-3 min-h-[3rem] leading-relaxed">
@@ -106,24 +168,19 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
           </p>
         )}
 
-
-
-        {/* Projets associés */}
+        {/* Projets associés — SANS le texte "Projets (X)" */}
         {species.associated_projects && species.associated_projects.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs font-semibold mb-2 text-muted-foreground">
-              Projets ({species.associated_projects.length})
-            </p>
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1.5">
               {species.associated_projects.slice(0, 3).map((project) => (
                 <Link key={project.id} href={`/projects/${project.id}`}>
-                  <span className="text-xs font-medium px-3 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 cursor-pointer transition-colors">
+                  <span className="text-xs font-medium px-3 py-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 hover:border-white/20 cursor-pointer transition-all active:scale-95">
                     {project.name}
                   </span>
                 </Link>
               ))}
               {species.associated_projects.length > 3 && (
-                <span className="text-xs font-medium px-3 py-0.5 rounded-full border border-white/10 bg-white/5 text-muted-foreground">
+                <span className="text-xs font-medium px-3 py-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground">
                   +{species.associated_projects.length - 3}
                 </span>
               )}
@@ -131,18 +188,22 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
           </div>
         )}
 
-        {/* Actions - Zero Friction Flow */}
-        <div className="flex mt-auto pt-2">
-          {!isLocked ? (
-            <Button asChild className="w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-500 border border-lime-500/20 shadow-none">
-              <Link href={`/aventure/biodex/${species.id}`}>📖 Explorer la fiche</Link>
+        {/* Actions conditionnelles — iOS 26.4 style */}
+        {cta.show && (
+          <div className="flex mt-auto pt-2">
+            <Button
+              asChild
+              className={cn(
+                'w-full shadow-none font-medium transition-all active:scale-95',
+                !isLocked
+                  ? 'bg-lime-500/10 hover:bg-lime-500/20 text-lime-500 border border-lime-500/20'
+                  : 'bg-white/10 hover:bg-white/20 text-white border border-white/10',
+              )}
+            >
+              <Link href={cta.href}>{cta.text}</Link>
             </Button>
-          ) : (
-            <Button asChild className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/10 shadow-none font-medium">
-              <Link href="/projets">🌱 Découvrir les projets</Link>
-            </Button>
-          )}
-        </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   )

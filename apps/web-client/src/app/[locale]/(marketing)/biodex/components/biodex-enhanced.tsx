@@ -5,6 +5,7 @@ import { Leaf, Search, Sparkles } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { SpeciesCardEnhanced } from './species-card-enhanced'
+import { BadgesCarousel } from './badges-carousel'
 import type { SpeciesContext } from '@/types/context'
 import { cn } from '@/lib/utils'
 
@@ -35,10 +36,27 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
     return Array.from(statuses)
   }, [species])
 
+  // Rareté helper pour tri
+  const getRarity = (status: string | null | undefined): 'common' | 'rare' | 'legendary' => {
+    switch (status?.toUpperCase()) {
+      case 'EN':
+      case 'CR':
+      case 'EW':
+      case 'EX':
+        return 'legendary'
+      case 'VU':
+      case 'NT':
+        return 'rare'
+      default:
+        return 'common'
+    }
+  }
+
   const filteredSpecies = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()
 
-    return species.filter((item) => {
+    // Filtrage
+    const filtered = species.filter((item) => {
       if (status !== 'all' && item.conservation_status !== status) {
         return false
       }
@@ -57,6 +75,27 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 
       return haystack.includes(normalizedSearch)
     })
+
+    // Tri intelligent iOS 26.4 : débloquées récentes → rareté → alphabétique
+    return filtered.sort((a, b) => {
+      // 1. Débloquées d'abord (dopamine boost)
+      const aUnlocked = a.user_status?.isUnlocked ?? false
+      const bUnlocked = b.user_status?.isUnlocked ?? false
+      
+      if (aUnlocked && !bUnlocked) return -1
+      if (!aUnlocked && bUnlocked) return 1
+
+      // 2. Puis par rareté (legendary > rare > common)
+      const rarityOrder = { legendary: 0, rare: 1, common: 2 }
+      const aRarity = getRarity(a.conservation_status)
+      const bRarity = getRarity(b.conservation_status)
+      const rarityDiff = rarityOrder[aRarity] - rarityOrder[bRarity]
+      
+      if (rarityDiff !== 0) return rarityDiff
+
+      // 3. Puis alphabétique
+      return a.name_default.localeCompare(b.name_default, 'fr')
+    })
   }, [search, species, status])
 
   return (
@@ -64,12 +103,6 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
       {/* Search and Filters Bar */}
       <div className="sticky top-[calc(52px_+_env(safe-area-inset-top))] sm:top-[56px] z-30 border-b border-white/5 bg-background/95 backdrop-blur pb-2">
         <div className="w-full max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold tracking-tight tabular-nums">
-              {t('results_count', { shown: filteredSpecies.length, total: species.length })}
-            </h2>
-          </div>
-
           {species.length > 20 && (
             <div className="mb-4">
               <search role="search" className="relative w-full max-w-md">
@@ -90,7 +123,7 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
             <button
               onClick={() => setStatus('all')}
               className={cn(
-                'shrink-0 rounded-full px-4 py-1.5 text-sm font-bold transition-all duration-200 whitespace-nowrap',
+                'shrink-0 rounded-full px-4 py-1.5 text-sm font-bold transition-all duration-200 whitespace-nowrap active:scale-95',
                 status === 'all'
                   ? 'bg-lime-500/15 text-lime-400 border border-lime-500/20'
                   : 'bg-white/5 border border-white/10 text-muted-foreground hover:text-white transition-colors',
@@ -104,7 +137,7 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
                 key={s}
                 onClick={() => setStatus(s)}
                 className={cn(
-                  'shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 whitespace-nowrap',
+                  'shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 whitespace-nowrap active:scale-95',
                   status === s
                     ? 'bg-lime-500/15 text-lime-400 border border-lime-500/20 font-bold'
                     : 'bg-white/5 border border-white/10 text-muted-foreground hover:text-white transition-colors',
@@ -115,6 +148,11 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Badges Carousel iOS 26.4 — sticky, positioned after filters */}
+      <div className="sticky z-20" style={{ top: 'calc(52px + env(safe-area-inset-top) + 140px)' }}>
+        <BadgesCarousel />
       </div>
 
       {/* Main Content Area */}
