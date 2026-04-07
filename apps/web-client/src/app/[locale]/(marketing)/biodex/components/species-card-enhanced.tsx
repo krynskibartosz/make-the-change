@@ -53,8 +53,11 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
   const rarity = getRarity(species.conservation_status)
   const rarityStyle = RARITY_STYLES[rarity]
 
-  // ─── Déblocage Ciblé (Quête Spécifique) ──────────────────────────────────────
-  const unlockTarget = isLocked && species.associated_projects && species.associated_projects.length > 0
+  // ─── Déblocage/Redirection Ciblé (Locked ET Unlocked) ────────────────────────
+  // Si locked OU (unlocked avec 1 seul projet) → Redirection vers projet
+  const shouldRedirectToProject = species.associated_projects && species.associated_projects.length === 1
+  
+  const unlockTarget = shouldRedirectToProject
     ? {
         type: 'project' as const,
         slug: species.associated_projects[0].slug || species.associated_projects[0].id,
@@ -62,7 +65,7 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
       }
     : null
 
-  // ─── Texte de Quête Spécifique ───────────────────────────────────────────────
+  // ─── Texte de Quête Spécifique (Locked uniquement) ───────────────────────────
   const getQuestDescription = (): string => {
     if (unlockTarget) {
       return `Soutenez le projet "${unlockTarget.name}" pour révéler les secrets de cette espèce.`
@@ -122,8 +125,8 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
         </p>
       )}
 
-      {/* Projets associés (unlocked uniquement) */}
-      {!isLocked && species.associated_projects && species.associated_projects.length > 0 && (
+      {/* Projets associés (unlocked avec PLUSIEURS projets uniquement) */}
+      {!isLocked && species.associated_projects && species.associated_projects.length > 1 && (
         <div className="mb-4">
           <div className="flex flex-wrap gap-1.5">
             {species.associated_projects.slice(0, 3).map((project) => (
@@ -142,8 +145,8 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
         </div>
       )}
 
-      {/* CTA pour unlocked */}
-      {!isLocked && (
+      {/* CTA pour unlocked SANS projet unique (plusieurs projets ou aucun) */}
+      {!isLocked && !unlockTarget && (
         <div className="flex mt-auto pt-2">
           <Button
             asChild
@@ -154,19 +157,19 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
         </div>
       )}
 
-      {/* Indicateur interactivité (locked avec quête) */}
-      {isLocked && unlockTarget && (
+      {/* Indicateur interactivité (locked OU unlocked avec 1 projet) */}
+      {unlockTarget && (
         <div className="absolute bottom-4 right-4 flex items-center gap-1 text-white/30">
-          <Lock className="w-3 h-3" />
+          {isLocked && <Lock className="w-3 h-3" />}
           <ChevronRight className="w-4 h-4" />
         </div>
       )}
     </CardContent>
   )
 
-  // ─── Rendu : Card Cliquable (Locked) ou Card Standard (Unlocked) ────────────
-  if (isLocked && unlockTarget) {
-    // LOCKED avec quête : Card entière cliquable → Redirection ciblée
+  // ─── Rendu : Card Cliquable ou Card Standard ─────────────────────────────────
+  if (unlockTarget) {
+    // Locked AVEC quête OU Unlocked avec 1 SEUL projet : Card cliquable vers projet
     return (
       <Link href={`/projets/${unlockTarget.slug}`} className="block">
         <Card
@@ -183,7 +186,7 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
     )
   }
 
-  // UNLOCKED ou LOCKED sans quête : Card standard
+  // Unlocked SANS projet unique OU Locked sans projet : Card standard
   return (
     <Card
       className={cn(
