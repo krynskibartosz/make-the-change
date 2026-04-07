@@ -3,8 +3,6 @@ import {
   ArrowRight,
   CalendarClock,
   CheckCircle2,
-  Flame,
-  Sparkles,
   Sprout,
   Target,
   Trophy,
@@ -128,24 +126,9 @@ export async function AdventureChallenges() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((c) => (
-            <Link key={c.id} href={`/challenges/${c.slug}`} className="group block h-full">
+            <div key={c.id} className="group block h-full">
               <Card className="relative h-full border-border/60 bg-card/95 shadow-md backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/20 rounded-3xl overflow-hidden">
-                <div className="absolute left-4 top-4 z-10">
-                  <div
-                    className={cn(
-                      'inline-flex items-center gap-1.5 rounded-full border backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-widest',
-                      c.type === 'daily'
-                        ? 'bg-blue-500/15 text-blue-300 border-blue-500/20'
-                        : c.type === 'monthly'
-                          ? 'bg-orange-500/15 text-orange-300 border-orange-500/20'
-                          : 'bg-lime-500/15 text-lime-400 border-lime-500/20',
-                    )}
-                  >
-                    <Sparkles className="h-3 w-3" />
-                    {c.type === 'daily' ? 'Quotidien' : c.type === 'monthly' ? 'Mensuel' : 'Saisonnier'}
-                  </div>
-                </div>
-                
+                {/* Récompense (haut droite) */}
                 <div className="absolute right-4 top-4 z-10">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 backdrop-blur-sm px-3 py-1.5 text-[10px] font-black uppercase tracking-tight shadow-md">
                     {c.reward_graines > 0 ? (
@@ -172,21 +155,13 @@ export async function AdventureChallenges() {
                         </div>
                       )}
                     </h3>
-                    <p className="text-sm text-slate-300 font-medium leading-relaxed line-clamp-3">
-                      {c.description}
-                    </p>
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
-                      <span className="flex items-center gap-1.5">
-                        <Flame size={14} className="opacity-80" />
-                        Progression
-                      </span>
-                      <span className="text-white font-semibold tabular-nums">
-                        {c.userProgress.progress} / {c.userProgress.target}{' '}
-                        {c.title.toLowerCase().includes('jour') ? 'jours' : c.title.toLowerCase().includes('projet') ? 'projets' : ''}
-                      </span>
+                    {/* Barre de progression (pas de label "Progression") */}
+                    <div className="flex items-center justify-end text-xs font-semibold text-white tabular-nums">
+                      {c.userProgress.progress} / {c.userProgress.target}{' '}
+                      {c.title.toLowerCase().includes('jour') ? 'jours' : c.title.toLowerCase().includes('projet') ? 'projets' : ''}
                     </div>
                     <div className="relative h-2 w-full bg-slate-700/40 rounded-full overflow-hidden">
                       <div
@@ -197,9 +172,14 @@ export async function AdventureChallenges() {
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t border-border/50">
+                    {/* Countdown réel UNIQUEMENT si type=daily (< 24h) */}
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <CalendarClock size={14} className="opacity-80" />
-                      {c.type === 'daily' ? "Expire aujourd'hui" : c.type === 'monthly' ? 'Expire ce mois' : 'Expire bientôt'}
+                      {c.type === 'daily' && (
+                        <>
+                          <CalendarClock size={14} className="opacity-80" />
+                          <span className="font-medium">Expire aujourd'hui</span>
+                        </>
+                      )}
                     </div>
 
                     {c.userProgress.isCompleted && !c.userProgress.isClaimed ? (
@@ -216,12 +196,22 @@ export async function AdventureChallenges() {
                   </div>
                 </CardContent>
               </Card>
-            </Link>
+            </div>
           ))}
         </div>
       )}
 
-      {/* Gamification Tip Card */}
+      {/* ═══════════════════════════════════════════════════════════════
+          CARD BAS DE PAGE : 2 OPTIONS
+          
+          OPTION A (ACTUELLE) : Toujours affichée
+          → Supprimer tout le bloc ci-dessous (ligne 224-249)
+          
+          OPTION B : Afficher UNIQUEMENT si user a complété ≥1 défi
+          → Décommenter le code conditionnel ci-dessous
+          ═══════════════════════════════════════════════════════════════ */}
+
+      {/* OPTION A : Card toujours affichée (à supprimer si vous choisissez soustraction totale) */}
       <div className="relative group overflow-hidden rounded-[2rem] border bg-client-slate-950 p-6 md:p-8 text-client-white shadow-xl mt-8">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent opacity-40" />
         <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 justify-between">
@@ -247,6 +237,38 @@ export async function AdventureChallenges() {
           </Button>
         </div>
       </div>
+
+      {/* OPTION B : Card contextuelle (affichée UNIQUEMENT si ≥1 défi complété) */}
+      {/* Décommenter ci-dessous pour activer OPTION B et supprimer OPTION A */}
+      {/*
+      {items.some((c) => c.userProgress.isCompleted) && (
+        <div className="relative group overflow-hidden rounded-[2rem] border bg-client-slate-950 p-6 md:p-8 text-client-white shadow-xl mt-8">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent opacity-40" />
+          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 justify-between">
+            <div className="flex items-center gap-5">
+              <div className="h-14 w-14 rounded-2xl bg-client-white/5 backdrop-blur-xl border border-client-white/10 flex items-center justify-center shrink-0 rotate-12 group-hover:rotate-0 transition-transform">
+                <Zap className="h-7 w-7 text-primary" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-lg font-black tracking-tight">Boostez votre Impact Score</p>
+                <p className="text-client-slate-400 font-medium text-sm max-w-sm">
+                  Progressez dans le classement global et débloquez des avantages exclusifs en boutique.
+                </p>
+              </div>
+            </div>
+            <Button
+              asChild
+              variant="outline"
+              className="w-full sm:w-auto h-12 px-6 rounded-xl border-client-white/10 text-client-white hover:bg-client-white/5 font-black uppercase tracking-widest text-xs mt-4 sm:mt-0"
+            >
+              <Link href="/leaderboard">
+                Voir le classement <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
+      */}
     </div>
   )
 }
