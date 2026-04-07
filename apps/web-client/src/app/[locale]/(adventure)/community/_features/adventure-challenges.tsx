@@ -1,7 +1,5 @@
 import { Button, Card, CardContent } from '@make-the-change/core/ui'
 import {
-  ArrowRight,
-  CalendarClock,
   CheckCircle2,
   Flame,
   Leaf,
@@ -145,7 +143,7 @@ export async function AdventureChallenges() {
           </div>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="w-full">
           {items.map((c) => {
             const Icon = c.icon
             const unitLabel = c.title.toLowerCase().includes('jour')
@@ -157,7 +155,7 @@ export async function AdventureChallenges() {
             return (
               <div
                 key={c.id}
-                className="flex flex-row items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-lime-500/30 transition-all duration-300 group"
+                className="w-full px-6 py-5 flex flex-row items-center gap-4 border-b border-white/5 last:border-0 active:bg-white/5 transition-colors cursor-pointer"
               >
                 {/* Icône gauche (Squircle) */}
                 <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center bg-white/10 group-hover:bg-lime-500/20 transition-colors">
@@ -218,76 +216,12 @@ export async function AdventureChallenges() {
             )
           })}
         </div>
+
+        {/* Clôture cognitive (End of List State) */}
+        <p className="text-center text-sm text-muted-foreground mt-8 mb-4">
+          Vous êtes à jour ! Revenez demain pour semer de nouvelles graines. 🌱
+        </p>
       )}
-
-      {/* ═══════════════════════════════════════════════════════════════
-          CARD BAS DE PAGE : 2 OPTIONS
-          
-          OPTION A (ACTUELLE) : Toujours affichée
-          → Supprimer tout le bloc ci-dessous (ligne 224-249)
-          
-          OPTION B : Afficher UNIQUEMENT si user a complété ≥1 défi
-          → Décommenter le code conditionnel ci-dessous
-          ═══════════════════════════════════════════════════════════════ */}
-
-      {/* OPTION A : Card toujours affichée (à supprimer si vous choisissez soustraction totale) */}
-      <div className="relative group overflow-hidden rounded-[2rem] border bg-client-slate-950 p-6 md:p-8 text-client-white shadow-xl mt-8">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent opacity-40" />
-        <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 justify-between">
-          <div className="flex items-center gap-5">
-            <div className="h-14 w-14 rounded-2xl bg-client-white/5 backdrop-blur-xl border border-client-white/10 flex items-center justify-center shrink-0 rotate-12 group-hover:rotate-0 transition-transform">
-              <Zap className="h-7 w-7 text-primary" />
-            </div>
-            <div className="space-y-1">
-              <p className="text-lg font-black tracking-tight">Boostez votre Impact Score</p>
-              <p className="text-client-slate-400 font-medium text-sm max-w-sm">
-                Progressez dans le classement global et débloquez des avantages exclusifs en boutique.
-              </p>
-            </div>
-          </div>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full sm:w-auto h-12 px-6 rounded-xl border-client-white/10 text-client-white hover:bg-client-white/5 font-black uppercase tracking-widest text-xs mt-4 sm:mt-0"
-          >
-            <Link href="/leaderboard">
-              Voir le classement <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </div>
-
-      {/* OPTION B : Card contextuelle (affichée UNIQUEMENT si ≥1 défi complété) */}
-      {/* Décommenter ci-dessous pour activer OPTION B et supprimer OPTION A */}
-      {/*
-      {items.some((c) => c.userProgress.isCompleted) && (
-        <div className="relative group overflow-hidden rounded-[2rem] border bg-client-slate-950 p-6 md:p-8 text-client-white shadow-xl mt-8">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent opacity-40" />
-          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 justify-between">
-            <div className="flex items-center gap-5">
-              <div className="h-14 w-14 rounded-2xl bg-client-white/5 backdrop-blur-xl border border-client-white/10 flex items-center justify-center shrink-0 rotate-12 group-hover:rotate-0 transition-transform">
-                <Zap className="h-7 w-7 text-primary" />
-              </div>
-              <div className="space-y-1">
-                <p className="text-lg font-black tracking-tight">Boostez votre Impact Score</p>
-                <p className="text-client-slate-400 font-medium text-sm max-w-sm">
-                  Progressez dans le classement global et débloquez des avantages exclusifs en boutique.
-                </p>
-              </div>
-            </div>
-            <Button
-              asChild
-              variant="outline"
-              className="w-full sm:w-auto h-12 px-6 rounded-xl border-client-white/10 text-client-white hover:bg-client-white/5 font-black uppercase tracking-widest text-xs mt-4 sm:mt-0"
-            >
-              <Link href="/leaderboard">
-                Voir le classement <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      )}
-      */}
     </div>
   )
 }
