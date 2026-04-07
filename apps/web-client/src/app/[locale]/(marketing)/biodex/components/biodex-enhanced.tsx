@@ -1,11 +1,10 @@
 'use client'
 
 import { Input } from '@make-the-change/core/ui'
-import { Leaf, Search, Sparkles } from 'lucide-react'
+import { Leaf, Search } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { SpeciesCardEnhanced } from './species-card-enhanced'
-import { BadgesCarousel } from './badges-carousel'
 import type { SpeciesContext } from '@/types/context'
 import { cn } from '@/lib/utils'
 
@@ -100,9 +99,10 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 
   return (
     <>
-      {/* Search and Filters Bar */}
-      <div className="sticky top-[calc(52px_+_env(safe-area-inset-top))] sm:top-[56px] z-30 border-b border-white/5 bg-background/95 backdrop-blur pb-2">
-        <div className="w-full max-w-7xl mx-auto">
+      {/* Header Sticky avec Safe Area iOS + Glassmorphism */}
+      <div className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-xl border-b border-white/5 pt-[max(env(safe-area-inset-top),1rem)] pb-3">
+        <div className="w-full max-w-7xl mx-auto px-4">
+          {/* Search (si + de 20 espèces) */}
           {species.length > 20 && (
             <div className="mb-4">
               <search role="search" className="relative w-full max-w-md">
@@ -118,7 +118,7 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
           )}
 
           {/* Chip Filters — horizontal scrollable */}
-          <div className="flex gap-2 overflow-x-auto mt-4 pb-1 scrollbar-hide -mx-1 px-1">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1">
             {/* "Toutes" chip */}
             <button
               onClick={() => setStatus('all')}
@@ -150,13 +150,61 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
         </div>
       </div>
 
-      {/* Badges Carousel iOS 26.4 — sticky, positioned after filters */}
-      <div className="sticky z-20" style={{ top: 'calc(52px + env(safe-area-inset-top) + 140px)' }}>
-        <BadgesCarousel />
+      {/* Hero Section : Progression Collection (Pokémon GO style) */}
+      <div className="w-full max-w-7xl mx-auto px-4 pt-6 pb-4">
+        <div className="rounded-2xl bg-gradient-to-br from-lime-500/10 to-emerald-600/10 border border-lime-500/20 p-5 shadow-lg">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-lg font-black text-white tracking-tight">
+                Mon BioDex
+              </h2>
+              <p className="text-sm text-white/60 font-medium">
+                Espèces sauvées grâce à vos dons
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black text-lime-400 tabular-nums">
+                {filteredSpecies.filter((s) => s.user_status?.isUnlocked).length}
+                <span className="text-white/40 text-lg">/{species.length}</span>
+              </p>
+              <p className="text-xs text-white/50 font-semibold uppercase tracking-wider">
+                Débloquées
+              </p>
+            </div>
+          </div>
+
+          {/* Barre de progression visuelle */}
+          <div className="relative h-3 w-full rounded-full bg-white/10 overflow-hidden">
+            <div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-lime-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-[0_0_12px_rgba(132,204,22,0.4)]"
+              style={{
+                width: `${
+                  species.length > 0
+                    ? (filteredSpecies.filter((s) => s.user_status?.isUnlocked).length /
+                        species.length) *
+                      100
+                    : 0
+                }%`,
+              }}
+            />
+          </div>
+
+          {/* Percentage */}
+          <p className="text-xs text-white/50 font-bold text-center mt-2 tabular-nums">
+            {species.length > 0
+              ? Math.round(
+                  (filteredSpecies.filter((s) => s.user_status?.isUnlocked).length /
+                    species.length) *
+                    100,
+                )
+              : 0}
+            % complété
+          </p>
+        </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="w-full max-w-7xl mx-auto pb-24 pt-6">
+      {/* Main Content Area : Cards Espèces */}
+      <div className="w-full max-w-7xl mx-auto px-4 pb-32 pt-6">
         {filteredSpecies.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredSpecies.map((item) => (
