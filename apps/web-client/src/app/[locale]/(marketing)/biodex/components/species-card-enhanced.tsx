@@ -2,6 +2,7 @@ import { Button, Card, CardContent } from '@make-the-change/core/ui'
 import type { SpeciesContext } from '@/types/context'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { ChevronRight, Lock } from 'lucide-react'
 
 interface SpeciesCardEnhancedProps {
   species: SpeciesContext
@@ -52,150 +53,147 @@ export function SpeciesCardEnhanced({ species, showUserStatus = true }: SpeciesC
   const rarity = getRarity(species.conservation_status)
   const rarityStyle = RARITY_STYLES[rarity]
 
-  // ─── Description dynamique selon contexte ────────────────────────────────────
-  const getLockedDescription = (): string => {
-    // Si a des projets associés → message spécifique avec nom du projet
-    if (species.associated_projects && species.associated_projects.length > 0) {
-      const firstProject = species.associated_projects[0]
-      return `Soutenez "${firstProject.name}" pour découvrir les secrets de cette espèce.`
-    }
+  // ─── Déblocage Ciblé (Quête Spécifique) ──────────────────────────────────────
+  const unlockTarget = isLocked && species.associated_projects && species.associated_projects.length > 0
+    ? {
+        type: 'project' as const,
+        slug: species.associated_projects[0].slug || species.associated_projects[0].id,
+        name: species.associated_projects[0].name,
+      }
+    : null
 
-    // RÈGLE MANIFESTE : Espèces débloquées UNIQUEMENT via dons financiers
-    // PAS via défis gratuits (qui donnent uniquement des badges)
+  // ─── Texte de Quête Spécifique ───────────────────────────────────────────────
+  const getQuestDescription = (): string => {
+    if (unlockTarget) {
+      return `Soutenez le projet "${unlockTarget.name}" pour révéler les secrets de cette espèce.`
+    }
+    // Fallback si pas de projet spécifique
     return `Soutenez un projet lié à cet habitat pour débloquer les secrets de cette espèce.`
   }
 
-  // ─── CTA dynamique selon contexte ────────────────────────────────────────────
-  const getCTA = (): { text: string; href: string; show: boolean } => {
-    if (!isLocked) {
-      // Espèce débloquée → Explorer la fiche
-      return {
-        text: '📖 Explorer la fiche',
-        href: `/aventure/biodex/${species.id}`,
-        show: true,
-      }
-    }
+  const questDescription = getQuestDescription()
 
-    // Espèce locked avec projets → Voir les projets
-    if (species.associated_projects && species.associated_projects.length > 0) {
-      return {
-        text: '🌱 Voir les projets',
-        href: '/projets',
-        show: true,
-      }
-    }
+  // ─── Card Content (commun locked/unlocked) ───────────────────────────────────
+  const cardContent = (
+    <CardContent className="p-6 relative">
+      {/* En-tête */}
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
+            {species.image_url ? (
+              <img
+                src={species.image_url}
+                alt=""
+                className={`h-full w-full object-cover transition-all duration-500 ${
+                  isLocked ? 'brightness-0 opacity-40 contrast-125' : ''
+                }`}
+              />
+            ) : (
+              <span className="text-2xl">{isLocked ? '🌿' : '🦋'}</span>
+            )}
+          </div>
+          <div>
+            <h3 className="font-bold text-lg leading-tight tracking-tight line-clamp-1">{species.name_default}</h3>
+            <p className="text-sm text-white/50 italic line-clamp-1">{species.scientific_name}</p>
+          </div>
+        </div>
 
-    // Espèce locked avec challenges → Voir les défis
-    if (species.associated_challenges && species.associated_challenges.length > 0) {
-      return {
-        text: '⚡ Voir les défis',
-        href: '/aventure?tab=defis',
-        show: true,
-      }
-    }
+        {/* Badge rareté */}
+        <span
+          className={cn(
+            'shrink-0 text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border',
+            rarityStyle.badge,
+          )}
+        >
+          {rarityStyle.label}
+        </span>
+      </div>
 
-    // Espèce locked sans action spécifique → Pas de bouton
-    return {
-      text: '',
-      href: '',
-      show: false,
-    }
+      {/* Description / Quête */}
+      {isLocked ? (
+        <div className="mb-4">
+          <p className="text-sm text-muted-foreground leading-relaxed min-h-[3rem]">
+            {questDescription}
+          </p>
+        </div>
+      ) : (
+        <p className="text-sm text-slate-300 mb-4 line-clamp-3 min-h-[3rem] leading-relaxed">
+          {species.description_default}
+        </p>
+      )}
+
+      {/* Projets associés (unlocked uniquement) */}
+      {!isLocked && species.associated_projects && species.associated_projects.length > 0 && (
+        <div className="mb-4">
+          <div className="flex flex-wrap gap-1.5">
+            {species.associated_projects.slice(0, 3).map((project) => (
+              <Link key={project.id} href={`/projects/${project.id}`}>
+                <span className="text-xs font-medium px-3 py-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 hover:border-white/20 cursor-pointer transition-all active:scale-95">
+                  {project.name}
+                </span>
+              </Link>
+            ))}
+            {species.associated_projects.length > 3 && (
+              <span className="text-xs font-medium px-3 py-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground">
+                +{species.associated_projects.length - 3}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* CTA pour unlocked */}
+      {!isLocked && (
+        <div className="flex mt-auto pt-2">
+          <Button
+            asChild
+            className="w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-500 border border-lime-500/20 shadow-none font-medium transition-all active:scale-95"
+          >
+            <Link href={`/aventure/biodex/${species.id}`}>📖 Explorer la fiche</Link>
+          </Button>
+        </div>
+      )}
+
+      {/* Indicateur interactivité (locked avec quête) */}
+      {isLocked && unlockTarget && (
+        <div className="absolute bottom-4 right-4 flex items-center gap-1 text-white/30">
+          <Lock className="w-3 h-3" />
+          <ChevronRight className="w-4 h-4" />
+        </div>
+      )}
+    </CardContent>
+  )
+
+  // ─── Rendu : Card Cliquable (Locked) ou Card Standard (Unlocked) ────────────
+  if (isLocked && unlockTarget) {
+    // LOCKED avec quête : Card entière cliquable → Redirection ciblée
+    return (
+      <Link href={`/projets/${unlockTarget.slug}`} className="block">
+        <Card
+          className={cn(
+            'group relative overflow-hidden rounded-3xl border bg-background/50 hover:bg-background/80 transition-all duration-300 cursor-pointer',
+            rarityStyle.border,
+            rarityStyle.halo,
+            'hover:scale-[1.01] active:scale-[0.98]',
+          )}
+        >
+          {cardContent}
+        </Card>
+      </Link>
+    )
   }
 
-  const lockedDescription = getLockedDescription()
-  const cta = getCTA()
-
+  // UNLOCKED ou LOCKED sans quête : Card standard
   return (
     <Card
       className={cn(
         'group relative overflow-hidden rounded-3xl border bg-background/50 hover:bg-background/80 transition-all duration-300',
         rarityStyle.border,
         rarityStyle.halo,
-        'hover:scale-[1.01] active:scale-[0.99]',
+        !isLocked && 'hover:scale-[1.01] active:scale-[0.99]',
       )}
     >
-      <CardContent className="p-6">
-        {/* En-tête */}
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
-              {species.image_url ? (
-                <img
-                  src={species.image_url}
-                  alt=""
-                  className={`h-full w-full object-cover transition-all duration-500 ${
-                    isLocked ? 'brightness-0 opacity-40 contrast-125' : ''
-                  }`}
-                />
-              ) : (
-                <span className="text-2xl">{isLocked ? '🌿' : '🦋'}</span>
-              )}
-            </div>
-            <div>
-              <h3 className="font-bold text-lg leading-tight tracking-tight line-clamp-1">{species.name_default}</h3>
-              <p className="text-sm text-white/50 italic line-clamp-1">{species.scientific_name}</p>
-            </div>
-          </div>
-
-          {/* Badge rareté */}
-          <span
-            className={cn(
-              'shrink-0 text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border',
-              rarityStyle.badge,
-            )}
-          >
-            {rarityStyle.label}
-          </span>
-        </div>
-
-        {/* Description dynamique */}
-        {isLocked ? (
-          <p className="text-sm not-italic text-slate-300 mb-4 min-h-[3rem] leading-relaxed">
-            {lockedDescription}
-          </p>
-        ) : (
-          <p className="text-sm text-slate-300 mb-4 line-clamp-3 min-h-[3rem] leading-relaxed">
-            {species.description_default}
-          </p>
-        )}
-
-        {/* Projets associés — SANS le texte "Projets (X)" */}
-        {species.associated_projects && species.associated_projects.length > 0 && (
-          <div className="mb-4">
-            <div className="flex flex-wrap gap-1.5">
-              {species.associated_projects.slice(0, 3).map((project) => (
-                <Link key={project.id} href={`/projects/${project.id}`}>
-                  <span className="text-xs font-medium px-3 py-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 hover:border-white/20 cursor-pointer transition-all active:scale-95">
-                    {project.name}
-                  </span>
-                </Link>
-              ))}
-              {species.associated_projects.length > 3 && (
-                <span className="text-xs font-medium px-3 py-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground">
-                  +{species.associated_projects.length - 3}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Actions conditionnelles — iOS 26.4 style */}
-        {cta.show && (
-          <div className="flex mt-auto pt-2">
-            <Button
-              asChild
-              className={cn(
-                'w-full shadow-none font-medium transition-all active:scale-95',
-                !isLocked
-                  ? 'bg-lime-500/10 hover:bg-lime-500/20 text-lime-500 border border-lime-500/20'
-                  : 'bg-white/10 hover:bg-white/20 text-white border border-white/10',
-              )}
-            >
-              <Link href={cta.href}>{cta.text}</Link>
-            </Button>
-          </div>
-        )}
-      </CardContent>
+      {cardContent}
     </Card>
   )
 }
