@@ -28,7 +28,7 @@ export function AdventureTabs() {
   return (
     <>
       {/* Desktop: sticky top tab bar */}
-      <div className="hidden md:block sticky top-0 z-50 bg-background/95 backdrop-blur-lg mb-6 -mx-4 sm:-mx-6">
+      <div className="hidden px-4 sm:px-6 md:block sticky top-0 z-50 bg-background/95 backdrop-blur-lg mb-6 -mx-4 sm:-mx-6">
         <div className="flex w-full border-b border-white/5">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id
@@ -54,7 +54,7 @@ export function AdventureTabs() {
 
       {/* iOS 26 mobile: floating segmented control at the bottom, above the bottom nav */}
       <div
-        className="md:hidden fixed left-0 right-0 z-40 flex justify-center px-6"
+        className="md:hidden  fixed left-0 right-0 z-40 flex justify-center px-4 sm:px-6"
         style={{ bottom: 'calc(4rem + env(safe-area-inset-bottom) + 0.75rem)' }}
       >
         <div className="flex w-full max-w-sm items-center rounded-2xl border border-white/10 bg-background/90 backdrop-blur-xl shadow-2xl p-1.5 gap-1">

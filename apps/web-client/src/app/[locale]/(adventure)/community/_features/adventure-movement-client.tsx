@@ -267,7 +267,7 @@ export function AdventureMovementClient({ guilds }: AdventureMovementClientProps
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 pb-24">
       {/* Mes Tribus */}
-      <section className="space-y-4">
+      <section className="space-y-4 px-4 sm:px-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight">Mes Tribus</h2>
           <Link href="/aventure/guilds" className="text-sm text-primary font-medium hover:underline">
@@ -299,7 +299,7 @@ export function AdventureMovementClient({ guilds }: AdventureMovementClientProps
       </section>
 
       {/* Impact Global */}
-      <section className="space-y-4 pt-2 border-t border-white/5">
+      <section className="space-y-4 px-4 sm:px-6 pt-2 border-t border-white/5">
         <div className="flex items-center">
           <h2 className="text-xl font-bold tracking-tight">Impact Global</h2>
         </div>

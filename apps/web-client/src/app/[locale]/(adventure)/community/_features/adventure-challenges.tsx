@@ -114,7 +114,7 @@ export async function AdventureChallenges() {
   })
 
   return (
-    <div className="space-y-8 pb-24 animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <div className="gap-8 px-4 sm:px-6 pb-24 animate-in fade-in slide-in-from-bottom-2 duration-500">
       {items.length === 0 ? (
         <div className="flex min-h-[40vh] items-center justify-center rounded-[3rem] border-2 border-dashed bg-muted/20 p-12 text-center">
           <div className="space-y-4">

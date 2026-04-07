@@ -40,7 +40,7 @@ export default async function AdventureHubPage({
 				sidebarUser={sidebarUser}
 				rightRail={<AdventureRightRail variant='default' activeTag='' />}
 			>
-				<div className='px-4 sm:px-6 relative'>
+				<div className='relative'>
 					<Suspense fallback={null}>
 						<AdventureTabs />
 					</Suspense>
