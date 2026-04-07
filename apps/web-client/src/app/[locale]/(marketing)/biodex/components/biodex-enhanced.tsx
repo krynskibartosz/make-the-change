@@ -30,9 +30,9 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 
   return (
     <>
-      {/* Hero Section : Progression Collection (épuré, respire) */}
-      <div className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-xl border-b border-white/5 pt-[max(env(safe-area-inset-top),1rem)] pb-4">
-        <div className="w-full max-w-7xl mx-auto px-4">
+      {/* Hero Section : Progression Collection (pas sticky, scroll naturel) */}
+      <div className="w-full bg-background/80 backdrop-blur-xl border-b border-white/5 pt-[max(env(safe-area-inset-top),1rem)] pb-4">
+        <div className="w-full px-2 sm:px-3">
           <div className="rounded-2xl bg-gradient-to-br from-lime-500/10 to-emerald-600/10 border border-lime-500/20 p-5 shadow-lg">
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -85,10 +85,10 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
         </div>
       </div>
 
-      {/* Main Content Area : Cards Espèces (tri automatique) */}
-      <div className="w-full max-w-7xl mx-auto px-4 pb-32 pt-6">
+      {/* Main Content Area : Cards Espèces (utilise tout l'espace horizontal) */}
+      <div className="w-full px-2 sm:px-3 pb-32 pt-6">
         {sortedSpecies.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {sortedSpecies.map((item) => (
               <SpeciesCardEnhanced key={item.id} species={item} />
             ))}
