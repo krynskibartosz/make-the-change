@@ -24,6 +24,7 @@ type ImpactEvent = {
 	avatar?: string
 	time: string
 	action: string
+	actionHighlight?: string
 	likes: number
 	bravos: number
 	avatarColor: string
@@ -88,6 +89,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		profileId: 'thomas-m',
 		time: 'Il y a 2 min',
 		action: '🌱 Vient de soutenir le projet Forêt Méditerranéenne',
+		actionHighlight: 'Forêt Méditerranéenne',
 		likes: 24,
 		bravos: 8,
 		avatarColor: 'bg-blue-500/20 text-blue-400',
@@ -194,19 +196,50 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 
 // ─── Borderless Impact Post ───────────────────────────────────────────────────
 
-function ImpactAction({ event }: { event: ImpactEvent }) {
-	if (!event.tribeSlug || !event.tribeName || !event.action.includes(event.tribeName)) {
-		return <>{event.action}</>
+function splitAction(action: string) {
+	const firstSpace = action.indexOf(' ')
+
+	if (firstSpace === -1) {
+		return { emoji: '', text: action }
 	}
 
-	const [before, after] = event.action.split(event.tribeName)
+	return {
+		emoji: action.slice(0, firstSpace),
+		text: action.slice(firstSpace + 1),
+	}
+}
+
+function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
+	if (
+		!event.tribeSlug ||
+		!event.tribeName ||
+		!text.includes(event.tribeName)
+	) {
+		if (!event.actionHighlight || !text.includes(event.actionHighlight)) {
+			return <>{text}</>
+		}
+
+		const [before, after] = text.split(event.actionHighlight)
+
+		return (
+			<>
+				{before}
+				<strong className='font-semibold text-white'>
+					{event.actionHighlight}
+				</strong>
+				{after}
+			</>
+		)
+	}
+
+	const [before, after] = text.split(event.tribeName)
 
 	return (
 		<>
 			{before}
 			<Link
 				href={`/community/guilds/${event.tribeSlug}`}
-				className='font-semibold text-lime-400 active:opacity-50 transition-opacity'
+				className='font-semibold text-white active:opacity-50 transition-opacity'
 			>
 				{event.tribeName}
 			</Link>
@@ -224,11 +257,11 @@ function ImpactCard({ event }: { event: ImpactEvent }) {
 	}, [])
 
 	const isTribe = event.isTribe === true
-	const timeLabel = isTribe ? `Tribu • ${event.time}` : event.time
 	const headerHref =
 		isTribe && event.tribeSlug
 			? `/community/guilds/${event.tribeSlug}`
 			: `/profile/${event.profileId}`
+	const action = splitAction(event.action)
 
 	return (
 		<div className='py-5 border-b border-white/5 last:border-b-0'>
@@ -249,23 +282,20 @@ function ImpactCard({ event }: { event: ImpactEvent }) {
 				>
 					{event.name[0]}
 				</div>
-				<div className='flex flex-col min-w-0'>
-					<span className='font-semibold text-sm text-foreground leading-none truncate'>
+				<div className='flex items-center gap-1.5 min-w-0 flex-wrap'>
+					<span className='font-bold text-white text-[15px] tracking-tight truncate'>
 						{event.name}
 					</span>
-					<span
-						className={cn(
-							'text-xs mt-1',
-							isTribe ? 'text-lime-500/80' : 'text-muted-foreground'
-						)}
-					>
-						{timeLabel}
-					</span>
+					<span className='text-muted-foreground text-xs'>·</span>
+					<span className='text-muted-foreground text-xs'>{event.time}</span>
 				</div>
 			</Link>
 
-			<p className='text-sm font-normal text-foreground/80 leading-relaxed mb-3'>
-				<ImpactAction event={event} />
+			<p className='text-[15px] text-white/70 leading-snug mt-1 mb-3 flex items-start gap-2'>
+				{action.emoji && <span>{action.emoji}</span>}
+				<span>
+					<ImpactAction event={event} text={action.text} />
+				</span>
 			</p>
 
 			<div className='flex items-center gap-2'>
@@ -285,7 +315,7 @@ function ImpactCard({ event }: { event: ImpactEvent }) {
 						)}
 					/>
 					Bravo{' '}
-					<span className='opacity-60 font-normal ml-1'>
+					<span className='text-sm font-medium tabular-nums opacity-60 ml-1'>
 						{event.bravos + (bravo ? 1 : 0)}
 					</span>
 				</button>
@@ -354,10 +384,10 @@ function TribeCard({ guild }: { guild: Guild }) {
 				<div className='relative z-20 mt-auto px-3 pb-3 space-y-2'>
 					{/* Name + member count */}
 					<div>
-						<p className='text-sm font-bold text-white leading-tight line-clamp-1'>
+						<p className='text-base font-bold text-white tracking-tight leading-tight line-clamp-1'>
 							{guild.name}
 						</p>
-						<p className='text-xs text-white/70 flex items-center gap-1 mt-0.5'>
+						<p className='text-[12px] font-medium text-white/80 mt-1 flex items-center gap-1'>
 							<Users className='h-3 w-3' />
 							{(guild.members_count || 0).toLocaleString()} membres
 						</p>
@@ -410,7 +440,7 @@ export function AdventureMovementClient({
 			{/* Mes Tribus */}
 			<section className='space-y-4 px-4 sm:px-6'>
 				<div className='flex items-center justify-between'>
-					<h2 className='text-xl font-bold tracking-tight'>
+					<h2 className='text-xl font-bold tracking-tight text-white'>
 						{userTribes.length > 0 ? 'Mes Tribus' : 'Tribus à découvrir'}
 					</h2>
 					{userTribes.length > 3 && (
@@ -427,16 +457,20 @@ export function AdventureMovementClient({
 					className='flex overflow-x-auto gap-4 pb-4 pr-2 sm:mx-0 snap-x snap-mandatory hide-scrollbar'
 					style={{ paddingLeft: 'max(1rem, env(safe-area-inset-left))' }}
 				>
-					{(userTribes.length > 0 ? userTribes : discoveryTribes).map((guild) => (
-						<TribeCard key={guild.id} guild={guild} />
-					))}
+					{(userTribes.length > 0 ? userTribes : discoveryTribes).map(
+						(guild) => (
+							<TribeCard key={guild.id} guild={guild} />
+						)
+					)}
 				</div>
 			</section>
 
 			{/* Impact Global */}
 			<section className='space-y-0 px-4 sm:px-6 pt-2 border-t border-white/5'>
 				<div className='flex items-center mb-4'>
-					<h2 className='text-xl font-bold tracking-tight'>Impact Global</h2>
+					<h2 className='text-xl font-bold tracking-tight text-white'>
+						Impact Global
+					</h2>
 				</div>
 				<div className='relative z-0 w-full'>
 					{MOCK_IMPACT_FEED.map((event) => (

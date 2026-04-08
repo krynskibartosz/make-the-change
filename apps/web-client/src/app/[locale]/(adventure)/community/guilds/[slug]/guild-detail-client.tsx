@@ -32,6 +32,7 @@ type ImpactEvent = {
 	avatarColor: string
 	time: string
 	action: string
+	actionHighlight?: string
 	bravos: number
 }
 
@@ -50,6 +51,65 @@ function getSocialAvatarPlaceholder(index: number) {
 	return (
 		SOCIAL_AVATAR_PLACEHOLDERS[index] ??
 		'https://source.unsplash.com/random/100x100/?portrait'
+	)
+}
+
+function getMemberInitials(name?: string | null) {
+	const parts = name?.trim().split(/\s+/).filter(Boolean) ?? []
+
+	if (parts.length === 0) {
+		return 'M'
+	}
+
+	return parts
+		.slice(0, 2)
+		.map((part) => part.charAt(0))
+		.join('')
+		.toUpperCase()
+}
+
+function MemberStackAvatar({
+	member,
+	index,
+	total,
+}: {
+	member: GuildDetailMember
+	index: number
+	total: number
+}) {
+	const [imageFailed, setImageFailed] = useState(false)
+	const avatarUrl = member.avatar_url ?? getSocialAvatarPlaceholder(index)
+	const className = cn(
+		'h-8 w-8 rounded-full border-2 border-background bg-muted shadow-sm',
+		index > 0 && '-ml-2'
+	)
+	const style = { zIndex: total - index }
+
+	if (!imageFailed && avatarUrl) {
+		return (
+			<img
+				src={avatarUrl}
+				alt={
+					member.full_name ? `Avatar de ${member.full_name}` : 'Portrait de membre'
+				}
+				className={cn(className, 'object-cover')}
+				style={style}
+				onError={() => setImageFailed(true)}
+			/>
+		)
+	}
+
+	return (
+		<div
+			className={cn(
+				className,
+				'flex items-center justify-center text-[10px] font-bold text-white bg-white/10'
+			)}
+			style={style}
+			aria-label={member.full_name ? `Avatar de ${member.full_name}` : 'Membre'}
+		>
+			{getMemberInitials(member.full_name)}
+		</div>
 	)
 }
 
@@ -86,6 +146,7 @@ const buildFeed = (
 			avatarColor: 'bg-purple-500/20 text-purple-400',
 			time: 'Il y a 3 min',
 			action: `👋 Vient de rejoindre ${guildName}`,
+			actionHighlight: guildName,
 			bravos: 4,
 		},
 		{
@@ -125,12 +186,44 @@ const buildFeed = (
 
 // ─── Impact Feed Card ─────────────────────────────────────────────────────────
 
+function splitAction(action: string) {
+	const firstSpace = action.indexOf(' ')
+
+	if (firstSpace === -1) {
+		return { emoji: '', text: action }
+	}
+
+	return {
+		emoji: action.slice(0, firstSpace),
+		text: action.slice(firstSpace + 1),
+	}
+}
+
+function ImpactEventAction({ event, text }: { event: ImpactEvent; text: string }) {
+	if (!event.actionHighlight || !text.includes(event.actionHighlight)) {
+		return <>{text}</>
+	}
+
+	const [before, after] = text.split(event.actionHighlight)
+
+	return (
+		<>
+			{before}
+			<strong className='font-semibold text-white'>
+				{event.actionHighlight}
+			</strong>
+			{after}
+		</>
+	)
+}
+
 function ImpactEventCard({ event }: { event: ImpactEvent }) {
 	const [bravo, setBravo] = useState(false)
 	const handleBravo = useCallback(() => {
 		navigator.vibrate?.(10)
 		setBravo((p) => !p)
 	}, [])
+	const action = splitAction(event.action)
 
 	return (
 		<div className='border-b border-white/5 pb-4 mb-4 last:mb-0 last:border-0'>
@@ -138,7 +231,7 @@ function ImpactEventCard({ event }: { event: ImpactEvent }) {
 				<Link
 					href={`/profile/${event.userId}`}
 					prefetch={false}
-					className='inline-flex max-w-full items-center gap-3 active:opacity-70 transition-opacity'
+					className='inline-flex max-w-full items-center gap-3 active:opacity-50 transition-opacity'
 				>
 					{event.avatarUrl ? (
 						<img
@@ -156,11 +249,12 @@ function ImpactEventCard({ event }: { event: ImpactEvent }) {
 							{event.name[0]}
 						</div>
 					)}
-					<div className='flex min-w-0 items-baseline gap-1.5 flex-wrap'>
-						<span className='font-semibold text-sm text-foreground'>
+					<div className='flex items-center gap-1.5 min-w-0 flex-wrap'>
+						<span className='font-bold text-white text-[15px] tracking-tight'>
 							{event.name}
 						</span>
-						<span className='text-xs text-muted-foreground'>{event.time}</span>
+						<span className='text-muted-foreground text-xs'>·</span>
+						<span className='text-muted-foreground text-xs'>{event.time}</span>
 					</div>
 				</Link>
 			) : (
@@ -173,16 +267,20 @@ function ImpactEventCard({ event }: { event: ImpactEvent }) {
 					>
 						{event.name[0]}
 					</div>
-					<div className='flex min-w-0 items-baseline gap-1.5 flex-wrap'>
-						<span className='font-semibold text-sm text-foreground'>
+					<div className='flex items-center gap-1.5 min-w-0 flex-wrap'>
+						<span className='font-bold text-white text-[15px] tracking-tight'>
 							{event.name}
 						</span>
-						<span className='text-xs text-muted-foreground'>{event.time}</span>
+						<span className='text-muted-foreground text-xs'>·</span>
+						<span className='text-muted-foreground text-xs'>{event.time}</span>
 					</div>
 				</div>
 			)}
-			<p className='ml-11 text-sm text-foreground/75 leading-relaxed mt-0.5'>
-				{event.action}
+			<p className='ml-11 text-[15px] text-white/70 leading-snug mt-1 flex items-start gap-2'>
+				{action.emoji && <span>{action.emoji}</span>}
+				<span>
+					<ImpactEventAction event={event} text={action.text} />
+				</span>
 			</p>
 			<button
 				onClick={handleBravo}
@@ -193,7 +291,7 @@ function ImpactEventCard({ event }: { event: ImpactEvent }) {
 			>
 				<Leaf className={cn('h-4 w-4', bravo && 'fill-lime-400')} />
 				Bravo{' '}
-				<span className='opacity-60 font-normal ml-1'>
+				<span className='text-sm font-medium tabular-nums opacity-60 ml-1'>
 					{event.bravos + (bravo ? 1 : 0)}
 				</span>
 			</button>
@@ -311,32 +409,32 @@ export function GuildDetailClient({
 			</div>
 
 			{/* ── B. MISSION DU MOIS — Le Raid Boss ───────────────────── */}
-			<div className='mx-4 mt-4 rounded-3xl bg-lime-950/40 border border-lime-500/20 p-5'>
+			<div className='mx-4 mt-4 rounded-3xl bg-gradient-to-br from-emerald-950/60 to-background border border-emerald-500/20 shadow-lg shadow-emerald-900/20 p-5'>
 				{activeMission ? (
 					<>
 						<div className='flex items-center gap-2 mb-1'>
-							<span className='text-[10px] font-bold uppercase tracking-wider text-lime-400'>
+							<span className='text-lime-400 font-bold text-[11px] tracking-widest uppercase'>
 								⚔️ MISSION D'AVRIL
 							</span>
 						</div>
-						<p className='text-lg font-bold text-white mb-3'>
+						<p className='text-xl font-bold tracking-tight text-white mb-4'>
 							La Forêt Vivante
 						</p>
 
 						{/* Jauge — progression à gauche, % à droite */}
 						<div className='flex justify-between items-center mb-2'>
-							<span className='text-xs font-medium text-white/75'>
+							<span className='tabular-nums text-sm font-medium text-white/75'>
 								{activeMission.goal_current.toLocaleString()} /{' '}
 								{activeMission.goal_target.toLocaleString()}{' '}
 								{activeMission.goal_unit}
 							</span>
-							<span className='text-xs font-bold text-lime-400 tabular-nums'>
+							<span className='tabular-nums text-sm font-medium text-lime-400'>
 								{missionPercent}%
 							</span>
 						</div>
-						<div className='h-1.5 w-full bg-white/20 rounded-full overflow-hidden mb-4'>
+						<div className='h-3 w-full bg-white/10 rounded-full overflow-hidden mb-2'>
 							<div
-								className='h-full bg-lime-400 rounded-full transition-all duration-700'
+								className='h-full bg-lime-500 rounded-full transition-all duration-700'
 								style={{ width: `${missionPercent}%` }}
 							/>
 						</div>
@@ -352,10 +450,10 @@ export function GuildDetailClient({
 								<Lock className='absolute right-1 bottom-1 w-3 h-3 text-white/40' />
 							</div>
 							<div>
-								<p className='text-xs text-muted-foreground'>
+								<p className='text-[11px] text-muted-foreground uppercase tracking-wider'>
 									Récompense si mission accomplie
 								</p>
-								<p className='text-sm font-semibold text-white'>
+								<p className='text-sm font-bold text-white'>
 									{activeMission.reward_species_name}
 								</p>
 							</div>
@@ -389,26 +487,18 @@ export function GuildDetailClient({
 				<Link
 					href={`/community/guilds/${guildSlug}/members`}
 					prefetch={false}
-					className='flex items-center w-full active:opacity-70 active:scale-[0.99] transition-all'
+					className='flex items-center w-full active:opacity-50 active:scale-[0.99] transition-all'
 				>
 					<div className='flex min-w-0 flex-1 items-center gap-3 px-1'>
 						{/* Avatar stack */}
 						{socialAvatarStack.length > 0 && (
 							<div className='flex shrink-0'>
 								{socialAvatarStack.map((member, i) => (
-									<img
+									<MemberStackAvatar
 										key={member.user_id}
-										src={member.avatar_url ?? getSocialAvatarPlaceholder(i)}
-										alt={
-											member.full_name
-												? `Avatar de ${member.full_name}`
-												: 'Portrait de membre'
-										}
-										className={cn(
-											'h-8 w-8 rounded-full border-2 border-background object-cover bg-muted shadow-sm',
-											i > 0 && '-ml-2'
-										)}
-										style={{ zIndex: socialAvatarStack.length - i }}
+										member={member}
+										index={i}
+										total={socialAvatarStack.length}
 									/>
 								))}
 							</div>
@@ -429,7 +519,7 @@ export function GuildDetailClient({
 
 			{/* ── D. FLUX D'IMPACT LOCAL ───────────────────────────────── */}
 			<div className='mx-4 mt-5 pb-28'>
-				<h2 className='text-base font-bold tracking-tight mb-3 text-foreground/90'>
+				<h2 className='text-xl font-bold tracking-tight text-white mb-3'>
 					Activité de la tribu
 				</h2>
 				<div>
