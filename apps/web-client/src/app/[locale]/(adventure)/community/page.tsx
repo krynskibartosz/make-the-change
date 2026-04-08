@@ -47,7 +47,7 @@ export default async function AdventureHubPage({
 
 						<Suspense
 							fallback={
-								<div className='h-[40vh] flex flex-col gap-4 items-center justify-center animate-pulse text-muted-foreground'>
+								<div className='h-[40vh] w-full flex flex-col gap-4 items-center justify-center animate-pulse text-muted-foreground'>
 									<div className='h-10 w-10 rounded-full border-4 border-lime-400 border-t-transparent animate-spin' />
 									<p className='font-medium'>Chargement de votre aventure...</p>
 								</div>
