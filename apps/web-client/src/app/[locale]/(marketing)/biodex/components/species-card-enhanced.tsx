@@ -89,15 +89,14 @@ export function SpeciesCardEnhanced({
 		species.name_default
 	)
 
-	const shouldRedirectToProject =
-		species.associated_projects && species.associated_projects.length === 1
+	const associatedProjects = species.associated_projects ?? []
+	const associatedProject =
+		associatedProjects.length === 1 ? associatedProjects[0] : null
 
-	const unlockTarget = shouldRedirectToProject
+	const unlockTarget = associatedProject
 		? {
 				type: 'project' as const,
-				slug:
-					species.associated_projects[0].slug ||
-					species.associated_projects[0].id,
+				slug: associatedProject.id,
 			}
 		: null
 
@@ -107,7 +106,7 @@ export function SpeciesCardEnhanced({
 				'relative flex flex-col p-3 aspect-[4/5] w-full overflow-hidden rounded-3xl border',
 				'transition-transform duration-150 active:scale-[0.97]',
 				isLocked
-					? 'bg-black/40 border-transparent'
+					? 'bg-white/5 border-white/5'
 					: 'bg-background/50 border-white/5'
 			)}
 		>
@@ -130,19 +129,18 @@ export function SpeciesCardEnhanced({
 			</div>
 
 			{/* Middle: visual area (flex-1) */}
-			<div className='flex-1 rounded-2xl overflow-hidden relative flex items-center justify-center'>
+			<div
+				className={cn(
+					'flex-1 rounded-2xl overflow-hidden relative flex items-center justify-center',
+					isLocked && 'bg-white/5 border border-white/5'
+				)}
+			>
 				{isLocked ? (
-					/* "Ombre Chinoise" — emoji silhouette */
-					<span
-						className='text-6xl select-none'
-						style={{ filter: 'brightness(0.15)', opacity: 0.25 }}
-					>
-						<img
-							src={'/images/diorama-chouette.png'}
-							alt={species.name_default}
-							className='h-full w-full object-cover'
-						/>
-					</span>
+					<img
+						src={'/images/diorama-chouette.png'}
+						alt={species.name_default}
+						className='h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px] transition-all duration-700'
+					/>
 				) : true ? (
 					<img
 						src={'/images/diorama-chouette.png'}

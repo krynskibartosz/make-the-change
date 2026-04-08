@@ -60,7 +60,7 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 			</div>
 
 			{/* Main Content Area : 2-column trading card grid */}
-			<div className='w-full px-4 pb-24 pt-2'>
+			<div className='w-full px-4 pb-36 pt-2'>
 				{sortedSpecies.length > 0 ? (
 					<div className='grid grid-cols-2 gap-3'>
 						{sortedSpecies.map((item) => (

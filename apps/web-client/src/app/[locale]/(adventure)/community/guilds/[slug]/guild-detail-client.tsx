@@ -1,7 +1,7 @@
 'use client'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { ArrowLeft, Leaf, Lock, Users } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Leaf, Lock, Users } from 'lucide-react'
 import { useState, useCallback } from 'react'
 import { GuildMembershipButton } from '../_features/guild-membership-button'
 
@@ -26,7 +26,9 @@ export type GuildDetailMember = {
 
 type ImpactEvent = {
 	id: string
+	userId?: string
 	name: string
+	avatarUrl?: string | null
 	avatarColor: string
 	time: string
 	action: string
@@ -42,6 +44,8 @@ const SOCIAL_AVATAR_PLACEHOLDERS = Array.from(
 const GUILD_LOGO_PLACEHOLDER =
 	'https://source.unsplash.com/random/200x200/?nature,logo'
 
+const BIODEX_REWARD_IMAGE_URL = '/images/diorama-chouette.png'
+
 function getSocialAvatarPlaceholder(index: number) {
 	return (
 		SOCIAL_AVATAR_PLACEHOLDERS[index] ??
@@ -51,48 +55,73 @@ function getSocialAvatarPlaceholder(index: number) {
 
 // ─── Mock System Feed ─────────────────────────────────────────────────────────
 
-const buildFeed = (guildName: string): ImpactEvent[] => [
-	{
-		id: 'f1',
-		name: 'Sarah L.',
-		avatarColor: 'bg-purple-500/20 text-purple-400',
-		time: 'Il y a 3 min',
-		action: `👋 Vient de rejoindre ${guildName}`,
-		bravos: 4,
-	},
-	{
-		id: 'f2',
-		name: 'Thomas M.',
-		avatarColor: 'bg-blue-500/20 text-blue-400',
-		time: 'Il y a 18 min',
-		action: `🌱 A fait gagner 150 pts à la tribu avec un don`,
-		bravos: 11,
-	},
-	{
-		id: 'f3',
-		name: 'ÉcoGuerrier',
-		avatarColor: 'bg-lime-500/20 text-lime-400',
-		time: 'Il y a 2 heures',
-		action: `🏆 La tribu vient de franchir 50% de son objectif mensuel !`,
-		bravos: 38,
-	},
-	{
-		id: 'f4',
-		name: 'Marie-Claire B.',
-		avatarColor: 'bg-rose-500/20 text-rose-400',
-		time: 'Hier',
-		action: `🦋 A débloqué une espèce grâce à la tribu`,
-		bravos: 22,
-	},
-	{
-		id: 'f5',
-		name: 'Lucas V.',
-		avatarColor: 'bg-emerald-500/20 text-emerald-400',
-		time: 'Hier',
-		action: `🌍 A soutenu un projet lié à la mission de la tribu`,
-		bravos: 16,
-	},
-]
+const getFeedMember = (
+	members: GuildDetailMember[],
+	index: number,
+	fallbackName: string
+) => {
+	const member = members[index]
+
+	return {
+		userId: member?.user_id,
+		name: member?.full_name || fallbackName,
+		avatarUrl: member?.avatar_url ?? null,
+	}
+}
+
+const buildFeed = (
+	guildName: string,
+	members: GuildDetailMember[]
+): ImpactEvent[] => {
+	const sarah = getFeedMember(members, 0, 'Sarah L.')
+	const thomas = getFeedMember(members, 1, 'Thomas M.')
+	const ecoGuerrier = getFeedMember(members, 2, 'ÉcoGuerrier')
+	const marieClaire = getFeedMember(members, 3, 'Marie-Claire B.')
+	const lucas = getFeedMember(members, 4, 'Lucas V.')
+
+	return [
+		{
+			id: 'f1',
+			...sarah,
+			avatarColor: 'bg-purple-500/20 text-purple-400',
+			time: 'Il y a 3 min',
+			action: `👋 Vient de rejoindre ${guildName}`,
+			bravos: 4,
+		},
+		{
+			id: 'f2',
+			...thomas,
+			avatarColor: 'bg-blue-500/20 text-blue-400',
+			time: 'Il y a 18 min',
+			action: `🌱 A fait gagner 150 pts à la tribu avec un don`,
+			bravos: 11,
+		},
+		{
+			id: 'f3',
+			...ecoGuerrier,
+			avatarColor: 'bg-lime-500/20 text-lime-400',
+			time: 'Il y a 2 heures',
+			action: `🏆 La tribu vient de franchir 50% de son objectif mensuel !`,
+			bravos: 38,
+		},
+		{
+			id: 'f4',
+			...marieClaire,
+			avatarColor: 'bg-rose-500/20 text-rose-400',
+			time: 'Hier',
+			action: `🦋 A débloqué une espèce grâce à la tribu`,
+			bravos: 22,
+		},
+		{
+			id: 'f5',
+			...lucas,
+			avatarColor: 'bg-emerald-500/20 text-emerald-400',
+			time: 'Hier',
+			action: `🌍 A soutenu un projet lié à la mission de la tribu`,
+			bravos: 16,
+		},
+	]
+}
 
 // ─── Impact Feed Card ─────────────────────────────────────────────────────────
 
@@ -104,35 +133,69 @@ function ImpactEventCard({ event }: { event: ImpactEvent }) {
 	}, [])
 
 	return (
-		<div className='flex items-start gap-3 border-b border-white/5 pb-4 mb-4 last:mb-0 last:border-0'>
-			<div
-				className={cn(
-					'h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold border border-white/10',
-					event.avatarColor
-				)}
-			>
-				{event.name[0]}
-			</div>
-			<div className='flex-1 min-w-0'>
-				<div className='flex items-baseline gap-1.5 flex-wrap'>
-					<span className='font-semibold text-sm text-foreground'>
-						{event.name}
-					</span>
-					<span className='text-xs text-muted-foreground'>{event.time}</span>
+		<div className='border-b border-white/5 pb-4 mb-4 last:mb-0 last:border-0'>
+			{event.userId ? (
+				<Link
+					href={`/profile/${event.userId}`}
+					prefetch={false}
+					className='inline-flex max-w-full items-center gap-3 active:opacity-70 transition-opacity'
+				>
+					{event.avatarUrl ? (
+						<img
+							src={event.avatarUrl}
+							alt={`Avatar de ${event.name}`}
+							className='h-8 w-8 shrink-0 rounded-full object-cover border border-white/10'
+						/>
+					) : (
+						<div
+							className={cn(
+								'h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold border border-white/10',
+								event.avatarColor
+							)}
+						>
+							{event.name[0]}
+						</div>
+					)}
+					<div className='flex min-w-0 items-baseline gap-1.5 flex-wrap'>
+						<span className='font-semibold text-sm text-foreground'>
+							{event.name}
+						</span>
+						<span className='text-xs text-muted-foreground'>{event.time}</span>
+					</div>
+				</Link>
+			) : (
+				<div className='inline-flex max-w-full items-center gap-3'>
+					<div
+						className={cn(
+							'h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold border border-white/10',
+							event.avatarColor
+						)}
+					>
+						{event.name[0]}
+					</div>
+					<div className='flex min-w-0 items-baseline gap-1.5 flex-wrap'>
+						<span className='font-semibold text-sm text-foreground'>
+							{event.name}
+						</span>
+						<span className='text-xs text-muted-foreground'>{event.time}</span>
+					</div>
 				</div>
-				<p className='text-sm text-foreground/75 leading-relaxed mt-0.5'>
-					{event.action}
-				</p>
-			</div>
+			)}
+			<p className='ml-11 text-sm text-foreground/75 leading-relaxed mt-0.5'>
+				{event.action}
+			</p>
 			<button
 				onClick={handleBravo}
 				className={cn(
-					'shrink-0 flex items-center gap-1 text-xs px-2 py-1 rounded-full transition-colors hover:bg-white/5',
+					'ml-11 mt-3 flex items-center gap-1.5 text-xs font-semibold tracking-wide px-3 py-1.5 rounded-full transition-colors hover:bg-white/5',
 					bravo ? 'text-lime-400' : 'text-muted-foreground hover:text-lime-400'
 				)}
 			>
-				<Leaf className={cn('h-3 w-3', bravo && 'fill-lime-400')} />
-				<span>{event.bravos + (bravo ? 1 : 0)}</span>
+				<Leaf className={cn('h-4 w-4', bravo && 'fill-lime-400')} />
+				Bravo{' '}
+				<span className='opacity-60 font-normal ml-1'>
+					{event.bravos + (bravo ? 1 : 0)}
+				</span>
 			</button>
 		</div>
 	)
@@ -157,6 +220,7 @@ interface GuildDetailClientProps {
 export function GuildDetailClient({
 	guildId,
 	guildName,
+	guildSlug,
 	description,
 	bannerUrl,
 	logoUrl,
@@ -165,7 +229,7 @@ export function GuildDetailClient({
 	activeMission,
 	members,
 }: GuildDetailClientProps) {
-	const feed = buildFeed(guildName)
+	const feed = buildFeed(guildName, members)
 
 	const missionPercent = activeMission
 		? Math.min(
@@ -279,11 +343,11 @@ export function GuildDetailClient({
 
 						{/* Récompense — silhouette mystère */}
 						<div className='flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2 mb-4 border border-white/10'>
-							<div className='relative w-12 h-12 rounded-xl bg-black/50 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden'>
+							<div className='relative w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden'>
 								<img
-									src='/images/diorama-chouette.png'
+									src={BIODEX_REWARD_IMAGE_URL}
 									alt='Récompense mystère'
-									className='object-contain w-full h-full brightness-0 opacity-50 drop-shadow-md'
+									className='object-cover w-full h-full brightness-0 opacity-50'
 								/>
 								<Lock className='absolute right-1 bottom-1 w-3 h-3 text-white/40' />
 							</div>
@@ -321,37 +385,46 @@ export function GuildDetailClient({
 			</div>
 
 			{/* ── C. PREUVE SOCIALE ────────────────────────────────────── */}
-			<div className='mx-4 mt-4 flex items-center gap-3 px-1'>
-				{/* Avatar stack */}
-				{socialAvatarStack.length > 0 && (
-					<div className='flex'>
-						{socialAvatarStack.map((member, i) => (
-							<img
-								key={member.user_id}
-								src={member.avatar_url ?? getSocialAvatarPlaceholder(i)}
-								alt={
-									member.full_name
-										? `Avatar de ${member.full_name}`
-										: 'Portrait de membre'
-								}
-								className={cn(
-									'h-8 w-8 rounded-full border-2 border-background object-cover bg-muted shadow-sm',
-									i > 0 && '-ml-2'
-								)}
-								style={{ zIndex: socialAvatarStack.length - i }}
-							/>
-						))}
+			<div className='mx-4 mt-4'>
+				<Link
+					href={`/community/guilds/${guildSlug}/members`}
+					prefetch={false}
+					className='flex items-center w-full active:opacity-70 active:scale-[0.99] transition-all'
+				>
+					<div className='flex min-w-0 flex-1 items-center gap-3 px-1'>
+						{/* Avatar stack */}
+						{socialAvatarStack.length > 0 && (
+							<div className='flex shrink-0'>
+								{socialAvatarStack.map((member, i) => (
+									<img
+										key={member.user_id}
+										src={member.avatar_url ?? getSocialAvatarPlaceholder(i)}
+										alt={
+											member.full_name
+												? `Avatar de ${member.full_name}`
+												: 'Portrait de membre'
+										}
+										className={cn(
+											'h-8 w-8 rounded-full border-2 border-background object-cover bg-muted shadow-sm',
+											i > 0 && '-ml-2'
+										)}
+										style={{ zIndex: socialAvatarStack.length - i }}
+									/>
+								))}
+							</div>
+						)}
+						<div className='flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground'>
+							<Users className='h-4 w-4 shrink-0' />
+							<span className='truncate'>
+								<span className='font-bold text-foreground'>
+									{membersCount.toLocaleString()}
+								</span>{' '}
+								membres actifs
+							</span>
+						</div>
 					</div>
-				)}
-				<div className='flex items-center gap-1.5 text-sm text-muted-foreground'>
-					<Users className='h-4 w-4' />
-					<span>
-						<span className='font-bold text-foreground'>
-							{membersCount.toLocaleString()}
-						</span>{' '}
-						membres actifs
-					</span>
-				</div>
+					<ChevronRight className='h-4 w-4 shrink-0 text-muted-foreground' />
+				</Link>
 			</div>
 
 			{/* ── D. FLUX D'IMPACT LOCAL ───────────────────────────────── */}
