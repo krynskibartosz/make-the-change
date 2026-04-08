@@ -40,12 +40,11 @@ export default async function AdventureHubPage({
 				sidebarUser={sidebarUser}
 				rightRail={<AdventureRightRail variant='default' activeTag='' />}
 			>
-				<div className='relative'>
+				<div className='relative w-full'>
 					<Suspense fallback={null}>
 						<AdventureTabs />
 					</Suspense>
 
-					<div className='mt-12 pb-48 md:pb-12'>
 						<Suspense
 							fallback={
 								<div className='h-[40vh] flex flex-col gap-4 items-center justify-center animate-pulse text-muted-foreground'>
@@ -58,7 +57,6 @@ export default async function AdventureHubPage({
 							{activeTab === 'biodex' && <AdventureBiodex />}
 							{activeTab === 'mouvement' && <AdventureMovement />}
 						</Suspense>
-					</div>
 				</div>
 			</AdventurePageFrame>
 		)

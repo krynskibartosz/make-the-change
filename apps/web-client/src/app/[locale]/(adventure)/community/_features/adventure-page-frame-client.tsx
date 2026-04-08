@@ -39,7 +39,7 @@ export function AdventurePageFrameClient({
 
         <main
           className={cn(
-            'flex min-h-screen w-full max-w-[600px] shrink-0 flex-col border-x border-border',
+            'flex  w-full max-w-[600px]  ',
             centerClassName,
           )}
         >

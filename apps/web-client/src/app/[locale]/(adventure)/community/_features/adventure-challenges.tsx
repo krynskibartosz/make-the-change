@@ -133,7 +133,7 @@ export async function AdventureChallenges() {
   })
 
   return (
-    <div className="gap-8 px-4 sm:px-6 pb-24 animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <div className="gap-8 w-full  animate-in fade-in slide-in-from-bottom-2 duration-500">
       {items.length === 0 ? (
         <div className="flex min-h-[40vh] items-center justify-center rounded-[3rem] border-2 border-dashed bg-muted/20 p-12 text-center">
           <div className="space-y-4">
@@ -145,7 +145,7 @@ export async function AdventureChallenges() {
           </div>
         </div>
       ) : (
-        <div className="w-full">
+        <>
           {items.map((c) => {
             const Icon = c.icon
             const unitLabel = c.title.toLowerCase().includes('jour')
@@ -157,7 +157,7 @@ export async function AdventureChallenges() {
             return (
               <div
                 key={c.id}
-                className="w-full px-6 py-5 flex flex-row items-center gap-4 border-b border-white/5 last:border-0 active:bg-white/5 transition-colors cursor-pointer"
+                className="w-full px-4 sm:px-6 py-5 flex flex-row items-center gap-4 border-b border-white/5 last:border-0 active:bg-white/5 transition-colors cursor-pointer"
               >
                 {/* Icône gauche (Squircle) */}
                 <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center bg-white/10 group-hover:bg-lime-500/20 transition-colors">
@@ -217,9 +217,7 @@ export async function AdventureChallenges() {
               </div>
             )
           })}
-        </div>
 
-        {/* Clôture cognitive (UNIQUEMENT si TOUS les défis sont complétés) */}
         {items.every((c) => c.userProgress.isCompleted) ? (
           <p className="text-center text-sm text-muted-foreground mt-8 mb-4">
             Vous êtes à jour ! Revenez demain pour semer de nouvelles graines. 🌱
@@ -227,6 +225,7 @@ export async function AdventureChallenges() {
         ) : (
           <div className="pb-8" />
         )}
+        </>
       )}
     </div>
   )
