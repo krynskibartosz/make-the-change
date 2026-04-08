@@ -79,30 +79,31 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           </div>
         </motion.article>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {/* Card 2: Streak */}
           <motion.article
             variants={itemVariants}
-            className="flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-md"
+            className="flex flex-col gap-2 rounded-3xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md"
           >
-            <div>
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/20 text-orange-400">
-                  <Flame className="h-6 w-6 animate-pulse" />
-                </div>
-                <motion.span
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
-                  className="inline-flex items-center gap-1 rounded-full border border-lime-500/30 bg-lime-500/20 px-2.5 py-1 text-[11px] font-black tracking-wide text-lime-400 shadow-[0_0_12px_rgba(132,204,22,0.25)]"
-                >
-                  +150 Graines 🌱
-                </motion.span>
+            <div className="flex justify-between items-start w-full">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/20 text-orange-400">
+                <Flame className="h-5 w-5 shrink-0 animate-pulse" />
               </div>
-              <h3 className="text-left text-lg font-bold text-white">Série 7 jours</h3>
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
+                className="px-1.5 py-0.5 rounded-full bg-lime-500/10 text-lime-400 text-[10px] font-bold tabular-nums whitespace-nowrap shrink-0"
+              >
+                +150 🌱
+              </motion.div>
+            </div>
 
-              <div className="relative mt-3 h-1.5 w-full">
+            <div className="flex min-w-0 flex-col gap-2">
+              <h3 className="min-w-0 break-words text-left text-sm font-bold leading-tight text-white">Série 7 jours</h3>
+
+              <div className="relative h-1.5 w-full">
                 {/* Track (empty) */}
                 <div className="absolute inset-0 flex gap-1">
                   {[...Array(7)].map((_, i) => (
@@ -132,43 +133,48 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
               </div>
             </div>
 
-            <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-white/60">
-              <span aria-hidden="true">🔥</span> Gardez le rythme au quotidien et gagnez des Graines bonus.
-            </p>
+            <div className="min-w-0">
+              <p className="mt-1 min-w-0 text-[11px] leading-tight text-muted-foreground line-clamp-3 overflow-hidden text-ellipsis">
+                <span aria-hidden="true">🔥</span> Gardez le rythme au quotidien et gagnez des Graines bonus.
+              </p>
+            </div>
           </motion.article>
 
           {/* Card 3: Tribes */}
           <motion.article
             variants={itemVariants}
-            className="flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-md"
+            className="flex flex-col gap-2 rounded-3xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md"
           >
-            <div>
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
-                  <Users className="h-6 w-6" />
-                </div>
-                <div className="flex -space-x-2">
-                  <img
-                    className="h-7 w-7 rounded-full border-2 border-[#1a1f24] object-cover"
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-                    alt="Membre de la tribu"
-                  />
-                  <img
-                    className="h-7 w-7 rounded-full border-2 border-[#1a1f24] object-cover"
-                    src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80"
-                    alt="Membre de la tribu"
-                  />
-                  <div className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#1a1f24] bg-blue-500 text-[9px] font-black text-white shadow-[0_0_12px_rgba(59,130,246,0.4)] ring-1 ring-blue-500/50">
-                    +42
-                  </div>
+            <div className="flex justify-between items-start w-full">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
+                <Users className="h-5 w-5 shrink-0" />
+              </div>
+              <div className="flex shrink-0">
+                <img
+                  className="h-6 w-6 shrink-0 rounded-full border-2 border-[#1a1f24] object-cover"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+                  alt="Membre de la tribu"
+                />
+                <img
+                  className="-ml-2 h-6 w-6 shrink-0 rounded-full border-2 border-[#1a1f24] object-cover"
+                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80"
+                  alt="Membre de la tribu"
+                />
+                <div className="relative z-10 -ml-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-[#1a1f24] bg-blue-500 text-[8px] font-black text-white shadow-[0_0_12px_rgba(59,130,246,0.4)] ring-1 ring-blue-500/50">
+                  +42
                 </div>
               </div>
-              <h3 className="text-left text-lg font-bold text-white">Agroforest Pioneers</h3>
             </div>
 
-            <p className="mt-auto pt-4 text-left text-xs leading-relaxed text-white/60">
-              <span aria-hidden="true">🤝</span> Atteignez des objectifs communs avec votre tribu.
-            </p>
+            <div className="min-w-0">
+              <h3 className="min-w-0 break-words text-left text-sm font-bold leading-tight text-white">Agroforest Pioneers</h3>
+            </div>
+
+            <div className="min-w-0">
+              <p className="mt-1 min-w-0 text-[11px] leading-tight text-muted-foreground line-clamp-3 overflow-hidden text-ellipsis">
+                <span aria-hidden="true">🤝</span> Atteignez des objectifs communs avec votre tribu.
+              </p>
+            </div>
           </motion.article>
         </div>
 

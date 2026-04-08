@@ -118,6 +118,26 @@ const nextConfig = {
         destination: '/:locale/aventure?tab=biodex',
         permanent: true,
       },
+      {
+        source: '/aventure/guilds',
+        destination: '/community/guilds',
+        permanent: true,
+      },
+      {
+        source: '/aventure/guilds/:slug',
+        destination: '/community/guilds/:slug',
+        permanent: true,
+      },
+      {
+        source: '/:locale/aventure/guilds',
+        destination: '/:locale/community/guilds',
+        permanent: true,
+      },
+      {
+        source: '/:locale/aventure/guilds/:slug',
+        destination: '/:locale/community/guilds/:slug',
+        permanent: true,
+      },
     ]
   },
   async rewrites() {

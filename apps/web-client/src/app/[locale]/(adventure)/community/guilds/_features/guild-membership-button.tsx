@@ -7,13 +7,19 @@ import { useState, useTransition } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from '@/i18n/navigation'
 import { joinGuild, leaveGuild } from '@/lib/social/feed.actions'
+import { cn } from '@/lib/utils'
 
 type GuildMembershipButtonProps = {
   guildId: string
   isMember: boolean
+  className?: string
 }
 
-export function GuildMembershipButton({ guildId, isMember }: GuildMembershipButtonProps) {
+export function GuildMembershipButton({
+  guildId,
+  isMember,
+  className,
+}: GuildMembershipButtonProps) {
   const t = useTranslations('community')
   const { toast } = useToast()
   const router = useRouter()
@@ -23,7 +29,7 @@ export function GuildMembershipButton({ guildId, isMember }: GuildMembershipButt
   const handleToggleMembership = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     startTransition(async () => {
       try {
         if (pendingState) {
@@ -43,7 +49,8 @@ export function GuildMembershipButton({ guildId, isMember }: GuildMembershipButt
         }
         router.refresh()
       } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : t('guilds.membership_error_description')
+        const message =
+          error instanceof Error ? error.message : t('guilds.membership_error_description')
         toast({
           title: t('guilds.membership_error_title'),
           description: message,
@@ -56,7 +63,7 @@ export function GuildMembershipButton({ guildId, isMember }: GuildMembershipButt
   return (
     <Button
       type="button"
-      className="w-full"
+      className={cn('w-full', className)}
       variant={pendingState ? 'outline' : 'default'}
       disabled={isPending}
       onClick={handleToggleMembership}

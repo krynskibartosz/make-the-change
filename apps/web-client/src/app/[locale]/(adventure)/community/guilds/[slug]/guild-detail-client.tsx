@@ -1,7 +1,7 @@
 'use client'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { ArrowLeft, Leaf, Users } from 'lucide-react'
+import { ArrowLeft, Leaf, Lock, Users } from 'lucide-react'
 import { useState, useCallback } from 'react'
 import { GuildMembershipButton } from '../_features/guild-membership-button'
 
@@ -31,6 +31,22 @@ type ImpactEvent = {
 	time: string
 	action: string
 	bravos: number
+}
+
+const SOCIAL_AVATAR_PLACEHOLDERS = Array.from(
+	{ length: 5 },
+	(_, index) =>
+		`https://source.unsplash.com/random/100x100/?portrait&sig=${index + 1}`
+)
+
+const GUILD_LOGO_PLACEHOLDER =
+	'https://source.unsplash.com/random/200x200/?nature,logo'
+
+function getSocialAvatarPlaceholder(index: number) {
+	return (
+		SOCIAL_AVATAR_PLACEHOLDERS[index] ??
+		'https://source.unsplash.com/random/100x100/?portrait'
+	)
 }
 
 // ─── Mock System Feed ─────────────────────────────────────────────────────────
@@ -88,7 +104,7 @@ function ImpactEventCard({ event }: { event: ImpactEvent }) {
 	}, [])
 
 	return (
-		<div className='flex items-start gap-3 py-3 border-b border-white/5 last:border-0'>
+		<div className='flex items-start gap-3 border-b border-white/5 pb-4 mb-4 last:mb-0 last:border-0'>
 			<div
 				className={cn(
 					'h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold border border-white/10',
@@ -141,9 +157,9 @@ interface GuildDetailClientProps {
 export function GuildDetailClient({
 	guildId,
 	guildName,
-	guildSlug,
 	description,
 	bannerUrl,
+	logoUrl,
 	membersCount,
 	isMember,
 	activeMission,
@@ -162,6 +178,15 @@ export function GuildDetailClient({
 
 	// Avatar stack — affiche jusqu'à 5 membres
 	const avatarStack = members.slice(0, 5)
+	const socialAvatarStack =
+		avatarStack.length > 0
+			? avatarStack
+			: SOCIAL_AVATAR_PLACEHOLDERS.map((avatarUrl, index) => ({
+					user_id: `placeholder-${index}`,
+					full_name: null,
+					avatar_url: avatarUrl,
+				}))
+	const guildAvatarUrl = logoUrl ?? GUILD_LOGO_PLACEHOLDER
 
 	return (
 		<div className='flex flex-col min-h-screen bg-background pb-24'>
@@ -191,7 +216,7 @@ export function GuildDetailClient({
 				{/* Back button — floating over the image */}
 				<div className='absolute top-4 left-4 z-20'>
 					<Link
-						href='/aventure/guilds'
+						href='/community/guilds'
 						className='inline-flex items-center gap-1.5 text-sm text-white/90 hover:text-white transition-colors bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10'
 					>
 						<ArrowLeft className='h-4 w-4' />
@@ -200,18 +225,13 @@ export function GuildDetailClient({
 				</div>
 
 				<div className='relative z-10 p-5 pb-6'>
-					{/* Squircle Avatar — vibrant solid background */}
-					<div className='h-14 w-14 rounded-2xl bg-emerald-600 flex items-center justify-center mb-3 overflow-hidden shadow-lg shadow-black/30'>
-						<span className='text-xl font-black text-white'>
-							{guildName[0]}
-						</span>
-					</div>
-
-					{/* Badges */}
-					<div className='flex items-center gap-2 mb-2'>
-						<span className='text-[10px] font-semibold uppercase tracking-widest text-lime-400 bg-lime-400/10 px-2 py-0.5 rounded-full border border-lime-400/20'>
-							Tribu Publique
-						</span>
+					{/* Squircle Avatar */}
+					<div className='h-14 w-14 rounded-2xl border border-white/20 mb-3 overflow-hidden shadow-lg shadow-black/30 bg-black/20'>
+						<img
+							src={guildAvatarUrl}
+							alt={`Avatar de la tribu ${guildName}`}
+							className='h-full w-full object-cover'
+						/>
 					</div>
 
 					<h1 className='text-2xl font-black tracking-tight text-white leading-tight'>
@@ -231,18 +251,19 @@ export function GuildDetailClient({
 				{activeMission ? (
 					<>
 						<div className='flex items-center gap-2 mb-1'>
-							<span className='text-xs font-bold uppercase tracking-widest text-lime-400'>
-								⚔️ {activeMission.title}
+							<span className='text-[10px] font-bold uppercase tracking-wider text-lime-400'>
+								⚔️ MISSION D'AVRIL
 							</span>
 						</div>
-						<p className='text-base font-bold text-white mb-1'>
-							{activeMission.goal_label}
+						<p className='text-lg font-bold text-white mb-3'>
+							La Forêt Vivante
 						</p>
 
-						{/* Jauge — objectif à gauche, % à droite */}
-						<div className='flex justify-between items-center mb-1.5'>
-							<span className='text-xs text-muted-foreground'>
-								🎯 {activeMission.goal_target.toLocaleString()}{' '}
+						{/* Jauge — progression à gauche, % à droite */}
+						<div className='flex justify-between items-center mb-2'>
+							<span className='text-xs font-medium text-white/75'>
+								{activeMission.goal_current.toLocaleString()} /{' '}
+								{activeMission.goal_target.toLocaleString()}{' '}
 								{activeMission.goal_unit}
 							</span>
 							<span className='text-xs font-bold text-lime-400 tabular-nums'>
@@ -258,15 +279,13 @@ export function GuildDetailClient({
 
 						{/* Récompense — silhouette mystère */}
 						<div className='flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2 mb-4 border border-white/10'>
-							{/* Silhouette teasing — emoji verrouillé */}
-							<div className='w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0'>
-								<span
-									className='text-2xl'
-									style={{ filter: 'brightness(0)', opacity: 0.4 }}
-									aria-label='Récompense mystère'
-								>
-									{activeMission.reward_species_emoji}
-								</span>
+							<div className='relative w-12 h-12 rounded-xl bg-black/50 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden'>
+								<img
+									src='/images/diorama-chouette.png'
+									alt='Récompense mystère'
+									className='object-contain w-full h-full brightness-0 opacity-50 drop-shadow-md'
+								/>
+								<Lock className='absolute right-1 bottom-1 w-3 h-3 text-white/40' />
 							</div>
 							<div>
 								<p className='text-xs text-muted-foreground'>
@@ -304,19 +323,23 @@ export function GuildDetailClient({
 			{/* ── C. PREUVE SOCIALE ────────────────────────────────────── */}
 			<div className='mx-4 mt-4 flex items-center gap-3 px-1'>
 				{/* Avatar stack */}
-				{avatarStack.length > 0 && (
+				{socialAvatarStack.length > 0 && (
 					<div className='flex'>
-						{avatarStack.map((member, i) => (
-							<div
+						{socialAvatarStack.map((member, i) => (
+							<img
 								key={member.user_id}
+								src={member.avatar_url ?? getSocialAvatarPlaceholder(i)}
+								alt={
+									member.full_name
+										? `Avatar de ${member.full_name}`
+										: 'Portrait de membre'
+								}
 								className={cn(
-									'h-8 w-8 rounded-full border-2 border-background bg-emerald-600 flex items-center justify-center text-xs font-bold text-white shadow-sm',
+									'h-8 w-8 rounded-full border-2 border-background object-cover bg-muted shadow-sm',
 									i > 0 && '-ml-2'
 								)}
-								style={{ zIndex: avatarStack.length - i }}
-							>
-								{member.full_name?.[0] ?? '?'}
-							</div>
+								style={{ zIndex: socialAvatarStack.length - i }}
+							/>
 						))}
 					</div>
 				)}
@@ -336,7 +359,7 @@ export function GuildDetailClient({
 				<h2 className='text-base font-bold tracking-tight mb-3 text-foreground/90'>
 					Activité de la tribu
 				</h2>
-				<div className='rounded-2xl bg-white/5 border border-white/10 px-4 divide-y-0'>
+				<div>
 					{feed.map((event) => (
 						<ImpactEventCard key={event.id} event={event} />
 					))}
@@ -345,9 +368,27 @@ export function GuildDetailClient({
 
 			{/* ── CTA flottant Rejoindre — glassmorphism (non-membre uniquement) ── */}
 			{!isMember && (
-				<div className='fixed bottom-[var(--navbar-height,80px)] left-0 w-full p-4 bg-background/80 backdrop-blur-xl border-t border-white/5 z-40'>
-					<GuildMembershipButton guildId={guildId} isMember={false} />
-				</div>
+				<>
+					<div
+						className='fixed left-0 w-full p-4 border-t border-white/10 bg-background/55 backdrop-blur-lg z-40 md:hidden'
+						style={{
+							bottom: 'calc(4rem + env(safe-area-inset-bottom))',
+						}}
+					>
+						<GuildMembershipButton
+							guildId={guildId}
+							isMember={false}
+							className='w-full h-12 rounded-full bg-lime-500 text-black font-bold shadow-lg shadow-lime-500/15 [@media(hover:hover)]:hover:bg-lime-400'
+						/>
+					</div>
+					<div className='fixed bottom-0 left-0 w-full p-4 border-t border-white/10 bg-background/55 backdrop-blur-lg z-40 hidden md:block'>
+						<GuildMembershipButton
+							guildId={guildId}
+							isMember={false}
+							className='w-full h-12 rounded-full bg-lime-500 text-black font-bold shadow-lg shadow-lime-500/15 [@media(hover:hover)]:hover:bg-lime-400'
+						/>
+					</div>
+				</>
 			)}
 		</div>
 	)

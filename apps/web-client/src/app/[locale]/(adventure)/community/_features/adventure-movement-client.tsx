@@ -212,7 +212,7 @@ function ImpactCard({ event }: { event: ImpactEvent }) {
 
 				{isTribe && event.tribeSlug && (
 					<Link
-						href={`/aventure/guilds/${event.tribeSlug}`}
+						href={`/community/guilds/${event.tribeSlug}`}
 						className='flex items-center gap-1 text-xs font-semibold text-lime-400 hover:bg-lime-400/10 px-3 py-1.5 rounded-full transition-colors'
 					>
 						👉 Rejoindre
@@ -230,7 +230,7 @@ function TribeCard({ guild }: { guild: Guild }) {
 
 	return (
 		<Link
-			href={`/aventure/guilds/${guild.slug}`}
+			href={`/community/guilds/${guild.slug}`}
 			prefetch={false}
 			className='block shrink-0 w-56 snap-start transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
 		>
@@ -322,7 +322,7 @@ export function AdventureMovementClient({
 				<div className='flex items-center justify-between'>
 					<h2 className='text-xl font-bold tracking-tight'>Mes Tribus</h2>
 					<Link
-						href='/aventure/guilds'
+						href='/community/guilds'
 						className='text-sm text-primary font-medium hover:underline'
 					>
 						Voir tout
@@ -347,7 +347,7 @@ export function AdventureMovementClient({
 								</p>
 							</div>
 							<Link
-								href='/aventure/guilds'
+								href='/community/guilds'
 								className='bg-white/10 hover:bg-white/20 text-white rounded-full px-5 py-2 text-sm transition-colors mt-2'
 							>
 								Explorer les tribus
