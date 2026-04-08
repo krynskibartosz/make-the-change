@@ -98,9 +98,11 @@ export async function AdventureChallenges() {
     // FIX : Cohérence mathématique selon titre
     const target = c.title.toLowerCase().includes('7 jours') || c.title.toLowerCase().includes('série')
       ? 7
-      : c.title.toLowerCase().includes('3 projet')
-        ? 3
-        : progressEntry?.target ?? 100
+      : c.title.toLowerCase().includes('2 projet')
+        ? 2
+        : c.title.toLowerCase().includes('3 projet')
+          ? 3
+          : progressEntry?.target ?? 100
     
     const percentage = Math.min((progress / target) * 100, 100)
     const isCompleted = !!progressEntry?.completed_at
@@ -217,10 +219,14 @@ export async function AdventureChallenges() {
           })}
         </div>
 
-        {/* Clôture cognitive (End of List State) */}
-        <p className="text-center text-sm text-muted-foreground mt-8 mb-4">
-          Vous êtes à jour ! Revenez demain pour semer de nouvelles graines. 🌱
-        </p>
+        {/* Clôture cognitive (UNIQUEMENT si TOUS les défis sont complétés) */}
+        {items.every((c) => c.userProgress.isCompleted) ? (
+          <p className="text-center text-sm text-muted-foreground mt-8 mb-4">
+            Vous êtes à jour ! Revenez demain pour semer de nouvelles graines. 🌱
+          </p>
+        ) : (
+          <div className="pb-8" />
+        )}
       )}
     </div>
   )
