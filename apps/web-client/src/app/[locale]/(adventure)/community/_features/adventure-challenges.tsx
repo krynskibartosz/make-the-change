@@ -119,13 +119,13 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 				</div>
 
 				<div className='p-6 pt-2 flex-1 overflow-y-auto'>
-					<p className='text-lime-400 font-bold text-[11px] tracking-widest uppercase mb-2'>
+					<p className='text-lime-300 font-semibold text-[10px] tracking-[0.18em] uppercase mb-2'>
 						ÉCO-FACT #001
 					</p>
-					<h3 className='text-2xl font-black text-white tracking-tight mb-3 text-balance'>
+					<h3 className='text-[30px] sm:text-[32px] font-black text-white tracking-[-0.025em] leading-[1.03] mb-3 text-balance'>
 						Le Poumon Vert
 					</h3>
-					<p className='text-white/80 text-[14px] leading-relaxed mb-6'>
+					<p className='text-white/75 text-[14px] leading-[1.7] mb-7 max-w-[34ch]'>
 						La forêt amazonienne abrite une biodiversité unique au monde.
 						Quand la déforestation progresse, des milliers d’espèces perdent
 						leur habitat. Protéger ces forêts, c’est protéger l’équilibre du
@@ -134,7 +134,7 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 					<button
 						type='button'
 						onClick={onValidate}
-						className='w-full py-3.5 rounded-2xl bg-lime-500 text-black font-black text-[16px] active:scale-[0.98] transition-transform'
+						className='w-full py-3.5 rounded-2xl bg-lime-500 text-black font-black text-[16px] tracking-tight active:scale-[0.98] transition-transform'
 					>
 						Valider & Gagner 50 🌱
 					</button>
@@ -168,18 +168,20 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 					alt='Mascotte Abeille'
 					className='w-32 h-32 mx-auto object-contain drop-shadow-2xl mb-4'
 				/>
-				<p className='text-lime-400 font-bold tracking-widest text-[11px] uppercase mb-1'>
+				<p className='text-lime-300 font-semibold tracking-[0.18em] text-[10px] uppercase mb-1.5'>
 					RÉCOMPENSE QUOTIDIENNE
 				</p>
-				<h3 className='text-2xl font-black text-white mb-2'>Le Nectar du Jour</h3>
-				<p className='text-muted-foreground text-sm mb-8'>
+				<h3 className='text-[30px] font-black text-white tracking-[-0.02em] leading-[1.05] mb-2 text-balance'>
+					Le Nectar du Jour
+				</h3>
+				<p className='text-white/70 text-[14px] leading-[1.65] mb-8 max-w-[32ch] mx-auto'>
 					Ton abeille a travaillé toute la nuit. Récupère tes graines pour
 					financer de nouveaux projets !
 				</p>
 				<button
 					type='button'
 					onClick={onClaim}
-					className='w-full py-4 rounded-2xl bg-gradient-to-r from-lime-400 to-lime-500 text-black font-black text-lg active:scale-95 transition-transform flex items-center justify-center gap-2'
+					className='w-full py-4 rounded-2xl bg-gradient-to-r from-lime-400 to-lime-500 text-black font-black text-[17px] tracking-tight active:scale-95 transition-transform flex items-center justify-center gap-2'
 				>
 					<span>Récolter 50</span> <span className='text-xl'>🌱</span>
 				</button>
