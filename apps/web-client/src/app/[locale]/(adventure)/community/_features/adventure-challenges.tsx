@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo, useState } from 'react'
 import { BookOpen, CheckCircle2, Sparkles, UsersRound } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
@@ -15,7 +16,7 @@ type DailyQuest = {
 	progress: number
 	max: number
 	reward: number
-	href: string
+	href?: string
 }
 
 type QuestTheme = {
@@ -24,7 +25,7 @@ type QuestTheme = {
 	progressClassName: string
 }
 
-const dailyQuests: DailyQuest[] = [
+const initialDailyQuests: DailyQuest[] = [
 	{
 		id: 1,
 		type: 'education',
@@ -33,7 +34,6 @@ const dailyQuests: DailyQuest[] = [
 		progress: 0,
 		max: 1,
 		reward: 50,
-		href: '/blog',
 	},
 	{
 		id: 2,
@@ -49,11 +49,10 @@ const dailyQuests: DailyQuest[] = [
 		id: 3,
 		type: 'daily_harvest',
 		title: 'La Récolte Quotidienne',
-		description: 'Récupère le nectar du jour depuis la page d’accueil.',
+		description: 'Récupère le nectar du jour.',
 		progress: 0,
 		max: 1,
 		reward: 50,
-		href: '/',
 	},
 ]
 
@@ -83,7 +82,175 @@ const monthlyQuest = {
 	max: 20,
 }
 
+type EcoFactReaderProps = {
+	open: boolean
+	onValidate: () => void
+	onClose: () => void
+}
+
+function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
+	if (!open) return null
+
+	return (
+		<div
+			className='fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md'
+			onClick={onClose}
+		>
+			<div
+				className='w-full max-w-md bg-card rounded-3xl overflow-hidden shadow-2xl relative flex flex-col animate-in zoom-in-95 fade-in duration-200'
+				onClick={(event) => event.stopPropagation()}
+			>
+				<button
+					type='button'
+					aria-label='Fermer'
+					onClick={onClose}
+					className='absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-md text-white/80 hover:text-white hover:bg-black/70 transition-colors'
+				>
+					✕
+				</button>
+
+				<div className='w-full h-48 sm:h-56 relative shrink-0'>
+					<img
+						src='/images/home-header-poster.jpeg'
+						alt='Forêt tropicale'
+						className='w-full h-full object-cover'
+					/>
+					<div className='absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-card to-transparent'></div>
+				</div>
+
+				<div className='p-6 pt-2 flex-1 overflow-y-auto'>
+					<p className='text-lime-400 font-bold text-[11px] tracking-widest uppercase mb-2'>
+						ÉCO-FACT #001
+					</p>
+					<h3 className='text-2xl font-black text-white tracking-tight mb-3 text-balance'>
+						Le Poumon Vert
+					</h3>
+					<p className='text-white/80 text-[14px] leading-relaxed mb-6'>
+						La forêt amazonienne abrite une biodiversité unique au monde.
+						Quand la déforestation progresse, des milliers d’espèces perdent
+						leur habitat. Protéger ces forêts, c’est protéger l’équilibre du
+						climat global.
+					</p>
+					<button
+						type='button'
+						onClick={onValidate}
+						className='w-full py-3.5 rounded-2xl bg-lime-500 text-black font-black text-[16px] active:scale-[0.98] transition-transform'
+					>
+						Valider & Gagner 50 🌱
+					</button>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+type DailyHarvestModalProps = {
+	open: boolean
+	onClose: () => void
+	onClaim: () => void
+}
+
+function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
+	if (!open) return null
+
+	return (
+		<div
+			className='bg-black/80 backdrop-blur-sm fixed inset-0 z-50 flex items-center justify-center p-4'
+			onClick={onClose}
+		>
+			<div
+				className='bg-card border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.2)] w-full max-w-sm rounded-3xl p-6 text-center overflow-hidden relative'
+				onClick={(event) => event.stopPropagation()}
+			>
+				<div className='absolute top-10 left-1/2 -translate-x-1/2 w-40 h-40 bg-lime-500/20 blur-3xl rounded-full -z-10'></div>
+				<img
+					src='/images/logo-icon-bee.png'
+					alt='Mascotte Abeille'
+					className='w-32 h-32 mx-auto object-contain drop-shadow-2xl mb-4'
+				/>
+				<p className='text-lime-400 font-bold tracking-widest text-[11px] uppercase mb-1'>
+					RÉCOMPENSE QUOTIDIENNE
+				</p>
+				<h3 className='text-2xl font-black text-white mb-2'>Le Nectar du Jour</h3>
+				<p className='text-muted-foreground text-sm mb-8'>
+					Ton abeille a travaillé toute la nuit. Récupère tes graines pour
+					financer de nouveaux projets !
+				</p>
+				<button
+					type='button'
+					onClick={onClaim}
+					className='w-full py-4 rounded-2xl bg-gradient-to-r from-lime-400 to-lime-500 text-black font-black text-lg active:scale-95 transition-transform flex items-center justify-center gap-2'
+				>
+					<span>Récolter 50</span> <span className='text-xl'>🌱</span>
+				</button>
+			</div>
+		</div>
+	)
+}
+
 export function AdventureChallenges() {
+	const [dailyQuests, setDailyQuests] = useState(initialDailyQuests)
+	const [isEcoFactReaderOpen, setIsEcoFactReaderOpen] = useState(false)
+	const [isDailyHarvestOpen, setIsDailyHarvestOpen] = useState(false)
+	const [userSeedBalance, setUserSeedBalance] = useState(240)
+
+	const ecoFactQuest = useMemo(
+		() => dailyQuests.find((quest) => quest.type === 'education') ?? null,
+		[dailyQuests]
+	)
+	const dailyHarvestQuest = useMemo(
+		() => dailyQuests.find((quest) => quest.type === 'daily_harvest') ?? null,
+		[dailyQuests]
+	)
+
+	const handleEcoFactOpen = () => {
+		setIsEcoFactReaderOpen(true)
+	}
+
+	const handleEcoFactValidate = () => {
+		setDailyQuests((current) =>
+			current.map((quest) => {
+				if (quest.type !== 'education') {
+					return quest
+				}
+
+				if (quest.progress >= quest.max) {
+					return quest
+				}
+
+				return { ...quest, progress: quest.max }
+			})
+		)
+
+		if (ecoFactQuest && ecoFactQuest.progress < ecoFactQuest.max) {
+			setUserSeedBalance((value) => value + ecoFactQuest.reward)
+		}
+
+		setIsEcoFactReaderOpen(false)
+	}
+
+	const handleDailyHarvestClaim = () => {
+		setDailyQuests((current) =>
+			current.map((quest) => {
+				if (quest.type !== 'daily_harvest') {
+					return quest
+				}
+
+				if (quest.progress >= quest.max) {
+					return quest
+				}
+
+				return { ...quest, progress: quest.max }
+			})
+		)
+
+		if (dailyHarvestQuest && dailyHarvestQuest.progress < dailyHarvestQuest.max) {
+			setUserSeedBalance((value) => value + dailyHarvestQuest.reward)
+		}
+
+		setIsDailyHarvestOpen(false)
+	}
+
 	return (
 		<section className='w-full animate-in fade-in slide-in-from-bottom-2 duration-500 pb-36 md:pb-10'>
 			{/* 1. LE HERO HEADER (Le Decor Emeraude) */}
@@ -143,7 +310,10 @@ export function AdventureChallenges() {
 			<div className='w-full flex flex-col'>
 				<h2 className='text-xs text-muted-foreground font-bold tracking-wider uppercase px-6 mb-2 flex justify-between'>
 					<span>Quêtes du jour</span>
-					<span>7 H</span>
+					<span className='flex items-center gap-2'>
+						<span>7 H</span>
+						<span className='tabular-nums'>{userSeedBalance} 🌱</span>
+					</span>
 				</h2>
 
 				{dailyQuests.map((quest) => {
@@ -151,13 +321,8 @@ export function AdventureChallenges() {
 					const Icon = theme.icon
 					const progress = Math.min((quest.progress / quest.max) * 100, 100)
 					const isComplete = quest.progress >= quest.max
-
-					return (
-						<Link
-							key={quest.id}
-							href={quest.href}
-							className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors'
-						>
+					const rowContent = (
+						<>
 							<div className='flex w-12 h-12 shrink-0 items-center justify-center rounded-full bg-white/5'>
 								<Icon className={cn('h-5 w-5', theme.iconClassName)} />
 							</div>
@@ -192,10 +357,57 @@ export function AdventureChallenges() {
 							<div className='shrink-0 rounded-full bg-lime-500/10 px-2 py-1 text-[10px] font-bold tabular-nums whitespace-nowrap text-lime-400'>
 								+{quest.reward} 🌱
 							</div>
+						</>
+					)
+
+					if (quest.type === 'education') {
+						return (
+							<button
+								key={quest.id}
+								type='button'
+								onClick={handleEcoFactOpen}
+								className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors text-left'
+							>
+								{rowContent}
+							</button>
+						)
+					}
+
+					if (quest.type === 'daily_harvest') {
+						return (
+							<button
+								key={quest.id}
+								type='button'
+								onClick={() => setIsDailyHarvestOpen(true)}
+								className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors text-left'
+							>
+								{rowContent}
+							</button>
+						)
+					}
+
+					return (
+						<Link
+							key={quest.id}
+							href={quest.href || '/'}
+							className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors'
+						>
+							{rowContent}
 						</Link>
 					)
 				})}
 			</div>
+
+			<EcoFactReader
+				open={isEcoFactReaderOpen}
+				onValidate={handleEcoFactValidate}
+				onClose={() => setIsEcoFactReaderOpen(false)}
+			/>
+			<DailyHarvestModal
+				open={isDailyHarvestOpen}
+				onClose={() => setIsDailyHarvestOpen(false)}
+				onClaim={handleDailyHarvestClaim}
+			/>
 		</section>
 	)
 }
