@@ -13,7 +13,6 @@ export function AdventureTabs() {
   const tabs = [
     { id: 'defis', label: 'Défis' },
     { id: 'biodex', label: 'BioDex' },
-    { id: 'mouvement', label: 'Collectif' },
   ]
 
   const handleTabChange = useCallback(

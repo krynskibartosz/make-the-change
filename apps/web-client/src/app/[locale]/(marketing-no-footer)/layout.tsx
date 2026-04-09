@@ -6,6 +6,7 @@ import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_feature
 import { Header } from '@/components/layout/header'
 import { MainContent } from '@/components/layout/main-content'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
+import { TopNavigation } from '@/components/layout/top-navigation'
 import { getHeaderData, type HeaderData } from '@/lib/get-header-data'
 
 type MarketingNoFooterScaffoldProps = PropsWithChildren<{
@@ -18,14 +19,21 @@ function MarketingNoFooterScaffold({
   user,
   menuData,
 }: MarketingNoFooterScaffoldProps) {
+  const navUser = user
+    ? { id: user.id, email: user.email, avatarUrl: user.avatarUrl, displayName: null }
+    : null
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <Header user={user} menuData={menuData} />
-      <MainContent>{children}</MainContent>
+      <TopNavigation user={navUser} />
+      <MainContent className="pt-[calc(env(safe-area-inset-top)+3.5rem)] md:pt-0">
+        {children}
+      </MainContent>
       <CartSheet />
       <CartSnackbar />
       <CartDock />
-      <MobileBottomNav user={user ? { id: user.id, email: user.email } : null} />
+      <MobileBottomNav user={navUser} />
     </div>
   )
 }

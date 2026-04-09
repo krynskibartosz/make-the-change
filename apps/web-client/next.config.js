@@ -84,9 +84,6 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Hub Aventure — route principale
-      // L'URL publique /aventure est un alias propre de /community
-      // Redirections permanentes des anciennes routes standalone
       {
         source: '/challenges',
         destination: '/aventure?tab=defis',
@@ -119,6 +116,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/community',
+        destination: '/collectif',
+        permanent: true,
+      },
+      {
+        source: '/:locale/community',
+        destination: '/:locale/collectif',
+        permanent: true,
+      },
+      {
         source: '/aventure/guilds',
         destination: '/community/guilds',
         permanent: true,
@@ -137,28 +144,6 @@ const nextConfig = {
         source: '/:locale/aventure/guilds/:slug',
         destination: '/:locale/community/guilds/:slug',
         permanent: true,
-      },
-    ]
-  },
-  async rewrites() {
-    return [
-      // /aventure → /community (côté Next.js, URL publique reste /aventure)
-      {
-        source: '/aventure',
-        destination: '/community',
-      },
-      {
-        source: '/aventure/:path*',
-        destination: '/community/:path*',
-      },
-      // Support i18n
-      {
-        source: '/:locale/aventure',
-        destination: '/:locale/community',
-      },
-      {
-        source: '/:locale/aventure/:path*',
-        destination: '/:locale/community/:path*',
       },
     ]
   },

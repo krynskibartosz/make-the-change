@@ -1,7 +1,7 @@
 import { getLocale } from 'next-intl/server'
 import { redirect } from '@/i18n/navigation'
 
-export default async function LegacyCommunityPage() {
+export default async function ProjetsPage() {
   const locale = await getLocale()
-  redirect({ href: '/collectif', locale })
+  redirect({ href: '/projects', locale })
 }

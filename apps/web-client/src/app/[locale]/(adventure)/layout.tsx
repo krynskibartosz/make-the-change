@@ -6,11 +6,11 @@ import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_feature
 import { createClient } from '@/lib/supabase/server'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 
-
 type CommunityNavUser = {
   id: string
   email: string
   avatarUrl: string | null
+  displayName: string | null
 } | null
 
 type CommunityLayoutShellProps = PropsWithChildren<{
@@ -38,19 +38,35 @@ async function CommunityLayoutResolved({ children }: PropsWithChildren) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  let profileData: { avatar_url: string | null } | null = null
+  let profileData: {
+    avatar_url: string | null
+    first_name: string | null
+    last_name: string | null
+  } | null = null
   if (user) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('avatar_url')
+      .select('avatar_url, first_name, last_name')
       .eq('id', user.id)
       .single()
     profileData = profile
   }
 
+  const displayName =
+    [profileData?.first_name, profileData?.last_name].filter(Boolean).join(' ').trim() || null
+
   return (
     <CommunityLayoutShell
-      user={user ? { id: user.id, email: user.email || '', avatarUrl: profileData?.avatar_url || null } : null}
+      user={
+        user
+          ? {
+              id: user.id,
+              email: user.email || '',
+              avatarUrl: profileData?.avatar_url || null,
+              displayName,
+            }
+          : null
+      }
     >
       {children}
     </CommunityLayoutShell>

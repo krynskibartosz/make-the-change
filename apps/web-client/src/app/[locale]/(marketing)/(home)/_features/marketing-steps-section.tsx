@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion, useScroll, useInView } from 'framer-motion'
-import { Check, Gift, HandCoins, Leaf, type LucideIcon } from 'lucide-react'
+import { BadgeCheck, Coins, Gift, HandCoins, Leaf, ShieldCheck, type LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useRef } from 'react'
 import { MarketingSection } from '../../_features/marketing-section'
@@ -16,7 +16,11 @@ type StepItem = {
   title: string
   description: string
   icon: LucideIcon
-  checks?: string[]
+  checks?: Array<{
+    id: string
+    label: string
+    icon: LucideIcon
+  }>
 }
 
 export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSectionProps) => {
@@ -42,9 +46,21 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
       description: t('how_it_works.step_2.description'),
       icon: HandCoins,
       checks: [
-        t('how_it_works.step_2.check_points'),
-        t('how_it_works.step_2.check_secure'),
-        t('how_it_works.step_2.check_verified'),
+        {
+          id: 'check-points',
+          label: t('how_it_works.step_2.check_points'),
+          icon: Coins,
+        },
+        {
+          id: 'check-secure',
+          label: t('how_it_works.step_2.check_secure'),
+          icon: ShieldCheck,
+        },
+        {
+          id: 'check-verified',
+          label: t('how_it_works.step_2.check_verified'),
+          icon: BadgeCheck,
+        },
       ],
     },
     {
@@ -125,16 +141,20 @@ function StepListItem({
       </p>
       {step.checks ? (
         <ul className="m-0 mt-4 flex flex-col gap-2 list-none p-0 text-left text-sm font-medium text-muted-foreground">
-          {step.checks.map((check) => (
-            <li key={check} className="flex items-center gap-2">
-              <Check
-                size={16}
-                className="shrink-0 text-lime-600 dark:text-lime-500"
-                aria-hidden="true"
-              />
-              <span>{check}</span>
-            </li>
-          ))}
+          {step.checks.map((check) => {
+            const CheckIcon = check.icon
+
+            return (
+              <li key={check.id} className="flex items-center gap-2">
+                <CheckIcon
+                  size={16}
+                  className="shrink-0 text-lime-600 dark:text-lime-500"
+                  aria-hidden="true"
+                />
+                <span>{check.label}</span>
+              </li>
+            )
+          })}
         </ul>
       ) : null}
     </div>

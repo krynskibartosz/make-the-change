@@ -1,55 +1,69 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
-import { Menu, ShoppingCart, User, Wallet, Compass } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import type { LucideIcon } from 'lucide-react'
+import { Compass, Globe, ShoppingBag, Users } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 interface MobileBottomNavProps {
-  user?: { id: string; email: string; avatarUrl?: string | null } | null
+  user?: { id: string; email: string; avatarUrl?: string | null; displayName?: string | null } | null
+}
+
+type BottomNavItem = {
+  href: string
+  icon: LucideIcon
+  label: string
+  isActive: boolean
 }
 
 export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const t = useTranslations('navigation')
+  const hasAuthenticatedUser = Boolean(user)
 
-  const isHome = pathname === '/'
-  const isProducts = pathname.startsWith('/products')
-  const isProjects = pathname.startsWith('/projects')
-  const isCommunity = pathname.startsWith('/aventure') || pathname.startsWith('/community') || pathname.startsWith('/leaderboard')
-  const isDashboard = pathname.startsWith('/dashboard')
-  const isMenuActive = !isHome && !isProducts && !isProjects && !isCommunity && !isDashboard
+  const isAdventure =
+    pathname === '/aventure' || pathname.startsWith('/aventure/')
+  const isProjects = pathname.startsWith('/projets') || pathname.startsWith('/projects')
+  const isCollective =
+    pathname.startsWith('/collectif') ||
+    pathname.startsWith('/leaderboard') ||
+    pathname.startsWith('/community')
+  const isMarket =
+    pathname.startsWith('/marche') ||
+    pathname.startsWith('/products') || pathname.startsWith('/cart') || pathname.startsWith('/checkout')
   const navLinkClass =
-    'flex-1 h-full w-full flex flex-col justify-center items-center text-[10px] font-medium transition-colors'
+    'flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors'
 
-  const navItems = [
-    {
-      href: '/products',
-      icon: ShoppingCart,
-      label: 'Le marche',
-      isActive: isProducts,
-    },
-    {
-      href: '/projects',
-      icon: Wallet,
-      label: t('projects'),
-      isActive: isProjects,
-    },
+  const navItems: BottomNavItem[] = [
     {
       href: '/aventure',
       icon: Compass,
       label: 'Aventure',
-      isActive: isCommunity,
+      isActive: isAdventure,
+    },
+    {
+      href: '/projets',
+      icon: Globe,
+      label: 'Projets',
+      isActive: isProjects,
+    },
+    {
+      href: '/collectif',
+      icon: Users,
+      label: 'Collectif',
+      isActive: isCollective,
+    },
+    {
+      href: '/marche',
+      icon: ShoppingBag,
+      label: 'Marché',
+      isActive: isMarket,
     },
   ]
 
-  const avatarUrl = user?.avatarUrl ?? null
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-[env(safe-area-inset-bottom)] md:hidden">
-      <nav aria-label="Navigation mobile">
-        <ul className="m-0 flex h-16 list-none items-stretch">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-[calc(env(safe-area-inset-bottom)+0.35rem)] md:hidden">
+      <nav aria-label={hasAuthenticatedUser ? 'Navigation mobile utilisateur' : 'Navigation mobile'}>
+        <ul className="m-0 flex h-[4.5rem] list-none items-stretch">
           {navItems.map((item) => {
             const Icon = item.icon
             return (
@@ -60,49 +74,37 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
                   className={cn(
                     navLinkClass,
                     item.isActive
-                      ? 'border-t-2 border-primary text-primary'
-                      : 'border-t-2 border-transparent text-muted-foreground hover:text-foreground',
+                      ? 'text-lime-400'
+                      : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  <Icon size={22} />
-                  <span className={cn('truncate', item.isActive && 'font-semibold')}>
+                  <span
+                    className={cn(
+                      'flex h-8 w-12 items-center justify-center rounded-xl transition-all',
+                      item.isActive
+                        ? 'scale-105 bg-lime-400/18 ring-1 ring-lime-400/35'
+                        : 'bg-transparent',
+                    )}
+                  >
+                    <Icon
+                      size={24}
+                      fill="none"
+                      strokeWidth={item.isActive ? 2.6 : 2.1}
+                      className={cn('h-6 w-6', item.isActive && 'drop-shadow-[0_0_3px_rgba(163,230,53,0.35)]')}
+                    />
+                  </span>
+                  <span
+                    className={cn(
+                      'w-full whitespace-nowrap text-center text-[10px] leading-none tracking-wide',
+                      item.isActive ? 'font-bold' : 'font-medium',
+                    )}
+                  >
                     {item.label}
                   </span>
                 </Link>
               </li>
             )
           })}
-
-          <li className="flex min-w-0 flex-1">
-            <Link
-              href="/menu"
-              aria-current={isMenuActive ? 'page' : undefined}
-              className={cn(
-                navLinkClass,
-                isMenuActive
-                  ? 'border-t-2 border-primary text-primary'
-                  : 'border-t-2 border-transparent text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {user ? (
-                avatarUrl ? (
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={avatarUrl} alt="" className="object-cover" />
-                    <AvatarFallback>
-                      <User size={22} />
-                    </AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <User size={22} />
-                )
-              ) : (
-                <Menu size={22} />
-              )}
-              <span className={cn('truncate', isMenuActive && 'font-semibold')}>
-                {t('menu')}
-              </span>
-            </Link>
-          </li>
         </ul>
       </nav>
     </div>

@@ -1209,11 +1209,11 @@
       "title": "Cultivez votre impact en 3 étapes",
       "step_1": {
         "title": "1. Choisissez un projet",
-        "description": "Soutenez des projets à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte"
+        "description": "Sélectionnez un domaine qui vous tient à cœur (forêt, océan, apiculture...)."
       },
       "step_2": {
         "title": "2. Parrainez & Cumulez",
-        "description": "Soutenez le projet à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte (1€ = 1 point).",
+        "description": "Soutenez des projets à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte",
         "check_points": "1€ = 1 point",
         "check_secure": "Paiement sécurisé",
         "check_verified": "Impact vérifié"

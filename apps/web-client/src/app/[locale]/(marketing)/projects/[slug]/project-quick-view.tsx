@@ -1,11 +1,12 @@
 import { Badge, Button, Progress } from '@make-the-change/core/ui'
-import { Calendar, Globe, Leaf, MapPin, Target } from 'lucide-react'
+import { Globe, Leaf, MapPin } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { createClient } from '@/lib/supabase/server'
-import { cn, formatCurrency, getLocalizedContent } from '@/lib/utils'
+import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
+import { ProjectImpactCalculator } from './components/project-impact-calculator'
 import type { PublicProject } from './project-detail-data'
 import { ProjectFavoriteButton } from './project-favorite-button'
 import { ProjectShareButton } from './project-share-button'
@@ -71,12 +72,6 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
   const isPrototypeProject = Boolean(project.is_mock)
   const typeLabel = formatBadgeLabel(project.type)
-  const launchDate = project.launch_date
-    ? new Date(project.launch_date).toLocaleDateString(locale)
-    : null
-  const maturityDate = project.maturity_date
-    ? new Date(project.maturity_date).toLocaleDateString(locale)
-    : null
 
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
 
@@ -186,8 +181,17 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
               ) : null}
             </div>
 
-            {/* ── 1. Barre de progression uniquement (sans le texte "72% de l'objectif") ── */}
+            {/* Executive summary */}
             <div className="pt-1">
+              <div className="mb-2 flex items-baseline justify-between">
+                <div>
+                  <span className="text-2xl font-black tracking-tight text-lime-400">
+                    {formatAmount(currentFunding)}
+                  </span>{' '}
+                  <span className="text-sm text-muted-foreground">/ {formatAmount(targetBudget)}</span>
+                </div>
+                <span className="text-sm font-bold text-white">{Math.round(fundingProgress)}%</span>
+              </div>
               <Progress
                 value={fundingProgress}
                 className="h-2 rounded-full bg-muted"
@@ -197,7 +201,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
           </aside>
 
           {/* ── Corps éditorial ── */}
-          <div className="mt-5 space-y-6 px-4 pb-36 sm:px-5 sm:pb-44 lg:px-6">
+          <div className="mt-5 space-y-6 px-4 pb-24 sm:px-5 sm:pb-28 lg:px-6">
 
             {/* Description : texte nu, sans card */}
             {projectDescription ? (
@@ -269,51 +273,21 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
               </section>
             ) : null}
 
-            {/* Dates : icônes grises inline, pas de card */}
-            {launchDate || maturityDate ? (
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                {launchDate ? (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-3.5 w-3.5 shrink-0" />
-                    <span>{launchDate}</span>
-                  </div>
-                ) : null}
-                {maturityDate ? (
-                  <div className="flex items-center gap-2">
-                    <Target className="h-3.5 w-3.5 shrink-0" />
-                    <span>{maturityDate}</span>
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
+            <ProjectImpactCalculator baseAmount={100} />
           </div>
         </div>
 
-        {/* ── 3. Sticky Bottom Bar refactorisée (sans le Like, CTA full-width) ── */}
-        <div className="relative shrink-0 border-t border-white/10 bg-background/60 px-5 py-5 backdrop-blur-xl sm:px-6 sm:py-6">
-          <div className="pointer-events-none absolute inset-x-0 -top-12 h-12 bg-gradient-to-t from-background/60 to-transparent" />
-
-          {/* Ligne 1 : métriques full-width */}
-          <div className="flex items-baseline justify-between mb-4 px-1">
-            {/* Pôle Gauche : L'argent */}
-            <div>
-              <span className="text-3xl font-black text-lime-400">{formatAmount(currentFunding)}</span>
-              <span className="text-sm font-medium text-muted-foreground ml-1">/ {formatAmount(targetBudget)}</span>
-            </div>
-            {/* Pôle Droite : La progression */}
-            <div className="text-right">
-              <span className="text-sm font-bold text-foreground">{Math.round(fundingProgress)}% de l&apos;objectif</span>
-            </div>
-          </div>
-
-          {/* CTA seul, pleine largeur */}
+        <div className="relative shrink-0 border-t border-white/10 bg-background/70 px-4 py-3 backdrop-blur-xl sm:px-5 sm:py-4">
           {isFundingClosed || isPrototypeProject ? (
-            <Button className="h-14 w-full rounded-2xl text-base font-bold" disabled>
+            <Button
+              className="h-12 w-full rounded-2xl bg-white/10 text-center text-base font-bold text-muted-foreground hover:bg-white/10 justify-center gap-0 [&_svg]:hidden"
+              disabled
+            >
               {isPrototypeProject ? 'Bientôt disponible' : t('detail.funding_closed')}
             </Button>
           ) : (
             <Link href={investCtaHref} className="block w-full">
-              <Button className="h-14 w-full rounded-2xl text-base font-bold shadow-lg shadow-primary/30">
+              <Button className="h-12 w-full rounded-2xl text-center text-base font-bold justify-center gap-0 shadow-lg shadow-primary/25 [&_svg]:hidden">
                 Soutenir ce projet
               </Button>
             </Link>

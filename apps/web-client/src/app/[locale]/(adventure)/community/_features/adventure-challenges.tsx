@@ -43,7 +43,7 @@ const initialDailyQuests: DailyQuest[] = [
 		progress: 1,
 		max: 3,
 		reward: 100,
-		href: '/aventure?tab=mouvement',
+		href: '/collectif',
 	},
 	{
 		id: 3,
