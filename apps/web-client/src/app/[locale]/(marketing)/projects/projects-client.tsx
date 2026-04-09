@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Input } from '@make-the-change/core/ui'
-import { Search, Target } from 'lucide-react'
+import { LayoutGrid, List, Map, Search, Target } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -9,6 +9,7 @@ import {
   type ClientCatalogProject,
   ClientCatalogProjectCard,
 } from '@/app/[locale]/(marketing)/projects/components/client-catalog-project-card'
+import { ProjectsGoogleMapView } from '@/app/[locale]/(marketing)/projects/components/projects-google-map-view'
 import { asString, isRecord } from '@/lib/type-guards'
 import { getLocalizedContent } from '@/lib/utils'
 
@@ -24,6 +25,8 @@ type RawClientProject = {
   funding_progress: number | null
   address_city: string | null
   address_country_code: string | null
+  latitude: number | null
+  longitude: number | null
   featured: boolean | null
   launch_date: string | null
   status: string | null
@@ -44,6 +47,7 @@ interface ProjectsClientProps {
   projects: RawClientProject[]
   initialStatus: string
   initialSearch: string
+  initialView: 'grid' | 'list' | 'map'
 }
 
 const normalizeProject = (
@@ -82,6 +86,8 @@ const normalizeProject = (
     funding_progress: project.funding_progress,
     address_city: project.address_city,
     address_country_code: project.address_country_code,
+    latitude: project.latitude,
+    longitude: project.longitude,
     featured: project.featured,
     status: project.status,
     hero_image_url: project.hero_image_url,
@@ -90,7 +96,12 @@ const normalizeProject = (
   }
 }
 
-export function ProjectsClient({ projects, initialStatus, initialSearch }: ProjectsClientProps) {
+export function ProjectsClient({
+  projects,
+  initialStatus,
+  initialSearch,
+  initialView,
+}: ProjectsClientProps) {
   const t = useTranslations('projects')
   const locale = useLocale()
   const router = useRouter()
@@ -98,12 +109,14 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
   const [isPending, startTransition] = useTransition()
   const [search, setSearch] = useState(initialSearch)
   const [status, setStatus] = useState(initialStatus)
+  const [view, setView] = useState<'grid' | 'list' | 'map'>(initialView)
 
   const updateFilters = useCallback(
-    (newSearch: string, newStatus: string) => {
+    (newSearch: string, newStatus: string, newView: 'grid' | 'list' | 'map') => {
       const params = new URLSearchParams()
       if (newSearch) params.set('search', newSearch)
       if (newStatus && newStatus !== 'all') params.set('status', newStatus)
+      if (newView !== 'grid') params.set('view', newView)
 
       startTransition(() => {
         router.push(`${pathname}?${params.toString()}`)
@@ -115,16 +128,21 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
   useEffect(() => {
     const timer = setTimeout(() => {
       if (search !== initialSearch) {
-        updateFilters(search, status)
+        updateFilters(search, status, view)
       }
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [search, initialSearch, status, updateFilters])
+  }, [search, initialSearch, status, view, updateFilters])
 
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus)
-    updateFilters(search, newStatus)
+    updateFilters(search, newStatus, view)
+  }
+
+  const handleViewChange = (newView: 'grid' | 'list' | 'map') => {
+    setView(newView)
+    updateFilters(search, status, newView)
   }
 
   const normalizedProjects = projects.map((project, index) =>
@@ -231,6 +249,55 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
 
       {/* Main Content Area — extra bottom padding on mobile for the floating search bar */}
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-8 pb-48 md:pb-16 lg:pt-10">
+        {normalizedProjects.length > 0 && (
+          <div className="mb-6 flex items-center justify-end">
+            <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 p-1">
+              <button
+                type="button"
+                onClick={() => handleViewChange('grid')}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                  view === 'grid'
+                    ? 'bg-foreground text-background'
+                    : 'text-foreground/80 hover:bg-white/10'
+                }`}
+                aria-pressed={view === 'grid'}
+                aria-label="Vue grille"
+              >
+                <LayoutGrid className="h-3.5 w-3.5" />
+                <span>Grille</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleViewChange('list')}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                  view === 'list'
+                    ? 'bg-foreground text-background'
+                    : 'text-foreground/80 hover:bg-white/10'
+                }`}
+                aria-pressed={view === 'list'}
+                aria-label="Vue liste"
+              >
+                <List className="h-3.5 w-3.5" />
+                <span>Liste</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleViewChange('map')}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                  view === 'map'
+                    ? 'bg-foreground text-background'
+                    : 'text-foreground/80 hover:bg-white/10'
+                }`}
+                aria-pressed={view === 'map'}
+                aria-label="Vue carte"
+              >
+                <Map className="h-3.5 w-3.5" />
+                <span>Carte</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         {normalizedProjects.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8 bg-muted/30 rounded-3xl border-2 border-dashed">
             <Target className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
@@ -241,12 +308,33 @@ export function ProjectsClient({ projects, initialStatus, initialSearch }: Proje
               onClick={() => {
                 setSearch('')
                 setStatus('all')
-                updateFilters('', 'all')
+                setView('grid')
+                updateFilters('', 'all', 'grid')
               }}
               className="mt-6"
             >
               {t('filter.reset_filters')}
             </Button>
+          </div>
+        ) : view === 'map' ? (
+          <ProjectsGoogleMapView projects={normalizedProjects} />
+        ) : view === 'list' ? (
+          <div className="space-y-4">
+            {normalizedProjects.map((project) => (
+              <ClientCatalogProjectCard
+                key={project.id}
+                project={project}
+                view="list"
+                labels={{
+                  viewLabel: t('filter.cta'),
+                  progressLabel: t('filter.progress.label'),
+                  fundedLabel: t('filter.progress.collected'),
+                  goalLabel: t('filter.progress.goal'),
+                  featuredLabel: t('filter.featured'),
+                  activeLabel: t('filter.status.active'),
+                }}
+              />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">

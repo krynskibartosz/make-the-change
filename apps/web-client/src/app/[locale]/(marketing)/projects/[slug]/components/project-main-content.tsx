@@ -6,9 +6,14 @@ import { ProjectSpeciesSection } from './project-species-section'
 import { ProjectChallengesSection } from './project-challenges-section'
 import { ProjectImpactSection } from './project-impact-section'
 import { ProjectProducerProductsSection } from './project-producer-products-section'
+import { ProjectAssociatedProjectsSection } from './project-associated-projects-section'
+import { ProjectSpeciesImpactSection } from './project-species-impact-section'
+import { ProjectUnlockSpeciesSection } from './project-unlock-species-section'
 import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/types/context'
+import type { RelatedProject } from '../project-detail-data'
 
 type ProjectMainContentProject = {
+  type: string | null
   name_default: string
   description_default: string | null
   description_i18n?: Record<string, string> | null
@@ -20,6 +25,8 @@ type ProjectMainContentProject = {
   challenges?: ProjectChallenge[] | null
   producer_products?: ProducerProduct[] | null
   expected_impact?: ProjectImpact | null
+  unit_price_eur?: number | null
+  unit_label?: string | null
 }
 
 type ProjectMainContentProps = {
@@ -27,6 +34,7 @@ type ProjectMainContentProps = {
   fundingProgress: number
   currentFunding: number
   targetBudget: number
+  relatedProjects: RelatedProject[]
 }
 
 export async function ProjectMainContent({
@@ -34,6 +42,7 @@ export async function ProjectMainContent({
   fundingProgress,
   currentFunding,
   targetBudget,
+  relatedProjects,
 }: ProjectMainContentProps) {
   const t = await getTranslations('projects')
   const locale = await getLocale()
@@ -51,6 +60,7 @@ export async function ProjectMainContent({
     locale,
     localizedLongDesc || defaultDesc,
   )
+  const unlockableSpecies = project.species?.[0] || null
 
   return (
     <div className="lg:col-span-8 space-y-8">
@@ -74,12 +84,25 @@ export async function ProjectMainContent({
       </section>
 
       {/* New Enhanced Sections */}
+      <ProjectUnlockSpeciesSection species={unlockableSpecies} />
+
       {project.expected_impact && (
         <ProjectImpactSection impact={project.expected_impact} />
       )}
 
       {project.species && project.species.length > 0 && (
         <ProjectSpeciesSection species={project.species} />
+      )}
+
+      <ProjectSpeciesImpactSection
+        projectType={project.type}
+        species={project.species}
+        unitPriceEur={project.unit_price_eur}
+        unitLabel={project.unit_label}
+      />
+
+      {relatedProjects.length > 0 && (
+        <ProjectAssociatedProjectsSection projects={relatedProjects} locale={locale} />
       )}
       
       {project.challenges && project.challenges.length > 0 && (

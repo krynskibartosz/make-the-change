@@ -30,7 +30,7 @@ import {
   SelectTrigger,
 } from '@make-the-change/core/ui'
 import { ProductCardSkeleton } from '@make-the-change/core/ui/next'
-import { ArrowUpDown, Filter, Package, Search } from 'lucide-react'
+import { ArrowUpDown, Filter, LayoutGrid, List as ListIcon, Package, Search } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
@@ -42,8 +42,10 @@ import { ProductsPagination } from '@/app/[locale]/(marketing)/products/_feature
 import type { ProductsPaginationData } from '@/app/[locale]/(marketing)/products/_features/products-query'
 import {
   buildProductsSearchParams,
+  DEFAULT_PRODUCT_VIEW,
   DEFAULT_PRODUCT_SORT,
   DEFAULT_PRODUCTS_QUERY_STATE,
+  isProductView,
   isProductSort,
   type ProductsQueryState,
 } from '@/app/[locale]/(marketing)/products/_features/query-state'
@@ -331,6 +333,7 @@ export const ProductsClient = ({
   )
 
   const sort = isProductSort(initialQueryState.sort) ? initialQueryState.sort : DEFAULT_PRODUCT_SORT
+  const view = isProductView(initialQueryState.view) ? initialQueryState.view : DEFAULT_PRODUCT_VIEW
   const activeTagValue = initialQueryState.tag || '__all__'
 
   const sortLabel =
@@ -379,8 +382,14 @@ export const ProductsClient = ({
 
   const clearAllFilters = useCallback(() => {
     setSearchInput('')
-    updateQuery(DEFAULT_PRODUCTS_QUERY_STATE, { resetPage: false })
-  }, [updateQuery])
+    updateQuery(
+      {
+        ...DEFAULT_PRODUCTS_QUERY_STATE,
+        view,
+      },
+      { resetPage: false },
+    )
+  }, [updateQuery, view])
 
   const activeFilterChips = useMemo<ActiveFilterChip[]>(() => {
     const chips: ActiveFilterChip[] = []
@@ -557,6 +566,37 @@ export const ProductsClient = ({
                 </Select>
               </div>
 
+              <div className="hidden lg:flex items-center rounded-full border border-white/10 bg-white/5 p-1">
+                <button
+                  type="button"
+                  onClick={() => updateQuery({ view: 'grid' }, { resetPage: false })}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                    view === 'grid'
+                      ? 'bg-foreground text-background'
+                      : 'text-foreground/80 hover:bg-white/10'
+                  }`}
+                  aria-pressed={view === 'grid'}
+                  aria-label={tProducts('view.grid')}
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                  <span>{tProducts('view.grid')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateQuery({ view: 'list' }, { resetPage: false })}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                    view === 'list'
+                      ? 'bg-foreground text-background'
+                      : 'text-foreground/80 hover:bg-white/10'
+                  }`}
+                  aria-pressed={view === 'list'}
+                  aria-label={tProducts('view.list')}
+                >
+                  <ListIcon className="h-3.5 w-3.5" />
+                  <span>{tProducts('view.list')}</span>
+                </button>
+              </div>
+
               <div className="hidden lg:flex">
                 <button
                   type="button"
@@ -656,11 +696,44 @@ export const ProductsClient = ({
                 ))}
               </SelectContent>
             </Select>
+
+            <div className="flex-1 rounded-xl border border-white/10 bg-white/5 p-1">
+              <div className="grid grid-cols-2 gap-1">
+                <button
+                  type="button"
+                  onClick={() => updateQuery({ view: 'grid' }, { resetPage: false })}
+                  className={`inline-flex h-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-semibold transition ${
+                    view === 'grid'
+                      ? 'bg-foreground text-background'
+                      : 'text-foreground/80 hover:bg-white/10'
+                  }`}
+                  aria-pressed={view === 'grid'}
+                  aria-label={tProducts('view.grid')}
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                  <span>{tProducts('view.grid')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateQuery({ view: 'list' }, { resetPage: false })}
+                  className={`inline-flex h-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-semibold transition ${
+                    view === 'list'
+                      ? 'bg-foreground text-background'
+                      : 'text-foreground/80 hover:bg-white/10'
+                  }`}
+                  aria-pressed={view === 'list'}
+                  aria-label={tProducts('view.list')}
+                >
+                  <ListIcon className="h-3.5 w-3.5" />
+                  <span>{tProducts('view.list')}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Product Grid Area — Fixed structure */}
+      {/* Products Area — Fixed structure */}
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-10 pb-64 md:pb-16 lg:pt-14">
         {/* Active Filters Bar (Desktop/Tablet) */}
         {hasActiveFilters && (
@@ -700,7 +773,7 @@ export const ProductsClient = ({
             />
           </aside>
 
-          {/* Product Grid Area */}
+          {/* Products list/grid area */}
           <div className="min-w-0 space-y-4">
             {/* Product Count */}
             <div className="mb-4">
@@ -709,9 +782,10 @@ export const ProductsClient = ({
               </p>
             </div>
 
-            {/* Product Grid */}
+            {/* Products list */}
             <DataList
               isLoading={isPending}
+              variant={view}
               items={products}
               getItemKey={(product) => product.id}
               gridCols={3 as const}
@@ -727,6 +801,7 @@ export const ProductsClient = ({
               }}
               renderItem={(product: Product) => (
                 <ClientCatalogProductCard
+                  view={view}
                   product={product}
                   featuredLabel={tProducts('featured')}
                   outOfStockLabel={tProducts('card.sold_out')}

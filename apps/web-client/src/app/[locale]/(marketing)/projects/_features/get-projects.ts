@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
+import { getMockProjects } from './mock-projects'
 
 export type GetProjectsOptions = {
   status?: string
@@ -21,6 +22,8 @@ type ProjectListItem = {
   funding_progress: number | null
   address_city: string | null
   address_country_code: string | null
+  latitude: number | null
+  longitude: number | null
   featured: boolean | null
   launch_date: string | null
   status: string | null
@@ -117,6 +120,8 @@ const toProjectListItem = (value: unknown): ProjectListItem | null => {
     funding_progress: toNullableNumber(value.funding_progress),
     address_city: toNullableString(value.address_city),
     address_country_code: toNullableString(value.address_country_code),
+    latitude: toNullableNumber(value.latitude ?? value.address_lat ?? value.lat),
+    longitude: toNullableNumber(value.longitude ?? value.address_lng ?? value.lng),
     featured: toNullableBoolean(value.featured),
     launch_date: toNullableString(value.launch_date),
     status: toNullableString(value.status),
@@ -126,10 +131,69 @@ const toProjectListItem = (value: unknown): ProjectListItem | null => {
   }
 }
 
+const toMockProjectListItem = (
+  project: ReturnType<typeof getMockProjects>[number],
+): ProjectListItem => {
+  const fundingProgress =
+    project.target_budget > 0 ? Math.min((project.current_funding / project.target_budget) * 100, 100) : 0
+
+  return {
+    id: project.id,
+    slug: project.slug,
+    name_default: project.name_default,
+    name_i18n: project.name_i18n || null,
+    description_default: project.description_default,
+    description_i18n: project.description_i18n || null,
+    target_budget: project.target_budget,
+    current_funding: project.current_funding,
+    funding_progress: fundingProgress,
+    address_city: project.address_city,
+    address_country_code: project.address_country_code,
+    latitude: project.latitude || null,
+    longitude: project.longitude || null,
+    featured: project.featured,
+    launch_date: project.launch_date,
+    status: project.status,
+    hero_image_url: project.hero_image_url,
+    type: project.type,
+    producer: {
+      name_default: project.producer.name_default,
+      name_i18n: project.producer.name_i18n || null,
+      description_default: project.producer.description_default,
+      description_i18n: project.producer.description_i18n || null,
+    },
+  }
+}
+
+const matchesSearch = (project: ProjectListItem, search: string) => {
+  if (!search) return true
+  const query = search.trim().toLowerCase()
+  if (!query) return true
+
+  const haystack = [
+    project.name_default || '',
+    project.description_default || '',
+    isRecord(project.producer) ? asString(project.producer.name_default) || '' : '',
+  ]
+    .join(' ')
+    .toLowerCase()
+
+  return haystack.includes(query)
+}
+
+const matchesStatus = (project: ProjectListItem, status: string) => {
+  if (status === 'all') return true
+  return project.status === status
+}
+
 export const getProjects = unstable_cache(
   async (options: GetProjectsOptions = {}) => {
     const supabase = createStaticClient()
     const { status = 'all', search } = options
+    const mockProjects = getMockProjects()
+      .map((project) => toMockProjectListItem(project))
+      .filter((project) => matchesStatus(project, status))
+      .filter((project) => matchesSearch(project, search || ''))
 
     // Build query
     let projectsQuery = supabase
@@ -156,11 +220,24 @@ export const getProjects = unstable_cache(
       throw error
     }
 
-    return Array.isArray(data)
+    const databaseProjects = Array.isArray(data)
       ? data
           .map((entry) => toProjectListItem(entry))
           .filter((entry): entry is ProjectListItem => entry !== null)
       : []
+
+    const mockSlugs = new Set(
+      mockProjects
+        .map((project) => project.slug)
+        .filter((slug): slug is string => typeof slug === 'string' && slug.length > 0),
+    )
+
+    const dedupedDatabaseProjects = databaseProjects.filter((project) => {
+      if (!project.slug) return true
+      return !mockSlugs.has(project.slug)
+    })
+
+    return [...mockProjects, ...dedupedDatabaseProjects]
   },
   ['projects-list'],
   {

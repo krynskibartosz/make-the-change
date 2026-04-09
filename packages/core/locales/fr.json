@@ -897,6 +897,10 @@
     "search_placeholder": "Rechercher des produits...",
     "featured": "Mis en avant",
     "product_list": "produits",
+    "view": {
+      "grid": "Grille",
+      "list": "Liste"
+    },
     "filters": {
       "title": "Filtres",
       "active_filters": "Filtres actifs",
@@ -1197,36 +1201,37 @@
   },
   "home_v2": {
     "hero": {
-      "title": "Faites un geste pour la nature, on vous le rend en produits.",
-      "subtitle": "Soutenez des projets locaux. Votre contribution est instantanément convertie en points pour vous offrir des produits éthiques.",
+      "title": "Soutenez la biodiversité, récoltez les bénéfices.",
+      "subtitle": "Soutenez des projets concrets pour la biodiversité. Votre contribution est transformée en points que vous pouvez utiliser pour obtenir des produits éthiques et responsables qui participent activement à la préservation du vivant.",
       "cta": "Découvrir les projets"
     },
     "how_it_works": {
-      "title": "Votre impact, récompensé en 3 étapes.",
+      "title": "Cultivez votre impact en 3 étapes",
       "step_1": {
         "title": "1. Choisissez un projet",
-        "description": "Sélectionnez une cause locale qui vous tient à cœur (forêt, océan, apiculture...)."
+        "description": "Soutenez des projets à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte"
       },
       "step_2": {
         "title": "2. Parrainez & Cumulez",
         "description": "Soutenez le projet à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte (1€ = 1 point).",
+        "check_points": "1€ = 1 point",
         "check_secure": "Paiement sécurisé",
         "check_verified": "Impact vérifié"
       },
       "step_3": {
-        "title": "3. Faites-vous plaisir",
-        "description": "Dépensez vos points dans notre boutique engagée. Miel, cosmétiques bio, artisanat : c'est notre façon de vous dire merci."
+        "title": "Utilisez vos points comme vous le souhaitez",
+        "description": "Soutenez directement des projets pour la biodiversité ou échangez-les contre des produits engagés en lien avec les projets."
       }
     },
     "projects": {
-      "title": "Ils ont besoin de vous",
+      "title": "Faites grandir ses projets",
       "view_all": "Voir tous les projets",
       "support_cta": "Soutenir ce projet",
       "collected_suffix": "collectés",
       "goal_prefix": "Objectif :"
     },
     "shop": {
-      "title": "Faites-vous plaisir avec vos points",
+      "title": "Récoltez les fruits de votre impact",
       "view_all": "Voir toute la boutique",
       "discover": "Découvrir",
       "points_label": "points"

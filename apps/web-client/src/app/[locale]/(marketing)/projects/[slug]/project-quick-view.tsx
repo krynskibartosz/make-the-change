@@ -69,6 +69,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
     .join(', ')
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
+  const isPrototypeProject = Boolean(project.is_mock)
   const typeLabel = formatBadgeLabel(project.type)
   const launchDate = project.launch_date
     ? new Date(project.launch_date).toLocaleDateString(locale)
@@ -306,9 +307,9 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
           </div>
 
           {/* CTA seul, pleine largeur */}
-          {isFundingClosed ? (
+          {isFundingClosed || isPrototypeProject ? (
             <Button className="h-14 w-full rounded-2xl text-base font-bold" disabled>
-              {t('detail.funding_closed')}
+              {isPrototypeProject ? 'Bientôt disponible' : t('detail.funding_closed')}
             </Button>
           ) : (
             <Link href={investCtaHref} className="block w-full">

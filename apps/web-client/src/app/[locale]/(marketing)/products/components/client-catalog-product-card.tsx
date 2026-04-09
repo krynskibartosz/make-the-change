@@ -24,6 +24,7 @@ type ClientCatalogProductCardProps = {
   lowStockLabel: string
   pointsLabel: string
   viewLabel: string
+  view?: 'grid' | 'list'
 }
 
 export const ClientCatalogProductCard = ({
@@ -33,6 +34,7 @@ export const ClientCatalogProductCard = ({
   lowStockLabel,
   pointsLabel,
   viewLabel,
+  view = 'grid',
 }: ClientCatalogProductCardProps) => {
   const imageUrl =
     sanitizeImageUrl(product.image_url) ||
@@ -41,10 +43,20 @@ export const ClientCatalogProductCard = ({
       : undefined)
 
   const inStock = product.stock_quantity !== null && product.stock_quantity !== undefined && product.stock_quantity > 0
+  const isListView = view === 'list'
 
   return (
-    <div itemScope itemType="https://schema.org/Product" className="h-full">
-      <Link href={`/products/${product.id}`} className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-card transition-all hover:border-white/20 hover:shadow-xl">
+    <div
+      itemScope
+      itemType="https://schema.org/Product"
+      className={isListView ? undefined : 'h-full'}
+    >
+      <Link
+        href={`/products/${product.id}`}
+        className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-card transition-all hover:border-white/20 hover:shadow-xl ${
+          isListView ? 'flex flex-col md:flex-row' : 'flex h-full flex-col'
+        }`}
+      >
         <meta itemProp="name" content={product.name_default} />
         <meta
           itemProp="description"
@@ -64,7 +76,7 @@ export const ClientCatalogProductCard = ({
         <div className="absolute left-4 top-4 z-10 flex flex-col gap-2 items-start">
           {product.featured && (
             <span className="rounded-full bg-lime-500/20 border border-lime-500/30 px-3 py-1 text-xs font-bold uppercase tracking-wider text-lime-400 backdrop-blur-sm shadow-sm">
-              Populaire
+              {featuredLabel}
             </span>
           )}
           {!inStock && (
@@ -75,7 +87,11 @@ export const ClientCatalogProductCard = ({
         </div>
 
         {/* Zone Image */}
-        <div className="relative aspect-square w-full overflow-hidden bg-muted flex-shrink-0 p-6 mix-blend-multiply dark:mix-blend-normal">
+        <div
+          className={`relative aspect-square overflow-hidden bg-muted p-6 mix-blend-multiply dark:mix-blend-normal ${
+            isListView ? 'w-full md:h-auto md:w-56 md:flex-shrink-0' : 'w-full flex-shrink-0'
+          }`}
+        >
           <Image
             src={imageUrl || ''}
             alt={product.name_default}
@@ -85,12 +101,12 @@ export const ClientCatalogProductCard = ({
         </div>
 
         {/* Contenu - Avec un padding généreux */}
-        <div className="flex flex-1 flex-col p-5">
+        <div className={`flex flex-1 flex-col p-5 ${isListView ? 'md:p-6' : ''}`}>
           <h3 className="line-clamp-2 text-lg font-bold tracking-tight text-foreground mb-2 group-hover:underline">
             {product.name_default}
           </h3>
 
-          <p className="line-clamp-2 text-sm text-muted-foreground mb-6">
+          <p className={`text-sm text-muted-foreground mb-6 ${isListView ? 'line-clamp-3' : 'line-clamp-2'}`}>
             {product.short_description_default || product.description_default}
           </p>
 

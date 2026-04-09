@@ -129,11 +129,6 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </section>
 
             <aside className="space-y-4 px-4 sm:px-0">
-              <div className="inline-flex items-center gap-2 rounded-full border border-lime-500/20 bg-lime-500/10 px-3 py-1 text-xs font-medium text-lime-400 backdrop-blur-md">
-                <span className="text-sm">🌱</span>
-                <span>Impact Garanti</span>
-              </div>
-
               <div className="space-y-3">
                 <h1
                   className="text-3xl font-black tracking-tight text-foreground sm:text-4xl"

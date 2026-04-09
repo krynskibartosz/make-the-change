@@ -242,6 +242,7 @@
       "step_2": {
         "title": "2. Steun & spaar punten",
         "description": "Steun vanaf €1. Het bedrag wordt direct omgezet in punten op je account (€1 = 1 punt).",
+        "check_points": "€1 = 1 punt",
         "check_secure": "Veilige betaling",
         "check_verified": "Geverifieerde impact"
       },
@@ -641,6 +642,10 @@
     "search_placeholder": "Producten zoeken...",
     "featured": "Uitgelicht",
     "product_list": "producten",
+    "view": {
+      "grid": "Raster",
+      "list": "Lijst"
+    },
     "filters": {
       "title": "Filters",
       "active_filters": "Actieve filters",

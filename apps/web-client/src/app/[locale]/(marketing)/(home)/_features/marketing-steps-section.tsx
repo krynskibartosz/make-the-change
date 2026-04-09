@@ -41,7 +41,11 @@ export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSec
       title: t('how_it_works.step_2.title'),
       description: t('how_it_works.step_2.description'),
       icon: HandCoins,
-      checks: [t('how_it_works.step_2.check_secure'), t('how_it_works.step_2.check_verified')],
+      checks: [
+        t('how_it_works.step_2.check_points'),
+        t('how_it_works.step_2.check_secure'),
+        t('how_it_works.step_2.check_verified'),
+      ],
     },
     {
       id: 'step-3',

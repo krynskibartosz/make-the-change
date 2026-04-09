@@ -11,8 +11,11 @@ export const PRODUCT_SORT_VALUES = [
 ] as const
 
 export type ProductSort = (typeof PRODUCT_SORT_VALUES)[number]
+export const PRODUCT_VIEW_VALUES = ['grid', 'list'] as const
+export type ProductView = (typeof PRODUCT_VIEW_VALUES)[number]
 
 export const DEFAULT_PRODUCT_SORT: ProductSort = 'featured_first'
+export const DEFAULT_PRODUCT_VIEW: ProductView = 'grid'
 
 export type ProductsQueryState = {
   search: string
@@ -20,6 +23,7 @@ export type ProductsQueryState = {
   producer: string
   tag: string
   sort: ProductSort
+  view: ProductView
   page: number
 }
 
@@ -36,6 +40,7 @@ export const DEFAULT_PRODUCTS_QUERY_STATE = {
   producer: '',
   tag: '',
   sort: DEFAULT_PRODUCT_SORT,
+  view: DEFAULT_PRODUCT_VIEW,
   page: 1,
 } satisfies ProductsQueryState
 
@@ -121,11 +126,17 @@ export const toPersistedProductsQueryState = (
   producer: state.producer,
   tag: state.tag,
   sort: state.sort,
+  view: state.view,
 })
 
 export const isProductSort = (value: string | null | undefined): value is ProductSort => {
   if (!value) return false
   return PRODUCT_SORT_VALUES.some((sort) => sort === value)
+}
+
+export const isProductView = (value: string | null | undefined): value is ProductView => {
+  if (!value) return false
+  return PRODUCT_VIEW_VALUES.some((view) => view === value)
 }
 
 export const parseProductsQueryState = (source: SearchParamsSource): ProductsQueryState => {
@@ -146,6 +157,8 @@ export const parseProductsQueryState = (source: SearchParamsSource): ProductsQue
 
   const sortParam = getRawParam(source, 'sort')
   const sort = withFallback(isProductSort(sortParam) ? sortParam : undefined, DEFAULT_PRODUCT_SORT)
+  const viewParam = getRawParam(source, 'view')
+  const view = withFallback(isProductView(viewParam) ? viewParam : undefined, DEFAULT_PRODUCT_VIEW)
   const page = sanitizePage(getRawParam(source, 'page'))
 
   return {
@@ -154,6 +167,7 @@ export const parseProductsQueryState = (source: SearchParamsSource): ProductsQue
     producer: identityFilters.producer,
     tag: textFilters.tag,
     sort,
+    view,
     page,
   }
 }
@@ -184,10 +198,18 @@ export const buildProductsSearchParams = (state: ProductsQueryState): URLSearchP
     isProductSort(state.sort) ? state.sort : undefined,
     DEFAULT_PRODUCT_SORT,
   )
+  const view = withFallback(
+    isProductView(state.view) ? state.view : undefined,
+    DEFAULT_PRODUCT_VIEW,
+  )
   const page = Number.isFinite(state.page) && state.page > 0 ? Math.floor(state.page) : 1
 
   if (sort !== DEFAULT_PRODUCT_SORT) {
     params.set('sort', sort)
+  }
+
+  if (view !== DEFAULT_PRODUCT_VIEW) {
+    params.set('view', view)
   }
 
   if (page > 1) {

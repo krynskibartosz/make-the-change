@@ -9,6 +9,7 @@ import { getEntityViewTransitionName } from '@/lib/view-transition'
 type ProjectCoverHeroProject = {
   id: string
   slug: string
+  is_mock?: boolean
   status: string | null
   type: string | null
   name_default: string
@@ -16,6 +17,8 @@ type ProjectCoverHeroProject = {
   address_city: string | null
   address_country_code: string | null
   launch_date: string | null
+  unit_price_eur?: number | null
+  unit_label?: string | null
 }
 
 type ProjectCoverHeroProps = {
@@ -65,6 +68,12 @@ export async function ProjectCoverHero({
               {project.type.replace('_', ' ')}
             </Badge>
           ) : null}
+          {project.unit_price_eur ? (
+            <Badge variant="outline" className="bg-background/80 border-border/60 backdrop-blur-sm">
+              {formatCurrency(project.unit_price_eur)}
+              {project.unit_label ? ` / ${project.unit_label}` : ''}
+            </Badge>
+          ) : null}
         </div>
 
         <h1
@@ -103,14 +112,24 @@ export async function ProjectCoverHero({
         </div>
 
         <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-450">
-          <Link href={`/projects/${project.slug}/invest`}>
+          {project.is_mock ? (
             <Button
               size="lg"
-              className="h-14 px-9 text-base rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"
+              disabled
+              className="h-14 px-9 text-base rounded-full font-bold"
             >
-              {t('detail.invest_now')}
+              Bientôt disponible
             </Button>
-          </Link>
+          ) : (
+            <Link href={`/projects/${project.slug}/invest`}>
+              <Button
+                size="lg"
+                className="h-14 px-9 text-base rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"
+              >
+                {t('detail.invest_now')}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 

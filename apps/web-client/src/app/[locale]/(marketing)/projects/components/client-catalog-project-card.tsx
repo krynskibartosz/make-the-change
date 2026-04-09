@@ -19,6 +19,8 @@ export type ClientCatalogProject = {
   status?: string | null
   hero_image_url?: string | null
   type?: string | null
+  latitude?: number | null
+  longitude?: number | null
   producer?: { name_default?: string | null } | null
 }
 
@@ -32,6 +34,7 @@ type ClientCatalogProjectCardProps = {
     featuredLabel: string
     activeLabel: string
   }
+  view?: 'grid' | 'list'
 }
 
 const getLocationLabel = (project: ClientCatalogProject): string | undefined => {
@@ -60,14 +63,24 @@ const getProgressPercent = (project: ClientCatalogProject): number | null => {
   return null
 }
 
-export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProjectCardProps) => {
+export const ClientCatalogProjectCard = ({
+  project,
+  labels,
+  view = 'grid',
+}: ClientCatalogProjectCardProps) => {
   const imageUrl = sanitizeImageUrl(project.hero_image_url)
   const locationLabel = getLocationLabel(project)
   const progressPercent = getProgressPercent(project)
+  const isListView = view === 'list'
 
   return (
-    <div itemScope itemType="https://schema.org/Project" className="h-full">
-      <Link href={`/projects/${project.slug}`} className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-card transition-all hover:border-white/20 hover:shadow-xl">
+    <div itemScope itemType="https://schema.org/Project" className={isListView ? undefined : 'h-full'}>
+      <Link
+        href={`/projects/${project.slug}`}
+        className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-card transition-all hover:border-white/20 hover:shadow-xl ${
+          isListView ? 'flex flex-col md:flex-row' : 'flex h-full flex-col'
+        }`}
+      >
         <meta itemProp="name" content={project.name_default} />
         <meta itemProp="description" content={project.description_default || ''} />
         <meta itemProp="image" content={imageUrl || ''} />
@@ -88,7 +101,11 @@ export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProje
         </div>
 
         {/* Zone Image */}
-        <div className="relative aspect-video w-full overflow-hidden bg-muted flex-shrink-0">
+        <div
+          className={`relative overflow-hidden bg-muted flex-shrink-0 ${
+            isListView ? 'aspect-video w-full md:h-auto md:w-72' : 'aspect-video w-full'
+          }`}
+        >
           <Image
             src={imageUrl || ''}
             alt={project.name_default}
@@ -98,7 +115,7 @@ export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProje
         </div>
 
         {/* Contenu - Avec un padding généreux */}
-        <div className="flex flex-1 flex-col p-5">
+        <div className={`flex flex-1 flex-col p-5 ${isListView ? 'md:p-6' : ''}`}>
           <div className="mb-2 flex items-center gap-3">
             <Target className="h-5 w-5 text-muted-foreground shrink-0" />
             <h3 className="line-clamp-1 text-xl font-bold tracking-tight text-foreground">
@@ -106,7 +123,7 @@ export const ClientCatalogProjectCard = ({ project, labels }: ClientCatalogProje
             </h3>
           </div>
 
-          <p className="line-clamp-2 text-sm text-muted-foreground mb-6">
+          <p className={`text-sm text-muted-foreground mb-6 ${isListView ? 'line-clamp-3' : 'line-clamp-2'}`}>
             {project.description_default}
           </p>
 

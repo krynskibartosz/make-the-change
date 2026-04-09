@@ -7,6 +7,7 @@ interface ProjectsPageProps {
   searchParams: Promise<{
     status?: string
     search?: string
+    view?: string
   }>
 }
 
@@ -25,6 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const params = await searchParams
   const status = params.status === 'active' || params.status === 'completed' ? params.status : 'all'
+  const initialView: 'grid' | 'list' | 'map' =
+    params.view === 'list' || params.view === 'map' || params.view === 'grid'
+      ? params.view
+      : 'grid'
 
   const projectsList = await getProjects({
     status,
@@ -38,6 +43,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
           projects={projectsList || []}
           initialStatus={status}
           initialSearch={params.search || ''}
+          initialView={initialView}
         />
       </section>
     </>

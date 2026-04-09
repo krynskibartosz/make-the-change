@@ -10,7 +10,7 @@ import { getLocalizedContent } from '@/lib/utils'
 import { ProjectCoverHero } from './components/project-cover-hero'
 import { ProjectMainContent } from './components/project-main-content'
 import { ProjectSidebar } from './components/project-sidebar'
-import type { PublicProject } from './project-detail-data'
+import { getRelatedProjectsByType, type PublicProject } from './project-detail-data'
 import { getEcosystemById, getPropertiesByProjectId } from '@/lib/investment/ecosystem.actions'
 import { EcosystemCard } from '@/components/investment/ecosystem-card'
 import { createClient } from '@/lib/supabase/server'
@@ -33,7 +33,7 @@ export async function ProjectDetails({
   const tNav = await getTranslations('navigation')
 
   // Fetch enhanced context
-  const projectContext = await getProjectContext(project.slug)
+  const projectContext = project.is_mock ? null : await getProjectContext(project.slug)
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
@@ -68,16 +68,28 @@ export async function ProjectDetails({
     : 'Make the Change'
 
   // Fetch ecosystem and properties
-  const supabase = await createClient()
-  const { data: coreProject } = await supabase
-    .schema('investment')
-    .from('projects')
-    .select('ecosystem_id')
-    .eq('id', project.id)
-    .single()
+  let ecosystem = null
+  let properties: any[] = []
 
-  const ecosystem = coreProject?.ecosystem_id ? await getEcosystemById(coreProject.ecosystem_id) : null
-  const properties = await getPropertiesByProjectId(project.id)
+  if (!project.is_mock) {
+    const supabase = await createClient()
+    const { data: coreProject } = await supabase
+      .schema('investment')
+      .from('projects')
+      .select('ecosystem_id')
+      .eq('id', project.id)
+      .single()
+
+    ecosystem = coreProject?.ecosystem_id ? await getEcosystemById(coreProject.ecosystem_id) : null
+    properties = await getPropertiesByProjectId(project.id)
+  }
+
+  const relatedProjects = await getRelatedProjectsByType({
+    type: project.type,
+    excludeProjectId: project.id,
+    excludeProjectSlug: project.slug,
+    limit: 4,
+  })
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -146,14 +158,16 @@ export async function ProjectDetails({
           <ProjectMainContent
             project={{
               ...project,
-              species: projectContext?.species,
-              challenges: projectContext?.challenges,
-              producer_products: projectContext?.producer_products,
-              expected_impact: projectContext?.expected_impact
+              species: projectContext?.species || project.species || null,
+              challenges: projectContext?.challenges || project.challenges || null,
+              producer_products:
+                projectContext?.producer_products || project.producer_products || null,
+              expected_impact: projectContext?.expected_impact || project.expected_impact || null,
             }}
             fundingProgress={fundingProgress}
             currentFunding={currentFunding}
             targetBudget={targetBudget}
+            relatedProjects={relatedProjects}
           />
           <ProjectSidebar
             project={project}
@@ -227,12 +241,13 @@ export async function ProjectDetails({
           }
           description={localizedDesc || t('subtitle')}
           primaryAction={
-            <Link href={`/projects/${project.slug}/invest`}>
+            <Link href={project.is_mock ? '/projects' : `/projects/${project.slug}/invest`}>
               <Button
                 size="lg"
+                disabled={Boolean(project.is_mock)}
                 className="h-16 px-10 text-lg rounded-full font-bold bg-marketing-positive-500 text-marketing-overlay-light hover:bg-marketing-positive-400 hover:scale-105 transition-all shadow-[0_0_50px_-10px_hsl(var(--marketing-positive) / 0.4)] border-none"
               >
-                {t('detail.invest_now')}
+                {project.is_mock ? 'Bientôt disponible' : t('detail.invest_now')}
               </Button>
             </Link>
           }

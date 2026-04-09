@@ -135,11 +135,6 @@ export async function ProductDetails({
         <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
           {/* Content Column */}
           <div className="space-y-8 order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-lime-500/30 bg-lime-500/10 px-4 py-1.5 text-sm font-medium text-lime-400 backdrop-blur-md mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <span>🌱</span>
-              <span className="uppercase tracking-widest text-xs font-bold">Impact Garanti</span>
-            </div>
-
             <h1
               className={`
                 font-black tracking-tighter mb-8 text-foreground animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100 drop-shadow-sm

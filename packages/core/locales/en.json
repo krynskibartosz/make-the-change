@@ -849,6 +849,10 @@
     "search_placeholder": "Search products...",
     "featured": "Featured",
     "product_list": "products",
+    "view": {
+      "grid": "Grid",
+      "list": "List"
+    },
     "filters": {
       "title": "Filters",
       "active_filters": "Active filters",
@@ -1162,6 +1166,7 @@
       "step_2": {
         "title": "2. Support & Earn",
         "description": "Support from €1. Your amount is instantly converted into points on your account (€1 = 1 point).",
+        "check_points": "€1 = 1 point",
         "check_secure": "Secure payment",
         "check_verified": "Verified impact"
       },
