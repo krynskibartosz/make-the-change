@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { connection } from 'next/server'
 import { Suspense } from 'react'
 import {
   AdventurePageFrame,
@@ -30,33 +31,28 @@ const fallbackLoader = (
 )
 
 export default async function AdventureHubPage({ searchParams }: AdventureHubProps) {
-  try {
-    const params = await searchParams
-    const activeTab = params.tab === 'biodex' ? 'biodex' : 'defis'
+  await connection()
+  const params = await searchParams
+  const activeTab = params.tab === 'biodex' ? 'biodex' : 'defis'
+  const sidebarUser = await getAdventureSidebarUser()
 
-    const sidebarUser = await getAdventureSidebarUser()
+  return (
+    <AdventurePageFrame
+      sidebarUser={sidebarUser}
+      rightRail={<AdventureRightRail variant="default" activeTag="" />}
+    >
+      <div className="relative w-full">
+        <AdventureStaticHeader user={sidebarUser} />
 
-    return (
-      <AdventurePageFrame
-        sidebarUser={sidebarUser}
-        rightRail={<AdventureRightRail variant="default" activeTag="" />}
-      >
-        <div className="relative w-full">
-          <AdventureStaticHeader user={sidebarUser} />
+        <Suspense fallback={null}>
+          <AdventureTabs />
+        </Suspense>
 
-          <Suspense fallback={null}>
-            <AdventureTabs />
-          </Suspense>
-
-          <Suspense fallback={fallbackLoader}>
-            {activeTab === 'defis' && <AdventureChallenges />}
-            {activeTab === 'biodex' && <AdventureBiodex />}
-          </Suspense>
-        </div>
-      </AdventurePageFrame>
-    )
-  } catch (error) {
-    console.error('Error loading adventure hub page:', error)
-    throw error
-  }
+        <Suspense fallback={fallbackLoader}>
+          {activeTab === 'defis' && <AdventureChallenges />}
+          {activeTab === 'biodex' && <AdventureBiodex />}
+        </Suspense>
+      </div>
+    </AdventurePageFrame>
+  )
 }

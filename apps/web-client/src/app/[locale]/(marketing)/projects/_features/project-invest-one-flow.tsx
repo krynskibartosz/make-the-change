@@ -17,7 +17,7 @@ import { ProjectImpactCalculator } from '../[slug]/components/project-impact-cal
 
 type FlowStep = 'impact' | 'payment' | 'success'
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
-const QUICK_AMOUNTS = [50, 100, 200]
+const QUICK_AMOUNTS = [20, 50, 100]
 const REWARD_PREVIEW_IMAGE = '/abeille-transparente.png'
 const formatAmountPlain = (value: number): string =>
   `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
@@ -66,7 +66,7 @@ export function ProjectInvestOneFlow({
 
   const min = rules.min_amount
   const max = rules.max_amount
-  const defaultAmount = clampAmount(initialAmount ?? Math.max(min, 50), min, max)
+  const defaultAmount = clampAmount(initialAmount ?? 50, min, max)
 
   const [step, setStep] = useState<FlowStep>('impact')
   const [amountEur, setAmountEur] = useState(defaultAmount)
@@ -77,7 +77,6 @@ export function ProjectInvestOneFlow({
   const [claimPassword, setClaimPassword] = useState('')
   const [claimSaved, setClaimSaved] = useState(false)
   const [xpProgress, setXpProgress] = useState(0)
-  const [amountFocused, setAmountFocused] = useState(false)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
   const panelBottomPadding =
@@ -160,10 +159,7 @@ export function ProjectInvestOneFlow({
   }
 
   const quickAmounts = useMemo(() => {
-    const candidates = [min, ...QUICK_AMOUNTS, max]
-    return Array.from(new Set(candidates.map((value) => clampAmount(value, min, max)))).sort(
-      (a, b) => a - b,
-    )
+    return Array.from(new Set(QUICK_AMOUNTS.map((value) => clampAmount(value, min, max))))
   }, [max, min])
 
   return (
@@ -203,22 +199,14 @@ export function ProjectInvestOneFlow({
               presentation === 'page' ? 'pt-2' : '',
             )}
           >
-            <div className="py-4">
-              <div
-                className={cn(
-                  'flex flex-col items-center justify-center text-center',
-                  presentation === 'modal' ? 'py-6' : 'py-10',
-                )}
-              >
+            <div className={cn('flex flex-col gap-8 py-4', presentation === 'modal' ? 'pt-6' : 'pt-10')}>
+              <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
                   Choisissez votre montant
                 </p>
                 <div className="flex items-baseline justify-center gap-2 w-full">
                   <div
-                    className={cn(
-                      'border-b pb-1 transition-colors',
-                      amountFocused ? 'border-lime-400/60' : 'border-white/20',
-                    )}
+                    className="border-b-2 border-dashed border-white/20 bg-white/5 rounded-2xl px-6 py-2 transition-colors focus-within:bg-white/10"
                   >
                     <input
                       type="text"
@@ -227,20 +215,13 @@ export function ProjectInvestOneFlow({
                       size={Math.max(amountInput.length, 2)}
                       value={amountInput}
                       onChange={(event) => handleAmountInput(event.target.value)}
-                      onFocus={() => setAmountFocused(true)}
-                      onBlur={() => {
-                        setAmountFocused(false)
-                        handleAmountBlur()
-                      }}
+                      onBlur={handleAmountBlur}
                       aria-label={t('amount_label')}
-                      className="w-auto max-w-[9ch] bg-transparent text-center text-7xl leading-none font-black tracking-tighter text-white tabular-nums caret-lime-400 outline-none"
+                      className="w-auto max-w-[9ch] bg-transparent text-center text-7xl leading-none font-black tracking-tighter text-white tabular-nums caret-lime-400 outline-none focus:outline-none focus:ring-0"
                     />
                   </div>
                   <span className="mb-1 text-5xl font-black tracking-tight text-white/90">€</span>
                 </div>
-                <p className="mt-2 text-xs text-white/50">
-                  Touchez le montant pour le modifier
-                </p>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-2">
@@ -263,9 +244,6 @@ export function ProjectInvestOneFlow({
                   </button>
                 ))}
               </div>
-              <p className="mt-10 mb-6 text-xs text-center text-white/40">
-                Montant libre. Chaque euro compte.
-              </p>
 
               <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
                 <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" />
