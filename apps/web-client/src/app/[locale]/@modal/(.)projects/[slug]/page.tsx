@@ -25,6 +25,7 @@ export default async function InterceptedProjectPage({ params }: InterceptedProj
     <FullScreenSlideModal
       title={getLocalizedContent(project.name_i18n, locale, project.name_default)}
       fallbackHref={`/projects/${project.slug}`}
+      headerMode="dynamic"
     >
       <ProjectQuickView project={project} />
     </FullScreenSlideModal>

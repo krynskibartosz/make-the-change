@@ -1,4 +1,4 @@
-import { Lock } from 'lucide-react'
+import { Bug, Cloud, Hexagon, Lock } from 'lucide-react'
 
 type ImpactMode = 'project' | 'checkout'
 
@@ -47,54 +47,100 @@ export function ProjectImpactCalculator({
 
   return (
     <section className="w-full">
-      <h3 className={isCheckoutMode ? 'text-[2rem] font-black tracking-tight text-white' : 'text-xl font-bold text-white'}>
-        {isCheckoutMode ? 'Votre impact estimé' : 'Impact collectif déjà généré'}
-      </h3>
       {!isCheckoutMode ? (
-        <p className="mb-4 mt-1 text-sm text-white/60">
-          {`Basé sur ${formatInteger(displayAmount)} € déjà investis`}
-        </p>
-      ) : null}
+        <>
+          <h3 className="text-xl font-bold text-white">Impact collectif déjà généré</h3>
+          <p className="mb-4 mt-1 text-sm text-white/60">
+            {`Basé sur ${formatInteger(displayAmount)} € déjà investis`}
+          </p>
 
-      <div className="grid grid-cols-2 gap-3">
-        <article className="w-full rounded-2xl bg-white/4 py-4">
-          <div className="text-2xl leading-none">🐝</div>
-          <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-            {formatInteger(bees)}
-          </div>
-          <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-            Abeilles protégées
-          </div>
-        </article>
+          <div className="grid grid-cols-2 gap-3">
+            <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+              <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                <Bug className="h-5 w-5 text-lime-400" />
+              </div>
+              <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                {formatInteger(bees)}
+              </div>
+              <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                Abeilles protégées
+              </div>
+            </article>
 
-        <article className="w-full rounded-2xl bg-white/4 py-4">
-          <div className="text-2xl leading-none">🍯</div>
-          <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-            {honeyParts.whole}
-            <span className="text-lg font-bold text-white/50">
-              {honeyParts.fraction ? `,${honeyParts.fraction}` : ''}
-              {' '}kg
-            </span>
-          </div>
-          <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-            Miel généré
-          </div>
-        </article>
+            <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+              <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                <Hexagon className="h-5 w-5 text-lime-400" />
+              </div>
+              <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                {honeyParts.whole}
+                <span className="text-lg font-bold text-white/50">
+                  {honeyParts.fraction ? `,${honeyParts.fraction}` : ''}
+                  {' '}kg
+                </span>
+              </div>
+              <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                Miel généré
+              </div>
+            </article>
 
-        <article className="col-span-2 w-full rounded-2xl bg-white/4 py-4">
-          <div className="text-2xl leading-none">💨</div>
-          <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-            {co2Parts.whole}
-            <span className="text-lg font-bold text-white/50">
-              {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
-              {' '}kg
-            </span>
+            <article className="col-span-2 w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+              <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                <Cloud className="h-5 w-5 text-lime-400" />
+              </div>
+              <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                {co2Parts.whole}
+                <span className="text-lg font-bold text-white/50">
+                  {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
+                  {' '}kg
+                </span>
+              </div>
+              <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                CO₂ capturé
+              </div>
+            </article>
           </div>
-          <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-            CO₂ capturé
-          </div>
-        </article>
-      </div>
+        </>
+      ) : (
+        <div className="flex w-full items-start justify-between border-y border-white/5 py-6 my-4">
+            <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+              <div className="text-xl">🐝</div>
+              <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
+                {formatInteger(bees)}
+              </div>
+              <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                Abeilles
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+              <div className="text-xl">🍯</div>
+              <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
+                <span>{honeyParts.whole}</span>
+                <span className="text-sm font-bold text-white/50">
+                  {honeyParts.fraction ? `,${honeyParts.fraction}` : ''}
+                  {' '}kg
+                </span>
+              </div>
+              <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                Miel
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+              <div className="text-xl">💨</div>
+              <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
+                <span>{co2Parts.whole}</span>
+                <span className="text-sm font-bold text-white/50">
+                  {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
+                  {' '}kg
+                </span>
+              </div>
+              <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                CO2
+              </div>
+            </div>
+        </div>
+      )}
 
       <article className="mt-3 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-linear-to-br from-black/55 to-black/35  py-3">
         <div className="relative ml-3 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/50">
@@ -107,7 +153,7 @@ export function ProjectImpactCalculator({
         </div>
 
         <div className="min-w-0">
-          <p className="text-[10px] font-bold text-white/60 uppercase tracking-[0.14em]">
+          <p className="mb-1 text-[10px] font-bold text-white/50 uppercase tracking-widest">
             {isCheckoutMode ? 'ESPÈCE À DÉBLOQUER' : 'ESPÈCE PROTÉGÉE PAR CE PROJET'}
           </p>
           <p className="text-sm font-bold text-white">L&apos;Abeille Noire</p>

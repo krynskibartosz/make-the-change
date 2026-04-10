@@ -52,8 +52,8 @@ export default async function InterceptedProjectInvestPage({
 
   return (
     <FullScreenSlideModal
-      title={getLocalizedContent(project.name_i18n, locale, project.name_default)}
       fallbackHref={`/projects/${project.slug}`}
+      headerMode="close"
     >
       <ProjectInvestOneFlow
         project={{

@@ -1,5 +1,5 @@
 import { Badge, Button, Progress } from '@make-the-change/core/ui'
-import { Globe, Leaf, MapPin } from 'lucide-react'
+import { ChevronRight, Globe, Leaf, MapPin } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -218,9 +218,12 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
 
             {/* Producteur : flex inline avec séparateurs subtils */}
             {project.producer ? (
-              <section className="flex px-4 sm:px-5 items-center gap-4 border-y border-white/5 py-4">
-                {producerHref ? (
-                  <a href={producerHref} className="flex items-center gap-4 w-full group">
+              producerHref ? (
+                <a
+                  href={producerHref}
+                  className="group block w-full cursor-pointer border-y border-white/5 px-4 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
+                >
+                  <div className="-mx-2 flex items-center gap-4 rounded-2xl px-2 py-2 transition-all duration-200 group-hover:bg-white/5 group-active:scale-[0.99] group-active:bg-white/10">
                     {producerImage ? (
                       <img
                         src={producerImage}
@@ -240,9 +243,11 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                         {organizerDescription}
                       </p>
                     </div>
-                    
-                  </a>
-                ) : (
+                    <ChevronRight className="h-4 w-4 shrink-0 text-white/35 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white/60" />
+                  </div>
+                </a>
+              ) : (
+                <section className="flex items-center gap-4 border-y border-white/5 px-4 py-3 sm:px-5">
                   <div className="flex items-center gap-4 w-full">
                     {producerImage ? (
                       <img
@@ -268,8 +273,8 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                       </span>
                     ) : null}
                   </div>
-                )}
-              </section>
+                </section>
+              )
             ) : null}
 <div className='px-4 sm:px-5'>
 
@@ -286,17 +291,17 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
           </div>
         </div>
 
-        <div className="relative shrink-0 border-t border-white/10 bg-background/70 px-4 py-3 backdrop-blur-xl sm:px-5 sm:py-4">
+        <div className="relative shrink-0 border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
           {isFundingClosed || isPrototypeProject ? (
             <Button
-              className="h-12 w-full rounded-2xl bg-white/10 text-center text-base font-bold text-muted-foreground hover:bg-white/10 justify-center gap-0 [&_svg]:hidden"
+              className="h-14 w-full rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 justify-center gap-0 [&_svg]:hidden"
               disabled
             >
               {isPrototypeProject ? 'Bientôt disponible' : t('detail.funding_closed')}
             </Button>
           ) : (
             <Link href={investPath} className="block w-full">
-              <Button className="h-12 w-full rounded-2xl text-center text-base font-bold justify-center gap-0 shadow-lg shadow-primary/25 [&_svg]:hidden">
+              <Button className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform [&_svg]:hidden">
                 Soutenir ce projet
               </Button>
             </Link>

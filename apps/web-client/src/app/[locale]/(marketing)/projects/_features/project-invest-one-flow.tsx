@@ -5,22 +5,57 @@ import {
   Button,
   Card,
   CardContent,
-  Input,
-  Progress,
 } from '@make-the-change/core/ui'
-import { ArrowLeft, ArrowRight, CheckCircle2, Lock, ShieldCheck, Sparkles } from 'lucide-react'
+import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { ArrowLeft, CheckCircle2, Lock } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
 
 type FlowStep = 'impact' | 'payment' | 'success'
+type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
-const REWARD_PREVIEW_IMAGE = '/abeille-transparente.png'
+const REWARD_PREVIEW_IMAGE = '/images/diorama-chouette.png'
 const formatAmountPlain = (value: number): string =>
   `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
+const formatAmountNumber = (value: number): string =>
+  new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
+
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
+
+const stripeAppearance = {
+  theme: 'stripe',
+  variables: {
+    colorPrimary: '#a3e635',
+    colorBackground: 'rgba(255,255,255,0.02)',
+    colorText: '#ffffff',
+    colorDanger: '#ef4444',
+    borderRadius: '12px',
+  },
+  rules: {
+    '.Input': {
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.12)',
+      boxShadow: 'none',
+    },
+    '.Input:focus': {
+      border: '1px solid rgba(163,230,53,0.6)',
+      boxShadow: '0 0 0 1px rgba(163,230,53,0.3)',
+    },
+    '.Label': {
+      color: 'rgba(255,255,255,0.65)',
+      fontWeight: '600',
+      letterSpacing: '0.02em',
+    },
+  },
+} as const
 
 type ProjectInvestOneFlowProps = {
   project: {
@@ -74,15 +109,11 @@ export function ProjectInvestOneFlow({
   const [guestEmail, setGuestEmail] = useState('')
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
   const [claimEmail, setClaimEmail] = useState('')
-  const [claimPassword, setClaimPassword] = useState('')
   const [claimSaved, setClaimSaved] = useState(false)
-  const [xpProgress, setXpProgress] = useState(0)
+  const [phase, setPhase] = useState<LootPhase>('tension')
+  const amountInputRef = useRef<HTMLInputElement | null>(null)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
-  const panelBottomPadding =
-    presentation === 'modal'
-      ? 'pb-[calc(1rem+env(safe-area-inset-bottom))]'
-      : 'pb-[calc(7rem+env(safe-area-inset-bottom))]'
 
   const points = useMemo(() => {
     return investment.calculateInvestmentPoints({
@@ -91,19 +122,62 @@ export function ProjectInvestOneFlow({
       bonus_percentage: rules.expected_bonus,
     })
   }, [amountEur, project.type, rules.expected_bonus])
+  const formattedAmount = formatAmountNumber(amountEur)
+  const protectedBees = formatPoints(Math.round((amountEur / 100) * 3800))
 
   useEffect(() => {
-    if (step !== 'success') {
-      setXpProgress(0)
-      return
+    if (step !== 'success') return
+
+    setPhase('tension')
+    const flashTimerId = window.setTimeout(() => setPhase('flash'), 1300)
+    const euphoriaTimerId = window.setTimeout(() => setPhase('euphoria'), 1500)
+    const resolvedTimerId = window.setTimeout(() => setPhase('resolved'), 2100)
+
+    return () => {
+      window.clearTimeout(flashTimerId)
+      window.clearTimeout(euphoriaTimerId)
+      window.clearTimeout(resolvedTimerId)
     }
-
-    const timeoutId = window.setTimeout(() => {
-      setXpProgress(100)
-    }, 90)
-
-    return () => window.clearTimeout(timeoutId)
   }, [step])
+
+  useEffect(() => {
+    if (step !== 'success' || phase !== 'euphoria') return
+
+    void import('canvas-confetti')
+      .then(({ default: confetti }) => {
+        confetti({
+          particleCount: 100,
+          spread: 72,
+          origin: { y: 0.6 },
+          colors: ['#a3e635', '#facc15', '#f59e0b'],
+        })
+        window.setTimeout(() => {
+          confetti({
+            particleCount: 80,
+            spread: 90,
+            origin: { y: 0.58 },
+            colors: ['#84cc16', '#eab308', '#fbbf24'],
+          })
+        }, 260)
+      })
+      .catch(() => {})
+  }, [step, phase])
+
+  useEffect(() => {
+    if (presentation !== 'modal') return
+
+    const closeButton = document.querySelector('button[aria-label="Fermer"]') as HTMLButtonElement | null
+    if (!closeButton) return
+
+    const shouldShowCloseButton = !(step === 'success' && phase !== 'resolved')
+    closeButton.style.opacity = shouldShowCloseButton ? '1' : '0'
+    closeButton.style.pointerEvents = shouldShowCloseButton ? 'auto' : 'none'
+
+    return () => {
+      closeButton.style.opacity = '1'
+      closeButton.style.pointerEvents = 'auto'
+    }
+  }, [presentation, step, phase])
 
   useEffect(() => {
     setAmountInput(String(amountEur))
@@ -152,15 +226,13 @@ export function ProjectInvestOneFlow({
   }
 
   const submitClaim = () => {
-    if (!isValidEmail(claimEmail) || claimPassword.length < 8) {
+    if (!isValidEmail(claimEmail)) {
       return
     }
     setClaimSaved(true)
   }
 
-  const quickAmounts = useMemo(() => {
-    return Array.from(new Set(QUICK_AMOUNTS.map((value) => clampAmount(value, min, max))))
-  }, [max, min])
+  const quickAmounts = QUICK_AMOUNTS
 
   return (
     <div
@@ -168,7 +240,7 @@ export function ProjectInvestOneFlow({
         'relative flex min-h-0 flex-col overflow-x-hidden bg-transparent',
         presentation === 'page'
           ? 'mx-auto w-full max-w-3xl px-4 pb-10 pt-6 md:px-6 md:pt-10'
-          : 'h-full px-4',
+          : 'h-full w-full',
       )}
     >
       {presentation === 'page' ? (
@@ -187,7 +259,22 @@ export function ProjectInvestOneFlow({
         </header>
       ) : null}
 
-      <div className="relative min-h-0 flex-1 overflow-x-hidden pb-24">
+      <div
+        className={cn(
+          'relative min-h-0 flex-1 overflow-x-hidden',
+          'pb-24',
+        )}
+      >
+        {presentation === 'modal' && step === 'payment' ? (
+          <button
+            onClick={() => setStep('impact')}
+            className="absolute top-4 left-4 z-30 p-2"
+            aria-label="Retour"
+          >
+            <ArrowLeft className="w-5 h-5 text-white/70" />
+          </button>
+        ) : null}
+
         <div
           className="flex h-full min-h-0 transition-transform duration-500 ease-out will-change-transform"
           style={{ transform: `translateX(-${stepIndex * 100}%)` }}
@@ -199,16 +286,18 @@ export function ProjectInvestOneFlow({
               presentation === 'page' ? 'pt-2' : '',
             )}
           >
-            <div className={cn('flex flex-col gap-8 py-4', presentation === 'modal' ? 'pt-6' : 'pt-10')}>
+            <div className={cn('flex flex-col gap-8 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
                   Choisissez votre montant
                 </p>
-                <div className="flex items-baseline justify-center gap-2 w-full">
+                <div className="flex w-full items-baseline justify-center">
                   <div
-                    className="border-b-2 border-dashed border-white/20 bg-white/5 rounded-2xl px-6 py-2 transition-colors focus-within:bg-white/10"
+                    className="flex cursor-text items-baseline justify-center gap-2 rounded-3xl bg-white/5 px-8 py-4 transition-colors hover:bg-white/10"
+                    onClick={() => amountInputRef.current?.focus()}
                   >
                     <input
+                      ref={amountInputRef}
                       type="text"
                       inputMode="numeric"
                       pattern="[0-9]*"
@@ -217,10 +306,10 @@ export function ProjectInvestOneFlow({
                       onChange={(event) => handleAmountInput(event.target.value)}
                       onBlur={handleAmountBlur}
                       aria-label={t('amount_label')}
-                      className="w-auto max-w-[9ch] bg-transparent text-center text-7xl leading-none font-black tracking-tighter text-white tabular-nums caret-lime-400 outline-none focus:outline-none focus:ring-0"
+                      className="w-auto max-w-[9ch] bg-transparent text-center text-7xl leading-none font-black tracking-tighter text-white tabular-nums caret-lime-400 outline-none ring-0 focus:outline-none focus:ring-0"
                     />
+                    <span className="mb-2 text-4xl font-semibold text-white/60">€</span>
                   </div>
-                  <span className="mb-1 text-5xl font-black tracking-tight text-white/90">€</span>
                 </div>
               </div>
 
@@ -251,197 +340,276 @@ export function ProjectInvestOneFlow({
             </div>
           </section>
 
-          <section className={cn('min-h-0 w-full shrink-0 overflow-y-auto', panelBottomPadding)}>
-            <Card className="border-white/10 bg-background/60 shadow-sm backdrop-blur">
-              <CardContent className="space-y-5 p-5 sm:p-6">
-                <div className="rounded-2xl border border-white/10 bg-background/50 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Montant</p>
-                  <p className="mt-2 text-3xl font-black tracking-tight tabular-nums text-foreground">
-                    {formatAmountPlain(amountEur)}
-                  </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    +{formatPoints(points.total_points)} points estimés
-                  </p>
+          <section
+            className={cn(
+              'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(200px+env(safe-area-inset-bottom))]',
+              presentation === 'page' ? 'pt-2' : '',
+            )}
+          >
+            <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+              <div className="text-center">
+                <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
+                  Votre don pour la nature
+                </p>
+                <div className="mb-8 flex items-baseline justify-center gap-1.5">
+                  <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
+                    {formatAmountNumber(amountEur)}
+                  </span>
+                  <span className="text-4xl font-semibold text-white/50">€</span>
                 </div>
 
-                {!isAuthenticated ? (
-                  <div className="rounded-2xl border border-white/10 bg-background/50 p-4">
-                    <Input
-                      type="email"
-                      size="lg"
-                      value={guestEmail}
-                      onChange={(event) => setGuestEmail(event.target.value)}
-                      label="Votre email"
-                      placeholder="vous@email.com"
-                      className="h-12 text-base"
-                      required
-                    />
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Nous préparons votre reçu et votre accès de récupération.
-                    </p>
-                    {guestEmailError ? (
-                      <p className="mt-2 text-xs font-semibold text-destructive">{guestEmailError}</p>
-                    ) : null}
+                <div className="mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-3 text-left">
+                  <div className="text-sm">
+                    <span className="mr-1 text-white/40">📍 Projet :</span>
+                    <span className="font-medium text-white truncate">{project.name}</span>
                   </div>
-                ) : null}
+                  <div className="mt-2 text-sm">
+                    <span className="mr-1 text-white/40">🎁 Inclus :</span>
+                    <span className="font-bold text-white">
+                      {`${formatPoints(points.total_points)} Points d'Impact + L'Abeille Noire`}
+                    </span>
+                  </div>
+                  <div className="mt-2 text-sm">
+                    <span className="mr-1 text-white/40">🔒 Sécurité :</span>
+                    <span className="text-white/70">Connexion cryptée par Stripe</span>
+                  </div>
+                </div>
+              </div>
 
-                <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
-                  <div className="flex items-start gap-3">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 text-primary" />
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">Paiement sécurisé Stripe</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Intégration wallet + carte à brancher à l’étape suivante.
-                      </p>
+              {!isAuthenticated ? (
+                <div className="w-full">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/50">
+                    Email pour le reçu
+                  </label>
+                  <input
+                    type="email"
+                    value={guestEmail}
+                    onChange={(event) => setGuestEmail(event.target.value)}
+                    placeholder="vous@email.com"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
+                    required
+                  />
+                  {guestEmailError ? (
+                    <p className="mt-2 text-xs font-semibold text-destructive">{guestEmailError}</p>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {stripePromise ? (
+                <Elements
+                  key={amountEur}
+                  stripe={stripePromise}
+                  options={{
+                    mode: 'payment',
+                    amount: Math.max(100, amountEur * 100),
+                    currency: 'eur',
+                    appearance: stripeAppearance,
+                  }}
+                >
+                  <div className="mt-8 flex w-full flex-col gap-4">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
+                      <ExpressCheckoutElement onConfirm={() => {}} />
+                    </div>
+
+                    <div className="my-6 flex items-center gap-4">
+                      <div className="h-px flex-1 bg-white/10" />
+                      <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
+                      <div className="h-px flex-1 bg-white/10" />
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                      <PaymentElement />
                     </div>
                   </div>
+                </Elements>
+              ) : (
+                <div className="mt-8 flex w-full flex-col gap-4">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
+                    Apple Pay / Google Pay indisponible (clé Stripe manquante)
+                  </div>
+                  <div className="my-6 flex items-center gap-4">
+                    <div className="h-px flex-1 bg-white/10" />
+                    <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
+                    <div className="h-px flex-1 bg-white/10" />
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
+                    Module carte bancaire Stripe
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-11 w-full rounded-xl"
-                    onClick={() => setStep('impact')}
-                  >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Retour
-                  </Button>
-                  <Button type="button" className="h-11 w-full rounded-xl font-bold" onClick={goToSuccess}>
-                    Confirmer
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              )}
+            </div>
           </section>
 
-          <section className={cn('min-h-0 w-full shrink-0 overflow-y-auto', panelBottomPadding)}>
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-[#050b08] via-[#0a1410] to-[#08120f] p-5 shadow-2xl">
-              <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full bg-lime-400/10 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-12 -left-10 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
+          <section
+            className={cn(
+              'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(220px+env(safe-area-inset-bottom))]',
+              presentation === 'page' ? 'pt-2' : '',
+            )}
+          >
+            <div className="relative flex flex-col items-center px-4 pt-16 pb-6 [@media(max-height:800px)]:pt-10 [@media(max-height:800px)]:pb-4">
+              <div className="pointer-events-none absolute -top-8 right-0 h-56 w-56 rounded-full bg-lime-400/15 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-12 left-0 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl" />
 
-              <div className="relative space-y-5">
-                <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-lime-300">
-                  <Sparkles className="h-3 w-3" />
-                  Succès
-                </div>
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.9, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+                className="mt-6 text-center text-4xl font-black tracking-tight text-white [@media(max-height:800px)]:mt-2 [@media(max-height:800px)]:text-3xl"
+              >
+                Impact Validé !
+              </motion.h1>
+              <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
+                Vos <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> viennent de protéger{' '}
+                <span className="font-bold text-white tabular-nums">{protectedBees}</span> abeilles.
+              </p>
 
-                <div>
-                  <p className="text-xl font-black tracking-tight text-white">
-                    Incroyable, votre impact est confirmé.
-                  </p>
-                  <p className="mt-1 text-sm text-white/70">
-                    {formatPoints(Math.round((amountEur / 100) * 3800))} abeilles soutenues estimées.
-                  </p>
-                </div>
-
-                <article className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/35 p-3">
-                  <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/50">
-                    <img
-                      src={REWARD_PREVIEW_IMAGE}
-                      alt="Aperçu espèce débloquée"
-                      className="h-full w-full object-contain opacity-70"
-                      onError={(event) => {
-                        event.currentTarget.style.display = 'none'
-                      }}
-                    />
-                    <Lock className="absolute bottom-1 right-1 h-4 w-4 text-white/55" />
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">
-                      Votre récompense BioDex
-                    </p>
-                    <p className="text-sm font-bold text-white">L&apos;Abeille Noire</p>
-                    <p className="mt-0.5 text-xs text-white/70">
-                      Espèce déverrouillée après confirmation du paiement.
-                    </p>
-                  </div>
-                </article>
-
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-3">
-                  <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-white/70">
-                    <span>+ 65 graines</span>
-                    <span>{xpProgress}%</span>
-                  </div>
-                  <Progress
-                    value={xpProgress}
-                    className="h-2 bg-white/10"
-                    indicatorClassName="bg-linear-to-r from-lime-400 to-emerald-400 transition-all duration-700 ease-out"
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.4 }}
+                className="flex-1 flex flex-col items-center justify-center gap-4 my-4 w-full"
+              >
+                <div className="relative mx-auto w-64 h-64 flex items-center justify-center [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56">
+                  <div
+                    className={cn(
+                      'absolute top-1/2 left-1/2 w-56 h-56 rounded-full bg-lime-500/30 blur-[60px] transition-all duration-1000 ease-out z-0 -translate-x-1/2 -translate-y-1/2',
+                      phase === 'euphoria' || phase === 'resolved' ? 'opacity-100 scale-100' : 'opacity-0 scale-50',
+                    )}
                   />
+                  <div
+                    className={cn(
+                      'absolute inset-[-50%] bg-white rounded-full blur-2xl z-20 transition-all duration-200',
+                      phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-50',
+                    )}
+                  />
+                  <img
+                    src={REWARD_PREVIEW_IMAGE}
+                    alt="Espèce débloquée"
+                    className={cn(
+                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                      phase === 'tension' ? 'brightness-0 opacity-50 scale-90 animate-pulse' : '',
+                      phase === 'flash' ? 'brightness-200 opacity-100 scale-95' : '',
+                      phase === 'euphoria' || phase === 'resolved'
+                        ? 'brightness-100 opacity-100 scale-110 drop-shadow-[0_20px_50px_rgba(132,204,22,0.3)]'
+                        : '',
+                    )}
+                    onError={(event) => {
+                      event.currentTarget.style.display = 'none'
+                    }}
+                  />
+                  <div
+                    className={cn(
+                      'absolute inset-0 flex items-center justify-center z-30 transition-all duration-300 ease-in',
+                      phase === 'tension' ? 'opacity-100 scale-100' : 'opacity-0 scale-[3] blur-sm',
+                    )}
+                  >
+                    <Lock className="h-12 w-12 text-white/80 [@media(max-height:800px)]:h-10 [@media(max-height:800px)]:w-10" />
+                  </div>
                 </div>
 
-                {isAuthenticated ? (
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    <Link href="/dashboard/investments" className="block">
-                      <Button className="h-11 w-full rounded-xl font-bold">Voir mon dashboard</Button>
-                    </Link>
-                    <Link href={`/projects/${project.slug}`} className="block">
-                      <Button variant="outline" className="h-11 w-full rounded-xl">
-                        Retour au projet
-                      </Button>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-                    <p className="text-sm font-semibold text-white">Sauvegarder mon impact</p>
-                    <p className="mt-1 text-xs text-white/70">
-                      Créez votre profil pour rattacher ce don et conserver vos récompenses.
-                    </p>
+                <div
+                  className="mt-6 text-center flex flex-col items-center gap-3"
+                >
+                  <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
+                    Nouvelle espèce débloquée
+                  </span>
+                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">La Chouette Effraie</h2>
+                  <p className="mt-2 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
+                    {`+ ${formatPoints(points.total_points)} Points d'Impact ✨`}
+                  </p>
+                  <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
+                    À dépenser dans le Marché
+                  </p>
+                </div>
+              </motion.div>
 
-                    <div className="mt-3 grid gap-2">
-                      <Input
-                        type="email"
-                        size="lg"
-                        value={claimEmail}
-                        onChange={(event) => setClaimEmail(event.target.value)}
-                        placeholder="Email"
-                        className="h-12 border-white/10 bg-black/30 text-base text-white"
-                      />
-                      <Input
-                        type="password"
-                        size="lg"
-                        value={claimPassword}
-                        onChange={(event) => setClaimPassword(event.target.value)}
-                        placeholder="Mot de passe (8+ caractères)"
-                        className="h-12 border-white/10 bg-black/30 text-base text-white"
-                      />
-                      <Button
-                        type="button"
-                        onClick={submitClaim}
-                        className="h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300"
-                        disabled={!isValidEmail(claimEmail) || claimPassword.length < 8}
-                      >
-                        Sauvegarder mon impact
-                      </Button>
-                      {claimSaved ? (
-                        <p className="inline-flex items-center gap-1 text-xs font-semibold text-lime-300">
-                          <CheckCircle2 className="h-3.5 w-3.5" />
-                          Pré-validation OK. Branchons l’action signup-and-claim ensuite.
-                        </p>
-                      ) : null}
-                    </div>
+              {!isAuthenticated && !claimSaved ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.35 }}
+                  className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6"
+                >
+                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre Abeille Noire !</h3>
+                  <p className="mb-4 text-sm text-white/60">
+                    Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
+                  </p>
+                  <div className="grid gap-2">
+                    <input
+                      type="email"
+                      value={claimEmail}
+                      onChange={(event) => setClaimEmail(event.target.value)}
+                      placeholder="Email"
+                      className="h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
+                    />
+                    <Button
+                      type="button"
+                      onClick={submitClaim}
+                      className="h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300"
+                      disabled={!isValidEmail(claimEmail)}
+                    >
+                      Créer mon compte
+                    </Button>
                   </div>
-                )}
-              </div>
+                </motion.div>
+              ) : null}
+
+              {claimSaved && !isAuthenticated ? (
+                <p className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-lime-300">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  Profil prêt. Votre récompense sera sauvegardée dans le BioDex.
+                </p>
+              ) : null}
             </div>
           </section>
         </div>
       </div>
 
       {step === 'impact' ? (
-        <div className="fixed bottom-0 left-0 right-0 w-full bg-background/95 backdrop-blur-xl border-t border-white/5 rounded-none p-4 pb-[max(1rem,env(safe-area-inset-bottom))] z-50 md:hidden">
-            <p className="mb-3 text-center text-sm font-bold text-lime-400">
-              Vous allez récolter +{formatPoints(points.total_points)} Graines 🌱
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+            <p className="mb-3 text-center text-sm font-medium text-lime-400">
+              Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Points d&apos;Impact</span> ✨
             </p>
             <Button
               type="button"
               onClick={goToPayment}
-              className="w-full rounded-2xl bg-lime-400 py-4 text-lg font-black text-black transition-transform active:scale-95 hover:bg-lime-300"
+              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
             >
               Valider mon impact
             </Button>
+        </div>
+      ) : null}
+
+      {step === 'payment' ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+          <Button
+            type="button"
+            onClick={goToSuccess}
+            className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+          >
+            <Lock className="h-5 w-5" />
+            {`Payer ${formatAmountNumber(amountEur)} €`}
+          </Button>
+        </div>
+      ) : null}
+
+      {step === 'success' && (isAuthenticated || claimSaved) ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+          <Link href="/aventure/biodex" className="block w-full">
+            <Button className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform">
+              Admirer dans mon BioDex
+            </Button>
+          </Link>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => {
+              router.push('/marche')
+            }}
+            className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
+          >
+            Visiter le Marché
+          </Button>
         </div>
       ) : null}
     </div>
