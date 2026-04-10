@@ -442,13 +442,11 @@ export function ProjectInvestOneFlow({
 
           <section
             className={cn(
-              'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(220px+env(safe-area-inset-bottom))]',
+              'min-h-0 w-full shrink-0 overflow-y-auto overflow-x-hidden pb-[calc(220px+env(safe-area-inset-bottom))]',
               presentation === 'page' ? 'pt-2' : '',
             )}
           >
-            <div className="relative flex flex-col items-center px-4 pt-16 pb-6 [@media(max-height:800px)]:pt-10 [@media(max-height:800px)]:pb-4">
-              <div className="pointer-events-none absolute -top-8 right-0 h-56 w-56 rounded-full bg-lime-400/15 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-12 left-0 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl" />
+            <div className="relative flex flex-col items-center overflow-x-hidden px-4 pt-16 pb-6 [@media(max-height:800px)]:pt-10 [@media(max-height:800px)]:pb-4">
 
               <motion.h1
                 initial={{ opacity: 0, scale: 0.9, y: 8 }}
@@ -472,14 +470,14 @@ export function ProjectInvestOneFlow({
                 <div className="relative mx-auto w-64 h-64 flex items-center justify-center [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56">
                   <div
                     className={cn(
-                      'absolute top-1/2 left-1/2 w-56 h-56 rounded-full bg-lime-500/30 blur-[60px] transition-all duration-1000 ease-out z-0 -translate-x-1/2 -translate-y-1/2',
-                      phase === 'euphoria' || phase === 'resolved' ? 'opacity-100 scale-100' : 'opacity-0 scale-50',
+                      'absolute top-1/2 left-1/2 z-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(132,204,22,0.35)_0%,rgba(132,204,22,0)_68%)] transition-all duration-700 ease-out',
+                      phase === 'euphoria' || phase === 'resolved' ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
                     )}
                   />
                   <div
                     className={cn(
-                      'absolute inset-[-50%] bg-white rounded-full blur-2xl z-20 transition-all duration-200',
-                      phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-50',
+                      'absolute top-1/2 left-1/2 z-20 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0)_65%)] transition-all duration-200',
+                      phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-75',
                     )}
                   />
                   <img
