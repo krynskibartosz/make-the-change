@@ -12,7 +12,7 @@ import { ArrowLeft, CheckCircle2, Lock } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useRouter } from '@/i18n/navigation'
+import { useRouter } from '@/i18n/navigation'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
 
@@ -71,6 +71,7 @@ type ProjectInvestOneFlowProps = {
   isAuthenticated: boolean
   source?: string
   initialAmount?: number
+  discoveredSpeciesId?: string | null
 }
 
 const clampAmount = (value: number, min: number, max: number): number =>
@@ -83,6 +84,7 @@ export function ProjectInvestOneFlow({
   presentation = 'page',
   isAuthenticated,
   initialAmount,
+  discoveredSpeciesId = null,
 }: ProjectInvestOneFlowProps) {
   const t = useTranslations('projects.invest_page')
   const router = useRouter()
@@ -593,11 +595,19 @@ export function ProjectInvestOneFlow({
 
       {step === 'success' && (isAuthenticated || claimSaved) ? (
         <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
-          <Link href="/aventure/biodex" className="block w-full">
-            <Button className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform">
-              Admirer dans mon BioDex
-            </Button>
-          </Link>
+          <Button
+            type="button"
+            onClick={() => {
+              if (discoveredSpeciesId) {
+                router.push(`/biodex/${discoveredSpeciesId}`)
+                return
+              }
+              router.push('/aventure?tab=biodex')
+            }}
+            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+          >
+            Admirer dans mon BioDex
+          </Button>
           <Button
             type="button"
             variant="ghost"

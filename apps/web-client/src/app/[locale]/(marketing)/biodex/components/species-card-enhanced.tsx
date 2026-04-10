@@ -1,6 +1,6 @@
 'use client'
 import type { SpeciesContext } from '@/types/context'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { Lock } from 'lucide-react'
 
@@ -89,17 +89,6 @@ export function SpeciesCardEnhanced({
 		species.name_default
 	)
 
-	const associatedProjects = species.associated_projects ?? []
-	const associatedProject =
-		associatedProjects.length === 1 ? associatedProjects[0] : null
-
-	const unlockTarget = associatedProject
-		? {
-				type: 'project' as const,
-				slug: associatedProject.id,
-			}
-		: null
-
 	const cardInner = (
 		<div
 			className={cn(
@@ -165,21 +154,10 @@ export function SpeciesCardEnhanced({
 		</div>
 	)
 
-	if (unlockTarget) {
-		return (
-			<Link
-				href={`/projets/${unlockTarget.slug}`}
-				className='block w-full text-left'
-			>
-				{cardInner}
-			</Link>
-		)
-	}
-
 	if (!isLocked) {
 		return (
 			<Link
-				href={`/aventure/biodex/${species.id}`}
+				href={`/biodex/${species.id}`}
 				className='block w-full text-left'
 			>
 				{cardInner}

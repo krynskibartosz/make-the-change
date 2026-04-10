@@ -7,6 +7,7 @@ import {
   getStatusConfig,
 } from '@/app/[locale]/(marketing)/biodex/_features/utils'
 import { Link } from '@/i18n/navigation'
+import { getSpeciesContext } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { asString, isRecord } from '@/lib/type-guards'
 
@@ -46,7 +47,21 @@ export async function generateMetadata({
     .eq('id', id)
     .single()
 
-  if (!species) return { title: 'Espèce non trouvée' }
+  if (!species) {
+    const fallbackContext = await getSpeciesContext(id)
+    if (!fallbackContext) {
+      return { title: 'Espèce non trouvée' }
+    }
+
+    const fallbackName = fallbackContext.name_default || 'Espèce'
+    const fallbackScientificName = fallbackContext.scientific_name || ''
+    return {
+      title: `${fallbackName} - Biodex`,
+      description: fallbackScientificName
+        ? `Fiche descriptive de ${fallbackName} (${fallbackScientificName})`
+        : `Fiche descriptive de ${fallbackName}`,
+    }
+  }
 
   const speciesNameI18n = toLocalizedRecord(species.name_i18n)
   const scientificName = asString(species.scientific_name)
@@ -66,36 +81,60 @@ export default async function SpeciesPage({
   const { id, locale } = await params
   const supabase = await createClient()
 
-  // 1. Fetch Species
-  const { data: speciesData, error } = await supabase
-    .schema('investment')
-    .from('species')
-    .select('*')
-    .eq('id', id)
-    .single()
+  // 1. Fetch Species (DB + fallback context for prototype-safe routing)
+  const [{ data: speciesData }, speciesContext] = await Promise.all([
+    supabase
+      .schema('investment')
+      .from('species')
+      .select('*')
+      .eq('id', id)
+      .single(),
+    getSpeciesContext(id),
+  ])
 
-  if (error || !speciesData) {
+  const parsedSpecies = speciesData ? toSpecies(speciesData) : null
+
+  if (!parsedSpecies && !speciesContext) {
     notFound()
   }
 
-  const species = toSpecies(speciesData)
-  if (!species) {
-    notFound()
-  }
-
-  const name = getLocalizedContent(species.name_i18n, locale, 'Espèce inconnue')
-  const description = getLocalizedContent(species.description_i18n, locale, '')
-  const statusConfig = getStatusConfig(species.conservation_status)
-  const contentLevels = isRecord(species.content_levels) ? species.content_levels : null
+  const species = parsedSpecies
+  const name = species
+    ? getLocalizedContent(species.name_i18n, locale, 'Espèce inconnue')
+    : (speciesContext?.name_default ?? 'Espèce inconnue')
+  const description = species
+    ? getLocalizedContent(species.description_i18n, locale, '')
+    : (speciesContext?.description_default ?? '')
+  const statusConfig = getStatusConfig(species?.conservation_status ?? speciesContext?.conservation_status ?? null)
+  const contentLevels = species && isRecord(species.content_levels) ? species.content_levels : null
   const familyLabel = typeof contentLevels?.family === 'string' ? contentLevels.family : null
+  const scientificName = species?.scientific_name || speciesContext?.scientific_name || null
+  const imageUrl = species?.image_url || speciesContext?.image_url || null
+  const dbHabitat = species?.habitat ?? []
+  const dbThreats = species?.threats ?? []
+  const habitat = dbHabitat.length > 0 ? dbHabitat : (speciesContext?.habitat ?? [])
+  const threats = dbThreats.length > 0 ? dbThreats : (speciesContext?.threats ?? [])
 
   // 2. Fetch Related Projects
-  const { data: projects } = await supabase
+  const projectIdsFromContext = (speciesContext?.associated_projects ?? [])
+    .map((project) => project.id)
+    .filter((projectId): projectId is string => typeof projectId === 'string' && projectId.length > 0)
+
+  let projectsQuery = supabase
     .schema('investment')
     .from('projects')
     .select('id, slug, name_default, hero_image_url')
-    .eq('species_id', id)
     .limit(3)
+
+  if (species?.id) {
+    projectsQuery = projectsQuery.eq('species_id', species.id)
+  } else if (projectIdsFromContext.length > 0) {
+    projectsQuery = projectsQuery.in('id', projectIdsFromContext)
+  } else {
+    projectsQuery = projectsQuery.eq('id', '__none__')
+  }
+
+  const { data: projects } = await projectsQuery
 
   const projectsList = Array.isArray(projects)
     ? projects
@@ -135,8 +174,8 @@ export default async function SpeciesPage({
     <div className="min-h-screen bg-background pb-20">
       {/* Hero Header */}
       <div className="relative h-[50vh] w-full overflow-hidden bg-muted lg:h-[60vh]">
-        {species.image_url ? (
-          <img src={species.image_url} alt={name} className="h-full w-full object-cover" />
+        {imageUrl ? (
+          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-muted">
             <Leaf className="h-24 w-24 text-muted-foreground/30" />
@@ -171,9 +210,9 @@ export default async function SpeciesPage({
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
               {name}
             </h1>
-            {species.scientific_name && (
+            {scientificName && (
               <p className="mt-2 font-serif text-xl italic text-muted-foreground sm:text-2xl">
-                {species.scientific_name}
+                {scientificName}
               </p>
             )}
           </div>
@@ -190,7 +229,7 @@ export default async function SpeciesPage({
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            {species.habitat && species.habitat.length > 0 && (
+            {habitat.length > 0 && (
               <Card>
                 <CardContent className="pt-6">
                   <div className="mb-2 flex items-center gap-2 text-primary">
@@ -198,7 +237,7 @@ export default async function SpeciesPage({
                     <h3 className="font-semibold">Habitat</h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {species.habitat.map((h) => (
+                    {habitat.map((h) => (
                       <Badge key={h} variant="secondary">
                         {h}
                       </Badge>
@@ -208,7 +247,7 @@ export default async function SpeciesPage({
               </Card>
             )}
 
-            {species.threats && species.threats.length > 0 && (
+            {threats.length > 0 && (
               <Card>
                 <CardContent className="pt-6">
                   <div className="mb-2 flex items-center gap-2 text-client-orange-600">
@@ -216,7 +255,7 @@ export default async function SpeciesPage({
                     <h3 className="font-semibold">Menaces</h3>
                   </div>
                   <ul className="list-inside list-disc text-sm text-muted-foreground">
-                    {species.threats.map((t) => (
+                    {threats.map((t) => (
                       <li key={t}>{t}</li>
                     ))}
                   </ul>

@@ -23,6 +23,34 @@ const toNullableString = (value: unknown): string | null => {
   return str === '' ? null : str
 }
 
+const PROTOTYPE_UNLOCK_SOURCE = 'prototype_checkout_unlock'
+
+function ensurePrototypeUnlockedSpecies(speciesList: SpeciesContext[]): SpeciesContext[] {
+  if (speciesList.length === 0) return speciesList
+
+  const alreadyUnlocked = speciesList.some((species) => species.user_status?.isUnlocked)
+  if (alreadyUnlocked) return speciesList
+
+  const preferredIndex = speciesList.findIndex((species) =>
+    species.name_default.toLowerCase().includes('chouette'),
+  )
+  const targetIndex = preferredIndex >= 0 ? preferredIndex : 0
+
+  return speciesList.map((species, index) => {
+    if (index !== targetIndex) return species
+
+    return {
+      ...species,
+      user_status: {
+        isUnlocked: true,
+        unlockedDate: new Date().toISOString(),
+        unlockSource: PROTOTYPE_UNLOCK_SOURCE,
+        progressionLevel: species.user_status?.progressionLevel ?? 1,
+      },
+    }
+  })
+}
+
 export async function getSpeciesContext(id: string): Promise<SpeciesContext | null> {
   const supabase = await createClient()
   
@@ -65,7 +93,8 @@ export async function getSpeciesContextList(filters?: SpeciesFilters): Promise<S
     return []
   }
   
-  return mapArray(data, mapSpeciesContext)
+  const mappedSpecies = mapArray(data, mapSpeciesContext)
+  return ensurePrototypeUnlockedSpecies(mappedSpecies)
 }
 
 function mapSpeciesContext(data: unknown): SpeciesContext | null {
