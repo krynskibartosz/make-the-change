@@ -241,7 +241,7 @@ export async function ProjectDetails({
           }
           description={localizedDesc || t('subtitle')}
           primaryAction={
-            <Link href={project.is_mock ? '/projects' : `/projects/${project.slug}/invest`}>
+            <Link href={project.is_mock ? '/projects' : `/projects/${project.slug}/invest?source=cta_band`}>
               <Button
                 size="lg"
                 disabled={Boolean(project.is_mock)}

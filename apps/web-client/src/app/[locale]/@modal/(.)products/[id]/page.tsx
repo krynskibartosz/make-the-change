@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { InterceptedRouteDialog } from '@/app/[locale]/@modal/_components/intercepted-route-dialog'
-import { QUICK_VIEW_MODAL_CONTENT_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getPublicProductById } from '@/app/[locale]/(marketing)/products/[id]/product-detail-data'
 import { ProductQuickView } from '@/app/[locale]/(marketing)/products/[id]/product-quick-view'
 import { getLocalizedContent } from '@/lib/utils'
@@ -28,11 +27,11 @@ export default async function InterceptedProductPage({ params }: InterceptedProd
   )
 
   return (
-    <InterceptedRouteDialog
+    <FullScreenSlideModal
       title={productName}
-      contentClassName={QUICK_VIEW_MODAL_CONTENT_CLASSNAME}
+      fallbackHref={`/products/${product.id}`}
     >
       <ProductQuickView product={product} />
-    </InterceptedRouteDialog>
+    </FullScreenSlideModal>
   )
 }

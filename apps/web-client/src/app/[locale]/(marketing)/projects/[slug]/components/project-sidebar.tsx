@@ -118,7 +118,7 @@ export async function ProjectSidebar({
             </div>
 
             <div className="space-y-3">
-              <Link href={`/projects/${project.slug}/invest`} className="block w-full">
+              <Link href={`/projects/${project.slug}/invest?source=detail_sidebar`} className="block w-full">
                 <Button
                   size="lg"
                   className="w-full h-14 text-lg font-bold rounded-full shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"

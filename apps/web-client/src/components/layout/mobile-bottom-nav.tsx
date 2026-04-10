@@ -18,7 +18,13 @@ type BottomNavItem = {
 
 export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const pathname = usePathname()
+  const normalizedPath = pathname.replace(/\/+$/, '')
   const hasAuthenticatedUser = Boolean(user)
+  const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
+
+  if (isInvestFlow) {
+    return null
+  }
 
   const isAdventure =
     pathname === '/aventure' || pathname.startsWith('/aventure/')

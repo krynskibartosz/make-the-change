@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { InterceptedRouteDialog } from '@/app/[locale]/@modal/_components/intercepted-route-dialog'
-import { QUICK_VIEW_MODAL_CONTENT_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getPublicProjectBySlug } from '@/app/[locale]/(marketing)/projects/[slug]/project-detail-data'
 import { ProjectQuickView } from '@/app/[locale]/(marketing)/projects/[slug]/project-quick-view'
 import { getLocalizedContent } from '@/lib/utils'
@@ -23,11 +22,11 @@ export default async function InterceptedProjectPage({ params }: InterceptedProj
   }
 
   return (
-    <InterceptedRouteDialog
+    <FullScreenSlideModal
       title={getLocalizedContent(project.name_i18n, locale, project.name_default)}
-      contentClassName={QUICK_VIEW_MODAL_CONTENT_CLASSNAME}
+      fallbackHref={`/projects/${project.slug}`}
     >
       <ProjectQuickView project={project} />
-    </InterceptedRouteDialog>
+    </FullScreenSlideModal>
   )
 }

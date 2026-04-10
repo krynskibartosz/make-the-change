@@ -121,7 +121,7 @@ export async function ProjectCoverHero({
               Bientôt disponible
             </Button>
           ) : (
-            <Link href={`/projects/${project.slug}/invest`}>
+            <Link href={`/projects/${project.slug}/invest?source=detail_hero`}>
               <Button
                 size="lg"
                 className="h-14 px-9 text-base rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"

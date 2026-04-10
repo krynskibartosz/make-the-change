@@ -3,11 +3,11 @@ import { Globe, Leaf, MapPin } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { ProjectImpactCalculator } from './components/project-impact-calculator'
-import type { PublicProject } from './project-detail-data'
+import { SimilarProjectsCarousel } from './components/similar-projects-carousel'
+import { getRelatedProjectsByType, type PublicProject } from './project-detail-data'
 import { ProjectFavoriteButton } from './project-favorite-button'
 import { ProjectShareButton } from './project-share-button'
 
@@ -22,11 +22,9 @@ const formatBadgeLabel = (value: string | null | undefined): string | null => {
   return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
 }
 
-/** Formate un montant en euros sans décimales (18 000 € au lieu de 18 000,00 €) */
-const formatAmount = (amount: number): string =>
+/** Formate un montant sans symbole monétaire (18 000) */
+const formatAmountNumber = (amount: number): string =>
   new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(amount)
 
@@ -42,10 +40,6 @@ const getWebsiteLabel = (url: string | null): string | null => {
 export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
   const t = await getTranslations('projects')
   const locale = await getLocale()
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
@@ -106,21 +100,26 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
       ? `/${locale}/producers/${project.producer.slug || project.producer.id}`
       : null
   const investPath = `/projects/${project.slug}/invest?source=quick_view`
-  const investCtaHref = user ? investPath : `/login?returnTo=${encodeURIComponent(investPath)}`
+  const relatedProjects = await getRelatedProjectsByType({
+    type: project.type,
+    excludeProjectId: project.id,
+    excludeProjectSlug: project.slug,
+    limit: 3,
+  })
 
   const mediaTransitionName = getEntityViewTransitionName('project', project.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
 
   return (
-    <div className="relative flex h-full min-h-full flex-col bg-transparent">
+    <div className="relative flex h-full min-h-full flex-col overflow-x-hidden bg-transparent">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-marketing-positive-500/10 blur-3xl" />
       </div>
 
-      <div className="relative flex h-full min-h-0 flex-col">
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4 ">
+      <div className="relative flex h-full min-h-0 flex-col overflow-x-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain overscroll-x-none touch-pan-y pb-4">
 
           {/* ── Hero Image avec Like en overlay ── */}
           <section>
@@ -157,7 +156,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
           {/* ── Titre + Tags ── */}
           <aside className="space-y-3 px-4 pt-5 sm:px-5 lg:px-6">
             <h1
-              className="text-3xl font-black tracking-tight text-foreground sm:text-4xl"
+              className="text-3xl font-black tracking-tighter text-foreground sm:text-4xl"
               style={{ viewTransitionName: titleTransitionName }}
             >
               {projectName}
@@ -184,13 +183,18 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
             {/* Executive summary */}
             <div className="pt-1">
               <div className="mb-2 flex items-baseline justify-between">
-                <div>
-                  <span className="text-2xl font-black tracking-tight text-lime-400">
-                    {formatAmount(currentFunding)}
-                  </span>{' '}
-                  <span className="text-sm text-muted-foreground">/ {formatAmount(targetBudget)}</span>
+                <div className="flex items-baseline">
+                  <span className="text-4xl font-black text-lime-400 tabular-nums tracking-tight">
+                    {formatAmountNumber(currentFunding)}{' '}
+                    <span className="text-2xl text-lime-400/80">€</span>
+                  </span>
+                  <span className="ml-2 text-sm font-medium text-white/50 tabular-nums">
+                    / {formatAmountNumber(targetBudget)} €
+                  </span>
                 </div>
-                <span className="text-sm font-bold text-white">{Math.round(fundingProgress)}%</span>
+                <span className="text-sm font-bold text-white tabular-nums tracking-tight">
+                  {Math.round(fundingProgress)}%
+                </span>
               </div>
               <Progress
                 value={fundingProgress}
@@ -201,20 +205,20 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
           </aside>
 
           {/* ── Corps éditorial ── */}
-          <div className="mt-5 space-y-6 px-4 pb-24 sm:px-5 sm:pb-28 lg:px-6">
+          <div className="mt-5 space-y-6  pb-40   sm:pb-44 lg:px-6">
 
             {/* Description : texte nu, sans card */}
             {projectDescription ? (
-              <section>
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground text-pretty sm:text-base">
+              
+                <p className="whitespace-pre-wrap px-4 sm:px-5 text-sm leading-relaxed text-white/80 text-pretty sm:text-base">
                   {projectDescription}
                 </p>
-              </section>
+              
             ) : null}
 
             {/* Producteur : flex inline avec séparateurs subtils */}
             {project.producer ? (
-              <section className="flex items-center gap-4 border-y border-white/5 py-4">
+              <section className="flex px-4 sm:px-5 items-center gap-4 border-y border-white/5 py-4">
                 {producerHref ? (
                   <a href={producerHref} className="flex items-center gap-4 w-full group">
                     {producerImage ? (
@@ -236,12 +240,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                         {organizerDescription}
                       </p>
                     </div>
-                    {websiteUrl && websiteLabel ? (
-                      <span className="shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                        <Globe className="h-3 w-3" />
-                        {websiteLabel}
-                      </span>
-                    ) : null}
+                    
                   </a>
                 ) : (
                   <div className="flex items-center gap-4 w-full">
@@ -272,8 +271,18 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                 )}
               </section>
             ) : null}
+<div className='px-4 sm:px-5'>
 
-            <ProjectImpactCalculator baseAmount={100} />
+            <ProjectImpactCalculator baseAmount={100} amount={currentFunding} mode="project" />
+</div>
+
+            <div className="w-full px-4 sm:px-5 max-w-full overflow-hidden">
+              <SimilarProjectsCarousel
+                currentProjectTags={[project.type || 'beehive']}
+                locale={locale}
+                relatedProjects={relatedProjects}
+              />
+            </div>
           </div>
         </div>
 
@@ -286,7 +295,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
               {isPrototypeProject ? 'Bientôt disponible' : t('detail.funding_closed')}
             </Button>
           ) : (
-            <Link href={investCtaHref} className="block w-full">
+            <Link href={investPath} className="block w-full">
               <Button className="h-12 w-full rounded-2xl text-center text-base font-bold justify-center gap-0 shadow-lg shadow-primary/25 [&_svg]:hidden">
                 Soutenir ce projet
               </Button>

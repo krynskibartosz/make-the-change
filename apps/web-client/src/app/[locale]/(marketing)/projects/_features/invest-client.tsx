@@ -18,6 +18,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import { useMemo, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { cn, formatPoints } from '@/lib/utils'
+import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
 import { createInvestmentAction } from './create-investment.action'
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -260,6 +261,12 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
                 </p>
               </div>
             </div>
+
+            <ProjectImpactCalculator
+              baseAmount={100}
+              amount={Math.max(amountEur, min)}
+              mode="checkout"
+            />
 
             <Button className="w-full" type="button" onClick={() => setStep(2)}>
               Continuer
