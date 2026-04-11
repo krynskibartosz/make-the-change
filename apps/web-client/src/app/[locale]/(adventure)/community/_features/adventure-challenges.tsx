@@ -313,8 +313,9 @@ export function AdventureChallenges() {
 				<h2 className='text-xs text-muted-foreground font-bold tracking-wider uppercase px-6 mb-2 flex justify-between'>
 					<span>Quêtes du jour</span>
 					<span className='flex items-center gap-2'>
-						<span>7 H</span>
-						<span className='tabular-nums'>{userSeedBalance} 🌱</span>
+						
+						<span>⏱ 7 H</span>
+						
 					</span>
 				</h2>
 

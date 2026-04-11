@@ -1,345 +1,136 @@
-import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { AlertTriangle, ArrowLeft, Leaf, ShieldCheck, Sparkles } from 'lucide-react'
-import { notFound } from 'next/navigation'
-import { toSpecies } from '@/app/[locale]/(marketing)/biodex/_features/species-parsers'
-import {
-  getLocalizedContent,
-  getStatusConfig,
-} from '@/app/[locale]/(marketing)/biodex/_features/utils'
-import { Link } from '@/i18n/navigation'
-import { getSpeciesContext } from '@/lib/api/species-context.service'
-import { createClient } from '@/lib/supabase/server'
-import { asString, isRecord } from '@/lib/type-guards'
+'use client'
 
-type ContentLevel = {
-  title?: string
-  description?: string
-  unlocked_at_level?: number
-}
+import { ArrowLeft, ArrowRight, ChevronRight, Lock, ShieldCheck, TreePine, TriangleAlert } from 'lucide-react'
+import { useState } from 'react'
+import { useRouter } from '@/i18n/navigation'
 
-const isContentLevel = (value: unknown): value is ContentLevel =>
-  typeof value === 'object' && value !== null
+const SPECIES_IMAGE_URL = '/images/diorama-chouette.png'
+const ECOSYSTEM_PROJECTS_HREF = '/projects?search=abeilles&status=active'
 
-const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
-  if (!isRecord(value)) {
-    return null
+export default function SpeciesPage() {
+  const router = useRouter()
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
+
+  const toggleCard = (cardId: string) => {
+    setExpandedCard((current) => (current === cardId ? null : cardId))
   }
-
-  return Object.fromEntries(
-    Object.entries(value).filter(
-      (entry): entry is [string, string] => typeof entry[1] === 'string',
-    ),
-  )
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string; locale: string }>
-}) {
-  const { id, locale } = await params
-  const supabase = await createClient()
-
-  const { data: species } = await supabase
-    .schema('investment')
-    .from('species')
-    .select('name_i18n, scientific_name')
-    .eq('id', id)
-    .single()
-
-  if (!species) {
-    const fallbackContext = await getSpeciesContext(id)
-    if (!fallbackContext) {
-      return { title: 'Espèce non trouvée' }
-    }
-
-    const fallbackName = fallbackContext.name_default || 'Espèce'
-    const fallbackScientificName = fallbackContext.scientific_name || ''
-    return {
-      title: `${fallbackName} - Biodex`,
-      description: fallbackScientificName
-        ? `Fiche descriptive de ${fallbackName} (${fallbackScientificName})`
-        : `Fiche descriptive de ${fallbackName}`,
-    }
-  }
-
-  const speciesNameI18n = toLocalizedRecord(species.name_i18n)
-  const scientificName = asString(species.scientific_name)
-  const name = getLocalizedContent(speciesNameI18n, locale, 'Espèce')
-
-  return {
-    title: `${name} - Biodex`,
-    description: `Fiche descriptive de ${name} (${scientificName})`,
-  }
-}
-
-export default async function SpeciesPage({
-  params,
-}: {
-  params: Promise<{ id: string; locale: string }>
-}) {
-  const { id, locale } = await params
-  const supabase = await createClient()
-
-  // 1. Fetch Species (DB + fallback context for prototype-safe routing)
-  const [{ data: speciesData }, speciesContext] = await Promise.all([
-    supabase
-      .schema('investment')
-      .from('species')
-      .select('*')
-      .eq('id', id)
-      .single(),
-    getSpeciesContext(id),
-  ])
-
-  const parsedSpecies = speciesData ? toSpecies(speciesData) : null
-
-  if (!parsedSpecies && !speciesContext) {
-    notFound()
-  }
-
-  const species = parsedSpecies
-  const name = species
-    ? getLocalizedContent(species.name_i18n, locale, 'Espèce inconnue')
-    : (speciesContext?.name_default ?? 'Espèce inconnue')
-  const description = species
-    ? getLocalizedContent(species.description_i18n, locale, '')
-    : (speciesContext?.description_default ?? '')
-  const statusConfig = getStatusConfig(species?.conservation_status ?? speciesContext?.conservation_status ?? null)
-  const contentLevels = species && isRecord(species.content_levels) ? species.content_levels : null
-  const familyLabel = typeof contentLevels?.family === 'string' ? contentLevels.family : null
-  const scientificName = species?.scientific_name || speciesContext?.scientific_name || null
-  const imageUrl = species?.image_url || speciesContext?.image_url || null
-  const dbHabitat = species?.habitat ?? []
-  const dbThreats = species?.threats ?? []
-  const habitat = dbHabitat.length > 0 ? dbHabitat : (speciesContext?.habitat ?? [])
-  const threats = dbThreats.length > 0 ? dbThreats : (speciesContext?.threats ?? [])
-
-  // 2. Fetch Related Projects
-  const projectIdsFromContext = (speciesContext?.associated_projects ?? [])
-    .map((project) => project.id)
-    .filter((projectId): projectId is string => typeof projectId === 'string' && projectId.length > 0)
-
-  let projectsQuery = supabase
-    .schema('investment')
-    .from('projects')
-    .select('id, slug, name_default, hero_image_url')
-    .limit(3)
-
-  if (species?.id) {
-    projectsQuery = projectsQuery.eq('species_id', species.id)
-  } else if (projectIdsFromContext.length > 0) {
-    projectsQuery = projectsQuery.in('id', projectIdsFromContext)
-  } else {
-    projectsQuery = projectsQuery.eq('id', '__none__')
-  }
-
-  const { data: projects } = await projectsQuery
-
-  const projectsList = Array.isArray(projects)
-    ? projects
-        .map((project) => {
-          if (!isRecord(project)) {
-            return null
-          }
-
-          const projectId = asString(project.id)
-          const projectSlug = asString(project.slug)
-          const projectName = asString(project.name_default)
-
-          if (!projectId || !projectSlug) {
-            return null
-          }
-
-          return {
-            id: projectId,
-            slug: projectSlug,
-            name_default: projectName || 'Projet',
-            hero_image_url: asString(project.hero_image_url) || null,
-          }
-        })
-        .filter(
-          (
-            project,
-          ): project is {
-            id: string
-            slug: string
-            name_default: string
-            hero_image_url: string | null
-          } => project !== null,
-        )
-    : []
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      {/* Hero Header */}
-      <div className="relative h-[50vh] w-full overflow-hidden bg-muted lg:h-[60vh]">
-        {imageUrl ? (
-          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted">
-            <Leaf className="h-24 w-24 text-muted-foreground/30" />
+    <div className="min-h-screen bg-background text-foreground">
+      <main className="relative mx-auto w-full max-w-2xl px-4 pt-6 pb-40">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="fixed left-4 top-[max(1rem,env(safe-area-inset-top))] z-50 p-2"
+        >
+          <ArrowLeft className="h-6 w-6 text-white" />
+        </button>
+
+        <section className="mb-8">
+          <div className="relative mx-auto mt-4 mb-6 flex h-64 w-64 items-center justify-center">
+            <div className="absolute top-1/2 left-1/2 z-0 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/30 blur-[60px]" />
+            <img
+              src={SPECIES_IMAGE_URL}
+              alt="Chouette Effraie"
+              className="relative z-10 h-full w-full border-none object-contain ring-0 outline-none drop-shadow-2xl animate-[float_6s_ease-in-out_infinite]"
+              style={{ clipPath: 'circle(50%)' }}
+            />
           </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
 
-        {/* Navigation & Title */}
-        <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-10">
-          <div>
-            <Button asChild variant="glass" size="icon" className="rounded-full">
-              <Link href="/biodex">
-                <ArrowLeft className="h-5 w-5" />
-              </Link>
-            </Button>
+          <div className="mx-auto mt-2 mb-4 w-fit rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-400">
+            Préoccupation Mineure
           </div>
+          <h1 className="text-center text-4xl font-black tracking-tight text-white">Chouette Effraie</h1>
+          <p className="mb-6 text-center font-serif italic text-white/40">Tyto alba</p>
 
-          <div className="mx-auto w-full max-w-4xl">
-            <div className="mb-4 flex flex-wrap gap-2">
-              <Badge
-                className={`border-none ${statusConfig.bg} ${statusConfig.color} hover:${statusConfig.bg}`}
-              >
-                {statusConfig.label}
-              </Badge>
-              {familyLabel && (
-                <Badge variant="outline" className="bg-background/50 backdrop-blur">
-                  {familyLabel}
-                </Badge>
-              )}
-            </div>
-
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-              {name}
-            </h1>
-            {scientificName && (
-              <p className="mt-2 font-serif text-xl italic text-muted-foreground sm:text-2xl">
-                {scientificName}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto mt-12 grid max-w-4xl gap-12 px-6 sm:px-10">
-        {/* Description & Bio */}
-        <section className="space-y-6">
-          <div className="prose prose-lg dark:prose-invert">
-            <p className="text-xl leading-relaxed text-foreground/80">
-              {description || 'Aucune description disponible pour cette espèce.'}
+          <div className="mx-4 mb-8 flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md">
+            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-lime-400" />
+            <p className="text-sm text-white/80">
+              Espèce protégée grâce à votre soutien au projet{' '}
+              <strong className="text-white">Sauvons les Abeilles</strong> le 12 Avril 2026.
             </p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            {habitat.length > 0 && (
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="mb-2 flex items-center gap-2 text-primary">
-                    <Leaf className="h-5 w-5" />
-                    <h3 className="font-semibold">Habitat</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {habitat.map((h) => (
-                      <Badge key={h} variant="secondary">
-                        {h}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {threats.length > 0 && (
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="mb-2 flex items-center gap-2 text-client-orange-600">
-                    <AlertTriangle className="h-5 w-5" />
-                    <h3 className="font-semibold">Menaces</h3>
-                  </div>
-                  <ul className="list-inside list-disc text-sm text-muted-foreground">
-                    {threats.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
           </div>
         </section>
 
-        {/* Content Levels (Gamification/Education) */}
-        {contentLevels && Object.keys(contentLevels).length > 0 && (
-          <section>
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Sparkles className="h-5 w-5" />
+        <section>
+          <p className="mb-8 px-4 text-center leading-relaxed text-white/70">
+            Chasseur discret des nuits, la Chouette Effraie régule naturellement les populations de
+            rongeurs et contribue à l'équilibre des écosystèmes ruraux.
+          </p>
+
+          <div className="mx-4 grid grid-cols-1 gap-3">
+            <article
+              className="cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-all duration-300"
+              onClick={() => toggleCard('habitat')}
+            >
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <TreePine className="h-5 w-5 text-emerald-400" />
+                  <p className="text-sm font-bold text-white">
+                    HABITAT : <span className="font-medium text-white/85">Forêts &amp; Plaines</span>
+                  </p>
+                </div>
+                <ChevronRight
+                  className={`h-4 w-4 text-white/60 transition-transform duration-300 ${expandedCard === 'habitat' ? 'rotate-90' : ''}`}
+                />
               </div>
-              <h2 className="text-2xl font-bold">Niveaux de Connaissance</h2>
-            </div>
+              {expandedCard === 'habitat' ? (
+                <div className="px-4 pb-4 text-sm text-white/70">
+                  Présente sur presque tous les continents, la chouette effraie privilégie les
+                  milieux ouverts (champs, prairies) et niche souvent dans les vieux bâtiments
+                  agricoles ou les clochers.
+                </div>
+              ) : null}
+            </article>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              {Object.entries(contentLevels)
-                .filter(([key]) => key !== 'family' && key !== 'kingdom' && key !== 'metadata') // Filter out metadata fields
-                .map(([level, content]) => {
-                  if (!isContentLevel(content)) return null
-
-                  return (
-                    <Card
-                      key={level}
-                      className="overflow-hidden border-none bg-muted/30 shadow-none transition-colors hover:bg-muted/50"
-                    >
-                      <CardContent className="p-6">
-                        <div className="mb-3 flex items-center justify-between">
-                          <h4 className="font-semibold capitalize text-primary">
-                            {content.title || level}
-                          </h4>
-                          {content.unlocked_at_level && (
-                            <Badge variant="outline" className="text-xs">
-                              Niveau {content.unlocked_at_level}
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm leading-relaxed text-muted-foreground">
-                          {content.description}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-            </div>
-          </section>
-        )}
-
-        {/* Related Projects */}
-        {projectsList.length > 0 && (
-          <section>
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <ShieldCheck className="h-5 w-5" />
+            <article
+              className="cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-all duration-300"
+              onClick={() => toggleCard('threats')}
+            >
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <TriangleAlert className="h-5 w-5 text-red-400" />
+                  <p className="text-sm font-bold text-white">MENACES PRINCIPALES</p>
+                </div>
+                <ChevronRight
+                  className={`h-4 w-4 text-white/60 transition-transform duration-300 ${expandedCard === 'threats' ? 'rotate-90' : ''}`}
+                />
               </div>
-              <h2 className="text-2xl font-bold">Projets associés</h2>
-            </div>
+              {expandedCard === 'threats' ? (
+                <div className="px-4 pb-4 text-sm text-white/70">
+                  <ul className="list-decimal space-y-1 pl-5">
+                    <li>Disparition des vieilles granges (sites de nidification).</li>
+                    <li>Empoisonnement indirect via les pesticides raticides.</li>
+                    <li>Collisions routières.</li>
+                  </ul>
+                </div>
+              ) : null}
+            </article>
+          </div>
+        </section>
+      </main>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projectsList.map((project) => (
-                <Link key={project.id} href={`/projects/${project.slug}`} className="group block">
-                  <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow transition-all hover:shadow-lg">
-                    <div className="aspect-video w-full overflow-hidden">
-                      <img
-                        src={project.hero_image_url || '/placeholder.jpg'}
-                        alt={project.name_default || 'Projet'}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-semibold group-hover:text-primary">
-                        {project.name_default}
-                      </h3>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+      <div className="fixed bottom-0 left-0 right-0 z-50 w-full border-t border-white/10 bg-[#0B0F15]/80 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+        <div className="mb-3 flex items-center justify-between px-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">
+            Niveau 1 / 3
+          </span>
+          <div className="flex items-center gap-1 text-[10px] font-bold text-white/30">
+            <Lock className="h-3 w-3" />
+            <span>500 🌱 pour améliorer</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            router.push(ECOSYSTEM_PROJECTS_HREF)
+          }}
+          className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 px-4 text-lg font-black text-black shadow-[0_0_20px_rgba(132,204,22,0.2)] transition-transform active:scale-95"
+        >
+          Soutenir son écosystème
+          <ArrowRight className="h-5 w-5" />
+        </button>
       </div>
     </div>
   )

@@ -135,6 +135,7 @@ export interface SpeciesContext {
 
 export interface AssociatedProject {
   id: string
+  slug?: string | null
   name: string
   type: string
   role: string

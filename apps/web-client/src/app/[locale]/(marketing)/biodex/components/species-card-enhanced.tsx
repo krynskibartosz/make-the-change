@@ -7,6 +7,7 @@ import { Lock } from 'lucide-react'
 interface SpeciesCardEnhancedProps {
 	species: SpeciesContext
 	showUserStatus?: boolean
+	onLockedClick?: (species: SpeciesContext) => void
 }
 
 // ─── Rareté déduite du statut de conservation IUCN ───────────────────────────
@@ -80,6 +81,7 @@ const RARITY_STYLES: Record<
 export function SpeciesCardEnhanced({
 	species,
 	showUserStatus = true,
+	onLockedClick,
 }: SpeciesCardEnhancedProps) {
 	const isLocked = showUserStatus && !species.user_status?.isUnlocked
 	const rarity = getRarity(species.conservation_status)
@@ -143,13 +145,14 @@ export function SpeciesCardEnhanced({
 
 			{/* Bottom: species name */}
 			<div className='shrink-0 mt-2'>
-				{isLocked ? (
-					<span className='text-sm italic text-white/40'>Espèce inconnue</span>
-				) : (
-					<p className='text-sm font-semibold truncate leading-tight text-white/90'>
-						{species.name_default}
-					</p>
-				)}
+				<p
+					className={cn(
+						'text-sm font-semibold truncate leading-tight',
+						isLocked ? 'text-white/60' : 'text-white/90'
+					)}
+				>
+					{species.name_default}
+				</p>
 			</div>
 		</div>
 	)
@@ -165,5 +168,13 @@ export function SpeciesCardEnhanced({
 		)
 	}
 
-	return <div className='w-full'>{cardInner}</div>
+	return (
+		<button
+			type='button'
+			onClick={() => onLockedClick?.(species)}
+			className='w-full text-left'
+		>
+			{cardInner}
+		</button>
+	)
 }

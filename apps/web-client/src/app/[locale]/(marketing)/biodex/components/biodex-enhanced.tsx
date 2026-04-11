@@ -1,16 +1,45 @@
 'use client'
-import { Leaf } from 'lucide-react'
+import { ArrowRight, Leaf, Lock, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { SpeciesCardEnhanced } from './species-card-enhanced'
 import type { SpeciesContext } from '@/types/context'
+import { Link } from '@/i18n/navigation'
 
 interface BiodexEnhancedProps {
 	species: SpeciesContext[]
 }
 
+const FALLBACK_SPECIES_PROJECTS = [
+	{
+		id: 'mock-project-ruchers-antsirabe',
+		slug: 'ruchers-apiculteurs-independants-antsirabe',
+		name: "Ruchers d’apiculteurs indépendants à Antsirabe",
+		impact: 'Pollinisation locale, protection de la biodiversité et soutien aux apiculteurs.',
+	},
+]
+
+const getProjectDetailHref = (project: {
+	id?: string | null
+	slug?: string | null
+	name?: string | null
+}) => {
+	const slug = project.slug?.trim()
+	if (slug) return `/projects/${slug}`
+
+	const id = project.id?.trim()
+	if (id) return `/projects/${id}`
+
+	const name = project.name?.trim()
+	if (name) return `/projects?search=${encodeURIComponent(name)}&status=active`
+
+	return '/projects?status=active'
+}
+
 export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 	const t = useTranslations('marketing_pages.biodex')
+	const [selectedLockedSpecies, setSelectedLockedSpecies] =
+		useState<SpeciesContext | null>(null)
 
 	// Tri automatique : Unlocked → Locked (pas de filtres manuels)
 	const sortedSpecies = useMemo(() => {
@@ -33,6 +62,12 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 	const totalCount = species.length
 	const progressPercent =
 		totalCount > 0 ? (unlockedCount / totalCount) * 100 : 0
+
+	const actionableProjects =
+		selectedLockedSpecies?.associated_projects &&
+		selectedLockedSpecies.associated_projects.length > 0
+			? selectedLockedSpecies.associated_projects
+			: FALLBACK_SPECIES_PROJECTS
 
 	return (
 		<>
@@ -64,7 +99,13 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 				{sortedSpecies.length > 0 ? (
 					<div className='grid grid-cols-2 gap-3'>
 						{sortedSpecies.map((item) => (
-							<SpeciesCardEnhanced key={item.id} species={item} />
+							<SpeciesCardEnhanced
+								key={item.id}
+								species={item}
+								onLockedClick={(lockedSpecies) =>
+									setSelectedLockedSpecies(lockedSpecies)
+								}
+							/>
 						))}
 					</div>
 				) : (
@@ -85,6 +126,80 @@ export function BiodexEnhanced({ species }: BiodexEnhancedProps) {
 					</div>
 				)}
 			</div>
+
+			{selectedLockedSpecies ? (
+				<div className='fixed inset-0 z-[80]'>
+					<button
+						type='button'
+						aria-label='Fermer la modale'
+						className='absolute inset-0 bg-black/70 backdrop-blur-md'
+						onClick={() => setSelectedLockedSpecies(null)}
+					/>
+
+					<div className='absolute inset-x-0 bottom-0 max-h-[88dvh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0B0F15] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]'>
+						<div className='mb-4 flex items-center justify-between'>
+							<div className='inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1'>
+								<Lock className='h-3.5 w-3.5 text-white/50' />
+								<span className='text-[10px] font-bold uppercase tracking-widest text-white/50'>
+									Espèce verrouillée
+								</span>
+							</div>
+							<button
+								type='button'
+								onClick={() => setSelectedLockedSpecies(null)}
+								className='inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70'
+								aria-label='Fermer'
+							>
+								<X className='h-4 w-4' />
+							</button>
+						</div>
+
+						<h3 className='text-2xl font-black tracking-tight text-white'>
+							{selectedLockedSpecies.name_default}
+						</h3>
+						<p className='mt-2 text-sm leading-relaxed text-white/70'>
+							Soutenez un projet lié à cette espèce pour la débloquer dans
+							votre BioDex et découvrir sa fiche complète.
+						</p>
+
+						<div className='mt-5 space-y-3'>
+							<p className='text-[11px] font-bold uppercase tracking-widest text-white/40'>
+								Projets qui peuvent l’aider
+							</p>
+
+							{actionableProjects.map((project) => (
+								<Link
+									key={project.id}
+									href={getProjectDetailHref(project)}
+									className='block rounded-2xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10'
+									onClick={() => setSelectedLockedSpecies(null)}
+								>
+									<div className='flex items-start justify-between gap-3'>
+										<div className='min-w-0'>
+											<p className='truncate text-sm font-bold text-white'>
+												{project.name}
+											</p>
+											<p className='mt-1 text-xs text-white/50'>
+												{project.impact ?? 'Contribuez à la protection de cette espèce'}
+											</p>
+										</div>
+										<ArrowRight className='mt-0.5 h-4 w-4 shrink-0 text-lime-400' />
+									</div>
+								</Link>
+							))}
+						</div>
+
+						<Link
+							href='/projects?status=active'
+							onClick={() => setSelectedLockedSpecies(null)}
+							className='mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-base font-black text-black active:scale-[0.98]'
+						>
+							Voir les projets
+							<ArrowRight className='h-4 w-4' />
+						</Link>
+					</div>
+				</div>
+			) : null}
 		</>
 	)
 }

@@ -222,7 +222,7 @@ export async function getPublicProjectBySlug(slug: string): Promise<PublicProjec
 
   const supabase = await createClient()
 
-  const { data } = await supabase
+  const { data: bySlug } = await supabase
     .from('public_projects')
     .select(
       `
@@ -231,9 +231,29 @@ export async function getPublicProjectBySlug(slug: string): Promise<PublicProjec
     `,
     )
     .eq('slug', slug)
-    .single()
+    .maybeSingle()
 
-  return toPublicProject(data)
+  if (bySlug) {
+    return toPublicProject(bySlug)
+  }
+
+  // Fallback: allow opening project detail with project id in URL when slug is unavailable.
+  if (isUuid(slug)) {
+    const { data: byId } = await supabase
+      .from('public_projects')
+      .select(
+        `
+        *,
+        producer:public_producers!producer_id(*)
+      `,
+      )
+      .eq('id', slug)
+      .maybeSingle()
+
+    return toPublicProject(byId)
+  }
+
+  return null
 }
 
 type GetRelatedProjectsByTypeParams = {

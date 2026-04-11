@@ -1,7 +1,8 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { Compass, Globe, ShoppingBag, Users } from 'lucide-react'
+import { BookOpen, Flame, Globe, ShoppingBag, Users } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -18,6 +19,7 @@ type BottomNavItem = {
 
 export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const normalizedPath = pathname.replace(/\/+$/, '')
   const hasAuthenticatedUser = Boolean(user)
   const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
@@ -26,8 +28,17 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     return null
   }
 
-  const isAdventure =
-    pathname === '/aventure' || pathname.startsWith('/aventure/')
+  const activeAdventureTab = searchParams.get('tab')
+  const isAdventure = pathname === '/aventure' || pathname.startsWith('/aventure/')
+  const isDefis =
+    pathname === '/defis' ||
+    pathname.startsWith('/defis/') ||
+    pathname.startsWith('/challenges') ||
+    (isAdventure && (activeAdventureTab === 'defis' || !activeAdventureTab))
+  const isBiodex =
+    pathname === '/biodex' ||
+    pathname.startsWith('/biodex/') ||
+    (isAdventure && activeAdventureTab === 'biodex')
   const isProjects = pathname.startsWith('/projets') || pathname.startsWith('/projects')
   const isCollective =
     pathname.startsWith('/collectif') ||
@@ -41,10 +52,16 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
 
   const navItems: BottomNavItem[] = [
     {
-      href: '/aventure',
-      icon: Compass,
-      label: 'Aventure',
-      isActive: isAdventure,
+      href: '/defis',
+      icon: Flame,
+      label: 'Défis',
+      isActive: isDefis,
+    },
+    {
+      href: '/biodex',
+      icon: BookOpen,
+      label: 'BioDex',
+      isActive: isBiodex,
     },
     {
       href: '/projets',

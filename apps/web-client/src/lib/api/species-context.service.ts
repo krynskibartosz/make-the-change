@@ -136,6 +136,7 @@ function mapAssociatedProject(data: unknown): AssociatedProject | null {
   
   return {
     id,
+    slug: asString(data.slug) || asString(data.project_slug) || null,
     name,
     type: asString(data.type),
     role: asString(data.role),

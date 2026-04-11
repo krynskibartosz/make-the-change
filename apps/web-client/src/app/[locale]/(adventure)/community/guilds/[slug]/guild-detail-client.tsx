@@ -465,9 +465,9 @@ export function GuildDetailClient({
 								href='/projets'
 								className='flex items-center justify-center gap-2 w-full bg-lime-400/10 hover:bg-lime-400/20 text-lime-400 border border-lime-400/20 font-semibold rounded-2xl py-3 transition-colors text-sm'
 							>
-								🌱 Faire un don → contribuer à la mission
-							</Link>
-						)}
+									🌱 Participer à l'effort collectif
+								</Link>
+							)}
 					</>
 				) : (
 					<div className='text-center py-4'>
