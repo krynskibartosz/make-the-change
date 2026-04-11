@@ -6,7 +6,6 @@ import {
 } from '@/app/[locale]/(adventure)/community/_features/adventure-page-frame'
 import { AdventureMovement } from '@/app/[locale]/(adventure)/community/_features/adventure-movement'
 import { AdventureRightRail } from '@/app/[locale]/(adventure)/community/_features/adventure-right-rail'
-import { AdventureStaticHeader } from '@/app/[locale]/(adventure)/community/_features/adventure-static-header'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -30,8 +29,6 @@ export default async function CollectifPage() {
       rightRail={<AdventureRightRail variant="default" activeTag="" />}
     >
       <div className="relative w-full">
-        <AdventureStaticHeader user={sidebarUser} />
-
         <Suspense fallback={fallbackLoader}>
           <AdventureMovement />
         </Suspense>

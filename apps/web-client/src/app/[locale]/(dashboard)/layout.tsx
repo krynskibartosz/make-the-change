@@ -1,7 +1,6 @@
 import { getLocale } from 'next-intl/server'
 import type { PropsWithChildren } from 'react'
 import { getUser } from '@/app/[locale]/(auth)/_features/auth-guards'
-import { DashboardMobileHeader } from '@/components/layout/dashboard-mobile-header'
 import { DashboardSidebarProvider } from '@/components/layout/dashboard-sidebar-context'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { redirect } from '@/i18n/navigation'
@@ -27,7 +26,6 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
   return (
     <DashboardSidebarProvider>
       <div className="flex flex-col lg:flex-row h-screen bg-background relative">
-        <DashboardMobileHeader />
         <DashboardSidebar user={{ id: user.id, email: user.email }} profile={profile} />
 
         <main className="flex-1 z-20 transition-all duration-300 bg-background/50 overflow-y-auto">

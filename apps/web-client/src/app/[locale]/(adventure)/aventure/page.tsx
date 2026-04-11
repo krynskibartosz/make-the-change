@@ -6,7 +6,6 @@ import {
   getAdventureSidebarUser,
 } from '@/app/[locale]/(adventure)/community/_features/adventure-page-frame'
 import { AdventureRightRail } from '@/app/[locale]/(adventure)/community/_features/adventure-right-rail'
-import { AdventureStaticHeader } from '@/app/[locale]/(adventure)/community/_features/adventure-static-header'
 import { AdventureTabs } from '@/app/[locale]/(adventure)/community/_features/adventure-tabs'
 import { AdventureBiodex } from '@/app/[locale]/(adventure)/community/_features/adventure-biodex'
 import { AdventureChallenges } from '@/app/[locale]/(adventure)/community/_features/adventure-challenges'
@@ -42,8 +41,6 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
       rightRail={<AdventureRightRail variant="default" activeTag="" />}
     >
       <div className="relative w-full">
-        <AdventureStaticHeader user={sidebarUser} />
-
         <Suspense fallback={null}>
           <AdventureTabs />
         </Suspense>

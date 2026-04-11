@@ -1,7 +1,7 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { BookOpen, Flame, Globe, ShoppingBag, Users } from 'lucide-react'
+import { Flame, Globe, ShoppingBag, User, Users } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -23,8 +23,10 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const normalizedPath = pathname.replace(/\/+$/, '')
   const hasAuthenticatedUser = Boolean(user)
   const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
+  const isSettingsPage =
+    pathname === '/dashboard/settings' || pathname.startsWith('/dashboard/settings/')
 
-  if (isInvestFlow) {
+  if (isInvestFlow || isSettingsPage) {
     return null
   }
 
@@ -35,10 +37,6 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     pathname.startsWith('/defis/') ||
     pathname.startsWith('/challenges') ||
     (isAdventure && (activeAdventureTab === 'defis' || !activeAdventureTab))
-  const isBiodex =
-    pathname === '/biodex' ||
-    pathname.startsWith('/biodex/') ||
-    (isAdventure && activeAdventureTab === 'biodex')
   const isProjects = pathname.startsWith('/projets') || pathname.startsWith('/projects')
   const isCollective =
     pathname.startsWith('/collectif') ||
@@ -47,6 +45,10 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const isMarket =
     pathname.startsWith('/marche') ||
     pathname.startsWith('/products') || pathname.startsWith('/cart') || pathname.startsWith('/checkout')
+  const isProfile =
+    pathname.startsWith('/dashboard/profile') ||
+    pathname.startsWith('/profile') ||
+    pathname.startsWith('/u/')
   const navLinkClass =
     'flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors'
 
@@ -56,12 +58,6 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
       icon: Flame,
       label: 'Défis',
       isActive: isDefis,
-    },
-    {
-      href: '/biodex',
-      icon: BookOpen,
-      label: 'BioDex',
-      isActive: isBiodex,
     },
     {
       href: '/projets',
@@ -80,6 +76,12 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
       icon: ShoppingBag,
       label: 'Marché',
       isActive: isMarket,
+    },
+    {
+      href: hasAuthenticatedUser ? '/dashboard/profile' : '/profile',
+      icon: User,
+      label: 'Profil',
+      isActive: isProfile,
     },
   ]
 

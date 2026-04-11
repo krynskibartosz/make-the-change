@@ -1,9 +1,85 @@
-import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
-import { createAdminClient } from '@/lib/supabase/admin'
+import {
+  Bell,
+  BookOpen,
+  ChevronRight,
+  HelpCircle,
+  Info,
+  Leaf,
+  Mail,
+  ReceiptText,
+  Shield,
+  Sparkles,
+  X,
+  type LucideIcon,
+} from 'lucide-react'
+import { logout } from '@/app/[locale]/(auth)/actions'
+import { Link } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { parseThemeConfig } from '@/lib/theme-config'
-import { asBoolean, asString, isRecord } from '@/lib/type-guards'
-import { SettingsClient } from './settings-client'
+
+type SettingsItem = {
+  label: string
+  href?: string
+  icon: LucideIcon
+  iconWrapperClassName: string
+  iconClassName?: string
+  highlight?: boolean
+}
+
+function SettingsGroup({ title, items }: { title: string; items: SettingsItem[] }) {
+  return (
+    <section>
+      <h3 className="ml-8 mb-1 mt-6 text-[11px] font-medium uppercase tracking-widest text-white/50">
+        {title}
+      </h3>
+
+      <div className="mx-4 mb-8 overflow-hidden rounded-xl bg-[#1C1C22]">
+        {items.map((item, index) => {
+          const Icon = item.icon
+          const iconClassName = item.iconClassName ?? 'text-white'
+          const row = (
+            <>
+              <div className="flex items-center gap-3">
+                <div
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${item.iconWrapperClassName}`}
+                >
+                  <Icon className={`h-4 w-4 ${iconClassName}`} />
+                </div>
+
+                <span className={`text-sm font-medium ${item.highlight ? 'text-lime-400' : 'text-white'}`}>
+                  {item.label}
+                </span>
+              </div>
+
+              <ChevronRight className="h-4 w-4 text-white/30" />
+            </>
+          )
+
+          return (
+            <div key={item.label}>
+              {item.href ? (
+                <Link
+                  href={item.href}
+                  className="flex w-full items-center justify-between bg-transparent px-6 py-4 transition-colors active:bg-white/5"
+                >
+                  {row}
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between bg-transparent px-6 py-4 transition-colors active:bg-white/5"
+                >
+                  {row}
+                </button>
+              )}
+
+              {index < items.length - 1 ? <div className="ml-14 border-b border-white/5" /> : null}
+            </div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -11,63 +87,162 @@ export default async function SettingsPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return null
+  if (!user) {
+    return null
+  }
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select(
-      'language_code, timezone, metadata, notification_preferences, social_links, theme_config',
-    )
+    .select('first_name, last_name, avatar_url')
     .eq('id', user.id)
     .single()
 
-  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
-  const publicProfile = asBoolean(metadata.is_public_profile, false)
-  const notificationPrefs = isRecord(profile?.notification_preferences)
-    ? profile.notification_preferences
-    : {}
-  const socialLinks = isRecord(profile?.social_links) ? profile.social_links : {}
-  const requestedLanguage = profile?.language_code || defaultLocale
-  const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
+  const metadata =
+    user.user_metadata && typeof user.user_metadata === 'object' ? user.user_metadata : null
+  const metadataFullName =
+    metadata && typeof metadata.full_name === 'string' ? metadata.full_name.trim() : ''
 
-  // Fetch marketing consent
-  let marketingConsent = false
+  const displayName =
+    [profile?.first_name, profile?.last_name]
+      .filter((value): value is string => typeof value === 'string' && value.length > 0)
+      .join(' ')
+      .trim() ||
+    metadataFullName ||
+    'Mon profil'
 
-  try {
-    const adminSupabase = createAdminClient()
-    const { data: consents } = await adminSupabase
-      .schema('identity')
-      .from('user_consents')
-      .select('granted')
-      .eq('user_id', user.id)
-      .eq('consent_type', 'marketing')
-      .order('decision_at', { ascending: false })
-      .limit(1)
+  const userEmail = user.email ?? 'email@exemple.com'
+  const userAvatar =
+    profile?.avatar_url ||
+    'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=240&q=80'
 
-    marketingConsent = consents?.[0]?.granted ?? false
-  } catch (error) {
-    console.error('Failed to fetch marketing consent', error)
-  }
+  const accountItems: SettingsItem[] = [
+    {
+      label: 'Mes contributions & achats',
+      icon: ReceiptText,
+      href: '/dashboard/investments',
+      iconWrapperClassName: 'bg-gray-500/20',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'Notifications',
+      icon: Bell,
+      href: '/dashboard/settings/notifications',
+      iconWrapperClassName: 'bg-red-500',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'Abonnement & Avantages',
+      icon: Sparkles,
+      href: '/dashboard/subscription',
+      iconWrapperClassName: 'bg-lime-500',
+      iconClassName: 'text-black',
+      highlight: true,
+    },
+  ]
+
+  const ecosystemItems: SettingsItem[] = [
+    {
+      label: 'Comment ça marche ?',
+      icon: Info,
+      href: '/faq',
+      iconWrapperClassName: 'bg-blue-500',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'Le Blog',
+      icon: BookOpen,
+      href: '/blog',
+      iconWrapperClassName: 'bg-orange-500',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'À propos de Make The Change',
+      icon: Leaf,
+      href: '/about',
+      iconWrapperClassName: 'bg-emerald-500',
+      iconClassName: 'text-white',
+    },
+  ]
+
+  const legalItems: SettingsItem[] = [
+    {
+      label: "FAQ & Centre d'aide",
+      icon: HelpCircle,
+      href: '/faq',
+      iconWrapperClassName: 'bg-indigo-500',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'Nous contacter',
+      icon: Mail,
+      href: '/contact',
+      iconWrapperClassName: 'bg-blue-400',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'Confidentialité & Conditions',
+      icon: Shield,
+      href: '/privacy',
+      iconWrapperClassName: 'bg-gray-500',
+      iconClassName: 'text-white',
+    },
+  ]
 
   return (
-    <SettingsClient
-      initial={{
-        languageCode,
-        timezone: profile?.timezone || 'Europe/Paris',
-        publicProfile,
-        marketingConsent,
-        notificationPrefs: {
-          email: asBoolean(notificationPrefs.email, true),
-          push: asBoolean(notificationPrefs.push, false),
-          monthly_report: asBoolean(notificationPrefs.monthly_report, true),
-        },
-        socialLinks: {
-          linkedin: asString(socialLinks.linkedin),
-          instagram: asString(socialLinks.instagram),
-          twitter: asString(socialLinks.twitter),
-        },
-        themeConfig: parseThemeConfig(profile?.theme_config),
-      }}
-    />
+    <div className="relative z-[100] min-h-full overflow-y-auto bg-[#050505] pb-4 text-white">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/30 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
+        <div className="relative flex h-12 items-center justify-center">
+          <Link
+            href="/dashboard/profile"
+            aria-label="Fermer"
+            className="absolute left-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/5"
+          >
+            <X className="h-6 w-6" />
+          </Link>
+          <h1 className="text-lg font-bold text-white">Paramètres</h1>
+        </div>
+      </header>
+
+      <main className="pt-[calc(env(safe-area-inset-top))] mt-20">
+        <section>
+          <div className="mx-4 mt-4 overflow-hidden rounded-xl bg-white/10">
+            <Link
+              href="/dashboard/profile"
+              className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
+            >
+              <div className="flex items-center gap-3">
+                <img
+                  src={userAvatar}
+                  alt={`Avatar de ${displayName}`}
+                  className="h-14 w-14 rounded-full object-cover"
+                />
+
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-white">{displayName}</span>
+                  <span className="text-sm text-white/50">{userEmail}</span>
+                </div>
+              </div>
+
+              <ChevronRight className="h-4 w-4 text-white/30" />
+            </Link>
+          </div>
+        </section>
+
+        <SettingsGroup title="MON COMPTE" items={accountItems} />
+        <SettingsGroup title="L'ÉCOSYSTÈME" items={ecosystemItems} />
+        <SettingsGroup title="ASSISTANCE & LÉGAL" items={legalItems} />
+
+        <section>
+          <form action={logout} className="mx-4 mt-2 mb-8">
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-white/10 p-4 text-center text-red-500 font-medium transition-colors active:bg-white/20"
+            >
+              Se déconnecter
+            </button>
+          </form>
+        </section>
+      </main>
+    </div>
   )
 }

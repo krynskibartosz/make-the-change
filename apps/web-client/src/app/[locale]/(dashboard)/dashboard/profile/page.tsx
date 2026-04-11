@@ -1,191 +1,235 @@
 import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Meter,
-  MeterIndicator,
-  MeterLabel,
-  MeterTrack,
-  MeterValue,
-  Progress,
-} from '@make-the-change/core/ui'
-import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
-import { ProfileHeader } from '@/components/profile/profile-header'
+  ArrowRight,
+  Bug,
+  ChevronRight,
+  Droplets,
+  Flame,
+  Gift,
+  Lock,
+  Settings,
+  Sparkles,
+  Users,
+  Wind,
+} from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
-import { createClient } from '@/lib/supabase/server'
-import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import { ProfileController } from './profile.controller'
 
-export default async function ProfilePage() {
-  const supabase = await createClient()
+const unlockedSpecies = [
+  {
+    id: 'species-chouette-effraie',
+    name: 'Chouette Effraie',
+    rarity: 'Commun',
+    image: '/images/diorama-chouette.png',
+  },
+  {
+    id: 'species-abeille-noire',
+    name: 'Abeille Noire',
+    rarity: 'Rare',
+    image: '/images/diorama-chouette.png',
+  },
+]
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return null
-  }
-
-  // Fetch profile using RLS
-  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-
-  const { data: publicRanking } = await supabase
-    .from('public_user_rankings')
-    .select('rank, impact_score')
-    .eq('id', user.id)
-    .maybeSingle()
-
-  // Fetch investment stats using RLS
-  const { data: userInvestments } = await supabase
-    .from('investments')
-    .select('amount_eur_equivalent')
-    .eq('user_id', user.id)
-
-  // Calculate stats client-side
-  const projectsSupported = userInvestments?.length || 0
-  const totalInvested = (userInvestments || []).reduce(
-    (sum, inv) => sum + Number(inv.amount_eur_equivalent || 0),
-    0,
-  )
-
-  const metadata = isRecord(profile?.metadata) ? profile.metadata : {}
-  const avatarUrl = profile?.avatar_url || asString(metadata.avatar_url) || undefined
-  const coverUrl = profile?.cover_url || asString(metadata.cover_url) || undefined
-  const pointsBalance = asNumber(profile?.points_balance, 0)
-  const impactScore =
-    asNumber(publicRanking?.impact_score, 0) ||
-    calculateImpactScore({
-      points: pointsBalance,
-      projects: projectsSupported,
-      invested: totalInvested,
-    })
-  const publicRank = asNumber(publicRanking?.rank, 0)
-  const levelProgress = getLevelProgress(impactScore)
-  const pointsToNextLevel =
-    levelProgress.nextLevel === null ? 0 : Math.max(levelProgress.nextMin - impactScore, 0)
-  const computedBadges = getMilestoneBadges({
-    points: pointsBalance,
-    projects: projectsSupported,
-    invested: totalInvested,
-  })
-  const metadataBadges = asStringArray(metadata.badges)
-  const badges = computedBadges.length ? computedBadges : metadataBadges
-
-  const displayName = profile?.first_name
-    ? `${profile.first_name} ${profile.last_name || ''}`.trim()
-    : user.email || 'Utilisateur'
-
+export default function ProfilePage() {
   return (
-    <div className="min-h-screen">
-      <ProfileHeader
-        userId={user.id}
-        name={displayName}
-        email={user.email || null}
-        level={levelProgress.currentLevel}
-        avatarUrl={avatarUrl}
-        coverUrl={coverUrl}
-        impactScore={impactScore}
-      />
-
-      <DashboardPageContainer>
-        <div className="grid gap-8 lg:grid-cols-[1fr_350px] xl:grid-cols-[1fr_400px]">
-          <div className="order-2 space-y-8 lg:order-1">
-            <ProfileController profile={profile || null} userEmail={user?.email} />
-          </div>
-
-          <div className="order-1 flex flex-col gap-6 lg:order-2 lg:sticky lg:top-24 lg:h-fit">
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
-              <Card className="border bg-background/70 shadow-sm backdrop-blur transition-all hover:shadow-md">
-                <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
-                  <CardTitle className="text-base sm:text-lg">Classement</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 p-5 pt-3 text-sm text-muted-foreground sm:p-8 sm:pt-4">
-                  <div className="flex items-center justify-between">
-                    <span>Rang global</span>
-                    <span className="font-bold text-foreground text-lg">
-                      {publicRank > 0 ? `#${publicRank}` : '—'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-border/50 pt-4">
-                    <span>Impact score</span>
-                    <span className="font-bold text-foreground text-lg">
-                      {new Intl.NumberFormat('fr-FR').format(impactScore)}
-                    </span>
-                  </div>
-                  <p className="text-xs italic opacity-70">
-                    Le classement public suit votre impact score actuel.
-                  </p>
-                  <Link href="/leaderboard">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full mt-2 font-bold uppercase tracking-wider text-[10px]"
-                    >
-                      Voir le leaderboard
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              <Card className="border bg-background/70 shadow-sm backdrop-blur transition-all hover:shadow-md">
-                <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
-                  <CardTitle className="text-base sm:text-lg">Progression niveau</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 p-5 pt-3 text-sm text-muted-foreground sm:p-8 sm:pt-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium">Vers {levelProgress.nextLevel ?? 'Max'}</span>
-                    <span className="font-black text-primary">
-                      {Math.round(levelProgress.progress)}%
-                    </span>
-                  </div>
-                  <Progress value={levelProgress.progress} className="h-2" />
-                  <Meter value={levelProgress.progress} className="space-y-1">
-                    <MeterLabel className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                      Score d&apos;avancement
-                    </MeterLabel>
-                    <MeterTrack className="h-1.5 rounded-full bg-muted">
-                      <MeterIndicator className="h-full rounded-full bg-primary/70" />
-                    </MeterTrack>
-                    <MeterValue className="text-[10px] text-muted-foreground" />
-                  </Meter>
-                  <p className="text-xs italic opacity-70">
-                    Plus que {new Intl.NumberFormat('fr-FR').format(pointsToNextLevel)} points avant
-                    le niveau suivant.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="border bg-background/70 shadow-sm backdrop-blur transition-all hover:shadow-md">
-              <CardHeader className="p-5 pb-4 sm:p-8 sm:pb-6">
-                <CardTitle className="text-base sm:text-lg">Badges</CardTitle>
-              </CardHeader>
-              <CardContent className="p-5 pt-3 pb-6 sm:p-8 sm:pt-4">
-                <div className="flex flex-wrap gap-2">
-                  {badges.length > 0 ? (
-                    badges.map((badge) => (
-                      <Badge
-                        key={badge}
-                        variant="secondary"
-                        className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight bg-primary/10 text-primary border-primary/20"
-                      >
-                        {badge}
-                      </Badge>
-                    ))
-                  ) : (
-                    <span className="text-sm italic opacity-60">Aucun badge pour le moment.</span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+    <div className="min-h-screen bg-[#0B0F15] text-white pb-32">
+      <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
+          <Link
+            href="/dashboard/settings"
+            aria-label="Paramètres"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
+          >
+            <Settings className="h-5 w-5" />
+          </Link>
         </div>
-      </DashboardPageContainer>
+      </header>
+
+      <main className="mx-auto w-full max-w-3xl px-4 ">
+        <section className="relative pt-6">
+          <div className="pointer-events-none absolute left-1/2 top-12 h-40 w-40 -translate-x-1/2 rounded-full bg-lime-500/10 blur-3xl" />
+
+          <div className="relative z-10 mx-auto mt-4 h-28 w-28 overflow-hidden rounded-full border-4 border-[#0B0F15] shadow-xl">
+            <img
+              src="https://images.unsplash.com/photo-1545167622-3a6ac756afa4"
+              alt="Avatar de Bartosz Krynski"
+              className="h-full w-full object-cover"
+            />
+          </div>
+
+          <h1 className="mt-3 text-center text-3xl font-black tracking-tight text-white">
+            Bartosz Krynski
+          </h1>
+
+          <div className="mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-orange-400/20 bg-orange-400/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.2)]">
+            <Flame className="h-3.5 w-3.5 fill-current" />
+            12 Jours de Série
+          </div>
+
+          <p className="mt-2 text-center text-xs font-medium tracking-wide text-white/60">
+            @bartosz_k • Membre depuis 2026
+          </p>
+        </section>
+
+        <section className=" mt-8 mb-10 grid grid-cols-2 gap-3">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Bug className="h-5 w-5 text-amber-400" />
+            <div className="mt-2 text-2xl font-black text-white tabular-nums">3 800</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
+              ABEILLES SAUVÉES
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Droplets className="h-5 w-5 text-orange-400" />
+            <div className="mt-2 text-2xl font-black text-white tabular-nums">0,77 kg</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
+              MIEL GÉNÉRÉ
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Wind className="h-5 w-5 text-blue-400" />
+            <div className="mt-2 text-2xl font-black text-white tabular-nums">3,85 kg</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
+              CO₂ CAPTURÉ
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Sparkles className="h-5 w-5 text-lime-400" />
+            <div className="mt-2 text-2xl font-black text-lime-400 tabular-nums">2 450</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
+              POINTS D&apos;IMPACT
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-xl font-black tracking-tight text-white">Mon BioDex</h2>
+            <span className="text-sm font-bold tabular-nums text-white/60">(2 / 13)</span>
+          </div>
+
+          <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {unlockedSpecies.map((species) => (
+              <Link
+                key={species.id}
+                href={`/biodex/${species.id}`}
+                className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4"
+              >
+                <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-400">
+                  {species.rarity}
+                </span>
+                <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/20">
+                  <img
+                    src={species.image}
+                    alt={species.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <p className="mt-3 text-sm font-bold text-white">{species.name}</p>
+              </Link>
+            ))}
+
+            <button
+              type="button"
+              className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left"
+            >
+              <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
+                <Lock className="h-3.5 w-3.5 text-white/55" />
+              </span>
+              <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
+                Verrouillé
+              </span>
+              <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
+                <img
+                  src="/images/diorama-chouette.png"
+                  alt="Espèce inconnue"
+                  className="h-full w-full object-cover brightness-0 opacity-20 blur-sm"
+                />
+              </div>
+              <p className="mt-3 text-sm italic text-white/50">Espèce inconnue</p>
+            </button>
+          </div>
+
+          <Link
+            href="/aventure?tab=biodex"
+            className="mt-1 inline-flex items-center gap-2 text-sm font-semibold text-lime-400 transition-colors hover:text-lime-300"
+          >
+            Voir la liste complète du BioDex
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </section>
+
+        <section>
+          <div className="mt-8 mb-4 flex items-end justify-between ">
+            <h2 className="text-xl font-bold text-white">Mes Tribus</h2>
+            <button type="button" className="text-xs font-medium text-lime-400 hover:text-lime-300">
+              Voir tout
+            </button>
+          </div>
+
+          <div className="hide-scrollbar flex snap-x gap-4 overflow-x-auto  pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <button
+              type="button"
+              className="w-48 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-3 text-left transition-transform active:scale-95"
+            >
+              <div className="mb-3 h-20 w-full overflow-hidden rounded-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=400"
+                  alt="Agroforest Pioneers"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="w-full truncate text-sm font-bold text-white">Agroforest Pioneers</h3>
+                <div className="mt-1 flex items-center gap-1 text-xs text-white/50">
+                  <Users className="h-3 w-3" /> 42 membres
+                </div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="w-48 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-3 text-left transition-transform active:scale-95"
+            >
+              <div className="mb-3 h-20 w-full overflow-hidden rounded-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1582967788606-a171c1080cb0?auto=format&fit=crop&q=80&w=400"
+                  alt="Océan"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="w-full truncate text-sm font-bold text-white">Ocean Mangroves</h3>
+                <div className="mt-1 flex items-center gap-1 text-xs text-white/50">
+                  <Users className="h-3 w-3" /> 128 membres
+                </div>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <section className="relative  mt-10 mb-8 overflow-hidden rounded-3xl border border-lime-500/30 bg-gradient-to-br from-lime-500/20 to-emerald-900/20 p-6 text-center">
+          <div className="pointer-events-none absolute left-1/2 mt-[-3rem] h-40 w-40 -translate-x-1/2 rounded-full bg-lime-400/15 blur-3xl" />
+          <div className="relative z-10">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+              <Gift className="h-7 w-7 text-lime-300" />
+            </div>
+            <h3 className="mt-3 text-lg font-black text-white">Invitez vos amis</h3>
+            <p className="mt-2 mb-4 text-sm text-balance text-white/70">
+              Faites grandir le mouvement. Gagnez{' '}
+              <span className="font-bold text-lime-400">500 Graines 🌱</span> chacun pour chaque
+              ami parrainé.
+            </p>
+            <button
+              type="button"
+              className="w-full rounded-xl bg-white py-3 font-bold text-black shadow-lg transition-transform active:scale-95"
+            >
+              Partager mon lien
+            </button>
+          </div>
+        </section>
+      </main>
     </div>
   )
 }
