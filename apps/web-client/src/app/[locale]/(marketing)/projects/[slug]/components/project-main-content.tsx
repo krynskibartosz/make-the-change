@@ -12,6 +12,17 @@ import { ProjectUnlockSpeciesSection } from './project-unlock-species-section'
 import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/types/context'
 import type { RelatedProject } from '../project-detail-data'
 
+const isVideoMedia = (source: string) => /\.(mp4|webm|ogg|mov|m4v)$/i.test(source)
+
+const getVideoMimeType = (source: string) => {
+  const normalized = source.toLowerCase()
+  if (normalized.endsWith('.mov')) return 'video/quicktime'
+  if (normalized.endsWith('.webm')) return 'video/webm'
+  if (normalized.endsWith('.ogg')) return 'video/ogg'
+  if (normalized.endsWith('.m4v')) return 'video/x-m4v'
+  return 'video/mp4'
+}
+
 type ProjectMainContentProject = {
   type: string | null
   name_default: string
@@ -61,6 +72,7 @@ export async function ProjectMainContent({
     localizedLongDesc || defaultDesc,
   )
   const unlockableSpecies = project.species?.[0] || null
+  const mediaPoster = project.images?.find((entry) => !isVideoMedia(entry))
 
   return (
     <div className="lg:col-span-8 space-y-8">
@@ -121,7 +133,9 @@ export async function ProjectMainContent({
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {project.images.map((img, i) => (
+            {project.images.map((img, i) => {
+              const isVideo = isVideoMedia(img)
+              return (
               <div
                 key={`${project.name_default}-${i}`}
                 className={cn(
@@ -129,14 +143,33 @@ export async function ProjectMainContent({
                   i === 0 ? 'md:col-span-2 aspect-[21/9]' : 'aspect-[4/3]',
                 )}
               >
-                <img
-                  src={img}
-                  alt={`${project.name_default} ${i + 1}`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-marketing-overlay-dark/0 transition-colors group-hover:bg-marketing-overlay-dark/10" />
+                {isVideo ? (
+                  <video
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    {...(mediaPoster ? { poster: mediaPoster } : {})}
+                  >
+                    <source src={img} type={getVideoMimeType(img)} />
+                    Votre navigateur ne prend pas en charge la lecture vidéo.
+                  </video>
+                ) : (
+                  <img
+                    src={img}
+                    alt={`${project.name_default} ${i + 1}`}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
+                <div className="pointer-events-none absolute inset-0 bg-marketing-overlay-dark/0 transition-colors group-hover:bg-marketing-overlay-dark/10" />
+                {isVideo ? (
+                  <div className="pointer-events-none absolute right-3 top-3 rounded-full bg-background/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground/80">
+                    Video
+                  </div>
+                ) : null}
               </div>
-            ))}
+              )
+            })}
           </div>
         </section>
       )}

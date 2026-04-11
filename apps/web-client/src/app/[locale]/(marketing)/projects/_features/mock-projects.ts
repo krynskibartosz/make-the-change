@@ -70,6 +70,29 @@ const antsirabeProducts: ProducerProduct[] = [
   },
 ]
 
+const manakaraSpecies: ProjectSpecies[] = [
+  {
+    id: 'mock-species-abeille-noire-manakara',
+    name: 'Abeille noire',
+    scientificName: 'Apis mellifera mellifera',
+    icon: '/images/logo-icon-bee.png',
+    rarity: 7,
+    status: 'NT',
+    role: 'Pollinisatrice clé',
+  },
+]
+
+const manakaraProducts: ProducerProduct[] = [
+  {
+    id: 'mock-product-miel-manakara',
+    name: 'Miel de Manakara',
+    price: 19,
+    category: 'Miel',
+    impactPercentage: 35,
+    image_url: '/images/logo-icon-bee.png',
+  },
+]
+
 export const MOCK_PROJECTS: MockProjectSeed[] = [
   {
     id: 'mock-project-ruchers-antsirabe',
@@ -89,9 +112,9 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       en: 'Andraina and his assistant manage 45 hives near the Analamazoatra reserve to support sustainable local beekeeping.',
     },
     long_description_default:
-      "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri (le plus grand lémur de Madagascar), mais aussi des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nCet environnement offre aux abeilles une ressource florale riche, principalement composée d’eucalyptus, donnant un miel au profil aromatique caractéristique.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le développement d’une apiculture locale durable. Suite à une infestation de varroa, une partie des ruches a été remplacée afin de relancer l’activité et renforcer l’impact sur le vivant.",
+      "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri (le plus grand lémur de Madagascar), mais aussi des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nCet environnement offre aux abeilles une ressource florale riche, principalement composée d’eucalyptus, donnant un miel au profil aromatique caractéristique.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le développement d’une apiculture locale durable. Suite à une infestation de varroa, une partie des ruches a été remplacée afin de relancer l’activité et renforcer l’impact sur le vivant.\n\nLocalisation : https://maps.app.goo.gl/DVLWnSu9cGoi7evw5?g_st=ic",
     long_description_i18n: {
-      fr: "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri (le plus grand lémur de Madagascar), mais aussi des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nCet environnement offre aux abeilles une ressource florale riche, principalement composée d’eucalyptus, donnant un miel au profil aromatique caractéristique.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le développement d’une apiculture locale durable. Suite à une infestation de varroa, une partie des ruches a été remplacée afin de relancer l’activité et renforcer l’impact sur le vivant.",
+      fr: "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri (le plus grand lémur de Madagascar), mais aussi des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nCet environnement offre aux abeilles une ressource florale riche, principalement composée d’eucalyptus, donnant un miel au profil aromatique caractéristique.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le développement d’une apiculture locale durable. Suite à une infestation de varroa, une partie des ruches a été remplacée afin de relancer l’activité et renforcer l’impact sur le vivant.\n\nLocalisation : https://maps.app.goo.gl/DVLWnSu9cGoi7evw5?g_st=ic",
     },
     address_city: 'Antsirabe',
     address_country_code: 'Madagascar',
@@ -101,8 +124,12 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     maturity_date: null,
     current_funding: 7640,
     target_budget: 17550,
-    hero_image_url: '/images/home-header-poster.jpeg',
-    images: ['/images/home-header-poster.jpeg'],
+    hero_image_url: '/images/projects/antsirabe-ruchers-1.jpg',
+    images: [
+      '/images/projects/antsirabe-ruchers-1.jpg',
+      '/images/projects/antsirabe-ruchers-1.mov',
+      '/images/projects/antsirabe-ruchers-2.mov',
+    ],
     unit_price_eur: 390,
     unit_label: 'ruche',
     producer: {
@@ -127,6 +154,67 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     expected_impact: {
       co2Absorbed: 50,
       biodiversityGain: 32,
+      jobsCreated: 2,
+      timeline: 12,
+    },
+  },
+  {
+    id: 'mock-project-miellerie-manakara',
+    slug: 'miellerie-manakara-ilanga-nature',
+    status: 'active',
+    type: 'beehive',
+    featured: true,
+    name_default: 'Miellerie de Manakara',
+    name_i18n: {
+      fr: 'Miellerie de Manakara',
+      en: 'Manakara Honey House',
+    },
+    description_default:
+      'Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l’abeille noire.',
+    description_i18n: {
+      fr: 'Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l’abeille noire.',
+      en: 'Ilanga Nature project in Madagascar to scale a sustainable local honey house around black bees.',
+    },
+    long_description_default:
+      'La miellerie de Manakara est portée par Ilanga Nature à Madagascar. Ce projet vise à renforcer la chaîne locale de production et de valorisation du miel en s’appuyant sur une apiculture durable.\n\nLes données terrain détaillées (production, rendement, impact) sont progressivement consolidées à partir du référentiel opérationnel.',
+    long_description_i18n: {
+      fr: 'La miellerie de Manakara est portée par Ilanga Nature à Madagascar. Ce projet vise à renforcer la chaîne locale de production et de valorisation du miel en s’appuyant sur une apiculture durable.\n\nLes données terrain détaillées (production, rendement, impact) sont progressivement consolidées à partir du référentiel opérationnel.',
+      en: 'The Manakara honey house is led by Ilanga Nature in Madagascar. The project strengthens local honey production and value chain through sustainable beekeeping.\n\nDetailed field metrics (production, yield, impact) are being progressively consolidated from the operational dataset.',
+    },
+    address_city: 'Manakara',
+    address_country_code: 'Madagascar',
+    latitude: -22.1427,
+    longitude: 48.0106,
+    launch_date: '2026-03-01',
+    maturity_date: null,
+    current_funding: 3510,
+    target_budget: 15600,
+    hero_image_url: '/images/projects/miellerie-manakara.jpg',
+    images: ['/images/projects/miellerie-manakara.jpg'],
+    unit_price_eur: 390,
+    unit_label: 'ruche',
+    producer: {
+      id: 'mock-producer-ilanga-nature',
+      slug: 'ilanga-nature',
+      name_default: 'Ilanga Nature',
+      name_i18n: {
+        fr: 'Ilanga Nature',
+        en: 'Ilanga Nature',
+      },
+      description_default: 'Produits naturels et éthiques de Madagascar.',
+      description_i18n: {
+        fr: 'Produits naturels et éthiques de Madagascar.',
+        en: 'Natural and ethical products from Madagascar.',
+      },
+      contact_website: 'https://ilanga.nature',
+      images: ['/images/logo-icon-bee.png'],
+    },
+    species: manakaraSpecies,
+    challenges: [],
+    producer_products: manakaraProducts,
+    expected_impact: {
+      co2Absorbed: 42,
+      biodiversityGain: 28,
       jobsCreated: 2,
       timeline: 12,
     },

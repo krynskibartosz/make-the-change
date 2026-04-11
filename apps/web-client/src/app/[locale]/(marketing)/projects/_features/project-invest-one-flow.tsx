@@ -13,6 +13,7 @@ import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
+import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
 
@@ -88,6 +89,7 @@ export function ProjectInvestOneFlow({
 }: ProjectInvestOneFlowProps) {
   const t = useTranslations('projects.invest_page')
   const router = useRouter()
+  const haptic = useHaptic()
 
   const rules = investment.getInvestmentRules(project.type)
 
@@ -126,21 +128,42 @@ export function ProjectInvestOneFlow({
   }, [amountEur, project.type, rules.expected_bonus])
   const formattedAmount = formatAmountNumber(amountEur)
   const protectedBees = formatPoints(Math.round((amountEur / 100) * 3800))
+  const triggerPattern = (pattern: number | number[]) => {
+    if (typeof window !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(pattern)
+      } catch {
+        // no-op on blocked environments (iOS Safari, permissions, etc.)
+      }
+    }
+  }
 
   useEffect(() => {
     if (step !== 'success') return
 
     setPhase('tension')
-    const flashTimerId = window.setTimeout(() => setPhase('flash'), 1300)
-    const euphoriaTimerId = window.setTimeout(() => setPhase('euphoria'), 1500)
+    haptic.mediumTap()
+
+    const flashTimerId = window.setTimeout(() => {
+      setPhase('flash')
+      triggerPattern([30, 200, 30])
+    }, 1300)
+    const euphoriaTimerId = window.setTimeout(() => {
+      setPhase('euphoria')
+      triggerPattern([60, 50, 80])
+    }, 1500)
     const resolvedTimerId = window.setTimeout(() => setPhase('resolved'), 2100)
+    const boomTimerId = window.setTimeout(() => {
+      triggerPattern([250])
+    }, 1720)
 
     return () => {
       window.clearTimeout(flashTimerId)
       window.clearTimeout(euphoriaTimerId)
       window.clearTimeout(resolvedTimerId)
+      window.clearTimeout(boomTimerId)
     }
-  }, [step])
+  }, [haptic, step])
 
   useEffect(() => {
     if (step !== 'success' || phase !== 'euphoria') return
@@ -211,6 +234,7 @@ export function ProjectInvestOneFlow({
   }
 
   const goToPayment = () => {
+    haptic.heartbeat()
     setGuestEmailError(null)
     setStep('payment')
   }

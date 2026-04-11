@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { useHaptic } from '@/hooks/use-haptic'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -249,12 +250,13 @@ function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
 }
 
 function ImpactCard({ event }: { event: ImpactEvent }) {
+	const haptic = useHaptic()
 	const [bravo, setBravo] = useState(false)
 
 	const handleBravo = useCallback(() => {
-		navigator.vibrate?.(10)
+		haptic.mediumTap()
 		setBravo((prev) => !prev)
-	}, [])
+	}, [haptic])
 
 	const isTribe = event.isTribe === true
 	const headerHref =

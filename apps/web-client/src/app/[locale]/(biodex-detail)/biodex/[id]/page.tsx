@@ -2,12 +2,25 @@
 
 import { ChevronLeft, Leaf, Lock } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
+import { useHaptic } from '@/hooks/use-haptic'
 
 const SPECIES_IMAGE_URL =
   'https://images.unsplash.com/photo-1590423719821-2e658742cb52?q=80&w=600&auto=format&fit=crop'
+const REQUIRED_SEEDS = 500
+const CURRENT_SEEDS = 120
 
 export default function SpeciesPage() {
   const router = useRouter()
+  const haptic = useHaptic()
+
+  const handleEvolution = () => {
+    if (CURRENT_SEEDS < REQUIRED_SEEDS) {
+      haptic.errorBuzz()
+      return
+    }
+
+    haptic.successMagic()
+  }
 
   return (
     <div className="min-h-screen bg-[#0B0F15] text-white">
@@ -54,16 +67,21 @@ export default function SpeciesPage() {
 
           <div className="mb-2 flex justify-between text-sm">
             <span className="text-white/60">Graines requises</span>
-            <span className="font-bold text-emerald-400">120 / 500 🌱</span>
+            <span className="font-bold text-emerald-400 tabular-nums">
+              {CURRENT_SEEDS} / {REQUIRED_SEEDS} 🌱
+            </span>
           </div>
 
           <div className="h-3 w-full overflow-hidden rounded-full bg-black/50">
-            <div className="h-full w-[24%] rounded-full bg-emerald-400" />
+            <div
+              className="h-full rounded-full bg-emerald-400"
+              style={{ width: `${Math.round((CURRENT_SEEDS / REQUIRED_SEEDS) * 100)}%` }}
+            />
           </div>
 
           <button
             type="button"
-            disabled
+            onClick={handleEvolution}
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white/5 py-4 font-bold text-white/40"
           >
             <Lock className="h-4 w-4" />

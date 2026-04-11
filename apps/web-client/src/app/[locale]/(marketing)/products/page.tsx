@@ -47,7 +47,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       locale,
       product.description_default || '',
     ),
-    price: product.price_points ? product.price_points / 100 : 0,
+    price: product.price ?? (product.price_points ? product.price_points / 100 : 0),
     price_points: product.price_points ?? 0,
   }))
 

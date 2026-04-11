@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
+import { getMockProductById, type MockProductSeed } from '../_features/mock-products'
 
 export type ProductProducer = {
   id: string
@@ -152,7 +153,49 @@ const toPublicProduct = (value: unknown): PublicProduct | null => {
   }
 }
 
+const toProductWithRelationsFromMock = (product: MockProductSeed): ProductWithRelations => ({
+  id: product.id,
+  name_default: product.name_default,
+  name_i18n: product.name_i18n || null,
+  slug: product.slug,
+  description_default: product.description_default,
+  description_i18n: product.description_i18n || null,
+  producer_id: product.producer_id,
+  category_id: product.category_id,
+  featured: product.featured,
+  is_hero_product: product.is_hero_product,
+  tags: product.tags,
+  stock_quantity: product.stock_quantity,
+  price_points: product.price_points,
+  price_eur_equivalent: product.price_eur_equivalent,
+  fulfillment_method: product.fulfillment_method,
+  image_url: product.image_url,
+  images: product.images,
+  certifications: product.certifications,
+  producer: {
+    id: product.producer.id,
+    slug: product.producer.slug,
+    name_default: product.producer.name_default,
+    name_i18n: product.producer.name_i18n || null,
+    description_default: product.producer.description_default,
+    description_i18n: product.producer.description_i18n || null,
+    images: product.producer.images,
+    address_city: product.producer.address_city,
+    address_country_code: product.producer.address_country_code,
+    contact_website: product.producer.contact_website,
+  },
+  category: {
+    name_default: product.category.name_default,
+    name_i18n: product.category.name_i18n || null,
+  },
+})
+
 export async function getPublicProductById(id: string): Promise<ProductWithRelations | null> {
+  const mockProduct = getMockProductById(id)
+  if (mockProduct) {
+    return toProductWithRelationsFromMock(mockProduct)
+  }
+
   const supabase = await createClient()
   const { data: productData, error } = await supabase
     .from('public_products')

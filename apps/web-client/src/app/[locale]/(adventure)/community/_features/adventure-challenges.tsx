@@ -5,6 +5,7 @@ import { BookOpen, CheckCircle2, Sparkles, UsersRound } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import { useHaptic } from '@/hooks/use-haptic'
 
 type DailyQuestType = 'education' | 'social' | 'daily_harvest'
 
@@ -191,6 +192,7 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 }
 
 export function AdventureChallenges() {
+	const haptic = useHaptic()
 	const [dailyQuests, setDailyQuests] = useState(initialDailyQuests)
 	const [isEcoFactReaderOpen, setIsEcoFactReaderOpen] = useState(false)
 	const [isDailyHarvestOpen, setIsDailyHarvestOpen] = useState(false)
@@ -232,6 +234,8 @@ export function AdventureChallenges() {
 	}
 
 	const handleDailyHarvestClaim = () => {
+		haptic.lightTap()
+
 		setDailyQuests((current) =>
 			current.map((quest) => {
 				if (quest.type !== 'daily_harvest') {

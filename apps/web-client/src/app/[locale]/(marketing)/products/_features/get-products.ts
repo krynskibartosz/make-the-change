@@ -12,6 +12,7 @@ import {
 } from '@/app/[locale]/(marketing)/products/_features/query-state'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
+import { getMockProducts } from './mock-products'
 
 type PublicProduct = {
   id: string
@@ -173,6 +174,62 @@ const toProductTagsRow = (value: unknown): ProductTagsRow | null => {
   }
 }
 
+const toMockPublicProduct = (
+  product: ReturnType<typeof getMockProducts>[number],
+): PublicProduct => ({
+  id: product.id,
+  created_at: product.created_at,
+  name_default: product.name_default,
+  name_i18n: product.name_i18n || null,
+  short_description_default: product.short_description_default || null,
+  short_description_i18n: product.short_description_i18n || null,
+  description_default: product.description_default,
+  description_i18n: product.description_i18n || null,
+  price: product.price_eur_equivalent,
+  price_points: product.price_points,
+  stock_quantity: product.stock_quantity,
+  featured: product.featured,
+  category_id: product.category_id,
+  producer_id: product.producer_id,
+  image_url: product.image_url,
+  images: product.images,
+  tags: product.tags,
+})
+
+const matchesMockFilters = (product: PublicProduct, filters: ProductsQueryState) => {
+  if (filters.category && product.category_id !== filters.category) {
+    return false
+  }
+
+  if (filters.producer && product.producer_id !== filters.producer) {
+    return false
+  }
+
+  if (filters.tag) {
+    const tags = product.tags || []
+    if (!tags.includes(filters.tag)) {
+      return false
+    }
+  }
+
+  if (filters.search.length >= 2) {
+    const haystack = [
+      product.name_default || '',
+      product.short_description_default || '',
+      product.description_default || '',
+      ...(product.tags || []),
+    ]
+      .join(' ')
+      .toLowerCase()
+
+    if (!haystack.includes(filters.search.toLowerCase())) {
+      return false
+    }
+  }
+
+  return true
+}
+
 const resolveCategoryId = async (
   supabase: ReturnType<typeof createStaticClient>,
   categoryFilter: string,
@@ -226,6 +283,9 @@ export const getProducts = unstable_cache(
       ...queryState,
       category: resolvedCategory,
     } satisfies ProductsQueryState
+    const filteredMockProducts = getMockProducts()
+      .map((product) => toMockPublicProduct(product))
+      .filter((product) => matchesMockFilters(product, filters))
 
     // 1. Fetch Count
     let countQuery = supabase.from('public_products').select('id', { count: 'exact', head: true })
@@ -261,8 +321,15 @@ export const getProducts = unstable_cache(
           .filter((product): product is PublicProduct => product !== null)
       : []
 
+    const mockIds = new Set(filteredMockProducts.map((product) => product.id))
+    const dedupedDatabaseProducts = products.filter((product) => !mockIds.has(product.id))
+    const mergedProducts =
+      queryState.page === 1
+        ? [...filteredMockProducts, ...dedupedDatabaseProducts]
+        : dedupedDatabaseProducts
+
     return {
-      products,
+      products: mergedProducts,
       pagination: {
         ...pagination,
         currentPage,

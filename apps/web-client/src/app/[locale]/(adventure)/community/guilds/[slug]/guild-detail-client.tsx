@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { ArrowLeft, ChevronRight, Leaf, Lock, Users } from 'lucide-react'
 import { useState, useCallback } from 'react'
 import { GuildMembershipButton } from '../_features/guild-membership-button'
+import { useHaptic } from '@/hooks/use-haptic'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -218,11 +219,12 @@ function ImpactEventAction({ event, text }: { event: ImpactEvent; text: string }
 }
 
 function ImpactEventCard({ event }: { event: ImpactEvent }) {
+	const haptic = useHaptic()
 	const [bravo, setBravo] = useState(false)
 	const handleBravo = useCallback(() => {
-		navigator.vibrate?.(10)
+		haptic.mediumTap()
 		setBravo((p) => !p)
-	}, [])
+	}, [haptic])
 	const action = splitAction(event.action)
 
 	return (
