@@ -30,7 +30,14 @@ import {
   SelectTrigger,
 } from '@make-the-change/core/ui'
 import { ProductCardSkeleton } from '@make-the-change/core/ui/next'
-import { ArrowUpDown, Filter, LayoutGrid, List as ListIcon, Package, Search } from 'lucide-react'
+import {
+  ArrowUpDown,
+  Filter,
+  LayoutGrid,
+  List as ListIcon,
+  Package,
+  Search,
+} from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
@@ -49,6 +56,7 @@ import {
   isProductSort,
   type ProductsQueryState,
 } from '@/app/[locale]/(marketing)/products/_features/query-state'
+import { MarketHeader } from './components/market-header'
 import { ClientCatalogProductCard } from './components/client-catalog-product-card'
 
 export interface Product {
@@ -461,6 +469,8 @@ export const ProductsClient = ({
 
   return (
     <>
+      <MarketHeader balance={2450} />
+
       {/* Page Hero Section */}
       <div className="py-8 md:pb-12 md:pt-24">
         <div className="px-4 sm:px-6 lg:px-8">
@@ -474,7 +484,7 @@ export const ProductsClient = ({
       </div>
 
       {/* Desktop sticky top search bar — hidden on mobile */}
-      <div className="hidden md:block sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+      <div className="hidden md:block sticky top-[4.5rem] z-30 border-b border-border bg-background/95 backdrop-blur">
         <div className="w-full max-w-[1920px] mx-auto px-8 lg:px-12 py-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">

@@ -2,7 +2,6 @@
 
 import type { LucideIcon } from 'lucide-react'
 import { Flame, Globe, ShoppingBag, User, Users } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -19,7 +18,6 @@ type BottomNavItem = {
 
 export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const normalizedPath = pathname.replace(/\/+$/, '')
   const hasAuthenticatedUser = Boolean(user)
   const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
@@ -30,13 +28,12 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     return null
   }
 
-  const activeAdventureTab = searchParams.get('tab')
   const isAdventure = pathname === '/aventure' || pathname.startsWith('/aventure/')
   const isDefis =
     pathname === '/defis' ||
     pathname.startsWith('/defis/') ||
     pathname.startsWith('/challenges') ||
-    (isAdventure && (activeAdventureTab === 'defis' || !activeAdventureTab))
+    isAdventure
   const isProjects = pathname.startsWith('/projets') || pathname.startsWith('/projects')
   const isCollective =
     pathname.startsWith('/collectif') ||
