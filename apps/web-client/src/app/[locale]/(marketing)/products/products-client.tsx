@@ -37,6 +37,7 @@ import {
   List as ListIcon,
   Package,
   Search,
+  Sparkles,
 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -56,6 +57,8 @@ import {
   isProductSort,
   type ProductsQueryState,
 } from '@/app/[locale]/(marketing)/products/_features/query-state'
+import { Link } from '@/i18n/navigation'
+import { sanitizeImageUrl } from '@/lib/image-url'
 import { MarketHeader } from './components/market-header'
 import { ClientCatalogProductCard } from './components/client-catalog-product-card'
 
@@ -466,6 +469,19 @@ export const ProductsClient = ({
   ])
 
   const hasActiveFilters = activeFilterChips.length > 0
+  const maxPricePoints = useMemo(
+    () => Math.max(...products.map((product) => product.price_points || 0), 1),
+    [products],
+  )
+  const formatPointsCompact = useCallback(
+    (value: number | null | undefined) => new Intl.NumberFormat('fr-FR').format(value || 0),
+    [],
+  )
+  const formatEuroCompact = useCallback(
+    (value: number | null | undefined) =>
+      `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value || 0)} €`,
+    [],
+  )
 
   return (
     <>
@@ -793,35 +809,117 @@ export const ProductsClient = ({
             </div>
 
             {/* Products list */}
-            <DataList
-              isLoading={isPending}
-              variant={view}
-              items={products}
-              getItemKey={(product) => product.id}
-              gridCols={3 as const}
-              emptyState={{
-                icon: Package,
-                title: tProducts('empty_state.title'),
-                description: tProducts('empty_state.description'),
-                action: hasActiveFilters ? (
-                  <Button size="sm" variant="outline" onClick={clearAllFilters}>
-                    {tProducts('filters.clear_filters')}
-                  </Button>
-                ) : undefined,
-              }}
-              renderItem={(product: Product) => (
-                <ClientCatalogProductCard
-                  view={view}
-                  product={product}
-                  featuredLabel={tProducts('featured')}
-                  outOfStockLabel={tProducts('card.sold_out')}
-                  lowStockLabel={tProducts('card.low_stock')}
-                  pointsLabel={tProducts('card.points')}
-                  viewLabel={tProducts('card.view_action')}
-                />
-              )}
-              renderSkeleton={() => <ProductCardSkeleton context="clientCatalog" />}
-            />
+            {view === 'list' ? (
+              products.length === 0 ? (
+                <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 text-center">
+                  <Package className="mb-4 h-12 w-12 text-muted-foreground/50" />
+                  <h3 className="text-lg font-bold text-foreground">{tProducts('empty_state.title')}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{tProducts('empty_state.description')}</p>
+                  {hasActiveFilters ? (
+                    <Button size="sm" variant="outline" onClick={clearAllFilters} className="mt-5">
+                      {tProducts('filters.clear_filters')}
+                    </Button>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="-mx-4 md:-mx-8 lg:-mx-12">
+                  {products.map((product, index) => {
+                    const points = product.price_points || 0
+                    const pointsBarPercent = Math.min(Math.max((points / maxPricePoints) * 100, 0), 100)
+                    const imageUrl =
+                      sanitizeImageUrl(product.image_url) ||
+                      (Array.isArray(product.images) && product.images.length > 0
+                        ? sanitizeImageUrl(product.images[0])
+                        : undefined)
+                    const description =
+                      product.short_description_default ||
+                      product.description_default ||
+                      ''
+                    const isLast = index === products.length - 1
+
+                    return (
+                      <Link
+                        key={product.id}
+                        href={`/products/${product.id}`}
+                        className="w-full flex items-center gap-4 px-5 py-4 bg-transparent active:bg-white/5 transition-colors text-left group"
+                      >
+                        <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-white/5">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={product.name_default}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-white/10" />
+                          )}
+                        </div>
+
+                        <div
+                          className={`flex-1 min-w-0 flex flex-col justify-center ${isLast ? '' : 'border-b border-white/10 pb-4'}`}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-base font-bold text-white truncate">
+                              {product.name_default}
+                            </h3>
+                            {product.featured ? (
+                              <Sparkles className="w-3.5 h-3.5 text-lime-400 shrink-0" />
+                            ) : null}
+                          </div>
+                          <p className="text-xs text-white/50 truncate mb-3">
+                            {description}
+                          </p>
+                          <div className="flex justify-between items-end mb-1.5">
+                            <span className="text-sm font-black text-lime-400 tabular-nums">
+                              {formatPointsCompact(points)} {tProducts('card.points')}
+                            </span>
+                            <span className="text-[10px] font-medium text-white/40 uppercase tabular-nums">
+                              / {formatEuroCompact(product.price)} Obj.
+                            </span>
+                          </div>
+                          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className="bg-lime-400 h-full rounded-full"
+                              style={{ width: `${pointsBarPercent}%` }}
+                            />
+                          </div>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )
+            ) : (
+              <DataList
+                isLoading={isPending}
+                variant={view}
+                items={products}
+                getItemKey={(product) => product.id}
+                gridCols={3 as const}
+                emptyState={{
+                  icon: Package,
+                  title: tProducts('empty_state.title'),
+                  description: tProducts('empty_state.description'),
+                  action: hasActiveFilters ? (
+                    <Button size="sm" variant="outline" onClick={clearAllFilters}>
+                      {tProducts('filters.clear_filters')}
+                    </Button>
+                  ) : undefined,
+                }}
+                renderItem={(product: Product) => (
+                  <ClientCatalogProductCard
+                    view={view}
+                    product={product}
+                    featuredLabel={tProducts('featured')}
+                    outOfStockLabel={tProducts('card.sold_out')}
+                    lowStockLabel={tProducts('card.low_stock')}
+                    pointsLabel={tProducts('card.points')}
+                    viewLabel={tProducts('card.view_action')}
+                  />
+                )}
+                renderSkeleton={() => <ProductCardSkeleton context="clientCatalog" />}
+              />
+            )}
 
             {/* Pagination */}
             <div className="mt-8">

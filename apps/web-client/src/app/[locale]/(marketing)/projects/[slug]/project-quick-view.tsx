@@ -64,7 +64,6 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
     .join(', ')
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
-  const isPrototypeProject = Boolean(project.is_mock)
   const typeLabel = formatBadgeLabel(project.type)
 
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
@@ -292,12 +291,12 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
         </div>
 
         <div className="relative shrink-0 border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
-          {isFundingClosed || isPrototypeProject ? (
+          {isFundingClosed ? (
             <Button
               className="h-14 w-full rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 justify-center gap-0 [&_svg]:hidden"
               disabled
             >
-              {isPrototypeProject ? 'Bientôt disponible' : t('detail.funding_closed')}
+              {t('detail.funding_closed')}
             </Button>
           ) : (
             <Link href={investPath} className="block w-full">

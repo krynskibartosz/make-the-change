@@ -128,15 +128,6 @@ export function ProjectInvestOneFlow({
   }, [amountEur, project.type, rules.expected_bonus])
   const formattedAmount = formatAmountNumber(amountEur)
   const protectedBees = formatPoints(Math.round((amountEur / 100) * 3800))
-  const triggerPattern = (pattern: number | number[]) => {
-    if (typeof window !== 'undefined' && navigator.vibrate) {
-      try {
-        navigator.vibrate(pattern)
-      } catch {
-        // no-op on blocked environments (iOS Safari, permissions, etc.)
-      }
-    }
-  }
 
   useEffect(() => {
     if (step !== 'success') return
@@ -146,15 +137,15 @@ export function ProjectInvestOneFlow({
 
     const flashTimerId = window.setTimeout(() => {
       setPhase('flash')
-      triggerPattern([30, 200, 30])
+      haptic.trigger([30, 200, 30])
     }, 1300)
     const euphoriaTimerId = window.setTimeout(() => {
       setPhase('euphoria')
-      triggerPattern([60, 50, 80])
+      haptic.trigger([60, 50, 80])
     }, 1500)
     const resolvedTimerId = window.setTimeout(() => setPhase('resolved'), 2100)
     const boomTimerId = window.setTimeout(() => {
-      triggerPattern([250])
+      haptic.trigger([250])
     }, 1720)
 
     return () => {

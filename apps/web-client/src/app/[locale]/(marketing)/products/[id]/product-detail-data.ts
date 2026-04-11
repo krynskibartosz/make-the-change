@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import { getMockProductById, type MockProductSeed } from '../_features/mock-products'
+import { getMockProductByIdentifier, type MockProductSeed } from '../_features/mock-products'
 
 export type ProductProducer = {
   id: string
@@ -190,22 +190,35 @@ const toProductWithRelationsFromMock = (product: MockProductSeed): ProductWithRe
   },
 })
 
-export async function getPublicProductById(id: string): Promise<ProductWithRelations | null> {
-  const mockProduct = getMockProductById(id)
+export async function getPublicProductById(idOrSlug: string): Promise<ProductWithRelations | null> {
+  const mockProduct = getMockProductByIdentifier(idOrSlug)
   if (mockProduct) {
     return toProductWithRelationsFromMock(mockProduct)
   }
 
   const supabase = await createClient()
-  const { data: productData, error } = await supabase
+  const { data: productDataById, error: byIdError } = await supabase
     .from('public_products')
     .select('*')
-    .eq('id', id)
+    .eq('id', idOrSlug)
     .eq('is_active', true)
-    .single()
+    .maybeSingle()
 
-  if (error || !productData) {
-    console.error('Error fetching product:', error)
+  const productData =
+    productDataById ||
+    (
+      await supabase
+        .from('public_products')
+        .select('*')
+        .eq('slug', idOrSlug)
+        .eq('is_active', true)
+        .maybeSingle()
+    ).data
+
+  if (!productData) {
+    if (byIdError && byIdError.code !== 'PGRST116') {
+      console.error('Error fetching product:', byIdError)
+    }
     return null
   }
 

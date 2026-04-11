@@ -1,15 +1,18 @@
 'use client'
 
 import { Button, Input } from '@make-the-change/core/ui'
-import { LayoutGrid, List, Map, Search, Target } from 'lucide-react'
+import { LayoutGrid, List, Map, Search, Sparkles, Target } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState, useTransition } from 'react'
+import { createPortal } from 'react-dom'
 import {
   type ClientCatalogProject,
   ClientCatalogProjectCard,
 } from '@/app/[locale]/(marketing)/projects/components/client-catalog-project-card'
 import { ProjectsGoogleMapView } from '@/app/[locale]/(marketing)/projects/components/projects-google-map-view'
+import { Link } from '@/i18n/navigation'
+import { sanitizeImageUrl } from '@/lib/image-url'
 import { asString, isRecord } from '@/lib/type-guards'
 import { getLocalizedContent } from '@/lib/utils'
 
@@ -110,6 +113,7 @@ export function ProjectsClient({
   const [search, setSearch] = useState(initialSearch)
   const [status, setStatus] = useState(initialStatus)
   const [view, setView] = useState<'grid' | 'list' | 'map'>(initialView)
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null)
 
   const updateFilters = useCallback(
     (newSearch: string, newStatus: string, newView: 'grid' | 'list' | 'map') => {
@@ -135,6 +139,10 @@ export function ProjectsClient({
     return () => clearTimeout(timer)
   }, [search, initialSearch, status, view, updateFilters])
 
+  useEffect(() => {
+    setPortalRoot(document.body)
+  }, [])
+
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus)
     updateFilters(search, newStatus, view)
@@ -148,6 +156,9 @@ export function ProjectsClient({
   const normalizedProjects = projects.map((project, index) =>
     normalizeProject(project, index, t('card.view_details'), locale),
   )
+  const shouldShowFloatingFilters = normalizedProjects.length > 5
+  const formatEuroAmount = (value: number): string =>
+    `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
 
   return (
     <>
@@ -163,92 +174,101 @@ export function ProjectsClient({
         </div>
       </div>
 
-      {/* Desktop sticky top search bar — hidden on mobile */}
-      <div className="hidden md:block sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
-        <div className="w-full max-w-[1920px] mx-auto px-8 lg:px-12 py-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">
-              <search role="search" className="relative w-full lg:w-[320px]">
-                <Search
-                  className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
-                  aria-hidden="true"
-                />
-                <Input
-                  type="search"
-                  placeholder={t('filter.search_placeholder')}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 h-10 bg-background"
-                  aria-label={t('filter.search_placeholder')}
-                />
-              </search>
-            </div>
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide w-full lg:w-auto pb-2 lg:pb-0">
-              {[
-                { id: 'all', label: t('filter.status.all') },
-                { id: 'active', label: t('filter.status.active') },
-                { id: 'completed', label: 'Financés' },
-              ].map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => handleStatusChange(option.id)}
-                  className={`whitespace-nowrap outline-none ${
-                    status === option.id
-                      ? 'rounded-full bg-lime-400 text-black font-bold px-5 py-2 transition-transform active:scale-95'
-                      : 'rounded-full bg-white/5 border border-white/10 text-muted-foreground px-5 py-2 font-medium transition-all hover:text-white active:scale-95'
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
+      {shouldShowFloatingFilters && (
+        <>
+          {/* Desktop sticky top search bar — hidden on mobile */}
+          <div className="hidden md:block sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+            <div className="w-full max-w-[1920px] mx-auto px-8 lg:px-12 py-4">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center w-full lg:w-auto lg:gap-4">
+                  <search role="search" className="relative w-full lg:w-[320px]">
+                    <Search
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    <Input
+                      type="search"
+                      placeholder={t('filter.search_placeholder')}
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      className="pl-9 h-10 bg-background"
+                      aria-label={t('filter.search_placeholder')}
+                    />
+                  </search>
+                </div>
+                <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide w-full lg:w-auto pb-2 lg:pb-0">
+                  {[
+                    { id: 'all', label: t('filter.status.all') },
+                    { id: 'active', label: t('filter.status.active') },
+                    { id: 'completed', label: 'Financés' },
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => handleStatusChange(option.id)}
+                      className={`whitespace-nowrap outline-none ${
+                        status === option.id
+                          ? 'rounded-full bg-lime-400 text-black font-bold px-5 py-2 transition-transform active:scale-95'
+                          : 'rounded-full bg-white/5 border border-white/10 text-muted-foreground px-5 py-2 font-medium transition-all hover:text-white active:scale-95'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* iOS 26 — Mobile floating search bar at the bottom (above bottom nav) */}
-      <div
-        className="md:hidden fixed left-0 right-0 z-40 px-4"
-        style={{ bottom: 'calc(4rem + env(safe-area-inset-bottom))' }}
-      >
-        <div className="rounded-2xl border border-white/10 bg-background/90 backdrop-blur-xl shadow-2xl overflow-hidden">
-          {/* Search Input */}
-          <div className="flex items-center gap-3 px-4 pt-3 pb-2">
-            <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-            <input
-              type="search"
-              placeholder={t('filter.search_placeholder')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label={t('filter.search_placeholder')}
-              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
-            />
-          </div>
-          {/* Filter Chips */}
-          <div className="flex items-center gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
-            {[
-              { id: 'all', label: t('filter.status.all') },
-              { id: 'active', label: t('filter.status.active') },
-              { id: 'completed', label: 'Financés' },
-            ].map((option) => (
-              <button
-                key={option.id}
-                onClick={() => handleStatusChange(option.id)}
-                className={`shrink-0 whitespace-nowrap text-xs font-semibold outline-none rounded-full px-4 py-1.5 transition-all active:scale-95 ${
-                  status === option.id
-                    ? 'bg-lime-400 text-black'
-                    : 'bg-white/5 border border-white/10 text-muted-foreground'
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+          {/* Mobile floating pill */}
+          {portalRoot
+            ? createPortal(
+                <div
+                  className="md:hidden fixed left-0 right-0 z-[60] px-4"
+                  style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
+                >
+                  <div className="bg-[#1C1C22]/80 backdrop-blur-xl border border-white/10 rounded-[28px] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.5)] flex flex-col gap-3 transition-all duration-300">
+                    <div className="relative w-full">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                      <input
+                        type="search"
+                        placeholder="Rechercher un projet..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        aria-label="Rechercher un projet"
+                        className="w-full bg-white/5 border border-white/5 text-white text-sm rounded-full pl-9 pr-4 py-2.5 outline-none focus:border-lime-400/50 transition-colors placeholder:text-white/30"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
+                      {[
+                        { id: 'all', label: t('filter.status.all') },
+                        { id: 'active', label: t('filter.status.active') },
+                        { id: 'completed', label: 'Financés' },
+                      ].map((option) => (
+                        <button
+                          key={option.id}
+                          onClick={() => handleStatusChange(option.id)}
+                          className={`px-4 py-1.5 rounded-full text-xs shrink-0 transition-colors ${
+                            status === option.id
+                              ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                              : 'bg-white/5 text-white/60 hover:text-white font-medium'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>,
+                portalRoot,
+              )
+            : null}
+        </>
+      )}
 
       {/* Main Content Area — extra bottom padding on mobile for the floating search bar */}
-      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-8 pb-48 md:pb-16 lg:pt-10">
+      <div
+        className={`w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-8 ${shouldShowFloatingFilters ? 'pb-48' : 'pb-32'} md:pb-16 lg:pt-10`}
+      >
         {normalizedProjects.length > 0 && (
           <div className="mb-6 flex items-center justify-end">
             <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 p-1">
@@ -319,22 +339,70 @@ export function ProjectsClient({
         ) : view === 'map' ? (
           <ProjectsGoogleMapView projects={normalizedProjects} />
         ) : view === 'list' ? (
-          <div className="space-y-4">
-            {normalizedProjects.map((project) => (
-              <ClientCatalogProjectCard
-                key={project.id}
-                project={project}
-                view="list"
-                labels={{
-                  viewLabel: t('filter.cta'),
-                  progressLabel: t('filter.progress.label'),
-                  fundedLabel: t('filter.progress.collected'),
-                  goalLabel: t('filter.progress.goal'),
-                  featuredLabel: t('filter.featured'),
-                  activeLabel: t('filter.status.active'),
-                }}
-              />
-            ))}
+          <div className="-mx-4 md:-mx-8 lg:-mx-12">
+            {normalizedProjects.map((project, index) => {
+              const currentFunding = project.current_funding ?? 0
+              const targetBudget = project.target_budget ?? 0
+              const progressPercent =
+                project.funding_progress !== null && project.funding_progress !== undefined
+                  ? project.funding_progress
+                  : targetBudget > 0
+                    ? (currentFunding / targetBudget) * 100
+                    : 0
+              const clampedProgress = Math.min(Math.max(progressPercent, 0), 100)
+              const imageUrl = sanitizeImageUrl(project.hero_image_url)
+              const isLast = index === normalizedProjects.length - 1
+
+              return (
+                <Link
+                  key={project.id}
+                  href={`/projects/${project.slug}`}
+                  className="w-full flex items-center gap-4 px-5 py-4 bg-transparent active:bg-white/5 transition-colors text-left group"
+                >
+                  <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-white/5">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={project.name_default}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-white/10" />
+                    )}
+                  </div>
+
+                  <div
+                    className={`flex-1 min-w-0 flex flex-col justify-center ${isLast ? '' : 'border-b border-white/10 pb-4'}`}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-base font-bold text-white truncate">
+                        {project.name_default}
+                      </h3>
+                      {project.featured ? (
+                        <Sparkles className="w-3.5 h-3.5 text-lime-400 shrink-0" />
+                      ) : null}
+                    </div>
+                    <p className="text-xs text-white/50 truncate mb-3">
+                      {project.description_default || ''}
+                    </p>
+                    <div className="flex justify-between items-end mb-1.5">
+                      <span className="text-sm font-black text-lime-400 tabular-nums">
+                        {formatEuroAmount(currentFunding)}
+                      </span>
+                      <span className="text-[10px] font-medium text-white/40 uppercase tabular-nums">
+                        / {formatEuroAmount(targetBudget)} Obj.
+                      </span>
+                    </div>
+                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="bg-lime-400 h-full rounded-full"
+                        style={{ width: `${clampedProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">

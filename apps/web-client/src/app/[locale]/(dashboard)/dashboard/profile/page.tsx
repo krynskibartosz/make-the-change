@@ -59,9 +59,9 @@ export default function ProfilePage() {
             Bartosz Krynski
           </h1>
 
-          <div className="mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-orange-400/20 bg-orange-400/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.2)]">
+          <div className="mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-orange-400/20 bg-orange-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.2)]">
             <Flame className="h-3.5 w-3.5 fill-current" />
-            12 Jours de Série
+            12 jours de série
           </div>
 
           <p className="mt-2 text-center text-xs font-medium tracking-wide text-white/60">

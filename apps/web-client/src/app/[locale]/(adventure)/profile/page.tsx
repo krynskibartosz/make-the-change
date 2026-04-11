@@ -1,4 +1,4 @@
-import { Command, Globe, Lock } from 'lucide-react'
+import { Lock } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 const lockedSpecies = ['Espèce Inconnue', 'Espèce Inconnue', 'Espèce Inconnue']
@@ -45,7 +45,7 @@ function LockedImpactCard({
 
 export default function GuestProfilePage() {
   return (
-    <div className="min-h-screen bg-[#0B0F15] pb-48 text-white">
+    <div className="min-h-screen bg-[#0B0F15] pb-32 text-white">
       <main className="w-full pt-[max(0.75rem,env(safe-area-inset-top))]">
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
           <div className="relative mb-5 h-28 w-28">
@@ -55,13 +55,34 @@ export default function GuestProfilePage() {
               className="h-full w-full object-contain drop-shadow-xl"
             />
           </div>
-          <h1 className="text-center text-2xl font-black tracking-tight text-white">
-            Créez votre Profil Écologique
+          <h1 className="text-2xl font-black text-white text-center tracking-tight mt-4">
+            L&apos;Aventure vous attend
           </h1>
-          <p className="mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
-            Rejoignez le mouvement pour suivre votre impact réel et collectionner des espèces en
-            3D.
+          <p className="text-white/60 text-sm text-center mt-2 max-w-[280px] leading-relaxed mx-auto">
+            Identifiez-vous pour débloquer votre BioDex, suivre votre impact et rejoindre une
+            tribu.
           </p>
+        </section>
+
+        <section className="w-full px-5 mt-8 mb-10 flex flex-col gap-3">
+          <Link
+            href="/login?provider=apple&returnTo=%2Fdashboard%2Fprofile"
+            className="w-full bg-white text-black font-bold h-14 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-transform"
+          >
+            <span className="text-lg"></span> Continuer avec Apple
+          </Link>
+          <Link
+            href="/login?provider=google&returnTo=%2Fdashboard%2Fprofile"
+            className="w-full bg-[#1C1C22] border border-white/10 text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-transform"
+          >
+            Continuer avec Google
+          </Link>
+          <Link
+            href="/login?returnTo=%2Fdashboard%2Fprofile"
+            className="text-white/40 text-xs text-center mt-2 underline decoration-white/20 active:text-white transition-colors"
+          >
+            Ou utiliser une adresse email
+          </Link>
         </section>
 
         <section className="mx-5 mb-8 grid grid-cols-2 gap-3">
@@ -70,10 +91,10 @@ export default function GuestProfilePage() {
           <LockedImpactCard icon="💨" label="CO₂ CAPTURÉ" />
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center opacity-50 grayscale transition-all">
-            <div className="mb-2 text-xl">✨</div>
-            <Lock className="my-1 h-5 w-5 text-white/50" />
+            <div className="mb-2 text-xl">🎁</div>
+            <div className="text-2xl font-black tabular-nums text-white">0</div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/60">
-              POINTS D&apos;IMPACT
+              +500 Graines
             </div>
           </div>
         </section>
@@ -124,34 +145,6 @@ export default function GuestProfilePage() {
           </div>
         </section>
       </main>
-
-      <div
-        className="fixed inset-x-0 bottom-24 z-[70] flex flex-col gap-3 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent p-5 pb-[calc(1rem+env(safe-area-inset-bottom))]"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 4.75rem)' }}
-      >
-        <Link
-          href="/login?provider=apple&returnTo=%2Fdashboard%2Fprofile"
-          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-white font-bold text-black shadow-lg transition-transform active:scale-95"
-        >
-          <Command className="h-5 w-5" />
-          Continuer avec Apple
-        </Link>
-
-        <Link
-          href="/login?provider=google&returnTo=%2Fdashboard%2Fprofile"
-          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-[#1C1C22] font-bold text-white shadow-lg transition-transform active:scale-95"
-        >
-          <Globe className="h-5 w-5" />
-          Continuer avec Google
-        </Link>
-
-        <Link
-          href="/login?returnTo=%2Fdashboard%2Fprofile"
-          className="mt-1 text-center text-xs text-white/40 underline decoration-white/20"
-        >
-          Ou utiliser une adresse email
-        </Link>
-      </div>
     </div>
   )
 }

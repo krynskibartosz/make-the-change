@@ -110,3 +110,8 @@ export const getMockProducts = (): MockProductSeed[] => MOCK_PRODUCTS
 
 export const getMockProductById = (id: string): MockProductSeed | null =>
   MOCK_PRODUCTS.find((product) => product.id === id) || null
+
+export const getMockProductByIdentifier = (identifier: string): MockProductSeed | null =>
+  MOCK_PRODUCTS.find(
+    (product) => product.id === identifier || (product.slug !== null && product.slug === identifier),
+  ) || null

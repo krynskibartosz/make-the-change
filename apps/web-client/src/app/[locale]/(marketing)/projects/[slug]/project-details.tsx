@@ -241,13 +241,12 @@ export async function ProjectDetails({
           }
           description={localizedDesc || t('subtitle')}
           primaryAction={
-            <Link href={project.is_mock ? '/projects' : `/projects/${project.slug}/invest?source=cta_band`}>
+            <Link href={`/projects/${project.slug}/invest?source=cta_band`}>
               <Button
                 size="lg"
-                disabled={Boolean(project.is_mock)}
                 className="h-16 px-10 text-lg rounded-full font-bold bg-marketing-positive-500 text-marketing-overlay-light hover:bg-marketing-positive-400 hover:scale-105 transition-all shadow-[0_0_50px_-10px_hsl(var(--marketing-positive) / 0.4)] border-none"
               >
-                {project.is_mock ? 'Bientôt disponible' : t('detail.invest_now')}
+                {t('detail.invest_now')}
               </Button>
             </Link>
           }

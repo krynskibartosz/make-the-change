@@ -112,24 +112,14 @@ export async function ProjectCoverHero({
         </div>
 
         <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-450">
-          {project.is_mock ? (
+          <Link href={`/projects/${project.slug}/invest?source=detail_hero`}>
             <Button
               size="lg"
-              disabled
-              className="h-14 px-9 text-base rounded-full font-bold"
+              className="h-14 px-9 text-base rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"
             >
-              Bientôt disponible
+              {t('detail.invest_now')}
             </Button>
-          ) : (
-            <Link href={`/projects/${project.slug}/invest?source=detail_hero`}>
-              <Button
-                size="lg"
-                className="h-14 px-9 text-base rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"
-              >
-                {t('detail.invest_now')}
-              </Button>
-            </Link>
-          )}
+          </Link>
         </div>
       </div>
 
