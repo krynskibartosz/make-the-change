@@ -209,19 +209,16 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 			const maxScrollable = scrollHeight - clientHeight
 
 			if (maxScrollable <= 0) {
-				setScrollProgress(100)
-				if (!isUnlocked) {
-					setIsUnlocked(true)
-					haptic.mediumTap()
-				}
+				setScrollProgress(0)
 				return
 			}
 
-			const progress = (scrollTop / maxScrollable) * 100
-			const clampedProgress = Math.min(100, Math.max(0, progress))
+			const scrollPercentage = (scrollTop / maxScrollable) * 100
+			const clampedProgress = Math.min(100, Math.max(0, scrollPercentage))
 			setScrollProgress(clampedProgress)
 
-			if (clampedProgress >= 95 && !isUnlocked) {
+			// Déblocage tolérant à 90%, sans reverrouillage.
+			if (clampedProgress >= 90 && !isUnlocked) {
 				setIsUnlocked(true)
 				haptic.mediumTap()
 			}
@@ -236,28 +233,33 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 			const element = contentRef.current
 			if (!element) return
 
-			if (element.scrollHeight <= element.clientHeight) {
-				setScrollProgress(100)
+			const maxScrollable = element.scrollHeight - element.clientHeight
+			if (maxScrollable <= 0) {
+				// Cas anti-bug: déverrouille uniquement si le contenu est vraiment non-scrollable.
 				if (!isUnlocked) {
 					setIsUnlocked(true)
-					haptic.mediumTap()
 				}
+				setScrollProgress(100)
 				return
 			}
 
-			const maxScrollable = element.scrollHeight - element.clientHeight
 			const progress = (element.scrollTop / maxScrollable) * 100
 			setScrollProgress(Math.min(100, Math.max(0, progress)))
 		}
 
-		const rafId = window.requestAnimationFrame(checkScrollable)
+		// On diffère la mesure pour éviter les faux positifs avant le layout complet.
+		const rafId = window.requestAnimationFrame(() => {
+			window.requestAnimationFrame(checkScrollable)
+		})
+		const timeoutId = window.setTimeout(checkScrollable, 350)
 		window.addEventListener('resize', checkScrollable)
 
 		return () => {
 			window.cancelAnimationFrame(rafId)
+			window.clearTimeout(timeoutId)
 			window.removeEventListener('resize', checkScrollable)
 		}
-	}, [haptic, isUnlocked, open])
+	}, [isUnlocked, open])
 
 	const openArticle = (event: { stopPropagation: () => void }) => {
 		event.stopPropagation()
@@ -355,15 +357,15 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 									}}
 									className='flex flex-wrap items-center gap-2'
 								>
-									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
-										Amazonie
-									</span>
+								<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
+									Amazonie
+								</span>
 									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
 										Biodiversité
 									</span>
-									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
-										Déforestation
-									</span>
+								<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
+									Déforestation
+								</span>
 								</motion.div>
 
 							<motion.div
@@ -441,16 +443,16 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 								onValidate()
 							}}
 							className={cn(
-								'w-full h-14 rounded-2xl font-black text-lg flex items-center justify-center gap-2 transition-all duration-500',
+								'w-full h-14 rounded-2xl font-black text-lg flex items-center justify-center transition-all duration-500',
 								isUnlocked
-									? 'bg-lime-400 text-[#0B0F15] active:scale-95 shadow-[0_0_30px_rgba(132,204,22,0.3)] animate-pulse'
+									? 'bg-lime-400 text-[#0B0F15] active:scale-95 shadow-[0_0_30px_rgba(132,204,22,0.3)]'
 									: 'bg-white/5 text-white/40 border border-white/10'
 							)}
 						>
 							{isUnlocked ? (
-								<span className='animate-in fade-in zoom-in duration-300'>
-									C&apos;est noté !{' '}
-									<span className='opacity-50 font-normal'>|</span> +50 🌱
+								<span className='flex items-center gap-2 animate-in zoom-in duration-300'>
+									C&apos;est noté ! <span className='opacity-50 font-normal'>|</span>{' '}
+									+50 🌱
 								</span>
 							) : (
 								<span className='flex items-center gap-2'>
