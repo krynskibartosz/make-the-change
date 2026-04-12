@@ -1,7 +1,6 @@
 import { Lock } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-
-const lockedSpecies = ['Espèce Inconnue', 'Espèce Inconnue', 'Espèce Inconnue']
+import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 
 const tribes = [
   {
@@ -43,7 +42,12 @@ function LockedImpactCard({
   )
 }
 
-export default function GuestProfilePage() {
+export default async function GuestProfilePage() {
+  const { lockedSpecies } = await getBiodexPreviewData({
+    unlockedLimit: 0,
+    lockedLimit: 4,
+  })
+
   return (
     <div className="min-h-screen bg-[#0B0F15] pb-32 text-white">
       <main className="w-full pt-[max(0.75rem,env(safe-area-inset-top))]">
@@ -103,16 +107,28 @@ export default function GuestProfilePage() {
           <h2 className="mb-3 px-5 text-lg font-bold text-white">Débloquez le BioDex</h2>
 
           <div className="hide-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {lockedSpecies.map((name, index) => (
+            {lockedSpecies.map((species) => (
               <div
-                key={`${name}-${index + 1}`}
-                className="flex min-h-[140px] w-36 shrink-0 snap-center flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center"
+                key={species.id}
+                className="relative flex aspect-[4/5] w-40 shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-3"
               >
-                <div className="mb-2 rounded-full border border-white/10 bg-white/5 p-2">
-                  <Lock className="h-4 w-4 text-white/50" />
+                <div className="mb-2 flex justify-end shrink-0">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                    <Lock className="h-3 w-3 text-white/30" />
+                  </div>
                 </div>
-                <div className="h-14 w-14 rounded-xl bg-white/5" />
-                <p className="mt-3 text-xs font-semibold text-white/45">{name}</p>
+                <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-2xl bg-white/5 border border-white/5">
+                  <img
+                    src={species.image}
+                    alt={species.name}
+                    className="h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px]"
+                  />
+                </div>
+                <div className="mt-2 shrink-0">
+                  <p className="truncate text-sm font-semibold leading-tight text-white/60">
+                    {species.name}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

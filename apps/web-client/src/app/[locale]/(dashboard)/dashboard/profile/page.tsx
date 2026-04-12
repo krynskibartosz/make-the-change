@@ -12,23 +12,14 @@ import {
   Wind,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 
-const unlockedSpecies = [
-  {
-    id: 'species-chouette-effraie',
-    name: 'Chouette Effraie',
-    rarity: 'Commun',
-    image: '/images/diorama-chouette.png',
-  },
-  {
-    id: 'species-abeille-noire',
-    name: 'Abeille Noire',
-    rarity: 'Rare',
-    image: '/images/diorama-chouette.png',
-  },
-]
+export default async function ProfilePage() {
+  const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
+    unlockedLimit: 2,
+    lockedLimit: 2,
+  })
 
-export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-[#0B0F15] text-white pb-32">
       <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl">
@@ -106,7 +97,9 @@ export default function ProfilePage() {
         <section className="mb-8">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-xl font-black tracking-tight text-white">Mon BioDex</h2>
-            <span className="text-sm font-bold tabular-nums text-white/60">(2 / 13)</span>
+            <span className="text-sm font-bold tabular-nums text-white/60">
+              ({unlockedCount} / {totalCount})
+            </span>
           </div>
 
           <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -130,25 +123,28 @@ export default function ProfilePage() {
               </Link>
             ))}
 
-            <button
-              type="button"
-              className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left"
-            >
-              <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
-                <Lock className="h-3.5 w-3.5 text-white/55" />
-              </span>
-              <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
-                Verrouillé
-              </span>
-              <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
-                <img
-                  src="/images/diorama-chouette.png"
-                  alt="Espèce inconnue"
-                  className="h-full w-full object-cover brightness-0 opacity-20 blur-sm"
-                />
-              </div>
-              <p className="mt-3 text-sm italic text-white/50">Espèce inconnue</p>
-            </button>
+            {lockedSpecies.map((species) => (
+              <button
+                key={species.id}
+                type="button"
+                className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left"
+              >
+                <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
+                  <Lock className="h-3.5 w-3.5 text-white/55" />
+                </span>
+                <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
+                  Verrouillé
+                </span>
+                <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
+                  <img
+                    src={species.image}
+                    alt={species.name}
+                    className="h-full w-full object-cover brightness-0 opacity-20 blur-sm"
+                  />
+                </div>
+                <p className="mt-3 text-sm font-semibold text-white/60">{species.name}</p>
+              </button>
+            ))}
           </div>
 
           <Link

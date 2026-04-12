@@ -640,7 +640,7 @@ export const ProductsClient = ({
       {/* iOS 26 — Mobile floating search and filter bar at the bottom (above bottom nav) */}
       <div
         className="md:hidden fixed left-0 right-0 z-40 px-4"
-        style={{ bottom: 'calc(4rem + env(safe-area-inset-bottom) + 0.5rem)' }}
+        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.85rem)' }}
       >
         <div className="rounded-2xl border border-white/10 bg-background/90 backdrop-blur-xl shadow-2xl p-3 flex flex-col gap-3">
           {/* Search bar */}

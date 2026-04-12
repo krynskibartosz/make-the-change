@@ -156,7 +156,9 @@ export function ProjectsClient({
   const normalizedProjects = projects.map((project, index) =>
     normalizeProject(project, index, t('card.view_details'), locale),
   )
-  const shouldShowFloatingFilters = normalizedProjects.length > 5
+  const isProjectsListPath =
+    pathname === `/${locale}/projects` || pathname === `/${locale}/projects/`
+  const shouldShowFloatingFilters = normalizedProjects.length > 5 && isProjectsListPath
   const formatEuroAmount = (value: number): string =>
     `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
 
@@ -224,7 +226,7 @@ export function ProjectsClient({
             ? createPortal(
                 <div
                   className="md:hidden fixed left-0 right-0 z-[60] px-4"
-                  style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
+                  style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.85rem)' }}
                 >
                   <div className="bg-[#1C1C22]/80 backdrop-blur-xl border border-white/10 rounded-[28px] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.5)] flex flex-col gap-3 transition-all duration-300">
                     <div className="relative w-full">
