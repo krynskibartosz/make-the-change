@@ -135,7 +135,7 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 						</button>
 					</div>
 
-					<h1 className='text-3xl font-black text-white px-6 mt-8 mb-6 leading-tight'>
+					<h1 className='text-3xl font-black text-white px-6 mt-8 mb-6 leading-[1.05] tracking-tight'>
 						Le Poumon Vert : Pourquoi l&apos;Amazonie est vitale.
 					</h1>
 
@@ -144,17 +144,21 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 							En bref
 						</h3>
 						<ul className='space-y-3 text-sm text-white/80'>
-							<li className='flex gap-3'>
-								<span className='text-lime-400 text-lg leading-none'>•</span>
-								Régulateur vital du climat mondial.
+							<li className='flex items-start gap-3'>
+								<span className='text-lime-400 text-lg leading-none mt-1'>•</span>
+								<span className='flex-1'>Régulateur vital du climat mondial.</span>
 							</li>
-							<li className='flex gap-3'>
-								<span className='text-lime-400 text-lg leading-none'>•</span>
-								Habitat de milliers d&apos;espèces menacées.
+							<li className='flex items-start gap-3'>
+								<span className='text-lime-400 text-lg leading-none mt-1'>•</span>
+								<span className='flex-1'>
+									Habitat de milliers d&apos;espèces menacées.
+								</span>
 							</li>
-							<li className='flex gap-3'>
-								<span className='text-lime-400 text-lg leading-none'>•</span>
-								Votre impact aide à restaurer cet équilibre.
+							<li className='flex items-start gap-3'>
+								<span className='text-lime-400 text-lg leading-none mt-1'>•</span>
+								<span className='flex-1'>
+									Votre impact aide à restaurer cet équilibre.
+								</span>
 							</li>
 						</ul>
 					</div>
@@ -215,6 +219,8 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 							Découvrir les projets
 						</Link>
 					</div>
+
+					<div className='pb-40' />
 				</motion.div>
 			) : null}
 		</AnimatePresence>
