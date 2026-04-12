@@ -5,9 +5,7 @@ import {
 	BookOpen,
 	CheckCircle2,
 	ChevronRight,
-	Flame,
 	Lock,
-	Map,
 	Sparkles,
 	UsersRound,
 	X,
@@ -117,13 +115,13 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 					className='fixed inset-0 z-[95] overflow-y-auto bg-[#0B0F15]'
 					onClick={(event) => event.stopPropagation()}
 				>
-					<div className='relative w-full h-[300px]'>
+					<div className='relative w-full h-72'>
 						<img
 							src='https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1600&q=80'
 							alt='Forêt amazonienne'
 							className='h-full w-full object-cover'
 						/>
-						<div className='absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/70 to-transparent' />
+						<div className='absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent' />
 						<button
 							type='button'
 							onClick={(event) => {
@@ -141,6 +139,26 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 						Le Poumon Vert : Pourquoi l&apos;Amazonie est vitale.
 					</h1>
 
+					<div className='mx-6 bg-lime-400/10 border border-lime-400/20 rounded-2xl p-5 mt-6 mb-8'>
+						<h3 className='text-lime-400 font-bold mb-3 uppercase tracking-widest text-[10px]'>
+							En bref
+						</h3>
+						<ul className='space-y-3 text-sm text-white/80'>
+							<li className='flex gap-3'>
+								<span className='text-lime-400 text-lg leading-none'>•</span>
+								Régulateur vital du climat mondial.
+							</li>
+							<li className='flex gap-3'>
+								<span className='text-lime-400 text-lg leading-none'>•</span>
+								Habitat de milliers d&apos;espèces menacées.
+							</li>
+							<li className='flex gap-3'>
+								<span className='text-lime-400 text-lg leading-none'>•</span>
+								Votre impact aide à restaurer cet équilibre.
+							</li>
+						</ul>
+					</div>
+
 					<div className='px-6 space-y-6 pb-24'>
 						<p className='text-white/80 text-[17px] leading-relaxed'>
 							La forêt amazonienne couvre près de{' '}
@@ -156,7 +174,17 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 							. À terme, cette rupture fragilise la biodiversité locale et les
 							populations humaines qui dépendent des services écologiques.
 						</p>
+					</div>
 
+					<div className='my-10 px-6'>
+						<img
+							src='https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1200&q=80'
+							alt='Détail Amazonie'
+							className='w-full h-48 object-cover rounded-2xl opacity-90'
+						/>
+					</div>
+
+					<div className='px-6 space-y-6 pb-24'>
 						<p className='text-white/80 text-[17px] leading-relaxed'>
 							Chaque action de préservation contribue à ralentir cette bascule.
 							Reboiser, restaurer des corridors écologiques et soutenir une
@@ -164,13 +192,15 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 							vivant.
 						</p>
 
-						<blockquote className='my-8 border-l-4 border-lime-400 pl-5 text-xl font-medium italic text-white'>
-							&quot;Chaque minute, l&apos;équivalent de 30 terrains de football
-							disparaît.&quot;
+						<blockquote className='border-l-4 border-lime-400 pl-6 my-12 py-2'>
+							<p className='italic text-2xl font-medium text-white leading-snug'>
+								&quot;Chaque minute, l&apos;équivalent de 30 terrains de football
+								disparaît.&quot;
+							</p>
 						</blockquote>
 					</div>
 
-					<div className='mx-6 mt-10 mb-12 p-6 bg-lime-400/10 border border-lime-400/20 rounded-3xl text-center'>
+					<div className='mx-6 mt-16 mb-12 p-6 bg-lime-400/10 border border-lime-400/20 rounded-3xl text-center'>
 						<h3 className='text-lime-400 font-black text-xl mb-2'>
 							Passez à l&apos;action
 						</h3>
@@ -385,36 +415,26 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 									</p>
 								</div>
 
-								<div className='col-span-1 bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between min-h-[120px]'>
-									<Map className='w-5 h-5 text-lime-400/50 mb-2' />
-
-									<div className='mt-auto'>
-										<div className='flex items-baseline text-white'>
-											<span className='text-3xl font-black tracking-tighter'>5,5</span>
-											<span className='text-sm font-bold text-white/60 ml-1'>M km²</span>
-										</div>
-
-										<span className='block text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold mt-1'>
-											Surface
-										</span>
+								<div className='col-span-1 bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-center'>
+									<span className='text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1'>
+										Surface
+									</span>
+									<div className='flex items-baseline gap-1'>
+										<span className='text-white font-black text-2xl tracking-tight'>5,5</span>
+										<span className='text-white/60 font-medium text-xs'>M km²</span>
 									</div>
 								</div>
 
-								<div className='col-span-1 bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between min-h-[120px]'>
-									<Flame className='w-5 h-5 text-lime-400/50 mb-2' />
-
-									<div className='mt-auto'>
-										<div className='flex items-baseline text-white'>
-											<span className='text-3xl font-black tracking-tighter'>30</span>
-											<span className='text-xs font-medium text-white/60 ml-1 leading-none'>
-												terrains
-												<br />
-												/min
-											</span>
-										</div>
-
-										<span className='block text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold mt-1'>
-											Déforestation
+								<div className='col-span-1 bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-center'>
+									<span className='text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1'>
+										Déforestation
+									</span>
+									<div className='flex flex-col'>
+										<span className='text-white font-black text-2xl tracking-tight leading-none'>
+											30
+										</span>
+										<span className='text-white/60 font-medium text-xs mt-0.5'>
+											terrains / min
 										</span>
 									</div>
 								</div>
