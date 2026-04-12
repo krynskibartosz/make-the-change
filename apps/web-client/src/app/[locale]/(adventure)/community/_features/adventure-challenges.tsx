@@ -5,7 +5,9 @@ import {
 	BookOpen,
 	CheckCircle2,
 	ChevronRight,
+	Flame,
 	Lock,
+	Map,
 	Sparkles,
 	UsersRound,
 	X,
@@ -217,7 +219,6 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 			const clampedProgress = Math.min(100, Math.max(0, scrollPercentage))
 			setScrollProgress(clampedProgress)
 
-			// Déblocage tolérant à 90%, sans reverrouillage.
 			if (clampedProgress >= 90 && !isUnlocked) {
 				setIsUnlocked(true)
 				haptic.mediumTap()
@@ -235,7 +236,6 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 
 			const maxScrollable = element.scrollHeight - element.clientHeight
 			if (maxScrollable <= 0) {
-				// Cas anti-bug: déverrouille uniquement si le contenu est vraiment non-scrollable.
 				if (!isUnlocked) {
 					setIsUnlocked(true)
 				}
@@ -247,7 +247,6 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 			setScrollProgress(Math.min(100, Math.max(0, progress)))
 		}
 
-		// On diffère la mesure pour éviter les faux positifs avant le layout complet.
 		const rafId = window.requestAnimationFrame(() => {
 			window.requestAnimationFrame(checkScrollable)
 		})
@@ -318,9 +317,9 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 								initial={{ opacity: 0, y: 8 }}
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ duration: 0.3, delay: 0.25 }}
-								className='mt-3 flex justify-center'
+								className='px-6 mt-6 mb-2'
 							>
-								<span className='rounded-full border border-white/5 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white/70'>
+								<span className='inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-white/50 tracking-[0.2em] uppercase font-bold'>
 									Éco-Fact #001
 								</span>
 							</motion.div>
@@ -338,77 +337,87 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 									},
 								},
 							}}
-							className='mt-8 flex flex-col gap-4 px-6'
+							className='mt-8 flex flex-col'
 						>
-							<motion.h2
+							<motion.h1
 								variants={{
 									hidden: { opacity: 0, y: 14 },
 									show: { opacity: 1, y: 0 },
 								}}
-								className='text-3xl font-black leading-tight tracking-tight text-white'
+								className='text-3xl md:text-4xl font-black text-white px-6 mb-4 leading-tight text-balance tracking-tight'
 							>
 								Le Poumon Vert de la planète
-							</motion.h2>
-
-								<motion.div
-									variants={{
-										hidden: { opacity: 0, y: 14 },
-										show: { opacity: 1, y: 0 },
-									}}
-									className='flex flex-wrap items-center gap-2'
-								>
-								<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
-									Amazonie
-								</span>
-									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
-										Biodiversité
-									</span>
-								<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
-									Déforestation
-								</span>
-								</motion.div>
+							</motion.h1>
 
 							<motion.div
 								variants={{
 									hidden: { opacity: 0, y: 14 },
 									show: { opacity: 1, y: 0 },
 								}}
-								className='flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5'
+								className='px-6 flex flex-wrap gap-2 mb-8'
 							>
-								<div className='text-4xl font-black tracking-tighter tabular-nums text-lime-400'>
-									20%
-								</div>
-								<p className='text-sm leading-relaxed text-white/70'>
-									De la biodiversité mondiale est abritée par la forêt
-										amazonienne. Sa déforestation menace des milliers
-										d&apos;espèces.
-									</p>
-								</motion.div>
+								<span className='px-3 py-1 rounded-full border border-lime-400/30 text-lime-400 text-[10px] font-bold uppercase tracking-widest'>
+									Amazonie
+								</span>
+								<span className='px-3 py-1 rounded-full border border-lime-400/30 text-lime-400 text-[10px] font-bold uppercase tracking-widest'>
+									Biodiversité
+								</span>
+								<span className='px-3 py-1 rounded-full border border-lime-400/30 text-lime-400 text-[10px] font-bold uppercase tracking-widest'>
+									Déforestation
+								</span>
+							</motion.div>
 
-								<motion.div
-									variants={{
-										hidden: { opacity: 0, y: 14 },
-										show: { opacity: 1, y: 0 },
-									}}
-									className='grid grid-cols-2 gap-3'
-								>
-									<div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
-										<p className='text-[10px] font-bold uppercase tracking-widest text-white/50'>
+							<motion.div
+								variants={{
+									hidden: { opacity: 0, y: 14 },
+									show: { opacity: 1, y: 0 },
+								}}
+								className='px-6 grid grid-cols-2 gap-3'
+							>
+								<div className='col-span-2 bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center gap-5'>
+									<div className='flex items-baseline text-lime-400 shrink-0'>
+										<span className='text-6xl font-black tracking-tighter leading-none'>20</span>
+										<span className='text-3xl font-bold ml-0.5 opacity-80 leading-none'>%</span>
+									</div>
+									<p className='text-[13px] text-white/70 leading-relaxed'>
+										De la biodiversité mondiale est abritée par la forêt amazonienne.
+										Sa déforestation menace des milliers d&apos;espèces.
+									</p>
+								</div>
+
+								<div className='col-span-1 bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between min-h-[120px]'>
+									<Map className='w-5 h-5 text-lime-400/50 mb-2' />
+
+									<div className='mt-auto'>
+										<div className='flex items-baseline text-white'>
+											<span className='text-3xl font-black tracking-tighter'>5,5</span>
+											<span className='text-sm font-bold text-white/60 ml-1'>M km²</span>
+										</div>
+
+										<span className='block text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold mt-1'>
 											Surface
-										</p>
-										<p className='mt-1 text-xl font-black text-white'>
-											5,5 M km²
-										</p>
+										</span>
 									</div>
-									<div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
-										<p className='text-[10px] font-bold uppercase tracking-widest text-white/50'>
+								</div>
+
+								<div className='col-span-1 bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between min-h-[120px]'>
+									<Flame className='w-5 h-5 text-lime-400/50 mb-2' />
+
+									<div className='mt-auto'>
+										<div className='flex items-baseline text-white'>
+											<span className='text-3xl font-black tracking-tighter'>30</span>
+											<span className='text-xs font-medium text-white/60 ml-1 leading-none'>
+												terrains
+												<br />
+												/min
+											</span>
+										</div>
+
+										<span className='block text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold mt-1'>
 											Déforestation
-										</p>
-										<p className='mt-1 text-xl font-black text-white'>
-											30 terrains/min
-										</p>
+										</span>
 									</div>
-								</motion.div>
+								</div>
 							</motion.div>
 
 							<div className='px-5 flex justify-center'>
@@ -424,7 +433,8 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 									<ChevronRight className='w-4 h-4 text-white/30' />
 								</button>
 							</div>
-						</div>
+						</motion.div>
+					</div>
 
 					<div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent pt-12 pb-[max(1.5rem,env(safe-area-inset-bottom))] px-5 z-40'>
 						<div className='w-full h-1 bg-white/10 rounded-full mb-4 overflow-hidden'>
@@ -451,8 +461,8 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 						>
 							{isUnlocked ? (
 								<span className='flex items-center gap-2 animate-in zoom-in duration-300'>
-									C&apos;est noté ! <span className='opacity-50 font-normal'>|</span>{' '}
-									+50 🌱
+									C&apos;est noté !{' '}
+									<span className='opacity-50 font-normal'>|</span> +50 🌱
 								</span>
 							) : (
 								<span className='flex items-center gap-2'>
@@ -461,6 +471,7 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 							)}
 						</button>
 					</div>
+
 					<EcoFactArticleView
 						open={isArticleOpen}
 						onClose={() => setIsArticleOpen(false)}
@@ -470,7 +481,6 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 		</AnimatePresence>
 	)
 }
-
 type DailyHarvestModalProps = {
 	open: boolean
 	onClose: () => void
