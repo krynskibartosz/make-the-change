@@ -1,10 +1,11 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type UIEvent } from 'react'
 import {
 	BookOpen,
 	CheckCircle2,
 	ChevronRight,
+	Lock,
 	Sparkles,
 	UsersRound,
 	X,
@@ -12,10 +13,6 @@ import {
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Link } from '@/i18n/navigation'
-import {
-	ClientCatalogProjectCard,
-	type ClientCatalogProject,
-} from '@/app/[locale]/(marketing)/projects/components/client-catalog-project-card'
 import { cn } from '@/lib/utils'
 import { useHaptic } from '@/hooks/use-haptic'
 
@@ -95,22 +92,6 @@ const monthlyQuest = {
 	max: 20,
 }
 
-const ecoFactDeepDiveProject: ClientCatalogProject = {
-	id: 'amazonie-restauration',
-	slug: 'foret-mediterraneenne',
-	name_default: 'Reforestation : Forêt Méditerranéenne',
-	description_default:
-		'Aidez à restaurer des habitats forestiers critiques et à sécuriser des couloirs pour les pollinisateurs et la faune locale.',
-	target_budget: 150000,
-	current_funding: 75000,
-	funding_progress: 50,
-	address_city: 'Bassin méditerranéen',
-	address_country_code: 'FR',
-	featured: true,
-	hero_image_url:
-		'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80',
-}
-
 type EcoFactReaderProps = {
 	open: boolean
 	onValidate: () => void
@@ -134,9 +115,9 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 					className='fixed inset-0 z-[95] overflow-y-auto bg-[#0B0F15]'
 					onClick={(event) => event.stopPropagation()}
 				>
-					<div className='relative h-72 w-full'>
+					<div className='relative w-full h-[300px]'>
 						<img
-							src='https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1400&q=80'
+							src='https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1600&q=80'
 							alt='Forêt amazonienne'
 							className='h-full w-full object-cover'
 						/>
@@ -154,105 +135,53 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 						</button>
 					</div>
 
-					<h1 className='mt-6 mb-4 px-5 text-3xl font-black leading-tight text-white'>
+					<h1 className='text-3xl font-black text-white px-6 mt-8 mb-6 leading-tight'>
 						Le Poumon Vert : Pourquoi l&apos;Amazonie est vitale.
 					</h1>
 
-					<div className='mx-5 mb-8 rounded-2xl border border-lime-400/20 bg-lime-400/10 p-5'>
-						<h3 className='mb-3 text-xs font-bold uppercase tracking-widest text-lime-400'>
-							En 3 points clés
-						</h3>
-						<ul className='space-y-3 text-sm text-white/80'>
-							<li className='flex gap-2'>
-								<span className='text-lime-400'>•</span>
-								<span>
-									L&apos;Amazonie régule le climat mondial en stockant
-									plusieurs milliards de tonnes de carbone.
-								</span>
-							</li>
-							<li className='flex gap-2'>
-								<span className='text-lime-400'>•</span>
-								<span>
-									Elle influence les cycles de pluie bien au-delà de
-									l&apos;Amérique du Sud, jusqu&apos;aux systèmes agricoles
-									globaux.
-								</span>
-							</li>
-							<li className='flex gap-2'>
-								<span className='text-lime-400'>•</span>
-								<span>
-									Des milliers d&apos;espèces y dépendent d&apos;habitats
-									fragiles menacés par la fragmentation forestière.
-								</span>
-							</li>
-						</ul>
-					</div>
-
-					<div className='px-5 pb-8 text-base leading-relaxed text-white/80'>
-						<p>
-							La forêt amazonienne est souvent décrite comme le poumon vert de la
-							planète, mais cette formule ne raconte qu&apos;une partie de son rôle.
-							Elle fonctionne comme un système vivant complexe qui connecte les
-							arbres, les sols, les rivières atmosphériques, les insectes
-							pollinisateurs et les espèces animales dans un équilibre
-							extrêmement précis.
+					<div className='px-6 space-y-6 pb-24'>
+						<p className='text-white/80 text-[17px] leading-relaxed'>
+							La forêt amazonienne couvre près de{' '}
+							<strong className='text-white'>5,5 millions de km²</strong> et agit
+							comme un immense régulateur climatique. Son équilibre hydrique
+							alimente des rivières atmosphériques qui influencent les pluies sur
+							tout un continent.
+						</p>
+						<p className='text-white/80 text-[17px] leading-relaxed'>
+							Quand les forêts sont fragmentées, les pollinisateurs disparaissent
+							et les{' '}
+							<strong className='text-white'>cycles de pluie se dérèglent</strong>
+							. À terme, cette rupture fragilise la biodiversité locale et les
+							populations humaines qui dépendent des services écologiques.
 						</p>
 
-						<img
-							src='https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1200&q=80'
-							alt='Canopée amazonienne'
-							className='my-6 h-48 w-full rounded-2xl object-cover'
-						/>
-
-						<p>
-							Lorsque la couverture forestière diminue, cet équilibre se dégrade
-							rapidement. Les sols se dessèchent, les cycles de pluie se
-							dérèglent, et de nombreuses espèces perdent leurs zones de
-							reproduction et d&apos;alimentation. Ce n&apos;est pas un phénomène
-							abstrait : cela impacte directement la sécurité alimentaire, la
-							résilience des territoires et la stabilité climatique.
+						<p className='text-white/80 text-[17px] leading-relaxed'>
+							Chaque action de préservation contribue à ralentir cette bascule.
+							Reboiser, restaurer des corridors écologiques et soutenir une
+							apiculture durable sont des leviers concrets pour préserver le
+							vivant.
 						</p>
 
 						<blockquote className='my-8 border-l-4 border-lime-400 pl-5 text-xl font-medium italic text-white'>
 							&quot;Chaque minute, l&apos;équivalent de 30 terrains de football
 							disparaît.&quot;
 						</blockquote>
-
-						<p>
-							La restauration écologique permet de renverser cette trajectoire :
-							replanter intelligemment, reconnecter les habitats, renforcer
-							l&apos;apiculture locale et protéger les zones critiques redonne une
-							capacité d&apos;adaptation aux écosystèmes. Chaque projet soutenu agit
-							comme une brique concrète dans une stratégie globale de
-							préservation du vivant.
-						</p>
-
-						<img
-							src='https://images.unsplash.com/photo-1523978591478-c753949ff840?auto=format&fit=crop&w=1200&q=80'
-							alt='Restauration et biodiversité'
-							className='my-6 h-48 w-full rounded-2xl object-cover'
-						/>
 					</div>
 
-					<div className='mt-12 mb-16 px-5'>
-						<h2 className='mb-2 text-2xl font-black text-white'>
+					<div className='mx-6 mt-10 mb-12 p-6 bg-lime-400/10 border border-lime-400/20 rounded-3xl text-center'>
+						<h3 className='text-lime-400 font-black text-xl mb-2'>
 							Passez à l&apos;action
-						</h2>
-						<p className='mb-6 text-sm text-white/60'>
-							Maintenant que vous savez, aidez-nous à protéger ces espaces
-							vitaux.
+						</h3>
+						<p className='text-white/70 text-sm mb-4'>
+							Soutenez un projet de reforestation dès aujourd&apos;hui.
 						</p>
-						<ClientCatalogProjectCard
-							project={ecoFactDeepDiveProject}
-							labels={{
-								viewLabel: 'Voir le projet',
-								progressLabel: 'Progression',
-								fundedLabel: 'Collectés',
-								goalLabel: 'Obj.',
-								featuredLabel: 'Coup de cœur',
-								activeLabel: 'En cours',
-							}}
-						/>
+						<Link
+							href='/projects'
+							onClick={onClose}
+							className='bg-lime-400 text-black font-bold px-6 py-3 rounded-full w-full inline-flex items-center justify-center'
+						>
+							Découvrir les projets
+						</Link>
 					</div>
 				</motion.div>
 			) : null}
@@ -260,101 +189,75 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 	)
 }
 
-const ecoFactWordContainer = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: {
-			staggerChildren: 0.05,
-		},
-	},
-}
-
-const ecoFactWordChild = {
-	hidden: { opacity: 0, y: 5, filter: 'blur(4px)' },
-	visible: {
-		opacity: 1,
-		y: 0,
-		filter: 'blur(0px)',
-		transition: {
-			type: 'spring' as const,
-			damping: 12,
-			stiffness: 100,
-		},
-	},
-}
-
-type EcoFactWordRevealProps = {
-	text: string
-	shouldAnimate: boolean
-	onComplete?: () => void
-}
-
-function EcoFactWordReveal({
-	text,
-	shouldAnimate,
-	onComplete,
-}: EcoFactWordRevealProps) {
-	const words = useMemo(() => text.split(' '), [text])
-
-	if (!shouldAnimate) {
-		return <p className='text-sm leading-relaxed text-white/75'>{text}</p>
-	}
-
-	return (
-		<motion.p
-			className='text-sm leading-relaxed text-white/75'
-			variants={ecoFactWordContainer}
-			initial='hidden'
-			animate='visible'
-			onAnimationComplete={onComplete}
-		>
-			{words.map((word, index) => (
-				<motion.span
-					// eslint-disable-next-line react/no-array-index-key
-					key={`${word}-${index}`}
-					className='inline-block mr-1'
-					variants={ecoFactWordChild}
-				>
-					{word}
-				</motion.span>
-			))}
-		</motion.p>
-	)
-}
-
 function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 	const haptic = useHaptic()
-	const [isSkipped, setIsSkipped] = useState(false)
-	const [isTextAnimationDone, setIsTextAnimationDone] = useState(false)
 	const [isArticleOpen, setIsArticleOpen] = useState(false)
-	const hasTriggeredCtaHaptic = useRef(false)
-
-	const longEcoFactText =
-		'La forêt amazonienne couvre près de 5,5 millions de km² et agit comme un immense régulateur climatique. Quand les forêts sont fragmentées, les pollinisateurs disparaissent, les sols s’appauvrissent et les cycles de pluie se dérèglent. À terme, cela affecte autant la faune locale que les communautés humaines qui dépendent de ces écosystèmes.'
-
-	const supportingEcoFactText =
-		'Protéger un habitat, c’est préserver des chaînes entières de vie : insectes, oiseaux, amphibiens, plantes et micro-organismes. Chaque action de restauration ou de préservation aide à maintenir l’équilibre de ce vivant invisible mais essentiel.'
+	const [scrollProgress, setScrollProgress] = useState(0)
+	const [isUnlocked, setIsUnlocked] = useState(false)
+	const contentRef = useRef<HTMLDivElement | null>(null)
 
 	useEffect(() => {
 		if (!open) return
-		setIsSkipped(false)
-		setIsTextAnimationDone(false)
 		setIsArticleOpen(false)
-		hasTriggeredCtaHaptic.current = false
+		setScrollProgress(0)
+		setIsUnlocked(false)
 	}, [open])
 
-	useEffect(() => {
-		if (!open || !isTextAnimationDone || hasTriggeredCtaHaptic.current) return
-		haptic.lightTap()
-		hasTriggeredCtaHaptic.current = true
-	}, [haptic, isTextAnimationDone, open])
+	const handleScroll = useCallback(
+		(event: UIEvent<HTMLDivElement>) => {
+			const { scrollTop, scrollHeight, clientHeight } = event.currentTarget
+			const maxScrollable = scrollHeight - clientHeight
 
-	const handleSkipReveal = () => {
-		if (isTextAnimationDone) return
-		setIsSkipped(true)
-		setIsTextAnimationDone(true)
-	}
+			if (maxScrollable <= 0) {
+				setScrollProgress(100)
+				if (!isUnlocked) {
+					setIsUnlocked(true)
+					haptic.mediumTap()
+				}
+				return
+			}
+
+			const progress = (scrollTop / maxScrollable) * 100
+			const clampedProgress = Math.min(100, Math.max(0, progress))
+			setScrollProgress(clampedProgress)
+
+			if (clampedProgress >= 95 && !isUnlocked) {
+				setIsUnlocked(true)
+				haptic.mediumTap()
+			}
+		},
+		[haptic, isUnlocked]
+	)
+
+	useEffect(() => {
+		if (!open) return
+
+		const checkScrollable = () => {
+			const element = contentRef.current
+			if (!element) return
+
+			if (element.scrollHeight <= element.clientHeight) {
+				setScrollProgress(100)
+				if (!isUnlocked) {
+					setIsUnlocked(true)
+					haptic.mediumTap()
+				}
+				return
+			}
+
+			const maxScrollable = element.scrollHeight - element.clientHeight
+			const progress = (element.scrollTop / maxScrollable) * 100
+			setScrollProgress(Math.min(100, Math.max(0, progress)))
+		}
+
+		const rafId = window.requestAnimationFrame(checkScrollable)
+		window.addEventListener('resize', checkScrollable)
+
+		return () => {
+			window.cancelAnimationFrame(rafId)
+			window.removeEventListener('resize', checkScrollable)
+		}
+	}, [haptic, isUnlocked, open])
 
 	const openArticle = (event: { stopPropagation: () => void }) => {
 		event.stopPropagation()
@@ -371,7 +274,6 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 					exit={{ y: '100%' }}
 					transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
 					className='fixed inset-0 z-[80] flex flex-col overflow-hidden bg-[#0B0F15]'
-					onClick={handleSkipReveal}
 				>
 					<button
 						type='button'
@@ -385,7 +287,11 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 						<X className='h-4 w-4' />
 					</button>
 
-					<div className='relative flex-1 overflow-y-auto pb-44'>
+					<div
+						ref={contentRef}
+						onScroll={handleScroll}
+						className='relative flex-1 overflow-y-auto pb-44'
+					>
 						<div className='relative isolate min-h-[46vh] px-6 pt-6'>
 							<div className='pointer-events-none absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
 							<motion.img
@@ -442,23 +348,23 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 								Le Poumon Vert de la planète
 							</motion.h2>
 
-							<motion.div
-								variants={{
-									hidden: { opacity: 0, y: 14 },
-									show: { opacity: 1, y: 0 },
-								}}
-								className='flex flex-wrap items-center gap-2'
-							>
-								<span className='rounded-full border border-lime-400/25 bg-lime-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-lime-300'>
-									Amazonie
-								</span>
-								<span className='rounded-full border border-sky-400/25 bg-sky-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-sky-300'>
-									Biodiversité
-								</span>
-								<span className='rounded-full border border-amber-400/25 bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-300'>
-									Déforestation
-								</span>
-							</motion.div>
+								<motion.div
+									variants={{
+										hidden: { opacity: 0, y: 14 },
+										show: { opacity: 1, y: 0 },
+									}}
+									className='flex flex-wrap items-center gap-2'
+								>
+									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
+										Amazonie
+									</span>
+									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
+										Biodiversité
+									</span>
+									<span className='px-3 py-1 rounded-full border border-white/20 text-white/60 text-xs font-semibold uppercase tracking-widest'>
+										Déforestation
+									</span>
+								</motion.div>
 
 							<motion.div
 								variants={{
@@ -472,70 +378,86 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 								</div>
 								<p className='text-sm leading-relaxed text-white/70'>
 									De la biodiversité mondiale est abritée par la forêt
-									amazonienne. Sa déforestation menace des milliers
-									d&apos;espèces.
-								</p>
-							</motion.div>
+										amazonienne. Sa déforestation menace des milliers
+										d&apos;espèces.
+									</p>
+								</motion.div>
 
-							<motion.div
-								variants={{
-									hidden: { opacity: 0, y: 14 },
-									show: { opacity: 1, y: 0 },
-								}}
-								className='rounded-2xl border border-white/10 bg-white/5 p-5'
-							>
-								<EcoFactWordReveal
-									text={longEcoFactText}
-									shouldAnimate={!isSkipped}
-									onComplete={() => {
-										setIsTextAnimationDone(true)
+								<motion.div
+									variants={{
+										hidden: { opacity: 0, y: 14 },
+										show: { opacity: 1, y: 0 },
 									}}
-								/>
-								<p className='mt-3 text-sm leading-relaxed text-white/65'>
-									{supportingEcoFactText}
-								</p>
-							</motion.div>
-						</motion.div>
-
-						<div className='px-5 mt-4 mb-32 flex justify-center'>
-							<button
-								type='button'
-								onClick={openArticle}
-								className='flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/10 rounded-full transition-all group'
-							>
-								<BookOpen className='w-4 h-4 text-lime-400' />
-								<span className='text-sm font-bold text-white group-hover:text-white/80 transition-colors'>
-									Explorer le dossier complet
-								</span>
-								<span className='text-xs font-medium text-white/40 ml-1'>
-									(3 min)
-								</span>
-								<ChevronRight className='w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform' />
-							</button>
-						</div>
-					</div>
-
-					<div className='absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15] to-transparent p-6 pb-[max(1.25rem,env(safe-area-inset-bottom))]'>
-						<AnimatePresence>
-							{isTextAnimationDone ? (
-								<motion.button
-									type='button'
-									initial={{ opacity: 0, y: 12 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: 8 }}
-									transition={{ duration: 0.45, delay: 0.7 }}
-									onClick={(event) => {
-										event.stopPropagation()
-										onValidate()
-									}}
-									className='flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-lg font-black text-black shadow-[0_0_30px_rgba(132,204,22,0.2)] transition-transform active:scale-95'
+									className='grid grid-cols-2 gap-3'
 								>
-									C&apos;est noté !
-									<span className='opacity-50'>|</span>
-									+50 🌱
-								</motion.button>
-							) : null}
-						</AnimatePresence>
+									<div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+										<p className='text-[10px] font-bold uppercase tracking-widest text-white/50'>
+											Surface
+										</p>
+										<p className='mt-1 text-xl font-black text-white'>
+											5,5 M km²
+										</p>
+									</div>
+									<div className='rounded-2xl border border-white/10 bg-white/5 p-4'>
+										<p className='text-[10px] font-bold uppercase tracking-widest text-white/50'>
+											Déforestation
+										</p>
+										<p className='mt-1 text-xl font-black text-white'>
+											30 terrains/min
+										</p>
+									</div>
+								</motion.div>
+							</motion.div>
+
+							<div className='px-5 flex justify-center'>
+								<button
+									type='button'
+									onClick={openArticle}
+									className='mt-6 mb-32 mx-auto flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/10 rounded-full transition-all'
+								>
+									<BookOpen className='w-4 h-4 text-lime-400' />
+									<span className='text-sm font-bold text-white'>
+										Explorer le dossier complet (3 min)
+									</span>
+									<ChevronRight className='w-4 h-4 text-white/30' />
+								</button>
+							</div>
+						</div>
+
+					<div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent pt-12 pb-[max(1.5rem,env(safe-area-inset-bottom))] px-5 z-40'>
+						<div className='w-full h-1 bg-white/10 rounded-full mb-4 overflow-hidden'>
+							<div
+								className='h-full bg-lime-400 transition-all duration-100 ease-out'
+								style={{ width: `${isUnlocked ? 100 : scrollProgress}%` }}
+							/>
+						</div>
+
+						<button
+							type='button'
+							disabled={!isUnlocked}
+							onClick={(event) => {
+								event.stopPropagation()
+								if (!isUnlocked) return
+								onValidate()
+							}}
+							className={cn(
+								'w-full h-14 rounded-2xl font-black text-lg flex items-center justify-center gap-2 transition-all duration-500',
+								isUnlocked
+									? 'bg-lime-400 text-[#0B0F15] active:scale-95 shadow-[0_0_30px_rgba(132,204,22,0.3)] animate-pulse'
+									: 'bg-white/5 text-white/40 border border-white/10'
+							)}
+						>
+							{isUnlocked ? (
+								<span className='animate-in fade-in zoom-in duration-300'>
+									C&apos;est noté !{' '}
+									<span className='opacity-50 font-normal'>|</span> +50 🌱
+								</span>
+							) : (
+								<span className='flex items-center gap-2'>
+									<Lock className='w-4 h-4' /> Faites défiler pour débloquer
+								</span>
+							)}
+						</button>
 					</div>
 					<EcoFactArticleView
 						open={isArticleOpen}

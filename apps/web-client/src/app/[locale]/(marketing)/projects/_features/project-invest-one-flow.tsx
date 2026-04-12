@@ -116,6 +116,7 @@ export function ProjectInvestOneFlow({
   const [claimSaved, setClaimSaved] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
   const amountInputRef = useRef<HTMLInputElement | null>(null)
+  const claimEmailInputRef = useRef<HTMLInputElement | null>(null)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
 
@@ -248,6 +249,17 @@ export function ProjectInvestOneFlow({
     }
     setClaimSaved(true)
   }
+
+  const focusClaimEmailInput = () => {
+    if (!claimEmailInputRef.current) {
+      return
+    }
+
+    claimEmailInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    claimEmailInputRef.current.focus()
+  }
+
+  const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
 
   const quickAmounts = QUICK_AMOUNTS
 
@@ -551,6 +563,7 @@ export function ProjectInvestOneFlow({
                   </p>
                   <div className="grid gap-2">
                     <input
+                      ref={claimEmailInputRef}
                       type="email"
                       value={claimEmail}
                       onChange={(event) => setClaimEmail(event.target.value)}
@@ -560,7 +573,7 @@ export function ProjectInvestOneFlow({
                     <Button
                       type="button"
                       onClick={submitClaim}
-                      className="h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300"
+                      className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
                       disabled={!isValidEmail(claimEmail)}
                     >
                       Créer mon compte
@@ -632,6 +645,24 @@ export function ProjectInvestOneFlow({
             className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
           >
             Visiter le Marché
+          </Button>
+        </div>
+      ) : null}
+
+      {showGuestClaimFooter ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+          <Button
+            type="button"
+            onClick={() => {
+              if (!isValidEmail(claimEmail)) {
+                focusClaimEmailInput()
+                return
+              }
+              submitClaim()
+            }}
+            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+          >
+            Créer mon compte
           </Button>
         </div>
       ) : null}
