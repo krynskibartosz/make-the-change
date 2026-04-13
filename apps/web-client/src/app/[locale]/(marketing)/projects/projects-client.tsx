@@ -6,7 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { asString, isRecord } from '@/lib/type-guards'
 import { getLocalizedContent } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type RawClientProject = {
   id: string | null
@@ -87,6 +87,15 @@ const normalizeProject = (
 export function ProjectsClient({ projects }: ProjectsClientProps) {
   const locale = useLocale()
   const [activeCategory, setActiveCategory] = useState<string>('Tous')
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 40)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const normalizedProjects = projects.map((project, index) =>
     normalizeProject(project, index, locale),
@@ -94,17 +103,31 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
   return (
     <div className="w-full max-w-[1920px] mx-auto pb-8">
-      {/* 2. LE HEADER & LES FILTRES */}
-      <div className="px-6 pt-12 pb-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-black text-white tracking-tight">Nos projets</h1>
-          <button className="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors">
-            <MapIcon className="w-5 h-5 text-white" />
+      {/* 2. L'EN-TÊTE FIXE (Sticky - Ligne 1 & Filtres) */}
+      <div 
+        className={`sticky top-0 z-50 transition-all duration-300 pt-14 pb-4 ${
+          isScrolled 
+            ? 'bg-[#0B0F15]/80 backdrop-blur-xl border-b border-white/10 shadow-lg' 
+            : 'bg-transparent'
+        }`}
+      >
+        {/* LIGNE 1 : Petit Titre Dynamique & Bouton Carte */}
+        <div className="flex justify-between items-center px-6 mb-5 h-10">
+          <h2 
+            className={`text-white font-bold text-xl transition-opacity duration-300 ${
+              isScrolled ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          >
+            Nos projets
+          </h2>
+          
+          <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
+            <MapIcon className="w-4 h-4 text-white" />
           </button>
         </div>
 
-        {/* Filtres Horizontaux (Pills) */}
-        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-6 px-6">
+        {/* LIGNE 2 : Filtres (Toujours visibles) */}
+        <div className="flex gap-3 overflow-x-auto scrollbar-hide px-6 pb-1 -mx-6 pl-6">
           {['Tous', '🌳 Forêts', '🐝 Faune'].map((category) => (
             <button
               key={category}
@@ -119,6 +142,12 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* 3. LE GRAND TITRE (Fluide - Disparaît au scroll) */}
+      <div className="px-6 pt-2 pb-6">
+        <h1 className="text-4xl font-black text-white tracking-tight leading-tight">Nos projets</h1>
+        <p className="text-white/60 text-[15px] mt-2">Découvrez et soutenez des projets vérifiés.</p>
       </div>
 
       {/* 3. L'ANATOMIE DE LA CARTE PROJET */}
