@@ -1,6 +1,6 @@
 'use client'
 
-import { Lock as LockIcon, Map as MapIcon, MapPin } from 'lucide-react'
+import { Lock as LockIcon, Map, MapPin, TreePine, Bug, Waves } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -117,21 +117,21 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     // Wrapper principal — overflow-x-hidden corrige le scroll horizontal cassé
     <div className="w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40">
 
-      {/* ── TOP HEADER (Safe Area + fond solide) ───────────────────────────── */}
-      <div className="sticky top-0 z-40 bg-[#0B0F15] pt-14 pb-4 px-6 flex justify-between items-center border-b border-white/5">
+      {/* ── TOP HEADER (FIXED ABSOLU — corrige le bug sticky+overflow-x-hidden) ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5 pt-14 pb-4 px-6 flex justify-between items-center shadow-sm">
         <h1 className="text-2xl font-black text-white tracking-tight">Nos projets</h1>
         <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
-          <MapIcon className="w-4 h-4 text-white" />
+          <Map className="w-4 h-4 text-white" />
         </button>
       </div>
 
-      {/* ── GRAND TITRE FLUIDE (glisse sous le header au scroll) ───────────── */}
-      <div className="px-6 pt-4 pb-6">
+      {/* ── SOUS-TITRE (compense le header fixed avec pt-28) ───────────────── */}
+      <div className="px-6 pt-28 pb-4">
         <p className="text-white/60 text-[15px]">Découvrez et soutenez des projets vérifiés.</p>
       </div>
 
       {/* ── LISTE DES CARTES ────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-8 px-6 mt-2 pb-32">
+      <div className="flex flex-col gap-8 px-6 pb-40">
         {normalizedProjects.map((project) => {
           const imageUrl = sanitizeImageUrl(project.hero_image_url)
           const location =
@@ -220,22 +220,55 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
         )}
       </div>
 
-      {/* ── FILTRES FLOTTANTS EN BAS (Thumb Zone) ──────────────────────────── */}
-      <div className="fixed bottom-24 left-0 right-0 z-50 px-4 pointer-events-none">
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide py-3 px-3 bg-[#0B0F15]/70 backdrop-blur-xl border border-white/10 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mx-auto w-max max-w-full">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-5 py-2.5 rounded-full whitespace-nowrap text-sm shrink-0 transition-colors ${
-                activeCategory === cat.id
-                  ? 'bg-lime-400 text-black font-bold'
-                  : 'bg-transparent hover:bg-white/10 text-white font-medium'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+      {/* ── DOCK FLOTTANT PREMIUM (Thumb Zone) ────────────────────────────── */}
+      <div className="fixed bottom-[80px] left-0 right-0 z-50 flex justify-center pointer-events-none px-4">
+        <div className="bg-[#1A1F26]/80 backdrop-blur-2xl border border-white/10 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
+          <button
+            onClick={() => setActiveCategory('all')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
+              activeCategory === 'all'
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'hover:bg-white/5 text-white/70'
+            }`}
+          >
+            <span className="text-[13px] font-bold">Tous</span>
+          </button>
+
+          <button
+            onClick={() => setActiveCategory('forets')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
+              activeCategory === 'forets'
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'hover:bg-white/5 text-white/70'
+            }`}
+          >
+            <TreePine className="w-3.5 h-3.5" />
+            <span className="text-[13px] font-medium">Forêts</span>
+          </button>
+
+          <button
+            onClick={() => setActiveCategory('faune')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
+              activeCategory === 'faune'
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'hover:bg-white/5 text-white/70'
+            }`}
+          >
+            <Bug className="w-3.5 h-3.5" />
+            <span className="text-[13px] font-medium">Faune</span>
+          </button>
+
+          <button
+            onClick={() => setActiveCategory('oceans')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
+              activeCategory === 'oceans'
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'hover:bg-white/5 text-white/70'
+            }`}
+          >
+            <Waves className="w-3.5 h-3.5" />
+            <span className="text-[13px] font-medium">Océans</span>
+          </button>
         </div>
       </div>
     </div>
