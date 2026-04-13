@@ -1,7 +1,7 @@
 'use client'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Award, Flame, Package, Star } from 'lucide-react'
+import { Award, Flame, Package, Star, Sparkles, Truck } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -98,7 +98,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="grid gap-4 md:grid-cols-[1.08fr_0.92fr] lg:gap-6">
             <section>
               <div
-                className="relative h-[clamp(220px,34vh,360px)] overflow-hidden rounded-none border-b border-border/50 bg-muted/40 sm:rounded-3xl sm:border"
+                className="relative aspect-square md:aspect-[4/3] max-h-[60vh] w-full overflow-hidden rounded-none border-b border-white/10 bg-white/5 sm:rounded-3xl sm:border"
                 style={{ viewTransitionName: mediaTransitionName }}
               >
                 {coverImage ? (
@@ -109,11 +109,19 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   </div>
                 )}
                 
-                {/* ── Overlay Gradient ── */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                {/* ── Overlay Gradients ── */}
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 via-black/20 to-transparent z-10" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent" />
+                
+                {/* Dots pagination */}
+                <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-1.5">
+                  <div className="h-1.5 w-1.5 rounded-full bg-white opacity-100" />
+                  <div className="h-1.5 w-1.5 rounded-full bg-white opacity-40" />
+                  <div className="h-1.5 w-1.5 rounded-full bg-white opacity-40" />
+                </div>
 
                 {/* ── Bottom Right Share + Favorite ── */}
-                <div className="absolute bottom-4 right-4 z-20 flex gap-2">
+                <div className="absolute bottom-4 right-4 z-30 flex gap-2">
                   <ProductShareButton
                     productName={productName}
                     productId={product.id}
@@ -131,7 +139,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             <aside className="space-y-4 px-4 sm:px-0">
               <div className="space-y-3">
                 <h1
-                  className="text-3xl font-black tracking-tight text-foreground sm:text-4xl"
+                  className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl"
                   style={{ viewTransitionName: titleTransitionName }}
                 >
                   {productName}
@@ -140,16 +148,14 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   {categoryName && (
                     <Badge
                       variant="outline"
-                      className="border-white/10 bg-white/5 text-muted-foreground transition-colors hover:bg-white/10"
+                      className="border-white/10 bg-white/5 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
                     >
-                      <Package className="mr-1 h-3.5 w-3.5" />
                       {categoryName}
                     </Badge>
                   )}
                   {product.is_hero_product && (
-                    <Badge className="border-none bg-white/10 text-primary backdrop-blur-sm">
-                      <Award className="mr-1 h-3.5 w-3.5" />
-                      {t('detail_page.hero_product_badge')}
+                    <Badge className="border border-white/10 bg-white/5 text-white/90 backdrop-blur-sm">
+                      🏆 Bestseller
                     </Badge>
                   )}
                 </div>
@@ -158,9 +164,23 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           </div>
 
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
+            {/* ── Spec Grid ── */}
+            <div className="grid grid-cols-2 gap-3 px-1 mb-6">
+              <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <Package className="h-5 w-5 text-white/50 mb-1.5" />
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Format</span>
+                <span className="text-sm font-semibold text-white">À l'unité</span>
+              </div>
+              <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <Truck className="h-5 w-5 text-white/50 mb-1.5" />
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Livraison</span>
+                <span className="text-sm font-semibold text-white">2 - 3 jours</span>
+              </div>
+            </div>
+
             {productDescription && (
               <section className="px-1">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground sm:text-base">
+                <p className="whitespace-pre-wrap text-[15px] leading-7 text-white/80 sm:text-base">
                   {productDescription}
                 </p>
               </section>
@@ -202,7 +222,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                     <Badge
                       key={`${certification}-${index}`}
                       variant="outline"
-                      className="border-marketing-positive-600/30 bg-marketing-positive-500/10 text-marketing-positive-700"
+                      className="border-white/10 bg-white/5 text-emerald-400"
                     >
                       {certification}
                     </Badge>
@@ -214,50 +234,35 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
         </div>
 
         {/* ── Sticky Bottom Bar ── */}
-        <div className="relative shrink-0 border-t border-white/10 bg-background/60 p-4 backdrop-blur-xl sm:p-6">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background/60 to-transparent" />
+        <div className="relative shrink-0 border-t border-white/10 bg-[#0B0F15]/90 p-4 backdrop-blur-xl sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#0B0F15] to-transparent" />
           
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col items-center justify-center gap-1">
-              {/* Scarcity indicator */}
-              {inStock && (
-                <div className="mb-1 flex items-center gap-1.5">
-                  <Flame size={12} className="text-orange-400/80" />
-                  <span className="text-xs font-medium text-orange-400/80">
-                    Série limitée • Plus que 12 exemplaires
-                  </span>
-                </div>
-              )}
-              
-              {/* Price hierarchy */}
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-lime-400">
-                  {displayPoints.toLocaleString('fr-FR')} Points
+          <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
+            {/* Scarcity indicator */}
+            {inStock && (
+              <div className="flex items-center justify-center gap-1.5 mb-1">
+                <Flame size={14} className="text-orange-400" />
+                <span className="text-[13px] font-bold text-orange-400">
+                  Série limitée
                 </span>
-                {displayPrice > 0 && (
-                  <span className="text-sm font-medium text-muted-foreground">
-                    ou {new Intl.NumberFormat('fr-FR', {
-                      style: 'currency',
-                      currency: 'EUR',
-                      maximumFractionDigits: 0,
-                    }).format(displayPrice)}
-                  </span>
-                )}
               </div>
-            </div>
+            )}
 
-            <ProductDetailAddToCartButton
-              className="h-14 w-full rounded-2xl text-lg font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              productId={product.id}
-              productName={productName}
-              productSlug={product.slug}
-              pricePoints={displayPoints}
-              priceEuros={priceEuros}
-              imageUrl={coverImage || null}
-              fulfillmentMethod={product.fulfillment_method}
-              stockQuantity={product.stock_quantity}
-              inStock={inStock}
-            />
+            {/* Bouton Primaire : Échange en Points */}
+            <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 px-4 py-4 text-[17px] font-black text-[#0B0F15] shadow-[0_0_20px_rgba(163,230,53,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              Échanger {displayPoints.toLocaleString('fr-FR')} ✨
+            </button>
+            
+            {/* Bouton Secondaire : Achat euros */}
+            {displayPrice > 0 && (
+              <button className="flex w-full items-center justify-center rounded-2xl px-4 py-1.5 text-[15px] font-bold text-white/50 transition-colors hover:text-white hover:bg-white/5 active:scale-[0.98]">
+                Ou acheter pour {new Intl.NumberFormat('fr-FR', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  maximumFractionDigits: 2,
+                }).format(displayPrice)}
+              </button>
+            )}
           </div>
         </div>
       </div>
