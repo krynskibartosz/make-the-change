@@ -107,9 +107,9 @@ const createSelectOptions = <T extends { id: string; name_default: string }>(
   items: T[] | undefined,
   allLabel: string,
 ): SelectOption[] => [
-  { value: '', label: allLabel },
-  ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
-]
+    { value: '', label: allLabel },
+    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
+  ]
 
 const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
   { value: 'featured_first', label: tProducts('sort.featured') },
@@ -591,11 +591,10 @@ export const ProductsClient = ({
                 <button
                   type="button"
                   onClick={() => updateQuery({ view: 'grid' }, { resetPage: false })}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
-                    view === 'grid'
-                      ? 'bg-foreground text-background'
-                      : 'text-foreground/80 hover:bg-white/10'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${view === 'grid'
+                    ? 'bg-foreground text-background'
+                    : 'text-foreground/80 hover:bg-white/10'
+                    }`}
                   aria-pressed={view === 'grid'}
                   aria-label={tProducts('view.grid')}
                 >
@@ -605,11 +604,10 @@ export const ProductsClient = ({
                 <button
                   type="button"
                   onClick={() => updateQuery({ view: 'list' }, { resetPage: false })}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
-                    view === 'list'
-                      ? 'bg-foreground text-background'
-                      : 'text-foreground/80 hover:bg-white/10'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${view === 'list'
+                    ? 'bg-foreground text-background'
+                    : 'text-foreground/80 hover:bg-white/10'
+                    }`}
                   aria-pressed={view === 'list'}
                   aria-label={tProducts('view.list')}
                 >
@@ -634,7 +632,7 @@ export const ProductsClient = ({
 
       {/* ── DOCK FLOTTANT (Thumb Zone) — identique à /projects ─────────────── */}
       <div
-        className="md:hidden fixed left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
+        className="md:hidden fixed mb-1 left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
         <div className="bg-background/80 pr-2 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
@@ -656,11 +654,10 @@ export const ProductsClient = ({
           <button
             type="button"
             onClick={() => updateQuery({ category: '' })}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
-              !initialQueryState.category
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
-            }`}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${!initialQueryState.category
+              ? 'bg-lime-400 text-[#0B0F15] font-bold'
+              : 'hover:bg-white/5 text-white/70'
+              }`}
           >
             <span className="text-[13px] font-bold">Tous</span>
           </button>
@@ -671,11 +668,10 @@ export const ProductsClient = ({
               key={cat.id}
               type="button"
               onClick={() => updateQuery({ category: cat.id })}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
-                initialQueryState.category === cat.id
-                  ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                  : 'hover:bg-white/5 text-white/70'
-              }`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${initialQueryState.category === cat.id
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'hover:bg-white/5 text-white/70'
+                }`}
             >
               <span className="text-[13px] font-medium">{cat.name_default}</span>
             </button>
@@ -725,12 +721,7 @@ export const ProductsClient = ({
 
           {/* Products list/grid area */}
           <div className="min-w-0 space-y-4">
-            {/* Product Count */}
-            <div className="mb-4">
-              <p className="text-sm font-medium text-muted-foreground">
-                {pagination.totalItems.toLocaleString()} {tProducts('product_list')}
-              </p>
-            </div>
+
 
             {/* Products list — forcé en vue liste sur mobile */}
             {view === 'list' || true ? (
