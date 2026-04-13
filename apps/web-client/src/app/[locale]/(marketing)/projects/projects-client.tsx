@@ -117,12 +117,17 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     // Wrapper principal — overflow-x-hidden corrige le scroll horizontal cassé
     <div className="w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40">
 
-      {/* ── TOP HEADER (FIXED ABSOLU — corrige le bug sticky+overflow-x-hidden) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5 pt-14 pb-4 px-6 flex justify-between items-center shadow-sm">
-        <h1 className="text-2xl font-black text-white tracking-tight">Nos projets</h1>
-        <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
-          <Map className="w-4 h-4 text-white" />
-        </button>
+      {/* ── TOP HEADER (pattern identique au top-navigation.tsx) ────────────── */}
+      {/* Le div externe couvre la safe area avec le fond, l'interne positionne le contenu */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5 shadow-sm">
+        <div className="pt-[env(safe-area-inset-top)]">
+          <div className="flex h-14 items-center justify-between px-6">
+            <h1 className="text-2xl font-black text-white tracking-tight">Nos projets</h1>
+            <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
+              <Map className="w-4 h-4 text-white" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* ── SOUS-TITRE (compense le header fixed avec pt-28) ───────────────── */}
@@ -221,7 +226,11 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       </div>
 
       {/* ── DOCK FLOTTANT PREMIUM (Thumb Zone) ────────────────────────────── */}
-      <div className="fixed bottom-[80px] left-0 right-0 z-50 flex justify-center pointer-events-none px-4">
+      {/* bottom = hauteur nav (4.5rem) + safe-area-bottom + gap 8px */}
+      <div
+        className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
+        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
+      >
         <div className="bg-[#1A1F26]/80 backdrop-blur-2xl border border-white/10 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
           <button
             onClick={() => setActiveCategory('all')}
