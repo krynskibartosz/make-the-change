@@ -117,29 +117,10 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     // Wrapper principal — overflow-x-hidden corrige le scroll horizontal cassé
     <div className="w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40">
 
-      {/* ── COUCHE DE FOND POUR LA ZONE BATTERIE/HEURE (Safe Area strip) ───── */}
-      {/* Même principe que fixed inset-0 de la modale : couvre physiquement  */}
-      {/* la zone derrière la barre de statut iOS avec un fond solide.        */}
-      <div
-        className="fixed top-0 left-0 right-0 z-[51] bg-[#0B0F15] pointer-events-none"
-        style={{ height: 'env(safe-area-inset-top, 44px)' }}
-      />
-
-      {/* ── TOP HEADER (contenu du header, au-dessus de la couche safe area) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5 shadow-sm">
-        <div className="pt-[max(0.5rem,env(safe-area-inset-top,44px))]">
-          <div className="flex h-14 items-center justify-between px-6">
-            <h1 className="text-2xl font-black text-white tracking-tight">Nos projets</h1>
-            <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
-              <Map className="w-4 h-4 text-white" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── SOUS-TITRE (compense le header fixed avec pt-28) ───────────────── */}
-      <div className="px-6 pt-28 pb-4">
-        <p className="text-white/60 text-[15px]">Découvrez et soutenez des projets vérifiés.</p>
+      {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
+      <div className="px-6 pt-8 pb-4">
+        <h1 className="text-4xl font-black text-white tracking-tight leading-tight">Nos projets</h1>
+        <p className="text-white/60 text-[15px] mt-2">Découvrez et soutenez des projets vérifiés.</p>
       </div>
 
       {/* ── LISTE DES CARTES ────────────────────────────────────────────────── */}
@@ -235,15 +216,23 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       {/* ── DOCK FLOTTANT PREMIUM (Thumb Zone) ────────────────────────────── */}
       {/* bottom = hauteur nav (4.5rem) + safe-area-bottom + gap 8px */}
       <div
-        className="fixed mb-2 left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
+        className="fixed mb-1 left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
         <div className="bg-background/80 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
+          {/* Bouton Map — à gauche du dock */}
+          <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/5 text-white/70 transition-all active:scale-95 shrink-0 mx-1">
+            <Map className="w-4 h-4" />
+          </button>
+
+          {/* Séparateur vertical */}
+          <div className="w-px h-5 bg-white/15 shrink-0" />
+
           <button
             onClick={() => setActiveCategory('all')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'all'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
+              ? 'bg-lime-400 text-[#0B0F15] font-bold'
+              : 'hover:bg-white/5 text-white/70'
               }`}
           >
             <span className="text-[13px] font-bold">Tous</span>
@@ -252,8 +241,8 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
           <button
             onClick={() => setActiveCategory('forets')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'forets'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
+              ? 'bg-lime-400 text-[#0B0F15] font-bold'
+              : 'hover:bg-white/5 text-white/70'
               }`}
           >
             <TreePine className="w-3.5 h-3.5" />
@@ -263,8 +252,8 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
           <button
             onClick={() => setActiveCategory('faune')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'faune'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
+              ? 'bg-lime-400 text-[#0B0F15] font-bold'
+              : 'hover:bg-white/5 text-white/70'
               }`}
           >
             <Bug className="w-3.5 h-3.5" />
@@ -274,8 +263,8 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
           <button
             onClick={() => setActiveCategory('oceans')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'oceans'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
+              ? 'bg-lime-400 text-[#0B0F15] font-bold'
+              : 'hover:bg-white/5 text-white/70'
               }`}
           >
             <Waves className="w-3.5 h-3.5" />
