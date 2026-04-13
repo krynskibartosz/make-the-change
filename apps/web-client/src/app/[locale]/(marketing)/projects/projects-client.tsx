@@ -227,7 +227,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
           {/* Séparateur vertical */}
           <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
-          <div className='w-full mr-2'>
+          <div className="flex items-center gap-1 w-full mr-2">
 
             <button
               onClick={() => setActiveCategory('all')}
