@@ -1,5 +1,5 @@
 'use client'
-import { Users, Leaf } from 'lucide-react'
+import { Users, Leaf, Sprout, Trophy, PawPrint, Handshake, Globe, Droplets, Star, Bird } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
@@ -25,6 +25,8 @@ type ImpactEvent = {
 	avatar?: string
 	time: string
 	action: string
+	icon: React.ElementType
+	iconColor: string
 	actionHighlight?: string
 	likes: number
 	bravos: number
@@ -89,7 +91,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Thomas M.',
 		profileId: 'thomas-m',
 		time: 'Il y a 2 min',
-		action: '🌱 Vient de soutenir le projet Forêt Méditerranéenne',
+		action: 'Vient de soutenir le projet Forêt Méditerranéenne',
+		icon: Sprout,
+		iconColor: 'text-green-500',
 		actionHighlight: 'Forêt Méditerranéenne',
 		likes: 24,
 		bravos: 8,
@@ -100,7 +104,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'ÉcoGuerrier',
 		profileId: 'eco-guerrier',
 		time: 'Il y a 14 min',
-		action: '🏆 A validé une Série de 7 jours',
+		action: 'A validé une Série de 7 jours',
+		icon: Trophy,
+		iconColor: 'text-amber-400',
 		likes: 41,
 		bravos: 17,
 		avatarColor: 'bg-lime-500/20 text-lime-400',
@@ -110,7 +116,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Agroforest Pioneers',
 		time: 'Il y a 30 min',
 		action:
-			'🏆 Vient d’atteindre son objectif mensuel : 5 000 arbres plantés !',
+			'Vient d’atteindre son objectif mensuel : 5 000 arbres plantés !',
+		icon: Trophy,
+		iconColor: 'text-amber-400',
 		likes: 284,
 		bravos: 96,
 		avatarColor: 'bg-lime-500/20 text-lime-400',
@@ -123,7 +131,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Sarah L.',
 		profileId: 'sarah-l',
 		time: 'Il y a 1 heure',
-		action: '🦋 A débloqué le Lynx Boréal dans le BioDex',
+		action: 'A débloqué le Lynx Boréal dans le BioDex',
+		icon: PawPrint,
+		iconColor: 'text-purple-400',
 		likes: 63,
 		bravos: 22,
 		avatarColor: 'bg-purple-500/20 text-purple-400',
@@ -133,7 +143,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Citoyen Anonyme',
 		profileId: 'citoyen-anonyme',
 		time: 'Il y a 2 heures',
-		action: '🤝 A rejoint la Tribu Agroforest Pioneers',
+		action: 'A rejoint la Tribu Agroforest Pioneers',
+		icon: Handshake,
+		iconColor: 'text-zinc-400',
 		likes: 18,
 		bravos: 5,
 		avatarColor: 'bg-zinc-500/20 text-zinc-400',
@@ -145,7 +157,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Marie-Claire B.',
 		profileId: 'marie-claire-b',
 		time: 'Il y a 3 heures',
-		action: '🌍 A participé à la collecte de fonds Zones Humides',
+		action: 'A participé à la collecte de fonds Zones Humides',
+		icon: Globe,
+		iconColor: 'text-blue-400',
 		likes: 89,
 		bravos: 31,
 		avatarColor: 'bg-rose-500/20 text-rose-400',
@@ -155,7 +169,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Ocean & Mangrove Circle',
 		time: 'Il y a 4 heures',
 		action:
-			'💧 A franchi la barre des 12 récifs suivis ce mois-ci !',
+			'A franchi la barre des 12 récifs suivis ce mois-ci !',
+		icon: Droplets,
+		iconColor: 'text-cyan-400',
 		likes: 178,
 		bravos: 61,
 		avatarColor: 'bg-blue-500/20 text-blue-400',
@@ -168,7 +184,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Lucas V.',
 		profileId: 'lucas-v',
 		time: 'Il y a 5 heures',
-		action: '🌿 A validé le défi « Zéro Déchet » de la semaine',
+		action: 'A validé le défi « Zéro Déchet » de la semaine',
+		icon: Leaf,
+		iconColor: 'text-emerald-500',
 		likes: 35,
 		bravos: 12,
 		avatarColor: 'bg-emerald-500/20 text-emerald-400',
@@ -178,7 +196,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'NaturaMind',
 		profileId: 'natura-mind',
 		time: 'Hier',
-		action: '⭐ Vient de débloquer le badge Gardien des Forêts',
+		action: 'Vient de débloquer le badge Gardien des Forêts',
+		icon: Star,
+		iconColor: 'text-amber-400',
 		likes: 112,
 		bravos: 47,
 		avatarColor: 'bg-amber-500/20 text-amber-400',
@@ -188,7 +208,9 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 		name: 'Amira K.',
 		profileId: 'amira-k',
 		time: 'Hier',
-		action: "🦅 A découvert l'Aigle de Bonelli dans le BioDex",
+		action: "A découvert l'Aigle de Bonelli dans le BioDex",
+		icon: Bird,
+		iconColor: 'text-sky-400',
 		likes: 57,
 		bravos: 19,
 		avatarColor: 'bg-cyan-500/20 text-cyan-400',
@@ -196,19 +218,6 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
 ]
 
 // ─── Borderless Impact Post ───────────────────────────────────────────────────
-
-function splitAction(action: string) {
-	const firstSpace = action.indexOf(' ')
-
-	if (firstSpace === -1) {
-		return { emoji: '', text: action }
-	}
-
-	return {
-		emoji: action.slice(0, firstSpace),
-		text: action.slice(firstSpace + 1),
-	}
-}
 
 function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
 	if (
@@ -263,7 +272,6 @@ function ImpactCard({ event }: { event: ImpactEvent }) {
 		isTribe && event.tribeSlug
 			? `/community/guilds/${event.tribeSlug}`
 			: `/profile/${event.profileId}`
-	const action = splitAction(event.action)
 
 	return (
 		<div className='py-5 border-b border-white/5 last:border-b-0'>
@@ -294,9 +302,9 @@ function ImpactCard({ event }: { event: ImpactEvent }) {
 			</Link>
 
 			<p className='text-[15px] text-white/70 leading-snug mt-1 mb-3 flex items-start gap-2'>
-				{action.emoji && <span>{action.emoji}</span>}
+				<event.icon className={cn('w-[18px] h-[18px] shrink-0 mt-0.5', event.iconColor)} />
 				<span>
-					<ImpactAction event={event} text={action.text} />
+					<ImpactAction event={event} text={event.action} />
 				</span>
 			</p>
 
