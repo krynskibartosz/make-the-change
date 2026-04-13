@@ -1,0 +1,212 @@
+'use client'
+
+import { useState } from 'react'
+import { ArrowLeft, MapPin, Plus, Sparkles, X } from 'lucide-react'
+import { sanitizeImageUrl } from '@/lib/image-url'
+
+interface ProductCheckoutViewProps {
+  product: any
+  selectedFormat: {
+    id: string
+    points: number
+    euros: number
+  }
+  onClose: () => void
+}
+
+export function ProductCheckoutView({ product, selectedFormat, onClose }: ProductCheckoutViewProps) {
+  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [hasAddress, setHasAddress] = useState(false) // Faux état pour la démo
+
+  const imageUrl =
+    sanitizeImageUrl(product.image_url) ||
+    (Array.isArray(product.images) && product.images.length > 0
+      ? sanitizeImageUrl(product.images[0])
+      : undefined)
+
+  const userBalance = 2450
+  const newBalance = userBalance - selectedFormat.points
+
+  // -------------------------------------------------------------
+  // VUE 1 : L'OFFRE (The Deal)
+  // -------------------------------------------------------------
+  if (step === 1) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#0B0F15] animate-in fade-in slide-in-from-bottom-[5%] duration-300">
+        <div className="flex items-center justify-between p-6 pb-2">
+          <h2 className="text-xl font-bold text-white">Votre récompense</h2>
+          <button 
+            onClick={onClose}
+            className="rounded-full p-2 transition-colors hover:bg-white/10 active:scale-95"
+          >
+            <X className="h-6 w-6 text-white/50" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto pb-40">
+          <div className="mx-6 mt-4 flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white/10">
+              {imageUrl && (
+                <img src={imageUrl} alt={product.name_default} className="h-full w-full object-cover" />
+              )}
+            </div>
+            <div>
+              <h3 className="text-lg font-bold leading-tight text-white">{product.name_default}</h3>
+              <p className="mt-0.5 text-sm text-white/50">Format : {selectedFormat.id}</p>
+            </div>
+          </div>
+
+          <div className="mx-6 mt-8 rounded-3xl border border-white/5 bg-[#1A1F26] p-5 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="font-medium text-white/70">Coût de l'échange</span>
+              <span className="text-2xl font-black tabular-nums text-lime-400">
+                - {selectedFormat.points.toLocaleString('fr-FR')} ✨
+              </span>
+            </div>
+            <div className="mb-4 h-px w-full bg-white/10" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-white/50">Nouveau solde estimé</span>
+              <span className="font-bold tabular-nums text-white">
+                {newBalance.toLocaleString('fr-FR')} ✨
+              </span>
+            </div>
+          </div>
+
+          {hasAddress ? (
+            <div className="mx-6 mt-6 flex items-center justify-between rounded-2xl border border-white/10 p-4 transition-colors hover:bg-white/5">
+              <div className="flex items-center gap-3">
+                <MapPin className="h-5 w-5 text-lime-400" />
+                <div className="text-sm">
+                  <p className="font-medium text-white">Livraison à domicile</p>
+                  <p className="text-white/50">12 Rue des Abeilles, Paris</p>
+                </div>
+              </div>
+              <button onClick={() => setStep(2)} className="text-xs font-bold text-white/50 hover:text-white">Modifier</button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setStep(2)}
+              className="mx-6 mt-6 flex w-[calc(100%-3rem)] items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 p-4 text-white/70 transition-colors hover:bg-white/5 hover:text-white"
+            >
+              <Plus className="h-4 w-4" /> Ajouter une adresse de livraison
+            </button>
+          )}
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 border-t border-white/10 bg-[#0B0F15]/95 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#0B0F15]/95 to-transparent" />
+          
+          {hasAddress ? (
+            <button 
+              onClick={() => setStep(3)}
+              className="w-full rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Confirmer l'échange
+            </button>
+          ) : (
+            <button className="w-full cursor-not-allowed rounded-2xl bg-white/10 py-4 text-lg font-bold text-white/30">
+              Adresse manquante
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // -------------------------------------------------------------
+  // VUE 2 : LA LOGISTIQUE (Shipping)
+  // -------------------------------------------------------------
+  if (step === 2) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#0B0F15] animate-in slide-in-from-right duration-300">
+        <div className="flex items-center p-6 pb-4">
+          <button 
+            onClick={() => setStep(1)}
+            className="mr-4 transition-transform active:scale-95"
+          >
+            <ArrowLeft className="h-6 w-6 text-white" />
+          </button>
+          <h2 className="text-xl font-bold text-white">Où livrer ?</h2>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-6 pb-32 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <input type="text" placeholder="Prénom" autoComplete="given-name" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+            <input type="text" placeholder="Nom" autoComplete="family-name" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+          </div>
+
+          <input type="text" placeholder="Adresse postale" autoComplete="street-address" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+
+          <div className="grid grid-cols-[1fr_2fr] gap-4">
+            <input type="text" inputMode="numeric" placeholder="Code postal" autoComplete="postal-code" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+            <input type="text" placeholder="Ville" autoComplete="address-level2" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+          </div>
+
+          <input type="text" defaultValue="France" autoComplete="country-name" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/90 to-transparent p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <button 
+            onClick={() => {
+              setHasAddress(true)
+              setStep(1)
+            }}
+            className="w-full rounded-2xl bg-white py-4 text-lg font-black text-[#0B0F15] transition-transform active:scale-95"
+          >
+            Utiliser cette adresse
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // -------------------------------------------------------------
+  // VUE 3 : LE CLIMAX (Success)
+  // -------------------------------------------------------------
+  if (step === 3) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#0B0F15] animate-in fade-in zoom-in-95 duration-500">
+        {/* Halo lumineux central */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime-400/20 blur-[80px]"></div>
+
+        {/* Visuel Héroïque */}
+        <div className="relative z-10 animate-[bounce_3s_ease-in-out_infinite]">
+          <div className="h-40 w-40 rounded-2xl border border-lime-400/30 bg-white/10 p-2 shadow-[0_0_50px_rgba(132,204,22,0.3)]">
+            {imageUrl && (
+              <img src={imageUrl} alt={product.name_default} className="h-full w-full rounded-xl object-cover" />
+            )}
+          </div>
+        </div>
+
+        {/* Typographie de Triomphe */}
+        <div className="z-10 mt-10 space-y-3 px-6 text-center">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-4 py-1.5">
+            <Sparkles className="h-4 w-4 text-lime-400" />
+            <span className="text-xs font-bold uppercase tracking-widest text-lime-400">Échange réussi</span>
+          </div>
+
+          <h2 className="text-4xl font-black leading-tight tracking-tight text-white">
+            Votre récompense<br/>est en route !
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-sm text-[15px] leading-relaxed text-white/60">
+            Votre <strong className="font-medium text-white">{product.name_default}</strong> est en cours de préparation. Il sera livré à votre adresse d'ici <strong className="font-medium text-white">2 à 3 jours ouvrés</strong>.
+          </p>
+
+          <p className="mt-6 font-mono text-xs text-white/30">Réf: #MTC-8492</p>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 z-10 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <button 
+            onClick={onClose}
+            className="w-full rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] transition-transform hover:bg-lime-500 active:scale-95"
+          >
+            Retour à la boutique
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return null
+}
