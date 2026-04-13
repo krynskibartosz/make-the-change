@@ -119,8 +119,8 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
       {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
       <div className="px-6 pt-8 pb-4">
-        <h1 className="text-4xl font-black text-white tracking-tight leading-tight">Nos projets</h1>
-        <p className="text-white/60 text-[15px] mt-2">Découvrez et soutenez des projets vérifiés.</p>
+        <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">Nos projets</h1>
+        <p className="text-white/60 text-[15px] mt-3 font-medium">Découvrez et soutenez des projets vérifiés.</p>
       </div>
 
       {/* ── LISTE DES CARTES ────────────────────────────────────────────────── */}
@@ -165,13 +165,13 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
               {/* B. Contenu textuel — typo millimétrée */}
               <div className="flex flex-col gap-1 px-1">
-                <h2 className="text-[22px] font-black text-white leading-tight tracking-tight">
+                <h2 className="text-[22px] font-black text-white leading-[1.1] tracking-tight text-balance">
                   {project.name_default}
                 </h2>
 
-                <div className="flex items-center gap-1.5 text-white/50 text-[13px] font-medium mt-0.5 mb-2">
+                <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-0.5 mb-2">
                   <MapPin className="w-3.5 h-3.5 shrink-0" />
-                  <span>{location}</span>
+                  <span className="tracking-wide font-medium">{location}</span>
                 </div>
 
                 {/* Impact collectif — donnée réelle calculée comme la page détail */}
@@ -182,11 +182,11 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                         <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
                       </svg>
                     </div>
-                    <p className="text-[13px] text-white/70">
-                      <span className="text-lime-400 font-bold">
+                    <p className="text-[13px]">
+                      <span className="text-lime-400 font-black tabular-nums tracking-tight">
                         {beesProtected.toLocaleString('fr-FR')}
                       </span>{' '}
-                      abeilles protégées
+                      <span className="text-white/70 font-medium">abeilles protégées</span>
                     </p>
                   </div>
                 ) : (
