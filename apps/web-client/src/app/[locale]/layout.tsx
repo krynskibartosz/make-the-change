@@ -1,5 +1,5 @@
 import { defaultLocale, isLocale, locales, type Locale } from '@make-the-change/core/i18n'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
@@ -17,6 +17,15 @@ export const metadata: Metadata = {
     template: '%s | Make the Change',
     default: 'Make the Change',
   },
+}
+
+// viewport-fit=cover est requis pour que env(safe-area-inset-top/bottom) 
+// retourne les vraies valeurs sur iOS Safari (encoche, Dynamic Island).
+// Sans cela, env() retourne 0 et les backgrounds ne couvrent pas la barre d'état.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 }
 
 type LocaleLayoutProps = PropsWithChildren<{
