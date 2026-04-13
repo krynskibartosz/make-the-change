@@ -120,7 +120,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       {/* ── TOP HEADER (pattern identique au top-navigation.tsx) ────────────── */}
       {/* Le div externe couvre la safe area avec le fond, l'interne positionne le contenu */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5 shadow-sm">
-        <div className="pt-[env(safe-area-inset-top)]">
+        <div className="pt-[max(0.5rem,env(safe-area-inset-top))]">
           <div className="flex h-14 items-center justify-between px-6">
             <h1 className="text-2xl font-black text-white tracking-tight">Nos projets</h1>
             <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
