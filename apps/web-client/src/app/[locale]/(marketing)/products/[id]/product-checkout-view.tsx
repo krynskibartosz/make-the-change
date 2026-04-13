@@ -33,7 +33,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
   if (step === 1) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-[#0B0F15] animate-in fade-in slide-in-from-bottom-[5%] duration-300">
-        <div className="flex items-center justify-between p-6 pb-2">
+        <div className="flex items-center justify-between p-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-2">
           <h2 className="text-xl font-bold text-white">Votre récompense</h2>
           <button 
             onClick={onClose}
@@ -50,7 +50,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
                 <img src={imageUrl} alt={product.name_default} className="h-full w-full object-cover" />
               )}
             </div>
-            <div>
+            <div className="flex flex-col justify-center">
               <h3 className="text-lg font-bold leading-tight text-white">{product.name_default}</h3>
               <p className="mt-0.5 text-sm text-white/50">Format : {selectedFormat.id}</p>
             </div>
@@ -119,7 +119,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
   if (step === 2) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-[#0B0F15] animate-in slide-in-from-right duration-300">
-        <div className="flex items-center p-6 pb-4">
+        <div className="flex items-center p-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-4">
           <button 
             onClick={() => setStep(1)}
             className="mr-4 transition-transform active:scale-95"
@@ -131,18 +131,18 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
 
         <div className="flex-1 overflow-y-auto px-6 pb-32 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <input type="text" placeholder="Prénom" autoComplete="given-name" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
-            <input type="text" placeholder="Nom" autoComplete="family-name" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+            <input type="text" placeholder="Prénom" autoComplete="given-name" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
+            <input type="text" placeholder="Nom" autoComplete="family-name" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
           </div>
 
-          <input type="text" placeholder="Adresse postale" autoComplete="street-address" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+          <input type="text" placeholder="Adresse postale" autoComplete="street-address" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
 
           <div className="grid grid-cols-[1fr_2fr] gap-4">
-            <input type="text" inputMode="numeric" placeholder="Code postal" autoComplete="postal-code" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
-            <input type="text" placeholder="Ville" autoComplete="address-level2" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+            <input type="text" inputMode="numeric" placeholder="Code postal" autoComplete="postal-code" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
+            <input type="text" placeholder="Ville" autoComplete="address-level2" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
           </div>
 
-          <input type="text" defaultValue="France" autoComplete="country-name" className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none" />
+          <input type="text" defaultValue="France" autoComplete="country-name" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/90 to-transparent p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
