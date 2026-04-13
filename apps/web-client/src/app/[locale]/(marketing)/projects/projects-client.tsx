@@ -33,14 +33,14 @@ type RawClientProject = {
   hero_image_url: string | null
   type: string | null
   producer?:
-    | {
-        name_default?: string | null
-        name_i18n?: Record<string, string> | null
-        description_default?: string | null
-        description_i18n?: Record<string, string> | null
-      }
-    | Record<string, unknown>
-    | null
+  | {
+    name_default?: string | null
+    name_i18n?: Record<string, string> | null
+    description_default?: string | null
+    description_i18n?: Record<string, string> | null
+  }
+  | Record<string, unknown>
+  | null
 }
 
 interface ProjectsClientProps {
@@ -91,7 +91,7 @@ const normalizeProject = (
 function BeeSilhouette() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 opacity-30 text-white">
-      <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z"/>
+      <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
     </svg>
   )
 }
@@ -117,10 +117,17 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     // Wrapper principal — overflow-x-hidden corrige le scroll horizontal cassé
     <div className="w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40">
 
-      {/* ── TOP HEADER (pattern identique au top-navigation.tsx) ────────────── */}
-      {/* Le div externe couvre la safe area avec le fond, l'interne positionne le contenu */}
+      {/* ── COUCHE DE FOND POUR LA ZONE BATTERIE/HEURE (Safe Area strip) ───── */}
+      {/* Même principe que fixed inset-0 de la modale : couvre physiquement  */}
+      {/* la zone derrière la barre de statut iOS avec un fond solide.        */}
+      <div
+        className="fixed top-0 left-0 right-0 z-[51] bg-[#0B0F15] pointer-events-none"
+        style={{ height: 'env(safe-area-inset-top, 44px)' }}
+      />
+
+      {/* ── TOP HEADER (contenu du header, au-dessus de la couche safe area) ── */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5 shadow-sm">
-        <div className="pt-[max(0.5rem,env(safe-area-inset-top))]">
+        <div className="pt-[max(0.5rem,env(safe-area-inset-top,44px))]">
           <div className="flex h-14 items-center justify-between px-6">
             <h1 className="text-2xl font-black text-white tracking-tight">Nos projets</h1>
             <button className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center border border-white/10 transition-colors shrink-0">
@@ -191,7 +198,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-6 h-6 rounded-full bg-lime-400/20 flex items-center justify-center shrink-0">
                       <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-lime-400">
-                        <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z"/>
+                        <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
                       </svg>
                     </div>
                     <p className="text-[13px] text-white/70">
@@ -205,7 +212,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-6 h-6 rounded-full bg-lime-400/20 flex items-center justify-center shrink-0">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3 text-lime-400">
-                        <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                        <circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" />
                       </svg>
                     </div>
                     <p className="text-[13px] text-white/70">
@@ -228,28 +235,26 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       {/* ── DOCK FLOTTANT PREMIUM (Thumb Zone) ────────────────────────────── */}
       {/* bottom = hauteur nav (4.5rem) + safe-area-bottom + gap 8px */}
       <div
-        className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
+        className="fixed mb-2 left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
         <div className="bg-background/80 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
-              activeCategory === 'all'
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'all'
                 ? 'bg-lime-400 text-[#0B0F15] font-bold'
                 : 'hover:bg-white/5 text-white/70'
-            }`}
+              }`}
           >
             <span className="text-[13px] font-bold">Tous</span>
           </button>
 
           <button
             onClick={() => setActiveCategory('forets')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
-              activeCategory === 'forets'
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'forets'
                 ? 'bg-lime-400 text-[#0B0F15] font-bold'
                 : 'hover:bg-white/5 text-white/70'
-            }`}
+              }`}
           >
             <TreePine className="w-3.5 h-3.5" />
             <span className="text-[13px] font-medium">Forêts</span>
@@ -257,11 +262,10 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
           <button
             onClick={() => setActiveCategory('faune')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
-              activeCategory === 'faune'
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'faune'
                 ? 'bg-lime-400 text-[#0B0F15] font-bold'
                 : 'hover:bg-white/5 text-white/70'
-            }`}
+              }`}
           >
             <Bug className="w-3.5 h-3.5" />
             <span className="text-[13px] font-medium">Faune</span>
@@ -269,11 +273,10 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
           <button
             onClick={() => setActiveCategory('oceans')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
-              activeCategory === 'oceans'
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'oceans'
                 ? 'bg-lime-400 text-[#0B0F15] font-bold'
                 : 'hover:bg-white/5 text-white/70'
-            }`}
+              }`}
           >
             <Waves className="w-3.5 h-3.5" />
             <span className="text-[13px] font-medium">Océans</span>
