@@ -635,7 +635,7 @@ export const ProductsClient = ({
         className="md:hidden fixed mb-1 left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="bg-background/80 pr-2 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
+        <div className="bg-background/80  backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
 
           {/* Bouton Points — remplace le bouton Map de /projects */}
           <button
@@ -649,33 +649,35 @@ export const ProductsClient = ({
 
           {/* Séparateur vertical */}
           <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
+          <div className='w-full mr-2'>
 
-          {/* Filtre Tous */}
-          <button
-            type="button"
-            onClick={() => updateQuery({ category: '' })}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${!initialQueryState.category
-              ? 'bg-lime-400 text-[#0B0F15] font-bold'
-              : 'hover:bg-white/5 text-white/70'
-              }`}
-          >
-            <span className="text-[13px] font-bold">Tous</span>
-          </button>
-
-          {/* Filtre par catégorie — les 3 premières catégories */}
-          {categories.slice(0, 3).map((cat) => (
+            {/* Filtre Tous */}
             <button
-              key={cat.id}
               type="button"
-              onClick={() => updateQuery({ category: cat.id })}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${initialQueryState.category === cat.id
+              onClick={() => updateQuery({ category: '' })}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${!initialQueryState.category
                 ? 'bg-lime-400 text-[#0B0F15] font-bold'
                 : 'hover:bg-white/5 text-white/70'
                 }`}
             >
-              <span className="text-[13px] font-medium">{cat.name_default}</span>
+              <span className="text-[13px] font-bold">Tous</span>
             </button>
-          ))}
+
+            {/* Filtre par catégorie — les 3 premières catégories */}
+            {categories.slice(0, 3).map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => updateQuery({ category: cat.id })}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${initialQueryState.category === cat.id
+                  ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                  : 'hover:bg-white/5 text-white/70'
+                  }`}
+              >
+                <span className="text-[13px] font-medium">{cat.name_default}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
