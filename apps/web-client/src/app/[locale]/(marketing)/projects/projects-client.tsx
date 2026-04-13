@@ -219,14 +219,14 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
         className="fixed mb-1 left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="bg-background/80 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
+        <div className="bg-background/80 pr-2 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
           {/* Bouton Map — à gauche du dock */}
           <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/5 text-white/70 transition-all active:scale-95 shrink-0 mx-1">
             <Map className="w-4 h-4" />
           </button>
 
           {/* Séparateur vertical */}
-          <div className="w-px h-5 bg-white/15 shrink-0" />
+          <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
 
           <button
             onClick={() => setActiveCategory('all')}
