@@ -231,7 +231,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
         className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="bg-[#1A1F26]/80 backdrop-blur-2xl border border-white/10 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
+        <div className="bg-background/80 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
           <button
             onClick={() => setActiveCategory('all')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
