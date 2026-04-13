@@ -32,12 +32,15 @@ import {
 import { ProductCardSkeleton } from '@make-the-change/core/ui/next'
 import {
   ArrowUpDown,
+  Bug,
   Filter,
   LayoutGrid,
   List as ListIcon,
   Package,
   Search,
   Sparkles,
+  TreePine,
+  Waves,
 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -485,18 +488,10 @@ export const ProductsClient = ({
 
   return (
     <>
-      <MarketHeader balance={2450} />
-
-      {/* Page Hero Section */}
-      <div className="py-8 md:pb-12 md:pt-24">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-              {tProducts('title')}
-            </h1>
-            <p className="mt-4 text-lg text-muted-foreground">{tProducts('subtitle')}</p>
-          </div>
-        </div>
+      {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
+      <div className="px-6 pt-8 pb-4">
+        <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">{tProducts('title')}</h1>
+        <p className="text-white/60 text-[15px] mt-3 font-medium">{tProducts('subtitle')}</p>
       </div>
 
       {/* Desktop sticky top search bar — hidden on mobile */}
@@ -637,125 +632,54 @@ export const ProductsClient = ({
         </div>
       </div>
 
-      {/* iOS 26 — Mobile floating search and filter bar at the bottom (above bottom nav) */}
+      {/* ── DOCK FLOTTANT (Thumb Zone) — identique à /projects ─────────────── */}
       <div
-        className="md:hidden fixed left-0 right-0 z-40 px-4"
-        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.85rem)' }}
+        className="md:hidden fixed left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
+        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="rounded-2xl border border-white/10 bg-background/90 backdrop-blur-xl shadow-2xl p-3 flex flex-col gap-3">
-          {/* Search bar */}
-          <div className="flex items-center gap-3 bg-white/5 rounded-xl px-3 py-2">
-            <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-            <input
-              type="search"
-              placeholder={tProducts('search_placeholder')}
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
-            />
-          </div>
-          {/* Action buttons (Filters and Sort) */}
-          <div className="flex items-center gap-2">
-            {/* Filter BottomSheet */}
-            <BottomSheet>
-              <BottomSheetTrigger className="flex-1">
-                <button
-                  className="flex items-center justify-center gap-2 w-full bg-white/5 border border-white/10 py-2.5 rounded-xl text-xs font-semibold"
-                >
-                  <Filter className="h-4 w-4" />
-                  {tCommon('filter')}
-                  {hasActiveFilters && (
-                    <span className="bg-lime-400 text-black px-1.5 py-0.5 rounded-full text-[10px]">
-                      {activeFilterChips.length}
-                    </span>
-                  )}
-                </button>
-              </BottomSheetTrigger>
-              <BottomSheetContent showHandle>
-                <BottomSheetHeader className="px-0 pb-3">
-                  <BottomSheetTitle>{tCommon('filter')}</BottomSheetTitle>
-                </BottomSheetHeader>
-                <BottomSheetBody className="px-0 pb-4">
-                  <ProductsFiltersSidebar
-                    title={tCommon('filter')}
-                    clearLabel={tProducts('filters.clear_filters')}
-                    categoryLabel={tProducts('filters.category_label')}
-                    producerLabel={tProducts('filters.producer_label')}
-                    tagLabel={tProducts('filters.tag_label')}
-                    allCategoriesLabel={tProducts('filters.all_categories')}
-                    allProducersLabel={tProducts('filters.all_producers')}
-                    allTagsLabel={tProducts('filters.all_tags')}
-                    showClear={hasActiveFilters}
-                    onReset={clearAllFilters}
-                    categoryOptions={categoryOptions}
-                    producerOptions={producerOptions}
-                    tagOptions={tagOptions}
-                    category={initialQueryState.category}
-                    producer={initialQueryState.producer}
-                    tag={initialQueryState.tag}
-                    onCategoryChange={(value) => updateQuery({ category: value })}
-                    onProducerChange={(value) => updateQuery({ producer: value })}
-                    onTagChange={(value) => updateQuery({ tag: value })}
-                  />
-                </BottomSheetBody>
-              </BottomSheetContent>
-            </BottomSheet>
+        <div className="bg-background/80 pr-2 backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
 
-            {/* Sort select */}
-            <Select
-              value={sort}
-              onValueChange={(value) => {
-                if (isProductSort(value)) {
-                  updateQuery({ sort: value })
-                }
-              }}
+          {/* Bouton Points — remplace le bouton Map de /projects */}
+          <button
+            type="button"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-white/5 text-lime-400 transition-all active:scale-95 shrink-0 mx-1"
+            aria-label="Solde Points d'Impact"
+          >
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
+            <span className="text-[13px] font-black tabular-nums tracking-tight">2 450</span>
+          </button>
+
+          {/* Séparateur vertical */}
+          <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
+
+          {/* Filtre Tous */}
+          <button
+            type="button"
+            onClick={() => updateQuery({ category: '' })}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
+              !initialQueryState.category
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'hover:bg-white/5 text-white/70'
+            }`}
+          >
+            <span className="text-[13px] font-bold">Tous</span>
+          </button>
+
+          {/* Filtre par catégorie — les 3 premières catégories */}
+          {categories.slice(0, 3).map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => updateQuery({ category: cat.id })}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${
+                initialQueryState.category === cat.id
+                  ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                  : 'hover:bg-white/5 text-white/70'
+              }`}
             >
-              <SelectTrigger className="flex-1 flex items-center justify-center gap-2 bg-white/5 border border-white/10 py-2.5 rounded-xl text-xs font-semibold h-auto decoration-none focus:ring-0">
-                <ArrowUpDown className="h-4 w-4 shrink-0 text-muted-foreground" />
-                <span className="truncate">{sortLabel}</span>
-              </SelectTrigger>
-              <SelectContent>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <div className="flex-1 rounded-xl border border-white/10 bg-white/5 p-1">
-              <div className="grid grid-cols-2 gap-1">
-                <button
-                  type="button"
-                  onClick={() => updateQuery({ view: 'grid' }, { resetPage: false })}
-                  className={`inline-flex h-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-semibold transition ${
-                    view === 'grid'
-                      ? 'bg-foreground text-background'
-                      : 'text-foreground/80 hover:bg-white/10'
-                  }`}
-                  aria-pressed={view === 'grid'}
-                  aria-label={tProducts('view.grid')}
-                >
-                  <LayoutGrid className="h-3.5 w-3.5" />
-                  <span>{tProducts('view.grid')}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => updateQuery({ view: 'list' }, { resetPage: false })}
-                  className={`inline-flex h-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-semibold transition ${
-                    view === 'list'
-                      ? 'bg-foreground text-background'
-                      : 'text-foreground/80 hover:bg-white/10'
-                  }`}
-                  aria-pressed={view === 'list'}
-                  aria-label={tProducts('view.list')}
-                >
-                  <ListIcon className="h-3.5 w-3.5" />
-                  <span>{tProducts('view.list')}</span>
-                </button>
-              </div>
-            </div>
-          </div>
+              <span className="text-[13px] font-medium">{cat.name_default}</span>
+            </button>
+          ))}
         </div>
       </div>
 
@@ -808,8 +732,8 @@ export const ProductsClient = ({
               </p>
             </div>
 
-            {/* Products list */}
-            {view === 'list' ? (
+            {/* Products list — forcé en vue liste sur mobile */}
+            {view === 'list' || true ? (
               products.length === 0 ? (
                 <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 text-center">
                   <Package className="mb-4 h-12 w-12 text-muted-foreground/50" />
