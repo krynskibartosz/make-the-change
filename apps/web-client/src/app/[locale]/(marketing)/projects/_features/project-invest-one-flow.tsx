@@ -387,48 +387,34 @@ export function ProjectInvestOneFlow({
                   <span className="text-4xl font-semibold text-white/50">€</span>
                 </div>
 
-                {/* CONTENEUR DE L'ÉTAPE 2 */}
-                <div className="relative pl-10 pb-10 mt-8 mx-auto w-full max-w-xl text-left"> {/* pl-10 laisse la place pour la ligne verticale verte à gauche */}
+                {/* CONTENU DE L'ÉTAPE 2 (Rollback UI + Nouveaux Tags) */}
+                <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
+                  <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
+                    2. Parrainez & Cumulez
+                  </h3>
                   
-                  {/* Ligne verticale verte (Gérée par le parent normalement, mais au cas où) */}
-                  <div className="absolute left-[19px] top-10 bottom-0 w-[2px] bg-white/10"></div>
-                  
-                  {/* Icône du Stepper (Cercle avec icône) */}
-                  <div className="absolute left-0 top-0 w-10 h-10 rounded-full bg-[#1A1F26] border border-lime-400 flex items-center justify-center shadow-[0_0_15px_rgba(132,204,22,0.2)]">
-                    <RefreshCw className="w-5 h-5 text-lime-400" />
-                  </div>
+                  <p className="text-white/60 text-[14px] leading-relaxed mb-4 pr-4">
+                    Chaque euro investi pour la planète se transforme instantanément en points d'impact sur votre compte.
+                  </p>
 
-                  {/* CONTENU DE L'ÉTAPE */}
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-2 tracking-tight">2. Parrainez & Cumulez</h3>
+                  {/* LES TAGS VISUELS (Alignés et aérés) */}
+                  <div className="flex flex-wrap gap-2">
                     
-                    {/* Paragraphe raccourci et aéré */}
-                    <p className="text-white/60 text-[15px] leading-relaxed mb-4">
-                      Chaque euro investi pour la planète se transforme instantanément en points d'impact.
-                    </p>
-
-                    {/* LA NOUVELLE LISTE : Format "Tags/Pills" au lieu de bullet points */}
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      
-                      {/* Tag 1 : Le plus important, en surbrillance */}
-                      <div className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span className="text-[13px] font-bold">1€ = 1 ✨</span>
-                      </div>
-
-                      {/* Tag 2 : Rassurance */}
-                      <div className="bg-white/5 border border-white/10 text-white/70 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span className="text-[13px] font-medium">Paiement sécurisé</span>
-                      </div>
-
-                      {/* Tag 3 : Confiance */}
-                      <div className="bg-white/5 border border-white/10 text-white/70 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                        <CheckCircle className="w-3.5 h-3.5" />
-                        <span className="text-[13px] font-medium">Impact vérifié</span>
-                      </div>
-
+                    <div className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-bold">1€ = 1 ✨</span>
                     </div>
+
+                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-medium">Paiement sécurisé</span>
+                    </div>
+
+                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <CheckCircle className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-medium">Impact vérifié</span>
+                    </div>
+
                   </div>
                 </div>
               </div>
