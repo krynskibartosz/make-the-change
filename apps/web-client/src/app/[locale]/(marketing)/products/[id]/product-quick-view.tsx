@@ -15,6 +15,7 @@ import type { ProductWithRelations } from './product-detail-data'
 import { ProductFavoriteButton } from './product-favorite-button'
 import { ProductShareButton } from './product-share-button'
 import { ProductCheckoutView } from './product-checkout-view'
+import { ProductFiatCheckoutView } from './product-fiat-checkout-view'
 import { ArrowLeft } from 'lucide-react'
 
 type ProductQuickViewProps = {
@@ -46,7 +47,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
     { id: "500g", points: 1800, euros: 18.00, stock: 3 }
   ];
   const [selectedFormat, setSelectedFormat] = useState(formats[0]);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const [isFiatCheckoutOpen, setIsFiatCheckoutOpen] = useState(false)
   const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
 
   const displayPoints = selectedFormat.points
@@ -356,7 +358,10 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             
             {/* Bouton Secondaire : Achat euros */}
             {displayPrice > 0 && (
-              <button className="flex w-full mt-2 items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50">
+              <button 
+                onClick={() => setIsFiatCheckoutOpen(true)}
+                className="flex w-full mt-2 items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50"
+              >
                 Ou acheter pour {new Intl.NumberFormat('fr-FR', {
                   style: 'currency',
                   currency: 'EUR',
@@ -374,6 +379,15 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           product={product} 
           selectedFormat={selectedFormat} 
           onClose={() => setIsCheckoutOpen(false)} 
+        />
+      )}
+
+      {/* ── Checkout Fiat Interceptée ── */}
+      {isFiatCheckoutOpen && (
+        <ProductFiatCheckoutView 
+          product={product} 
+          selectedFormat={selectedFormat} 
+          onClose={() => setIsFiatCheckoutOpen(false)} 
         />
       )}
 
