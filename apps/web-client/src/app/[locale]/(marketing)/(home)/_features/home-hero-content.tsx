@@ -21,7 +21,7 @@ export function HomeHeroContent({ title, subtitle, cta }: HomeHeroContentProps) 
 
   return (
     <motion.div
-      className="relative z-10 mt-auto w-full max-w-xl"
+      className="relative z-10 mt-auto w-full"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
