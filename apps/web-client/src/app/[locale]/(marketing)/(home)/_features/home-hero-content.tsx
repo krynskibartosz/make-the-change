@@ -21,31 +21,31 @@ export function HomeHeroContent({ title, subtitle, cta }: HomeHeroContentProps) 
 
   return (
     <motion.div
-      className="relative z-10 mt-auto w-full"
+      className="relative z-10 px-6 pb-10 w-full"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.h1
         variants={childVariants}
-        className="text-left text-4xl font-bold tracking-tight text-foreground sm:text-5xl text-balance"
+        className="text-[38px] leading-[1.15] font-black text-white tracking-tight mb-4 [text-wrap:balance]"
       >
-        {title}
+        Soutenez la biodiversité, récoltez les bénéfices.
       </motion.h1>
 
       <motion.p
         variants={childVariants}
-        className="mt-4 text-left text-base text-foreground/80 dark:text-muted-foreground text-pretty"
+        className="text-white/80 text-[16px] leading-relaxed mb-10 max-w-sm"
       >
-        {subtitle}
+        Transformez votre soutien à des projets concrets en points. Utilisez-les pour obtenir des récompenses éthiques et responsables.
       </motion.p>
 
       <motion.div variants={childVariants}>
         <Link
           href="/projects"
-          className="mt-6 flex h-14 w-full items-center justify-center rounded-xl bg-[#7ED321] font-bold text-black shadow-[0_8px_30px_rgb(132,204,22,0.25)] dark:shadow-none transition-transform hover:bg-[#68B01B] active:scale-95 select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="flex w-full items-center justify-center bg-lime-400 text-[#0B0F15] font-bold text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-lg"
         >
-          {cta}
+          Découvrir les projets
         </Link>
       </motion.div>
     </motion.div>
