@@ -17,6 +17,7 @@ interface ProductCheckoutViewProps {
 export function ProductCheckoutView({ product, selectedFormat, onClose }: ProductCheckoutViewProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [hasAddress, setHasAddress] = useState(false) // Faux état pour la démo
+  const [quantity, setQuantity] = useState(1)
 
   const imageUrl =
     sanitizeImageUrl(product.image_url) ||
@@ -25,7 +26,8 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
       : undefined)
 
   const userBalance = 2450
-  const newBalance = userBalance - selectedFormat.points
+  const totalCost = selectedFormat.points * quantity
+  const newBalance = userBalance - totalCost
 
   // -------------------------------------------------------------
   // VUE 1 : L'OFFRE (The Deal)
@@ -44,31 +46,68 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
         </div>
 
         <div className="flex-1 overflow-y-auto pb-40">
-          <div className="mx-6 mt-4 flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white/10">
-              {imageUrl && (
-                <img src={imageUrl} alt={product.name_default} className="h-full w-full object-cover" />
-              )}
+          <div className="mx-6 mt-4 p-4 bg-[#1A1F26] border border-white/5 rounded-2xl flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-xl bg-white/10 overflow-hidden shrink-0">
+                {imageUrl && (
+                  <img src={imageUrl} alt={product.name_default} className="w-full h-full object-cover" />
+                )}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-white font-bold text-lg leading-tight">{product.name_default}</h3>
+                <p className="text-white/50 text-sm mt-0.5">Format : {selectedFormat.id}</p>
+              </div>
             </div>
-            <div className="flex flex-col justify-center">
-              <h3 className="text-lg font-bold leading-tight text-white">{product.name_default}</h3>
-              <p className="mt-0.5 text-sm text-white/50">Format : {selectedFormat.id}</p>
+            
+            {/* SÉLECTEUR DE QUANTITÉ */}
+            <div className="flex justify-between items-center pt-3 border-t border-white/5">
+              <span className="text-sm font-medium text-white/70">Quantité</span>
+              <div className="flex items-center gap-4 bg-[#0B0F15] rounded-xl p-1 border border-white/5">
+                <button 
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-white/50 active:scale-95 transition-all"
+                >
+                  -
+                </button>
+                <span className="text-sm font-bold text-white tabular-nums w-4 text-center">{quantity}</span>
+                <button 
+                  onClick={() => setQuantity(quantity + 1)}
+                  disabled={newBalance - selectedFormat.points < 0}
+                  className={`w-8 h-8 flex items-center justify-center rounded-lg active:scale-95 transition-all ${
+                    newBalance - selectedFormat.points < 0 ? 'opacity-30 cursor-not-allowed text-white/30' : 'hover:bg-white/5 text-white/50'
+                  }`}
+                >
+                  +
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="mx-6 mt-8 rounded-3xl border border-white/5 bg-[#1A1F26] p-5 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <span className="font-medium text-white/70">Coût de l'échange</span>
-              <span className="flex items-center gap-1.5 text-2xl font-black tabular-nums text-lime-400">
-                - {selectedFormat.points.toLocaleString('fr-FR')} <Sparkles className="h-5 w-5" />
-              </span>
+          {/* LE TICKET DE CAISSE (Rassurance) */}
+          <div className="mx-6 mt-6 p-5 bg-[#1A1F26] border border-white/5 rounded-3xl space-y-3">
+            
+            {/* Lignes de détail */}
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-white/60">Sous-total ({quantity}x)</span>
+              <span className="text-white font-medium tabular-nums">{totalCost.toLocaleString('fr-FR')} ✨</span>
             </div>
-            <div className="mb-4 h-px w-full bg-white/10" />
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-white/50">Nouveau solde estimé</span>
-              <span className="flex items-center gap-1.5 font-bold tabular-nums text-white">
-                {newBalance.toLocaleString('fr-FR')} <Sparkles className="h-3.5 w-3.5" />
-              </span>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-white/60">Livraison (France)</span>
+              <span className="text-lime-400 font-bold bg-lime-400/10 px-2 py-0.5 rounded-md">Offerte</span>
+            </div>
+            
+            <div className="h-px w-full bg-white/10 my-2"></div>
+            
+            {/* Total */}
+            <div className="flex justify-between items-center">
+              <span className="text-white font-bold">Total à échanger</span>
+              <span className="text-xl font-black text-white tabular-nums">- {totalCost.toLocaleString('fr-FR')} ✨</span>
+            </div>
+            
+            {/* Rassurance Solde */}
+            <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
+              <span className="text-white/40 text-xs">Nouveau solde estimé</span>
+              <span className="text-lime-400 font-bold text-sm tabular-nums">{newBalance.toLocaleString('fr-FR')} ✨</span>
             </div>
           </div>
 
@@ -169,11 +208,14 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
         {/* Halo lumineux central */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime-400/20 blur-[80px]"></div>
 
-        {/* Visuel Héroïque */}
+        {/* Visuel Héroïque - Artefact Magique */}
         <div className="relative z-10 animate-[bounce_3s_ease-in-out_infinite]">
-          <div className="h-40 w-40 rounded-2xl border border-lime-400/30 bg-white/10 p-2 shadow-[0_0_50px_rgba(132,204,22,0.3)]">
+          {/* Halo de l'artefact */}
+          <div className="absolute inset-0 bg-lime-400/20 blur-2xl rounded-full"></div>
+          {/* L'image */}
+          <div className="relative w-40 h-40 rounded-2xl overflow-hidden drop-shadow-[0_20px_50px_rgba(132,204,22,0.4)] border border-lime-400/30">
             {imageUrl && (
-              <img src={imageUrl} alt={product.name_default} className="h-full w-full rounded-xl object-cover" />
+              <img src={imageUrl} alt={product.name_default} className="w-full h-full object-cover" />
             )}
           </div>
         </div>
@@ -196,12 +238,21 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
           <p className="mt-6 font-mono text-xs text-white/30">Réf: #MTC-8492</p>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-10 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          {/* Bouton Primaire (La Boucle) */}
           <button 
             onClick={onClose}
-            className="w-full rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] transition-transform hover:bg-lime-500 active:scale-95"
+            className="w-full bg-lime-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-lime-500 shadow-[0_0_30px_rgba(132,204,22,0.2)]"
           >
-            Retour à la boutique
+            Soutenir un projet
+          </button>
+          
+          {/* Bouton Secondaire (Utilitaires) */}
+          <button 
+            onClick={onClose}
+            className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
+          >
+            Suivre ma récompense
           </button>
         </div>
       </div>
