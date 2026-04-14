@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Award, Flame, Package, Star, Sparkles, Truck } from 'lucide-react'
+import { Award, Flame, Package, Star, Sparkles, Truck, Trophy } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -14,6 +14,7 @@ import type { ProductWithRelations } from './product-detail-data'
 import { ProductFavoriteButton } from './product-favorite-button'
 import { ProductShareButton } from './product-share-button'
 import { ProductCheckoutView } from './product-checkout-view'
+import { ArrowLeft } from 'lucide-react'
 
 type ProductQuickViewProps = {
   product: ProductWithRelations
@@ -37,11 +38,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
-  // ─── GESTION DE L'ÉTAT (Le State React) ───
+  const userBalance = 2450;
   const formats = [
-    { id: "140g", points: 550, euros: 5.50 },
-    { id: "250g", points: 950, euros: 9.50 },
-    { id: "500g", points: 1800, euros: 18.00 }
+    { id: "140g", points: 550, euros: 5.50, stock: 12 },
+    { id: "250g", points: 950, euros: 9.50, stock: 45 },
+    { id: "500g", points: 1800, euros: 18.00, stock: 3 }
   ];
   const [selectedFormat, setSelectedFormat] = useState(formats[0]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -122,28 +123,37 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 )}
                 
                 {/* ── Overlay Gradients ── */}
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 via-black/20 to-transparent z-10" />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0B0F15]/80 to-transparent z-10" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent z-10" />
                 
+                {/* ── Top Navigation & Actions ── */}
+                <div className="absolute top-[max(1rem,env(safe-area-inset-top))] left-4 right-4 z-30 flex justify-between">
+                  <button 
+                    onClick={() => router.back()}
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
+                    aria-label="Retour"
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                  </button>
+                  <div className="flex gap-2">
+                    <ProductShareButton
+                      productName={productName}
+                      productId={product.id}
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
+                    />
+                    <ProductFavoriteButton
+                      productName={productName}
+                      productId={product.id}
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
+                    />
+                  </div>
+                </div>
+
                 {/* Dots pagination */}
                 <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-1.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-white" />
                   <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
                   <div className="h-1.5 w-1.5 rounded-full bg-white/30" />
-                </div>
-
-                {/* ── Bottom Right Share + Favorite ── */}
-                <div className="absolute bottom-4 right-4 z-30 flex gap-2">
-                  <ProductShareButton
-                    productName={productName}
-                    productId={product.id}
-                    className="h-10 w-10 rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:bg-black/70 active:scale-95"
-                  />
-                  <ProductFavoriteButton
-                    productName={productName}
-                    productId={product.id}
-                    className="h-10 w-10 rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:bg-black/70 active:scale-95"
-                  />
                 </div>
               </div>
             </section>
@@ -156,19 +166,16 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 >
                   {productName}
                 </h1>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mt-3">
                   {categoryName && (
-                    <Badge
-                      variant="outline"
-                      className="border-white/10 bg-white/5 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
-                    >
-                      {categoryName}
-                    </Badge>
+                    <span className="bg-white/5 border border-white/10 text-white/70 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
+                      🍯 {categoryName}
+                    </span>
                   )}
                   {product.is_hero_product && (
-                    <Badge className="border border-white/10 bg-white/5 text-white/90 backdrop-blur-sm">
-                      🏆 Bestseller
-                    </Badge>
+                    <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                      <Trophy className="w-3 h-3"/> Bestseller
+                    </span>
                   )}
                 </div>
               </div>
@@ -179,19 +186,23 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             {/* ── LA BENTO GRID INTERACTIVE ── */}
             <div className="grid grid-cols-2 gap-3 px-1 mb-6 mt-2">
               {/* BENTO 1 : SÉLECTEUR DE FORMAT */}
-              <div className="col-span-2 bg-white/5 border border-white/10 rounded-2xl p-4">
+              <div className="col-span-2 bg-white/[0.02] border-t border-b border-white/5 py-4 px-1 sm:p-4 sm:rounded-2xl sm:border">
                 <div className="flex justify-between items-end mb-3">
                   <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Choisir le format</span>
+                  <div className="flex items-center gap-1.5 bg-lime-400/10 px-2.5 py-1 rounded-lg">
+                    <span className="text-[11px] text-white/50 font-medium">Votre solde :</span>
+                    <span className="text-xs font-bold text-lime-400 tabular-nums">{userBalance} ✨</span>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   {formats.map((format) => (
                     <button
                       key={format.id}
                       onClick={() => setSelectedFormat(format)}
-                      className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 ${
+                      className={`flex-1 flex items-center justify-center h-12 rounded-xl text-sm font-bold transition-all active:scale-95 ${
                         selectedFormat.id === format.id 
                           ? 'bg-lime-400 text-[#0B0F15] shadow-lg' 
-                          : 'bg-white/5 text-white hover:bg-white/10'
+                          : 'bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10'
                       }`}
                     >
                       {format.id}
@@ -280,25 +291,26 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
             {/* Scarcity indicator */}
             {inStock && (
-              <div className="flex items-center justify-center gap-1.5 mb-1">
-                <Flame size={14} className="text-orange-400" />
-                <span className="text-[13px] font-bold text-orange-400">
-                  Série limitée • En stock
+              <div className="flex items-center justify-center gap-1.5 mb-2">
+                <Flame className="w-3.5 h-3.5 text-orange-500" />
+                <span className="text-xs font-bold text-orange-500">
+                  {selectedFormat.stock < 20 ? `Série limitée • Plus que ${selectedFormat.stock} exemplaires` : 'En stock • Prêt à expédier'}
                 </span>
               </div>
             )}
 
             {/* Bouton Primaire : Échange en Points */}
             <button 
+              key={selectedFormat.points}
               onClick={() => setIsCheckoutOpen(true)}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 px-4 py-4 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.2)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="flex w-full h-14 items-center justify-center gap-2 rounded-2xl bg-lime-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300"
             >
-              Échanger {displayPoints.toLocaleString('fr-FR')} ✨
+              Échanger <span className="tabular-nums">{displayPoints.toLocaleString('fr-FR')}</span> <Sparkles className="w-4 h-4" />
             </button>
             
             {/* Bouton Secondaire : Achat euros */}
             {displayPrice > 0 && (
-              <button className="flex w-full items-center justify-center rounded-2xl px-4 py-1.5 text-[14px] font-medium text-white/50 underline underline-offset-4 transition-all hover:text-white hover:bg-white/5 active:scale-[0.98] active:opacity-50 mt-1">
+              <button className="flex w-full mt-2 items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50">
                 Ou acheter pour {new Intl.NumberFormat('fr-FR', {
                   style: 'currency',
                   currency: 'EUR',
