@@ -103,7 +103,7 @@ export function ProjectImpactCalculator({
       ) : (
         <div className="flex w-full items-start justify-between border-y border-white/5 py-6 my-4">
             <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-              <div className="text-xl">🐝</div>
+              <Bug className="mb-1 h-6 w-6 text-lime-400 drop-shadow-sm" />
               <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
                 {formatInteger(bees)}
               </div>
@@ -113,7 +113,7 @@ export function ProjectImpactCalculator({
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-              <div className="text-xl">🍯</div>
+              <Hexagon className="mb-1 h-6 w-6 text-amber-500 drop-shadow-sm" />
               <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
                 <span>{honeyParts.whole}</span>
                 <span className="text-sm font-bold text-white/50">
@@ -127,7 +127,7 @@ export function ProjectImpactCalculator({
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-              <div className="text-xl">💨</div>
+              <Cloud className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
               <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
                 <span>{co2Parts.whole}</span>
                 <span className="text-sm font-bold text-white/50">

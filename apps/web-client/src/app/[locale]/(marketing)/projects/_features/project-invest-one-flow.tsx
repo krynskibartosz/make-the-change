@@ -389,19 +389,19 @@ export function ProjectInvestOneFlow({
 
                 <div className="mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-3 text-left">
                   <div className="flex items-center text-sm">
-                    <MapPin className="mr-1.5 h-4 w-4 text-white/40" />
+                    <MapPin className="mr-1.5 h-4 w-4 text-lime-400 drop-shadow-sm" />
                     <span className="mr-1 text-white/40">Projet :</span>
                     <span className="font-medium text-white truncate">{project.name}</span>
                   </div>
                   <div className="mt-2 flex items-center text-sm">
-                    <Gift className="mr-1.5 h-4 w-4 text-white/40" />
+                    <Gift className="mr-1.5 h-4 w-4 text-amber-500 drop-shadow-sm" />
                     <span className="mr-1 text-white/40">Inclus :</span>
                     <span className="font-bold text-white">
                       {`${formatPoints(points.total_points)} Points d'Impact + L'Abeille Noire`}
                     </span>
                   </div>
                   <div className="mt-2 flex items-center text-sm">
-                    <ShieldCheck className="mr-1.5 h-4 w-4 text-white/40" />
+                    <ShieldCheck className="mr-1.5 h-4 w-4 text-emerald-400 drop-shadow-sm" />
                     <span className="mr-1 text-white/40">Sécurité :</span>
                     <span className="text-white/70">Connexion cryptée par Stripe</span>
                   </div>
