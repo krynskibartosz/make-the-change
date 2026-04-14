@@ -1,9 +1,12 @@
 import {
   ArrowLeft,
+  Bug,
   ChevronRight,
   ExternalLink,
+  Hexagon,
   MapPin,
-  ShieldCheck,
+  Package,
+  Sparkles,
 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -176,40 +179,45 @@ export default async function ProducerDetailPage({
     : []
 
   return (
-    <div className="bg-[#0B0F15] min-h-screen pb-safe">
-      
-      {/* 1. LE HEADER "SOCIAL PROFILE" (Cover + Avatar) */}
+    <div className="bg-[#0B0F15] min-h-screen pb-32">
+
+      {/* 1. HEADER : Cover + Avatar */}
       <div className="relative w-full h-48 bg-[#1A1F26]">
         <img src={coverImage} alt={producer.name_default || t('default_name')} className="w-full h-full object-cover" />
-        
-        {/* Boutons de navigation (par-dessus l'image) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15]/60 to-transparent" />
         <div className="absolute top-14 left-4 right-4 flex justify-between">
-          <Link href="/producers" className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform"><ArrowLeft className="w-5 h-5 text-white"/></Link>
-          <button className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform pointer-events-none opacity-0"><ExternalLink className="w-5 h-5 text-white"/></button> {/* Bouton masqué pour l'équilibre si pas de share au niveau UX fourni */}
+          <Link href="/producers" className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform">
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </Link>
+          {producer.contact_website && (
+            <a href={producer.contact_website} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform">
+              <ExternalLink className="w-5 h-5 text-white" />
+            </a>
+          )}
         </div>
       </div>
 
-      {/* IDENTITÉ & CALL-TO-ACTION */}
+      {/* IDENTITE & CTA */}
       <div className="px-5 relative">
-        {/* Avatar qui chevauche la cover */}
-        <div className="absolute -top-12 left-5 w-24 h-24 rounded-2xl bg-[#0B0F15] p-1 border-[3px] border-[#0B0F15] z-10 shadow-xl">
-          <div className="w-full h-full rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
-            <img src={images[1] || coverImage} alt={`${producer.name_default || t('default_name')} avatar`} className="w-full h-full object-cover" />
+        {/* Avatar logo — object-contain pour un logo, pas un paysage */}
+        <div className="absolute -top-12 left-5 w-24 h-24 rounded-2xl bg-[#0B0F15] p-1.5 border-[3px] border-[#0B0F15] z-10 shadow-xl">
+          <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
+            <img
+              src={images[1] || images[0] || coverImage}
+              alt={`Logo ${producer.name_default || t('default_name')}`}
+              className="w-full h-full object-contain p-2"
+            />
           </div>
         </div>
-
-        {/* Espace pour compenser l'avatar */}
-        <div className="h-14"></div>
-
-        {/* Titre et Bouton Suivre */}
+        <div className="h-14" />
         <div className="flex justify-between items-start mt-2">
           <div>
             <h1 className="text-2xl font-black text-white tracking-tight">{producer.name_default || t('default_name')}</h1>
-            {location ? (
+            {location && (
               <p className="text-white/50 text-sm flex items-center gap-1.5 mt-1 font-medium">
                 <MapPin className="w-3.5 h-3.5 text-white/40" /> {location}
               </p>
-            ) : null}
+            )}
           </div>
           <div className="-mt-1">
             <FollowToggleButton
@@ -222,42 +230,102 @@ export default async function ProducerDetailPage({
         </div>
       </div>
 
-      {/* 2. LE MINI-BENTO D'IMPACT (La preuve sociale immédiate) */}
-      <div className="px-5 mt-6 grid grid-cols-2 gap-3">
-        {projects.length > 0 && (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
-            <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Projets actifs</span>
-            <span className="text-xl font-black text-white">{projects.length}</span>
+      {/* 2. GLOBAL IMPACT DASHBOARD (data pure, pas de badge vide) */}
+      <div className="px-5 mt-6">
+        <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Impact Global Généré</h3>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-3 flex flex-col justify-center items-center text-center">
+            <span className="text-xl font-black text-white tabular-nums">{projects.length > 0 ? projects.length : '—'}</span>
+            <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider mt-1">Projets</span>
           </div>
-        )}
-
-        {products.length > 0 && (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
-            <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Produits liés</span>
-            <span className="text-xl font-black text-white">{products.length}</span>
+          <div className="bg-[#1A1F26] border border-lime-400/10 rounded-2xl p-3 flex flex-col justify-center items-center text-center">
+            <Bug className="w-4 h-4 text-lime-400 mb-1" />
+            <span className="text-sm font-black text-white tabular-nums">290k</span>
+            <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Abeilles</span>
           </div>
-        )}
-        
-        {/* Tag "Producteur Engagé" mis en valeur (Bouche les trous) */}
-        <div className={`bg-lime-400/10 border border-lime-400/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center ${projects.length === 0 || products.length === 0 ? 'col-span-1' : 'col-span-2'}`}>
-          <ShieldCheck className="w-6 h-6 text-lime-400 mb-1" />
-          <span className="text-xs font-bold text-lime-400 uppercase tracking-wide">Producteur<br/>Engagé</span>
+          <div className="bg-[#1A1F26] border border-amber-500/10 rounded-2xl p-3 flex flex-col justify-center items-center text-center">
+            <Hexagon className="w-4 h-4 text-amber-500 mb-1" />
+            <span className="text-sm font-black text-white tabular-nums">58kg</span>
+            <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Miel</span>
+          </div>
         </div>
       </div>
 
-      {/* 3. LE STORYTELLING ("À propos" sans boîte noire) */}
-      {producer.description_default && (
-        <div className="px-5 mt-8">
-          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">{t('about')}</h3>
-          <p className="text-white/80 leading-relaxed text-[15px]">
-            {producer.description_default}
-          </p>
+      {/* 3. VITRINE PRODUITS — Cross-selling horizontal */}
+      {products.length > 0 && (
+        <div className="mt-8 pl-5">
+          <div className="flex justify-between items-end pr-5 mb-3">
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest">Leurs Récompenses</h3>
+            <Link href="/products" className="text-[11px] font-bold text-lime-400">Voir tout</Link>
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-4 pr-5 scrollbar-hide">
+            {products.map((product) => (
+              <Link
+                key={product.id}
+                href={product.slug ? `/products/${product.slug}` : '/products'}
+                className="min-w-[140px] bg-[#1A1F26] border border-white/5 rounded-2xl p-2.5 text-left active:scale-95 transition-transform block shrink-0"
+              >
+                <div className="w-full aspect-square rounded-xl bg-white/5 mb-3 overflow-hidden flex items-center justify-center">
+                  {product.image_url ? (
+                    <img src={product.image_url} alt={product.name_default || ''} className="w-full h-full object-cover" />
+                  ) : (
+                    <Package className="w-8 h-8 text-white/20" />
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-white truncate">{product.name_default || t('default_product_name')}</h4>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className="text-lime-400 font-bold text-sm">•••</span>
+                  <Sparkles className="w-3 h-3 text-lime-400" />
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* 4. LA GESTION CONDITIONNELLE (Certifications & Projets) */}
+      {/* 4. PROJETS avec thumbnails */}
+      {projects.length > 0 && (
+        <div className="px-5 mt-4 mb-8">
+          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Soutenir leurs projets</h3>
+          <div className="space-y-3">
+            {projects.map((project) => (
+              <Link
+                key={project.id}
+                href={project.slug ? `/projects/${project.slug}` : '/projects'}
+                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/10 transition-colors rounded-2xl p-3 flex items-center gap-3 group text-left block"
+              >
+                <div className="w-12 h-12 rounded-xl bg-white/10 shrink-0 overflow-hidden">
+                  {project.hero_image_url ? (
+                    <img src={project.hero_image_url} alt={project.name_default || ''} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-lime-400/10 flex items-center justify-center">
+                      <Bug className="w-5 h-5 text-lime-400/50" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-bold text-[13px] truncate">{project.name_default || t('default_project_name')}</p>
+                  <p className="text-lime-400 text-[11px] font-bold mt-0.5">
+                    {project.status === 'active' ? '🟢 Actif' : project.status ? `🟡 ${project.status}` : '🟢 Actif'}
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 transition-transform shrink-0" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 5. À PROPOS & CERTIFICATIONS — repoussés en bas */}
+      {producer.description_default && (
+        <div className="px-5 mt-6">
+          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">{t('about')}</h3>
+          <p className="text-white/70 leading-relaxed text-[15px]">{producer.description_default}</p>
+        </div>
+      )}
+
       {certifications.length > 0 && (
-        <div className="px-5 mt-8">
+        <div className="px-5 mt-6">
           <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">{t('certifications')}</h3>
           <div className="flex flex-wrap gap-2">
             {certifications.map((item) => (
@@ -269,30 +337,9 @@ export default async function ProducerDetailPage({
         </div>
       )}
 
-      {projects.length > 0 && (
-        <div className="px-5 mt-8 mb-6">
-          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Leurs Projets ({projects.length})</h3>
-          <div className="space-y-3">
-            {projects.map((project) => (
-              <Link
-                key={project.id}
-                href={project.slug ? `/projects/${project.slug}` : '/projects'}
-                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left block"
-              >
-                <div>
-                  <p className="text-white font-bold text-sm">{project.name_default || t('default_project_name')}</p>
-                  <p className="text-lime-400 text-xs font-medium mt-0.5">🟢 {project.status || 'Actif'}</p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 5. LE BOUTON CONTACT (Call to Action Secondaire) */}
+      {/* 6. CONTACT — tout en bas */}
       {producer.contact_website && (
-        <div className="px-5 mt-8 mb-32 border-t border-white/10 pt-6">
+        <div className="px-5 mt-8 border-t border-white/10 pt-6">
           <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Contact</h3>
           <a
             href={producer.contact_website}
