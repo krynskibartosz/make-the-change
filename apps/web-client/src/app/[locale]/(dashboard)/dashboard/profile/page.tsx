@@ -139,7 +139,7 @@ export default async function ProfilePage() {
                   <img
                     src={species.image}
                     alt={species.name}
-                    className="h-full w-full object-cover brightness-0 opacity-20 blur-sm"
+                    className="h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px] transition-all duration-700"
                   />
                 </div>
                 <p className="mt-3 text-sm font-semibold text-white/60">{species.name}</p>
