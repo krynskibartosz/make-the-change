@@ -9,6 +9,8 @@ import {
   ShieldAlert,
   Sparkles,
   Leaf,
+  Trees,
+  Wind,
 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -261,20 +263,26 @@ export default async function ProducerDetailPage({
 
       {/* ── 2. IMPACT DASHBOARD (Bento Grid) ── */}
       <div className="px-5 mt-8 grid grid-cols-3 gap-3">
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <div className="mb-2 text-xl">🌱</div>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center shrink-0">
+            <div className="mb-2">
+              <Trees className="w-5 h-5 text-emerald-400" />
+            </div>
             <div className="text-2xl font-black tabular-nums text-white leading-none">
               {projects.length}
             </div>
             <div className="mt-1.5 text-[10px] uppercase font-bold tracking-widest text-white/40">PROJETS</div>
         </div>
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <div className="mb-2 text-xl">🐝</div>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center shrink-0">
+            <div className="mb-2">
+              <Bug className="w-5 h-5 text-lime-400" />
+            </div>
             <div className="text-2xl font-black tabular-nums text-white leading-none">290k</div>
             <div className="mt-1.5 text-[10px] uppercase font-bold tracking-widest text-white/40">ABEILLES</div>
         </div>
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <div className="mb-2 text-xl">💨</div>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center shrink-0">
+            <div className="mb-2">
+              <Wind className="w-5 h-5 text-sky-400" />
+            </div>
             <div className="text-2xl font-black tabular-nums text-white leading-none">12t</div>
             <div className="mt-1.5 text-[10px] uppercase font-bold tracking-widest text-white/40">CO₂ CAPTURÉ</div>
         </div>
