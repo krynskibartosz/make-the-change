@@ -311,7 +311,7 @@ export default async function ProducerDetailPage({
               </div>
               <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-[1.5rem] bg-white/5 border border-white/5">
                 <img
-                  src={!species.unlocked ? '/images/diorama-chouette.png' : species.image}
+                  src={'/images/diorama-chouette.png'}
                   alt={species.name}
                   className={`h-full w-full scale-105 object-cover transition-all duration-700 group-hover:scale-110 ${
                     !species.unlocked ? 'grayscale contrast-125 opacity-40 blur-[2px]' : ''
