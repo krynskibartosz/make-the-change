@@ -89,7 +89,9 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             {/* Lignes de détail */}
             <div className="flex justify-between items-center text-sm">
               <span className="text-white/60">Sous-total ({quantity}x)</span>
-              <span className="text-white font-medium tabular-nums">{totalCost.toLocaleString('fr-FR')} ✨</span>
+              <span className="flex items-center gap-1 text-white font-medium tabular-nums">
+                {totalCost.toLocaleString('fr-FR')} <Sparkles className="w-3.5 h-3.5 text-lime-400" />
+              </span>
             </div>
             <div className="flex justify-between items-center text-sm">
               <span className="text-white/60">Livraison (France)</span>
@@ -101,13 +103,17 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             {/* Total */}
             <div className="flex justify-between items-center">
               <span className="text-white font-bold">Total à échanger</span>
-              <span className="text-xl font-black text-white tabular-nums">- {totalCost.toLocaleString('fr-FR')} ✨</span>
+              <span className="flex items-center gap-1.5 text-xl font-black text-white tabular-nums">
+                - {totalCost.toLocaleString('fr-FR')} <Sparkles className="w-5 h-5 text-lime-400" />
+              </span>
             </div>
             
             {/* Rassurance Solde */}
             <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
               <span className="text-white/40 text-xs">Nouveau solde estimé</span>
-              <span className="text-lime-400 font-bold text-sm tabular-nums">{newBalance.toLocaleString('fr-FR')} ✨</span>
+              <span className="flex items-center gap-1 text-lime-400 font-bold text-sm tabular-nums">
+                {newBalance.toLocaleString('fr-FR')} <Sparkles className="w-3.5 h-3.5" />
+              </span>
             </div>
           </div>
 
