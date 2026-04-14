@@ -1,18 +1,13 @@
-import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import {
   ArrowLeft,
-  ArrowRight,
+  ChevronRight,
   ExternalLink,
-  Factory,
-  Leaf,
   MapPin,
   ShieldCheck,
 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { FollowToggleButton } from '@/components/social/follow-toggle-button'
-import { PageHero } from '@/components/ui/page-hero'
-import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { createClient } from '@/lib/supabase/server'
@@ -181,196 +176,136 @@ export default async function ProducerDetailPage({
     : []
 
   return (
-    <>
-      <PageHero
-        title={producer.name_default || t('default_name')}
-        description={producer.description_default || t('no_description')}
-        badge={producer.type || t('producer_label')}
-        variant="gradient"
-        size="md"
-      >
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
-          {location ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1">
-              <MapPin className="h-4 w-4" />
-              {location}
-            </span>
-          ) : null}
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1">
-            <Factory className="h-4 w-4" />
-            {t('producer_label')}
-          </span>
+    <div className="bg-[#0B0F15] min-h-screen pb-safe">
+      
+      {/* 1. LE HEADER "SOCIAL PROFILE" (Cover + Avatar) */}
+      <div className="relative w-full h-48 bg-[#1A1F26]">
+        <img src={coverImage} alt={producer.name_default || t('default_name')} className="w-full h-full object-cover" />
+        
+        {/* Boutons de navigation (par-dessus l'image) */}
+        <div className="absolute top-14 left-4 right-4 flex justify-between">
+          <Link href="/producers" className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform"><ArrowLeft className="w-5 h-5 text-white"/></Link>
+          <button className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform pointer-events-none opacity-0"><ExternalLink className="w-5 h-5 text-white"/></button> {/* Bouton masqué pour l'équilibre si pas de share au niveau UX fourni */}
         </div>
-        <div className="mt-4 flex justify-center">
-          <FollowToggleButton
-            targetType="producer"
-            targetId={producer.id}
-            initialFollowing={isFollowingProducer}
-          />
+      </div>
+
+      {/* IDENTITÉ & CALL-TO-ACTION */}
+      <div className="px-5 relative">
+        {/* Avatar qui chevauche la cover */}
+        <div className="absolute -top-12 left-5 w-24 h-24 rounded-2xl bg-[#0B0F15] p-1 border-[3px] border-[#0B0F15] z-10 shadow-xl">
+          <div className="w-full h-full rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
+            <img src={images[1] || coverImage} alt={`${producer.name_default || t('default_name')} avatar`} className="w-full h-full object-cover" />
+          </div>
         </div>
-      </PageHero>
 
-      <SectionContainer size="lg" className="pt-0">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          <div className="space-y-8">
-            <div className="overflow-hidden rounded-3xl border border-border bg-card">
-              <img
-                src={coverImage}
-                alt={producer.name_default || t('default_name')}
-                className="h-[280px] w-full object-cover md:h-[380px]"
-              />
-            </div>
+        {/* Espace pour compenser l'avatar */}
+        <div className="h-14"></div>
 
-            <Card>
-              <CardContent className="space-y-4 p-6 md:p-8">
-                <h2 className="text-2xl font-black tracking-tight">{t('about')}</h2>
-                <p className="text-base leading-relaxed text-muted-foreground">
-                  {producer.description_default || t('no_description')}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="space-y-4 p-6 md:p-8">
-                <h2 className="text-2xl font-black tracking-tight">{t('certifications')}</h2>
-                {certifications.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {certifications.map((item) => (
-                      <Badge key={item} variant="secondary">
-                        {item}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground">{t('no_certifications')}</p>
-                )}
-              </CardContent>
-            </Card>
-
-            {products.length > 0 ? (
-              <Card>
-                <CardContent className="space-y-4 p-6 md:p-8">
-                  <h2 className="text-2xl font-black tracking-tight">{t('related_products')}</h2>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {products.map((product) => (
-                      <Link
-                        key={product.id}
-                        href={product.slug ? `/products/${product.slug}` : '/products'}
-                        className="group overflow-hidden rounded-2xl border border-border bg-background transition hover:border-primary/40"
-                      >
-                        <div className="aspect-[4/3] overflow-hidden bg-muted">
-                          {product.image_url ? (
-                            <img
-                              src={product.image_url}
-                              alt={product.name_default || t('default_product_name')}
-                              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-                          ) : (
-                            <div className="flex h-full items-center justify-center text-muted-foreground">
-                              <Leaf className="h-8 w-8" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between p-4">
-                          <span className="font-semibold">
-                            {product.name_default || t('default_product_name')}
-                          </span>
-                          <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+        {/* Titre et Bouton Suivre */}
+        <div className="flex justify-between items-start mt-2">
+          <div>
+            <h1 className="text-2xl font-black text-white tracking-tight">{producer.name_default || t('default_name')}</h1>
+            {location ? (
+              <p className="text-white/50 text-sm flex items-center gap-1.5 mt-1 font-medium">
+                <MapPin className="w-3.5 h-3.5 text-white/40" /> {location}
+              </p>
             ) : null}
           </div>
+          <div className="-mt-1">
+            <FollowToggleButton
+              targetType="producer"
+              targetId={producer.id}
+              initialFollowing={isFollowingProducer}
+              className="bg-lime-400 text-[#0B0F15] hover:bg-lime-500 hover:text-[#0B0F15] px-5 py-2 h-auto rounded-full font-bold text-sm border-0 active:scale-95 transition-transform"
+            />
+          </div>
+        </div>
+      </div>
 
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="space-y-4 p-6">
-                <h2 className="text-lg font-black tracking-tight">{t('key_figures')}</h2>
-                <div className="grid gap-3">
-                  <div className="rounded-2xl border border-border bg-muted/30 p-4">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      {t('related_products')}
-                    </p>
-                    <p className="mt-1 text-2xl font-black">{products.length}</p>
-                  </div>
-                  <div className="rounded-2xl border border-border bg-muted/30 p-4">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      {t('related_projects')}
-                    </p>
-                    <p className="mt-1 text-2xl font-black">{projects.length}</p>
-                  </div>
-                  {location ? (
-                    <div className="rounded-2xl border border-border bg-muted/30 p-4">
-                      <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                        {t('location')}
-                      </p>
-                      <p className="mt-1 text-sm font-semibold">{location}</p>
-                    </div>
-                  ) : null}
+      {/* 2. LE MINI-BENTO D'IMPACT (La preuve sociale immédiate) */}
+      <div className="px-5 mt-6 grid grid-cols-2 gap-3">
+        {projects.length > 0 && (
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
+            <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Projets actifs</span>
+            <span className="text-xl font-black text-white">{projects.length}</span>
+          </div>
+        )}
+
+        {products.length > 0 && (
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
+            <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Produits liés</span>
+            <span className="text-xl font-black text-white">{products.length}</span>
+          </div>
+        )}
+        
+        {/* Tag "Producteur Engagé" mis en valeur (Bouche les trous) */}
+        <div className={`bg-lime-400/10 border border-lime-400/20 rounded-2xl p-4 flex flex-col justify-center items-center text-center ${projects.length === 0 || products.length === 0 ? 'col-span-1' : 'col-span-2'}`}>
+          <ShieldCheck className="w-6 h-6 text-lime-400 mb-1" />
+          <span className="text-xs font-bold text-lime-400 uppercase tracking-wide">Producteur<br/>Engagé</span>
+        </div>
+      </div>
+
+      {/* 3. LE STORYTELLING ("À propos" sans boîte noire) */}
+      {producer.description_default && (
+        <div className="px-5 mt-8">
+          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">{t('about')}</h3>
+          <p className="text-white/80 leading-relaxed text-[15px]">
+            {producer.description_default}
+          </p>
+        </div>
+      )}
+
+      {/* 4. LA GESTION CONDITIONNELLE (Certifications & Projets) */}
+      {certifications.length > 0 && (
+        <div className="px-5 mt-8">
+          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">{t('certifications')}</h3>
+          <div className="flex flex-wrap gap-2">
+            {certifications.map((item) => (
+              <span key={item} className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white/70 bg-white/5 border border-white/10 rounded-full">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {projects.length > 0 && (
+        <div className="px-5 mt-8 mb-6">
+          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Leurs Projets ({projects.length})</h3>
+          <div className="space-y-3">
+            {projects.map((project) => (
+              <Link
+                key={project.id}
+                href={project.slug ? `/projects/${project.slug}` : '/projects'}
+                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left block"
+              >
+                <div>
+                  <p className="text-white font-bold text-sm">{project.name_default || t('default_project_name')}</p>
+                  <p className="text-lime-400 text-xs font-medium mt-0.5">🟢 {project.status || 'Actif'}</p>
                 </div>
-              </CardContent>
-            </Card>
-
-            {projects.length > 0 ? (
-              <Card>
-                <CardContent className="space-y-4 p-6">
-                  <h2 className="text-lg font-black tracking-tight">{t('related_projects')}</h2>
-                  <div className="space-y-3">
-                    {projects.map((project) => (
-                      <Link
-                        key={project.id}
-                        href={project.slug ? `/projects/${project.slug}` : '/projects'}
-                        className="group flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 transition hover:border-primary/40"
-                      >
-                        <div>
-                          <p className="font-semibold">
-                            {project.name_default || t('default_project_name')}
-                          </p>
-                          {project.status ? (
-                            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                              {project.status}
-                            </p>
-                          ) : null}
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                      </Link>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ) : null}
-
-            <Card>
-              <CardContent className="space-y-3 p-6">
-                <h2 className="inline-flex items-center gap-2 text-lg font-black tracking-tight">
-                  <ShieldCheck className="h-5 w-5 text-primary" />
-                  {t('contact')}
-                </h2>
-                {producer.contact_website ? (
-                  <Button asChild className="w-full justify-center">
-                    <a href={producer.contact_website} target="_blank" rel="noreferrer">
-                      {t('visit_website')}
-                      <ExternalLink className="ml-2 h-4 w-4" />
-                    </a>
-                  </Button>
-                ) : (
-                  <p className="text-sm text-muted-foreground">{t('no_contact_available')}</p>
-                )}
-
-                <Button variant="outline" asChild className="w-full justify-center">
-                  <Link href="/producers">
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    {t('back_to_producers')}
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+                <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            ))}
           </div>
         </div>
-      </SectionContainer>
-    </>
+      )}
+
+      {/* 5. LE BOUTON CONTACT (Call to Action Secondaire) */}
+      {producer.contact_website && (
+        <div className="px-5 mt-8 mb-32 border-t border-white/10 pt-6">
+          <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Contact</h3>
+          <a
+            href={producer.contact_website}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full bg-white/5 border border-white/10 text-white font-medium text-sm h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-colors"
+          >
+            <ExternalLink className="w-4 h-4 text-white/50" />
+            Visiter le site web
+          </a>
+        </div>
+      )}
+
+    </div>
   )
 }
