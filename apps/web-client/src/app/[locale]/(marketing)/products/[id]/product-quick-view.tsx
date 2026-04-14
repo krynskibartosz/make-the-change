@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon } from 'lucide-react'
+import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -46,6 +46,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
   ];
   const [selectedFormat, setSelectedFormat] = useState(formats[0]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
 
   const displayPoints = selectedFormat.points
   const displayPrice = selectedFormat.euros
@@ -283,6 +284,49 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 </div>
               </section>
             )}
+
+            {/* ── TRANSPARENCE DU PRODUIT ── */}
+            <section className="px-1 mt-8 mb-6">
+              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Transparence du produit</h3>
+              
+              <div className="bg-[#1A1F26] border border-white/5 rounded-3xl p-5 mb-3">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShieldCheck className="w-4 h-4 text-white/50" />
+                  <h4 className="text-sm font-bold text-white tracking-wide">Ingrédients & Conservation</h4>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <span className="block text-[11px] uppercase tracking-wider font-bold text-white/40 mb-1">Ingrédients</span>
+                    <p className="text-white text-sm font-medium">100% Miel d'Eucalyptus</p>
+                  </div>
+                  <div>
+                    <span className="block text-[11px] uppercase tracking-wider font-bold text-white/40 mb-1">Origine</span>
+                    <p className="text-white text-sm font-medium">Madagascar</p>
+                  </div>
+                  <div>
+                    <span className="block text-[11px] uppercase tracking-wider font-bold text-white/40 mb-1">Conservation</span>
+                    <p className="text-sm leading-relaxed text-white/70">À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20°C).</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* BOUTON DÉCLENCHEUR NUTRITION */}
+              <button 
+                onClick={() => setIsNutritionModalOpen(true)}
+                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/5 transition-colors rounded-3xl p-4 flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                    <Info className="w-5 h-5 text-white/70" />
+                  </div>
+                  <div className="text-left">
+                    <span className="block text-sm font-bold text-white tracking-wide">Valeurs Nutritionnelles</span>
+                    <span className="block text-[11px] text-white/40 uppercase tracking-wider mt-0.5">Énergie, glucides, protéines...</span>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </section>
           </div>
         </div>
 
@@ -331,6 +375,70 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           selectedFormat={selectedFormat} 
           onClose={() => setIsCheckoutOpen(false)} 
         />
+      )}
+
+      {/* ── MODALE BOTTOM SHEET (NUTRITION) ── */}
+      {isNutritionModalOpen && (
+        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
+          {/* OVERLAY (Ferme la modale au clic) */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setIsNutritionModalOpen(false)}
+          ></div>
+
+          {/* LE TIROIR */}
+          <div className="relative w-full bg-[#0B0F15] rounded-t-3xl border-t border-white/10 p-6 pt-3 flex flex-col max-h-[85vh] animate-in slide-in-from-bottom duration-300 shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
+            
+            {/* DRAG HANDLE (La petite barre grise en haut pour swipe) */}
+            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6"></div>
+
+            {/* HEADER DU TIROIR */}
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-white tracking-tight">Nutrition (100g)</h3>
+              <button 
+                onClick={() => setIsNutritionModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform active:scale-95 hover:bg-white/20"
+              >
+                <X className="w-4 h-4 text-white" />
+              </button>
+            </div>
+
+            {/* LE CONTENU DENSE */}
+            <div className="overflow-y-auto overscroll-contain pb-safe">
+              <div className="flex flex-col text-[14px]">
+                <div className="flex justify-between py-3.5 border-b border-white/5">
+                  <span className="text-white/70">Énergie (Kj/Kcal)</span>
+                  <span className="text-white font-semibold tabular-nums">1374 / 328</span>
+                </div>
+                <div className="flex justify-between py-3.5 border-b border-white/5">
+                  <span className="text-white/70">Matières Grasses</span>
+                  <span className="text-white font-semibold tabular-nums">0.22 g</span>
+                </div>
+                <div className="flex justify-between py-3.5 border-b border-white/5">
+                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">dont acides gras saturés</span>
+                  <span className="text-white/70 font-semibold text-sm tabular-nums">0 g</span>
+                </div>
+                <div className="flex justify-between py-3.5 border-b border-white/5">
+                  <span className="text-white/70">Glucides</span>
+                  <span className="text-white font-semibold tabular-nums">81 g</span>
+                </div>
+                <div className="flex justify-between py-3.5 border-b border-white/5">
+                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">dont sucres</span>
+                  <span className="text-white/70 font-semibold text-sm tabular-nums">74 g</span>
+                </div>
+                <div className="flex justify-between py-3.5 border-b border-white/5">
+                  <span className="text-white/70">Protéines</span>
+                  <span className="text-white font-semibold tabular-nums">0.8 g</span>
+                </div>
+                <div className="flex justify-between py-3.5">
+                  <span className="text-white/70">Sel</span>
+                  <span className="text-white font-semibold tabular-nums">0 g</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       )}
     </div>
   )
