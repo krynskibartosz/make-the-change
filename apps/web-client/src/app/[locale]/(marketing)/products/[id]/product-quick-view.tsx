@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X } from 'lucide-react'
+import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -168,16 +168,16 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   {productName}
                 </h1>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {categoryName && (
-                    <span className="bg-white/5 border border-white/10 text-white/70 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                      <Hexagon className="w-3 h-3"/> {categoryName}
-                    </span>
-                  )}
-                  {product.is_hero_product && (
-                    <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                      <Trophy className="w-3 h-3"/> Bestseller
-                    </span>
-                  )}
+                  <span className="bg-white/5 border border-white/10 text-white/70 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                    <Hexagon className="w-3 h-3"/> Miel
+                  </span>
+                  <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                    <Trophy className="w-3 h-3"/> Bestseller
+                  </span>
+                  {/* NOUVEAU TAG issu des catégories */}
+                  <span className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                    <Bug className="w-3 h-3"/> Abeille Noire
+                  </span>
                 </div>
               </div>
             </aside>
@@ -285,48 +285,47 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               </section>
             )}
 
-            {/* ── TRANSPARENCE DU PRODUIT ── */}
-            <section className="px-1 mt-8 mb-6">
-              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3">Transparence du produit</h3>
+            {/* BLOC COMPOSITION ET CONSERVATION */}
+            <div className="px-1 mt-8 space-y-5">
+              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">Informations produit</h3>
               
-              <div className="bg-[#1A1F26] border border-white/5 rounded-3xl p-5 mb-3">
-                <div className="flex items-center gap-2 mb-4">
-                  <ShieldCheck className="w-4 h-4 text-white/50" />
-                  <h4 className="text-sm font-bold text-white tracking-wide">Ingrédients & Conservation</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4">
+                  <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Ingrédients</span>
+                  <p className="text-sm font-medium text-white">100% miel d'Eucalyptus</p>
                 </div>
-                <div className="space-y-4">
-                  <div>
-                    <span className="block text-[11px] uppercase tracking-wider font-bold text-white/40 mb-1">Ingrédients</span>
-                    <p className="text-white text-sm font-medium">100% Miel d'Eucalyptus</p>
-                  </div>
-                  <div>
-                    <span className="block text-[11px] uppercase tracking-wider font-bold text-white/40 mb-1">Origine</span>
-                    <p className="text-white text-sm font-medium">Madagascar</p>
-                  </div>
-                  <div>
-                    <span className="block text-[11px] uppercase tracking-wider font-bold text-white/40 mb-1">Conservation</span>
-                    <p className="text-sm leading-relaxed text-white/70">À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20°C).</p>
-                  </div>
+                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4">
+                  <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Origine</span>
+                  <p className="text-sm font-medium text-white">Madagascar</p>
                 </div>
               </div>
 
-              {/* BOUTON DÉCLENCHEUR NUTRITION */}
+              <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4">
+                <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">Conditions de conservation</span>
+                <p className="text-[13px] text-white/70 leading-relaxed">
+                  À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).
+                </p>
+              </div>
+            </div>
+
+            {/* BOUTON DÉCLENCHEUR NUTRITION */}
+            <div className="px-1 mt-4 mb-6">
               <button 
                 onClick={() => setIsNutritionModalOpen(true)}
-                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/5 transition-colors rounded-3xl p-4 flex items-center justify-between group"
+                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/10 transition-colors rounded-2xl p-4 flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                    <Info className="w-5 h-5 text-white/70" />
+                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                    <Info className="w-4 h-4 text-white/70" /> 
                   </div>
                   <div className="text-left">
                     <span className="block text-sm font-bold text-white tracking-wide">Valeurs Nutritionnelles</span>
-                    <span className="block text-[11px] text-white/40 uppercase tracking-wider mt-0.5">Énergie, glucides, protéines...</span>
+                    <span className="block text-[11px] text-white/40 mt-0.5">Pour 100g : 328 kcal, 81g glucides...</span>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
               </button>
-            </section>
+            </div>
           </div>
         </div>
 
@@ -377,66 +376,76 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
         />
       )}
 
-      {/* ── MODALE BOTTOM SHEET (NUTRITION) ── */}
+      {/* MODALE BOTTOM SHEET (NUTRITION) */}
       {isNutritionModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col justify-end">
-          {/* OVERLAY (Ferme la modale au clic) */}
+          {/* OVERLAY */}
           <div 
             className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
             onClick={() => setIsNutritionModalOpen(false)}
           ></div>
 
           {/* LE TIROIR */}
-          <div className="relative w-full bg-[#0B0F15] rounded-t-3xl border-t border-white/10 p-6 pt-3 flex flex-col max-h-[85vh] animate-in slide-in-from-bottom duration-300 shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
+          <div className="relative w-full bg-[#0B0F15] rounded-t-3xl border-t border-white/10 p-6 pt-3 flex flex-col animate-in slide-in-from-bottom duration-300 shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
             
-            {/* DRAG HANDLE (La petite barre grise en haut pour swipe) */}
+            {/* DRAG HANDLE */}
             <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6"></div>
 
-            {/* HEADER DU TIROIR */}
+            {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-white tracking-tight">Nutrition (100g)</h3>
+              <div>
+                <h3 className="text-xl font-bold text-white tracking-tight">Valeurs Nutritionnelles</h3>
+                <p className="text-sm text-white/50">Pour 100g de produit</p>
+              </div>
               <button 
                 onClick={() => setIsNutritionModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform active:scale-95 hover:bg-white/20"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-95"
               >
                 <X className="w-4 h-4 text-white" />
               </button>
             </div>
 
-            {/* LE CONTENU DENSE */}
-            <div className="overflow-y-auto overscroll-contain pb-safe">
+            {/* DONNÉES EXACTES EXTRAITES DU DOCUMENT */}
+            <div className="overflow-y-auto pb-safe">
               <div className="flex flex-col text-[14px]">
+                
                 <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Énergie (Kj/Kcal)</span>
-                  <span className="text-white font-semibold tabular-nums">1374 / 328</span>
+                  <span className="text-white/70">Énergie (Kj/KCal)</span>
+                  <span className="text-white font-semibold">1374 / 328</span>
                 </div>
+                
                 <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Matières Grasses</span>
-                  <span className="text-white font-semibold tabular-nums">0.22 g</span>
+                  <span className="text-white/70">Matières Grasses (Gr)</span>
+                  <span className="text-white font-semibold">0.22</span>
                 </div>
+                
                 <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">dont acides gras saturés</span>
-                  <span className="text-white/70 font-semibold text-sm tabular-nums">0 g</span>
+                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont d'acides gras saturés (Gr)</span>
+                  <span className="text-white/70 font-semibold text-sm">0</span>
                 </div>
+                
                 <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Glucides</span>
-                  <span className="text-white font-semibold tabular-nums">81 g</span>
+                  <span className="text-white/70">Glucides (Gr)</span>
+                  <span className="text-white font-semibold">81</span>
                 </div>
+                
                 <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">dont sucres</span>
-                  <span className="text-white/70 font-semibold text-sm tabular-nums">74 g</span>
+                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont Sucres (Gr)</span>
+                  <span className="text-white/70 font-semibold text-sm">74</span>
                 </div>
+                
                 <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Protéines</span>
-                  <span className="text-white font-semibold tabular-nums">0.8 g</span>
+                  <span className="text-white/70">Protéines (Gr)</span>
+                  <span className="text-white font-semibold">0.8</span>
                 </div>
+                
                 <div className="flex justify-between py-3.5">
-                  <span className="text-white/70">Sel</span>
-                  <span className="text-white font-semibold tabular-nums">0 g</span>
+                  <span className="text-white/70">Sel (Gr)</span>
+                  <span className="text-white font-semibold">0</span>
                 </div>
+
               </div>
             </div>
-
           </div>
         </div>
       )}
