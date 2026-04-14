@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
 import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
@@ -376,79 +377,79 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
         />
       )}
 
-      {/* MODALE BOTTOM SHEET (NUTRITION) */}
+      {/* MODALE BOTTOM SHEET (NUTRITION) - STYLE ECO-FACT */}
+      <AnimatePresence>
       {isNutritionModalOpen && (
-        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
-          {/* OVERLAY */}
-          <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
-            onClick={() => setIsNutritionModalOpen(false)}
-          ></div>
-
-          {/* LE TIROIR */}
-          <div className="relative w-full bg-[#0B0F15] rounded-t-3xl border-t border-white/10 p-6 pt-3 flex flex-col animate-in slide-in-from-bottom duration-300 shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
-            
-            {/* DRAG HANDLE */}
-            <div className="w-12 h-1.5 bg-white/30 rounded-full mx-auto mb-6"></div>
-
-            {/* HEADER */}
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className="text-xl font-bold text-white tracking-tight">Valeurs Nutritionnelles</h3>
-                <p className="text-sm text-white/50">Pour 100g de produit</p>
-              </div>
-              <button 
-                onClick={() => setIsNutritionModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-95"
-              >
-                <X className="w-4 h-4 text-white" />
-              </button>
+        <motion.div
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%' }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[100] overflow-y-auto bg-[#0B0F15]"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {/* HEADER FIXE */}
+          <div className="sticky top-0 z-20 bg-[#0B0F15]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-white/5 pt-[max(1.5rem,env(safe-area-inset-top))]">
+            <div>
+              <h3 className="text-xl font-bold text-white tracking-tight">Valeurs Nutritionnelles</h3>
+              <p className="text-sm text-white/50">Pour 100g de produit</p>
             </div>
+            <button 
+              onClick={(event) => {
+                event.stopPropagation()
+                setIsNutritionModalOpen(false)
+              }}
+              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center active:scale-95 transition-transform"
+              aria-label="Fermer"
+            >
+              <X className="w-5 h-5 text-white" />
+            </button>
+          </div>
 
-            {/* DONNÉES EXACTES EXTRAITES DU DOCUMENT */}
-            <div className="overflow-y-auto pb-safe">
-              <div className="flex flex-col text-[14px]">
-                
-                <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Énergie (Kj/KCal)</span>
-                  <span className="text-white font-semibold">1374 / 328</span>
-                </div>
-                
-                <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Matières Grasses (Gr)</span>
-                  <span className="text-white font-semibold">0.22</span>
-                </div>
-                
-                <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont d'acides gras saturés (Gr)</span>
-                  <span className="text-white/70 font-semibold text-sm">0</span>
-                </div>
-                
-                <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Glucides (Gr)</span>
-                  <span className="text-white font-semibold">81</span>
-                </div>
-                
-                <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/40 pl-4 text-sm relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont Sucres (Gr)</span>
-                  <span className="text-white/70 font-semibold text-sm">74</span>
-                </div>
-                
-                <div className="flex justify-between py-3.5 border-b border-white/5">
-                  <span className="text-white/70">Protéines (Gr)</span>
-                  <span className="text-white font-semibold">0.8</span>
-                </div>
-                
-                <div className="flex justify-between py-3.5">
-                  <span className="text-white/70">Sel (Gr)</span>
-                  <span className="text-white font-semibold">0</span>
-                </div>
-
+          {/* DONNÉES EXACTES EXTRAITES DU DOCUMENT */}
+          <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] mt-6">
+            <div className="flex flex-col text-[15px]">
+              
+              <div className="flex justify-between py-4 border-b border-white/5">
+                <span className="text-white/70 tracking-wide">Énergie (Kj/KCal)</span>
+                <span className="text-white font-black tabular-nums">1374 / 328</span>
               </div>
+              
+              <div className="flex justify-between py-4 border-b border-white/5">
+                <span className="text-white/70 tracking-wide">Matières Grasses <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
+                <span className="text-white font-black tabular-nums">0.22</span>
+              </div>
+              
+              <div className="flex justify-between py-4 border-b border-white/5">
+                <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont d'acides gras saturés <span className="text-white/20 text-xs ml-1 font-medium">(Gr)</span></span>
+                <span className="text-white/80 font-bold text-sm tabular-nums">0</span>
+              </div>
+              
+              <div className="flex justify-between py-4 border-b border-white/5">
+                <span className="text-white/70 tracking-wide">Glucides <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
+                <span className="text-white font-black tabular-nums">81</span>
+              </div>
+              
+              <div className="flex justify-between py-4 border-b border-white/5">
+                <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont Sucres <span className="text-white/20 text-xs ml-1 font-medium">(Gr)</span></span>
+                <span className="text-white/80 font-bold text-sm tabular-nums">74</span>
+              </div>
+              
+              <div className="flex justify-between py-4 border-b border-white/5">
+                <span className="text-white/70 tracking-wide">Protéines <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
+                <span className="text-white font-black tabular-nums">0.8</span>
+              </div>
+              
+              <div className="flex justify-between py-4">
+                <span className="text-white/70 tracking-wide">Sel <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
+                <span className="text-white font-black tabular-nums">0</span>
+              </div>
+
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   )
 }
