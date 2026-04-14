@@ -290,11 +290,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">Informations produit</h3>
               
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4">
+                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4 flex flex-col justify-between min-h-[5rem]">
                   <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Ingrédients</span>
                   <p className="text-sm font-medium text-white">100% miel d'Eucalyptus</p>
                 </div>
-                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4">
+                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4 flex flex-col justify-between min-h-[5rem]">
                   <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Origine</span>
                   <p className="text-sm font-medium text-white">Madagascar</p>
                 </div>
@@ -309,8 +309,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </div>
 
             {/* BOUTON DÉCLENCHEUR NUTRITION */}
-            <div className="px-1 mt-4 mb-6">
-              <button 
+            <div className="px-1 mt-4 mb-32">
+              <button  
                 onClick={() => setIsNutritionModalOpen(true)}
                 className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/10 transition-colors rounded-2xl p-4 flex items-center justify-between group"
               >
@@ -389,7 +389,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="relative w-full bg-[#0B0F15] rounded-t-3xl border-t border-white/10 p-6 pt-3 flex flex-col animate-in slide-in-from-bottom duration-300 shadow-[0_-20px_40px_rgba(0,0,0,0.5)]">
             
             {/* DRAG HANDLE */}
-            <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6"></div>
+            <div className="w-12 h-1.5 bg-white/30 rounded-full mx-auto mb-6"></div>
 
             {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
