@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Award, Flame, Package, Star, Sparkles, Truck, Trophy } from 'lucide-react'
+import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -168,8 +168,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 </h1>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {categoryName && (
-                    <span className="bg-white/5 border border-white/10 text-white/70 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
-                      🍯 {categoryName}
+                    <span className="bg-white/5 border border-white/10 text-white/70 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                      <Hexagon className="w-3 h-3"/> {categoryName}
                     </span>
                   )}
                   {product.is_hero_product && (
@@ -191,7 +191,9 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Choisir le format</span>
                   <div className="flex items-center gap-1.5 bg-lime-400/10 px-2.5 py-1 rounded-lg">
                     <span className="text-[11px] text-white/50 font-medium">Votre solde :</span>
-                    <span className="text-xs font-bold text-lime-400 tabular-nums">{userBalance} ✨</span>
+                    <span className="flex items-center gap-1 text-xs font-bold text-lime-400 tabular-nums">
+                      {userBalance} <Sparkles className="w-3.5 h-3.5" />
+                    </span>
                   </div>
                 </div>
                 <div className="flex gap-2">

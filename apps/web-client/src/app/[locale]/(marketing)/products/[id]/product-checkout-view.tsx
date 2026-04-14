@@ -59,15 +59,15 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
           <div className="mx-6 mt-8 rounded-3xl border border-white/5 bg-[#1A1F26] p-5 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
               <span className="font-medium text-white/70">Coût de l'échange</span>
-              <span className="text-2xl font-black tabular-nums text-lime-400">
-                - {selectedFormat.points.toLocaleString('fr-FR')} ✨
+              <span className="flex items-center gap-1.5 text-2xl font-black tabular-nums text-lime-400">
+                - {selectedFormat.points.toLocaleString('fr-FR')} <Sparkles className="h-5 w-5" />
               </span>
             </div>
             <div className="mb-4 h-px w-full bg-white/10" />
             <div className="flex items-center justify-between">
               <span className="text-sm text-white/50">Nouveau solde estimé</span>
-              <span className="font-bold tabular-nums text-white">
-                {newBalance.toLocaleString('fr-FR')} ✨
+              <span className="flex items-center gap-1.5 font-bold tabular-nums text-white">
+                {newBalance.toLocaleString('fr-FR')} <Sparkles className="h-3.5 w-3.5" />
               </span>
             </div>
           </div>

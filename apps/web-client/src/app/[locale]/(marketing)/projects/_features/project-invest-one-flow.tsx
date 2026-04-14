@@ -8,7 +8,7 @@ import {
 } from '@make-the-change/core/ui'
 import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, CheckCircle2, Lock, MapPin, Gift, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Lock, MapPin, Gift, ShieldCheck, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -544,8 +544,8 @@ export function ProjectInvestOneFlow({
                     Nouvelle espèce débloquée
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">La Chouette Effraie</h2>
-                  <p className="mt-2 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
-                    {`+ ${formatPoints(points.total_points)} Points d'Impact ✨`}
+                  <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
+                    {`+ ${formatPoints(points.total_points)} Points d'Impact`} <Sparkles className="h-5 w-5" />
                   </p>
                   <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
                     À dépenser dans le Marché
@@ -598,8 +598,8 @@ export function ProjectInvestOneFlow({
 
       {step === 'impact' ? (
         <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
-            <p className="mb-3 text-center text-sm font-medium text-lime-400">
-              Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Points d&apos;Impact</span> ✨
+            <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
+              Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Points d&apos;Impact</span> <Sparkles className="h-4 w-4" />
             </p>
             <Button
               type="button"
