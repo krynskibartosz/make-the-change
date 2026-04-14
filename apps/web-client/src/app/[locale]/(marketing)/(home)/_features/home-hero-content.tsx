@@ -21,21 +21,21 @@ export function HomeHeroContent({ title, subtitle, cta }: HomeHeroContentProps) 
 
   return (
     <motion.div
-      className="relative z-10 px-6 pb-10 w-full"
+      className="relative z-10 px-5 pb-8 w-full"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.h1
         variants={childVariants}
-        className="text-[38px] leading-[1.15] font-black text-white tracking-tight mb-4 [text-wrap:balance]"
+        className="text-[40px] leading-[1.15] font-black text-white tracking-tight mb-4"
       >
         Soutenez la biodiversité, récoltez les bénéfices.
       </motion.h1>
 
       <motion.p
         variants={childVariants}
-        className="text-white/80 text-[16px] leading-relaxed mb-10 max-w-sm"
+        className="text-white/80 text-[16px] leading-relaxed mb-8"
       >
         Transformez votre soutien à des projets concrets en points. Utilisez-les pour obtenir des récompenses éthiques et responsables.
       </motion.p>
