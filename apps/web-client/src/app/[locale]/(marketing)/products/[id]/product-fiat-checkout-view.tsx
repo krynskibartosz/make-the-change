@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { CreditCard, Gift, Lock, MapPin, Package, Sparkles, Truck, X } from 'lucide-react'
 
 interface ProductFiatCheckoutViewProps {
@@ -13,10 +14,15 @@ interface ProductFiatCheckoutViewProps {
 }
 
 export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: ProductFiatCheckoutViewProps) {
-  const price = selectedFormat.euros
-  const shipping = 4.90
-  const total = price + shipping
-  const pointsEarned = Math.round(total * 10) // Formule de cashback simple pour l'exemple
+  const unitPrice = selectedFormat.euros
+  const shippingCost = 4.90
+  const pointsPerUnit = Math.round((unitPrice + shippingCost) * 10) // Ajusté pour l'exemple
+  
+  const [quantity, setQuantity] = useState(1)
+
+  const subtotal = unitPrice * quantity
+  const total = subtotal + shippingCost
+  const totalPointsEarned = pointsPerUnit * quantity
 
   // Formatage du prix pour avoir les centimes en plus petit
   const formattedTotal = new Intl.NumberFormat('fr-FR', { 
@@ -27,16 +33,15 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
   const [totalEuros, totalCents] = formattedTotal.split(',')
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#0B0F15] flex flex-col animate-in fade-in slide-in-from-bottom-[5%] duration-300">
-      <div className="flex justify-between items-center p-6 pb-2 pt-[max(1.5rem,env(safe-area-inset-top))]">
+    <div className="fixed inset-0 z-[200] bg-[#0B0F15] flex flex-col overflow-y-auto animate-in fade-in slide-in-from-bottom-[5%] duration-300">
+      <div className="flex justify-between items-center p-6 pb-2 sticky top-0 bg-[#0B0F15]/90 backdrop-blur-xl z-20 pt-[max(1.5rem,env(safe-area-inset-top))]">
         <div className="w-6"></div> {/* Spacer */}
         <span className="text-white/50 text-xs font-bold uppercase tracking-widest shadow-sm">Achat solidaire</span>
-        <button onClick={onClose} className="active:scale-95 transition-transform">
-          <X className="w-6 h-6 text-white/50 hover:text-white transition-colors" />
-        </button>
+        <button onClick={onClose} className="active:scale-95 transition-transform"><X className="w-6 h-6 text-white/50 hover:text-white transition-colors" /></button>
       </div>
 
       <div className="text-center mt-2 mb-6 px-6">
+        {/* Total mis à jour dynamiquement */}
         <h1 className="text-6xl font-black text-white tracking-tighter flex items-end justify-center leading-none">
           {totalEuros},
           <span className="text-4xl text-white/50 mb-1">{totalCents} €</span>
@@ -44,73 +49,77 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
         <p className="text-white/40 text-sm mt-3 font-medium">TVA incluse</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-64">
-        {/* CARTE DE DÉTAILS (Le "Receipt" de confiance) */}
-        <div className="mx-6 p-5 bg-[#1A1F26] border border-white/5 rounded-3xl space-y-4 shadow-2xl">
-          
-          {/* Produit */}
-          <div className="flex items-start gap-3">
-            <Package className="w-5 h-5 text-white/50 shrink-0 mt-0.5" />
-            <div className="w-full flex justify-between items-center">
-              <div>
-                <p className="text-sm text-white/50">Produit</p>
-                <p className="text-white font-medium">{product.name_default} <span className="text-white/30 text-xs ml-1">({selectedFormat.id})</span></p>
-              </div>
-              <span className="text-white font-medium whitespace-nowrap ml-2">
-                {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price)}
-              </span>
+      <div className="flex-1 pb-44">
+        {/* LE PANIER & SÉLECTEUR DE QUANTITÉ */}
+        <div className="mx-6 mb-4 p-4 bg-[#1A1F26] border border-white/5 rounded-2xl flex items-center justify-between shadow-lg">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-white/10 overflow-hidden shrink-0">
+              {product.image_url ? (
+                <img src={product.image_url} alt={product.name_default} className="w-full h-full object-cover"/>
+              ) : (
+                <Package className="w-full h-full p-3 text-white/30" />
+              )}
             </div>
-          </div>
-
-          {/* Livraison */}
-          <div className="flex items-start gap-3 pt-4 border-t border-white/5">
-            <Truck className="w-5 h-5 text-white/50 shrink-0 mt-0.5" />
-            <div className="w-full flex justify-between items-center">
-              <div>
-                <p className="text-sm text-white/50">Livraison Colissimo</p>
-                <p className="text-white font-medium text-sm">2 à 3 jours ouvrés</p>
-              </div>
-              <span className="text-white font-medium whitespace-nowrap ml-2">
-                {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(shipping)}
-              </span>
-            </div>
-          </div>
-
-          {/* Le Hack UX : Le Cashback en points */}
-          <div className="flex items-start gap-3 pt-4 border-t border-white/5">
-            <Gift className="w-5 h-5 text-lime-400 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-white/50">Récompense incluse</p>
-              <p className="text-lime-400 font-bold tracking-wide flex items-center gap-1.5 leading-tight mt-0.5">
-                + {pointsEarned} Points d'Impact <Sparkles className="w-3.5 h-3.5" />
-              </p>
+              <h3 className="text-white font-bold text-sm leading-tight">{product.name_default} <span className="text-white/30 text-xs ml-1 font-normal">({selectedFormat.id})</span></h3>
+              <p className="text-white/50 text-xs mt-0.5">{unitPrice.toFixed(2).replace('.', ',')} € / unité</p>
             </div>
           </div>
-
-          {/* Sécurité */}
-          <div className="flex items-start gap-3 pt-4 border-t border-white/5">
-            <Lock className="w-5 h-5 text-white/30 shrink-0 mt-0.5" />
-            <p className="text-white/50 text-[13px] leading-relaxed">Paiement crypté & sécurisé par Stripe</p>
+          
+          {/* Stepper Quantité */}
+          <div className="flex items-center gap-3 bg-[#0B0F15] rounded-xl p-1 border border-white/5">
+            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-white/70 active:scale-95 transition-all">-</button>
+            <span className="text-sm font-bold text-white tabular-nums w-4 text-center">{quantity}</span>
+            <button onClick={() => setQuantity(quantity + 1)} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-white/70 active:scale-95 transition-all">+</button>
           </div>
-
         </div>
 
-        {/* LA LOGISTIQUE (L'Adresse) */}
+        {/* LE TICKET DE CAISSE & CASHBACK */}
+        <div className="mx-6 p-5 bg-[#1A1F26] border border-white/5 rounded-3xl space-y-3 shadow-2xl">
+          
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-white/50">Sous-total ({quantity}x)</span>
+            <span className="text-white font-medium">{subtotal.toFixed(2).replace('.', ',')} €</span>
+          </div>
+          
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-white/50">Livraison Colissimo</span>
+            <span className="text-white font-medium">{shippingCost.toFixed(2).replace('.', ',')} €</span>
+          </div>
+
+          <div className="h-px w-full bg-white/10 my-3"></div>
+
+          {/* Le Hack UX : Le Cashback en points (S'anime au changement de quantité) */}
+          <div className="flex justify-between items-center pt-1">
+            <span className="text-sm text-white/50 flex items-center gap-2"><Gift className="w-4 h-4 text-lime-400" /> Récompense incluse</span>
+            <span key={totalPointsEarned} className="flex items-center gap-1.5 text-lime-400 font-bold bg-lime-400/10 px-2.5 py-1 rounded-lg text-sm animate-in fade-in zoom-in duration-300">
+              + {totalPointsEarned} <Sparkles className="w-3.5 h-3.5" />
+            </span>
+          </div>
+        </div>
+
+        {/* L'ADRESSE DE LIVRAISON (Crucial) */}
         <div className="mx-6 mt-6 p-4 rounded-2xl border border-white/10 flex items-center justify-between bg-white/[0.02]">
           <div className="flex items-center gap-3">
             <MapPin className="w-5 h-5 text-white/50" />
             <div className="text-sm">
               <p className="text-white font-medium">Livraison à domicile</p>
-              <p className="text-white/50">12 Rue des Abeilles, Paris</p>
+              <p className="text-white/50 truncate max-w-[180px]">12 Rue des Abeilles, Paris</p>
             </div>
           </div>
           <button className="text-xs font-bold text-white/50 hover:text-white transition-colors">Modifier</button>
         </div>
       </div>
 
-      {/* LES BOUTONS DE PAIEMENT (Express Checkout) */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent pt-12 z-10 pointer-events-none">
+      {/* LES BOUTONS DE PAIEMENT (Sticky Bottom) */}
+      <div className="sticky bottom-0 left-0 right-0 p-6 pt-12 flex flex-col gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent z-20 pointer-events-none mt-auto">
         
+        {/* Rassurance Stripe */}
+        <div className="flex justify-center items-center gap-1.5 mb-1 pointer-events-auto">
+          <Lock className="w-3 h-3 text-white/30" />
+          <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Paiement sécurisé par Stripe</span>
+        </div>
+
         {/* Express Checkout (Apple Pay / Google Pay) */}
         <button 
           onClick={onClose} 
@@ -121,19 +130,13 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           </svg>
           Payer avec Apple Pay
         </button>
-        
-        <div className="flex items-center gap-4 my-1">
-          <div className="h-px bg-white/10 flex-1"></div>
-          <span className="text-white/30 text-xs font-bold uppercase tracking-widest">Ou</span>
-          <div className="h-px bg-white/10 flex-1"></div>
-        </div>
 
         {/* Checkout Classique (CB) */}
         <button 
           onClick={onClose}
           className="w-full bg-[#1A1F26] pointer-events-auto border border-white/10 text-white font-bold text-[15px] h-14 rounded-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 hover:bg-white/5"
         >
-          <CreditCard className="w-4 h-4 text-white/50" />
+          <CreditCard className="w-5 h-5 text-white/50" />
           Payer par Carte Bancaire
         </button>
 
