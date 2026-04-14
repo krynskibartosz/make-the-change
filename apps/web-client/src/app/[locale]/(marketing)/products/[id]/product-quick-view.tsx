@@ -130,25 +130,18 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0B0F15]/80 to-transparent z-10" />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent z-10" />
                 
-                {/* ── Top Navigation & Actions ── */}
-                <div className="absolute top-[max(1rem,env(safe-area-inset-top))] left-4 right-4 z-30 flex justify-between">
-                  <button 
-                    onClick={() => router.back()}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
-                    aria-label="Retour"
-                  >
-                    <ArrowLeft className="h-5 w-5" />
-                  </button>
+                {/* ── Top Actions (Aligned to top-right) ── */}
+                <div className="absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-30 flex justify-end">
                   <div className="flex gap-2">
                     <ProductShareButton
                       productName={productName}
                       productId={product.id}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition-all hover:bg-black/60 active:scale-95"
                     />
                     <ProductFavoriteButton
                       productName={productName}
                       productId={product.id}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition-all hover:bg-black/60 active:scale-95"
                     />
                   </div>
                 </div>
