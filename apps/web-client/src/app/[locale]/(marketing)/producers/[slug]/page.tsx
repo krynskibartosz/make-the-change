@@ -333,7 +333,7 @@ export default async function ProducerDetailPage({
         <section className="mt-10 w-full max-w-full overflow-hidden">
           <h3 className="mb-4 px-5 text-xl font-bold text-white tracking-tight">Explorez leurs projets</h3>
 
-          <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden px-5 pb-4 snap-x snap-mandatory touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-4 overflow-x-auto overflow-y-hidden ml-5 pr-5 pb-4 snap-x snap-mandatory touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden">
             {projects.map((project) => {
               const typeLabel = formatTypeLabel(project.type)
               return (
@@ -370,7 +370,7 @@ export default async function ProducerDetailPage({
       {/* ── 5. VITRINE PRODUITS (Hardcoded pour assurer l'affichage) ── */}
       <section className="mt-10">
         <h3 className="mb-4 px-5 text-xl font-bold text-white tracking-tight">Leurs Récompenses</h3>
-        <div className="flex gap-4 overflow-x-auto px-5 pb-4 scrollbar-hide touch-pan-x snap-x">
+        <div className="flex gap-4 overflow-x-auto ml-5 pr-5 pb-4 scrollbar-hide touch-pan-x snap-x">
           {HARDCODED_PRODUCTS.map((product) => (
             <Link
               key={product.id}
