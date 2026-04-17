@@ -194,6 +194,30 @@ const MenuPage = () => {
           </div>
         )}
 
+        {/* Development / Testing Link */}
+        <div className="mt-6">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 ml-2">
+            CONFIGURATION
+          </h3>
+          <div className="flex flex-col overflow-hidden rounded-2xl border bg-card divide-y shadow-sm">
+            <Link
+              href="/onboarding"
+              className="flex items-center justify-between p-4 active:bg-accent transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-lime-500/10 p-2 text-lime-500">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-medium text-foreground">Lancer l'Onboarding</span>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-tight font-bold">Tester le tunnel 2026</span>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground/50" />
+            </Link>
+          </div>
+        </div>
+
         {/* Discover Menu Sections (Reusing Mega Menu Data as ListTiles) */}
         {discoverMenu.sections.map((section) => (
           <div key={section.title} className="mt-6">
