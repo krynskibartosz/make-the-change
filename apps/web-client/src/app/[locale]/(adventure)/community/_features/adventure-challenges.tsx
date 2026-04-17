@@ -15,7 +15,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { useHaptic } from '@/hooks/use-haptic'
-import { useActionAuth } from '@/hooks/use-action-auth'
 
 type DailyQuestType = 'education' | 'social' | 'daily_harvest'
 
@@ -822,7 +821,6 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 
 export function AdventureChallenges() {
 	const haptic = useHaptic()
-	const { guardAction } = useActionAuth()
 	const [dailyQuests, setDailyQuests] = useState(initialDailyQuests)
 	const [isEcoFactReaderOpen, setIsEcoFactReaderOpen] = useState(false)
 	const [isDailyHarvestOpen, setIsDailyHarvestOpen] = useState(false)
@@ -1024,7 +1022,7 @@ export function AdventureChallenges() {
 							<button
 								key={quest.id}
 								type='button'
-								onClick={() => guardAction(handleEcoFactOpen)}
+								onClick={handleEcoFactOpen}
 								className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors text-left'
 							>
 								{rowContent}
@@ -1037,7 +1035,7 @@ export function AdventureChallenges() {
 							<button
 								key={quest.id}
 								type='button'
-								onClick={() => guardAction(() => setIsDailyHarvestOpen(true))}
+								onClick={() => setIsDailyHarvestOpen(true)}
 								className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors text-left'
 							>
 								{rowContent}
