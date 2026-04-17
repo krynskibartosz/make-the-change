@@ -1,3 +1,4 @@
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import type {
@@ -220,6 +221,10 @@ export async function getPublicProjectBySlug(slug: string): Promise<PublicProjec
     return toPublicProjectFromMock(mockProject)
   }
 
+  if (isMockDataSource) {
+    return null
+  }
+
   const supabase = await createClient()
 
   const { data: bySlug } = await supabase
@@ -289,6 +294,10 @@ export async function getRelatedProjectsByType({
       current_funding: project.current_funding,
       target_budget: project.target_budget,
     }))
+
+  if (isMockDataSource) {
+    return mockRelatedProjects.slice(0, limit)
+  }
 
   const supabase = await createClient()
   let projectsQuery = supabase

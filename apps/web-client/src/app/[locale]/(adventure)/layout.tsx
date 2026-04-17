@@ -3,8 +3,10 @@ import { Suspense, type PropsWithChildren } from 'react'
 import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
 import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
 import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
+import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
+import { isMockDataSource } from '@/lib/mock/data-source'
 
 type CommunityNavUser = {
   id: string
@@ -33,6 +35,28 @@ function CommunityLayoutShell({ children, user }: CommunityLayoutShellProps) {
 
 async function CommunityLayoutResolved({ children }: PropsWithChildren) {
   await connection()
+
+  if (isMockDataSource) {
+    const viewer = await getCurrentViewer()
+
+    return (
+      <CommunityLayoutShell
+        user={
+          viewer
+            ? {
+                id: viewer.viewerId,
+                email: viewer.email,
+                avatarUrl: viewer.avatarUrl,
+                displayName: viewer.displayName,
+              }
+            : null
+        }
+      >
+        {children}
+      </CommunityLayoutShell>
+    )
+  }
+
   const supabase = await createClient()
   const {
     data: { user },

@@ -4,6 +4,7 @@ import { type Brand, AppThemeProvider as ThemeProvider } from '@make-the-change/
 import type { PropsWithChildren } from 'react'
 import { CartProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-provider'
 import { CartUIProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
+import { SetupGuard } from '@/components/app/setup-guard'
 import { Toaster } from '@/components/ui/toaster'
 
 interface ProvidersProps extends PropsWithChildren {
@@ -23,7 +24,10 @@ export function Providers({ children, initialBrand, initialCustomVars }: Provide
     >
       <CartProvider>
         <CartUIProvider>
-          <Toaster>{children}</Toaster>
+          <Toaster>
+            <SetupGuard />
+            {children}
+          </Toaster>
         </CartUIProvider>
       </CartProvider>
     </ThemeProvider>

@@ -4,6 +4,11 @@ import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { getLocale } from 'next-intl/server'
 import { redirect } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { clearMockViewerSession, getMockViewerSession, setMockViewerSession } from '@/lib/mock/mock-session-server'
+import { createMockRegisteredViewerSession, getMockExistingViewerSession } from '@/lib/mock/mock-viewer'
+import type { Faction } from '@/lib/mock/types'
+import { sanitizeReturnTo } from '@/lib/mock/mock-session'
 import { buildPublicAppUrl } from '@/lib/public-url'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -21,8 +26,6 @@ const getFormDataString = (formData: FormData, key: string): string => {
 }
 
 export async function login(_prevState: AuthState, formData: FormData): Promise<AuthState> {
-  const supabase = await createClient()
-
   const email = getFormDataString(formData, 'email')
   const password = getFormDataString(formData, 'password')
   const returnToRaw = getFormDataString(formData, 'returnTo')
@@ -31,6 +34,17 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
     return { error: 'Email and password are required' }
   }
 
+  if (isMockDataSource) {
+    await setMockViewerSession(getMockExistingViewerSession(email))
+    revalidatePath('/', 'layout')
+
+    return {
+      success: 'true',
+      redirectUrl: sanitizeReturnTo(returnToRaw, '/dashboard/profile'),
+    }
+  }
+
+  const supabase = await createClient()
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -50,13 +64,12 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
 }
 
 export async function register(_prevState: AuthState, formData: FormData): Promise<AuthState> {
-  const supabase = await createClient()
-
   const email = getFormDataString(formData, 'email')
   const password = getFormDataString(formData, 'password')
   const confirmPassword = getFormDataString(formData, 'confirmPassword')
   const firstName = getFormDataString(formData, 'firstName')
   const lastName = getFormDataString(formData, 'lastName')
+  const returnToRaw = getFormDataString(formData, 'returnTo')
 
   if (!email || !password) {
     return { error: 'Email and password are required' }
@@ -70,6 +83,26 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
     return { error: 'Password must be at least 8 characters' }
   }
 
+  if (isMockDataSource) {
+    const displayName = [firstName, lastName].filter(Boolean).join(' ').trim() || 'Nouveau membre'
+
+    await setMockViewerSession(
+      createMockRegisteredViewerSession({
+        displayName,
+        email,
+      }),
+    )
+    revalidatePath('/', 'layout')
+
+    return {
+      success: 'true',
+      redirectUrl: `/setup?returnTo=${encodeURIComponent(
+        sanitizeReturnTo(returnToRaw, '/defis'),
+      )}`,
+    }
+  }
+
+  const supabase = await createClient()
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -151,9 +184,51 @@ export async function forgotPassword(
 }
 
 export async function logout() {
-  const supabase = await createClient()
   const locale = await getLocale()
+
+  if (isMockDataSource) {
+    await clearMockViewerSession()
+    revalidatePath('/', 'layout')
+    redirect({ href: '/', locale })
+  }
+
+  const supabase = await createClient()
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')
   redirect({ href: '/', locale })
+}
+
+export async function completeMockSetup(formData: FormData) {
+  const locale = await getLocale()
+
+  if (!isMockDataSource) {
+    redirect({ href: '/dashboard/profile', locale })
+  }
+
+  const factionValue = getFormDataString(formData, 'faction')
+  const returnToRaw = getFormDataString(formData, 'returnTo')
+  const faction: Faction | null =
+    factionValue === 'Vie Sauvage' ||
+    factionValue === 'Terres & Forêts' ||
+    factionValue === 'Artisans Locaux'
+      ? factionValue
+      : null
+
+  if (!faction) {
+    redirect({ href: '/setup', locale })
+  }
+
+  const session = await getMockViewerSession()
+  if (!session) {
+    redirect({ href: '/login', locale })
+  }
+
+  const resolvedSession = session as NonNullable<typeof session>
+
+  await setMockViewerSession({
+    ...resolvedSession,
+    faction,
+  })
+  revalidatePath('/', 'layout')
+  redirect({ href: sanitizeReturnTo(returnToRaw, '/defis'), locale })
 }

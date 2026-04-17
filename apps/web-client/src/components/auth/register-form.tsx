@@ -23,7 +23,7 @@ import {
   User,
   UserCircle,
 } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter as useNextRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
   type FormEvent,
@@ -114,6 +114,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(register, {})
   const searchParams = useSearchParams()
+  const nextRouter = useNextRouter()
   const urlStep = useMemo(() => parseWizardStep(searchParams.get('step')), [searchParams])
   const returnTo = searchParams.get('returnTo') || ''
   const loginHref = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : '/login'
@@ -240,6 +241,16 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
     }
   }, [state.success])
 
+  useEffect(() => {
+    const redirectUrl = state.redirectUrl
+    if (!state.success || !redirectUrl) {
+      return
+    }
+
+    nextRouter.push(redirectUrl)
+    nextRouter.refresh()
+  }, [nextRouter, state.redirectUrl, state.success])
+
   const canProceed = useMemo(() => {
     if (step === 1) {
       return Boolean(formValues.firstName && formValues.lastName)
@@ -273,7 +284,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
     setSubmittedEmail(String(formData.get('email') || ''))
   }
 
-  if (state.success) {
+  if (state.success && !state.redirectUrl) {
     const provider = getEmailProvider(submittedEmail)
 
     return (
@@ -362,6 +373,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
         )}
       >
         <Form action={formAction} onSubmit={handleFormSubmit} className="space-y-8">
+          <input type="hidden" name="returnTo" value={returnTo} />
           {state.error && (
             <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
               {state.error}

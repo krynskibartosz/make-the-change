@@ -1,10 +1,12 @@
 'use client'
+import { useSearchParams } from 'next/navigation'
 import { Users, Leaf, Sprout, Trophy, PawPrint, Handshake, Globe, Droplets, Star, Bird } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { useHaptic } from '@/hooks/use-haptic'
+import { useActionAuth } from '@/hooks/use-action-auth'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -258,14 +260,37 @@ function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
 	)
 }
 
-function ImpactCard({ event }: { event: ImpactEvent }) {
+function ImpactCard({
+	event,
+	onAttemptBravo,
+	shouldAutoBravo = false,
+	onAutoBravoConsumed,
+}: {
+	event: ImpactEvent
+	onAttemptBravo: (eventId: string, action: () => void) => void
+	shouldAutoBravo?: boolean
+	onAutoBravoConsumed?: () => void
+}) {
 	const haptic = useHaptic()
 	const [bravo, setBravo] = useState(false)
 
-	const handleBravo = useCallback(() => {
+	const handleBravoAction = useCallback(() => {
 		haptic.mediumTap()
 		setBravo((prev) => !prev)
 	}, [haptic])
+
+	useEffect(() => {
+		if (!shouldAutoBravo || bravo) {
+			return
+		}
+
+		handleBravoAction()
+		onAutoBravoConsumed?.()
+	}, [bravo, handleBravoAction, onAutoBravoConsumed, shouldAutoBravo])
+
+	const handleBravo = useCallback(() => {
+		onAttemptBravo(event.id, handleBravoAction)
+	}, [event.id, handleBravoAction, onAttemptBravo])
 
 	const isTribe = event.isTribe === true
 	const headerHref =
@@ -435,6 +460,9 @@ interface AdventureMovementClientProps {
 export function AdventureMovementClient({
 	guilds,
 }: AdventureMovementClientProps) {
+	const searchParams = useSearchParams()
+	const { guardAction } = useActionAuth()
+	const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
 	const userTribes = guilds.filter((guild) => guild.is_member)
 	const publicTribes = guilds.filter((guild) => !guild.is_member)
 	const discoveryTribes = [
@@ -444,6 +472,33 @@ export function AdventureMovementClient({
 				!publicTribes.some((guild) => guild.slug === suggestedGuild.slug)
 		),
 	].slice(0, 3)
+
+	useEffect(() => {
+		if (searchParams.get('intent') !== 'give-bravo') {
+			return
+		}
+
+		setReplayBravoId(searchParams.get('targetId') || MOCK_IMPACT_FEED[0]?.id || null)
+
+		const nextParams = new URLSearchParams(searchParams.toString())
+		nextParams.delete('intent')
+		nextParams.delete('targetId')
+		const nextQuery = nextParams.toString()
+		const nextUrl = nextQuery ? `${window.location.pathname}?${nextQuery}` : window.location.pathname
+		window.history.replaceState(window.history.state, '', nextUrl)
+	}, [searchParams])
+
+	const handleAttemptBravo = useCallback(
+		(eventId: string, action: () => void) => {
+			guardAction(action, {
+				intent: 'give-bravo',
+				extraParams: {
+					targetId: eventId,
+				},
+			})
+		},
+		[guardAction]
+	)
 
 	return (
 		<div className='space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500 pb-24'>
@@ -484,7 +539,13 @@ export function AdventureMovementClient({
 				</div>
 				<div className='relative z-0 w-full'>
 					{MOCK_IMPACT_FEED.map((event) => (
-						<ImpactCard key={event.id} event={event} />
+						<ImpactCard
+							key={event.id}
+							event={event}
+							onAttemptBravo={handleAttemptBravo}
+							shouldAutoBravo={replayBravoId === event.id}
+							onAutoBravoConsumed={() => setReplayBravoId(null)}
+						/>
 					))}
 				</div>
 			</section>

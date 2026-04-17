@@ -10,6 +10,7 @@ import {
   PRODUCTS_PAGE_SIZE,
   type ProductsQueryState,
 } from '@/app/[locale]/(marketing)/products/_features/query-state'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import { getMockProducts } from './mock-products'
@@ -277,15 +278,45 @@ const resolveCategoryId = async (
 
 export const getProducts = unstable_cache(
   async (queryState: ProductsQueryState) => {
+    const mockProducts = getMockProducts()
+    const mockCategoryId =
+      mockProducts.find(
+        (product) =>
+          product.category.id === queryState.category ||
+          toCategoryToken(product.category.name_default || '') === toCategoryToken(queryState.category),
+      )?.category.id || ''
+    const mockResolvedCategory = queryState.category ? mockCategoryId : ''
+    const mockFilters = {
+      ...queryState,
+      category: mockResolvedCategory,
+    } satisfies ProductsQueryState
+    const filteredMockProducts = mockProducts
+      .map((product) => toMockPublicProduct(product))
+      .filter((product) => matchesMockFilters(product, mockFilters))
+
+    if (isMockDataSource) {
+      const totalItems = filteredMockProducts.length
+      const pagination = toProductsPagination(totalItems, queryState.page, PRODUCTS_PAGE_SIZE)
+      const currentPage = clampPage(queryState.page, pagination.totalPages)
+      const { from, to } = getPaginationRange(currentPage, PRODUCTS_PAGE_SIZE)
+
+      return {
+        products: filteredMockProducts.slice(from, to + 1),
+        pagination: {
+          ...pagination,
+          currentPage,
+        },
+        totalItems,
+        resolvedCategory: mockResolvedCategory,
+      }
+    }
+
     const supabase = createStaticClient()
     const resolvedCategory = await resolveCategoryId(supabase, queryState.category)
     const filters = {
       ...queryState,
       category: resolvedCategory,
     } satisfies ProductsQueryState
-    const filteredMockProducts = getMockProducts()
-      .map((product) => toMockPublicProduct(product))
-      .filter((product) => matchesMockFilters(product, filters))
 
     // 1. Fetch Count
     let countQuery = supabase.from('public_products').select('id', { count: 'exact', head: true })
@@ -348,6 +379,43 @@ export const getProducts = unstable_cache(
 // Helper to fetch static lists (Categories, Producers, Tags)
 export const getProductStaticResources = unstable_cache(
   async () => {
+    if (isMockDataSource) {
+      const mockProducts = getMockProducts()
+      const categories = Array.from(
+        new Map(
+          mockProducts.map((product) => [
+            product.category.id,
+            {
+              id: product.category.id,
+              name_default: product.category.name_default || '',
+              name_i18n: product.category.name_i18n || null,
+            },
+          ]),
+        ).values(),
+      )
+      const producers = Array.from(
+        new Map(
+          mockProducts.map((product) => [
+            product.producer.id,
+            {
+              id: product.producer.id,
+              name_default: product.producer.name_default || '',
+              name_i18n: product.producer.name_i18n || null,
+            },
+          ]),
+        ).values(),
+      )
+      const availableTags = Array.from(new Set(mockProducts.flatMap((product) => product.tags))).sort(
+        (a, b) => a.localeCompare(b),
+      )
+
+      return {
+        categories,
+        producers,
+        availableTags,
+      }
+    }
+
     const supabase = createStaticClient()
 
     const [categoriesResult, producersResult, tagsResult] = await Promise.all([

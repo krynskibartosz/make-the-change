@@ -11,12 +11,16 @@ import {
 import { Crown, Leaf, Loader2, MapPin, Sparkles, Trophy, Wallet } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
+import { MockPublicProfilePage } from '@/app/[locale]/profile/[id]/mock-public-profile'
 import { ProfileHeader } from '@/components/profile/profile-header'
 import { FeedClient } from '@/components/social/feed-client'
 import { FollowToggleButton } from '@/components/social/follow-toggle-button'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
+import { getMockPublicProfile } from '@/lib/mock/mock-viewer'
 import { getUserFeed } from '@/lib/social/feed.reads'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
@@ -24,6 +28,23 @@ import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+
+  if (isMockDataSource) {
+    const viewerSession = await getMockViewerSession()
+    const profile = getMockPublicProfile(id, viewerSession)
+
+    if (!profile) {
+      notFound()
+    }
+
+    return (
+      <MockPublicProfilePage
+        profile={profile}
+        isOwnProfile={viewerSession?.viewerId === id}
+      />
+    )
+  }
+
   const supabase = await createClient()
   const {
     data: { user: viewer },

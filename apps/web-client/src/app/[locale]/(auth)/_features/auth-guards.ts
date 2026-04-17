@@ -3,8 +3,15 @@ import { headers } from 'next/headers'
 import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { redirect } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { asBoolean, asStringArray, isRecord } from '@/lib/type-guards'
+
+export type AuthenticatedAppUser = {
+  id: string
+  email: string
+}
 
 /**
  * Requires an authenticated user.
@@ -12,6 +19,22 @@ import { asBoolean, asStringArray, isRecord } from '@/lib/type-guards'
  * Logs security events with IP address.
  */
 export async function requireAuth() {
+  if (isMockDataSource) {
+    const viewer = await getCurrentViewer()
+
+    if (!viewer) {
+      const headerList = await headers()
+      const ip = headerList.get('x-forwarded-for') || 'unknown'
+      console.warn(`[SECURITY] Unauthorized Access Attempt | IP: ${ip}`)
+      throw new Error('Unauthorized')
+    }
+
+    return {
+      id: viewer.viewerId,
+      email: viewer.email,
+    } satisfies AuthenticatedAppUser
+  }
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -46,6 +69,16 @@ export async function requireAuthWithRedirect() {
  * Returns null if not authenticated.
  */
 export async function getUser() {
+  if (isMockDataSource) {
+    const viewer = await getCurrentViewer()
+    return viewer
+      ? ({
+          id: viewer.viewerId,
+          email: viewer.email,
+        } satisfies AuthenticatedAppUser)
+      : null
+  }
+
   const supabase = await createClient()
   const {
     data: { user },

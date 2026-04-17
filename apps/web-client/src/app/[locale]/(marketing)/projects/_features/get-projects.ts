@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { getMockProjects } from './mock-projects'
@@ -188,12 +189,17 @@ const matchesStatus = (project: ProjectListItem, status: string) => {
 
 export const getProjects = unstable_cache(
   async (options: GetProjectsOptions = {}) => {
-    const supabase = createStaticClient()
     const { status = 'all', search } = options
     const mockProjects = getMockProjects()
       .map((project) => toMockProjectListItem(project))
       .filter((project) => matchesStatus(project, status))
       .filter((project) => matchesSearch(project, search || ''))
+
+    if (isMockDataSource) {
+      return mockProjects
+    }
+
+    const supabase = createStaticClient()
 
     // Build query
     let projectsQuery = supabase

@@ -25,6 +25,9 @@ import { useEffect, useState } from 'react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockViewer } from '@/lib/mock/mock-viewer'
 import { createClient } from '@/lib/supabase/client'
 import { asString, isRecord } from '@/lib/type-guards'
 
@@ -41,9 +44,11 @@ function getIconForTitle(href: string) {
 }
 
 const MenuPage = () => {
-  const [user, setUser] = useState<{ id: string; email: string; avatarUrl?: string | null } | null>(
-    null,
-  )
+  const [user, setUser] = useState<{
+    id: string
+    email: string
+    avatarUrl?: string | null
+  } | null>(null)
   const tNav = useTranslations('navigation')
   const tMenu = useTranslations('menu_page')
   const tFooter = useTranslations('footer')
@@ -52,6 +57,22 @@ const MenuPage = () => {
   const discoverMenu = useDiscoverMenu()
 
   useEffect(() => {
+    if (isMockDataSource) {
+      const session = getClientMockViewerSession()
+      const viewer = session ? getMockViewer(session) : null
+
+      setUser(
+        viewer
+          ? {
+              id: viewer.viewerId,
+              email: viewer.email,
+              avatarUrl: viewer.avatarUrl,
+            }
+          : null,
+      )
+      return
+    }
+
     const supabase = createClient()
     const getUser = async () => {
       const {
@@ -73,7 +94,7 @@ const MenuPage = () => {
         avatarUrl,
       })
     }
-    getUser()
+    void getUser()
   }, [])
 
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()

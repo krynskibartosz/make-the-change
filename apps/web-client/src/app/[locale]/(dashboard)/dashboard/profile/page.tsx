@@ -13,8 +13,10 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
+import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 
 export default async function ProfilePage() {
+  const profile = await getCurrentProfile()
   const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
     unlockedLimit: 2,
     lockedLimit: 2,
@@ -40,30 +42,36 @@ export default async function ProfilePage() {
 
           <div className="relative z-10 mx-auto mt-4 h-28 w-28 overflow-hidden rounded-full border-4 border-[#0B0F15] shadow-xl">
             <img
-              src="https://images.unsplash.com/photo-1545167622-3a6ac756afa4"
-              alt="Avatar de Bartosz Krynski"
+              src={
+                profile?.avatarUrl ||
+                'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=320&q=80'
+              }
+              alt={`Avatar de ${profile?.displayName || 'Bartosz Krynski'}`}
               className="h-full w-full object-cover"
             />
           </div>
 
           <h1 className="mt-3 text-center text-3xl font-black tracking-tight text-white">
-            Bartosz Krynski
+            {profile?.displayName || 'Bartosz Krynski'}
           </h1>
 
           <div className="mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-orange-400/20 bg-orange-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.2)]">
             <Flame className="h-3.5 w-3.5 fill-current" />
-            12 jours de série
+            {profile?.streakDays || 12} jours de série
           </div>
 
           <p className="mt-2 text-center text-xs font-medium tracking-wide text-white/60">
-            @bartosz_k • Membre depuis 2026
+            @{profile?.username || 'bartosz_k'} • Membre depuis{' '}
+            {(profile?.memberSince || '2026-01-01').slice(0, 4)}
           </p>
         </section>
 
         <section className=" mt-8 mb-10 grid grid-cols-2 gap-3">
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
             <Bug className="h-5 w-5 text-amber-400" />
-            <div className="mt-2 text-2xl font-black text-white tabular-nums">3 800</div>
+            <div className="mt-2 text-2xl font-black text-white tabular-nums">
+              {(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
+            </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
               ABEILLES SAUVÉES
             </div>
@@ -71,7 +79,13 @@ export default async function ProfilePage() {
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
             <Droplets className="h-5 w-5 text-orange-400" />
-            <div className="mt-2 text-2xl font-black text-white tabular-nums">0,77 kg</div>
+            <div className="mt-2 text-2xl font-black text-white tabular-nums">
+              {(profile?.honeyGeneratedKg || 0.77).toLocaleString('fr-FR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{' '}
+              kg
+            </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
               MIEL GÉNÉRÉ
             </div>
@@ -79,7 +93,13 @@ export default async function ProfilePage() {
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
             <Wind className="h-5 w-5 text-blue-400" />
-            <div className="mt-2 text-2xl font-black text-white tabular-nums">3,85 kg</div>
+            <div className="mt-2 text-2xl font-black text-white tabular-nums">
+              {(profile?.co2CapturedKg || 3.85).toLocaleString('fr-FR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{' '}
+              kg
+            </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
               CO₂ CAPTURÉ
             </div>
@@ -87,7 +107,9 @@ export default async function ProfilePage() {
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
             <Sparkles className="h-5 w-5 text-lime-400" />
-            <div className="mt-2 text-2xl font-black text-lime-400 tabular-nums">2 450</div>
+            <div className="mt-2 text-2xl font-black text-lime-400 tabular-nums">
+              {(profile?.points || 2450).toLocaleString('fr-FR')}
+            </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
               POINTS D&apos;IMPACT
             </div>

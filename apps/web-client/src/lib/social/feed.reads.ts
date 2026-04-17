@@ -14,6 +14,13 @@ import type {
   PostMediaAsset,
 } from '@make-the-change/core/shared'
 import { cache } from 'react'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import {
+  getMockCollectiveGuilds,
+  getMockGuildBySlug,
+  getMockGuildLeaderboard,
+} from '@/lib/mock/mock-collective'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getPublicAppUrl } from '@/lib/public-url'
 import {
   extractHashtagsFromText,
@@ -997,6 +1004,10 @@ export async function getFeed(
   optionsOrPage: FeedQueryOptions | number = 1,
   limit = DEFAULT_FEED_LIMIT,
 ) {
+  if (isMockDataSource) {
+    return []
+  }
+
   const options = parseFeedOptions(optionsOrPage, limit)
   const supabase = await createClient()
   const {
@@ -1190,6 +1201,10 @@ export async function getReelsFeed(options: ReelsFeedQueryOptions = {}): Promise
  * Fetch feed posts for a specific user
  */
 export async function getUserFeed(userId: string, page = 1, limit = 20) {
+  if (isMockDataSource) {
+    return []
+  }
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -1899,6 +1914,11 @@ const getGuildsPublic = async (limit: number): Promise<Guild[]> => {
 }
 
 export async function getGuilds(limit = 24): Promise<Guild[]> {
+  if (isMockDataSource) {
+    const session = await getMockViewerSession()
+    return getMockCollectiveGuilds(session).slice(0, Math.max(1, limit))
+  }
+
   const guilds = await getGuildsPublic(limit)
   if (guilds.length === 0) {
     return []
@@ -1937,6 +1957,20 @@ export async function getGuildBySlug(slug: string): Promise<GuildDetails | null>
   const normalizedSlug = asString(slug).trim()
   if (!normalizedSlug) {
     return null
+  }
+
+  if (isMockDataSource) {
+    const session = await getMockViewerSession()
+    const guild = getMockGuildBySlug(normalizedSlug, session)
+
+    if (!guild) {
+      return null
+    }
+
+    return {
+      guild,
+      members: [],
+    }
   }
 
   const supabase = await createClient()
@@ -2052,6 +2086,10 @@ export async function getGuildLeaderboard(
   period: 'weekly' | 'monthly' = 'monthly',
   limit = 10,
 ): Promise<GuildLeaderboardEntry[]> {
+  if (isMockDataSource) {
+    return getMockGuildLeaderboard().slice(0, Math.max(1, limit))
+  }
+
   const normalizedLimit = Math.max(1, limit)
   const supabase = createStaticClient()
 

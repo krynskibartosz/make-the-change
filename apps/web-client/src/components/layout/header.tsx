@@ -28,6 +28,7 @@ import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
 import { useScrollHeader } from '@/components/layout/use-scroll-header'
 import { Logo } from '@/components/ui/logo'
 import { Link, usePathname } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { cn } from '@/lib/utils'
 
 type HeaderElementProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>
@@ -316,6 +317,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
 
   const avatarUrl = user?.avatarUrl ?? null
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
+  const dashboardHref = isMockDataSource ? '/dashboard/profile' : '/dashboard'
   const headerStyle = activeMegaContent
     ? {
         ...rest.style,
@@ -454,7 +456,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
                 size="sm"
                 className="h-11 cursor-pointer gap-2 px-2.5"
               >
-                <Link href="/dashboard" className="cursor-pointer">
+                <Link href={dashboardHref} className="cursor-pointer">
                   <Avatar className="h-8 w-8 ring-1 ring-border">
                     <AvatarImage src={avatarUrl || undefined} alt="" className="object-cover" />
                     <AvatarFallback className="bg-linear-to-br from-primary/10 via-secondary/10 to-accent/10 text-xs font-bold text-primary">

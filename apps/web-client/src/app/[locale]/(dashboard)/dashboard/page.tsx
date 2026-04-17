@@ -8,10 +8,11 @@ import {
   Progress,
 } from '@make-the-change/core/ui'
 import { Leaf, ShoppingBag, TrendingUp, Trophy, Wallet } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
-import { Link } from '@/i18n/navigation'
+import { Link, redirect } from '@/i18n/navigation'
 import { calculateImpactScore, getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { formatCurrency, formatPoints } from '@/lib/utils'
@@ -113,6 +114,11 @@ const toRecentInvestment = (value: unknown): RecentInvestment | null => {
 }
 
 export default async function DashboardPage() {
+  if (isMockDataSource) {
+    const locale = await getLocale()
+    redirect({ href: '/dashboard/profile', locale })
+  }
+
   const t = await getTranslations('dashboard')
   const supabase = await createClient()
 

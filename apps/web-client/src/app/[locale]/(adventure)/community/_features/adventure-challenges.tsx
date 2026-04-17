@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState, type UIEvent } from 'react'
 import {
 	BookOpen,
@@ -12,22 +13,18 @@ import {
 } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
 import { useHaptic } from '@/hooks/use-haptic'
+import { useActionAuth } from '@/hooks/use-action-auth'
+import { Link } from '@/i18n/navigation'
+import { getChallenges } from '@/lib/mock/mock-challenges'
+import type { Challenge } from '@/lib/mock/types'
+import { cn } from '@/lib/utils'
 
-type DailyQuestType = 'education' | 'social' | 'daily_harvest'
-
-type DailyQuest = {
-	id: number
-	type: DailyQuestType
-	title: string
-	description: string
-	progress: number
-	max: number
-	reward: number
-	href?: string
+type DailyQuest = Challenge & {
+	id: string | number
 }
+
+type DailyQuestType = DailyQuest['type']
 
 type QuestTheme = {
 	icon: typeof BookOpen
@@ -37,7 +34,7 @@ type QuestTheme = {
 
 const initialDailyQuests: DailyQuest[] = [
 	{
-		id: 1,
+		id: 'legacy-eco-fact',
 		type: 'education',
 		title: "L'Éco-Fact du jour",
 		description: "Lis l'article sur la déforestation.",
@@ -46,7 +43,7 @@ const initialDailyQuests: DailyQuest[] = [
 		reward: 50,
 	},
 	{
-		id: 2,
+		id: 'legacy-collective-bravo',
 		type: 'social',
 		title: "L'Esprit d'Équipe",
 		description: 'Distribue 3 Bravos dans le Collectif.',
@@ -56,7 +53,7 @@ const initialDailyQuests: DailyQuest[] = [
 		href: '/collectif',
 	},
 	{
-		id: 3,
+		id: 'legacy-daily-harvest',
 		type: 'daily_harvest',
 		title: 'La Récolte Quotidienne',
 		description: 'Récupère le nectar du jour.',
@@ -821,7 +818,11 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 
 export function AdventureChallenges() {
 	const haptic = useHaptic()
-	const [dailyQuests, setDailyQuests] = useState(initialDailyQuests)
+	const searchParams = useSearchParams()
+	const { guardAction } = useActionAuth()
+	const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(
+		() => getChallenges() || initialDailyQuests
+	)
 	const [isEcoFactReaderOpen, setIsEcoFactReaderOpen] = useState(false)
 	const [isDailyHarvestOpen, setIsDailyHarvestOpen] = useState(false)
 	const [userSeedBalance, setUserSeedBalance] = useState(240)
@@ -840,8 +841,32 @@ export function AdventureChallenges() {
 	)
 
 	const handleEcoFactOpen = () => {
-		setIsEcoFactReaderOpen(true)
+		guardAction(
+			() => {
+				setIsEcoFactReaderOpen(true)
+			},
+			{ intent: 'eco-fact' }
+		)
 	}
+
+	useEffect(() => {
+		const intent = searchParams.get('intent')
+
+		if (intent === 'eco-fact') {
+			setIsEcoFactReaderOpen(true)
+		} else if (intent === 'daily-harvest') {
+			setIsDailyHarvestOpen(true)
+		} else {
+			return
+		}
+
+		const nextParams = new URLSearchParams(searchParams.toString())
+		nextParams.delete('intent')
+		nextParams.delete('targetId')
+		const nextQuery = nextParams.toString()
+		const nextUrl = nextQuery ? `${window.location.pathname}?${nextQuery}` : window.location.pathname
+		window.history.replaceState(window.history.state, '', nextUrl)
+	}, [searchParams])
 
 	useEffect(() => {
 		if (!floatingReward) return
@@ -1035,7 +1060,14 @@ export function AdventureChallenges() {
 							<button
 								key={quest.id}
 								type='button'
-								onClick={() => setIsDailyHarvestOpen(true)}
+								onClick={() =>
+									guardAction(
+										() => {
+											setIsDailyHarvestOpen(true)
+										},
+										{ intent: 'daily-harvest' }
+									)
+								}
 								className='w-full flex items-center gap-4 py-4 px-6 border-b border-white/5 bg-transparent active:bg-white/5 transition-colors text-left'
 							>
 								{rowContent}

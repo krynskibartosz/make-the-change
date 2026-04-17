@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { AdventurePageFrameClient } from './adventure-page-frame-client'
 
@@ -31,6 +33,19 @@ const resolveDisplayName = (input: {
 }
 
 export async function getAdventureSidebarUser(): Promise<AdventureSidebarUser> {
+  if (isMockDataSource) {
+    const viewer = await getCurrentViewer()
+
+    return viewer
+      ? {
+          id: viewer.viewerId,
+          email: viewer.email,
+          avatarUrl: viewer.avatarUrl,
+          displayName: viewer.displayName,
+        }
+      : null
+  }
+
   const supabase = await createClient()
   const {
     data: { user },

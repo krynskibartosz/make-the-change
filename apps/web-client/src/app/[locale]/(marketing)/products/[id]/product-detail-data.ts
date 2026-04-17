@@ -1,3 +1,4 @@
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import { getMockProductByIdentifier, type MockProductSeed } from '../_features/mock-products'
@@ -194,6 +195,10 @@ export async function getPublicProductById(idOrSlug: string): Promise<ProductWit
   const mockProduct = getMockProductByIdentifier(idOrSlug)
   if (mockProduct) {
     return toProductWithRelationsFromMock(mockProduct)
+  }
+
+  if (isMockDataSource) {
+    return null
   }
 
   const supabase = await createClient()
