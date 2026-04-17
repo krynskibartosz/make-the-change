@@ -1,13 +1,15 @@
 import { locales } from '@make-the-change/core/i18n'
 import type { MetadataRoute } from 'next'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
+import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
+import { getMockProjects } from '@/app/[locale]/(marketing)/projects/_features/mock-projects'
 
 export const dynamic = 'force-static'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL || 'https://make-the-change-web-client.vercel.app'
-  const supabase = createStaticClient()
 
   // Base routes to include in sitemap
   const routes = [
@@ -21,26 +23,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/blog',
   ]
 
-  // Fetch active projects
-  const { data: projects } = await supabase
-    .schema('investment')
-    .from('projects')
-    .select('slug, id, updated_at')
-    .eq('status', 'active')
+  const projects = isMockDataSource
+    ? getMockProjects().map((project) => ({
+        id: project.id,
+        slug: project.slug,
+        updated_at: project.updated_at,
+      }))
+    : await (async () => {
+        const supabase = createStaticClient()
+        const { data } = await supabase
+          .schema('investment')
+          .from('projects')
+          .select('slug, id, updated_at')
+          .eq('status', 'active')
 
-  // Fetch active products
-  const { data: products } = await supabase
-    .schema('commerce')
-    .from('products')
-    .select('slug, id, updated_at')
-    .eq('is_active', true)
+        return data || []
+      })()
 
-  // Fetch published blog posts
-  const { data: posts } = await supabase
-    .schema('content')
-    .from('blog_posts')
-    .select('slug, id, published_at')
-    .eq('status', 'published')
+  const products = isMockDataSource
+    ? getMockProducts().map((product) => ({
+        id: product.id,
+        slug: product.slug,
+        updated_at: product.updated_at,
+      }))
+    : await (async () => {
+        const supabase = createStaticClient()
+        const { data } = await supabase
+          .schema('commerce')
+          .from('products')
+          .select('slug, id, updated_at')
+          .eq('is_active', true)
+
+        return data || []
+      })()
+
+  const posts = isMockDataSource
+    ? []
+    : await (async () => {
+        const supabase = createStaticClient()
+        const { data } = await supabase
+          .schema('content')
+          .from('blog_posts')
+          .select('slug, id, published_at')
+          .eq('status', 'published')
+
+        return data || []
+      })()
 
   const sitemapEntry: MetadataRoute.Sitemap = []
 

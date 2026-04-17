@@ -1,7 +1,7 @@
 'use client'
 
 import { type Brand, AppThemeProvider as ThemeProvider } from '@make-the-change/core'
-import type { PropsWithChildren } from 'react'
+import { Suspense, type PropsWithChildren } from 'react'
 import { CartProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-provider'
 import { CartUIProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { SetupGuard } from '@/components/app/setup-guard'
@@ -25,7 +25,9 @@ export function Providers({ children, initialBrand, initialCustomVars }: Provide
       <CartProvider>
         <CartUIProvider>
           <Toaster>
-            <SetupGuard />
+            <Suspense fallback={null}>
+              <SetupGuard />
+            </Suspense>
             {children}
           </Toaster>
         </CartUIProvider>
