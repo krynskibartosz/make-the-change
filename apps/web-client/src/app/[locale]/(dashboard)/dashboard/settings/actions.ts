@@ -3,6 +3,11 @@
 import { defaultLocale, isLocale, type Locale } from '@make-the-change/core/i18n'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import {
+  getCurrentMockUserPreferences,
+  setMockUserPreferences,
+} from '@/lib/mock/mock-user-preferences-server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { asString, isRecord } from '@/lib/type-guards'
@@ -22,24 +27,43 @@ export async function updateSettings(
   _prevState: SettingsState,
   formData: FormData,
 ): Promise<SettingsState> {
+  const requestedLanguage = getFormDataString(formData, 'languageCode') || defaultLocale
+  const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
+  const timezone = getFormDataString(formData, 'timezone') || 'Europe/Paris'
+  const publicProfile = formData.get('publicProfile') === 'on'
+  const marketingConsent = formData.get('marketingConsent') === 'on'
+
+  const socialLinks = {
+    linkedin: getFormDataString(formData, 'social_linkedin'),
+    instagram: getFormDataString(formData, 'social_instagram'),
+    twitter: getFormDataString(formData, 'social_twitter'),
+  }
+
+  if (isMockDataSource) {
+    const preferences = await getCurrentMockUserPreferences()
+    if (!preferences) return { error: 'Not authenticated' }
+
+    await setMockUserPreferences({
+      ...preferences,
+      languageCode,
+      timezone,
+      publicProfile,
+      marketingConsent,
+      socialLinks,
+    })
+
+    revalidatePath('/dashboard/settings')
+    revalidatePath('/dashboard/profile')
+
+    return { success: 'Paramètres mis à jour', locale: languageCode }
+  }
+
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   if (!user) return { error: 'Not authenticated' }
-
-  const requestedLanguage = getFormDataString(formData, 'languageCode') || defaultLocale
-  const languageCode: Locale = isLocale(requestedLanguage) ? requestedLanguage : defaultLocale
-  const timezone = getFormDataString(formData, 'timezone') || 'Europe/Paris'
-  const publicProfile = formData.get('publicProfile') === 'on'
-
-  // Social links
-  const socialLinks = {
-    linkedin: getFormDataString(formData, 'social_linkedin'),
-    instagram: getFormDataString(formData, 'social_instagram'),
-    twitter: getFormDataString(formData, 'social_twitter'),
-  }
 
   const { data: currentProfile } = await supabase
     .from('profiles')
@@ -67,7 +91,6 @@ export async function updateSettings(
   if (error) return { error: error.message }
 
   // Update marketing consent
-  const marketingConsent = formData.get('marketingConsent') === 'on'
   try {
     const adminSupabase = createAdminClient()
     const headersList = await headers()

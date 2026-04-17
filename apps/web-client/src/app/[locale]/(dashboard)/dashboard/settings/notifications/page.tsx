@@ -1,8 +1,21 @@
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getCurrentMockUserPreferences } from '@/lib/mock/mock-user-preferences-server'
 import { createClient } from '@/lib/supabase/server'
 import { asBoolean, isRecord } from '@/lib/type-guards'
 import { NotificationsClient } from './notifications-client'
 
 export default async function NotificationsPage() {
+  if (isMockDataSource) {
+    const preferences = await getCurrentMockUserPreferences()
+    if (!preferences) return null
+
+    return (
+      <div className="w-full">
+        <NotificationsClient initial={preferences.notificationPreferences} />
+      </div>
+    )
+  }
+
   const supabase = await createClient()
   const {
     data: { user },

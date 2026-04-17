@@ -1,3 +1,6 @@
+import type { ThemeConfig } from '@make-the-change/core'
+import type { Locale } from '@make-the-change/core/i18n'
+
 export type Faction = 'Vie Sauvage' | 'Terres & Forêts' | 'Artisans Locaux'
 
 export type MockViewerSession = {
@@ -29,6 +32,33 @@ export type Profile = {
   addressStreet: string
   addressPostalCode: string
   tribeIds: string[]
+}
+
+export type MockNotificationPreferences = {
+  project_updates: boolean
+  product_updates: boolean
+  leaderboard: boolean
+  marketing: boolean
+  email: boolean
+  push: boolean
+  monthly_report: boolean
+}
+
+export type MockSocialLinks = {
+  linkedin: string
+  instagram: string
+  twitter: string
+}
+
+export type MockUserPreferences = {
+  viewerId: string
+  languageCode: Locale
+  timezone: string
+  publicProfile: boolean
+  marketingConsent: boolean
+  socialLinks: MockSocialLinks
+  notificationPreferences: MockNotificationPreferences
+  themeConfig: ThemeConfig
 }
 
 export type ChallengeIntent = 'eco-fact' | 'daily-harvest' | 'give-bravo'

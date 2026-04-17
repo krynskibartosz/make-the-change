@@ -13,7 +13,6 @@ type AppUser = {
 export function useUser() {
   const [user, setUser] = useState<AppUser | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
 
   useEffect(() => {
     if (isMockDataSource) {
@@ -38,6 +37,8 @@ export function useUser() {
       }
     }
 
+    const supabase = createClient()
+
     // Get initial session
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user ? { id: user.id, email: user.email || '' } : null)
@@ -55,7 +56,7 @@ export function useUser() {
     return () => {
       subscription.unsubscribe()
     }
-  }, [supabase])
+  }, [])
 
   return { user, loading }
 }
