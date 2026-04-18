@@ -23,7 +23,7 @@ import {
   User,
   UserCircle,
 } from 'lucide-react'
-import { useRouter as useNextRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
   type FormEvent,
@@ -114,7 +114,6 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(register, {})
   const searchParams = useSearchParams()
-  const nextRouter = useNextRouter()
   const urlStep = useMemo(() => parseWizardStep(searchParams.get('step')), [searchParams])
   const returnTo = searchParams.get('returnTo') || ''
   const loginHref = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : '/login'
@@ -247,9 +246,10 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
       return
     }
 
-    nextRouter.push(redirectUrl)
-    nextRouter.refresh()
-  }, [nextRouter, state.redirectUrl, state.success])
+    // Force a full navigation so mock auth/setup cookies are visible right away
+    // after registration, even when coming from intercepted routes.
+    window.location.replace(redirectUrl)
+  }, [state.redirectUrl, state.success])
 
   const canProceed = useMemo(() => {
     if (step === 1) {

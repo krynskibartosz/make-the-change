@@ -13,7 +13,7 @@ import {
   Input,
 } from '@make-the-change/core/ui'
 import { ArrowRight, Lock, Mail } from 'lucide-react'
-import { useRouter as useNextRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useActionState, useEffect } from 'react'
 import { type AuthState, login } from '@/app/[locale]/(auth)/actions'
@@ -28,7 +28,6 @@ export function LoginForm({ modal = false }: LoginFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(login, {})
   const searchParams = useSearchParams()
-  const nextRouter = useNextRouter()
   const returnTo = searchParams.get('returnTo') || ''
   const registerHref = returnTo ? `/register?returnTo=${encodeURIComponent(returnTo)}` : '/register'
 
@@ -39,17 +38,10 @@ export function LoginForm({ modal = false }: LoginFormProps) {
       return
     }
 
-    if (modal) {
-      nextRouter.back()
-      setTimeout(() => {
-        nextRouter.push(redirectUrl)
-        nextRouter.refresh()
-      }, 100)
-    } else {
-      nextRouter.push(redirectUrl)
-      nextRouter.refresh()
-    }
-  }, [state, modal, nextRouter])
+    // Use a document navigation after auth so the mock cookie is always
+    // reflected immediately across client/server boundaries and intercepted routes.
+    window.location.replace(redirectUrl)
+  }, [state])
 
   return (
     <Card
