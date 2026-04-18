@@ -165,18 +165,16 @@ export default async function ProfilePage() {
         {factionContribution ? (
           <section className="mt-8">
             {/* IDENTITY POD */}
-            <div
-              className={`relative overflow-hidden rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}
-            >
-              {/* Halo d'ambiance */}
-              <div
-                className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-30 ${accentTheme.accentBg}`}
-              />
+            <div className={`relative rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
+              {/* Halo d'ambiance - encapsulé pour ne pas déborder */}
+              <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none">
+                <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-40 ${accentTheme.accentBg}`} />
+              </div>
 
               {/* LAYOUT HAUT : Mascotte + Infos */}
-              <div className="relative z-10 flex items-center gap-4">
-                {/* Mascotte 3D flottante */}
-                <div className="relative h-24 w-24 shrink-0 drop-shadow-2xl">
+              <div className="relative z-10 flex flex-row items-center justify-between">
+                {/* Mascotte 3D flottante (Scale up + dépassement) */}
+                <div className="relative -mt-10 h-28 w-[30%] shrink-0 drop-shadow-2xl">
                   <img
                     src={
                       factionContribution.themeKey === 'pollinisateurs'
@@ -186,13 +184,13 @@ export default async function ProfilePage() {
                           : '/aura.png'
                     }
                     alt={factionContribution.label}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full origin-bottom scale-[1.3] object-contain"
                     style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' }}
                   />
                 </div>
 
                 {/* Infos faction */}
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 w-[70%] pl-2 text-left pt-2 flex-1">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
                     Ma Faction
                   </p>
@@ -210,10 +208,10 @@ export default async function ProfilePage() {
               </div>
 
               {/* PONT : Teasing + CTA */}
-              <div className="relative z-10 mt-4 space-y-2">
-                <div className={`flex items-center gap-2 rounded-2xl px-3 py-2 ${accentTheme.accentBgSoft}`}>
+              <div className="relative z-10 mt-6 space-y-4">
+                <div className="flex items-center gap-2">
                   <Flame className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
-                  <p className="text-xs font-semibold text-white/70">
+                  <p className="text-xs font-semibold text-white/80">
                     Ta faction génère{' '}
                     <span className={`font-black ${accentTheme.accentText}`}>
                       {factionContribution.contributionShare}%
@@ -224,7 +222,7 @@ export default async function ProfilePage() {
 
                 <Link
                   href="/collectif"
-                  className={`flex w-full items-center justify-center gap-2 rounded-2xl border py-3 text-sm font-bold transition-opacity active:opacity-70 ${accentTheme.accentBorder} ${accentTheme.accentText}`}
+                  className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                 >
                   Rejoindre la quête du mois
                   <ArrowRight className="h-4 w-4" />
@@ -235,22 +233,20 @@ export default async function ProfilePage() {
         ) : (
           <section className="mt-8">
             {/* GUEST IDENTITY POD */}
-            <div
-              className={`relative overflow-hidden rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}
-            >
+            <div className={`relative rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
               {/* Halo d'ambiance */}
-              <div
-                className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-20 ${accentTheme.accentBg}`}
-              />
+              <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none">
+                <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-20 ${accentTheme.accentBg}`} />
+              </div>
 
               {/* LAYOUT HAUT : Icône + Infos */}
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="relative flex h-24 w-24 shrink-0 items-center justify-center drop-shadow-2xl">
-                  <div className={`absolute inset-0 rounded-full blur-xl opacity-30 ${accentTheme.accentBg}`} />
-                  <Target className={`relative z-10 h-10 w-10 ${accentTheme.accentText}`} />
+              <div className="relative z-10 flex flex-row items-center justify-between">
+                <div className="relative flex -mt-8 h-24 w-[30%] shrink-0 items-center justify-center drop-shadow-2xl">
+                  <div className={`absolute inset-0 scale-[1.2] rounded-full blur-2xl opacity-30 ${accentTheme.accentBg}`} />
+                  <Target className={`relative z-10 h-10 w-10 scale-[1.1] ${accentTheme.accentText}`} />
                 </div>
 
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 w-[70%] pl-2 text-left pt-2 flex-1">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
                     Ma Faction
                   </p>
@@ -264,17 +260,17 @@ export default async function ProfilePage() {
               </div>
 
               {/* PONT : Teasing + CTA */}
-              <div className="relative z-10 mt-4 space-y-2">
-                <div className={`flex items-center gap-2 rounded-2xl px-3 py-2 ${accentTheme.accentBgSoft}`}>
+              <div className="relative z-10 mt-6 space-y-4">
+                <div className="flex items-center gap-2">
                   <Sparkles className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
-                  <p className="text-xs font-semibold text-white/70">
+                  <p className="text-xs font-semibold text-white/80">
                     Multipliez votre impact en équipe
                   </p>
                 </div>
 
                 <Link
                   href="/welcome/setup"
-                  className={`flex w-full items-center justify-center gap-2 rounded-2xl border py-3 text-sm font-bold transition-opacity active:opacity-70 ${accentTheme.accentBorder} ${accentTheme.accentText}`}
+                  className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                 >
                   Choisir ma Faction
                   <ArrowRight className="h-4 w-4" />
