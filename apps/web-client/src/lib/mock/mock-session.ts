@@ -18,7 +18,9 @@ export const serializeMockViewerSession = (session: MockViewerSession): string =
   return encodeURIComponent(JSON.stringify(session))
 }
 
-export const parseMockViewerSessionValue = (value: string | null | undefined): MockViewerSession | null => {
+export const parseMockViewerSessionValue = (
+  value: string | null | undefined,
+): MockViewerSession | null => {
   if (!value) {
     return null
   }
@@ -32,6 +34,12 @@ export const parseMockViewerSessionValue = (value: string | null | undefined): M
     const viewerId = typeof parsed.viewerId === 'string' ? parsed.viewerId : ''
     const displayName = typeof parsed.displayName === 'string' ? parsed.displayName : ''
     const email = typeof parsed.email === 'string' ? parsed.email : ''
+    const avatarUrl =
+      typeof parsed.avatarUrl === 'string'
+        ? parsed.avatarUrl
+        : parsed.avatarUrl === null
+          ? null
+          : null
     const faction =
       parsed.faction === 'Vie Sauvage' ||
       parsed.faction === 'Terres & Forêts' ||
@@ -49,6 +57,7 @@ export const parseMockViewerSessionValue = (value: string | null | undefined): M
       displayName,
       email,
       faction,
+      avatarUrl,
     }
   } catch {
     return null

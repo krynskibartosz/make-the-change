@@ -9,9 +9,12 @@ type MockProfileSeed = Omit<Profile, 'faction'> & {
 const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   id: MOCK_EXISTING_VIEWER_ID,
   displayName: 'Bartosz Krynski',
+  firstName: 'Bartosz',
+  lastName: 'Krynski',
   username: 'bartosz_k',
   email: 'bartosz@make-the-change.com',
   avatarUrl: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=320&q=80',
+  coverUrl: 'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1600&q=80',
   defaultFaction: 'Vie Sauvage',
   memberSince: '2026-01-12',
   streakDays: 12,
@@ -19,6 +22,8 @@ const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   beesSaved: 3800,
   honeyGeneratedKg: 0.77,
   co2CapturedKg: 3.85,
+  phone: '+32 470 00 00 00',
+  bio: "Je soutiens les projets qui rendent l'impact concret et visible au quotidien.",
   city: 'Bruxelles',
   country: 'Belgique',
   addressStreet: 'Rue du Nectar 12',
@@ -119,13 +124,31 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+const splitDisplayName = (displayName: string) => {
+  const trimmed = displayName.trim()
+  if (!trimmed) {
+    return { firstName: '', lastName: '' }
+  }
+
+  const [firstName, ...rest] = trimmed.split(/\s+/)
+  return {
+    firstName,
+    lastName: rest.join(' '),
+  }
+}
+
 const buildGenericProfile = (session: MockViewerSession): Profile => {
+  const names = splitDisplayName(session.displayName)
+
   return {
     id: session.viewerId,
     displayName: session.displayName,
+    firstName: names.firstName || session.displayName,
+    lastName: names.lastName || null,
     username: slugify(session.displayName).replace(/-/g, '_'),
     email: session.email,
-    avatarUrl: null,
+    avatarUrl: session.avatarUrl ?? null,
+    coverUrl: null,
     faction: session.faction,
     memberSince: '2026-04-17',
     streakDays: 1,
@@ -133,6 +156,8 @@ const buildGenericProfile = (session: MockViewerSession): Profile => {
     beesSaved: 240,
     honeyGeneratedKg: 0.05,
     co2CapturedKg: 0.24,
+    phone: '',
+    bio: '',
     city: 'Bruxelles',
     country: 'Belgique',
     addressStreet: 'Avenue du Vivant 8',
@@ -146,6 +171,7 @@ export const getMockExistingViewerSession = (email?: string): MockViewerSession 
   displayName: EXISTING_VIEWER_PROFILE.displayName,
   email: email || EXISTING_VIEWER_PROFILE.email,
   faction: EXISTING_VIEWER_PROFILE.defaultFaction,
+  avatarUrl: EXISTING_VIEWER_PROFILE.avatarUrl,
 })
 
 export const createMockRegisteredViewerSession = ({
@@ -159,6 +185,7 @@ export const createMockRegisteredViewerSession = ({
   displayName: displayName || 'Nouveau membre',
   email,
   faction: null,
+  avatarUrl: null,
 })
 
 export const getMockTribeIdsForFaction = (faction: Faction | null): string[] => {
@@ -170,7 +197,7 @@ export const getMockViewer = (session: MockViewerSession): Viewer => {
 
   return {
     viewerId: session.viewerId,
-    displayName: session.displayName,
+    displayName: profile.displayName,
     email: session.email,
     faction: session.faction,
     avatarUrl: profile.avatarUrl,
@@ -181,9 +208,15 @@ export const getMockProfile = (session: MockViewerSession): Profile => {
   const activeFaction = session.faction ?? EXISTING_VIEWER_PROFILE.defaultFaction
 
   if (session.viewerId === EXISTING_VIEWER_PROFILE.id) {
+    const names = splitDisplayName(session.displayName)
+
     return {
       ...EXISTING_VIEWER_PROFILE,
+      displayName: session.displayName,
+      firstName: names.firstName || EXISTING_VIEWER_PROFILE.firstName || session.displayName,
+      lastName: names.lastName || EXISTING_VIEWER_PROFILE.lastName || null,
       email: session.email,
+      avatarUrl: session.avatarUrl ?? EXISTING_VIEWER_PROFILE.avatarUrl,
       points: getMockImpactPoints(session.viewerId),
       faction: activeFaction,
       tribeIds: activeFaction ? getMockTribeIdsForFaction(activeFaction) : [],

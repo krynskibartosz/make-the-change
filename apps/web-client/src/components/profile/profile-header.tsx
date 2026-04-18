@@ -58,6 +58,7 @@ export const ProfileHeader = ({
       const formData = new FormData()
       formData.append('bucket', 'users') // Bucket 'users' must exist and have public access
       formData.append('entityId', userId)
+      formData.append('folder', type)
       formData.append('files', file)
 
       // 1. Upload to Storage

@@ -1,8 +1,18 @@
 import 'server-only'
 
 import { cookies } from 'next/headers'
-import { mockAuthCookieOptions, MOCK_AUTH_COOKIE_NAME, parseMockViewerSessionValue, serializeMockViewerSession } from '@/lib/mock/mock-session'
-import { getMockProfile, getMockViewer } from '@/lib/mock/mock-viewer'
+import {
+  applyMockProfileOverrides,
+  createDefaultMockProfileOverrides,
+} from '@/lib/mock/mock-profile-overrides'
+import { getMockProfileOverrides } from '@/lib/mock/mock-profile-overrides-server'
+import {
+  mockAuthCookieOptions,
+  MOCK_AUTH_COOKIE_NAME,
+  parseMockViewerSessionValue,
+  serializeMockViewerSession,
+} from '@/lib/mock/mock-session'
+import { getMockProfile } from '@/lib/mock/mock-viewer'
 import type { MockViewerSession, Profile, Viewer } from '@/lib/mock/types'
 
 export async function getMockViewerSession(): Promise<MockViewerSession | null> {
@@ -12,12 +22,37 @@ export async function getMockViewerSession(): Promise<MockViewerSession | null> 
 
 export async function getCurrentViewer(): Promise<Viewer | null> {
   const session = await getMockViewerSession()
-  return session ? getMockViewer(session) : null
+  if (!session) {
+    return null
+  }
+
+  const profile = await getCurrentProfile()
+
+  return {
+    viewerId: session.viewerId,
+    displayName: profile?.displayName ?? session.displayName,
+    email: session.email,
+    faction: session.faction,
+    avatarUrl: profile?.avatarUrl ?? session.avatarUrl ?? null,
+  }
 }
 
 export async function getCurrentProfile(): Promise<Profile | null> {
   const session = await getMockViewerSession()
-  return session ? getMockProfile(session) : null
+  if (!session) {
+    return null
+  }
+
+  const baseProfile = getMockProfile(session)
+  const overrides =
+    (await getMockProfileOverrides(session.viewerId)) ??
+    createDefaultMockProfileOverrides(session.viewerId)
+
+  return applyMockProfileOverrides({
+    baseProfile,
+    overrides,
+    session,
+  })
 }
 
 export async function setMockViewerSession(session: MockViewerSession) {

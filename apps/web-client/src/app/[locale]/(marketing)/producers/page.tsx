@@ -3,8 +3,10 @@ import { ArrowRight, MapPin, Tractor } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asString, isRecord } from '@/lib/type-guards'
+import { getMockProducers } from './_features/mock-producers'
 
 type ProducerRow = {
   id: string
@@ -50,34 +52,39 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function ProducersPage() {
-  const supabase = await createClient()
   const t = await getTranslations('producers')
 
-  const { data } = await supabase.from('public_producers').select('*').order('name_default')
-  const producers = Array.isArray(data)
-    ? data
-        .map((entry) => toProducerRow(entry))
-        .filter((entry): entry is ProducerRow => entry !== null)
-    : []
+  const producers = isMockDataSource
+    ? getMockProducers().map((producer) => ({
+        id: producer.id,
+        slug: producer.slug,
+        name_default: producer.name_default,
+        images: producer.images,
+        address_city: producer.address_city,
+        address_country_code: producer.address_country_code,
+        type: producer.type,
+        description_default: producer.description_default,
+      }))
+    : (
+        await (await createClient()).from('public_producers').select('*').order('name_default')
+      ).data?.map((entry) => toProducerRow(entry)).filter((entry): entry is ProducerRow => entry !== null) || []
 
   return (
     <section className="pb-12 pt-0 md:pb-16 md:pt-2">
-      {/* Page Hero Section */}
       <div className="py-8 md:pb-12 md:pt-24">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               {t('intro_title')}
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
               {t('intro_description')}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pb-24 pt-8 lg:pb-16 lg:pt-10">
+      <div className="mx-auto w-full max-w-[1920px] px-4 pb-24 pt-8 md:px-8 lg:px-12 lg:pb-16 lg:pt-10">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
           {producers.map((producer) => {
             const hasValidSlug =
@@ -117,7 +124,7 @@ export default async function ProducersPage() {
                     {producer.description_default || t('no_description')}
                   </p>
 
-                  <div className="flex items-center text-primary font-medium text-sm">
+                  <div className="flex items-center text-sm font-medium text-primary">
                     {hasValidSlug ? t('discover') : t('details_coming_soon')}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </div>
@@ -142,7 +149,7 @@ export default async function ProducersPage() {
         </div>
 
         {producers.length === 0 && (
-          <div className="py-20 text-center col-span-full">
+          <div className="col-span-full py-20 text-center">
             <Tractor className="mx-auto h-12 w-12 text-muted-foreground opacity-50" />
             <h3 className="mt-4 text-lg font-semibold">{t('no_producers')}</h3>
             <p className="text-muted-foreground">{t('no_producers_desc')}</p>

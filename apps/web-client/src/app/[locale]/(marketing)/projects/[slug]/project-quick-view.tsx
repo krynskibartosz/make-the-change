@@ -1,18 +1,27 @@
 import { Badge, Button, Progress } from '@make-the-change/core/ui'
-import { ChevronRight, Globe, Leaf, MapPin } from 'lucide-react'
+import { ChevronRight, Globe, MapPin } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
+import { getProjectContext } from '@/lib/api/project-context.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { getLocalizedContent } from '@/lib/utils'
+import type { ProducerProduct } from '@/types/context'
+import { cn, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { ProjectImpactCalculator } from './components/project-impact-calculator'
+import { ProjectProducerProductsSection } from './components/project-producer-products-section'
+import { ProjectQuickViewHero } from './components/project-quick-view-hero'
 import { SimilarProjectsCarousel } from './components/similar-projects-carousel'
-import { getRelatedProjectsByType, type PublicProject } from './project-detail-data'
-import { ProjectFavoriteButton } from './project-favorite-button'
-import { ProjectShareButton } from './project-share-button'
+import {
+  getRelatedProjectsByType,
+  type PublicProject,
+  type RelatedProject,
+} from './project-detail-data'
 
 type ProjectQuickViewProps = {
   project: PublicProject
+  mode?: 'modal' | 'page'
+  producerProducts?: ProducerProduct[] | null
+  relatedProjects?: RelatedProject[]
 }
 
 const formatBadgeLabel = (value: string | null | undefined): string | null => {
@@ -22,7 +31,6 @@ const formatBadgeLabel = (value: string | null | undefined): string | null => {
   return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
 }
 
-/** Formate un montant sans symbole monétaire (18 000) */
 const formatAmountNumber = (amount: number): string =>
   new Intl.NumberFormat('fr-FR', {
     maximumFractionDigits: 0,
@@ -37,9 +45,15 @@ const getWebsiteLabel = (url: string | null): string | null => {
   }
 }
 
-export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
+export async function ProjectQuickView({
+  project,
+  mode = 'modal',
+  producerProducts,
+  relatedProjects,
+}: ProjectQuickViewProps) {
   const t = await getTranslations('projects')
   const locale = await getLocale()
+  const isPageMode = mode === 'page'
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
@@ -47,16 +61,16 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
     targetBudget > 0 ? Math.min((currentFunding / targetBudget) * 100, 100) : 0
 
   const coverImage =
-    sanitizeImageUrl(project.hero_image_url) ||
+    sanitizeImageUrl(project.hero_image_url) ??
     (Array.isArray(project.images) && project.images.length > 0
-      ? sanitizeImageUrl(project.images[0])
+      ? sanitizeImageUrl(project.images[0]) ?? undefined
       : undefined)
 
   const producerImage =
     project.producer?.images &&
     Array.isArray(project.producer.images) &&
     project.producer.images.length > 0
-      ? sanitizeImageUrl(project.producer.images[0])
+      ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
       : undefined
 
   const locationLabel = [project.address_city, project.address_country_code]
@@ -99,60 +113,59 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
       ? `/${locale}/producers/${project.producer.slug || project.producer.id}`
       : null
   const investPath = `/projects/${project.slug}/invest?source=quick_view`
-  const relatedProjects = await getRelatedProjectsByType({
-    type: project.type,
-    excludeProjectId: project.id,
-    excludeProjectSlug: project.slug,
-    limit: 3,
-  })
+  const projectContext =
+    producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
+  const resolvedProducerProducts =
+    producerProducts ?? projectContext?.producer_products ?? project.producer_products ?? null
+  const resolvedRelatedProjects =
+    relatedProjects ??
+    (await getRelatedProjectsByType({
+      type: project.type,
+      excludeProjectId: project.id,
+      excludeProjectSlug: project.slug,
+      limit: 3,
+    }))
+  const galleryMedia = [
+    ...(project.hero_image_url ? [project.hero_image_url] : []),
+    ...(Array.isArray(project.images) ? project.images : []),
+  ]
 
-  const mediaTransitionName = getEntityViewTransitionName('project', project.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
 
   return (
-    <div className="relative flex h-full min-h-full flex-col overflow-x-hidden bg-transparent">
-      {/* Ambient glow */}
+    <div
+      className={cn(
+        'relative flex flex-col overflow-x-hidden',
+        isPageMode ? 'min-h-screen bg-background' : 'h-full min-h-full bg-transparent',
+      )}
+    >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-marketing-positive-500/10 blur-3xl" />
       </div>
 
-      <div className="relative flex h-full min-h-0 flex-col overflow-x-hidden">
-        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain overscroll-x-none touch-pan-y pb-4">
+      <div
+        className={cn(
+          'relative flex min-h-0 flex-1 flex-col overflow-x-hidden',
+          !isPageMode && 'h-full',
+        )}
+      >
+        <div
+          className={cn(
+            'flex-1 overflow-x-hidden pb-4',
+            isPageMode
+              ? 'overflow-visible'
+              : 'min-h-0 overflow-y-auto overscroll-contain overscroll-x-none touch-pan-y',
+          )}
+        >
+          <ProjectQuickViewHero
+            coverImage={coverImage}
+            media={galleryMedia}
+            projectId={project.id}
+            projectName={projectName}
+            projectSlug={project.slug}
+          />
 
-          {/* ── Hero Image avec Like en overlay ── */}
-          <section>
-            <div
-              className="relative h-48 overflow-hidden bg-muted/40 sm:h-56"
-              style={{ viewTransitionName: mediaTransitionName }}
-            >
-              {coverImage ? (
-                <img src={coverImage} alt={projectName} className="h-full w-full object-cover" />
-              ) : (
-                <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/10 to-muted">
-                  <Leaf className="h-16 w-16 text-primary/50" />
-                </div>
-              )}
-              {/* Gradient bas pour faire respirer le Hero */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-              {/* ── Share + Like repositionnés sur l'image ── */}
-              <div className="absolute bottom-4 right-4 z-20 flex gap-2">
-                <ProjectShareButton
-                  projectName={projectName}
-                  projectSlug={project.slug}
-                  className="w-10 h-10 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center transition-all active:scale-95 hover:bg-black/70"
-                />
-                <ProjectFavoriteButton
-                  projectName={projectName}
-                  projectId={project.id}
-                  className="w-10 h-10 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center transition-all active:scale-95 hover:bg-black/70"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* ── Titre + Tags ── */}
           <aside className="space-y-3 px-4 pt-5 sm:px-5 lg:px-6">
             <h1
               className="text-3xl font-black tracking-tighter text-foreground sm:text-4xl"
@@ -161,7 +174,6 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
               {projectName}
             </h1>
 
-            {/* Tags catégorie + localisation uniquement (pas le statut) */}
             <div className="flex flex-wrap gap-2">
               {typeLabel ? (
                 <Badge
@@ -179,19 +191,18 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
               ) : null}
             </div>
 
-            {/* Executive summary */}
             <div className="pt-1">
               <div className="mb-2 flex items-baseline justify-between">
                 <div className="flex items-baseline">
-                  <span className="text-4xl font-black text-lime-400 tabular-nums tracking-tight">
+                  <span className="text-4xl font-black tabular-nums tracking-tight text-lime-400">
                     {formatAmountNumber(currentFunding)}{' '}
-                    <span className="text-2xl text-lime-400/80">€</span>
+                    <span className="text-2xl text-lime-400/80">EUR</span>
                   </span>
-                  <span className="ml-2 text-sm font-medium text-white/50 tabular-nums">
-                    / {formatAmountNumber(targetBudget)} €
+                  <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
+                    / {formatAmountNumber(targetBudget)} EUR
                   </span>
                 </div>
-                <span className="text-sm font-bold text-white tabular-nums tracking-tight">
+                <span className="text-sm font-bold tabular-nums tracking-tight text-white">
                   {Math.round(fundingProgress)}%
                 </span>
               </div>
@@ -203,19 +214,13 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
             </div>
           </aside>
 
-          {/* ── Corps éditorial ── */}
-          <div className="mt-5 space-y-6  pb-40   sm:pb-44 lg:px-6">
-
-            {/* Description : texte nu, sans card */}
+          <div className="mt-5 space-y-6 pb-40 sm:pb-44 lg:px-6">
             {projectDescription ? (
-              
-                <p className="whitespace-pre-wrap px-4 sm:px-5 text-sm leading-relaxed text-white/80 text-pretty sm:text-base">
-                  {projectDescription}
-                </p>
-              
+              <p className="whitespace-pre-wrap px-4 text-sm leading-relaxed text-pretty text-white/80 sm:px-5 sm:text-base">
+                {projectDescription}
+              </p>
             ) : null}
 
-            {/* Producteur : flex inline avec séparateurs subtils */}
             {project.producer ? (
               producerHref ? (
                 <a
@@ -247,7 +252,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                 </a>
               ) : (
                 <section className="flex items-center gap-4 border-y border-white/5 px-4 py-3 sm:px-5">
-                  <div className="flex items-center gap-4 w-full">
+                  <div className="flex w-full items-center gap-4">
                     {producerImage ? (
                       <img
                         src={producerImage}
@@ -266,7 +271,7 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                       </p>
                     </div>
                     {websiteUrl && websiteLabel ? (
-                      <span className="shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary">
                         <Globe className="h-3 w-3" />
                         {websiteLabel}
                       </span>
@@ -275,32 +280,43 @@ export async function ProjectQuickView({ project }: ProjectQuickViewProps) {
                 </section>
               )
             ) : null}
-<div className='px-4 sm:px-5'>
 
-            <ProjectImpactCalculator baseAmount={100} amount={currentFunding} mode="project" />
-</div>
+            {resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
+              <div className="px-4 sm:px-5">
+                <ProjectProducerProductsSection products={resolvedProducerProducts} />
+              </div>
+            ) : null}
 
-            <div className="w-full px-4 sm:px-5 max-w-full overflow-hidden">
+            <div className="px-4 sm:px-5">
+              <ProjectImpactCalculator baseAmount={100} amount={currentFunding} mode="project" />
+            </div>
+
+            <div className="w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
                 currentProjectTags={[project.type || 'beehive']}
                 locale={locale}
-                relatedProjects={relatedProjects}
+                relatedProjects={resolvedRelatedProjects}
               />
             </div>
           </div>
         </div>
 
-        <div className="relative shrink-0 border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+        <div
+          className={cn(
+            'border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl',
+            isPageMode ? 'sticky bottom-0 z-20' : 'relative shrink-0',
+          )}
+        >
           {isFundingClosed ? (
             <Button
-              className="h-14 w-full rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 justify-center gap-0 [&_svg]:hidden"
+              className="h-14 w-full justify-center gap-0 rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 [&_svg]:hidden"
               disabled
             >
               {t('detail.funding_closed')}
             </Button>
           ) : (
             <Link href={investPath} className="block w-full">
-              <Button className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform [&_svg]:hidden">
+              <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
                 Soutenir ce projet
               </Button>
             </Link>

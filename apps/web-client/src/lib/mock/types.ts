@@ -8,6 +8,7 @@ export type MockViewerSession = {
   displayName: string
   email: string
   faction: Faction | null
+  avatarUrl?: string | null
 }
 
 export type Viewer = MockViewerSession & {
@@ -17,9 +18,12 @@ export type Viewer = MockViewerSession & {
 export type Profile = {
   id: string
   displayName: string
+  firstName?: string | null
+  lastName?: string | null
   username: string
   email: string
   avatarUrl: string | null
+  coverUrl?: string | null
   faction: Faction | null
   memberSince: string
   streakDays: number
@@ -27,6 +31,8 @@ export type Profile = {
   beesSaved: number
   honeyGeneratedKg: number
   co2CapturedKg: number
+  phone?: string | null
+  bio?: string | null
   city: string
   country: string
   addressStreet: string

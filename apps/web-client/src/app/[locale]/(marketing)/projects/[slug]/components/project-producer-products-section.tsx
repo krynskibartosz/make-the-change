@@ -1,6 +1,6 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { ProducerProduct } from '@/types/context'
-import Link from 'next/link'
+import type { ProducerProduct } from '@/types/context'
+import { Link } from '@/i18n/navigation'
 import { formatCurrency } from '@/lib/utils'
 
 interface ProjectProducerProductsSectionProps {
@@ -14,7 +14,7 @@ export function ProjectProducerProductsSection({ products }: ProjectProducerProd
     <section>
       <div className="mb-6 flex items-center gap-3">
         <div className="h-10 w-1 rounded-full bg-primary" />
-        <h2 className="text-3xl font-black tracking-tight">Produits du Producteur</h2>
+        <h2 className="text-3xl font-black tracking-tight">Produits du partenaire</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {products.map((product) => (

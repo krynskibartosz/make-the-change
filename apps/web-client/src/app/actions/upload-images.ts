@@ -1,6 +1,8 @@
 'use server'
 
 import { z } from 'zod'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 
 const bucketSchema = z.enum(['projects', 'products', 'producers', 'users', 'categories'])
@@ -17,7 +19,7 @@ const deleteSchema = z.object({
 })
 
 const allowedTypes = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp'])
-const maxSize = 10 * 1024 * 1024 // 10MB
+const maxSize = 10 * 1024 * 1024
 
 type UploadResult = {
   success: boolean
@@ -27,7 +29,7 @@ type UploadResult = {
 }
 
 function validateFile(file: File): string | null {
-  if (!allowedTypes.has(file.type)) return 'Type de fichier non supporté'
+  if (!allowedTypes.has(file.type)) return 'Type de fichier non supporte'
   if (file.size > maxSize) return 'Fichier trop volumineux (max 10MB)'
   return null
 }
@@ -39,6 +41,21 @@ function buildPath(entityId: string, folder: string | undefined, fileName: strin
 }
 
 async function requireUser() {
+  if (isMockDataSource) {
+    const session = await getMockViewerSession()
+
+    if (!session) {
+      throw new Error('Unauthorized')
+    }
+
+    return {
+      user: {
+        id: session.viewerId,
+      },
+      supabase: null,
+    }
+  }
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -50,6 +67,18 @@ async function requireUser() {
   }
 
   return { user, supabase }
+}
+
+function buildMockUrl(entityId: string, folder: string | undefined, fileName: string) {
+  const seed = `${entityId}-${folder || 'asset'}-${fileName}`.replace(/[^a-zA-Z0-9-]/g, '-')
+
+  if (folder === 'avatar') {
+    return `https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(seed)}`
+  }
+
+  return `https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1600&q=80&sig=${encodeURIComponent(
+    seed,
+  )}`
 }
 
 export async function uploadImages(formData: FormData): Promise<UploadResult> {
@@ -64,17 +93,25 @@ export async function uploadImages(formData: FormData): Promise<UploadResult> {
 
     const parsed = uploadSchema.safeParse({ bucket, entityId, folder })
     if (!parsed.success) {
-      return { success: false, error: 'Paramètres invalides' }
+      return { success: false, error: 'Parametres invalides' }
     }
 
     const files = formData.getAll('files').filter((f): f is File => f instanceof File)
     if (files.length === 0) {
-      return { success: false, error: 'Aucun fichier reçu' }
+      return { success: false, error: 'Aucun fichier recu' }
     }
 
     for (const file of files) {
       const error = validateFile(file)
       if (error) return { success: false, error }
+    }
+
+    if (isMockDataSource || !supabase) {
+      return {
+        success: true,
+        urls: files.map((file) => buildMockUrl(parsed.data.entityId, parsed.data.folder, file.name)),
+        paths: files.map((file) => buildPath(parsed.data.entityId, parsed.data.folder, file.name)),
+      }
     }
 
     const urls: string[] = []
@@ -96,7 +133,6 @@ export async function uploadImages(formData: FormData): Promise<UploadResult> {
 
       return { success: true, urls, paths }
     } catch (error) {
-      // Cleanup on failure
       if (paths.length > 0) {
         await supabase.storage.from(parsed.data.bucket).remove(paths)
       }
@@ -113,7 +149,11 @@ export async function deleteImage(input: { bucket: string; filePath: string }) {
 
     const parsed = deleteSchema.safeParse(input)
     if (!parsed.success) {
-      return { success: false, error: 'Paramètres invalides' }
+      return { success: false, error: 'Parametres invalides' }
+    }
+
+    if (isMockDataSource || !supabase) {
+      return { success: true }
     }
 
     const { error } = await supabase.storage.from(parsed.data.bucket).remove([parsed.data.filePath])

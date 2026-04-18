@@ -1,8 +1,20 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { ArrowLeft, Calendar, CheckCircle2, Flame, Sparkles, Target, Trophy, Zap } from 'lucide-react'
+import {
+  ArrowLeft,
+  Calendar,
+  CheckCircle2,
+  Flame,
+  Sparkles,
+  Target,
+  Trophy,
+  Zap,
+} from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockChallengeBySlug } from '@/lib/mock/mock-challenges'
+import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
@@ -59,43 +71,84 @@ interface ChallengePageProps {
 
 export default async function ChallengePage({ params }: ChallengePageProps) {
   const { slug } = await params
-  const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const { data: challengeData } = await supabase
-    .schema('gamification')
-    .from('challenges')
-    .select('*')
-    .eq('slug', slug)
-    .eq('status', 'active')
-    .maybeSingle()
-
-  const challenge = toChallengeDetail(challengeData)
-
-  if (!challenge) notFound()
-
+  let challenge: ChallengeDetailRow | null = null
   let userChallenge: UserChallengeRow | null = null
 
-  if (user) {
-    const { data: userChallengeData } = await supabase
-      .schema('gamification')
-      .from('user_challenges')
-      .select('progress, target, completed_at, claimed_at')
-      .eq('user_id', user.id)
-      .eq('challenge_id', challenge.id)
-      .maybeSingle()
+  if (isMockDataSource) {
+    const mockChallenge = getMockChallengeBySlug(slug)
+    if (!mockChallenge) {
+      notFound()
+    }
 
-    if (userChallengeData) {
+    challenge = {
+      id: mockChallenge.id,
+      slug: mockChallenge.slug,
+      title: mockChallenge.title,
+      description: mockChallenge.description,
+      type:
+        mockChallenge.type === 'daily_harvest'
+          ? 'daily'
+          : mockChallenge.type === 'social'
+            ? 'monthly'
+            : 'seasonal',
+      reward_graines: mockChallenge.reward,
+      reward_badge: mockChallenge.rewardBadge,
+      start_date: mockChallenge.startDate,
+      end_date: mockChallenge.endDate,
+      metadata: mockChallenge.metadata,
+    }
+
+    const viewer = await getCurrentViewer()
+    if (viewer) {
       userChallenge = {
-        progress: asNumber(userChallengeData.progress, 0),
-        target: Math.max(1, asNumber(userChallengeData.target, 100)),
-        completed_at: asString(userChallengeData.completed_at) || null,
-        claimed_at: asString(userChallengeData.claimed_at) || null,
+        progress: mockChallenge.progress,
+        target: mockChallenge.max,
+        completed_at: mockChallenge.completedAt,
+        claimed_at: mockChallenge.claimedAt,
       }
     }
+  } else {
+    const supabase = await createClient()
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    const { data: challengeData } = await supabase
+      .schema('gamification')
+      .from('challenges')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'active')
+      .maybeSingle()
+
+    challenge = toChallengeDetail(challengeData)
+
+    if (!challenge) notFound()
+
+    if (user) {
+      const { data: userChallengeData } = await supabase
+        .schema('gamification')
+        .from('user_challenges')
+        .select('progress, target, completed_at, claimed_at')
+        .eq('user_id', user.id)
+        .eq('challenge_id', challenge.id)
+        .maybeSingle()
+
+      if (userChallengeData) {
+        userChallenge = {
+          progress: asNumber(userChallengeData.progress, 0),
+          target: Math.max(1, asNumber(userChallengeData.target, 100)),
+          completed_at: asString(userChallengeData.completed_at) || null,
+          claimed_at: asString(userChallengeData.claimed_at) || null,
+        }
+      }
+    }
+  }
+
+  if (!challenge) {
+    notFound()
   }
 
   const progress = userChallenge?.progress ?? 0
@@ -105,18 +158,18 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
   const isClaimed = Boolean(userChallenge?.claimed_at)
   const rewardLabel =
     challenge.reward_graines > 0
-      ? `+${challenge.reward_graines} Graines 🌱`
+      ? `+${challenge.reward_graines} Graines`
       : challenge.reward_badge || 'Badge'
   const hint =
     asString(challenge.metadata.hint) ||
     (challenge.type === 'daily'
-      ? 'Revenez régulièrement pour faire progresser ce challenge.'
+      ? 'Revenez regulierement pour faire progresser ce challenge.'
       : challenge.type === 'monthly'
-        ? 'Accumulez vos actions sur la période en cours.'
-        : 'Concentrez-vous sur les actions à fort impact pour le terminer.')
+        ? 'Accumulez vos actions sur la periode en cours.'
+        : 'Concentrez-vous sur les actions a fort impact pour le terminer.')
   const nextStep =
     asString(challenge.metadata.next_step) ||
-    'Complétez vos actions depuis les projets, le dashboard et la communauté.'
+    'Completez vos actions depuis les projets, le dashboard et la communaute.'
   const dateLabel = challenge.end_date
     ? new Date(challenge.end_date).toLocaleDateString('fr-FR')
     : challenge.start_date
@@ -129,21 +182,20 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
       className="min-h-[calc(100svh-4rem)] bg-gradient-to-b from-background via-background to-muted/20 py-4 sm:py-8"
     >
       <div className="space-y-6">
-        <Link href="/challenges">
+        <Link href="/aventure?tab=defis">
           <Button variant="ghost" size="sm" className="hover:bg-muted/50">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour aux challenges
+            Retour aux defis
           </Button>
         </Link>
 
-        <Card className="border-border/60 bg-card/95 shadow-lg backdrop-blur-sm rounded-3xl overflow-hidden">
+        <Card className="overflow-hidden rounded-3xl border-border/60 bg-card/95 shadow-lg backdrop-blur-sm">
           <CardContent className="space-y-6 p-6 sm:p-8">
-            {/* Header Section */}
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-              <div className="space-y-3 flex-1">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+              <div className="flex-1 space-y-3">
                 <div
                   className={cn(
-                    'inline-flex w-fit items-center gap-2 rounded-full border backdrop-blur-sm px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em]',
+                    'inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] backdrop-blur-sm',
                     challenge.type === 'daily'
                       ? 'border-info/20 bg-info/10 text-info'
                       : challenge.type === 'monthly'
@@ -158,36 +210,41 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
                       ? 'Mensuel'
                       : 'Saisonnier'}
                 </div>
-                <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">{challenge.title}</h1>
-                <p className="text-sm sm:text-base text-muted-foreground font-medium leading-relaxed">{challenge.description}</p>
+                <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl">
+                  {challenge.title}
+                </h1>
+                <p className="text-sm font-medium leading-relaxed text-muted-foreground sm:text-base">
+                  {challenge.description}
+                </p>
               </div>
               <div className="flex-shrink-0">
-                <Badge className="rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white border-0 px-4 py-2 text-sm font-bold shadow-lg">
+                <Badge className="rounded-full border-0 bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2 text-sm font-bold text-white shadow-lg">
                   <Trophy className="mr-2 h-4 w-4" />
                   {rewardLabel}
                 </Badge>
               </div>
             </div>
 
-            {/* Stats Grid */}
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="relative rounded-2xl border border-border/40 bg-muted/30 p-4 backdrop-blur-sm">
-                <div className="absolute top-2 right-2">
-                  <div className="h-8 w-8 rounded-full bg-info/10 flex items-center justify-center">
+                <div className="absolute right-2 top-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-info/10">
                     <Sparkles className="h-4 w-4 text-info" />
                   </div>
                 </div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">Conseil</p>
-                <p className="text-sm leading-relaxed pr-8">{hint}</p>
+                <p className="mb-3 pr-8 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                  Conseil
+                </p>
+                <p className="text-sm leading-relaxed">{hint}</p>
               </div>
-              
+
               <div className="relative rounded-2xl border border-border/40 bg-muted/30 p-4 backdrop-blur-sm">
-                <div className="absolute top-2 right-2">
-                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <div className="absolute right-2 top-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
                     <Flame className="h-4 w-4 text-primary" />
                   </div>
                 </div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
                   Progression
                 </p>
                 <div className="space-y-1">
@@ -197,12 +254,19 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
                   </p>
                 </div>
               </div>
-              
+
               <div className="relative rounded-2xl border border-border/40 bg-muted/30 p-4 backdrop-blur-sm">
-                <div className="absolute top-2 right-2">
-                  <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                    isClaimed ? 'bg-success/10' : isCompleted ? 'bg-primary/10' : 'bg-warning/10'
-                  }`}>
+                <div className="absolute right-2 top-2">
+                  <div
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-full',
+                      isClaimed
+                        ? 'bg-success/10'
+                        : isCompleted
+                          ? 'bg-primary/10'
+                          : 'bg-warning/10',
+                    )}
+                  >
                     {isClaimed ? (
                       <CheckCircle2 className="h-4 w-4 text-success" />
                     ) : isCompleted ? (
@@ -212,13 +276,15 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
                     )}
                   </div>
                 </div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">Statut</p>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                  Statut
+                </p>
                 <div className="space-y-1">
                   <p className="text-sm font-semibold">
                     {isClaimed ? (
-                      <span className="text-success">Récompense réclamée</span>
+                      <span className="text-success">Recompense reclamee</span>
                     ) : isCompleted ? (
-                      <span className="text-primary">Récompense à réclamer</span>
+                      <span className="text-primary">Recompense a reclamer</span>
                     ) : (
                       <span className="text-warning">En cours</span>
                     )}
@@ -233,42 +299,47 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
               </div>
             </div>
 
-            {/* Progress Section */}
-            <div className="space-y-4 p-6 rounded-2xl bg-gradient-to-r from-muted/20 to-muted/10 border border-border/30">
+            <div className="space-y-4 rounded-2xl border border-border/30 bg-gradient-to-r from-muted/20 to-muted/10 p-6">
               <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                 <span className="flex items-center gap-2">
                   <Target className="h-4 w-4" />
                   Avancement
                 </span>
-                <span className="text-primary font-black">{Math.round(percentage)}%</span>
+                <span className="font-black text-primary">{Math.round(percentage)}%</span>
               </div>
               <div className="relative h-3 w-full overflow-hidden rounded-full bg-muted/50">
                 <div
                   className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-primary/80 transition-all duration-700 shadow-sm"
                   style={{ width: `${percentage}%` }}
                 />
-                {percentage > 0 && (
-                  <div 
-                    className="absolute top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-white shadow-md transition-all duration-300"
+                {percentage > 0 ? (
+                  <div
+                    className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-white shadow-md transition-all duration-300"
                     style={{ left: `calc(${percentage}% - 4px)` }}
                   />
-                )}
+                ) : null}
               </div>
-              <p className="text-sm text-muted-foreground font-medium leading-relaxed">{nextStep}</p>
+              <p className="text-sm font-medium leading-relaxed text-muted-foreground">{nextStep}</p>
             </div>
 
-            {/* Action Buttons */}
             <div className="grid gap-4 sm:grid-cols-2">
-              <Button asChild className="w-full h-12 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-lg hover:shadow-xl transition-all duration-300">
+              <Button
+                asChild
+                className="h-12 w-full rounded-2xl text-xs font-bold uppercase tracking-widest shadow-lg transition-all duration-300 hover:shadow-xl"
+              >
                 <Link href="/projects" className="flex items-center justify-center gap-2">
                   <Trophy className="h-4 w-4" />
-                  Découvrir des projets
+                  Decouvrir des projets
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="w-full h-12 rounded-2xl font-bold uppercase tracking-widest text-xs border-border/60 hover:bg-muted/50 transition-all duration-300">
-                <Link href="/leaderboard" className="flex items-center justify-center gap-2">
+              <Button
+                asChild
+                variant="outline"
+                className="h-12 w-full rounded-2xl border-border/60 text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-muted/50"
+              >
+                <Link href="/aventure?tab=defis" className="flex items-center justify-center gap-2">
                   <Target className="h-4 w-4" />
-                  Voir le classement
+                  Retour au hub
                 </Link>
               </Button>
             </div>
