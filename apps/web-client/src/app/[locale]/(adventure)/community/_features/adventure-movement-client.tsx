@@ -12,6 +12,7 @@ import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { useHaptic } from '@/hooks/use-haptic'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 
 type ImpactEvent = {
   id: string
@@ -326,71 +327,79 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
           {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
         </p>
 
-        {/* MODALE — LE PRIVILÈGE DE L'ESSAIM */}
+        {/* FULL-SCREEN — LE PRIVILEGE DE L'ESSAIM */}
         {showPrivilege && (
-          <div
-            className="fixed inset-0 z-50 flex items-end justify-center p-4 pb-8 sm:items-center"
-            onClick={() => setShowPrivilege(false)}
+          <FullScreenSlideModal
+            title="Le Privilège de l'Essaim"
+            headerMode="close"
+            fallbackHref="/collectif"
           >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <div className="flex flex-col gap-6 px-5 pb-10 pt-8 sm:px-6">
 
-            {/* Panneau */}
-            <div
-              className="relative w-full max-w-sm overflow-hidden rounded-[2rem] border border-amber-400/20 bg-[#131820]/95 p-6 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.6)]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Fermer */}
+              {/* Icône + titre */}
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-400/15">
+                  <Gift className="h-8 w-8 text-amber-400" />
+                </div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80">La Récompense du Mois</p>
+                <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
+                  Si l'Essaim atteint 100%, notre partenaire{' '}
+                  <span className="font-semibold text-white">Ilanga Nature</span>{' '}
+                  débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
+                </p>
+              </div>
+
+              {/* Jauge de progression */}
+              <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+                <div className="flex items-center justify-between text-xs text-white/50">
+                  <span>Progression collective</span>
+                  <span className="font-bold text-white">{collectiveGoal.progress}%</span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#1A222C]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
+                    style={{ width: `${collectiveGoal.progress}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-center text-[11px] text-white/40">
+                  Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
+                </p>
+              </div>
+
+              {/* Récompenses */}
+              <div className="space-y-3">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
+                <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
+                    <Droplets className="h-5 w-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white">15% de privilège</p>
+                    <p className="text-sm text-white/50">Sur la récolte de miel Ilanga Nature</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-400/15">
+                    <Sparkles className="h-5 w-5 text-violet-400" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
+                    <p className="text-sm text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bouton fermer */}
               <button
                 type="button"
                 onClick={() => setShowPrivilege(false)}
-                className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/60 hover:text-white"
+                className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white/10 text-sm font-semibold text-white transition-colors hover:bg-white/15"
               >
-                <X className="h-4 w-4" />
+                Compris, let's go ! 🌱
               </button>
-
-              {/* Icône */}
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/15">
-                <Gift className="h-7 w-7 text-amber-400" />
-              </div>
-
-              {/* Texte */}
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80">La Récompense du Mois</p>
-              <h3 className="mt-1 text-xl font-black text-white">Le Privilège de l'Essaim</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/65">
-                Si l'Essaim atteint 100%, notre partenaire{' '}
-                <span className="font-semibold text-white">Ilanga Nature</span>{' '}
-                débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
-              </p>
-
-              {/* Récompenses */}
-              <div className="mt-4 space-y-2">
-                <div className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
-                    <Droplets className="h-4 w-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">15% de privilège</p>
-                    <p className="text-xs text-white/50">Sur la récolte de miel Ilanga Nature</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-violet-400/15">
-                    <Sparkles className="h-4 w-4 text-violet-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
-                    <p className="text-xs text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <p className="mt-5 text-center text-xs text-white/35">
-                Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 pour débloquer ce privilège.
-              </p>
             </div>
-          </div>
+          </FullScreenSlideModal>
         )}
 
         {/* LE PODIUM MASCOTTES */}
