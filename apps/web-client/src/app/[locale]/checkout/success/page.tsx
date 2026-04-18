@@ -7,6 +7,7 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { Link, redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
+import { isMockDataSource } from '@/lib/mock/data-source'
 
 interface CheckoutSuccessPageProps {
   searchParams: Promise<{ orderId?: string }>
@@ -16,39 +17,62 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
   const { orderId } = await searchParams
   if (!orderId) notFound()
 
-  const supabase = await createClient()
   const locale = await getLocale()
   const t = await getTranslations('checkout.success')
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user: { id: string } | null = null
+  let order: any = null
 
-  if (!user) {
-    const returnTo = encodeURIComponent(`/checkout/success?orderId=${orderId}`)
-    return redirect({ href: `/login?returnTo=${returnTo}`, locale })
-  }
+  if (isMockDataSource) {
+    user = { id: 'mock' }
+    order = {
+      id: orderId,
+      status: 'paid',
+      total_points: 250,
+      created_at: new Date().toISOString(),
+      items: [
+        {
+          id: 'mock-item-1',
+          quantity: 1,
+          unit_price_points: 250,
+          total_price_points: 250,
+          product_snapshot: { name: 'Article fictif', priceEuros: 0, pricePoints: 250 }
+        }
+      ]
+    }
+  } else {
+    const supabase = await createClient()
+    const { data: authData } = await supabase.auth.getUser()
+    user = authData.user
 
-  const { data: order } = await supabase
-    .from('orders')
-    .select(
-      `
-      id,
-      status,
-      total_points,
-      created_at,
-      items:order_items(
+    if (!user) {
+      const returnTo = encodeURIComponent(`/checkout/success?orderId=${orderId}`)
+      return redirect({ href: `/login?returnTo=${returnTo}`, locale })
+    }
+
+    const { data: orderData } = await supabase
+      .from('orders')
+      .select(
+        `
         id,
-        quantity,
-        unit_price_points,
-        total_price_points,
-        product_snapshot
+        status,
+        total_points,
+        created_at,
+        items:order_items(
+          id,
+          quantity,
+          unit_price_points,
+          total_price_points,
+          product_snapshot
+        )
+      `,
       )
-    `,
-    )
-    .eq('id', orderId)
-    .eq('user_id', user.id)
-    .single()
+      .eq('id', orderId)
+      .eq('user_id', user.id)
+      .single()
+      
+    order = orderData
+  }
 
   if (!order) notFound()
 

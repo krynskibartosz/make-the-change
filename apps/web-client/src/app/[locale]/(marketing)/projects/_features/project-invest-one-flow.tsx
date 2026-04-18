@@ -8,7 +8,7 @@ import {
 } from '@make-the-change/core/ui'
 import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, CheckCircle, CheckCircle2, Lock, MapPin, Gift, RefreshCw, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowLeft, CheckCircle, CheckCircle2, Lock, MapPin, Gift, RefreshCw, ShieldCheck, Sparkles, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -115,6 +115,7 @@ export function ProjectInvestOneFlow({
   const [claimEmail, setClaimEmail] = useState('')
   const [claimSaved, setClaimSaved] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
+  const [isProcessing, setIsProcessing] = useState(false)
   const amountInputRef = useRef<HTMLInputElement | null>(null)
   const claimEmailInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -240,7 +241,11 @@ export function ProjectInvestOneFlow({
     }
 
     setGuestEmailError(null)
-    setStep('success')
+    setIsProcessing(true)
+    setTimeout(() => {
+      setIsProcessing(false)
+      setStep('success')
+    }, 1500)
   }
 
   const submitClaim = () => {
@@ -626,11 +631,21 @@ export function ProjectInvestOneFlow({
         <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
           <Button
             type="button"
+            disabled={isProcessing}
             onClick={goToSuccess}
-            className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+            className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
           >
-            <Lock className="h-5 w-5" />
-            {`Payer ${formatAmountNumber(amountEur)} €`}
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Traitement en cours...
+              </>
+            ) : (
+              <>
+                <Lock className="h-5 w-5" />
+                {`Payer ${formatAmountNumber(amountEur)} €`}
+              </>
+            )}
           </Button>
         </div>
       ) : null}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, MapPin, Plus, Sparkles, X } from 'lucide-react'
+import { ArrowLeft, MapPin, Plus, Sparkles, X, Loader2 } from 'lucide-react'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 interface ProductCheckoutViewProps {
@@ -18,6 +18,8 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [hasAddress, setHasAddress] = useState(false) // Faux état pour la démo
   const [quantity, setQuantity] = useState(1)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [userBalance, setUserBalance] = useState(2450)
 
   const imageUrl =
     sanitizeImageUrl(product.image_url) ||
@@ -25,7 +27,6 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
       ? sanitizeImageUrl(product.images[0])
       : undefined)
 
-  const userBalance = 2450
   const totalCost = selectedFormat.points * quantity
   const newBalance = userBalance - totalCost
 
@@ -143,10 +144,19 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
           
           {hasAddress ? (
             <button 
-              onClick={() => setStep(3)}
-              className="w-full rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              disabled={isProcessing || newBalance < 0}
+              onClick={() => {
+                if (newBalance < 0) return
+                setIsProcessing(true)
+                setTimeout(() => {
+                  setUserBalance(newBalance)
+                  setIsProcessing(false)
+                  setStep(3)
+                }, 1500)
+              }}
+              className="w-full flex items-center justify-center gap-2 rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100"
             >
-              Confirmer l'échange
+              {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : "Confirmer l'échange"}
             </button>
           ) : (
             <button className="w-full cursor-not-allowed rounded-2xl bg-white/10 py-4 text-lg font-bold text-white/30">
