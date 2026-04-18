@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Bird, Globe, Gift, Leaf, PawPrint, Sprout, Star, Target, Trophy, type LucideIcon } from 'lucide-react'
+import { Bird, Globe, Gift, Leaf, PawPrint, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
@@ -260,6 +260,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
   const searchParams = useSearchParams()
   const { guardAction } = useActionAuth()
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
+  const [showPrivilege, setShowPrivilege] = useState(false)
   const collectiveGoal = getCollectiveGoal()
   const factionContributions = getFactionContributions()
   const activeContribution = getFactionContribution(initialFaction)
@@ -304,16 +305,89 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
           </h2>
         </div>
 
-        {/* JAUGE FINE FULL-WIDTH */}
-        <div className="relative h-2 w-full overflow-hidden rounded-full bg-[#1A222C]">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
-            style={{ width: `${collectiveGoal.progress}%` }}
-          />
+        {/* JAUGE FINE + BOUTON PRIVILÈGE */}
+        <div className="flex items-center gap-3">
+          <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-[#1A222C]">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
+              style={{ width: `${collectiveGoal.progress}%` }}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowPrivilege(true)}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+            aria-label="Voir la récompense du mois"
+          >
+            <Gift className="h-3.5 w-3.5" />
+          </button>
         </div>
         <p className="mt-2 text-center text-[11px] text-white/40">
           {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
         </p>
+
+        {/* MODALE — LE PRIVILÈGE DE L'ESSAIM */}
+        {showPrivilege && (
+          <div
+            className="fixed inset-0 z-50 flex items-end justify-center p-4 pb-8 sm:items-center"
+            onClick={() => setShowPrivilege(false)}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+            {/* Panneau */}
+            <div
+              className="relative w-full max-w-sm overflow-hidden rounded-[2rem] border border-amber-400/20 bg-[#131820]/95 p-6 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.6)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Fermer */}
+              <button
+                type="button"
+                onClick={() => setShowPrivilege(false)}
+                className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/60 hover:text-white"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              {/* Icône */}
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/15">
+                <Gift className="h-7 w-7 text-amber-400" />
+              </div>
+
+              {/* Texte */}
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80">La Récompense du Mois</p>
+              <h3 className="mt-1 text-xl font-black text-white">Le Privilège de l'Essaim</h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/65">
+                Si l'Essaim atteint 100%, notre partenaire{' '}
+                <span className="font-semibold text-white">Ilanga Nature</span>{' '}
+                débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
+              </p>
+
+              {/* Récompenses */}
+              <div className="mt-4 space-y-2">
+                <div className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3">
+                  <span className="text-xl">🍯</span>
+                  <div>
+                    <p className="text-sm font-bold text-white">15% de privilège</p>
+                    <p className="text-xs text-white/50">Sur la récolte de miel Ilanga Nature</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3">
+                  <span className="text-xl">✨</span>
+                  <div>
+                    <p className="text-sm font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
+                    <p className="text-xs text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <p className="mt-5 text-center text-xs text-white/35">
+                Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 pour débloquer ce privilège.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* LE PODIUM MASCOTTES */}
         {(() => {
