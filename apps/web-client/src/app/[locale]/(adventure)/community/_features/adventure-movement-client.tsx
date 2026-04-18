@@ -33,7 +33,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     name: 'Thomas M.',
     profileId: 'thomas-m',
     time: 'Il y a 2 min',
-    action: 'Vient de soutenir le rucher de Manakara avec sa contribution Terres & Forêts.',
+    action: 'A apporté ses graines 🌱 au Rucher de Manakara pour les Terres & Forêts.',
     icon: Sprout,
     iconColor: 'text-emerald-400',
     actionHighlight: 'rucher de Manakara',
@@ -312,7 +312,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
           />
         </div>
         <p className="mt-2 text-center text-[11px] text-white/45">
-          {collectiveGoal.progress}% financé · plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱
+          {collectiveGoal.progress}% récolté · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
         </p>
 
         {/* LE PODIUM MASCOTTES */}
