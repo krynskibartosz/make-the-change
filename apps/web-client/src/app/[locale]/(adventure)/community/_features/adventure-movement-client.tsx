@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Bird, Globe, Gift, Leaf, PawPrint, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
+import { Bird, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
@@ -366,14 +366,18 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
               {/* Récompenses */}
               <div className="mt-4 space-y-2">
                 <div className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3">
-                  <span className="text-xl">🍯</span>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
+                    <Droplets className="h-4 w-4 text-amber-400" />
+                  </div>
                   <div>
                     <p className="text-sm font-bold text-white">15% de privilège</p>
                     <p className="text-xs text-white/50">Sur la récolte de miel Ilanga Nature</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3">
-                  <span className="text-xl">✨</span>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-violet-400/15">
+                    <Sparkles className="h-4 w-4 text-violet-400" />
+                  </div>
                   <div>
                     <p className="text-sm font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
                     <p className="text-xs text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
