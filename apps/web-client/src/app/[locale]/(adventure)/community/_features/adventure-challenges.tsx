@@ -10,7 +10,8 @@ import {
 	Sparkles,
 	UsersRound,
 	X,
-, Sprout } from 'lucide-react'
+	Sprout
+} from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { useHaptic } from '@/hooks/use-haptic'
