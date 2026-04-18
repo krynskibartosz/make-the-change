@@ -293,69 +293,90 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8 pb-24 duration-500">
-      <section className="px-4 pt-10 sm:px-6">
-        <div className="relative overflow-visible rounded-[2rem] bg-[#131820]/80 px-4 py-6 backdrop-blur-xl sm:px-6 sm:py-8">
-          {/* SECTION 1 : UNIFIED IMPACT HEADER */}
-          <div className="mb-14 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50">
-              Objectif Commun
-            </p>
-            <h2 className="mt-1 text-xl font-black uppercase tracking-tight text-white sm:text-2xl">
+      <section className="px-4 pt-12 sm:px-6">
+        <div className="relative overflow-visible rounded-[2rem] bg-[#131820]/80 px-5 pb-6 pt-5 backdrop-blur-xl sm:px-6">
+
+          {/* HEADER */}
+          <div className="mb-6 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">Objectif Commun</p>
+            <h2 className="mt-1 text-lg font-black uppercase tracking-tight text-white sm:text-xl">
               Financer {collectiveGoal.projectName}
             </h2>
-            <div className="mx-auto mt-5 h-5 w-full max-w-sm overflow-hidden rounded-full bg-white/5">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-amber-500 via-emerald-500 to-rose-500 transition-all duration-1000 ease-out"
-                style={{ width: `${collectiveGoal.progress}%` }}
-              />
-            </div>
-            <p className="mt-3 text-xs font-semibold text-white/60">
-              Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 pour financer le projet
+            <p className="mt-1.5 text-xs font-medium text-white/50">
+              {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
             </p>
           </div>
 
-          {/* SECTION 2 : COOPETITION ROW (Organic Pods) */}
-          <div className="flex flex-row justify-between gap-3 sm:gap-4">
-            {factionContributions.map((contribution) => {
-              const theme = getFactionThemeByKey(contribution.themeKey)
-              const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
+          {/* LA JAUGE TOTEM */}
+          <div className="relative mt-14">
+            {/* Mascottes flottantes au-dessus de la jauge */}
+            <div className="absolute -top-14 left-0 flex w-full">
+              {factionContributions.map((contribution) => {
+                const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
 
-              let mascotSrc = ''
-              if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
-              else if (contribution.themeKey === 'forets') mascotSrc = '/sylva.png'
-              else if (contribution.themeKey === 'artisans') mascotSrc = '/aura.png'
+                let mascotSrc = ''
+                if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
+                else if (contribution.themeKey === 'forets') mascotSrc = '/sylva.png'
+                else if (contribution.themeKey === 'artisans') mascotSrc = '/aura.png'
 
-              return (
-                <div
-                  key={contribution.themeKey}
-                  className={cn(
-                    'relative flex flex-1 flex-col items-center justify-end rounded-[1.5rem] p-3 pt-8 sm:pt-10 transition-all duration-300',
-                    theme.accentBgSoft,
-                    isActiveFaction && cn('scale-[1.05]', theme.accentShadow)
-                  )}
-                >
-                  {/* Floating Mascot */}
-                  <div className="absolute -top-12 h-20 w-20 drop-shadow-2xl sm:-top-16 sm:h-24 sm:w-24 pointer-events-none">
-                    <img 
-                      src={mascotSrc} 
-                      alt={contribution.label} 
-                      className="h-full w-full object-contain animate-in fade-in duration-700"
-                      style={{ filter: isActiveFaction ? 'drop-shadow(0px 10px 15px rgba(255,255,255,0.1))' : 'drop-shadow(0px 10px 15px rgba(0,0,0,0.4))' }}
-                    />
+                return (
+                  <div
+                    key={contribution.themeKey}
+                    className="flex items-end justify-center"
+                    style={{ width: `${contribution.contributionShare}%` }}
+                  >
+                    <div
+                      className={cn(
+                        'relative h-14 w-14 drop-shadow-xl transition-transform duration-300',
+                        isActiveFaction && 'scale-125'
+                      )}
+                    >
+                      <img
+                        src={mascotSrc}
+                        alt={contribution.label}
+                        className="h-full w-full object-contain"
+                        style={{
+                          filter: isActiveFaction
+                            ? 'drop-shadow(0 0 8px rgba(255,255,255,0.4))'
+                            : 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))',
+                        }}
+                      />
+                    </div>
                   </div>
-                  
-                  {/* Massive Data */}
-                  <div className="flex flex-col items-center text-center z-10 pt-1">
-                    <span className={cn('text-2xl font-black tracking-tighter', theme.accentText)}>
-                      +{contribution.contributionShare}%
+                )
+              })}
+            </div>
+
+            {/* La barre épaisse segmentée */}
+            <div className="flex h-16 w-full overflow-hidden rounded-2xl bg-white/5">
+              {factionContributions.map((contribution, index) => {
+                const theme = getFactionThemeByKey(contribution.themeKey)
+                const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
+                const isLast = index === factionContributions.length - 1
+
+                return (
+                  <div
+                    key={contribution.themeKey}
+                    className={cn(
+                      'relative flex flex-col items-center justify-center',
+                      theme.accentBg,
+                      !isLast && 'border-r border-black/20',
+                      isActiveFaction && 'brightness-125'
+                    )}
+                    style={{ width: `${contribution.contributionShare}%` }}
+                  >
+                    <span className="text-lg font-black text-white drop-shadow">
+                      {contribution.contributionShare}%
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">
-                      Graines 🌱
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-white/70">
+                      {contribution.shortLabel}
                     </span>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+              {/* Portion restante */}
+              <div className="flex-1 bg-white/5" />
+            </div>
           </div>
         </div>
       </section>
