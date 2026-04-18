@@ -38,10 +38,10 @@ export function AboutPillarsTimeline({
         </span>
 
         <ol className="relative space-y-10 pl-6">
-          {/* Gradient timeline line: positioned to center on icon (h-9 w-9 = 36px, half = 18px, +1px for border) */}
+          {/* Gradient timeline line: centered on icon (li pl-10 = 40px, icon center = 40px - 18px = 22px from ol edge) */}
           <span
             aria-hidden="true"
-            className="absolute left-[19px] top-2 bottom-2 w-px bg-gradient-to-b from-emerald-400/60 via-amber-300/30 to-sky-400/40"
+            className="absolute left-[22px] top-2 bottom-2 w-px bg-gradient-to-b from-emerald-400/60 via-amber-300/30 to-sky-400/40"
           />
           <PillarRow
             entry={engagement}
