@@ -12,6 +12,7 @@ type FullScreenSlideModalProps = PropsWithChildren<{
   headerMode?: 'back' | 'close' | 'none' | 'dynamic'
   className?: string
   contentClassName?: string
+  onClose?: () => void
 }>
 
 export function FullScreenSlideModal({
@@ -20,6 +21,7 @@ export function FullScreenSlideModal({
   headerMode = 'back',
   className,
   contentClassName,
+  onClose,
   children,
 }: FullScreenSlideModalProps) {
   const router = useRouter()
@@ -64,6 +66,11 @@ export function FullScreenSlideModal({
   }, [headerMode])
 
   const handleClose = () => {
+    if (onClose) {
+      onClose()
+      return
+    }
+
     if (typeof window !== 'undefined' && window.history.length > 1) {
       router.back()
       return
@@ -94,9 +101,9 @@ export function FullScreenSlideModal({
         <button
           onClick={handleClose}
           aria-label="Fermer"
-          className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-background/80 backdrop-blur-md"
+          className="absolute right-5 top-[max(1.5rem,calc(env(safe-area-inset-top)+0.5rem))] z-20 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition-colors active:bg-white/20"
         >
-          <X className="h-5 w-5 text-white" />
+          <X className="h-5 w-5 text-white/90" />
         </button>
       ) : null}
 

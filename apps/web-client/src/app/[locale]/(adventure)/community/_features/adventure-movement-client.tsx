@@ -334,6 +334,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
             title="Le Privilège de l'Essaim"
             headerMode="close"
             fallbackHref="/collectif"
+            onClose={() => setShowPrivilege(false)}
             className="z-[100]"
           >
             {(() => {
@@ -389,9 +390,9 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                     <div className="space-y-4">
                       <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
                       
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
-                          <Droplets className="h-5 w-5 text-amber-400" />
+                      <div className="flex items-center gap-5">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
+                          <Droplets className="h-4 w-4 text-amber-400" />
                         </div>
                         <div className="flex-1 border-b border-white/5 pb-4">
                           <p className="text-base font-bold text-white">15% de privilège</p>
@@ -399,9 +400,9 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-400/10">
-                          <Sparkles className="h-5 w-5 text-violet-400" />
+                      <div className="flex items-center gap-5">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-400/10">
+                          <Sparkles className="h-4 w-4 text-violet-400" />
                         </div>
                         <div className="flex-1 pb-2">
                           <p className="text-base font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
@@ -416,7 +417,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">
                           La récolte d'Ilanga Nature
                         </p>
-                        <div className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] sm:-mx-6 sm:px-6 [&::-webkit-scrollbar]:hidden">
+                        <div className="relative -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pl-5 sm:-mx-6 sm:pl-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                           {ilangaProducts.map((product) => (
                             <Link
                               key={product.id}
@@ -438,6 +439,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                               </div>
                             </Link>
                           ))}
+                          <div className="w-1 shrink-0" />
                         </div>
                       </div>
                     )}
