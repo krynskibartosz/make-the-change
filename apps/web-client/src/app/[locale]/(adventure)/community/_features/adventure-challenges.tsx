@@ -1061,6 +1061,7 @@ export function AdventureChallenges({
           const progress = Math.min((quest.progress / quest.max) * 100, 100)
           const isComplete = quest.progress >= quest.max
           const isHarvestComplete = quest.type === 'daily_harvest' && isComplete
+          const isSocialComplete = quest.type === 'social' && isComplete
 
           const rowContent = (
             <>
@@ -1079,6 +1080,11 @@ export function AdventureChallenges({
                   {isHarvestComplete ? (
                     <p className='mt-1 text-[10px] font-bold uppercase tracking-widest text-lime-400'>
                       Recolte deja effectuee
+                    </p>
+                  ) : null}
+                  {isSocialComplete ? (
+                    <p className='mt-1 text-[10px] font-bold uppercase tracking-widest text-lime-400'>
+                      3 Bravos deja distribues
                     </p>
                   ) : null}
 
@@ -1137,13 +1143,22 @@ export function AdventureChallenges({
           }
 
           return quest.href ? (
-            <Link
-              key={quest.id}
-              href={quest.href}
-              className='flex w-full items-center gap-4 border-b border-white/5 bg-transparent px-6 py-4 transition-colors active:bg-white/5'
-            >
-              {rowContent}
-            </Link>
+            isSocialComplete ? (
+              <div
+                key={quest.id}
+                className='flex w-full cursor-default items-center gap-4 border-b border-white/5 px-6 py-4 opacity-70'
+              >
+                {rowContent}
+              </div>
+            ) : (
+              <Link
+                key={quest.id}
+                href={quest.href}
+                className='flex w-full items-center gap-4 border-b border-white/5 bg-transparent px-6 py-4 transition-colors active:bg-white/5'
+              >
+                {rowContent}
+              </Link>
+            )
           ) : (
             <div key={quest.id} className='flex w-full items-center gap-4 border-b border-white/5 px-6 py-4'>
               {rowContent}
