@@ -163,58 +163,72 @@ export default async function ProfilePage() {
         </section>
 
         {factionContribution ? (
-          <section
-            className={`mt-8 overflow-hidden rounded-3xl border bg-gradient-to-br p-5 ${accentTheme.accentBorder} ${accentTheme.heroGradient}`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${accentTheme.accentTextSoft}`}>
-                  Ma contribution collective
-                </p>
-                <h2 className="mt-2 text-xl font-black text-white">{collectiveGoal.title}</h2>
-                <p className="mt-2 text-sm text-white/70">{collectiveGoal.summary}</p>
-              </div>
-              <div className={`rounded-full border px-3 py-1 text-xs font-bold ${accentTheme.badgeClassName} ${accentTheme.accentText}`}>
-                {factionContribution.contributionShare}% de l effort
-              </div>
-            </div>
+          <section className="mt-8">
+            {/* IDENTITY POD */}
+            <div
+              className={`relative overflow-hidden rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}
+            >
+              {/* Halo d'ambiance */}
+              <div
+                className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-30 ${accentTheme.accentBg}`}
+              />
 
-            <div className="mt-5 grid gap-3">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/50">
-                  <Target className={`h-4 w-4 ${accentTheme.accentText}`} />
-                  Objectif commun
-                </div>
-                <p className="mt-3 text-base font-black text-white">{collectiveGoal.projectName}</p>
-                <p className="mt-1 text-sm text-white/70">
-                  {collectiveGoal.currentSeeds.toLocaleString('fr-FR')} / {collectiveGoal.targetSeeds.toLocaleString('fr-FR')} graines
-                </p>
-                <div className="mt-3 h-2 rounded-full bg-white/10">
-                  <div className="h-full rounded-full bg-white" style={{ width: `${collectiveGoal.progress}%` }} />
-                </div>
-                <p className={`mt-2 text-xs font-semibold ${accentTheme.accentText}`}>
-                  {factionContribution.label} apporte {factionContribution.contributionSeeds.toLocaleString('fr-FR')} graines ce mois-ci
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/50">
-                    <Trophy className={`h-4 w-4 ${accentTheme.accentText}`} />
-                    Recompense commune
-                  </div>
-                  <p className="mt-3 text-base font-black text-white">{collectiveGoal.commonRewardTitle}</p>
-                  <p className="mt-1 text-sm text-white/60">{collectiveGoal.commonRewardSummary}</p>
+              {/* LAYOUT HAUT : Mascotte + Infos */}
+              <div className="relative z-10 flex items-center gap-4">
+                {/* Mascotte 3D flottante */}
+                <div className="relative h-24 w-24 shrink-0 drop-shadow-2xl">
+                  <img
+                    src={
+                      factionContribution.themeKey === 'pollinisateurs'
+                        ? '/abeille-transparente.png'
+                        : factionContribution.themeKey === 'forets'
+                          ? '/sylva.png'
+                          : '/aura.png'
+                    }
+                    alt={factionContribution.label}
+                    className="h-full w-full object-contain"
+                    style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' }}
+                  />
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/50">
-                    <Gift className={`h-4 w-4 ${accentTheme.accentText}`} />
-                    Prestige de faction
-                  </div>
-                  <p className="mt-3 text-base font-black text-white">{factionContribution.prestigeTitle}</p>
-                  <p className="mt-1 text-sm text-white/60">{factionContribution.prestigeSummary}</p>
+                {/* Infos faction */}
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                    Ma Faction
+                  </p>
+                  <h2 className={`mt-0.5 text-xl font-black tracking-tight ${accentTheme.accentText}`}>
+                    {factionContribution.label}
+                  </h2>
+                  <p className="mt-2 text-sm font-medium text-white/60">
+                    🌱{' '}
+                    <span className="font-black text-white">
+                      {(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds).toLocaleString('fr-FR')}
+                    </span>{' '}
+                    graines apportées
+                  </p>
                 </div>
+              </div>
+
+              {/* PONT : Teasing + CTA */}
+              <div className="relative z-10 mt-4 space-y-2">
+                <div className={`flex items-center gap-2 rounded-2xl px-3 py-2 ${accentTheme.accentBgSoft}`}>
+                  <Flame className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
+                  <p className="text-xs font-semibold text-white/70">
+                    Ta faction génère{' '}
+                    <span className={`font-black ${accentTheme.accentText}`}>
+                      {factionContribution.contributionShare}%
+                    </span>{' '}
+                    de l'effort collectif ce mois-ci
+                  </p>
+                </div>
+
+                <Link
+                  href="/collectif"
+                  className={`flex w-full items-center justify-center gap-2 rounded-2xl border py-3 text-sm font-bold transition-opacity active:opacity-70 ${accentTheme.accentBorder} ${accentTheme.accentText}`}
+                >
+                  Rejoindre la quête du mois
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
           </section>
