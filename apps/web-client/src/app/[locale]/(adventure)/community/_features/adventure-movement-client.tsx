@@ -334,108 +334,125 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
             title="Le Privilège de l'Essaim"
             headerMode="close"
             fallbackHref="/collectif"
+            className="z-[100]"
           >
             {(() => {
               const ilangaProducts = getMockProducts().filter(
                 (p) => p.producer_id === 'mock-producer-ilanga-nature',
               )
+              
+              let mascotSrc = '/sylva.png'
+              if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
+              else if (activeContribution?.themeKey === 'artisans') mascotSrc = '/aura.png'
+              
+              const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
+
               return (
-                <div className="flex flex-col gap-6 px-5 pb-10 pt-8 sm:px-6">
+                <div className="flex min-h-full flex-col relative">
+                  <div className="flex flex-col gap-8 px-5 pb-28 pt-8 sm:px-6">
 
-                  {/* Icône + titre */}
-                  <div className="flex flex-col items-center text-center">
-                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-400/15">
-                      <Gift className="h-8 w-8 text-amber-400" />
-                    </div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80">La Récompense du Mois</p>
-                    <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
-                    <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
-                      Si l'Essaim atteint 100%, notre partenaire{' '}
-                      <span className="font-semibold text-white">Ilanga Nature</span>{' '}
-                      débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
-                    </p>
-                  </div>
-
-                  {/* Jauge de progression */}
-                  <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-                    <div className="flex items-center justify-between text-xs text-white/50">
-                      <span>Progression collective</span>
-                      <span className="font-bold text-white">{collectiveGoal.progress}%</span>
-                    </div>
-                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#1A222C]">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
-                        style={{ width: `${collectiveGoal.progress}%` }}
-                      />
-                    </div>
-                    <p className="mt-2 text-center text-[11px] text-white/40">
-                      Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
-                    </p>
-                  </div>
-
-                  {/* Récompenses */}
-                  <div className="space-y-3">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
-                    <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
-                        <Droplets className="h-5 w-5 text-amber-400" />
+                    {/* En-tête : Mascotte & Titre */}
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative mb-4 flex h-24 w-24 items-center justify-center">
+                        <div className={`absolute inset-0 rounded-full blur-2xl opacity-40 ${activeTheme.accentBg}`} />
+                        <img src={mascotSrc} alt="Mascotte faction" className="relative z-10 h-full w-full object-contain drop-shadow-2xl" />
                       </div>
-                      <div>
-                        <p className="font-bold text-white">15% de privilège</p>
-                        <p className="text-sm text-white/50">Sur la récolte de miel Ilanga Nature</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-400/15">
-                        <Sparkles className="h-5 w-5 text-violet-400" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
-                        <p className="text-sm text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Produits du partenaire */}
-                  {ilangaProducts.length > 0 && (
-                    <div className="space-y-3">
-                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">
-                        La récolte d'Ilanga Nature
+                      <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${activeTheme.accentTextSoft}`}>
+                        La Récompense du Mois
                       </p>
-                      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 sm:-mx-6 sm:px-6">
-                        {ilangaProducts.map((product) => (
-                          <Link
-                            key={product.id}
-                            href={`/products/${product.slug}`}
-                            prefetch={false}
-                            className="group flex w-44 shrink-0 flex-col overflow-hidden rounded-2xl border border-white/8 bg-white/5 transition-transform active:scale-[0.97]"
-                          >
-                            <div className="aspect-square w-full overflow-hidden bg-white/5">
-                              <img
-                                src={product.image_url}
-                                alt={product.name_default}
-                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              />
-                            </div>
-                            <div className="flex flex-col gap-1 p-3">
-                              <p className="text-sm font-bold text-white line-clamp-1">{product.name_default}</p>
-                              <p className="text-[11px] text-white/50 line-clamp-2">{product.short_description_default}</p>
-                              <p className="mt-1 text-sm font-black text-amber-400">{product.price_points} 🌱</p>
-                            </div>
-                          </Link>
-                        ))}
+                      <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
+                      <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
+                        Si l'Essaim atteint 100%, notre partenaire{' '}
+                        <span className="font-semibold text-white">Ilanga Nature</span>{' '}
+                        débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
+                      </p>
+                    </div>
+
+                    {/* Jauge de progression (Focus) */}
+                    <div>
+                      <div className="flex items-center justify-between text-xs text-white/50">
+                        <span>Progression collective</span>
+                        <span className="font-bold text-white">{collectiveGoal.progress}%</span>
+                      </div>
+                      <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#1A222C]">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
+                          style={{ width: `${collectiveGoal.progress}%` }}
+                        />
+                      </div>
+                      <p className="mt-2 text-center text-[11px] text-white/40">
+                        Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
+                      </p>
+                    </div>
+
+                    {/* Récompenses (Sleek List) */}
+                    <div className="space-y-4">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
+                          <Droplets className="h-5 w-5 text-amber-400" />
+                        </div>
+                        <div className="flex-1 border-b border-white/5 pb-4">
+                          <p className="text-base font-bold text-white">15% de privilège</p>
+                          <p className="text-sm text-white/50">Sur la récolte de miel Ilanga Nature</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-400/10">
+                          <Sparkles className="h-5 w-5 text-violet-400" />
+                        </div>
+                        <div className="flex-1 pb-2">
+                          <p className="text-base font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
+                          <p className="text-sm text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
+                        </div>
                       </div>
                     </div>
-                  )}
 
-                  {/* Bouton fermer */}
-                  <button
-                    type="button"
-                    onClick={() => setShowPrivilege(false)}
-                    className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white/10 text-sm font-semibold text-white transition-colors hover:bg-white/15"
-                  >
-                    Compris, let's go ! 🌱
-                  </button>
+                    {/* Produits du partenaire */}
+                    {ilangaProducts.length > 0 && (
+                      <div className="space-y-3">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">
+                          La récolte d'Ilanga Nature
+                        </p>
+                        <div className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] sm:-mx-6 sm:px-6 [&::-webkit-scrollbar]:hidden">
+                          {ilangaProducts.map((product) => (
+                            <Link
+                              key={product.id}
+                              href={`/products/${product.slug}`}
+                              prefetch={false}
+                              className="group flex w-44 shrink-0 snap-center flex-col overflow-hidden transition-transform active:scale-[0.97]"
+                            >
+                              <div className="aspect-square w-full overflow-hidden rounded-[1.5rem] bg-white/5 border border-white/5">
+                                <img
+                                  src={product.image_url}
+                                  alt={product.name_default}
+                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                              </div>
+                              <div className="mt-3 flex flex-col gap-0.5">
+                                <p className="text-sm font-bold text-white line-clamp-1">{product.name_default}</p>
+                                <p className="text-xs text-white/50 line-clamp-1">{product.short_description_default}</p>
+                                <p className="mt-1 text-sm font-black text-amber-400">{product.price_points} 🌱</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bouton Sticky */}
+                  <div className="sticky bottom-0 z-20 w-full border-t border-white/5 bg-[#0B0F15]/80 p-5 backdrop-blur-xl sm:px-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowPrivilege(false)}
+                      className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white text-sm font-bold text-black shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-transform hover:scale-[1.02] active:scale-95"
+                    >
+                      Compris, let's go ! 🌱
+                    </button>
+                  </div>
                 </div>
               )
             })()}
