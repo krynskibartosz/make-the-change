@@ -154,7 +154,7 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
             <div 
               key={`dot-${faction.id}`}
               className={`h-1.5 rounded-full transition-all duration-500 ${
-                activeIndex === idx ? \`w-8 \${faction.accentColor}\` : 'w-2 bg-white/20'
+                activeIndex === idx ? `w-8 ${faction.accentColor}` : 'w-2 bg-white/20'
               }`}
             />
           ))}
