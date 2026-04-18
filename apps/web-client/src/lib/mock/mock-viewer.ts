@@ -1,10 +1,10 @@
+import { getMockImpactPoints } from '@/lib/mock/mock-member-data'
+import { FACTION_TO_TRIBE_ID, MOCK_EXISTING_VIEWER_ID } from '@/lib/mock/mock-ids'
 import type { Faction, MockViewerSession, Profile, Viewer } from '@/lib/mock/types'
 
 type MockProfileSeed = Omit<Profile, 'faction'> & {
   defaultFaction: Faction | null
 }
-
-export const MOCK_EXISTING_VIEWER_ID = 'mock-viewer-bartosz'
 
 const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   id: MOCK_EXISTING_VIEWER_ID,
@@ -23,7 +23,7 @@ const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   country: 'Belgique',
   addressStreet: 'Rue du Nectar 12',
   addressPostalCode: '1000',
-  tribeIds: ['agroforest-pioneers'],
+  tribeIds: ['campus-biodiversity-lab'],
 }
 
 const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
@@ -31,6 +31,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'Thomas M.',
     username: 'thomas_m',
     avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Terres & Forêts',
     points: 1820,
     streakDays: 9,
     city: 'Lyon',
@@ -41,6 +42,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'EcoGuerrier',
     username: 'eco_guerrier',
     avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Vie Sauvage',
     points: 3210,
     streakDays: 7,
     city: 'Namur',
@@ -51,6 +53,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'Sarah L.',
     username: 'sarah_l',
     avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Vie Sauvage',
     points: 2105,
     city: 'Lille',
     country: 'France',
@@ -60,6 +63,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'Citoyen Anonyme',
     username: 'citoyen_anonyme',
     avatarUrl: null,
+    defaultFaction: 'Artisans Locaux',
     points: 540,
     city: 'Liege',
     country: 'Belgique',
@@ -69,6 +73,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'Marie-Claire B.',
     username: 'marie_claire_b',
     avatarUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Artisans Locaux',
     points: 2790,
     city: 'Bordeaux',
     country: 'France',
@@ -78,6 +83,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'Lucas V.',
     username: 'lucas_v',
     avatarUrl: 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Terres & Forêts',
     points: 1630,
     city: 'Namur',
     country: 'Belgique',
@@ -87,6 +93,7 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'NaturaMind',
     username: 'natura_mind',
     avatarUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Terres & Forêts',
     points: 3560,
     city: 'Bruxelles',
     country: 'Belgique',
@@ -96,17 +103,12 @@ const PUBLIC_PROFILE_DIRECTORY: Record<string, Partial<MockProfileSeed>> = {
     displayName: 'Amira K.',
     username: 'amira_k',
     avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=320&q=80',
+    defaultFaction: 'Vie Sauvage',
     points: 2275,
     city: 'Anvers',
     country: 'Belgique',
     tribeIds: ['ocean-mangrove-circle'],
   },
-}
-
-const factionToTribeId: Record<Faction, string> = {
-  'Vie Sauvage': 'campus-biodiversity-lab',
-  'Terres & Forêts': 'agroforest-pioneers',
-  'Artisans Locaux': 'zero-dechet',
 }
 
 const slugify = (value: string) =>
@@ -135,7 +137,7 @@ const buildGenericProfile = (session: MockViewerSession): Profile => {
     country: 'Belgique',
     addressStreet: 'Avenue du Vivant 8',
     addressPostalCode: '1050',
-    tribeIds: session.faction ? [factionToTribeId[session.faction]] : [],
+    tribeIds: session.faction ? [FACTION_TO_TRIBE_ID[session.faction]] : [],
   }
 }
 
@@ -160,7 +162,7 @@ export const createMockRegisteredViewerSession = ({
 })
 
 export const getMockTribeIdsForFaction = (faction: Faction | null): string[] => {
-  return faction ? [factionToTribeId[faction]] : []
+  return faction ? [FACTION_TO_TRIBE_ID[faction]] : []
 }
 
 export const getMockViewer = (session: MockViewerSession): Viewer => {
@@ -176,22 +178,25 @@ export const getMockViewer = (session: MockViewerSession): Viewer => {
 }
 
 export const getMockProfile = (session: MockViewerSession): Profile => {
+  const activeFaction = session.faction ?? EXISTING_VIEWER_PROFILE.defaultFaction
+
   if (session.viewerId === EXISTING_VIEWER_PROFILE.id) {
     return {
       ...EXISTING_VIEWER_PROFILE,
       email: session.email,
-      faction: session.faction ?? EXISTING_VIEWER_PROFILE.defaultFaction,
-      tribeIds:
-        session.faction === null
-          ? []
-          : getMockTribeIdsForFaction(session.faction),
+      points: getMockImpactPoints(session.viewerId),
+      faction: activeFaction,
+      tribeIds: activeFaction ? getMockTribeIdsForFaction(activeFaction) : [],
     }
   }
 
   return buildGenericProfile(session)
 }
 
-export const getMockPublicProfile = (id: string, viewerSession?: MockViewerSession | null): Profile | null => {
+export const getMockPublicProfile = (
+  id: string,
+  viewerSession?: MockViewerSession | null,
+): Profile | null => {
   if (viewerSession && viewerSession.viewerId === id) {
     return getMockProfile(viewerSession)
   }
@@ -206,9 +211,8 @@ export const getMockPublicProfile = (id: string, viewerSession?: MockViewerSessi
     displayName: directoryEntry.displayName || 'Membre',
     username: directoryEntry.username || slugify(directoryEntry.displayName || 'membre').replace(/-/g, '_'),
     email: `${slugify(directoryEntry.displayName || 'membre')}@make-the-change.mock`,
-    avatarUrl:
-      directoryEntry.avatarUrl === undefined ? null : directoryEntry.avatarUrl,
-    faction: null,
+    avatarUrl: directoryEntry.avatarUrl === undefined ? null : directoryEntry.avatarUrl,
+    faction: directoryEntry.defaultFaction ?? null,
     memberSince: '2026-02-01',
     streakDays: directoryEntry.streakDays ?? 5,
     points: directoryEntry.points ?? 900,

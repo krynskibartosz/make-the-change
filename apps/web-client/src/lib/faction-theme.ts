@@ -78,3 +78,7 @@ export const resolveFactionThemeKey = (
 export const getFactionTheme = (faction: Faction | null | undefined): FactionTheme => {
   return FACTION_THEMES[resolveFactionThemeKey(faction)]
 }
+
+export const getFactionThemeByKey = (themeKey: FactionThemeKey): FactionTheme => {
+  return FACTION_THEMES[themeKey]
+}

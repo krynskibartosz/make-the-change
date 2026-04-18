@@ -1,8 +1,8 @@
-import { getGuilds } from '@/lib/social/feed.reads'
+import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 import { AdventureMovementClient } from './adventure-movement-client'
 
 export async function AdventureMovement() {
-  const guilds = await getGuilds(6)
+  const profile = await getCurrentProfile()
 
-  return <AdventureMovementClient guilds={guilds} />
+  return <AdventureMovementClient initialFaction={profile?.faction ?? null} />
 }
