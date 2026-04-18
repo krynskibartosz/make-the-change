@@ -16,6 +16,11 @@ export default async function AboutPage() {
       <AboutPillarsTimeline {...viewModel.pillars} />
       <AboutTeamCarousel {...viewModel.team} />
       <AboutLetter {...viewModel.letter} />
+      {/* Bottom spacer so the last content is never hidden behind the fixed sticky CTA */}
+      <div
+        aria-hidden="true"
+        style={{ height: 'calc(6rem + env(safe-area-inset-bottom))' }}
+      />
       <AboutStickyCta {...viewModel.cta} />
     </>
   )

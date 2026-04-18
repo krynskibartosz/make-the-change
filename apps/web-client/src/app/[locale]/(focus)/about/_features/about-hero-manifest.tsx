@@ -1,27 +1,42 @@
 import type { AboutHeroProps } from './about.types'
 
-const HERO_IMAGE_URL =
-  'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80'
+const HERO_VIDEO_URL = '/videos/home-header.mp4'
+const HERO_POSTER_URL = '/images/home-header-poster.jpeg'
 
 export function AboutHeroManifest({ overline, title, subtitle, imageAlt }: AboutHeroProps) {
   return (
-    <section className="relative min-h-[80vh] w-full overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={HERO_IMAGE_URL}
-        alt={imageAlt}
+    <section
+      className="relative min-h-[85vh] w-full overflow-hidden"
+      aria-label={imageAlt}
+    >
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={HERO_POSTER_URL}
         className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-black" />
+      >
+        <source src={HERO_VIDEO_URL} type="video/mp4" />
+      </video>
 
-      <div className="relative z-10 flex min-h-[80vh] flex-col items-center justify-end px-6 pb-16 pt-24 text-center">
-        <span className="mb-6 text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">
+      {/* Subtle top vignette for overline legibility */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
+
+      {/* Long bottom fade-to-black for organic transition to next section */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-b from-transparent via-black/70 to-black" />
+
+      <div className="relative z-10 flex min-h-[85vh] flex-col items-center justify-end px-6 pb-20 pt-24 text-center">
+        <span className="mb-5 text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-400/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
           {overline}
         </span>
-        <h1 className="mx-auto max-w-[18ch] text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl">
+        <h1 className="mx-auto max-w-[14ch] text-4xl font-black leading-[0.95] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl">
           {title}
         </h1>
-        <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-gray-300">{subtitle}</p>
+        <p className="mx-auto mt-6 max-w-[85%] text-sm leading-relaxed text-white/70 sm:text-base sm:max-w-md">
+          {subtitle}
+        </p>
       </div>
     </section>
   )
