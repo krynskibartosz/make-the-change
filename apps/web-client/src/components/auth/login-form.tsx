@@ -17,7 +17,7 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useActionState, useEffect } from 'react'
 import { type AuthState, login } from '@/app/[locale]/(auth)/actions'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 type LoginFormProps = {
@@ -28,6 +28,7 @@ export function LoginForm({ modal = false }: LoginFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(login, {})
   const searchParams = useSearchParams()
+  const router = useRouter()
   const returnTo = searchParams.get('returnTo') || ''
   const registerHref = returnTo ? `/register?returnTo=${encodeURIComponent(returnTo)}` : '/register'
 
@@ -38,10 +39,9 @@ export function LoginForm({ modal = false }: LoginFormProps) {
       return
     }
 
-    // Use a document navigation after auth so the mock cookie is always
-    // reflected immediately across client/server boundaries and intercepted routes.
-    window.location.replace(redirectUrl)
-  }, [state])
+    router.replace(redirectUrl)
+    router.refresh()
+  }, [router, state])
 
   return (
     <Card

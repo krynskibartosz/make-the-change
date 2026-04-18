@@ -35,7 +35,7 @@ import {
   useState,
 } from 'react'
 import { type AuthState, register } from '@/app/[locale]/(auth)/actions'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 
@@ -114,6 +114,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
   const t = useTranslations('auth')
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(register, {})
   const searchParams = useSearchParams()
+  const router = useRouter()
   const urlStep = useMemo(() => parseWizardStep(searchParams.get('step')), [searchParams])
   const returnTo = searchParams.get('returnTo') || ''
   const loginHref = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : '/login'
@@ -246,10 +247,9 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
       return
     }
 
-    // Force a full navigation so mock auth/setup cookies are visible right away
-    // after registration, even when coming from intercepted routes.
-    window.location.replace(redirectUrl)
-  }, [state.redirectUrl, state.success])
+    router.replace(redirectUrl)
+    router.refresh()
+  }, [router, state.redirectUrl, state.success])
 
   const canProceed = useMemo(() => {
     if (step === 1) {
