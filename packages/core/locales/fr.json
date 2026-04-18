@@ -613,92 +613,51 @@
     }
   },
   "about": {
-    "title": "À propos de Make the CHANGE",
-    "intro": "Make the CHANGE est une plateforme innovante qui connecte les citoyens engagés avec des projets de biodiversité concrets.",
-    "mission": {
-      "title": "Notre mission",
-      "description": "Démocratiser l'investissement dans la biodiversité en le rendant accessible, transparent et gratifiant.",
-      "heading": {
-        "line1": "Democratiser",
-        "highlight": "l'impact environnemental."
-      },
-      "metrics": {
-        "transparency": "Transparent",
-        "active_projects": "Projets Actifs"
-      },
-      "image_alt": "Projet biodiversite",
-      "community": {
-        "title": "Communaute",
-        "description": "Engagee pour demain"
-      }
+    "hero": {
+      "overline": "LE MOUVEMENT",
+      "title": "Le digital au service du vivant.",
+      "subtitle": "Make the Change n'est pas qu'une application. C'est un Essaim citoyen qui transforme le virtuel en impact physique. Ne subissez plus l'éco-anxiété, agissez depuis votre poche.",
+      "imageAlt": "Forêt sombre et brumeuse"
     },
-    "values": {
-      "title": "Nos valeurs",
-      "transparency": {
-        "title": "Transparence",
-        "description": "Suivi en temps réel de l'impact de vos investissements.",
-        "verified_label": "Blockchain Verified"
+    "pillars": {
+      "overline": "LA BOUCLE DU VIVANT",
+      "engagement": {
+        "title": "L'Engagement",
+        "description": "Relevez des défis quotidiens et récoltez des Graines. Faites grandir vos espèces dans votre BioDex personnel."
+      },
+      "swarm": {
+        "title": "La Force de l'Essaim",
+        "description": "Seul on va vite, en Faction on va loin. Vos actions quotidiennes propulsent l'effort collectif du mois."
       },
       "impact": {
-        "title": "Impact",
-        "description": "Des projets concrets avec des résultats mesurables.",
-        "metric_label": "D'efficacite"
-      },
-      "community": {
-        "title": "Communauté",
-        "description": "Une communauté engagée pour la biodiversité."
-      },
-      "section_badge": "Nos piliers",
-      "section_heading": {
-        "line1": "Des valeurs ancrees dans",
-        "highlight": "l'action concrete."
-      },
-      "section_description": "Nous ne nous contentons pas de promesses. Chaque fonctionnalite de la plateforme est concue pour maximiser l'impact reel.",
-      "innovation": {
-        "title": "Innovation",
-        "description": "Tech for Good : IA, Satellite et Big Data au service de la nature.",
-        "badges": {
-          "ai": "AI",
-          "iot": "IoT"
-        }
-      }
-    },
-    "hero": {
-      "badge": "Notre Histoire",
-      "cards": {
-        "global": {
-          "title": "Global",
-          "subtitle": "Impact"
-        },
-        "nature": "Nature",
-        "social": "Social"
+        "title": "L'Impact",
+        "description": "Votre soutien finance la réalité. Des ruchers à Madagascar aux corridors écologiques en Europe, chaque Euro est traçable jusqu'au terrain."
       }
     },
     "team": {
-      "title": "L'equipe visionnaire",
-      "subtitle": "Rencontrez les esprits qui transforment l'ambition ecologique en realite.",
+      "title": "Ceux qui veillent sur l'Essaim.",
+      "subtitle": "Deux visages, une conviction : rendre l'écologie désirable.",
       "gregory": {
-        "badge": "Leadership",
-        "role": "CEO & Co-Fondateur",
-        "quote": "\"L'ecologie ne doit plus etre une contrainte, mais une opportunite.\"",
-        "bio": "Entrepreneur passionne, Gregory a consacre la derniere decennie a construire des ponts entre innovation technologique et impact durable. Sa vision : creer un ecosysteme ou chaque action individuelle se traduit par une restauration concrete de la biodiversite mondiale."
+        "name": "Grégory Steisel",
+        "role": "Initiateur du mouvement",
+        "quote": "L'écologie doit cesser d'être une contrainte pour devenir la plus belle des opportunités.",
+        "linkedinUrl": "https://www.linkedin.com/in/steisel/",
+        "linkedinLabel": "LinkedIn de Grégory Steisel"
       },
       "bartosz": {
-        "badge": "Technology",
-        "role": "CTO & Co-Fondateur",
-        "quote": "\"La transparence n'est pas une option, c'est la fondation de la confiance.\"",
-        "bio": "Architecte de l'invisible, Bartosz transforme la complexite de la blockchain en une experience utilisateur fluide et securisee. Il veille a ce que chaque ligne de code serve la mission : garantir l'integrite et l'impact de chaque investissement."
+        "name": "Bartosz Krynski",
+        "role": "Architecte de l'impact",
+        "quote": "Nous construisons le pont technologique le plus court entre votre téléphone et la nature.",
+        "linkedinUrl": "https://www.linkedin.com/in/bartosz-krynski/",
+        "linkedinLabel": "LinkedIn de Bartosz Krynski"
       }
     },
+    "letter": {
+      "body": "Si vous lisez ceci, c'est que vous cherchiez du sens. Vous l'avez trouvé. L'Essaim n'attend plus que vous pour faire la différence, aujourd'hui.",
+      "signature": "L'équipe Make the Change"
+    },
     "cta": {
-      "badge": "Rejoignez le mouvement",
-      "title": {
-        "line1": "Ensemble, preservons",
-        "line2": "notre heritage."
-      },
-      "description": "Chaque action compte. Transformez votre engagement en impact reel et mesurable pour la biodiversite.",
-      "primary": "Commencer maintenant",
-      "secondary": "Voir les projets"
+      "label": "Retourner à mon Impact"
     }
   },
   "how_it_works": {

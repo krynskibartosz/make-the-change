@@ -1144,12 +1144,14 @@ export function AdventureChallenges({
 
           return quest.href ? (
             isSocialComplete ? (
-              <div
+              <button
                 key={quest.id}
-                className='flex w-full cursor-default items-center gap-4 border-b border-white/5 px-6 py-4 opacity-70'
+                type='button'
+                disabled
+                className='flex w-full cursor-default items-center gap-4 border-b border-white/5 bg-transparent px-6 py-4 text-left opacity-70'
               >
                 {rowContent}
-              </div>
+              </button>
             ) : (
               <Link
                 key={quest.id}
