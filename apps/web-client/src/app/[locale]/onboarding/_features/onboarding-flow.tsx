@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Mail,
   Hexagon,
+  Sprout,
 } from "lucide-react";
 // We don't have Apple from lucide-react (wait, is there Apple? lucide-react actually doesn't have an Apple logo we might need to fake it or check if lucide has it).
 // Wait, the user imported Apple from 'lucide-react', let's stick to their code, if it exists it works, otherwise I might fix it later.

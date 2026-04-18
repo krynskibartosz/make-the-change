@@ -28,6 +28,7 @@ export type Profile = {
   memberSince: string
   streakDays: number
   points: number
+  totalSeedsContributed?: number
   beesSaved: number
   honeyGeneratedKg: number
   co2CapturedKg: number

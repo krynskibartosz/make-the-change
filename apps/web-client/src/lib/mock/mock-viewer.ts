@@ -19,6 +19,7 @@ const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   memberSince: '2026-01-12',
   streakDays: 12,
   points: 2450,
+  totalSeedsContributed: 2450,
   beesSaved: 3800,
   honeyGeneratedKg: 0.77,
   co2CapturedKg: 3.85,
@@ -153,6 +154,7 @@ const buildGenericProfile = (session: MockViewerSession): Profile => {
     memberSince: '2026-04-17',
     streakDays: 1,
     points: 120,
+    totalSeedsContributed: 120,
     beesSaved: 240,
     honeyGeneratedKg: 0.05,
     co2CapturedKg: 0.24,
@@ -218,6 +220,8 @@ export const getMockProfile = (session: MockViewerSession): Profile => {
       email: session.email,
       avatarUrl: session.avatarUrl ?? EXISTING_VIEWER_PROFILE.avatarUrl,
       points: getMockImpactPoints(session.viewerId),
+      totalSeedsContributed:
+        EXISTING_VIEWER_PROFILE.totalSeedsContributed ?? getMockImpactPoints(session.viewerId),
       faction: activeFaction,
       tribeIds: activeFaction ? getMockTribeIdsForFaction(activeFaction) : [],
     }
@@ -249,6 +253,7 @@ export const getMockPublicProfile = (
     memberSince: '2026-02-01',
     streakDays: directoryEntry.streakDays ?? 5,
     points: directoryEntry.points ?? 900,
+    totalSeedsContributed: Math.max(180, Math.round((directoryEntry.points ?? 900) * 1.15)),
     beesSaved: Math.max(180, Math.round((directoryEntry.points ?? 900) * 1.4)),
     honeyGeneratedKg: Number(((directoryEntry.points ?? 900) / 3000).toFixed(2)),
     co2CapturedKg: Number(((directoryEntry.points ?? 900) / 550).toFixed(2)),
