@@ -5,7 +5,10 @@ import { Bird, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Ta
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
-import { recordClientMockCollectiveBravo } from '@/lib/mock/mock-challenge-progress'
+import {
+  getClientPersistedMockChallengeStates,
+  recordClientMockCollectiveBravo,
+} from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
@@ -150,6 +153,8 @@ function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
 function ImpactCard({
   event,
   onAttemptBravo,
+  isBravoed,
+  onBravoPersisted,
   shouldAutoBravo = false,
   onAutoBravoConsumed,
   currentDayKey,
@@ -157,48 +162,56 @@ function ImpactCard({
 }: {
   event: ImpactEvent
   onAttemptBravo: (eventId: string, action: () => void) => void
+  isBravoed: boolean
+  onBravoPersisted: (eventId: string) => void
   shouldAutoBravo?: boolean
   onAutoBravoConsumed?: () => void
   currentDayKey: string
   viewerId?: string | null
 }) {
   const haptic = useHaptic()
-  const [bravo, setBravo] = useState(false)
   const accentTheme = getFactionTheme(event.faction ?? null)
 
   const handleBravoAction = useCallback(() => {
+    if (isBravoed) {
+      onAutoBravoConsumed?.()
+      return
+    }
+
     haptic.mediumTap()
-    setBravo((prev) => {
-      const next = !prev
-
-      if (next) {
-        const session = getClientMockViewerSession()
-        const effectiveViewerId = session?.viewerId ?? viewerId ?? null
-        if (effectiveViewerId) {
-          recordClientMockCollectiveBravo({
-            viewerId: effectiveViewerId,
-            dayKey: currentDayKey,
-            targetId: event.id,
-          })
-        }
-      }
-
-      return next
-    })
-  }, [currentDayKey, event.id, haptic, viewerId])
+    const session = getClientMockViewerSession()
+    const effectiveViewerId = session?.viewerId ?? viewerId ?? null
+    if (effectiveViewerId) {
+      recordClientMockCollectiveBravo({
+        viewerId: effectiveViewerId,
+        dayKey: currentDayKey,
+        targetId: event.id,
+      })
+      onBravoPersisted(event.id)
+    }
+  }, [currentDayKey, event.id, haptic, isBravoed, onAutoBravoConsumed, onBravoPersisted, viewerId])
 
   useEffect(() => {
-    if (!shouldAutoBravo || bravo) {
+    if (!shouldAutoBravo) {
+      return
+    }
+
+    if (isBravoed) {
+      onAutoBravoConsumed?.()
       return
     }
 
     handleBravoAction()
     onAutoBravoConsumed?.()
-  }, [bravo, handleBravoAction, onAutoBravoConsumed, shouldAutoBravo])
+  }, [handleBravoAction, isBravoed, onAutoBravoConsumed, shouldAutoBravo])
 
   const handleBravo = useCallback(() => {
+    if (isBravoed) {
+      return
+    }
+
     onAttemptBravo(event.id, handleBravoAction)
-  }, [event.id, handleBravoAction, onAttemptBravo])
+  }, [event.id, handleBravoAction, isBravoed, onAttemptBravo])
 
   const header = (
     <div className="mb-3 flex items-center gap-3">
@@ -243,14 +256,16 @@ function ImpactCard({
 
       <button
         onClick={handleBravo}
+        disabled={isBravoed}
         className={cn(
           'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5',
-          bravo ? accentTheme.accentText : 'text-muted-foreground',
+          isBravoed ? accentTheme.accentText : 'text-muted-foreground',
+          isBravoed && 'cursor-default',
         )}
       >
-        <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', bravo && 'fill-current')} />
-        Bravo
-        <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (bravo ? 1 : 0)}</span>
+        <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
+        {isBravoed ? 'Bravo envoye' : 'Bravo'}
+        <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
       </button>
     </div>
   )
@@ -274,12 +289,31 @@ export function AdventureMovementClient({
     faction: initialFaction,
   })
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
+  const [persistedBravoIds, setPersistedBravoIds] = useState<string[]>([])
   
   const showPrivilege = searchParams.get('p') === 'reward'
   
   const collectiveGoal = getCollectiveGoal()
   const factionContributions = getFactionContributions()
   const activeContribution = getFactionContribution(initialFaction)
+
+  useEffect(() => {
+    const effectiveViewerId = getClientMockViewerSession()?.viewerId ?? viewerId ?? null
+
+    if (!effectiveViewerId) {
+      setPersistedBravoIds([])
+      return
+    }
+
+    const collectiveEntry = getClientPersistedMockChallengeStates().find(
+      (entry) =>
+        entry.viewerId === effectiveViewerId &&
+        entry.dayKey === currentDayKey &&
+        entry.archetypeId === 'collective-bravo',
+    )
+
+    setPersistedBravoIds(collectiveEntry?.targetIds ?? [])
+  }, [currentDayKey, viewerId])
 
   useEffect(() => {
     if (searchParams.get('intent') !== 'give-bravo') {
@@ -307,6 +341,10 @@ export function AdventureMovementClient({
     },
     [guardAction],
   )
+
+  const handleBravoPersisted = useCallback((eventId: string) => {
+    setPersistedBravoIds((current) => (current.includes(eventId) ? current : [...current, eventId]))
+  }, [])
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8 pb-24 duration-500">
@@ -567,6 +605,8 @@ export function AdventureMovementClient({
             <ImpactCard
               key={event.id}
               event={event}
+              isBravoed={persistedBravoIds.includes(event.id)}
+              onBravoPersisted={handleBravoPersisted}
               currentDayKey={currentDayKey}
               viewerId={viewerId}
               onAttemptBravo={handleAttemptBravo}
