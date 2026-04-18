@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
 import { completeMockSetup } from '@/app/[locale]/(auth)/actions'
 import { useFormStatus } from 'react-dom'
 
@@ -61,6 +61,7 @@ function SubmitButton({ activeColor, text }: { activeColor: string; text: string
 export function SetupCarousel({ returnTo }: { returnTo: string }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,23 +85,52 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
   }, [activeIndex])
 
   const activeFaction = FACTIONS[activeIndex] ?? FACTIONS[0]
+  const scrollToFaction = (index: number) => {
+    const container = containerRef.current
+    if (!container) return
+
+    const clampedIndex = Math.max(0, Math.min(index, FACTIONS.length - 1))
+    const left = container.clientWidth * clampedIndex
+
+    container.scrollTo({
+      left,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    })
+    setActiveIndex(clampedIndex)
+  }
 
   return (
     <div className="relative h-[100dvh] w-full bg-[#0B0F15] overflow-hidden flex flex-col">
       {/* 1. Top Bar (Fixe) */}
       <div className="absolute top-0 left-0 w-full z-10 pt-[max(1.5rem,env(safe-area-inset-top))] px-6 pointer-events-none">
-        <p className={`text-[10px] font-black uppercase tracking-[0.25em] transition-colors duration-500 ${activeFaction.accentText}`}>
-          VOTRE AVENTURE
-        </p>
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={activeFaction.id}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className={`text-[10px] font-black uppercase tracking-[0.25em] ${activeFaction.accentText}`}
+          >
+            VOTRE AVENTURE
+          </motion.p>
+        </AnimatePresence>
         <h1 className="mt-1 text-3xl font-black tracking-tight text-white drop-shadow-md">
           Choisis ton compagnon
         </h1>
       </div>
 
       {/* Background Glow Dynamique */}
-      <div 
-        className={`absolute top-0 left-0 right-0 h-3/5 bg-gradient-to-b ${activeFaction.colorTheme} transition-all duration-700 ease-in-out pointer-events-none`} 
-      />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeFaction.id}
+          initial={prefersReducedMotion ? false : { opacity: 0.45, scale: 0.96 }}
+          animate={prefersReducedMotion ? undefined : { opacity: 1, scale: 1 }}
+          exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 1.04 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className={`absolute top-0 left-0 right-0 h-3/5 bg-gradient-to-b ${activeFaction.colorTheme} pointer-events-none`}
+        />
+      </AnimatePresence>
 
       {/* 2. Le Carousel Central */}
       <div 
@@ -115,23 +145,54 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
               className="w-full h-full shrink-0 snap-center flex flex-col items-center justify-center pt-20 px-6 pb-40"
             >
               {/* Mascotte Flottante */}
-              <div 
-                className={`relative w-full max-w-[280px] aspect-square transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                  isActive ? 'opacity-100 scale-100 translate-y-0' : 'opacity-40 scale-90 translate-y-8'
-                } animate-[bounce_4s_ease-in-out_infinite]`}
+              <motion.div
+                initial={false}
+                animate={
+                  prefersReducedMotion
+                    ? undefined
+                    : {
+                        opacity: isActive ? 1 : 0.4,
+                        scale: isActive ? 1 : 0.9,
+                        y: isActive ? [0, -8, 0] : 20,
+                        rotate: isActive ? [0, -1, 1, 0] : 0,
+                      }
+                }
+                transition={{
+                  opacity: { duration: 0.28, ease: 'easeOut' },
+                  scale: { type: 'spring', stiffness: 220, damping: 18 },
+                  y: isActive
+                    ? { duration: 4.2, ease: 'easeInOut', repeat: Infinity }
+                    : { type: 'spring', stiffness: 180, damping: 20 },
+                  rotate: isActive
+                    ? { duration: 4.8, ease: 'easeInOut', repeat: Infinity }
+                    : { duration: 0.2 },
+                }}
+                className="relative w-full max-w-[280px] aspect-square"
               >
                 <img 
                   src={faction.image} 
                   alt={faction.mascotName} 
                   className="w-full h-full object-contain filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)]"
                 />
-              </div>
+              </motion.div>
 
               {/* Textes Faction */}
-              <div 
-                className={`mt-8 text-center transition-all duration-700 delay-100 ${
-                  isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                }`}
+              <motion.div
+                initial={false}
+                animate={
+                  prefersReducedMotion
+                    ? undefined
+                    : {
+                        opacity: isActive ? 1 : 0,
+                        y: isActive ? 0 : 16,
+                      }
+                }
+                transition={{
+                  opacity: { duration: 0.24, ease: 'easeOut' },
+                  y: { type: 'spring', stiffness: 220, damping: 22 },
+                  delay: isActive ? 0.08 : 0,
+                }}
+                className="mt-8 text-center"
               >
                 <h2 className="text-3xl font-black text-white tracking-tight">
                   {faction.name}
@@ -139,7 +200,7 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
                 <p className="mt-3 text-[15px] leading-relaxed text-white/70 max-w-sm mx-auto font-medium">
                   {faction.description}
                 </p>
-              </div>
+              </motion.div>
             </div>
           )
         })}
@@ -151,8 +212,12 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
         {/* Pagination Dots */}
         <div className="flex justify-center gap-2 mb-6">
           {FACTIONS.map((faction, idx) => (
-            <div 
+            <button
+              type="button"
               key={`dot-${faction.id}`}
+              onClick={() => scrollToFaction(idx)}
+              aria-label={`Choisir ${faction.name}`}
+              aria-pressed={activeIndex === idx}
               className={`h-1.5 rounded-full transition-all duration-500 ${
                 activeIndex === idx ? `w-8 ${faction.accentColor}` : 'w-2 bg-white/20'
               }`}
@@ -165,17 +230,25 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
           <input type="hidden" name="faction" value={activeFaction.value} />
           <input type="hidden" name="returnTo" value={returnTo} />
           
-          <SubmitButton 
-            activeColor={activeFaction.accentColor} 
-            text={activeFaction.buttonText} 
-          />
-          
-          <Link 
-            href={returnTo} 
-            className="text-[13px] font-bold text-white/40 tracking-wide uppercase hover:text-white transition-colors py-2"
+          <motion.div
+            key={activeFaction.id}
+            initial={prefersReducedMotion ? false : { opacity: 0.7, y: 12 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+            className="w-full"
           >
-            Revenir plus tard
-          </Link>
+            <SubmitButton 
+              activeColor={activeFaction.accentColor} 
+              text={activeFaction.buttonText} 
+            />
+          </motion.div>
+
+          <p className="text-center text-[12px] font-medium text-white/45 leading-relaxed px-5">
+            Fais glisser ou touche les points pour explorer les 3 alliances.
+            <span className="block mt-1 text-white/30">
+              Ce choix est requis pour entrer dans l&apos;application.
+            </span>
+          </p>
         </form>
       </div>
     </div>

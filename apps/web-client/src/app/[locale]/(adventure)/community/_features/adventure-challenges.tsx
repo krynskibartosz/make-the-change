@@ -17,8 +17,7 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { Link } from '@/i18n/navigation'
 import { getChallenges } from '@/lib/mock/mock-challenges'
-import { getClientMockViewerSession } from '@/lib/mock/mock-session'
-import type { Challenge } from '@/lib/mock/types'
+import type { Challenge, Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 
 type DailyQuest = Challenge & {
@@ -116,6 +115,14 @@ const FACTION_THEMES = {
 		badgeBg: 'bg-rose-500/10 border border-rose-500/20',
 	},
 } as const
+
+const resolveFactionThemeKey = (
+	faction: Faction | null | undefined
+): keyof typeof FACTION_THEMES => {
+	if (faction === 'Vie Sauvage') return 'pollinisateurs'
+	if (faction === 'Artisans Locaux') return 'artisans'
+	return 'forets'
+}
 
 type EcoFactReaderProps = {
 	open: boolean
@@ -844,15 +851,16 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 	)
 }
 
-export function AdventureChallenges() {
+type AdventureChallengesProps = {
+	initialFaction?: Faction | null
+}
+
+export function AdventureChallenges({ initialFaction = null }: AdventureChallengesProps) {
 	const haptic = useHaptic()
 	const searchParams = useSearchParams()
 	const { guardAction } = useActionAuth()
 	
-	const session = getClientMockViewerSession()
-	let themeKey: keyof typeof FACTION_THEMES = 'forets'
-	if (session?.faction === 'Vie Sauvage') themeKey = 'pollinisateurs'
-	if (session?.faction === 'Artisans Locaux') themeKey = 'artisans'
+	const themeKey = resolveFactionThemeKey(initialFaction)
 	const factionTheme = FACTION_THEMES[themeKey]
 	const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(
 		() => getChallenges() || initialDailyQuests
