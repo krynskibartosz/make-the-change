@@ -293,25 +293,50 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8 pb-24 duration-500">
-      <section className="px-4 pt-12 sm:px-6">
-        <div className="relative overflow-visible rounded-[2rem] bg-[#131820]/80 px-5 pb-6 pt-5 backdrop-blur-xl sm:px-6">
+      {/* ═══ SCÈNE DES MASCOTTES (Edge-to-Edge) ═══ */}
+      <section className="w-full px-4 pb-4 pt-6 sm:px-6">
 
-          {/* HEADER */}
-          <div className="mb-6 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">Objectif Commun</p>
-            <h2 className="mt-1 text-lg font-black uppercase tracking-tight text-white sm:text-xl">
-              Financer {collectiveGoal.projectName}
-            </h2>
-            <p className="mt-1.5 text-xs font-medium text-white/50">
-              {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
-            </p>
-          </div>
+        {/* HEADER */}
+        <div className="mb-5 text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">Objectif du mois</p>
+          <h2 className="mt-1 text-2xl font-black uppercase tracking-tight text-white">
+            {collectiveGoal.projectName}
+          </h2>
+        </div>
 
-          {/* LA JAUGE TOTEM */}
-          <div className="relative mt-14">
-            {/* Mascottes flottantes au-dessus de la jauge */}
-            <div className="absolute -top-14 left-0 flex w-full">
-              {factionContributions.map((contribution) => {
+        {/* JAUGE FINE FULL-WIDTH */}
+        <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-amber-500 via-emerald-500 to-rose-500 transition-all duration-1000"
+            style={{ width: `${collectiveGoal.progress}%` }}
+          />
+        </div>
+        <p className="mt-2 text-center text-[11px] text-white/45">
+          {collectiveGoal.progress}% financé · plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱
+        </p>
+
+        {/* LE PODIUM MASCOTTES */}
+        {(() => {
+          // Réordonner pour l'affichage en podium : [2e, 1er, 3e]
+          const sorted = [...factionContributions] // déjà trié par effort desc
+          const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean)
+
+          const sizes: Record<number, string> = {
+            0: 'w-20 h-20', // 2e (gauche)
+            1: 'w-28 h-28', // 1er (centre)
+            2: 'w-16 h-16', // 3e (droite)
+          }
+          const bottoms: Record<number, string> = {
+            0: 'mb-2',
+            1: 'mb-0',
+            2: 'mb-4',
+          }
+
+          return (
+            <div className="relative mt-6 flex h-44 items-end justify-center gap-2">
+              {podiumOrder.map((contribution, displayIndex) => {
+                if (!contribution) return null
+                const theme = getFactionThemeByKey(contribution.themeKey)
                 const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
 
                 let mascotSrc = ''
@@ -319,66 +344,50 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                 else if (contribution.themeKey === 'forets') mascotSrc = '/sylva.png'
                 else if (contribution.themeKey === 'artisans') mascotSrc = '/aura.png'
 
+                const sizeClass = sizes[displayIndex] ?? 'w-20 h-20'
+                const bottomClass = bottoms[displayIndex] ?? ''
+
                 return (
                   <div
                     key={contribution.themeKey}
-                    className="flex items-end justify-center"
-                    style={{ width: `${contribution.contributionShare}%` }}
+                    className={cn('relative flex flex-col items-center', bottomClass)}
                   >
-                    <div
-                      className={cn(
-                        'relative h-14 w-14 drop-shadow-xl transition-transform duration-300',
-                        isActiveFaction && 'scale-125'
-                      )}
-                    >
+                    {/* Glow derrière la mascotte de l'utilisateur */}
+                    {isActiveFaction && (
+                      <div
+                        className={cn(
+                          'absolute inset-0 -z-10 scale-150 rounded-full opacity-40 blur-2xl',
+                          theme.accentBg,
+                        )}
+                      />
+                    )}
+
+                    {/* Mascotte */}
+                    <div className={cn(sizeClass, 'relative drop-shadow-2xl')}>
                       <img
                         src={mascotSrc}
                         alt={contribution.label}
                         className="h-full w-full object-contain"
                         style={{
                           filter: isActiveFaction
-                            ? 'drop-shadow(0 0 8px rgba(255,255,255,0.4))'
-                            : 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))',
+                            ? 'drop-shadow(0 0 12px rgba(255,255,255,0.35))'
+                            : 'drop-shadow(0 6px 12px rgba(0,0,0,0.6))',
                         }}
                       />
+                    </div>
+
+                    {/* Floating Pill */}
+                    <div className="mt-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 backdrop-blur-md">
+                      <span className={cn('text-sm font-black', theme.accentText)}>
+                        {contribution.contributionShare}%
+                      </span>
                     </div>
                   </div>
                 )
               })}
             </div>
-
-            {/* La barre épaisse segmentée */}
-            <div className="flex h-16 w-full overflow-hidden rounded-2xl bg-white/5">
-              {factionContributions.map((contribution, index) => {
-                const theme = getFactionThemeByKey(contribution.themeKey)
-                const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
-                const isLast = index === factionContributions.length - 1
-
-                return (
-                  <div
-                    key={contribution.themeKey}
-                    className={cn(
-                      'relative flex flex-col items-center justify-center',
-                      theme.accentBg,
-                      !isLast && 'border-r border-black/20',
-                      isActiveFaction && 'brightness-125'
-                    )}
-                    style={{ width: `${contribution.contributionShare}%` }}
-                  >
-                    <span className="text-lg font-black text-white drop-shadow">
-                      {contribution.contributionShare}%
-                    </span>
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-white/70">
-                      {contribution.shortLabel}
-                    </span>
-                  </div>
-                )
-              })}
-              {/* Portion restante */}
-              <div className="flex-1 bg-white/5" />
-            </div>
-          </div>
-        </div>
+          )
+        })()}
       </section>
 
       <section className="space-y-0 border-t border-white/5 px-4 pt-2 sm:px-6">
