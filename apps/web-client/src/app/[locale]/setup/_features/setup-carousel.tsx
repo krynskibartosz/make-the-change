@@ -84,7 +84,7 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
     }
   }, [activeIndex])
 
-  const activeFaction = FACTIONS[activeIndex] ?? FACTIONS[0]
+  const activeFaction = FACTIONS[Math.max(0, Math.min(activeIndex, FACTIONS.length - 1))]!
   const scrollToFaction = (index: number) => {
     const container = containerRef.current
     if (!container) return

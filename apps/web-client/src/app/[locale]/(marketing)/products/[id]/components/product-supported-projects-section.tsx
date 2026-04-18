@@ -1,9 +1,10 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { SupportedProject } from '@/types/context'
+import type { SupportedProject } from '@/types/context'
 import Link from 'next/link'
 
 interface ProductSupportedProjectsSectionProps {
   projects: SupportedProject[] | null
+  locale?: string
 }
 
 export function ProductSupportedProjectsSection({ projects }: ProductSupportedProjectsSectionProps) {

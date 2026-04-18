@@ -220,6 +220,19 @@ export const getMockCollectiveGuilds = (session?: MockViewerSession | null): Gui
   }))
 }
 
+export const getMockCollectiveGuildsByIds = (
+  tribeIds: string[],
+  session?: MockViewerSession | null,
+): Guild[] => {
+  const guildsBySlug = new Map(
+    getMockCollectiveGuilds(session).map((guild) => [guild.slug, guild] as const),
+  )
+
+  return tribeIds
+    .map((tribeId) => guildsBySlug.get(tribeId) || null)
+    .filter((guild): guild is Guild => guild !== null)
+}
+
 export const getMockGuildBySlug = (slug: string, session?: MockViewerSession | null): Guild | null => {
   return getMockCollectiveGuilds(session).find((guild) => guild.slug === slug) || null
 }

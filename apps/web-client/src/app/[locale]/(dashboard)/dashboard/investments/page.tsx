@@ -13,31 +13,27 @@ import { formatCurrency, formatDate } from '@/lib/utils'
 export default async function InvestmentsPage() {
   const t = await getTranslations('investments')
   const user = await requireAuth()
-  let userInvestments = getMockInvestments(user.id)
-
-  if (!isMockDataSource) {
-    const supabase = await createClient()
-
-    const { data } = await supabase
-      .from('investments')
-      .select(`
-        id,
-        amount_eur_equivalent,
-        amount_points,
-        returns_received_points,
-        status,
-        created_at,
-        project:public_projects!project_id(
-          name_default,
-          slug,
-          status
-        )
-      `)
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-
-    userInvestments = data || []
-  }
+  const userInvestments = isMockDataSource
+    ? getMockInvestments(user.id)
+    : (
+        await (await createClient())
+          .from('investments')
+          .select(`
+            id,
+            amount_eur_equivalent,
+            amount_points,
+            returns_received_points,
+            status,
+            created_at,
+            project:public_projects!project_id(
+              name_default,
+              slug,
+              status
+            )
+          `)
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+      ).data || []
 
   // Calculate total invested
   const totalInvested = (userInvestments || []).reduce(

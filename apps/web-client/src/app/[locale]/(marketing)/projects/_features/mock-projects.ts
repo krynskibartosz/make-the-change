@@ -1,3 +1,15 @@
+import {
+  MOCK_PRODUCT_EUCALYPTUS_ID,
+  MOCK_PRODUCT_MANAKARA_ID,
+  MOCK_PRODUCER_ILANGA_ID,
+  MOCK_PRODUCER_ILANGA_SLUG,
+  MOCK_PROJECT_ANTSIRABE_ID,
+  MOCK_PROJECT_ANTSIRABE_SLUG,
+  MOCK_PROJECT_MANAKARA_ID,
+  MOCK_PROJECT_MANAKARA_SLUG,
+  MOCK_SPECIES_BLACK_BEE_ID,
+  MOCK_SPECIES_HONEY_BEE_ID,
+} from '@/lib/mock/mock-ids'
 import type {
   ProducerProduct,
   ProjectChallenge,
@@ -40,6 +52,7 @@ export type MockProjectSeed = {
   images: string[]
   unit_price_eur?: number
   unit_label?: string | null
+  updated_at?: string | null
   producer: MockProjectProducer
   species?: ProjectSpecies[] | null
   challenges?: ProjectChallenge[] | null
@@ -49,19 +62,19 @@ export type MockProjectSeed = {
 
 const antsirabeSpecies: ProjectSpecies[] = [
   {
-    id: 'mock-species-abeille-noire',
-    name: 'Abeille noire',
-    scientificName: 'Apis mellifera mellifera',
+    id: MOCK_SPECIES_HONEY_BEE_ID,
+    name: 'Abeille mellifere',
+    scientificName: 'Apis mellifera',
     icon: '/images/logo-icon-bee.png',
     rarity: 7,
     status: 'NT',
-    role: 'Pollinisatrice clé',
+    role: 'Pollinisatrice cle',
   },
 ]
 
 const antsirabeProducts: ProducerProduct[] = [
   {
-    id: 'mock-product-miel-eucalyptus',
+    id: MOCK_PRODUCT_EUCALYPTUS_ID,
     name: "Miel d'Eucalyptus",
     price: 18,
     category: 'Miel',
@@ -72,19 +85,19 @@ const antsirabeProducts: ProducerProduct[] = [
 
 const manakaraSpecies: ProjectSpecies[] = [
   {
-    id: 'mock-species-abeille-noire-manakara',
+    id: MOCK_SPECIES_BLACK_BEE_ID,
     name: 'Abeille noire',
     scientificName: 'Apis mellifera mellifera',
     icon: '/images/logo-icon-bee.png',
     rarity: 7,
     status: 'NT',
-    role: 'Pollinisatrice clé',
+    role: 'Pollinisatrice cle',
   },
 ]
 
 const manakaraProducts: ProducerProduct[] = [
   {
-    id: 'mock-product-miel-manakara',
+    id: MOCK_PRODUCT_MANAKARA_ID,
     name: 'Miel de Manakara',
     price: 19,
     category: 'Miel',
@@ -95,26 +108,26 @@ const manakaraProducts: ProducerProduct[] = [
 
 export const MOCK_PROJECTS: MockProjectSeed[] = [
   {
-    id: 'mock-project-ruchers-antsirabe',
-    slug: 'ruchers-apiculteurs-independants-antsirabe',
+    id: MOCK_PROJECT_ANTSIRABE_ID,
+    slug: MOCK_PROJECT_ANTSIRABE_SLUG,
     status: 'active',
     type: 'beehive',
     featured: true,
-    name_default: "Ruchers d’apiculteurs indépendants à Antsirabe",
+    name_default: "Ruchers d'apiculteurs independants a Antsirabe",
     name_i18n: {
-      fr: "Ruchers d’apiculteurs indépendants à Antsirabe",
+      fr: "Ruchers d'apiculteurs independants a Antsirabe",
       en: 'Independent Beekeepers Apiaries in Antsirabe',
     },
     description_default:
-      "Affilié à la coopérative, ce rucher de 45 colonies près d’Analamazoatra soutient une apiculture locale durable à Antsirabe.",
+      "Affilie a la cooperative, ce rucher de 45 colonies pres d'Analamazoatra soutient une apiculture locale durable a Antsirabe.",
     description_i18n: {
-      fr: "Affilié à la coopérative, ce rucher de 45 colonies près d’Analamazoatra soutient une apiculture locale durable à Antsirabe.",
+      fr: "Affilie a la cooperative, ce rucher de 45 colonies pres d'Analamazoatra soutient une apiculture locale durable a Antsirabe.",
       en: 'Andraina and his assistant manage 45 hives near the Analamazoatra reserve to support sustainable local beekeeping.',
     },
     long_description_default:
-      "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri (le plus grand lémur de Madagascar), mais aussi des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nCet environnement offre aux abeilles une ressource florale riche, principalement composée d’eucalyptus, donnant un miel au profil aromatique caractéristique.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le développement d’une apiculture locale durable. Suite à une infestation de varroa, une partie des ruches a été remplacée afin de relancer l’activité et renforcer l’impact sur le vivant.\n\nLocalisation : https://maps.app.goo.gl/DVLWnSu9cGoi7evw5?g_st=ic",
+      "Andraina et son assistant gerent 45 ruches reparties sur un site situe derriere son habitation, a quelques metres de la reserve speciale d'Analamazoatra.\n\nCette foret tropicale est un hotspot de biodiversite, abritant de nombreuses especes de lemuriens, dont l'Indri, ainsi que des cameleons, plus de 100 especes d'oiseaux et une grande diversite d'amphibiens et de plantes endemiques.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le developpement d'une apiculture locale durable.",
     long_description_i18n: {
-      fr: "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri (le plus grand lémur de Madagascar), mais aussi des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nCet environnement offre aux abeilles une ressource florale riche, principalement composée d’eucalyptus, donnant un miel au profil aromatique caractéristique.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le développement d’une apiculture locale durable. Suite à une infestation de varroa, une partie des ruches a été remplacée afin de relancer l’activité et renforcer l’impact sur le vivant.\n\nLocalisation : https://maps.app.goo.gl/DVLWnSu9cGoi7evw5?g_st=ic",
+      fr: "Andraina et son assistant gerent 45 ruches reparties sur un site situe derriere son habitation, a quelques metres de la reserve speciale d'Analamazoatra.\n\nCette foret tropicale est un hotspot de biodiversite, abritant de nombreuses especes de lemuriens, dont l'Indri, ainsi que des cameleons, plus de 100 especes d'oiseaux et une grande diversite d'amphibiens et de plantes endemiques.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le developpement d'une apiculture locale durable.",
     },
     address_city: 'Antsirabe',
     address_country_code: 'Madagascar',
@@ -132,17 +145,18 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     ],
     unit_price_eur: 390,
     unit_label: 'ruche',
+    updated_at: '2026-04-17T10:00:00.000Z',
     producer: {
-      id: 'mock-producer-ilanga-nature',
-      slug: 'ilanga-nature',
+      id: MOCK_PRODUCER_ILANGA_ID,
+      slug: MOCK_PRODUCER_ILANGA_SLUG,
       name_default: 'Ilanga Nature',
       name_i18n: {
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et éthiques de Madagascar.',
+      description_default: 'Produits naturels et ethiques de Madagascar.',
       description_i18n: {
-        fr: 'Produits naturels et éthiques de Madagascar.',
+        fr: 'Produits naturels et ethiques de Madagascar.',
         en: 'Natural and ethical products from Madagascar.',
       },
       contact_website: 'https://ilanga.nature',
@@ -159,8 +173,8 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     },
   },
   {
-    id: 'mock-project-miellerie-manakara',
-    slug: 'miellerie-manakara-ilanga-nature',
+    id: MOCK_PROJECT_MANAKARA_ID,
+    slug: MOCK_PROJECT_MANAKARA_SLUG,
     status: 'active',
     type: 'beehive',
     featured: true,
@@ -170,16 +184,16 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       en: 'Manakara Honey House',
     },
     description_default:
-      'Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l’abeille noire.',
+      "Projet Ilanga Nature a Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
     description_i18n: {
-      fr: 'Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l’abeille noire.',
+      fr: "Projet Ilanga Nature a Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
       en: 'Ilanga Nature project in Madagascar to scale a sustainable local honey house around black bees.',
     },
     long_description_default:
-      'La miellerie de Manakara est portée par Ilanga Nature à Madagascar. Ce projet vise à renforcer la chaîne locale de production et de valorisation du miel en s’appuyant sur une apiculture durable.\n\nLes données terrain détaillées (production, rendement, impact) sont progressivement consolidées à partir du référentiel opérationnel.',
+      "La miellerie de Manakara est portee par Ilanga Nature a Madagascar. Ce projet vise a renforcer la chaine locale de production et de valorisation du miel en s'appuyant sur une apiculture durable.\n\nLes donnees terrain detaillees sont progressivement consolidees a partir du referentiel operationnel.",
     long_description_i18n: {
-      fr: 'La miellerie de Manakara est portée par Ilanga Nature à Madagascar. Ce projet vise à renforcer la chaîne locale de production et de valorisation du miel en s’appuyant sur une apiculture durable.\n\nLes données terrain détaillées (production, rendement, impact) sont progressivement consolidées à partir du référentiel opérationnel.',
-      en: 'The Manakara honey house is led by Ilanga Nature in Madagascar. The project strengthens local honey production and value chain through sustainable beekeeping.\n\nDetailed field metrics (production, yield, impact) are being progressively consolidated from the operational dataset.',
+      fr: "La miellerie de Manakara est portee par Ilanga Nature a Madagascar. Ce projet vise a renforcer la chaine locale de production et de valorisation du miel en s'appuyant sur une apiculture durable.\n\nLes donnees terrain detaillees sont progressivement consolidees a partir du referentiel operationnel.",
+      en: 'The Manakara honey house is led by Ilanga Nature in Madagascar. The project strengthens local honey production and value chain through sustainable beekeeping.',
     },
     address_city: 'Manakara',
     address_country_code: 'Madagascar',
@@ -193,17 +207,18 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     images: ['/images/projects/miellerie-manakara.jpg'],
     unit_price_eur: 390,
     unit_label: 'ruche',
+    updated_at: '2026-04-18T10:00:00.000Z',
     producer: {
-      id: 'mock-producer-ilanga-nature',
-      slug: 'ilanga-nature',
+      id: MOCK_PRODUCER_ILANGA_ID,
+      slug: MOCK_PRODUCER_ILANGA_SLUG,
       name_default: 'Ilanga Nature',
       name_i18n: {
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et éthiques de Madagascar.',
+      description_default: 'Produits naturels et ethiques de Madagascar.',
       description_i18n: {
-        fr: 'Produits naturels et éthiques de Madagascar.',
+        fr: 'Produits naturels et ethiques de Madagascar.',
         en: 'Natural and ethical products from Madagascar.',
       },
       contact_website: 'https://ilanga.nature',

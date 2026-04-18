@@ -1,5 +1,5 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { ProjectSpecies } from '@/types/context'
+import type { ProjectSpecies } from '@/types/context'
 import Link from 'next/link'
 
 interface ProjectSpeciesSectionProps {

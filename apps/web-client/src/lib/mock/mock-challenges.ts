@@ -1,17 +1,22 @@
+import {
+  MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
+  MOCK_CHALLENGE_DAILY_HARVEST_ID,
+  MOCK_CHALLENGE_ECO_FACT_ID,
+} from '@/lib/mock/mock-ids'
 import type { Challenge } from '@/lib/mock/types'
 
 const MOCK_CHALLENGES: Challenge[] = [
   {
-    id: 'eco-fact',
+    id: MOCK_CHALLENGE_ECO_FACT_ID,
     type: 'education',
     title: "L'Eco-Fact du jour",
     description: "Lis l'article sur la deforestation.",
-    progress: 0,
+    progress: 1,
     max: 1,
     reward: 50,
   },
   {
-    id: 'collective-bravo',
+    id: MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
     type: 'social',
     title: "L'Esprit d'Equipe",
     description: 'Distribue 3 Bravos dans le Collectif.',
@@ -21,11 +26,11 @@ const MOCK_CHALLENGES: Challenge[] = [
     href: '/collectif',
   },
   {
-    id: 'daily-harvest',
+    id: MOCK_CHALLENGE_DAILY_HARVEST_ID,
     type: 'daily_harvest',
     title: 'La Recolte Quotidienne',
     description: 'Recupere le nectar du jour.',
-    progress: 0,
+    progress: 1,
     max: 1,
     reward: 50,
   },
@@ -33,4 +38,8 @@ const MOCK_CHALLENGES: Challenge[] = [
 
 export const getChallenges = (): Challenge[] => {
   return MOCK_CHALLENGES.map((challenge) => ({ ...challenge }))
+}
+
+export const getChallengeById = (challengeId: string): Challenge | null => {
+  return getChallenges().find((challenge) => challenge.id === challengeId) || null
 }

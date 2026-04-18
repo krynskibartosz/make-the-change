@@ -1,9 +1,10 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { LinkedSpecies } from '@/types/context'
+import type { LinkedSpecies } from '@/types/context'
 import Link from 'next/link'
 
 interface ProductLinkedSpeciesSectionProps {
   species: LinkedSpecies[] | null
+  locale?: string
 }
 
 export function ProductLinkedSpeciesSection({ species }: ProductLinkedSpeciesSectionProps) {

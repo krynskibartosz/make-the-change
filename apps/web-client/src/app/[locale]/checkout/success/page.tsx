@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, ShoppingBag, Sparkles } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { parseOrderItems } from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
+import { PersistMockOrder } from '@/app/[locale]/checkout/_features/persist-mock-order'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link, redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
@@ -10,8 +11,9 @@ import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import {
   buildSyntheticMockOrder,
-  getMockOrderById,
+  type MockOrderRecord,
 } from '@/lib/mock/mock-member-data'
+import { getCurrentMockOrderById } from '@/lib/mock/mock-order-history-server'
 import { getCurrentProfile, getCurrentViewer } from '@/lib/mock/mock-session-server'
 
 interface CheckoutSuccessPageProps {
@@ -27,13 +29,17 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
 
   let user: { id: string } | null = null
   let order: any = null
+  let syntheticOrderToPersist: MockOrderRecord | null = null
 
   if (isMockDataSource) {
     const [viewer, profile] = await Promise.all([getCurrentViewer(), getCurrentProfile()])
     user = viewer ? { id: viewer.viewerId } : null
-    order =
-      (viewer ? getMockOrderById(viewer.viewerId, orderId) : null) ||
-      buildSyntheticMockOrder(orderId, profile)
+    order = viewer ? await getCurrentMockOrderById(viewer.viewerId, orderId) : null
+
+    if (!order) {
+      syntheticOrderToPersist = buildSyntheticMockOrder(orderId, profile)
+      order = syntheticOrderToPersist
+    }
   } else {
     const supabase = await createClient()
     const { data: authData } = await supabase.auth.getUser()
@@ -81,7 +87,7 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
   const showEuroAsPrimary = totalEuros > 0 && totalPoints <= 0
   const primaryOrdersHref =
     isMockDataSource && !user
-      ? `/register?returnTo=${encodeURIComponent('/dashboard/orders')}`
+      ? `/register?returnTo=${encodeURIComponent(`/checkout/success?orderId=${orderId}`)}`
       : '/dashboard/orders'
 
   return (
@@ -92,6 +98,9 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
       </div>
 
       <SectionContainer size="lg" className="relative py-6 sm:py-10">
+        {isMockDataSource && user && syntheticOrderToPersist ? (
+          <PersistMockOrder viewerId={user.id} order={syntheticOrderToPersist} />
+        ) : null}
         <div className="space-y-6">
           <section className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-background/75 p-6 shadow-xl shadow-primary/5 backdrop-blur-md sm:p-8">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.08),transparent_55%)]" />

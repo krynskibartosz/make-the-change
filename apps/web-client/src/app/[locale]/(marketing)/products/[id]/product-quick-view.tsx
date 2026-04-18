@@ -22,6 +22,13 @@ type ProductQuickViewProps = {
   product: ProductWithRelations
 }
 
+type ProductFormat = {
+  id: string
+  points: number
+  euros: number
+  stock: number
+}
+
 export function ProductQuickView({ product }: ProductQuickViewProps) {
   const t = useTranslations('products')
   const locale = useLocale()
@@ -41,12 +48,13 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       : undefined
 
   const userBalance = 2450;
-  const formats = [
+  const formats: ProductFormat[] = [
     { id: "140g", points: 550, euros: 5.50, stock: 12 },
     { id: "250g", points: 950, euros: 9.50, stock: 45 },
     { id: "500g", points: 1800, euros: 18.00, stock: 3 }
   ];
-  const [selectedFormat, setSelectedFormat] = useState(formats[0]);
+  const defaultFormat = formats[0]!
+  const [selectedFormat, setSelectedFormat] = useState<ProductFormat>(defaultFormat);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isFiatCheckoutOpen, setIsFiatCheckoutOpen] = useState(false)
   const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);

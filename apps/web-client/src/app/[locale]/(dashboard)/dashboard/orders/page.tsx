@@ -7,43 +7,39 @@ import { parseOrderItems } from '@/app/[locale]/(dashboard)/dashboard/orders/_fe
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockOrders } from '@/lib/mock/mock-member-data'
+import { getCurrentMockOrders } from '@/lib/mock/mock-order-history-server'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPoints } from '@/lib/utils'
 
 export default async function OrdersPage() {
   const t = await getTranslations('orders')
   const user = await requireAuth()
-  let userOrders = getMockOrders(user.id)
-
-  if (!isMockDataSource) {
-    const supabase = await createClient()
-
-    const { data } = await supabase
-      .from('orders')
-      .select(`
-        id,
-        status,
-        total_points,
-        created_at,
-        items:order_items(
-          id,
-          quantity,
-          unit_price_points,
-          total_price_points,
-          product_snapshot,
-          product:public_products!product_id(
+  const userOrders = isMockDataSource
+    ? await getCurrentMockOrders(user.id)
+    : (
+        await (await createClient())
+          .from('orders')
+          .select(`
             id,
-            name_default,
-            slug
-          )
-          )
-      `)
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-
-    userOrders = data || []
-  }
+            status,
+            total_points,
+            created_at,
+            items:order_items(
+              id,
+              quantity,
+              unit_price_points,
+              total_price_points,
+              product_snapshot,
+              product:public_products!product_id(
+                id,
+                name_default,
+                slug
+              )
+            )
+          `)
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+      ).data || []
 
   // Status colors now centralized in lib/status-colors.ts
 

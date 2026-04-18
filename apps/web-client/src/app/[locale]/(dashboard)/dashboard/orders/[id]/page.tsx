@@ -10,7 +10,7 @@ import {
 } from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
 import { Link } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockOrderById } from '@/lib/mock/mock-member-data'
+import { getCurrentMockOrderById } from '@/lib/mock/mock-order-history-server'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
@@ -23,7 +23,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const t = await getTranslations('orders')
   const user = await requireAuth()
   const order = isMockDataSource
-    ? getMockOrderById(user.id, id)
+    ? await getCurrentMockOrderById(user.id, id)
     : (
         await (await createClient())
           .from('orders')

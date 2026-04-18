@@ -1,5 +1,5 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
-import { ProjectChallenge } from '@/types/context'
+import type { ProjectChallenge } from '@/types/context'
 
 interface ProjectChallengesSectionProps {
   challenges: ProjectChallenge[] | null

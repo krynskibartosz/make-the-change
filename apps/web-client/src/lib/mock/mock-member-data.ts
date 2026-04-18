@@ -1,5 +1,14 @@
 import type { SpeciesContext } from '@/types/context'
-import { MOCK_EXISTING_VIEWER_ID } from '@/lib/mock/mock-viewer'
+import {
+  MOCK_CHALLENGE_DAILY_HARVEST_ID,
+  MOCK_CHALLENGE_ECO_FACT_ID,
+  MOCK_EXISTING_VIEWER_ID,
+  MOCK_PRODUCT_EUCALYPTUS_ID,
+  MOCK_PRODUCT_EUCALYPTUS_SLUG,
+  MOCK_PRODUCER_ILANGA_SLUG,
+  MOCK_PROJECT_ANTSIRABE_SLUG,
+  MOCK_PROJECT_MANAKARA_SLUG,
+} from '@/lib/mock/mock-ids'
 
 export type MockInvestmentRecord = {
   id: string
@@ -68,6 +77,7 @@ export type MockPointsTransactionRecord = {
   id: string
   label: string
   delta: number
+  impactDelta: number
   createdAt: string
 }
 
@@ -101,8 +111,8 @@ const EXISTING_VIEWER_INVESTMENTS: MockInvestmentRecord[] = [
     status: 'active',
     created_at: '2026-04-14T09:20:00.000Z',
     project: {
-      name_default: 'Ruchers d’apiculteurs indépendants à Antsirabe',
-      slug: 'ruchers-apiculteurs-independants-antsirabe',
+      name_default: "Ruchers d'apiculteurs independants a Antsirabe",
+      slug: MOCK_PROJECT_ANTSIRABE_SLUG,
       status: 'active',
     },
   },
@@ -115,7 +125,7 @@ const EXISTING_VIEWER_INVESTMENTS: MockInvestmentRecord[] = [
     created_at: '2026-03-28T16:45:00.000Z',
     project: {
       name_default: 'Miellerie de Manakara',
-      slug: 'miellerie-manakara-ilanga-nature',
+      slug: MOCK_PROJECT_MANAKARA_SLUG,
       status: 'active',
     },
   },
@@ -140,14 +150,14 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
         unit_price_points: 550,
         total_price_points: 550,
         product_snapshot: {
-          name: 'Miel d’Eucalyptus',
+          name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
         },
         product: {
-          id: 'mock-product-miel-eucalyptus-ilanga',
-          name_default: 'Miel d’Eucalyptus',
-          slug: 'miel-eucalyptus-ilanga',
+          id: MOCK_PRODUCT_EUCALYPTUS_ID,
+          name_default: "Miel d'Eucalyptus",
+          slug: MOCK_PRODUCT_EUCALYPTUS_SLUG,
         },
       },
     ],
@@ -170,14 +180,14 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
         unit_price_points: 550,
         total_price_points: 1100,
         product_snapshot: {
-          name: 'Miel d’Eucalyptus',
+          name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
         },
         product: {
-          id: 'mock-product-miel-eucalyptus-ilanga',
-          name_default: 'Miel d’Eucalyptus',
-          slug: 'miel-eucalyptus-ilanga',
+          id: MOCK_PRODUCT_EUCALYPTUS_ID,
+          name_default: "Miel d'Eucalyptus",
+          slug: MOCK_PRODUCT_EUCALYPTUS_SLUG,
         },
       },
     ],
@@ -200,31 +210,85 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-welcome-bonus',
     label: 'Bonus de bienvenue',
     delta: 250,
+    impactDelta: 250,
     createdAt: '2026-01-12T09:00:00.000Z',
+  },
+  {
+    id: 'mock-points-allocation-february',
+    label: 'Allocation mensuelle Pollinisateur+',
+    delta: 1200,
+    impactDelta: 0,
+    createdAt: '2026-02-03T08:00:00.000Z',
+  },
+  {
+    id: 'mock-points-allocation-march',
+    label: 'Allocation mensuelle Pollinisateur+',
+    delta: 1200,
+    impactDelta: 0,
+    createdAt: '2026-03-03T08:00:00.000Z',
+  },
+  {
+    id: 'mock-points-investment-manakara',
+    label: 'Contribution projet Manakara',
+    delta: -780,
+    impactDelta: 780,
+    createdAt: '2026-03-28T16:45:00.000Z',
+  },
+  {
+    id: 'mock-points-allocation-april',
+    label: 'Allocation mensuelle Pollinisateur+',
+    delta: 1200,
+    impactDelta: 0,
+    createdAt: '2026-04-03T08:00:00.000Z',
+  },
+  {
+    id: 'mock-points-order-01',
+    label: "Commande Miel d'Eucalyptus",
+    delta: -550,
+    impactDelta: 0,
+    createdAt: '2026-04-11T12:30:00.000Z',
   },
   {
     id: 'mock-points-investment-antsirabe',
     label: 'Contribution projet Antsirabe',
-    delta: 390,
+    delta: -390,
+    impactDelta: 390,
     createdAt: '2026-04-14T09:20:00.000Z',
   },
   {
-    id: 'mock-points-order-01',
-    label: 'Commande Miel d’Eucalyptus',
-    delta: -550,
-    createdAt: '2026-04-11T12:30:00.000Z',
-  },
-  {
     id: 'mock-points-order-02',
-    label: 'Commande Miel d’Eucalyptus',
+    label: "Commande Miel d'Eucalyptus",
     delta: -1150,
+    impactDelta: 0,
     createdAt: '2026-04-16T08:10:00.000Z',
   },
   {
+    id: 'mock-points-eco-fact',
+    label: "Eco-Fact du jour complete",
+    delta: 50,
+    impactDelta: 50,
+    createdAt: '2026-04-17T07:30:00.000Z',
+  },
+  {
+    id: 'mock-points-daily-harvest',
+    label: 'Recolte quotidienne',
+    delta: 50,
+    impactDelta: 50,
+    createdAt: '2026-04-17T07:32:00.000Z',
+  },
+  {
     id: 'mock-points-referral',
-    label: 'Parrainage confirmé',
+    label: 'Parrainage confirme',
     delta: 500,
+    impactDelta: 500,
     createdAt: '2026-04-17T18:00:00.000Z',
+  },
+  {
+    id: 'mock-points-streak',
+    label: 'Serie de 12 jours maintenue',
+    delta: 430,
+    impactDelta: 430,
+    createdAt: '2026-04-18T06:45:00.000Z',
   },
 ]
 
@@ -233,24 +297,24 @@ const EXISTING_VIEWER_MESSAGES: MockProducerMessageRecord[] = [
     id: 'mock-message-ilanga-stock',
     subject: 'Question sur le prochain lot de miel',
     message:
-      'Bonjour, savez-vous quand le prochain lot de miel d’eucalyptus sera disponible ? J’aimerais en recommander pour offrir.',
+      "Bonjour, savez-vous quand le prochain lot de miel d'eucalyptus sera disponible ? J'aimerais en recommander pour offrir.",
     status: 'replied',
     created_at: '2026-04-10T10:00:00.000Z',
     producer: {
       name: 'Ilanga Nature',
-      slug: 'ilanga-nature',
+      slug: MOCK_PRODUCER_ILANGA_SLUG,
     },
   },
   {
     id: 'mock-message-ilanga-impact',
-    subject: 'Peut-on visiter le projet à Madagascar ?',
+    subject: 'Peut-on visiter le projet a Madagascar ?',
     message:
-      'Bonjour, j’aimerais savoir si vous prévoyez un format de visite ou un journal terrain plus régulier pour suivre les ruchers.',
+      "Bonjour, j'aimerais savoir si vous prevoyez un format de visite ou un journal terrain plus regulier pour suivre les ruchers.",
     status: 'read',
     created_at: '2026-04-15T14:35:00.000Z',
     producer: {
       name: 'Ilanga Nature',
-      slug: 'ilanga-nature',
+      slug: MOCK_PRODUCER_ILANGA_SLUG,
     },
   },
 ]
@@ -263,6 +327,16 @@ const EMPTY_SHIPPING_ADDRESS = {
   city: '',
   country: '',
 }
+
+const STARTER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
+  {
+    id: 'mock-points-starter',
+    label: 'Bonus de depart',
+    delta: 120,
+    impactDelta: 120,
+    createdAt: '2026-04-17T10:00:00.000Z',
+  },
+]
 
 const cloneOrder = (order: MockOrderRecord): MockOrderRecord => ({
   ...order,
@@ -288,12 +362,30 @@ const cloneMessage = (message: MockProducerMessageRecord): MockProducerMessageRe
   producer: message.producer ? { ...message.producer } : null,
 })
 
-export const getMockWalletBalance = (viewerId: string): number => {
+const sortByCreatedAtDesc = <T extends { createdAt: string }>(entries: T[]): T[] => {
+  return [...entries].sort((first, second) => second.createdAt.localeCompare(first.createdAt))
+}
+
+const getWalletTransactions = (viewerId: string): MockPointsTransactionRecord[] => {
   if (viewerId !== MOCK_EXISTING_VIEWER_ID) {
-    return 120
+    return STARTER_POINTS_TRANSACTIONS.map((transaction) => ({ ...transaction }))
   }
 
-  return 1680
+  return sortByCreatedAtDesc(
+    EXISTING_VIEWER_POINTS_TRANSACTIONS.map((transaction) => ({ ...transaction })),
+  )
+}
+
+export const getMockImpactPoints = (viewerId: string): number => {
+  return getWalletTransactions(viewerId).reduce((sum, transaction) => {
+    return sum + transaction.impactDelta
+  }, 0)
+}
+
+export const getMockWalletBalance = (viewerId: string): number => {
+  return getWalletTransactions(viewerId).reduce((sum, transaction) => {
+    return sum + transaction.delta
+  }, 0)
 }
 
 export const getMockInvestments = (viewerId: string): MockInvestmentRecord[] => {
@@ -309,7 +401,9 @@ export const getMockOrders = (viewerId: string): MockOrderRecord[] => {
     return []
   }
 
-  return EXISTING_VIEWER_ORDERS.map(cloneOrder)
+  return EXISTING_VIEWER_ORDERS
+    .map(cloneOrder)
+    .sort((first, second) => second.created_at.localeCompare(first.created_at))
 }
 
 export const getMockOrderById = (
@@ -359,14 +453,14 @@ export const buildSyntheticMockOrder = (
         unit_price_points: 550,
         total_price_points: 550,
         product_snapshot: {
-          name: 'Miel d’Eucalyptus',
+          name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
         },
         product: {
-          id: 'mock-product-miel-eucalyptus-ilanga',
-          name_default: 'Miel d’Eucalyptus',
-          slug: 'miel-eucalyptus-ilanga',
+          id: MOCK_PRODUCT_EUCALYPTUS_ID,
+          name_default: "Miel d'Eucalyptus",
+          slug: MOCK_PRODUCT_EUCALYPTUS_SLUG,
         },
       },
     ],
@@ -382,18 +476,7 @@ export const getMockSubscription = (viewerId: string): MockSubscriptionRecord | 
 }
 
 export const getMockPointsTransactions = (viewerId: string): MockPointsTransactionRecord[] => {
-  if (viewerId !== MOCK_EXISTING_VIEWER_ID) {
-    return [
-      {
-        id: 'mock-points-starter',
-        label: 'Bonus de départ',
-        delta: 120,
-        createdAt: '2026-04-17T10:00:00.000Z',
-      },
-    ]
-  }
-
-  return EXISTING_VIEWER_POINTS_TRANSACTIONS.map((transaction) => ({ ...transaction }))
+  return getWalletTransactions(viewerId)
 }
 
 export const getMockSentMessages = (viewerId: string): MockProducerMessageRecord[] => {
@@ -402,6 +485,14 @@ export const getMockSentMessages = (viewerId: string): MockProducerMessageRecord
   }
 
   return EXISTING_VIEWER_MESSAGES.map(cloneMessage)
+}
+
+export const getMockCompletedChallengeIds = (viewerId: string): string[] => {
+  if (viewerId !== MOCK_EXISTING_VIEWER_ID) {
+    return []
+  }
+
+  return [MOCK_CHALLENGE_ECO_FACT_ID, MOCK_CHALLENGE_DAILY_HARVEST_ID]
 }
 
 export const getMockSpeciesUnlockPoints = (viewerId: string): SpeciesContext['user_status'] => {
