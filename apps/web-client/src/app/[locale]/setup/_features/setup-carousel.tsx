@@ -83,7 +83,7 @@ export function SetupCarousel({ returnTo }: { returnTo: string }) {
     }
   }, [activeIndex])
 
-  const activeFaction = FACTIONS[activeIndex]
+  const activeFaction = FACTIONS[activeIndex] ?? FACTIONS[0]
 
   return (
     <div className="relative h-[100dvh] w-full bg-[#0B0F15] overflow-hidden flex flex-col">

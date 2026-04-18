@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState, type UIEvent } from 'react'
@@ -17,6 +17,7 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { Link } from '@/i18n/navigation'
 import { getChallenges } from '@/lib/mock/mock-challenges'
+import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Challenge } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 
@@ -820,6 +821,12 @@ export function AdventureChallenges() {
 	const haptic = useHaptic()
 	const searchParams = useSearchParams()
 	const { guardAction } = useActionAuth()
+	
+	const session = getClientMockViewerSession()
+	let themeKey: keyof typeof FACTION_THEMES = 'forets'
+	if (session?.faction === 'Vie Sauvage') themeKey = 'pollinisateurs'
+	if (session?.faction === 'Artisans Locaux') themeKey = 'artisans'
+	const factionTheme = FACTION_THEMES[themeKey]
 	const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(
 		() => getChallenges() || initialDailyQuests
 	)
@@ -936,15 +943,15 @@ export function AdventureChallenges() {
 		<section className='w-full animate-in fade-in slide-in-from-bottom-2 duration-500 pb-36 md:pb-10'>
 			{/* 1. LE HERO HEADER (Le Decor Emeraude) */}
 			<div className='relative w-full isolate overflow-hidden'>
-				{/* Le Fond Colore (Couche -1) */}
-				<div className='absolute inset-0 bg-gradient-to-br from-emerald-600 via-emerald-900 to-background z-[-1]'></div>
+				{/* Le Fond Colore dynamique */}
+				<div className={`absolute inset-0 bg-gradient-to-b ${factionTheme.bgGradient} z-[-1]`}></div>
 
 				{/* Le Contenu Textuel (Couche 2 - Toujours au dessus) */}
 				<div className='relative z-20 px-6 pt-12 pb-24'>
 					<h1 className='text-3xl font-black text-white tracking-tight drop-shadow-md'>
-						{monthlyQuest.title}
+						{factionTheme.title}
 					</h1>
-					<p className='text-lime-400 font-bold text-[11px] tracking-widest uppercase mt-1'>
+					<p className={`font-bold text-[11px] tracking-widest uppercase mt-1 ${factionTheme.accentText}`}>
 						⏱ {monthlyQuest.timeLeft}
 					</p>
 				</div>
@@ -952,8 +959,8 @@ export function AdventureChallenges() {
 				{/* La Mascotte (Couche 1 - Derriere le texte, devant le fond) */}
 				<div className='absolute bottom-0 right-[-10px] w-40 h-40 z-10 opacity-90'>
 					<img
-						src='/images/logo-icon-bee.png'
-						alt='Mascotte Abeille'
+						src={factionTheme.mascotImg}
+						alt={factionTheme.title}
 						className='w-full h-full object-contain object-bottom drop-shadow-2xl'
 						onError={(e) => {
 							e.currentTarget.style.display = 'none'
@@ -973,14 +980,14 @@ export function AdventureChallenges() {
 						<h2 className='text-base font-bold text-white tracking-tight'>
 							{monthlyQuest.objective}
 						</h2>
-						<span className='px-2 py-1 rounded-full bg-lime-500/10 text-lime-400 text-[10px] font-bold tabular-nums'>
+						<span className={`px-2 py-1 rounded-full text-[10px] font-bold tabular-nums ${factionTheme.badgeBg} ${factionTheme.accentText}`}>
 							+500 🌱
 						</span>
 					</div>
 
 					{/* Progress Bar */}
 					<div className='h-3 w-full bg-white/5 rounded-full overflow-hidden'>
-						<div className='h-full bg-lime-500 w-[40%] rounded-full'></div>
+						<div className={`h-full w-[40%] rounded-full ${factionTheme.accentBg}`}></div>
 					</div>
 					<div className='text-right text-[11px] font-medium text-white/50 tabular-nums mt-2'>
 						{monthlyQuest.progress} / {monthlyQuest.max} jours
