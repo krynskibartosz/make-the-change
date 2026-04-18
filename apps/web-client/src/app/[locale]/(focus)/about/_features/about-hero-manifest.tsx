@@ -1,3 +1,4 @@
+import { HeroParallaxBackground } from '../../../(marketing)/(home)/_features/hero-parallax-background'
 import type { AboutHeroProps } from './about.types'
 
 const HERO_VIDEO_URL = '/videos/home-header.mp4'
@@ -6,20 +7,10 @@ const HERO_POSTER_URL = '/images/home-header-poster.jpeg'
 export function AboutHeroManifest({ overline, title, subtitle, imageAlt }: AboutHeroProps) {
   return (
     <section
-      className="relative min-h-[85vh] w-full overflow-hidden"
+      className="relative min-h-[85vh] w-full overflow-hidden bg-black"
       aria-label={imageAlt}
     >
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster={HERO_POSTER_URL}
-        className="absolute inset-0 h-full w-full object-cover"
-      >
-        <source src={HERO_VIDEO_URL} type="video/mp4" />
-      </video>
+      <HeroParallaxBackground videoUrl={HERO_VIDEO_URL} posterUrl={HERO_POSTER_URL} />
 
       {/* Subtle top vignette for overline legibility */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
