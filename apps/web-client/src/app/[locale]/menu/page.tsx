@@ -25,9 +25,11 @@ import { useEffect, useState } from 'react'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { useDiscoverMenu } from '@/components/layout/use-discover-menu'
 import { Link } from '@/i18n/navigation'
+import { getFactionTheme } from '@/lib/faction-theme'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import { getMockViewer } from '@/lib/mock/mock-viewer'
+import type { Faction } from '@/lib/mock/types'
 import { createClient } from '@/lib/supabase/client'
 import { asString, isRecord } from '@/lib/type-guards'
 
@@ -48,6 +50,7 @@ const MenuPage = () => {
     id: string
     email: string
     avatarUrl?: string | null
+    faction?: Faction | null
   } | null>(null)
   const tNav = useTranslations('navigation')
   const tMenu = useTranslations('menu_page')
@@ -67,6 +70,7 @@ const MenuPage = () => {
               id: viewer.viewerId,
               email: viewer.email,
               avatarUrl: viewer.avatarUrl,
+              faction: viewer.faction,
             }
           : null,
       )
@@ -92,12 +96,14 @@ const MenuPage = () => {
         id: user.id,
         email: user.email || '',
         avatarUrl,
+        faction: null,
       })
     }
     void getUser()
   }, [])
 
   const initial = (user?.email || '?').trim().charAt(0).toUpperCase()
+  const accentTheme = getFactionTheme(user?.faction ?? null)
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-24">
@@ -106,8 +112,8 @@ const MenuPage = () => {
 
         {/* User Profile Section */}
         {user ? (
-          <div className="flex items-center gap-4 rounded-2xl border bg-card p-4 shadow-sm">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary ring-2 ring-background">
+          <div className={`flex items-center gap-4 rounded-2xl border bg-card p-4 shadow-sm ${accentTheme.accentBorder}`}>
+            <div className={`flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 ring-background ${accentTheme.accentBgSoft} ${accentTheme.accentText}`}>
               {user.avatarUrl ? (
                 <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
               ) : (
@@ -119,7 +125,7 @@ const MenuPage = () => {
               <p className="text-xs text-muted-foreground break-all">{user.email}</p>
               <Link
                 href="/dashboard/profile"
-                className="text-sm text-primary hover:underline flex items-center gap-1 mt-1 font-medium"
+                className={`text-sm hover:underline flex items-center gap-1 mt-1 font-medium ${accentTheme.accentText}`}
               >
                 {tMenu('user.view_profile')}
               </Link>

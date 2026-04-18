@@ -13,10 +13,12 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
+import { getFactionTheme } from '@/lib/faction-theme'
 import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 
 export default async function ProfilePage() {
   const profile = await getCurrentProfile()
+  const accentTheme = getFactionTheme(profile?.faction ?? null)
   const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
     unlockedLimit: 2,
     lockedLimit: 2,
@@ -28,7 +30,7 @@ export default async function ProfilePage() {
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
           <Link
             href="/dashboard/settings"
-            aria-label="Paramètres"
+            aria-label="Parametres"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
           >
             <Settings className="h-5 w-5" />
@@ -38,7 +40,9 @@ export default async function ProfilePage() {
 
       <main className="mx-auto w-full max-w-3xl px-4 ">
         <section className="relative pt-6">
-          <div className="pointer-events-none absolute left-1/2 top-12 h-40 w-40 -translate-x-1/2 rounded-full bg-lime-500/10 blur-3xl" />
+          <div
+            className={`pointer-events-none absolute left-1/2 top-12 h-40 w-40 -translate-x-1/2 rounded-full blur-3xl ${accentTheme.accentGlow}`}
+          />
 
           <div className="relative z-10 mx-auto mt-4 h-28 w-28 overflow-hidden rounded-full border-4 border-[#0B0F15] shadow-xl">
             <img
@@ -55,9 +59,11 @@ export default async function ProfilePage() {
             {profile?.displayName || 'Bartosz Krynski'}
           </h1>
 
-          <div className="mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border border-orange-400/20 bg-orange-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.2)]">
+          <div
+            className={`mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide ${accentTheme.badgeClassName} ${accentTheme.accentText} ${accentTheme.accentShadow}`}
+          >
             <Flame className="h-3.5 w-3.5 fill-current" />
-            {profile?.streakDays || 12} jours de série
+            {profile?.streakDays || 12} jours de serie
           </div>
 
           <p className="mt-2 text-center text-xs font-medium tracking-wide text-white/60">
@@ -73,7 +79,7 @@ export default async function ProfilePage() {
               {(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
-              ABEILLES SAUVÉES
+              ABEILLES SAUVEES
             </div>
           </div>
 
@@ -87,7 +93,7 @@ export default async function ProfilePage() {
               kg
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
-              MIEL GÉNÉRÉ
+              MIEL GENERE
             </div>
           </div>
 
@@ -101,13 +107,13 @@ export default async function ProfilePage() {
               kg
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
-              CO₂ CAPTURÉ
+              CO2 CAPTURE
             </div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Sparkles className="h-5 w-5 text-lime-400" />
-            <div className="mt-2 text-2xl font-black text-lime-400 tabular-nums">
+            <Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} />
+            <div className={`mt-2 text-2xl font-black tabular-nums ${accentTheme.accentText}`}>
               {(profile?.points || 2450).toLocaleString('fr-FR')}
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">
@@ -155,7 +161,7 @@ export default async function ProfilePage() {
                   <Lock className="h-3.5 w-3.5 text-white/55" />
                 </span>
                 <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
-                  Verrouillé
+                  Verrouille
                 </span>
                 <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
                   <img
@@ -171,9 +177,9 @@ export default async function ProfilePage() {
 
           <Link
             href="/aventure?tab=biodex"
-            className="mt-1 inline-flex items-center gap-2 text-sm font-semibold text-lime-400 transition-colors hover:text-lime-300"
+            className={`mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors ${accentTheme.accentText}`}
           >
-            Voir la liste complète du BioDex
+            Voir la liste complete du BioDex
             <ArrowRight className="h-4 w-4" />
           </Link>
         </section>
@@ -181,7 +187,7 @@ export default async function ProfilePage() {
         <section>
           <div className="mt-8 mb-4 flex items-end justify-between ">
             <h2 className="text-xl font-bold text-white">Mes Tribus</h2>
-            <button type="button" className="text-xs font-medium text-lime-400 hover:text-lime-300">
+            <button type="button" className={`text-xs font-medium ${accentTheme.accentText}`}>
               Voir tout
             </button>
           </div>
@@ -213,7 +219,7 @@ export default async function ProfilePage() {
               <div className="mb-3 h-20 w-full overflow-hidden rounded-xl">
                 <img
                   src="https://images.unsplash.com/photo-1582967788606-a171c1080cb0?auto=format&fit=crop&q=80&w=400"
-                  alt="Océan"
+                  alt="Ocean"
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -227,17 +233,21 @@ export default async function ProfilePage() {
           </div>
         </section>
 
-        <section className="relative  mt-10 mb-8 overflow-hidden rounded-3xl border border-lime-500/30 bg-gradient-to-br from-lime-500/20 to-emerald-900/20 p-6 text-center">
-          <div className="pointer-events-none absolute left-1/2 mt-[-3rem] h-40 w-40 -translate-x-1/2 rounded-full bg-lime-400/15 blur-3xl" />
+        <section
+          className={`relative  mt-10 mb-8 overflow-hidden rounded-3xl border bg-gradient-to-br p-6 text-center ${accentTheme.accentBorder} ${accentTheme.heroGradient}`}
+        >
+          <div
+            className={`pointer-events-none absolute left-1/2 mt-[-3rem] h-40 w-40 -translate-x-1/2 rounded-full blur-3xl ${accentTheme.accentGlow}`}
+          />
           <div className="relative z-10">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
-              <Gift className="h-7 w-7 text-lime-300" />
+              <Gift className={`h-7 w-7 ${accentTheme.accentTextSoft}`} />
             </div>
             <h3 className="mt-3 text-lg font-black text-white">Invitez vos amis</h3>
             <p className="mt-2 mb-4 text-sm text-balance text-white/70">
               Faites grandir le mouvement. Gagnez{' '}
-              <span className="font-bold text-lime-400">500 Graines 🌱</span> chacun pour chaque
-              ami parrainé.
+              <span className={`font-bold ${accentTheme.accentText}`}>500 Graines 🌱</span> chacun pour chaque ami
+              parraine.
             </p>
             <button
               type="button"

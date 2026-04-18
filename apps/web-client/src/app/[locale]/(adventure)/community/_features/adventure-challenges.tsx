@@ -16,6 +16,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useHaptic } from '@/hooks/use-haptic'
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { Link } from '@/i18n/navigation'
+import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/lib/faction-theme'
 import { getChallenges } from '@/lib/mock/mock-challenges'
 import type { Challenge, Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
@@ -89,53 +90,35 @@ const monthlyQuest = {
 	max: 20,
 }
 
-const FACTION_THEMES = {
+const FACTION_CONTENT = {
 	pollinisateurs: {
 		title: "Quête de l'Essaim",
 		mascotImg: '/abeille-transparente.png',
-		bgGradient: 'from-amber-600 to-[#0B0F15]',
-		accentText: 'text-amber-400',
-		accentBg: 'bg-amber-400',
-		badgeBg: 'bg-amber-500/10 border border-amber-500/20',
 	},
 	forets: {
 		title: 'Quête de la Forêt',
 		mascotImg: '/sylva.png',
-		bgGradient: 'from-emerald-700 to-[#0B0F15]',
-		accentText: 'text-emerald-400',
-		accentBg: 'bg-emerald-400',
-		badgeBg: 'bg-emerald-500/10 border border-emerald-500/20',
 	},
 	artisans: {
 		title: 'Quête du Terroir',
 		mascotImg: '/aura.png',
-		bgGradient: 'from-rose-700 to-[#0B0F15]',
-		accentText: 'text-rose-400',
-		accentBg: 'bg-rose-400',
-		badgeBg: 'bg-rose-500/10 border border-rose-500/20',
 	},
 } as const
 
-const resolveFactionThemeKey = (
-	faction: Faction | null | undefined
-): keyof typeof FACTION_THEMES => {
-	if (faction === 'Vie Sauvage') return 'pollinisateurs'
-	if (faction === 'Artisans Locaux') return 'artisans'
-	return 'forets'
-}
-
 type EcoFactReaderProps = {
+	accentTheme: FactionTheme
 	open: boolean
 	onValidate: () => void
 	onClose: () => void
 }
 
 type EcoFactArticleViewProps = {
+	accentTheme: FactionTheme
 	open: boolean
 	onClose: () => void
 }
 
-function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
+function EcoFactArticleView({ accentTheme, open, onClose }: EcoFactArticleViewProps) {
 	return (
 		<AnimatePresence>
 			{open ? (
@@ -171,8 +154,14 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 						Le Poumon Vert : Pourquoi l&apos;Amazonie est vitale.
 					</h1>
 
-					<div className='mx-6 bg-lime-400/10 border border-lime-400/20 rounded-2xl p-5 mt-6 mb-8'>
-						<h3 className='text-lime-400 font-bold mb-3 uppercase tracking-widest text-[10px]'>
+					<div
+						className={cn(
+							'mx-6 rounded-2xl p-5 mt-6 mb-8 border',
+							accentTheme.accentBgSoft,
+							accentTheme.accentBorder
+						)}
+					>
+						<h3 className={cn('font-bold mb-3 uppercase tracking-widest text-[10px]', accentTheme.accentText)}>
 							En bref
 						</h3>
 						<ul className='space-y-3 text-sm text-white/80'>
@@ -228,7 +217,7 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 							vivant.
 						</p>
 
-						<blockquote className='border-l-4 border-lime-400 pl-6 my-12 py-2'>
+						<blockquote className={cn('border-l-4 pl-6 my-12 py-2', accentTheme.accentBorder)}>
 							<p className='italic text-2xl font-medium text-white leading-snug'>
 								&quot;Chaque minute, l&apos;équivalent de 30 terrains de football
 								disparaît.&quot;
@@ -236,8 +225,14 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 						</blockquote>
 					</div>
 
-					<div className='mx-6 mt-16 mb-12 p-6 bg-lime-400/10 border border-lime-400/20 rounded-3xl text-center'>
-						<h3 className='text-lime-400 font-black text-xl mb-2'>
+					<div
+						className={cn(
+							'mx-6 mt-16 mb-12 p-6 rounded-3xl text-center border',
+							accentTheme.accentBgSoft,
+							accentTheme.accentBorder
+						)}
+					>
+						<h3 className={cn('font-black text-xl mb-2', accentTheme.accentText)}>
 							Passez à l&apos;action
 						</h3>
 						<p className='text-white/70 text-sm mb-4'>
@@ -246,7 +241,10 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 						<Link
 							href='/projects'
 							onClick={onClose}
-							className='bg-lime-400 text-black font-bold px-6 py-3 rounded-full w-full inline-flex items-center justify-center'
+							className={cn(
+								'text-black font-bold px-6 py-3 rounded-full w-full inline-flex items-center justify-center',
+								accentTheme.accentBg
+							)}
 						>
 							Découvrir les projets
 						</Link>
@@ -259,7 +257,7 @@ function EcoFactArticleView({ open, onClose }: EcoFactArticleViewProps) {
 	)
 }
 
-function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
+function EcoFactReader({ accentTheme, open, onValidate, onClose }: EcoFactReaderProps) {
 	const haptic = useHaptic()
 	const [isArticleOpen, setIsArticleOpen] = useState(false)
 	const [scrollProgress, setScrollProgress] = useState(0)
@@ -497,7 +495,7 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 					<div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent pt-12 pb-[max(1.5rem,env(safe-area-inset-bottom))] px-5 z-40'>
 						<div className='w-full h-1 bg-white/10 rounded-full mb-4 overflow-hidden'>
 							<div
-								className='h-full bg-lime-400 transition-all duration-100 ease-out'
+								className={cn('h-full transition-all duration-100 ease-out', accentTheme.accentBg)}
 								style={{ width: `${isUnlocked ? 100 : scrollProgress}%` }}
 							/>
 						</div>
@@ -513,7 +511,7 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 							className={cn(
 								'w-full h-14 rounded-2xl font-black text-lg flex items-center justify-center transition-all duration-500',
 								isUnlocked
-									? 'bg-lime-400 text-[#0B0F15] active:scale-95 shadow-[0_0_30px_rgba(132,204,22,0.3)]'
+									? cn(accentTheme.accentBg, 'text-[#0B0F15] active:scale-95', accentTheme.accentShadow)
 									: 'bg-white/5 text-white/40 border border-white/10'
 							)}
 						>
@@ -531,6 +529,7 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 					</div>
 
 					<EcoFactArticleView
+						accentTheme={accentTheme}
 						open={isArticleOpen}
 						onClose={() => setIsArticleOpen(false)}
 					/>
@@ -540,12 +539,13 @@ function EcoFactReader({ open, onValidate, onClose }: EcoFactReaderProps) {
 	)
 }
 type DailyHarvestModalProps = {
+	accentTheme: FactionTheme
 	open: boolean
 	onClose: () => void
 	onClaim: () => void
 }
 
-function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
+function DailyHarvestModal({ accentTheme, open, onClose, onClaim }: DailyHarvestModalProps) {
 	const [phase, setPhase] = useState<'idle' | 'charging' | 'exploding' | 'revealed'>('idle')
 	const [progress, setProgress] = useState(0)
 	const [animatedReward, setAnimatedReward] = useState(0)
@@ -776,7 +776,7 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 							</p>
 							<div className='mt-4 h-2 w-48 overflow-hidden rounded-full bg-white/10'>
 								<div
-									className='h-full bg-yellow-400 transition-all duration-75 ease-linear'
+									className={cn('h-full transition-all duration-75 ease-linear', accentTheme.accentBg)}
 									style={{ width: `${progress}%` }}
 								/>
 							</div>
@@ -789,14 +789,14 @@ function DailyHarvestModal({ open, onClose, onClaim }: DailyHarvestModalProps) {
 
 					{phase === 'revealed' ? (
 						<div className='animate-in zoom-in slide-in-from-bottom-10 duration-700 z-10 flex flex-col items-center'>
-							<h2 className='mb-2 text-sm font-bold uppercase tracking-widest text-yellow-400'>
+							<h2 className={cn('mb-2 text-sm font-bold uppercase tracking-widest', accentTheme.accentText)}>
 								Récompense Quotidienne
 							</h2>
 							<div className='relative mb-4'>
 								<div className='pointer-events-none absolute inset-0 -z-10 flex items-center justify-center'>
-									<div className='h-64 w-64 rounded-full bg-gradient-to-tr from-lime-400/0 via-lime-400/20 to-yellow-400/0 blur-2xl animate-[spin_4s_linear_infinite]' />
+									<div className={cn('h-64 w-64 rounded-full blur-2xl animate-[spin_4s_linear_infinite]', accentTheme.accentGlow)} />
 								</div>
-								<div className='text-7xl font-black text-lime-400 drop-shadow-[0_0_40px_rgba(163,230,53,0.5)] animate-[loot-spring-pop_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]'>
+								<div className={cn('text-7xl font-black animate-[loot-spring-pop_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]', accentTheme.accentText, accentTheme.accentShadow)}>
 									+ {animatedReward} 🌱
 								</div>
 							</div>
@@ -859,9 +859,17 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 	const haptic = useHaptic()
 	const searchParams = useSearchParams()
 	const { guardAction } = useActionAuth()
-	
+
 	const themeKey = resolveFactionThemeKey(initialFaction)
-	const factionTheme = FACTION_THEMES[themeKey]
+	const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
+	const accentTheme = getFactionTheme(initialFaction)
+	const factionTheme = {
+		...FACTION_CONTENT[contentKey],
+		accentBg: accentTheme.accentBg,
+		accentText: accentTheme.accentText,
+		badgeBg: accentTheme.badgeClassName,
+		bgGradient: accentTheme.heroGradient,
+	}
 	const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(
 		() => getChallenges() || initialDailyQuests
 	)
@@ -1078,7 +1086,13 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 								</p>
 							</div>
 
-							<div className='shrink-0 rounded-full bg-lime-500/10 px-2 py-1 text-[10px] font-bold tabular-nums whitespace-nowrap text-lime-400'>
+							<div
+								className={cn(
+									'shrink-0 rounded-full px-2 py-1 text-[10px] font-bold tabular-nums whitespace-nowrap',
+									accentTheme.badgeClassName,
+									accentTheme.accentText
+								)}
+							>
 								+{quest.reward} 🌱
 							</div>
 						</>
@@ -1130,6 +1144,7 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 			</div>
 
 			<EcoFactReader
+				accentTheme={accentTheme}
 				open={isEcoFactReaderOpen}
 				onValidate={handleEcoFactValidate}
 				onClose={() => setIsEcoFactReaderOpen(false)}
@@ -1144,13 +1159,21 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 						transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
 						className='pointer-events-none fixed inset-x-0 top-[18%] z-[95] flex justify-center px-4'
 					>
-						<div className='rounded-full border border-lime-400/40 bg-lime-400/15 px-4 py-2 text-sm font-black text-lime-300 backdrop-blur-md shadow-[0_0_20px_rgba(132,204,22,0.35)]'>
+						<div
+							className={cn(
+								'rounded-full px-4 py-2 text-sm font-black backdrop-blur-md',
+								accentTheme.badgeClassName,
+								accentTheme.accentText,
+								accentTheme.accentShadow
+							)}
+						>
 							+{floatingReward.amount} graines gagnées
 						</div>
 					</motion.div>
 				) : null}
 			</AnimatePresence>
 			<DailyHarvestModal
+				accentTheme={accentTheme}
 				open={isDailyHarvestOpen}
 				onClose={() => setIsDailyHarvestOpen(false)}
 				onClaim={handleDailyHarvestClaim}
