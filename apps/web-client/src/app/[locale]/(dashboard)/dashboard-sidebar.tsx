@@ -24,6 +24,7 @@ import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
 import { useDashboardSidebar } from '@/components/layout/dashboard-sidebar-context'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { Link, usePathname } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { asString, isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 import { logout } from '../(auth)/actions'
@@ -46,7 +47,7 @@ type NavigationKey = keyof Messages['navigation']
 
 type AccountNavItem = { href: string; icon: LucideIcon; labelKey?: NavigationKey; label?: string }
 
-const accountNavPrimaryItems: AccountNavItem[] = [
+const baseAccountNavPrimaryItems: AccountNavItem[] = [
   { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
   { href: '/dashboard/profile', labelKey: 'profile', icon: User },
   { href: '/dashboard/investments', label: 'Mes contributions', icon: PiggyBank },
@@ -187,6 +188,9 @@ export const DashboardSidebar = ({ user, profile }: DashboardSidebarProps) => {
   const metadata = isRecord(profile?.metadata) ? profile.metadata : null
   const metadataAvatarUrl = metadata ? asString(metadata.avatar_url) : ''
   const avatarUrl = metadataAvatarUrl || profile?.avatar_url || null
+  const accountNavPrimaryItems = isMockDataSource
+    ? baseAccountNavPrimaryItems.filter((item) => item.href !== '/dashboard')
+    : baseAccountNavPrimaryItems
 
   const handleNavClick = () => {
     setIsMobileOpen(false)

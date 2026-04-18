@@ -1,4 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
+import { getMockSpeciesContext, getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
 import { isRecord, asString, asNumber, asStringArray } from '@/lib/type-guards'
 import type { 
   SpeciesContext, 
@@ -52,6 +55,11 @@ function ensurePrototypeUnlockedSpecies(speciesList: SpeciesContext[]): SpeciesC
 }
 
 export async function getSpeciesContext(id: string): Promise<SpeciesContext | null> {
+  if (isMockDataSource) {
+    const session = await getMockViewerSession()
+    return getMockSpeciesContext(id, session?.viewerId)
+  }
+
   const supabase = await createClient()
   
   const { data, error } = await supabase
@@ -69,6 +77,25 @@ export async function getSpeciesContext(id: string): Promise<SpeciesContext | nu
 }
 
 export async function getSpeciesContextList(filters?: SpeciesFilters): Promise<SpeciesContext[]> {
+  if (isMockDataSource) {
+    const session = await getMockViewerSession()
+    let speciesList = getMockSpeciesContextList(session?.viewerId)
+
+    if (filters?.status) {
+      speciesList = speciesList.filter((species) => species.conservation_status === filters.status)
+    }
+
+    if (filters?.search) {
+      const query = filters.search.toLowerCase().trim()
+      speciesList = speciesList.filter((species) =>
+        species.name_default.toLowerCase().includes(query) ||
+        species.description_default.toLowerCase().includes(query),
+      )
+    }
+
+    return ensurePrototypeUnlockedSpecies(speciesList)
+  }
+
   const supabase = await createClient()
   
   let query = supabase.from('v_species_context').select('*')

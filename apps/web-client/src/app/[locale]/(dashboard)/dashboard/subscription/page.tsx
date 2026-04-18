@@ -1,26 +1,27 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { ArrowRight, Sparkles } from 'lucide-react'
+import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPoints } from '@/lib/utils'
 
 export default async function SubscriptionPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) return null
-
-  const { data: subscription } = await supabase
-    .from('subscriptions')
-    .select(
-      'id, plan_type, status, monthly_points_allocation, current_period_end, next_billing_date, monthly_price, annual_price',
-    )
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  const user = await requireAuth()
+  const subscription = isMockDataSource
+    ? getMockSubscription(user.id)
+    : (
+        await (await createClient())
+          .from('subscriptions')
+          .select(
+            'id, plan_type, status, monthly_points_allocation, current_period_end, next_billing_date, monthly_price, annual_price',
+          )
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+      ).data
 
   return (
     <div className="space-y-6 sm:space-y-8">

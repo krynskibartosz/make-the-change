@@ -5,32 +5,39 @@ import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getInvestmentStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/status-colors'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockInvestments } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 export default async function InvestmentsPage() {
   const t = await getTranslations('investments')
   const user = await requireAuth()
-  const supabase = await createClient()
+  let userInvestments = getMockInvestments(user.id)
 
-  // Fetch user investments with project details using RLS
-  const { data: userInvestments } = await supabase
-    .from('investments')
-    .select(`
-      id,
-      amount_eur_equivalent,
-      amount_points,
-      returns_received_points,
-      status,
-      created_at,
-      project:public_projects!project_id(
-        name_default,
-        slug,
-        status
-      )
-    `)
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+  if (!isMockDataSource) {
+    const supabase = await createClient()
+
+    const { data } = await supabase
+      .from('investments')
+      .select(`
+        id,
+        amount_eur_equivalent,
+        amount_points,
+        returns_received_points,
+        status,
+        created_at,
+        project:public_projects!project_id(
+          name_default,
+          slug,
+          status
+        )
+      `)
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+
+    userInvestments = data || []
+  }
 
   // Calculate total invested
   const totalInvested = (userInvestments || []).reduce(

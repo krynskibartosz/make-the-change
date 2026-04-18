@@ -9,6 +9,8 @@ import {
   parseShippingAddress,
 } from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockOrderById } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
@@ -20,34 +22,36 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const { id } = await params
   const t = await getTranslations('orders')
   const user = await requireAuth()
-  const supabase = await createClient()
-
-  const { data: order } = await supabase
-    .from('orders')
-    .select(
-      `
-      id,
-      status,
-      subtotal_points,
-      shipping_cost_points,
-      tax_points,
-      total_points,
-      created_at,
-      tracking_number,
-      carrier,
-      shipping_address,
-      items:order_items(
-        id,
-        quantity,
-        unit_price_points,
-        total_price_points,
-        product_snapshot
-      )
-    `,
-    )
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .single()
+  const order = isMockDataSource
+    ? getMockOrderById(user.id, id)
+    : (
+        await (await createClient())
+          .from('orders')
+          .select(
+            `
+            id,
+            status,
+            subtotal_points,
+            shipping_cost_points,
+            tax_points,
+            total_points,
+            created_at,
+            tracking_number,
+            carrier,
+            shipping_address,
+            items:order_items(
+              id,
+              quantity,
+              unit_price_points,
+              total_price_points,
+              product_snapshot
+            )
+          `,
+          )
+          .eq('id', id)
+          .eq('user_id', user.id)
+          .single()
+      ).data
 
   if (!order) notFound()
 

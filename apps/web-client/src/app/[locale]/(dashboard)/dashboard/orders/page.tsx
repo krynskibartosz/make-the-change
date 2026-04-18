@@ -6,37 +6,44 @@ import { getOrderStatusColor } from '@/app/[locale]/(dashboard)/_features/lib/st
 import { parseOrderItems } from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockOrders } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPoints } from '@/lib/utils'
 
 export default async function OrdersPage() {
   const t = await getTranslations('orders')
   const user = await requireAuth()
-  const supabase = await createClient()
+  let userOrders = getMockOrders(user.id)
 
-  // Fetch user orders with items using RLS
-  const { data: userOrders } = await supabase
-    .from('orders')
-    .select(`
-      id,
-      status,
-      total_points,
-      created_at,
-      items:order_items(
+  if (!isMockDataSource) {
+    const supabase = await createClient()
+
+    const { data } = await supabase
+      .from('orders')
+      .select(`
         id,
-        quantity,
-        unit_price_points,
-        total_price_points,
-        product_snapshot,
-        product:public_products!product_id(
+        status,
+        total_points,
+        created_at,
+        items:order_items(
           id,
-          name_default,
-          slug
-        )
-        )
-    `)
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+          quantity,
+          unit_price_points,
+          total_price_points,
+          product_snapshot,
+          product:public_products!product_id(
+            id,
+            name_default,
+            slug
+          )
+          )
+      `)
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+
+    userOrders = data || []
+  }
 
   // Status colors now centralized in lib/status-colors.ts
 

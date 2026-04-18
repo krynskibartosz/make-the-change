@@ -3,13 +3,14 @@ import { CheckoutClient } from '@/app/[locale]/(marketing-no-footer)/checkout/_f
 import { SectionContainer } from '@/components/ui/section-container'
 import { redirect } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getCurrentProfile } from '@/lib/mock/mock-session-server'
+import { getCurrentProfile, getCurrentViewer } from '@/lib/mock/mock-session-server'
+import { getMockWalletBalance } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function CheckoutPage() {
   if (isMockDataSource) {
-    const profile = await getCurrentProfile()
-    const pointsBalance = Number(profile?.points || 0)
+    const [profile, viewer] = await Promise.all([getCurrentProfile(), getCurrentViewer()])
+    const pointsBalance = viewer ? getMockWalletBalance(viewer.viewerId) : 0
     const defaultAddress = {
       firstName: profile?.displayName.split(' ')[0] || '',
       lastName: profile?.displayName.split(' ').slice(1).join(' ') || '',

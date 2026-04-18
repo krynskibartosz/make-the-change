@@ -1,33 +1,32 @@
 import { Badge } from '@make-the-change/core/ui'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { redirect } from 'next/navigation'
+import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockSentMessages } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 import { asString, isRecord } from '@/lib/type-guards'
 
 export default async function SentMessagesPage() {
-  const supabase = await createClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
-  // Fetch user's sent messages
-  const { data: rawMessages } = await supabase
-    .from('producer_messages')
-    .select(
-      `
-      id,
-      subject,
-      message,
-      status,
-      created_at,
-      producer:public_producers!producer_id(name, slug)
-    `,
-    )
-    .eq('sender_user_id', user.id)
-    .order('created_at', { ascending: false })
+  const user = await requireAuth()
+  const rawMessages = isMockDataSource
+    ? getMockSentMessages(user.id)
+    : (
+        await (await createClient())
+          .from('producer_messages')
+          .select(
+            `
+            id,
+            subject,
+            message,
+            status,
+            created_at,
+            producer:public_producers!producer_id(name, slug)
+          `,
+          )
+          .eq('sender_user_id', user.id)
+          .order('created_at', { ascending: false })
+      ).data
 
   type ProducerRef = { name: string | null; slug: string | null }
   type ProducerMessageRow = {
@@ -97,9 +96,9 @@ export default async function SentMessagesPage() {
             const status = msg.status ?? 'pending'
             const statusConfig =
               status === 'pending'
-                ? { label: 'En attente', variant: 'warning' as const }
+                ? { label: 'En attente', variant: 'secondary' as const }
                 : status === 'read'
-                  ? { label: 'Lu', variant: 'info' as const }
+                  ? { label: 'Lu', variant: 'default' as const }
                   : status === 'replied'
                     ? { label: 'Répondu', variant: 'success' as const }
                     : { label: 'Archivé', variant: 'secondary' as const }

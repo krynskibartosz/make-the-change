@@ -1,8 +1,11 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { ArrowDown, ArrowUp, ShoppingBag, Wallet } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockPointsTransactions, getMockWalletBalance } from '@/lib/mock/mock-member-data'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { formatDate, formatPoints } from '@/lib/utils'
@@ -37,101 +40,99 @@ const getLedgerReasonLabel = (reason: string) => {
 
 export default async function PointsPage() {
   const t = await getTranslations('points')
-  const supabase = await createClient()
+  const user = await requireAuth()
+  let walletBalance = getMockWalletBalance(user.id)
+  let transactions: LedgerTransaction[] = getMockPointsTransactions(user.id)
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  if (!isMockDataSource) {
+    const supabase = await createClient()
 
-  if (!user) {
-    return null
-  }
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('points_balance')
+      .eq('id', user.id)
+      .single()
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('points_balance')
-    .eq('id', user.id)
-    .single()
+    walletBalance = asNumber(profile?.points_balance, 0)
 
-  const walletBalance = asNumber(profile?.points_balance, 0)
+    const { data: ledgerRows, error: ledgerError } = await supabase
+      .schema('commerce')
+      .from('points_ledger')
+      .select('id, delta, reason, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
 
-  const { data: ledgerRows, error: ledgerError } = await supabase
-    .schema('commerce')
-    .from('points_ledger')
-    .select('id, delta, reason, created_at')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+    // Fallback legacy history derived from orders if ledger is not available yet.
+    const { data: userOrders } = await supabase
+      .from('orders')
+      .select('id, user_id, points_earned, points_used, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
 
-  // Fallback legacy history derived from orders if ledger is not available yet.
-  const { data: userOrders } = await supabase
-    .from('orders')
-    .select('id, user_id, points_earned, points_used, created_at')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+    const transactionsFromLedger: LedgerTransaction[] =
+      !ledgerError && Array.isArray(ledgerRows)
+        ? ledgerRows
+            .map((row) => {
+              if (!isRecord(row)) {
+                return null
+              }
 
-  const transactionsFromLedger: LedgerTransaction[] =
-    !ledgerError && Array.isArray(ledgerRows)
-      ? ledgerRows
-          .map((row) => {
-            if (!isRecord(row)) {
-              return null
-            }
+              const id = asString(row.id)
+              const createdAt = asString(row.created_at)
 
-            const id = asString(row.id)
-            const createdAt = asString(row.created_at)
+              if (!id || !createdAt) {
+                return null
+              }
 
-            if (!id || !createdAt) {
-              return null
-            }
+              return {
+                id,
+                label: getLedgerReasonLabel(asString(row.reason)),
+                delta: asNumber(row.delta, 0),
+                createdAt,
+              }
+            })
+            .filter((row): row is LedgerTransaction => row !== null)
+        : []
 
-            return {
-              id,
-              label: getLedgerReasonLabel(asString(row.reason)),
-              delta: asNumber(row.delta, 0),
-              createdAt,
-            }
-          })
-          .filter((row): row is LedgerTransaction => row !== null)
+    const transactionsFromOrders: LedgerTransaction[] = Array.isArray(userOrders)
+      ? userOrders.flatMap((order) => {
+          const orderId = asString(order.id)
+          const createdAt = asString(order.created_at)
+          if (!orderId || !createdAt) {
+            return []
+          }
+
+          const earned = asNumber(order.points_earned, 0)
+          const spent = asNumber(order.points_used, 0)
+
+          return [
+            ...(earned > 0
+              ? [
+                  {
+                    id: `${orderId}-earned`,
+                    label: `Commande #${orderId.slice(0, 8)} (gain)`,
+                    delta: earned,
+                    createdAt,
+                  },
+                ]
+              : []),
+            ...(spent > 0
+              ? [
+                  {
+                    id: `${orderId}-spent`,
+                    label: `Commande #${orderId.slice(0, 8)} (utilisation)`,
+                    delta: -spent,
+                    createdAt,
+                  },
+                ]
+              : []),
+          ]
+        })
       : []
 
-  const transactionsFromOrders: LedgerTransaction[] = Array.isArray(userOrders)
-    ? userOrders.flatMap((order) => {
-        const orderId = asString(order.id)
-        const createdAt = asString(order.created_at)
-        if (!orderId || !createdAt) {
-          return []
-        }
-
-        const earned = asNumber(order.points_earned, 0)
-        const spent = asNumber(order.points_used, 0)
-
-        return [
-          ...(earned > 0
-            ? [
-                {
-                  id: `${orderId}-earned`,
-                  label: `Commande #${orderId.slice(0, 8)} (gain)`,
-                  delta: earned,
-                  createdAt,
-                },
-              ]
-            : []),
-          ...(spent > 0
-            ? [
-                {
-                  id: `${orderId}-spent`,
-                  label: `Commande #${orderId.slice(0, 8)} (utilisation)`,
-                  delta: -spent,
-                  createdAt,
-                },
-              ]
-            : []),
-        ]
-      })
-    : []
-
-  const transactions =
-    transactionsFromLedger.length > 0 ? transactionsFromLedger : transactionsFromOrders
+    transactions =
+      transactionsFromLedger.length > 0 ? transactionsFromLedger : transactionsFromOrders
+  }
 
   const totalEarned = transactions.reduce((sum, transaction) => {
     return transaction.delta > 0 ? sum + transaction.delta : sum

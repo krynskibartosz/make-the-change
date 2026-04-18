@@ -8,6 +8,11 @@ import { Link, redirect } from '@/i18n/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 import { isMockDataSource } from '@/lib/mock/data-source'
+import {
+  buildSyntheticMockOrder,
+  getMockOrderById,
+} from '@/lib/mock/mock-member-data'
+import { getCurrentProfile, getCurrentViewer } from '@/lib/mock/mock-session-server'
 
 interface CheckoutSuccessPageProps {
   searchParams: Promise<{ orderId?: string }>
@@ -24,22 +29,11 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
   let order: any = null
 
   if (isMockDataSource) {
-    user = { id: 'mock' }
-    order = {
-      id: orderId,
-      status: 'paid',
-      total_points: 250,
-      created_at: new Date().toISOString(),
-      items: [
-        {
-          id: 'mock-item-1',
-          quantity: 1,
-          unit_price_points: 250,
-          total_price_points: 250,
-          product_snapshot: { name: 'Article fictif', priceEuros: 0, pricePoints: 250 }
-        }
-      ]
-    }
+    const [viewer, profile] = await Promise.all([getCurrentViewer(), getCurrentProfile()])
+    user = viewer ? { id: viewer.viewerId } : null
+    order =
+      (viewer ? getMockOrderById(viewer.viewerId, orderId) : null) ||
+      buildSyntheticMockOrder(orderId, profile)
   } else {
     const supabase = await createClient()
     const { data: authData } = await supabase.auth.getUser()
@@ -85,6 +79,10 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
 
   const totalPoints = Number(order.total_points || 0)
   const showEuroAsPrimary = totalEuros > 0 && totalPoints <= 0
+  const primaryOrdersHref =
+    isMockDataSource && !user
+      ? `/register?returnTo=${encodeURIComponent('/dashboard/orders')}`
+      : '/dashboard/orders'
 
   return (
     <section className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-muted/25">
@@ -218,9 +216,9 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <Link href="/dashboard/orders">
+                <Link href={primaryOrdersHref}>
                   <Button className="w-full">
-                    {t('actions.orders')}
+                    {isMockDataSource && !user ? 'Créer mon compte' : t('actions.orders')}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
