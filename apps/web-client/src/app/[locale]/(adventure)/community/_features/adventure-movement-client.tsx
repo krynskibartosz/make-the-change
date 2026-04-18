@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { Bird, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
 import { recordClientMockCollectiveBravo } from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
@@ -260,9 +260,12 @@ interface AdventureMovementClientProps {
 
 export function AdventureMovementClient({ initialFaction, currentDayKey }: AdventureMovementClientProps) {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const { guardAction } = useActionAuth()
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
-  const [showPrivilege, setShowPrivilege] = useState(false)
+  
+  const showPrivilege = searchParams.get('p') === 'reward'
+  
   const collectiveGoal = getCollectiveGoal()
   const factionContributions = getFactionContributions()
   const activeContribution = getFactionContribution(initialFaction)
@@ -315,14 +318,14 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
               style={{ width: `${collectiveGoal.progress}%` }}
             />
           </div>
-          <button
-            type="button"
-            onClick={() => setShowPrivilege(true)}
+          <Link
+            href="?p=reward"
+            scroll={false}
             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
             aria-label="Voir la récompense du mois"
           >
             <Gift className="h-3.5 w-3.5" />
-          </button>
+          </Link>
         </div>
         <p className="mt-2 text-center text-[11px] text-white/40">
           {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> restantes
@@ -334,7 +337,11 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
             title="Le Privilège de l'Essaim"
             headerMode="close"
             fallbackHref="/collectif"
-            onClose={() => setShowPrivilege(false)}
+            onClose={() => {
+              const params = new URLSearchParams(searchParams.toString())
+              params.delete('p')
+              router.push(`?${params.toString()}`, { scroll: false })
+            }}
             className="z-[100]"
           >
             {(() => {
@@ -449,7 +456,11 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                   <div className="sticky bottom-0 z-20 w-full border-t border-white/5 bg-[#0B0F15]/80 p-5 backdrop-blur-xl sm:px-6">
                     <button
                       type="button"
-                      onClick={() => setShowPrivilege(false)}
+                      onClick={() => {
+                        const params = new URLSearchParams(searchParams.toString())
+                        params.delete('p')
+                        router.push(`?${params.toString()}`, { scroll: false })
+                      }}
                       className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white text-sm font-bold text-black shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-transform hover:scale-[1.02] active:scale-95"
                     >
                       Compris, let's go ! <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
