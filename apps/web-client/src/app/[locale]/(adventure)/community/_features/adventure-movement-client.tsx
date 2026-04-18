@@ -5,7 +5,9 @@ import { Bird, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trop
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
+import { recordClientMockCollectiveBravo } from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
+import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 import { useActionAuth } from '@/hooks/use-action-auth'
@@ -148,11 +150,13 @@ function ImpactCard({
   onAttemptBravo,
   shouldAutoBravo = false,
   onAutoBravoConsumed,
+  currentDayKey,
 }: {
   event: ImpactEvent
   onAttemptBravo: (eventId: string, action: () => void) => void
   shouldAutoBravo?: boolean
   onAutoBravoConsumed?: () => void
+  currentDayKey: string
 }) {
   const haptic = useHaptic()
   const [bravo, setBravo] = useState(false)
@@ -160,8 +164,23 @@ function ImpactCard({
 
   const handleBravoAction = useCallback(() => {
     haptic.mediumTap()
-    setBravo((prev) => !prev)
-  }, [haptic])
+    setBravo((prev) => {
+      const next = !prev
+
+      if (next) {
+        const session = getClientMockViewerSession()
+        if (session?.viewerId) {
+          recordClientMockCollectiveBravo({
+            viewerId: session.viewerId,
+            dayKey: currentDayKey,
+            targetId: event.id,
+          })
+        }
+      }
+
+      return next
+    })
+  }, [currentDayKey, event.id, haptic])
 
   useEffect(() => {
     if (!shouldAutoBravo || bravo) {
@@ -234,9 +253,10 @@ function ImpactCard({
 
 interface AdventureMovementClientProps {
   initialFaction: Faction | null
+  currentDayKey: string
 }
 
-export function AdventureMovementClient({ initialFaction }: AdventureMovementClientProps) {
+export function AdventureMovementClient({ initialFaction, currentDayKey }: AdventureMovementClientProps) {
   const searchParams = useSearchParams()
   const { guardAction } = useActionAuth()
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
@@ -273,138 +293,63 @@ export function AdventureMovementClient({ initialFaction }: AdventureMovementCli
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8 pb-24 duration-500">
-      <section className="space-y-4 px-4 sm:px-6">
-        <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl">
-          <div className="grid gap-4">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">Objectif commun du mois</p>
-                <h2 className="mt-2 text-2xl font-black tracking-tight text-white">{collectiveGoal.title}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-white/65">{collectiveGoal.summary}</p>
-              </div>
-              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">
-                {collectiveGoal.projectName}
-              </div>
-            </div>
-
-            <div className="rounded-[1.5rem] border border-white/10 bg-black/20 p-4">
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">Reservoir collectif</p>
-                  <p className="mt-2 text-3xl font-black text-white">{collectiveGoal.currentSeeds.toLocaleString('fr-FR')}</p>
-                  <p className="mt-1 text-sm text-white/55">sur {collectiveGoal.targetSeeds.toLocaleString('fr-FR')} graines</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">Progression</p>
-                  <p className="mt-2 text-3xl font-black text-white">{collectiveGoal.progress}%</p>
-                </div>
-              </div>
-
-              <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-gradient-to-r from-white via-amber-300 to-emerald-300" style={{ width: `${collectiveGoal.progress}%` }} />
-              </div>
-
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                    <Gift className="h-4 w-4 text-white/70" />
-                    Recompense commune
-                  </div>
-                  <p className="mt-2 text-sm font-black text-white">{collectiveGoal.commonRewardTitle}</p>
-                  <p className="mt-1 text-sm text-white/60">{collectiveGoal.commonRewardSummary}</p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                    <Sparkles className="h-4 w-4 text-white/70" />
-                    Prestige de faction
-                  </div>
-                  <p className="mt-2 text-sm font-black text-white">{collectiveGoal.prestigeRewardTitle}</p>
-                  <p className="mt-1 text-sm text-white/60">{collectiveGoal.prestigeRewardSummary}</p>
-                </div>
-              </div>
-            </div>
-
-            <Link
-              href={activeContribution ? '/aventure?tab=defis' : '/setup'}
-              className="inline-flex h-12 items-center justify-center rounded-2xl bg-white px-4 text-sm font-bold text-black transition-transform active:scale-[0.98]"
-            >
-              {activeContribution ? `Faire un defi pour aider ${activeContribution.label}` : 'Choisir une faction pour contribuer'}
-            </Link>
-          </div>
-        </article>
-
-        <div className="space-y-3">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <h3 className="text-lg font-black tracking-tight text-white">Contribution des factions</h3>
-              <p className="mt-1 text-sm text-white/55">Le classement indique qui pousse le plus fort vers l objectif commun.</p>
+      <section className="px-4 sm:px-6">
+        <div className="rounded-3xl bg-[#131820]/80 p-6 backdrop-blur-xl">
+          {/* SECTION 1 : LA QUÊTE COMMUNAUTAIRE */}
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-white">
+              Objectif Commun : {collectiveGoal.projectName}
+            </h2>
+            <p className="mt-1 text-sm text-white/60">
+              Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 pour financer le projet.
+            </p>
+            <div className="mt-4 h-4 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-amber-500 via-emerald-500 to-rose-500"
+                style={{ width: `${collectiveGoal.progress}%` }}
+              />
             </div>
           </div>
 
-          {factionContributions.map((contribution) => {
-            const theme = getFactionThemeByKey(contribution.themeKey)
-            const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
+          {/* SECTION 2 : LE SPLIT DES FACTIONS */}
+          <div className="flex flex-col gap-3">
+            {factionContributions.map((contribution) => {
+              const theme = getFactionThemeByKey(contribution.themeKey)
+              const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
 
-            return (
-              <article
-                key={contribution.themeKey}
-                className={cn(
-                  'rounded-[1.75rem] border bg-white/5 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)]',
-                  theme.accentBorder,
-                  isActiveFaction && `${theme.accentBgSoft} ${theme.accentShadow}`,
-                )}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className={cn('text-[11px] font-semibold uppercase tracking-[0.22em]', theme.accentTextSoft)}>
-                        {contribution.isLeader ? 'En tete' : `#${contribution.rank}`}
-                      </span>
-                      {isActiveFaction ? (
-                        <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em]', theme.badgeClassName, theme.accentText)}>
-                          Ma faction
-                        </span>
-                      ) : null}
+              return (
+                <div
+                  key={contribution.themeKey}
+                  className={cn(
+                    'flex items-center gap-3 rounded-2xl px-4 py-3 transition-transform',
+                    theme.accentBgSoft,
+                    isActiveFaction ? cn('border scale-[1.02]', theme.accentBorder, theme.accentShadow) : 'border border-transparent'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold',
+                      theme.accentBgSoft,
+                      theme.accentBorder,
+                      theme.accentText
+                    )}
+                  >
+                    {contribution.shortLabel[0]}
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-white tracking-tight">{contribution.label}</span>
+                      <span className={cn('font-black', theme.accentText)}>{contribution.contributionShare}%</span>
                     </div>
-                    <h4 className="mt-2 text-lg font-black text-white">{contribution.label}</h4>
-                    <p className="mt-1 text-sm text-white/60">{contribution.tagline}</p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className={cn('text-2xl font-black', theme.accentText)}>{contribution.contributionShare}%</p>
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">de l effort</p>
+                    <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                      <div className={cn('h-full rounded-full', theme.accentBg)} style={{ width: `${contribution.contributionShare}%` }} />
+                    </div>
                   </div>
                 </div>
-
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">Graines apportees</div>
-                    <p className="mt-2 text-xl font-black text-white">{contribution.contributionSeeds.toLocaleString('fr-FR')}</p>
-                    <p className="mt-1 text-sm text-white/55">{contribution.members} membres actifs</p>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">Impact reel</div>
-                    <p className="mt-2 text-xl font-black text-white">{contribution.impactValue}</p>
-                    <p className="mt-1 text-sm text-white/55">{contribution.impactLabel}</p>
-                  </div>
-                </div>
-
-                <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                  <div className={cn('h-full rounded-full', theme.accentBg)} style={{ width: `${contribution.contributionShare}%` }} />
-                </div>
-
-                <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
-                  <p className="text-sm text-white/60">{contribution.rallyLabel}</p>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-right">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">Prestige si 1ere</p>
-                    <p className={cn('mt-1 text-sm font-black', theme.accentText)}>{contribution.prestigeTitle}</p>
-                  </div>
-                </div>
-              </article>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </section>
 
@@ -417,6 +362,7 @@ export function AdventureMovementClient({ initialFaction }: AdventureMovementCli
             <ImpactCard
               key={event.id}
               event={event}
+              currentDayKey={currentDayKey}
               onAttemptBravo={handleAttemptBravo}
               shouldAutoBravo={replayBravoId === event.id}
               onAutoBravoConsumed={() => setReplayBravoId(null)}
