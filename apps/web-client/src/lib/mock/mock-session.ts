@@ -35,6 +35,20 @@ const decodeCookiePayload = (value: string): string => {
   }
 }
 
+const normalizeFactionToken = (value: string) =>
+  value
+    .replace(/Ãª/g, 'ê')
+    .replace(/Ã©/g, 'é')
+    .replace(/Ã¨/g, 'è')
+    .replace(/Ã /g, 'à')
+    .replace(/&/g, ' and ')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z\s]/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase()
+
 const normalizeFactionValue = (value: unknown): MockViewerSession['faction'] => {
   if (value === null) {
     return null
@@ -44,21 +58,17 @@ const normalizeFactionValue = (value: unknown): MockViewerSession['faction'] => 
     return null
   }
 
-  const normalized = value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/Ãª/g, 'e')
-    .replace(/Ã©/g, 'e')
-    .replace(/Ã¨/g, 'e')
-    .replace(/Ã /g, 'a')
-    .trim()
-    .toLowerCase()
+  const normalized = normalizeFactionToken(value)
 
   if (normalized === 'vie sauvage') {
     return 'Vie Sauvage'
   }
 
-  if (normalized === 'terres & forets' || normalized === 'terres and forets') {
+  if (
+    normalized === 'terres forets' ||
+    normalized === 'terres and forets' ||
+    normalized === 'terres et forets'
+  ) {
     return 'Terres & Forêts'
   }
 

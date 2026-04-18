@@ -5,14 +5,19 @@ import { useCallback } from 'react'
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { buildReturnToWithIntent, getClientMockViewerSession } from '@/lib/mock/mock-session'
-import type { ChallengeIntent } from '@/lib/mock/types'
+import type { ChallengeIntent, Faction } from '@/lib/mock/types'
 
 type GuardActionOptions = {
   intent: ChallengeIntent
   extraParams?: Record<string, string | undefined>
 }
 
-export function useActionAuth() {
+type ActionAuthFallback = {
+  viewerId?: string | null
+  faction?: Faction | null
+}
+
+export function useActionAuth(fallbackViewer?: ActionAuthFallback) {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -25,7 +30,10 @@ export function useActionAuth() {
       }
 
       const session = getClientMockViewerSession()
-      if (session?.faction) {
+      const effectiveViewerId = session?.viewerId ?? fallbackViewer?.viewerId ?? null
+      const effectiveFaction = session?.faction ?? fallbackViewer?.faction ?? null
+
+      if (effectiveFaction) {
         action()
         return
       }
@@ -37,14 +45,14 @@ export function useActionAuth() {
         options.extraParams,
       )
 
-      if (!session) {
+      if (!effectiveViewerId) {
         router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`)
         return
       }
 
       router.push(`/setup?returnTo=${encodeURIComponent(returnTo)}`)
     },
-    [pathname, router, searchParams],
+    [fallbackViewer?.faction, fallbackViewer?.viewerId, pathname, router, searchParams],
   )
 
   return { guardAction }
