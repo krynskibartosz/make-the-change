@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
 import { recordClientMockCollectiveBravo } from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
+import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
@@ -334,71 +335,110 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
             headerMode="close"
             fallbackHref="/collectif"
           >
-            <div className="flex flex-col gap-6 px-5 pb-10 pt-8 sm:px-6">
+            {(() => {
+              const ilangaProducts = getMockProducts().filter(
+                (p) => p.producer_id === 'mock-producer-ilanga-nature',
+              )
+              return (
+                <div className="flex flex-col gap-6 px-5 pb-10 pt-8 sm:px-6">
 
-              {/* Icône + titre */}
-              <div className="flex flex-col items-center text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-400/15">
-                  <Gift className="h-8 w-8 text-amber-400" />
-                </div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80">La Récompense du Mois</p>
-                <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
-                <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
-                  Si l'Essaim atteint 100%, notre partenaire{' '}
-                  <span className="font-semibold text-white">Ilanga Nature</span>{' '}
-                  débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
-                </p>
-              </div>
+                  {/* Icône + titre */}
+                  <div className="flex flex-col items-center text-center">
+                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-400/15">
+                      <Gift className="h-8 w-8 text-amber-400" />
+                    </div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80">La Récompense du Mois</p>
+                    <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
+                    <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
+                      Si l'Essaim atteint 100%, notre partenaire{' '}
+                      <span className="font-semibold text-white">Ilanga Nature</span>{' '}
+                      débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
+                    </p>
+                  </div>
 
-              {/* Jauge de progression */}
-              <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-                <div className="flex items-center justify-between text-xs text-white/50">
-                  <span>Progression collective</span>
-                  <span className="font-bold text-white">{collectiveGoal.progress}%</span>
-                </div>
-                <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#1A222C]">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
-                    style={{ width: `${collectiveGoal.progress}%` }}
-                  />
-                </div>
-                <p className="mt-2 text-center text-[11px] text-white/40">
-                  Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
-                </p>
-              </div>
+                  {/* Jauge de progression */}
+                  <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+                    <div className="flex items-center justify-between text-xs text-white/50">
+                      <span>Progression collective</span>
+                      <span className="font-bold text-white">{collectiveGoal.progress}%</span>
+                    </div>
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#1A222C]">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
+                        style={{ width: `${collectiveGoal.progress}%` }}
+                      />
+                    </div>
+                    <p className="mt-2 text-center text-[11px] text-white/40">
+                      Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
+                    </p>
+                  </div>
 
-              {/* Récompenses */}
-              <div className="space-y-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
-                <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
-                    <Droplets className="h-5 w-5 text-amber-400" />
+                  {/* Récompenses */}
+                  <div className="space-y-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
+                    <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-400/15">
+                        <Droplets className="h-5 w-5 text-amber-400" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-white">15% de privilège</p>
+                        <p className="text-sm text-white/50">Sur la récolte de miel Ilanga Nature</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-400/15">
+                        <Sparkles className="h-5 w-5 text-violet-400" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
+                        <p className="text-sm text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-white">15% de privilège</p>
-                    <p className="text-sm text-white/50">Sur la récolte de miel Ilanga Nature</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 px-5 py-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-400/15">
-                    <Sparkles className="h-5 w-5 text-violet-400" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
-                    <p className="text-sm text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
-                  </div>
-                </div>
-              </div>
 
-              {/* Bouton fermer */}
-              <button
-                type="button"
-                onClick={() => setShowPrivilege(false)}
-                className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white/10 text-sm font-semibold text-white transition-colors hover:bg-white/15"
-              >
-                Compris, let's go ! 🌱
-              </button>
-            </div>
+                  {/* Produits du partenaire */}
+                  {ilangaProducts.length > 0 && (
+                    <div className="space-y-3">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">
+                        La récolte d'Ilanga Nature
+                      </p>
+                      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1 sm:-mx-6 sm:px-6">
+                        {ilangaProducts.map((product) => (
+                          <Link
+                            key={product.id}
+                            href={`/products/${product.slug}`}
+                            prefetch={false}
+                            className="group flex w-44 shrink-0 flex-col overflow-hidden rounded-2xl border border-white/8 bg-white/5 transition-transform active:scale-[0.97]"
+                          >
+                            <div className="aspect-square w-full overflow-hidden bg-white/5">
+                              <img
+                                src={product.image_url}
+                                alt={product.name_default}
+                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1 p-3">
+                              <p className="text-sm font-bold text-white line-clamp-1">{product.name_default}</p>
+                              <p className="text-[11px] text-white/50 line-clamp-2">{product.short_description_default}</p>
+                              <p className="mt-1 text-sm font-black text-amber-400">{product.price_points} 🌱</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bouton fermer */}
+                  <button
+                    type="button"
+                    onClick={() => setShowPrivilege(false)}
+                    className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white/10 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                  >
+                    Compris, let's go ! 🌱
+                  </button>
+                </div>
+              )
+            })()}
           </FullScreenSlideModal>
         )}
 
