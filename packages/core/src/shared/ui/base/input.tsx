@@ -73,9 +73,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     const sizeClasses = {
-      sm: 'h-9 text-sm px-3',
-      md: 'h-11 text-sm px-4',
-      lg: 'h-13 text-base px-4',
+      // Keep input text at 16px on touch devices to prevent iOS zoom-on-focus.
+      sm: 'h-9 px-3 text-base sm:text-sm',
+      md: 'h-11 px-4 text-base sm:text-sm',
+      lg: 'h-13 px-4 text-base',
     }
 
     const variantClasses = {
