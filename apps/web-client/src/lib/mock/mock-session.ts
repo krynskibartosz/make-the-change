@@ -14,6 +14,61 @@ export const mockAuthCookieOptions = {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null
 
+const stripWrappingQuotes = (value: string): string => {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1)
+  }
+
+  return value
+}
+
+const decodeCookiePayload = (value: string): string => {
+  const normalized = stripWrappingQuotes(value.trim())
+
+  try {
+    return decodeURIComponent(normalized)
+  } catch {
+    return normalized
+  }
+}
+
+const normalizeFactionValue = (value: unknown): MockViewerSession['faction'] => {
+  if (value === null) {
+    return null
+  }
+
+  if (typeof value !== 'string') {
+    return null
+  }
+
+  const normalized = value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/Ãª/g, 'e')
+    .replace(/Ã©/g, 'e')
+    .replace(/Ã¨/g, 'e')
+    .replace(/Ã /g, 'a')
+    .trim()
+    .toLowerCase()
+
+  if (normalized === 'vie sauvage') {
+    return 'Vie Sauvage'
+  }
+
+  if (normalized === 'terres & forets' || normalized === 'terres and forets') {
+    return 'Terres & Forêts'
+  }
+
+  if (normalized === 'artisans locaux') {
+    return 'Artisans Locaux'
+  }
+
+  return null
+}
+
 export const serializeMockViewerSession = (session: MockViewerSession): string => {
   return encodeURIComponent(JSON.stringify(session))
 }
@@ -26,7 +81,7 @@ export const parseMockViewerSessionValue = (
   }
 
   try {
-    const parsed = JSON.parse(decodeURIComponent(value)) as unknown
+    const parsed = JSON.parse(decodeCookiePayload(value)) as unknown
     if (!isRecord(parsed)) {
       return null
     }
@@ -40,13 +95,7 @@ export const parseMockViewerSessionValue = (
         : parsed.avatarUrl === null
           ? null
           : null
-    const faction =
-      parsed.faction === 'Vie Sauvage' ||
-      parsed.faction === 'Terres & Forêts' ||
-      parsed.faction === 'Artisans Locaux' ||
-      parsed.faction === null
-        ? parsed.faction
-        : null
+    const faction = normalizeFactionValue(parsed.faction)
 
     if (!viewerId || !displayName || !email) {
       return null
@@ -66,7 +115,7 @@ export const parseMockViewerSessionValue = (
 
 const readCookieValue = (cookieString: string, key: string): string | null => {
   const entries = cookieString.split(';').map((entry) => entry.trim())
-  const match = entries.find((entry) => entry.startsWith(`${key}=`))
+  const match = [...entries].reverse().find((entry) => entry.startsWith(`${key}=`))
   if (!match) {
     return null
   }
