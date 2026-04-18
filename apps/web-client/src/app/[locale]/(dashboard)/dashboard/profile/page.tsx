@@ -2,13 +2,14 @@ import { ArrowRight, Bug, Droplets, Flame, Gift, Lock, Settings, Sparkles, Targe
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
-import { getFactionCampaign } from '@/lib/mock/mock-factions'
+import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
 import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 
 export default async function ProfilePage() {
   const profile = await getCurrentProfile()
   const accentTheme = getFactionTheme(profile?.faction ?? null)
-  const factionCampaign = getFactionCampaign(profile?.faction ?? null)
+  const collectiveGoal = getCollectiveGoal()
+  const factionContribution = getFactionContribution(profile?.faction ?? null)
   const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
     unlockedLimit: 2,
     lockedLimit: 2,
@@ -161,20 +162,20 @@ export default async function ProfilePage() {
           </Link>
         </section>
 
-        {factionCampaign ? (
+        {factionContribution ? (
           <section
             className={`mt-8 overflow-hidden rounded-3xl border bg-gradient-to-br p-5 ${accentTheme.accentBorder} ${accentTheme.heroGradient}`}
           >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${accentTheme.accentTextSoft}`}>
-                  Ma faction
+                  Ma contribution collective
                 </p>
-                <h2 className="mt-2 text-xl font-black text-white">{factionCampaign.label}</h2>
-                <p className="mt-2 text-sm text-white/70">{factionCampaign.tagline}</p>
+                <h2 className="mt-2 text-xl font-black text-white">{collectiveGoal.title}</h2>
+                <p className="mt-2 text-sm text-white/70">{collectiveGoal.summary}</p>
               </div>
               <div className={`rounded-full border px-3 py-1 text-xs font-bold ${accentTheme.badgeClassName} ${accentTheme.accentText}`}>
-                #{factionCampaign.rank}
+                {factionContribution.contributionShare}% de l effort
               </div>
             </div>
 
@@ -182,18 +183,17 @@ export default async function ProfilePage() {
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/50">
                   <Target className={`h-4 w-4 ${accentTheme.accentText}`} />
-                  Quete principale du mois
+                  Objectif commun
                 </div>
-                <p className="mt-3 text-base font-black text-white">{factionCampaign.monthlyQuestTitle}</p>
-                <p className="mt-1 text-sm text-white/70">{factionCampaign.monthlyQuestSummary}</p>
+                <p className="mt-3 text-base font-black text-white">{collectiveGoal.projectName}</p>
+                <p className="mt-1 text-sm text-white/70">
+                  {collectiveGoal.currentSeeds.toLocaleString('fr-FR')} / {collectiveGoal.targetSeeds.toLocaleString('fr-FR')} graines
+                </p>
                 <div className="mt-3 h-2 rounded-full bg-white/10">
-                  <div
-                    className={`h-full rounded-full ${accentTheme.accentBg}`}
-                    style={{ width: `${factionCampaign.monthlyQuestProgress}%` }}
-                  />
+                  <div className="h-full rounded-full bg-white" style={{ width: `${collectiveGoal.progress}%` }} />
                 </div>
                 <p className={`mt-2 text-xs font-semibold ${accentTheme.accentText}`}>
-                  {factionCampaign.monthlyQuestProgress}% de progression collective
+                  {factionContribution.label} apporte {factionContribution.contributionSeeds.toLocaleString('fr-FR')} graines ce mois-ci
                 </p>
               </div>
 
@@ -201,19 +201,19 @@ export default async function ProfilePage() {
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/50">
                     <Trophy className={`h-4 w-4 ${accentTheme.accentText}`} />
-                    Classement
+                    Recompense commune
                   </div>
-                  <p className="mt-3 text-2xl font-black text-white">{factionCampaign.score.toLocaleString('fr-FR')}</p>
-                  <p className="mt-1 text-sm text-white/60">{factionCampaign.members} membres actifs</p>
+                  <p className="mt-3 text-base font-black text-white">{collectiveGoal.commonRewardTitle}</p>
+                  <p className="mt-1 text-sm text-white/60">{collectiveGoal.commonRewardSummary}</p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/50">
                     <Gift className={`h-4 w-4 ${accentTheme.accentText}`} />
-                    Recompense
+                    Prestige de faction
                   </div>
-                  <p className="mt-3 text-base font-black text-white">{factionCampaign.rewardTitle}</p>
-                  <p className="mt-1 text-sm text-white/60">{factionCampaign.rewardSummary}</p>
+                  <p className="mt-3 text-base font-black text-white">{factionContribution.prestigeTitle}</p>
+                  <p className="mt-1 text-sm text-white/60">{factionContribution.prestigeSummary}</p>
                 </div>
               </div>
             </div>

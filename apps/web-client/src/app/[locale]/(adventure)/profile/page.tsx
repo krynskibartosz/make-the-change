@@ -1,7 +1,7 @@
-import { Lock, Target, Trophy } from 'lucide-react'
+import { Gift, Lock, Target, Trophy } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
-import { getFactionCampaigns } from '@/lib/mock/mock-factions'
+import { getCollectiveGoal, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getFactionThemeByKey } from '@/lib/faction-theme'
 
 function LockedImpactCard({
@@ -25,7 +25,8 @@ export default async function GuestProfilePage() {
     unlockedLimit: 0,
     lockedLimit: 4,
   })
-  const factionCampaigns = getFactionCampaigns()
+  const collectiveGoal = getCollectiveGoal()
+  const factionContributions = getFactionContributions()
 
   return (
     <div className="min-h-screen bg-[#0B0F15] pb-32 text-white">
@@ -36,7 +37,7 @@ export default async function GuestProfilePage() {
           </div>
           <h1 className="mt-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
           <p className="mx-auto mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
-            Identifiez-vous pour debloquer votre BioDex, suivre votre impact et choisir la faction qui vous ressemble.
+            Identifiez-vous pour debloquer votre BioDex, suivre votre impact et aider votre faction a faire avancer l objectif commun.
           </p>
         </section>
 
@@ -69,7 +70,7 @@ export default async function GuestProfilePage() {
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center opacity-50 grayscale transition-all">
             <div className="mb-2 text-xl">🎁</div>
             <div className="text-2xl font-black tabular-nums text-white">0</div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/60">+500 Graines</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/60">+500 GRAINES</div>
           </div>
         </section>
 
@@ -104,56 +105,70 @@ export default async function GuestProfilePage() {
 
         <section className="mb-8">
           <div className="mb-3 flex items-center justify-between px-5">
-            <h2 className="text-lg font-bold text-white">Classement des factions</h2>
-            <span className="text-[11px] uppercase tracking-[0.18em] text-white/40">Mobile first</span>
+            <h2 className="text-lg font-bold text-white">Objectif commun des factions</h2>
+            <span className="text-[11px] uppercase tracking-[0.18em] text-white/40">Hope core</span>
           </div>
 
-          <div className="flex flex-col gap-3 px-5">
-            {factionCampaigns.map((campaign) => {
-              const theme = getFactionThemeByKey(campaign.themeKey)
+          <div className="space-y-3 px-5">
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">North star du mois</p>
+              <h3 className="mt-2 text-lg font-black text-white">{collectiveGoal.title}</h3>
+              <p className="mt-2 text-sm text-white/60">{collectiveGoal.summary}</p>
+              <div className="mt-4 h-2 rounded-full bg-white/10">
+                <div className="h-full rounded-full bg-white" style={{ width: `${collectiveGoal.progress}%` }} />
+              </div>
+              <p className="mt-2 text-sm text-white/55">
+                {collectiveGoal.currentSeeds.toLocaleString('fr-FR')} / {collectiveGoal.targetSeeds.toLocaleString('fr-FR')} graines
+              </p>
+            </div>
+
+            {factionContributions.map((contribution) => {
+              const theme = getFactionThemeByKey(contribution.themeKey)
 
               return (
-                <div
-                  key={campaign.themeKey}
-                  className={`rounded-3xl border bg-white/5 p-4 ${theme.accentBorder}`}
-                >
+                <div key={contribution.themeKey} className={`rounded-3xl border bg-white/5 p-4 ${theme.accentBorder}`}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${theme.accentTextSoft}`}>
-                        #{campaign.rank} du mois
+                        {contribution.isLeader ? 'En tete du mois' : `${contribution.contributionShare}% de l effort`}
                       </p>
-                      <h3 className="mt-2 text-base font-black text-white">{campaign.label}</h3>
-                      <p className="mt-1 text-sm text-white/60">{campaign.tagline}</p>
+                      <h3 className="mt-2 text-base font-black text-white">{contribution.label}</h3>
+                      <p className="mt-1 text-sm text-white/60">{contribution.impactValue} {contribution.impactLabel}</p>
                     </div>
                     <div className={`rounded-full border px-3 py-1 text-xs font-bold ${theme.badgeClassName} ${theme.accentText}`}>
-                      {campaign.score.toLocaleString('fr-FR')}
+                      {contribution.contributionSeeds.toLocaleString('fr-FR')}
                     </div>
                   </div>
 
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="mt-4 grid grid-cols-2 gap-3">
                     <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
                       <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
                         <Target className={`h-4 w-4 ${theme.accentText}`} />
-                        Quete
+                        Contribution
                       </div>
-                      <p className="mt-2 text-sm font-bold text-white">{campaign.monthlyQuestTitle}</p>
-                      <div className="mt-3 h-2 rounded-full bg-white/10">
-                        <div className={`h-full rounded-full ${theme.accentBg}`} style={{ width: `${campaign.monthlyQuestProgress}%` }} />
-                      </div>
+                      <p className="mt-2 text-sm font-bold text-white">{contribution.contributionShare}% du total</p>
                     </div>
 
                     <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
                       <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                        <Trophy className={`h-4 w-4 ${theme.accentText}`} />
-                        Recompense
+                        <Gift className={`h-4 w-4 ${theme.accentText}`} />
+                        Reward
                       </div>
-                      <p className="mt-2 text-sm font-bold text-white">{campaign.rewardTitle}</p>
-                      <p className={`mt-1 text-xs font-semibold ${theme.accentText}`}>+{campaign.rewardSeeds} graines</p>
+                      <p className="mt-2 text-sm font-bold text-white">{contribution.prestigeTitle}</p>
                     </div>
                   </div>
                 </div>
               )
             })}
+
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
+                <Trophy className="h-4 w-4 text-white/70" />
+                Recompense commune
+              </div>
+              <p className="mt-2 text-base font-black text-white">{collectiveGoal.commonRewardTitle}</p>
+              <p className="mt-1 text-sm text-white/60">{collectiveGoal.commonRewardSummary}</p>
+            </div>
           </div>
         </section>
       </main>

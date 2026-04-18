@@ -2,7 +2,7 @@ import { Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { Flame, Gift, Leaf, MapPin, Sparkles, Target, Trophy, Wind } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme } from '@/lib/faction-theme'
-import { getFactionCampaign } from '@/lib/mock/mock-factions'
+import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
 import type { Profile } from '@/lib/mock/types'
 
 type MockPublicProfilePageProps = {
@@ -12,7 +12,8 @@ type MockPublicProfilePageProps = {
 
 export function MockPublicProfilePage({ profile, isOwnProfile }: MockPublicProfilePageProps) {
   const accentTheme = getFactionTheme(profile.faction)
-  const factionCampaign = getFactionCampaign(profile.faction)
+  const collectiveGoal = getCollectiveGoal()
+  const factionContribution = getFactionContribution(profile.faction)
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -102,7 +103,7 @@ export function MockPublicProfilePage({ profile, isOwnProfile }: MockPublicProfi
           </Card>
         </section>
 
-        {factionCampaign ? (
+        {factionContribution ? (
           <section
             className={`mt-6 overflow-hidden rounded-[2rem] border bg-card/80 p-6 shadow-xl ${accentTheme.accentBorder} ${accentTheme.accentShadow}`}
           >
@@ -111,11 +112,11 @@ export function MockPublicProfilePage({ profile, isOwnProfile }: MockPublicProfi
                 <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${accentTheme.accentTextSoft}`}>
                   Faction en action
                 </p>
-                <h2 className="mt-2 text-xl font-black tracking-tight">{factionCampaign.label}</h2>
-                <p className="mt-2 text-sm text-muted-foreground">{factionCampaign.tagline}</p>
+                <h2 className="mt-2 text-xl font-black tracking-tight">{collectiveGoal.title}</h2>
+                <p className="mt-2 text-sm text-muted-foreground">{collectiveGoal.summary}</p>
               </div>
               <Badge variant="outline" className={`${accentTheme.badgeClassName} ${accentTheme.accentText}`}>
-                #{factionCampaign.rank} ce mois-ci
+                {factionContribution.contributionShare}% de l effort
               </Badge>
             </div>
 
@@ -123,36 +124,35 @@ export function MockPublicProfilePage({ profile, isOwnProfile }: MockPublicProfi
               <div className={`rounded-2xl border p-4 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
                 <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   <Trophy className={`h-4 w-4 ${accentTheme.accentText}`} />
-                  Classement
+                  Contribution
                 </div>
-                <p className="mt-3 text-2xl font-black">{factionCampaign.score.toLocaleString('fr-FR')}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{factionCampaign.members} membres mobilises</p>
+                <p className="mt-3 text-2xl font-black">{factionContribution.contributionSeeds.toLocaleString('fr-FR')}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{factionContribution.members} membres mobilises</p>
               </div>
 
               <div className="rounded-2xl border border-border/60 bg-background/40 p-4">
                 <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   <Target className={`h-4 w-4 ${accentTheme.accentText}`} />
-                  Quete du mois
+                  Objectif global
                 </div>
-                <p className="mt-3 text-base font-black">{factionCampaign.monthlyQuestTitle}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{factionCampaign.monthlyQuestSummary}</p>
+                <p className="mt-3 text-base font-black">{collectiveGoal.projectName}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {collectiveGoal.currentSeeds.toLocaleString('fr-FR')} / {collectiveGoal.targetSeeds.toLocaleString('fr-FR')} graines
+                </p>
                 <div className="mt-3 h-2 rounded-full bg-border/60">
-                  <div
-                    className={`h-full rounded-full ${accentTheme.accentBg}`}
-                    style={{ width: `${factionCampaign.monthlyQuestProgress}%` }}
-                  />
+                  <div className="h-full rounded-full bg-white" style={{ width: `${collectiveGoal.progress}%` }} />
                 </div>
               </div>
 
               <div className="rounded-2xl border border-border/60 bg-background/40 p-4">
                 <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   <Gift className={`h-4 w-4 ${accentTheme.accentText}`} />
-                  Recompense
+                  Prestige
                 </div>
-                <p className="mt-3 text-base font-black">{factionCampaign.rewardTitle}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{factionCampaign.rewardSummary}</p>
+                <p className="mt-3 text-base font-black">{factionContribution.prestigeTitle}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{factionContribution.prestigeSummary}</p>
                 <p className={`mt-3 text-sm font-semibold ${accentTheme.accentText}`}>
-                  +{factionCampaign.rewardSeeds} graines si la faction termine devant
+                  Reward commune: {collectiveGoal.commonRewardTitle}
                 </p>
               </div>
             </div>

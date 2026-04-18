@@ -2,35 +2,68 @@ import { resolveFactionThemeKey } from '@/lib/faction-theme'
 import type { FactionThemeKey } from '@/lib/faction-theme'
 import type { Faction } from '@/lib/mock/types'
 
-export type FactionCampaign = {
-  themeKey: Exclude<FactionThemeKey, 'neutral'>
+type LiveFactionThemeKey = Exclude<FactionThemeKey, 'neutral'>
+
+export type CollectiveGoal = {
+  title: string
+  summary: string
+  projectName: string
+  currentSeeds: number
+  targetSeeds: number
+  progress: number
+  commonRewardTitle: string
+  commonRewardSummary: string
+  prestigeRewardTitle: string
+  prestigeRewardSummary: string
+}
+
+export type FactionContribution = {
+  themeKey: LiveFactionThemeKey
   label: string
   shortLabel: string
   tagline: string
   members: number
-  score: number
-  monthlyQuestTitle: string
-  monthlyQuestSummary: string
-  monthlyQuestProgress: number
-  rewardTitle: string
-  rewardSummary: string
-  rewardSeeds: number
+  contributionSeeds: number
+  contributionShare: number
+  impactValue: string
+  impactLabel: string
+  rallyLabel: string
+  prestigeTitle: string
+  prestigeSummary: string
 }
 
-const FACTION_CAMPAIGNS: Record<Exclude<FactionThemeKey, 'neutral'>, FactionCampaign> = {
+export type RankedFactionContribution = FactionContribution & {
+  rank: number
+  isLeader: boolean
+}
+
+const COLLECTIVE_GOAL: CollectiveGoal = {
+  title: 'La Grande Recolte de Printemps',
+  summary: "Ce mois-ci, les 3 factions reunissent leurs graines pour financer un nouveau rucher Ilanga Nature a Madagascar.",
+  projectName: 'Rucher de Manakara',
+  currentSeeds: 38240,
+  targetSeeds: 50000,
+  progress: 76,
+  commonRewardTitle: 'Badge Batisseur de Rucher',
+  commonRewardSummary: "500 graines et un badge commun pour tous les membres actifs si l objectif est atteint.",
+  prestigeRewardTitle: 'Glow de faction',
+  prestigeRewardSummary: 'La faction en tete obtient un halo cosmetique exclusif pour le mois suivant.',
+}
+
+const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = {
   pollinisateurs: {
     themeKey: 'pollinisateurs',
     label: 'Vie Sauvage',
     shortLabel: 'Sauvage',
     tagline: 'Les protecteurs des pollinisateurs et de la faune locale.',
     members: 482,
-    score: 12480,
-    monthlyQuestTitle: 'Corridors pour pollinisateurs',
-    monthlyQuestSummary: 'Faire fleurir 180 refuges nectar sur le mois.',
-    monthlyQuestProgress: 78,
-    rewardTitle: 'Pack Nectar',
-    rewardSummary: 'Badge exclusif + 450 graines pour la faction.',
-    rewardSeeds: 450,
+    contributionSeeds: 17210,
+    contributionShare: 45,
+    impactValue: '1.2M',
+    impactLabel: 'abeilles protegees',
+    rallyLabel: "Chaque defi renforce l Essaim et fait avancer le rucher commun.",
+    prestigeTitle: 'Halo nectar',
+    prestigeSummary: 'Un halo dore autour de Melli si la faction reste devant jusqu a la fin du mois.',
   },
   forets: {
     themeKey: 'forets',
@@ -38,13 +71,13 @@ const FACTION_CAMPAIGNS: Record<Exclude<FactionThemeKey, 'neutral'>, FactionCamp
     shortLabel: 'Forêts',
     tagline: 'Les regenerateurs de sols, haies et forets nourricieres.',
     members: 436,
-    score: 11940,
-    monthlyQuestTitle: 'Ceinture de regeneration',
-    monthlyQuestSummary: 'Restaurer 24 zones vivantes avant la fin du mois.',
-    monthlyQuestProgress: 64,
-    rewardTitle: 'Coffre Canopee',
-    rewardSummary: 'Acces prioritaire a une recompense terrain + 420 graines.',
-    rewardSeeds: 420,
+    contributionSeeds: 13380,
+    contributionShare: 35,
+    impactValue: '5 400',
+    impactLabel: 'arbres plantes',
+    rallyLabel: 'Chaque mission terrain aide la canopee et rapproche tout le collectif du but.',
+    prestigeTitle: 'Couronne canopee',
+    prestigeSummary: 'Un glow vegetal autour de Sylva pour souligner la faction meneuse.',
   },
   artisans: {
     themeKey: 'artisans',
@@ -52,46 +85,49 @@ const FACTION_CAMPAIGNS: Record<Exclude<FactionThemeKey, 'neutral'>, FactionCamp
     shortLabel: 'Artisans',
     tagline: 'Les createurs qui transforment l impact en gestes concrets.',
     members: 391,
-    score: 11120,
-    monthlyQuestTitle: 'Circuit local vivant',
-    monthlyQuestSummary: 'Completer 320 achats ou actions utiles au tissu local.',
-    monthlyQuestProgress: 52,
-    rewardTitle: 'Reserve Atelier',
-    rewardSummary: 'Serie collector + 400 graines pour debloquer un bonus.',
-    rewardSeeds: 400,
+    contributionSeeds: 7650,
+    contributionShare: 20,
+    impactValue: '80',
+    impactLabel: 'artisans soutenus',
+    rallyLabel: 'Chaque achat utile renforce le tissu local et nourrit l objectif commun.',
+    prestigeTitle: 'Halo atelier',
+    prestigeSummary: 'Un accessoire prestige discret autour de Aura pour celebrer la premiere place.',
   },
 }
 
-const CAMPAIGN_ORDER: Array<Exclude<FactionThemeKey, 'neutral'>> = ['pollinisateurs', 'forets', 'artisans']
+const FACTION_ORDER: LiveFactionThemeKey[] = ['pollinisateurs', 'forets', 'artisans']
 
-export type RankedFactionCampaign = FactionCampaign & {
-  rank: number
-}
+export const getCollectiveGoal = (): CollectiveGoal => ({
+  ...COLLECTIVE_GOAL,
+})
 
-export const getFactionCampaigns = (): RankedFactionCampaign[] => {
-  return CAMPAIGN_ORDER.map((themeKey) => FACTION_CAMPAIGNS[themeKey])
-    .sort((first, second) => second.score - first.score)
+export const getFactionContributions = (): RankedFactionContribution[] => {
+  return FACTION_ORDER.map((themeKey) => FACTION_CONTRIBUTIONS[themeKey])
+    .sort((first, second) => second.contributionSeeds - first.contributionSeeds)
     .map((entry, index) => ({
       ...entry,
       rank: index + 1,
+      isLeader: index === 0,
     }))
 }
 
-export const getFactionCampaign = (faction: Faction | null | undefined): RankedFactionCampaign | null => {
+export const getFactionContribution = (
+  faction: Faction | null | undefined,
+): RankedFactionContribution | null => {
   const themeKey = resolveFactionThemeKey(faction)
   if (themeKey === 'neutral') {
     return null
   }
 
-  return getFactionCampaigns().find((entry) => entry.themeKey === themeKey) || null
+  return getFactionContributions().find((entry) => entry.themeKey === themeKey) || null
 }
 
-export const getFactionCampaignByKey = (
-  themeKey: Exclude<FactionThemeKey, 'neutral'>,
-): RankedFactionCampaign => {
-  const entry = getFactionCampaigns().find((campaign) => campaign.themeKey === themeKey)
+export const getFactionContributionByKey = (
+  themeKey: LiveFactionThemeKey,
+): RankedFactionContribution => {
+  const entry = getFactionContributions().find((campaign) => campaign.themeKey === themeKey)
   if (!entry) {
-    throw new Error(`Unknown faction campaign: ${themeKey}`)
+    throw new Error(`Unknown faction contribution: ${themeKey}`)
   }
 
   return entry
