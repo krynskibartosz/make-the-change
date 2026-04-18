@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState, type UIEvent } from 'react'
@@ -89,6 +89,33 @@ const monthlyQuest = {
 	progress: 8,
 	max: 20,
 }
+
+const FACTION_THEMES = {
+	pollinisateurs: {
+		title: "Quête de l'Essaim",
+		mascotImg: '/abeille-transparente.png',
+		bgGradient: 'from-amber-600 to-[#0B0F15]',
+		accentText: 'text-amber-400',
+		accentBg: 'bg-amber-400',
+		badgeBg: 'bg-amber-500/10 border border-amber-500/20',
+	},
+	forets: {
+		title: 'Quête de la Forêt',
+		mascotImg: '/sylva.png',
+		bgGradient: 'from-emerald-700 to-[#0B0F15]',
+		accentText: 'text-emerald-400',
+		accentBg: 'bg-emerald-400',
+		badgeBg: 'bg-emerald-500/10 border border-emerald-500/20',
+	},
+	artisans: {
+		title: 'Quête du Terroir',
+		mascotImg: '/aura.png',
+		bgGradient: 'from-rose-700 to-[#0B0F15]',
+		accentText: 'text-rose-400',
+		accentBg: 'bg-rose-400',
+		badgeBg: 'bg-rose-500/10 border border-rose-500/20',
+	},
+} as const
 
 type EcoFactReaderProps = {
 	open: boolean
