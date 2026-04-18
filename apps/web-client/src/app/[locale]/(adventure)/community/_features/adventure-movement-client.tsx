@@ -153,12 +153,14 @@ function ImpactCard({
   shouldAutoBravo = false,
   onAutoBravoConsumed,
   currentDayKey,
+  viewerId,
 }: {
   event: ImpactEvent
   onAttemptBravo: (eventId: string, action: () => void) => void
   shouldAutoBravo?: boolean
   onAutoBravoConsumed?: () => void
   currentDayKey: string
+  viewerId?: string | null
 }) {
   const haptic = useHaptic()
   const [bravo, setBravo] = useState(false)
@@ -171,9 +173,10 @@ function ImpactCard({
 
       if (next) {
         const session = getClientMockViewerSession()
-        if (session?.viewerId) {
+        const effectiveViewerId = session?.viewerId ?? viewerId ?? null
+        if (effectiveViewerId) {
           recordClientMockCollectiveBravo({
-            viewerId: session.viewerId,
+            viewerId: effectiveViewerId,
             dayKey: currentDayKey,
             targetId: event.id,
           })
@@ -182,7 +185,7 @@ function ImpactCard({
 
       return next
     })
-  }, [currentDayKey, event.id, haptic])
+  }, [currentDayKey, event.id, haptic, viewerId])
 
   useEffect(() => {
     if (!shouldAutoBravo || bravo) {
@@ -255,13 +258,21 @@ function ImpactCard({
 
 interface AdventureMovementClientProps {
   initialFaction: Faction | null
+  viewerId: string | null
   currentDayKey: string
 }
 
-export function AdventureMovementClient({ initialFaction, currentDayKey }: AdventureMovementClientProps) {
+export function AdventureMovementClient({
+  initialFaction,
+  viewerId,
+  currentDayKey,
+}: AdventureMovementClientProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { guardAction } = useActionAuth()
+  const { guardAction } = useActionAuth({
+    viewerId,
+    faction: initialFaction,
+  })
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
   
   const showPrivilege = searchParams.get('p') === 'reward'
@@ -557,6 +568,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
               key={event.id}
               event={event}
               currentDayKey={currentDayKey}
+              viewerId={viewerId}
               onAttemptBravo={handleAttemptBravo}
               shouldAutoBravo={replayBravoId === event.id}
               onAutoBravoConsumed={() => setReplayBravoId(null)}

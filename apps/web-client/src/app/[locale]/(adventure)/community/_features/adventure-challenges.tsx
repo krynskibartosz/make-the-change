@@ -1012,7 +1012,6 @@ export function AdventureChallenges({
               event.currentTarget.style.display = 'none'
             }}
           />
-          <div className='absolute inset-0 -z-10 flex items-end justify-center text-8xl'>🐝</div>
         </div>
       </div>
 
