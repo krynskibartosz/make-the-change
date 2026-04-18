@@ -51,6 +51,7 @@ type EcoFactArticleViewProps = {
 type EcoFactReaderProps = {
   accentTheme: FactionTheme
   challenge: DailyQuest | null
+  isCompleted: boolean
   open: boolean
   onValidate: () => void
   onClose: () => void
@@ -289,6 +290,7 @@ function EcoFactArticleView({
 function EcoFactReader({
   accentTheme,
   challenge,
+  isCompleted,
   open,
   onValidate,
   onClose,
@@ -319,9 +321,9 @@ function EcoFactReader({
     }
 
     setIsArticleOpen(false)
-    setScrollProgress(0)
-    setIsUnlocked(false)
-  }, [open])
+    setScrollProgress(isCompleted ? 100 : 0)
+    setIsUnlocked(isCompleted)
+  }, [isCompleted, open])
 
   const handleScroll = useCallback(
     (event: UIEvent<HTMLDivElement>) => {
@@ -529,6 +531,27 @@ function EcoFactReader({
                 </div>
               </motion.div>
 
+              {isCompleted ? (
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 14 },
+                    show: { opacity: 1, y: 0 },
+                  }}
+                  className='mt-4 px-6'
+                >
+                  <div
+                    className={cn(
+                      'rounded-2xl border px-4 py-3 text-sm font-medium text-white/75',
+                      accentTheme.accentBgSoft,
+                      accentTheme.accentBorder,
+                    )}
+                  >
+                    Deja lu aujourd hui. Tu peux relire ce dossier quand tu veux, mais la recompense a
+                    deja ete comptee.
+                  </div>
+                </motion.div>
+              ) : null}
+
               <div className='flex justify-center px-5'>
                 <button
                   type='button'
@@ -557,22 +580,28 @@ function EcoFactReader({
 
             <button
               type='button'
-              disabled={!isUnlocked}
+              disabled={!isUnlocked || isCompleted}
               onClick={(event) => {
                 event.stopPropagation()
-                if (!isUnlocked) {
+                if (!isUnlocked || isCompleted) {
                   return
                 }
                 onValidate()
               }}
               className={cn(
                 'flex h-14 w-full items-center justify-center rounded-2xl text-lg font-black transition-all duration-500',
-                isUnlocked
+                isCompleted
+                  ? 'border border-white/10 bg-white/5 text-white/55'
+                  : isUnlocked
                   ? cn(accentTheme.accentBg, 'text-[#0B0F15] active:scale-95', accentTheme.accentShadow)
                   : 'border border-white/10 bg-white/5 text-white/40',
               )}
             >
-              {isUnlocked ? (
+              {isCompleted ? (
+                <span className='flex items-center gap-2'>
+                  <CheckCircle2 className='h-4 w-4 text-lime-400' /> Deja valide aujourd hui
+                </span>
+              ) : isUnlocked ? (
                 <span className='flex items-center gap-2 animate-in zoom-in duration-300'>
                   C est note ! <span className='font-normal opacity-50'>|</span> +{challenge?.reward ?? 50}
                   <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
@@ -840,7 +869,10 @@ export function AdventureChallenges({
     const intent = searchParams.get('intent')
     if (intent === 'eco-fact') {
       setIsEcoFactReaderOpen(true)
-    } else if (intent === 'daily-harvest') {
+    } else if (
+      intent === 'daily-harvest' &&
+      !(dailyHarvestQuest && dailyHarvestQuest.progress >= dailyHarvestQuest.max)
+    ) {
       setIsDailyHarvestOpen(true)
     } else {
       return
@@ -852,7 +884,7 @@ export function AdventureChallenges({
     const nextQuery = nextParams.toString()
     const nextUrl = nextQuery ? `${window.location.pathname}?${nextQuery}` : window.location.pathname
     window.history.replaceState(window.history.state, '', nextUrl)
-  }, [searchParams])
+  }, [dailyHarvestQuest, searchParams])
 
   const incrementMonthlyQuestIfNeeded = useCallback(() => {
     const hasCompletedQuest = dailyQuests.some((quest) => Boolean(quest.completedAt || quest.claimedAt))
@@ -934,13 +966,18 @@ export function AdventureChallenges({
   }, [awardQuestReward, ecoFactQuest, markQuestAsClaimed])
 
   const handleDailyHarvestOpen = useCallback(() => {
+    if (dailyHarvestQuest && dailyHarvestQuest.progress >= dailyHarvestQuest.max) {
+      haptic.lightTap()
+      return
+    }
+
     guardAction(
       () => {
         setIsDailyHarvestOpen(true)
       },
       { intent: 'daily-harvest' },
     )
-  }, [guardAction])
+  }, [dailyHarvestQuest, guardAction, haptic])
 
   const handleDailyHarvestClaim = useCallback(() => {
     const timestamp = new Date().toISOString()
@@ -1024,6 +1061,7 @@ export function AdventureChallenges({
           const Icon = theme.icon
           const progress = Math.min((quest.progress / quest.max) * 100, 100)
           const isComplete = quest.progress >= quest.max
+          const isHarvestComplete = quest.type === 'daily_harvest' && isComplete
 
           const rowContent = (
             <>
@@ -1036,13 +1074,18 @@ export function AdventureChallenges({
                   <h3 className='truncate text-sm font-semibold text-white'>{quest.title}</h3>
                   {isComplete ? <CheckCircle2 className='h-4 w-4 shrink-0 text-lime-400' /> : null}
                 </div>
-                <p className='mt-0.5 line-clamp-2 text-[12px] leading-tight text-white/60'>
-                  {quest.description}
-                </p>
+                  <p className='mt-0.5 line-clamp-2 text-[12px] leading-tight text-white/60'>
+                    {quest.description}
+                  </p>
+                  {isHarvestComplete ? (
+                    <p className='mt-1 text-[10px] font-bold uppercase tracking-widest text-lime-400'>
+                      Recolte deja effectuee
+                    </p>
+                  ) : null}
 
-                <div className='mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10'>
-                  <div
-                    className={cn('h-full rounded-full transition-all duration-700', theme.progressClassName)}
+                  <div className='mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10'>
+                    <div
+                      className={cn('h-full rounded-full transition-all duration-700', theme.progressClassName)}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -1079,14 +1122,18 @@ export function AdventureChallenges({
 
           if (quest.type === 'daily_harvest') {
             return (
-              <button
-                key={quest.id}
-                type='button'
-                onClick={handleDailyHarvestOpen}
-                className='flex w-full items-center gap-4 border-b border-white/5 bg-transparent px-6 py-4 text-left transition-colors active:bg-white/5'
-              >
-                {rowContent}
-              </button>
+                <button
+                  key={quest.id}
+                  type='button'
+                  onClick={handleDailyHarvestOpen}
+                  disabled={isHarvestComplete}
+                  className={cn(
+                    'flex w-full items-center gap-4 border-b border-white/5 bg-transparent px-6 py-4 text-left transition-colors',
+                    isHarvestComplete ? 'cursor-default opacity-70' : 'active:bg-white/5',
+                  )}
+                >
+                  {rowContent}
+                </button>
             )
           }
 
@@ -1109,6 +1156,7 @@ export function AdventureChallenges({
       <EcoFactReader
         accentTheme={accentTheme}
         challenge={ecoFactQuest}
+        isCompleted={Boolean(ecoFactQuest && ecoFactQuest.progress >= ecoFactQuest.max)}
         open={isEcoFactReaderOpen}
         onValidate={handleEcoFactValidate}
         onClose={() => setIsEcoFactReaderOpen(false)}
