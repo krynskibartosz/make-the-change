@@ -232,7 +232,57 @@ export default async function ProfilePage() {
               </div>
             </div>
           </section>
-        ) : null}
+        ) : (
+          <section className="mt-8">
+            {/* GUEST IDENTITY POD */}
+            <div
+              className={`relative overflow-hidden rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}
+            >
+              {/* Halo d'ambiance */}
+              <div
+                className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-20 ${accentTheme.accentBg}`}
+              />
+
+              {/* LAYOUT HAUT : Icône + Infos */}
+              <div className="relative z-10 flex items-center gap-4">
+                <div className="relative flex h-24 w-24 shrink-0 items-center justify-center drop-shadow-2xl">
+                  <div className={`absolute inset-0 rounded-full blur-xl opacity-30 ${accentTheme.accentBg}`} />
+                  <Target className={`relative z-10 h-10 w-10 ${accentTheme.accentText}`} />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                    Ma Faction
+                  </p>
+                  <h2 className="mt-0.5 text-xl font-black tracking-tight text-white">
+                    Aucune Faction
+                  </h2>
+                  <p className="mt-2 text-balance text-sm font-medium text-white/60">
+                    Rejoignez les rangs pour orienter l'effort de l'Essaim.
+                  </p>
+                </div>
+              </div>
+
+              {/* PONT : Teasing + CTA */}
+              <div className="relative z-10 mt-4 space-y-2">
+                <div className={`flex items-center gap-2 rounded-2xl px-3 py-2 ${accentTheme.accentBgSoft}`}>
+                  <Sparkles className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
+                  <p className="text-xs font-semibold text-white/70">
+                    Multipliez votre impact en équipe
+                  </p>
+                </div>
+
+                <Link
+                  href="/welcome/setup"
+                  className={`flex w-full items-center justify-center gap-2 rounded-2xl border py-3 text-sm font-bold transition-opacity active:opacity-70 ${accentTheme.accentBorder} ${accentTheme.accentText}`}
+                >
+                  Choisir ma Faction
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         <section
           className={`relative mb-8 mt-10 overflow-hidden rounded-3xl border bg-gradient-to-br p-6 text-center ${accentTheme.accentBorder} ${accentTheme.heroGradient}`}
