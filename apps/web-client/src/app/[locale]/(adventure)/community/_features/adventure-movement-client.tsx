@@ -35,7 +35,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     name: 'Thomas M.',
     profileId: 'thomas-m',
     time: 'Il y a 2 min',
-    action: 'A apporté ses graines 🌱 au Rucher de Manakara pour les Terres & Forêts.',
+    action: 'A apporté ses graines au Rucher de Manakara pour les Terres & Forêts.',
     icon: Sprout,
     iconColor: 'text-emerald-400',
     actionHighlight: 'rucher de Manakara',
@@ -325,7 +325,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
           </button>
         </div>
         <p className="mt-2 text-center text-[11px] text-white/40">
-          {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
+          {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> restantes
         </p>
 
         {/* FULL-SCREEN — LE PRIVILEGE DE L'ESSAIM */}
@@ -381,7 +381,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                         />
                       </div>
                       <p className="mt-2 text-center text-[11px] text-white/40">
-                        Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
+                        Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> restantes
                       </p>
                     </div>
 
@@ -434,7 +434,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                               <div className="mt-3 flex flex-col gap-0.5">
                                 <p className="text-sm font-bold text-white line-clamp-1">{product.name_default}</p>
                                 <p className="text-xs text-white/50 line-clamp-1">{product.short_description_default}</p>
-                                <p className="mt-1 text-sm font-black text-amber-400">{product.price_points} 🌱</p>
+                                <p className="mt-1 text-sm font-black text-amber-400">{product.price_points} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /></p>
                               </div>
                             </Link>
                           ))}
@@ -450,7 +450,7 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
                       onClick={() => setShowPrivilege(false)}
                       className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white text-sm font-bold text-black shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-transform hover:scale-[1.02] active:scale-95"
                     >
-                      Compris, let's go ! 🌱
+                      Compris, let's go ! <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
                     </button>
                   </div>
                 </div>

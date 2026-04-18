@@ -2,7 +2,7 @@
 
 import { Badge } from '@make-the-change/core/ui'
 import { Progress } from '@make-the-change/core/ui'
-import { Sparkles, TrendingUp } from 'lucide-react'
+import {  Sparkles, TrendingUp , Sprout } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type DashboardWelcomeProps = {
@@ -131,9 +131,9 @@ export const DashboardWelcome = ({
           <div className="max-w-md space-y-2">
             <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
               <span className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3" /> Graines : {currentGraines} 🌱
+                <TrendingUp className="h-3 w-3" /> Graines : {currentGraines} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
               </span>
-              <span>Prochain niveau: {nextLevelGraines} Graines 🌱</span>
+              <span>Prochain niveau: {nextLevelGraines} Graines <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /></span>
             </div>
             <Progress value={grainesProgress} className="h-2" />
           </div>

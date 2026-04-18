@@ -382,7 +382,7 @@ export function OnboardingFlow() {
               </div>
               <div className="absolute -top-2 -right-2 bg-[#0B0F15] rounded-full p-1 z-20">
                 <div className="bg-gradient-to-br from-emerald-400 to-emerald-600 text-[#0B0F15] text-xs font-black px-2 py-1 rounded-full border border-[#0B0F15]">
-                  +500 🌱
+                  +500 <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
                 </div>
               </div>
             </div>

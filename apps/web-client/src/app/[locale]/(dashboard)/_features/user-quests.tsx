@@ -26,7 +26,7 @@ export function UserQuests({ quests }: { quests: any[] }) {
             const res = await claimQuestReward(questId)
             toast({
                 title: "Récompense réclamée !",
-                description: `Vous avez gagné ${res.reward_graines} Graines 🌱.`,
+                description: `Vous avez gagné ${res.reward_graines} Graines.`,
                 variant: "success"
             })
         } catch (error: any) {

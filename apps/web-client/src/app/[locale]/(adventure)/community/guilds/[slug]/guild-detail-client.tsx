@@ -1,7 +1,7 @@
 'use client'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { ArrowLeft, ChevronRight, Leaf, Lock, Users } from 'lucide-react'
+import {  ArrowLeft, ChevronRight, Leaf, Lock, Users , Sprout } from 'lucide-react'
 import { useState, useCallback } from 'react'
 import { GuildMembershipButton } from '../_features/guild-membership-button'
 import { useHaptic } from '@/hooks/use-haptic'
@@ -155,7 +155,7 @@ const buildFeed = (
 			...thomas,
 			avatarColor: 'bg-blue-500/20 text-blue-400',
 			time: 'Il y a 18 min',
-			action: `🌱 A fait gagner 150 pts à la tribu avec un don`,
+			action: `✨ A fait gagner 150 pts à la tribu avec un don`,
 			bravos: 11,
 		},
 		{
@@ -467,7 +467,7 @@ export function GuildDetailClient({
 								href='/projets'
 								className='flex items-center justify-center gap-2 w-full bg-lime-400/10 hover:bg-lime-400/20 text-lime-400 border border-lime-400/20 font-semibold rounded-2xl py-3 transition-colors text-sm'
 							>
-									🌱 Participer à l'effort collectif
+									<Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> Participer à l'effort collectif
 								</Link>
 							)}
 					</>

@@ -1,4 +1,4 @@
-import { ArrowRight, Bug, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind } from 'lucide-react'
+import {  ArrowRight, Bug, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind , Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
@@ -198,7 +198,7 @@ export default async function ProfilePage() {
                     {factionContribution.label}
                   </h2>
                   <p className="mt-2 text-sm font-medium text-white/60">
-                    🌱{' '}
+                    <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />{' '}
                     <span className="font-black text-white">
                       {(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds).toLocaleString('fr-FR')}
                     </span>{' '}

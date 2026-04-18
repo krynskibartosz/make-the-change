@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, Leaf, Lock } from 'lucide-react'
+import {  ChevronLeft, Leaf, Lock , Sprout } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 
@@ -68,7 +68,7 @@ export default function SpeciesPage() {
           <div className="mb-2 flex justify-between text-sm">
             <span className="text-white/60">Graines requises</span>
             <span className="font-bold text-emerald-400 tabular-nums">
-              {CURRENT_SEEDS} / {REQUIRED_SEEDS} 🌱
+              {CURRENT_SEEDS} / {REQUIRED_SEEDS} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
             </span>
           </div>
 

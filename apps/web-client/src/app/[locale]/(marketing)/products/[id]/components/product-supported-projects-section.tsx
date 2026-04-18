@@ -1,3 +1,4 @@
+import { Sprout } from 'lucide-react'
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import type { SupportedProject } from '@/types/context'
 import Link from 'next/link'
@@ -37,7 +38,7 @@ function SupportedProjectCard({ project }: { project: SupportedProject }) {
         </div>
         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
           <span className="flex items-center gap-1">
-            🌱 {project.ecosystem || 'Écosystème non spécifié'}
+            <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> {project.ecosystem || 'Écosystème non spécifié'}
           </span>
           <span>•</span>
           <Badge variant={getStatusVariant(project.status)}>

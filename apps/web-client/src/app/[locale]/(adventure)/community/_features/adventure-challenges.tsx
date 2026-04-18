@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState, type UIEvent } from 'react'
-import {
+import { 
 	BookOpen,
 	CheckCircle2,
 	ChevronRight,
@@ -10,7 +10,7 @@ import {
 	Sparkles,
 	UsersRound,
 	X,
-} from 'lucide-react'
+, Sprout } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { useHaptic } from '@/hooks/use-haptic'
@@ -521,7 +521,7 @@ function EcoFactReader({ accentTheme, challenge, open, onValidate, onClose }: Ec
 							{isUnlocked ? (
 								<span className='flex items-center gap-2 animate-in zoom-in duration-300'>
 									C&apos;est noté !{' '}
-									<span className='opacity-50 font-normal'>|</span> +50 🌱
+									<span className='opacity-50 font-normal'>|</span> +50 <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
 								</span>
 							) : (
 								<span className='flex items-center gap-2'>
@@ -801,7 +801,7 @@ function DailyHarvestModal({ accentTheme, open, onClose, onClaim }: DailyHarvest
 									<div className={cn('h-64 w-64 rounded-full blur-2xl animate-[spin_4s_linear_infinite]', accentTheme.accentGlow)} />
 								</div>
 								<div className={cn('text-7xl font-black animate-[loot-spring-pop_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]', accentTheme.accentText, accentTheme.accentShadow)}>
-									+ {animatedReward} 🌱
+									+ {animatedReward} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
 								</div>
 							</div>
 							<p
@@ -1103,7 +1103,7 @@ export function AdventureChallenges({
 							{activeMonthlyQuest?.objective || monthlyQuest.objective}
 						</h2>
 						<span className={`px-2 py-1 rounded-full text-[10px] font-bold tabular-nums ${factionTheme.badgeBg} ${factionTheme.accentText}`}>
-							+500 🌱
+							+500 <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
 						</span>
 					</div>
 
@@ -1172,7 +1172,7 @@ export function AdventureChallenges({
 									accentTheme.accentText
 								)}
 							>
-								+{quest.reward} 🌱
+								+{quest.reward} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
 							</div>
 						</>
 					)
