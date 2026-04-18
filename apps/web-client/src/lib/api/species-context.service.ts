@@ -57,7 +57,7 @@ function ensurePrototypeUnlockedSpecies(speciesList: SpeciesContext[]): SpeciesC
 export async function getSpeciesContext(id: string): Promise<SpeciesContext | null> {
   if (isMockDataSource) {
     const session = await getMockViewerSession()
-    return getMockSpeciesContext(id, session?.viewerId)
+    return getMockSpeciesContext(id, session?.viewerId, session?.faction ?? null)
   }
 
   const supabase = await createClient()
@@ -79,7 +79,10 @@ export async function getSpeciesContext(id: string): Promise<SpeciesContext | nu
 export async function getSpeciesContextList(filters?: SpeciesFilters): Promise<SpeciesContext[]> {
   if (isMockDataSource) {
     const session = await getMockViewerSession()
-    let speciesList = getMockSpeciesContextList(session?.viewerId)
+    let speciesList = await getMockSpeciesContextList(
+      session?.viewerId,
+      session?.faction ?? null,
+    )
 
     if (filters?.status) {
       speciesList = speciesList.filter((species) => species.conservation_status === filters.status)

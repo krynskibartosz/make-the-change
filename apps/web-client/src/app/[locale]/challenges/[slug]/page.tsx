@@ -13,7 +13,7 @@ import { notFound } from 'next/navigation'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockChallengeBySlug } from '@/lib/mock/mock-challenges'
+import { getCurrentMockChallengeBySlug, getCurrentMockChallengeDayKey } from '@/lib/mock/mock-challenge-progress-server'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
@@ -76,7 +76,16 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
   let userChallenge: UserChallengeRow | null = null
 
   if (isMockDataSource) {
-    const mockChallenge = getMockChallengeBySlug(slug)
+    const [viewer, fallbackDayKey] = await Promise.all([
+      getCurrentViewer(),
+      getCurrentMockChallengeDayKey(),
+    ])
+    const mockChallenge = await getCurrentMockChallengeBySlug({
+      slug,
+      viewerId: viewer?.viewerId ?? null,
+      faction: viewer?.faction ?? null,
+      fallbackDayKey,
+    })
     if (!mockChallenge) {
       notFound()
     }
@@ -99,7 +108,6 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
       metadata: mockChallenge.metadata,
     }
 
-    const viewer = await getCurrentViewer()
     if (viewer) {
       userChallenge = {
         progress: mockChallenge.progress,

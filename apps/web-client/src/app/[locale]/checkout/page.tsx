@@ -4,13 +4,15 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { redirect } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentProfile, getCurrentViewer } from '@/lib/mock/mock-session-server'
-import { getMockWalletBalance } from '@/lib/mock/mock-member-data'
+import { getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function CheckoutPage() {
   if (isMockDataSource) {
     const [profile, viewer] = await Promise.all([getCurrentProfile(), getCurrentViewer()])
-    const pointsBalance = viewer ? getMockWalletBalance(viewer.viewerId) : 0
+    const pointsBalance = viewer
+      ? await getCurrentMockWalletBalance(viewer.viewerId, viewer.faction)
+      : 0
     const defaultAddress = {
       firstName: profile?.displayName.split(' ')[0] || '',
       lastName: profile?.displayName.split(' ').slice(1).join(' ') || '',

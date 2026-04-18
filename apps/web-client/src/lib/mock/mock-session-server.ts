@@ -12,6 +12,7 @@ import {
   parseMockViewerSessionValue,
   serializeMockViewerSession,
 } from '@/lib/mock/mock-session'
+import { getCurrentMockImpactPoints } from '@/lib/mock/mock-member-data-server'
 import { getMockProfile } from '@/lib/mock/mock-viewer'
 import type { MockViewerSession, Profile, Viewer } from '@/lib/mock/types'
 
@@ -48,11 +49,16 @@ export async function getCurrentProfile(): Promise<Profile | null> {
     (await getMockProfileOverrides(session.viewerId)) ??
     createDefaultMockProfileOverrides(session.viewerId)
 
-  return applyMockProfileOverrides({
+  const profile = applyMockProfileOverrides({
     baseProfile,
     overrides,
     session,
   })
+
+  return {
+    ...profile,
+    points: await getCurrentMockImpactPoints(session.viewerId, session.faction),
+  }
 }
 
 export async function setMockViewerSession(session: MockViewerSession) {

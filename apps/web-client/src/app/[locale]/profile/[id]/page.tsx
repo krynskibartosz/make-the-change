@@ -19,7 +19,7 @@ import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockViewerSession } from '@/lib/mock/mock-session-server'
+import { getCurrentProfile, getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockPublicProfile } from '@/lib/mock/mock-viewer'
 import { getUserFeed } from '@/lib/social/feed.reads'
 import { createClient } from '@/lib/supabase/server'
@@ -31,7 +31,10 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   if (isMockDataSource) {
     const viewerSession = await getMockViewerSession()
-    const profile = getMockPublicProfile(id, viewerSession)
+    const profile =
+      viewerSession?.viewerId === id
+        ? await getCurrentProfile()
+        : getMockPublicProfile(id, viewerSession)
 
     if (!profile) {
       notFound()

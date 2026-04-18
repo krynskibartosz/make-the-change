@@ -5,7 +5,8 @@ import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { DashboardPageContainer } from '@/components/layout/dashboard-page-container'
 import { Link } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockPointsTransactions, getMockWalletBalance } from '@/lib/mock/mock-member-data'
+import { getCurrentMockPointsTransactions, getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
+import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { formatDate, formatPoints } from '@/lib/utils'
@@ -41,8 +42,13 @@ const getLedgerReasonLabel = (reason: string) => {
 export default async function PointsPage() {
   const t = await getTranslations('points')
   const user = await requireAuth()
-  let walletBalance = getMockWalletBalance(user.id)
-  let transactions: LedgerTransaction[] = getMockPointsTransactions(user.id)
+  const mockProfile = isMockDataSource ? await getCurrentProfile() : null
+  let walletBalance = isMockDataSource
+    ? await getCurrentMockWalletBalance(user.id, mockProfile?.faction ?? null)
+    : 0
+  let transactions: LedgerTransaction[] = isMockDataSource
+    ? await getCurrentMockPointsTransactions(user.id, mockProfile?.faction ?? null)
+    : []
 
   if (!isMockDataSource) {
     const supabase = await createClient()

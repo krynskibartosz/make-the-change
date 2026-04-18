@@ -68,6 +68,7 @@ export type MockUserPreferences = {
 }
 
 export type ChallengeIntent = 'eco-fact' | 'daily-harvest' | 'give-bravo'
+export type ChallengeArchetypeId = 'eco-fact' | 'collective-bravo' | 'daily-harvest'
 
 export type Challenge = {
   id: string

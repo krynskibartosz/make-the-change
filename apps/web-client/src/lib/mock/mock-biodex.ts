@@ -1,8 +1,8 @@
-import { getChallengeById, getChallenges } from '@/lib/mock/mock-challenges'
-import {
-  getMockInvestments,
-  getMockOrders,
-} from '@/lib/mock/mock-member-data'
+import 'server-only'
+
+import { getCurrentMockCompletedChallengeSeriesIds, getCurrentMockDailyChallenges } from '@/lib/mock/mock-challenge-progress-server'
+import { getMockInvestments } from '@/lib/mock/mock-member-data'
+import { getCurrentMockOrders } from '@/lib/mock/mock-order-history-server'
 import {
   MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
   MOCK_CHALLENGE_DAILY_HARVEST_ID,
@@ -19,6 +19,7 @@ import {
   MOCK_SPECIES_LADYBUG_ID,
   MOCK_SPECIES_OWL_ID,
 } from '@/lib/mock/mock-ids'
+import type { Faction } from '@/lib/mock/types'
 import type { SpeciesContext } from '@/types/context'
 
 const createUserStatus = (isUnlocked: boolean, level: number) => ({
@@ -60,7 +61,7 @@ const MOCK_SPECIES: SpeciesContext[] = [
     associated_challenges: [
       {
         id: MOCK_CHALLENGE_ECO_FACT_ID,
-        name: "Eco-Fact du jour",
+        name: 'Eco-Fact du jour',
         type: 'education',
         difficulty: 'easy',
         rewards: ['50 graines'],
@@ -176,47 +177,55 @@ type MockParticipationGraph = {
   investedProjectSlugs: Set<string>
   orderedProductIds: Set<string>
   completedChallengeIds: Set<string>
+  currentChallengeProgress: Map<string, number>
 }
 
-const getParticipationGraph = (viewerId?: string | null): MockParticipationGraph => {
+const getParticipationGraph = async (
+  viewerId?: string | null,
+  faction?: Faction | null,
+): Promise<MockParticipationGraph> => {
   if (!viewerId) {
     return {
       investedProjectSlugs: new Set<string>(),
       orderedProductIds: new Set<string>(),
       completedChallengeIds: new Set<string>(),
+      currentChallengeProgress: new Map<string, number>(),
     }
   }
+
+  const [orders, completedChallengeIds, currentDailyChallenges] = await Promise.all([
+    getCurrentMockOrders(viewerId),
+    getCurrentMockCompletedChallengeSeriesIds(viewerId),
+    getCurrentMockDailyChallenges({ viewerId, faction: faction ?? null }),
+  ])
 
   const investedProjectSlugs = new Set(
     getMockInvestments(viewerId).map((investment) => investment.project.slug),
   )
   const orderedProductIds = new Set(
-    getMockOrders(viewerId).flatMap((order) =>
+    orders.flatMap((order) =>
       order.items
         .map((item) => item.product?.id || null)
         .filter((productId): productId is string => Boolean(productId)),
     ),
   )
-  const completedChallengeIds = new Set(
-    getChallenges()
-      .filter((challenge) => challenge.progress >= challenge.max)
-      .map((challenge) => challenge.id),
-  )
 
   return {
     investedProjectSlugs,
     orderedProductIds,
-    completedChallengeIds,
+    completedChallengeIds: new Set(completedChallengeIds),
+    currentChallengeProgress: new Map(
+      currentDailyChallenges.map((challenge) => [challenge.seriesId, challenge.progress]),
+    ),
   }
 }
 
-const getChallengeProgress = (challengeId: string): number | null => {
-  const challenge = getChallengeById(challengeId)
-  return challenge ? challenge.progress : null
-}
-
-const cloneSpecies = (species: SpeciesContext, viewerId?: string | null): SpeciesContext => {
-  const graph = getParticipationGraph(viewerId)
+const cloneSpecies = async (
+  species: SpeciesContext,
+  viewerId?: string | null,
+  faction?: Faction | null,
+): Promise<SpeciesContext> => {
+  const graph = await getParticipationGraph(viewerId, faction)
 
   const associatedProjects =
     species.associated_projects?.map((project) => ({
@@ -227,7 +236,7 @@ const cloneSpecies = (species: SpeciesContext, viewerId?: string | null): Specie
   const associatedChallenges =
     species.associated_challenges?.map((challenge) => ({
       ...challenge,
-      userProgress: getChallengeProgress(challenge.id),
+      userProgress: graph.currentChallengeProgress.get(challenge.id) ?? null,
     })) || []
 
   let isUnlocked = false
@@ -265,14 +274,18 @@ const cloneSpecies = (species: SpeciesContext, viewerId?: string | null): Specie
   }
 }
 
-export const getMockSpeciesContextList = (viewerId?: string | null): SpeciesContext[] => {
-  return MOCK_SPECIES.map((species) => cloneSpecies(species, viewerId))
+export const getMockSpeciesContextList = async (
+  viewerId?: string | null,
+  faction?: Faction | null,
+): Promise<SpeciesContext[]> => {
+  return Promise.all(MOCK_SPECIES.map((species) => cloneSpecies(species, viewerId, faction)))
 }
 
-export const getMockSpeciesContext = (
+export const getMockSpeciesContext = async (
   id: string,
   viewerId?: string | null,
-): SpeciesContext | null => {
+  faction?: Faction | null,
+): Promise<SpeciesContext | null> => {
   const species = MOCK_SPECIES.find((entry) => entry.id === id)
-  return species ? cloneSpecies(species, viewerId) : null
+  return species ? cloneSpecies(species, viewerId, faction) : null
 }

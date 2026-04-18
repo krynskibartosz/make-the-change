@@ -17,13 +17,12 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/lib/faction-theme'
-import { getChallenges } from '@/lib/mock/mock-challenges'
-import type { Challenge, Faction } from '@/lib/mock/types'
+import { recordClientMockChallengeCompletion } from '@/lib/mock/mock-challenge-progress'
+import type { MockChallengeDetail, MockMonthlyQuestOverview } from '@/lib/mock/mock-challenges'
+import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 
-type DailyQuest = Challenge & {
-	id: string | number
-}
+type DailyQuest = MockChallengeDetail
 
 type DailyQuestType = DailyQuest['type']
 
@@ -33,7 +32,7 @@ type QuestTheme = {
 	progressClassName: string
 }
 
-const initialDailyQuests: DailyQuest[] = [
+const initialDailyQuests = [
 	{
 		id: 'legacy-eco-fact',
 		type: 'education',
@@ -107,6 +106,7 @@ const FACTION_CONTENT = {
 
 type EcoFactReaderProps = {
 	accentTheme: FactionTheme
+	challenge: DailyQuest | null
 	open: boolean
 	onValidate: () => void
 	onClose: () => void
@@ -114,11 +114,14 @@ type EcoFactReaderProps = {
 
 type EcoFactArticleViewProps = {
 	accentTheme: FactionTheme
+	challenge: DailyQuest | null
 	open: boolean
 	onClose: () => void
 }
 
-function EcoFactArticleView({ accentTheme, open, onClose }: EcoFactArticleViewProps) {
+function EcoFactArticleView({ accentTheme, challenge, open, onClose }: EcoFactArticleViewProps) {
+	const articleTitle = challenge?.metadata.articleTitle || challenge?.title || "L'Eco-Fact du jour"
+
 	return (
 		<AnimatePresence>
 			{open ? (
@@ -151,7 +154,7 @@ function EcoFactArticleView({ accentTheme, open, onClose }: EcoFactArticleViewPr
 					</div>
 
 					<h1 className='text-3xl font-black text-white px-6 mt-8 mb-6 leading-[1.05] tracking-tight'>
-						Le Poumon Vert : Pourquoi l&apos;Amazonie est vitale.
+						{articleTitle}
 					</h1>
 
 					<div
@@ -257,7 +260,7 @@ function EcoFactArticleView({ accentTheme, open, onClose }: EcoFactArticleViewPr
 	)
 }
 
-function EcoFactReader({ accentTheme, open, onValidate, onClose }: EcoFactReaderProps) {
+function EcoFactReader({ accentTheme, challenge, open, onValidate, onClose }: EcoFactReaderProps) {
 	const haptic = useHaptic()
 	const [isArticleOpen, setIsArticleOpen] = useState(false)
 	const [scrollProgress, setScrollProgress] = useState(0)
@@ -530,6 +533,7 @@ function EcoFactReader({ accentTheme, open, onValidate, onClose }: EcoFactReader
 
 					<EcoFactArticleView
 						accentTheme={accentTheme}
+						challenge={challenge}
 						open={isArticleOpen}
 						onClose={() => setIsArticleOpen(false)}
 					/>
@@ -853,12 +857,25 @@ function DailyHarvestModal({ accentTheme, open, onClose, onClaim }: DailyHarvest
 
 type AdventureChallengesProps = {
 	initialFaction?: Faction | null
+	viewerId?: string | null
+	initialDayKey?: string | null
+	initialDayLabel?: string
+	initialDailyQuests?: DailyQuest[]
+	initialMonthlyQuest?: MockMonthlyQuestOverview | null
 }
 
-export function AdventureChallenges({ initialFaction = null }: AdventureChallengesProps) {
+export function AdventureChallenges({
+	initialFaction = null,
+	viewerId = null,
+	initialDayKey = null,
+	initialDayLabel = 'aujourd hui',
+	initialDailyQuests = [],
+	initialMonthlyQuest = null,
+}: AdventureChallengesProps) {
 	const haptic = useHaptic()
 	const searchParams = useSearchParams()
 	const { guardAction } = useActionAuth()
+	void initialDayLabel
 
 	const themeKey = resolveFactionThemeKey(initialFaction)
 	const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
@@ -870,12 +887,14 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 		badgeBg: accentTheme.badgeClassName,
 		bgGradient: accentTheme.heroGradient,
 	}
-	const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(
-		() => getChallenges() || initialDailyQuests
+	const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(() => initialDailyQuests)
+	const [monthlyQuestState, setMonthlyQuestState] = useState<MockMonthlyQuestOverview | null>(
+		() => initialMonthlyQuest
 	)
+	const activeMonthlyQuest = monthlyQuestState ?? initialMonthlyQuest
 	const [isEcoFactReaderOpen, setIsEcoFactReaderOpen] = useState(false)
 	const [isDailyHarvestOpen, setIsDailyHarvestOpen] = useState(false)
-	const [userSeedBalance, setUserSeedBalance] = useState(240)
+	const [, setUserSeedBalance] = useState(240)
 	const [floatingReward, setFloatingReward] = useState<{
 		id: number
 		amount: number
@@ -889,6 +908,30 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 		() => dailyQuests.find((quest) => quest.type === 'daily_harvest') ?? null,
 		[dailyQuests]
 	)
+
+	useEffect(() => {
+		setDailyQuests(initialDailyQuests)
+		setMonthlyQuestState(initialMonthlyQuest)
+	}, [initialDailyQuests, initialMonthlyQuest])
+
+	const incrementMonthlyQuestIfNeeded = useCallback(() => {
+		const hadCompletedQuest = dailyQuests.some((quest) => Boolean(quest.completedAt || quest.claimedAt))
+		if (hadCompletedQuest) {
+			return
+		}
+
+		setMonthlyQuestState((current) => {
+			if (!current) {
+				return current
+			}
+
+			return {
+				...current,
+				progress: Math.min(current.progress + 1, current.max),
+				completedDays: current.completedDays + 1,
+			}
+		})
+	}, [dailyQuests])
 
 	const handleEcoFactOpen = () => {
 		guardAction(
@@ -928,6 +971,7 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 	}, [floatingReward])
 
 	const handleEcoFactValidate = () => {
+		const now = new Date().toISOString()
 		setDailyQuests((current) =>
 			current.map((quest) => {
 				if (quest.type !== 'education') {
@@ -938,7 +982,13 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 					return quest
 				}
 
-				return { ...quest, progress: quest.max }
+				return {
+					...quest,
+					progress: quest.max,
+					completedAt: quest.completedAt || now,
+					claimedAt: quest.claimedAt || now,
+					status: 'claimed',
+				}
 			})
 		)
 
@@ -947,12 +997,23 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 		)
 
 		if (canCollectReward && ecoFactQuest) {
+			incrementMonthlyQuestIfNeeded()
 			setUserSeedBalance((value) => value + ecoFactQuest.reward)
 			setFloatingReward({
 				id: Date.now(),
 				amount: ecoFactQuest.reward,
 			})
 			haptic.lightTap()
+
+			if (viewerId && initialDayKey) {
+				recordClientMockChallengeCompletion({
+					viewerId,
+					dayKey: initialDayKey,
+					archetypeId: 'eco-fact',
+					max: ecoFactQuest.max,
+					timestamp: now,
+				})
+			}
 		}
 
 		setIsEcoFactReaderOpen(false)
@@ -960,6 +1021,7 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 
 	const handleDailyHarvestClaim = () => {
 		haptic.lightTap()
+		const now = new Date().toISOString()
 
 		setDailyQuests((current) =>
 			current.map((quest) => {
@@ -971,12 +1033,29 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 					return quest
 				}
 
-				return { ...quest, progress: quest.max }
+				return {
+					...quest,
+					progress: quest.max,
+					completedAt: quest.completedAt || now,
+					claimedAt: quest.claimedAt || now,
+					status: 'claimed',
+				}
 			})
 		)
 
 		if (dailyHarvestQuest && dailyHarvestQuest.progress < dailyHarvestQuest.max) {
+			incrementMonthlyQuestIfNeeded()
 			setUserSeedBalance((value) => value + dailyHarvestQuest.reward)
+
+			if (viewerId && initialDayKey) {
+				recordClientMockChallengeCompletion({
+					viewerId,
+					dayKey: initialDayKey,
+					archetypeId: 'daily-harvest',
+					max: dailyHarvestQuest.max,
+					timestamp: now,
+				})
+			}
 		}
 
 		setIsDailyHarvestOpen(false)
@@ -1021,7 +1100,7 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 				<div className='bg-card/95 backdrop-blur-xl rounded-2xl p-5 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.5)]'>
 					<div className='flex justify-between items-center mb-4'>
 						<h2 className='text-base font-bold text-white tracking-tight'>
-							{monthlyQuest.objective}
+							{activeMonthlyQuest?.objective || monthlyQuest.objective}
 						</h2>
 						<span className={`px-2 py-1 rounded-full text-[10px] font-bold tabular-nums ${factionTheme.badgeBg} ${factionTheme.accentText}`}>
 							+500 🌱
@@ -1033,7 +1112,7 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 						<div className={`h-full w-[40%] rounded-full ${factionTheme.accentBg}`}></div>
 					</div>
 					<div className='text-right text-[11px] font-medium text-white/50 tabular-nums mt-2'>
-						{monthlyQuest.progress} / {monthlyQuest.max} jours
+						{activeMonthlyQuest?.progress || monthlyQuest.progress} / {activeMonthlyQuest?.max || monthlyQuest.max} jours
 					</div>
 				</div>
 			</div>
@@ -1145,6 +1224,7 @@ export function AdventureChallenges({ initialFaction = null }: AdventureChalleng
 
 			<EcoFactReader
 				accentTheme={accentTheme}
+				challenge={ecoFactQuest}
 				open={isEcoFactReaderOpen}
 				onValidate={handleEcoFactValidate}
 				onClose={() => setIsEcoFactReaderOpen(false)}
