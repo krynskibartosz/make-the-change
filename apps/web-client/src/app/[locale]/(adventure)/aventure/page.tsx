@@ -9,6 +9,8 @@ import { AdventureRightRail } from '@/app/[locale]/(adventure)/community/_featur
 import { AdventureTabs } from '@/app/[locale]/(adventure)/community/_features/adventure-tabs'
 import { AdventureBiodex } from '@/app/[locale]/(adventure)/community/_features/adventure-biodex'
 import { AdventureChallenges } from '@/app/[locale]/(adventure)/community/_features/adventure-challenges'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 
 type AdventureHubProps = {
   searchParams: Promise<{
@@ -34,6 +36,7 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
   const params = await searchParams
   const activeTab = params.tab === 'biodex' ? 'biodex' : 'defis'
   const sidebarUser = await getAdventureSidebarUser()
+  const currentViewer = isMockDataSource ? await getCurrentViewer() : null
 
   return (
     <AdventurePageFrame
@@ -46,7 +49,9 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
         </Suspense>
 
         <Suspense fallback={fallbackLoader}>
-          {activeTab === 'defis' && <AdventureChallenges />}
+          {activeTab === 'defis' && (
+            <AdventureChallenges initialFaction={currentViewer?.faction ?? null} />
+          )}
           {activeTab === 'biodex' && <AdventureBiodex />}
         </Suspense>
       </div>
