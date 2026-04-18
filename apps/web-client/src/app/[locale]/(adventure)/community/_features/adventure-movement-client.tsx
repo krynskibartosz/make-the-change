@@ -305,14 +305,14 @@ export function AdventureMovementClient({ initialFaction, currentDayKey }: Adven
         </div>
 
         {/* JAUGE FINE FULL-WIDTH */}
-        <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
+        <div className="relative h-2 w-full overflow-hidden rounded-full bg-[#1A222C]">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-amber-500 via-emerald-500 to-rose-500 transition-all duration-1000"
+            className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
             style={{ width: `${collectiveGoal.progress}%` }}
           />
         </div>
-        <p className="mt-2 text-center text-[11px] text-white/45">
-          {collectiveGoal.progress}% récolté · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
+        <p className="mt-2 text-center text-[11px] text-white/40">
+          {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} 🌱 restantes
         </p>
 
         {/* LE PODIUM MASCOTTES */}
