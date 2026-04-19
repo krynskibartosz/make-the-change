@@ -5,6 +5,9 @@ import {
   MOCK_PRODUCT_FORETS_HUMIDES_ID,
   MOCK_PRODUCT_FORETS_PRIMAIRES_ID,
   MOCK_PRODUCT_FORETS_SECHES_ID,
+  MOCK_PRODUCT_HUILE_FRANTOIO_ID,
+  MOCK_PRODUCT_HUILE_LECCINO_ID,
+  MOCK_PRODUCT_HUILE_LECCIO_ID,
   MOCK_PRODUCT_JUJUBIER_ID,
   MOCK_PRODUCT_LITCHI_ID,
   MOCK_PRODUCT_MANAKARA_ID,
@@ -12,14 +15,19 @@ import {
   MOCK_PRODUCT_NIAOULI_ID,
   MOCK_PRODUCER_ILANGA_ID,
   MOCK_PRODUCER_ILANGA_SLUG,
+  MOCK_PRODUCER_SARDINIA_ID,
+  MOCK_PRODUCER_SARDINIA_SLUG,
   MOCK_PROJECT_ANTSIRABE_ID,
   MOCK_PROJECT_ANTSIRABE_SLUG,
   MOCK_PROJECT_MANAKARA_ID,
   MOCK_PROJECT_MANAKARA_SLUG,
   MOCK_PROJECT_MIELLERIES_MOBILE_ID,
   MOCK_PROJECT_MIELLERIES_MOBILE_SLUG,
+  MOCK_PROJECT_SARDINIA_ID,
+  MOCK_PROJECT_SARDINIA_SLUG,
   MOCK_SPECIES_BLACK_BEE_ID,
   MOCK_SPECIES_HONEY_BEE_ID,
+  MOCK_SPECIES_OLIVE_TREE_ID,
 } from '@/lib/mock/mock-ids'
 import type {
   ProducerProduct,
@@ -212,6 +220,45 @@ const mielleriesMobileProducts: ProducerProduct[] = [
   },
 ]
 
+const sardiniaSpecies: ProjectSpecies[] = [
+  {
+    id: MOCK_SPECIES_OLIVE_TREE_ID,
+    name: 'Olivier',
+    scientificName: 'Olea europaea',
+    icon: '/images/logo-icon-bee.png',
+    rarity: 6,
+    status: 'LC',
+    role: 'Arbre emblematique mediterraneen',
+  },
+]
+
+const sardiniaProducts: ProducerProduct[] = [
+  {
+    id: MOCK_PRODUCT_HUILE_LECCINO_ID,
+    name: "Huile d'olive Leccino",
+    price: 28,
+    category: 'Huile',
+    impactPercentage: 40,
+    image_url: '/images/logo-icon-bee.png',
+  },
+  {
+    id: MOCK_PRODUCT_HUILE_FRANTOIO_ID,
+    name: "Huile d'olive Frantoio",
+    price: 32,
+    category: 'Huile',
+    impactPercentage: 40,
+    image_url: '/images/logo-icon-bee.png',
+  },
+  {
+    id: MOCK_PRODUCT_HUILE_LECCIO_ID,
+    name: "Huile d'olive Leccio del Corno",
+    price: 35,
+    category: 'Huile',
+    impactPercentage: 40,
+    image_url: '/images/logo-icon-bee.png',
+  },
+]
+
 export const MOCK_PROJECTS: MockProjectSeed[] = [
   {
     id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -400,6 +447,68 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       biodiversityGain: 40,
       jobsCreated: 3,
       timeline: 18,
+    },
+  },
+  {
+    id: MOCK_PROJECT_SARDINIA_ID,
+    slug: MOCK_PROJECT_SARDINIA_SLUG,
+    status: 'active',
+    type: 'orchard',
+    featured: true,
+    name_default: 'Oliviers en Sardaigne',
+    name_i18n: {
+      fr: 'Oliviers en Sardaigne',
+      en: 'Olive Trees in Sardinia',
+    },
+    description_default:
+      '10 000 oliviers issus de plusieurs variétés toscanes (Leccino, Frantoio, Leccio del Corno) avec un moulin pour le pressage directement sur le site.',
+    description_i18n: {
+      fr: '10 000 oliviers issus de plusieurs variétés toscanes (Leccino, Frantoio, Leccio del Corno) avec un moulin pour le pressage directement sur le site.',
+      en: '10,000 olive trees from several Tuscan varieties (Leccino, Frantoio, Leccio del Corno) with a mill for pressing directly on site.',
+    },
+    long_description_default:
+      "Notre projet en Sardaigne compte 10 000 oliviers issus de plusieurs variétés toscanes prestigieuses : Leccino, Frantoio et Leccio del Corno. Ces variétés sont réputées pour produire des huiles d'olive de haute qualité aux arômes complexes et équilibrés.\n\nUn moulin à huile moderne est installé directement sur le site, permettant le pressage des olives immédiatement après la récolte. Cette approche de 'ferme à bouteille' garantit une fraîcheur optimale et préserve les qualités organoleptiques de l'huile.\n\nLe projet s'inscrit dans une démarche d'agriculture durable, respectant les cycles naturels des oliviers et minimisant l'impact environnemental. Les techniques culturales privilégient la biodiversité et la santé des sols, sans utilisation de produits chimiques de synthèse.\n\nCette exploitation contribue à la préservation du paysage oléicole traditionnel sard, tout en innovant avec des méthodes modernes de production et de transformation.",
+    long_description_i18n: {
+      fr: "Notre projet en Sardaigne compte 10 000 oliviers issus de plusieurs variétés toscanes prestigieuses : Leccino, Frantoio et Leccio del Corno. Ces variétés sont réputées pour produire des huiles d'olive de haute qualité aux arômes complexes et équilibrés.\n\nUn moulin à huile moderne est installé directement sur le site, permettant le pressage des olives immédiatement après la récolte. Cette approche de 'ferme à bouteille' garantit une fraîcheur optimale et préserve les qualités organoleptiques de l'huile.\n\nLe projet s'inscrit dans une démarche d'agriculture durable, respectant les cycles naturels des oliviers et minimisant l'impact environnemental. Les techniques culturales privilégient la biodiversité et la santé des sols, sans utilisation de produits chimiques de synthèse.\n\nCette exploitation contribue à la préservation du paysage oléicole traditionnel sard, tout en innovant avec des méthodes modernes de production et de transformation.",
+      en: "Our project in Sardinia features 10,000 olive trees from several prestigious Tuscan varieties: Leccino, Frantoio and Leccio del Corno. These varieties are renowned for producing high-quality olive oils with complex and balanced aromas.\n\nA modern oil mill is installed directly on site, allowing olives to be pressed immediately after harvest. This 'farm-to-bottle' approach ensures optimal freshness and preserves the organoleptic qualities of the oil.\n\nThe project follows sustainable farming practices, respecting natural olive tree cycles and minimizing environmental impact. Cultivation techniques prioritize biodiversity and soil health, without the use of synthetic chemicals.\n\nThis operation contributes to the preservation of the traditional Sardinian olive landscape, while innovating with modern production and transformation methods.",
+    },
+    address_city: 'Sassari',
+    address_country_code: 'Italie',
+    latitude: 40.7259,
+    longitude: 8.5546,
+    launch_date: '2026-05-01',
+    maturity_date: null,
+    current_funding: 12000,
+    target_budget: 25000,
+    hero_image_url: '/images/projects/miellerie-manakara.jpg',
+    images: ['/images/projects/miellerie-manakara.jpg'],
+    unit_price_eur: 150,
+    unit_label: 'olivier',
+    updated_at: '2026-04-19T10:00:00.000Z',
+    producer: {
+      id: MOCK_PRODUCER_SARDINIA_ID,
+      slug: MOCK_PRODUCER_SARDINIA_SLUG,
+      name_default: 'Oliviers de Sardaigne',
+      name_i18n: {
+        fr: 'Oliviers de Sardaigne',
+        en: 'Sardinia Olive Trees',
+      },
+      description_default: 'Production d\'huile d\'olive premium en Sardaigne.',
+      description_i18n: {
+        fr: 'Production d\'huile d\'olive premium en Sardaigne.',
+        en: 'Premium olive oil production in Sardinia.',
+      },
+      contact_website: 'https://oliviers-sardaigne.it',
+      images: ['/images/logo-icon-bee.png'],
+    },
+    species: sardiniaSpecies,
+    challenges: [],
+    producer_products: sardiniaProducts,
+    expected_impact: {
+      co2Absorbed: 80,
+      biodiversityGain: 35,
+      jobsCreated: 5,
+      timeline: 24,
     },
   },
 ]
