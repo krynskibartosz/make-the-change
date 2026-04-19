@@ -1,3 +1,4 @@
+// Producer products carousel component
 import { Package } from 'lucide-react'
 import type { ProducerProduct } from '@/types/context'
 import { Link } from '@/i18n/navigation'
