@@ -3,22 +3,39 @@
 import {
   ArrowRight,
   ArrowUpRight,
+  ChevronLeft,
   HelpCircle,
   Instagram,
   Linkedin,
   Mail,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 type Subject = 'bug' | 'partnership' | 'other'
 
 export default function ContactPage() {
   const [selectedSubject, setSelectedSubject] = useState<Subject>('bug')
+  const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col relative pb-10">
+      {/* HEADER - Bouton Retour */}
+      <div className="sticky top-0 w-full z-50 px-4 py-4 flex items-center bg-[#0A0A0A]/80 backdrop-blur-md">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition active:scale-95"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+        <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-white/80">
+          Nous contacter
+        </span>
+      </div>
+
       {/* 1. HERO */}
-      <div className="px-6 pt-24 pb-8 flex flex-col items-start">
+      <div className="px-6 pt-8 pb-8 flex flex-col items-start">
         <span className="text-[10px] font-bold tracking-[0.25em] text-emerald-500 uppercase mb-4">
           GARDONS LE LIEN
         </span>
@@ -132,8 +149,7 @@ export default function ContactPage() {
           />
           <textarea
             placeholder="Votre message"
-            rows={4}
-            className="bg-transparent border-b border-white/10 focus:border-emerald-500 pb-3 text-white placeholder:text-gray-600 outline-none transition-colors w-full text-base resize-none"
+            className="w-full bg-transparent border-b border-white/10 focus:border-emerald-500 pb-3 text-white placeholder:text-gray-600 outline-none transition-colors text-base min-h-[100px] resize-none mt-4"
           />
 
           {/* C. Bouton Submit */}
