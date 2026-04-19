@@ -7,7 +7,8 @@ export type AboutHeroProps = {
 
 export type AboutGenesisProps = {
   title: string
-  body: string
+  paragraph1: string
+  paragraph2: string
 }
 
 export type AboutModelBlock = {

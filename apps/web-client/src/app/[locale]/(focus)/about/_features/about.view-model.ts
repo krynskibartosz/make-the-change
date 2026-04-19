@@ -13,7 +13,8 @@ export const buildAboutViewModel = async (
     },
     genesis: {
       title: t('genesis.title'),
-      body: t('genesis.body'),
+      paragraph1: t('genesis.paragraph1'),
+      paragraph2: t('genesis.paragraph2'),
     },
     model: {
       overline: t('model.overline'),

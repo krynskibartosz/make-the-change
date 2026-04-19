@@ -621,7 +621,8 @@
     },
     "genesis": {
       "title": "D'une thèse étudiante à un écosystème mondial.",
-      "body": "Il y a plus de 5 ans, l'idée de Make the Change naissait sur les bancs de l'école. La conviction était simple : l'écologie traditionnelle culpabilise, alors qu'elle devrait motiver. Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le {jeu}, la {technologie} et la {transparence}."
+      "paragraph1": "Il y a plus de 5 ans, l'idée de Make the Change naissait sur les bancs de l'école. La conviction était simple : l'écologie traditionnelle culpabilise, alors qu'elle devrait motiver.",
+      "paragraph2": "Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le jeu, la technologie et la transparence."
     },
     "model": {
       "overline": "UN CERCLE VERTUEUX, DU VIRTUEL AU RÉEL",
