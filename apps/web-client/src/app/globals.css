@@ -102,3 +102,21 @@ body {
   width: max-content;
   animation: ecosystem-marquee 26s linear infinite;
 }
+
+/* Motion Design: Blur Reveal Animation */
+@keyframes blurReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-blur-reveal {
+  animation: blurReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}

@@ -6,7 +6,6 @@ import { AboutModelBento } from './_features/about-model-bento'
 import { AboutStickyCta } from './_features/about-sticky-cta'
 import { AboutTeamCarousel } from './_features/about-team-carousel'
 import { buildAboutViewModel } from './_features/about.view-model'
-import { HomeReveal } from '../../(marketing)/(home)/_features/home-reveal'
 
 export default async function AboutPage() {
   const t = await getTranslations('about')
@@ -15,12 +14,8 @@ export default async function AboutPage() {
   return (
     <>
       <AboutHeroManifest {...viewModel.hero} />
-      <HomeReveal delay={0.1}>
-        <AboutGenesis {...viewModel.genesis} />
-      </HomeReveal>
-      <HomeReveal delay={0.1} className="mt-16">
-        <AboutModelBento {...viewModel.model} />
-      </HomeReveal>
+      <AboutGenesis {...viewModel.genesis} />
+      <AboutModelBento {...viewModel.model} />
       <AboutTeamCarousel {...viewModel.team} />
       <AboutLetter {...viewModel.letter} />
       {/* Bottom spacer so the last content is never hidden behind the fixed sticky CTA */}
