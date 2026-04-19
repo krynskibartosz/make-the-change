@@ -1,6 +1,10 @@
 import {
   MOCK_PRODUCT_BAIES_ROSES_ID,
   MOCK_PRODUCT_CACTUS_ID,
+  MOCK_PRODUCT_CORAL_12_ID,
+  MOCK_PRODUCT_CORAL_18_ID,
+  MOCK_PRODUCT_CORAL_3_ID,
+  MOCK_PRODUCT_CORAL_6_ID,
   MOCK_PRODUCT_EUCALYPTUS_ID,
   MOCK_PRODUCT_FORETS_HUMIDES_ID,
   MOCK_PRODUCT_FORETS_PRIMAIRES_ID,
@@ -17,8 +21,12 @@ import {
   MOCK_PRODUCER_ILANGA_SLUG,
   MOCK_PRODUCER_SARDINIA_ID,
   MOCK_PRODUCER_SARDINIA_SLUG,
+  MOCK_PRODUCER_TRILOGY_ID,
+  MOCK_PRODUCER_TRILOGY_SLUG,
   MOCK_PROJECT_ANTSIRABE_ID,
   MOCK_PROJECT_ANTSIRABE_SLUG,
+  MOCK_PROJECT_CORAL_ID,
+  MOCK_PROJECT_CORAL_SLUG,
   MOCK_PROJECT_MANAKARA_ID,
   MOCK_PROJECT_MANAKARA_SLUG,
   MOCK_PROJECT_MIELLERIES_MOBILE_ID,
@@ -26,6 +34,7 @@ import {
   MOCK_PROJECT_SARDINIA_ID,
   MOCK_PROJECT_SARDINIA_SLUG,
   MOCK_SPECIES_BLACK_BEE_ID,
+  MOCK_SPECIES_CORAL_ID,
   MOCK_SPECIES_HONEY_BEE_ID,
   MOCK_SPECIES_OLIVE_TREE_ID,
 } from '@/lib/mock/mock-ids'
@@ -256,6 +265,53 @@ const sardiniaProducts: ProducerProduct[] = [
     category: 'Huile',
     impactPercentage: 40,
     image_url: '/images/logo-icon-bee.png',
+  },
+]
+
+const coralSpecies: ProjectSpecies[] = [
+  {
+    id: MOCK_SPECIES_CORAL_ID,
+    name: 'Coraux tropicaux',
+    scientificName: 'Scleractinia',
+    icon: '/images/logo-icon-bee.png',
+    rarity: 9,
+    status: 'CR',
+    role: 'Fondateurs des recifs coralliens',
+  },
+]
+
+const coralProducts: ProducerProduct[] = [
+  {
+    id: MOCK_PRODUCT_CORAL_3_ID,
+    name: 'Pack 3 coraux',
+    price: 55,
+    category: 'Corail',
+    impactPercentage: 25,
+    image_url: '/coral-karimunjawa.jpg',
+  },
+  {
+    id: MOCK_PRODUCT_CORAL_6_ID,
+    name: 'Pack 6 coraux',
+    price: 100,
+    category: 'Corail',
+    impactPercentage: 25,
+    image_url: '/coral-karimunjawa.jpg',
+  },
+  {
+    id: MOCK_PRODUCT_CORAL_12_ID,
+    name: 'Pack 12 coraux (mini araignée)',
+    price: 180,
+    category: 'Corail',
+    impactPercentage: 25,
+    image_url: '/coral-karimunjawa.jpg',
+  },
+  {
+    id: MOCK_PRODUCT_CORAL_18_ID,
+    name: 'Pack 18 coraux (araignée complète)',
+    price: 250,
+    category: 'Corail',
+    impactPercentage: 25,
+    image_url: '/coral-karimunjawa.jpg',
   },
 ]
 
@@ -509,6 +565,68 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       biodiversityGain: 35,
       jobsCreated: 5,
       timeline: 24,
+    },
+  },
+  {
+    id: MOCK_PROJECT_CORAL_ID,
+    slug: MOCK_PROJECT_CORAL_SLUG,
+    status: 'active',
+    type: 'reef',
+    featured: true,
+    name_default: 'Restauration des récifs coralliens',
+    name_i18n: {
+      fr: 'Restauration des récifs coralliens',
+      en: 'Coral Reef Restoration',
+    },
+    description_default:
+      'Restaurer les récifs coralliens en implantant de nouveaux fragments de corail et en recréant des zones de biodiversité active.',
+    description_i18n: {
+      fr: 'Restaurer les récifs coralliens en implantant de nouveaux fragments de corail et en recréant des zones de biodiversité active.',
+      en: 'Restore coral reefs by planting new coral fragments and recreating active biodiversity zones.',
+    },
+    long_description_default:
+      'Notre projet de restauration des récifs coralliens se déroule à Karimunjawa, en Indonésie, où nous implantons de nouveaux fragments de corail pour recréer des zones de biodiversité marine active. Les coraux sont les fondements des écosystèmes tropicaux, fournissant un habitat essentiel à des milliers d\'espèces marines.\n\nLes coraux restaurés ont 60 à 85% de chance de survie sur 12 mois, créant des micro-habitats pour les poissons tropicaux et régénérant 0,02 m² de récif par corail. Chaque structure complète (18 coraux) restaure 0,3 à 0,5 m² de récif.\n\nCe projet a un impact environnemental majeur : recréation d\'habitats marins, augmentation de la biodiversité, retour des poissons tropicaux, développement d\'écosystèmes complets et protection des côtes contre l\'érosion.\n\nSur le plan social et économique, nous employons des plongeurs et des équipes locales, développons un tourisme durable et sensibilisons les populations locales à l\'importance de la conservation marine.',
+    long_description_i18n: {
+      fr: 'Notre projet de restauration des récifs coralliens se déroule à Karimunjawa, en Indonésie, où nous implantons de nouveaux fragments de corail pour recréer des zones de biodiversité marine active. Les coraux sont les fondements des écosystèmes tropicaux, fournissant un habitat essentiel à des milliers d\'espèces marines.\n\nLes coraux restaurés ont 60 à 85% de chance de survie sur 12 mois, créant des micro-habitats pour les poissons tropicaux et régénérant 0,02 m² de récif par corail. Chaque structure complète (18 coraux) restaure 0,3 à 0,5 m² de récif.\n\nCe projet a un impact environnemental majeur : recréation d\'habitats marins, augmentation de la biodiversité, retour des poissons tropicaux, développement d\'écosystèmes complets et protection des côtes contre l\'érosion.\n\nSur le plan social et économique, nous employons des plongeurs et des équipes locales, développons un tourisme durable et sensibilisons les populations locales à l\'importance de la conservation marine.',
+      en: 'Our coral reef restoration project takes place in Karimunjawa, Indonesia, where we plant new coral fragments to recreate active marine biodiversity zones. Corals are the foundation of tropical ecosystems, providing essential habitat for thousands of marine species.\n\nRestored corals have a 60-85% survival rate over 12 months, creating micro-habitats for tropical fish and regenerating 0.02 m² of reef per coral. Each complete structure (18 corals) restores 0.3 to 0.5 m² of reef.\n\nThis project has major environmental impact: marine habitat recreation, biodiversity increase, return of tropical fish, complete ecosystem development and coastal protection against erosion.\n\nSocially and economically, we employ divers and local teams, develop sustainable tourism and raise local awareness about the importance of marine conservation.',
+    },
+    address_city: 'Karimunjawa',
+    address_country_code: 'Indonésie',
+    latitude: -5.8333,
+    longitude: 110.45,
+    launch_date: '2026-06-01',
+    maturity_date: null,
+    current_funding: 8500,
+    target_budget: 15000,
+    hero_image_url: '/coral-karimunjawa.jpg',
+    images: ['/coral-karimunjawa.jpg'],
+    unit_price_eur: 30,
+    unit_label: 'corail',
+    updated_at: '2026-04-19T10:00:00.000Z',
+    producer: {
+      id: MOCK_PRODUCER_TRILOGY_ID,
+      slug: MOCK_PRODUCER_TRILOGY_SLUG,
+      name_default: 'Trilogy Ocean Restoration',
+      name_i18n: {
+        fr: 'Trilogy Ocean Restoration',
+        en: 'Trilogy Ocean Restoration',
+      },
+      description_default: 'Restauration des récifs coralliens en Indonésie.',
+      description_i18n: {
+        fr: 'Restauration des récifs coralliens en Indonésie.',
+        en: 'Coral reef restoration in Indonesia.',
+      },
+      contact_website: 'https://linktr.ee/underwatergardeners',
+      images: ['/images/logo-icon-bee.png'],
+    },
+    species: coralSpecies,
+    challenges: [],
+    producer_products: coralProducts,
+    expected_impact: {
+      co2Absorbed: 45,
+      biodiversityGain: 75,
+      jobsCreated: 8,
+      timeline: 36,
     },
   },
 ]
