@@ -4,7 +4,7 @@ function GamificationCard({ title, description }: AboutModelBlock) {
   return (
     <article className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent p-8">
       {/* Glow */}
-      <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-emerald-500/20 blur-[50px] z-0" />
+      <div className="pointer-events-none absolute -right-8 -top-8 h-56 w-56 rounded-full bg-emerald-500/20 blur-[50px] z-0" />
       {/* Watermark */}
       <div className="pointer-events-none absolute -bottom-6 -right-2 text-[120px] font-black italic leading-none text-white/[0.03] z-0">
         01
@@ -20,7 +20,7 @@ function CircularCard({ title, description }: AboutModelBlock) {
   return (
     <article className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent p-8">
       {/* Glow */}
-      <div className="pointer-events-none absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-amber-500/20 blur-[50px] z-0" />
+      <div className="pointer-events-none absolute -bottom-8 -right-8 h-56 w-56 rounded-full bg-amber-500/20 blur-[50px] z-0" />
       {/* Watermark */}
       <div className="pointer-events-none absolute -bottom-6 -right-2 text-[120px] font-black italic leading-none text-white/[0.03] z-0">
         02
@@ -36,7 +36,7 @@ function TransparencyCard({ title, description }: AboutModelBlock) {
   return (
     <article className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent p-8">
       {/* Glow */}
-      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-16 h-56 w-56 rounded-full bg-blue-500/20 blur-[50px] z-0" />
+      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-blue-500/20 blur-[50px] z-0" />
       {/* Watermark */}
       <div className="pointer-events-none absolute -bottom-6 -right-2 text-[120px] font-black italic leading-none text-white/[0.03] z-0">
         03
