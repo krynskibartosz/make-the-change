@@ -21,21 +21,23 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col relative pb-10">
       {/* HEADER - Bouton Retour */}
-      <div className="sticky top-0 w-full z-50 px-4 py-4 flex items-center bg-[#0A0A0A]/80 backdrop-blur-md">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition active:scale-95"
-        >
-          <ChevronLeft className="w-5 h-5 text-white" />
-        </button>
-        <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-white/80">
-          Nous contacter
-        </span>
-      </div>
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/30 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
+        <div className="relative flex h-12 items-center">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition active:scale-95"
+          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
+          <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-white/80">
+            Nous contacter
+          </span>
+        </div>
+      </header>
 
       {/* 1. HERO */}
-      <div className="px-6 pt-8 pb-8 flex flex-col items-start">
+      <div className="px-6 pt-24 pb-8 flex flex-col items-start">
         <span className="text-[10px] font-bold tracking-[0.25em] text-emerald-500 uppercase mb-4">
           GARDONS LE LIEN
         </span>
