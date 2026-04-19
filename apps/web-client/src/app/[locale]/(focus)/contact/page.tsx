@@ -19,7 +19,7 @@ export default function ContactPage() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-[#0B0F15] text-white flex flex-col relative pb-10 overflow-hidden">
+    <div className="fixed inset-0 z-40 bg-[#0B0F15] h-[100dvh] w-full text-white flex flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain pb-10">
       {/* Halo de lumière en haut */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-lime-500/5 blur-[100px] pointer-events-none z-0" />
 
