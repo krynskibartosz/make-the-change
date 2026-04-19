@@ -83,6 +83,9 @@ const HomePage = async () => {
           </Link>
         </div>
 
+        {/* Spacer to push content to bottom */}
+        <div className="flex-1" aria-hidden="true" />
+
         <HomeHeroContent 
           title={t('hero.title')} 
           subtitle={t('hero.subtitle')} 
