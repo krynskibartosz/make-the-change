@@ -171,7 +171,7 @@ export default async function SettingsPage() {
     ]
 
     return (
-      <div className="relative z-[100] min-h-full overflow-y-auto bg-[#050505] pb-4 text-white">
+      <div className="fixed inset-0 z-[100] bg-[#050505] h-[100dvh] w-full flex flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain pb-4 text-white">
         <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/30 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
           <div className="relative flex h-12 items-center justify-center">
             <Link
@@ -336,7 +336,7 @@ export default async function SettingsPage() {
   ]
 
   return (
-    <div className="relative z-[100] min-h-full overflow-y-auto bg-[#050505] pb-4 text-white">
+    <div className="fixed inset-0 z-[100] bg-[#050505] h-[100dvh] w-full flex flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain pb-4 text-white">
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/30 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
         <div className="relative flex h-12 items-center justify-center">
           <Link
