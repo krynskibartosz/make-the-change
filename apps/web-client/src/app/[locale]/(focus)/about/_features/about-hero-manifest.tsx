@@ -21,7 +21,7 @@ export function AboutHeroManifest({ overline, title, subtitle, imageAlt }: About
       {/* Spacer so content naturally sinks to bottom via flex */}
       <div className="flex-1" aria-hidden="true" />
 
-      <div className="relative z-10 w-full text-center -mt-8">
+      <div className="relative z-10 w-full text-center -mt-16">
         <span className="mb-5 block text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-400/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
           {overline}
         </span>
