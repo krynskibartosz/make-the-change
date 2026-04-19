@@ -17,7 +17,7 @@ export default async function PrivacyPage() {
         <span className="text-[10px] font-bold tracking-[0.25em] text-emerald-500 uppercase mb-4">
           {viewModel.hero.badge}
         </span>
-        <h1 className="text-4xl font-bold text-white tracking-tight leading-[1.1] mb-6 text-balance">
+        <h1 className="mb-6 text-balance text-4xl font-bold leading-[1.1] tracking-tight text-white hyphens-none">
           {viewModel.hero.title.line1}{' '}
           <span className="text-lime-400">{viewModel.hero.title.highlight}</span>
         </h1>

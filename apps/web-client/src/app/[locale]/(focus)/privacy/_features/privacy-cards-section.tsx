@@ -1,4 +1,4 @@
-import { CheckCircle2, Fingerprint, Lock, Mail, Server } from 'lucide-react'
+import { CheckCircle2, Fingerprint, Lock, Server } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import type { PrivacyCardsProps } from './privacy.types'
 
@@ -9,26 +9,17 @@ export function PrivacyCardsSection({
   contact,
 }: PrivacyCardsProps) {
   return (
-    <div className="relative z-10 px-6 grid grid-cols-1 gap-3 md:grid-cols-3">
-      {/* Card 1: Collecte minimale */}
-      <div className="md:col-span-2 rounded-3xl border border-white/5 bg-[#1A1F26] p-6 shadow-sm">
-        <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
-          <Server className="h-5 w-5 text-lime-400" />
+    <div className="relative z-10 grid grid-cols-2 gap-3 px-6 sm:gap-4">
+      {/* CARTE 1 — LA PROMESSE (fullwidth) */}
+      <div className="col-span-2 flex flex-col items-start gap-4 rounded-3xl border border-white/5 bg-[#1A1F26] p-6 shadow-sm">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
+          <Fingerprint className="h-5 w-5 text-lime-400" />
         </div>
-        <h3 className="text-lg font-bold text-white mb-2">{minimalCollection.title}</h3>
-        <p className="text-sm font-light leading-relaxed text-gray-400">
-          {minimalCollection.description}
-        </p>
-      </div>
-
-      {/* Card 2: Vos données vous appartiennent */}
-      <div className="md:col-span-1 md:row-span-2 rounded-3xl border border-white/5 bg-[#1A1F26] p-6 shadow-sm flex flex-col justify-between">
         <div>
-          <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
-            <Fingerprint className="h-5 w-5 text-lime-400" />
-          </div>
-          <h3 className="text-lg font-bold text-white mb-2">{dataOwnership.title}</h3>
-          <p className="text-sm font-light leading-relaxed text-gray-400 mb-6">
+          <h3 className="mb-2 text-lg font-bold leading-tight text-white">
+            {dataOwnership.title}
+          </h3>
+          <p className="text-sm font-light leading-relaxed text-gray-400">
             {dataOwnership.description}
           </p>
         </div>
@@ -38,27 +29,45 @@ export function PrivacyCardsSection({
         </div>
       </div>
 
-      {/* Card 3: Sécurité renforcée */}
-      <div className="md:col-span-1 rounded-3xl border border-white/5 bg-[#1A1F26] p-6 shadow-sm">
-        <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
-          <Lock className="h-5 w-5 text-emerald-400" />
+      {/* CARTE 2 — COLLECTE MINIMALE (carré) */}
+      <div className="col-span-1 flex aspect-square flex-col justify-between rounded-[24px] border border-white/5 bg-[#1A1F26] p-5 shadow-sm">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
+          <Server className="h-5 w-5 text-lime-400" />
         </div>
-        <h3 className="text-lg font-bold text-white mb-2">{security.title}</h3>
-        <p className="text-sm font-light leading-relaxed text-gray-400">
-          {security.description}
-        </p>
+        <div>
+          <h3 className="mb-1 text-base font-bold leading-tight text-white">
+            {minimalCollection.title}
+          </h3>
+          <p className="line-clamp-3 text-xs leading-relaxed text-gray-400">
+            {minimalCollection.description}
+          </p>
+        </div>
       </div>
 
-      {/* Card 4: Contact */}
-      <div className="md:col-span-1 rounded-3xl border border-white/5 bg-[#1A1F26] p-6 shadow-sm flex flex-col">
-        <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
-          <Mail className="h-5 w-5 text-lime-400" />
+      {/* CARTE 3 — SÉCURITÉ RENFORCÉE (carré) */}
+      <div className="col-span-1 flex aspect-square flex-col justify-between rounded-[24px] border border-white/5 bg-[#1A1F26] p-5 shadow-sm">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
+          <Lock className="h-5 w-5 text-emerald-400" />
         </div>
-        <h3 className="text-lg font-bold text-white mb-2">{contact.title}</h3>
-        <p className="text-sm font-light leading-relaxed text-gray-400">{contact.description}</p>
+        <div>
+          <h3 className="mb-1 text-base font-bold leading-tight text-white">
+            {security.title}
+          </h3>
+          <p className="line-clamp-3 text-xs leading-relaxed text-gray-400">
+            {security.description}
+          </p>
+        </div>
+      </div>
+
+      {/* CARTE 4 — CTA (fullwidth, centré) */}
+      <div className="col-span-2 mt-2 flex flex-col items-center rounded-3xl border border-white/5 bg-[#1A1F26] p-6 text-center shadow-sm">
+        <h3 className="mb-2 text-lg font-bold text-white">{contact.title}</h3>
+        <p className="mb-5 text-sm font-light leading-relaxed text-gray-400">
+          {contact.description}
+        </p>
         <Link
           href="/contact"
-          className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-lime-400 text-base font-black text-[#0B0F15] shadow-[0_0_20px_rgba(132,204,22,0.15)] transition-all active:scale-[0.98]"
+          className="flex h-12 w-full items-center justify-center rounded-xl bg-lime-400 text-base font-black text-[#0B0F15] shadow-[0_0_20px_rgba(132,204,22,0.15)] transition-all active:scale-[0.98]"
         >
           {contact.cta}
         </Link>
