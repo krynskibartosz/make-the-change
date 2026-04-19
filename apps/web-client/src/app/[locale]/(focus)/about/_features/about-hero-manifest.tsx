@@ -19,13 +19,13 @@ export function AboutHeroManifest({ overline, title, subtitle, imageAlt }: About
       />
 
       <div className="relative z-10 w-full text-center py-12 mt-20">
-        <span className="mb-5 block text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-400/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">
+        <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.25em] text-amber-500 drop-shadow-md md:text-xs">
           {overline}
         </span>
-        <h1 className="mx-auto max-w-[14ch] text-[40px] font-black leading-[1.05] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl">
+        <h1 className="mx-auto max-w-[14ch] text-5xl font-black leading-[1.05] tracking-tighter text-white drop-shadow-lg md:text-6xl">
           {title}
         </h1>
-        <p className="mx-auto mt-5 max-w-[85%] text-[15px] leading-relaxed text-white/75 sm:max-w-md sm:text-base">
+        <p className="mx-auto mt-6 max-w-[280px] text-base font-light leading-[1.7] text-gray-200 drop-shadow-md sm:max-w-xs">
           {subtitle}
         </p>
       </div>
