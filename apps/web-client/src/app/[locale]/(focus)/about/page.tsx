@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import { AboutBackHeader } from './_features/about-back-header'
 import { AboutGenesis } from './_features/about-genesis'
 import { AboutHeroManifest } from './_features/about-hero-manifest'
 import { AboutLetter } from './_features/about-letter'
@@ -12,18 +13,14 @@ export default async function AboutPage() {
   const viewModel = await buildAboutViewModel(t)
 
   return (
-    <>
+    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0D1117] text-white">
+      <AboutBackHeader title="À propos" />
       <AboutHeroManifest {...viewModel.hero} />
       <AboutGenesis {...viewModel.genesis} />
       <AboutModelBento {...viewModel.model} />
       <AboutTeamCarousel {...viewModel.team} />
       <AboutLetter {...viewModel.letter} />
-      {/* Bottom spacer so the last content is never hidden behind the fixed sticky CTA */}
-      <div
-        aria-hidden="true"
-        style={{ height: 'calc(6rem + env(safe-area-inset-bottom))' }}
-      />
       <AboutStickyCta {...viewModel.cta} />
-    </>
+    </div>
   )
 }

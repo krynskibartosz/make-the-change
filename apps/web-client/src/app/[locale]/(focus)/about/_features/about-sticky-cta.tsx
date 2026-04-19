@@ -17,27 +17,18 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
   }, [router])
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50">
-      {/* Soft top fade so scrolled content disappears gently under the bar */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-8 h-8 bg-gradient-to-t from-black/60 to-transparent"
-      />
-
-      {/* Full-width frosted bar with iOS safe-area */}
-      <div
-        className="border-t border-white/5 bg-black/50 px-4 pt-3 backdrop-blur-lg"
-        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+    <div
+      className="px-4 pt-10"
+      style={{ paddingBottom: 'calc(2.5rem + env(safe-area-inset-bottom))' }}
+    >
+      <button
+        type="button"
+        onClick={handleClick}
+        className="group mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-4 text-base font-bold text-white shadow-[0_8px_32px_-8px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1117]"
       >
-        <button
-          type="button"
-          onClick={handleClick}
-          className="group mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-4 text-base font-bold text-white shadow-[0_8px_32px_-8px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1117]"
-        >
-          <span>{label}</span>
-          <ArrowRight className="h-5 w-5 transition group-hover:translate-x-0.5" />
-        </button>
-      </div>
+        <span>{label}</span>
+        <ArrowRight className="h-5 w-5 transition group-hover:translate-x-0.5" />
+      </button>
     </div>
   )
 }
