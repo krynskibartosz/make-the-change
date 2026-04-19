@@ -11,19 +11,23 @@ export const buildAboutViewModel = async (
       subtitle: t('hero.subtitle'),
       imageAlt: t('hero.imageAlt'),
     },
-    pillars: {
-      overline: t('pillars.overline'),
-      engagement: {
-        title: t('pillars.engagement.title'),
-        description: t('pillars.engagement.description'),
+    genesis: {
+      title: t('genesis.title'),
+      body: t('genesis.body'),
+    },
+    model: {
+      overline: t('model.overline'),
+      gamification: {
+        title: t('model.gamification.title'),
+        description: t('model.gamification.description'),
       },
-      swarm: {
-        title: t('pillars.swarm.title'),
-        description: t('pillars.swarm.description'),
+      circular: {
+        title: t('model.circular.title'),
+        description: t('model.circular.description'),
       },
-      impact: {
-        title: t('pillars.impact.title'),
-        description: t('pillars.impact.description'),
+      transparency: {
+        title: t('model.transparency.title'),
+        description: t('model.transparency.description'),
       },
     },
     team: {

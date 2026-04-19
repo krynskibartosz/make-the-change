@@ -5,16 +5,21 @@ export type AboutHeroProps = {
   imageAlt: string
 }
 
-export type AboutPillarEntry = {
+export type AboutGenesisProps = {
+  title: string
+  body: string
+}
+
+export type AboutModelBlock = {
   title: string
   description: string
 }
 
-export type AboutPillarsProps = {
+export type AboutModelProps = {
   overline: string
-  engagement: AboutPillarEntry
-  swarm: AboutPillarEntry
-  impact: AboutPillarEntry
+  gamification: AboutModelBlock
+  circular: AboutModelBlock
+  transparency: AboutModelBlock
 }
 
 export type AboutTeamMember = {
@@ -43,7 +48,8 @@ export type AboutCtaProps = {
 
 export type AboutViewModel = {
   hero: AboutHeroProps
-  pillars: AboutPillarsProps
+  genesis: AboutGenesisProps
+  model: AboutModelProps
   team: AboutTeamProps
   letter: AboutLetterProps
   cta: AboutCtaProps

@@ -1,7 +1,8 @@
 import { getTranslations } from 'next-intl/server'
+import { AboutGenesis } from './_features/about-genesis'
 import { AboutHeroManifest } from './_features/about-hero-manifest'
 import { AboutLetter } from './_features/about-letter'
-import { AboutPillarsTimeline } from './_features/about-pillars-timeline'
+import { AboutModelBento } from './_features/about-model-bento'
 import { AboutStickyCta } from './_features/about-sticky-cta'
 import { AboutTeamCarousel } from './_features/about-team-carousel'
 import { buildAboutViewModel } from './_features/about.view-model'
@@ -15,7 +16,10 @@ export default async function AboutPage() {
     <>
       <AboutHeroManifest {...viewModel.hero} />
       <HomeReveal delay={0.1}>
-        <AboutPillarsTimeline {...viewModel.pillars} />
+        <AboutGenesis {...viewModel.genesis} />
+      </HomeReveal>
+      <HomeReveal delay={0.1} className="mt-16">
+        <AboutModelBento {...viewModel.model} />
       </HomeReveal>
       <AboutTeamCarousel {...viewModel.team} />
       <AboutLetter {...viewModel.letter} />

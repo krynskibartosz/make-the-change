@@ -614,47 +614,51 @@
   },
   "about": {
     "hero": {
-      "overline": "LE MOUVEMENT",
+      "overline": "LE COLLECTIF",
       "title": "Le digital au service du vivant.",
-      "subtitle": "Make the Change n'est pas qu'une application. C'est un Essaim citoyen qui transforme le virtuel en impact physique. Ne subissez plus l'éco-anxiété, agissez depuis votre poche.",
+      "subtitle": "Make the Change n'est pas qu'une application. C'est un collectif citoyen qui transforme le virtuel en impact physique. Ne subissez plus l'éco-anxiété, agissez depuis votre poche.",
       "imageAlt": "Forêt sombre et brumeuse"
     },
-    "pillars": {
-      "overline": "LA BOUCLE DU VIVANT",
-      "engagement": {
-        "title": "L'Engagement",
-        "description": "Relevez des défis quotidiens et récoltez des Graines. Faites grandir vos espèces dans votre BioDex personnel."
+    "genesis": {
+      "title": "D'une thèse étudiante à un écosystème mondial.",
+      "body": "Il y a plus de 5 ans, l'idée de Make the Change naissait sur les bancs de l'école. La conviction était simple : l'écologie traditionnelle culpabilise, alors qu'elle devrait motiver. Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le {jeu}, la {technologie} et la {transparence}."
+    },
+    "model": {
+      "overline": "UN CERCLE VERTUEUX, DU VIRTUEL AU RÉEL",
+      "gamification": {
+        "title": "Jouer pour apprendre.",
+        "description": "Réaliser des actions pour la planète ne doit plus être une corvée. Nous utilisons la gamification pour transformer vos efforts quotidiens en une aventure stimulante."
       },
-      "swarm": {
-        "title": "La Force de l'Essaim",
-        "description": "Seul on va vite, en Faction on va loin. Vos actions quotidiennes propulsent l'effort collectif du mois."
+      "circular": {
+        "title": "Soutenir la terre, récolter ses fruits.",
+        "description": "Votre engagement numérique soutient directement des projets de biodiversité sur le terrain. En retour, ces terres restaurées créent de la richesse locale (comme du miel ou de l'artisanat). Ces produits nous sont retournés, et nous vous les offrons en échange de vos points d'impact. La boucle est bouclée."
       },
-      "impact": {
-        "title": "L'Impact",
-        "description": "Votre soutien finance la réalité. Des ruchers à Madagascar aux corridors écologiques en Europe, chaque Euro est traçable jusqu'au terrain."
+      "transparency": {
+        "title": "Un impact traçable.",
+        "description": "Pas de greenwashing. Des partenariats locaux forts et une traçabilité totale pour que vous sachiez exactement quelle forêt, quelle ruche ou quelle espèce vous avez aidé à soutenir aujourd'hui."
       }
     },
     "team": {
-      "title": "Ceux qui veillent sur l'Essaim.",
+      "title": "Ceux qui veillent sur le collectif.",
       "subtitle": "Deux visages, une conviction : rendre l'écologie désirable.",
       "gregory": {
         "name": "Grégory Steisel",
-        "role": "Initiateur du mouvement",
-        "quote": "L'écologie doit cesser d'être une contrainte pour devenir la plus belle des opportunités.",
+        "role": "INITIATEUR & VISIONNAIRE",
+        "quote": "Nous voulons créer un monde où l'écologie n'est plus une contrainte, mais un jeu où tout le monde gagne : la nature, les producteurs locaux, et vous.",
         "linkedinUrl": "https://www.linkedin.com/in/steisel/",
         "linkedinLabel": "LinkedIn de Grégory Steisel"
       },
       "bartosz": {
         "name": "Bartosz Krynski",
-        "role": "Architecte de l'impact",
-        "quote": "Nous construisons le pont technologique le plus court entre votre téléphone et la nature.",
+        "role": "ARCHITECTE & BÂTISSEUR",
+        "quote": "Une idée ne survit que si on lui donne un corps. Mon rôle est de forger le moteur de ce collectif, et de créer le pont technologique le plus court entre votre téléphone et la nature.",
         "linkedinUrl": "https://www.linkedin.com/in/bartosz-krynski/",
         "linkedinLabel": "LinkedIn de Bartosz Krynski"
       }
     },
     "letter": {
-      "body": "Si vous lisez ceci, c'est que vous cherchiez du sens. Vous l'avez trouvé. L'Essaim n'attend plus que vous pour faire la différence, aujourd'hui.",
-      "signature": "L'équipe Make the Change"
+      "body": "Dans 3 ans, nous voulons que Make the Change soit le plus grand collectif citoyen d'Europe pour la biodiversité. Un écosystème où chaque swipe sur un écran plante une graine, où chaque défi relevé restaure un habitat, et où l'action commune devient une seconde nature. Le collectif n'attend plus que vous.",
+      "signature": "— Les fondateurs, Grégory & Bartosz"
     },
     "cta": {
       "label": "Retourner à mon Impact"
