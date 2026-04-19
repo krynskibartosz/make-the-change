@@ -18,8 +18,8 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
 
         {/* Identity */}
         <div className="flex flex-col">
-          <h3 className="text-2xl font-bold text-white tracking-tight">{member.name}</h3>
-          <p className={`mt-1 text-[10px] font-bold uppercase tracking-[0.2em] ${isGregory ? 'text-amber-500' : 'text-emerald-500'}`}>
+          <h3 className="text-2xl font-bold text-white tracking-tight leading-none">{member.name}</h3>
+          <p className={`mt-2 text-[10px] font-bold uppercase tracking-[0.25em] ${isGregory ? 'text-amber-500' : 'text-emerald-500'}`}>
             {member.role}
           </p>
         </div>
@@ -28,13 +28,13 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
       {/* Body: Quote with watermark */}
       <div className="relative">
         {/* Watermark quote mark */}
-        <div className="absolute -top-6 left-0 select-none font-serif text-[120px] leading-none text-white/[0.03]">
+        <div className="absolute -top-8 -left-3 select-none font-serif text-[100px] leading-none text-white/[0.03] pointer-events-none z-0">
           "
         </div>
 
         {/* Quote container */}
         <blockquote className={`relative z-10 border-l-2 pl-4 ${isGregory ? 'border-amber-500/20' : 'border-emerald-500/20'}`}>
-          <p className="text-lg italic leading-relaxed text-gray-300">{member.quote}</p>
+          <p className="relative z-10 text-[15px] italic leading-[1.85] font-light text-gray-300 text-pretty drop-shadow-sm sm:text-base">{member.quote}</p>
         </blockquote>
       </div>
 
@@ -55,11 +55,9 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
 export function AboutTeamCarousel({ title, subtitle, members }: AboutTeamProps) {
   return (
     <section className="relative mt-20 py-20 sm:py-24">
-      <div className="px-6 mb-20">
-        <h2 className="text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl">
-          {title}
-        </h2>
-        <p className="mt-2 max-w-md text-sm font-light text-gray-400">{subtitle}</p>
+      <div className="px-6 mb-12">
+        <h2 className="mb-3 text-3xl font-bold text-white tracking-tight text-balance">{title}</h2>
+        <p className="text-base font-light text-gray-400 mb-12">{subtitle}</p>
       </div>
 
       <div className="flex flex-col gap-20 px-6">
