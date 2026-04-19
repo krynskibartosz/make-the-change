@@ -1,7 +1,7 @@
-import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
+import { Package } from 'lucide-react'
 import type { ProducerProduct } from '@/types/context'
 import { Link } from '@/i18n/navigation'
-import { formatCurrency } from '@/lib/utils'
+import { sanitizeImageUrl } from '@/lib/image-url'
 
 interface ProjectProducerProductsSectionProps {
   products: ProducerProduct[] | null
@@ -11,12 +11,10 @@ export function ProjectProducerProductsSection({ products }: ProjectProducerProd
   if (!products || products.length === 0) return null
 
   return (
-    <section>
-      <div className="mb-6 flex items-center gap-3">
-        <div className="h-10 w-1 rounded-full bg-primary" />
-        <h2 className="text-3xl font-black tracking-tight">Produits du partenaire</h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <section className="w-full max-w-full overflow-hidden">
+      <h3 className="mb-4 text-xl font-bold text-white">Produits du partenaire</h3>
+
+      <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -26,36 +24,31 @@ export function ProjectProducerProductsSection({ products }: ProjectProducerProd
 }
 
 function ProductCard({ product }: { product: ProducerProduct }) {
+  const imageUrl = sanitizeImageUrl(product.image_url)
+
   return (
-    <Card className="rounded-2xl border-border/50 bg-background/50 hover:bg-background/80 transition-all">
-      <CardContent className="p-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="h-16 w-16 rounded-xl bg-muted overflow-hidden flex-shrink-0">
-            {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-primary/10 text-2xl">📦</div>
-            )}
-          </div>
-          <div>
-            <h3 className="font-bold text-lg leading-tight">{product.name}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{product.category}</p>
-          </div>
+    <Link
+      href={`/products/${product.id}`}
+      className="min-w-[240px] w-[240px] h-[160px] shrink-0 snap-start rounded-2xl overflow-hidden relative group cursor-pointer border border-white/10"
+    >
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={product.name}
+          className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+          <Package className="h-8 w-8 text-white/50" />
         </div>
-        
-        <div className="flex items-center justify-between mb-4">
-          <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-            {product.impactPercentage}% reversés
-          </Badge>
-          <span className="font-bold text-lg">{formatCurrency(product.price)}</span>
-        </div>
-        
-        <Link href={`/products/${product.id}`}>
-          <Button className="w-full" variant="outline">
-            Voir le produit →
-          </Button>
-        </Link>
-      </CardContent>
-    </Card>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+      <div className="absolute bottom-0 left-0 p-4 w-full">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-lime-400 mb-1 block">
+          {product.category}
+        </span>
+        <h4 className="text-sm font-bold text-white leading-tight truncate">{product.name}</h4>
+      </div>
+    </Link>
   )
 }
