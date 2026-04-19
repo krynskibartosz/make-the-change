@@ -1872,31 +1872,31 @@
       }
     },
     "privacy": {
-      "badge": "Legal & Securite",
+      "badge": "Légal & Sécurité",
       "hero": {
         "title_line1": "Votre confiance",
-        "title_highlight": "est notre priorite.",
-        "description_line1": "Nous avons concu Make the CHANGE avec la confidentialite au coeur de l experience.",
-        "description_line2": "Transparence totale, zero compromis."
+        "title_highlight": "est notre priorité.",
+        "description_line1": "Nous avons conçu Make the CHANGE avec la confidentialité au cœur de l'expérience.",
+        "description_line2": "Transparence totale, zéro compromis."
       },
       "cards": {
         "minimal_collection": {
           "title": "Collecte minimale",
-          "description": "Nous collectons uniquement les informations necessaires au compte, aux commandes et au suivi d impact."
+          "description": "Nous collectons uniquement les informations nécessaires au compte, aux commandes et au suivi d'impact."
         },
         "data_ownership": {
-          "title": "Vos donnees vous appartiennent.",
-          "description": "Nous ne vendons pas vos donnees. Jamais.",
-          "guarantee": "Garanti a 100%"
+          "title": "Vos données vous appartiennent.",
+          "description": "Nous ne vendons pas vos données. Jamais.",
+          "guarantee": "Garanti à 100%"
         },
         "security": {
-          "title": "Securite renforcee",
-          "description": "Les informations sensibles ne sont jamais exposees publiquement et sont protegees par chiffrement."
+          "title": "Sécurité renforcée",
+          "description": "Les informations sensibles ne sont jamais exposées publiquement et sont protégées par chiffrement."
         },
         "contact": {
           "title": "Des questions ?",
-          "description": "Notre equipe DPO est la pour vous.",
-          "cta": "Nous ecrire"
+          "description": "Notre équipe DPO est là pour vous.",
+          "cta": "Nous écrire"
         }
       }
     },
