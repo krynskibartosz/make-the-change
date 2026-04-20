@@ -1,22 +1,9 @@
 'use client'
 
-import { cn } from '@make-the-change/core/shared/utils'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Checkbox,
-  CheckboxGroup,
-  Fieldset,
-  FieldsetLegend,
-  Form,
-} from '@make-the-change/core/ui'
-import { Bell, Check, Mail, Package, Radio, ShieldCheck, Trophy, Zap } from 'lucide-react'
-import { useActionState } from 'react'
-import { type NotificationState, updateNotifications } from './actions'
+import { useEffect, useState } from 'react'
+import { ArrowLeft } from 'lucide-react'
+import { useRouter } from '@/i18n/navigation'
+import { updateNotifications } from './actions'
 
 type NotificationsClientProps = {
   initial: {
@@ -32,232 +19,165 @@ type NotificationsClientProps = {
   }
 }
 
-type NotificationTopicId = 'project_updates' | 'product_updates' | 'leaderboard' | 'marketing'
+type ToggleKey = 'push' | 'monthly_report' | 'email' | 'project_updates' | 'product_updates' | 'leaderboard' | 'marketing'
+
+function ToggleSwitch({ checked, onToggle }: { checked: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={onToggle}
+      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+        checked ? 'bg-lime-400' : 'bg-white/10'
+      }`}
+    >
+      <span
+        className={`inline-block h-6 w-6 transform rounded-full transition duration-200 ease-in-out ${
+          checked ? 'translate-x-5 bg-[#0B0F15]' : 'translate-x-0 bg-white'
+        }`}
+      />
+    </button>
+  )
+}
+
+function SettingRow({
+  title,
+  description,
+  checked,
+  onToggle,
+}: {
+  title: string
+  description: string
+  checked: boolean
+  onToggle: () => void
+}) {
+  return (
+    <div className="px-5 py-4 flex items-center justify-between gap-4 bg-transparent active:bg-white/[0.02] transition-colors">
+      <div className="flex flex-col justify-center flex-1 min-w-0">
+        <h3 className="text-base font-medium text-white mb-0.5">{title}</h3>
+        <span className="text-xs text-gray-500 leading-snug">{description}</span>
+      </div>
+      <ToggleSwitch checked={checked} onToggle={onToggle} />
+    </div>
+  )
+}
 
 export function NotificationsClient({ initial }: NotificationsClientProps) {
-  const [state, formAction, isPending] = useActionState<NotificationState, FormData>(
-    updateNotifications,
-    {},
-  )
+  const router = useRouter()
+  const [settings, setSettings] = useState(initial)
 
-  const notificationTypes: Array<{
-    id: NotificationTopicId
-    label: string
-    description: string
-    icon: typeof Zap
-    color: string
-    bgColor: string
-  }> = [
-    {
-      id: 'project_updates',
-      label: 'Updates projets',
-      description: 'Nouvelles photos, milestones et nouvelles étapes de vos investissements.',
-      icon: Zap,
-      color: 'text-warning',
-      bgColor: 'bg-warning/10',
-    },
-    {
-      id: 'product_updates',
-      label: 'Actus boutique',
-      description: 'Soyez informé des nouveaux produits et des réassorts exclusifs.',
-      icon: Package,
-      color: 'text-info',
-      bgColor: 'bg-info/10',
-    },
-    {
-      id: 'leaderboard',
-      label: 'Classement & Gamification',
-      description: 'Suivez votre progression et vos changements de rang dans la communauté.',
-      icon: Trophy,
-      color: 'text-accent',
-      bgColor: 'bg-accent/10',
-    },
-    {
-      id: 'marketing',
-      label: 'Newsletter & Offres',
-      description: 'Conseils personnalisés, annonces et offres partenaires (optionnel).',
-      icon: Mail,
-      color: 'text-success',
-      bgColor: 'bg-success/10',
-    },
-  ]
+  useEffect(() => {
+    // Hide mobile bottom nav when notifications page is active
+    const bottomNav = document.getElementById('mobile-bottom-nav')
+    if (bottomNav) {
+      bottomNav.style.display = 'none'
+    }
+
+    return () => {
+      // Restore mobile bottom nav when component unmounts
+      if (bottomNav) {
+        bottomNav.style.display = ''
+      }
+    }
+  }, [])
+
+  const handleToggle = async (key: ToggleKey) => {
+    // Optimistic update
+    setSettings((prev) => ({ ...prev, [key]: !prev[key] }))
+
+    // Call server action in background
+    const formData = new FormData()
+    Object.entries(settings).forEach(([k, v]) => {
+      if (v) {
+        formData.append(k, k)
+      }
+    })
+    
+    // Toggle the current key in the form data
+    if (!settings[key]) {
+      formData.append(key, key)
+    }
+
+    try {
+      await updateNotifications(formData)
+    } catch (error) {
+      // Revert on error
+      setSettings((prev) => ({ ...prev, [key]: !prev[key] }))
+    }
+  }
 
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-xl">
-            <Bell className="h-6 w-6 text-primary" />
-          </div>
-          <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
-            Centre de Notifications
-          </h1>
-        </div>
-        <p className="text-muted-foreground font-medium ml-11">
-          Personnalisez votre expérience et restez informé de ce qui compte pour vous.
-        </p>
+    <div className="min-h-screen bg-[#0B0F15] text-white flex flex-col pb-12">
+      {/* Header */}
+      <div className="sticky top-0 z-50 px-4 py-4 flex items-center bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/5">
+        <button
+          onClick={() => router.back()}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+          aria-label="Retour"
+        >
+          <ArrowLeft className="h-5 w-5 text-white" />
+        </button>
+        <span className="flex-1 text-center text-base font-semibold text-white">Notifications</span>
+        <div className="w-10" />
       </div>
 
-      <Form action={formAction} className="space-y-8">
-        <Card className="border bg-background/70 shadow-xl backdrop-blur-md overflow-hidden">
-          <CardHeader className="p-6 pb-4 sm:p-8 sm:pb-6 border-b border-border/50 bg-muted/30">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <CardTitle className="text-xl font-bold">Préférences de réception</CardTitle>
-                <CardDescription className="text-sm">
-                  Contrôlez la fréquence et le type de messages reçus.
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            {state.error || state.success ? (
-              <div className="px-6 pt-6 sm:px-8">
-                {state.error && (
-                  <div className="rounded-xl bg-destructive/10 p-4 text-sm text-destructive font-medium border border-destructive/20 animate-in zoom-in-95">
-                    {state.error}
-                  </div>
-                )}
-                {state.success && (
-                  <div className="flex items-center gap-3 rounded-xl bg-client-emerald-500/10 p-4 text-sm text-client-emerald-600 font-bold border border-client-emerald-500/20 animate-in zoom-in-95">
-                    <div className="bg-client-emerald-500 text-client-white rounded-full p-0.5">
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-                    {state.success}
-                  </div>
-                )}
-              </div>
-            ) : null}
+      {/* Hero */}
+      <div className="px-6 pt-8 pb-6">
+        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Préférences</h1>
+        <p className="text-gray-400 text-sm">Contrôlez ce que vous recevez et où vous le recevez.</p>
+      </div>
 
-            {/* Channels Section */}
-            <Fieldset className="p-6 sm:p-8 border-b border-border/50 space-y-5">
-              <FieldsetLegend className="flex items-center gap-2 mb-4">
-                <Radio className="h-4 w-4 text-primary" />
-                <span className="text-sm font-black uppercase tracking-widest text-muted-foreground">
-                  Canaux de diffusion
-                </span>
-              </FieldsetLegend>
+      {/* Block 1: Canaux de diffusion */}
+      <div className="text-xs font-bold text-gray-500 uppercase tracking-widest px-6 mb-2 mt-2">
+        Canaux de diffusion
+      </div>
+      <div className="mx-6 mb-6 bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+        <SettingRow
+          title="Notifications Push"
+          description="Alertes instantanées sur votre téléphone."
+          checked={settings.push}
+          onToggle={() => handleToggle('push')}
+        />
+        <div className="border-b border-white/5" />
+        <SettingRow
+          title="Résumé Mensuel"
+          description="Votre rapport d'impact par email."
+          checked={settings.monthly_report}
+          onToggle={() => handleToggle('monthly_report')}
+        />
+        <div className="border-b border-white/5" />
+        <SettingRow
+          title="Email"
+          description="Mises à jour majeures de la plateforme."
+          checked={settings.email}
+          onToggle={() => handleToggle('email')}
+        />
+      </div>
 
-              <CheckboxGroup
-                defaultValue={['email', 'monthly']}
-                className="grid gap-4 sm:grid-cols-2"
-              >
-                <label
-                  htmlFor="notify_email"
-                  className="flex items-start gap-3 rounded-xl border border-border/60 p-3 hover:bg-muted/30"
-                >
-                  <Checkbox
-                    id="notify_email"
-                    name="notify_email"
-                    value="email"
-                    defaultChecked={initial.email}
-                    className="mt-1"
-                  />
-                  <div>
-                    <p className="text-sm font-semibold">Email</p>
-                    <p className="text-xs text-muted-foreground">
-                      Recevoir les alertes importantes par email.
-                    </p>
-                  </div>
-                </label>
-                <label
-                  htmlFor="notify_push"
-                  className="flex items-start gap-3 rounded-xl border border-border/60 p-3 hover:bg-muted/30"
-                >
-                  <Checkbox
-                    id="notify_push"
-                    name="notify_push"
-                    value="push"
-                    defaultChecked={initial.push}
-                    className="mt-1"
-                  />
-                  <div>
-                    <p className="text-sm font-semibold">Notifications Push</p>
-                    <p className="text-xs text-muted-foreground">
-                      Recevoir les notifications sur votre navigateur/mobile.
-                    </p>
-                  </div>
-                </label>
-                <label
-                  htmlFor="notify_monthly"
-                  className="flex items-start gap-3 rounded-xl border border-border/60 p-3 hover:bg-muted/30 sm:col-span-2"
-                >
-                  <Checkbox
-                    id="notify_monthly"
-                    name="notify_monthly"
-                    value="monthly"
-                    defaultChecked={initial.monthly_report}
-                    className="mt-1"
-                  />
-                  <div>
-                    <p className="text-sm font-semibold">Rapport mensuel d'impact</p>
-                    <p className="text-xs text-muted-foreground">
-                      Un résumé complet de votre contribution chaque mois.
-                    </p>
-                  </div>
-                </label>
-              </CheckboxGroup>
-            </Fieldset>
-
-            {/* Topics Section */}
-            <div className="divide-y divide-border/50">
-              <div className="px-6 pt-6 sm:px-8 flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-primary" />
-                <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">
-                  Sujets d'intérêt
-                </h3>
-              </div>
-
-              {notificationTypes.map((type) => (
-                <label
-                  key={type.id}
-                  htmlFor={type.id}
-                  className="flex items-start gap-4 p-6 sm:p-8 transition-all hover:bg-muted/40 cursor-pointer group"
-                >
-                  <div
-                    className={cn(
-                      'p-3 rounded-2xl shrink-0 transition-transform group-hover:scale-110 duration-300',
-                      type.bgColor,
-                    )}
-                  >
-                    <type.icon className={cn('h-6 w-6', type.color)} />
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-base font-bold leading-none group-hover:text-primary transition-colors">
-                      {type.label}
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                      {type.description}
-                    </p>
-                  </div>
-                  <div className="pt-1">
-                    <Checkbox
-                      id={type.id}
-                      name={type.id}
-                      defaultChecked={initial[type.id]}
-                      className="h-6 w-6 rounded-lg border-2 border-muted-foreground/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all shadow-sm"
-                    />
-                  </div>
-                </label>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-primary/5 rounded-2xl border border-primary/10 shadow-inner">
-          <div className="text-sm text-muted-foreground font-medium">
-            Vos modifications sont appliquées instantanément après l'enregistrement.
-          </div>
-          <Button
-            type="submit"
-            loading={isPending}
-            className="w-full sm:w-auto px-10 py-6 text-base font-black uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30"
-          >
-            Enregistrer les choix
-          </Button>
-        </div>
-      </Form>
+      {/* Block 2: Vos intérêts */}
+      <div className="text-xs font-bold text-gray-500 uppercase tracking-widest px-6 mb-2 mt-8">
+        Vos intérêts
+      </div>
+      <div className="mx-6 bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+        <SettingRow
+          title="Mises à jour Projets"
+          description="Photos et avancées de vos investissements."
+          checked={settings.project_updates}
+          onToggle={() => handleToggle('project_updates')}
+        />
+        <div className="border-b border-white/5" />
+        <SettingRow
+          title="Boutique & Récompenses"
+          description="Nouveaux produits et réassorts limités."
+          checked={settings.product_updates}
+          onToggle={() => handleToggle('product_updates')}
+        />
+        <div className="border-b border-white/5" />
+        <SettingRow
+          title="Classement & Collectif"
+          description="Votre rang et les actions de la communauté."
+          checked={settings.leaderboard}
+          onToggle={() => handleToggle('leaderboard')}
+        />
+      </div>
     </div>
   )
 }
