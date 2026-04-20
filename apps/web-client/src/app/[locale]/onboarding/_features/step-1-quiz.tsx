@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, HelpCircle, Trophy } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 export function Step1Quiz() {
@@ -9,8 +9,8 @@ export function Step1Quiz() {
 
   return (
     <div className="px-6 flex flex-col items-center max-w-md mx-auto w-full pt-12">
-      <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center text-3xl mb-6 border border-emerald-500/30">
-        🤔
+      <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6 border border-emerald-500/30">
+        <HelpCircle size={32} className="text-emerald-400" />
       </div>
       <h2 className="text-2xl font-black text-center mb-2">
         Faisons un test rapide.
@@ -48,7 +48,9 @@ export function Step1Quiz() {
       {quizAnswered && (
         <div className="mt-8 p-5 bg-gradient-to-br from-emerald-900/40 to-transparent border border-emerald-500/30 rounded-2xl w-full animate-in zoom-in-95 duration-300">
           <div className="flex items-start gap-4">
-            <div className="text-3xl">🎉</div>
+            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center shrink-0">
+              <Trophy size={24} className="text-emerald-400" />
+            </div>
             <div>
               <h3 className="font-bold text-white mb-1">C'est exact !</h3>
               <p className="text-white/60 text-sm leading-snug mb-4">
