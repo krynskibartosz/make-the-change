@@ -109,16 +109,16 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
       <div className="relative z-10 mx-6 mb-6 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center h-20">
         <div className="flex flex-col gap-1">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{leftLabel}</span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-white tracking-tighter">{formatEuros(leftValue)}</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl font-black text-white tracking-tighter leading-none">{formatEuros(leftValue)}</span>
             <span className="text-lg font-bold text-lime-400">{leftUnit}</span>
           </div>
         </div>
         <div className="w-px h-12 bg-white/10"></div>
         <div className="flex flex-col gap-1 text-right">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{rightLabel}</span>
-          <div className="flex items-baseline gap-1 justify-end">
-            <span className="text-3xl font-black text-white tracking-tighter">{formatEuros(rightValue)}</span>
+          <div className="flex items-baseline gap-1.5 justify-end">
+            <span className="text-3xl font-black text-white tracking-tighter leading-none">{formatEuros(rightValue)}</span>
             <span className="text-lg font-bold text-lime-400">{rightUnit}</span>
           </div>
         </div>
@@ -152,17 +152,17 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                         <Leaf className="h-6 w-6 text-lime-400" />
                       </div>
                     )}
-                    <div className="flex min-w-0 flex-col justify-center">
-                      <h3 className="truncate text-base font-bold text-white">
+                    <div className="flex flex-col justify-center flex-1 min-w-0 py-1">
+                      <h3 className="text-[15px] font-semibold text-white line-clamp-2 leading-snug mb-1">
                         {project?.name_default || 'Projet'}
                       </h3>
-                      <span className="mt-0.5 text-xs text-gray-400">
+                      <span className="text-xs text-gray-400 font-medium">
                         {formatDate(investment.created_at)}
                       </span>
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className="text-base font-bold text-white">
+                    <span className="text-[15px] font-black tracking-tight text-white">
                       {formatEuros(investment.amount_eur)} €
                     </span>
                     <span
@@ -206,22 +206,22 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                         <Leaf className="h-6 w-6 text-white" />
                       </div>
                     )}
-                    <div className="flex min-w-0 flex-col justify-center">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <h3 className="truncate text-sm font-bold text-white">
+                    <div className="flex flex-col justify-center flex-1 min-w-0 py-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-[15px] font-semibold text-white line-clamp-2 leading-snug">
                           {product?.name_default || 'Produit'}
                         </h3>
-                        <span className="rounded bg-white/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-gray-300">
+                        <span className="rounded bg-white/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-gray-300 shrink-0">
                           Achat
                         </span>
                       </div>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-400 font-medium">
                         {formatDate(order.created_at)}
                       </span>
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className="text-sm font-bold text-white">
+                    <span className="text-[15px] font-black tracking-tight text-white">
                       {paidInEuros ? `${formatEuros(order.amount_eur)} €` : `${formatEuros(order.amount_points)} pts`}
                     </span>
                     <span
