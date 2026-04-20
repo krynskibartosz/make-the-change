@@ -21,6 +21,7 @@ export type MockInvestmentRecord = {
     name_default: string
     slug: string
     status: string
+    cover_image_url: string | null
   }
 }
 
@@ -111,9 +112,10 @@ const EXISTING_VIEWER_INVESTMENTS: MockInvestmentRecord[] = [
     status: 'active',
     created_at: '2026-04-14T09:20:00.000Z',
     project: {
-      name_default: "Ruchers d'apiculteurs independants a Antsirabe",
+      name_default: "Ruchers d'apiculteurs indépendants à Antsirabe",
       slug: MOCK_PROJECT_ANTSIRABE_SLUG,
       status: 'active',
+      cover_image_url: '/images/projects/antsirabe-ruchers-1.jpg',
     },
   },
   {
@@ -127,6 +129,7 @@ const EXISTING_VIEWER_INVESTMENTS: MockInvestmentRecord[] = [
       name_default: 'Miellerie de Manakara',
       slug: MOCK_PROJECT_MANAKARA_SLUG,
       status: 'active',
+      cover_image_url: '/images/projects/miellerie-manakara.jpg',
     },
   },
 ]
