@@ -149,19 +149,19 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
               {/* Glow subtil */}
               <div className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/5 blur-2xl transition-colors duration-500 group-hover:bg-white/10" />
 
-              {/* Avatar Stack — 3 mascottes superposées */}
-              <div className="relative z-10 mb-2 mt-1 flex items-center">
-                <div className="relative z-30 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1A1F26] bg-[#0B0F15] p-0.5 shadow-md transition-transform duration-300 group-hover:-translate-y-1">
-                  <img src="/sylva.png" alt="Terres et Forêts" className="h-full w-full object-contain" />
+              {/* Avatar Stack — 3 mascottes superposées (Premium) */}
+              <div className="relative z-10 mb-3 mt-1 flex items-center pl-1">
+                <div className="relative z-30 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0B0F15] shadow-lg ring-2 ring-[#1A1F26] transition-transform duration-300 group-hover:-translate-y-1">
+                  <img src="/sylva.png" alt="Terres et Forêts" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
-                <div className="relative z-20 -ml-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1A1F26] bg-[#0B0F15] p-0.5 shadow-md transition-transform delay-75 duration-300 group-hover:-translate-y-1">
-                  <img src="/abeille-transparente.png" alt="Vie Sauvage" className="h-full w-full object-contain" />
+                <div className="relative z-20 -ml-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0B0F15] shadow-lg ring-2 ring-[#1A1F26] transition-transform delay-75 duration-300 group-hover:-translate-y-1">
+                  <img src="/abeille-transparente.png" alt="Vie Sauvage" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
-                <div className="relative z-10 -ml-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1A1F26] bg-[#0B0F15] p-0.5 shadow-md transition-transform delay-150 duration-300 group-hover:-translate-y-1">
-                  <img src="/aura.png" alt="Artisans Locaux" className="h-full w-full object-contain" />
+                <div className="relative z-10 -ml-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0B0F15] shadow-lg ring-2 ring-[#1A1F26] transition-transform delay-150 duration-300 group-hover:-translate-y-1">
+                  <img src="/aura.png" alt="Artisans Locaux" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
-                <div className="relative z-40 -ml-2 flex h-6 w-6 items-center justify-center rounded-full border border-lime-400/30 bg-lime-400/20 backdrop-blur-md transition-all group-hover:scale-110 group-hover:bg-lime-400/30">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="3">
+                <div className="relative z-40 -ml-3 flex h-7 w-7 items-center justify-center rounded-full border border-lime-400/20 bg-lime-400/10 shadow-sm backdrop-blur-md transition-all group-hover:scale-110 group-hover:bg-lime-400/20">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="3">
                     <path d="M12 5v14M5 12h14" />
                   </svg>
                 </div>
