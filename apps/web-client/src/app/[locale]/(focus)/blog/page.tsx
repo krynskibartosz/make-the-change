@@ -65,37 +65,35 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       {/* Chips catégories scrollables */}
       {categories.length > 0 ? (
-        <div className="relative z-10 w-full overflow-x-auto scrollbar-hide pt-2 pb-4">
-          <div className="flex gap-2 px-6 w-max">
-            <Link
-              href="/blog"
-              className={cn(
-                'whitespace-nowrap rounded-full px-4 py-2 text-sm transition-all',
-                normalizedCategory === 'all'
-                  ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                  : 'border border-white/10 bg-white/5 text-gray-400 hover:bg-white/10',
-              )}
-            >
-              {t('categories.all')}
-            </Link>
-            {categories.map((category) => {
-              const isActive = normalizedCategory === category.toLowerCase()
-              return (
-                <Link
-                  key={category}
-                  href={`/blog?category=${encodeURIComponent(category)}`}
-                  className={cn(
-                    'whitespace-nowrap rounded-full px-4 py-2 text-sm transition-all',
-                    isActive
-                      ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                      : 'border border-white/10 bg-white/5 text-gray-400 hover:bg-white/10',
-                  )}
-                >
-                  {category}
-                </Link>
-              )
-            })}
-          </div>
+        <div className="relative z-10 w-full overflow-x-auto pb-6 pt-2 px-6 flex gap-2" style={{ scrollbarWidth: 'none' }}>
+          <Link
+            href="/blog"
+            className={cn(
+              'whitespace-nowrap px-4 py-2 rounded-full text-sm',
+              normalizedCategory === 'all'
+                ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                : 'border border-white/10 bg-white/5 text-gray-400',
+            )}
+          >
+            {t('categories.all')}
+          </Link>
+          {categories.map((category) => {
+            const isActive = normalizedCategory === category.toLowerCase()
+            return (
+              <Link
+                key={category}
+                href={`/blog?category=${encodeURIComponent(category)}`}
+                className={cn(
+                  'whitespace-nowrap px-4 py-2 rounded-full text-sm',
+                  isActive
+                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                    : 'border border-white/10 bg-white/5 text-gray-400',
+                )}
+              >
+                {category}
+              </Link>
+            )
+          })}
         </div>
       ) : null}
 
@@ -103,65 +101,64 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {featuredPost ? (
         <Link
           href={`/blog/${featuredPost.slug}`}
-          className="relative z-10 mx-6 mb-8 mt-2 block overflow-hidden rounded-[24px] aspect-[4/5] sm:aspect-square group"
+          className="relative z-10 mx-6 mb-8 block overflow-hidden rounded-[24px] aspect-[4/5] sm:aspect-square group"
         >
           {featuredPost.coverImage ? (
             // biome-ignore lint/performance/noImgElement: blog cover can be remote
             <img
               src={featuredPost.coverImage}
-              alt={featuredPost.title}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              alt="Cover"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-lime-500/20 via-emerald-900/20 to-[#0B0F15]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/80 to-transparent" />
 
           <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col items-start">
-            <span className="mb-3 px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider">
+            <span className="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider mb-3">
               À la une
             </span>
             <h2 className="text-2xl font-bold text-white mb-2 leading-tight text-balance">
               {featuredPost.title}
             </h2>
-            <p className="text-xs text-gray-300 font-medium">
-              {featuredPost.author?.name ? `${featuredPost.author.name} · ` : ''}
+            <span className="text-xs text-gray-300 font-medium">
               {featuredPost.publishedAt ? formatDate(featuredPost.publishedAt) : null}
-            </p>
+            </span>
           </div>
         </Link>
       ) : null}
 
       {/* Flux d'articles : liste compacte */}
       {otherPosts.length > 0 ? (
-        <div className="relative z-10 px-6 flex flex-col gap-6">
+        <div className="relative z-10 px-6 flex flex-col gap-6 mb-12">
           {otherPosts.map((post) => {
             const primaryTag = post.tags[0]
             return (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="flex items-center gap-4 group"
+                className="flex items-center gap-4 group cursor-pointer w-full"
               >
                 <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 border border-white/5 bg-white/5">
                   {post.coverImage ? (
                     // biome-ignore lint/performance/noImgElement: blog cover can be remote
                     <img
                       src={post.coverImage}
-                      alt={post.title}
+                      alt="Miniature"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : null}
                 </div>
-                <div className="flex flex-col justify-center min-w-0">
+                <div className="flex flex-col justify-center flex-1 min-w-0">
                   {primaryTag ? (
-                    <span className="text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-1">
+                    <span className="text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-1.5">
                       {primaryTag}
                     </span>
                   ) : null}
-                  <span className="text-base font-semibold text-white leading-snug line-clamp-2 mb-2 text-pretty">
+                  <h3 className="text-base font-semibold text-white leading-snug line-clamp-2 mb-2 text-pretty">
                     {post.title}
-                  </span>
+                  </h3>
                   <span className="text-xs text-gray-500">
                     {post.publishedAt ? formatDate(post.publishedAt) : null}
                   </span>
