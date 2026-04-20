@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Share2 } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
 import { useRouter } from '@/i18n/navigation'
 
@@ -39,5 +39,38 @@ export function BlogShell({ title = 'Blog', children }: BlogShellProps) {
 
       {children}
     </div>
+  )
+}
+
+export function ArticleHeader() {
+  const router = useRouter()
+
+  const handleShare = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      await navigator.share({ url: window.location.href })
+    } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      await navigator.clipboard.writeText(window.location.href)
+    }
+  }
+
+  return (
+    <header className="fixed top-0 left-0 w-full z-50 px-4 py-4 flex items-center justify-between bg-[#0B0F15]/90 backdrop-blur-xl border-b border-white/5">
+      <button
+        type="button"
+        onClick={() => router.back()}
+        className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center active:bg-white/10 transition-colors"
+        aria-label="Retour"
+      >
+        <ChevronLeft className="h-5 w-5 text-white" />
+      </button>
+      <button
+        type="button"
+        onClick={handleShare}
+        className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center active:bg-white/10 transition-colors"
+        aria-label="Partager"
+      >
+        <Share2 className="h-5 w-5 text-white" />
+      </button>
+    </header>
   )
 }

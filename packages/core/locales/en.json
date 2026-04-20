@@ -1723,7 +1723,10 @@
       "back_to_blog": "Back to blog",
       "author_label": "Author",
       "published_label": "Published on",
-      "all_articles": "All articles"
+      "all_articles": "All articles",
+      "reading_time": "Reading · {minutes} min",
+      "team_name": "Make the Change team",
+      "published_on": "Published {date}"
     },
     "blog_list": {
       "badge": "Blog & Updates",

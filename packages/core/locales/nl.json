@@ -1638,7 +1638,10 @@
       "back_to_blog": "Terug naar blog",
       "author_label": "Auteur",
       "published_label": "Gepubliceerd op",
-      "all_articles": "Alle artikelen"
+      "all_articles": "Alle artikelen",
+      "reading_time": "Lezen · {minutes} min",
+      "team_name": "Make the Change team",
+      "published_on": "Gepubliceerd op {date}"
     },
     "blog_list": {
       "badge": "Blog & Updates",

@@ -1,10 +1,9 @@
 import type { Locale } from '@make-the-change/core/i18n'
 import { defaultLocale, isLocale } from '@make-the-change/core/i18n'
-import { User } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { BlogShell } from '@/app/[locale]/(focus)/blog/_features/blog-shell'
+import { ArticleHeader } from '@/app/[locale]/(focus)/blog/_features/blog-shell'
 import { getBlogPostBySlug } from '@/app/[locale]/(focus)/blog/_features/blog-data'
 import { RenderTipTapContent } from '@/app/[locale]/(focus)/blog/_features/content/render-tiptap-content'
 import { formatDate, getLocalizedContent } from '@/lib/utils'
@@ -58,6 +57,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound()
   }
 
+  const wordCount = post.rawContent.split(/\s+/).filter(Boolean).length
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200))
+  const primaryTag = post.tags[0] ?? null
+  const authorInitials = post.author?.name
+    ? post.author.name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : 'MT'
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -78,90 +89,88 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <BlogShell title={post.title}>
+    <div className="min-h-screen bg-[#0B0F15] text-white pb-24">
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
 
-      {/* Cover hero */}
-      <div className="relative w-full aspect-[4/5] sm:aspect-[3/2] overflow-hidden">
-        {post.coverImage ? (
-          // biome-ignore lint/performance/noImgElement: remote cover image
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-lime-500/20 via-emerald-900/20 to-[#0B0F15]" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/60 to-transparent" />
+      <ArticleHeader />
 
-        <div className="absolute bottom-0 left-0 w-full px-6 pt-20 pb-8 flex flex-col items-start">
-          {post.tags.length > 0 ? (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur-md"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          ) : null}
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white hyphens-none text-balance leading-[1.1]">
+      <main className="pt-[72px]">
+        {/* Cover image */}
+        <div className="w-full aspect-video bg-[#1A1F26] overflow-hidden">
+          {post.coverImage ? (
+            // biome-ignore lint/performance/noImgElement: remote cover image
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-lime-500/20 via-emerald-900/20 to-[#0B0F15]" />
+          )}
+        </div>
+
+        {/* Article header */}
+        <header className="px-6 pt-6">
+          <div className="flex items-center gap-2 mb-4">
+            {primaryTag ? (
+              <span className="px-2.5 py-1 rounded-md bg-lime-400/10 text-lime-400 text-[10px] font-bold uppercase tracking-wider border border-lime-400/20">
+                {primaryTag}
+              </span>
+            ) : null}
+            <span className="text-xs text-gray-500 font-medium">
+              {t('reading_time', { minutes: readingTime })}
+            </span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-6 text-balance">
             {post.title}
           </h1>
-        </div>
-      </div>
 
-      {/* Meta : auteur + date */}
-      <div className="relative z-10 px-6 pt-6 flex items-center gap-4 border-b border-white/5 pb-6">
-        {post.author ? (
-          <div className="flex items-center gap-3">
-            {post.author.avatarUrl ? (
+          {/* Author + date */}
+          <div className="flex items-center gap-3 py-4 border-y border-white/5">
+            {post.author?.avatarUrl ? (
               // biome-ignore lint/performance/noImgElement: remote avatar
               <img
                 src={post.author.avatarUrl}
                 alt={post.author.name}
-                className="h-10 w-10 rounded-full border border-white/10 object-cover"
+                className="h-10 w-10 rounded-full object-cover shrink-0"
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5">
-                <User className="h-5 w-5 text-white/80" />
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-lime-400 to-green-600 flex items-center justify-center shrink-0">
+                <span className="text-[#0B0F15] font-bold text-sm">{authorInitials}</span>
               </div>
             )}
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-white leading-none">
-                {post.author.name}
+              <span className="text-sm font-bold text-white leading-none">
+                {post.author?.name ?? t('team_name')}
               </span>
-              <span className="mt-1 text-[11px] uppercase tracking-wider text-gray-500">
-                {t('author_label')}
-              </span>
+              {post.publishedAt ? (
+                <span className="mt-1 text-xs text-gray-500">
+                  {t('published_on', { date: formatDate(post.publishedAt) })}
+                </span>
+              ) : null}
             </div>
           </div>
-        ) : null}
-        {post.publishedAt ? (
-          <div className="ml-auto flex flex-col items-end">
-            <span className="text-sm font-semibold text-white leading-none">
-              {formatDate(post.publishedAt)}
-            </span>
-            <span className="mt-1 text-[11px] uppercase tracking-wider text-gray-500">
-              {t('published_label')}
-            </span>
+        </header>
+
+        {/* Article body */}
+        <article className="px-6 pt-8 pb-12">
+          {post.excerpt ? (
+            <p className="mb-8 text-lg leading-relaxed text-white/70 text-pretty font-light border-l-2 border-lime-400/40 pl-4 italic">
+              {post.excerpt}
+            </p>
+          ) : null}
+
+          {/* Drop cap on first paragraph via scoped CSS */}
+          <style>{`.article-body>div>p:first-of-type::first-letter{font-size:3.5rem;font-weight:900;float:left;margin-right:0.35rem;margin-top:0.1rem;line-height:1;color:white}`}</style>
+          <div className="article-body">
+            <RenderTipTapContent
+              content={post.content}
+              className="[&_p]:text-gray-300 [&_p]:leading-relaxed max-w-none"
+            />
           </div>
-        ) : null}
-      </div>
-
-      {/* Corps de l'article */}
-      <article className="relative z-10 px-6 pt-8 pb-12">
-        {post.excerpt ? (
-          <p className="mb-8 text-lg leading-relaxed text-white/80 text-pretty font-light">
-            {post.excerpt}
-          </p>
-        ) : null}
-
-        <RenderTipTapContent content={post.content} className="max-w-none" />
-      </article>
-    </BlogShell>
+        </article>
+      </main>
+    </div>
   )
 }

@@ -1741,7 +1741,10 @@
       "back_to_blog": "Retour au blog",
       "author_label": "Auteur",
       "published_label": "Publié le",
-      "all_articles": "Tous les articles"
+      "all_articles": "Tous les articles",
+      "reading_time": "Lecture · {minutes} min",
+      "team_name": "L’équipe Make the Change",
+      "published_on": "Publié le {date}"
     },
     "blog_list": {
       "badge": "LE MAG'",
