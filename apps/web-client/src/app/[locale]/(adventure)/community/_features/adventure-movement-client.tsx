@@ -22,6 +22,7 @@ type ImpactEvent = {
   id: string
   name: string
   profileId?: string
+  avatarUrl?: string
   time: string
   action: string
   icon: LucideIcon
@@ -37,6 +38,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-1',
     name: 'Thomas M.',
     profileId: 'thomas-m',
+    avatarUrl: 'https://i.pravatar.cc/80?u=thomas-m',
     time: 'Il y a 2 min',
     action: 'A apporté ses graines au Rucher de Manakara pour les Terres & Forêts.',
     icon: Sprout,
@@ -75,6 +77,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-4',
     name: 'Sarah L.',
     profileId: 'sarah-l',
+    avatarUrl: 'https://i.pravatar.cc/80?u=sarah-l',
     time: 'Il y a 1 heure',
     action: 'A debloque le Lynx Boreal dans le BioDex.',
     icon: PawPrint,
@@ -87,6 +90,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-5',
     name: 'Marie-Claire B.',
     profileId: 'marie-claire-b',
+    avatarUrl: 'https://i.pravatar.cc/80?u=marie-claire-b',
     time: 'Il y a 3 heures',
     action: 'A ajoute 120 graines au reservoir commun pour Artisans Locaux.',
     icon: Globe,
@@ -124,6 +128,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-8',
     name: 'Amira K.',
     profileId: 'amira-k',
+    avatarUrl: 'https://i.pravatar.cc/80?u=amira-k',
     time: 'Hier',
     action: "A decouvert l'Aigle de Bonelli dans le BioDex.",
     icon: Bird,
@@ -215,15 +220,26 @@ function ImpactCard({
 
   const header = (
     <div className="mb-3 flex items-center gap-3">
-      <div
-        className={cn(
-          'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold',
-          event.avatarColor,
-          event.profileId ? 'border-border/30' : accentTheme.accentBorder,
-        )}
-      >
-        {event.name[0]}
-      </div>
+      {event.avatarUrl ? (
+        <img
+          src={event.avatarUrl}
+          alt={event.name}
+          className={cn(
+            'h-10 w-10 shrink-0 rounded-full border object-cover',
+            event.profileId ? 'border-border/30' : accentTheme.accentBorder,
+          )}
+        />
+      ) : (
+        <div
+          className={cn(
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold',
+            event.avatarColor,
+            event.profileId ? 'border-border/30' : accentTheme.accentBorder,
+          )}
+        >
+          {event.name[0]}
+        </div>
+      )}
       <div className="min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="truncate text-[15px] font-bold tracking-tight text-white">{event.name}</span>
