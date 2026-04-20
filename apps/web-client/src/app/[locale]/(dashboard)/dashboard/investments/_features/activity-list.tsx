@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Leaf } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
+import { Leaf } from 'lucide-react'
+import { useRouter } from '@/i18n/navigation'
 import { formatDate } from '@/lib/utils'
 import { ActivityFilter } from './activity-filter'
 
@@ -66,6 +66,7 @@ type ActivityListProps = {
 
 export function ActivityList({ userInvestments, userOrders, totalInvested, totalPoints }: ActivityListProps) {
   const [filter, setFilter] = useState<FilterType>('all')
+  const router = useRouter()
 
   const allActivities: UnifiedActivity[] = [...userInvestments, ...userOrders].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
@@ -141,7 +142,10 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
               const statusLabel = STATUS_LABELS[investment.status] || investment.status
 
               const content = (
-                <div className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]">
+                <div
+                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]"
+                  onClick={() => router.push(`/modal/transactions/${investment.id}?type=investment`)}
+                >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
                     {project?.cover_image_url ? (
                       <img
@@ -180,13 +184,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                 </div>
               )
 
-              return href ? (
-                <Link key={investment.id} href={href} className="block">
-                  {content}
-                </Link>
-              ) : (
-                <div key={investment.id}>{content}</div>
-              )
+              return <div key={investment.id}>{content}</div>
             } else {
               const order = activity
               const product = order.product
@@ -195,7 +193,10 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
               const paidInEuros = order.amount_eur > 0
 
               const content = (
-                <div className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]">
+                <div
+                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]"
+                  onClick={() => router.push(`/modal/transactions/${order.id}?type=order`)}
+                >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
                     {product?.cover_image_url ? (
                       <img
@@ -252,13 +253,12 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
           <p className="mb-6 text-sm text-gray-400 text-pretty">
             Soutenez un projet ou achetez un produit pour commencer à bâtir votre héritage d&apos;impact.
           </p>
-          <Link
-            href="/projects"
+          <button
+            onClick={() => router.push('/projects')}
             className="inline-flex items-center gap-2 rounded-2xl bg-lime-400 px-5 py-3 text-sm font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition active:scale-[0.98]"
           >
             Découvrir les projets
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          </button>
         </div>
       )}
     </>
