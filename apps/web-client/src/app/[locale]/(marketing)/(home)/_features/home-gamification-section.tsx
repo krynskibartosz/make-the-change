@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, type Variants } from 'framer-motion'
-import {  Bird, Flame, Users, ArrowRight , Sprout } from 'lucide-react'
+import {  Bird, Flame, ArrowRight , Sprout } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { MarketingSection } from '../../_features/marketing-section'
@@ -140,42 +140,45 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
             </div>
           </motion.article>
 
-          {/* Card 3: Tribes */}
-          <motion.article
-            variants={itemVariants}
-            className="flex flex-col gap-2 rounded-3xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md"
-          >
-            <div className="flex justify-between items-start w-full">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
-                <Users className="h-5 w-5 shrink-0" />
-              </div>
-              <div className="flex shrink-0">
-                <img
-                  className="h-6 w-6 shrink-0 rounded-full border-2 border-[#1a1f24] object-cover"
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-                  alt="Membre de la tribu"
-                />
-                <img
-                  className="-ml-2 h-6 w-6 shrink-0 rounded-full border-2 border-[#1a1f24] object-cover"
-                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80"
-                  alt="Membre de la tribu"
-                />
-                <div className="relative z-10 -ml-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-[#1a1f24] bg-blue-500 text-[8px] font-black text-white shadow-[0_0_12px_rgba(59,130,246,0.4)] ring-1 ring-blue-500/50">
-                  +42
+          {/* Card 3: Faction (Teasing — Sans Faction) */}
+          <motion.div variants={itemVariants} className="h-full">
+            <Link
+              href="/community"
+              className="relative col-span-1 flex h-full min-h-[160px] flex-col justify-between overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-5 group active:scale-[0.98] transition-transform"
+            >
+              {/* Glow subtil */}
+              <div className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/5 blur-2xl transition-colors duration-500 group-hover:bg-white/10" />
+
+              {/* Avatar Stack — 3 mascottes superposées */}
+              <div className="relative z-10 mb-2 mt-1 flex items-center">
+                <div className="relative z-30 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1A1F26] bg-[#0B0F15] p-0.5 shadow-md transition-transform duration-300 group-hover:-translate-y-1">
+                  <img src="/sylva.png" alt="Terres et Forêts" className="h-full w-full object-contain" />
+                </div>
+                <div className="relative z-20 -ml-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1A1F26] bg-[#0B0F15] p-0.5 shadow-md transition-transform delay-75 duration-300 group-hover:-translate-y-1">
+                  <img src="/abeille-transparente.png" alt="Vie Sauvage" className="h-full w-full object-contain" />
+                </div>
+                <div className="relative z-10 -ml-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#1A1F26] bg-[#0B0F15] p-0.5 shadow-md transition-transform delay-150 duration-300 group-hover:-translate-y-1">
+                  <img src="/aura.png" alt="Artisans Locaux" className="h-full w-full object-contain" />
+                </div>
+                <div className="relative z-40 -ml-2 flex h-6 w-6 items-center justify-center rounded-full border border-lime-400/30 bg-lime-400/20 backdrop-blur-md transition-all group-hover:scale-110 group-hover:bg-lime-400/30">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="3">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
                 </div>
               </div>
-            </div>
 
-            <div className="min-w-0">
-              <h3 className="min-w-0 break-words text-left text-sm font-bold leading-tight text-white">Agroforest Pioneers</h3>
-            </div>
-
-            <div className="min-w-0">
-              <p className="mt-1 min-w-0 text-[11px] leading-tight text-muted-foreground line-clamp-3 overflow-hidden text-ellipsis">
-                <span aria-hidden="true">🤝</span> Atteignez des objectifs communs avec votre tribu.
-              </p>
-            </div>
-          </motion.article>
+              {/* CTA */}
+              <div className="relative z-10 mt-auto min-w-0">
+                <span className="mb-1 block text-[9px] font-black uppercase tracking-widest text-gray-500">Votre aventure</span>
+                <h3 className="mb-1.5 text-sm font-bold leading-tight text-white transition-colors group-hover:text-lime-400">
+                  Choisissez un camp
+                </h3>
+                <p className="line-clamp-2 text-[10px] leading-relaxed text-gray-400">
+                  Sélectionnez votre compagnon et rejoignez l&apos;effort collectif.
+                </p>
+              </div>
+            </Link>
+          </motion.div>
         </div>
 
         <motion.div variants={itemVariants} className="mt-4">
