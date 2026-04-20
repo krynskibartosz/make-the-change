@@ -143,7 +143,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           {/* Card 3: Faction (Teasing — Sans Faction) */}
           <motion.div variants={itemVariants} className="h-full">
             <Link
-              href="/community"
+              href="/onboarding"
               className="relative col-span-1 flex h-full min-h-[160px] flex-col justify-between overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-5 group active:scale-[0.98] transition-transform"
             >
               {/* Glow subtil */}
