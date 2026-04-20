@@ -121,7 +121,6 @@ const HomePage = async () => {
           <HomeFeaturedProductsSection
             title={t('shop.title')}
             viewAllLabel={t('shop.view_all')}
-            discoverLabel={t('shop.discover')}
             pointsLabel={t('shop.points_label')}
             products={featuredProductsState.value.map((product) => ({
               ...product,

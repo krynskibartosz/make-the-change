@@ -4,6 +4,7 @@ import { getBlogPosts } from '@/app/[locale]/(focus)/blog/_features/blog-data'
 import type { BlogPost } from '@/app/[locale]/(focus)/blog/_features/blog-types'
 import type { ProductCardProduct } from '@/app/[locale]/(marketing)/products/_features/product-card'
 import { getMockProjects } from '@/app/[locale]/(marketing)/projects/_features/mock-projects'
+import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { isMockDataSource } from '@/lib/mock/data-source'
@@ -362,27 +363,65 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     }
   }
 
-  const featuredProductsStateRaw = mapReadyState(
-    toArrayState<FeaturedProductRow>(featuredProductsResult.data, featuredProductsResult.error),
-    (product): ProductCardProduct => ({
-      id: product.id,
-      slug: product.slug,
-      name_default: product.name_default,
-      name_i18n: toLocalizedRecord(product.name_i18n),
-      short_description_default: product.short_description_default,
-      short_description_i18n: toLocalizedRecord(product.short_description_i18n),
-      price_points: product.price_points,
-      price_eur_equivalent: product.price_eur_equivalent,
-      stock_quantity: product.stock_quantity,
-      featured: product.featured,
-      fulfillment_method: product.fulfillment_method,
-      metadata: product.metadata,
-      images: product.images ?? [],
-      tags: product.tags ?? [],
-    }),
-  )
+  const mockFeaturedProducts: ProductCardProduct[] = getMockProducts()
+    .filter((p) => p.featured)
+    .slice(0, 4)
+    .map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      name_default: p.name_default,
+      name_i18n: p.name_i18n ?? null,
+      short_description_default: p.short_description_default ?? null,
+      short_description_i18n: p.short_description_i18n ?? null,
+      price_points: p.price_points,
+      price_eur_equivalent: p.price_eur_equivalent,
+      stock_quantity: p.stock_quantity,
+      featured: p.featured,
+      fulfillment_method: p.fulfillment_method,
+      metadata: null,
+      images: p.images,
+      tags: p.tags,
+    }))
 
-  const featuredProductsState = featuredProductsStateRaw
+  let featuredProductsState: DataState<ProductCardProduct[]>
+
+  if (isMockDataSource) {
+    featuredProductsState = toArrayState(mockFeaturedProducts, null)
+  } else {
+    const dbProductState = mapReadyState(
+      toArrayState<FeaturedProductRow>(featuredProductsResult.data, featuredProductsResult.error),
+      (product): ProductCardProduct => ({
+        id: product.id,
+        slug: product.slug,
+        name_default: product.name_default,
+        name_i18n: toLocalizedRecord(product.name_i18n),
+        short_description_default: product.short_description_default,
+        short_description_i18n: toLocalizedRecord(product.short_description_i18n),
+        price_points: product.price_points,
+        price_eur_equivalent: product.price_eur_equivalent,
+        stock_quantity: product.stock_quantity,
+        featured: product.featured,
+        fulfillment_method: product.fulfillment_method,
+        metadata: product.metadata,
+        images: product.images ?? [],
+        tags: product.tags ?? [],
+      }),
+    )
+
+    if (dbProductState.status === 'ready') {
+      const mockSlugs = new Set(
+        mockFeaturedProducts
+          .map((p) => p.slug)
+          .filter((s): s is string => typeof s === 'string' && s.length > 0),
+      )
+      const dedupedDb = dbProductState.value.filter((p) => !p.slug || !mockSlugs.has(p.slug))
+      featuredProductsState = toArrayState([...mockFeaturedProducts, ...dedupedDb], null)
+    } else {
+      featuredProductsState = mockFeaturedProducts.length > 0
+        ? toArrayState(mockFeaturedProducts, null)
+        : dbProductState
+    }
+  }
 
   const activeProducersState = mapReadyState(
     toArrayState<ActiveProducerRow>(activeProducersResult.data, activeProducersResult.error),
