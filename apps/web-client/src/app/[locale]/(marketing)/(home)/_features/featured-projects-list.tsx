@@ -62,7 +62,7 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
       <li className="shrink-0">
         <Link
           href="/projects"
-          className="w-72 aspect-square shrink-0 snap-start rounded-3xl border border-lime-500/30 bg-lime-900/10 flex flex-col items-center justify-center gap-3 p-6 text-center group active:scale-[0.98] transition-transform block"
+          className="w-72 aspect-[4/5] shrink-0 snap-start rounded-3xl border border-lime-500/30 bg-lime-900/10 flex flex-col items-center justify-center gap-3 p-6 text-center group active:scale-[0.98] transition-transform block"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-lime-400/20 text-lime-400 transition-transform group-hover:translate-x-1">
             <ArrowRight size={22} />

@@ -51,7 +51,7 @@ export function ProjectThumbnailCard({
     <Link
       href={`/projects/${slug}`}
       prefetch={priority}
-      className="relative w-72 aspect-square shrink-0 snap-start rounded-3xl overflow-hidden border border-white/10 block active:scale-[0.98] transition-transform group shadow-lg"
+      className="relative w-72 aspect-[4/5] shrink-0 snap-start rounded-3xl overflow-hidden border border-white/10 block active:scale-[0.98] transition-transform group shadow-lg"
     >
       {imageUrl ? (
         <img

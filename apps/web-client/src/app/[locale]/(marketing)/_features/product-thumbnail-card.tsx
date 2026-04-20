@@ -42,10 +42,10 @@ export function ProductThumbnailCard({
             src={cleanImage}
             alt={title}
             loading={priority ? 'eager' : 'lazy'}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-lime-500/10 via-[#1A1F26] to-[#0B0F15]">
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-lime-500/10 via-[#1A1F26] to-[#0B0F15]">
             <Sparkles className="w-6 h-6 text-white/20" />
           </div>
         )}
