@@ -106,8 +106,8 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
       </div>
 
       {/* 2. DASHBOARD GLOBAL - Carte Hero Unifiée */}
-      <div className="relative z-10 mx-6 mb-6 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center h-20">
-        <div className="flex flex-col gap-1">
+      <div className="fixed top-[88px] left-6 right-6 z-10 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center h-[88px]">
+        <div className="flex flex-col gap-1 min-w-0">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{leftLabel}</span>
           <div className="flex items-baseline gap-1.5">
             <span className="text-3xl font-black text-white tracking-tighter leading-none">{formatEuros(leftValue)}</span>
@@ -115,7 +115,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
           </div>
         </div>
         <div className="w-px h-12 bg-white/10"></div>
-        <div className="flex flex-col gap-1 text-right">
+        <div className="flex flex-col gap-1 text-right min-w-0">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{rightLabel}</span>
           <div className="flex items-baseline gap-1.5 justify-end">
             <span className="text-3xl font-black text-white tracking-tighter leading-none">{formatEuros(rightValue)}</span>
@@ -125,7 +125,9 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
       </div>
 
       {/* 3. SÉLECTEUR DE FILTRE */}
-      <ActivityFilter currentFilter={filter} onFilterChange={setFilter} />
+      <div className="pt-[96px]">
+        <ActivityFilter currentFilter={filter} onFilterChange={setFilter} />
+      </div>
 
       {/* 4. LISTE DES ACTIVITÉS UNIFIÉES */}
       {filteredActivities.length > 0 ? (

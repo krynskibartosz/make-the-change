@@ -20,7 +20,7 @@ export function ContributionsShell({ title = 'Historique', children }: Contribut
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0B0F15] pb-12 text-white">
+    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0B0F15] pb-12 text-white scrollbar-gutter-stable">
       {/* Halo lumineux */}
       <div className="pointer-events-none absolute left-1/2 top-0 z-0 h-64 w-full -translate-x-1/2 bg-lime-500/5 blur-[100px]" />
 
