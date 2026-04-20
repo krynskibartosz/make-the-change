@@ -1,7 +1,7 @@
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
 import {
-  formatImpact,
+  formatEcologicalImpact,
   ProjectThumbnailCard,
 } from '@/app/[locale]/(marketing)/_features/project-thumbnail-card'
 import type { RelatedProject } from '../project-detail-data'
@@ -92,8 +92,9 @@ export function SimilarProjectsCarousel({
           : realCards.map((project) => {
               const title = getLocalizedContent(project.name_i18n, locale, project.name_default)
               const imageUrl = sanitizeImageUrl(project.hero_image_url) ?? null
-              const impactLabel = formatImpact(
+              const impactLabel = formatEcologicalImpact(
                 typeof project.current_funding === 'number' ? project.current_funding : null,
+                project.type ?? null,
               )
 
               return (
