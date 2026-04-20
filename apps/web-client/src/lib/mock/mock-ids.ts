@@ -52,6 +52,19 @@ export const MOCK_CHALLENGE_ECO_FACT_ID = 'eco-fact'
 export const MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID = 'collective-bravo'
 export const MOCK_CHALLENGE_DAILY_HARVEST_ID = 'daily-harvest'
 
+export const MOCK_BLOG_POST_1_ID = 'mock-blog-post-mielleries-mobiles'
+export const MOCK_BLOG_POST_1_SLUG = 'mielleries-mobiles-apiculture-durable-madagascar'
+export const MOCK_BLOG_POST_2_ID = 'mock-blog-post-oliviers-sardaigne'
+export const MOCK_BLOG_POST_2_SLUG = 'oliviers-sardaigne-agriculture-durable'
+export const MOCK_BLOG_POST_3_ID = 'mock-blog-post-technologie-ruches'
+export const MOCK_BLOG_POST_3_SLUG = 'technologie-suivi-ruches-iot'
+export const MOCK_BLOG_POST_4_ID = 'mock-blog-post-interview-andraina'
+export const MOCK_BLOG_POST_4_SLUG = 'interview-andraina-apiculteur-antsirabe'
+export const MOCK_BLOG_POST_5_ID = 'mock-blog-post-recifs-coraux'
+export const MOCK_BLOG_POST_5_SLUG = 'restauration-recifs-coraux-indonesie'
+export const MOCK_BLOG_POST_6_ID = 'mock-blog-post-apiculture-durable'
+export const MOCK_BLOG_POST_6_SLUG = 'notre-approche-apiculture-durable'
+
 export const FACTION_TO_TRIBE_ID: Record<Faction, string> = {
   'Vie Sauvage': 'campus-biodiversity-lab',
   'Terres & Forêts': 'agroforest-pioneers',

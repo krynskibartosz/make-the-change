@@ -1,9 +1,12 @@
 import 'server-only'
 
+import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { asBoolean, asString, isRecord } from '@/lib/type-guards'
 import type { BlogPost, BlogPostStatus } from './blog-types'
 import { parseBlogContent } from './content/parse-blog-content'
+import { getMockBlogPosts, getMockBlogPostBySlug, getMockBlogPostById } from './mock-blog-posts'
 
 type BlogTagRelationRow = {
   tag?: {
@@ -221,68 +224,126 @@ const mapPost = (row: BlogPostRow): BlogPost => {
   }
 }
 
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .schema('content')
-      .from('blog_posts')
-      .select(BLOG_POST_SELECT)
-      .eq('status', 'published')
-      .order('published_at', { ascending: false })
-      .limit(50)
+const toMockBlogPost = (mockPost: ReturnType<typeof getMockBlogPosts>[number]): BlogPost => {
+  return {
+    id: mockPost.id,
+    slug: mockPost.slug,
+    title: mockPost.title_default,
+    titleI18n: mockPost.title_i18n || null,
+    excerpt: mockPost.excerpt_default,
+    excerptI18n: mockPost.excerpt_i18n || null,
+    content: mockPost.content,
+    rawContent: mockPost.content.kind === 'legacyText' ? mockPost.content.text : JSON.stringify(mockPost.content),
+    coverImage: mockPost.cover_image_url,
+    author: {
+      name: mockPost.author_name,
+      avatarUrl: mockPost.author_avatar_url || null,
+    },
+    publishedAt: mockPost.published_at,
+    tags: mockPost.tags,
+    featured: mockPost.featured,
+    status: 'published' as const,
+  }
+}
 
-    if (error || !data) {
+export const getBlogPosts = unstable_cache(
+  async (): Promise<BlogPost[]> => {
+    if (isMockDataSource) {
+      const mockPosts = getMockBlogPosts()
+      return mockPosts.map((post) => toMockBlogPost(post))
+    }
+
+    try {
+      const supabase = await createClient()
+      const { data, error } = await supabase
+        .schema('content')
+        .from('blog_posts')
+        .select(BLOG_POST_SELECT)
+        .eq('status', 'published')
+        .order('published_at', { ascending: false })
+        .limit(50)
+
+      if (error || !data) {
+        return []
+      }
+
+      return data
+        .map((row) => toBlogPostRow(row))
+        .filter((row): row is BlogPostRow => row !== null)
+        .map((row) => mapPost(row))
+    } catch {
       return []
     }
+  },
+  ['blog-posts-list'],
+  {
+    revalidate: 3600,
+    tags: ['blog-posts-list'],
+  },
+)
 
-    return data
-      .map((row) => toBlogPostRow(row))
-      .filter((row): row is BlogPostRow => row !== null)
-      .map((row) => mapPost(row))
-  } catch {
-    return []
-  }
-}
-
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .schema('content')
-      .from('blog_posts')
-      .select(BLOG_POST_SELECT)
-      .eq('slug', slug)
-      .single()
-
-    if (error || !data) {
-      return null
+export const getBlogPostBySlug = unstable_cache(
+  async (slug: string): Promise<BlogPost | null> => {
+    if (isMockDataSource) {
+      const mockPost = getMockBlogPostBySlug(slug)
+      return mockPost ? toMockBlogPost(mockPost) : null
     }
 
-    const row = toBlogPostRow(data)
-    return row ? mapPost(row) : null
-  } catch {
-    return null
-  }
-}
+    try {
+      const supabase = await createClient()
+      const { data, error } = await supabase
+        .schema('content')
+        .from('blog_posts')
+        .select(BLOG_POST_SELECT)
+        .eq('slug', slug)
+        .single()
 
-export async function getBlogPostById(id: string): Promise<BlogPost | null> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .schema('content')
-      .from('blog_posts')
-      .select(BLOG_POST_ADMIN_SELECT)
-      .eq('id', id)
-      .single()
+      if (error || !data) {
+        return null
+      }
 
-    if (error || !data) {
+      const row = toBlogPostRow(data)
+      return row ? mapPost(row) : null
+    } catch {
       return null
     }
+  },
+  ['blog-post-by-slug'],
+  {
+    revalidate: 3600,
+    tags: ['blog-post-by-slug'],
+  },
+)
 
-    const row = toBlogPostRow(data)
-    return row ? mapPost(row) : null
-  } catch {
-    return null
-  }
-}
+export const getBlogPostById = unstable_cache(
+  async (id: string): Promise<BlogPost | null> => {
+    if (isMockDataSource) {
+      const mockPost = getMockBlogPostById(id)
+      return mockPost ? toMockBlogPost(mockPost) : null
+    }
+
+    try {
+      const supabase = await createClient()
+      const { data, error } = await supabase
+        .schema('content')
+        .from('blog_posts')
+        .select(BLOG_POST_ADMIN_SELECT)
+        .eq('id', id)
+        .single()
+
+      if (error || !data) {
+        return null
+      }
+
+      const row = toBlogPostRow(data)
+      return row ? mapPost(row) : null
+    } catch {
+      return null
+    }
+  },
+  ['blog-post-by-id'],
+  {
+    revalidate: 3600,
+    tags: ['blog-post-by-id'],
+  },
+)
