@@ -121,7 +121,6 @@ const HomePage = async () => {
           <HomeFeaturedProductsSection
             title={t('shop.title')}
             viewAllLabel={t('shop.view_all')}
-            pointsLabel={t('shop.points_label')}
             products={featuredProductsState.value.map((product) => ({
               ...product,
               name_default: getLocalizedContent(product.name_i18n, locale, product.name_default || ''),
