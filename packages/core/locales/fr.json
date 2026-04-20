@@ -1788,36 +1788,36 @@
     "faq": {
       "meta": {
         "title": "FAQ - Make the Change",
-        "description": "Questions frequentes sur la plateforme Make the Change."
+        "description": "Questions fréquentes sur la plateforme Make the Change."
       },
-      "badge": "Help Center",
-      "title": "Questions frequentes",
-      "description": "Tout ce que vous devez savoir sur Make the Change, nos projets et votre impact.",
+      "badge": "CENTRE D'AIDE",
+      "title": "Questions fréquentes",
+      "description": "Tout ce que vous devez savoir sur Make the Change, vos points et votre impact.",
       "search_placeholder": "Rechercher...",
       "learn_more": "En savoir plus",
-      "empty_title": "Aucun resultat",
-      "empty_description": "Essayez un autre mot-cle ou contactez notre support.",
-      "footer_prompt": "Vous ne trouvez pas votre reponse ?",
+      "empty_title": "Aucun résultat",
+      "empty_description": "Essayez un autre mot-clé ou contactez notre support.",
+      "footer_prompt": "Vous ne trouvez pas votre réponse ?",
       "footer_cta": "Contactez notre support",
       "items": {
         "points": {
           "category": "Concept",
           "question": "Comment fonctionnent les points ?",
-          "answer": "Chaque euro investi dans un projet genere des points d impact. Ces points peuvent etre utilises sur le marketplace ou reinvestis."
+          "answer": "Chaque euro investi dans un projet génère des points d'impact. Ces points peuvent être utilisés sur le marketplace ou réinvestis."
         },
         "tracking": {
           "category": "Transparence",
           "question": "Puis-je suivre mon impact ?",
-          "answer": "Oui. Vous disposez d un suivi en temps reel pour visualiser les effets concrets de vos investissements."
+          "answer": "Oui. Vous disposez d'un suivi en temps réel pour visualiser les effets concrets de vos investissements."
         },
         "payment": {
           "category": "Finance",
           "question": "Quels moyens de paiement sont disponibles ?",
-          "answer": "Nous acceptons actuellement la carte bancaire et le virement. Le wallet impact sera active dans une prochaine version."
+          "answer": "Nous acceptons actuellement la carte bancaire et le virement. Le wallet impact sera activé dans une prochaine version."
         },
         "profile": {
           "category": "Compte",
-          "question": "A quoi servent les badges du profil ?",
+          "question": "À quoi servent les badges du profil ?",
           "answer": "Les badges valorisent votre engagement. Vous pouvez rendre votre profil public pour partager votre progression."
         }
       }

@@ -73,7 +73,7 @@ export function FaqAccordion({
                     transition={{ duration: 0.25, ease: 'easeOut' }}
                     className="overflow-hidden"
                   >
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-gray-400 text-pretty">
+                    <p className="px-5 pt-2 pb-5 text-sm leading-relaxed text-gray-400 text-pretty">
                       {item.a}
                     </p>
                   </motion.div>
