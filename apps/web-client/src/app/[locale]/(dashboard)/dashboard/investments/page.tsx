@@ -111,9 +111,10 @@ export default async function InvestmentsPage() {
   const userOrders: NormalizedOrder[] = (rawOrders || []).map((order) => {
     const firstItem = Array.isArray(order.items) ? order.items[0] : null
     const productSnapshot = firstItem?.product_snapshot
+    const totalEuros = typeof (order as any).total_euros === 'number' ? (order as any).total_euros : 0
     return {
       id: String(order.id),
-      amount_eur: 0,
+      amount_eur: totalEuros,
       amount_points: Number(order.total_points || 0),
       status: String(order.status || 'pending'),
       created_at: String(order.created_at || new Date().toISOString()),

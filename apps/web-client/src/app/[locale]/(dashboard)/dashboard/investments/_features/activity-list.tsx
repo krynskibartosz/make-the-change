@@ -83,11 +83,12 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
   const filteredOrders = filter === 'all' || filter === 'order' ? userOrders : []
   const displayInvested = filteredInvestments.reduce((sum, inv) => sum + inv.amount_eur, 0)
   const displayPoints = [...filteredInvestments, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
+  const displayOrderEuros = filteredOrders.reduce((sum, order) => sum + order.amount_eur, 0)
 
   // Determine bento labels based on filter
   const leftLabel = filter === 'order' ? 'Total Achat' : 'Impact Total'
-  const leftValue = filter === 'order' ? displayPoints : displayInvested
-  const leftUnit = filter === 'order' ? 'pts' : '€'
+  const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayInvested
+  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'pts') : '€'
   const rightLabel = filter === 'investment' ? 'Points Gagnés' : 'Points Dépensés'
   const rightValue = filter === 'investment' ? userInvestments.reduce((sum, inv) => sum + inv.amount_points, 0) : displayPoints
   const rightUnit = 'pts'
@@ -189,6 +190,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
               const product = order.product
               const isActive = order.status === 'paid' || order.status === 'processing'
               const statusLabel = STATUS_LABELS[order.status] || order.status
+              const paidInEuros = order.amount_eur > 0
 
               const content = (
                 <div className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]">
@@ -220,7 +222,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5">
                     <span className="text-sm font-bold text-white">
-                      {formatEuros(order.amount_points)} pts
+                      {paidInEuros ? `${formatEuros(order.amount_eur)} €` : `${formatEuros(order.amount_points)} pts`}
                     </span>
                     <span
                       className={
