@@ -29,31 +29,31 @@ export function PrivacyCardsSection({
         </div>
       </div>
 
-      {/* CARTE 2 — COLLECTE MINIMALE (carré) */}
-      <div className="col-span-1 flex aspect-square flex-col justify-between rounded-[24px] border border-white/5 bg-[#1A1F26] p-5 shadow-sm">
+      {/* CARTE 2 — COLLECTE MINIMALE (flex-stretch) */}
+      <div className="col-span-1 flex h-full flex-col gap-3 rounded-[24px] border border-white/5 bg-[#1A1F26] p-5 shadow-sm">
         <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
           <Server className="h-5 w-5 text-lime-400" />
         </div>
-        <div>
-          <h3 className="mb-1 text-base font-bold leading-tight text-white">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-bold leading-tight text-white">
             {minimalCollection.title}
           </h3>
-          <p className="line-clamp-3 text-xs leading-relaxed text-gray-400">
+          <p className="text-[12px] leading-relaxed text-gray-400 sm:text-xs">
             {minimalCollection.description}
           </p>
         </div>
       </div>
 
-      {/* CARTE 3 — SÉCURITÉ RENFORCÉE (carré) */}
-      <div className="col-span-1 flex aspect-square flex-col justify-between rounded-[24px] border border-white/5 bg-[#1A1F26] p-5 shadow-sm">
+      {/* CARTE 3 — SÉCURITÉ RENFORCÉE (flex-stretch) */}
+      <div className="col-span-1 flex h-full flex-col gap-3 rounded-[24px] border border-white/5 bg-[#1A1F26] p-5 shadow-sm">
         <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
           <Lock className="h-5 w-5 text-emerald-400" />
         </div>
-        <div>
-          <h3 className="mb-1 text-base font-bold leading-tight text-white">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-bold leading-tight text-white">
             {security.title}
           </h3>
-          <p className="line-clamp-3 text-xs leading-relaxed text-gray-400">
+          <p className="text-[12px] leading-relaxed text-gray-400 sm:text-xs">
             {security.description}
           </p>
         </div>
