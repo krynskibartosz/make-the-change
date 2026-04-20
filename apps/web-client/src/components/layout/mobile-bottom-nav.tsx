@@ -23,8 +23,9 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
   const isSettingsPage =
     pathname === '/dashboard/settings' || pathname.startsWith('/dashboard/settings/')
+  const isHome = pathname === '/'
 
-  if (isInvestFlow || isSettingsPage) {
+  if (isInvestFlow || isSettingsPage || isHome) {
     return null
   }
 
