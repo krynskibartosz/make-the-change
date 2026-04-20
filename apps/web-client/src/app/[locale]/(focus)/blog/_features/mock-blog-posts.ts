@@ -159,7 +159,7 @@ const MOCK_BLOG_POSTS: MockBlogPostSeed[] = [
   {
     id: MOCK_BLOG_POST_6_ID,
     slug: MOCK_BLOG_POST_6_SLUG,
-    title_default: 'Notre approche de l'apiculture durable',
+    title_default: "Notre approche de l'apiculture durable",
     title_i18n: {
       fr: "Notre approche de l'apiculture durable",
       en: 'Our Approach to Sustainable Beekeeping',
