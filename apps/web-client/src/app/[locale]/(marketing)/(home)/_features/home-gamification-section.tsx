@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, type Variants } from 'framer-motion'
-import {  Bird, Flame, ArrowRight , Sprout } from 'lucide-react'
+import {  Bird, ArrowRight , Sprout } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { MarketingSection } from '../../_features/marketing-section'
@@ -87,7 +87,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           >
             <div className="flex justify-between items-start w-full">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/20 text-orange-400">
-                <Flame className="h-5 w-5 shrink-0 animate-pulse" />
+                {/* Flame icon removed */}
               </div>
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
