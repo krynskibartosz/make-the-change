@@ -19,7 +19,7 @@ export function PrivacyCardsSection({
           <h3 className="mb-2 text-lg font-bold leading-tight text-white">
             {dataOwnership.title}
           </h3>
-          <p className="text-sm font-light leading-relaxed text-gray-400">
+          <p className="text-pretty text-sm font-light leading-relaxed text-gray-400">
             {dataOwnership.description}
           </p>
         </div>
@@ -38,7 +38,7 @@ export function PrivacyCardsSection({
           <h3 className="text-base font-bold leading-tight text-white">
             {minimalCollection.title}
           </h3>
-          <p className="text-[12px] leading-relaxed text-gray-400 sm:text-xs">
+          <p className="text-pretty text-[13px] leading-[1.6] text-gray-400">
             {minimalCollection.description}
           </p>
         </div>
@@ -53,16 +53,16 @@ export function PrivacyCardsSection({
           <h3 className="text-base font-bold leading-tight text-white">
             {security.title}
           </h3>
-          <p className="text-[12px] leading-relaxed text-gray-400 sm:text-xs">
+          <p className="text-pretty text-[13px] leading-[1.6] text-gray-400">
             {security.description}
           </p>
         </div>
       </div>
 
       {/* CARTE 4 — CTA (fullwidth, centré) */}
-      <div className="col-span-2 mt-2 flex flex-col items-center rounded-3xl border border-white/5 bg-[#1A1F26] p-6 text-center shadow-sm">
-        <h3 className="mb-2 text-lg font-bold text-white">{contact.title}</h3>
-        <p className="mb-5 text-sm font-light leading-relaxed text-gray-400">
+      <div className="col-span-2 mt-2 flex flex-col items-center rounded-3xl border border-white/5 bg-[#1A1F26] px-6 py-8 text-center shadow-sm">
+        <h3 className="mb-3 text-lg font-bold text-white">{contact.title}</h3>
+        <p className="mb-6 text-pretty text-sm font-light leading-relaxed text-gray-400">
           {contact.description}
         </p>
         <Link

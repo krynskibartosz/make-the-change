@@ -21,7 +21,7 @@ export default async function PrivacyPage() {
           {viewModel.hero.title.line1}{' '}
           <span className="text-lime-400">{viewModel.hero.title.highlight}</span>
         </h1>
-        <p className="text-gray-400 text-base font-light leading-relaxed">
+        <p className="text-balance text-base font-light leading-relaxed text-white/80">
           {viewModel.hero.description.line1} {viewModel.hero.description.line2}
         </p>
       </div>
