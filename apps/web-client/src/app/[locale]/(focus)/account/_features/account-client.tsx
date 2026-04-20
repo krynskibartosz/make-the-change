@@ -1,8 +1,7 @@
 'use client'
 
-import { ChevronLeft, ChevronRight, Lock, LogOut, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Lock } from 'lucide-react'
 import { useState, useTransition } from 'react'
-import { logout } from '@/app/[locale]/(auth)/actions'
 import { useRouter } from '@/i18n/navigation'
 import { updateAccount } from './actions'
 
@@ -137,21 +136,11 @@ export function AccountClient({ firstName, lastName, username, email }: AccountC
         </div>
 
         {/* Danger zone */}
-        <div className="mx-4 flex flex-col gap-3 pb-8">
-          <form action={logout}>
-            <button
-              type="submit"
-              className="w-full py-4 rounded-2xl bg-[#1A1F26] text-white font-bold text-sm transition-all active:bg-white/10 border border-white/5 flex items-center justify-center gap-2"
-            >
-              <LogOut className="h-4 w-4 text-white/50" />
-              Se déconnecter
-            </button>
-          </form>
+        <div className="flex justify-center mt-8 pb-8">
           <button
             type="button"
-            className="w-full py-4 rounded-2xl bg-red-500/10 text-red-400 font-bold text-sm transition-all active:bg-red-500/20 border border-red-500/10 flex items-center justify-center gap-2"
+            className="text-xs font-bold text-red-500/70 hover:text-red-500 transition-colors uppercase tracking-widest"
           >
-            <Trash2 className="h-4 w-4" />
             Supprimer mon compte
           </button>
         </div>
