@@ -78,6 +78,20 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
     return true
   })
 
+  // Calculate filtered totals for bento display
+  const filteredInvestments = filter === 'all' || filter === 'investment' ? userInvestments : []
+  const filteredOrders = filter === 'all' || filter === 'order' ? userOrders : []
+  const displayInvested = filteredInvestments.reduce((sum, inv) => sum + inv.amount_eur, 0)
+  const displayPoints = [...filteredInvestments, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
+
+  // Determine bento labels based on filter
+  const leftLabel = filter === 'order' ? 'Total Achat' : 'Impact Total'
+  const leftValue = filter === 'order' ? displayPoints : displayInvested
+  const leftUnit = filter === 'order' ? 'pts' : '€'
+  const rightLabel = filter === 'investment' ? 'Points Gagnés' : 'Points Dépensés'
+  const rightValue = filter === 'investment' ? userInvestments.reduce((sum, inv) => sum + inv.amount_points, 0) : displayPoints
+  const rightUnit = 'pts'
+
   return (
     <>
       {/* 1. HERO - Titre de la page */}
@@ -91,20 +105,20 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
       </div>
 
       {/* 2. DASHBOARD GLOBAL - Carte Hero Unifiée */}
-      <div className="relative z-10 mx-6 mb-6 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center">
+      <div className="relative z-10 mx-6 mb-6 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center h-20">
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Impact Total</span>
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{leftLabel}</span>
           <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-white tracking-tighter">{formatEuros(totalInvested)}</span>
-            <span className="text-lg font-bold text-lime-400">€</span>
+            <span className="text-3xl font-black text-white tracking-tighter">{formatEuros(leftValue)}</span>
+            <span className="text-lg font-bold text-lime-400">{leftUnit}</span>
           </div>
         </div>
         <div className="w-px h-12 bg-white/10"></div>
         <div className="flex flex-col gap-1 text-right">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Points Dépensés</span>
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{rightLabel}</span>
           <div className="flex items-baseline gap-1 justify-end">
-            <span className="text-3xl font-black text-white tracking-tighter">{formatEuros(totalPoints)}</span>
-            <span className="text-lg font-bold text-lime-400">pts</span>
+            <span className="text-3xl font-black text-white tracking-tighter">{formatEuros(rightValue)}</span>
+            <span className="text-lg font-bold text-lime-400">{rightUnit}</span>
           </div>
         </div>
       </div>
