@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Crown, Lock, Sparkles, Zap } from 'lucide-react'
+import { ArrowLeft, Crown, ShieldCheck } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 
 type PlanType = 'monthly' | 'annual'
@@ -11,14 +11,12 @@ export default function SubscriptionPage() {
   const [planType, setPlanType] = useState<PlanType>('annual')
 
   useEffect(() => {
-    // Hide mobile bottom nav when subscription page is active
     const bottomNav = document.getElementById('mobile-bottom-nav')
     if (bottomNav) {
       bottomNav.style.display = 'none'
     }
 
     return () => {
-      // Restore mobile bottom nav when component unmounts
       if (bottomNav) {
         bottomNav.style.display = ''
       }
@@ -26,8 +24,18 @@ export default function SubscriptionPage() {
   }, [])
 
   const pricing = {
-    monthly: { price: '4,99', period: '/ mois', savings: null },
-    annual: { price: '49,90', period: '/ an', savings: 'Vous économisez 10€ par an' },
+    monthly: {
+      price: '4,99',
+      period: '/ mois',
+      savings: null,
+      disclaimer: 'Facturé mensuellement. Sans engagement.',
+    },
+    annual: {
+      price: '47,90',
+      period: '/ an',
+      savings: 'Vous économisez 12€ par an',
+      disclaimer: 'Facturé annuellement. Sans engagement.',
+    },
   }
 
   return (
@@ -47,20 +55,22 @@ export default function SubscriptionPage() {
 
       {/* Hero with VIP Aura */}
       <div className="relative px-6 pt-12 pb-8 text-center">
-        <div className="pointer-events-none absolute left-1/2 top-0 z-0 h-64 w-full -translate-x-1/2 bg-lime-500/20 blur-[120px]" />
+        <div className="pointer-events-none absolute top-10 left-1/2 -translate-x-1/2 w-full aspect-square bg-lime-500/15 blur-[120px] rounded-full z-0" />
         <div className="relative z-10">
           <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-lime-400/10">
             <Crown className="h-10 w-10 text-lime-400" />
           </div>
-          <h1 className="mb-3 text-4xl font-black tracking-tight text-white">Devenez un Gardien</h1>
-          <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">
-            Rejoignez l'élite du collectif et débloquez des privilèges exclusifs.
+          <h1 className="mb-4 text-4xl sm:text-5xl font-black tracking-tighter text-white text-balance text-center">
+            Devenez un Gardien.
+          </h1>
+          <p className="text-gray-400 text-sm leading-relaxed text-pretty max-w-[300px] mx-auto text-center">
+            Menez votre faction à la victoire et accédez aux privilèges exclusifs du collectif.
           </p>
         </div>
       </div>
 
       {/* Segmented Control */}
-      <div className="mx-6 mb-6 p-1 bg-[#1A1F26] rounded-2xl flex gap-1 border border-white/5 relative z-10">
+      <div className="mx-6 mt-6 p-1 bg-[#1A1F26] rounded-2xl flex gap-1 border border-white/5 relative z-10">
         <button
           onClick={() => setPlanType('monthly')}
           className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all flex flex-col items-center ${
@@ -76,58 +86,52 @@ export default function SubscriptionPage() {
           }`}
         >
           <span>Annuel</span>
-          <span className="absolute -top-2 -right-1 px-2 py-0.5 rounded-full bg-lime-400 text-[#0B0F15] text-[9px] font-black uppercase tracking-widest">
+          <span className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-lime-400 text-[#0B0F15] text-[9px] font-black uppercase tracking-widest">
             -20%
           </span>
         </button>
       </div>
 
       {/* Bento Grid of Privileges */}
-      <div className="px-6 space-y-4">
-        {/* Boost Card (Larger, highlighted) */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-br from-lime-400/10 to-[#1A1F26] p-6">
-          <div className="flex items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-lime-400/20">
-              <Zap className="h-7 w-7 text-lime-400" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-white mb-1">Boost de Points</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Gagnez 50% de points en plus sur chaque investissement. Votre impact s'accélère.
-              </p>
-            </div>
-          </div>
+      <div className="px-6 mt-8 grid grid-cols-2 gap-3 mb-8 relative z-10">
+        {/* Card 1 — Moteur de l'Essaim (full width) */}
+        <div className="col-span-2 p-6 rounded-3xl bg-gradient-to-br from-lime-400/10 to-[#1A1F26] border border-lime-400/20 flex flex-col items-start gap-2 relative overflow-hidden">
+          <span className="text-3xl mb-2">🛡️</span>
+          <h3 className="text-lg font-bold text-white leading-tight">Moteur de l'Essaim</h3>
+          <p className="text-xs text-gray-400 leading-relaxed">
+            Vos quêtes rapportent{' '}
+            <strong className="text-lime-400">2x plus de graines</strong> pour votre Sanctuaire
+            et propulsent la progression collective de votre Faction deux fois plus vite dans le classement.
+          </p>
         </div>
 
-        {/* Private Sales Card */}
-        <div className="overflow-hidden rounded-2xl border border-white/5 bg-[#1A1F26] p-6">
-          <div className="flex items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/5">
-              <Lock className="h-7 w-7 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-white mb-1">Ventes Privées</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Accès anticipé aux produits limités et réassorts exclusifs avant tout le monde.
-              </p>
-            </div>
-          </div>
+        {/* Card 2 — Accès Privilège (square) */}
+        <div className="col-span-1 p-5 rounded-3xl bg-[#1A1F26] border border-white/5 flex flex-col gap-2 h-full">
+          <span className="text-2xl mb-auto">⏳</span>
+          <h3 className="text-sm font-bold text-white leading-snug mt-4">Accès Privilège</h3>
+          <p className="text-[10px] text-gray-400 leading-relaxed">
+            Accès anticipé de 24h aux récoltes limitées et{' '}
+            <strong className="text-white">livraison toujours offerte</strong>.
+          </p>
         </div>
 
-        {/* Faction Glow Card */}
-        <div className="overflow-hidden rounded-2xl border border-white/5 bg-[#1A1F26] p-6">
-          <div className="flex items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/5">
-              <Sparkles className="h-7 w-7 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-white mb-1">Glow de Faction</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Un halo lumineux autour de votre profil. Signez votre appartenance à l'élite.
-              </p>
-            </div>
-          </div>
+        {/* Card 3 — L'Aura du Gardien (square) */}
+        <div className="col-span-1 p-5 rounded-3xl bg-[#1A1F26] border border-white/5 flex flex-col gap-2 h-full relative overflow-hidden">
+          <div className="absolute top-4 left-4 w-12 h-12 bg-lime-500/20 blur-xl rounded-full" />
+          <span className="text-2xl mb-auto relative z-10">✨</span>
+          <h3 className="text-sm font-bold text-white leading-snug mt-4 relative z-10">L'Aura du Gardien</h3>
+          <p className="text-[10px] text-gray-400 leading-relaxed relative z-10">
+            Débloquez le halo lumineux exclusif autour de votre profil public.
+          </p>
         </div>
+      </div>
+
+      {/* Trust Badge */}
+      <div className="flex items-center justify-center gap-2 px-6 mt-2 mb-4 opacity-70">
+        <ShieldCheck className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+        <span className="text-[10px] text-gray-400 uppercase tracking-widest text-center">
+          Votre impact financier sur les projets reste authentique et non modifié.
+        </span>
       </div>
 
       {/* Sticky CTA */}
@@ -146,7 +150,7 @@ export default function SubscriptionPage() {
             Devenir Gardien
           </button>
           <span className="text-[10px] text-gray-500 text-center uppercase tracking-widest">
-            Facturé annuellement. Sans engagement.
+            {pricing[planType].disclaimer}
           </span>
         </div>
       </div>
