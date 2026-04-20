@@ -1,4 +1,4 @@
-import { Leaf } from 'lucide-react'
+import { Leaf, MapPin } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 type ProjectThumbnailCardProps = {
@@ -6,15 +6,37 @@ type ProjectThumbnailCardProps = {
   title: string
   imageUrl: string | null
   impactLabel?: string
+  location?: string
   priority?: boolean
 }
 
-const formatImpact = (currentFunding: number | null): string | undefined => {
-  if (!currentFunding || currentFunding <= 0) return undefined
-  if (currentFunding >= 1000) {
-    return `${Math.round(currentFunding / 1000)}k€ levés`
+export function formatEcologicalImpact(
+  currentFunding: number | null,
+  type: string | null,
+): string | undefined {
+  if (!currentFunding || currentFunding <= 0 || !type) return undefined
+
+  switch (type) {
+    case 'beehive': {
+      const bees = Math.floor(currentFunding / 390) * 15000
+      if (bees <= 0) return undefined
+      return bees >= 1000
+        ? `${Math.round(bees / 1000)}k abeilles protégées`
+        : `${bees} abeilles protégées`
+    }
+    case 'olive_tree': {
+      const trees = Math.floor(currentFunding / 50)
+      if (trees <= 0) return undefined
+      return `${trees} oliviers préservés`
+    }
+    case 'coral': {
+      const corals = Math.floor(currentFunding / 18)
+      if (corals <= 0) return undefined
+      return `${corals} coraux transplantés`
+    }
+    default:
+      return undefined
   }
-  return `${currentFunding}€ levés`
 }
 
 export function ProjectThumbnailCard({
@@ -22,13 +44,14 @@ export function ProjectThumbnailCard({
   title,
   imageUrl,
   impactLabel,
+  location,
   priority = false,
 }: ProjectThumbnailCardProps) {
   return (
     <Link
       href={`/projects/${slug}`}
       prefetch={priority}
-      className="relative w-[70vw] max-w-[260px] aspect-square shrink-0 snap-start rounded-3xl overflow-hidden border border-white/10 block active:scale-[0.98] transition-transform group"
+      className="relative w-72 aspect-square shrink-0 snap-start rounded-3xl overflow-hidden border border-white/10 block active:scale-[0.98] transition-transform group shadow-lg"
     >
       {imageUrl ? (
         <img
@@ -43,15 +66,24 @@ export function ProjectThumbnailCard({
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15]/90 via-[#0B0F15]/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/60 to-transparent" />
 
-      <div className="absolute bottom-0 left-0 w-full p-4 flex flex-col items-start z-10">
-        <h3 className="text-sm font-bold text-white leading-tight mb-2 line-clamp-2 drop-shadow-md">
+      <div className="absolute bottom-0 left-0 w-full p-5 flex flex-col items-start z-10">
+        {location ? (
+          <div className="flex items-center gap-1 mb-1.5 opacity-90">
+            <MapPin className="w-2.5 h-2.5 text-gray-400 shrink-0" />
+            <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">
+              {location}
+            </span>
+          </div>
+        ) : null}
+
+        <h3 className="text-xl font-bold text-white leading-tight mb-4 line-clamp-2 drop-shadow-md text-balance">
           {title}
         </h3>
 
         {impactLabel ? (
-          <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10">
+          <div className="flex items-center gap-1.5 bg-[#0B0F15]/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-white/10 shadow-sm">
             <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
             <span className="text-[11px] font-bold text-white tracking-wide">
               <span className="text-lime-400">{impactLabel}</span>
@@ -62,5 +94,3 @@ export function ProjectThumbnailCard({
     </Link>
   )
 }
-
-export { formatImpact }

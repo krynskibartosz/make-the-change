@@ -183,7 +183,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .schema('investment')
     .from('projects')
     .select(
-      'id,slug,name_default,name_i18n,description_default,description_i18n,hero_image_url,target_budget,current_funding,status,featured',
+      'id,slug,type,name_default,name_i18n,description_default,description_i18n,hero_image_url,target_budget,current_funding,address_city,address_country_code,status,featured',
     )
     .eq('featured', true)
     .limit(3)
@@ -319,6 +319,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .map((p) => ({
       id: p.id,
       slug: p.slug,
+      type: p.type,
       name_default: p.name_default,
       name_i18n: p.name_i18n ?? null,
       description_default: p.description_default,
@@ -326,6 +327,8 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       hero_image_url: p.hero_image_url,
       target_budget: p.target_budget,
       current_funding: p.current_funding,
+      address_city: p.address_city,
+      address_country_code: p.address_country_code,
       status: p.status,
       featured: p.featured,
     }))
@@ -340,6 +343,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       (project): HomeFeaturedProject => ({
         id: project.id,
         slug: project.slug,
+        type: project.type,
         name_default: project.name_default,
         name_i18n: toLocalizedRecord(project.name_i18n),
         description_default: project.description_default,
@@ -347,6 +351,8 @@ export async function getHomeServerData(): Promise<HomeServerData> {
         hero_image_url: sanitizeImageUrl(project.hero_image_url),
         target_budget: project.target_budget,
         current_funding: project.current_funding,
+        address_city: project.address_city,
+        address_country_code: project.address_country_code,
         status: project.status,
         featured: project.featured,
       }),

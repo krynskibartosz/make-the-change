@@ -4,16 +4,19 @@ import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import {
-  formatImpact,
+  formatEcologicalImpact,
   ProjectThumbnailCard,
 } from '@/app/[locale]/(marketing)/_features/project-thumbnail-card'
 
 type FeaturedProject = {
   id: string
   slug: string
+  type: string | null
   name_default: string | null
   hero_image_url: string | null
   current_funding: number | null
+  address_city: string | null
+  address_country_code: string | null
 }
 
 type FeaturedProjectsListProps = {
@@ -37,7 +40,10 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
       {projects.map((project, index) => {
         const title = (project.name_default || 'Projet').replace(' 2024', '')
         const imageUrl = sanitizeImageUrl(project.hero_image_url) ?? null
-        const impactLabel = formatImpact(project.current_funding)
+        const impactLabel = formatEcologicalImpact(project.current_funding, project.type)
+        const location = [project.address_city, project.address_country_code]
+          .filter(Boolean)
+          .join(', ') || undefined
 
         return (
           <li key={project.id} className="shrink-0">
@@ -46,6 +52,7 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
               title={title}
               imageUrl={imageUrl}
               impactLabel={impactLabel}
+              location={location}
               priority={index === 0}
             />
           </li>
@@ -55,7 +62,7 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
       <li className="shrink-0">
         <Link
           href="/projects"
-          className="relative w-[70vw] max-w-[260px] aspect-square shrink-0 snap-start rounded-3xl overflow-hidden border border-lime-500/30 bg-lime-900/10 flex flex-col items-center justify-center gap-3 p-6 text-center group active:scale-[0.98] transition-transform block"
+          className="w-72 aspect-square shrink-0 snap-start rounded-3xl border border-lime-500/30 bg-lime-900/10 flex flex-col items-center justify-center gap-3 p-6 text-center group active:scale-[0.98] transition-transform block"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-lime-400/20 text-lime-400 transition-transform group-hover:translate-x-1">
             <ArrowRight size={22} />
