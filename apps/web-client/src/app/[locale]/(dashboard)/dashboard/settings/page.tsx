@@ -183,7 +183,7 @@ export default async function SettingsPage() {
           <section>
             <div className="mx-4 mt-4 overflow-hidden rounded-xl bg-white/10">
               <Link
-                href="/dashboard/profile"
+                href="/account"
                 className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
               >
                 <div className="flex items-center gap-3">
@@ -348,7 +348,7 @@ export default async function SettingsPage() {
         <section>
           <div className="mx-4 mt-4 overflow-hidden rounded-xl bg-white/10">
             <Link
-              href="/dashboard/profile"
+              href="/account"
               className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
             >
               <div className="flex items-center gap-3">
