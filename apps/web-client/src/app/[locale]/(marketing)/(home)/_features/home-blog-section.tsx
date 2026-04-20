@@ -1,6 +1,6 @@
 import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
-import type { BlogPost } from '@/app/[locale]/(marketing)/blog/_features/blog-types'
-import { BlogCard } from '@/app/[locale]/(marketing)/blog/_features/components/blog-card'
+import type { BlogPost } from '@/app/[locale]/(focus)/blog/_features/blog-types'
+import { BlogCard } from '@/app/[locale]/(focus)/blog/_features/components/blog-card'
 import { HomeSectionViewAllAction } from './home-section-view-all-action'
 
 type HomeBlogSectionProps = {

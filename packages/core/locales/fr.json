@@ -1740,20 +1740,20 @@
     "blog_post": {
       "back_to_blog": "Retour au blog",
       "author_label": "Auteur",
-      "published_label": "Publie le",
+      "published_label": "Publié le",
       "all_articles": "Tous les articles"
     },
     "blog_list": {
-      "badge": "Blog & Actualites",
+      "badge": "LE MAG'",
       "title": "Explorez le futur de l'impact positif.",
-      "description": "Histoires inspirantes, analyses d experts et coulisses des projets pour comprendre notre impact collectif.",
+      "description": "Histoires inspirantes, analyses d'experts et coulisses des projets pour comprendre notre impact collectif.",
       "categories": {
         "all": "Tous"
       },
-      "recent_title": "Articles recents",
-      "active_filter": "Categorie active: {category}",
+      "recent_title": "Articles récents",
+      "active_filter": "Catégorie active : {category}",
       "empty_title": "Aucun article pour ce filtre",
-      "empty_description": "Essayez une autre categorie ou revenez plus tard."
+      "empty_description": "Essayez une autre catégorie ou revenez plus tard."
     },
     "biodex": {
       "meta": {

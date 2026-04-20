@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getBlogPostById } from '@/app/[locale]/(marketing)/blog/_features/blog-data'
-import { BlogEditor } from '@/app/[locale]/(marketing)/blog/_features/components/blog-editor'
+import { getBlogPostById } from '@/app/[locale]/(focus)/blog/_features/blog-data'
+import { BlogEditor } from '@/app/[locale]/(focus)/blog/_features/components/blog-editor'
 
 export default async function AdminBlogEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

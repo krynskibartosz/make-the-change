@@ -25,7 +25,7 @@ import { useState, useTransition } from 'react'
 import {
   deleteBlogPost,
   updateBlogPost,
-} from '@/app/[locale]/(marketing)/blog/_features/actions/blog-actions'
+} from '@/app/[locale]/(focus)/blog/_features/actions/blog-actions'
 import { EditorComponent } from '@/app/[locale]/admin/cms/_features/components/editor/editor-component'
 import { useToast } from '@/components/ui/use-toast'
 import { Link, useRouter } from '@/i18n/navigation'
