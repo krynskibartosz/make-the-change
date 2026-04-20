@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, type Variants } from 'framer-motion'
-import {  Bird, ArrowRight , Sprout } from 'lucide-react'
+import {  Bird, Flame, ArrowRight , Sprout } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { MarketingSection } from '../../_features/marketing-section'
@@ -87,7 +87,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           >
             <div className="flex justify-between items-start w-full">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/20 text-orange-400">
-                {/* Flame icon removed */}
+                <Flame className="h-5 w-5 shrink-0 animate-pulse" />
               </div>
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
@@ -135,7 +135,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
 
             <div className="min-w-0">
               <p className="mt-1 min-w-0 text-[11px] leading-tight text-muted-foreground line-clamp-3 overflow-hidden text-ellipsis">
-                <span aria-hidden="true">🔥</span> Gardez le rythme au quotidien et gagnez des Graines bonus.
+                Gardez le rythme au quotidien et gagnez des Graines bonus.
               </p>
             </div>
           </motion.article>
