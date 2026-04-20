@@ -50,6 +50,21 @@ const STATUS_LABELS: Record<string, string> = {
   paid: 'Payé',
 }
 
+const getStatusBadgeClass = (status: string): string => {
+  switch (status) {
+    case 'active':
+    case 'paid':
+    case 'delivered':
+    case 'completed':
+      return 'rounded-md border border-lime-400/20 bg-lime-400/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-lime-400'
+    case 'processing':
+    case 'pending':
+      return 'rounded-md border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-400'
+    default:
+      return 'rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-gray-400'
+  }
+}
+
 const formatEuros = (value: number): string => {
   return new Intl.NumberFormat('fr-FR', {
     minimumFractionDigits: 0,
@@ -141,7 +156,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
 
               const content = (
                 <div
-                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]"
+                  className="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.03]"
                   onClick={() => router.push(`/transactions/${investment.id}?type=investment`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
@@ -149,33 +164,30 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                       <img
                         src={project.cover_image_url}
                         alt={project.name_default || 'Projet'}
-                        className="h-14 w-14 shrink-0 rounded-xl bg-[#0B0F15] object-cover"
+                        className="h-12 w-12 shrink-0 rounded-xl border border-white/5 bg-[#0B0F15] object-cover"
                       />
                     ) : (
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-lime-400/10">
-                        <Leaf className="h-6 w-6 text-lime-400" />
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-lime-400/20 bg-lime-400/10">
+                        <Leaf className="h-5 w-5 text-lime-400" />
                       </div>
                     )}
-                    <div className="flex flex-col justify-center flex-1 min-w-0 py-1">
-                      <h3 className="text-[15px] font-semibold text-white line-clamp-2 leading-snug mb-1">
+                    <div className="flex flex-col justify-center flex-1 min-w-0">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-lime-400/80 mb-0.5">
+                        Impact
+                      </span>
+                      <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
                         {project?.name_default || 'Projet'}
                       </h3>
-                      <span className="text-xs text-gray-400 font-medium">
+                      <span className="text-xs text-gray-500">
                         {formatDate(investment.created_at)}
                       </span>
                     </div>
                   </div>
-                  <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className="text-[15px] font-black tracking-tight text-white">
+                  <div className="flex shrink-0 flex-col items-end gap-1.5 ml-2">
+                    <span className="text-sm font-black tracking-tight text-white">
                       {formatEuros(investment.amount_eur)} €
                     </span>
-                    <span
-                      className={
-                        isActive
-                          ? 'rounded-md border border-lime-400/20 bg-lime-400/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-lime-400'
-                          : 'rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400'
-                      }
-                    >
+                    <span className={getStatusBadgeClass(investment.status)}>
                       {statusLabel}
                     </span>
                   </div>
@@ -186,13 +198,12 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
             } else {
               const order = activity
               const product = order.product
-              const isActive = order.status === 'paid' || order.status === 'processing'
               const statusLabel = STATUS_LABELS[order.status] || order.status
               const paidInEuros = order.amount_eur > 0
 
               const content = (
                 <div
-                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]"
+                  className="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.03]"
                   onClick={() => router.push(`/transactions/${order.id}?type=order`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
@@ -200,38 +211,30 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                       <img
                         src={product.cover_image_url}
                         alt={product.name_default || 'Produit'}
-                        className="h-12 w-12 shrink-0 rounded-xl bg-[#0B0F15] object-cover"
+                        className="h-12 w-12 shrink-0 rounded-xl border border-white/5 bg-[#0B0F15] object-cover"
                       />
                     ) : (
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/5">
-                        <Leaf className="h-6 w-6 text-white" />
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/5 bg-[#0B0F15]">
+                        <Leaf className="h-5 w-5 text-gray-500" />
                       </div>
                     )}
-                    <div className="flex flex-col justify-center flex-1 min-w-0 py-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-[15px] font-semibold text-white line-clamp-2 leading-snug">
-                          {product?.name_default || 'Produit'}
-                        </h3>
-                        <span className="rounded bg-white/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-gray-300 shrink-0">
-                          Achat
-                        </span>
-                      </div>
-                      <span className="text-xs text-gray-400 font-medium">
+                    <div className="flex flex-col justify-center flex-1 min-w-0">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-0.5">
+                        Achat Boutique
+                      </span>
+                      <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
+                        {product?.name_default || 'Produit'}
+                      </h3>
+                      <span className="text-xs text-gray-500">
                         {formatDate(order.created_at)}
                       </span>
                     </div>
                   </div>
-                  <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className="text-[15px] font-black tracking-tight text-white">
+                  <div className="flex shrink-0 flex-col items-end gap-1.5 ml-2">
+                    <span className="text-sm font-black tracking-tight text-white">
                       {paidInEuros ? `${formatEuros(order.amount_eur)} €` : `${formatEuros(order.amount_points)} pts`}
                     </span>
-                    <span
-                      className={
-                        isActive
-                          ? 'rounded-md border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-400'
-                          : 'rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-gray-400'
-                      }
-                    >
+                    <span className={getStatusBadgeClass(order.status)}>
                       {statusLabel}
                     </span>
                   </div>
