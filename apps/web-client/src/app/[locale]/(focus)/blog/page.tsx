@@ -65,7 +65,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       {/* Chips catégories scrollables */}
       {categories.length > 0 ? (
-        <div className="relative z-10 w-full overflow-x-auto pb-6 pt-2 px-6 flex gap-2" style={{ scrollbarWidth: 'none' }}>
+        <div className="relative z-10 w-full overflow-x-auto pb-2 mb-6 pt-2 px-6 flex gap-2" style={{ scrollbarWidth: 'none' }}>
           <Link
             href="/blog"
             className={cn(
@@ -101,7 +101,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {featuredPost ? (
         <Link
           href={`/blog/${featuredPost.slug}`}
-          className="relative z-10 mx-6 mb-8 block overflow-hidden rounded-[24px] aspect-[4/5] sm:aspect-square group"
+          className="relative z-10 mx-6 mb-8 block overflow-hidden rounded-3xl aspect-[4/5] sm:aspect-video border border-white/5 shadow-2xl bg-[#1A1F26] group"
         >
           {featuredPost.coverImage ? (
             // biome-ignore lint/performance/noImgElement: blog cover can be remote
@@ -119,7 +119,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <span className="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider mb-3">
               À la une
             </span>
-            <h2 className="text-2xl font-bold text-white mb-2 leading-tight text-balance">
+            <h2 className="text-2xl font-black text-white mb-2 leading-tight text-balance">
               {featuredPost.title}
             </h2>
             <span className="text-xs text-gray-300 font-medium">
@@ -138,9 +138,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}
-                className="flex items-center gap-4 group cursor-pointer w-full"
+                className="flex items-center gap-4 group cursor-pointer w-full hover:bg-white/[0.02] p-2 -mx-2 rounded-2xl transition-colors"
               >
-                <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 border border-white/5 bg-white/5">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden shrink-0 border border-white/5 bg-[#1A1F26]">
                   {post.coverImage ? (
                     // biome-ignore lint/performance/noImgElement: blog cover can be remote
                     <img
@@ -148,15 +148,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       alt="Miniature"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  ) : null}
+                  ) : (
+                    <div className="w-full h-full bg-[#1A1F26]" />
+                  )}
                 </div>
-                <div className="flex flex-col justify-center flex-1 min-w-0">
+                <div className="flex flex-col justify-center flex-1 min-w-0 py-1">
                   {primaryTag ? (
                     <span className="text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-1.5">
                       {primaryTag}
                     </span>
                   ) : null}
-                  <h3 className="text-base font-semibold text-white leading-snug line-clamp-2 mb-2 text-pretty">
+                  <h3 className="text-base font-bold text-white leading-snug line-clamp-2 mb-2 text-pretty">
                     {post.title}
                   </h3>
                   <span className="text-xs text-gray-500">
