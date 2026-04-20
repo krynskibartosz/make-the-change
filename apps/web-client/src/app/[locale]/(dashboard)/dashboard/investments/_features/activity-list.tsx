@@ -107,7 +107,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
       </div>
 
       {/* 2. DASHBOARD GLOBAL - Carte Hero Unifiée */}
-      <div className="relative z-10 mx-6 mb-6 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center h-[88px] w-full">
+      <div className="relative z-10 mx-6 mb-6 overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center">
         <div className="flex flex-col gap-1 min-w-0">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{leftLabel}</span>
           <div className="flex items-baseline gap-1.5">
