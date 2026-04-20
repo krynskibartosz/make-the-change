@@ -37,6 +37,7 @@ export type MockOrderItemRecord = {
     name: string
     priceEuros: number
     pricePoints: number
+    cover_image_url?: string | null
   }
   product: {
     id: string
@@ -159,6 +160,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
+          cover_image_url: '/images/products/miel-eucalyptus.jpg',
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -189,6 +191,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: 'Miellerie de Manakara',
           priceEuros: 6.5,
           pricePoints: 650,
+          cover_image_url: '/images/projects/miellerie-manakara.jpg',
         },
         product: {
           id: MOCK_PRODUCT_MANAKARA_ID,
@@ -219,6 +222,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
+          cover_image_url: '/images/products/miel-eucalyptus.jpg',
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -249,6 +253,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: 'Miel de Litchi',
           priceEuros: 7.5,
           pricePoints: 750,
+          cover_image_url: '/images/products/miel-litchi.jpg',
         },
         product: {
           id: MOCK_PRODUCT_LITCHI_ID,
