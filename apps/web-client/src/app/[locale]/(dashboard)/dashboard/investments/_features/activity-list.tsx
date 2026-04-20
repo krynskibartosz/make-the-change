@@ -144,7 +144,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
               const content = (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]"
-                  onClick={() => router.push(`/modal/transactions/${investment.id}?type=investment`)}
+                  onClick={() => router.push(`/transactions/${investment.id}?type=investment`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
                     {project?.cover_image_url ? (
@@ -195,7 +195,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
               const content = (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.04]"
-                  onClick={() => router.push(`/modal/transactions/${order.id}?type=order`)}
+                  onClick={() => router.push(`/transactions/${order.id}?type=order`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
                     {product?.cover_image_url ? (

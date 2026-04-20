@@ -2,6 +2,7 @@
 
 import { ChevronLeft } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from '@/i18n/navigation'
 
 type ContributionsShellProps = PropsWithChildren<{
@@ -19,8 +20,23 @@ export function ContributionsShell({ title = 'Historique', children }: Contribut
     router.push('/dashboard')
   }
 
+  useEffect(() => {
+    // Hide mobile bottom nav when shell is active
+    const bottomNav = document.getElementById('mobile-bottom-nav')
+    if (bottomNav) {
+      bottomNav.style.display = 'none'
+    }
+
+    return () => {
+      // Restore mobile bottom nav when shell is unmounted
+      if (bottomNav) {
+        bottomNav.style.display = ''
+      }
+    }
+  }, [])
+
   return (
-    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0B0F15] pb-12 text-white scrollbar-gutter-stable">
+    <div className="fixed inset-0 z-50 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0B0F15] pb-12 text-white scrollbar-gutter-stable">
       {/* Halo lumineux */}
       <div className="pointer-events-none absolute left-1/2 top-0 z-0 h-64 w-full -translate-x-1/2 bg-lime-500/5 blur-[100px]" />
 

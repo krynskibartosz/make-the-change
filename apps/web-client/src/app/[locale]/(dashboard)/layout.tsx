@@ -43,7 +43,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
             {children}
           </main>
 
-          <div className="lg:hidden">
+          <div className="lg:hidden" id="mobile-bottom-nav">
             <MobileBottomNav user={{ id: user.id, email: user.email || '' }} />
           </div>
         </div>
@@ -68,7 +68,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
           {children}
         </main>
 
-        <div className="lg:hidden">
+        <div className="lg:hidden" id="mobile-bottom-nav">
           <MobileBottomNav user={{ id: user.id, email: user.email || '' }} />
         </div>
       </div>
