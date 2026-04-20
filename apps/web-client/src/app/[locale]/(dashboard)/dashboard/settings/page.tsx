@@ -123,13 +123,7 @@ export default async function SettingsPage() {
     ]
 
     const ecosystemItems: SettingsItem[] = [
-      {
-        label: 'Comment ça marche ?',
-        icon: Info,
-        href: '/faq',
-        iconWrapperClassName: 'bg-blue-500',
-        iconClassName: 'text-white',
-      },
+    
       {
         label: 'Le Blog',
         icon: BookOpen,
