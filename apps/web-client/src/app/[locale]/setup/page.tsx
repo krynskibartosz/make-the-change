@@ -4,7 +4,7 @@ import { redirect } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { sanitizeReturnTo } from '@/lib/mock/mock-session'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
-import { SetupCarousel } from './_features/setup-carousel'
+import { FactionCarousel } from '@/app/[locale]/(auth)/_features/faction-carousel'
 
 type SetupPageProps = {
   searchParams: Promise<{
@@ -35,5 +35,5 @@ export default async function SetupPage({ searchParams }: SetupPageProps) {
     redirect({ href: returnTo, locale })
   }
 
-  return <SetupCarousel returnTo={returnTo} />
+  return <FactionCarousel returnTo={returnTo} />
 }
