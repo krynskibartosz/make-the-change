@@ -102,9 +102,6 @@ const HomePage = async () => {
           <HomeFeaturedProjectsSection
             title={t('projects.title')}
             viewAllLabel={t('projects.view_all')}
-            supportLabel={t('projects.support_cta')}
-            collectedLabel={t('projects.collected_suffix')}
-            goalLabel={t('projects.goal_prefix')}
             projects={featuredProjectsState.value.map((project) => ({
               ...project,
               name_default: getLocalizedContent(project.name_i18n, locale, project.name_default || ''),

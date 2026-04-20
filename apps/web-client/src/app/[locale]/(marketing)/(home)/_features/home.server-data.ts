@@ -3,8 +3,10 @@ import type { QueryData, User } from '@supabase/supabase-js'
 import { getBlogPosts } from '@/app/[locale]/(focus)/blog/_features/blog-data'
 import type { BlogPost } from '@/app/[locale]/(focus)/blog/_features/blog-types'
 import type { ProductCardProduct } from '@/app/[locale]/(marketing)/products/_features/product-card'
+import { getMockProjects } from '@/app/[locale]/(marketing)/projects/_features/mock-projects'
 import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { isRecord } from '@/lib/type-guards'
 import type { DataState, HomeFeaturedProject, HomePartnerProducer } from './home.types'
@@ -310,22 +312,55 @@ export async function getHomeServerData(): Promise<HomeServerData> {
   const membersCountState = toRpcNumberState(membersCountResult.data, membersCountResult.error)
   const pointsGeneratedState = toRpcNumberState(pointsResult.data, pointsResult.error)
 
-  const featuredProjectsState = mapReadyState(
-    toArrayState<FeaturedProjectRow>(featuredProjectsResult.data, featuredProjectsResult.error),
-    (project): HomeFeaturedProject => ({
-      id: project.id,
-      slug: project.slug,
-      name_default: project.name_default,
-      name_i18n: toLocalizedRecord(project.name_i18n),
-      description_default: project.description_default,
-      description_i18n: toLocalizedRecord(project.description_i18n),
-      hero_image_url: sanitizeImageUrl(project.hero_image_url),
-      target_budget: project.target_budget,
-      current_funding: project.current_funding,
-      status: project.status,
-      featured: project.featured,
-    }),
-  )
+  const mockFeaturedProjects: HomeFeaturedProject[] = getMockProjects()
+    .filter((p) => p.featured)
+    .slice(0, 3)
+    .map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      name_default: p.name_default,
+      name_i18n: p.name_i18n ?? null,
+      description_default: p.description_default,
+      description_i18n: p.description_i18n ?? null,
+      hero_image_url: p.hero_image_url,
+      target_budget: p.target_budget,
+      current_funding: p.current_funding,
+      status: p.status,
+      featured: p.featured,
+    }))
+
+  let featuredProjectsState: DataState<HomeFeaturedProject[]>
+
+  if (isMockDataSource) {
+    featuredProjectsState = toArrayState(mockFeaturedProjects, null)
+  } else {
+    const dbState = mapReadyState(
+      toArrayState<FeaturedProjectRow>(featuredProjectsResult.data, featuredProjectsResult.error),
+      (project): HomeFeaturedProject => ({
+        id: project.id,
+        slug: project.slug,
+        name_default: project.name_default,
+        name_i18n: toLocalizedRecord(project.name_i18n),
+        description_default: project.description_default,
+        description_i18n: toLocalizedRecord(project.description_i18n),
+        hero_image_url: sanitizeImageUrl(project.hero_image_url),
+        target_budget: project.target_budget,
+        current_funding: project.current_funding,
+        status: project.status,
+        featured: project.featured,
+      }),
+    )
+
+    if (dbState.status === 'ready') {
+      const mockSlugs = new Set(mockFeaturedProjects.map((p) => p.slug))
+      const dedupedDb = dbState.value.filter((p) => !mockSlugs.has(p.slug))
+      featuredProjectsState = toArrayState([...mockFeaturedProjects, ...dedupedDb], null)
+    } else {
+      featuredProjectsState = mockFeaturedProjects.length > 0
+        ? toArrayState(mockFeaturedProjects, null)
+        : dbState
+    }
+  }
 
   const featuredProductsStateRaw = mapReadyState(
     toArrayState<FeaturedProductRow>(featuredProductsResult.data, featuredProductsResult.error),
