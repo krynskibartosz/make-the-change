@@ -90,11 +90,11 @@ export function OnboardingFlow() {
               </div>
 
               <h1 className="text-4xl font-black leading-tight text-balance">
-                Soutenez la nature.<br />Récoltez ses fruits.
+                Soutenez la biodiversité.<br />Récoltez ses fruits.
               </h1>
 
               <p className="text-white/60 text-sm max-w-sm mx-auto leading-relaxed">
-                Financez les projets de nos artisans locaux, protégez la
+                Soutenez les projets de nos artisans locaux, protégez la
                 biodiversité et recevez leurs produits d'exception en
                 remerciement.
               </p>
