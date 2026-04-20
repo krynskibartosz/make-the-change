@@ -1,4 +1,4 @@
-import { Step0Hook } from '../../_features/step-0-hook'
+import { Step0Hook } from '../_features/step-0-hook'
 
 export default function Step0Page() {
   return (

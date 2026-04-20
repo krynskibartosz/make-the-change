@@ -1,5 +1,5 @@
-import { OnboardingLayout } from '../../_features/onboarding-layout'
-import { Step5Paywall } from '../../_features/step-5-paywall'
+import { OnboardingLayout } from '../_features/onboarding-layout'
+import { Step5Paywall } from '../_features/step-5-paywall'
 
 export default function Step5Page() {
   return (
