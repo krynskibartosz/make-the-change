@@ -39,7 +39,7 @@ export default function SubscriptionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F15] text-white flex flex-col pb-32">
+    <div className="min-h-screen bg-[#0B0F15] text-white flex flex-col pb-[220px]">
       {/* Header */}
       <div className="sticky top-0 z-50 px-4 py-4 flex items-center bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/5">
         <button
@@ -57,8 +57,11 @@ export default function SubscriptionPage() {
       <div className="relative px-6 pt-12 pb-8 text-center">
         <div className="pointer-events-none absolute top-10 left-1/2 -translate-x-1/2 w-full aspect-square bg-lime-500/15 blur-[120px] rounded-full z-0" />
         <div className="relative z-10">
-          <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-lime-400/10">
-            <Crown className="h-10 w-10 text-lime-400" />
+          <div className="relative flex items-center justify-center mb-6">
+            <div className="absolute w-24 h-24 bg-lime-400/30 blur-2xl rounded-full" />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-[#1A1F26] border border-lime-400/20 flex items-center justify-center shadow-[0_0_15px_rgba(132,204,22,0.3)]">
+              <Crown className="h-8 w-8 text-lime-400" />
+            </div>
           </div>
           <h1 className="mb-4 text-4xl sm:text-5xl font-black tracking-tighter text-white text-balance text-center">
             Devenez un Gardien.
@@ -135,23 +138,32 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Sticky CTA */}
-      <div className="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15] to-transparent z-50">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-end justify-center gap-1 mb-2">
-            <span className="text-4xl font-black text-white leading-none">{pricing[planType].price} €</span>
-            <span className="text-sm font-bold text-gray-500">{pricing[planType].period}</span>
-          </div>
-          {pricing[planType].savings && (
-            <span className="text-xs text-lime-400 font-bold text-center -mt-2 mb-1">
-              {pricing[planType].savings}
+      <div className="fixed bottom-0 left-0 w-full z-50 flex flex-col">
+        {/* Gradient transition */}
+        <div className="h-12 w-full bg-gradient-to-t from-[#0B0F15] to-transparent pointer-events-none" />
+        {/* Solid opaque zone */}
+        <div className="bg-[#0B0F15] px-6 pb-8 pt-2 w-full">
+          <div className="max-w-md mx-auto flex flex-col gap-3">
+            {/* Price */}
+            <div className="flex flex-col items-center justify-center mb-2 gap-1">
+              <div className="flex items-baseline gap-1">
+                <span className="text-[40px] font-black text-white leading-none tracking-tighter">{pricing[planType].price}</span>
+                <span className="text-xl font-bold text-white">€</span>
+                <span className="text-sm font-bold text-gray-500 ml-1">{pricing[planType].period}</span>
+              </div>
+              <span className="text-xs text-lime-400 font-bold block h-4">
+                {pricing[planType].savings ?? ''}
+              </span>
+            </div>
+            {/* CTA Button */}
+            <button className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(132,204,22,0.15)] flex items-center justify-center">
+              Devenir Gardien
+            </button>
+            {/* Disclaimer */}
+            <span className="text-[10px] text-gray-500 text-center uppercase tracking-widest mt-1">
+              {pricing[planType].disclaimer}
             </span>
-          )}
-          <button className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(132,204,22,0.2)]">
-            Devenir Gardien
-          </button>
-          <span className="text-[10px] text-gray-500 text-center uppercase tracking-widest">
-            {pricing[planType].disclaimer}
-          </span>
+          </div>
         </div>
       </div>
     </div>
