@@ -44,10 +44,10 @@ export default function ContactPage() {
         <span className="text-[10px] font-bold tracking-[0.25em] text-emerald-500 uppercase mb-4">
           GARDONS LE LIEN
         </span>
-        <h1 className="text-4xl font-bold text-white tracking-tight leading-[1.1] mb-4">
+        <h1 className="text-4xl font-bold text-white hyphens-none tracking-tight text-balance leading-[1.1] mb-4">
           Comment pouvons-nous vous aider ?
         </h1>
-        <p className="text-gray-400 text-base font-light leading-relaxed mb-6">
+        <p className="text-gray-400 text-base font-light text-pretty leading-[1.6] mb-6">
           Une idée, un partenariat ou un retour sur l'app ? L'équipe lit chaque message.
         </p>
         <div className="relative z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#1A1F26] border border-white/5">
@@ -149,11 +149,11 @@ export default function ContactPage() {
         <input
           type="email"
           placeholder="Votre email"
-          className="w-full bg-transparent border-b border-white/20 focus:border-lime-400 pb-4 text-white placeholder:text-gray-500 outline-none transition-colors text-[17px]"
+          className="w-full bg-transparent border-b border-white/20 focus:border-lime-400 pb-4 font-normal text-white placeholder:text-white/40 placeholder:font-light outline-none transition-colors text-base"
         />
         <textarea
           placeholder="Votre message"
-          className="w-full bg-transparent border-b border-white/20 focus:border-lime-400 pb-4 text-white placeholder:text-gray-500 outline-none transition-colors text-[17px] min-h-[120px] resize-none"
+          className="w-full bg-transparent border-b border-white/20 focus:border-lime-400 pb-4 font-normal text-white placeholder:text-white/40 placeholder:font-light outline-none transition-colors text-base min-h-[120px] resize-none"
         />
 
         {/* C. Bouton Submit - Lime brand color */}
