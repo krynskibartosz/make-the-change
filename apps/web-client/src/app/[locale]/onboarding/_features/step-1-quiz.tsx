@@ -86,40 +86,42 @@ export function Step1Quiz() {
 
       {/* 3. FOOTER (Totalement FIXE en bas) */}
       <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 pt-4 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent relative z-20">
-        {selectedAnswer === correctAnswer && (
-          <div className="w-full max-w-md mx-auto mb-4 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md flex gap-4 items-start animate-in zoom-in-95 duration-300">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-500/30">
-              <Trophy size={20} className="text-emerald-400" />
+        <div className="w-full max-w-md mx-auto relative">
+          {selectedAnswer === correctAnswer && (
+            <div className="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-xl flex gap-4 items-start shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-500/30">
+                <Trophy size={20} className="text-emerald-400" />
+              </div>
+              <div className="flex flex-col pt-0.5">
+                <span className="text-sm font-black text-emerald-400 mb-0.5">C'est exact !</span>
+                <p className="text-xs text-gray-300 leading-relaxed">
+                  Pour faire 1kg de miel, une abeille parcourt l'équivalent de <span className="text-white font-bold">4 fois le tour de la Terre</span>. Leur travail est titanesque, mais elles sont menacées. Voici <span className="text-lime-400 font-bold">500 Graines</span> pour vous remercier de vous y intéresser.
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col pt-0.5">
-              <span className="text-sm font-black text-emerald-400 mb-0.5">C'est exact !</span>
-              <p className="text-xs text-gray-300 leading-relaxed">
-                Pour faire 1kg de miel, une abeille parcourt l'équivalent de <span className="text-white font-bold">4 fois le tour de la Terre</span>. Leur travail est titanesque, mais elles sont menacées. Voici <span className="text-lime-400 font-bold">500 Graines</span> pour vous remercier de vous y intéresser.
-              </p>
-            </div>
-          </div>
-        )}
+          )}
 
-        {selectedAnswer !== null && selectedAnswer !== correctAnswer && (
-          <div className="w-full max-w-md mx-auto mb-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex gap-4 items-start animate-in zoom-in-95 duration-300">
-            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
-              <Lightbulb size={20} className="text-white" />
+          {selectedAnswer !== null && selectedAnswer !== correctAnswer && (
+            <div className="absolute bottom-[calc(100%+16px)] left-0 w-full p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl flex gap-4 items-start shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+                <Lightbulb size={20} className="text-white" />
+              </div>
+              <div className="flex flex-col pt-0.5">
+                <span className="text-sm font-black text-white mb-0.5">Presque !</span>
+                <p className="text-xs text-gray-300 leading-relaxed">
+                  Il en faut en réalité 4 millions ! Mais on récompense l'effort : voici <span className="text-lime-400 font-bold">500 Graines</span> pour commencer.
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col pt-0.5">
-              <span className="text-sm font-black text-white mb-0.5">Presque !</span>
-              <p className="text-xs text-gray-300 leading-relaxed">
-                Il en faut en réalité 4 millions ! Mais on récompense l'effort : voici <span className="text-lime-400 font-bold">500 Graines</span> pour commencer.
-              </p>
-            </div>
-          </div>
-        )}
+          )}
 
-        <Link
-          href="/onboarding/step-2"
-          className={`w-full max-w-md mx-auto h-16 rounded-2xl bg-lime-400 text-[#0B0F15] font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-transform ${selectedAnswer !== null ? '' : 'opacity-50 pointer-events-none'}`}
-        >
-          Continuer
-        </Link>
+          <Link
+            href="/onboarding/step-2"
+            className={`w-full h-16 rounded-2xl bg-lime-400 text-[#0B0F15] font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-transform ${selectedAnswer !== null ? '' : 'opacity-50 pointer-events-none'}`}
+          >
+            Continuer
+          </Link>
+        </div>
       </div>
     </div>
   )
