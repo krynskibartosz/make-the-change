@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Crown, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Crown, ShieldCheck, Shield, Hourglass, Sparkles } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 
 type PlanType = 'monthly' | 'annual'
@@ -99,7 +99,7 @@ export default function SubscriptionPage() {
       <div className="px-6 mt-8 grid grid-cols-2 gap-3 mb-8 relative z-10">
         {/* Card 1 — Moteur de l'Essaim (full width) */}
         <div className="col-span-2 p-6 rounded-3xl bg-gradient-to-br from-lime-400/10 to-[#1A1F26] border border-lime-400/20 flex flex-col items-start gap-2 relative overflow-hidden">
-          <span className="text-3xl mb-2">🛡️</span>
+          <Shield className="h-8 w-8 mb-2 text-lime-400" />
           <h3 className="text-lg font-bold text-white leading-tight">Moteur de l'Essaim</h3>
           <p className="text-xs text-gray-400 leading-relaxed">
             Vos quêtes rapportent{' '}
@@ -110,7 +110,7 @@ export default function SubscriptionPage() {
 
         {/* Card 2 — Accès Privilège (square) */}
         <div className="col-span-1 p-5 rounded-3xl bg-[#1A1F26] border border-white/5 flex flex-col gap-2 h-full">
-          <span className="text-2xl mb-auto">⏳</span>
+          <Hourglass className="h-6 w-6 mb-auto text-gray-400" />
           <h3 className="text-sm font-bold text-white leading-snug mt-4">Accès Privilège</h3>
           <p className="text-[10px] text-gray-400 leading-relaxed">
             Accès anticipé de 24h aux récoltes limitées et{' '}
@@ -121,7 +121,7 @@ export default function SubscriptionPage() {
         {/* Card 3 — L'Aura du Gardien (square) */}
         <div className="col-span-1 p-5 rounded-3xl bg-[#1A1F26] border border-white/5 flex flex-col gap-2 h-full relative overflow-hidden">
           <div className="absolute top-4 left-4 w-12 h-12 bg-lime-500/20 blur-xl rounded-full" />
-          <span className="text-2xl mb-auto relative z-10">✨</span>
+          <Sparkles className="h-6 w-6 mb-auto text-lime-400 relative z-10" />
           <h3 className="text-sm font-bold text-white leading-snug mt-4 relative z-10">L'Aura du Gardien</h3>
           <p className="text-[10px] text-gray-400 leading-relaxed relative z-10">
             Débloquez le halo lumineux exclusif autour de votre profil public.
