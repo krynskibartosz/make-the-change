@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Users } from 'lucide-react'
 import { completeMockSetup } from '@/app/[locale]/(auth)/actions'
 import { useFormStatus } from 'react-dom'
 import { Link } from '@/i18n/navigation'
@@ -107,8 +107,24 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
 
   return (
     <div className="relative h-[100dvh] w-full bg-[#0B0F15] overflow-hidden flex flex-col">
+      {/* Header standard pour onboarding */}
+      {onboardingMode && (
+        <div className="flex-none pt-safe-top px-6 py-4 flex items-center justify-between z-30">
+          <Link
+            href="/onboarding/step-1"
+            className="w-10 h-10 rounded-full bg-[#1A1F26] border border-white/5 flex items-center justify-center active:scale-95 transition-transform"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
+          </Link>
+          <div className="w-12 h-12 rounded-full bg-[#1A1F26] border border-white/5 flex items-center justify-center">
+            <Users size={24} className="text-emerald-400" />
+          </div>
+          <div className="w-10"></div>
+        </div>
+      )}
+
       {/* 1. Top Bar (Fixe) */}
-      <div className="absolute top-0 left-0 w-full z-10 pt-[max(1.5rem,env(safe-area-inset-top))] px-6 pointer-events-none">
+      <div className={`absolute top-0 left-0 w-full z-10 pt-[max(1.5rem,env(safe-area-inset-top))] px-6 pointer-events-none ${onboardingMode ? 'pt-20' : ''}`}>
         <AnimatePresence mode="wait">
           <motion.p
             key={activeFaction.id}
