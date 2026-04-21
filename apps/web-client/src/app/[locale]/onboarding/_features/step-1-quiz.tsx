@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, HelpCircle, Trophy } from 'lucide-react'
+import { CheckCircle2, HelpCircle, Trophy, X } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 export function Step1Quiz() {
-  const [quizAnswered, setQuizAnswered] = useState(false)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const correctAnswer = 2 // "4 millions de fleurs"
 
   return (
     <div className="fixed inset-0 z-[100] h-[100dvh] w-full bg-[#0B0F15] flex flex-col overflow-hidden">
@@ -39,32 +40,52 @@ export function Step1Quiz() {
             "100 000 fleurs",
             "1 million de fleurs",
             "4 millions de fleurs",
-          ].map((answer, i) => (
-            <button
-              key={i}
-              onClick={() => setQuizAnswered(true)}
-              disabled={quizAnswered}
-              className={`w-full p-5 rounded-2xl border text-left active:scale-[0.98] transition-transform ${quizAnswered
-                  ? i === 2
-                    ? "bg-emerald-500/10 border-2 border-emerald-500 flex justify-between items-center"
-                    : "bg-[#1A1F26] border-white/5 opacity-50"
-                  : "bg-[#1A1F26] border-white/5"
+          ].map((answer, i) => {
+            const isSelected = selectedAnswer === i
+            const isCorrect = i === correctAnswer
+            const showResult = selectedAnswer !== null
+
+            return (
+              <button
+                key={i}
+                onClick={() => setSelectedAnswer(i)}
+                disabled={selectedAnswer !== null}
+                className={`w-full p-5 rounded-2xl border text-left active:scale-[0.98] transition-transform flex justify-between items-center ${
+                  showResult
+                    ? isSelected && !isCorrect
+                      ? "bg-red-500/10 border-2 border-red-500"
+                      : isCorrect
+                        ? "bg-emerald-500/10 border-2 border-emerald-500"
+                        : "bg-[#1A1F26] border-white/5 opacity-50"
+                    : "bg-[#1A1F26] border-white/5"
                 }`}
-            >
-              <span className={`text-lg font-bold ${quizAnswered && i === 2 ? 'text-emerald-400' : 'text-white'}`}>
-                {answer}
-              </span>
-              {quizAnswered && i === 2 && (
-                <CheckCircle2 size={20} className="text-emerald-400" strokeWidth={3} />
-              )}
-            </button>
-          ))}
+              >
+                <span className={`text-lg font-bold ${
+                  showResult
+                    ? isSelected && !isCorrect
+                      ? "text-red-400"
+                      : isCorrect
+                        ? "text-emerald-400"
+                        : "text-white"
+                    : "text-white"
+                }`}>
+                  {answer}
+                </span>
+                {showResult && isCorrect && (
+                  <CheckCircle2 size={20} className="text-emerald-400" strokeWidth={3} />
+                )}
+                {showResult && isSelected && !isCorrect && (
+                  <X size={20} className="text-red-400" strokeWidth={3} />
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
 
       {/* 3. FOOTER (Totalement FIXE en bas) */}
       <div className="flex-none px-6 pb-8 pt-4 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent relative z-20">
-        {quizAnswered && (
+        {selectedAnswer === correctAnswer && (
           <div className="w-full max-w-md mx-auto mb-4 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md flex gap-4 items-start animate-in zoom-in-95 duration-300">
             <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-500/30">
               <Trophy size={20} className="text-emerald-400" />
@@ -80,7 +101,7 @@ export function Step1Quiz() {
 
         <Link
           href="/onboarding/step-2"
-          className={`w-full max-w-md mx-auto h-16 rounded-2xl bg-lime-400 text-[#0B0F15] font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-transform ${!quizAnswered ? 'opacity-50 pointer-events-none' : ''}`}
+          className={`w-full max-w-md mx-auto h-16 rounded-2xl bg-lime-400 text-[#0B0F15] font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-transform ${selectedAnswer !== correctAnswer ? 'opacity-50 pointer-events-none' : ''}`}
         >
           Continuer
         </Link>
