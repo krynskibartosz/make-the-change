@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, HelpCircle, Trophy, X } from 'lucide-react'
+import { CheckCircle2, HelpCircle, Lightbulb, Trophy, X } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 export function Step1Quiz() {
@@ -13,7 +13,7 @@ export function Step1Quiz() {
     
 
       {/* 2. BODY (La zone de contenu, centrée verticalement) */}
-      <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col justify-center pb-32">
+      <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col justify-center pt-12 pb-32">
         <div className="flex flex-col text-center mb-8">
           <h1 className="text-3xl font-black text-white leading-tight mb-2 text-balance">
             Faisons un test rapide.
@@ -87,9 +87,23 @@ export function Step1Quiz() {
           </div>
         )}
 
+        {selectedAnswer !== null && selectedAnswer !== correctAnswer && (
+          <div className="w-full max-w-md mx-auto mb-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex gap-4 items-start animate-in zoom-in-95 duration-300">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+              <Lightbulb size={20} className="text-white" />
+            </div>
+            <div className="flex flex-col pt-0.5">
+              <span className="text-sm font-black text-white mb-0.5">Presque !</span>
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Il en faut en réalité 4 millions ! Mais on récompense l'effort : voici <span className="text-lime-400 font-bold">500 Graines</span> pour commencer.
+              </p>
+            </div>
+          </div>
+        )}
+
         <Link
           href="/onboarding/step-2"
-          className={`w-full max-w-md mx-auto h-16 rounded-2xl bg-lime-400 text-[#0B0F15] font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-transform ${selectedAnswer !== correctAnswer ? 'opacity-50 pointer-events-none' : ''}`}
+          className={`w-full max-w-md mx-auto h-16 rounded-2xl bg-lime-400 text-[#0B0F15] font-black text-lg flex items-center justify-center shadow-[0_0_20px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-transform ${selectedAnswer !== null ? '' : 'opacity-50 pointer-events-none'}`}
         >
           Continuer
         </Link>
