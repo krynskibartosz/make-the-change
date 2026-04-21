@@ -13,7 +13,7 @@ const IMPACT_LEVELS = [
 export function Step3Contract() {
   const [selectedLevel, setSelectedLevel] = useState(1) // Default to "Engagé"
 
-  const currentMetrics = IMPACT_LEVELS[selectedLevel]
+  const currentMetrics = IMPACT_LEVELS[Math.max(0, Math.min(selectedLevel, IMPACT_LEVELS.length - 1))]
 
   return (
     <div className="fixed inset-0 z-[100] h-[100dvh] w-full bg-[#0B0F15] flex flex-col overflow-hidden">
