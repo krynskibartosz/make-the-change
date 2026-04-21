@@ -7,7 +7,7 @@ import { Link } from '@/i18n/navigation'
 export function Step6Account() {
   const router = useRouter()
   // In a real app, this would come from state or URL params
-  const selectedFaction: 'faune' | 'flore' | 'humain' = 'flore' // Default for now
+  const selectedFaction = 'flore' as 'faune' | 'flore' | 'humain' // Default for now
 
   const handleSignup = () => {
     // In a real app, this would trigger actual authentication
