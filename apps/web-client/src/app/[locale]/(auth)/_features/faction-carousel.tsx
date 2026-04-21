@@ -106,24 +106,36 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
   }
 
   return (
-    <div className="relative h-[100dvh] w-full bg-[#0B0F15] overflow-hidden flex flex-col">
-     
+    <div className="fixed inset-0 z-[100] h-[100dvh] w-full bg-[#0B0F15] overflow-hidden flex flex-col">
 
-      {/* 1. Top Bar (Fixe) */}
-      <div className={`absolute top-0 left-0 w-full z-10 pt-[max(1.5rem,env(safe-area-inset-top))] px-6 pointer-events-none ${onboardingMode ? 'pt-20' : ''}`}>
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={activeFaction.id}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
-            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-            exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }}
-            transition={{ duration: 0.24, ease: 'easeOut' }}
-            className={`text-[10px] font-black uppercase tracking-[0.25em] ${activeFaction.accentText}`}
-          >
-            VOTRE AVENTURE
-          </motion.p>
-        </AnimatePresence>
-        <h1 className="mt-1 text-3xl font-black tracking-tight text-white drop-shadow-md">
+      {/* 1. HEADER (Fixe en haut) */}
+      <div className="flex-none pt-safe-top px-6 py-4">
+        <div className="flex items-center justify-between mb-6">
+          {onboardingMode ? (
+            <Link
+              href="/onboarding/step-1"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md active:scale-95 transition-transform"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
+            </Link>
+          ) : (
+            <div className="w-10"></div>
+          )}
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={activeFaction.id}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
+              animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, y: -6 }}
+              transition={{ duration: 0.24, ease: 'easeOut' }}
+              className={`text-[10px] font-black uppercase tracking-[0.25em] ${activeFaction.accentText}`}
+            >
+              VOTRE AVENTURE
+            </motion.p>
+          </AnimatePresence>
+          <div className="w-10"></div>
+        </div>
+        <h1 className="text-3xl font-black tracking-tight text-white drop-shadow-md">
           Choisis ton compagnon
         </h1>
       </div>
@@ -140,17 +152,17 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
         />
       </AnimatePresence>
 
-      {/* 2. Le Carousel Central */}
-      <div 
+      {/* 2. BODY : LE CARROUSEL (Zone de Swipe) */}
+      <div
         ref={containerRef}
         className="flex-1 flex overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden w-full h-full relative z-0"
       >
         {FACTIONS.map((faction, idx) => {
           const isActive = activeIndex === idx
           return (
-            <div 
+            <div
               key={faction.id}
-              className="w-full h-full shrink-0 snap-center flex flex-col items-center justify-center pt-20 px-6 pb-40"
+              className="w-full h-full shrink-0 snap-center flex flex-col items-center justify-center pt-8 px-6 pb-32"
             >
               {/* Mascotte Flottante */}
               <motion.div
@@ -239,7 +251,7 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
             href="/onboarding/step-3"
             className={`w-full py-4 rounded-2xl font-black text-[#0B0F15] text-[17px] transition-all duration-500 active:scale-95 flex items-center justify-center gap-2 ${activeFaction.accentColor}`}
           >
-            Continuer
+            {activeFaction.buttonText}
           </Link>
         ) : (
           <form action={completeMockSetup} className="flex flex-col items-center gap-4 w-full">
