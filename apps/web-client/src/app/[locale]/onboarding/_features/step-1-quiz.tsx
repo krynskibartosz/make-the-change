@@ -54,7 +54,7 @@ export function Step1Quiz() {
                 className={`w-full p-5 rounded-2xl border text-left active:scale-[0.98] transition-transform flex justify-between items-center ${
                   showResult
                     ? isSelected && !isCorrect
-                      ? "bg-red-500/10 border-2 border-red-500"
+                      ? "bg-amber-500/5 border-amber-500/40"
                       : isCorrect
                         ? "bg-emerald-500/10 border-2 border-emerald-500"
                         : "bg-[#1A1F26] border-white/5 opacity-50"
@@ -64,7 +64,7 @@ export function Step1Quiz() {
                 <span className={`text-lg font-bold ${
                   showResult
                     ? isSelected && !isCorrect
-                      ? "text-red-400"
+                      ? "text-amber-500/90"
                       : isCorrect
                         ? "text-emerald-400"
                         : "text-white"
@@ -76,7 +76,7 @@ export function Step1Quiz() {
                   <CheckCircle2 size={20} className="text-emerald-400" strokeWidth={3} />
                 )}
                 {showResult && isSelected && !isCorrect && (
-                  <X size={20} className="text-red-400" strokeWidth={3} />
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-amber-500/70" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
                 )}
               </button>
             )
