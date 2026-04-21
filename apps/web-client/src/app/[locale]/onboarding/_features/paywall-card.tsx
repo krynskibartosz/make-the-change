@@ -22,12 +22,14 @@ export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps)
       price: '4,99',
       period: '/ mois',
       savings: null,
+      monthlyEquivalent: null,
       disclaimer: 'Facturé mensuellement. Sans engagement.',
     },
     annual: {
       price: '47,90',
       period: '/ an',
       savings: 'Vous économisez 12€ par an',
+      monthlyEquivalent: 'soit 3,99€/mois',
       disclaimer: 'Facturé annuellement. Sans engagement.',
     },
   }
@@ -107,7 +109,7 @@ export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps)
         <button
           onClick={() => setPlanType('monthly')}
           className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all flex flex-col items-center ${
-            planType === 'monthly' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-400 hover:text-white'
+            planType === 'monthly' ? 'bg-lime-500 text-[#0B0F15] shadow-lg shadow-lime-500/20' : 'text-gray-400 hover:text-white'
           }`}
         >
           <span>Mensuel</span>
@@ -115,7 +117,7 @@ export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps)
         <button
           onClick={() => setPlanType('annual')}
           className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all flex flex-col items-center relative ${
-            planType === 'annual' ? 'bg-white/10 text-white shadow-sm' : 'text-gray-400 hover:text-white'
+            planType === 'annual' ? 'bg-lime-500 text-[#0B0F15] shadow-lg shadow-lime-500/20' : 'text-gray-400 hover:text-white'
           }`}
         >
           <span>Annuel</span>
@@ -125,8 +127,20 @@ export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps)
         </button>
       </div>
 
+      {/* Social Proof */}
+      <div className="flex items-center justify-center gap-3 px-6 mt-6 mb-4">
+        <div className="flex -space-x-2">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 border-2 border-[#0B0F15] flex items-center justify-center text-[10px] font-bold text-[#0B0F15]">A</div>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-[#0B0F15] flex items-center justify-center text-[10px] font-bold text-[#0B0F15]">B</div>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-[#0B0F15] flex items-center justify-center text-[10px] font-bold text-[#0B0F15]">C</div>
+        </div>
+        <span className="text-xs text-gray-400">
+          Apprécié par <strong className="text-white">+5,000 Gardiens</strong>
+        </span>
+      </div>
+
       {/* Bento Grid of Privileges */}
-      <div className="px-6 mt-8 grid grid-cols-2 gap-3 mb-8 relative z-10">
+      <div className="px-6 mt-4 grid grid-cols-2 gap-3 mb-4 relative z-10">
         {/* Card 1 — Moteur de l'Essaim (full width) */}
         <div className="col-span-2 p-6 rounded-3xl bg-gradient-to-br from-lime-400/10 to-[#1A1F26] border border-lime-400/20 flex flex-col items-start gap-2 relative overflow-hidden">
           <Shield className="h-8 w-8 mb-2 text-lime-400" />
@@ -184,6 +198,11 @@ export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps)
               <span className="text-xs text-lime-400 font-bold block h-4">
                 {pricing[planType].savings ?? ''}
               </span>
+              {pricing[planType].monthlyEquivalent && (
+                <span className="text-[10px] text-gray-400 text-center">
+                  {pricing[planType].monthlyEquivalent}
+                </span>
+              )}
             </div>
             {/* CTA Button */}
             <button onClick={handleSubscribe} className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(132,204,22,0.15)] flex items-center justify-center">
