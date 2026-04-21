@@ -21,7 +21,7 @@ export function Step1Quiz() {
       </div>
 
       {/* 2. BODY (La zone de contenu, centrée verticalement) */}
-      <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col justify-center pb-8">
+      <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col justify-center pb-32">
         <div className="flex flex-col text-center mb-8">
           <h1 className="text-3xl font-black text-white leading-tight mb-2 text-balance">
             Faisons un test rapide.
@@ -80,7 +80,7 @@ export function Step1Quiz() {
       </div>
 
       {/* 3. FOOTER (Totalement FIXE en bas) */}
-      <div className="flex-none px-6 pb-8 pt-4 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent relative z-20">
+      <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 pt-4 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent relative z-20">
         {selectedAnswer === correctAnswer && (
           <div className="w-full max-w-md mx-auto mb-4 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md flex gap-4 items-start animate-in zoom-in-95 duration-300">
             <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 border border-emerald-500/30">
