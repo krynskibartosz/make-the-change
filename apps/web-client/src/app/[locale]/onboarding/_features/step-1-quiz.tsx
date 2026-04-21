@@ -10,15 +10,7 @@ export function Step1Quiz() {
 
   return (
     <div className="fixed inset-0 z-[100] h-[100dvh] w-full bg-[#0B0F15] flex flex-col overflow-hidden">
-      {/* 1. HEADER (Fixe en haut) */}
-      <div className="flex-none pt-safe-top px-6 py-4 flex items-center">
-        <Link
-          href="/onboarding/step-0"
-          className="w-10 h-10 rounded-full bg-[#1A1F26] border border-white/5 flex items-center justify-center active:scale-95 transition-transform"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
-        </Link>
-      </div>
+    
 
       {/* 2. BODY (La zone de contenu, centrée verticalement) */}
       <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col justify-center pb-32">
