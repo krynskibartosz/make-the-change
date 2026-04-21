@@ -94,7 +94,7 @@ export function Step1Quiz() {
             <div className="flex flex-col pt-0.5">
               <span className="text-sm font-black text-emerald-400 mb-0.5">C'est exact !</span>
               <p className="text-xs text-gray-300 leading-relaxed">
-                Le travail des pollinisateurs est colossal. Voici <span className="text-lime-400 font-bold">500 Graines</span> pour récompenser votre curiosité.
+                Pour faire 1kg de miel, une abeille parcourt l'équivalent de <span className="text-white font-bold">4 fois le tour de la Terre</span>. Leur travail est titanesque, mais elles sont menacées. Voici <span className="text-lime-400 font-bold">500 Graines</span> pour vous remercier de vous y intéresser.
               </p>
             </div>
           </div>
