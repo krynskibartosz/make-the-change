@@ -77,8 +77,11 @@ export function Step3Contract() {
             <div className="absolute left-1.5 top-1.5 bottom-1.5 bg-emerald-500/20 rounded-full transition-all duration-500" style={{ width: `${currentMetrics.percentage}%` }}></div>
 
             <div
-              className={`absolute -ml-6 w-12 h-11 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center justify-center transition-all duration-500 cursor-grab active:cursor-grabbing z-10`}
-              style={{ left: `${currentMetrics.percentage}%` }}
+              className={`absolute w-12 h-11 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center justify-center transition-all duration-500 cursor-grab active:cursor-grabbing z-10`}
+              style={{
+                left: `calc(${currentMetrics.percentage}% + 6px)`,
+                transform: 'translateX(-50%)'
+              }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B0F15" strokeWidth="3"><path d="M12 5v14M5 12h14"/></svg>
             </div>
