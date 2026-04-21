@@ -215,7 +215,7 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
                 className="mt-8 text-center"
               >
                 <h2 className="text-3xl font-black text-white tracking-tight">
-                  {faction.name}
+                  {faction.mascotName}
                 </h2>
                 <p className="mt-3 text-[15px] leading-relaxed text-white/70 max-w-sm mx-auto font-medium">
                   {faction.description}
