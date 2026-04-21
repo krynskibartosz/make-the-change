@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, HelpCircle, Lightbulb, Trophy, X } from 'lucide-react'
+import { CheckCircle2, HelpCircle, Lightbulb, Sprout, Trophy, X } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 export function Step1Quiz() {
@@ -10,7 +10,20 @@ export function Step1Quiz() {
 
   return (
     <div className="fixed inset-0 z-[100] h-[100dvh] w-full bg-[#0B0F15] flex flex-col overflow-hidden">
-    
+      {/* 1. HEADER (Fixe en haut) */}
+      <div className="flex-none pt-safe-top px-6 py-4 flex items-center justify-between">
+        <Link
+          href="/onboarding/step-0"
+          className="w-10 h-10 rounded-full bg-[#1A1F26] border border-white/5 flex items-center justify-center active:scale-95 transition-transform"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
+        </Link>
+        <div className="w-14 h-14 rounded-full bg-lime-400/10 border border-lime-400/20 shadow-[0_0_15px_rgba(132,204,22,0.15)] flex items-center justify-center relative group">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-lime-400/5 to-transparent"></div>
+          <Sprout size={32} className="text-lime-400 relative z-10 group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div className="w-10"></div>
+      </div>
 
       {/* 2. BODY (La zone de contenu, centrée verticalement) */}
       <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col justify-center pt-12 pb-32">
