@@ -7,7 +7,7 @@ import { Link } from '@/i18n/navigation'
 export function Step6Account() {
   const router = useRouter()
   // In a real app, this would come from state or URL params
-  const selectedFaction = 'forets' // Default for now
+  const selectedFaction: 'faune' | 'flore' | 'humain' = 'flore' // Default for now
 
   const handleSignup = () => {
     // In a real app, this would trigger actual authentication
@@ -39,7 +39,9 @@ export function Step6Account() {
                   ? '/abeille-transparente.png'
                   : selectedFaction === 'humain'
                     ? '/aura.png'
-                    : '/sylva.png'}
+                    : selectedFaction === 'flore'
+                      ? '/sylva.png'
+                      : '/sylva.png'}
                 alt="Mascotte"
                 className="w-16 h-16 object-contain"
               />

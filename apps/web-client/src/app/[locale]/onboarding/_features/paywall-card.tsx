@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, Crown, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Crown, ShieldCheck, Shield } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { Link } from '@/i18n/navigation'
 
