@@ -1306,7 +1306,7 @@ export function AdventureChallenges({
               <Lock className='h-4 w-4 shrink-0 text-white/25' />
             </div>
             <Link
-              href='/dashboard/subscription'
+              href={isConnected ? '/dashboard/subscription' : '/onboarding/step-0'}
               className='mx-6 mb-4 flex items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-semibold text-amber-400/70 transition-colors hover:text-amber-400 active:opacity-50'
             >
               Débloquer en tant que Gardien <ChevronRight className='h-3.5 w-3.5' />
