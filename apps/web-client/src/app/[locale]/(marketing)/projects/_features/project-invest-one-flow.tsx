@@ -16,6 +16,7 @@ import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
+import { getMockSpeciesContext } from '@/lib/mock/mock-biodex'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -91,7 +92,19 @@ export function ProjectInvestOneFlow({
   const router = useRouter()
   const haptic = useHaptic()
 
+  const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
+
   const rules = investment.getInvestmentRules(project.type)
+
+  useEffect(() => {
+    if (discoveredSpeciesId) {
+      getMockSpeciesContext(discoveredSpeciesId).then((species) => {
+        if (species) {
+          setDiscoveredSpecies({ name_default: species.name_default })
+        }
+      })
+    }
+  }, [discoveredSpeciesId])
 
   if (!rules) {
     return (
@@ -257,6 +270,10 @@ export function ProjectInvestOneFlow({
     setTimeout(() => {
       setIsSendingMagicLink(false)
       setClaimSaved(true)
+      // Redirection vers le BioDex après validation Magic Link
+      setTimeout(() => {
+        router.push('/adventure/biodex')
+      }, 2000)
     }, 1200)
   }
 
@@ -564,7 +581,7 @@ export function ProjectInvestOneFlow({
                   <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
                     Nouvelle espèce débloquée
                   </span>
-                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">La Chouette Effraie</h2>
+                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
                   <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
                     {`+ ${formatPoints(points.total_points)} Points d'Impact`} <Sparkles className="h-5 w-5" />
                   </p>
@@ -581,7 +598,7 @@ export function ProjectInvestOneFlow({
                   transition={{ delay: 0.35, duration: 0.35 }}
                   className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6"
                 >
-                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre Chouette Effraie !</h3>
+                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre {discoveredSpecies?.name_default || 'Chouette Effraie'} !</h3>
                   <p className="mb-4 text-sm text-white/60">
                     Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
                   </p>
