@@ -126,10 +126,24 @@ const antsirabeSpecies: ProjectSpecies[] = [
 const antsirabeProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_ID,
-    name: "Miel d'Eucalyptus",
+    name: 'Miel Eucalyptus 250g',
     price: 18,
     category: 'Miel',
     impactPercentage: 35,
+    size: '250g',
+    type: 'impact',
+    format: 'bocal',
+    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+  },
+  {
+    id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
+    name: 'Miel Eucalyptus 140g',
+    price: 12,
+    category: 'Miel',
+    impactPercentage: 35,
+    size: '140g',
+    type: 'impact',
+    format: 'bocal',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
 ]
@@ -148,11 +162,25 @@ const manakaraSpecies: ProjectSpecies[] = [
 
 const manakaraProducts: ProducerProduct[] = [
   {
-    id: MOCK_PRODUCT_MANAKARA_ID,
-    name: 'Miel de Manakara',
-    price: 19,
+    id: MOCK_PRODUCT_EUCALYPTUS_ID,
+    name: 'Miel Eucalyptus 250g',
+    price: 18,
     category: 'Miel',
     impactPercentage: 35,
+    size: '250g',
+    type: 'impact',
+    format: 'bocal',
+    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+  },
+  {
+    id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
+    name: 'Miel Eucalyptus 140g',
+    price: 12,
+    category: 'Miel',
+    impactPercentage: 35,
+    size: '140g',
+    type: 'impact',
+    format: 'bocal',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
 ]
