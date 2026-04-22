@@ -64,10 +64,12 @@ type FactionCarouselProps = {
   onboardingMode?: boolean
   onFactionSelect?: (faction: typeof FACTIONS[number]) => void | Promise<void>
   redirectAfterSelection?: string
+  preselectedFactionId?: string
 }
 
-export function FactionCarousel({ returnTo, onboardingMode = false, onFactionSelect, redirectAfterSelection }: FactionCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(0)
+export function FactionCarousel({ returnTo, onboardingMode = false, onFactionSelect, redirectAfterSelection, preselectedFactionId }: FactionCarouselProps) {
+  const preselectedIndex = preselectedFactionId ? FACTIONS.findIndex(f => f.id === preselectedFactionId) : 0
+  const [activeIndex, setActiveIndex] = useState(preselectedIndex >= 0 ? preselectedIndex : 0)
   const containerRef = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = useReducedMotion()
 
