@@ -1,4 +1,8 @@
 import {
+  MOCK_DONATION_CORAL_12_ID,
+  MOCK_DONATION_CORAL_18_ID,
+  MOCK_DONATION_CORAL_3_ID,
+  MOCK_DONATION_CORAL_6_ID,
   MOCK_PRODUCT_BAIES_ROSES_ID,
   MOCK_PRODUCT_CACTUS_ID,
   MOCK_PRODUCT_CORAL_12_ID,
@@ -39,6 +43,7 @@ import {
   MOCK_SPECIES_OLIVE_TREE_ID,
 } from '@/lib/mock/mock-ids'
 import type {
+  DonationOption,
   ProducerProduct,
   ProjectChallenge,
   ProjectImpact,
@@ -85,6 +90,7 @@ export type MockProjectSeed = {
   species?: ProjectSpecies[] | null
   challenges?: ProjectChallenge[] | null
   producer_products?: ProducerProduct[] | null
+  donation_options?: DonationOption[] | null
   expected_impact?: ProjectImpact | null
 }
 
@@ -312,6 +318,101 @@ const coralProducts: ProducerProduct[] = [
     category: 'Corail',
     impactPercentage: 25,
     image_url: '/coral-karimunjawa.jpg',
+  },
+]
+
+const coralDonationOptions: DonationOption[] = [
+  {
+    id: MOCK_DONATION_CORAL_3_ID,
+    projectId: MOCK_PROJECT_CORAL_ID,
+    name: 'Pack 3 coraux',
+    price: 55,
+    quantity: 3,
+    unitLabel: 'corail',
+    rewards: {
+      points: 55,
+      certificate: true,
+      photo: true,
+      location: true,
+      updates: true,
+    },
+    impact: {
+      unitsRestored: 3,
+      unitsLabel: 'corail',
+      survivalRate: '60-85%',
+      areaRestored: '0,06 m²',
+      habitatCreated: 3,
+      description: 'Micro-habitats créés pour poissons tropicaux',
+    },
+  },
+  {
+    id: MOCK_DONATION_CORAL_6_ID,
+    projectId: MOCK_PROJECT_CORAL_ID,
+    name: 'Pack 6 coraux',
+    price: 100,
+    quantity: 6,
+    unitLabel: 'corail',
+    rewards: {
+      points: 100,
+      certificate: true,
+      photo: true,
+      location: true,
+      updates: true,
+    },
+    impact: {
+      unitsRestored: 6,
+      unitsLabel: 'corail',
+      survivalRate: '60-85%',
+      areaRestored: '0,12 m²',
+      habitatCreated: 6,
+      description: 'Micro-habitats créés pour poissons tropicaux',
+    },
+  },
+  {
+    id: MOCK_DONATION_CORAL_12_ID,
+    projectId: MOCK_PROJECT_CORAL_ID,
+    name: 'Pack 12 coraux (mini araignée)',
+    price: 180,
+    quantity: 12,
+    unitLabel: 'corail',
+    rewards: {
+      points: 180,
+      certificate: true,
+      photo: true,
+      location: true,
+      updates: true,
+    },
+    impact: {
+      unitsRestored: 12,
+      unitsLabel: 'corail',
+      survivalRate: '60-85%',
+      areaRestored: '0,24 m²',
+      habitatCreated: 12,
+      description: 'Structure récifale partielle',
+    },
+  },
+  {
+    id: MOCK_DONATION_CORAL_18_ID,
+    projectId: MOCK_PROJECT_CORAL_ID,
+    name: 'Pack 18 coraux (araignée complète)',
+    price: 250,
+    quantity: 18,
+    unitLabel: 'corail',
+    rewards: {
+      points: 250,
+      certificate: true,
+      photo: true,
+      location: true,
+      updates: true,
+    },
+    impact: {
+      unitsRestored: 18,
+      unitsLabel: 'corail',
+      survivalRate: '60-85%',
+      areaRestored: '0,30-0,50 m²',
+      habitatCreated: 18,
+      description: 'Structure récifale complète',
+    },
   },
 ]
 
@@ -621,13 +722,9 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     },
     species: coralSpecies,
     challenges: [],
-    producer_products: coralProducts,
-    expected_impact: {
-      co2Absorbed: 45,
-      biodiversityGain: 75,
-      jobsCreated: 8,
-      timeline: 36,
-    },
+    producer_products: null,
+    donation_options: coralDonationOptions,
+    expected_impact: null,
   },
 ]
 

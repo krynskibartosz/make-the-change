@@ -2,6 +2,7 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import type {
+  DonationOption,
   ProducerProduct,
   ProjectChallenge,
   ProjectImpact,
@@ -46,6 +47,8 @@ export type PublicProject = {
   species?: ProjectSpecies[] | null
   challenges?: ProjectChallenge[] | null
   producer_products?: ProducerProduct[] | null
+  donation_options?: DonationOption[] | null
+  is_donation_project?: boolean
   expected_impact?: ProjectImpact | null
 }
 
@@ -185,6 +188,8 @@ const toPublicProjectFromMock = (
     species: project.species || null,
     challenges: project.challenges || null,
     producer_products: project.producer_products || null,
+    donation_options: project.donation_options || null,
+    is_donation_project: Boolean(project.donation_options?.length),
     expected_impact: project.expected_impact || null,
   }
 }

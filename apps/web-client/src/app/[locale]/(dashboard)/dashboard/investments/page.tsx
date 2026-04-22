@@ -23,6 +23,16 @@ type NormalizedInvestment = {
   type: 'investment'
 }
 
+type NormalizedDonation = {
+  id: string
+  amount_eur: number
+  amount_points: number
+  status: string
+  created_at: string
+  project: InvestmentProject | null
+  type: 'donation'
+}
+
 type NormalizedOrder = {
   id: string
   amount_eur: number
@@ -89,6 +99,39 @@ export default async function InvestmentsPage() {
     type: 'investment',
   }))
 
+  // Fetch donations
+  const rawDonations = isMockDataSource
+    ? []
+    : (
+        await (await createClient())
+          .from('donations')
+          .select(`
+            id,
+            amount_eur_equivalent,
+            amount_points,
+            status,
+            created_at,
+            project:public_projects!project_id(
+              name_default,
+              slug,
+              status,
+              hero_image_url
+            )
+          `)
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+      ).data || []
+
+  const userDonations: NormalizedDonation[] = (rawDonations || []).map((don) => ({
+    id: String(don.id),
+    amount_eur: Number(don.amount_eur_equivalent || 0),
+    amount_points: Number(don.amount_points || 0),
+    status: String(don.status || 'pending'),
+    created_at: String(don.created_at || new Date().toISOString()),
+    project: normalizeProject(don.project),
+    type: 'donation',
+  }))
+
   // Fetch orders
   const rawOrders = isMockDataSource
     ? await getCurrentMockOrders(user.id)
@@ -130,13 +173,14 @@ export default async function InvestmentsPage() {
     }
   })
 
-  const totalInvested = userInvestments.reduce((sum, inv) => sum + inv.amount_eur, 0)
-  const totalPoints = [...userInvestments, ...userOrders].reduce((sum, item) => sum + item.amount_points, 0)
+  const totalInvested = [...userInvestments, ...userDonations].reduce((sum, item) => sum + item.amount_eur, 0)
+  const totalPoints = [...userInvestments, ...userDonations, ...userOrders].reduce((sum, item) => sum + item.amount_points, 0)
 
   return (
     <ContributionsShell title="Historique">
       <ActivityList
         userInvestments={userInvestments}
+        userDonations={userDonations}
         userOrders={userOrders}
         totalInvested={totalInvested}
         totalPoints={totalPoints}

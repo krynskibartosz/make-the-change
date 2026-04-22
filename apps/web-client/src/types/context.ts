@@ -58,6 +58,35 @@ export interface ProjectImpact {
   timeline: number | null
 }
 
+// Donation Types
+export interface DonationReward {
+  points: number
+  certificate: boolean
+  photo: boolean
+  location: boolean
+  updates: boolean
+}
+
+export interface DonationImpact {
+  unitsRestored: number
+  unitsLabel: string
+  survivalRate: string
+  areaRestored: string
+  habitatCreated?: number
+  description?: string
+}
+
+export interface DonationOption {
+  id: string
+  projectId: string
+  name: string
+  price: number
+  quantity: number
+  unitLabel: string
+  rewards: DonationReward
+  impact: DonationImpact
+}
+
 // Product Context Types
 export interface ProductContext {
   id: string

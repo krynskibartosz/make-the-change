@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-type FilterType = 'all' | 'investment' | 'order'
+type FilterType = 'all' | 'investment' | 'donation' | 'order'
 
 type ActivityFilterProps = {
   onFilterChange: (filter: FilterType) => void
@@ -31,6 +31,16 @@ export function ActivityFilter({ onFilterChange, currentFilter }: ActivityFilter
         }`}
       >
         Impact
+      </button>
+      <button
+        onClick={() => onFilterChange('donation')}
+        className={`flex-1 py-2 rounded-lg text-sm transition-all ${
+          currentFilter === 'donation'
+            ? 'bg-white/15 text-white font-semibold shadow-sm'
+            : 'text-gray-500 hover:text-gray-300 font-medium'
+        }`}
+      >
+        Donations
       </button>
       <button
         onClick={() => onFilterChange('order')}

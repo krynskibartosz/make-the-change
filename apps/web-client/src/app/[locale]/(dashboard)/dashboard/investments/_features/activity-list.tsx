@@ -23,6 +23,16 @@ type NormalizedInvestment = {
   type: 'investment'
 }
 
+type NormalizedDonation = {
+  id: string
+  amount_eur: number
+  amount_points: number
+  status: string
+  created_at: string
+  project: InvestmentProject | null
+  type: 'donation'
+}
+
 type NormalizedOrder = {
   id: string
   amount_eur: number
@@ -37,9 +47,7 @@ type NormalizedOrder = {
   type: 'order'
 }
 
-type UnifiedActivity = NormalizedInvestment | NormalizedOrder
-
-type FilterType = 'all' | 'investment' | 'order'
+type UnifiedActivity = NormalizedInvestment | NormalizedDonation | NormalizedOrder
 
 const STATUS_LABELS: Record<string, string> = {
   active: 'Actif',
@@ -74,31 +82,34 @@ const formatEuros = (value: number): string => {
 
 type ActivityListProps = {
   userInvestments: NormalizedInvestment[]
+  userDonations: NormalizedDonation[]
   userOrders: NormalizedOrder[]
   totalInvested: number
   totalPoints: number
 }
 
-export function ActivityList({ userInvestments, userOrders, totalInvested, totalPoints }: ActivityListProps) {
+export function ActivityList({ userInvestments, userDonations, userOrders, totalInvested, totalPoints }: ActivityListProps) {
   const [filter, setFilter] = useState<FilterType>('all')
   const router = useRouter()
 
-  const allActivities: UnifiedActivity[] = [...userInvestments, ...userOrders].sort(
+  const allActivities: UnifiedActivity[] = [...userInvestments, ...userDonations, ...userOrders].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
   )
 
   const filteredActivities = allActivities.filter((activity) => {
     if (filter === 'all') return true
     if (filter === 'investment') return activity.type === 'investment'
+    if (filter === 'donation') return activity.type === 'donation'
     if (filter === 'order') return activity.type === 'order'
     return true
   })
 
   // Calculate filtered totals for bento display
   const filteredInvestments = filter === 'all' || filter === 'investment' ? userInvestments : []
+  const filteredDonations = filter === 'all' || filter === 'donation' ? userDonations : []
   const filteredOrders = filter === 'all' || filter === 'order' ? userOrders : []
-  const displayInvested = filteredInvestments.reduce((sum, inv) => sum + inv.amount_eur, 0)
-  const displayPoints = [...filteredInvestments, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
+  const displayInvested = [...filteredInvestments, ...filteredDonations].reduce((sum, item) => sum + item.amount_eur, 0)
+  const displayPoints = [...filteredInvestments, ...filteredDonations, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
   const displayOrderEuros = filteredOrders.reduce((sum, order) => sum + order.amount_eur, 0)
 
   // Determine bento labels based on filter
@@ -195,8 +206,54 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
               )
 
               return <div key={investment.id}>{content}</div>
+            } else if (activity.type === 'donation') {
+              const donation = activity
+              const project = donation.project
+              const statusLabel = STATUS_LABELS[donation.status] || donation.status
+
+              const content = (
+                <div
+                  className="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.03]"
+                  onClick={() => router.push(`/transactions/${donation.id}?type=donation`)}
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-4">
+                    {project?.cover_image_url ? (
+                      <img
+                        src={project.cover_image_url}
+                        alt={project.name_default || 'Projet'}
+                        className="h-12 w-12 shrink-0 rounded-xl border border-white/5 bg-[#0B0F15] object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-lime-400/20 bg-lime-400/10">
+                        <Leaf className="h-5 w-5 text-lime-400" />
+                      </div>
+                    )}
+                    <div className="flex flex-col justify-center flex-1 min-w-0">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-lime-400/80 mb-0.5">
+                        Donation
+                      </span>
+                      <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
+                        {project?.name_default || 'Projet'}
+                      </h3>
+                      <span className="text-xs text-gray-500">
+                        {formatDate(donation.created_at)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-1.5 ml-2">
+                    <span className="text-sm font-black tracking-tight text-white">
+                      {formatEuros(donation.amount_eur)} €
+                    </span>
+                    <span className={getStatusBadgeClass(donation.status)}>
+                      {statusLabel}
+                    </span>
+                  </div>
+                </div>
+              )
+
+              return <div key={donation.id}>{content}</div>
             } else {
-              const order = activity
+              const order = activity as NormalizedOrder
               const product = order.product
               const statusLabel = STATUS_LABELS[order.status] || order.status
               const paidInEuros = order.amount_eur > 0

@@ -4,9 +4,10 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getProjectContext } from '@/lib/api/project-context.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import type { ProducerProduct } from '@/types/context'
+import type { DonationOption, ProducerProduct } from '@/types/context'
 import { cn, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
+import { DonationOptionsSection } from './components/donation-options-section'
 import { ProjectImpactCalculator } from './components/project-impact-calculator'
 import { ProjectProducerProductsSection } from './components/project-producer-products-section'
 import { ProjectQuickViewHero } from './components/project-quick-view-hero'
@@ -112,7 +113,11 @@ export async function ProjectQuickView({
     project.producer && (project.producer.slug || project.producer.id)
       ? `/${locale}/producers/${project.producer.slug || project.producer.id}`
       : null
-  const investPath = `/projects/${project.slug}/invest?source=quick_view`
+
+  const isDonationProject = project.is_donation_project && project.donation_options
+  const investPath = isDonationProject
+    ? `/projects/${project.slug}/donate?source=quick_view`
+    : `/projects/${project.slug}/invest?source=quick_view`
   const projectContext =
     producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
   const resolvedProducerProducts =
@@ -281,15 +286,27 @@ export async function ProjectQuickView({
               )
             ) : null}
 
-            {resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
+            {isDonationProject && project.donation_options && project.donation_options.length > 0 ? (
+              <div className="px-4 sm:px-5">
+                <DonationOptionsSection
+                  options={project.donation_options}
+                  projectId={project.id}
+                  projectSlug={project.slug}
+                />
+              </div>
+            ) : null}
+
+            {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
               <div className="px-4 sm:px-5">
                 <ProjectProducerProductsSection products={resolvedProducerProducts} />
               </div>
             ) : null}
 
-            <div className="px-4 sm:px-5">
-              <ProjectImpactCalculator baseAmount={100} amount={currentFunding} mode="project" />
-            </div>
+            {!isDonationProject ? (
+              <div className="px-4 sm:px-5">
+                <ProjectImpactCalculator baseAmount={100} amount={currentFunding} mode="project" />
+              </div>
+            ) : null}
 
             <div className="w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
@@ -317,7 +334,7 @@ export async function ProjectQuickView({
           ) : (
             <Link href={investPath} className="block w-full">
               <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
-                Soutenir ce projet
+                {isDonationProject ? 'Faire un don' : 'Soutenir ce projet'}
               </Button>
             </Link>
           )}
