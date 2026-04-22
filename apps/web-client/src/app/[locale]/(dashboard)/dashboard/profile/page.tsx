@@ -174,7 +174,7 @@ export default async function ProfilePage() {
 
           <Link
             href="/aventure?tab=biodex"
-            className={`mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors ${accentTheme.accentText}`}
+            className="mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors text-lime-400"
           >
             Voir la liste complète du BioDex
             <ArrowRight className="h-4 w-4" />
