@@ -932,6 +932,7 @@ export function AdventureChallenges({
   const session = getClientMockViewerSession()
   const subscription = session ? getMockSubscription(session.viewerId) : null
   const hasSubscription = subscription?.status === 'active'
+  const isConnected = !!session
 
   const themeKey = resolveFactionThemeKey(initialFaction)
   const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
