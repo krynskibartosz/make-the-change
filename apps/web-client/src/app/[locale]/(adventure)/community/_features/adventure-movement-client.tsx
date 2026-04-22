@@ -503,10 +503,20 @@ export function AdventureMovementClient({
 
                     {/* En-tête : Mascotte & Titre */}
                     <div className="flex flex-col items-center text-center">
-                      <div className="relative mb-4 flex h-24 w-24 items-center justify-center">
-                        <div className={`absolute inset-0 rounded-full blur-2xl opacity-40 ${activeTheme.accentBg}`} />
-                        <img src={mascotSrc} alt="Mascotte faction" className="relative z-10 h-full w-full object-contain drop-shadow-2xl" />
-                      </div>
+                      {initialFaction ? (
+                        // Utilisateur connecté : afficher sa mascotte
+                        <div className="relative mb-4 flex h-24 w-24 items-center justify-center">
+                          <div className={`absolute inset-0 rounded-full blur-2xl opacity-40 ${activeTheme.accentBg}`} />
+                          <img src={mascotSrc} alt="Mascotte faction" className="relative z-10 h-full w-full object-contain drop-shadow-2xl" />
+                        </div>
+                      ) : (
+                        // Utilisateur non connecté : afficher les 3 mascottes
+                        <div className="relative mb-4 flex h-24 items-center justify-center gap-3">
+                          <img src="/abeille-transparente.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                          <img src="/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                          <img src="/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                        </div>
+                      )}
                       <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${activeTheme.accentTextSoft}`}>
                         La Récompense du Mois
                       </p>
