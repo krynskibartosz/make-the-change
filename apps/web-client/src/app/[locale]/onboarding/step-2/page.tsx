@@ -5,6 +5,8 @@ export default function Step2Page({
 }: {
   searchParams: Record<string, string | string[] | undefined>
 }) {
-  const preselected = searchParams.preselected as string | undefined
+  const preselected = Array.isArray(searchParams.preselected) 
+    ? searchParams.preselected[0] 
+    : searchParams.preselected
   return <FactionCarousel onboardingMode preselectedFactionId={preselected} />
 }
