@@ -845,18 +845,61 @@ function DailyHarvestModal({
                       }}
                     />
                   </svg>
-                  <img
-                    src={FACTION_CONTENT[accentTheme.key as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logo-icon-bee.png'}
-                    alt='Mascotte'
-                    className={cn(
-                      'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
-                      phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
-                    )}
-                    draggable='false'
-                    style={{
-                      filter: phase === 'charging' ? 'drop-shadow(0 0 20px rgba(163,230,53,0.6))' : 'none',
-                    }}
-                  />
+                  {hasFaction ? (
+                    // Utilisateur connecté : afficher sa mascotte
+                    <img
+                      src={FACTION_CONTENT[accentTheme.key as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logo-icon-bee.png'}
+                      alt='Mascotte'
+                      className={cn(
+                        'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                        phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
+                      )}
+                      draggable='false'
+                      style={{
+                        filter: phase === 'charging' ? 'drop-shadow(0 0 20px rgba(163,230,53,0.6))' : 'none',
+                      }}
+                    />
+                  ) : (
+                    // Utilisateur non connecté : afficher les 3 mascottes
+                    <div className="flex gap-3">
+                      <img
+                        src="/abeille-transparente.png"
+                        alt="Melli"
+                        className={cn(
+                          'h-32 w-32 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                          phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
+                        )}
+                        draggable='false'
+                        style={{
+                          filter: phase === 'charging' ? 'drop-shadow(0 0 20px rgba(163,230,53,0.6))' : 'none',
+                        }}
+                      />
+                      <img
+                        src="/sylva.png"
+                        alt="Sylva"
+                        className={cn(
+                          'h-32 w-32 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                          phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
+                        )}
+                        draggable='false'
+                        style={{
+                          filter: phase === 'charging' ? 'drop-shadow(0 0 20px rgba(163,230,53,0.6))' : 'none',
+                        }}
+                      />
+                      <img
+                        src="/ondine.png"
+                        alt="Ondine"
+                        className={cn(
+                          'h-32 w-32 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                          phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
+                        )}
+                        draggable='false'
+                        style={{
+                          filter: phase === 'charging' ? 'drop-shadow(0 0 20px rgba(163,230,53,0.6))' : 'none',
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <p className='mt-12 text-center text-2xl font-bold uppercase tracking-widest text-white/90 pointer-events-none select-none'>
