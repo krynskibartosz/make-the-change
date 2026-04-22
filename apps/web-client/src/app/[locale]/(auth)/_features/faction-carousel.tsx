@@ -94,6 +94,20 @@ export function FactionCarousel({ returnTo, onboardingMode = false, onFactionSel
     }
   }, [activeIndex])
 
+  // Scroll to preselected faction on mount
+  useEffect(() => {
+    if (preselectedFactionId && preselectedIndex >= 0) {
+      const container = containerRef.current
+      if (container) {
+        const left = container.clientWidth * preselectedIndex
+        container.scrollTo({
+          left,
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        })
+      }
+    }
+  }, [preselectedFactionId, preselectedIndex, prefersReducedMotion])
+
   const activeFaction = FACTIONS[Math.max(0, Math.min(activeIndex, FACTIONS.length - 1))]!
   const scrollToFaction = (index: number) => {
     const container = containerRef.current
