@@ -1,4 +1,4 @@
-import { Gift, Lock, Target, Trophy } from 'lucide-react'
+import { Gift, Lock, Mail, Target, Trophy } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getCollectiveGoal, getFactionContributions } from '@/lib/mock/mock-factions'
@@ -37,7 +37,7 @@ export default async function GuestProfilePage() {
           </div>
           <h1 className="mt-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
           <p className="mx-auto mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
-            Identifiez-vous pour debloquer votre BioDex, suivre votre impact et aider votre faction a faire avancer l objectif commun.
+            Identifiez-vous pour débloquer votre BioDex, suivre votre impact et aider votre faction à faire avancer l'objectif commun.
           </p>
         </section>
 
@@ -56,16 +56,17 @@ export default async function GuestProfilePage() {
           </Link>
           <Link
             href="/login?returnTo=%2Fdashboard%2Fprofile"
-            className="mt-2 text-center text-xs text-white/40 underline decoration-white/20 transition-colors active:text-white"
+            className="mt-2 flex items-center justify-center gap-2 text-center text-sm font-medium text-white/70 transition-colors hover:text-white"
           >
+            <Mail className="h-4 w-4" />
             Ou utiliser une adresse email
           </Link>
         </section>
 
         <section className="mx-5 mb-8 grid grid-cols-2 gap-3">
-          <LockedImpactCard icon="🐝" label="ABEILLES SAUVEES" />
-          <LockedImpactCard icon="🍯" label="MIEL GENERE" />
-          <LockedImpactCard icon="💨" label="CO2 CAPTURE" />
+          <LockedImpactCard icon="🐝" label="ABEILLES SAUVÉES" />
+          <LockedImpactCard icon="🍯" label="MIEL GÉNÉRÉ" />
+          <LockedImpactCard icon="💨" label="CO2 CAPTURÉ" />
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center opacity-50 grayscale transition-all">
             <div className="mb-2 text-xl">🎁</div>
@@ -130,7 +131,7 @@ export default async function GuestProfilePage() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${theme.accentTextSoft}`}>
-                        {contribution.isLeader ? 'En tete du mois' : `${contribution.contributionShare}% de l effort`}
+                        {contribution.isLeader ? 'En tête du mois' : `${contribution.contributionShare}% de l effort`}
                       </p>
                       <h3 className="mt-2 text-base font-black text-white">{contribution.label}</h3>
                       <p className="mt-1 text-sm text-white/60">{contribution.impactValue} {contribution.impactLabel}</p>

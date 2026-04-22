@@ -53,7 +53,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     name: 'EcoGuerrier',
     profileId: 'eco-guerrier',
     time: 'Il y a 14 min',
-    action: 'A complete un defi qui renforce la part de Vie Sauvage dans la recolte commune.',
+    action: 'A complété un défi qui renforce la part de Vie Sauvage dans la récolte commune.',
     icon: Trophy,
     iconColor: 'text-amber-400',
     actionHighlight: 'Vie Sauvage',
@@ -65,7 +65,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-3',
     name: 'Vie Sauvage',
     time: 'Il y a 31 min',
-    action: 'Passe en tete avec 45% de la recolte totale ce mois-ci.',
+    action: 'Passe en tête avec 45% de la récolte totale ce mois-ci.',
     icon: Target,
     iconColor: 'text-amber-400',
     actionHighlight: '45%',
@@ -79,7 +79,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     profileId: 'sarah-l',
     avatarUrl: 'https://i.pravatar.cc/80?u=sarah-l',
     time: 'Il y a 1 heure',
-    action: 'A debloque le Lynx Boreal dans le BioDex.',
+    action: 'A débloqué le Lynx Boréal dans le BioDex.',
     icon: PawPrint,
     iconColor: 'text-violet-400',
     bravos: 22,
@@ -117,7 +117,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     name: 'NaturaMind',
     profileId: 'natura-mind',
     time: 'Hier',
-    action: 'Vient de debloquer le badge Gardien des Forets.',
+    action: 'Vient de débloquer le badge Gardien des Forêts.',
     icon: Star,
     iconColor: 'text-amber-400',
     bravos: 47,
@@ -306,6 +306,7 @@ export function AdventureMovementClient({
   })
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
   const [persistedBravoIds, setPersistedBravoIds] = useState<string[]>([])
+  const [feedFilter, setFeedFilter] = useState<'faction' | 'global'>(initialFaction ? 'faction' : 'global')
   
   const showPrivilege = searchParams.get('p') === 'reward'
   
@@ -604,6 +605,9 @@ export function AdventureMovementClient({
                         {contribution.contributionShare}%
                       </span>
                     </div>
+                    <div className="mt-1 text-[10px] text-white/40">
+                      {contribution.label}
+                    </div>
                   </div>
                 )
               })}
@@ -613,11 +617,33 @@ export function AdventureMovementClient({
       </section>
 
       <section className="space-y-0 border-t border-white/5 px-4 pt-2 sm:px-6">
-        <div className="mb-4 flex items-center">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight text-white">Impact Global</h2>
+          {initialFaction && (
+            <div className="flex items-center rounded-full bg-white/5 p-1">
+              <button
+                onClick={() => setFeedFilter('faction')}
+                className={cn(
+                  'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
+                  feedFilter === 'faction' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'
+                )}
+              >
+                Ma Faction
+              </button>
+              <button
+                onClick={() => setFeedFilter('global')}
+                className={cn(
+                  'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
+                  feedFilter === 'global' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'
+                )}
+              >
+                Global
+              </button>
+            </div>
+          )}
         </div>
         <div className="relative z-0 w-full">
-          {MOCK_IMPACT_FEED.map((event) => (
+          {MOCK_IMPACT_FEED.filter(event => feedFilter === 'global' || !initialFaction || event.faction === initialFaction).map((event) => (
             <ImpactCard
               key={event.id}
               event={event}

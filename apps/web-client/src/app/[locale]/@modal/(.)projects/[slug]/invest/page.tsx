@@ -57,6 +57,7 @@ export default async function InterceptedProjectInvestPage({
     <FullScreenSlideModal
       fallbackHref={`/projects/${project.slug}`}
       headerMode="close"
+      refreshOnClose={true}
     >
       <ProjectInvestOneFlow
         project={{

@@ -13,6 +13,7 @@ type FullScreenSlideModalProps = PropsWithChildren<{
   className?: string
   contentClassName?: string
   onClose?: () => void
+  refreshOnClose?: boolean
 }>
 
 export function FullScreenSlideModal({
@@ -22,6 +23,7 @@ export function FullScreenSlideModal({
   className,
   contentClassName,
   onClose,
+  refreshOnClose,
   children,
 }: FullScreenSlideModalProps) {
   const router = useRouter()
@@ -69,6 +71,10 @@ export function FullScreenSlideModal({
     if (onClose) {
       onClose()
       return
+    }
+
+    if (refreshOnClose) {
+      router.refresh()
     }
 
     if (typeof window !== 'undefined' && window.history.length > 1) {

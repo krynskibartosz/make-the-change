@@ -25,14 +25,12 @@ function ToggleSwitch({ checked, onToggle }: { checked: boolean; onToggle: () =>
   return (
     <button
       onClick={onToggle}
-      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-        checked ? 'bg-lime-400' : 'bg-white/10'
-      }`}
+      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${checked ? 'bg-lime-400' : 'bg-white/10'
+        }`}
     >
       <span
-        className={`inline-block h-6 w-6 transform rounded-full transition duration-200 ease-in-out ${
-          checked ? 'translate-x-5 bg-[#0B0F15]' : 'translate-x-0 bg-white'
-        }`}
+        className={`inline-block h-6 w-6 transform rounded-full transition duration-200 ease-in-out ${checked ? 'translate-x-5 bg-[#0B0F15]' : 'translate-x-0 bg-white'
+          }`}
       />
     </button>
   )
@@ -90,7 +88,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         formData.append(k, k)
       }
     })
-    
+
     // Toggle the current key in the form data
     if (!settings[key]) {
       formData.append(key, key)
@@ -165,7 +163,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         />
         <div className="border-b border-white/5" />
         <SettingRow
-          title="Boutique & Récompenses"
+          title={"Marché & Récompenses"}
           description="Nouveaux produits et réassorts limités."
           checked={settings.product_updates}
           onToggle={() => handleToggle('product_updates')}

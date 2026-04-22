@@ -96,15 +96,15 @@ const EMPTY_MONTHLY_QUEST: MockMonthlyQuestOverview = {
 
 const FACTION_CONTENT = {
   pollinisateurs: {
-    title: "Quete de l'Essaim",
+    title: "Quête de l'Essaim",
     mascotImg: '/abeille-transparente.png',
   },
   forets: {
-    title: 'Quete de la Foret',
+    title: 'Quête de la Forêt',
     mascotImg: '/sylva.png',
   },
   artisans: {
-    title: 'Quete du Terroir',
+    title: 'Quête du Terroir',
     mascotImg: '/aura.png',
   },
 } as const
@@ -608,7 +608,7 @@ function EcoFactReader({
                 </span>
               ) : (
                 <span className='flex items-center gap-2'>
-                  <Lock className='h-4 w-4' /> Faites defiler pour debloquer
+                  <Lock className='h-4 w-4' /> Faites défiler pour débloquer
                 </span>
               )}
             </button>
@@ -839,8 +839,8 @@ export function AdventureChallenges({
       : 0
   const dayHeading =
     initialDayLabel && initialDayLabel !== "aujourd'hui"
-      ? `Quetes du ${initialDayLabel}`
-      : 'Quetes du jour'
+      ? `Quêtes du ${initialDayLabel}`
+      : 'Quêtes du jour'
 
   const ecoFactQuest = useMemo(
     () => dailyQuests.find((quest) => quest.type === 'education') ?? null,
@@ -1051,7 +1051,7 @@ export function AdventureChallenges({
 
         {dailyQuests.length === 0 ? (
           <div className='px-6 py-8 text-sm text-white/60'>
-            Aucun defi disponible pour le moment.
+            Aucun défi disponible pour le moment.
           </div>
         ) : null}
 

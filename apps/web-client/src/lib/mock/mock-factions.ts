@@ -47,7 +47,7 @@ const COLLECTIVE_GOAL: CollectiveGoal = {
   commonRewardTitle: 'Badge Batisseur de Rucher',
   commonRewardSummary: "500 graines et un badge commun pour tous les membres actifs si l objectif est atteint.",
   prestigeRewardTitle: 'Glow de faction',
-  prestigeRewardSummary: 'La faction en tete obtient un halo cosmetique exclusif pour le mois suivant.',
+  prestigeRewardSummary: 'La faction en tête obtient un halo cosmétique exclusif pour le mois suivant.',
 }
 
 const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = {
@@ -61,7 +61,7 @@ const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = 
     contributionShare: 45,
     impactValue: '1.2M',
     impactLabel: 'abeilles protegees',
-    rallyLabel: "Chaque defi renforce l Essaim et fait avancer le rucher commun.",
+    rallyLabel: "Chaque défi renforce l'Essaim et fait avancer le rucher commun.",
     prestigeTitle: 'Halo nectar',
     prestigeSummary: 'Un halo dore autour de Melli si la faction reste devant jusqu a la fin du mois.',
   },

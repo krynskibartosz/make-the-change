@@ -220,7 +220,7 @@ export function ActivityList({ userInvestments, userOrders, totalInvested, total
                     )}
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-0.5">
-                        Achat Boutique
+                        Achat Marché
                       </span>
                       <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
                         {product?.name_default || 'Produit'}

@@ -125,7 +125,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
   {
     key: 'nectar-saison-seche',
     label: 'Nectar en saison seche',
-    articleTitle: "Ce que change une floraison bien etalee pour l'apiculture",
+    articleTitle: "Ce que change une floraison bien étalée pour l'apiculture",
     fact: 'la continuite des ressources florales limite les creux critiques pour les colonies.',
     impact: 'des paysages diversifies soutiennent mieux la production locale et les pollinisateurs.',
     ritual: 'repere les continuites saisonnieres dans les ressources du vivant.',
@@ -395,7 +395,7 @@ const getTopicCta = (topic: TopicTheme) => {
   if (topic.linkedProductSlug) {
     return {
       href: '/products',
-      label: 'Voir le produit associe',
+      label: 'Voir le produit associé',
     }
   }
 
@@ -457,7 +457,7 @@ const buildEcoFactChallenge = (
       articleBody: [
         `Aujourd'hui, on zoome sur ${topic.label.toLowerCase()}: ${topic.fact}`,
         `C'est important parce que ${topic.impact}`,
-        `Petit reflexe a retenir: ${topic.ritual}`,
+        `Petit réflexe à retenir: ${topic.ritual}`,
       ],
       ctaHref: cta.href,
       ctaLabel: cta.label,
@@ -540,7 +540,7 @@ const buildDailyHarvestChallenge = (
     monthKey,
     type: 'daily_harvest',
     title: `${title} · ${topic.label}`,
-    description: `Reclame ton nectar du jour et garde en tete ${topic.ritual}`,
+    description: `Réclame ton nectar du jour et garde en tête ${topic.ritual}`,
     progress: progressSnapshot.progress,
     max: progressSnapshot.max,
     reward: 50,

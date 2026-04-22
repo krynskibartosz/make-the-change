@@ -96,7 +96,7 @@ const CMS_MENU_TEXT_TRANSLATIONS: CmsTextTranslations[] = [
     aliases: ['voir tous les projets', 'view all projects', 'bekijk alle projecten'],
   },
   {
-    fr: 'Boutique',
+    fr: 'Marché',
     en: 'Shop',
     nl: 'Winkel',
     aliases: ['boutique', 'shop', 'winkel'],

@@ -89,7 +89,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
             <div className="mt-2 text-2xl font-black tabular-nums text-white">
               {profile.beesSaved.toLocaleString('fr-FR')}
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">ABEILLES SAUVEES</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">ABEILLES SAUVÉES</div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
@@ -101,7 +101,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
               })}{' '}
               kg
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">MIEL GENERE</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">MIEL GÉNÉRÉ</div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
@@ -113,7 +113,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
               })}{' '}
               kg
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CO2 CAPTURE</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CO2 CAPTURÉ</div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">

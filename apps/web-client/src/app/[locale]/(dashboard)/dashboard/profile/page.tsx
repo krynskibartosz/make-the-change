@@ -1,4 +1,4 @@
-import {  ArrowRight, Bug, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind , Sprout } from 'lucide-react'
+import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind, Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
@@ -68,7 +68,7 @@ export default async function ProfilePage() {
             <div className="mt-2 text-2xl font-black tabular-nums text-white">
               {(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">ABEILLES SAUVEES</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">ABEILLES SAUVÉES</div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
@@ -80,7 +80,7 @@ export default async function ProfilePage() {
               })}{' '}
               kg
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">MIEL GENERE</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">MIEL GÉNÉRÉ</div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
@@ -92,7 +92,7 @@ export default async function ProfilePage() {
               })}{' '}
               kg
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CO2 CAPTURE</div>
+            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CO2 CAPTURÉ</div>
           </div>
 
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
@@ -102,6 +102,24 @@ export default async function ProfilePage() {
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">POINTS D&apos;IMPACT</div>
           </div>
+        </section>
+
+        <section className="mb-10 px-0">
+          <Link
+            href="/paywall"
+            className="flex items-center justify-between gap-4 rounded-3xl border border-amber-500/30 bg-amber-500/10 p-5 transition-colors hover:bg-amber-500/20 active:scale-[0.98]"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                <Crown className="h-6 w-6 text-amber-400" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-black text-amber-400">Passez au niveau superieur</span>
+                <span className="mt-0.5 text-xs font-medium text-amber-400/80">Decouvrez les privileges des Gardiens.</span>
+              </div>
+            </div>
+            <ArrowRight className="h-5 w-5 shrink-0 text-amber-400/50" />
+          </Link>
         </section>
 
         <section className="mb-8">
@@ -293,7 +311,7 @@ export default async function ProfilePage() {
             <h3 className="mt-3 text-lg font-black text-white">Invitez vos amis</h3>
             <p className="mb-4 mt-2 text-balance text-sm text-white/70">
               Faites grandir le mouvement. Gagnez <span className={`font-bold ${accentTheme.accentText}`}>500 graines</span>{' '}
-              chacun pour chaque ami parraine.
+              chacun pour chaque ami parrainé.
             </p>
             <button
               type="button"

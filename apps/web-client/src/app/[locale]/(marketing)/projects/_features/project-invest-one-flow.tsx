@@ -114,6 +114,7 @@ export function ProjectInvestOneFlow({
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
   const [claimEmail, setClaimEmail] = useState('')
   const [claimSaved, setClaimSaved] = useState(false)
+  const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
   const [isProcessing, setIsProcessing] = useState(false)
   const amountInputRef = useRef<HTMLInputElement | null>(null)
@@ -252,7 +253,11 @@ export function ProjectInvestOneFlow({
     if (!isValidEmail(claimEmail)) {
       return
     }
-    setClaimSaved(true)
+    setIsSendingMagicLink(true)
+    setTimeout(() => {
+      setIsSendingMagicLink(false)
+      setClaimSaved(true)
+    }, 1200)
   }
 
   const focusClaimEmailInput = () => {
@@ -593,19 +598,27 @@ export function ProjectInvestOneFlow({
                       type="button"
                       onClick={submitClaim}
                       className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
-                      disabled={!isValidEmail(claimEmail)}
+                      disabled={!isValidEmail(claimEmail) || isSendingMagicLink}
                     >
-                      Créer mon compte
+                      {isSendingMagicLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      Créer mon compte en 1 clic
                     </Button>
                   </div>
                 </motion.div>
               ) : null}
 
               {claimSaved && !isAuthenticated ? (
-                <p className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-lime-300">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  Profil prêt. Votre récompense sera sauvegardée dans le BioDex.
-                </p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 inline-flex w-full items-center gap-3 rounded-xl border border-lime-400/30 bg-lime-400/10 p-4 text-left text-sm font-semibold text-lime-300 shadow-sm"
+                >
+                  <CheckCircle2 className="h-6 w-6 shrink-0" />
+                  <span>
+                    <span className="block font-black text-lime-400 mb-0.5">Vérifiez votre boîte mail !</span>
+                    Un lien magique vous y attend pour sécuriser votre espèce.
+                  </span>
+                </motion.p>
               ) : null}
             </div>
           </section>
@@ -682,6 +695,7 @@ export function ProjectInvestOneFlow({
         <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
           <Button
             type="button"
+            disabled={isSendingMagicLink}
             onClick={() => {
               if (!isValidEmail(claimEmail)) {
                 focusClaimEmailInput()
@@ -689,9 +703,10 @@ export function ProjectInvestOneFlow({
               }
               submitClaim()
             }}
-            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
           >
-            Créer mon compte
+            {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+            Créer mon compte en 1 clic
           </Button>
         </div>
       ) : null}

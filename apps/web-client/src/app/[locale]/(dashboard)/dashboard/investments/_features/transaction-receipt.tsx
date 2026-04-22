@@ -24,7 +24,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
       { label: 'Construction des ruches', date: 'En cours sur le terrain', status: 'in-progress' },
       { label: 'Première récolte', date: 'Prévu en Septembre', status: 'future' },
     ],
-    impact: 'Vos 390€ représentent 5% du financement total. Vous parrainez l\'équivalent de 15 000 abeilles sauvages.',
+    impact: 'Vos 390€ représentent 5% du financement total. Vous avez parrainé l\'équivalent de 15 000 abeilles sauvages.',
   }
 
   const orderData = {
@@ -132,7 +132,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
           )}
           {isInvestment ? (
             <p className="text-sm text-gray-300 leading-relaxed">
-              Vos <strong className="text-white">{formatEuros(data.amount)}€</strong> représentent <strong className="text-white">5% du financement total</strong>. Vous parrainez l'équivalent de 15 000 abeilles sauvages.
+              Vos <strong className="text-white">{formatEuros(data.amount)}€</strong> représentent <strong className="text-white">5% du financement total</strong>. Vous avez parrainé l'équivalent de 15 000 abeilles sauvages.
             </p>
           ) : (
             <div className="flex flex-col gap-1">

@@ -425,7 +425,7 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
   },
   {
     id: 'mock-points-eco-fact',
-    label: "Eco-Fact du jour complete",
+    label: "Eco-Fact du jour complété",
     delta: 50,
     impactDelta: 50,
     createdAt: '2026-04-17T07:30:00.000Z',
