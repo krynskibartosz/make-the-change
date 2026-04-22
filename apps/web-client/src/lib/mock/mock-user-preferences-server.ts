@@ -1,6 +1,3 @@
-import 'server-only'
-
-import { cookies } from 'next/headers'
 import {
   createDefaultMockUserPreferences,
   mockPreferencesCookieOptions,
@@ -14,6 +11,7 @@ import type { MockUserPreferences } from '@/lib/mock/types'
 export async function getMockUserPreferences(
   viewerId: string,
 ): Promise<MockUserPreferences> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   const parsed = parseMockUserPreferencesValue(
     cookieStore.get(MOCK_PREFERENCES_COOKIE_NAME)?.value,
@@ -38,6 +36,7 @@ export async function getCurrentMockUserPreferences(): Promise<MockUserPreferenc
 export async function setMockUserPreferences(
   preferences: MockUserPreferences,
 ): Promise<void> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   cookieStore.set(
     MOCK_PREFERENCES_COOKIE_NAME,
@@ -47,6 +46,7 @@ export async function setMockUserPreferences(
 }
 
 export async function clearMockUserPreferences(): Promise<void> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   cookieStore.set(MOCK_PREFERENCES_COOKIE_NAME, '', {
     ...mockPreferencesCookieOptions,

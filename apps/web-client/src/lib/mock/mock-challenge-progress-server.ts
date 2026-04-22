@@ -1,6 +1,3 @@
-import 'server-only'
-
-import { cookies } from 'next/headers'
 import {
   getMockCalendarDayKey,
   getMockChallengeBySlug,
@@ -116,6 +113,7 @@ export async function getCurrentMockChallengeStates(
     return []
   }
 
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   const persistedStates = parseMockChallengeProgressValue(
     cookieStore.get(MOCK_CHALLENGE_PROGRESS_COOKIE_NAME)?.value,

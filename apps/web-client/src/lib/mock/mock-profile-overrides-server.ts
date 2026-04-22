@@ -1,6 +1,3 @@
-import 'server-only'
-
-import { cookies } from 'next/headers'
 import {
   createDefaultMockProfileOverrides,
   mockProfileCookieOptions,
@@ -17,6 +14,7 @@ import {
 export async function getMockProfileOverrides(
   viewerId: string,
 ): Promise<MockProfileOverrides> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   const parsed = parseMockProfileOverridesValue(
     cookieStore.get(MOCK_PROFILE_COOKIE_NAME)?.value,
@@ -30,6 +28,7 @@ export async function getMockProfileOverrides(
 }
 
 export async function getCurrentMockProfileOverrides(): Promise<MockProfileOverrides | null> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   const session = parseMockViewerSessionValue(
     cookieStore.get(MOCK_AUTH_COOKIE_NAME)?.value,
@@ -45,6 +44,7 @@ export async function getCurrentMockProfileOverrides(): Promise<MockProfileOverr
 export async function setMockProfileOverrides(
   overrides: MockProfileOverrides,
 ): Promise<void> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   cookieStore.set(
     MOCK_PROFILE_COOKIE_NAME,
@@ -54,6 +54,7 @@ export async function setMockProfileOverrides(
 }
 
 export async function clearMockProfileOverrides(): Promise<void> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   cookieStore.set(MOCK_PROFILE_COOKIE_NAME, '', {
     ...mockProfileCookieOptions,

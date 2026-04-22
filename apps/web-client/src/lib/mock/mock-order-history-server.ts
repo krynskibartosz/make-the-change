@@ -1,6 +1,3 @@
-import 'server-only'
-
-import { cookies } from 'next/headers'
 import {
   MOCK_ORDERS_COOKIE_NAME,
   parseMockOrdersCookieValue,
@@ -18,6 +15,7 @@ const clonePersistedOrder = (order: MockOrderRecord): MockOrderRecord => ({
 })
 
 export async function getCurrentMockOrders(viewerId: string): Promise<MockOrderRecord[]> {
+  const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   const persistedOrders = parseMockOrdersCookieValue(
     cookieStore.get(MOCK_ORDERS_COOKIE_NAME)?.value,

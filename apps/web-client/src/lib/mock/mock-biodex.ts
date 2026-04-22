@@ -1,6 +1,3 @@
-import { getCurrentMockCompletedChallengeSeriesIds, getCurrentMockDailyChallenges } from '@/lib/mock/mock-challenge-progress-server'
-import { getMockInvestments } from '@/lib/mock/mock-member-data'
-import { getCurrentMockOrders } from '@/lib/mock/mock-order-history-server'
 import {
   MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
   MOCK_CHALLENGE_DAILY_HARVEST_ID,
@@ -190,6 +187,11 @@ const getParticipationGraph = async (
       currentChallengeProgress: new Map<string, number>(),
     }
   }
+
+  // Import server-only modules only when this function is called
+  const { getCurrentMockCompletedChallengeSeriesIds, getCurrentMockDailyChallenges } = await import('@/lib/mock/mock-challenge-progress-server')
+  const { getMockInvestments } = await import('@/lib/mock/mock-member-data')
+  const { getCurrentMockOrders } = await import('@/lib/mock/mock-order-history-server')
 
   const [orders, completedChallengeIds, currentDailyChallenges] = await Promise.all([
     getCurrentMockOrders(viewerId),
