@@ -737,7 +737,7 @@ export function AdventureMovementClient({
       </section>
 
       <section className="space-y-0 border-t border-white/5 px-4 pt-6 sm:px-6">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-2 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight text-white">Impact Global</h2>
           {initialFaction && (
             <div className="flex items-center rounded-full bg-white/5 p-1">
