@@ -416,7 +416,7 @@ function EcoFactReader({
               <div className='pointer-events-none absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
               {hasFaction && (
                 <motion.img
-                  src='/images/logo-icon-bee.png'
+                  src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
                   alt={challengeLabel}
                   initial={{ opacity: 0, scale: 0.85, y: 18 }}
                   animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
@@ -842,7 +842,7 @@ function DailyHarvestModal({
                     />
                   </svg>
                   <img
-                    src='/images/logo-icon-bee.png'
+                    src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
                     alt='Mascotte'
                     className={cn(
                       'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100',
