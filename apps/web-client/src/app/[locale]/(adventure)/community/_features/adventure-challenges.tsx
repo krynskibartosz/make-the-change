@@ -53,6 +53,7 @@ type EcoFactReaderProps = {
   challenge: DailyQuest | null
   isCompleted: boolean
   open: boolean
+  hasFaction: boolean
   onValidate: () => void
   onClose: () => void
 }
@@ -292,6 +293,7 @@ function EcoFactReader({
   challenge,
   isCompleted,
   open,
+  hasFaction,
   onValidate,
   onClose,
 }: EcoFactReaderProps) {
@@ -408,24 +410,26 @@ function EcoFactReader({
           <div ref={contentRef} onScroll={handleScroll} className='relative flex-1 overflow-y-auto pb-44'>
             <div className='relative isolate min-h-[46vh] px-6 pt-6'>
               <div className='pointer-events-none absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
-              <motion.img
-                src='/images/logo-icon-bee.png'
-                alt={challengeLabel}
-                initial={{ opacity: 0, scale: 0.85, y: 18 }}
-                animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
-                transition={{
-                  opacity: { duration: 0.35, delay: 0.15 },
-                  scale: { duration: 0.35, delay: 0.15 },
-                  y: {
-                    duration: 4,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatType: 'mirror',
-                    ease: 'easeInOut',
-                    delay: 0.55,
-                  },
-                }}
-                className='relative z-10 mx-auto mt-16 h-56 w-56 object-contain drop-shadow-2xl'
-              />
+              {hasFaction && (
+                <motion.img
+                  src='/images/logo-icon-bee.png'
+                  alt={challengeLabel}
+                  initial={{ opacity: 0, scale: 0.85, y: 18 }}
+                  animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
+                  transition={{
+                    opacity: { duration: 0.35, delay: 0.15 },
+                    scale: { duration: 0.35, delay: 0.15 },
+                    y: {
+                      duration: 4,
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatType: 'mirror',
+                      ease: 'easeInOut',
+                      delay: 0.55,
+                    },
+                  }}
+                  className='relative z-10 mx-auto mt-16 h-56 w-56 object-contain drop-shadow-2xl'
+                />
+              )}
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -580,10 +584,14 @@ function EcoFactReader({
 
             <button
               type='button'
-              disabled={!isUnlocked || isCompleted}
+              disabled={(!isUnlocked || isCompleted) && hasFaction}
               onClick={(event) => {
                 event.stopPropagation()
                 if (!isUnlocked || isCompleted) {
+                  return
+                }
+                if (!hasFaction) {
+                  window.location.href = '/welcome/setup'
                   return
                 }
                 onValidate()
@@ -593,7 +601,9 @@ function EcoFactReader({
                 isCompleted
                   ? 'border border-white/10 bg-white/5 text-white/55'
                   : isUnlocked
-                  ? cn(accentTheme.accentBg, 'text-[#0B0F15] active:scale-95', accentTheme.accentShadow)
+                  ? !hasFaction
+                    ? 'bg-lime-400 text-black active:scale-95'
+                    : cn(accentTheme.accentBg, 'text-[#0B0F15] active:scale-95', accentTheme.accentShadow)
                   : 'border border-white/10 bg-white/5 text-white/40',
               )}
             >
@@ -602,10 +612,17 @@ function EcoFactReader({
                   <CheckCircle2 className='h-4 w-4 text-lime-400' /> Déjà validé aujourd'hui
                 </span>
               ) : isUnlocked ? (
-                <span className='flex items-center gap-2 animate-in zoom-in duration-300'>
-                  C'est noté ! <span className='font-normal opacity-50'>|</span> +{challenge?.reward ?? 50}
-                  <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
-                </span>
+                !hasFaction ? (
+                  <span className='flex items-center gap-2 animate-in zoom-in duration-300'>
+                    Rejoindre pour récolter {challenge?.reward ?? 50}
+                    <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
+                  </span>
+                ) : (
+                  <span className='flex items-center gap-2 animate-in zoom-in duration-300'>
+                    C'est noté ! <span className='font-normal opacity-50'>|</span> +{challenge?.reward ?? 50}
+                    <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
+                  </span>
+                )
               ) : (
                 <span className='flex items-center gap-2'>
                   <Lock className='h-4 w-4' /> Faites défiler pour débloquer
@@ -1210,6 +1227,7 @@ export function AdventureChallenges({
         challenge={ecoFactQuest}
         isCompleted={Boolean(ecoFactQuest && ecoFactQuest.progress >= ecoFactQuest.max)}
         open={isEcoFactReaderOpen}
+        hasFaction={Boolean(initialFaction)}
         onValidate={handleEcoFactValidate}
         onClose={() => setIsEcoFactReaderOpen(false)}
       />
