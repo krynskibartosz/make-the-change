@@ -114,7 +114,7 @@ const FACTION_CONTENT = {
 const resolveArticleParagraphs = (challenge: DailyQuest | null) => {
   const articleSummary =
     challenge?.metadata.articleSummary ||
-    'Un geste simple repete chaque jour finit par changer le vivant autour de nous.'
+    'Un geste simple répété chaque jour finit par changer le vivant autour de nous.'
 
   if (challenge?.metadata.articleBody?.length) {
     return challenge.metadata.articleBody
@@ -123,9 +123,9 @@ const resolveArticleParagraphs = (challenge: DailyQuest | null) => {
   return [
     articleSummary,
     challenge?.description ||
-      'Comprendre un ecosysteme, c est deja commencer a mieux le proteger.',
+      'Comprendre un écosystème, c\'est déjà commencer à mieux le protéger.',
     challenge?.metadata.nextStep ||
-      'Observe ce que ce sujet change dans ta maniere de regarder les projets et les especes.',
+      'Observe ce que ce sujet change dans ta manière de regarder les projets et les espèces.',
   ]
 }
 
@@ -147,9 +147,9 @@ function EcoFactArticleView({
   ].filter((value): value is string => Boolean(value))
   const articleParagraphs = resolveArticleParagraphs(challenge)
   const articleQuote =
-    articleParagraphs[1] || articleSummary || 'Le vivant repond a la repetition des bons gestes.'
+    articleParagraphs[1] || articleSummary || 'Le vivant répond à la répétition des bons gestes.'
   const articleCtaHref = challenge?.metadata.ctaHref || '/projects'
-  const articleCtaLabel = challenge?.metadata.ctaLabel || 'Voir les projets lies'
+  const articleCtaLabel = challenge?.metadata.ctaLabel || 'Voir les projets liés'
   const articleBadge = challenge?.rewardBadge || 'Rituel quotidien'
 
   return (
@@ -267,7 +267,7 @@ function EcoFactArticleView({
             )}
           >
             <h3 className={cn('mb-2 text-xl font-black', accentTheme.accentText)}>
-              Passe a l'action
+              Passe à l'action
             </h3>
             <p className='mb-4 text-sm text-white/70'>{articleSummary}</p>
             <Link
@@ -551,7 +551,7 @@ function EcoFactReader({
                       accentTheme.accentBorder,
                     )}
                   >
-                    Déjà lu aujourd'hui. Tu peux relire ce dossier quand tu veux, mais la récompense a
+                    Déjà lu aujourd'hui. Tu peux relire ce dossier quand tu veux, mais la récompense à
                     déjà été comptée.
                   </div>
                 </motion.div>
@@ -1296,7 +1296,7 @@ export function AdventureChallenges({
           <Lock className='h-4 w-4 shrink-0 text-white/25' />
         </div>
         <Link
-          href='/paywall'
+          href='/dashboard/subscription'
           className='mx-6 mb-4 flex items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-semibold text-amber-400/70 transition-colors hover:text-amber-400 active:opacity-50'
         >
           Débloquer en tant que Gardien <ChevronRight className='h-3.5 w-3.5' />
