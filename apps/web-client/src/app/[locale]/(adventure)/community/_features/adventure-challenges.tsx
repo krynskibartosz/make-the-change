@@ -100,6 +100,10 @@ const EMPTY_MONTHLY_QUEST: MockMonthlyQuestOverview = {
 }
 
 const FACTION_CONTENT = {
+  neutral: {
+    title: "Les Défis Quotidiens",
+    mascotImg: '/images/logo-icon-bee.png',
+  },
   pollinisateurs: {
     title: "Quête de l'Essaim",
     mascotImg: '/abeille-transparente.png',
@@ -416,7 +420,7 @@ function EcoFactReader({
               <div className='pointer-events-none absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
               {hasFaction && (
                 <motion.img
-                  src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
+                  src={FACTION_CONTENT[accentTheme.key as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logo-icon-bee.png'}
                   alt={challengeLabel}
                   initial={{ opacity: 0, scale: 0.85, y: 18 }}
                   animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
@@ -842,7 +846,7 @@ function DailyHarvestModal({
                     />
                   </svg>
                   <img
-                    src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
+                    src={FACTION_CONTENT[accentTheme.key as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logo-icon-bee.png'}
                     alt='Mascotte'
                     className={cn(
                       'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
@@ -1119,7 +1123,7 @@ export function AdventureChallenges({
         {initialFaction && (
           <div className='absolute bottom-0 right-[-10px] z-10 h-40 w-40 opacity-90'>
             <img
-              src={factionTheme.mascotImg}
+              src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
               alt={factionTheme.title}
               className='h-full w-full object-contain object-bottom drop-shadow-2xl'
               onError={(event) => {
