@@ -60,7 +60,7 @@ export default async function GuestProfilePage() {
       <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
           <Link
-            href="/dashboard/settings"
+            href="/settings"
             aria-label="Paramètres"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
           >
