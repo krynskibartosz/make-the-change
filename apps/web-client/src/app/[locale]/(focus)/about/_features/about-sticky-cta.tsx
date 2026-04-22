@@ -1,20 +1,58 @@
 'use client'
 
 import { ArrowRight } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
+import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { AboutCtaProps } from './about.types'
 
 export function AboutStickyCta({ label }: AboutCtaProps) {
   const router = useRouter()
+  const [userState, setUserState] = useState<{
+    isConnected: boolean
+    hasFaction: boolean
+    hasSubscription: boolean
+  }>({
+    isConnected: false,
+    hasFaction: false,
+    hasSubscription: false,
+  })
+
+  useEffect(() => {
+    const session = getClientMockViewerSession()
+    const subscription = session ? getMockSubscription(session.viewerId) : null
+    setUserState({
+      isConnected: !!session,
+      hasFaction: !!session?.faction,
+      hasSubscription: subscription?.status === 'active',
+    })
+  }, [])
 
   const handleClick = useCallback(() => {
     if (typeof window !== 'undefined' && window.history.length > 1) {
       router.back()
       return
     }
-    router.push('/')
-  }, [router])
+
+    // Logique de redirection intelligente
+    if (!userState.isConnected) {
+      router.push('/onboarding/step-0')
+      return
+    }
+
+    if (!userState.hasFaction) {
+      router.push('/welcome/setup')
+      return
+    }
+
+    if (!userState.hasSubscription) {
+      router.push('/dashboard/subscription')
+      return
+    }
+
+    router.push('/aventure?tab=defis')
+  }, [router, userState])
 
   return (
     <div

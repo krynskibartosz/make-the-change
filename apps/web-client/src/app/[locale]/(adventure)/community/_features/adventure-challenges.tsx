@@ -6,6 +6,7 @@ import {
   BookOpen,
   CheckCircle2,
   ChevronRight,
+  Crown,
   Lock,
   Sparkles,
   Sprout,
@@ -19,6 +20,8 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/lib/faction-theme'
 import { recordClientMockChallengeCompletion } from '@/lib/mock/mock-challenge-progress'
+import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { MockChallengeDetail, MockMonthlyQuestOverview } from '@/lib/mock/mock-challenges'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
@@ -925,6 +928,11 @@ export function AdventureChallenges({
   const [isDailyHarvestOpen, setIsDailyHarvestOpen] = useState(false)
   const [floatingReward, setFloatingReward] = useState<{ id: number; amount: number } | null>(null)
 
+  // Utiliser les données mockées existantes pour l'abonnement
+  const session = getClientMockViewerSession()
+  const subscription = session ? getMockSubscription(session.viewerId) : null
+  const hasSubscription = subscription?.status === 'active'
+
   const themeKey = resolveFactionThemeKey(initialFaction)
   const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
   const accentTheme = getFactionTheme(initialFaction)
@@ -1275,32 +1283,53 @@ export function AdventureChallenges({
         })}
 
         {/* ── UPSELL PREMIUM : BOOST GARDIEN ── */}
-        <div className='mx-6 mt-3 mb-2 flex items-center gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 py-3.5 opacity-80'>
-          <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10'>
-            <Sparkles className='h-5 w-5 text-amber-400' />
-          </div>
-          <div className='min-w-0 flex-1'>
-            <div className='flex items-center gap-1.5'>
-              <span className='text-sm font-bold text-white/60'>Boost Gardien</span>
-              <span className='rounded-full bg-amber-400/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400'>
-                ×2
-              </span>
-              <span className='ml-auto rounded-full bg-amber-400/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400'>
-                👑 Gardiens
-              </span>
+        {!hasSubscription ? (
+          <>
+            <div className='mx-6 mt-3 mb-2 flex items-center gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 py-3.5 opacity-80'>
+              <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10'>
+                <Sparkles className='h-5 w-5 text-amber-400' />
+              </div>
+              <div className='min-w-0 flex-1'>
+                <div className='flex items-center gap-1.5'>
+                  <span className='text-sm font-bold text-white/60'>Boost Gardien</span>
+                  <span className='rounded-full bg-amber-400/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400'>
+                    ×2
+                  </span>
+                  <span className='ml-auto rounded-full bg-amber-400/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400'>
+                    👑 Gardiens
+                  </span>
+                </div>
+                <p className='mt-0.5 text-[11px] text-white/40'>
+                  Double vos graines sur toutes les quêtes du jour.
+                </p>
+              </div>
+              <Lock className='h-4 w-4 shrink-0 text-white/25' />
             </div>
-            <p className='mt-0.5 text-[11px] text-white/40'>
-              Double vos graines sur toutes les quêtes du jour.
-            </p>
+            <Link
+              href='/dashboard/subscription'
+              className='mx-6 mb-4 flex items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-semibold text-amber-400/70 transition-colors hover:text-amber-400 active:opacity-50'
+            >
+              Débloquer en tant que Gardien <ChevronRight className='h-3.5 w-3.5' />
+            </Link>
+          </>
+        ) : (
+          <div className='mx-6 mt-3 mb-4 flex items-center gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 py-3.5'>
+            <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10'>
+              <Crown className='h-5 w-5 text-amber-400' />
+            </div>
+            <div className='min-w-0 flex-1'>
+              <div className='flex items-center gap-1.5'>
+                <span className='text-sm font-bold text-amber-400'>Boost Gardien Actif</span>
+                <span className='rounded-full bg-amber-400/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400'>
+                  ×2
+                </span>
+              </div>
+              <p className='mt-0.5 text-[11px] text-white/60'>
+                Vos graines sont doublées sur toutes les quêtes du jour.
+              </p>
+            </div>
           </div>
-          <Lock className='h-4 w-4 shrink-0 text-white/25' />
-        </div>
-        <Link
-          href='/dashboard/subscription'
-          className='mx-6 mb-4 flex items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-semibold text-amber-400/70 transition-colors hover:text-amber-400 active:opacity-50'
-        >
-          Débloquer en tant que Gardien <ChevronRight className='h-3.5 w-3.5' />
-        </Link>
+        )}
       </div>
 
       <EcoFactReader

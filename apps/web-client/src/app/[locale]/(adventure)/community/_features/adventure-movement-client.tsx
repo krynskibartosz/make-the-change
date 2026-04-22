@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Bird, Clock, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
+import { Bird, Clock, Crown, Droplets, Globe, Gift, Leaf, Lock, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
@@ -13,6 +13,7 @@ import { getCollectiveGoal, getFactionContribution, getFactionContributions } fr
 import { getCurrentSeason, getSeasonProgress, getSeasonTimeRemaining } from '@/lib/mock/mock-seasons'
 import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 import { useActionAuth } from '@/hooks/use-action-auth'
@@ -374,7 +375,13 @@ export function AdventureMovementClient({
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
   const [persistedBravoIds, setPersistedBravoIds] = useState<string[]>([])
   const [feedFilter, setFeedFilter] = useState<'faction' | 'global'>(initialFaction ? 'faction' : 'global')
-  
+
+  // État utilisateur pour la logique de redirection
+  const session = getClientMockViewerSession()
+  const subscription = session ? getMockSubscription(session.viewerId) : null
+  const hasSubscription = subscription?.status === 'active'
+  const isConnected = !!session
+
   const showPrivilege = searchParams.get('p') === 'reward'
   
   const collectiveGoal = getCollectiveGoal()
@@ -591,14 +598,49 @@ export function AdventureMovementClient({
                     )}
                   </div>
 
+                  {/* Encart abonnement contextuel si connecté sans abonnement */}
+                  {isConnected && initialFaction && !hasSubscription && (
+                    <div className="mx-5 mb-4 flex items-center gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 py-3.5 sm:mx-6">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
+                        <Sparkles className="h-5 w-5 text-amber-400" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-sm font-bold text-white/60">Accès Récompenses</span>
+                          <span className="rounded-full bg-amber-400/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400">
+                            👑 Gardiens
+                          </span>
+                        </div>
+                        <p className="mt-0.5 text-[11px] text-white/40">
+                          Débloquez les récompenses exclusives de la saison collective.
+                        </p>
+                      </div>
+                      <Lock className="h-4 w-4 shrink-0 text-white/25" />
+                    </div>
+                  )}
+
                   {/* Bouton Sticky */}
                   <div className="sticky bottom-0 z-20 w-full border-t border-white/5 bg-[#0B0F15]/80 p-5 backdrop-blur-xl sm:px-6">
-                    {!initialFaction ? (
+                    {!isConnected ? (
+                      <Link
+                        href="/onboarding/step-0"
+                        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
+                      >
+                        Rejoindre pour participer <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+                      </Link>
+                    ) : !initialFaction ? (
                       <Link
                         href="/welcome/setup"
                         className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
                       >
-                        Rejoindre pour participer <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+                        Choisir votre faction <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+                      </Link>
+                    ) : !hasSubscription ? (
+                      <Link
+                        href="/dashboard/subscription"
+                        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-amber-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(251,191,36,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
+                      >
+                        Débloquer les récompenses <Crown className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
                       </Link>
                     ) : (
                       <button
