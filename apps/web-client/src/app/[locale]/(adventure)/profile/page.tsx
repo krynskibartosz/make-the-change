@@ -121,9 +121,17 @@ export default async function GuestProfilePage() {
                     className={`flex items-center gap-4 rounded-2xl border p-4 ${theme.accentBorder} ${theme.accentBgSoft}`}
                   >
                     <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${theme.accentBg} bg-opacity-20`}>
-                      <span className="text-xl">
-                        {contribution.themeKey === 'pollinisateurs' ? '🐝' : contribution.themeKey === 'forets' ? '🌲' : '🏺'}
-                      </span>
+                      <img
+                        src={
+                          contribution.themeKey === 'pollinisateurs'
+                            ? '/images/logo-icon-bee.png'
+                            : contribution.themeKey === 'forets'
+                              ? '/sylva.png'
+                              : '/aura.png'
+                        }
+                        alt={contribution.label}
+                        className="h-6 w-6 object-contain"
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className={`text-sm font-bold ${theme.accentText}`}>{contribution.label}</p>
