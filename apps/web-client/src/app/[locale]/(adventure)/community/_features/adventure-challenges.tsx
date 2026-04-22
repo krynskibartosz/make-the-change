@@ -845,7 +845,7 @@ function DailyHarvestModal({
                     src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
                     alt='Mascotte'
                     className={cn(
-                      'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100',
+                      'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
                       phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
                     )}
                     draggable='false'
@@ -855,7 +855,7 @@ function DailyHarvestModal({
                   />
                 </div>
 
-                <p className='mt-12 text-center text-2xl font-bold uppercase tracking-widest text-white/90'>
+                <p className='mt-12 text-center text-2xl font-bold uppercase tracking-widest text-white/90 pointer-events-none select-none'>
                   {phase === 'charging' ? `${Math.round(progress)}%` : 'Maintiens pour récolter'}
                 </p>
                 <p className='mt-3 max-w-[280px] text-center text-base text-white/70'>
