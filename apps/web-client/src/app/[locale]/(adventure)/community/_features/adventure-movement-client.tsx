@@ -157,6 +157,14 @@ function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
   )
 }
 
+function getFactionImage(faction: string | undefined): string | null {
+  if (!faction) return null
+  if (faction === 'Terres & Forêts') return '/sylva.png'
+  if (faction === 'Vie Sauvage') return '/abeille-transparente.png'
+  if (faction === 'Artisans Locaux') return '/aura.png'
+  return null
+}
+
 function ImpactCard({
   event,
   onAttemptBravo,
@@ -220,12 +228,23 @@ function ImpactCard({
     onAttemptBravo(event.id, handleBravoAction)
   }, [event.id, handleBravoAction, isBravoed, onAttemptBravo])
 
+  const factionImage = getFactionImage(event.faction)
+
   const header = (
     <div className="mb-3 flex items-center gap-3">
       {event.avatarUrl ? (
         <img
           src={event.avatarUrl}
           alt={event.name}
+          className={cn(
+            'h-10 w-10 shrink-0 rounded-full border object-cover',
+            event.profileId ? 'border-border/30' : accentTheme.accentBorder,
+          )}
+        />
+      ) : factionImage ? (
+        <img
+          src={factionImage}
+          alt={event.faction}
           className={cn(
             'h-10 w-10 shrink-0 rounded-full border object-cover',
             event.profileId ? 'border-border/30' : accentTheme.accentBorder,
