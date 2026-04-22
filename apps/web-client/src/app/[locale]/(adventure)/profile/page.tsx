@@ -77,7 +77,7 @@ export default async function GuestProfilePage() {
           <FactionMascotSelector />
           <Link
             href="/login"
-            className="mt-6 text-sm text-white/40 hover:text-white/60 underline underline-offset-4 transition-colors"
+            className="mt-6 mb-6 text-sm text-white/40 hover:text-white/60 underline underline-offset-4 transition-colors"
           >
             Déjà un Gardien ? Se connecter
           </Link>
