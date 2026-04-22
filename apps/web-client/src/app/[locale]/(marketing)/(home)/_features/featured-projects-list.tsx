@@ -54,6 +54,7 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
               impactLabel={impactLabel}
               location={location}
               priority={index === 0}
+              type={project.type ?? null}
             />
           </li>
         )

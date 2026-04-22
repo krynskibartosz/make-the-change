@@ -1,4 +1,4 @@
-import { Leaf, MapPin } from 'lucide-react'
+import { Fish, Leaf, MapPin, TreePine } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 type ProjectThumbnailCardProps = {
@@ -8,6 +8,7 @@ type ProjectThumbnailCardProps = {
   impactLabel?: string
   location?: string
   priority?: boolean
+  type?: string | null
 }
 
 export function formatEcologicalImpact(
@@ -46,7 +47,21 @@ export function ProjectThumbnailCard({
   impactLabel,
   location,
   priority = false,
+  type,
 }: ProjectThumbnailCardProps) {
+  const getImpactIcon = () => {
+    switch (type) {
+      case 'beehive':
+        return <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
+      case 'coral':
+        return <Fish className="w-3 h-3 text-cyan-400 shrink-0" />
+      case 'olive_tree':
+        return <TreePine className="w-3 h-3 text-emerald-400 shrink-0" />
+      default:
+        return <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
+    }
+  }
+
   return (
     <Link
       href={`/projects/${slug}`}
@@ -84,7 +99,7 @@ export function ProjectThumbnailCard({
 
         {impactLabel ? (
           <div className="flex items-center gap-1.5 bg-[#0B0F15]/80 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-white/10 shadow-sm">
-            <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
+            {getImpactIcon()}
             <span className="text-[11px] font-bold text-white tracking-wide">
               <span className="text-lime-400">{impactLabel}</span>
             </span>

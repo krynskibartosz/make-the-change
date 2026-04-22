@@ -104,6 +104,7 @@ export function SimilarProjectsCarousel({
                   title={title}
                   imageUrl={imageUrl}
                   impactLabel={impactLabel}
+                  type={project.type ?? null}
                 />
               )
             })}
