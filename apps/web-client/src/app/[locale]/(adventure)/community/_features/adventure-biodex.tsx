@@ -1,12 +1,17 @@
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { BiodexEnhanced } from '@/app/[locale]/(marketing)/biodex/components/biodex-enhanced'
+import type { Faction } from '@/lib/mock/types'
 
-export async function AdventureBiodex() {
+type AdventureBiodexProps = {
+  initialFaction?: Faction | null
+}
+
+export async function AdventureBiodex({ initialFaction }: AdventureBiodexProps) {
   const speciesList = await getSpeciesContextList()
 
   return (
     <>
-      <BiodexEnhanced species={speciesList} />
+      <BiodexEnhanced species={speciesList} initialFaction={initialFaction ?? null} />
     </>
   )
 }

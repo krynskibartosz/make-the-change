@@ -67,7 +67,7 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
               initialMonthlyQuest={challengeSurface?.monthlyQuest ?? null}
             />
           )}
-          {activeTab === 'biodex' && <AdventureBiodex />}
+          {activeTab === 'biodex' && <AdventureBiodex initialFaction={currentViewer?.faction ?? null} />}
         </Suspense>
       </div>
     </AdventurePageFrame>

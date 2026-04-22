@@ -114,8 +114,8 @@ export default async function ProfilePage() {
                 <Crown className="h-6 w-6 text-amber-400" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-black text-amber-400">Passez au niveau superieur</span>
-                <span className="mt-0.5 text-xs font-medium text-amber-400/80">Decouvrez les privileges des Gardiens.</span>
+                <span className="text-sm font-black text-amber-400">Passez au niveau supérieur</span>
+                <span className="mt-0.5 text-xs font-medium text-amber-400/80">Découvrez les privilèges des Gardiens.</span>
               </div>
             </div>
             <ArrowRight className="h-5 w-5 shrink-0 text-amber-400/50" />

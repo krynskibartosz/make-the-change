@@ -186,6 +186,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   <span className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
                     <Bug className="w-3 h-3"/> Abeille Noire
                   </span>
+                  {product.featured && (
+                    <span className="bg-amber-400/10 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                      👑 Accès anticipé Gardiens
+                    </span>
+                  )}
                 </div>
               </div>
             </aside>
