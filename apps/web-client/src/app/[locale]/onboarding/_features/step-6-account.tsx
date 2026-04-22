@@ -35,13 +35,7 @@ export function Step6Account() {
           <div className="relative mb-8 mt-12">
             <div className="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center z-10 relative shadow-[0_0_40px_rgba(16,185,129,0.3)] border border-emerald-500/30">
               <img
-                src={selectedFaction === 'faune'
-                  ? '/abeille-transparente.png'
-                  : selectedFaction === 'humain'
-                    ? '/aura.png'
-                    : selectedFaction === 'flore'
-                      ? '/sylva.png'
-                      : '/sylva.png'}
+                src='/sylva.png'
                 alt="Mascotte"
                 className="w-16 h-16 object-contain"
               />
