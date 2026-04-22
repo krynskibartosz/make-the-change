@@ -380,12 +380,14 @@ export function ProjectDonateOneFlow({
               </div>
 
               <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
-                <ProjectImpactCalculator 
-                  baseAmount={defaultAmount} 
-                  amount={amountEur} 
-                  mode="checkout" 
+                <ProjectImpactCalculator
+                  baseAmount={defaultAmount}
+                  amount={amountEur}
+                  mode="checkout"
                   isDonationProject={true}
                   donationOptions={project.donationOptions}
+                  projectType={project.type}
+                  projectImpact={null}
                 />
               </div>
             </div>

@@ -266,6 +266,8 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               baseAmount={100}
               amount={Math.max(amountEur, min)}
               mode="checkout"
+              projectType={project.type}
+              projectImpact={null}
             />
 
             <Button className="w-full" type="button" onClick={() => setStep(2)}>

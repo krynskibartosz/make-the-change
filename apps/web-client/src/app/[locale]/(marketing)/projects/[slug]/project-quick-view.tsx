@@ -114,7 +114,7 @@ export async function ProjectQuickView({
       ? `/${locale}/producers/${project.producer.slug || project.producer.id}`
       : null
 
-  const isDonationProject = project.is_donation_project && project.donation_options
+  const isDonationProject = !!(project.is_donation_project && project.donation_options)
   const investPath = isDonationProject
     ? `/projects/${project.slug}/donate?source=quick_view`
     : `/projects/${project.slug}/invest?source=quick_view`
@@ -293,12 +293,14 @@ export async function ProjectQuickView({
             ) : null}
 
             <div className="px-4 sm:px-5">
-              <ProjectImpactCalculator 
-                baseAmount={100} 
-                amount={currentFunding} 
-                mode="project" 
+              <ProjectImpactCalculator
+                baseAmount={100}
+                amount={currentFunding}
+                mode="project"
                 isDonationProject={isDonationProject}
-                donationOptions={project.donation_options}
+                donationOptions={project.donation_options || undefined}
+                projectType={project.type || undefined}
+                projectImpact={project.expected_impact}
               />
             </div>
 

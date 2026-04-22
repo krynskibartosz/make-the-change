@@ -56,6 +56,21 @@ export interface ProjectImpact {
   biodiversityGain: number | null
   jobsCreated: number | null
   timeline: number | null
+  // Métriques détaillées par € pour les abeilles
+  beesPerEur?: number
+  honeyGramsPerEur?: number
+  flowersPerEur?: number
+  propolisGramsPerEur?: number
+  waxGramsPerEur?: number
+  pollenGramsPerEur?: number
+  nectarGramsPerEur?: number
+  // Métriques détaillées pour les coraux
+  fishShelterCapacity?: number
+  blueCarbonPotential?: number
+  biodiversityPoints?: number
+  // Métriques détaillées pour les oliviers
+  olivesSupported?: number
+  oilGeneratedLiters?: number
 }
 
 // Donation Types

@@ -1,5 +1,5 @@
-import { Bug, Cloud, Hexagon, Lock, Waves } from 'lucide-react'
-import type { DonationOption } from '@/types/context'
+import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish } from 'lucide-react'
+import type { DonationOption, ProjectImpact } from '@/types/context'
 
 type ImpactMode = 'project' | 'checkout'
 
@@ -9,6 +9,8 @@ type ProjectImpactCalculatorProps = {
   mode?: ImpactMode
   isDonationProject?: boolean
   donationOptions?: DonationOption[] | null
+  projectType?: string
+  projectImpact?: ProjectImpact | null
 }
 
 const REFERENCE_IMPACT = {
@@ -47,22 +49,37 @@ export function ProjectImpactCalculator({
   mode = 'project',
   isDonationProject = false,
   donationOptions = null,
+  projectType = 'beehive',
+  projectImpact = null,
 }: ProjectImpactCalculatorProps) {
   const displayAmount = Number.isFinite(amount) ? Math.max(amount, 0) : baseAmount
-  const ratio = baseAmount > 0 ? displayAmount / baseAmount : 0
 
-  // Calculer les métriques selon le type de projet
-  const bees = Math.round(REFERENCE_IMPACT.bees * ratio)
-  const honeyKg = REFERENCE_IMPACT.honeyKg * ratio
-  const co2Kg = REFERENCE_IMPACT.co2Kg * ratio
+  // Calculer les métriques selon le type de projet et les ratios par €
+  const bees = Math.round((projectImpact?.beesPerEur || 152) * displayAmount)
+  const honeyGrams = (projectImpact?.honeyGramsPerEur || 7.7) * displayAmount
+  const honeyKg = honeyGrams / 1000
+  const co2Grams = (projectImpact?.beesPerEur ? 38.5 : 0) * displayAmount
+  const co2Kg = co2Grams / 1000
   const honeyParts = splitDecimalValue(honeyKg)
   const co2Parts = splitDecimalValue(co2Kg)
 
-  // Métriques pour les donations (basées sur les donation_options)
-  const corals = Math.round(DONATION_REFERENCE_IMPACT.corals * ratio)
-  const areaRestored = DONATION_REFERENCE_IMPACT.areaRestored * ratio
-  const habitatCreated = Math.round(DONATION_REFERENCE_IMPACT.habitatCreated * ratio)
+  // Nouvelles métriques pour les abeilles
+  const flowers = Math.round((projectImpact?.flowersPerEur || 1154) * displayAmount)
+  const propolisGrams = (projectImpact?.propolisGramsPerEur || 0.0385) * displayAmount
+  const waxGrams = (projectImpact?.waxGramsPerEur || 0.92) * displayAmount
+  const pollenGrams = (projectImpact?.pollenGramsPerEur || 7.7) * displayAmount
+  const nectarGrams = (projectImpact?.nectarGramsPerEur || 19.2) * displayAmount
+
+  // Métriques pour les coraux
+  const corals = Math.round(displayAmount / 18) // Basé sur les donation options
+  const areaRestored = (projectImpact?.blueCarbonPotential || 0.5) * corals
+  const habitatCreated = Math.round((projectImpact?.biodiversityPoints || 5) * corals)
+  const fishShelter = Math.round((projectImpact?.fishShelterCapacity || 3) * corals)
   const areaParts = splitDecimalValue(areaRestored)
+
+  // Métriques pour les oliviers
+  const olivesSupported = Math.round((projectImpact?.olivesSupported || 1) * (displayAmount / 150))
+  const oilGeneratedLiters = (projectImpact?.oilGeneratedLiters || 0.4) * olivesSupported
 
   const isCheckoutMode = mode === 'checkout'
 
@@ -78,7 +95,7 @@ export function ProjectImpactCalculator({
           </p>
 
           <div className="grid grid-cols-2 gap-3">
-            {isDonationProject ? (
+            {projectType === 'reef' || isDonationProject ? (
               <>
                 <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
                   <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
@@ -108,7 +125,19 @@ export function ProjectImpactCalculator({
                   </div>
                 </article>
 
-                <article className="col-span-2 w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                    <Fish className="h-5 w-5 text-lime-400" />
+                  </div>
+                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                    {formatInteger(fishShelter)}
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                    Refuges poissons
+                  </div>
+                </article>
+
+                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
                   <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
                     <Cloud className="h-5 w-5 text-lime-400" />
                   </div>
@@ -116,7 +145,50 @@ export function ProjectImpactCalculator({
                     {formatInteger(habitatCreated)}
                   </div>
                   <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Habitats créés
+                    Points biodiversité
+                  </div>
+                </article>
+              </>
+            ) : projectType === 'orchard' ? (
+              <>
+                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                    <TreePine className="h-5 w-5 text-lime-400" />
+                  </div>
+                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                    {formatInteger(olivesSupported)}
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                    Oliviers soutenus
+                  </div>
+                </article>
+
+                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                    <Droplets className="h-5 w-5 text-lime-400" />
+                  </div>
+                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                    {formatInteger(oilGeneratedLiters)}
+                    <span className="text-lg font-bold text-white/50">{' '}L</span>
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                    Huile générée
+                  </div>
+                </article>
+
+                <article className="col-span-2 w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                    <Cloud className="h-5 w-5 text-lime-400" />
+                  </div>
+                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                    {co2Parts.whole}
+                    <span className="text-lg font-bold text-white/50">
+                      {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
+                      {' '}kg
+                    </span>
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                    CO₂ séquestré
                   </div>
                 </article>
               </>
@@ -150,7 +222,19 @@ export function ProjectImpactCalculator({
                   </div>
                 </article>
 
-                <article className="col-span-2 w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
+                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+                    <Flower2 className="h-5 w-5 text-lime-400" />
+                  </div>
+                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
+                    {formatInteger(flowers)}
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+                    Fleurs butinées
+                  </div>
+                </article>
+
+                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
                   <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
                     <Cloud className="h-5 w-5 text-lime-400" />
                   </div>
@@ -171,7 +255,7 @@ export function ProjectImpactCalculator({
         </>
       ) : (
         <div className="flex w-full items-start justify-between border-y border-white/5 py-6 my-4">
-          {isDonationProject ? (
+          {projectType === 'reef' || isDonationProject ? (
             <>
               <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
                 <Waves className="mb-1 h-6 w-6 text-lime-400 drop-shadow-sm" />
@@ -198,12 +282,46 @@ export function ProjectImpactCalculator({
               </div>
 
               <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Cloud className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
+                <Fish className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
                 <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(habitatCreated)}
+                  {formatInteger(fishShelter)}
                 </div>
                 <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Habitats
+                  Refuges
+                </div>
+              </div>
+            </>
+          ) : projectType === 'orchard' ? (
+            <>
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+                <TreePine className="mb-1 h-6 w-6 text-lime-400 drop-shadow-sm" />
+                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
+                  {formatInteger(olivesSupported)}
+                </div>
+                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                  Oliviers
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+                <Droplets className="mb-1 h-6 w-6 text-amber-500 drop-shadow-sm" />
+                <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
+                  <span>{formatInteger(oilGeneratedLiters)}</span>
+                  <span className="text-sm font-bold text-white/50">{' '}L</span>
+                </div>
+                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                  Huile
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+                <Cloud className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
+                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
+                  {formatInteger(co2Kg)}
+                  <span className="text-sm font-bold text-white/50">{' '}kg</span>
+                </div>
+                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                  CO₂
                 </div>
               </div>
             </>
@@ -234,16 +352,12 @@ export function ProjectImpactCalculator({
               </div>
 
               <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Cloud className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
-                <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
-                  <span>{co2Parts.whole}</span>
-                  <span className="text-sm font-bold text-white/50">
-                    {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
-                    {' '}kg
-                  </span>
+                <Flower2 className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
+                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
+                  {formatInteger(flowers)}
                 </div>
                 <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  CO2
+                  Fleurs
                 </div>
               </div>
             </>

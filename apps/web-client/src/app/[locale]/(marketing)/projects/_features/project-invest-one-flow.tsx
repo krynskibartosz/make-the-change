@@ -391,7 +391,7 @@ export function ProjectInvestOneFlow({
               </div>
 
               <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
-                <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" />
+                <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expected_impact} />
               </div>
             </div>
           </section>
