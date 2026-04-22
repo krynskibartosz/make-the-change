@@ -53,8 +53,8 @@ const COLLECTIVE_GOAL: CollectiveGoal = {
 const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = {
   pollinisateurs: {
     themeKey: 'pollinisateurs',
-    label: 'Vie Sauvage',
-    shortLabel: 'Sauvage',
+    label: 'Melli',
+    shortLabel: 'Melli',
     tagline: 'Les protecteurs des pollinisateurs et de la faune locale.',
     members: 482,
     contributionSeeds: 17210,
@@ -67,8 +67,8 @@ const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = 
   },
   forets: {
     themeKey: 'forets',
-    label: 'Terres & Forêts',
-    shortLabel: 'Forêts',
+    label: 'Sylva',
+    shortLabel: 'Sylva',
     tagline: 'Les régénérateurs de sols, haies et forêts nourricières.',
     members: 436,
     contributionSeeds: 13380,
@@ -81,8 +81,8 @@ const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = 
   },
   artisans: {
     themeKey: 'artisans',
-    label: 'Artisans Locaux',
-    shortLabel: 'Artisans',
+    label: 'Aura',
+    shortLabel: 'Aura',
     tagline: "Les créateurs qui transforment l'impact en gestes concrets.",
     members: 391,
     contributionSeeds: 7650,
