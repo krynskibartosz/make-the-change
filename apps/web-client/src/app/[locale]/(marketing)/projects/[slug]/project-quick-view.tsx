@@ -286,27 +286,21 @@ export async function ProjectQuickView({
               )
             ) : null}
 
-            {isDonationProject && project.donation_options && project.donation_options.length > 0 ? (
-              <div className="px-4 sm:px-5">
-                <DonationOptionsSection
-                  options={project.donation_options}
-                  projectId={project.id}
-                  projectSlug={project.slug}
-                />
-              </div>
-            ) : null}
-
             {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
               <div className="px-4 sm:px-5">
                 <ProjectProducerProductsSection products={resolvedProducerProducts} />
               </div>
             ) : null}
 
-            {!isDonationProject ? (
-              <div className="px-4 sm:px-5">
-                <ProjectImpactCalculator baseAmount={100} amount={currentFunding} mode="project" />
-              </div>
-            ) : null}
+            <div className="px-4 sm:px-5">
+              <ProjectImpactCalculator 
+                baseAmount={100} 
+                amount={currentFunding} 
+                mode="project" 
+                isDonationProject={isDonationProject}
+                donationOptions={project.donation_options}
+              />
+            </div>
 
             <div className="w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
