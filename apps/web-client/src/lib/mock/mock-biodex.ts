@@ -1,5 +1,3 @@
-import 'server-only'
-
 import { getCurrentMockCompletedChallengeSeriesIds, getCurrentMockDailyChallenges } from '@/lib/mock/mock-challenge-progress-server'
 import { getMockInvestments } from '@/lib/mock/mock-member-data'
 import { getCurrentMockOrders } from '@/lib/mock/mock-order-history-server'
@@ -288,4 +286,12 @@ export const getMockSpeciesContext = async (
 ): Promise<SpeciesContext | null> => {
   const species = MOCK_SPECIES.find((entry) => entry.id === id)
   return species ? cloneSpecies(species, viewerId, faction) : null
+}
+
+// Client-safe version that doesn't use server-only imports
+export const getMockSpeciesContextClient = async (
+  id: string,
+): Promise<{ name_default: string } | null> => {
+  const species = MOCK_SPECIES.find((entry) => entry.id === id)
+  return species ? { name_default: species.name_default } : null
 }

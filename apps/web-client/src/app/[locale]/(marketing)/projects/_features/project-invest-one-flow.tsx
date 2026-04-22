@@ -16,7 +16,7 @@ import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
-import { getMockSpeciesContext } from '@/lib/mock/mock-biodex'
+import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -98,7 +98,7 @@ export function ProjectInvestOneFlow({
 
   useEffect(() => {
     if (discoveredSpeciesId) {
-      getMockSpeciesContext(discoveredSpeciesId).then((species) => {
+      getMockSpeciesContextClient(discoveredSpeciesId).then((species) => {
         if (species) {
           setDiscoveredSpecies({ name_default: species.name_default })
         }
