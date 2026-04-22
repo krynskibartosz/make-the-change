@@ -79,7 +79,9 @@ export function ProjectImpactCalculator({
 
   // Métriques pour les oliviers
   const olivesSupported = Math.round((projectImpact?.olivesSupported || 1) * (displayAmount / 150))
-  const oilGeneratedLiters = (projectImpact?.oilGeneratedLiters || 0.4) * olivesSupported
+  const oilGeneratedLiters = (projectImpact?.oilGeneratedLiters || 4) * olivesSupported
+  const co2SequesteredKg = (projectImpact?.co2SequesteredPerOlive || 10) * olivesSupported
+  const co2SequesteredParts = splitDecimalValue(co2SequesteredKg)
 
   const isCheckoutMode = mode === 'checkout'
 
@@ -181,9 +183,9 @@ export function ProjectImpactCalculator({
                     <Cloud className="h-5 w-5 text-lime-400" />
                   </div>
                   <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {co2Parts.whole}
+                    {co2SequesteredParts.whole}
                     <span className="text-lg font-bold text-white/50">
-                      {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
+                      {co2SequesteredParts.fraction ? `,${co2SequesteredParts.fraction}` : ''}
                       {' '}kg
                     </span>
                   </div>
@@ -317,7 +319,7 @@ export function ProjectImpactCalculator({
               <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
                 <Cloud className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
                 <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(co2Kg)}
+                  {formatInteger(co2SequesteredKg)}
                   <span className="text-sm font-bold text-white/50">{' '}kg</span>
                 </div>
                 <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">

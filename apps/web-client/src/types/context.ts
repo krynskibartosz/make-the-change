@@ -71,6 +71,7 @@ export interface ProjectImpact {
   // Métriques détaillées pour les oliviers
   olivesSupported?: number
   oilGeneratedLiters?: number
+  co2SequesteredPerOlive?: number
 }
 
 // Donation Types
