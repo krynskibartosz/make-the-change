@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { getLocale } from 'next-intl/server'
 import type { PropsWithChildren } from 'react'
 import { getUser } from '@/app/[locale]/(auth)/_features/auth-guards'
@@ -10,13 +11,23 @@ import { createClient } from '@/lib/supabase/server'
 import { DashboardSidebar } from './dashboard-sidebar'
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
+  // Check if the current route is settings to allow access without authentication
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') || ''
+  const isSettingsRoute = pathname.includes('/settings')
+
   const user = await getUser()
 
+  // For settings route without user, render children without sidebar
   if (!user) {
+    if (isSettingsRoute) {
+      return <>{children}</>
+    }
     const locale = await getLocale()
     return redirect({ href: '/login', locale })
   }
 
+  // User is authenticated, render with sidebar
   if (isMockDataSource) {
     const profile = await getCurrentProfile()
 
