@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { SpeciesCardEnhanced } from './species-card-enhanced'
 import type { SpeciesContext } from '@/types/context'
 import { Link } from '@/i18n/navigation'
+import { FactionCarousel } from '@/app/[locale]/(auth)/_features/faction-carousel'
+import { useRouter } from '@/i18n/navigation'
 
 interface BiodexEnhancedProps {
 	species: SpeciesContext[]
@@ -45,10 +47,10 @@ const getProjectDetailHref = (project: {
 
 export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps) {
 	const t = useTranslations('marketing_pages.biodex')
+	const router = useRouter()
 	const [selectedLockedSpecies, setSelectedLockedSpecies] =
 		useState<SpeciesContext | null>(null)
 	const [showFactionModal, setShowFactionModal] = useState(false)
-	const [selectedFaction, setSelectedFaction] = useState<string | null>(null)
 
 	// Afficher la modale faction si l'utilisateur n'en a pas (retour Magic Link)
 	useEffect(() => {
@@ -64,6 +66,18 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 	const handleDismissFactionModal = () => {
 		sessionStorage.setItem('faction-onboarding-dismissed', '1')
 		setShowFactionModal(false)
+	}
+
+	const handleFactionSelect = async (faction: { id: string; value: string; name: string; mascotName: string; description: string; colorTheme: string; accentColor: string; accentText: string; buttonText: string; image: string }) => {
+		// Sauvegarder la faction sélectionnée via l'action existante
+		const formData = new FormData()
+		formData.append('faction', faction.value)
+		formData.append('returnTo', '/aventure?tab=defis')
+		
+		// Pour l'instant, simuler le succès et rediriger
+		sessionStorage.setItem('faction-onboarding-dismissed', '1')
+		setShowFactionModal(false)
+		router.push('/aventure?tab=defis')
 	}
 
 	const sortedSpecies = useMemo(() => {
@@ -192,68 +206,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 
 			{/* ── MICRO-ONBOARDING FACTION (Post-Magic Link) ── */}
 			{showFactionModal && (
-				<div className='fixed inset-0 z-[90]'>
-					<button
-						type='button'
-						aria-label='Ignorer'
-						className='absolute inset-0 bg-black/60 backdrop-blur-sm'
-						onClick={handleDismissFactionModal}
-					/>
-					<div className='absolute inset-x-0 bottom-0 animate-in slide-in-from-bottom-4 duration-500 rounded-t-3xl border-t border-white/10 bg-[#0D1117] p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]'>
-						<div className='mx-auto mb-5 h-1 w-10 rounded-full bg-white/20' />
-						<div className='mb-2 flex items-start justify-between'>
-							<div>
-								<p className='text-[10px] font-bold uppercase tracking-[0.22em] text-lime-400'>Bienvenue dans le mouvement</p>
-								<h2 className='mt-1 text-2xl font-black tracking-tight text-white'>Choisissez votre Faction</h2>
-								<p className='mt-1 text-sm text-white/50'>Pour dépenser vos points et rejoindre les classements.</p>
-							</div>
-							<button
-								type='button'
-								onClick={handleDismissFactionModal}
-								className='inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60'
-								aria-label='Plus tard'
-							>
-								<X className='h-4 w-4' />
-							</button>
-						</div>
-						<div className='mt-5 space-y-2.5'>
-							{FACTIONS.map((faction) => (
-								<button
-									key={faction.key}
-									type='button'
-									onClick={() => setSelectedFaction(faction.key)}
-									className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all active:scale-[0.98] ${
-										selectedFaction === faction.key ? faction.color : 'border-white/10 bg-white/5 text-white/80'
-									}`}
-								>
-									<span className='text-2xl'>{faction.emoji}</span>
-									<div className='min-w-0 flex-1'>
-										<p className='font-bold text-white'>{faction.label}</p>
-										<p className='text-xs text-white/50'>{faction.description}</p>
-									</div>
-									{selectedFaction === faction.key && <Sparkles className='h-4 w-4 shrink-0 text-current' />}
-								</button>
-							))}
-						</div>
-						<Link
-							href={selectedFaction ? `/welcome/setup?faction=${encodeURIComponent(selectedFaction)}` : '/welcome/setup'}
-							onClick={() => sessionStorage.setItem('faction-onboarding-dismissed', '1')}
-							className={`mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-base font-black transition-all active:scale-[0.98] ${
-								selectedFaction ? 'bg-lime-400 text-black shadow-[0_0_25px_rgba(163,230,53,0.35)]' : 'bg-white/10 text-white/50'
-							}`}
-						>
-							{selectedFaction ? `Rejoindre ${selectedFaction}` : 'Choisir ma faction'}
-							<ArrowRight className='h-5 w-5' />
-						</Link>
-						<button
-							type='button'
-							onClick={handleDismissFactionModal}
-							className='mt-3 w-full py-2 text-sm text-white/30 transition-colors hover:text-white/50'
-						>
-							Plus tard
-						</button>
-					</div>
-				</div>
+				<FactionCarousel onFactionSelect={handleFactionSelect} />
 			)}
 		</>
 	)

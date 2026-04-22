@@ -40,7 +40,7 @@ export function ActivityFilter({ onFilterChange, currentFilter }: ActivityFilter
             : 'text-gray-500 hover:text-gray-300 font-medium'
         }`}
       >
-        Marché
+        Récompenses
       </button>
     </div>
   )

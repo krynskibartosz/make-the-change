@@ -53,7 +53,7 @@ export default async function OrdersPage() {
         <Link href="/products">
           <Button className="w-full sm:w-auto">
             <ShoppingBag className="mr-2 h-4 w-4" />
-            Marché
+            Récompenses
           </Button>
         </Link>
       </div>

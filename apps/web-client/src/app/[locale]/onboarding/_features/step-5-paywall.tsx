@@ -10,8 +10,8 @@ export function Step5Paywall() {
 
   const handleSignup = () => {
     // In a real app, this would trigger actual authentication
-    // For now, redirect to user profile
-    router.push('/u/me')
+    // For now, redirect to paywall premium
+    router.push('/onboarding/step-6')
   }
 
   return (

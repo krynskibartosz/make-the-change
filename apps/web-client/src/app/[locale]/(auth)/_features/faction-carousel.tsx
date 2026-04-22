@@ -62,9 +62,11 @@ function SubmitButton({ activeColor, text }: { activeColor: string; text: string
 type FactionCarouselProps = {
   returnTo?: string
   onboardingMode?: boolean
+  onFactionSelect?: (faction: typeof FACTIONS[number]) => void | Promise<void>
+  redirectAfterSelection?: string
 }
 
-export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCarouselProps) {
+export function FactionCarousel({ returnTo, onboardingMode = false, onFactionSelect, redirectAfterSelection }: FactionCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = useReducedMotion()
@@ -246,7 +248,16 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
         </div>
 
         {/* Action Button & Form */}
-        {onboardingMode ? (
+        {onFactionSelect ? (
+          // Mode personnalisé (micro-onboarding post-paiement)
+          <motion.button
+            onClick={() => onFactionSelect(activeFaction)}
+            className={`w-full py-4 rounded-2xl font-black text-[#0B0F15] text-[17px] transition-all duration-500 active:scale-95 flex items-center justify-center gap-2 ${activeFaction.accentColor}`}
+          >
+            {activeFaction.buttonText}
+          </motion.button>
+        ) : onboardingMode ? (
+          // Mode onboarding (Tunnel A)
           <Link
             href="/onboarding/step-3"
             className={`w-full py-4 rounded-2xl font-black text-[#0B0F15] text-[17px] transition-all duration-500 active:scale-95 flex items-center justify-center gap-2 ${activeFaction.accentColor}`}
@@ -254,9 +265,11 @@ export function FactionCarousel({ returnTo, onboardingMode = false }: FactionCar
             {activeFaction.buttonText}
           </Link>
         ) : (
+          // Mode setup classique
           <form action={completeMockSetup} className="flex flex-col items-center gap-4 w-full">
             <input type="hidden" name="faction" value={activeFaction.value} />
             {returnTo && <input type="hidden" name="returnTo" value={returnTo} />}
+            {redirectAfterSelection && <input type="hidden" name="redirectAfterSelection" value={redirectAfterSelection} />}
             
             <motion.div
               key={activeFaction.id}

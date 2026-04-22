@@ -11,9 +11,10 @@ type PaywallMode = 'onboarding' | 'dashboard'
 interface PaywallCardProps {
   mode?: PaywallMode
   onDismiss?: () => void
+  onSubscribe?: () => void
 }
 
-export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps) {
+export function PaywallCard({ mode = 'dashboard', onDismiss, onSubscribe }: PaywallCardProps) {
   const router = useRouter()
   const [planType, setPlanType] = useState<PlanType>('annual')
 
@@ -35,7 +36,9 @@ export function PaywallCard({ mode = 'dashboard', onDismiss }: PaywallCardProps)
   }
 
   const handleSubscribe = () => {
-    if (mode === 'onboarding') {
+    if (onSubscribe) {
+      onSubscribe()
+    } else if (mode === 'onboarding') {
       // In onboarding, after subscription, go to account creation
       router.push('/onboarding/step-6')
     } else {

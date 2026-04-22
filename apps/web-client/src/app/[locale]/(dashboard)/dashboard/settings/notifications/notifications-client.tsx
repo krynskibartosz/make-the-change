@@ -163,7 +163,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         />
         <div className="border-b border-white/5" />
         <SettingRow
-          title={"Marché & Récompenses"}
+          title={"Récompenses"}
           description="Nouveaux produits et réassorts limités."
           checked={settings.product_updates}
           onToggle={() => handleToggle('product_updates')}

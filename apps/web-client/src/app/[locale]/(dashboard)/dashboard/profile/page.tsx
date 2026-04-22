@@ -191,19 +191,20 @@ export default async function ProfilePage() {
 
               {/* LAYOUT HAUT : Mascotte + Infos */}
               <div className="relative z-10 flex flex-row items-center justify-between">
-                {/* Mascotte 3D flottante (Scale up + dépassement) */}
-                <div className="relative -mt-10 h-28 w-[30%] shrink-0 drop-shadow-2xl">
-                  <img
+                <div className="relative -mt-12 h-32 w-[35%] shrink-0 drop-shadow-2xl z-20">
+                  <motion.img
                     src={
                       factionContribution.themeKey === 'pollinisateurs'
-                        ? '/abeille-transparente.png'
+                        ? '/images/logo-icon-bee.png'
                         : factionContribution.themeKey === 'forets'
                           ? '/sylva.png'
                           : '/aura.png'
                     }
                     alt={factionContribution.label}
-                    className="h-full w-full origin-bottom scale-[1.3] object-contain"
-                    style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' }}
+                    initial={{ y: 0 }}
+                    animate={{ y: [-4, 4, -4] }}
+                    transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
+                    className="h-full w-full origin-bottom scale-[1.1] object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
                   />
                 </div>
 

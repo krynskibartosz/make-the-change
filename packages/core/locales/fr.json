@@ -490,7 +490,7 @@
         },
         "products": {
           "badge": "Éco-responsable",
-          "title": "Boutique Éthique",
+          "title": "Récompense Éthique",
           "description": "Consommez mieux avec nos produits artisanaux.",
           "cta": "Explorer la boutique"
         },
@@ -1963,7 +1963,7 @@
       "supported_project_popular": "Projet soutenu • Populaire",
       "sample_project_title": "Agroforesterie au Sénégal",
       "sample_project_metric": "+450 plantations",
-      "shop_trending": "Boutique • Tendance",
+      "shop_trending": "Récompense • Tendance",
       "sample_product_title": "Gourde réutilisable inox",
       "sample_product_metric": "4.9/5 (24 avis)",
       "show_more": "Afficher plus",

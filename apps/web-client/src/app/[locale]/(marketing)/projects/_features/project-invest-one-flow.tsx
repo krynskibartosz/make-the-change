@@ -569,7 +569,7 @@ export function ProjectInvestOneFlow({
                     {`+ ${formatPoints(points.total_points)} Points d'Impact`} <Sparkles className="h-5 w-5" />
                   </p>
                   <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
-                    À dépenser dans le Marché
+                    À dépenser dans les Récompenses
                   </p>
                 </div>
               </motion.div>
@@ -686,7 +686,7 @@ export function ProjectInvestOneFlow({
             }}
             className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
           >
-            Visiter le Marché
+            Visiter les Récompenses
           </Button>
         </div>
       ) : null}

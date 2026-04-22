@@ -62,6 +62,7 @@ type DailyHarvestModalProps = {
   accentTheme: FactionTheme
   challenge: DailyQuest | null
   open: boolean
+  hasFaction: boolean
   onClose: () => void
   onClaim: () => void
 }
@@ -591,7 +592,7 @@ function EcoFactReader({
                   return
                 }
                 if (!hasFaction) {
-                  window.location.href = '/welcome/setup'
+                  window.location.href = '/onboarding/step-0'
                   return
                 }
                 onValidate()
@@ -647,6 +648,7 @@ function DailyHarvestModal({
   accentTheme,
   challenge,
   open,
+  hasFaction,
   onClose,
   onClaim,
 }: DailyHarvestModalProps) {
@@ -711,11 +713,15 @@ function DailyHarvestModal({
   }, [clearChargeInterval, onClose])
 
   const handleClaim = useCallback(() => {
+    if (!hasFaction) {
+      window.location.href = '/onboarding/step-0'
+      return
+    }
     clearChargeInterval()
     setPhase('idle')
     setProgress(0)
     onClaim()
-  }, [clearChargeInterval, onClaim])
+  }, [clearChargeInterval, hasFaction, onClaim])
 
   return (
     <AnimatePresence>
@@ -803,9 +809,19 @@ function DailyHarvestModal({
               <button
                 type='button'
                 onClick={handleClaim}
-                className='mt-12 h-14 rounded-2xl bg-white px-8 font-bold text-black transition-transform active:scale-95'
+                className={cn(
+                  'mt-12 h-14 rounded-2xl px-8 font-bold text-black transition-transform active:scale-95',
+                  !hasFaction ? 'bg-lime-400' : 'bg-white'
+                )}
               >
-                Génial !
+                {!hasFaction ? (
+                  <span className='flex items-center gap-2'>
+                    Rejoindre pour récolter {challenge?.reward ?? 50}
+                    <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
+                  </span>
+                ) : (
+                  'Génial !'
+                )}
               </button>
             </div>
           )}
@@ -842,7 +858,8 @@ export function AdventureChallenges({
   const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
   const accentTheme = getFactionTheme(initialFaction)
   const factionTheme = {
-    ...FACTION_CONTENT[contentKey],
+    title: initialFaction ? FACTION_CONTENT[contentKey].title : "Les Défis Quotidiens",
+    mascotImg: initialFaction ? FACTION_CONTENT[contentKey].mascotImg : undefined,
     accentBg: accentTheme.accentBg,
     accentText: accentTheme.accentText,
     badgeBg: accentTheme.badgeClassName,
@@ -967,13 +984,10 @@ export function AdventureChallenges({
   )
 
   const handleEcoFactOpen = useCallback(() => {
-    guardAction(
-      () => {
-        setIsEcoFactReaderOpen(true)
-      },
-      { intent: 'eco-fact' },
-    )
-  }, [guardAction])
+    // Mode spectateur : permettre l'ouverture de la modal sans connexion
+    // Le bouton de validation gérera la redirection vers l'inscription
+    setIsEcoFactReaderOpen(true)
+  }, [])
 
   const handleEcoFactValidate = useCallback(() => {
     const timestamp = new Date().toISOString()
@@ -988,13 +1002,9 @@ export function AdventureChallenges({
       return
     }
 
-    guardAction(
-      () => {
-        setIsDailyHarvestOpen(true)
-      },
-      { intent: 'daily-harvest' },
-    )
-  }, [dailyHarvestQuest, guardAction, haptic])
+    // Mode spectateur : permettre l'ouverture de la modal sans connexion
+    setIsDailyHarvestOpen(true)
+  }, [dailyHarvestQuest, haptic])
 
   const handleDailyHarvestClaim = useCallback(() => {
     const timestamp = new Date().toISOString()
@@ -1260,6 +1270,7 @@ export function AdventureChallenges({
         accentTheme={accentTheme}
         challenge={dailyHarvestQuest}
         open={isDailyHarvestOpen}
+        hasFaction={Boolean(initialFaction)}
         onClose={() => setIsDailyHarvestOpen(false)}
         onClaim={handleDailyHarvestClaim}
       />

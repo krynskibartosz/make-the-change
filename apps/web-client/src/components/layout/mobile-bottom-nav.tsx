@@ -73,7 +73,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     {
       href: '/marche',
       icon: ShoppingBag,
-      label: 'Marché',
+      label: 'Récompense',
       isActive: isMarket,
     },
     {

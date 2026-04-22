@@ -18,7 +18,7 @@ const resolveSectionLabel = (pathname: string): string => {
     pathname.startsWith('/cart') ||
     pathname.startsWith('/checkout')
   ) {
-    return 'Marché'
+    return 'Récompense'
   }
   if (
     pathname.startsWith('/collectif') ||
