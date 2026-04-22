@@ -15,6 +15,9 @@ export type CollectiveGoal = {
   commonRewardSummary: string
   prestigeRewardTitle: string
   prestigeRewardSummary: string
+  isGoalReached: boolean
+  degradedRewardTitle?: string
+  degradedRewardSummary?: string
 }
 
 export type FactionContribution = {
@@ -48,6 +51,9 @@ const COLLECTIVE_GOAL: CollectiveGoal = {
   commonRewardSummary: "500 graines et un badge commun pour tous les membres actifs si l'objectif est atteint.",
   prestigeRewardTitle: 'Glow de faction',
   prestigeRewardSummary: 'La faction en tête obtient un halo cosmétique exclusif pour le mois suivant.',
+  isGoalReached: false,
+  degradedRewardTitle: 'Badge Batisseur de Rucher (Dégradé)',
+  degradedRewardSummary: "250 graines et un badge commun pour tous les membres actifs (récompense dégradée car l'objectif n'a pas été atteint).",
 }
 
 const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = {
@@ -97,9 +103,21 @@ const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = 
 
 const FACTION_ORDER: LiveFactionThemeKey[] = ['pollinisateurs', 'forets', 'artisans']
 
-export const getCollectiveGoal = (): CollectiveGoal => ({
-  ...COLLECTIVE_GOAL,
-})
+export const getCollectiveGoal = (): CollectiveGoal => {
+  const goalReached = COLLECTIVE_GOAL.progress >= 100
+
+  // Calcul de la récompense dégradée basée sur le pourcentage atteint
+  const degradedSeeds = Math.floor((COLLECTIVE_GOAL.currentSeeds / COLLECTIVE_GOAL.targetSeeds) * 500)
+
+  return {
+    ...COLLECTIVE_GOAL,
+    isGoalReached: goalReached,
+    degradedRewardTitle: goalReached ? undefined : 'Badge Batisseur de Rucher (Dégradé)',
+    degradedRewardSummary: goalReached
+      ? undefined
+      : `${degradedSeeds} graines et un badge commun pour tous les membres actifs (récompense dégradée car l'objectif n'a pas été atteint).`,
+  }
+}
 
 export const getFactionContributions = (): RankedFactionContribution[] => {
   return FACTION_ORDER.map((themeKey) => FACTION_CONTRIBUTIONS[themeKey])
