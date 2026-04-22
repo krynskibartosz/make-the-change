@@ -147,11 +147,11 @@ export default async function SettingsPage() {
 
           <main className="pt-[calc(env(safe-area-inset-top))] mt-20">
             <section>
-              <div className="mx-4 mt-4 overflow-hidden rounded-xl bg-white/10">
-                <Link
-                  href="/login"
-                  className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
-                >
+              <Link
+                href="/login"
+                className="mx-4 mt-4 block overflow-hidden rounded-xl bg-white/10 transition-colors active:bg-white/20"
+              >
+                <div className="flex w-full items-center justify-between p-3">
                   <div className="flex items-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
                       <Shield className="h-7 w-7 text-white/60" />
@@ -164,8 +164,8 @@ export default async function SettingsPage() {
                   </div>
 
                   <ChevronRight className="h-4 w-4 text-white/30" />
-                </Link>
-              </div>
+                </div>
+              </Link>
             </section>
 
             <SettingsGroup title="L'ÉCOSYSTÈME" items={ecosystemItems} />
@@ -379,11 +379,11 @@ export default async function SettingsPage() {
 
         <main className="pt-[calc(env(safe-area-inset-top))] mt-20">
           <section>
-            <div className="mx-4 mt-4 overflow-hidden rounded-xl bg-white/10">
-              <Link
-                href="/login"
-                className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
-              >
+            <Link
+              href="/login"
+              className="mx-4 mt-4 block overflow-hidden rounded-xl bg-white/10 transition-colors active:bg-white/20"
+            >
+              <div className="flex w-full items-center justify-between p-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
                     <Shield className="h-7 w-7 text-white/60" />
@@ -396,8 +396,8 @@ export default async function SettingsPage() {
                 </div>
 
                 <ChevronRight className="h-4 w-4 text-white/30" />
-              </Link>
-            </div>
+              </div>
+            </Link>
           </section>
 
           <SettingsGroup title="L'ÉCOSYSTÈME" items={ecosystemItems} />

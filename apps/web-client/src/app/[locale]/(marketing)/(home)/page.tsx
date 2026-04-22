@@ -69,7 +69,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <section className="relative flex min-h-[100svh] flex-col px-6 pb-32 pt-12 overflow-hidden bg-black">
+      <section className="relative flex min-h-[100svh] flex-col px-6 pb-6 pt-12 overflow-hidden bg-black">
         <HeroParallaxBackground videoUrl={HERO_VIDEO_URL} posterUrl={HERO_POSTER_URL} />
         <div
           className="absolute inset-0 bg-gradient-to-t from-background via-background/90 via-30% to-transparent dark:from-background dark:via-background/60 dark:to-transparent"

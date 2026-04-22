@@ -21,7 +21,7 @@ export function HomeHeroContent({ title, subtitle, cta }: HomeHeroContentProps) 
 
   return (
     <motion.div
-      className="relative z-10 flex h-full flex-col justify-end pb-8 w-full"
+      className="relative z-10 flex h-full flex-col justify-end pb-0 w-full"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
