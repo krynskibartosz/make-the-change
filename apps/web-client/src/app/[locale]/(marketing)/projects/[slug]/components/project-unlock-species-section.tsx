@@ -33,7 +33,7 @@ export function ProjectUnlockSpeciesSection({ species }: ProjectUnlockSpeciesSec
               <img
                 src={imageUrl}
                 alt={`Espèce déblocable: ${species.name}`}
-                className="h-full w-full object-cover brightness-0 opacity-50"
+                className="h-full w-full object-cover brightness-25 opacity-60"
               />
               <Lock className="absolute bottom-1 right-1 h-3.5 w-3.5 text-white/50" />
             </div>
