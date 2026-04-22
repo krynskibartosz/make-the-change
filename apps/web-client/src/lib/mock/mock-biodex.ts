@@ -74,7 +74,7 @@ const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Pollinisatrice essentielle, elle soutient la reproduction de nombreuses plantes cultivees et sauvages.',
     conservation_status: 'NT',
-    image_url: '/abeille.png',
+    image_url: '/images/diorama-chouette.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_MANAKARA_ID,
@@ -116,7 +116,7 @@ const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Espece emblematique des ecosystemes temperes, robuste et precieuse pour la biodiversite locale.',
     conservation_status: 'VU',
-    image_url: '/abeille-transparente.png',
+    image_url: '/images/diorama-chouette.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_MANAKARA_ID,
@@ -158,7 +158,7 @@ const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       "Predatrice naturelle des pucerons, elle contribue a l'equilibre des cultures et des jardins.",
     conservation_status: 'LC',
-    image_url: '/abeille-transparente.png',
+    image_url: '/images/diorama-chouette.png',
     associated_projects: [],
     associated_producers: [],
     associated_challenges: [],
