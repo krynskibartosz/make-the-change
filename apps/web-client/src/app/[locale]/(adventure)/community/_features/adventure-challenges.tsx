@@ -737,15 +737,47 @@ function DailyHarvestModal({
             type='button'
             aria-label='Fermer'
             onClick={handleClose}
-            className='absolute right-6 top-6 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:text-white'
+            className='absolute right-6 top-6 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:text-white z-20'
           >
             <X className='h-4 w-4' />
           </button>
 
+          {/* Gradient de remplissage full screen */}
+          <div
+            className='absolute inset-0 transition-all duration-75 ease-linear'
+            style={{
+              opacity: progress / 100,
+              background: accentTheme.key === 'pollinisateurs'
+                ? 'linear-gradient(to top, rgba(251, 191, 36, 0.3) 0%, transparent 100%)'
+                : accentTheme.key === 'forets'
+                ? 'linear-gradient(to top, rgba(52, 211, 153, 0.3) 0%, transparent 100%)'
+                : accentTheme.key === 'artisans'
+                ? 'linear-gradient(to top, rgba(244, 114, 182, 0.3) 0%, transparent 100%)'
+                : 'linear-gradient(to top, rgba(163, 230, 53, 0.3) 0%, transparent 100%)',
+            }}
+          />
+
+          {/* Bordure de progression sur tout l'écran */}
+          <div
+            className='absolute inset-0 pointer-events-none transition-all duration-75 ease-linear'
+            style={{
+              clipPath: `inset(0 0 ${100 - progress}% 0)`,
+              opacity: 0.3,
+              background: accentTheme.key === 'pollinisateurs'
+                ? 'rgba(251, 191, 36, 1)'
+                : accentTheme.key === 'forets'
+                ? 'rgba(52, 211, 153, 1)'
+                : accentTheme.key === 'artisans'
+                ? 'rgba(244, 114, 182, 1)'
+                : 'rgba(163, 230, 53, 1)',
+            }}
+          />
+
           <div className='pointer-events-none absolute top-1/4 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
 
           {phase !== 'revealed' ? (
-            <div className='relative z-10 flex flex-col items-center'>
+            <div className='relative z-10 flex flex-col items-center w-full h-full'>
+              {/* Zone tactile full screen */}
               <button
                 type='button'
                 onMouseDown={startCharging}
@@ -763,31 +795,70 @@ function DailyHarvestModal({
                   event.preventDefault()
                   stopCharging()
                 }}
-                className='relative rounded-full'
+                className='absolute inset-0 flex flex-col items-center justify-center'
               >
-                <img
-                  src='/images/logo-icon-bee.png'
-                  alt='Mascotte'
-                  className={cn(
-                    'h-48 w-48 object-contain drop-shadow-2xl transition-transform duration-100',
-                    phase === 'charging' ? 'scale-110' : 'scale-100',
-                  )}
-                  draggable='false'
-                />
-              </button>
+                {/* Cercle de progression autour de la mascotte */}
+                <div className='relative'>
+                  <svg className='absolute inset-0 -rotate-90' width={220} height={220} viewBox='0 0 220 220'>
+                    <circle
+                      cx='110'
+                      cy='110'
+                      r='100'
+                      fill='none'
+                      stroke='rgba(255,255,255,0.1)'
+                      strokeWidth='8'
+                    />
+                    <circle
+                      cx='110'
+                      cy='110'
+                      r='100'
+                      fill='none'
+                      stroke={
+                        accentTheme.key === 'pollinisateurs'
+                          ? '#FBBF24'
+                          : accentTheme.key === 'forets'
+                          ? '#34D399'
+                          : accentTheme.key === 'artisans'
+                          ? '#F472B6'
+                          : '#A3E635'
+                      }
+                      strokeWidth='8'
+                      strokeLinecap='round'
+                      strokeDasharray={628}
+                      strokeDashoffset={628 - (628 * progress) / 100}
+                      className='transition-all duration-75 ease-linear'
+                      style={{
+                        filter: accentTheme.key === 'pollinisateurs'
+                          ? 'drop-shadow(0 0 8px rgba(251,191,36,0.5))'
+                          : accentTheme.key === 'forets'
+                          ? 'drop-shadow(0 0 8px rgba(52,211,153,0.5))'
+                          : accentTheme.key === 'artisans'
+                          ? 'drop-shadow(0 0 8px rgba(244,114,182,0.5))'
+                          : 'drop-shadow(0 0 8px rgba(163,230,53,0.5))',
+                      }}
+                    />
+                  </svg>
+                  <img
+                    src='/images/logo-icon-bee.png'
+                    alt='Mascotte'
+                    className={cn(
+                      'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100',
+                      phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
+                    )}
+                    draggable='false'
+                    style={{
+                      filter: phase === 'charging' ? 'drop-shadow(0 0 20px rgba(163,230,53,0.6))' : 'none',
+                    }}
+                  />
+                </div>
 
-              <p className='mt-8 text-center text-sm font-bold uppercase tracking-widest text-white/55'>
-                Maintiens pour récolter
-              </p>
-              <p className='mt-2 max-w-[250px] text-center text-sm text-white/55'>
-                {challenge?.description || 'Charge ton rituel quotidien pour recevoir tes graines.'}
-              </p>
-              <div className='mt-5 h-2 w-56 overflow-hidden rounded-full bg-white/10'>
-                <div
-                  className={cn('h-full transition-all duration-75 ease-linear', accentTheme.accentBg)}
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+                <p className='mt-12 text-center text-2xl font-bold uppercase tracking-widest text-white/90'>
+                  {phase === 'charging' ? `${Math.round(progress)}%` : 'Maintiens pour récolter'}
+                </p>
+                <p className='mt-3 max-w-[280px] text-center text-base text-white/70'>
+                  {phase === 'charging' ? 'Continue...' : (challenge?.description || 'Charge ton rituel quotidien pour recevoir tes graines.')}
+                </p>
+              </button>
             </div>
           ) : (
             <div className='animate-in zoom-in slide-in-from-bottom-10 duration-700 z-10 flex flex-col items-center'>
