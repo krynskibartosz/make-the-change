@@ -49,6 +49,9 @@ export interface ProducerProduct {
   category: string
   impactPercentage: number
   image_url?: string | null
+  size?: string // ex: "250g", "140g", "500ml"
+  type?: 'impact' | 'collectible' // distinction produit impact vs collectible
+  format?: string // ex: "bocal", "sachet", "tirage photo"
 }
 
 export interface ProjectImpact {

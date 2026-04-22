@@ -26,6 +26,7 @@ export const MOCK_PROJECT_HABEEBEE_SLUG = 'habeebee-belgique'
 
 export const MOCK_PRODUCT_EUCALYPTUS_ID = 'mock-product-miel-eucalyptus-ilanga'
 export const MOCK_PRODUCT_EUCALYPTUS_SLUG = 'miel-eucalyptus-ilanga'
+export const MOCK_PRODUCT_EUCALYPTUS_140G_ID = 'mock-product-miel-eucalyptus-140g-ilanga'
 export const MOCK_PRODUCT_MANAKARA_ID = 'mock-product-miel-manakara-ilanga'
 export const MOCK_PRODUCT_MANAKARA_SLUG = 'miel-manakara-ilanga'
 export const MOCK_PRODUCT_LITCHI_ID = 'mock-product-miel-litchi-ilanga'

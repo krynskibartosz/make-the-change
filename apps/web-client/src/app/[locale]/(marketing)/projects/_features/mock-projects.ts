@@ -10,6 +10,7 @@ import {
   MOCK_PRODUCT_CORAL_3_ID,
   MOCK_PRODUCT_CORAL_6_ID,
   MOCK_PRODUCT_EUCALYPTUS_ID,
+  MOCK_PRODUCT_EUCALYPTUS_140G_ID,
   MOCK_PRODUCT_FORETS_HUMIDES_ID,
   MOCK_PRODUCT_FORETS_PRIMAIRES_ID,
   MOCK_PRODUCT_FORETS_SECHES_ID,
@@ -171,10 +172,24 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
 const mielleriesMobileProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_ID,
-    name: "Miel d'Eucalyptus",
+    name: 'Miel Eucalyptus 250g',
     price: 18,
     category: 'Miel',
     impactPercentage: 35,
+    size: '250g',
+    type: 'impact',
+    format: 'bocal',
+    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+  },
+  {
+    id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
+    name: 'Miel Eucalyptus 140g',
+    price: 12,
+    category: 'Miel',
+    impactPercentage: 35,
+    size: '140g',
+    type: 'impact',
+    format: 'bocal',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
   {
@@ -354,6 +369,8 @@ const habeebeeProducts: ProducerProduct[] = [
     price: 12,
     category: 'Cosmetique',
     impactPercentage: 30,
+    type: 'impact',
+    format: 'savon',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
   {
@@ -362,6 +379,8 @@ const habeebeeProducts: ProducerProduct[] = [
     price: 25,
     category: 'Cosmetique',
     impactPercentage: 30,
+    type: 'impact',
+    format: 'flacon',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
   {
@@ -370,6 +389,8 @@ const habeebeeProducts: ProducerProduct[] = [
     price: 15,
     category: 'Cosmetique',
     impactPercentage: 30,
+    type: 'impact',
+    format: 'shampoing',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
 ]
@@ -381,6 +402,8 @@ const sardiniaProducts: ProducerProduct[] = [
     price: 28,
     category: 'Huile',
     impactPercentage: 40,
+    type: 'impact',
+    format: 'bouteille',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
   {
@@ -389,6 +412,8 @@ const sardiniaProducts: ProducerProduct[] = [
     price: 32,
     category: 'Huile',
     impactPercentage: 40,
+    type: 'impact',
+    format: 'bouteille',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
   {
@@ -397,6 +422,8 @@ const sardiniaProducts: ProducerProduct[] = [
     price: 35,
     category: 'Huile',
     impactPercentage: 40,
+    type: 'impact',
+    format: 'bouteille',
     image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
   },
 ]
