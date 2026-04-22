@@ -142,27 +142,25 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
         <div className="fixed bottom-0 left-0 right-0 border-t border-white/10 bg-[#0B0F15]/95 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#0B0F15]/95 to-transparent" />
           
-          {hasAddress ? (
-            <button 
-              disabled={isProcessing || newBalance < 0}
-              onClick={() => {
-                if (newBalance < 0) return
-                setIsProcessing(true)
-                setTimeout(() => {
-                  setUserBalance(newBalance)
-                  setIsProcessing(false)
-                  setStep(3)
-                }, 1500)
-              }}
-              className="w-full flex items-center justify-center gap-2 rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100"
-            >
-              {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : "Confirmer l'échange"}
-            </button>
-          ) : (
-            <button className="w-full cursor-not-allowed rounded-2xl bg-white/10 py-4 text-lg font-bold text-white/30">
-              Adresse manquante
-            </button>
-          )}
+          <button 
+            disabled={isProcessing || newBalance < 0}
+            onClick={() => {
+              if (newBalance < 0) return
+              if (!hasAddress) {
+                setStep(2)
+                return
+              }
+              setIsProcessing(true)
+              setTimeout(() => {
+                setUserBalance(newBalance)
+                setIsProcessing(false)
+                setStep(3)
+              }, 1500)
+            }}
+            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100"
+          >
+            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Continuer" : "Confirmer l'échange")}
+          </button>
         </div>
       </div>
     )
