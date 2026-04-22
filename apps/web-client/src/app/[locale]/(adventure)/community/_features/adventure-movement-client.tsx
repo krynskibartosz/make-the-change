@@ -319,12 +319,10 @@ interface AdventureMovementClientProps {
 function SeasonCountdown() {
   const currentSeason = getCurrentSeason()
   const [timeRemaining, setTimeRemaining] = useState<number>(0)
-  const [progress, setProgress] = useState<number>(0)
 
   useEffect(() => {
     const updateCountdown = () => {
       setTimeRemaining(getSeasonTimeRemaining())
-      setProgress(getSeasonProgress())
     }
 
     updateCountdown()
@@ -350,32 +348,21 @@ function SeasonCountdown() {
   if (!currentSeason) return null
 
   return (
-    <div className="mb-4 rounded-xl border border-lime-400/20 bg-lime-400/5 p-3 backdrop-blur-sm">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lime-400/20">
-            <Clock className="h-4 w-4 text-lime-400" />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-lime-400/80">
-              {currentSeason.name}
-            </p>
-            <p className="text-xs font-semibold text-white">
-              {formatTimeRemaining(timeRemaining)} restantes
-            </p>
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="text-sm font-black text-lime-400">{Math.round(progress)}%</div>
-          <div className="text-[10px] text-white/40">Progression</div>
-        </div>
+    <div className="mb-4 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Clock className="h-4 w-4 text-white/40" />
+        <p className="text-[11px] font-medium text-white/40">
+          ⏱️ {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
+        </p>
       </div>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#1A222C]">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 transition-all duration-1000"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
+      <Link
+        href="?p=reward"
+        scroll={false}
+        className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+        aria-label="Voir la récompense du mois"
+      >
+        <Gift className="h-3.5 w-3.5" />
+      </Link>
     </div>
   )
 }
@@ -468,32 +455,22 @@ export function AdventureMovementClient({
         <SeasonCountdown />
 
         {/* HEADER */}
-        <div className="mb-5 text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">Objectif du mois</p>
-          <h2 className="mt-1 text-2xl font-black uppercase tracking-tight text-white">
+        <div className="mb-6 text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">OBJECTIF DU MOIS</p>
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">
             {collectiveGoal.projectName}
           </h2>
         </div>
 
-        {/* JAUGE FINE + BOUTON PRIVILÈGE */}
-        <div className="flex items-center gap-3">
-          <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-[#1A222C]">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
-              style={{ width: `${collectiveGoal.progress}%` }}
-            />
-          </div>
-          <Link
-            href="?p=reward"
-            scroll={false}
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
-            aria-label="Voir la récompense du mois"
-          >
-            <Gift className="h-3.5 w-3.5" />
-          </Link>
+        {/* JAUGE UNIQUE */}
+        <div className="mb-3 h-4 overflow-hidden rounded-full bg-[#1A222C]">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
+            style={{ width: `${collectiveGoal.progress}%` }}
+          />
         </div>
-        <p className="mt-2 text-center text-[11px] text-white/40">
-          {collectiveGoal.progress}% accompli · {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> restantes
+        <p className="mb-8 text-center text-sm font-medium text-white/60">
+          {collectiveGoal.progress}% accomplis • Encore {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
         </p>
 
         {/* FULL-SCREEN — LE PRIVILEGE DE L'ESSAIM */}
@@ -759,7 +736,7 @@ export function AdventureMovementClient({
         })()}
       </section>
 
-      <section className="space-y-0 border-t border-white/5 px-4 pt-5 sm:px-6">
+      <section className="space-y-0 border-t border-white/5 px-4 pt-6 sm:px-6">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight text-white">Impact Global</h2>
           {initialFaction && (
