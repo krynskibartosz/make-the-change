@@ -124,3 +124,36 @@ export type ProductCard = {
 }
 
 export type ProductDetail = ProductCard
+
+export type SeasonStatus = 'active' | 'completed' | 'upcoming'
+
+export type SeasonDuration = '30_days' | '2_months' | '3_months'
+
+export type Season = {
+  id: string
+  name: string
+  startDate: string
+  endDate: string
+  status: SeasonStatus
+  duration: SeasonDuration
+  winnerFaction: Faction | null
+}
+
+export type SeasonStats = {
+  seasonId: string
+  faction: Faction
+  totalSeeds: number
+  contributions: number
+  goalsReached: number
+  engagementScore: number
+}
+
+export type PrestigeReward = {
+  id: string
+  name: string
+  description: string
+  icon: string
+  faction: Faction
+  seasonId: string
+  isPermanent: true
+}

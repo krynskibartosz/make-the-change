@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Bird, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
+import { Bird, Clock, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
@@ -10,6 +10,7 @@ import {
   recordClientMockCollectiveBravo,
 } from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
+import { getCurrentSeason, getSeasonProgress, getSeasonTimeRemaining } from '@/lib/mock/mock-seasons'
 import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Faction } from '@/lib/mock/types'
@@ -295,6 +296,70 @@ interface AdventureMovementClientProps {
   currentDayKey: string
 }
 
+function SeasonCountdown() {
+  const currentSeason = getCurrentSeason()
+  const [timeRemaining, setTimeRemaining] = useState<number>(0)
+  const [progress, setProgress] = useState<number>(0)
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      setTimeRemaining(getSeasonTimeRemaining())
+      setProgress(getSeasonProgress())
+    }
+
+    updateCountdown()
+    const interval = setInterval(updateCountdown, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const formatTimeRemaining = (ms: number) => {
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60))
+
+    if (days > 0) {
+      return `${days}j ${hours}h`
+    }
+    if (hours > 0) {
+      return `${hours}h ${minutes}min`
+    }
+    return `${minutes}min`
+  }
+
+  if (!currentSeason) return null
+
+  return (
+    <div className="mb-4 rounded-xl border border-lime-400/20 bg-lime-400/5 p-3 backdrop-blur-sm">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lime-400/20">
+            <Clock className="h-4 w-4 text-lime-400" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-lime-400/80">
+              {currentSeason.name}
+            </p>
+            <p className="text-xs font-semibold text-white">
+              {formatTimeRemaining(timeRemaining)} restantes
+            </p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-sm font-black text-lime-400">{Math.round(progress)}%</div>
+          <div className="text-[10px] text-white/40">Progression</div>
+        </div>
+      </div>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#1A222C]">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 transition-all duration-1000"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  )
+}
+
 export function AdventureMovementClient({
   initialFaction,
   viewerId,
@@ -372,6 +437,9 @@ export function AdventureMovementClient({
     <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8 pb-24 duration-500">
       {/* ═══ SCÈNE DES MASCOTTES (Edge-to-Edge) ═══ */}
       <section className="w-full px-4 pb-4 pt-6 sm:px-6">
+
+        {/* SEASON COUNTDOWN */}
+        <SeasonCountdown />
 
         {/* HEADER */}
         <div className="mb-5 text-center">
