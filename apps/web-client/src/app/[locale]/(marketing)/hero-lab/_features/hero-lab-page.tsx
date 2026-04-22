@@ -165,9 +165,7 @@ export async function HeroLabPage({ variant }: HeroLabPageProps) {
         <HomeFeaturedProjectsSection
           title={t('featured_projects')}
           viewAllLabel={t('view_all_projects')}
-          supportLabel={t('empty.featured_projects.cta')}
-          collectedLabel={t('project_card.funded')}
-          goalLabel="Objectif :"
+          variant="muted"
           projects={featuredProjectsState.value.map((project) => ({
             ...project,
             name_default: getLocalizedContent(
@@ -181,7 +179,6 @@ export async function HeroLabPage({ variant }: HeroLabPageProps) {
               project.description_default || '',
             ),
           }))}
-          variant="muted"
         />
       ) : featuredProjectsState.status === 'empty' ? (
         <HomeSectionEmptyState
@@ -197,8 +194,6 @@ export async function HeroLabPage({ variant }: HeroLabPageProps) {
         <HomeFeaturedProductsSection
           title={t('featured_products')}
           viewAllLabel={t('view_all_products')}
-          discoverLabel={t('features.explore')}
-          pointsLabel={t('stats.points_label')}
           products={featuredProductsState.value}
         />
       ) : featuredProductsState.status === 'empty' ? (

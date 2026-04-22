@@ -95,7 +95,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
     }
 
     try {
-      await updateNotifications(formData)
+      await updateNotifications({}, formData)
     } catch (error) {
       // Revert on error
       setSettings((prev) => ({ ...prev, [key]: !prev[key] }))

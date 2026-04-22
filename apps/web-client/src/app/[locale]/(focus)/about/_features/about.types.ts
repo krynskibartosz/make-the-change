@@ -47,6 +47,18 @@ export type AboutCtaProps = {
   label: string
 }
 
+export type AboutPillarEntry = {
+  title: string
+  description: string
+}
+
+export type AboutPillarsProps = {
+  overline: string
+  engagement: AboutPillarEntry
+  swarm: AboutPillarEntry
+  impact: AboutPillarEntry
+}
+
 export type AboutViewModel = {
   hero: AboutHeroProps
   genesis: AboutGenesisProps

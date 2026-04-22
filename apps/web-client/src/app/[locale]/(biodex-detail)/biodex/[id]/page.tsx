@@ -3,8 +3,9 @@ import { getSpeciesContext } from '@/lib/api/species-context.service'
 
 const REQUIRED_SEEDS = 500
 
-export default async function SpeciesPage({ params }: { params: { id: string } }) {
-  const species = await getSpeciesContext(params.id)
+export default async function SpeciesPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const species = await getSpeciesContext(id)
   const currentSeeds = species?.user_status?.progressionLevel ?? 1
 
   if (!species) {
