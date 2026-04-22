@@ -1,5 +1,6 @@
 import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind, Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { motion } from 'framer-motion'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
