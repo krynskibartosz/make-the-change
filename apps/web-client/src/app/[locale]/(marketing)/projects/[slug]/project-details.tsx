@@ -188,7 +188,7 @@ export async function ProjectDetails({
           <div className="mt-16 grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-12">
             {ecosystem && (
               <div className="space-y-4 lg:col-span-4">
-                <h3 className="text-xl font-bold">{t('detail.ecosystem') || 'Ã‰cosystÃ¨me'}</h3>
+                <h3 className="text-xl font-bold">{t('detail.ecosystem') || 'Écosystème'}</h3>
                 <EcosystemCard ecosystem={ecosystem} />
               </div>
             )}
@@ -196,7 +196,7 @@ export async function ProjectDetails({
             {properties && properties.length > 0 && (
               <div className={`space-y-4 ${ecosystem ? 'lg:col-span-8' : 'lg:col-span-12'}`}>
                 <h3 className="text-xl font-bold">
-                  {t('detail.properties') || 'Parcelles & PropriÃ©tÃ©s'}
+                  {t('detail.properties') || 'Parcelles & Propriétés'}
                 </h3>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {properties.map((prop: any) => (

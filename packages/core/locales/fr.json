@@ -789,7 +789,9 @@
       "updates": "Actualités",
       "invest_now": "Investir maintenant",
       "funding_closed": "Financement clôturé",
-      "share": "Partager"
+      "share": "Partager",
+      "ecosystem": "Écosystème",
+      "properties": "Parcelles & Propriétés"
     },
     "empty": "Aucun projet trouvé",
     "detail_page": {
