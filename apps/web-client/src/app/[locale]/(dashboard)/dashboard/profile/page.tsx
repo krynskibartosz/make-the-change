@@ -107,7 +107,7 @@ export default async function ProfilePage() {
 
         <section className="mb-10 px-0">
           <Link
-            href="/paywall"
+            href="/dashboard/subscription"
             className="flex items-center justify-between gap-4 rounded-3xl border border-amber-500/30 bg-amber-500/10 p-5 transition-colors hover:bg-amber-500/20 active:scale-[0.98]"
           >
             <div className="flex items-center gap-4">

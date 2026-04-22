@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from '@/i18n/navigation'
 import { ArrowLeft, MapPin, Plus, Sparkles, X, Loader2 } from 'lucide-react'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -15,6 +16,7 @@ interface ProductCheckoutViewProps {
 }
 
 export function ProductCheckoutView({ product, selectedFormat, onClose }: ProductCheckoutViewProps) {
+  const router = useRouter()
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [hasAddress, setHasAddress] = useState(false) // Faux état pour la démo
   const [quantity, setQuantity] = useState(1)
@@ -254,16 +256,16 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
 
         <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {/* Bouton Primaire (La Boucle) */}
-          <button 
-            onClick={onClose}
+          <button
+            onClick={() => router.push('/projects')}
             className="w-full bg-lime-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-lime-500 shadow-[0_0_30px_rgba(132,204,22,0.2)]"
           >
             Soutenir un projet
           </button>
           
           {/* Bouton Secondaire (Utilitaires) */}
-          <button 
-            onClick={onClose}
+          <button
+            onClick={() => router.push('/dashboard/investments')}
             className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
           >
             Suivre ma récompense
