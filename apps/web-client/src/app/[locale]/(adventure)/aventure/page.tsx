@@ -62,7 +62,7 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
               initialFaction={currentViewer?.faction ?? null}
               viewerId={currentViewer?.viewerId ?? null}
               initialDayKey={challengeSurface?.dayKey ?? null}
-              initialDayLabel={challengeSurface?.dayLabel ?? 'aujourd hui'}
+              initialDayLabel={challengeSurface?.dayLabel ?? 'aujourd\'hui'}
               initialDailyQuests={challengeSurface?.dailyChallenges ?? []}
               initialMonthlyQuest={challengeSurface?.monthlyQuest ?? null}
             />

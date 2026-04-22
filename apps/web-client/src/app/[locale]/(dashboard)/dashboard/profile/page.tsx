@@ -22,7 +22,7 @@ export default async function ProfilePage() {
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
           <Link
             href="/dashboard/settings"
-            aria-label="Parametres"
+            aria-label="Paramètres"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
           >
             <Settings className="h-5 w-5" />
@@ -55,7 +55,7 @@ export default async function ProfilePage() {
             className={`mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide ${accentTheme.badgeClassName} ${accentTheme.accentText} ${accentTheme.accentShadow}`}
           >
             <Flame className="h-3.5 w-3.5 fill-current" />
-            {profile?.streakDays || 12} jours de serie
+            {profile?.streakDays || 12} jours de série
           </div>
 
           <p className="mt-2 text-center text-xs font-medium tracking-wide text-white/60">
@@ -158,7 +158,7 @@ export default async function ProfilePage() {
                   <Lock className="h-3.5 w-3.5 text-white/55" />
                 </span>
                 <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
-                  Verrouille
+                  Verrouillé
                 </span>
                 <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
                   <img
@@ -176,7 +176,7 @@ export default async function ProfilePage() {
             href="/aventure?tab=biodex"
             className={`mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors ${accentTheme.accentText}`}
           >
-            Voir la liste complete du BioDex
+            Voir la liste complète du BioDex
             <ArrowRight className="h-4 w-4" />
           </Link>
         </section>
