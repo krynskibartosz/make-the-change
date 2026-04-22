@@ -432,7 +432,7 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
   },
   {
     id: 'mock-points-daily-harvest',
-    label: 'Recolte quotidienne',
+    label: 'Récolte quotidienne',
     delta: 50,
     impactDelta: 50,
     createdAt: '2026-04-17T07:32:00.000Z',

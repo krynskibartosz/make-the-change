@@ -103,7 +103,7 @@ const MOCK_SPECIES: SpeciesContext[] = [
     associated_challenges: [
       {
         id: MOCK_CHALLENGE_DAILY_HARVEST_ID,
-        name: 'Recolte quotidienne',
+        name: 'Récolte quotidienne',
         type: 'daily_harvest',
         difficulty: 'easy',
         rewards: ['50 graines'],

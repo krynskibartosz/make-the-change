@@ -581,7 +581,7 @@ export function ProjectInvestOneFlow({
                   transition={{ delay: 0.35, duration: 0.35 }}
                   className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6"
                 >
-                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre Abeille Noire !</h3>
+                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre Chouette Effraie !</h3>
                   <p className="mb-4 text-sm text-white/60">
                     Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
                   </p>

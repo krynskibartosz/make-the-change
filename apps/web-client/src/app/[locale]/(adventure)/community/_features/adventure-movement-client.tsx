@@ -92,7 +92,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     profileId: 'marie-claire-b',
     avatarUrl: 'https://i.pravatar.cc/80?u=marie-claire-b',
     time: 'Il y a 3 heures',
-    action: 'A ajoute 120 graines au reservoir commun pour Artisans Locaux.',
+    action: 'A ajouté 120 graines au réservoir commun pour Artisans Locaux.',
     icon: Globe,
     iconColor: 'text-sky-400',
     actionHighlight: '120 graines',
@@ -104,7 +104,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-6',
     name: 'Terres & Forêts',
     time: 'Il y a 4 heures',
-    action: 'A depasse les 13 000 graines et continue de pousser le rucher vers son objectif final.',
+    action: 'A dépassé les 13 000 graines et continue de pousser le rucher vers son objectif final.',
     icon: Gift,
     iconColor: 'text-emerald-400',
     actionHighlight: '13 000 graines',
@@ -130,7 +130,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     profileId: 'amira-k',
     avatarUrl: 'https://i.pravatar.cc/80?u=amira-k',
     time: 'Hier',
-    action: "A decouvert l'Aigle de Bonelli dans le BioDex.",
+    action: "A découvert l'Aigle de Bonelli dans le BioDex.",
     icon: Bird,
     iconColor: 'text-sky-400',
     bravos: 19,
@@ -280,7 +280,7 @@ function ImpactCard({
         )}
       >
         <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
-        {isBravoed ? 'Bravo envoye' : 'Bravo'}
+        {isBravoed ? 'Bravo envoyé' : 'Bravo'}
         <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
       </button>
     </div>

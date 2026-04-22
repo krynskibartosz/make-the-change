@@ -86,7 +86,7 @@ const questThemes: Record<DailyQuestType, QuestTheme> = {
 const EMPTY_MONTHLY_QUEST: MockMonthlyQuestOverview = {
   title: 'Cycle du mois',
   timeLeft: '0 jour restant',
-  objective: 'Valide 20 jours de presence',
+  objective: 'Valide 20 jours de présence',
   progress: 0,
   max: 20,
   completedDays: 0,
@@ -546,8 +546,8 @@ function EcoFactReader({
                       accentTheme.accentBorder,
                     )}
                   >
-                    Deja lu aujourd hui. Tu peux relire ce dossier quand tu veux, mais la recompense a
-                    deja ete comptee.
+                    Déjà lu aujourd'hui. Tu peux relire ce dossier quand tu veux, mais la récompense a
+                    déjà été comptée.
                   </div>
                 </motion.div>
               ) : null}
@@ -599,11 +599,11 @@ function EcoFactReader({
             >
               {isCompleted ? (
                 <span className='flex items-center gap-2'>
-                  <CheckCircle2 className='h-4 w-4 text-lime-400' /> Deja valide aujourd hui
+                  <CheckCircle2 className='h-4 w-4 text-lime-400' /> Déjà validé aujourd'hui
                 </span>
               ) : isUnlocked ? (
                 <span className='flex items-center gap-2 animate-in zoom-in duration-300'>
-                  C est note ! <span className='font-normal opacity-50'>|</span> +{challenge?.reward ?? 50}
+                  C'est noté ! <span className='font-normal opacity-50'>|</span> +{challenge?.reward ?? 50}
                   <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
                 </span>
               ) : (
@@ -754,7 +754,7 @@ function DailyHarvestModal({
               </button>
 
               <p className='mt-8 text-center text-sm font-bold uppercase tracking-widest text-white/55'>
-                Maintiens pour recolter
+                Maintiens pour récolter
               </p>
               <p className='mt-2 max-w-[250px] text-center text-sm text-white/55'>
                 {challenge?.description || 'Charge ton rituel quotidien pour recevoir tes graines.'}
@@ -769,7 +769,7 @@ function DailyHarvestModal({
           ) : (
             <div className='animate-in zoom-in slide-in-from-bottom-10 duration-700 z-10 flex flex-col items-center'>
               <h2 className={cn('mb-2 text-sm font-bold uppercase tracking-widest', accentTheme.accentText)}>
-                Recompense quotidienne
+                Récompense quotidienne
               </h2>
               <div className='relative mb-4'>
                 <div className='pointer-events-none absolute inset-0 -z-10 flex items-center justify-center'>
@@ -781,14 +781,14 @@ function DailyHarvestModal({
                 </div>
               </div>
               <p className='max-w-[250px] text-center text-white/60'>
-                Ton compagnon a travaille toute la nuit. Reviens demain pour continuer ta serie.
+                Ton compagnon a travaillé toute la nuit. Reviens demain pour continuer ta série.
               </p>
               <button
                 type='button'
                 onClick={handleClaim}
                 className='mt-12 h-14 rounded-2xl bg-white px-8 font-bold text-black transition-transform active:scale-95'
               >
-                Genial !
+                Génial !
               </button>
             </div>
           )}
@@ -992,27 +992,35 @@ export function AdventureChallenges({
         <div className={`absolute inset-0 z-[-1] bg-gradient-to-b ${factionTheme.bgGradient}`} />
 
         <div className='relative z-20 px-6 pb-24 pt-12'>
-          <p className={`text-[11px] font-bold uppercase tracking-widest ${factionTheme.accentText}`}>
-            {activeMonthlyQuest.title}
-          </p>
+          {initialFaction ? (
+            <p className={`text-[11px] font-bold uppercase tracking-widest ${factionTheme.accentText}`}>
+              {activeMonthlyQuest.title}
+            </p>
+          ) : (
+            <p className='text-[11px] font-bold uppercase tracking-widest text-white/40'>
+              Exploration libre
+            </p>
+          )}
           <h1 className='mt-1 text-3xl font-black tracking-tight text-white drop-shadow-md'>
-            {factionTheme.title}
+            {initialFaction ? factionTheme.title : 'Les Défis du Vivant'}
           </h1>
-          <p className={`mt-2 text-[11px] font-bold uppercase tracking-widest ${factionTheme.accentText}`}>
-            {activeMonthlyQuest.timeLeft}
+          <p className={`mt-2 text-[11px] font-bold uppercase tracking-widest ${initialFaction ? factionTheme.accentText : 'text-white/40'}`}>
+            {initialFaction ? activeMonthlyQuest.timeLeft : 'Découvrez les actions quotidiennes pour protéger la biodiversité.'}
           </p>
         </div>
 
-        <div className='absolute bottom-0 right-[-10px] z-10 h-40 w-40 opacity-90'>
-          <img
-            src={factionTheme.mascotImg}
-            alt={factionTheme.title}
-            className='h-full w-full object-contain object-bottom drop-shadow-2xl'
-            onError={(event) => {
-              event.currentTarget.style.display = 'none'
-            }}
-          />
-        </div>
+        {initialFaction && (
+          <div className='absolute bottom-0 right-[-10px] z-10 h-40 w-40 opacity-90'>
+            <img
+              src={factionTheme.mascotImg}
+              alt={factionTheme.title}
+              className='h-full w-full object-contain object-bottom drop-shadow-2xl'
+              onError={(event) => {
+                event.currentTarget.style.display = 'none'
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <div className='relative z-30 -mt-12 mb-8 px-4'>
@@ -1079,12 +1087,12 @@ export function AdventureChallenges({
                   </p>
                   {isHarvestComplete ? (
                     <p className='mt-1 text-[10px] font-bold uppercase tracking-widest text-lime-400'>
-                      Recolte deja effectuee
+                      Récolte déjà effectuée
                     </p>
                   ) : null}
                   {isSocialComplete ? (
                     <p className='mt-1 text-[10px] font-bold uppercase tracking-widest text-lime-400'>
-                      3 Bravos deja distribues
+                      3 Bravos déjà distribués
                     </p>
                   ) : null}
 
@@ -1196,7 +1204,7 @@ export function AdventureChallenges({
                 accentTheme.accentShadow,
               )}
             >
-              +{floatingReward.amount} graines gagnees
+              +{floatingReward.amount} graines gagnées
             </div>
           </motion.div>
         ) : null}
