@@ -102,11 +102,11 @@ export function FactionCarousel({ returnTo, onboardingMode = false, onFactionSel
         const left = container.clientWidth * preselectedIndex
         container.scrollTo({
           left,
-          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          behavior: 'auto',
         })
       }
     }
-  }, [preselectedFactionId, preselectedIndex, prefersReducedMotion])
+  }, [preselectedFactionId, preselectedIndex])
 
   const activeFaction = FACTIONS[Math.max(0, Math.min(activeIndex, FACTIONS.length - 1))]!
   const scrollToFaction = (index: number) => {
