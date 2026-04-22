@@ -351,14 +351,17 @@ export function AdventureMovementClient({
 
   const handleAttemptBravo = useCallback(
     (eventId: string, action: () => void) => {
-      guardAction(action, {
-        intent: 'give-bravo',
-        extraParams: {
-          targetId: eventId,
-        },
-      })
+      const session = getClientMockViewerSession()
+      const effectiveViewerId = session?.viewerId ?? viewerId ?? null
+
+      if (!effectiveViewerId) {
+        window.location.href = '/onboarding/step-0'
+        return
+      }
+
+      action()
     },
-    [guardAction],
+    [viewerId],
   )
 
   const handleBravoPersisted = useCallback((eventId: string) => {
