@@ -60,8 +60,6 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
   const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [hasAddress, setHasAddress] = useState(false);
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const displayPoints = selectedFormat.points
   const displayPrice = selectedFormat.euros
