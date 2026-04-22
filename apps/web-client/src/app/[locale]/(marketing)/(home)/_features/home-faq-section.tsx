@@ -64,10 +64,10 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
                   <span
                     className={cn(
                       'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 transition-all duration-300 group-hover:border-lime-200 group-hover:bg-lime-50 group-hover:text-lime-600 dark:border-white/10 dark:bg-white/5 dark:text-white dark:group-hover:border-lime-500/30 dark:group-hover:bg-lime-500/20 dark:group-hover:text-lime-400',
-                      isOpen && 'rotate-45 border-lime-200 bg-lime-50 text-lime-600 dark:border-lime-500/30 dark:bg-lime-500/20 dark:text-lime-400',
+                      isOpen && 'border-lime-200 bg-lime-50 text-lime-600 dark:border-lime-500/30 dark:bg-lime-500/20 dark:text-lime-400',
                     )}
                   >
-                    <Plus className="h-5 w-5" />
+                    {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
                   </span>
                 </button>
 
