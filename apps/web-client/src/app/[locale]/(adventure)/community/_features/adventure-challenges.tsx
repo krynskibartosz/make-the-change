@@ -869,7 +869,7 @@ function DailyHarvestModal({
             </div>
           ) : (
             <div className='animate-in zoom-in slide-in-from-bottom-10 duration-700 z-10 flex flex-col items-center'>
-              <h2 className={cn('mb-2 text-sm font-bold uppercase tracking-widest', accentTheme.accentText)}>
+              <h2 className={cn('mb-2 text-sm font-bold uppercase tracking-widest pointer-events-none select-none', accentTheme.accentText)}>
                 Récompense quotidienne
               </h2>
               <div className='relative mb-4'>
@@ -881,7 +881,7 @@ function DailyHarvestModal({
                   <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
                 </div>
               </div>
-              <p className='max-w-[250px] text-center text-white/60'>
+              <p className='max-w-[250px] text-center text-white/60 pointer-events-none select-none'>
                 Ton compagnon a travaillé toute la nuit. Reviens demain pour continuer ta série.
               </p>
               <button
