@@ -28,14 +28,14 @@ function FactionMascotSelector() {
   ]
 
   return (
-    <div className="flex gap-4 mb-6">
+    <div className="mt-10 flex gap-4 mb-6">
       {factions.map((faction) => (
         <Link
           key={faction.id}
           href={`/onboarding/step-0?faction=${faction.id}`}
           className="flex flex-col items-center gap-2 group"
         >
-          <div className="w-24 h-24 rounded-full border border-white/10 bg-white/5 p-2 transition-all hover:scale-105 hover:bg-white/10 hover:border-white/20 animate-[float_3s_ease-in-out_infinite]">
+          <div className="w-24 h-24 rounded-full border border-white/10 bg-white/5 p-2 shadow-lg transition-all hover:scale-105 hover:bg-white/10 hover:border-white/20 animate-[float_3s_ease-in-out_infinite]">
             <img src={faction.image} alt={faction.name} className="w-full h-full object-contain" />
           </div>
           <span className="text-xs font-bold text-white/60 group-hover:text-white transition-colors">
@@ -70,14 +70,14 @@ export default async function GuestProfilePage() {
       </header>
       <main className="w-full pt-[max(0.75rem,env(safe-area-inset-top))]">
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
-          <h1 className="text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
+          <h1 className="mb-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
           <p className="mx-auto mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
             Choisissez votre compagnon pour débloquer votre BioDex, sauvegarder votre impact et rejoindre l'effort collectif.
           </p>
           <FactionMascotSelector />
           <Link
             href="/login"
-            className="text-sm text-white/40 hover:text-white/60 underline transition-colors"
+            className="mt-6 text-sm text-white/40 hover:text-white/60 underline underline-offset-4 transition-colors"
           >
             Déjà un Gardien ? Se connecter
           </Link>
