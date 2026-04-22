@@ -14,12 +14,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
+import { ProjectImpactCalculator } from '../[slug]/components/project-impact-calculator'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import type { DonationOption } from '@/types/context'
 
-type FlowStep = 'pack' | 'impact' | 'payment' | 'success'
+type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
-const FLOW_STEPS: FlowStep[] = ['pack', 'impact', 'payment', 'success']
+const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const REWARD_PREVIEW_IMAGE = '/images/diorama-chouette.png'
 const formatAmountPlain = (value: number): string =>
   `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
@@ -88,13 +89,20 @@ export function ProjectDonateOneFlow({
 
   const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
 
-  // Pré-sélectionner le pack si initialOptionId est fourni
-  const [selectedOption, setSelectedOption] = useState<DonationOption | null>(() => {
+  // Utiliser les prix des donation options comme montants rapides
+  const quickAmounts = project.donationOptions.map((opt) => opt.price)
+  const defaultAmount = quickAmounts[0] || 55
+
+  // État pour le montant (comme dans le flow soutien)
+  const [amountEur, setAmountEur] = useState(() => {
     if (initialOptionId) {
-      return project.donationOptions.find((opt) => opt.id === initialOptionId) || null
+      const option = project.donationOptions.find((opt) => opt.id === initialOptionId)
+      return option?.price || defaultAmount
     }
-    return null
+    return defaultAmount
   })
+  const [amountInput, setAmountInput] = useState(String(amountEur))
+  const amountInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (discoveredSpeciesId) {
@@ -106,8 +114,12 @@ export function ProjectDonateOneFlow({
     }
   }, [discoveredSpeciesId])
 
-  const [step, setStep] = useState<FlowStep>('pack')
-  const [selectedOption, setSelectedOption] = useState<DonationOption | null>(null)
+  // Mettre à jour amountInput quand amountEur change
+  useEffect(() => {
+    setAmountInput(String(amountEur))
+  }, [amountEur])
+
+  const [step, setStep] = useState<FlowStep>('impact')
   const [guestEmail, setGuestEmail] = useState('')
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
   const [claimEmail, setClaimEmail] = useState('')
@@ -120,11 +132,13 @@ export function ProjectDonateOneFlow({
   const stepIndex = FLOW_STEPS.indexOf(step)
 
   const points = useMemo(() => {
-    return selectedOption?.rewards.points || 0
-  }, [selectedOption])
+    const option = project.donationOptions.find((opt) => opt.price === amountEur)
+    return option?.rewards.points || Math.round(amountEur * 1.5)
+  }, [amountEur, project.donationOptions])
 
-  const formattedAmount = selectedOption ? formatAmountNumber(selectedOption.price) : '0'
-  const unitsRestored = selectedOption?.impact.unitsRestored || 0
+  const formattedAmount = formatAmountNumber(amountEur)
+  const selectedOption = project.donationOptions.find((opt) => opt.price === amountEur)
+  const unitsRestored = selectedOption?.impact.unitsRestored || Math.round(amountEur / 18)
 
   useEffect(() => {
     if (step !== 'success') return
@@ -192,10 +206,29 @@ export function ProjectDonateOneFlow({
     }
   }, [presentation, step, phase])
 
-  const goToImpact = () => {
-    if (!selectedOption) return
-    haptic.heartbeat()
-    setStep('impact')
+  const handleAmountInput = (value: string) => {
+    const digitsOnly = value.replace(/[^\d]/g, '')
+    setAmountInput(digitsOnly)
+    if (digitsOnly.length === 0) {
+      return
+    }
+
+    const parsed = Number(digitsOnly)
+    if (!Number.isFinite(parsed)) {
+      return
+    }
+
+    setAmountEur(parsed)
+  }
+
+  const handleAmountBlur = () => {
+    if (amountInput.trim().length === 0) {
+      setAmountEur(defaultAmount)
+      setAmountInput(String(defaultAmount))
+      return
+    }
+
+    setAmountInput(String(amountEur))
   }
 
   const goToPayment = () => {
@@ -276,9 +309,9 @@ export function ProjectDonateOneFlow({
           'pb-24',
         )}
       >
-        {presentation === 'modal' && (step === 'impact' || step === 'payment') ? (
+        {presentation === 'modal' && step === 'payment' ? (
           <button
-            onClick={() => setStep('pack')}
+            onClick={() => setStep('impact')}
             className="absolute top-4 left-4 z-30 p-2"
             aria-label="Retour"
           >
@@ -290,7 +323,7 @@ export function ProjectDonateOneFlow({
           className="flex h-full min-h-0 transition-transform duration-500 ease-out will-change-transform"
           style={{ transform: `translateX(-${stepIndex * 100}%)` }}
         >
-          {/* Étape 1 : Sélection pack */}
+          {/* Étape 1 : Impact (sélection montant) */}
           <section
             className={cn(
               'min-h-0 w-full shrink-0 overflow-y-auto',
@@ -301,105 +334,64 @@ export function ProjectDonateOneFlow({
             <div className={cn('flex flex-col gap-8 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
-                  Choisissez votre pack de donation
+                  Choisissez votre montant
                 </p>
+                <div className="flex w-full items-baseline justify-center">
+                  <div
+                    className="flex cursor-text items-baseline justify-center gap-2 rounded-3xl bg-white/5 px-8 py-4 transition-colors hover:bg-white/10"
+                    onClick={() => amountInputRef.current?.focus()}
+                  >
+                    <input
+                      ref={amountInputRef}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      size={Math.max(amountInput.length, 2)}
+                      value={amountInput}
+                      onChange={(event) => handleAmountInput(event.target.value)}
+                      onBlur={handleAmountBlur}
+                      aria-label="Montant"
+                      className="w-auto max-w-[9ch] bg-transparent text-center text-7xl leading-none font-black tracking-tighter text-white tabular-nums caret-lime-400 outline-none ring-0 focus:outline-none focus:ring-0"
+                    />
+                    <span className="mb-2 text-4xl font-semibold text-white/60">€</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="grid gap-4">
-                {project.donationOptions.map((option) => (
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {quickAmounts.map((boundedValue) => (
                   <button
-                    key={option.id}
+                    key={boundedValue}
                     type="button"
-                    onClick={() => setSelectedOption(option)}
+                    onClick={() => {
+                      setAmountEur(boundedValue)
+                      setAmountInput(String(boundedValue))
+                    }}
                     className={cn(
-                      'relative w-full rounded-2xl border p-5 text-left transition-all active:scale-95',
-                      selectedOption?.id === option.id
-                        ? 'border-lime-400 bg-lime-400/10'
-                        : 'border-white/10 bg-white/5 hover:bg-white/10',
+                      'rounded-full px-5 py-2 text-sm font-bold transition-all active:scale-95',
+                      amountEur === boundedValue
+                        ? 'bg-lime-400 text-black'
+                        : 'bg-white/5 text-white hover:bg-white/10',
                     )}
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-foreground">{option.name}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {option.quantity} {option.unitLabel}
-                        </p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          <span className="text-xs font-medium text-lime-400">
-                            +{option.rewards.points} pts
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {option.impact.survivalRate} survie
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-2xl font-black text-lime-400">
-                          {formatAmountPlain(option.price)}
-                        </span>
-                      </div>
-                    </div>
+                    {formatAmountPlain(boundedValue)}
                   </button>
                 ))}
               </div>
-            </div>
-          </section>
 
-          {/* Étape 2 : Impact */}
-          <section
-            className={cn(
-              'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(200px+env(safe-area-inset-bottom))]',
-              presentation === 'page' ? 'pt-2' : '',
-            )}
-          >
-            <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
-              <div className="text-center">
-                <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
-                  Impact de votre donation
-                </p>
-                <div className="mb-8 flex items-baseline justify-center gap-1.5">
-                  <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
-                    {formattedAmount}
-                  </span>
-                  <span className="text-4xl font-semibold text-white/50">€</span>
-                </div>
-
-                {selectedOption && (
-                  <div className="mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-6 text-left">
-                    <h3 className="text-lg font-bold text-white mb-4">
-                      {selectedOption.name}
-                    </h3>
-                    
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/60">Coraux restaurés</span>
-                        <span className="text-white font-bold">{selectedOption.impact.unitsRestored}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/60">Taux de survie</span>
-                        <span className="text-white font-bold">{selectedOption.impact.survivalRate}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/60">Surface restaurée</span>
-                        <span className="text-white font-bold">{selectedOption.impact.areaRestored}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/60">Habitats créés</span>
-                        <span className="text-white font-bold">{selectedOption.impact.habitatCreated}</span>
-                      </div>
-                      {selectedOption.impact.description && (
-                        <p className="mt-4 text-sm text-white/60 pt-4 border-t border-white/10">
-                          {selectedOption.impact.description}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
+                <ProjectImpactCalculator 
+                  baseAmount={defaultAmount} 
+                  amount={amountEur} 
+                  mode="checkout" 
+                  isDonationProject={true}
+                  donationOptions={project.donationOptions}
+                />
               </div>
             </div>
           </section>
 
-          {/* Étape 3 : Payment */}
+          {/* Étape 2 : Payment */}
           <section
             className={cn(
               'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(200px+env(safe-area-inset-bottom))]',
@@ -465,13 +457,13 @@ export function ProjectDonateOneFlow({
                 </div>
               ) : null}
 
-              {stripePromise && selectedOption ? (
+              {stripePromise && amountEur > 0 ? (
                 <Elements
-                  key={selectedOption.id}
+                  key={amountEur}
                   stripe={stripePromise}
                   options={{
                     mode: 'payment',
-                    amount: Math.max(100, selectedOption.price * 100),
+                    amount: Math.max(100, amountEur * 100),
                     currency: 'eur',
                     appearance: stripeAppearance,
                   }}
@@ -510,7 +502,7 @@ export function ProjectDonateOneFlow({
             </div>
           </section>
 
-          {/* Étape 4 : Success */}
+          {/* Étape 3 : Success */}
           <section
             className={cn(
               'min-h-0 w-full shrink-0 overflow-y-auto overflow-x-hidden pb-[calc(220px+env(safe-area-inset-bottom))]',
@@ -641,23 +633,11 @@ export function ProjectDonateOneFlow({
         </div>
       </div>
 
-      {step === 'pack' && selectedOption ? (
+      {step === 'impact' ? (
         <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
             <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
               Vous allez recevoir <span className="font-black">+{formatPoints(points)} Points d&apos;Impact</span> <Sparkles className="h-4 w-4" />
             </p>
-            <Button
-              type="button"
-              onClick={goToImpact}
-              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
-            >
-              Voir l'impact
-            </Button>
-        </div>
-      ) : null}
-
-      {step === 'impact' ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
             <Button
               type="button"
               onClick={goToPayment}
