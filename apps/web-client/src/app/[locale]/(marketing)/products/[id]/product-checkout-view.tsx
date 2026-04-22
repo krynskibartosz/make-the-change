@@ -159,7 +159,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             }}
             className="w-full flex items-center justify-center gap-2 rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100"
           >
-            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Continuer" : "Confirmer l'échange")}
+            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'échange")}
           </button>
         </div>
       </div>
