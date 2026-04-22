@@ -876,7 +876,7 @@ function DailyHarvestModal({
                 <div className='pointer-events-none absolute inset-0 -z-10 flex items-center justify-center'>
                   <div className={cn('h-64 w-64 rounded-full blur-2xl', accentTheme.accentGlow)} />
                 </div>
-                <div className={cn('text-7xl font-black', accentTheme.accentText, accentTheme.accentShadow)}>
+                <div className={cn('text-7xl font-black pointer-events-none select-none', accentTheme.accentText, accentTheme.accentShadow)}>
                   + {challenge?.reward ?? 50}{' '}
                   <Sprout className='inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400' />
                 </div>
