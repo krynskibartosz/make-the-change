@@ -100,9 +100,10 @@ export default async function GuestProfilePage() {
 
           <div className="hide-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {lockedSpecies.map((species) => (
-              <div
+              <Link
                 key={species.id}
-                className="relative flex aspect-[4/5] w-40 shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-3"
+                href="/onboarding/step-0"
+                className="relative flex aspect-[4/5] w-40 shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-3 transition-opacity hover:opacity-70 active:opacity-50"
               >
                 <div className="mb-2 flex shrink-0 justify-end">
                   <div className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/5">
@@ -119,7 +120,7 @@ export default async function GuestProfilePage() {
                 <div className="mt-2 shrink-0">
                   <p className="truncate text-sm font-semibold leading-tight text-white/60">{species.name}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>

@@ -482,7 +482,7 @@ export const Header = ({ user, menuData, className, ...rest }: HeaderProps) => {
                     Profil
                   </Link>
                   <Link
-                    href="/dashboard/settings"
+                    href="/settings"
                     className="block cursor-pointer rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                   >
                     Paramètres
