@@ -45,7 +45,7 @@ export default function ContactPage() {
           Comment pouvons-nous vous aider ?
         </h1>
         <p className="text-gray-400 text-sm text-pretty leading-relaxed mb-6">
-          Une idée, un partenariat ou un retour sur l’app ? L’équipe lit chaque message avec attention.
+          Une idée, un partenariat ou un retour sur l'application ? L'équipe lit chaque message avec attention.
         </p>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-lime-400 animate-pulse shrink-0" />
