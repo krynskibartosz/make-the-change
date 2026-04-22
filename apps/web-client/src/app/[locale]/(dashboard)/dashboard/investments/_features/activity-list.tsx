@@ -80,6 +80,8 @@ const formatEuros = (value: number): string => {
   }).format(Math.round(value))
 }
 
+type FilterType = 'all' | 'investment' | 'donation' | 'order'
+
 type ActivityListProps = {
   userInvestments: NormalizedInvestment[]
   userDonations: NormalizedDonation[]

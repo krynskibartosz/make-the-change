@@ -1,5 +1,6 @@
-import { ChevronLeft, Leaf, Lock, Sprout } from 'lucide-react'
+import { Leaf, Lock, Sprout } from 'lucide-react'
 import { getSpeciesContext } from '@/lib/api/species-context.service'
+import { BackButton } from '@/components/back-button'
 
 const REQUIRED_SEEDS = 500
 
@@ -24,14 +25,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
     <div className="min-h-screen bg-[#0B0F15] text-white">
       <main className="mx-auto w-full max-w-2xl pb-12">
         <header className="flex items-center justify-between px-5 pb-4 pt-12">
-          <button
-            type="button"
-            onClick={() => window.history.back()}
-            aria-label="Retour"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-white/10"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
+          <BackButton />
 
           <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
             <Leaf className="h-4 w-4 text-emerald-400" />
