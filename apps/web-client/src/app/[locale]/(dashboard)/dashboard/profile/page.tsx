@@ -1,10 +1,10 @@
 import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind, Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { motion } from 'framer-motion'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
 import { getCurrentProfile } from '@/lib/mock/mock-session-server'
+import { AnimatedMascot } from './animated-mascot'
 
 export default async function ProfilePage() {
   const profile = await getCurrentProfile()
@@ -193,20 +193,7 @@ export default async function ProfilePage() {
               {/* LAYOUT HAUT : Mascotte + Infos */}
               <div className="relative z-10 flex flex-row items-center justify-between">
                 <div className="relative -mt-12 h-32 w-[35%] shrink-0 drop-shadow-2xl z-20">
-                  <motion.img
-                    src={
-                      factionContribution.themeKey === 'pollinisateurs'
-                        ? '/images/logo-icon-bee.png'
-                        : factionContribution.themeKey === 'forets'
-                          ? '/sylva.png'
-                          : '/aura.png'
-                    }
-                    alt={factionContribution.label}
-                    initial={{ y: 0 }}
-                    animate={{ y: [-4, 4, -4] }}
-                    transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-                    className="h-full w-full origin-bottom scale-[1.1] object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
-                  />
+                  <AnimatedMascot themeKey={factionContribution.themeKey} label={factionContribution.label} />
                 </div>
 
                 {/* Infos faction */}
