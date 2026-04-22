@@ -247,7 +247,9 @@ function ImpactCard({
           <span className="text-xs text-muted-foreground">{event.time}</span>
         </div>
         {event.faction ? (
-          <span className={cn('text-[11px] font-semibold', accentTheme.accentTextSoft)}>{event.faction}</span>
+          <span className={cn('text-[11px] font-semibold', accentTheme.accentTextSoft)}>
+            {getFactionContribution(event.faction)?.label || event.faction}
+          </span>
         ) : null}
       </div>
     </div>
