@@ -520,17 +520,26 @@ export function AdventureMovementClient({
 
                   {/* Bouton Sticky */}
                   <div className="sticky bottom-0 z-20 w-full border-t border-white/5 bg-[#0B0F15]/80 p-5 backdrop-blur-xl sm:px-6">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const params = new URLSearchParams(searchParams.toString())
-                        params.delete('p')
-                        router.push(`?${params.toString()}`, { scroll: false })
-                      }}
-                      className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white text-sm font-bold text-black shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-transform hover:scale-[1.02] active:scale-95"
-                    >
-                      Compris, let's go ! <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
-                    </button>
+                    {!initialFaction ? (
+                      <Link
+                        href="/welcome/setup"
+                        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
+                      >
+                        Rejoindre pour participer <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const params = new URLSearchParams(searchParams.toString())
+                          params.delete('p')
+                          router.push(`?${params.toString()}`, { scroll: false })
+                        }}
+                        className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white text-sm font-bold text-black shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-transform hover:scale-[1.02] active:scale-95"
+                      >
+                        Compris, let's go ! <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
+                      </button>
+                    )}
                   </div>
                 </div>
               )

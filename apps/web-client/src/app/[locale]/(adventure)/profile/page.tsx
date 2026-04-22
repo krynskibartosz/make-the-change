@@ -76,7 +76,7 @@ export default async function GuestProfilePage() {
         </section>
 
         <section className="mb-2">
-          <h2 className="mb-3 px-5 text-lg font-bold text-white">Debloquez le BioDex</h2>
+          <h2 className="mb-3 px-5 text-lg font-bold text-white">Découvrez le BioDex</h2>
 
           <div className="hide-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {lockedSpecies.map((species) => (
@@ -104,72 +104,49 @@ export default async function GuestProfilePage() {
           </div>
         </section>
 
-        <section className="mb-8">
-          <div className="mb-3 flex items-center justify-between px-5">
-            <h2 className="text-lg font-bold text-white">Objectif commun des factions</h2>
-            <span className="text-[11px] uppercase tracking-[0.18em] text-white/40">Hope core</span>
-          </div>
+        <section className="mb-8 px-5">
+          <h2 className="mb-4 text-lg font-bold text-white">Choisissez votre Faction</h2>
 
-          <div className="space-y-3 px-5">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">North star du mois</p>
-              <h3 className="mt-2 text-lg font-black text-white">{collectiveGoal.title}</h3>
-              <p className="mt-2 text-sm text-white/60">{collectiveGoal.summary}</p>
-              <div className="mt-4 h-2 rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-white" style={{ width: `${collectiveGoal.progress}%` }} />
-              </div>
-              <p className="mt-2 text-sm text-white/55">
-                {collectiveGoal.currentSeeds.toLocaleString('fr-FR')} / {collectiveGoal.targetSeeds.toLocaleString('fr-FR')} graines
-              </p>
-            </div>
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p className="mb-5 text-sm leading-relaxed text-white/60">
+              Rejoignez l’un des trois camps et orientez l’effort collectif selon vos valeurs.
+            </p>
 
-            {factionContributions.map((contribution) => {
-              const theme = getFactionThemeByKey(contribution.themeKey)
-
-              return (
-                <div key={contribution.themeKey} className={`rounded-3xl border bg-white/5 p-4 ${theme.accentBorder}`}>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${theme.accentTextSoft}`}>
-                        {contribution.isLeader ? 'En tête du mois' : `${contribution.contributionShare}% de l effort`}
-                      </p>
-                      <h3 className="mt-2 text-base font-black text-white">{contribution.label}</h3>
-                      <p className="mt-1 text-sm text-white/60">{contribution.impactValue} {contribution.impactLabel}</p>
+            <div className="space-y-3">
+              {factionContributions.map((contribution) => {
+                const theme = getFactionThemeByKey(contribution.themeKey)
+                return (
+                  <div
+                    key={contribution.themeKey}
+                    className={`flex items-center gap-4 rounded-2xl border p-4 ${theme.accentBorder} ${theme.accentBgSoft}`}
+                  >
+                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${theme.accentBg} bg-opacity-20`}>
+                      <span className="text-xl">
+                        {contribution.themeKey === 'pollinisateurs' ? '🐝' : contribution.themeKey === 'forets' ? '🌲' : '🏺'}
+                      </span>
                     </div>
-                    <div className={`rounded-full border px-3 py-1 text-xs font-bold ${theme.badgeClassName} ${theme.accentText}`}>
-                      {contribution.contributionSeeds.toLocaleString('fr-FR')}
+                    <div className="min-w-0 flex-1">
+                      <p className={`text-sm font-bold ${theme.accentText}`}>{contribution.label}</p>
+                      <p className="text-xs text-white/50">{contribution.impactValue} {contribution.impactLabel}</p>
+                    </div>
+                    <div className={`rounded-full border px-2.5 py-1 text-[10px] font-black ${theme.badgeClassName} ${theme.accentText}`}>
+                      #{contribution.rank === 1 ? '1' : contribution.rank === 2 ? '2' : '3'}
                     </div>
                   </div>
-
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                      <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                        <Target className={`h-4 w-4 ${theme.accentText}`} />
-                        Contribution
-                      </div>
-                      <p className="mt-2 text-sm font-bold text-white">{contribution.contributionShare}% du total</p>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                      <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                        <Gift className={`h-4 w-4 ${theme.accentText}`} />
-                        Reward
-                      </div>
-                      <p className="mt-2 text-sm font-bold text-white">{contribution.prestigeTitle}</p>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                <Trophy className="h-4 w-4 text-white/70" />
-                Recompense commune
-              </div>
-              <p className="mt-2 text-base font-black text-white">{collectiveGoal.commonRewardTitle}</p>
-              <p className="mt-1 text-sm text-white/60">{collectiveGoal.commonRewardSummary}</p>
+                )
+              })}
             </div>
+
+            <Link
+              href="/welcome/setup"
+              className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-base font-black text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform active:scale-95"
+            >
+              Choisir ma Faction
+              <span className="text-lg">→</span>
+            </Link>
+            <p className="mt-3 text-center text-xs text-white/30">
+              Gratuit — Rejoignez l’aventure en 30 secondes
+            </p>
           </div>
         </section>
       </main>
