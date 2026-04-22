@@ -1,6 +1,8 @@
 import {
   MOCK_PRODUCT_EUCALYPTUS_ID,
   MOCK_PRODUCT_EUCALYPTUS_SLUG,
+  MOCK_PRODUCT_EUCALYPTUS_140G_ID,
+  MOCK_PRODUCT_EUCALYPTUS_140G_SLUG,
   MOCK_PRODUCT_MANAKARA_ID,
   MOCK_PRODUCT_MANAKARA_SLUG,
   MOCK_PRODUCER_ILANGA_ID,
@@ -88,6 +90,67 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
     certifications: ['Artisanal', 'Origine Madagascar'],
     created_at: '2026-04-11T08:00:00.000Z',
     updated_at: '2026-04-17T08:00:00.000Z',
+    producer: {
+      id: MOCK_PRODUCER_ILANGA_ID,
+      slug: MOCK_PRODUCER_ILANGA_SLUG,
+      name_default: 'Ilanga Nature',
+      name_i18n: {
+        fr: 'Ilanga Nature',
+        en: 'Ilanga Nature',
+      },
+      description_default: 'Coopérative engagée dans une apiculture durable à Madagascar.',
+      description_i18n: {
+        fr: 'Coopérative engagée dans une apiculture durable à Madagascar.',
+        en: 'Cooperative committed to sustainable beekeeping in Madagascar.',
+      },
+      images: ['/images/projects/miellerie-manakara.jpg'],
+      address_city: 'Manakara',
+      address_country_code: 'Madagascar',
+      contact_website: 'https://ilanga.nature',
+    },
+    category: {
+      id: 'mock-category-honey',
+      name_default: 'Miel',
+      name_i18n: {
+        fr: 'Miel',
+        en: 'Honey',
+      },
+    },
+  },
+  {
+    id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
+    slug: MOCK_PRODUCT_EUCALYPTUS_140G_SLUG,
+    name_default: 'Miel Eucalyptus 140g',
+    name_i18n: {
+      fr: 'Miel Eucalyptus 140g',
+      en: 'Eucalyptus Honey 140g',
+    },
+    short_description_default:
+      'Format compact du miel artisanal de Madagascar, ambré et aromatique.',
+    short_description_i18n: {
+      fr: 'Format compact du miel artisanal de Madagascar, ambré et aromatique.',
+      en: 'Compact format of artisanal Madagascar honey, with amber color and aromatic notes.',
+    },
+    description_default:
+      "Issu des forêts d'eucalyptus de Madagascar, ce miel se distingue par sa robe ambrée et son goût intense, légèrement boisé avec des notes fraîches et aromatiques.\n\nFormat 140g idéal pour découvrir ou offrir. Récolté de manière artisanale, il reflète la richesse des écosystèmes locaux et le travail des apiculteurs engagés.\n\nAu-delà de ses qualités gustatives, ce miel soutient une apiculture durable et participe à la préservation du vivant grâce à la pollinisation.",
+    description_i18n: {
+      fr: "Issu des forêts d'eucalyptus de Madagascar, ce miel se distingue par sa robe ambrée et son goût intense, légèrement boisé avec des notes fraîches et aromatiques.\n\nFormat 140g idéal pour découvrir ou offrir. Récolté de manière artisanale, il reflète la richesse des écosystèmes locaux et le travail des apiculteurs engagés.\n\nAu-delà de ses qualités gustatives, ce miel soutient une apiculture durable et participe à la préservation du vivant grâce à la pollinisation.",
+      en: 'Harvested in Madagascar eucalyptus forests, this honey has an amber robe and a powerful, slightly woody aromatic profile. 140g format ideal for discovery or gifting. It supports sustainable local beekeeping and biodiversity preservation through pollination.',
+    },
+    producer_id: MOCK_PRODUCER_ILANGA_ID,
+    category_id: 'mock-category-honey',
+    featured: true,
+    is_hero_product: false,
+    tags: ['Miel', 'Ruche', 'Abeilles', 'Abeille noire', 'Format compact'],
+    stock_quantity: 45,
+    price_points: 350,
+    price_eur_equivalent: 3.5,
+    fulfillment_method: 'ship',
+    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    images: ['/images/products/miel-eucalyptus-ilanga.jpg'],
+    certifications: ['Artisanal', 'Origine Madagascar'],
+    created_at: '2026-04-15T08:00:00.000Z',
+    updated_at: '2026-04-20T08:00:00.000Z',
     producer: {
       id: MOCK_PRODUCER_ILANGA_ID,
       slug: MOCK_PRODUCER_ILANGA_SLUG,
