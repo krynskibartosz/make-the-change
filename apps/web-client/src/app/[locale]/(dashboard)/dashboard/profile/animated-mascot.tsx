@@ -13,7 +13,7 @@ export function AnimatedMascot({ themeKey, label }: AnimatedMascotProps) {
       ? '/images/logo-icon-bee.png'
       : themeKey === 'forets'
         ? '/sylva.png'
-        : '/aura.png'
+        : '/ondine.png'
 
   return (
     <motion.img

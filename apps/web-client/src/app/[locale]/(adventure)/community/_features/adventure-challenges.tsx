@@ -108,9 +108,9 @@ const FACTION_CONTENT = {
     title: 'Quête de la Forêt',
     mascotImg: '/sylva.png',
   },
-  artisans: {
-    title: 'Quête du Terroir',
-    mascotImg: '/aura.png',
+  mers: {
+    title: 'Quête des Mers',
+    mascotImg: '/ondine.png',
   },
 } as const
 
@@ -754,8 +754,8 @@ function DailyHarvestModal({
                 ? 'linear-gradient(to top, rgba(251, 191, 36, 0.3) 0%, transparent 100%)'
                 : accentTheme.key === 'forets'
                 ? 'linear-gradient(to top, rgba(52, 211, 153, 0.3) 0%, transparent 100%)'
-                : accentTheme.key === 'artisans'
-                ? 'linear-gradient(to top, rgba(244, 114, 182, 0.3) 0%, transparent 100%)'
+                : accentTheme.key === 'mers'
+                ? 'linear-gradient(to top, rgba(59, 130, 246, 0.3) 0%, transparent 100%)'
                 : 'linear-gradient(to top, rgba(163, 230, 53, 0.3) 0%, transparent 100%)',
             }}
           />
@@ -770,8 +770,8 @@ function DailyHarvestModal({
                 ? 'rgba(251, 191, 36, 1)'
                 : accentTheme.key === 'forets'
                 ? 'rgba(52, 211, 153, 1)'
-                : accentTheme.key === 'artisans'
-                ? 'rgba(244, 114, 182, 1)'
+                : accentTheme.key === 'mers'
+                ? 'rgba(59, 130, 246, 1)'
                 : 'rgba(163, 230, 53, 1)',
             }}
           />
@@ -821,8 +821,8 @@ function DailyHarvestModal({
                           ? '#FBBF24'
                           : accentTheme.key === 'forets'
                           ? '#34D399'
-                          : accentTheme.key === 'artisans'
-                          ? '#F472B6'
+                          : accentTheme.key === 'mers'
+                          ? '#3B82F6'
                           : '#A3E635'
                       }
                       strokeWidth='8'
@@ -835,8 +835,8 @@ function DailyHarvestModal({
                           ? 'drop-shadow(0 0 8px rgba(251,191,36,0.5))'
                           : accentTheme.key === 'forets'
                           ? 'drop-shadow(0 0 8px rgba(52,211,153,0.5))'
-                          : accentTheme.key === 'artisans'
-                          ? 'drop-shadow(0 0 8px rgba(244,114,182,0.5))'
+                          : accentTheme.key === 'mers'
+                          ? 'drop-shadow(0 0 8px rgba(59,130,246,0.5))'
                           : 'drop-shadow(0 0 8px rgba(163,230,53,0.5))',
                       }}
                     />

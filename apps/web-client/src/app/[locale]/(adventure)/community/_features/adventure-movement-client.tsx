@@ -100,7 +100,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     actionHighlight: '120 graines',
     bravos: 31,
     avatarColor: 'bg-rose-500/20 text-rose-400',
-    faction: 'Artisans Locaux',
+    faction: 'Gardiens des mers',
   },
   {
     id: 'evt-6',
@@ -137,7 +137,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     iconColor: 'text-sky-400',
     bravos: 19,
     avatarColor: 'bg-cyan-500/20 text-cyan-400',
-    faction: 'Artisans Locaux',
+    faction: 'Gardiens des mers',
   },
 ]
 
@@ -161,7 +161,7 @@ function getFactionImage(faction: string | undefined): string | null {
   if (!faction) return null
   if (faction === 'Terres & Forêts') return '/sylva.png'
   if (faction === 'Vie Sauvage') return '/abeille-transparente.png'
-  if (faction === 'Artisans Locaux') return '/aura.png'
+  if (faction === 'Gardiens des mers') return '/ondine.png'
   return null
 }
 
@@ -516,7 +516,7 @@ export function AdventureMovementClient({
               
               let mascotSrc = '/sylva.png'
               if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
-              else if (activeContribution?.themeKey === 'artisans') mascotSrc = '/aura.png'
+              else if (activeContribution?.themeKey === 'mers') mascotSrc = '/ondine.png'
               
               const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
 
@@ -708,7 +708,7 @@ export function AdventureMovementClient({
                 let mascotSrc = ''
                 if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
                 else if (contribution.themeKey === 'forets') mascotSrc = '/sylva.png'
-                else if (contribution.themeKey === 'artisans') mascotSrc = '/aura.png'
+                else if (contribution.themeKey === 'mers') mascotSrc = '/ondine.png'
 
                 const sizeClass = sizes[displayIndex] ?? 'w-20 h-20'
                 const bottomClass = bottoms[displayIndex] ?? ''

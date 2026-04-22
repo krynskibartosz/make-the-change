@@ -85,23 +85,23 @@ const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = 
     prestigeTitle: 'Couronne canéopée',
     prestigeSummary: "Un glow végétal autour de Sylva pour souligner la faction meneuse.",
   },
-  artisans: {
-    themeKey: 'artisans',
-    label: 'Aura',
-    shortLabel: 'Aura',
-    tagline: "Les créateurs qui transforment l'impact en gestes concrets.",
+  mers: {
+    themeKey: 'mers',
+    label: 'Ondine',
+    shortLabel: 'Ondine',
+    tagline: "Les protecteurs des océans et de la biodiversité marine.",
     members: 391,
     contributionSeeds: 7650,
     contributionShare: 20,
     impactValue: '80',
-    impactLabel: 'artisans soutenus',
-    rallyLabel: "Chaque achat utile renforce le tissu local et nourrit l'objectif commun.",
-    prestigeTitle: 'Halo atelier',
-    prestigeSummary: "Un accessoire prestige discret autour de Aura pour célébrer la première place.",
+    impactLabel: 'km² de récifs protégés',
+    rallyLabel: "Chaque action renforce la protection des océans et rapproche tout le collectif du but.",
+    prestigeTitle: 'Halo abyssal',
+    prestigeSummary: "Un accessoire prestige discret autour de Ondine pour célébrer la première place.",
   },
 }
 
-const FACTION_ORDER: LiveFactionThemeKey[] = ['pollinisateurs', 'forets', 'artisans']
+const FACTION_ORDER: LiveFactionThemeKey[] = ['pollinisateurs', 'forets', 'mers']
 
 export const getCollectiveGoal = (): CollectiveGoal => {
   const goalReached = COLLECTIVE_GOAL.progress >= 100

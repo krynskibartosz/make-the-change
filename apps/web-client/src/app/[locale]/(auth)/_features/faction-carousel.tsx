@@ -33,16 +33,16 @@ const FACTIONS = [
     image: '/sylva.png'
   },
   {
-    id: 'artisans',
-    value: 'Artisans Locaux',
-    name: 'Artisans Locaux',
-    mascotName: 'Aura',
-    description: 'Soutiens les producteurs, coopératives et le savoir-faire local.',
-    colorTheme: 'from-rose-500/30 via-rose-500/5 to-transparent',
-    accentColor: 'bg-rose-500',
-    accentText: 'text-rose-500',
-    buttonText: 'Soutenir les Artisans',
-    image: '/aura.png'
+    id: 'mers',
+    value: 'Gardiens des mers',
+    name: 'Gardiens des mers',
+    mascotName: 'Ondine',
+    description: 'Soutiens la protection des océans et la biodiversité marine.',
+    colorTheme: 'from-blue-500/30 via-blue-500/5 to-transparent',
+    accentColor: 'bg-blue-500',
+    accentText: 'text-blue-500',
+    buttonText: 'Protéger les Océans',
+    image: '/ondine.png'
   }
 ]
 

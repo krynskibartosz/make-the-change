@@ -1,6 +1,6 @@
 import type { Faction } from '@/lib/mock/types'
 
-export type FactionThemeKey = 'neutral' | 'pollinisateurs' | 'forets' | 'artisans'
+export type FactionThemeKey = 'neutral' | 'pollinisateurs' | 'forets' | 'mers'
 
 export type FactionTheme = {
   key: FactionThemeKey
@@ -52,17 +52,17 @@ const FACTION_THEMES: Record<FactionThemeKey, FactionTheme> = {
     badgeClassName: 'border border-emerald-400/20 bg-emerald-400/10',
     heroGradient: 'from-emerald-500/18 to-[#0B0F15]',
   },
-  artisans: {
-    key: 'artisans',
-    accentText: 'text-rose-400',
-    accentTextSoft: 'text-rose-300',
-    accentBg: 'bg-rose-400',
-    accentBgSoft: 'bg-rose-400/12',
-    accentBorder: 'border-rose-400/25',
-    accentGlow: 'bg-rose-400/14',
-    accentShadow: 'shadow-[0_0_16px_rgba(251,113,133,0.24)]',
-    badgeClassName: 'border border-rose-400/20 bg-rose-400/10',
-    heroGradient: 'from-rose-500/18 to-[#0B0F15]',
+  mers: {
+    key: 'mers',
+    accentText: 'text-blue-400',
+    accentTextSoft: 'text-blue-300',
+    accentBg: 'bg-blue-400',
+    accentBgSoft: 'bg-blue-400/12',
+    accentBorder: 'border-blue-400/25',
+    accentGlow: 'bg-blue-400/14',
+    accentShadow: 'shadow-[0_0_16px_rgba(96,165,250,0.24)]',
+    badgeClassName: 'border border-blue-400/20 bg-blue-400/10',
+    heroGradient: 'from-blue-500/18 to-[#0B0F15]',
   },
 }
 
@@ -71,7 +71,7 @@ export const resolveFactionThemeKey = (
 ): FactionThemeKey => {
   if (faction === 'Vie Sauvage') return 'pollinisateurs'
   if (faction === 'Terres & Forêts') return 'forets'
-  if (faction === 'Artisans Locaux') return 'artisans'
+  if (faction === 'Gardiens des mers') return 'mers'
   return 'neutral'
 }
 

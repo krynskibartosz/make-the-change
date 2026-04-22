@@ -158,7 +158,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                   <img src="/abeille-transparente.png" alt="Vie Sauvage" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
                 <div className="relative z-10 -ml-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0B0F15] shadow-lg ring-2 ring-[#1A1F26] transition-transform delay-150 duration-300 group-hover:-translate-y-1">
-                  <img src="/aura.png" alt="Artisans Locaux" className="mt-1 h-[120%] w-[120%] object-contain" />
+                  <img src="/ondine.png" alt="Gardiens des mers" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
                 <div className="relative z-40 -ml-3 flex h-7 w-7 items-center justify-center rounded-full border border-lime-400/20 bg-lime-400/10 shadow-sm backdrop-blur-md transition-all group-hover:scale-110 group-hover:bg-lime-400/20">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="3">

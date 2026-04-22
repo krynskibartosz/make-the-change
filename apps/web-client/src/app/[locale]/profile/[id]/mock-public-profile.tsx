@@ -200,7 +200,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
                         ? '/abeille-transparente.png'
                         : factionContribution.themeKey === 'forets'
                           ? '/sylva.png'
-                          : '/aura.png'
+                          : '/ondine.png'
                     }
                     alt={factionContribution.label}
                     className="h-full w-full origin-bottom scale-[1.3] object-contain"

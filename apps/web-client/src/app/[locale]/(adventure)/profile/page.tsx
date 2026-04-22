@@ -24,7 +24,7 @@ function FactionMascotSelector() {
   const factions = [
     { id: 'pollinisateurs', name: 'Melli', image: '/abeille-transparente.png' },
     { id: 'forets', name: 'Sylva', image: '/sylva.png' },
-    { id: 'artisans', name: 'Aura', image: '/aura.png' },
+    { id: 'mers', name: 'Ondine', image: '/ondine.png' },
   ]
 
   return (

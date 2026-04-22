@@ -1,7 +1,7 @@
 import type { ThemeConfig } from '@make-the-change/core'
 import type { Locale } from '@make-the-change/core/i18n'
 
-export type Faction = 'Vie Sauvage' | 'Terres & Forêts' | 'Artisans Locaux'
+export type Faction = 'Vie Sauvage' | 'Terres & Forêts' | 'Gardiens des mers'
 
 export type MockViewerSession = {
   viewerId: string
