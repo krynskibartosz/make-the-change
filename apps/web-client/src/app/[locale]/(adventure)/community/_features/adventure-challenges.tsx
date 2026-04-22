@@ -105,15 +105,15 @@ const FACTION_CONTENT = {
     mascotImg: '/images/logo-icon-bee.png',
   },
   pollinisateurs: {
-    title: "Quête de l'Essaim",
+    title: 'Quête de Melli',
     mascotImg: '/abeille-transparente.png',
   },
   forets: {
-    title: 'Quête de la Forêt',
+    title: 'Quête de Sylva',
     mascotImg: '/sylva.png',
   },
   mers: {
-    title: 'Quête des Mers',
+    title: "Quête d'Ondine",
     mascotImg: '/ondine.png',
   },
 } as const
