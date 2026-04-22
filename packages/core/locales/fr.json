@@ -762,7 +762,7 @@
       "search_placeholder": "Rechercher un projet...",
       "reset_filters": "Réinitialiser les filtres",
       "empty_description": "Essayez de modifier vos filtres ou revenez plus tard pour découvrir de nouveaux projets.",
-      "featured": "Vedette",
+      "featured": "En vedette",
       "status": {
         "active": "En cours",
         "completed": "Terminé",
