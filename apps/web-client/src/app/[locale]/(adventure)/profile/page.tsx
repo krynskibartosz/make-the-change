@@ -22,8 +22,8 @@ function LockedImpactCard({
 
 function FactionMascotSelector() {
   const factions = [
-    { id: 'pollinisateurs', name: 'Pollinisateurs', image: '/abeille-transparente.png' },
-    { id: 'forets', name: 'Forêts', image: '/sylva.png' },
+    { id: 'pollinisateurs', name: 'Melli', image: '/abeille-transparente.png' },
+    { id: 'forets', name: 'Sylva', image: '/sylva.png' },
     { id: 'aura', name: 'Aura', image: '/aura.png' },
   ]
 
