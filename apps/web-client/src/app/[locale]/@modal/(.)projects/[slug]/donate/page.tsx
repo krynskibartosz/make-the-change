@@ -28,7 +28,7 @@ const toOptionalAmount = (value: string | string[] | undefined): number | undefi
 
 type InterceptedDonatePageProps = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ source?: string | string[] }>
+  searchParams: Promise<{ source?: string | string[]; option?: string | string[] }>
 }
 
 export default async function InterceptedProjectDonatePage({
@@ -56,6 +56,8 @@ export default async function InterceptedProjectDonatePage({
     ? speciesList.find((species) => species.user_status?.isUnlocked && species.user_status.unlockSource === 'donation')
     : null
 
+  const initialOptionId = toOptionalString(query.option)
+
   return (
     <FullScreenSlideModal
       fallbackHref={`/projects/${project.slug}`}
@@ -77,6 +79,7 @@ export default async function InterceptedProjectDonatePage({
         isAuthenticated={Boolean(user)}
         source={toOptionalString(query.source)}
         discoveredSpeciesId={unlockedSpecies?.id ?? null}
+        initialOptionId={initialOptionId}
       />
     </FullScreenSlideModal>
   )

@@ -72,6 +72,7 @@ type ProjectDonateOneFlowProps = {
   isAuthenticated: boolean
   source?: string
   discoveredSpeciesId?: string | null
+  initialOptionId?: string | null
 }
 
 export function ProjectDonateOneFlow({
@@ -79,12 +80,21 @@ export function ProjectDonateOneFlow({
   presentation = 'page',
   isAuthenticated,
   discoveredSpeciesId = null,
+  initialOptionId = null,
 }: ProjectDonateOneFlowProps) {
   const t = useTranslations('projects.invest_page')
   const router = useRouter()
   const haptic = useHaptic()
 
   const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
+
+  // Pré-sélectionner le pack si initialOptionId est fourni
+  const [selectedOption, setSelectedOption] = useState<DonationOption | null>(() => {
+    if (initialOptionId) {
+      return project.donationOptions.find((opt) => opt.id === initialOptionId) || null
+    }
+    return null
+  })
 
   useEffect(() => {
     if (discoveredSpeciesId) {
