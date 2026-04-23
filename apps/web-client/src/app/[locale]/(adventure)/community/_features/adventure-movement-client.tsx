@@ -332,17 +332,26 @@ function SeasonCountdown() {
   }, [])
 
   const formatTimeRemaining = (ms: number) => {
-    const days = Math.floor(ms / (1000 * 60 * 60 * 24))
-    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60))
+    const rtf = new Intl.RelativeTimeFormat('fr', {
+      numeric: 'auto',
+      style: 'narrow'
+    })
+    
+    const seconds = Math.floor(ms / 1000)
+    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
 
     if (days > 0) {
-      return `${days}j ${hours}h`
+      return rtf.format(days, 'day')
     }
     if (hours > 0) {
-      return `${hours}h ${minutes}min`
+      return rtf.format(hours, 'hour')
     }
-    return `${minutes}min`
+    if (minutes > 0) {
+      return rtf.format(minutes, 'minute')
+    }
+    return rtf.format(seconds, 'second')
   }
 
   if (!currentSeason) return null
