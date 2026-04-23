@@ -289,7 +289,7 @@ function ImpactCard({
 
   return (
     <div className={cn(
-      'border-b border-white/5 py-5 last:border-b-0 relative',
+      'border-b border-white/5 py-5 last:border-b-0 relative w-full',
       event.isSystem && '[background-image:radial-gradient(circle_at_10%_50%,rgba(255,184,0,0.12)_0%,rgba(255,184,0,0.05)_30%,rgba(255,184,0,0)_70%)]',
       event.isSystem && event.faction === 'Terres & Forêts' && '[background-image:radial-gradient(circle_at_10%_50%,rgba(52,199,89,0.12)_0%,rgba(52,199,89,0.05)_30%,rgba(52,199,89,0)_70%)]',
       event.isSystem && event.faction === 'Gardiens des mers' && '[background-image:radial-gradient(circle_at_10%_50%,rgba(0,199,255,0.12)_0%,rgba(0,199,255,0.05)_30%,rgba(0,199,255,0)_70%)]',
@@ -305,42 +305,44 @@ function ImpactCard({
           event.faction === 'Gardiens des mers' && 'bg-[#00C7FF] [box-shadow:2px_0px_8px_0px_rgba(0,199,255,0.4),2px_0px_16px_0px_rgba(0,199,255,0.2)]'
         )} />
       )}
-      {event.profileId ? (
-        <Link href={`/profile/${event.profileId}`} prefetch={false} className="block transition-opacity active:opacity-50">
-          {header}
-        </Link>
-      ) : (
-        header
-      )}
+      <div className="px-4 sm:px-6">
+        {event.profileId ? (
+          <Link href={`/profile/${event.profileId}`} prefetch={false} className="block transition-opacity active:opacity-50">
+            {header}
+          </Link>
+        ) : (
+          header
+        )}
 
-      <p className="mb-3 mt-1 flex items-start gap-2 text-[15px] leading-snug text-white/70">
-        <event.icon className={cn('mt-0.5 h-[18px] w-[18px] shrink-0', event.iconColor)} />
-        <span>
-          <ImpactAction event={event} text={event.action} />
-        </span>
-      </p>
+        <p className="mb-3 mt-1 flex items-start gap-2 text-[15px] leading-snug text-white/70">
+          <event.icon className={cn('mt-0.5 h-[18px] w-[18px] shrink-0', event.iconColor)} />
+          <span>
+            <ImpactAction event={event} text={event.action} />
+          </span>
+        </p>
 
-      {!event.isCurrentUser ? (
-        <button
-          onClick={handleBravo}
-          disabled={isBravoed}
-          className={cn(
-            'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5',
-            isBravoed ? accentTheme.accentText : 'text-muted-foreground',
-            isBravoed && 'cursor-default',
-          )}
-        >
-          <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
-          {isBravoed ? 'Bravo envoyé' : 'Bravo'}
-          <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
-        </button>
-      ) : (
-        <button
-          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5 text-muted-foreground"
-        >
-          Partager
-        </button>
-      )}
+        {!event.isCurrentUser ? (
+          <button
+            onClick={handleBravo}
+            disabled={isBravoed}
+            className={cn(
+              'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5',
+              isBravoed ? accentTheme.accentText : 'text-muted-foreground',
+              isBravoed && 'cursor-default',
+            )}
+          >
+            <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
+            {isBravoed ? 'Bravo envoyé' : 'Bravo'}
+            <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
+          </button>
+        ) : (
+          <button
+            className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5 text-muted-foreground"
+          >
+            Partager
+          </button>
+        )}
+      </div>
     </div>
   )
 }
@@ -789,7 +791,7 @@ export function AdventureMovementClient({
         })()}
       </section>
 
-      <section className="space-y-0 border-t border-white/5 px-4 pt-6 sm:px-6">
+      <section className="space-y-0 border-t border-white/5 pt-6 w-full">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight text-white">
             {feedFilter === 'faction' && activeContribution
