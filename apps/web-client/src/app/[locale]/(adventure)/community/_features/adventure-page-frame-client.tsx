@@ -90,16 +90,6 @@ function SeasonCountdownHeader({ showSeeds = true, showSeason = true, showReward
       )}
 
       <div className="flex items-center gap-2">
-        {/* Affichage des graines */}
-        {showSeeds && (
-          <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-            <Sprout className="h-3.5 w-3.5 text-lime-400" />
-            <span className="text-xs font-bold text-white tabular-nums">
-              {seeds.toLocaleString('fr-FR')}
-            </span>
-          </div>
-        )}
-
         {showRewardIcon && (
           <Link
             href="?p=reward"
@@ -109,6 +99,16 @@ function SeasonCountdownHeader({ showSeeds = true, showSeason = true, showReward
           >
             <Gift className="h-5 w-5 text-lime-400" />
           </Link>
+        )}
+
+        {/* Affichage des graines */}
+        {showSeeds && (
+          <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+            <Sprout className="h-3.5 w-3.5 text-lime-400" />
+            <span className="text-xs font-bold text-white tabular-nums">
+              {seeds.toLocaleString('fr-FR')}
+            </span>
+          </div>
         )}
       </div>
     </div>
