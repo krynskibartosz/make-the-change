@@ -272,7 +272,7 @@ export function ProjectInvestOneFlow({
       setClaimSaved(true)
       // Redirection vers le BioDex après validation Magic Link
       setTimeout(() => {
-        router.push('/adventure/biodex')
+        router.push('/biodex')
       }, 2000)
     }, 1200)
   }

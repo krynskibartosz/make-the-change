@@ -33,7 +33,7 @@ export function AdventureTabs() {
           return tab.id === 'biodex' ? (
             <Link
               key={tab.id}
-              href="/adventure/biodex"
+              href="/biodex"
               className={cn(
                 'flex-1 flex flex-col items-center justify-center pb-4 pt-4 font-medium transition-all text-sm px-1 sm:text-base border-b-2 -mb-[1px]',
                 isActive

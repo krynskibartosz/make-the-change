@@ -262,7 +262,7 @@ export function ProjectDonateOneFlow({
       setIsSendingMagicLink(false)
       setClaimSaved(true)
       setTimeout(() => {
-        router.push('/adventure/biodex')
+        router.push('/biodex')
       }, 2000)
     }, 1200)
   }
