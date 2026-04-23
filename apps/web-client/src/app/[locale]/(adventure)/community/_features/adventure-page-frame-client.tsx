@@ -76,10 +76,10 @@ function SeasonCountdownHeader() {
       <Link
         href="?p=reward"
         scroll={false}
-        className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
         aria-label="Voir la récompense du mois"
       >
-        <Gift className="h-3.5 w-3.5" />
+        <Gift className="h-5 w-5" />
       </Link>
     </div>
   )
@@ -99,12 +99,12 @@ export function AdventurePageFrameClient({
     <div className="fixed inset-0 z-40 bg-[#0B0F15] sm:relative sm:bg-background">
       {showStickyHeader && (
         <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/95 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl sm:hidden">
-          <div className="mx-auto flex h-12 max-w-3xl items-center">
+          <div className="mx-auto flex h-16 max-w-3xl items-center">
             <SeasonCountdownHeader />
           </div>
         </header>
       )}
-      <div className="mx-auto flex h-[100dvh] w-full max-w-[1260px] flex-col pt-16 sm:pt-0 sm:h-auto sm:flex-row justify-center overflow-y-auto overflow-x-hidden overscroll-y-contain sm:overflow-visible">
+      <div className="mx-auto flex h-[100dvh] w-full max-w-[1260px] flex-col pt-20 sm:pt-0 sm:h-auto sm:flex-row justify-center overflow-y-auto overflow-x-hidden overscroll-y-contain sm:overflow-visible">
         <div className="hidden shrink-0 sm:block sm:w-[240px] lg:w-[275px]">
           <header className="sticky top-0 flex h-screen flex-col justify-between overflow-y-auto">
             <AdventureLeftSidebar user={sidebarUser} />
