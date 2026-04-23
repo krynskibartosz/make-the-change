@@ -10,7 +10,7 @@ interface AnimatedMascotProps {
 export function AnimatedMascot({ themeKey, label }: AnimatedMascotProps) {
   const src =
     themeKey === 'pollinisateurs'
-      ? '/images/logo-icon-bee.png'
+      ? '/abeille-transparente.png'
       : themeKey === 'forets'
         ? '/sylva.png'
         : '/ondine.png'
