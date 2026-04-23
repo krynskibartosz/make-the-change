@@ -40,17 +40,26 @@ function SeasonCountdownHeader() {
   }, [])
 
   const formatTimeRemaining = (ms: number) => {
-    const days = Math.floor(ms / (1000 * 60 * 60 * 24))
-    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60))
+    const rtf = new Intl.RelativeTimeFormat('fr', {
+      numeric: 'auto',
+      style: 'narrow'
+    })
+    
+    const seconds = Math.floor(ms / 1000)
+    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
 
     if (days > 0) {
-      return `${days}j ${hours}h`
+      return rtf.format(days, 'day')
     }
     if (hours > 0) {
-      return `${hours}h ${minutes}min`
+      return rtf.format(hours, 'hour')
     }
-    return `${minutes}min`
+    if (minutes > 0) {
+      return rtf.format(minutes, 'minute')
+    }
+    return rtf.format(seconds, 'second')
   }
 
   if (!currentSeason) return null
@@ -67,7 +76,7 @@ function SeasonCountdownHeader() {
       <Link
         href="?p=reward"
         scroll={false}
-        className="flex  h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+        className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
         aria-label="Voir la récompense du mois"
       >
         <Gift className="h-3.5 w-3.5" />
