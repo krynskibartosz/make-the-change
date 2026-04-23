@@ -2,6 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useTransition, useCallback } from 'react'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 export function AdventureTabs() {
@@ -29,7 +30,20 @@ export function AdventureTabs() {
       <div className="flex w-full border-b border-white/5">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id
-          return (
+          return tab.id === 'biodex' ? (
+            <Link
+              key={tab.id}
+              href="/adventure/biodex"
+              className={cn(
+                'flex-1 flex flex-col items-center justify-center pb-4 pt-4 font-medium transition-all text-sm px-1 sm:text-base border-b-2 -mb-[1px]',
+                isActive
+                  ? 'border-lime-400 text-foreground font-bold'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border/50',
+              )}
+            >
+              {tab.label}
+            </Link>
+          ) : (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
