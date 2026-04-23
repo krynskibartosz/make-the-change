@@ -30,7 +30,7 @@ import {
   Search,
   Sparkles,
 } from 'lucide-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Link, usePathname, useRouter, useSearchParams } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import {
@@ -297,6 +297,27 @@ export const ProductsClient = ({
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
   const [searchInput, setSearchInput] = useState(initialQueryState.search)
+  const [userPoints, setUserPoints] = useState<number>(0)
+  const [isConnected, setIsConnected] = useState<boolean>(false)
+
+  useEffect(() => {
+    async function loadUserPoints() {
+      try {
+        const { getMockViewerSession } = await import('@/lib/mock/mock-session-server')
+        const { getCurrentMockImpactPoints } = await import('@/lib/mock/mock-member-data-server')
+        const session = await getMockViewerSession()
+        if (session) {
+          const points = await getCurrentMockImpactPoints(session.viewerId, session.faction)
+          setUserPoints(points)
+          setIsConnected(true)
+        }
+      } catch (error) {
+        setIsConnected(false)
+      }
+    }
+
+    loadUserPoints()
+  }, [])
 
   useEffect(() => {
     setSearchInput(initialQueryState.search)
@@ -612,17 +633,19 @@ export const ProductsClient = ({
         <div className="bg-background/80  backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
 
           {/* Bouton Points — remplace le bouton Map de /projects */}
-          <button
-            type="button"
+          <Link
+            href="/products/balance"
             className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-white/5 text-lime-400 transition-all active:scale-95 shrink-0 mx-1"
             aria-label="Solde Points d'Impact"
           >
             <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            <span className="text-[13px] font-black tabular-nums tracking-tight">2 450</span>
-          </button>
+            <span className="text-[13px] font-black tabular-nums tracking-tight">
+              {isConnected ? userPoints.toLocaleString('fr-FR') : '--'}
+            </span>
+          </Link>
 
-          {/* Séparateur vertical */}
-          <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
+          {/* Séparateur vertical - plus visible pour séparer clairement le portefeuille des filtres */}
+          <div className="w-px mr-3 h-6 bg-white/25 shrink-0" />
           <div className="flex items-center gap-1 w-full mr-2">
 
             {/* Filtre Tous */}
