@@ -7,7 +7,6 @@ import {
 } from '@/app/[locale]/(adventure)/community/_features/adventure-page-frame'
 import { AdventureRightRail } from '@/app/[locale]/(adventure)/community/_features/adventure-right-rail'
 import { AdventureTabs } from '@/app/[locale]/(adventure)/community/_features/adventure-tabs'
-import { AdventureBiodex } from '@/app/[locale]/(adventure)/community/_features/adventure-biodex'
 import { AdventureChallenges } from '@/app/[locale]/(adventure)/community/_features/adventure-challenges'
 import { getCurrentMockChallengeSurface } from '@/lib/mock/mock-challenge-progress-server'
 import { isMockDataSource } from '@/lib/mock/data-source'
@@ -15,7 +14,6 @@ import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 
 type AdventureHubProps = {
   searchParams: Promise<{
-    tab?: string
     day?: string
   }>
 }
@@ -35,8 +33,6 @@ const fallbackLoader = (
 
 export default async function AdventureHubPage({ searchParams }: AdventureHubProps) {
   await connection()
-  const params = await searchParams
-  const activeTab = params.tab === 'biodex' ? 'biodex' : 'defis'
   const sidebarUser = await getAdventureSidebarUser()
   const currentViewer = isMockDataSource ? await getCurrentViewer() : null
   const challengeSurface = isMockDataSource
@@ -60,17 +56,14 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
         </Suspense>
 
         <Suspense fallback={fallbackLoader}>
-          {activeTab === 'defis' && (
-            <AdventureChallenges
-              initialFaction={currentViewer?.faction ?? null}
-              viewerId={currentViewer?.viewerId ?? null}
-              initialDayKey={challengeSurface?.dayKey ?? null}
-              initialDayLabel={challengeSurface?.dayLabel ?? 'aujourd\'hui'}
-              initialDailyQuests={challengeSurface?.dailyChallenges ?? []}
-              initialMonthlyQuest={challengeSurface?.monthlyQuest ?? null}
-            />
-          )}
-          {activeTab === 'biodex' && <AdventureBiodex initialFaction={currentViewer?.faction ?? null} />}
+          <AdventureChallenges
+            initialFaction={currentViewer?.faction ?? null}
+            viewerId={currentViewer?.viewerId ?? null}
+            initialDayKey={challengeSurface?.dayKey ?? null}
+            initialDayLabel={challengeSurface?.dayLabel ?? 'aujourd\'hui'}
+            initialDailyQuests={challengeSurface?.dailyChallenges ?? []}
+            initialMonthlyQuest={challengeSurface?.monthlyQuest ?? null}
+          />
         </Suspense>
       </div>
     </AdventurePageFrame>
