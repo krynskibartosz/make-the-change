@@ -151,7 +151,6 @@ export default async function SettingsPage() {
                 <Link
                   href="/login"
                   className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
-                  prefetch={false}
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
@@ -384,6 +383,7 @@ export default async function SettingsPage() {
               <Link
                 href="/login"
                 className="flex w-full items-center justify-between bg-transparent p-3 transition-colors active:bg-white/5"
+                prefetch={false}
               >
                 <div className="flex items-center gap-3">
                   <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10">

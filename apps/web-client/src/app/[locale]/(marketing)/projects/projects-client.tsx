@@ -32,6 +32,7 @@ type RawClientProject = {
   status: string | null
   hero_image_url: string | null
   type: string | null
+  unit_label: string | null
   producer?:
   | {
     name_default?: string | null
@@ -59,6 +60,8 @@ type ClientProject = {
   address_country_code: string | null
   hero_image_url: string | null
   current_funding: number | null
+  type: string | null
+  unit_label: string | null
 }
 
 const normalizeProject = (
@@ -84,6 +87,8 @@ const normalizeProject = (
     address_country_code: project.address_country_code,
     hero_image_url: project.hero_image_url,
     current_funding: project.current_funding,
+    type: project.type,
+    unit_label: project.unit_label,
   }
 }
 
@@ -134,7 +139,27 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
 
           // Impact réel cohérent avec project-species-impact-section.tsx
           const funding = project.current_funding || 0
-          const beesProtected = Math.round(funding * BEES_PER_EUR)
+          const projectType = project.type || 'beehive'
+          const unitLabel = project.unit_label || 'abeille'
+
+          let impactValue = 0
+          let impactLabel = ''
+
+          if (projectType === 'orchard') {
+            // Pour les oliviers : calcul basé sur unit_price_eur (150€ par olivier)
+            const OLIVE_PRICE_EUR = 150
+            impactValue = Math.round(funding / OLIVE_PRICE_EUR)
+            impactLabel = 'oliviers protégés'
+          } else if (projectType === 'reef') {
+            // Pour les coraux : calcul basé sur unit_price_eur (30€ par corail)
+            const CORAL_PRICE_EUR = 30
+            impactValue = Math.round(funding / CORAL_PRICE_EUR)
+            impactLabel = 'coraux plantés'
+          } else {
+            // Pour les abeilles : calcul standard
+            impactValue = Math.round(funding * BEES_PER_EUR)
+            impactLabel = 'abeilles protégées'
+          }
 
           return (
             <Link

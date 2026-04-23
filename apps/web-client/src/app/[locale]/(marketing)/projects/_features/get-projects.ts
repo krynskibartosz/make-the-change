@@ -30,6 +30,7 @@ type ProjectListItem = {
   status: string | null
   hero_image_url: string | null
   type: string | null
+  unit_label: string | null
   producer:
     | {
         name_default?: string | null
@@ -128,6 +129,7 @@ const toProjectListItem = (value: unknown): ProjectListItem | null => {
     status: toNullableString(value.status),
     hero_image_url: toNullableString(value.hero_image_url),
     type: toNullableString(value.type),
+    unit_label: toNullableString(value.unit_label),
     producer: toProducer(value.producer),
   }
 }
@@ -157,6 +159,7 @@ const toMockProjectListItem = (
     status: project.status,
     hero_image_url: project.hero_image_url,
     type: project.type,
+    unit_label: project.unit_label || null,
     producer: {
       name_default: project.producer.name_default,
       name_i18n: project.producer.name_i18n || null,
