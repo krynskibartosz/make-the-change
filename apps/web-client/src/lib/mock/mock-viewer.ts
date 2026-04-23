@@ -183,7 +183,7 @@ export const createMockRegisteredViewerSession = ({
   displayName: string
   email: string
 }): MockViewerSession => ({
-  viewerId: `mock-viewer-${slugify(email || displayName || 'nouveau-membre')}`,
+  viewerId: MOCK_EXISTING_VIEWER_ID,
   displayName: displayName || 'Nouveau membre',
   email,
   faction: null,
