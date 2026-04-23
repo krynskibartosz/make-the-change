@@ -56,9 +56,9 @@ export default async function GuestProfilePage() {
   const factionContributions = getFactionContributions()
 
   return (
-    <div className="min-h-screen bg-[#0B0F15] pb-32 text-white">
-      <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
+    <div className="fixed inset-0 z-40 bg-[#0B0F15] sm:relative sm:min-h-screen sm:pb-32 text-white">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/95 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl">
+        <div className="mx-auto flex h-12 max-w-3xl items-center justify-end">
           <Link
             href="/settings"
             aria-label="Paramètres"
@@ -68,7 +68,7 @@ export default async function GuestProfilePage() {
           </Link>
         </div>
       </header>
-      <main className="w-full pt-[max(0.75rem,env(safe-area-inset-top))]">
+      <main className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden overscroll-y-contain pt-16 sm:h-auto sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:overflow-visible">
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
           <h1 className="mb-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
           <p className="mx-auto mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
