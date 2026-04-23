@@ -243,10 +243,12 @@ function ImpactCard({
           alt={event.name}
           className={cn(
             'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
-            event.faction && !event.isSystem ? accentTheme.accentBorder : 'border-border/30',
+            event.faction && !event.isSystem ? '[box-shadow:0_0_0_2px_#121212,0_0_0_4px_#34C759]' : 'border-border/30',
+            event.faction === 'Vie Sauvage' && !event.isSystem && '[box-shadow:0_0_0_2px_#121212,0_0_0_4px_#FFB800]',
+            event.faction === 'Gardiens des mers' && !event.isSystem && '[box-shadow:0_0_0_2px_#121212,0_0_0_4px_#00C7FF]',
           )}
         />
-      ) : factionImage ? (
+      ) : factionImage && !event.isCurrentUser ? (
         <img
           src={factionImage}
           alt={event.faction}
@@ -259,8 +261,8 @@ function ImpactCard({
         <div
           className={cn(
             'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold',
-            event.avatarColor,
-            event.faction && !event.isSystem ? accentTheme.accentBorder : 'border-border/30',
+            event.isCurrentUser ? 'bg-[rgba(255,184,0,0.1)] border-[rgba(255,184,0,0.2)] text-[#FFB800]' : event.avatarColor,
+            event.faction && !event.isSystem && !event.isCurrentUser ? accentTheme.accentBorder : 'border-border/30',
           )}
         >
           {event.name[0]}
@@ -269,6 +271,9 @@ function ImpactCard({
       <div className="min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="truncate text-[15px] font-bold tracking-tight text-white">{event.name}</span>
+          {event.isSystem && (
+            <Star className="h-3.5 w-3.5 text-amber-400" fill="currentColor" />
+          )}
           {event.isCurrentUser && (
             <>
               <span className="text-xs text-muted-foreground">•</span>
@@ -278,21 +283,28 @@ function ImpactCard({
           <span className="text-xs text-muted-foreground">•</span>
           <span className="text-xs text-muted-foreground">{event.time}</span>
         </div>
-        {event.faction && !event.isSystem ? (
-          <span className={cn('text-[11px] font-semibold', accentTheme.accentTextSoft)}>
-            {getFactionContribution(event.faction)?.label || event.faction}
-          </span>
-        ) : null}
       </div>
     </div>
   )
 
   return (
     <div className={cn(
-      'border-b border-white/5 py-5 last:border-b-0',
-      event.isCurrentUser && 'border-l-2 border-l-lime-400',
-      event.isSystem && accentTheme.accentBg
+      'border-b border-white/5 py-5 last:border-b-0 relative',
+      event.isSystem && '[background-image:radial-gradient(circle_at_10%_50%,rgba(255,184,0,0.12)_0%,rgba(255,184,0,0.05)_30%,rgba(255,184,0,0)_70%)]',
+      event.isSystem && event.faction === 'Terres & Forêts' && '[background-image:radial-gradient(circle_at_10%_50%,rgba(52,199,89,0.12)_0%,rgba(52,199,89,0.05)_30%,rgba(52,199,89,0)_70%)]',
+      event.isSystem && event.faction === 'Gardiens des mers' && '[background-image:radial-gradient(circle_at_10%_50%,rgba(0,199,255,0.12)_0%,rgba(0,199,255,0.05)_30%,rgba(0,199,255,0)_70%)]',
+      event.isSystem && '[box-shadow:inset_0px_1px_0px_0px_rgba(255,184,0,0.15)]',
+      event.isSystem && event.faction === 'Terres & Forêts' && '[box-shadow:inset_0px_1px_0px_0px_rgba(52,199,89,0.15)]',
+      event.isSystem && event.faction === 'Gardiens des mers' && '[box-shadow:inset_0px_1px_0px_0px_rgba(0,199,255,0.15)]'
     )}>
+      {event.isCurrentUser && (
+        <div className={cn(
+          'absolute left-0 top-4 bottom-4 w-1 rounded-r-full',
+          event.faction === 'Vie Sauvage' && 'bg-[#FFB800] [box-shadow:2px_0px_8px_0px_rgba(255,184,0,0.4),2px_0px_16px_0px_rgba(255,184,0,0.2)]',
+          event.faction === 'Terres & Forêts' && 'bg-[#34C759] [box-shadow:2px_0px_8px_0px_rgba(52,199,89,0.4),2px_0px_16px_0px_rgba(52,199,89,0.2)]',
+          event.faction === 'Gardiens des mers' && 'bg-[#00C7FF] [box-shadow:2px_0px_8px_0px_rgba(0,199,255,0.4),2px_0px_16px_0px_rgba(0,199,255,0.2)]'
+        )} />
+      )}
       {event.profileId ? (
         <Link href={`/profile/${event.profileId}`} prefetch={false} className="block transition-opacity active:opacity-50">
           {header}
