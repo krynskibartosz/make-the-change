@@ -861,12 +861,12 @@ function DailyHarvestModal({
                     />
                   ) : (
                     // Utilisateur non connecté : afficher les 3 mascottes
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                       <img
                         src="/abeille-transparente.png"
                         alt="Melli"
                         className={cn(
-                          'h-32 w-32 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                          'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
                           phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
                         )}
                         draggable='false'
@@ -878,7 +878,7 @@ function DailyHarvestModal({
                         src="/sylva.png"
                         alt="Sylva"
                         className={cn(
-                          'h-32 w-32 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                          'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
                           phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
                         )}
                         draggable='false'
@@ -890,7 +890,7 @@ function DailyHarvestModal({
                         src="/ondine.png"
                         alt="Ondine"
                         className={cn(
-                          'h-32 w-32 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
+                          'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
                           phase === 'charging' ? 'scale-110 opacity-100' : 'scale-100 opacity-80',
                         )}
                         draggable='false'
