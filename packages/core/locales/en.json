@@ -651,7 +651,11 @@
       },
       "description": "Every action matters. Turn your commitment into real, measurable biodiversity impact.",
       "primary": "Get started",
-      "secondary": "View projects"
+      "secondary": "View projects",
+      "not_connected": "Join the collective",
+      "no_faction": "Choose my faction",
+      "no_subscription": "Discover subscriptions",
+      "ready": "Access challenges"
     }
   },
   "how_it_works": {

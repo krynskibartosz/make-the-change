@@ -30,8 +30,9 @@ import {
   Search,
   Sparkles,
 } from 'lucide-react'
-import { Link, usePathname, useRouter, useSearchParams } from '@/i18n/navigation'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import {
   type ActiveFilterChip,

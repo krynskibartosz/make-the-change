@@ -2,6 +2,7 @@
 
 import { ArrowRight } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
@@ -9,6 +10,7 @@ import type { AboutCtaProps } from './about.types'
 
 export function AboutStickyCta({ label }: AboutCtaProps) {
   const router = useRouter()
+  const t = useTranslations('about')
   const [userState, setUserState] = useState<{
     isConnected: boolean
     hasFaction: boolean
@@ -28,6 +30,19 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
       hasSubscription: subscription?.status === 'active',
     })
   }, [])
+
+  const getConditionalLabel = useCallback(() => {
+    if (!userState.isConnected) {
+      return t('cta.not_connected')
+    }
+    if (!userState.hasFaction) {
+      return t('cta.no_faction')
+    }
+    if (!userState.hasSubscription) {
+      return t('cta.no_subscription')
+    }
+    return t('cta.ready')
+  }, [t, userState])
 
   const handleClick = useCallback(() => {
     if (typeof window !== 'undefined' && window.history.length > 1) {
@@ -64,7 +79,7 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
         onClick={handleClick}
         className="group mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-4 text-base font-bold text-white shadow-[0_8px_32px_-8px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1117]"
       >
-        <span>{label}</span>
+        <span>{getConditionalLabel()}</span>
         <ArrowRight className="h-5 w-5 transition group-hover:translate-x-0.5" />
       </button>
     </div>

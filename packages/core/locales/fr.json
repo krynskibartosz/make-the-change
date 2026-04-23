@@ -662,7 +662,11 @@
       "signature": "— Les fondateurs, Grégory & Bartosz"
     },
     "cta": {
-      "label": "Retourner à mon Impact"
+      "label": "Retourner à mon Impact",
+      "not_connected": "Rejoindre le collectif",
+      "no_faction": "Choisir ma faction",
+      "no_subscription": "Découvrir les abonnements",
+      "ready": "Accéder aux défis"
     }
   },
   "how_it_works": {
