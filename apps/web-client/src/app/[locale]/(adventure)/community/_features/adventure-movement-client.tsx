@@ -33,6 +33,8 @@ type ImpactEvent = {
   bravos: number
   avatarColor: string
   faction?: Faction
+  isCurrentUser?: boolean
+  isSystem?: boolean
 }
 
 const MOCK_IMPACT_FEED: ImpactEvent[] = [
@@ -62,6 +64,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     bravos: 17,
     avatarColor: 'bg-lime-500/20 text-lime-400',
     faction: 'Vie Sauvage',
+    isCurrentUser: true,
   },
   {
     id: 'evt-3',
@@ -74,6 +77,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     bravos: 42,
     avatarColor: 'bg-amber-500/20 text-amber-300',
     faction: 'Vie Sauvage',
+    isSystem: true,
   },
   {
     id: 'evt-4',
@@ -113,6 +117,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     bravos: 61,
     avatarColor: 'bg-emerald-500/20 text-emerald-300',
     faction: 'Terres & Forêts',
+    isSystem: true,
   },
   {
     id: 'evt-7',
@@ -237,8 +242,8 @@ function ImpactCard({
           src={event.avatarUrl}
           alt={event.name}
           className={cn(
-            'h-10 w-10 shrink-0 rounded-full border object-cover',
-            event.profileId ? 'border-border/30' : accentTheme.accentBorder,
+            'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
+            event.faction && !event.isSystem ? accentTheme.accentBorder : 'border-border/30',
           )}
         />
       ) : factionImage ? (
@@ -246,16 +251,16 @@ function ImpactCard({
           src={factionImage}
           alt={event.faction}
           className={cn(
-            'h-10 w-10 shrink-0 rounded-full border object-cover',
-            event.profileId ? 'border-border/30' : accentTheme.accentBorder,
+            'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
+            event.isSystem ? accentTheme.accentBorder : 'border-border/30',
           )}
         />
       ) : (
         <div
           className={cn(
-            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold',
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold',
             event.avatarColor,
-            event.profileId ? 'border-border/30' : accentTheme.accentBorder,
+            event.faction && !event.isSystem ? accentTheme.accentBorder : 'border-border/30',
           )}
         >
           {event.name[0]}
@@ -264,10 +269,16 @@ function ImpactCard({
       <div className="min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="truncate text-[15px] font-bold tracking-tight text-white">{event.name}</span>
+          {event.isCurrentUser && (
+            <>
+              <span className="text-xs text-muted-foreground">•</span>
+              <span className="text-xs font-semibold text-lime-400">Toi</span>
+            </>
+          )}
           <span className="text-xs text-muted-foreground">•</span>
           <span className="text-xs text-muted-foreground">{event.time}</span>
         </div>
-        {event.faction ? (
+        {event.faction && !event.isSystem ? (
           <span className={cn('text-[11px] font-semibold', accentTheme.accentTextSoft)}>
             {getFactionContribution(event.faction)?.label || event.faction}
           </span>
@@ -277,7 +288,11 @@ function ImpactCard({
   )
 
   return (
-    <div className="border-b border-white/5 py-5 last:border-b-0">
+    <div className={cn(
+      'border-b border-white/5 py-5 last:border-b-0',
+      event.isCurrentUser && 'border-l-2 border-l-lime-400',
+      event.isSystem && accentTheme.accentBg
+    )}>
       {event.profileId ? (
         <Link href={`/profile/${event.profileId}`} prefetch={false} className="block transition-opacity active:opacity-50">
           {header}
@@ -293,19 +308,27 @@ function ImpactCard({
         </span>
       </p>
 
-      <button
-        onClick={handleBravo}
-        disabled={isBravoed}
-        className={cn(
-          'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5',
-          isBravoed ? accentTheme.accentText : 'text-muted-foreground',
-          isBravoed && 'cursor-default',
-        )}
-      >
-        <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
-        {isBravoed ? 'Bravo envoyé' : 'Bravo'}
-        <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
-      </button>
+      {!event.isCurrentUser ? (
+        <button
+          onClick={handleBravo}
+          disabled={isBravoed}
+          className={cn(
+            'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5',
+            isBravoed ? accentTheme.accentText : 'text-muted-foreground',
+            isBravoed && 'cursor-default',
+          )}
+        >
+          <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
+          {isBravoed ? 'Bravo envoyé' : 'Bravo'}
+          <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
+        </button>
+      ) : (
+        <button
+          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5 text-muted-foreground"
+        >
+          Partager
+        </button>
+      )}
     </div>
   )
 }
@@ -756,7 +779,13 @@ export function AdventureMovementClient({
 
       <section className="space-y-0 border-t border-white/5 px-4 pt-6 sm:px-6">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight text-white">Impact Global</h2>
+          <h2 className="text-xl font-bold tracking-tight text-white">
+            {feedFilter === 'faction' && activeContribution
+              ? `Activité de ${activeContribution.label.split(' ')[0]}`
+              : feedFilter === 'global'
+              ? "Impact du Collectif"
+              : "Impact Global"}
+          </h2>
           {initialFaction && (
             <div className="flex items-center rounded-full bg-white/5 p-1">
               <button
