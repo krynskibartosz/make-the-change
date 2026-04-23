@@ -176,7 +176,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
           </div>
 
           <Link
-            href="/aventure?tab=biodex"
+            href="/biodex"
             className="mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors text-lime-400"
           >
             Voir la liste complète du BioDex

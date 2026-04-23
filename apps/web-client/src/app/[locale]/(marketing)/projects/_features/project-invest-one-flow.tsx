@@ -689,7 +689,7 @@ export function ProjectInvestOneFlow({
                 router.push(`/biodex/${discoveredSpeciesId}`)
                 return
               }
-              router.push('/aventure?tab=biodex')
+              router.push('/biodex')
             }}
             className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
           >
