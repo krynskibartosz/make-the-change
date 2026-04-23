@@ -2,6 +2,8 @@ import {
   getMockPointsTransactions,
   type MockPointsTransactionRecord,
 } from '@/lib/mock/mock-member-data'
+
+export { getMockPointsTransactions }
 import { getCurrentMockChallengeTransactions } from '@/lib/mock/mock-challenge-progress-server'
 import type { Faction } from '@/lib/mock/types'
 

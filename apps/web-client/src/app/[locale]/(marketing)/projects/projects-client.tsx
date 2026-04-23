@@ -200,18 +200,24 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                 </div>
 
                 {/* Impact collectif — donnée réelle calculée comme la page détail */}
-                {beesProtected > 0 ? (
+                {impactValue > 0 ? (
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-6 h-6 rounded-full bg-lime-400/20 flex items-center justify-center shrink-0">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-lime-400">
-                        <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
-                      </svg>
+                      {projectType === 'orchard' ? (
+                        <TreePine className="w-3 h-3 text-lime-400" />
+                      ) : projectType === 'reef' ? (
+                        <Waves className="w-3 h-3 text-lime-400" />
+                      ) : (
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-lime-400">
+                          <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
+                        </svg>
+                      )}
                     </div>
                     <p className="text-[13px]">
                       <span className="text-lime-400 font-black tabular-nums tracking-tight">
-                        {beesProtected.toLocaleString('fr-FR')}
+                        {impactValue.toLocaleString('fr-FR')}
                       </span>{' '}
-                      <span className="text-white/70 font-medium">abeilles protégées</span>
+                      <span className="text-white/70 font-medium">{impactLabel}</span>
                     </p>
                   </div>
                 ) : (

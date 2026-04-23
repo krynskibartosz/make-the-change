@@ -2,7 +2,7 @@
 
 import { Button } from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
-import { ArrowRight, Sparkles, TreeDeciduous, Honey, Clock } from 'lucide-react'
+import { ArrowRight, Sparkles, TreeDeciduous, Droplet , Clock } from 'lucide-react'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import type { MockPointsTransactionRecord } from '@/lib/mock/mock-member-data'
 import { useEffect, useState } from 'react'
@@ -29,7 +29,7 @@ const formatRelativeDate = (dateString: string): string => {
 
 const getTransactionIcon = (label: string) => {
   const lowerLabel = label.toLowerCase()
-  if (lowerLabel.includes('commande') || lowerLabel.includes('miel')) return Honey
+  if (lowerLabel.includes('commande') || lowerLabel.includes('miel')) return Droplet 
   if (lowerLabel.includes('contribution') || lowerLabel.includes('projet')) return TreeDeciduous
   return Sparkles
 }

@@ -29,16 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         slug: project.slug,
         updated_at: project.updated_at,
       }))
-    : await (async () => {
-        const supabase = createStaticClient()
-        const { data } = await supabase
-          .schema('investment')
-          .from('projects')
-          .select('slug, id, updated_at')
-          .eq('status', 'active')
-
-        return data || []
-      })()
+    : await getDatabaseProjects()
 
   const products = isMockDataSource
     ? getMockProducts().map((product) => ({
@@ -46,29 +37,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         slug: product.slug,
         updated_at: product.updated_at,
       }))
-    : await (async () => {
-        const supabase = createStaticClient()
-        const { data } = await supabase
-          .schema('commerce')
-          .from('products')
-          .select('slug, id, updated_at')
-          .eq('is_active', true)
-
-        return data || []
-      })()
+    : await getDatabaseProducts()
 
   const posts = isMockDataSource
     ? []
-    : await (async () => {
-        const supabase = createStaticClient()
-        const { data } = await supabase
-          .schema('content')
-          .from('blog_posts')
-          .select('slug, id, published_at')
-          .eq('status', 'published')
+    : await getDatabasePosts()
 
-        return data || []
-      })()
+async function getDatabaseProjects() {
+  const supabase = createStaticClient()
+  const { data } = await supabase
+    .schema('investment')
+    .from('projects')
+    .select('slug, id, updated_at')
+    .eq('status', 'active')
+
+  return data || []
+}
+
+async function getDatabaseProducts() {
+  const supabase = createStaticClient()
+  const { data } = await supabase
+    .schema('commerce')
+    .from('products')
+    .select('slug, id, updated_at')
+    .eq('is_active', true)
+
+  return data || []
+}
+
+async function getDatabasePosts() {
+  const supabase = createStaticClient()
+  const { data } = await supabase
+    .schema('content')
+    .from('blog_posts')
+    .select('slug, id, published_at')
+    .eq('status', 'published')
+
+  return data || []
+}
 
   const sitemapEntry: MetadataRoute.Sitemap = []
 
