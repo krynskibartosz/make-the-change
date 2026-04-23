@@ -57,16 +57,17 @@ function SeasonCountdownHeader() {
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-1 items-center gap-2">
         <Clock className="h-4 w-4 text-white/40" />
         <p className="text-[11px] font-medium text-white/40">
           ⏱️ {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
         </p>
       </div>
+      
       <Link
         href="?p=reward"
         scroll={false}
-        className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+        className="flex flex-1 h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
         aria-label="Voir la récompense du mois"
       >
         <Gift className="h-3.5 w-3.5" />

@@ -451,8 +451,7 @@ export function AdventureMovementClient({
       {/* ═══ SCÈNE DES MASCOTTES (Edge-to-Edge) ═══ */}
       <section className="w-full px-4 pb-4 pt-6 sm:px-6">
 
-        {/* SEASON COUNTDOWN */}
-        <SeasonCountdown />
+       
 
         {/* HEADER */}
         <div className="mb-6 text-center">
