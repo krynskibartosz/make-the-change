@@ -51,6 +51,8 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
       sidebarUser={sidebarUser}
       rightRail={<AdventureRightRail variant="default" activeTag="" />}
       showStickyHeader={true}
+      showSeason={false}
+      showRewardIcon={false}
     >
       <div className="relative w-full">
         <Suspense fallback={null}>

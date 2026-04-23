@@ -19,6 +19,8 @@ type AdventurePageFrameProps = {
   rightRailClassName?: string
   showStickyHeader?: boolean
   showSeeds?: boolean
+  showSeason?: boolean
+  showRewardIcon?: boolean
 }
 
 const resolveDisplayName = (input: {
@@ -83,6 +85,8 @@ export async function AdventurePageFrame({
   rightRailClassName,
   showStickyHeader = false,
   showSeeds = true,
+  showSeason = true,
+  showRewardIcon = true,
 }: AdventurePageFrameProps) {
   const resolvedSidebarUser =
     sidebarUser === undefined ? await getAdventureSidebarUser() : sidebarUser
@@ -95,6 +99,8 @@ export async function AdventurePageFrame({
       rightRail={rightRail}
       showStickyHeader={showStickyHeader}
       showSeeds={showSeeds}
+      showSeason={showSeason}
+      showRewardIcon={showRewardIcon}
     >
       {children}
     </AdventurePageFrameClient>

@@ -25,9 +25,11 @@ type AdventurePageFrameClientProps = {
   rightRailClassName?: string
   showStickyHeader?: boolean
   showSeeds?: boolean
+  showSeason?: boolean
+  showRewardIcon?: boolean
 }
 
-function SeasonCountdownHeader({ showSeeds = true }: { showSeeds?: boolean }) {
+function SeasonCountdownHeader({ showSeeds = true, showSeason = true, showRewardIcon = true }: { showSeeds?: boolean; showSeason?: boolean; showRewardIcon?: boolean }) {
   const currentSeason = getCurrentSeason()
   const [timeRemaining, setTimeRemaining] = useState<number>(0)
   const [seeds, setSeeds] = useState<number>(0)
@@ -78,12 +80,14 @@ function SeasonCountdownHeader({ showSeeds = true }: { showSeeds?: boolean }) {
 
   return (
     <div className="flex items-center justify-between w-full">
-      <div className="flex flex-1 items-center gap-2">
-        <Clock className="h-4 w-4 text-white/40" />
-        <p className="text-[11px] font-medium text-white/40">
-           {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
-        </p>
-      </div>
+      {showSeason && (
+        <div className="flex flex-1 items-center gap-2">
+          <Clock className="h-4 w-4 text-white/40" />
+          <p className="text-[11px] font-medium text-white/40">
+             {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
+          </p>
+        </div>
+      )}
 
       <div className="flex items-center gap-2">
         {/* Affichage des graines */}
@@ -96,14 +100,16 @@ function SeasonCountdownHeader({ showSeeds = true }: { showSeeds?: boolean }) {
           </div>
         )}
 
-        <Link
-          href="?p=reward"
-          scroll={false}
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
-          aria-label="Voir la récompense du mois"
-        >
-          <Gift className="h-5 w-5 text-lime-400" />
-        </Link>
+        {showRewardIcon && (
+          <Link
+            href="?p=reward"
+            scroll={false}
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
+            aria-label="Voir la récompense du mois"
+          >
+            <Gift className="h-5 w-5 text-lime-400" />
+          </Link>
+        )}
       </div>
     </div>
   )
@@ -117,6 +123,8 @@ export function AdventurePageFrameClient({
   rightRailClassName,
   showStickyHeader = false,
   showSeeds = true,
+  showSeason = true,
+  showRewardIcon = true,
 }: AdventurePageFrameClientProps) {
   const hasRightRail = !!rightRail
 
@@ -125,7 +133,7 @@ export function AdventurePageFrameClient({
       {showStickyHeader && (
         <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/95 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl sm:hidden">
           <div className="mx-auto flex h-16 max-w-3xl items-center">
-            <SeasonCountdownHeader showSeeds={showSeeds} />
+            <SeasonCountdownHeader showSeeds={showSeeds} showSeason={showSeason} showRewardIcon={showRewardIcon} />
           </div>
         </header>
       )}
