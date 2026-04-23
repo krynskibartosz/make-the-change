@@ -30,7 +30,6 @@ import {
   MOCK_SPECIES_GECKO_ID,
   MOCK_SPECIES_GREEN_TURTLE_ID,
   MOCK_SPECIES_HEDGEHOG_ID,
-  MOCK_SPECIES_HONEY_BEE_ID,
   MOCK_SPECIES_HOOPoe_ID,
   MOCK_SPECIES_INDRI_ID,
   MOCK_SPECIES_KINGFISHER_ID,
@@ -39,7 +38,6 @@ import {
   MOCK_SPECIES_MEGACHILE_ID,
   MOCK_SPECIES_OLIVE_TREE_ID,
   MOCK_SPECIES_OSMIA_ID,
-  MOCK_SPECIES_OWL_ID,
   MOCK_SPECIES_SEAHORSE_ID,
   MOCK_SPECIES_SIFAKA_ID,
   MOCK_SPECIES_SYRPHID_ID,
@@ -58,90 +56,6 @@ const createUserStatus = (isUnlocked: boolean, level: number) => ({
 })
 
 export const MOCK_SPECIES: SpeciesContext[] = [
-  {
-    id: MOCK_SPECIES_OWL_ID,
-    name_default: 'Chouette Effraie',
-    scientific_name: 'Tyto alba',
-    description_default:
-      'Gardienne nocturne des paysages agricoles vivants, elle aide a reguler naturellement les ecosystemes.',
-    conservation_status: 'LC',
-    image_url: '/images/diaromas/Chouette chevêche.png',
-    associated_projects: [
-      {
-        id: MOCK_PROJECT_ANTSIRABE_ID,
-        slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
-        type: 'beehive',
-        role: 'Habitat indirect',
-        impact: 'Les zones melliferes favorisent aussi les chaines ecologiques locales.',
-        userParticipation: false,
-      },
-    ],
-    associated_producers: [
-      {
-        id: MOCK_PRODUCER_ILANGA_ID,
-        name: 'Ilanga Nature',
-        location: 'Madagascar',
-        relationship: 'Producteur partenaire',
-        projectsCount: 2,
-      },
-    ],
-    associated_challenges: [
-      {
-        id: MOCK_CHALLENGE_ECO_FACT_ID,
-        name: 'Eco-Fact du jour',
-        type: 'education',
-        difficulty: 'easy',
-        rewards: ['50 graines'],
-        userProgress: 0,
-      },
-    ],
-    user_status: createUserStatus(false, 1),
-    habitat: ['Bocages', 'Vergers', 'Prairies'],
-    threats: ['Disparition des haies', 'Artificialisation des sols'],
-  },
-  {
-    id: MOCK_SPECIES_HONEY_BEE_ID,
-    name_default: 'Abeille mellifere',
-    scientific_name: 'Apis mellifera',
-    description_default:
-      'Pollinisatrice essentielle, elle soutient la reproduction de nombreuses plantes cultivees et sauvages.',
-    conservation_status: 'NT',
-    image_url: '/images/diaromas/Abeilles pollinisatrices.png',
-    associated_projects: [
-      {
-        id: MOCK_PROJECT_MANAKARA_ID,
-        slug: MOCK_PROJECT_MANAKARA_SLUG,
-        name: 'Miellerie de Manakara',
-        type: 'beehive',
-        role: 'Pollinisation',
-        impact: "Le projet structure une apiculture durable autour de l'abeille noire et du miel local.",
-        userParticipation: false,
-      },
-    ],
-    associated_producers: [
-      {
-        id: MOCK_PRODUCER_ILANGA_ID,
-        name: 'Ilanga Nature',
-        location: 'Manakara',
-        relationship: 'Producteur engage',
-        projectsCount: 2,
-      },
-    ],
-    associated_challenges: [
-      {
-        id: MOCK_CHALLENGE_DAILY_HARVEST_ID,
-        name: 'Récolte quotidienne',
-        type: 'daily_harvest',
-        difficulty: 'easy',
-        rewards: ['50 graines'],
-        userProgress: 0,
-      },
-    ],
-    user_status: createUserStatus(false, 1),
-    habitat: ['Jardins', 'Prairies', 'Forets claires'],
-    threats: ['Pesticides', 'Parasites', 'Uniformisation florale'],
-  },
   {
     id: MOCK_SPECIES_BLACK_BEE_ID,
     name_default: 'Abeille Noire',
@@ -227,10 +141,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
   },
   {
     id: MOCK_SPECIES_CORAL_ID,
-    name_default: 'Coraux tropicaux',
-    scientific_name: 'Scleractinia',
+    name_default: 'Acropora corne de cerf',
+    scientific_name: 'Acropora spp.',
     description_default:
-      'Fondateurs des recifs coralliens, ils abritent 25% des especes marines malgre 0.1% de locean.',
+      'Corail branchu rapide, fondateur des recifs tropicaux, habitat essentiel pour les poissons.',
     conservation_status: 'CR',
     image_url: '/images/diaromas/Acropora  Corail corne de cerf.png',
     associated_projects: [
@@ -240,15 +154,15 @@ export const MOCK_SPECIES: SpeciesContext[] = [
         name: 'Restauration des recifs Karimunjawa',
         type: 'coral_restoration',
         role: 'Espece principale',
-        impact: 'Restauration de fragments coralliens et reconstruction dhabitat marin.',
+        impact: 'Restauration prioritaire pour reconstruction du recif.',
         userParticipation: false,
       },
     ],
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
-    habitat: ['Recifs coralliens', 'Eaux tropicales'],
-    threats: ['Rechauffement climatique', 'Acidification des oceans', 'Pollution'],
+    habitat: ['Recifs coralliens', 'Eaux tropicales peu profondes'],
+    threats: ['Rechauffement', 'Blanchissement', 'Acidification'],
   },
   {
     id: MOCK_SPECIES_BUMBLEBEE_ID,
@@ -953,17 +867,7 @@ const cloneSpecies = async (
   let isUnlocked = false
   let progressionLevel = 1
 
-  if (species.id === MOCK_SPECIES_OWL_ID) {
-    isUnlocked =
-      graph.investedProjectSlugs.has(MOCK_PROJECT_ANTSIRABE_SLUG) ||
-      graph.completedChallengeIds.has(MOCK_CHALLENGE_ECO_FACT_ID)
-    progressionLevel = graph.investedProjectSlugs.has(MOCK_PROJECT_ANTSIRABE_SLUG) ? 2 : 1
-  } else if (species.id === MOCK_SPECIES_HONEY_BEE_ID) {
-    isUnlocked =
-      graph.investedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) &&
-      graph.orderedProductIds.has(MOCK_PRODUCT_EUCALYPTUS_ID)
-    progressionLevel = graph.completedChallengeIds.has(MOCK_CHALLENGE_DAILY_HARVEST_ID) ? 2 : 1
-  } else if (species.id === MOCK_SPECIES_BLACK_BEE_ID) {
+  if (species.id === MOCK_SPECIES_BLACK_BEE_ID) {
     isUnlocked =
       graph.investedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) &&
       graph.completedChallengeIds.has(MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID)

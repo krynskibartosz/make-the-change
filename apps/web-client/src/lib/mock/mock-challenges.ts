@@ -7,9 +7,7 @@ import {
   MOCK_PROJECT_ANTSIRABE_SLUG,
   MOCK_PROJECT_MANAKARA_SLUG,
   MOCK_SPECIES_BLACK_BEE_ID,
-  MOCK_SPECIES_HONEY_BEE_ID,
   MOCK_SPECIES_LADYBUG_ID,
-  MOCK_SPECIES_OWL_ID,
 } from '@/lib/mock/mock-ids'
 import type { PersistedMockChallengeState } from '@/lib/mock/mock-challenge-progress'
 import type { Challenge, ChallengeArchetypeId, Faction } from '@/lib/mock/types'
@@ -85,7 +83,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
     impact: "les zones melliferes autour des vergers servent aussi d'abri a d'autres especes utiles.",
     ritual: 'observe le maillage entre fleurs, abeilles et nourriture locale.',
     socialFocus: 'les gestes qui soutiennent les pollinisateurs autour des vergers.',
-    linkedSpeciesId: MOCK_SPECIES_HONEY_BEE_ID,
+    linkedSpeciesId: MOCK_SPECIES_BLACK_BEE_ID,
     linkedProjectSlug: MOCK_PROJECT_MANAKARA_SLUG,
     linkedProductSlug: MOCK_PRODUCT_EUCALYPTUS_SLUG,
   },
@@ -97,7 +95,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
     impact: 'les corridors vegetaux favorisent les insectes, les oiseaux et la regulation naturelle des cultures.',
     ritual: 'cherche le lien entre refuge, nourriture et circulation des especes.',
     socialFocus: 'les micro-actions qui rendent un paysage plus hospitalier.',
-    linkedSpeciesId: MOCK_SPECIES_OWL_ID,
+    linkedSpeciesId: MOCK_SPECIES_BLACK_BEE_ID,
     linkedProjectSlug: MOCK_PROJECT_ANTSIRABE_SLUG,
   },
   {
@@ -130,7 +128,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
     impact: 'des paysages diversifies soutiennent mieux la production locale et les pollinisateurs.',
     ritual: 'repere les continuites saisonnieres dans les ressources du vivant.',
     socialFocus: 'les choix qui protègent les reserves alimentaires des colonies.',
-    linkedSpeciesId: MOCK_SPECIES_HONEY_BEE_ID,
+    linkedSpeciesId: MOCK_SPECIES_BLACK_BEE_ID,
     linkedProductSlug: MOCK_PRODUCT_EUCALYPTUS_SLUG,
   },
   {
@@ -141,7 +139,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
     impact: 'renforcer ces transitions aide autant les insectes que la petite faune.',
     ritual: 'observe les interfaces, pas seulement les zones centrales.',
     socialFocus: 'les gestes qui rendent une lisiere plus accueillante.',
-    linkedSpeciesId: MOCK_SPECIES_OWL_ID,
+    linkedSpeciesId: MOCK_SPECIES_BLACK_BEE_ID,
     linkedProjectSlug: MOCK_PROJECT_ANTSIRABE_SLUG,
   },
   {
@@ -152,7 +150,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
     impact: 'la diversite vegetale renforce aussi les chaines alimentaires locales.',
     ritual: 'regarde la prairie comme une succession de relais plutot qu un decor fixe.',
     socialFocus: 'les attentions quotidiennes qui favorisent les floraisons utiles.',
-    linkedSpeciesId: MOCK_SPECIES_HONEY_BEE_ID,
+    linkedSpeciesId: MOCK_SPECIES_BLACK_BEE_ID,
   },
   {
     key: 'sols-humides',

@@ -61,8 +61,6 @@ export const MOCK_DONATION_CORAL_6_ID = 'mock-donation-coral-6'
 export const MOCK_DONATION_CORAL_12_ID = 'mock-donation-coral-12'
 export const MOCK_DONATION_CORAL_18_ID = 'mock-donation-coral-18'
 
-export const MOCK_SPECIES_OWL_ID = 'species-chouette-effraie'
-export const MOCK_SPECIES_HONEY_BEE_ID = 'species-abeille-mellifere'
 export const MOCK_SPECIES_BLACK_BEE_ID = 'species-abeille-noire'
 export const MOCK_SPECIES_LADYBUG_ID = 'species-coccinelle-7-points'
 export const MOCK_SPECIES_OLIVE_TREE_ID = 'species-olivier'

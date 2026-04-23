@@ -51,12 +51,10 @@ import {
   MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
   MOCK_SPECIES_CORAL_ID,
   MOCK_SPECIES_HEDGEHOG_ID,
-  MOCK_SPECIES_HONEY_BEE_ID,
   MOCK_SPECIES_LADYBUG_ID,
   MOCK_SPECIES_MEGACHILE_ID,
   MOCK_SPECIES_OLIVE_TREE_ID,
   MOCK_SPECIES_OSMIA_ID,
-  MOCK_SPECIES_OWL_ID,
   MOCK_SPECIES_SYRPHID_ID,
 } from '@/lib/mock/mock-ids'
 import type {
@@ -113,12 +111,12 @@ export type MockProjectSeed = {
 
 const antsirabeSpecies: ProjectSpecies[] = [
   {
-    id: MOCK_SPECIES_HONEY_BEE_ID,
-    name: 'Abeille mellifere',
-    scientificName: 'Apis mellifera',
-    icon: '/images/diaromas/Abeilles pollinisatrices.png',
+    id: MOCK_SPECIES_BLACK_BEE_ID,
+    name: 'Abeille Noire',
+    scientificName: 'Apis mellifera mellifera',
+    icon: '/images/diaromas/abeille noire.png',
     rarity: 7,
-    status: 'NT',
+    status: 'VU',
     role: 'Pollinisatrice cle',
   },
 ]
@@ -369,15 +367,6 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 3,
     status: 'LC',
     role: 'Auxiliaire',
-  },
-  {
-    id: MOCK_SPECIES_OWL_ID,
-    name: 'Chouette effraie',
-    scientificName: 'Tyto alba',
-    icon: '/images/diaromas/Chouette effraie.png',
-    rarity: 6,
-    status: 'LC',
-    role: 'Faune associee',
   },
   {
     id: MOCK_SPECIES_HEDGEHOG_ID,

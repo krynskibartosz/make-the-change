@@ -25,11 +25,9 @@ import {
   MOCK_SPECIES_CORAL_ID,
   MOCK_SPECIES_GREEN_TURTLE_ID,
   MOCK_SPECIES_HEDGEHOG_ID,
-  MOCK_SPECIES_HONEY_BEE_ID,
   MOCK_SPECIES_LADYBUG_ID,
   MOCK_SPECIES_MEGACHILE_ID,
   MOCK_SPECIES_OSMIA_ID,
-  MOCK_SPECIES_OWL_ID,
   MOCK_SPECIES_SYRPHID_ID,
 } from '@/lib/mock/mock-ids'
 
@@ -39,8 +37,8 @@ interface CheckoutSuccessPageProps {
 
 // Mapping des produits aux espèces débloquées (simplifié pour le mock)
 const PRODUCT_TO_SPECIES: Record<string, string> = {
-  'mock-product-miel-eucalyptus': MOCK_SPECIES_HONEY_BEE_ID,
-  'mock-product-miel-eucalyptus-140g': MOCK_SPECIES_HONEY_BEE_ID,
+  'mock-product-miel-eucalyptus': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-eucalyptus-140g': MOCK_SPECIES_BLACK_BEE_ID,
   'mock-product-miel-litchi': MOCK_SPECIES_BLACK_BEE_ID,
   'mock-product-miel-niaouli': MOCK_SPECIES_BLACK_BEE_ID,
   'mock-product-miel-mokarana': MOCK_SPECIES_BLACK_BEE_ID,
