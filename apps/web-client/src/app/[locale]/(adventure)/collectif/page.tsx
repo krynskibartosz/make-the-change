@@ -27,6 +27,7 @@ export default async function CollectifPage() {
     <AdventurePageFrame
       sidebarUser={sidebarUser}
       rightRail={<AdventureRightRail variant="default" activeTag="" />}
+      showStickyHeader={true}
     >
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>

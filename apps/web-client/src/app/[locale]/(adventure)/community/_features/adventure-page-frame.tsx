@@ -17,6 +17,7 @@ type AdventurePageFrameProps = {
   sidebarUser?: AdventureSidebarUser
   centerClassName?: string
   rightRailClassName?: string
+  showStickyHeader?: boolean
 }
 
 const resolveDisplayName = (input: {
@@ -79,6 +80,7 @@ export async function AdventurePageFrame({
   sidebarUser,
   centerClassName,
   rightRailClassName,
+  showStickyHeader = false,
 }: AdventurePageFrameProps) {
   const resolvedSidebarUser =
     sidebarUser === undefined ? await getAdventureSidebarUser() : sidebarUser
@@ -89,6 +91,7 @@ export async function AdventurePageFrame({
       centerClassName={centerClassName}
       rightRailClassName={rightRailClassName}
       rightRail={rightRail}
+      showStickyHeader={showStickyHeader}
     >
       {children}
     </AdventurePageFrameClient>

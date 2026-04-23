@@ -21,6 +21,7 @@ type AdventurePageFrameClientProps = {
   sidebarUser?: AdventureSidebarUser
   centerClassName?: string
   rightRailClassName?: string
+  showStickyHeader?: boolean
 }
 
 function SeasonCountdownHeader() {
@@ -80,16 +81,19 @@ export function AdventurePageFrameClient({
   sidebarUser = null,
   centerClassName,
   rightRailClassName,
+  showStickyHeader = false,
 }: AdventurePageFrameClientProps) {
   const hasRightRail = !!rightRail
 
   return (
     <div className="relative bg-background">
-      <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl sm:hidden">
-        <div className="mx-auto flex h-16 max-w-3xl items-center px-4">
-          <SeasonCountdownHeader />
-        </div>
-      </header>
+      {showStickyHeader && (
+        <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl sm:hidden">
+          <div className="mx-auto flex h-16 max-w-3xl items-center px-4">
+            <SeasonCountdownHeader />
+          </div>
+        </header>
+      )}
       <div className="mx-auto flex w-full max-w-[1260px] justify-center">
         <div className="hidden shrink-0 sm:block sm:w-[240px] lg:w-[275px]">
           <header className="sticky top-0 flex h-screen flex-col justify-between overflow-y-auto">
