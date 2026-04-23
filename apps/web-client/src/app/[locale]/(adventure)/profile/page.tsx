@@ -68,7 +68,7 @@ export default async function GuestProfilePage() {
           </Link>
         </div>
       </header>
-      <main className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden overscroll-y-contain pt-16 sm:h-auto sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:overflow-visible">
+      <main className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden overscroll-y-contain pt-16 pb-24 sm:h-auto sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:pb-32 sm:overflow-visible">
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
           <h1 className="mb-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
           <p className="mx-auto mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
