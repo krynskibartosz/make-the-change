@@ -21,7 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@make-the-change/core/ui'
-import { Check } from 'lucide-react'
+import { Check, Wallet } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { useActionState, useEffect, useState } from 'react'
 import { usePathname, useRouter } from '@/i18n/navigation'
@@ -73,8 +74,18 @@ export function SettingsClient({ initial }: SettingsClientProps) {
     <div className="space-y-8 max-w-4xl">
       <Card className="border bg-background/70 shadow-sm backdrop-blur overflow-hidden">
         <CardHeader className="p-6 pb-4 sm:p-8 sm:pb-6">
-          <CardTitle className="text-xl sm:text-2xl">{t('title')}</CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-xl sm:text-2xl">{t('title')}</CardTitle>
+              <CardDescription>{t('description')}</CardDescription>
+            </div>
+            <Link href="/products/balance">
+              <Button variant="outline" size="sm" className="gap-2">
+                <Wallet className="h-4 w-4" />
+                Portefeuille
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent className="p-6 pt-3 sm:p-8 sm:pt-4">
           <Form action={formAction} className="space-y-8">
