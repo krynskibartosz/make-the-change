@@ -12,7 +12,7 @@ import {
   Sprout,
   UsersRound,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { useHaptic } from '@/hooks/use-haptic'

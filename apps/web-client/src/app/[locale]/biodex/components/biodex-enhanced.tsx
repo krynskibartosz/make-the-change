@@ -34,7 +34,6 @@ interface BiodexEnhancedProps {
 }
 
 export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps) {
-	const t = useTranslations()
 	const router = useRouter()
 	const [searchQuery, setSearchQuery] = useState('')
 	const [selectedLockedSpecies, setSelectedLockedSpecies] = useState<SpeciesContext | null>(null)
@@ -104,9 +103,9 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 							<ArrowLeft className='h-4 w-4' />
 						</Link>
 						<div className='flex-1'>
-							<h1 className='text-lg font-black text-white'>{t('biodex.title')}</h1>
+							<h1 className='text-lg font-black text-white'>BioDex</h1>
 							<p className='text-xs text-white/50'>
-								{sortedSpecies.filter((s) => s.user_status?.isUnlocked).length} / {sortedSpecies.length} {t('biodex.unlocked')}
+								{sortedSpecies.filter((s) => s.user_status?.isUnlocked).length} / {sortedSpecies.length} débloquées
 							</p>
 						</div>
 					</div>
@@ -119,7 +118,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 					<Sparkles className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30' />
 					<input
 						type='text'
-						placeholder={t('biodex.searchPlaceholder')}
+						placeholder='Rechercher une espèce...'
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 						className='w-full rounded-2xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder:text-white/30 focus:border-lime-400/50 focus:outline-none focus:ring-1 focus:ring-lime-400/50'
@@ -132,7 +131,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 				{sortedSpecies.length === 0 ? (
 					<div className='flex flex-col items-center justify-center py-16'>
 						<Leaf className='h-12 w-12 text-white/20 mb-4' />
-						<p className='text-sm text-white/50'>{t('biodex.noResults')}</p>
+						<p className='text-sm text-white/50'>Aucun résultat</p>
 					</div>
 				) : (
 					<div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6'>
