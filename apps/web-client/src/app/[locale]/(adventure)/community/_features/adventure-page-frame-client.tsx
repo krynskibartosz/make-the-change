@@ -92,8 +92,7 @@ function SeasonCountdownHeader({ showSeeds = true, showSeason = true, showReward
       <div className="flex items-center gap-2">
         {showRewardIcon && (
           <Link
-            href="?p=reward"
-            scroll={false}
+            href="/collectif/reward"
             className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
             aria-label="Voir la récompense du mois"
           >
