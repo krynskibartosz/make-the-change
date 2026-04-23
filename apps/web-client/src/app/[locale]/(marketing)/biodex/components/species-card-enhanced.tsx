@@ -126,20 +126,17 @@ export function SpeciesCardEnhanced({
 					isLocked && 'bg-white/5 border border-white/5'
 				)}
 			>
-				{isLocked ? (
+				{species.image_url ? (
 					<img
-						src={'/images/diorama-chouette.png'}
+						src={species.image_url}
 						alt={species.name_default}
-						className='h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px] transition-all duration-700'
-					/>
-				) : true ? (
-					<img
-						src={'/images/diorama-chouette.png'}
-						alt={species.name_default}
-						className='h-full w-full object-cover'
+						className={cn(
+							'h-full w-full object-cover transition-all duration-700',
+							isLocked && 'scale-105 grayscale contrast-125 opacity-40 blur-[2px]'
+						)}
 					/>
 				) : (
-					<span className='text-4xl opacity-20'>🌿</span>
+					<span className='text-4xl opacity-20'>{silhouetteEmoji}</span>
 				)}
 			</div>
 

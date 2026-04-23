@@ -64,7 +64,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Gardienne nocturne des paysages agricoles vivants, elle aide a reguler naturellement les ecosystemes.',
     conservation_status: 'LC',
-    image_url: '/images/diaromas/Chouette effraie.png',
+    image_url: '/images/diaromas/Chouette chevêche.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
