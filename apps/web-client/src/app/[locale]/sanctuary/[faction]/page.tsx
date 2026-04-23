@@ -10,7 +10,7 @@ import type { FactionThemeKey } from '@/lib/faction-theme'
 interface SanctuaryPageProps {
   params: {
     locale: string
-    faction: FactionThemeKey
+    faction: string
   }
 }
 

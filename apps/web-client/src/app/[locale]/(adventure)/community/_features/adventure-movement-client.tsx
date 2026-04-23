@@ -18,6 +18,7 @@ import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 import { useActionAuth } from '@/hooks/use-action-auth'
 import { useHaptic } from '@/hooks/use-haptic'
+import { resolveFactionThemeKey } from '@/lib/faction-theme'
 
 type ImpactEvent = {
   id: string
@@ -342,6 +343,7 @@ function ImpactCard({
   }, [event.id, handleBravoAction, isBravoed, onAttemptBravo])
 
   const factionImage = getFactionImage(event.faction)
+  const factionThemeKey = event.faction ? resolveFactionThemeKey(event.faction) : null
 
   const header = (
     <div className="mb-3 flex items-center gap-3">
@@ -357,14 +359,16 @@ function ImpactCard({
           )}
         />
       ) : factionImage && event.isSystem ? (
-        <img
-          src={factionImage}
-          alt={event.faction}
-          className={cn(
-            'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
-            event.isSystem ? accentTheme.accentBorder : 'border-border/30',
-          )}
-        />
+        <Link href={`/sanctuary/${factionThemeKey}`} prefetch={false} className="block transition-transform hover:scale-110 active:scale-95">
+          <img
+            src={factionImage}
+            alt={event.faction}
+            className={cn(
+              'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
+              event.isSystem ? accentTheme.accentBorder : 'border-border/30',
+            )}
+          />
+        </Link>
       ) : (
         <div
           className={cn(
