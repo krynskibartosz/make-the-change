@@ -289,7 +289,7 @@ function ImpactCard({
 
   return (
     <div className={cn(
-      'border-b border-white/5 py-5 last:border-b-0 relative w-full',
+      'border-b border-white/10 py-5 last:border-b-0 relative w-full',
       event.isSystem && '[background-image:radial-gradient(circle_at_10%_50%,rgba(255,184,0,0.12)_0%,rgba(255,184,0,0.05)_30%,rgba(255,184,0,0)_70%)]',
       event.isSystem && event.faction === 'Terres & Forêts' && '[background-image:radial-gradient(circle_at_10%_50%,rgba(52,199,89,0.12)_0%,rgba(52,199,89,0.05)_30%,rgba(52,199,89,0)_70%)]',
       event.isSystem && event.faction === 'Gardiens des mers' && '[background-image:radial-gradient(circle_at_10%_50%,rgba(0,199,255,0.12)_0%,rgba(0,199,255,0.05)_30%,rgba(0,199,255,0)_70%)]',
@@ -305,7 +305,7 @@ function ImpactCard({
           event.faction === 'Gardiens des mers' && 'bg-[#00C7FF] [box-shadow:2px_0px_8px_0px_rgba(0,199,255,0.4),2px_0px_16px_0px_rgba(0,199,255,0.2)]'
         )} />
       )}
-      <div className="px-4 sm:px-6">
+      <div className={cn('px-4 sm:px-6', event.isCurrentUser && 'pl-[calc(1rem-1px)] sm:pl-[calc(1.5rem-1px)]')}>
         {event.profileId ? (
           <Link href={`/profile/${event.profileId}`} prefetch={false} className="block transition-opacity active:opacity-50">
             {header}
