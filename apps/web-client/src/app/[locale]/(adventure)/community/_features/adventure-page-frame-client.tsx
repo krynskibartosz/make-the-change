@@ -3,10 +3,12 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
-import { Clock, Gift } from 'lucide-react'
+import { Clock, Gift, Sprout } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { AdventureLeftSidebar } from './adventure-left-sidebar'
 import { getCurrentSeason, getSeasonTimeRemaining } from '@/lib/mock/mock-seasons'
+import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockImpactPoints } from '@/lib/mock/mock-member-data'
 
 type AdventureSidebarUser = {
   id: string
@@ -27,6 +29,7 @@ type AdventurePageFrameClientProps = {
 function SeasonCountdownHeader() {
   const currentSeason = getCurrentSeason()
   const [timeRemaining, setTimeRemaining] = useState<number>(0)
+  const [seeds, setSeeds] = useState<number>(0)
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -35,6 +38,12 @@ function SeasonCountdownHeader() {
 
     updateCountdown()
     const interval = setInterval(updateCountdown, 1000)
+
+    // Récupérer les graines
+    const session = getClientMockViewerSession()
+    if (session) {
+      setSeeds(getMockImpactPoints(session.viewerId))
+    }
 
     return () => clearInterval(interval)
   }, [])
@@ -72,15 +81,25 @@ function SeasonCountdownHeader() {
            {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
         </p>
       </div>
-      
-      <Link
-        href="?p=reward"
-        scroll={false}
-        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
-        aria-label="Voir la récompense du mois"
-      >
-        <Gift className="h-5 w-5 text-lime-400" />
-      </Link>
+
+      <div className="flex items-center gap-2">
+        {/* Affichage des graines */}
+        <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+          <Sprout className="h-3.5 w-3.5 text-lime-400" />
+          <span className="text-xs font-bold text-white tabular-nums">
+            {seeds.toLocaleString('fr-FR')}
+          </span>
+        </div>
+
+        <Link
+          href="?p=reward"
+          scroll={false}
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
+          aria-label="Voir la récompense du mois"
+        >
+          <Gift className="h-5 w-5 text-lime-400" />
+        </Link>
+      </div>
     </div>
   )
 }
