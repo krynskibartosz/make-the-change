@@ -8,10 +8,10 @@ import type { Faction } from '@/lib/mock/types'
 import type { FactionThemeKey } from '@/lib/faction-theme'
 
 interface SanctuaryPageProps {
-  params: {
+  params: Promise<{
     locale: string
     faction: string
-  }
+  }>
 }
 
 const FACTION_CONFIG: Record<string, { name: string; title: string; mascot: string; emoji: string }> = {
@@ -36,28 +36,30 @@ const FACTION_CONFIG: Record<string, { name: string; title: string; mascot: stri
 }
 
 export async function generateMetadata({ params }: SanctuaryPageProps): Promise<Metadata> {
-  const faction = FACTION_CONFIG[params.faction]
+  const { faction: factionKey } = await params
+  const faction = FACTION_CONFIG[factionKey]
   return {
     title: `${faction?.name || 'Sanctuaire'} | Make the Change`,
   }
 }
 
 export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
+  const { faction: factionKey } = await params
   const session = getClientMockViewerSession()
   const initialFaction: Faction | null = session?.faction ?? null
-  const factionConfig = FACTION_CONFIG[params.faction]
+  const factionConfig = FACTION_CONFIG[factionKey]
   
   if (!factionConfig) {
     return <div>Faction not found</div>
   }
 
-  const theme = getFactionThemeByKey(params.faction as FactionThemeKey)
-  const contribution = getFactionContribution(params.faction as Faction)
+  const theme = getFactionThemeByKey(factionKey as FactionThemeKey)
+  const contribution = getFactionContribution(factionKey as Faction)
   const contributions = getFactionContributions()
-  const isLeading = contributions[0]?.themeKey === params.faction
+  const isLeading = contributions[0]?.themeKey === factionKey
 
   const factionMessage = isLeading
-    ? `Votre énergie est incroyable ce mois-ci ! Nos ${params.faction === 'pollinisateurs' ? 'ruches' : params.faction === 'forets' ? 'forêts' : 'océans'} bourdonnent de vie grâce à vous.`
+    ? `Votre énergie est incroyable ce mois-ci ! Nos ${factionKey === 'pollinisateurs' ? 'ruches' : factionKey === 'forets' ? 'forêts' : 'océans'} bourdonnent de vie grâce à vous.`
     : `La nature a besoin d'un coup de pouce. Semons ensemble de nouvelles graines aujourd'hui.`
 
   return (
