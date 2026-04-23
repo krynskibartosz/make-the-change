@@ -1,10 +1,12 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
-import { Settings } from 'lucide-react'
+import { Clock, Gift } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { AdventureLeftSidebar } from './adventure-left-sidebar'
+import { getCurrentSeason, getSeasonTimeRemaining } from '@/lib/mock/mock-seasons'
 
 type AdventureSidebarUser = {
   id: string
@@ -21,6 +23,57 @@ type AdventurePageFrameClientProps = {
   rightRailClassName?: string
 }
 
+function SeasonCountdownHeader() {
+  const currentSeason = getCurrentSeason()
+  const [timeRemaining, setTimeRemaining] = useState<number>(0)
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      setTimeRemaining(getSeasonTimeRemaining())
+    }
+
+    updateCountdown()
+    const interval = setInterval(updateCountdown, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const formatTimeRemaining = (ms: number) => {
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60))
+
+    if (days > 0) {
+      return `${days}j ${hours}h`
+    }
+    if (hours > 0) {
+      return `${hours}h ${minutes}min`
+    }
+    return `${minutes}min`
+  }
+
+  if (!currentSeason) return null
+
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Clock className="h-4 w-4 text-white/40" />
+        <p className="text-[11px] font-medium text-white/40">
+          ⏱️ {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
+        </p>
+      </div>
+      <Link
+        href="?p=reward"
+        scroll={false}
+        className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+        aria-label="Voir la récompense du mois"
+      >
+        <Gift className="h-3.5 w-3.5" />
+      </Link>
+    </div>
+  )
+}
+
 export function AdventurePageFrameClient({
   children,
   rightRail,
@@ -33,14 +86,8 @@ export function AdventurePageFrameClient({
   return (
     <div className="relative bg-background">
       <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl sm:hidden">
-        <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
-          <Link
-            href="/settings"
-            aria-label="Paramètres"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
-          >
-            <Settings className="h-5 w-5" />
-          </Link>
+        <div className="mx-auto flex h-16 max-w-3xl items-center px-4">
+          <SeasonCountdownHeader />
         </div>
       </header>
       <div className="mx-auto flex w-full max-w-[1260px] justify-center">
