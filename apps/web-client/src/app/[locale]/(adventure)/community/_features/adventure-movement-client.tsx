@@ -243,12 +243,12 @@ function ImpactCard({
           alt={event.name}
           className={cn(
             'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
-            event.faction && !event.isSystem ? '[box-shadow:0_0_0_2px_#121212,0_0_0_4px_#34C759]' : 'border-border/30',
-            event.faction === 'Vie Sauvage' && !event.isSystem && '[box-shadow:0_0_0_2px_#121212,0_0_0_4px_#FFB800]',
-            event.faction === 'Gardiens des mers' && !event.isSystem && '[box-shadow:0_0_0_2px_#121212,0_0_0_4px_#00C7FF]',
+            event.faction && !event.isSystem ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(52,199,89,0.4)]' : 'border-border/30',
+            event.faction === 'Vie Sauvage' && !event.isSystem && '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(255,184,0,0.4)]',
+            event.faction === 'Gardiens des mers' && !event.isSystem && '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(0,199,255,0.4)]',
           )}
         />
-      ) : factionImage && !event.isCurrentUser ? (
+      ) : factionImage && event.isSystem ? (
         <img
           src={factionImage}
           alt={event.faction}
@@ -262,7 +262,9 @@ function ImpactCard({
           className={cn(
             'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold',
             event.isCurrentUser ? 'bg-[rgba(255,184,0,0.1)] border-[rgba(255,184,0,0.2)] text-[#FFB800]' : event.avatarColor,
-            event.faction && !event.isSystem && !event.isCurrentUser ? accentTheme.accentBorder : 'border-border/30',
+            event.faction === 'Terres & Forêts' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(52,199,89,0.4)]' : 'border-border/30',
+            event.faction === 'Vie Sauvage' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(255,184,0,0.4)]' : 'border-border/30',
+            event.faction === 'Gardiens des mers' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(0,199,255,0.4)]' : 'border-border/30',
           )}
         >
           {event.name[0]}
