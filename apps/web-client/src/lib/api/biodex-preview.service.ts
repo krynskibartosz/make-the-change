@@ -25,6 +25,7 @@ type FallbackSpecies = {
   name_default: string
   conservation_status: string
   isUnlocked: boolean
+  image_url?: string
 }
 
 const DEFAULT_SPECIES_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
@@ -35,48 +36,56 @@ const FALLBACK_SPECIES: FallbackSpecies[] = [
     name_default: 'Chouette Effraie',
     conservation_status: 'LC',
     isUnlocked: true,
+    image_url: '/images/diaromas/Chouette chevêche.png',
   },
   {
     id: 'species-abeille-mellifere',
     name_default: 'Abeille mellifère',
     conservation_status: 'NT',
     isUnlocked: false,
+    image_url: '/images/diaromas/Abeilles pollinisatrices.png',
   },
   {
     id: 'species-abeille-noire',
     name_default: 'Abeille Noire',
     conservation_status: 'VU',
     isUnlocked: false,
+    image_url: '/images/diaromas/Eucalyptus.png',
   },
   {
     id: 'species-coccinelle-7-points',
     name_default: 'Coccinelle à 7 points',
     conservation_status: 'LC',
     isUnlocked: false,
+    image_url: '/images/diaromas/Coccinelle.png',
   },
   {
     id: 'species-grenouille-rousse',
     name_default: 'Grenouille Rousse',
     conservation_status: 'NT',
     isUnlocked: false,
+    image_url: '/images/diaromas/Grenouille tomate.png',
   },
   {
     id: 'species-heron-cendre',
     name_default: 'Héron Cendré',
     conservation_status: 'LC',
     isUnlocked: false,
+    image_url: '/images/diaromas/Martin-chasseur pygmée.png',
   },
   {
     id: 'species-lavande-vraie',
     name_default: 'Lavande vraie',
     conservation_status: 'LC',
     isUnlocked: false,
+    image_url: '/images/diaromas/Olivier .png',
   },
   {
     id: 'species-lynx-boreal',
     name_default: 'Lynx Boréal',
     conservation_status: 'EN',
     isUnlocked: false,
+    image_url: '/images/diaromas/Hérisson européen.png',
   },
 ]
 
