@@ -1,5 +1,5 @@
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { BiodexEnhanced } from '@/app/[locale]/(marketing)/biodex/components/biodex-enhanced'
+import { BiodexEnhanced } from '@/app/[locale]/(adventure)/biodex/components/biodex-enhanced'
 import type { Faction } from '@/lib/mock/types'
 
 type AdventureBiodexProps = {
