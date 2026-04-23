@@ -75,6 +75,27 @@ export const MOCK_SPECIES_BUTTERFLY_CITRON_ID = 'species-papillon-citron'
 export const MOCK_SPECIES_BUTTERFLY_PEACOCK_ID = 'species-paon-du-jour'
 export const MOCK_SPECIES_HEDGEHOG_ID = 'species-herisson-europeen'
 
+// Espèces secondaires - Madagascar
+export const MOCK_SPECIES_INDRI_ID = 'species-indri'
+export const MOCK_SPECIES_SIFAKA_ID = 'species-sifaka-diademe'
+export const MOCK_SPECIES_VARI_ID = 'species-vari-noir-blanc'
+export const MOCK_SPECIES_CHAMELEON_ID = 'species-cameleon-parson'
+export const MOCK_SPECIES_WEEVIL_ID = 'species-charancon-girafe'
+export const MOCK_SPECIES_TOMATO_FROG_ID = 'species-grenouille-tomate'
+export const MOCK_SPECIES_KINGFISHER_ID = 'species-martin-chasseur-pygme'
+export const MOCK_SPECIES_COUA_ID = 'species-coua-bleu'
+export const MOCK_SPECIES_GECKO_ID = 'species-gecko-diurne'
+export const MOCK_SPECIES_LITTLE_OWL_ID = 'species-chouette-cheveche'
+export const MOCK_SPECIES_HOOPoe_ID = 'species-huppe-fascie'
+
+// Espèces associées - Coraux
+export const MOCK_SPECIES_ACROPORA_ID = 'species-acropora-corail-cerf'
+export const MOCK_SPECIES_CLOWNFISH_ID = 'species-poisson-clown'
+export const MOCK_SPECIES_BLUE_DEMOISELLE_ID = 'species-demoiselle-bleue'
+export const MOCK_SPECIES_BUTTERFLYFISH_ID = 'species-poisson-papillon'
+export const MOCK_SPECIES_SEAHORSE_ID = 'species-hippocampe'
+export const MOCK_SPECIES_GREEN_TURTLE_ID = 'species-tortue-verte'
+
 export const MOCK_CHALLENGE_ECO_FACT_ID = 'eco-fact'
 export const MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID = 'collective-bravo'
 export const MOCK_CHALLENGE_DAILY_HARVEST_ID = 'daily-harvest'
@@ -95,6 +116,7 @@ export const MOCK_BLOG_POST_6_SLUG = 'notre-approche-apiculture-durable'
 export const FACTION_TO_TRIBE_ID: Record<Faction, string> = {
   'Vie Sauvage': 'campus-biodiversity-lab',
   'Terres & Forêts': 'agroforest-pioneers',
+  'Gardiens des mers': 'ocean-guardians',
   'Artisans Locaux': 'zero-dechet',
 }
 

@@ -46,7 +46,7 @@ const SOCIAL_AVATAR_PLACEHOLDERS = Array.from(
 const GUILD_LOGO_PLACEHOLDER =
 	'https://source.unsplash.com/random/200x200/?nature,logo'
 
-const BIODEX_REWARD_IMAGE_URL = '/images/diorama-chouette.png'
+const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png' // Image générique de fallback
 
 function getSocialAvatarPlaceholder(index: number) {
 	return (

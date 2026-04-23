@@ -27,7 +27,7 @@ type FallbackSpecies = {
   isUnlocked: boolean
 }
 
-const DEFAULT_SPECIES_IMAGE = '/images/diorama-chouette.png'
+const DEFAULT_SPECIES_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
 
 const FALLBACK_SPECIES: FallbackSpecies[] = [
   {

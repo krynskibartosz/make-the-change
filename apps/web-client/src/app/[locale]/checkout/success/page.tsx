@@ -1,5 +1,5 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
-import { ArrowRight, CheckCircle2, ShoppingBag, Sparkles } from 'lucide-react'
+import { ArrowRight, CheckCircle2, ShoppingBag, Sparkles, ShieldAlert } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { parseOrderItems } from '@/app/[locale]/(dashboard)/dashboard/orders/_features/order-parsers'
@@ -15,9 +15,64 @@ import {
 } from '@/lib/mock/mock-member-data'
 import { getCurrentMockOrderById } from '@/lib/mock/mock-order-history-server'
 import { getCurrentProfile, getCurrentViewer } from '@/lib/mock/mock-session-server'
+import { MOCK_SPECIES } from '@/lib/mock/mock-biodex'
+import {
+  MOCK_SPECIES_BLACK_BEE_ID,
+  MOCK_SPECIES_BUMBLEBEE_ID,
+  MOCK_SPECIES_BUTTERFLY_CITRON_ID,
+  MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
+  MOCK_SPECIES_CLOWNFISH_ID,
+  MOCK_SPECIES_CORAL_ID,
+  MOCK_SPECIES_GREEN_TURTLE_ID,
+  MOCK_SPECIES_HEDGEHOG_ID,
+  MOCK_SPECIES_HONEY_BEE_ID,
+  MOCK_SPECIES_LADYBUG_ID,
+  MOCK_SPECIES_MEGACHILE_ID,
+  MOCK_SPECIES_OSMIA_ID,
+  MOCK_SPECIES_OWL_ID,
+  MOCK_SPECIES_SYRPHID_ID,
+} from '@/lib/mock/mock-ids'
 
 interface CheckoutSuccessPageProps {
   searchParams: Promise<{ orderId?: string }>
+}
+
+// Mapping des produits aux espèces débloquées (simplifié pour le mock)
+const PRODUCT_TO_SPECIES: Record<string, string> = {
+  'mock-product-miel-eucalyptus': MOCK_SPECIES_HONEY_BEE_ID,
+  'mock-product-miel-eucalyptus-140g': MOCK_SPECIES_HONEY_BEE_ID,
+  'mock-product-miel-litchi': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-niaouli': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-mokarana': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-forets-seches': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-forets-humides': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-cactus': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-jujubier': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-baies-roses': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-miel-forets-primaires': MOCK_SPECIES_BLACK_BEE_ID,
+  'mock-product-coral-3': MOCK_SPECIES_CORAL_ID,
+  'mock-product-coral-6': MOCK_SPECIES_CORAL_ID,
+  'mock-product-coral-12': MOCK_SPECIES_CORAL_ID,
+  'mock-product-coral-18': MOCK_SPECIES_CORAL_ID,
+  'mock-product-savon-doux': MOCK_SPECIES_LADYBUG_ID,
+  'mock-product-huile-visage': MOCK_SPECIES_LADYBUG_ID,
+  'mock-product-shampoing': MOCK_SPECIES_LADYBUG_ID,
+}
+
+async function getUnlockedSpecies(items: any[]) {
+  const speciesIds = new Set<string>()
+  
+  for (const item of items) {
+    const productId = item.snapshot?.id || item.product_id
+    const speciesId = PRODUCT_TO_SPECIES[productId]
+    if (speciesId) {
+      speciesIds.add(speciesId)
+    }
+  }
+
+  if (speciesIds.size === 0) return []
+
+  return MOCK_SPECIES.filter((species) => speciesIds.has(species.id))
 }
 
 export default async function CheckoutSuccessPage({ searchParams }: CheckoutSuccessPageProps) {
@@ -78,6 +133,7 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
 
   const items = parseOrderItems(order.items)
   const dateLocale = locale === 'fr' ? 'fr-FR' : locale === 'nl' ? 'nl-NL' : 'en-US'
+  const unlockedSpecies = await getUnlockedSpecies(items)
 
   const totalEuros = items.reduce((sum, item) => {
     return sum + item.snapshot.priceEuros * item.quantity
@@ -223,6 +279,32 @@ export default async function CheckoutSuccessPage({ searchParams }: CheckoutSucc
                   </div>
                 </div>
               </div>
+
+              {unlockedSpecies.length > 0 && (
+                <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <ShieldAlert className="h-4 w-4 text-emerald-500" />
+                    <span className="text-sm font-bold text-emerald-500">Espèces débloquées</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {unlockedSpecies.map((species) => (
+                      <div key={species.id} className="flex items-center gap-2 rounded-xl border border-emerald-500/10 bg-emerald-500/10 px-3 py-2">
+                        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-emerald-500/20 bg-emerald-500/5">
+                          <img
+                            src={species.image_url || '/images/diaromas/abeille noire.png'}
+                            alt={species.name_default}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-foreground truncate">{species.name_default}</p>
+                          <p className="text-[10px] text-muted-foreground truncate italic">{species.scientific_name}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <Link href={primaryOrdersHref}>

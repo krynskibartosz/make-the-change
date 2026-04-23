@@ -6,7 +6,7 @@ interface ProjectUnlockSpeciesSectionProps {
   species: ProjectSpecies | null
 }
 
-const BIODEX_REWARD_IMAGE_URL = '/images/diorama-chouette.png'
+const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png' // Image générique de fallback
 
 export function ProjectUnlockSpeciesSection({ species }: ProjectUnlockSpeciesSectionProps) {
   if (!species) return null

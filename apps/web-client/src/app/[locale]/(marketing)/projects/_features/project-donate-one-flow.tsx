@@ -21,7 +21,7 @@ import type { DonationOption } from '@/types/context'
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
-const REWARD_PREVIEW_IMAGE = '/images/diorama-chouette.png'
+const REWARD_PREVIEW_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
 const formatAmountPlain = (value: number): string =>
   `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
 const formatAmountNumber = (value: number): string =>

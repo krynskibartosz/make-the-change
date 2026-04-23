@@ -37,7 +37,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
           <div className="relative flex aspect-square w-full items-center justify-center">
             <div className="absolute inset-0 mx-auto h-3/4 w-3/4 rounded-full bg-emerald-500/20 blur-[100px]" />
             <img
-              src={species.image_url || '/images/diorama-chouette.png'}
+              src={species.image_url || '/images/diaromas/abeille noire.png'}
               alt={species.name_default}
               className="z-10 h-64 w-64 rounded-full object-cover drop-shadow-2xl"
             />

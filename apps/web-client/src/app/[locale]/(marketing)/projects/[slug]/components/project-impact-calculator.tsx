@@ -25,7 +25,7 @@ const DONATION_REFERENCE_IMPACT = {
   habitatCreated: 18,
 } as const
 
-const BIODEX_REWARD_IMAGE_URL = '/images/diorama-chouette.png'
+const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png' // Image générique de fallback
 
 const formatInteger = (value: number): string =>
   new Intl.NumberFormat('fr-FR', {
