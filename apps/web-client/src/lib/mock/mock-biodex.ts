@@ -63,7 +63,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Espece emblematique des ecosystemes temperes, robuste et precieuse pour la biodiversite locale.',
     conservation_status: 'VU',
-    image_url: '/images/diaromas/abeille noire.png',
+    image_url: '/images/diaromas/Eucalyptus.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_MANAKARA_ID,
@@ -121,7 +121,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Arbre emblematique mediterraneen, pilier de lagriculture regenerative et de la biodiversite.',
     conservation_status: 'LC',
-    image_url: '/images/diaromas/abeille noire.png', // À remplacer par image olivier quand disponible
+    image_url: '/images/diaromas/Olivier .png',
     associated_projects: [
       {
         id: MOCK_PROJECT_SARDINIA_ID,
