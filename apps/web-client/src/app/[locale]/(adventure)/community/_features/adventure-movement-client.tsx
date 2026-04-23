@@ -431,7 +431,7 @@ function ImpactCard({
           </span>
         </p>
 
-        {!event.isCurrentUser ? (
+        {!event.isCurrentUser && (
           <button
             onClick={handleBravo}
             disabled={isBravoed}
@@ -444,12 +444,6 @@ function ImpactCard({
             <Leaf className={cn('h-4 w-4 transition-transform active:scale-125', isBravoed && 'fill-current')} />
             {isBravoed ? 'Bravo envoyé' : 'Bravo'}
             <span className="ml-1 text-sm font-medium tabular-nums opacity-60">{event.bravos + (isBravoed ? 1 : 0)}</span>
-          </button>
-        ) : (
-          <button
-            className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors hover:bg-white/5 text-muted-foreground"
-          >
-            Partager
           </button>
         )}
       </div>
@@ -674,7 +668,7 @@ export function AdventureMovementClient({
                     )}
 
                     {/* Mascotte */}
-                    <div className={cn(sizeClass, 'relative drop-shadow-2xl')}>
+                    <Link href={`/sanctuary/${contribution.themeKey}`} className={cn(sizeClass, 'relative drop-shadow-2xl transition-transform hover:scale-110 active:scale-95')}>
                       <img
                         src={mascotSrc}
                         alt={contribution.label}
@@ -685,7 +679,7 @@ export function AdventureMovementClient({
                             : 'drop-shadow(0 6px 12px rgba(0,0,0,0.6))',
                         }}
                       />
-                    </div>
+                    </Link>
 
                     {/* Floating Pill */}
                     <div className="mt-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 backdrop-blur-md">
