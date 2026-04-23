@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { Sprout, TrendingUp, Award, Zap, Crown, ChevronRight, Calendar, Clock } from 'lucide-react'
 import { getMockWalletBalance, getMockPointsTransactions, getMockSubscription } from '@/lib/mock/mock-member-data'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockCalendarDayKey } from '@/lib/mock/mock-challenges'
 import { cn } from '@/lib/utils'
 
 interface SeedsPageProps {
@@ -37,52 +38,52 @@ const MOCK_WEEKLY_DATA = [
   { day: 'Dim', seeds: 0 },
 ]
 
-// Mock action cards
-const ACTION_CARDS = [
-  {
-    id: 'daily-harvest',
-    title: 'Récolte Quotidienne',
-    description: 'Reviens chaque jour pour récolter tes graines',
-    reward: 50,
-    icon: Sprout,
-    href: '/adventure/daily-harvest/today',
-  },
-  {
-    id: 'eco-fact',
-    title: 'Eco-Fact du Jour',
-    description: 'Apprends et agis avec un fait écologique',
-    reward: 50,
-    icon: TrendingUp,
-    href: '/adventure/eco-fact/today',
-  },
-  {
-    id: 'challenges',
-    title: 'Défis Écologiques',
-    description: 'Complete des défis pour gagner plus',
-    reward: 500,
-    icon: Award,
-    href: '/adventure/defis',
-  },
-  {
-    id: 'faction',
-    title: 'Contribution Faction',
-    description: 'Soutiens ta faction et gagne des graines',
-    reward: 'Variable',
-    icon: Crown,
-    href: '/collectif',
-  },
-]
-
 export default async function SeedsPage({ params }: SeedsPageProps) {
   const session = getClientMockViewerSession()
   const viewerId = session?.viewerId ?? null
   const balance = getMockWalletBalance(viewerId ?? '')
   const transactions = getMockPointsTransactions(viewerId ?? '')
   const subscription = getMockSubscription(viewerId ?? '')
+  const currentDayKey = getMockCalendarDayKey()
   
   const weeklyTotal = MOCK_WEEKLY_DATA.reduce((sum, day) => sum + day.seeds, 0)
   const maxDailySeeds = Math.max(...MOCK_WEEKLY_DATA.map(d => d.seeds))
   const factionAverage = 320 // Mock average
+
+  const actionCards = [
+    {
+      id: 'daily-harvest',
+      title: 'Récolte Quotidienne',
+      description: 'Reviens chaque jour pour récolter tes graines',
+      reward: 50,
+      icon: Sprout,
+      href: `/adventure/daily-harvest/${currentDayKey}`,
+    },
+    {
+      id: 'eco-fact',
+      title: 'Eco-Fact du Jour',
+      description: 'Apprends et agis avec un fait écologique',
+      reward: 50,
+      icon: TrendingUp,
+      href: `/adventure/eco-fact/${currentDayKey}`,
+    },
+    {
+      id: 'challenges',
+      title: 'Défis Écologiques',
+      description: 'Complete des défis pour gagner plus',
+      reward: 500,
+      icon: Award,
+      href: '/adventure/defis',
+    },
+    {
+      id: 'faction',
+      title: 'Contribution Faction',
+      description: 'Soutiens ta faction et gagne des graines',
+      reward: 'Variable',
+      icon: Crown,
+      href: '/collectif',
+    },
+  ]
 
   return (
     <div className="min-h-screen bg-[#0B0F15]">
@@ -209,7 +210,7 @@ export default async function SeedsPage({ params }: SeedsPageProps) {
           >
             <h2 className="text-2xl font-black text-white mb-6">Gagner des graines</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {ACTION_CARDS.map((card, index) => {
+              {actionCards.map((card, index) => {
                 const Icon = card.icon
                 return (
                   <Link
