@@ -352,9 +352,9 @@ function ImpactCard({
           alt={event.name}
           className={cn(
             'h-10 w-10 shrink-0 rounded-full border-2 object-cover',
-            event.faction && !event.isSystem ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(52,199,89,0.4)]' : 'border-border/30',
-            event.faction === 'Vie Sauvage' && !event.isSystem && '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(255,184,0,0.4)]',
-            event.faction === 'Gardiens des mers' && !event.isSystem && '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(0,199,255,0.4)]',
+            event.faction && !event.isSystem ? '[box-shadow:0_0_0_1px_rgba(52,199,89,0.3),0_0_10px_2px_rgba(52,199,89,0.6)]' : 'border-border/30',
+            event.faction === 'Vie Sauvage' && !event.isSystem && '[box-shadow:0_0_0_1px_rgba(255,184,0,0.3),0_0_10px_2px_rgba(255,184,0,0.6)]',
+            event.faction === 'Gardiens des mers' && !event.isSystem && '[box-shadow:0_0_0_1px_rgba(0,199,255,0.3),0_0_10px_2px_rgba(0,199,255,0.6)]',
           )}
         />
       ) : factionImage && event.isSystem ? (
@@ -371,9 +371,9 @@ function ImpactCard({
           className={cn(
             'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold',
             event.isCurrentUser ? 'bg-[rgba(255,184,0,0.1)] border-[rgba(255,184,0,0.2)] text-[#FFB800]' : event.avatarColor,
-            event.faction === 'Terres & Forêts' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(52,199,89,0.4)]' : 'border-border/30',
-            event.faction === 'Vie Sauvage' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(255,184,0,0.4)]' : 'border-border/30',
-            event.faction === 'Gardiens des mers' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_#121212,0_0_12px_0px_rgba(0,199,255,0.4)]' : 'border-border/30',
+            event.faction === 'Terres & Forêts' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_rgba(52,199,89,0.3),0_0_10px_2px_rgba(52,199,89,0.6)]' : 'border-border/30',
+            event.faction === 'Vie Sauvage' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_rgba(255,184,0,0.3),0_0_10px_2px_rgba(255,184,0,0.6)]' : 'border-border/30',
+            event.faction === 'Gardiens des mers' && !event.isSystem && !event.isCurrentUser ? '[box-shadow:0_0_0_1px_rgba(0,199,255,0.3),0_0_10px_2px_rgba(0,199,255,0.6)]' : 'border-border/30',
           )}
         >
           {event.name[0]}
