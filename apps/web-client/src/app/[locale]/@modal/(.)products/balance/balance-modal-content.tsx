@@ -122,10 +122,10 @@ const VisitorState = () => (
     <div className="absolute inset-0 bg-gradient-to-b from-amber-400/10 via-transparent to-black/50 backdrop-blur-xl" />
     
     <div className="relative z-10 flex flex-col items-center gap-6">
-      <div className="flex gap-4">
-        <img src="/abeille-transparente.png" alt="Melli" className="h-32 w-32 object-contain drop-shadow-2xl" />
-        <img src="/sylva.png" alt="Sylva" className="h-32 w-32 object-contain drop-shadow-2xl" />
-        <img src="/ondine.png" alt="Ondine" className="h-32 w-32 object-contain drop-shadow-2xl" />
+      <div className="relative flex h-24 items-center justify-center gap-3">
+        <img src="/abeille-transparente.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
+        <img src="/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
+        <img src="/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
       </div>
       <h1 className="text-3xl font-black text-white">
         Ton impact a de la valeur.
