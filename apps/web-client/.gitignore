@@ -1,5 +1,8 @@
 .vercel
 
+# Environment variables (local development only)
+.env.local
+
 # Local heavy project videos (kept local only, not pushed)
 public/images/projects/antsirabe-ruchers-1.mov
 public/images/projects/antsirabe-ruchers-2.mov
