@@ -67,7 +67,7 @@ function SeasonCountdownHeader() {
       <Link
         href="?p=reward"
         scroll={false}
-        className="flex flex-1 h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
+        className="flex  h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
         aria-label="Voir la récompense du mois"
       >
         <Gift className="h-3.5 w-3.5" />
