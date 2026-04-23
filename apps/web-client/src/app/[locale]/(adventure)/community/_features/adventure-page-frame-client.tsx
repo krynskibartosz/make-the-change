@@ -87,15 +87,15 @@ export function AdventurePageFrameClient({
   const hasRightRail = !!rightRail
 
   return (
-    <div className="relative bg-background">
+    <div className="fixed inset-0 z-40 bg-[#0B0F15] sm:relative sm:bg-background">
       {showStickyHeader && (
-        <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl sm:hidden">
-          <div className="mx-auto flex h-16 max-w-3xl items-center px-4">
+        <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/95 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl sm:hidden">
+          <div className="mx-auto flex h-12 max-w-3xl items-center">
             <SeasonCountdownHeader />
           </div>
         </header>
       )}
-      <div className="mx-auto flex w-full max-w-[1260px] justify-center">
+      <div className="mx-auto flex h-[100dvh] w-full max-w-[1260px] flex-col pt-16 sm:pt-0 sm:h-auto sm:flex-row justify-center overflow-y-auto overflow-x-hidden overscroll-y-contain sm:overflow-visible">
         <div className="hidden shrink-0 sm:block sm:w-[240px] lg:w-[275px]">
           <header className="sticky top-0 flex h-screen flex-col justify-between overflow-y-auto">
             <AdventureLeftSidebar user={sidebarUser} />
