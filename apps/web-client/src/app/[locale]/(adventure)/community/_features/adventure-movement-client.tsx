@@ -792,7 +792,7 @@ export function AdventureMovementClient({
       </section>
 
       <section className="space-y-0 border-t border-white/5 pt-6 w-full">
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-2 flex items-center justify-between px-4 sm:px-6">
           <h2 className="text-xl font-bold tracking-tight text-white">
             {feedFilter === 'faction' && activeContribution
               ? `Activité de ${activeContribution.label.split(' ')[0]}`
