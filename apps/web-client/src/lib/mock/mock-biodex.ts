@@ -23,6 +23,7 @@ import {
   MOCK_SPECIES_BUTTERFLY_CITRON_ID,
   MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
   MOCK_SPECIES_CHAMELEON_ID,
+  MOCK_SPECIES_PANTHER_CHAMELEON_ID,
   MOCK_SPECIES_CLOWNFISH_ID,
   MOCK_SPECIES_CORAL_ID,
   MOCK_SPECIES_COUA_ID,
@@ -526,6 +527,31 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     threats: ['Commerce international', 'Perte dhabitat'],
   },
   {
+    id: MOCK_SPECIES_PANTHER_CHAMELEON_ID,
+    name_default: 'Caméléon panthère',
+    scientific_name: 'Furcifer pardalis',
+    description_default:
+      'Caméléon spectaculaire aux couleurs vibrantes, embleme de la biodiversite malgache.',
+    conservation_status: 'LC',
+    image_url: '/images/diaromas/Caméléon panthère.png',
+    associated_projects: [
+      {
+        id: MOCK_PROJECT_ANTSIRABE_ID,
+        slug: MOCK_PROJECT_ANTSIRABE_SLUG,
+        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        type: 'beehive',
+        role: 'Espece secondaire',
+        impact: 'Indicateur de la sante des ecosystemes forestiers.',
+        userParticipation: false,
+      },
+    ],
+    associated_producers: [],
+    associated_challenges: [],
+    user_status: createUserStatus(false, 1),
+    habitat: ['Forets humides', 'Broussailles', 'Plantations'],
+    threats: ['Commerce international', 'Perte dhabitat'],
+  },
+  {
     id: MOCK_SPECIES_WEEVIL_ID,
     name_default: 'Charançon girafe',
     scientific_name: 'Trachelophorus giraffa',
@@ -968,6 +994,7 @@ const cloneSpecies = async (
     species.id === MOCK_SPECIES_SIFAKA_ID ||
     species.id === MOCK_SPECIES_VARI_ID ||
     species.id === MOCK_SPECIES_CHAMELEON_ID ||
+    species.id === MOCK_SPECIES_PANTHER_CHAMELEON_ID ||
     species.id === MOCK_SPECIES_WEEVIL_ID ||
     species.id === MOCK_SPECIES_TOMATO_FROG_ID ||
     species.id === MOCK_SPECIES_KINGFISHER_ID ||
