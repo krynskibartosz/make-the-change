@@ -24,9 +24,10 @@ type AdventurePageFrameClientProps = {
   centerClassName?: string
   rightRailClassName?: string
   showStickyHeader?: boolean
+  showSeeds?: boolean
 }
 
-function SeasonCountdownHeader() {
+function SeasonCountdownHeader({ showSeeds = true }: { showSeeds?: boolean }) {
   const currentSeason = getCurrentSeason()
   const [timeRemaining, setTimeRemaining] = useState<number>(0)
   const [seeds, setSeeds] = useState<number>(0)
@@ -40,13 +41,15 @@ function SeasonCountdownHeader() {
     const interval = setInterval(updateCountdown, 1000)
 
     // Récupérer les graines
-    const session = getClientMockViewerSession()
-    if (session) {
-      setSeeds(getMockImpactPoints(session.viewerId))
+    if (showSeeds) {
+      const session = getClientMockViewerSession()
+      if (session) {
+        setSeeds(getMockImpactPoints(session.viewerId))
+      }
     }
 
     return () => clearInterval(interval)
-  }, [])
+  }, [showSeeds])
 
   const formatTimeRemaining = (ms: number) => {
     const rtf = new Intl.RelativeTimeFormat('fr', {
@@ -84,12 +87,14 @@ function SeasonCountdownHeader() {
 
       <div className="flex items-center gap-2">
         {/* Affichage des graines */}
-        <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-          <Sprout className="h-3.5 w-3.5 text-lime-400" />
-          <span className="text-xs font-bold text-white tabular-nums">
-            {seeds.toLocaleString('fr-FR')}
-          </span>
-        </div>
+        {showSeeds && (
+          <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+            <Sprout className="h-3.5 w-3.5 text-lime-400" />
+            <span className="text-xs font-bold text-white tabular-nums">
+              {seeds.toLocaleString('fr-FR')}
+            </span>
+          </div>
+        )}
 
         <Link
           href="?p=reward"
@@ -111,6 +116,7 @@ export function AdventurePageFrameClient({
   centerClassName,
   rightRailClassName,
   showStickyHeader = false,
+  showSeeds = true,
 }: AdventurePageFrameClientProps) {
   const hasRightRail = !!rightRail
 
@@ -119,7 +125,7 @@ export function AdventurePageFrameClient({
       {showStickyHeader && (
         <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/95 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl sm:hidden">
           <div className="mx-auto flex h-16 max-w-3xl items-center">
-            <SeasonCountdownHeader />
+            <SeasonCountdownHeader showSeeds={showSeeds} />
           </div>
         </header>
       )}
