@@ -69,7 +69,7 @@ function SeasonCountdownHeader() {
       <div className="flex flex-1 mr-auto items-center gap-2">
         <Clock className="h-4 w-4 text-white/40" />
         <p className="text-[11px] font-medium text-white/40">
-          ⏱️ {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
+           {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
         </p>
       </div>
       
