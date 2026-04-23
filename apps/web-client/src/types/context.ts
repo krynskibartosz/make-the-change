@@ -170,6 +170,7 @@ export interface SpeciesContext {
   name_default: string
   scientific_name: string
   description_default: string
+  description_scientific?: string | null
   conservation_status: string
   image_url: string | null
   associated_projects: AssociatedProject[] | null

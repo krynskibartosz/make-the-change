@@ -87,6 +87,10 @@ export const MOCK_SPECIES_GECKO_ID = 'species-gecko-diurne'
 export const MOCK_SPECIES_LITTLE_OWL_ID = 'species-chouette-cheveche'
 export const MOCK_SPECIES_HOOPoe_ID = 'species-huppe-fascie'
 
+// Espèces supplémentaires - Nouvelles espèces identifiées
+export const MOCK_SPECIES_LIOTRIGONA_ID = 'species-liotrigona-bitika'
+export const MOCK_SPECIES_APIS_LIGUSTICA_ID = 'species-apis-ligustica'
+
 // Espèces associées - Coraux
 export const MOCK_SPECIES_ACROPORA_ID = 'species-acropora-corail-cerf'
 export const MOCK_SPECIES_CLOWNFISH_ID = 'species-poisson-clown'

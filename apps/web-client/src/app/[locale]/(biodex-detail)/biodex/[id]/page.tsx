@@ -1,6 +1,10 @@
 import { Leaf, Lock, Sprout } from 'lucide-react'
 import { getSpeciesContext } from '@/lib/api/species-context.service'
 import { BackButton } from '@/components/back-button'
+import { SpeciesInfoCard } from '@/components/biodex/species-info-card'
+import { AccordionSection } from '@/components/biodex/accordion-section'
+import { HabitatList } from '@/components/biodex/habitat-list'
+import { ThreatList } from '@/components/biodex/threat-list'
 
 const REQUIRED_SEEDS = 500
 
@@ -53,6 +57,37 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
             {species.description_default}
           </p>
         </section>
+
+        {/* Species Info Card - Scientific Name & IUCN Status */}
+        {species.scientific_name && species.conservation_status && (
+          <SpeciesInfoCard
+            scientificName={species.scientific_name}
+            conservationStatus={species.conservation_status}
+          />
+        )}
+
+        {/* Scientific Description - Accordion */}
+        {species.description_scientific && (
+          <div className="mt-4">
+            <AccordionSection title="Description scientifique" defaultOpen={false}>
+              {species.description_scientific}
+            </AccordionSection>
+          </div>
+        )}
+
+        {/* Habitats */}
+        {species.habitat && species.habitat.length > 0 && (
+          <div className="mt-4">
+            <HabitatList habitats={species.habitat} />
+          </div>
+        )}
+
+        {/* Threats */}
+        {species.threats && species.threats.length > 0 && (
+          <div className="mt-4">
+            <ThreatList threats={species.threats} />
+          </div>
+        )}
 
         <section className="mx-5 mt-10 rounded-3xl border border-white/5 bg-[#1C1C22] p-5">
           <h3 className="mb-4 font-bold text-white">Évolution disponible</h3>
