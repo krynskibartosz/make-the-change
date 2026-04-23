@@ -67,7 +67,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'L\'abeille noire de Madagascar, réputée comme l\'une des plus dociles au monde, est une sous-espèce endémique d\'une homogénéité génétique exceptionnelle due à un isolement d\'un million d\'années. En tant qu\'insecte clé de voûte doté d\'un comportement hygiénique naturel unique pour se défendre des parasites, elle garantit la structure des réseaux trophiques insulaires en assurant la reproduction végétale continue. Elle présente une divergence évolutive avec les autres abeilles africaines continentales datant d\'environ 1 million d\'années, et son génome représente 99,6 % de l\'ADN échantillonné au sein des colonies sur l\'île, témoignant d\'une absence presque totale d\'introgression par des sous-espèces étrangères.',
     conservation_status: 'DD',
-    image_url: '/images/diaromas/Eucalyptus.png',
+    image_url: '/images/diaromas/Abeilles pollinisatrices.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_MANAKARA_ID,
@@ -935,7 +935,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Considérée comme la plus petite abeille sans dard du monde, plus petite qu\'une drosophile. Sa taille microscopique lui permet de polliniser des fleurs endémiques minuscules, inaccessibles aux autres insectes pollinisateurs.',
     conservation_status: 'NE',
-    image_url: '/images/diaromas/Eucalyptus.png',
+    image_url: '/images/diaromas/Abeilles pollinisatrices.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -960,7 +960,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_default:
       'Sous-espèce apicole extrêmement populaire originaire de la péninsule italienne. Elle soutient le rendement commercial et la résilience florale des paysages secs.',
     conservation_status: 'NE',
-    image_url: '/images/diaromas/Olivier .png',
+    image_url: '/images/diaromas/Abeilles pollinisatrices.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_SARDINIA_ID,
