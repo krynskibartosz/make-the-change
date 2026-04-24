@@ -1,9 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
-import { Sprout, TrendingUp, Award, Zap, Crown, ChevronRight, Clock } from 'lucide-react'
+import { Sprout, TrendingUp, Award, Zap, Crown, ChevronRight, Clock, PawPrint } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useEffect, useRef, useState } from 'react'
 
 interface SeedsClientProps {
   balance: number
@@ -21,390 +22,303 @@ interface SeedsClientProps {
   currentDayKey: string
 }
 
-// Mock achievements with poetic tone
-const MOCK_ACHIEVEMENTS = [
-  { id: 'first-harvest', name: 'Première Pousse', emoji: '🌱', description: 'Ta première graine gagnée', unlocked: true, progress: 100, target: 1 },
-  { id: 'beekeeper', name: 'Gardien du Rucher', emoji: '🐝', description: '1000 graines des défis quotidiens', unlocked: true, progress: 100, target: 1000 },
-  { id: 'forest-walker', name: 'Marcheur des Forêts', emoji: '🌲', description: '5000 graines au total', unlocked: false, progress: 3450, target: 5000 },
-  { id: 'ocean-seeds', name: 'Océan de Graines', emoji: '🌊', description: '10 000 graines atteintes', unlocked: false, progress: 3450, target: 10000 },
+// Mock weekly analytics data (last 7 days) - Apple Fitness style
+const MOCK_WEEKLY_DATA = [
+  { day: 'Lun', seeds: 120, isToday: false },
+  { day: 'Mar', seeds: 85, isToday: false },
+  { day: 'Mer', seeds: 200, isToday: false },
+  { day: 'Jeu', seeds: 150, isToday: false },
+  { day: 'Ven', seeds: 95, isToday: false },
+  { day: 'Sam', seeds: 0, isToday: false },
+  { day: 'Dim', seeds: 0, isToday: true },
 ]
 
-// Mock weekly analytics data (last 7 days)
-const MOCK_WEEKLY_DATA = [
-  { day: 'Lun', seeds: 120 },
-  { day: 'Mar', seeds: 85 },
-  { day: 'Mer', seeds: 200 },
-  { day: 'Jeu', seeds: 150 },
-  { day: 'Ven', seeds: 95 },
-  { day: 'Sam', seeds: 0 },
-  { day: 'Dim', seeds: 0 },
+const MOCK_CHALLENGE_POSTERS = [
+  { id: '1', title: 'Marche 5km', reward: 100, image: '🚶', href: '/aventure?tab=defis' },
+  { id: '2', title: 'Plante un arbre', reward: 500, image: '🌳', href: '/collectif' },
+  { id: '3', title: 'Réduis tes déchets', reward: 75, image: '♻️', href: '/aventure?tab=defis' },
+  { id: '4', title: 'Éco-Fact du jour', reward: 50, image: '📖', href: `/aventure/eco-fact/today` },
 ]
 
 export default function SeedsClient({ balance, transactions, subscription, currentDayKey }: SeedsClientProps) {
   const weeklyTotal = MOCK_WEEKLY_DATA.reduce((sum, day) => sum + day.seeds, 0)
-  const maxDailySeeds = Math.max(...MOCK_WEEKLY_DATA.map(d => d.seeds))
-  const factionAverage = 320 // Mock average
+  const maxDailySeeds = Math.max(...MOCK_WEEKLY_DATA.map(d => d.seeds), 1)
+  const [isHeaderSticky, setIsHeaderSticky] = useState(false)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const { scrollY } = useScroll()
+  const heroY = useTransform(scrollY, [0, 300], [0, -1])
+  const heroScale = useTransform(scrollY, [0, 300], [1, 0.8])
+  const heroOpacity = useTransform(scrollY, [0, 200], [1, 0])
 
-  const actionCards = [
-    {
-      id: 'daily-harvest',
-      title: 'Récolte Quotidienne',
-      description: 'Reviens chaque jour pour récolter tes graines',
-      reward: 50,
-      icon: Sprout,
-      href: `/adventure/daily-harvest/${currentDayKey}`,
-    },
-    {
-      id: 'eco-fact',
-      title: 'Eco-Fact du Jour',
-      description: 'Apprends et agis avec un fait écologique',
-      reward: 50,
-      icon: TrendingUp,
-      href: `/adventure/eco-fact/${currentDayKey}`,
-    },
-    {
-      id: 'challenges',
-      title: 'Défis Écologiques',
-      description: 'Complete des défis pour gagner plus',
-      reward: 500,
-      icon: Award,
-      href: '/adventure/defis',
-    },
-    {
-      id: 'faction',
-      title: 'Contribution Faction',
-      description: 'Soutiens ta faction et gagne des graines',
-      reward: 'Variable',
-      icon: Crown,
-      href: '/collectif',
-    },
-  ]
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 250) {
+        setIsHeaderSticky(true)
+      } else {
+        setIsHeaderSticky(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const treesEquivalent = Math.floor(balance / 500) // Mock calculation
 
   return (
     <div className="min-h-screen bg-[#0B0F15]">
-      <div className="relative">
-        {/* Back button */}
-        <div className="absolute left-5 top-8 sm:left-6 z-10">
-          <Link
-            href="/adventure"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            ←
-          </Link>
-        </div>
-
-        {/* Hero Section - Monumental Balance */}
-        <div className="relative h-[50vh] flex items-center justify-center px-5 pt-20">
-          <div className="text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+      {/* Sticky Header with Balance */}
+      <div className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        isHeaderSticky ? 'bg-[#0B0F15]/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
+      )}>
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link
+              href="/adventure"
+              className={cn(
+                'flex h-10 w-10 items-center justify-center rounded-full transition-colors',
+                isHeaderSticky ? 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white' : 'bg-transparent text-white/60 hover:bg-white/5'
+              )}
             >
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <Sprout className="h-8 w-8 text-lime-400" />
-                <span className="text-sm font-semibold text-white/60 uppercase tracking-wider">Solde actuel</span>
-              </div>
-              <h1 className="text-6xl sm:text-7xl font-black text-white tracking-tight mb-4">
-                {balance.toLocaleString('fr-FR')}
-              </h1>
-              <p className="text-lg text-white/60 font-medium">
-                +{weeklyTotal} cette semaine
-              </p>
-            </motion.div>
+              ←
+            </Link>
+            {isHeaderSticky && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2"
+              >
+                <span className="text-xl">✨</span>
+                <span className="text-lg font-bold text-white">{balance.toLocaleString('fr-FR')}</span>
+              </motion.div>
+            )}
+            <div className="w-10" />
           </div>
         </div>
+      </div>
 
-        {/* Content Section */}
-        <div className="relative z-10 -mt-20 bg-[#0B0F15] rounded-t-[3rem] border-t border-white/10 px-5 pb-32 pt-12 sm:px-6">
-          
-          {/* Analytics Chart - Apple Fitness Style */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
+      {/* Hero Section - The Sanctuary */}
+      <motion.div
+        ref={heroRef}
+        style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
+        className="relative min-h-[60vh] flex items-center justify-center px-6 pt-24"
+      >
+        {/* Radial Gradient Background */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[600px] h-[600px] rounded-full bg-amber-500/10 blur-[120px]" />
+        </div>
+
+        <div className="relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="mb-12"
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h2 className="text-2xl font-black text-white mb-6">Cette semaine</h2>
-            <div className="flex items-end justify-between gap-2 h-32 px-2">
-              {MOCK_WEEKLY_DATA.map((day, index) => {
-                const height = maxDailySeeds > 0 ? (day.seeds / maxDailySeeds) * 100 : 0
-                return (
-                  <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full flex-1 flex items-end justify-center">
-                      <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${height}%` }}
-                        transition={{ delay: 0.3 + (index * 0.05), duration: 0.5 }}
-                        className={cn(
-                          'w-full rounded-full transition-all',
-                          day.seeds > 0 ? 'bg-lime-400' : 'bg-white/10'
-                        )}
-                        style={{ minHeight: day.seeds > 0 ? '8px' : '4px' }}
-                      />
-                    </div>
-                    <span className="text-xs text-white/40 font-medium">{day.day}</span>
-                  </div>
-                )
-              })}
+            {/* Balance */}
+            <h1 className="text-7xl sm:text-8xl font-black text-white tracking-tight mb-6">
+              <span className="inline-block mr-2">✨</span>
+              {balance.toLocaleString('fr-FR')}
+            </h1>
+
+            {/* Glassmorphism Badge */}
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 backdrop-blur-xl border border-white/10">
+              <span className="text-lg">🌿</span>
+              <span className="text-sm font-medium text-white/80">
+                Ton impact équivaut à la plantation de ~{treesEquivalent} arbres
+              </span>
             </div>
-          </motion.section>
+          </motion.div>
+        </div>
+      </motion.div>
 
-          {/* Faction Comparison */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="mb-12"
-          >
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-white">Comparaison Faction</h3>
-                <span className={cn(
-                  'text-sm font-semibold',
-                  weeklyTotal > factionAverage ? 'text-lime-400' : 'text-white/60'
-                )}>
-                  {weeklyTotal > factionAverage ? 'Au-dessus de la moyenne !' : 'En dessous de la moyenne'}
-                </span>
-              </div>
-              <div className="space-y-3">
+      {/* Content Section */}
+      <div className="relative z-10 px-5 pb-32 pt-8 sm:px-6">
+        
+        {/* Quick Actions - Bento Layout */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="mb-12"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            {/* Card 1 - Faction Support */}
+            <Link
+              href="/collectif"
+              className="group relative block h-40 rounded-2xl bg-[#1C1C1E] border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
+            >
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-amber-600" />
+              <div className="p-5 h-full flex flex-col justify-between">
+                <div className="w-12 h-12 rounded-full bg-amber-400/10 flex items-center justify-center">
+                  <img src="/abeille-transparente.png" alt="Melli" className="w-8 h-8 object-contain" />
+                </div>
                 <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-white/60">Toi</span>
-                    <span className="text-white font-bold">{weeklyTotal}</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div
+                  <h3 className="font-bold text-white mb-1">Soutenir la faction</h3>
+                  <p className="text-xs text-white/50">Injecte des graines</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Card 2 - BioDex */}
+            <Link
+              href="/biodex"
+              className="group relative block h-40 rounded-2xl bg-[#151517] border border-white/10 overflow-hidden hover:border-lime-400/30 transition-all"
+            >
+              <div className="p-5 h-full flex flex-col justify-between">
+                <div className="w-12 h-12 rounded-full bg-lime-400/10 flex items-center justify-center">
+                  <PawPrint className="h-6 w-6 text-lime-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white mb-1">Évoluer le BioDex</h3>
+                  <p className="text-xs text-white/50">Découvre des espèces</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </motion.section>
+
+        {/* Weekly Tracker - Apple Fitness Style */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="mb-12"
+        >
+          <h2 className="text-xl font-bold text-white mb-6">Récolte de la semaine</h2>
+          <div className="flex items-end justify-between gap-3 h-16 px-2">
+            {MOCK_WEEKLY_DATA.map((day, index) => {
+              const height = day.seeds > 0 ? Math.max((day.seeds / maxDailySeeds) * 100, 20) : 4
+              return (
+                <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
+                  <div className="w-full flex-1 flex items-end justify-center">
+                    <motion.div
+                      initial={{ height: 0 }}
+                      animate={{ height: `${height}%` }}
+                      transition={{ delay: 0.4 + (index * 0.05), duration: 0.5 }}
                       className={cn(
-                        'h-full rounded-full transition-all',
-                        weeklyTotal > factionAverage ? 'bg-lime-400' : 'bg-white/30'
+                        'w-full rounded-full transition-all',
+                        day.isToday 
+                          ? 'bg-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.5)]' 
+                          : day.seeds > 0 
+                            ? 'bg-amber-400/30' 
+                            : 'bg-white/5'
                       )}
-                      style={{ width: `${Math.min((weeklyTotal / 500) * 100, 100)}%` }}
                     />
                   </div>
+                  <span className={cn(
+                    'text-xs font-medium',
+                    day.isToday ? 'text-white' : 'text-white/40'
+                  )}>{day.day}</span>
                 </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-white/60">Moyenne faction</span>
-                    <span className="text-white font-bold">{factionAverage}</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-white/30 rounded-full" style={{ width: `${Math.min((factionAverage / 500) * 100, 100)}%` }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.section>
+              )
+            })}
+          </div>
+        </motion.section>
 
-          {/* Interactive Action Cards */}
+        {/* Upsell Premium - Only if not subscribed */}
+        {!subscription && (
           <motion.section
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             className="mb-12"
           >
-            <h2 className="text-2xl font-black text-white mb-6">Gagner des graines</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {actionCards.map((card, index) => {
-                const Icon = card.icon
-                return (
-                  <Link
-                    key={card.id}
-                    href={card.href}
-                    className="group block"
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + (index * 0.05), duration: 0.4 }}
-                      className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-all hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98]"
+            <div className="relative rounded-2xl bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-amber-600" />
+              <div className="p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-white mb-2">
+                      Passe en Pollinisateur+ et double ton impact
+                    </h3>
+                    <p className="text-sm text-white/60 mb-4">
+                      Tes {balance.toLocaleString('fr-FR')} graines vaudraient {(balance * 2).toLocaleString('fr-FR')}
+                    </p>
+                    <Link
+                      href="/abonnement"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-400 text-black font-bold text-sm hover:bg-amber-300 transition-colors shadow-[0_0_20px_rgba(251,191,36,0.4)]"
                     >
-                      <div className="flex items-start gap-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-lime-400/10 text-lime-400 group-hover:bg-lime-400/20">
-                          <Icon className="h-6 w-6" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-white mb-1">{card.title}</h3>
-                          <p className="text-sm text-white/60 mb-2 line-clamp-2">{card.description}</p>
-                          <div className="flex items-center gap-1 text-xs font-semibold text-lime-400">
-                            <span>+{card.reward}</span>
-                            <Sprout className="h-3 w-3" />
-                          </div>
-                        </div>
-                        <ChevronRight className="h-5 w-5 text-white/30 group-hover:text-white/60 transition-colors" />
-                      </div>
-                    </motion.div>
-                  </Link>
-                )
-              })}
+                      <Zap className="h-4 w-4" />
+                      Découvrir
+                    </Link>
+                  </div>
+                  <Crown className="h-8 w-8 text-amber-400/50" />
+                </div>
+              </div>
             </div>
           </motion.section>
+        )}
 
-          {/* History Timeline */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="mb-12"
-          >
-            <h2 className="text-2xl font-black text-white mb-6">Historique</h2>
-            <div className="space-y-3">
-              {transactions.slice(0, 5).map((transaction, index) => (
+        {/* Challenge Carousel - Horizontal Scroll */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mb-12"
+        >
+          <h2 className="text-xl font-bold text-white mb-6">Gagner plus de graines</h2>
+          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+            {MOCK_CHALLENGE_POSTERS.map((poster, index) => (
+              <Link
+                key={poster.id}
+                href={poster.href}
+                className="flex-shrink-0 w-48 snap-start"
+              >
                 <motion.div
-                  key={transaction.id}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + (index * 0.05), duration: 0.4 }}
-                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-4"
+                  className="relative h-64 rounded-2xl overflow-hidden bg-gradient-to-b from-white/10 to-black border border-white/10 group"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      'flex h-10 w-10 items-center justify-center rounded-full',
-                      transaction.delta > 0 ? 'bg-lime-400/10 text-lime-400' : 'bg-red-400/10 text-red-400'
-                    )}>
-                      {transaction.delta > 0 ? (
-                        <TrendingUp className="h-5 w-5" />
-                      ) : (
-                        <Clock className="h-5 w-5" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-white text-sm">{transaction.label}</p>
-                      <p className="text-xs text-white/40">
-                        {new Date(transaction.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
-                      </p>
-                    </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-6xl">{poster.image}</span>
                   </div>
-                  <span className={cn(
-                    'font-bold text-sm',
-                    transaction.delta > 0 ? 'text-lime-400' : 'text-red-400'
-                  )}>
-                    {transaction.delta > 0 ? '+' : ''}{transaction.delta}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.section>
-
-          {/* Achievements Section */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="mb-12"
-          >
-            <h2 className="text-2xl font-black text-white mb-6">Achievements</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {MOCK_ACHIEVEMENTS.map((achievement, index) => (
-                <motion.div
-                  key={achievement.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 + (index * 0.05), duration: 0.4 }}
-                  className={cn(
-                    'rounded-2xl border p-5 transition-all',
-                    achievement.unlocked 
-                      ? 'border-lime-400/30 bg-lime-400/5' 
-                      : 'border-white/10 bg-white/5 opacity-60'
-                  )}
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-3xl">{achievement.emoji}</span>
-                    <div className="flex-1">
-                      <h3 className={cn(
-                        'font-bold mb-1',
-                        achievement.unlocked ? 'text-white' : 'text-white/60'
-                      )}>
-                        {achievement.name}
-                      </h3>
-                      <p className="text-xs text-white/40 mb-3">{achievement.description}</p>
-                      {!achievement.unlocked && (
-                        <div className="space-y-1">
-                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-white/30 rounded-full"
-                              style={{ width: `${(achievement.progress / achievement.target) * 100}%` }}
-                            />
-                          </div>
-                          <p className="text-[10px] text-white/40">
-                            {achievement.progress.toLocaleString('fr-FR')} / {achievement.target.toLocaleString('fr-FR')}
-                          </p>
-                        </div>
-                      )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="font-bold text-white mb-1">{poster.title}</h3>
+                    <div className="flex items-center gap-1 text-xs font-semibold text-lime-400">
+                      <span>+{poster.reward}</span>
+                      <Sprout className="h-3 w-3" />
                     </div>
                   </div>
                 </motion.div>
-              ))}
-            </div>
-          </motion.section>
+              </Link>
+            ))}
+          </div>
+        </motion.section>
 
-          {/* Subscription Section */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.6 }}
-          >
-            {subscription ? (
-              <div className="rounded-3xl border border-lime-400/30 bg-gradient-to-br from-lime-400/10 to-transparent p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-lime-400/20 text-lime-400">
-                    <Zap className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">Abonnement {subscription.plan_type}</h3>
-                    <p className="text-sm text-white/60">Actif jusqu'au {new Date(subscription.current_period_end || '').toLocaleDateString('fr-FR')}</p>
-                  </div>
+        {/* History - Edge to Edge List */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+        >
+          <h2 className="text-xl font-bold text-white mb-6">Mon carnet de route</h2>
+          <div className="border-t border-b border-white/5 divide-y divide-white/5">
+            {transactions.slice(0, 10).map((transaction, index) => (
+              <motion.div
+                key={transaction.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 + (index * 0.03), duration: 0.3 }}
+                className="flex items-center justify-between py-4"
+              >
+                <div className="flex-1">
+                  <p className="font-semibold text-white text-sm">{transaction.label}</p>
+                  <p className="text-xs text-[#8E8E93]">
+                    • Il y a {Math.floor((Date.now() - new Date(transaction.createdAt).getTime()) / (1000 * 60 * 60))}h
+                  </p>
                 </div>
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-lime-400" />
-                    <span className="text-white/80"><span className="font-bold text-lime-400">Boost d'Impact x2</span> sur tous les gains</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-lime-400" />
-                    <span className="text-white/80">Allocation mensuelle: <span className="font-bold text-lime-400">{subscription.monthly_points_allocation} graines</span></span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-lime-400" />
-                    <span className="text-white/80">Halo Premium autour de l'avatar</span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-400/10 text-amber-400">
-                    <Crown className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">Passe à l'abonnement</h3>
-                    <p className="text-sm text-white/60">Maximise ton impact</p>
-                  </div>
-                </div>
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-amber-400" />
-                    <span className="text-white/80"><span className="font-bold text-amber-400">Boost d'Impact x2</span> sur tous les gains</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-amber-400" />
-                    <span className="text-white/80">Allocation mensuelle: <span className="font-bold text-amber-400">1200 graines</span></span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="h-2 w-2 rounded-full bg-amber-400" />
-                    <span className="text-white/80">Halo Premium exclusif</span>
-                  </div>
-                </div>
-                <Link
-                  href="/abonnement"
-                  className="block w-full rounded-xl bg-amber-400 py-3 text-center font-bold text-black transition-colors hover:bg-amber-300"
-                >
-                  Découvrir l'abonnement
-                </Link>
-              </div>
-            )}
-          </motion.section>
-        </div>
+                <span className={cn(
+                  'font-bold text-sm ml-4',
+                  transaction.delta > 0 ? 'text-[#32D74B]' : 'text-white/60'
+                )}>
+                  {transaction.delta > 0 ? '+ ' : ''}{transaction.delta} ✨
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
       </div>
     </div>
   )
