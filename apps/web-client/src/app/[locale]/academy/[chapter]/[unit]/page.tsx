@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
-import { X, Check, ArrowRight, RefreshCcw, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, Check, ArrowRight, RefreshCcw, ChevronLeft, ChevronRight, Heart, HeartCrack, Droplet } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { cn } from '@/lib/utils'
@@ -105,7 +105,7 @@ function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, 
               : 'bg-white/5 border-white/10 opacity-50'
         )}
       >
-        <span className="text-base leading-none select-none">❤️</span>
+        <Heart className="w-4 h-4 fill-current shrink-0" />
         <span className={cn(
           'text-sm font-black tabular-nums leading-none',
           lives >= 3 ? 'text-red-400' : lives >= 1 ? 'text-amber-400' : 'text-white/30'
@@ -233,7 +233,9 @@ function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResul
           onDragEnd={handleDragEnd}
           className="absolute inset-0 bg-cover bg-center border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
         >
-          <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full mb-8 flex items-center justify-center text-5xl border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.2)]">💧</div>
+          <div className="w-24 h-24 bg-blue-500/10 backdrop-blur-md rounded-full mb-8 flex items-center justify-center border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+            <Droplet className="w-12 h-12 text-blue-400 fill-blue-400" />
+          </div>
           <h3 className="text-2xl font-black text-white text-center">L'Eau Douce</h3>
           <p className="text-white/70 text-center text-sm mt-2 mb-auto">Source de toute vie</p>
           <div className="mt-auto flex justify-between w-full text-xs font-bold text-white uppercase tracking-widest bg-black/40 px-4 py-3 rounded-2xl backdrop-blur-md border border-white/10">
@@ -485,9 +487,9 @@ function GameOverScreen({ onQuit }: { onQuit: () => void }) {
         initial={{ scale: 0, rotate: -20 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: 'spring', bounce: 0.5 }}
-        className="text-8xl mb-6 select-none"
+        className="text-red-500 mb-8 drop-shadow-[0_0_30px_rgba(239,68,68,0.3)]"
       >
-        💔
+        <HeartCrack className="w-24 h-24" />
       </motion.div>
 
       <motion.h2
@@ -516,7 +518,7 @@ function GameOverScreen({ onQuit }: { onQuit: () => void }) {
         className="flex gap-2 mb-12"
       >
         {Array.from({ length: 5 }).map((_, i) => (
-          <span key={i} className="text-2xl opacity-20 grayscale">❤️</span>
+          <Heart key={i} className="w-6 h-6 fill-current text-white opacity-20" />
         ))}
       </motion.div>
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Check, Flame, Sprout, Crown, BookOpen, ChevronDown } from 'lucide-react'
+import { Lock, Check, Flame, Sprout, Crown, BookOpen, ChevronDown, Unlock, Trophy } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter, Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -305,7 +305,9 @@ export default function AcademyPage() {
           {/* Chapter banner */}
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden flex flex-col items-center">
             <div className="absolute top-0 right-0 p-4 z-10">
-              <span className="text-sm font-bold text-white/80 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm">2/4 👑</span>
+              <span className="text-sm font-bold text-white/80 bg-black/40 px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1.5">
+                2/4 <Crown className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+              </span>
             </div>
             <div className="w-24 h-24 mb-4 relative z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
               <Image src="/abeille-transparente.png" alt="Melli" fill className="object-contain" />
@@ -392,12 +394,12 @@ export default function AcademyPage() {
                       </h3>
                     </div>
                     <div className={cn(
-                      'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl',
+                      'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0',
                       chapterDone
                         ? 'bg-indigo-500/20 border border-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.3)]'
                         : 'bg-white/5 border border-white/10'
                     )}>
-                      {chapterDone && nextChapter ? '🔓' : chapterDone ? '🏆' : '🔒'}
+                      {chapterDone && nextChapter ? <Unlock className="w-5 h-5 text-indigo-400" /> : chapterDone ? <Trophy className="w-5 h-5 text-yellow-400" /> : <Lock className="w-5 h-5 text-white/40" />}
                     </div>
                   </div>
 
