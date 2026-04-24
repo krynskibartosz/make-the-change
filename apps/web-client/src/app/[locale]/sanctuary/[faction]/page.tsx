@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
+import { connection } from 'next/server'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
 import { getFactionContributionByKey, getFactionContributions } from '@/lib/mock/mock-factions'
-import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getCurrentViewer } from '@/lib/mock/mock-session-server'
+import { isMockDataSource } from '@/lib/mock/data-source'
 import type { Faction } from '@/lib/mock/types'
 import type { FactionThemeKey } from '@/lib/faction-theme'
 
@@ -44,9 +46,10 @@ export async function generateMetadata({ params }: SanctuaryPageProps): Promise<
 }
 
 export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
+  await connection()
   const { faction: factionKey } = await params
-  const session = getClientMockViewerSession()
-  const initialFaction: Faction | null = session?.faction ?? null
+  const currentViewer = isMockDataSource ? await getCurrentViewer() : null
+  const initialFaction: Faction | null = currentViewer?.faction ?? null
   const factionConfig = FACTION_CONFIG[factionKey]
   
   if (!factionConfig) {
