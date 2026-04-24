@@ -76,7 +76,7 @@ const EMPTY_MONTHLY_QUEST: MockMonthlyQuestOverview = {
 const FACTION_CONTENT = {
   neutral: {
     title: "Les Défis Quotidiens",
-    mascotImg: '/images/logo-icon-bee.png',
+    mascotImg: '/abeille-transparente.png',
   },
   pollinisateurs: {
     title: 'Quête de Melli',
@@ -125,7 +125,7 @@ export function AdventureChallenges({
   const accentTheme = getFactionTheme(initialFaction)
   const factionTheme = {
     title: initialFaction ? FACTION_CONTENT[contentKey].title : "Les Défis Quotidiens",
-    mascotImg: initialFaction ? FACTION_CONTENT[contentKey].mascotImg : undefined,
+    mascotImg: FACTION_CONTENT[contentKey].mascotImg || '/abeille-transparente.png',
     accentBg: accentTheme.accentBg,
     accentText: accentTheme.accentText,
     badgeBg: accentTheme.badgeClassName,
@@ -253,18 +253,16 @@ export function AdventureChallenges({
           </p>
         </div>
 
-        {initialFaction && (
-          <div className='absolute bottom-0 right-[-10px] z-10 h-40 w-40 opacity-90'>
-            <img
-              src={factionTheme.mascotImg || '/images/logo-icon-bee.png'}
-              alt={factionTheme.title}
-              className='h-full w-full object-contain object-bottom drop-shadow-2xl'
-              onError={(event) => {
-                event.currentTarget.style.display = 'none'
-              }}
-            />
-          </div>
-        )}
+        <div className='absolute bottom-0 right-[-10px] z-10 h-40 w-40 opacity-90'>
+          <img
+            src={factionTheme.mascotImg}
+            alt={factionTheme.title}
+            className='h-full w-full object-contain object-bottom drop-shadow-2xl'
+            onError={(event) => {
+              event.currentTarget.style.display = 'none'
+            }}
+          />
+        </div>
       </div>
 
       <div className='relative z-30 -mt-12 mb-8 px-4'>
