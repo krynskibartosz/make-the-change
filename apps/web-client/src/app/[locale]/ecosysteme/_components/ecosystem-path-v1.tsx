@@ -435,12 +435,14 @@ export function PerspectiveTabs({
   perspective: EcosystemPerspective
   onChange: (nextPerspective: EcosystemPerspective) => void
 }) {
-  const perspectives = Object.entries(PERSPECTIVE_COPY) as Array<
+  const perspectives = Object.entries(PERSPECTIVE_COPY).filter(
+    ([key]) => key !== 'faction'
+  ) as Array<
     [EcosystemPerspective, (typeof PERSPECTIVE_COPY)[EcosystemPerspective]]
   >
 
   return (
-    <div className="grid grid-cols-4 gap-1 rounded-2xl border border-white/10 bg-white/[0.035] p-1">
+    <div className="grid grid-cols-3 gap-1 rounded-2xl border border-white/10 bg-white/[0.035] p-1">
       {perspectives.map(([key, copy]) => {
         const Icon = PERSPECTIVE_ICONS[key]
         const isActive = perspective === key

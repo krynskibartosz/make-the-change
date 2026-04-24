@@ -4,6 +4,7 @@ import { Button } from '@make-the-change/core/ui'
 import {
   ChevronLeft,
   RotateCcw,
+  Users,
   type LucideIcon,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -12,11 +13,9 @@ import { useEcosystem } from '@/hooks/use-ecosystem'
 import {
   DEFAULT_ECOSYSTEM_ID,
   ECOSYSTEMS,
-  FACTION_COPY,
   PERSPECTIVE_COPY,
   type EcosystemDefinition,
   type EcosystemEdge,
-  type EcosystemFactionKey,
   type EcosystemNode,
   type EcosystemPerspective,
   type EcosystemStatus,
@@ -29,7 +28,6 @@ import {
   PerspectiveTabs,
   ContextPanel,
   SpeciesStrip,
-  FactionPanel,
   LEVEL_Y,
   buildPathPoints,
   getNodeVisual,
@@ -115,8 +113,8 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
     router.push('/ecosysteme')
   }
 
-  function handleFactionSelect(ecosystemId: string) {
-    router.push(`/ecosysteme/${ecosystemId}?perspective=faction`)
+  function handleGoToFactions() {
+    router.push('/ecosysteme/factions')
   }
 
   return (
@@ -134,6 +132,17 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
               icon={<ChevronLeft className="h-4 w-4" />}
               shimmer={false}
               onClick={handleBack}
+            />
+            
+            <Button
+              type="button"
+              variant="glass"
+              size="icon"
+              className="h-10 w-10 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
+              aria-label="Explorer par faction"
+              icon={<Users className="h-4 w-4" />}
+              shimmer={false}
+              onClick={handleGoToFactions}
             />
             
             <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -205,15 +214,6 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
             ) : null}
           </div>
 
-          {/* FactionPanel conditionnel */}
-          {perspective === 'faction' ? (
-            <div className="mt-4">
-              <FactionPanel
-                activeFaction={ecosystem.factionFocus}
-                onSelectEcosystem={handleFactionSelect}
-              />
-            </div>
-          ) : null}
         </header>
 
         {/* Visualisation principale */}
