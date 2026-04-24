@@ -189,11 +189,11 @@ function UnitNode({
             'active:translate-y-[8px] active:shadow-none',
           ],
           
-          // Completed: Solid emerald tone, less prominent than active
+          // Completed: Golden mastery tone
           isCompleted && [
-            'bg-gradient-to-b from-emerald-500 to-emerald-700',
-            'shadow-[0_8px_0_#064e3b]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b]',
+            'bg-gradient-to-b from-yellow-400 to-amber-500',
+            'shadow-[0_8px_0_#b45309]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#b45309]',
             'active:translate-y-[8px] active:shadow-none',
           ],
           
@@ -213,7 +213,7 @@ function UnitNode({
         )}
 
         {isActive    && <Flame className="w-10 h-10 text-white fill-white drop-shadow-md" />}
-        {isCompleted && <Check className="w-10 h-10 text-emerald-100 drop-shadow-md" strokeWidth={4} />}
+        {isCompleted && <Crown className="w-9 h-9 text-white fill-white drop-shadow-md" />}
         {isLocked    && <Lock  className="w-8 h-8 text-white/20" />}
       </button>
 
