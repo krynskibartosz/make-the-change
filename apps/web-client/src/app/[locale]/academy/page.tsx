@@ -267,31 +267,33 @@ export default function AcademyPage() {
 
       <div className="relative z-10">
         {/* ── HEADER ───────────────────────────────────────────────── */}
-        <header className="fixed top-0 w-full z-40 backdrop-blur-md bg-white/5 border-b border-white/5 p-4 flex justify-between items-center pt-[max(1rem,env(safe-area-inset-top))]">
-          <Link href="/academy/chapters" className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-95 group">
-            <BookOpen className="w-4 h-4 text-emerald-400 shrink-0" />
-            <div className="flex flex-col leading-none">
-              <span className="text-[9px] font-medium text-white/40 uppercase tracking-widest">Section</span>
-              <span className="text-xs font-black text-white">Chapitre 1</span>
-            </div>
-            <ChevronDown className="w-3.5 h-3.5 text-white/40 group-hover:text-white/70 transition-colors" />
+        <header className="fixed top-0 w-full z-40 backdrop-blur-md bg-white/5 border-b border-white/5 px-4 flex justify-between items-center pt-[max(0.75rem,env(safe-area-inset-top))] pb-2.5">
+
+          {/* Left: chapter navigator */}
+          <Link href="/academy/chapters" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-95 group">
+            <BookOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <span className="text-[11px] font-black text-white leading-none">Chapitre 1</span>
+            <ChevronDown className="w-3 h-3 text-white/40 group-hover:text-white/70 transition-colors" />
           </Link>
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
-              <Crown className="w-5 h-5 fill-indigo-400/20" />
+          {/* Center: streak + seeds */}
+          <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10">
+              <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
+              <span className="text-[11px] font-bold text-white">12 j</span>
             </div>
-            <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
-              <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
-              <span className="text-sm font-bold text-white">12 j</span>
-            </div>
+            <Link href="/seeds" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
+              <Sprout className="h-3.5 w-3.5 text-lime-400" />
+              <span className="text-[11px] font-bold text-white tabular-nums">2 450</span>
+            </Link>
           </div>
 
-          <Link href="/seeds" prefetch={false} className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 transition-transform hover:scale-105 active:scale-95">
-            <Sprout className="h-3.5 w-3.5 text-lime-400" />
-            <span className="text-xs font-bold text-white tabular-nums">2 450</span>
-          </Link>
+          {/* Right: premium / subscription */}
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
+            <Crown className="w-4 h-4 fill-indigo-400/20" />
+          </div>
         </header>
+
 
         {/* ── MAIN ─────────────────────────────────────────────────── */}
         <main className="pt-[calc(6rem+env(safe-area-inset-top))] px-6">

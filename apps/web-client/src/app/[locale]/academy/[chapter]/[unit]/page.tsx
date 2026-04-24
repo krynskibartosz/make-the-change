@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, useAnimation, useMotionValue, useTransform } from 'framer-motion'
-import { X, Check, ArrowRight, RefreshCcw } from 'lucide-react'
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
+import { X, Check, ArrowRight, RefreshCcw, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { cn } from '@/lib/utils'
 import { DndContext, useDraggable, useDroppable, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor, closestCenter } from '@dnd-kit/core'
 import Image from 'next/image'
+import confetti from 'canvas-confetti'
 
 // --- MOCK DATA (L'Unité 1.1: Les Forges de la Vie) ---
 const unitData = {
@@ -205,35 +206,31 @@ function SwipeExercise({ exercise, onResult }: { exercise: any, onResult: (corre
   }
 
   return (
-    <div className="w-full h-full relative bg-[#05050A] flex flex-col items-center justify-center p-6 overflow-hidden">
+    <div className="w-full h-full relative bg-[#05050A] flex flex-col items-center justify-center p-6 pt-28 overflow-hidden">
       <motion.div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: bgCorrect }} />
       <motion.div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: bgWrong }} />
 
-      <h2 className="text-2xl font-bold text-white text-center mb-16 relative z-10">{exercise.question}</h2>
+      <h2 className="text-xl font-bold text-white text-center mb-10 relative z-10">{exercise.question}</h2>
 
       <div className="relative w-full max-w-sm aspect-[3/4]">
-        {/* Next Card preview */}
         <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-3xl scale-95 translate-y-4" />
 
-        {/* Draggable Card */}
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          style={{ x, rotate, opacity }}
-          onDragEnd={handleDragEnd}
-          className="absolute inset-0 bg-cover bg-center border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
-          // Utilisation d'une belle image placeholder pour la carte
           style={{
             x, rotate, opacity,
             backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1000&auto=format&fit=crop')`
           }}
+          onDragEnd={handleDragEnd}
+          className="absolute inset-0 bg-cover bg-center border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
         >
           <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full mb-8 flex items-center justify-center text-5xl border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.2)]">💧</div>
           <h3 className="text-2xl font-black text-white text-center">L'Eau Douce</h3>
           <p className="text-white/70 text-center text-sm mt-2 mb-auto">Source de toute vie</p>
           <div className="mt-auto flex justify-between w-full text-xs font-bold text-white uppercase tracking-widest bg-black/40 px-4 py-3 rounded-2xl backdrop-blur-md border border-white/10">
-            <span className="text-red-400">← {exercise.carte_gauche.nom}</span>
-            <span className="text-emerald-400">{exercise.carte_droite.nom} →</span>
+            <span className="text-red-400 flex items-center gap-1"><ChevronLeft className="w-3.5 h-3.5" />{exercise.carte_gauche.nom}</span>
+            <span className="text-emerald-400 flex items-center gap-1">{exercise.carte_droite.nom}<ChevronRight className="w-3.5 h-3.5" /></span>
           </div>
         </motion.div>
       </div>
@@ -320,11 +317,11 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
   const isComplete = Object.values(slots).every(Boolean)
 
   return (
-    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-hidden">
-      <h2 className="text-xl font-bold text-white text-center mb-8">{exercise.consigne}</h2>
+    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-28 overflow-y-auto pb-40">
+      <h2 className="text-xl font-bold text-white text-center mb-8 shrink-0">{exercise.consigne}</h2>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <div className="flex-1 flex flex-col items-center max-w-sm mx-auto w-full">
+        <div className="flex flex-col items-center max-w-sm mx-auto w-full">
           {/* Slots */}
           <div className="w-full flex flex-col items-center mb-8">
             <DroppableSlot id="slot_0" index={0} item={slots.slot_0} />
@@ -342,7 +339,7 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
       </DndContext>
 
       {isComplete && (
-        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="absolute bottom-6 inset-x-6 flex gap-4">
+        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="sticky bottom-0 mt-8 flex gap-4">
           <button onClick={handleReset} className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0">
             <RefreshCcw className="w-6 h-6" />
           </button>
@@ -393,23 +390,38 @@ function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correc
 function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: boolean, feedback: string, mascotte: string, onNext: () => void }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      className={cn(
-        "absolute inset-0 z-[100] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]",
-        correct ? "bg-emerald-500" : "bg-red-500"
-      )}
+      exit={{ opacity: 0, y: 60 }}
+      transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+      className="absolute inset-x-0 bottom-0 z-[100] rounded-t-3xl border-t border-white/10 shadow-2xl p-6 pb-[max(2rem,env(safe-area-inset-bottom))]"
+      style={{
+        background: correct
+          ? 'linear-gradient(to top, rgba(16,185,129,0.15), rgba(5,5,10,0.98))'
+          : 'linear-gradient(to top, rgba(239,68,68,0.1), rgba(5,5,10,0.98))'
+      }}
     >
-      <div className={cn("relative w-40 h-40 mb-8 transition-all duration-500", !correct && "grayscale sepia opacity-80 scale-95")}>
-        <Image src={`/${mascotte}.png`} alt="Mascotte" fill className="object-contain drop-shadow-2xl" />
+      <div className="flex items-center gap-4 mb-4">
+        {/* Mascotte compacte */}
+        <div className={cn('relative w-14 h-14 shrink-0', !correct && 'grayscale opacity-60')}>
+          <Image src={`/${mascotte}.png`} alt="Mascotte" fill className="object-contain" />
+        </div>
+        <div>
+          <p className={cn('text-lg font-black', correct ? 'text-emerald-400' : 'text-red-400')}>
+            {correct ? 'Excellent !' : 'Pas tout à fait...'}
+          </p>
+          <p className="text-white/70 text-sm leading-snug">{feedback}</p>
+        </div>
       </div>
-      <h2 className="text-4xl font-black text-black mb-4">{correct ? "Excellent !" : "Aïe !"}</h2>
-      <p className="text-black/80 text-xl font-medium mb-16">{feedback}</p>
 
       <button
         onClick={onNext}
-        className="mt-auto w-full bg-black text-white text-xl font-black rounded-3xl py-6 shadow-2xl active:scale-95 transition-transform"
+        className={cn(
+          'w-full font-black text-lg rounded-2xl py-5 shadow-lg active:scale-95 transition-transform mt-2',
+          correct
+            ? 'bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]'
+            : 'bg-white/10 text-white border border-white/20'
+        )}
       >
         CONTINUER
       </button>
@@ -543,7 +555,7 @@ export default function ExerciseEngine() {
 
       <div className="flex-1 w-full h-full relative">
         <AnimatePresence mode="wait">
-          <motion.div
+          {currentExercise && <motion.div
             key={currentExercise.id}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -551,6 +563,7 @@ export default function ExerciseEngine() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="absolute inset-0"
           >
+
             {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
             {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} />}
             {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} />}
