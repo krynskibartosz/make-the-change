@@ -58,24 +58,37 @@ const unitData = {
 
 // --- COMPONENTS ---
 
-function ExerciseHeader({ progress, onQuit }: { progress: number, onQuit: () => void }) {
-  const segments = unitData.exercices.length
+function ExerciseHeader({ progress, total, onQuit }: { progress: number, total: number, onQuit: () => void }) {
   return (
     <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4">
       <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
         <X className="w-6 h-6" />
       </button>
       <div className="flex-1 flex gap-1.5 h-3">
-        {Array.from({ length: segments }).map((_, i) => (
-          <div key={i} className="flex-1 h-full rounded-full bg-white/10 overflow-hidden">
-            <motion.div 
-              className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"
-              initial={{ width: 0 }}
-              animate={{ width: progress > i ? '100%' : '0%' }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-        ))}
+        {Array.from({ length: total }).map((_, i) => {
+          const isCompleted = progress > i
+          const isActive = progress === i
+          
+          return (
+            <div key={i} className="flex-1 h-full rounded-full bg-white/10 overflow-hidden relative">
+              {/* Pulse effect for active step */}
+              {isActive && (
+                <motion.div 
+                  className="absolute inset-0 bg-emerald-500/30"
+                  animate={{ opacity: [0.3, 0.8, 0.3] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+              )}
+              {/* Completed fill */}
+              <motion.div 
+                className="absolute inset-0 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] origin-left"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: isCompleted ? 1 : 0 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+              />
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -326,10 +339,10 @@ function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correc
   }
 
   return (
-    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32">
-      <h2 className="text-2xl font-black text-white text-center mb-12">{exercise.question}</h2>
+    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-y-auto pb-24">
+      <h2 className="text-2xl font-black text-white text-center mb-12 shrink-0">{exercise.question}</h2>
       
-      <div className="flex flex-col gap-4 mt-auto mb-16">
+      <div className="flex flex-col gap-4 mt-auto">
         {exercise.options.map((opt: any, index: number) => (
           <button 
             key={index}
@@ -411,6 +424,7 @@ export default function ExerciseEngine() {
   const router = useRouter()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [feedback, setFeedback] = useState<{ show: boolean, correct: boolean, text: string } | null>(null)
+  const [showQuitModal, setShowQuitModal] = useState(false)
   
   const currentExercise = unitData.exercices[currentStepIndex]
   const isFinished = currentStepIndex >= unitData.exercices.length
@@ -426,10 +440,8 @@ export default function ExerciseEngine() {
     }
   }
 
-  const handleQuit = () => {
-    if (confirm("Tu vas perdre ta progression ! Es-tu sûr ?")) {
-      router.push('/academy')
-    }
+  const confirmQuit = () => {
+    router.push('/academy')
   }
 
   if (isFinished) {
@@ -437,19 +449,67 @@ export default function ExerciseEngine() {
   }
 
   return (
-    <div className="fixed inset-0 bg-[#05050A] flex flex-col overflow-hidden overscroll-none touch-none">
-      <ExerciseHeader progress={currentStepIndex} onQuit={handleQuit} />
+    <div className="fixed inset-0 bg-[#05050A] flex flex-col overflow-hidden overscroll-none">
+      <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} />
       
       <div className="flex-1 w-full h-full relative">
-        {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
-        {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} />}
-        {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} />}
-        {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} />}
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={currentExercise.id}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="absolute inset-0"
+          >
+            {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
+            {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} />}
+            {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} />}
+            {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} />}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <AnimatePresence>
         {feedback?.show && (
           <FeedbackScreen correct={feedback.correct} feedback={feedback.text} onNext={handleNextStep} />
+        )}
+        
+        {showQuitModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-[#111116] border border-white/10 rounded-3xl p-8 w-full max-w-sm text-center shadow-2xl"
+            >
+              <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <X className="w-8 h-8 text-red-500" />
+              </div>
+              <h3 className="text-2xl font-black text-white mb-4">Quitter l'entraînement ?</h3>
+              <p className="text-white/60 mb-8 font-medium">Toute ta progression dans cette unité sera perdue. Es-tu sûr de vouloir abandonner ?</p>
+              
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={() => setShowQuitModal(false)}
+                  className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 active:scale-95 transition-transform"
+                >
+                  NON, JE CONTINUE
+                </button>
+                <button 
+                  onClick={confirmQuit}
+                  className="w-full bg-red-500/20 text-red-500 font-bold rounded-2xl py-4 active:scale-95 transition-transform"
+                >
+                  OUI, QUITTER
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
