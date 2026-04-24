@@ -147,7 +147,11 @@ function mapSpeciesContext(data: unknown): SpeciesContext | null {
     associated_challenges: mapArray(data.associated_challenges, mapAssociatedChallenge),
     user_status: mapUserSpeciesStatus(data.user_status),
     habitat: asStringArray(data.habitat),
-    threats: asStringArray(data.threats)
+    threats: asStringArray(data.threats),
+    weight: toNullableString(data.weight),
+    size: toNullableString(data.size),
+    origin_country: toNullableString(data.origin_country),
+    diet: toNullableString(data.diet)
   }
 }
 

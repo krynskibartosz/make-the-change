@@ -9,6 +9,7 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import type { Faction } from '@/lib/mock/types'
 import type { FactionThemeKey } from '@/lib/faction-theme'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
+import { BackButton } from '@/components/back-button'
 import { SanctuaryHero } from './_components/sanctuary-hero'
 import { SanctuaryContent } from './_components/sanctuary-content'
 
@@ -76,12 +77,7 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
       <div className="relative min-h-screen">
         {/* Back button */}
         <div className="absolute left-5 top-8 sm:left-6 z-10">
-          <Link
-            href="/collectif"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            ←
-          </Link>
+          <BackButton />
         </div>
 
         <SanctuaryHero

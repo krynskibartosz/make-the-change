@@ -180,6 +180,10 @@ export interface SpeciesContext {
   // Additional fields
   habitat?: string[] | null
   threats?: string[] | null
+  weight?: string | null
+  size?: string | null
+  origin_country?: string | null
+  diet?: string | null
 }
 
 export interface AssociatedProject {

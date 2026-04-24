@@ -1,10 +1,16 @@
-import { Leaf, Lock, Sprout } from 'lucide-react'
+import { Leaf, BookOpen } from 'lucide-react'
+import Link from 'next/link'
 import { getSpeciesContext } from '@/lib/api/species-context.service'
 import { BackButton } from '@/components/back-button'
-import { SpeciesInfoCard } from '@/components/biodex/species-info-card'
-import { AccordionSection } from '@/components/biodex/accordion-section'
-import { HabitatList } from '@/components/biodex/habitat-list'
-import { ThreatList } from '@/components/biodex/threat-list'
+import { EvolutionTimeline } from '@/components/biodex/evolution-timeline'
+import { BentoGrid } from '@/components/biodex/bento-grid'
+import { SizeWeightWidget } from '@/components/biodex/bento-size-weight'
+import { OriginWidget } from '@/components/biodex/bento-origin'
+import { DietWidget } from '@/components/biodex/bento-diet'
+import { IUCNWidget } from '@/components/biodex/bento-iucn'
+import { HabitatCarousel } from '@/components/biodex/habitat-carousel'
+import { ThreatTags } from '@/components/biodex/threat-tags'
+import { EvolutionCard } from '@/components/biodex/evolution-card'
 
 const REQUIRED_SEEDS = 500
 
@@ -39,87 +45,72 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
 
         <section className="mt-4">
           <div className="relative flex aspect-square w-full items-center justify-center">
-            <div className="absolute inset-0 mx-auto h-3/4 w-3/4 rounded-full bg-emerald-500/20 blur-[100px]" />
+            <div className="absolute inset-0 mx-auto h-3/4 w-3/4 rounded-full bg-emerald-500/10 blur-[100px]" />
             <img
               src={species.image_url || '/images/diaromas/abeille noire.png'}
               alt={species.name_default}
-              className="z-10 h-64 w-64 rounded-full object-cover drop-shadow-2xl"
+              className="z-10 h-64 w-64 object-cover drop-shadow-2xl"
             />
           </div>
         </section>
 
         <section className="mt-2 text-center">
-          <div className="mx-auto mb-3 w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white/70">
-            Niveau {species.user_status?.progressionLevel ?? 1}
-          </div>
+          <EvolutionTimeline currentLevel={species.user_status?.progressionLevel ?? 1} />
           <h1 className="text-center text-3xl font-black text-white">{species.name_default}</h1>
           <p className="mt-2 px-8 text-center text-sm text-white/50">
             {species.description_default}
           </p>
         </section>
 
-        {/* Species Info Card - Scientific Name & IUCN Status */}
-        {species.scientific_name && species.conservation_status && (
-          <SpeciesInfoCard
-            scientificName={species.scientific_name}
-            conservationStatus={species.conservation_status}
-          />
-        )}
+        {/* Bento Grid Data Widgets */}
+        <BentoGrid>
+          <SizeWeightWidget size={species.size} weight={species.weight} />
+          <OriginWidget originCountry={species.origin_country} />
+          <DietWidget diet={species.diet} />
+          {species.conservation_status && (
+            <IUCNWidget conservationStatus={species.conservation_status} />
+          )}
+        </BentoGrid>
 
-        {/* Scientific Description - Accordion */}
-        {species.description_scientific && (
-          <div className="mt-4">
-            <AccordionSection title="Description scientifique" defaultOpen={false}>
-              {species.description_scientific}
-            </AccordionSection>
+        {/* Le Saviez-vous ? Hook + Modal Link */}
+        {species.description_default && (
+          <div className="mx-5 mt-6">
+            <h3 className="mb-2 text-lg font-bold text-white">Le Saviez-vous ?</h3>
+            <p className="mb-3 text-sm text-white/70 line-clamp-3">
+              {species.description_default}
+            </p>
+            {species.description_scientific && (
+              <Link
+                href={`/biodex/${id}/story`}
+                className="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300"
+              >
+                <BookOpen className="h-4 w-4" />
+                Lire son histoire...
+              </Link>
+            )}
           </div>
         )}
 
-        {/* Habitats */}
+        {/* Habitats Carousel */}
         {species.habitat && species.habitat.length > 0 && (
-          <div className="mt-4">
-            <HabitatList habitats={species.habitat} />
+          <div className="mt-6">
+            <HabitatCarousel habitats={species.habitat} />
           </div>
         )}
 
-        {/* Threats */}
+        {/* Threats Tags */}
         {species.threats && species.threats.length > 0 && (
-          <div className="mt-4">
-            <ThreatList threats={species.threats} />
+          <div className="mt-6">
+            <ThreatTags threats={species.threats} />
           </div>
         )}
 
-        <section className="mx-5 mt-10 rounded-3xl border border-white/5 bg-[#1C1C22] p-5">
-          <h3 className="mb-4 font-bold text-white">Évolution disponible</h3>
-
-          <div className="mb-2 flex justify-between text-sm">
-            <span className="text-white/60">Graines requises</span>
-            <span className="font-bold text-emerald-400 tabular-nums">
-              {currentSeeds} / {REQUIRED_SEEDS} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
-            </span>
-          </div>
-
-          <div className="h-3 w-full overflow-hidden rounded-full bg-black/50">
-            <div
-              className="h-full rounded-full bg-emerald-400"
-              style={{ width: `${Math.round((currentSeeds / REQUIRED_SEEDS) * 100)}%` }}
-            />
-          </div>
-
-          <button
-            type="button"
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white/5 py-4 font-bold text-white/40"
-          >
-            <Lock className="h-4 w-4" />
-            Évoluer l&apos;espèce
-          </button>
-
-          <p className="mt-4 text-center text-xs text-white/40">
-            Faites des{' '}
-            <span className="text-lime-400 underline decoration-lime-400/30">Défis Quotidiens</span>{' '}
-            pour gagner plus de graines.
-          </p>
-        </section>
+        {/* Evolution Card */}
+        <EvolutionCard
+          currentSeeds={currentSeeds}
+          requiredSeeds={REQUIRED_SEEDS}
+          canEvolve={currentSeeds >= REQUIRED_SEEDS}
+        />
       </main>
     </div>
   )

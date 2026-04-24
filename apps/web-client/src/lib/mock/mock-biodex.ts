@@ -525,6 +525,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '700g',
+    size: '70cm',
+    origin_country: 'Madagascar',
+    diet: 'Insectivore',
     habitat: [
       'Forêts primaires canopéennes',
       'Forêts de montagne / nuages',
