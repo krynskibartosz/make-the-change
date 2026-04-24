@@ -344,10 +344,10 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
 
       {isComplete && (
         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="sticky bottom-0 mt-8 flex gap-4">
-          <button onClick={handleReset} className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0">
+          <button onClick={handleReset} className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[0_5px_0_rgba(0,0,0,0.4)] hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.4)] active:translate-y-1 transition-all duration-100">
             <RefreshCcw className="w-6 h-6" />
           </button>
-          <button onClick={handleVerify} className="flex-1 bg-emerald-500 text-black font-black text-lg rounded-2xl py-4 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+          <button onClick={handleVerify} className="flex-1 bg-emerald-500 text-black font-black text-lg rounded-2xl py-4 shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px] transition-all duration-100">
             VÉRIFIER
           </button>
         </motion.div>
@@ -376,11 +376,14 @@ function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correc
           <button
             key={index}
             onClick={() => handleSelect(index)}
+            disabled={selected !== null}
             className={cn(
-              "w-full p-6 rounded-3xl text-left font-bold text-lg transition-all active:scale-95",
+              "w-full p-5 rounded-2xl text-left font-bold text-base transition-all duration-100",
               selected === index
-                ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)]"
-                : "bg-white/10 border border-white/10 text-white hover:bg-white/15"
+                ? "bg-emerald-500 text-black shadow-[0_2px_0_#065f46] translate-y-1"
+                : selected !== null
+                  ? "bg-white/5 border border-white/5 text-white/40 cursor-not-allowed"
+                  : "bg-white/10 border border-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-1"
             )}
           >
             {opt.texte}
@@ -421,10 +424,10 @@ function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: bool
       <button
         onClick={onNext}
         className={cn(
-          'w-full font-black text-lg rounded-2xl py-5 shadow-lg active:scale-95 transition-transform mt-2',
+          'w-full font-black text-lg rounded-2xl py-5 transition-all duration-100 mt-2',
           correct
-            ? 'bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]'
-            : 'bg-white/10 text-white border border-white/20'
+            ? 'bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px]'
+            : 'bg-white/10 text-white border border-white/20 shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-[4px]'
         )}
       >
         CONTINUER
@@ -454,9 +457,9 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
 
       <button
         onClick={onFinish}
-        className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_0_30px_rgba(16,185,129,0.4)] active:scale-95 transition-transform mt-auto mb-8"
+        className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_7px_0_#065f46] hover:shadow-[0_5px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[6px] transition-all duration-100 mt-auto mb-8"
       >
-        RETOUR À L'ACADÉmie
+        RETOUR À L'ACADéMIE
       </button>
     </div>
   )
@@ -509,9 +512,9 @@ function GameOverScreen({ onQuit }: { onQuit: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
         onClick={onQuit}
-        className="w-full bg-white/10 text-white font-black text-lg rounded-2xl py-5 active:scale-95 transition-transform mt-auto"
+        className="w-full bg-white/10 text-white font-black text-lg rounded-2xl py-5 shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-[4px] transition-all duration-100 mt-auto"
       >
-        RETOUR À L'ACADÉmie
+        RETOUR À L'ACADéMIE
       </motion.button>
     </div>
   )
@@ -603,13 +606,13 @@ export default function ExerciseEngine() {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => setShowQuitModal(false)}
-                  className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 active:scale-95 transition-transform"
+                  className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 shadow-[0_5px_0_rgba(0,0,0,0.4)] hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.4)] active:translate-y-1 transition-all duration-100"
                 >
                   NON, JE CONTINUE
                 </button>
                 <button
                   onClick={confirmQuit}
-                  className="w-full bg-red-500/20 text-red-500 font-bold rounded-2xl py-4 active:scale-95 transition-transform"
+                  className="w-full bg-red-500/20 text-red-500 font-bold rounded-2xl py-4 shadow-[0_5px_0_rgba(139,0,0,0.4)] hover:shadow-[0_3px_0_rgba(139,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(139,0,0,0.4)] active:translate-y-1 transition-all duration-100"
                 >
                   OUI, QUITTER
                 </button>

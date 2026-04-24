@@ -74,7 +74,7 @@ function LockedUnitModal({ unit, onClose }: { unit: AcademyUnit; onClose: () => 
         <p className="text-white/50 text-sm leading-relaxed mb-6">
           Termine tous les niveaux précédents pour débloquer celui-ci.
         </p>
-        <button onClick={onClose} className="w-full bg-white/10 hover:bg-white/15 text-white font-bold rounded-2xl py-4 transition-colors active:scale-95">
+        <button onClick={onClose} className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-[4px] transition-all duration-100">
           Compris !
         </button>
       </motion.div>
@@ -180,27 +180,31 @@ function UnitNode({
       {/* ── Main button surface */}
       <div
         className={cn(
-          'w-[72px] h-[72px] rounded-[22px] flex items-center justify-center relative transition-all duration-150 active:translate-y-[3px]',
-          // Active: vibrant gradient + deep shadow
+          // Base: size + shape + transition snappy
+          'w-[72px] h-[72px] rounded-[22px] flex items-center justify-center relative transition-all duration-100',
+          // Active: vibrant gradient + deep 3D shadow
           isActive && [
             'bg-gradient-to-b from-emerald-400 to-emerald-600',
             'border-t border-white/25',
             'shadow-[0_7px_0_#065f46,0_0_35px_rgba(16,185,129,0.45)]',
-            'active:shadow-[0_4px_0_#065f46]',
+            'group-hover:shadow-[0_5px_0_#065f46,0_0_35px_rgba(16,185,129,0.45)] group-hover:translate-y-[2px]',
+            'group-active:shadow-[0_1px_0_#065f46] group-active:translate-y-[6px]',
           ],
-          // Completed: subtle glass
+          // Completed: subtle glass 3D
           isCompleted && [
             'bg-gradient-to-b from-white/12 to-white/4',
             'border border-emerald-500/25',
-            'shadow-[0_5px_0_rgba(52,211,153,0.15),0_0_20px_rgba(16,185,129,0.08)]',
-            'active:shadow-[0_2px_0_rgba(52,211,153,0.15)]',
+            'shadow-[0_5px_0_rgba(52,211,153,0.15)]',
+            'group-hover:shadow-[0_3px_0_rgba(52,211,153,0.15)] group-hover:translate-y-[2px]',
+            'group-active:shadow-[0_1px_0_rgba(52,211,153,0.15)] group-active:translate-y-[4px]',
           ],
-          // Locked: dark matte
+          // Locked: dark matte — minimal press
           isLocked && [
             'bg-gradient-to-b from-white/5 to-black/30',
             'border border-white/8',
             'shadow-[0_3px_0_rgba(0,0,0,0.6)]',
-            'opacity-55 active:shadow-[0_1px_0_rgba(0,0,0,0.6)]',
+            'opacity-55',
+            'group-active:shadow-[0_1px_0_rgba(0,0,0,0.6)] group-active:translate-y-[2px]',
           ],
         )}
       >
@@ -351,8 +355,28 @@ export default function AcademyPage() {
               className="bg-[#05050A]"
             >
               <div className="relative h-64 bg-emerald-900/30 rounded-b-[40px] overflow-hidden shrink-0 mt-[-env(safe-area-inset-top)]">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#05050A] to-transparent z-10" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-emerald-500/30 blur-[60px] rounded-full" />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#05050A] via-[#05050A]/20 to-transparent z-10 pointer-events-none" />
+                {/* Glow orb */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-emerald-500/25 blur-[70px] rounded-full" />
+                {/* Mascotte — centrée, en avant du gradient */}
+                <motion.div
+                  initial={{ scale: 0.7, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: [0, -8, 0] }}
+                  transition={{
+                    scale: { duration: 0.4, ease: 'backOut' },
+                    opacity: { duration: 0.3 },
+                    y: { duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.4 },
+                  }}
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-40 h-40 drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]"
+                >
+                  <Image
+                    src={`/${selectedUnit.mascotte}.png`}
+                    alt={selectedUnit.mascotte}
+                    fill
+                    className="object-contain"
+                  />
+                </motion.div>
               </div>
 
               <div className="flex-1 px-6 pt-8 pb-32 flex flex-col items-center text-center">
@@ -381,7 +405,7 @@ export default function AcademyPage() {
                 </div>
                 <button
                   onClick={() => handleStartCourse(selectedUnit)}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-black text-lg font-black rounded-2xl py-5 shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all active:scale-95"
+                  className="w-full bg-emerald-500 text-black text-lg font-black rounded-2xl py-5 shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px] transition-all duration-100"
                 >
                   DÉMARRER L'EXPLORATION
                 </button>

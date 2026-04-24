@@ -78,9 +78,12 @@ export default function ChaptersPage() {
                     router.push('/academy')
                   }
                 }}
+                whileHover={!isLocked ? { y: -1 } : {}}
+                whileTap={!isLocked ? { y: 4, boxShadow: '0 1px 0 rgba(52,211,153,0.2)' } : {}}
+                style={!isLocked ? { boxShadow: '0 5px 0 rgba(52,211,153,0.15)' } : undefined}
                 className={cn(
-                  "relative rounded-3xl p-5 border transition-all duration-300",
-                  isActive ? "bg-emerald-900/20 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.05)] cursor-pointer hover:border-emerald-500 hover:bg-emerald-900/30" : "",
+                  "relative rounded-3xl p-5 border transition-colors duration-150",
+                  isActive ? "bg-emerald-900/20 border-emerald-500/50 cursor-pointer hover:border-emerald-500 hover:bg-emerald-900/30" : "",
                   isCompleted ? "bg-white/5 border-white/10 cursor-pointer hover:bg-white/10" : "",
                   isLocked ? "bg-black/40 border-white/5 opacity-60 cursor-not-allowed" : ""
                 )}
@@ -91,11 +94,11 @@ export default function ChaptersPage() {
                 )}
 
                 <div className="flex items-start gap-4 relative z-10">
-                  {/* Icône de statut */}
+                  {/* Icône de statut avec 3D press */}
                   <div className={cn(
-                    "w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center transition-colors",
-                    isActive ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "",
-                    isCompleted ? "bg-white/10 text-white" : "",
+                    "w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center transition-all duration-100",
+                    isActive ? "bg-emerald-500 text-black shadow-[0_5px_0_#065f46]" : "",
+                    isCompleted ? "bg-white/10 text-white shadow-[0_4px_0_rgba(0,0,0,0.4)]" : "",
                     isLocked ? "bg-black text-white/40 border border-white/10" : ""
                   )}>
                     {isActive && <Play className="w-6 h-6 ml-1 fill-current" />}
