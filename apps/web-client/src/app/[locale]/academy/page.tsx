@@ -15,10 +15,10 @@ const nextChapter = getNextChapter()
 
 // ─── Loading steps ─────────────────────────────────────────────────────────
 const LOADING_STEPS = [
-  { label: 'Chargement du cours…',        duration: 650 },
-  { label: 'Préparation des exercices…',   duration: 750 },
-  { label: 'Ajustement à ton niveau…',     duration: 600 },
-  { label: 'C\'est parti !',              duration: 400 },
+  { label: 'Chargement du cours…', duration: 650 },
+  { label: 'Préparation des exercices…', duration: 750 },
+  { label: 'Ajustement à ton niveau…', duration: 600 },
+  { label: 'C\'est parti !', duration: 400 },
 ]
 
 // ─── Sub-components ────────────────────────────────────────────────────────
@@ -156,9 +156,9 @@ function UnitNode({
   onSelect: (unit: AcademyUnit) => void
   onLocked: (unit: AcademyUnit) => void
 }) {
-  const isLocked    = unit.status === 'locked'
+  const isLocked = unit.status === 'locked'
   const isCompleted = unit.status === 'completed'
-  const isActive    = unit.status === 'active'
+  const isActive = unit.status === 'active'
 
   return (
     <div className="relative flex flex-col items-center justify-center my-4">
@@ -179,7 +179,7 @@ function UnitNode({
         }}
         className={cn(
           'w-[84px] h-[84px] rounded-full flex items-center justify-center relative transition-all duration-100 focus:outline-none group',
-          
+
           // Active: vibrant gradient + deep 3D shadow + outline ring
           isActive && [
             'bg-gradient-to-b from-emerald-400 to-emerald-600',
@@ -188,15 +188,15 @@ function UnitNode({
             'hover:translate-y-[2px] hover:shadow-[0_6px_0_#065f46]',
             'active:translate-y-[8px] active:shadow-none',
           ],
-          
+
           // Completed: Golden mastery tone
           isCompleted && [
-            'bg-gradient-to-b from-yellow-400 to-amber-500',
-            'shadow-[0_8px_0_#b45309]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#b45309]',
+            'bg-gradient-to-b from-emerald-500 to-emerald-700',
+            'shadow-[0_8px_0_#064e3b]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b]',
             'active:translate-y-[8px] active:shadow-none',
           ],
-          
+
           // Locked: Dark grey/matte 3D
           isLocked && [
             'bg-gradient-to-b from-white/10 to-white/5',
@@ -212,9 +212,9 @@ function UnitNode({
           <div className="absolute top-[2px] inset-x-4 h-2 bg-gradient-to-b from-white/50 to-transparent rounded-t-full pointer-events-none" />
         )}
 
-        {isActive    && <Flame className="w-10 h-10 text-white fill-white drop-shadow-md" />}
+        {isActive && <Flame className="w-10 h-10 text-white fill-white drop-shadow-md" />}
         {isCompleted && <Crown className="w-9 h-9 text-white fill-white drop-shadow-md" />}
-        {isLocked    && <Lock  className="w-8 h-8 text-white/20" />}
+        {isLocked && <Lock className="w-8 h-8 text-white/20" />}
       </button>
 
       {/* ── "C'est ici!" bubble ── */}
@@ -237,9 +237,9 @@ function UnitNode({
 
 export default function AcademyPage() {
   const router = useRouter()
-  const [selectedUnit,   setSelectedUnit]   = useState<AcademyUnit | null>(null)
-  const [lockedUnit,     setLockedUnit]     = useState<AcademyUnit | null>(null)
-  const [loadingTarget,  setLoadingTarget]  = useState<string | null>(null)
+  const [selectedUnit, setSelectedUnit] = useState<AcademyUnit | null>(null)
+  const [lockedUnit, setLockedUnit] = useState<AcademyUnit | null>(null)
+  const [loadingTarget, setLoadingTarget] = useState<string | null>(null)
 
   const units = currentChapter.units
 
@@ -320,7 +320,7 @@ export default function AcademyPage() {
           <div className="flex flex-col items-center mt-12 pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
             {units.flatMap((unit, index) => {
               const nextUnit = units[index + 1]
-              const isGoingLeft  = index % 4 === 1
+              const isGoingLeft = index % 4 === 1
               const isGoingRight = index % 4 === 3
               const alignmentClass = isGoingLeft ? 'mr-20' : isGoingRight ? 'ml-20' : ''
 
