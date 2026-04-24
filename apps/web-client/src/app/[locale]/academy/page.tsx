@@ -312,7 +312,7 @@ export default function AcademyPage() {
           </div>
 
           {/* ── ZIGZAG TREE ─────────────────────────────────────────── */}
-          <div className="flex flex-col items-center mt-12 mb-24">
+          <div className="flex flex-col items-center mt-12 pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
             {units.flatMap((unit, index) => {
               const nextUnit = units[index + 1]
               const isGoingLeft  = index % 4 === 1

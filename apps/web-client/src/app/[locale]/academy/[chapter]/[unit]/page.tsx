@@ -61,8 +61,6 @@ const unitData = {
 // --- COMPONENTS ---
 
 function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, total: number, onQuit: () => void, lives: number }) {
-  const MAX_LIVES = 5
-
   return (
     <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4 bg-[#05050A]/60 backdrop-blur-md border-b border-white/5">
       <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
@@ -93,22 +91,28 @@ function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, 
         })}
       </div>
 
-      {/* Vies (cœurs) */}
-      <div className="flex items-center gap-1 shrink-0">
-        {Array.from({ length: MAX_LIVES }).map((_, i) => (
-          <motion.span
-            key={i}
-            initial={{ scale: 0.8 }}
-            animate={{ scale: i < lives ? 1 : 0.9 }}
-            className={cn(
-              'text-lg leading-none transition-all duration-300',
-              i < lives ? 'opacity-100' : 'opacity-20 grayscale'
-            )}
-          >
-            ❤️
-          </motion.span>
-        ))}
-      </div>
+      {/* Vies — compteur compact avec animation de perte */}
+      <motion.div
+        key={lives}
+        animate={lives > 0 ? { x: [0, -5, 5, -5, 5, 0] } : { scale: [1, 1.15, 0.9, 1] }}
+        transition={{ duration: 0.35, ease: 'easeInOut' }}
+        className={cn(
+          'flex items-center gap-1.5 px-3 py-1.5 rounded-full border shrink-0 transition-colors duration-300',
+          lives >= 3
+            ? 'bg-red-500/10 border-red-500/25'
+            : lives >= 1
+              ? 'bg-amber-500/10 border-amber-500/25'
+              : 'bg-white/5 border-white/10 opacity-50'
+        )}
+      >
+        <span className="text-base leading-none select-none">❤️</span>
+        <span className={cn(
+          'text-sm font-black tabular-nums leading-none',
+          lives >= 3 ? 'text-red-400' : lives >= 1 ? 'text-amber-400' : 'text-white/30'
+        )}>
+          {lives}
+        </span>
+      </motion.div>
     </div>
   )
 }
