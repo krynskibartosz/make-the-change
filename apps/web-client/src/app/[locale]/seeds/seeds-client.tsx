@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
-import { Sprout, TrendingUp, Award, Zap, Crown, ChevronRight, Clock, PawPrint } from 'lucide-react'
+import { Sprout, TrendingUp, Award, Zap, Crown, ChevronRight, Clock, PawPrint, BookOpen, Sparkles, UsersRound } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect, useRef, useState } from 'react'
 
@@ -115,16 +115,19 @@ export default function SeedsClient({ balance, transactions, subscription, curre
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Balance */}
-            <h1 className="text-7xl sm:text-8xl font-black text-white tracking-tight mb-6">
-              <span className="inline-block mr-2">✨</span>
-              {balance.toLocaleString('fr-FR')}
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="text-7xl sm:text-8xl font-black text-white tracking-tight">✨</span>
+              <span className="text-7xl sm:text-8xl font-black text-white tracking-tight">{balance.toLocaleString('fr-FR')}</span>
+            </div>
 
             {/* Glassmorphism Badge */}
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 backdrop-blur-xl border border-white/10">
               <span className="text-lg">🌿</span>
               <span className="text-sm font-medium text-white/80">
-                Ton impact équivaut à la plantation de ~{treesEquivalent} arbres
+                {treesEquivalent > 0 
+                  ? `Ton impact équivaut à la plantation de ~${treesEquivalent} arbres`
+                  : 'Soutiens un projet pour planter ton 1er arbre'
+                }
               </span>
             </div>
           </motion.div>
@@ -145,16 +148,16 @@ export default function SeedsClient({ balance, transactions, subscription, curre
             {/* Card 1 - Faction Support */}
             <Link
               href="/collectif"
-              className="group relative block h-40 rounded-2xl bg-[#1C1C1E] border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
+              className="group relative block h-40 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
             >
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-amber-600" />
+              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 to-amber-600 shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
               <div className="p-5 h-full flex flex-col justify-between">
                 <div className="w-12 h-12 rounded-full bg-amber-400/10 flex items-center justify-center">
                   <img src="/abeille-transparente.png" alt="Melli" className="w-8 h-8 object-contain" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white mb-1">Soutenir la faction</h3>
-                  <p className="text-xs text-white/50">Injecte des graines</p>
+                  <h3 className="font-bold text-white mb-2">Soutenir la faction</h3>
+                  <p className="text-xs text-white/40">Injecte des graines</p>
                 </div>
               </div>
             </Link>
@@ -162,15 +165,15 @@ export default function SeedsClient({ balance, transactions, subscription, curre
             {/* Card 2 - BioDex */}
             <Link
               href="/biodex"
-              className="group relative block h-40 rounded-2xl bg-[#151517] border border-white/10 overflow-hidden hover:border-lime-400/30 transition-all"
+              className="group relative block h-40 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-lime-400/30 transition-all"
             >
               <div className="p-5 h-full flex flex-col justify-between">
                 <div className="w-12 h-12 rounded-full bg-lime-400/10 flex items-center justify-center">
                   <PawPrint className="h-6 w-6 text-lime-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white mb-1">Évoluer le BioDex</h3>
-                  <p className="text-xs text-white/50">Découvre des espèces</p>
+                  <h3 className="font-bold text-white mb-2">Évoluer le BioDex</h3>
+                  <p className="text-xs text-white/40">Découvre des espèces</p>
                 </div>
               </div>
             </Link>
@@ -185,9 +188,9 @@ export default function SeedsClient({ balance, transactions, subscription, curre
           className="mb-12"
         >
           <h2 className="text-xl font-bold text-white mb-6">Récolte de la semaine</h2>
-          <div className="flex items-end justify-between gap-3 h-16 px-2">
+          <div className="flex items-end justify-between gap-3 h-32 px-2">
             {MOCK_WEEKLY_DATA.map((day, index) => {
-              const height = day.seeds > 0 ? Math.max((day.seeds / maxDailySeeds) * 100, 20) : 4
+              const height = day.seeds > 0 ? Math.max((day.seeds / maxDailySeeds) * 100, 20) : 8
               return (
                 <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full flex-1 flex items-end justify-center">
@@ -201,8 +204,9 @@ export default function SeedsClient({ balance, transactions, subscription, curre
                           ? 'bg-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.5)]' 
                           : day.seeds > 0 
                             ? 'bg-amber-400/30' 
-                            : 'bg-white/5'
+                            : 'bg-white/10'
                       )}
+                      style={{ minHeight: day.seeds > 0 ? '8px' : '4px' }}
                     />
                   </div>
                   <span className={cn(
@@ -223,8 +227,8 @@ export default function SeedsClient({ balance, transactions, subscription, curre
             transition={{ delay: 0.4, duration: 0.6 }}
             className="mb-12"
           >
-            <div className="relative rounded-2xl bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-amber-600" />
+            <div className="relative rounded-2xl bg-white/5 backdrop-blur-xl border border-amber-500/30 overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 to-amber-600" />
               <div className="p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
@@ -236,7 +240,7 @@ export default function SeedsClient({ balance, transactions, subscription, curre
                     </p>
                     <Link
                       href="/abonnement"
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber-400 text-black font-bold text-sm hover:bg-amber-300 transition-colors shadow-[0_0_20px_rgba(251,191,36,0.4)]"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-amber-400 text-amber-400 font-bold text-sm hover:bg-amber-400/10 transition-colors"
                     >
                       <Zap className="h-4 w-4" />
                       Découvrir
@@ -259,37 +263,60 @@ export default function SeedsClient({ balance, transactions, subscription, curre
           >
             <h2 className="text-xl font-bold text-white mb-6">Gagner plus de graines</h2>
             <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-              {dailyQuests.slice(0, 4).map((quest, index) => (
-                <Link
-                  key={quest.id}
-                  href={`/aventure?tab=defis`}
-                  className="flex-shrink-0 w-48 snap-start"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 + (index * 0.05), duration: 0.4 }}
-                    className={cn(
-                      'relative h-64 rounded-2xl overflow-hidden bg-gradient-to-b from-white/10 to-black border border-white/10 group',
-                      quest.completed ? 'opacity-50' : ''
-                    )}
+              {dailyQuests.slice(0, 4).map((quest, index) => {
+                const gradientClass = quest.type === 'education' 
+                  ? 'from-sky-500/10 to-black' 
+                  : quest.type === 'daily_harvest' 
+                    ? 'from-amber-500/10 to-black' 
+                    : quest.type === 'social' 
+                      ? 'from-lime-500/10 to-black' 
+                      : 'from-white/5 to-black'
+                
+                return (
+                  <Link
+                    key={quest.id}
+                    href={`/aventure?tab=defis`}
+                    className="flex-shrink-0 w-48 snap-start"
                   >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-6xl">
-                        {quest.type === 'education' ? '📖' : quest.type === 'daily_harvest' ? '✨' : quest.type === 'social' ? '🤝' : '🎯'}
-                      </span>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <h3 className="font-bold text-white mb-1">{quest.title}</h3>
-                      <div className="flex items-center gap-1 text-xs font-semibold text-lime-400">
-                        <span>+{quest.reward}</span>
-                        <Sprout className="h-3 w-3" />
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6 + (index * 0.05), duration: 0.4 }}
+                      className={cn(
+                        'relative h-64 rounded-2xl overflow-hidden bg-gradient-to-b border border-white/10 group',
+                        gradientClass,
+                        quest.completed ? 'opacity-50' : ''
+                      )}
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className={cn(
+                          'w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-xl',
+                          quest.type === 'education' 
+                            ? 'bg-sky-400/20 text-sky-300' 
+                            : quest.type === 'daily_harvest' 
+                              ? 'bg-amber-400/20 text-amber-300' 
+                              : quest.type === 'social' 
+                                ? 'bg-lime-400/20 text-lime-300' 
+                                : 'bg-white/10 text-white/60'
+                        )}>
+                          {quest.type === 'education' && <BookOpen className="h-8 w-8" />}
+                          {quest.type === 'daily_harvest' && <Sparkles className="h-8 w-8" />}
+                          {quest.type === 'social' && <UsersRound className="h-8 w-8" />}
+                          {quest.type !== 'education' && quest.type !== 'daily_harvest' && quest.type !== 'social' && <Award className="h-8 w-8" />}
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="font-bold text-white mb-1">{quest.title}</h3>
+                        <div className="flex items-center gap-1 text-xs font-semibold text-lime-400">
+                          <span>+{quest.reward}</span>
+                          <Sprout className="h-3 w-3" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                )
+              })}
             </div>
           </motion.section>
         )}
