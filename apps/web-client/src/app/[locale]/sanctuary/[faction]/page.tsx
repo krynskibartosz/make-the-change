@@ -8,6 +8,7 @@ import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import type { Faction } from '@/lib/mock/types'
 import type { FactionThemeKey } from '@/lib/faction-theme'
+import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { SanctuaryHero } from './_components/sanctuary-hero'
 import { SanctuaryContent } from './_components/sanctuary-content'
 
@@ -64,6 +65,7 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
   const contribution = getFactionContributionByKey(factionKey as Exclude<FactionThemeKey, 'neutral'>)
   const contributions = getFactionContributions()
   const isLeading = contributions[0]?.themeKey === factionKey
+  const biodexData = await getBiodexPreviewData({ unlockedLimit: 5, lockedLimit: 5 })
 
   const factionMessage = isLeading
     ? `Votre énergie est incroyable ce mois-ci ! Nos ${factionKey === 'pollinisateurs' ? 'ruches' : factionKey === 'forets' ? 'forêts' : 'océans'} bourdonnent de vie grâce à vous.`
@@ -87,14 +89,15 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
           name={factionConfig.name}
           title={factionConfig.title}
           accentBg={theme.accentBg}
+          factionMessage={factionMessage}
         />
 
         <SanctuaryContent
           factionConfig={factionConfig}
           theme={theme}
-          factionMessage={factionMessage}
           contribution={contribution}
           isLeading={isLeading}
+          biodexData={biodexData}
         />
       </div>
     </div>
