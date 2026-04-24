@@ -17,7 +17,7 @@ const unitData = {
   titre: "Les Forges de la Vie",
   concept_cle: "Énergie, Minéraux, Hydratation",
   mascotte: "ondine", // 'ondine', 'sylva', ou 'abeille-transparente'
-  recompense: { type: "gouttes", montant: 10, icone: "💧" },
+  recompense: { type: "gouttes", montant: 10 },
   exercices: [
     {
       id: "ex_1",
@@ -453,28 +453,37 @@ function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: bool
 
 function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) {
   useEffect(() => {
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#34D399', '#059669'] })
+    confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#10B981', '#34D399', '#059669', '#FBBF24'] })
   }, [])
 
   return (
     <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
       <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', bounce: 0.5 }}
-        className="relative w-48 h-48 bg-white/5 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.3)] mb-12 overflow-hidden"
+        initial={{ scale: 0, rotate: -10 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', bounce: 0.6, duration: 0.8 }}
+        className="relative w-56 h-56 bg-gradient-to-b from-emerald-500/20 to-transparent border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.4)] mb-10 overflow-hidden"
       >
-        <Image src="/ondine.png" alt="Ondine la mascotte" width={120} height={120} className="object-contain" />
+        <motion.div 
+          animate={{ y: [-5, 5, -5] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <Image src="/ondine.png" alt="Ondine la mascotte" width={140} height={140} className="object-contain drop-shadow-[0_10px_20px_rgba(16,185,129,0.5)]" />
+        </motion.div>
       </motion.div>
 
-      <h2 className="text-4xl font-black text-white mb-2">Unité Complétée !</h2>
-      <p className="text-emerald-400 text-xl font-bold mb-12">+{unit.recompense.montant} {unit.recompense.type}</p>
+      <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tight">Leçon Terminée !</h2>
+      
+      <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-3 rounded-2xl mb-12 shadow-lg">
+        <span className="text-emerald-400 text-2xl font-black">+{unit.recompense.montant}</span>
+        <span className="text-white/80 text-lg font-bold capitalize">{unit.recompense.type}</span>
+      </div>
 
       <button
         onClick={onFinish}
-        className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_7px_0_#065f46] hover:shadow-[0_5px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[6px] transition-all duration-100 mt-auto mb-8"
+        className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_7px_0_#065f46] hover:shadow-[0_5px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[6px] transition-all duration-100 mt-auto mb-8 uppercase tracking-wide"
       >
-        RETOUR À L'ACADéMIE
+        Continuer
       </button>
     </div>
   )
