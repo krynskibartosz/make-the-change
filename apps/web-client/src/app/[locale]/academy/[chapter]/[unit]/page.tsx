@@ -1,9 +1,444 @@
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Unité | Make the Change',
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence, useAnimation, useMotionValue, useTransform } from 'framer-motion'
+import { X, Check, ArrowRight, RefreshCcw } from 'lucide-react'
+import { useRouter } from '@/i18n/navigation'
+import { cn } from '@/lib/utils'
+import confetti from 'canvas-confetti'
+import { DndContext, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core'
+
+// --- MOCK DATA (L'Unité 1.1: Les Forges de la Vie) ---
+const unitData = {
+  id: "1.1",
+  chapitre_id: "chapitre-1",
+  titre: "Les Forges de la Vie",
+  concept_cle: "Énergie, Minéraux, Hydratation",
+  mascotte: "💧", // Ondine
+  recompense: { type: "gouttes", montant: 10, icone: "💧" },
+  exercices: [
+    {
+      id: "ex_1",
+      type: "STORY",
+      ecrans: [
+        { texte: "Soleil, eau, sol : les trois piliers de la vie.", bg: "bg-emerald-900" },
+        { texte: "Ensemble, ils forgent l'énergie de toute la nature.", bg: "bg-emerald-800" }
+      ]
+    },
+    {
+      id: "ex_2",
+      type: "SWIPE",
+      question: "Est-ce un ingrédient indispensable à la création de la vie ?",
+      carte_droite: { nom: "L'eau douce", est_correct: true, feedback: "Génial ! Sans eau, les cellules de la vie ne peuvent pas s'hydrater." },
+      carte_gauche: { nom: "Le goudron", est_correct: false, feedback: "Oups ! Le goudron asphyxie nos sols et empêche l'eau de circuler." }
+    },
+    {
+      id: "ex_3",
+      type: "DRAG_DROP",
+      consigne: "Ordonne ces éléments du plus lointain au plus profond :",
+      ordre_correct: [
+        { id: "item1", texte: "Le Soleil (Espace)" },
+        { id: "item2", texte: "L'Eau (Surface)" },
+        { id: "item3", texte: "Les Minéraux (Sous-sol)" }
+      ]
+    },
+    {
+      id: "ex_4",
+      type: "QUIZ",
+      question: "Quel élément fournit l'énergie de base à presque toute la Terre ?",
+      options: [
+        { texte: "Le vent fougueux", est_correct: false },
+        { texte: "La roche magmatique", est_correct: false },
+        { texte: "Le Soleil", est_correct: true }
+      ],
+      anecdote_victoire: "Bingo ! Les plantes capturent sa lumière pour nourrir toute la chaîne alimentaire."
+    }
+  ]
 }
 
-export default function UnitPage() {
-  return null
+// --- COMPONENTS ---
+
+function ExerciseHeader({ progress, onQuit }: { progress: number, onQuit: () => void }) {
+  const segments = unitData.exercices.length
+  return (
+    <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4">
+      <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
+        <X className="w-6 h-6" />
+      </button>
+      <div className="flex-1 flex gap-1.5 h-3">
+        {Array.from({ length: segments }).map((_, i) => (
+          <div key={i} className="flex-1 h-full rounded-full bg-white/10 overflow-hidden">
+            <motion.div 
+              className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"
+              initial={{ width: 0 }}
+              animate={{ width: progress > i ? '100%' : '0%' }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: () => void }) {
+  const [currentScreen, setCurrentScreen] = useState(0)
+
+  const handleNext = () => {
+    if (currentScreen < exercise.ecrans.length - 1) {
+      setCurrentScreen(prev => prev + 1)
+    } else {
+      onComplete()
+    }
+  }
+
+  const handlePrev = () => {
+    if (currentScreen > 0) setCurrentScreen(prev => prev - 1)
+  }
+
+  return (
+    <div className="w-full h-full relative bg-black flex flex-col">
+      {/* ProgressBar style Instagram */}
+      <div className="absolute top-20 inset-x-4 z-10 flex gap-1 h-1">
+        {exercise.ecrans.map((_: any, i: number) => (
+          <div key={i} className="flex-1 bg-white/20 rounded-full overflow-hidden">
+            <motion.div 
+              className="h-full bg-white"
+              initial={{ width: 0 }}
+              animate={{ width: i < currentScreen ? '100%' : i === currentScreen ? '100%' : '0%' }}
+              transition={i === currentScreen ? { duration: 5, ease: 'linear' } : { duration: 0 }}
+              onAnimationComplete={() => {
+                if (i === currentScreen) handleNext()
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={currentScreen}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className={cn("absolute inset-0", exercise.ecrans[currentScreen].bg)}
+        />
+      </AnimatePresence>
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+      <div className="absolute inset-0 flex">
+        <div className="flex-1" onClick={handlePrev} />
+        <div className="flex-1" onClick={handleNext} />
+      </div>
+
+      <div className="mt-auto relative z-10 p-8 pb-32">
+        <motion.h2 
+          key={`text-${currentScreen}`}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-3xl font-black text-white leading-tight"
+        >
+          {exercise.ecrans[currentScreen].texte}
+        </motion.h2>
+      </div>
+    </div>
+  )
+}
+
+function SwipeExercise({ exercise, onResult }: { exercise: any, onResult: (correct: boolean, feedback: string) => void }) {
+  const x = useMotionValue(0)
+  const rotate = useTransform(x, [-200, 200], [-15, 15])
+  const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0])
+  const bgCorrect = useTransform(x, [0, 150], ['rgba(16, 185, 129, 0)', 'rgba(16, 185, 129, 0.4)'])
+  const bgWrong = useTransform(x, [0, -150], ['rgba(239, 68, 68, 0)', 'rgba(239, 68, 68, 0.4)'])
+
+  const handleDragEnd = (e: any, info: any) => {
+    if (info.offset.x > 100) {
+      onResult(exercise.carte_droite.est_correct, exercise.carte_droite.feedback)
+    } else if (info.offset.x < -100) {
+      onResult(exercise.carte_gauche.est_correct, exercise.carte_gauche.feedback)
+    }
+  }
+
+  return (
+    <div className="w-full h-full relative bg-[#05050A] flex flex-col items-center justify-center p-6 overflow-hidden">
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: bgCorrect }} />
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: bgWrong }} />
+
+      <h2 className="text-2xl font-bold text-white text-center mb-16 relative z-10">{exercise.question}</h2>
+
+      <div className="relative w-full max-w-sm aspect-[3/4]">
+        {/* Next Card preview */}
+        <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-3xl scale-95 translate-y-4" />
+        
+        {/* Draggable Card */}
+        <motion.div 
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          style={{ x, rotate, opacity }}
+          onDragEnd={handleDragEnd}
+          className="absolute inset-0 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
+        >
+          <div className="w-32 h-32 bg-white/5 rounded-full mb-8 flex items-center justify-center text-6xl">💧</div>
+          <h3 className="text-2xl font-black text-white text-center">Glisse pour répondre</h3>
+          <div className="mt-auto flex justify-between w-full text-sm font-bold text-white/50 uppercase tracking-widest">
+            <span>← {exercise.carte_gauche.nom}</span>
+            <span>{exercise.carte_droite.nom} →</span>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+function DraggableItem({ id, text }: { id: string, text: string }) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id })
+  const style = transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={cn(
+        "bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-white font-medium text-center shadow-lg active:scale-105 active:shadow-2xl transition-shadow cursor-grab active:cursor-grabbing touch-none",
+        isDragging && "opacity-50 z-50 scale-105"
+      )}
+    >
+      {text}
+    </div>
+  )
+}
+
+function DroppableSlot({ id, index, item }: { id: string, index: number, item: any }) {
+  const { isOver, setNodeRef } = useDroppable({ id })
+
+  return (
+    <div className="flex flex-col items-center w-full">
+      <div 
+        ref={setNodeRef} 
+        className={cn(
+          "w-full h-16 rounded-xl border-2 border-dashed flex items-center justify-center transition-colors",
+          isOver ? "border-emerald-500 bg-emerald-500/10" : "border-white/20 bg-white/5",
+          item && "border-solid border-emerald-500/50 bg-emerald-500/20"
+        )}
+      >
+        {item ? <div className="text-white font-medium">{item.texte}</div> : <span className="text-white/30 text-sm">Emplacement {index + 1}</span>}
+      </div>
+      {index < 2 && <ArrowRight className="w-6 h-6 text-white/30 my-2 rotate-90" />}
+    </div>
+  )
+}
+
+function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (correct: boolean, feedback: string) => void }) {
+  const items = exercise.ordre_correct
+  const [shuffledItems] = useState(() => [...items].sort(() => Math.random() - 0.5))
+  const [slots, setSlots] = useState<Record<string, any>>({ slot_0: null, slot_1: null, slot_2: null })
+  const [availableItems, setAvailableItems] = useState(shuffledItems)
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && over.id.toString().startsWith('slot_')) {
+      const slotId = over.id as string
+      const item = availableItems.find(i => i.id === active.id)
+      if (item && !slots[slotId]) {
+        setSlots(prev => ({ ...prev, [slotId]: item }))
+        setAvailableItems(prev => prev.filter(i => i.id !== item.id))
+      }
+    }
+  }
+
+  const handleVerify = () => {
+    const isCorrect = 
+      slots.slot_0?.id === items[0].id &&
+      slots.slot_1?.id === items[1].id &&
+      slots.slot_2?.id === items[2].id
+
+    onResult(isCorrect, isCorrect ? "Parfait ! La chronologie est exacte." : "Mince ! L'ordre n'est pas le bon. Le soleil est le plus lointain.")
+  }
+
+  const handleReset = () => {
+    setSlots({ slot_0: null, slot_1: null, slot_2: null })
+    setAvailableItems(shuffledItems)
+  }
+
+  const isComplete = Object.values(slots).every(Boolean)
+
+  return (
+    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-hidden">
+      <h2 className="text-xl font-bold text-white text-center mb-8">{exercise.consigne}</h2>
+      
+      <DndContext onDragEnd={handleDragEnd}>
+        <div className="flex-1 flex flex-col items-center max-w-sm mx-auto w-full">
+          {/* Slots */}
+          <div className="w-full flex flex-col items-center mb-8">
+            <DroppableSlot id="slot_0" index={0} item={slots.slot_0} />
+            <DroppableSlot id="slot_1" index={1} item={slots.slot_1} />
+            <DroppableSlot id="slot_2" index={2} item={slots.slot_2} />
+          </div>
+
+          {/* Available Items */}
+          <div className="w-full flex flex-col gap-3">
+            {availableItems.map(item => (
+              <DraggableItem key={item.id} id={item.id} text={item.texte} />
+            ))}
+          </div>
+        </div>
+      </DndContext>
+
+      {isComplete && (
+        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="absolute bottom-6 inset-x-6 flex gap-4">
+          <button onClick={handleReset} className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0">
+            <RefreshCcw className="w-6 h-6" />
+          </button>
+          <button onClick={handleVerify} className="flex-1 bg-emerald-500 text-black font-black text-lg rounded-2xl py-4 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            VÉRIFIER
+          </button>
+        </motion.div>
+      )}
+    </div>
+  )
+}
+
+function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correct: boolean, feedback: string) => void }) {
+  const [selected, setSelected] = useState<number | null>(null)
+
+  const handleSelect = (index: number) => {
+    setSelected(index)
+    const opt = exercise.options[index]
+    setTimeout(() => {
+      onResult(opt.est_correct, opt.est_correct ? exercise.anecdote_victoire : "Oups, ce n'est pas la bonne réponse.")
+    }, 600)
+  }
+
+  return (
+    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32">
+      <h2 className="text-2xl font-black text-white text-center mb-12">{exercise.question}</h2>
+      
+      <div className="flex flex-col gap-4 mt-auto mb-16">
+        {exercise.options.map((opt: any, index: number) => (
+          <button 
+            key={index}
+            onClick={() => handleSelect(index)}
+            className={cn(
+              "w-full p-6 rounded-3xl text-left font-bold text-lg transition-all active:scale-95",
+              selected === index 
+                ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)]" 
+                : "bg-white/10 border border-white/10 text-white hover:bg-white/15"
+            )}
+          >
+            {opt.texte}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function FeedbackScreen({ correct, feedback, onNext }: { correct: boolean, feedback: string, onNext: () => void }) {
+  return (
+    <motion.div 
+      initial={{ y: '100%' }}
+      animate={{ y: 0 }}
+      exit={{ opacity: 0 }}
+      className={cn(
+        "fixed inset-0 z-[100] flex flex-col items-center justify-center p-8 text-center",
+        correct ? "bg-emerald-500" : "bg-red-500"
+      )}
+    >
+      <div className="text-8xl mb-8">{correct ? "🥳" : "🧐"}</div>
+      <h2 className="text-4xl font-black text-black mb-4">{correct ? "Excellent !" : "Aïe !"}</h2>
+      <p className="text-black/80 text-xl font-medium mb-16">{feedback}</p>
+      
+      <button 
+        onClick={onNext}
+        className="mt-auto w-full bg-black text-white text-xl font-black rounded-3xl py-6 shadow-2xl active:scale-95 transition-transform"
+      >
+        CONTINUER
+      </button>
+    </motion.div>
+  )
+}
+
+function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) {
+  useEffect(() => {
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#34D399', '#059669'] })
+  }, [])
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-[#05050A] flex flex-col items-center justify-center p-8 text-center">
+      <motion.div 
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: 'spring', bounce: 0.5 }}
+        className="w-48 h-48 bg-white/5 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.3)] mb-12"
+      >
+        <span className="text-7xl">{unit.recompense.icone}</span>
+      </motion.div>
+      
+      <h2 className="text-4xl font-black text-white mb-2">Unité Complétée !</h2>
+      <p className="text-emerald-400 text-xl font-bold mb-12">+{unit.recompense.montant} {unit.recompense.type}</p>
+      
+      <button 
+        onClick={onFinish}
+        className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_0_30px_rgba(16,185,129,0.4)] active:scale-95 transition-transform mt-auto mb-8"
+      >
+        RETOUR À L'ACADÉMIE
+      </button>
+    </div>
+  )
+}
+
+// --- ENGINE (STATE MACHINE) ---
+
+export default function ExerciseEngine() {
+  const router = useRouter()
+  const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  const [feedback, setFeedback] = useState<{ show: boolean, correct: boolean, text: string } | null>(null)
+  
+  const currentExercise = unitData.exercices[currentStepIndex]
+  const isFinished = currentStepIndex >= unitData.exercices.length
+
+  const handleResult = (correct: boolean, text: string) => {
+    setFeedback({ show: true, correct, text })
+  }
+
+  const handleNextStep = () => {
+    setFeedback(null)
+    if (feedback?.correct || currentExercise?.type === 'STORY') {
+      setCurrentStepIndex(prev => prev + 1)
+    }
+  }
+
+  const handleQuit = () => {
+    if (confirm("Tu vas perdre ta progression ! Es-tu sûr ?")) {
+      router.push('/academy')
+    }
+  }
+
+  if (isFinished) {
+    return <VictoryScreen unit={unitData} onFinish={() => router.push('/academy')} />
+  }
+
+  return (
+    <div className="fixed inset-0 bg-[#05050A] flex flex-col overflow-hidden overscroll-none touch-none">
+      <ExerciseHeader progress={currentStepIndex} onQuit={handleQuit} />
+      
+      <div className="flex-1 w-full h-full relative">
+        {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
+        {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} />}
+        {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} />}
+        {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} />}
+      </div>
+
+      <AnimatePresence>
+        {feedback?.show && (
+          <FeedbackScreen correct={feedback.correct} feedback={feedback.text} onNext={handleNextStep} />
+        )}
+      </AnimatePresence>
+    </div>
+  )
 }

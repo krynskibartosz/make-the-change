@@ -157,6 +157,10 @@ export default function AcademyPage() {
                 </span>
               </div>
               <button 
+                onClick={() => {
+                  // TODO: remplacer 'chapitre-1' par l'ID réel du chapitre depuis les datas globales plus tard
+                  window.location.href = `/academy/chapitre-1/${selectedUnit.id}`
+                }}
                 className="w-full bg-emerald-500 hover:bg-emerald-400 text-black text-lg font-black rounded-2xl py-5 shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all active:scale-95"
               >
                 DÉMARRER L'EXPLORATION
