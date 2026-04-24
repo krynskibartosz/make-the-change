@@ -6,49 +6,9 @@ import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-scr
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
-// Mock des chapitres basé sur le curriculum
-const chapters = [
-  {
-    id: 1,
-    title: "L'Alphabet Originel",
-    level: "A1",
-    description: "Découvrez les éléments fondamentaux de la nature.",
-    status: "active", // 'completed', 'active', 'locked'
-    progress: 25,
-  },
-  {
-    id: 2,
-    title: "La Grammaire des Espèces",
-    level: "A2",
-    description: "Comprenez comment les êtres vivants interagissent et s'allient secrètement.",
-    status: "locked",
-    progress: 0,
-  },
-  {
-    id: 3,
-    title: "L'Économie de la Biosphère",
-    level: "B1",
-    description: "Plongez dans les immenses cycles qui maintiennent notre planète en marche.",
-    status: "locked",
-    progress: 0,
-  },
-  {
-    id: 4,
-    title: "Les Sanctuaires Sauvages",
-    level: "B2",
-    description: "Explorez les habitats uniques, isolés et fragiles.",
-    status: "locked",
-    progress: 0,
-  },
-  {
-    id: 5,
-    title: "L'Éveil des Gardiens",
-    level: "C1/C2",
-    description: "Devenez un véritable acteur de la protection de la biodiversité.",
-    status: "locked",
-    progress: 0,
-  }
-]
+import { getAllChapters } from '@/lib/mock/mock-academy'
+
+const chapters = getAllChapters()
 
 export default function ChaptersPage() {
   const router = useRouter()
@@ -60,97 +20,77 @@ export default function ChaptersPage() {
       fallbackHref="/academy"
       className="bg-[#05050A] text-white"
     >
-      <div className="max-w-xl mx-auto px-4 pt-6 pb-32">
-        <div className="flex flex-col gap-4">
-          {chapters.map((chapter, index) => {
+      {/* Padding top augmenté (pt-28) pour ne pas coller au header/croix */}
+      <div className="max-w-xl mx-auto px-5 pt-28 pb-32">
+        <div className="flex flex-col gap-5">
+          {chapters.map((chapter) => {
             const isCompleted = chapter.status === 'completed'
             const isActive = chapter.status === 'active'
             const isLocked = chapter.status === 'locked'
 
+            const totalUnits = chapter.units.length
+            const completedUnitsCount = chapter.units.filter(u => u.status === 'completed').length
+
             return (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.4 }}
                 key={chapter.id}
                 onClick={() => {
                   if (!isLocked) {
                     router.push('/academy')
                   }
                 }}
-                whileHover={!isLocked ? { y: -1 } : {}}
-                whileTap={!isLocked ? { y: 4, boxShadow: '0 1px 0 rgba(52,211,153,0.2)' } : {}}
-                style={!isLocked ? { boxShadow: '0 5px 0 rgba(52,211,153,0.15)' } : undefined}
+                whileTap={!isLocked ? { scale: 0.96 } : {}}
                 className={cn(
-                  "relative rounded-3xl p-5 border transition-colors duration-150",
-                  isActive ? "bg-emerald-900/20 border-emerald-500/50 cursor-pointer hover:border-emerald-500 hover:bg-emerald-900/30" : "",
-                  isCompleted ? "bg-white/5 border-white/10 cursor-pointer hover:bg-white/10" : "",
-                  isLocked ? "bg-black/40 border-white/5 opacity-60 cursor-not-allowed" : ""
+                  "relative rounded-[32px] p-5 flex items-center gap-5 transition-colors duration-200",
+                  !isLocked && "cursor-pointer",
+                  isActive ? "bg-emerald-500/10 border-2 border-emerald-500/30" : 
+                  isCompleted ? "bg-white/5 border-2 border-transparent hover:bg-white/10" : 
+                  "bg-white/[0.02] border-2 border-transparent opacity-50 grayscale-[50%]"
                 )}
               >
-                {/* Ligne connectrice visuelle (façon Duolingo) */}
-                {index < chapters.length - 1 && (
-                  <div className="absolute left-11 -bottom-4 w-[2px] h-4 bg-white/10 z-0" />
-                )}
+                {/* Icône circulaire (façon Headspace/Duolingo) */}
+                <div className={cn(
+                  "w-16 h-16 shrink-0 rounded-full flex items-center justify-center transition-all duration-300",
+                  isActive ? "bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]" :
+                  isCompleted ? "bg-white/10 text-white" :
+                  "bg-black/40 text-white/30 border border-white/5"
+                )}>
+                  {isActive && <Play className="w-7 h-7 ml-1 fill-current" />}
+                  {isCompleted && <Check className="w-7 h-7" strokeWidth={3} />}
+                  {isLocked && <Lock className="w-6 h-6" />}
+                </div>
 
-                <div className="flex items-start gap-4 relative z-10">
-                  {/* Icône de statut avec 3D press */}
-                  <div className={cn(
-                    "w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center transition-all duration-100",
-                    isActive ? "bg-emerald-500 text-black shadow-[0_5px_0_#065f46]" : "",
-                    isCompleted ? "bg-white/10 text-white shadow-[0_4px_0_rgba(0,0,0,0.4)]" : "",
-                    isLocked ? "bg-black text-white/40 border border-white/10" : ""
-                  )}>
-                    {isActive && <Play className="w-6 h-6 ml-1 fill-current" />}
-                    {isCompleted && <Check className="w-6 h-6" strokeWidth={3} />}
-                    {isLocked && <Lock className="w-6 h-6" />}
-                  </div>
-
-                  {/* Contenu */}
-                  <div className="flex-1 pt-1">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className={cn(
-                        "text-[10px] font-black px-2 py-0.5 rounded-lg uppercase tracking-widest",
-                        isActive ? "bg-emerald-500/20 text-emerald-400" : "bg-white/10 text-white/60"
-                      )}>
-                        Section {chapter.id}
-                      </span>
-                      <span className="text-xs font-bold text-white/40 bg-white/5 px-2 py-0.5 rounded-lg">
-                        {chapter.level}
-                      </span>
-                    </div>
-                    <h3 className={cn(
-                      "text-xl font-black mb-2 leading-tight",
-                      isLocked ? "text-white/60" : "text-white"
+                {/* Contenu */}
+                <div className="flex-1 min-w-0 py-1">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className={cn(
+                      "text-[11px] font-black uppercase tracking-widest",
+                      isActive ? "text-emerald-400" : "text-white/40"
                     )}>
-                      {chapter.title}
-                    </h3>
-                    <p className={cn(
-                      "text-sm leading-relaxed",
-                      isLocked ? "text-white/40" : "text-white/70"
-                    )}>
-                      {chapter.description}
-                    </p>
-
-                    {/* Progress Bar (seulement si actif ou complété) */}
-                    {(isActive || isCompleted) && (
-                      <div className="mt-4 flex items-center gap-3">
-                        <div className="flex-1 h-2.5 bg-black/50 rounded-full overflow-hidden shadow-inner">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${chapter.progress}%` }}
-                            transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
-                            className="h-full bg-emerald-500 rounded-full relative"
-                          >
-                            <div className="absolute top-0 right-0 bottom-0 w-4 bg-white/30 rounded-full blur-[2px]" />
-                          </motion.div>
-                        </div>
-                        <span className="text-xs font-bold text-emerald-400 tabular-nums w-8 text-right">
-                          {chapter.progress}%
-                        </span>
-                      </div>
+                      Section {chapter.id}
+                    </span>
+                    
+                    {/* Badge d'unités (remplace la progress bar) */}
+                    {(isActive || isCompleted) && totalUnits > 0 && (
+                      <span className="text-[10px] font-bold text-white/60 bg-black/40 px-2.5 py-1 rounded-full tabular-nums">
+                        {completedUnitsCount} / {totalUnits} unités
+                      </span>
                     )}
                   </div>
+                  
+                  <h3 className={cn(
+                    "text-xl font-black truncate mb-1",
+                    isLocked ? "text-white/60" : "text-white"
+                  )}>
+                    {chapter.title}
+                  </h3>
+                  
+                  <p className={cn(
+                    "text-sm line-clamp-2 leading-relaxed",
+                    isLocked ? "text-white/30" : "text-white/60"
+                  )}>
+                    {chapter.subtitle}
+                  </p>
                 </div>
               </motion.div>
             )

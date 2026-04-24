@@ -7,10 +7,11 @@ import Image from 'next/image'
 import { useRouter, Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { getMockAcademySyllabus, type AcademyUnit } from '@/lib/mock/mock-academy'
+import { getCurrentChapter, getNextChapter, type AcademyUnit } from '@/lib/mock/mock-academy'
 
 // ─── Data ──────────────────────────────────────────────────────────────────
-const syllabus = getMockAcademySyllabus()
+const currentChapter = getCurrentChapter()
+const nextChapter = getNextChapter()
 
 // ─── Loading steps ─────────────────────────────────────────────────────────
 const LOADING_STEPS = [
@@ -242,7 +243,7 @@ export default function AcademyPage() {
   const [lockedUnit,     setLockedUnit]     = useState<AcademyUnit | null>(null)
   const [loadingTarget,  setLoadingTarget]  = useState<string | null>(null)
 
-  const units = syllabus.units
+  const units = currentChapter.units
 
   const handleStartCourse = useCallback((unit: AcademyUnit) => {
     setSelectedUnit(null)
@@ -276,7 +277,7 @@ export default function AcademyPage() {
           {/* Left: chapter navigator */}
           <Link href="/academy/chapters" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-95 group">
             <BookOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            <span className="text-[11px] font-black text-white leading-none">Chapitre 1</span>
+            <span className="text-[11px] font-black text-white leading-none">Chapitre {currentChapter.id}</span>
             <ChevronDown className="w-3 h-3 text-white/40 group-hover:text-white/70 transition-colors" />
           </Link>
 
@@ -309,9 +310,9 @@ export default function AcademyPage() {
             <div className="w-24 h-24 mb-4 relative z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
               <Image src="/abeille-transparente.png" alt="Melli" fill className="object-contain" />
             </div>
-            <h2 className="text-emerald-400 text-xs font-black tracking-[0.2em] mb-2 uppercase relative z-10">CHAPITRE 1</h2>
-            <h1 className="text-3xl font-black text-white mb-2 relative z-10">{syllabus.chapter.title}</h1>
-            <p className="text-sm text-white/60 relative z-10 max-w-[250px]">{syllabus.chapter.subtitle}</p>
+            <h2 className="text-emerald-400 text-xs font-black tracking-[0.2em] mb-2 uppercase relative z-10">CHAPITRE {currentChapter.id}</h2>
+            <h1 className="text-3xl font-black text-white mb-2 relative z-10">{currentChapter.title}</h1>
+            <p className="text-sm text-white/60 relative z-10 max-w-[250px]">{currentChapter.subtitle}</p>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-500/10 blur-[50px] rounded-full" />
           </div>
 
@@ -342,6 +343,88 @@ export default function AcademyPage() {
               return mascotSpacer ? [nodeEl, mascotSpacer] : [nodeEl]
             })}
           </div>
+
+          {/* ── NEXT CHAPTER TEASER ─────────────────────────────── */}
+          {(() => {
+            const chapterDone = units.every(u => u.status === 'completed')
+            return (
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }}
+                className={cn(
+                  'w-full rounded-3xl overflow-hidden border relative',
+                  chapterDone
+                    ? 'bg-gradient-to-br from-indigo-900/40 to-purple-900/30 border-indigo-500/40'
+                    : 'bg-white/3 border-white/8'
+                )}
+              >
+                {/* Glow de fond */}
+                {chapterDone && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/5 pointer-events-none" />
+                )}
+
+                <div className="relative z-10 p-6 flex flex-col gap-3">
+                  {/* Badge */}
+                  <span className={cn(
+                    'self-start text-[10px] font-black uppercase tracking-[0.18em] px-2.5 py-1 rounded-full border',
+                    chapterDone
+                      ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300'
+                      : 'bg-white/5 border-white/10 text-white/40'
+                  )}>
+                    À suivre
+                  </span>
+
+                  {/* Titre */}
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className={cn(
+                        'text-xs font-bold uppercase tracking-widest mb-1',
+                        chapterDone ? 'text-indigo-400' : 'text-white/30'
+                      )}>
+                        {nextChapter ? `Chapitre ${nextChapter.id}` : 'Félicitations !'}
+                      </p>
+                      <h3 className={cn(
+                        'text-xl font-black leading-tight',
+                        chapterDone ? 'text-white' : 'text-white/40'
+                      )}>
+                        {nextChapter ? nextChapter.title : 'Tu as tout terminé'}
+                      </h3>
+                    </div>
+                    <div className={cn(
+                      'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl',
+                      chapterDone
+                        ? 'bg-indigo-500/20 border border-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.3)]'
+                        : 'bg-white/5 border border-white/10'
+                    )}>
+                      {chapterDone && nextChapter ? '🔓' : chapterDone ? '🏆' : '🔒'}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className={cn(
+                    'text-sm leading-relaxed',
+                    chapterDone ? 'text-white/70' : 'text-white/25'
+                  )}>
+                    {chapterDone
+                      ? (nextChapter ? `Bravo ! Tu peux maintenant explorer : ${nextChapter.subtitle}` : 'Tu as exploré tous les chapitres de l\'académie !')
+                      : `Termine tous les niveaux du Chapitre ${currentChapter.id} pour débloquer la suite.`}
+                  </p>
+
+                  {/* CTA */}
+                  {chapterDone && nextChapter && (
+                    <motion.button
+                      whileTap={{ y: 3, boxShadow: '0 1px 0 #3730a3' }}
+                      style={{ boxShadow: '0 5px 0 #3730a3' }}
+                      className="mt-2 w-full bg-indigo-600 text-white font-black text-sm rounded-2xl py-3.5 transition-colors hover:bg-indigo-500"
+                    >
+                      COMMENCER LE CHAPITRE {nextChapter.id}
+                    </motion.button>
+                  )}
+                </div>
+              </motion.div>
+            )
+          })()}
         </main>
 
         {/* ── MODALES ───────────────────────────────────────────────── */}
@@ -381,7 +464,7 @@ export default function AcademyPage() {
 
               <div className="flex-1 px-6 pt-8 pb-32 flex flex-col items-center text-center">
                 <span className="text-emerald-400 font-bold tracking-widest text-xs uppercase mb-4">
-                  Chapitre 1 — Unité {selectedUnit.id}
+                  Chapitre {currentChapter.id} — Unité {selectedUnit.id}
                 </span>
                 <h2 className="text-3xl font-black text-white mb-4 leading-tight">{selectedUnit.title}</h2>
                 {selectedUnit.description && (
