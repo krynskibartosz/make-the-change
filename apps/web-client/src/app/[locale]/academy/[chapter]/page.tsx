@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Chapter | Make the Change',
+  title: 'Chapitre | Make the Change',
 }
 
 export default function ChapterPage() {
