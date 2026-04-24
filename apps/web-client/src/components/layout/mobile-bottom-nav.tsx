@@ -27,7 +27,8 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const isHome = pathname === '/'
   const isImmersive =
     pathname.includes('/aventure/eco-fact/') ||
-    pathname.includes('/aventure/daily-harvest/')
+    pathname.includes('/aventure/daily-harvest/') ||
+    pathname.startsWith('/academy')
 
   if (isInvestFlow || isSettingsPage || isInvestmentsPage || isHome || isImmersive) {
     return null

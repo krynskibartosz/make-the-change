@@ -1,0 +1,696 @@
+{
+  "app_name": "Biolingo",
+  "target_audience": "Micro-learning",
+  "syllabus": [
+    {
+      "chapter_id": 1,
+      "chapter_title": "L'Alphabet Originel (A1)",
+      "units": [
+        {
+          "unit_id": "1.1",
+          "unit_title": "Les Forges de la Vie (Eau, Soleil, Sols)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Soleil, eau, sol : les trois piliers de la vie.",
+                "visual": "Une jeune pousse lumineuse émergeant d'une terre humide sous un grand soleil"
+              },
+              "screen_2": {
+                "text": "Ensemble, ils forgent l'énergie de toute la nature.",
+                "visual": "La mascotte Ondine mélangeant joyeusement de l'eau, de la terre et des rayons solaires"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Est-ce un ingrédient indispensable à la création de la vie ?",
+              "card_true": {
+                "element": "L'eau douce",
+                "feedback": "Génial ! Sans eau, les cellules de la vie ne peuvent pas s'hydrater."
+              },
+              "card_false": {
+                "element": "Le goudron",
+                "feedback": "Oups ! Le goudron asphyxie nos sols et empêche l'eau de circuler."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne ces éléments du plus lointain au plus profond :",
+              "ordered_elements": [
+                "Le Soleil (Espace)",
+                "L'Eau (Surface)",
+                "Les Minéraux (Sous-sol)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel élément fournit l'énergie de base à presque toute la Terre ?",
+              "wrong_answers": [
+                "Le vent fougueux",
+                "La roche magmatique"
+              ],
+              "correct_answer": "Le Soleil",
+              "celebration": "Bingo ! Les plantes capturent sa lumière pour nourrir toute la chaîne alimentaire."
+            }
+          }
+        },
+        {
+          "unit_id": "1.2",
+          "unit_title": "Le Peuple Émeraude (Flore)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Les plantes sont les usines magiques de notre planète.",
+                "visual": "Une forêt dense et vibrante vue d'en bas, baignée de lumière"
+              },
+              "screen_2": {
+                "text": "Elles transforment la lumière du soleil en énergie pure.",
+                "visual": "La mascotte Sylva tenant une feuille verte brillante qui absorbe un rayon solaire"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Que capte la plante pour réaliser la photosynthèse ?",
+              "card_true": {
+                "element": "La lumière du soleil",
+                "feedback": "Brillant ! Les feuilles sont de véritables panneaux solaires naturels."
+              },
+              "card_false": {
+                "element": "L'ombre fraîche",
+                "feedback": "Zut ! Sans lumière, la grande usine verte s'arrête de fonctionner complètement."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne le trajet magique de l'eau dans une plante :",
+              "ordered_elements": [
+                "Les racines (Sol)",
+                "La tige (Transport)",
+                "Les feuilles (Évaporation)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel super-pouvoir permet aux plantes de créer leur nourriture ?",
+              "wrong_answers": [
+                "La télékinésie",
+                "La digestion lente"
+              ],
+              "correct_answer": "La photosynthèse",
+              "celebration": "Super ! Elles créent du sucre avec du soleil, de l'eau et de l'air."
+            }
+          }
+        },
+        {
+          "unit_id": "1.3",
+          "unit_title": "Le Bestiaire Sauvage (Faune)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Les animaux respirent, bougent et explorent chaque recoin du monde.",
+                "visual": "Une plaine sauvage vibrante où courent des animaux de différentes tailles"
+              },
+              "screen_2": {
+                "text": "Leur secret pour survivre ? L'instinct et le mouvement permanent.",
+                "visual": "La mascotte Melli volant agilement au-dessus des hautes herbes"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Quelle caractéristique appartient au règne animal ?",
+              "card_true": {
+                "element": "Le mouvement autonome",
+                "feedback": "Exact ! Pouvoir se déplacer permet de chasser, de fuir et d'explorer."
+              },
+              "card_false": {
+                "element": "Des racines souterraines",
+                "feedback": "Oups ! Les animaux ne sont pas fixés au sol, contrairement aux plantes."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Classe ces animaux sauvages du plus lent au plus rapide :",
+              "ordered_elements": [
+                "L'escargot (Lent)",
+                "Le loup (Rapide)",
+                "Le faucon pèlerin (Très rapide)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Comment appelle-t-on la boussole naturelle qui guide les actions des animaux ?",
+              "wrong_answers": [
+                "Le magnétisme",
+                "La photosynthèse"
+              ],
+              "correct_answer": "L'instinct",
+              "celebration": "Parfait ! C'est ce GPS interne qui les aide à survivre dès la naissance."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "chapter_id": 2,
+      "chapter_title": "La Grammaire des Espèces (A2)",
+      "units": [
+        {
+          "unit_id": "2.1",
+          "unit_title": "Le Festin des Prédateurs (Chaîne alimentaire)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Dans la nature, tout le monde mange ou est mangé.",
+                "visual": "Une boucle lumineuse reliant une herbe, un lièvre et un loup"
+              },
+              "screen_2": {
+                "text": "C'est le cycle vital de la chaîne alimentaire !",
+                "visual": "La mascotte Melli observant avec de grandes jumelles un aigle en chasse"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Est-ce le rôle utile d'un grand prédateur ?",
+              "card_true": {
+                "element": "Réguler les proies",
+                "feedback": "Bien joué ! Sans les prédateurs, les herbivores mangeraient toute la forêt."
+              },
+              "card_false": {
+                "element": "Fabriquer de l'engrais",
+                "feedback": "Aïe ! Ça, c'est le travail minutieux des insectes et des bactéries."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Reconstitue cette chaîne alimentaire dans le bon ordre :",
+              "ordered_elements": [
+                "La feuille (Producteur)",
+                "La chenille (Herbivore)",
+                "L'oiseau (Carnivore)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Qui se trouve tout à la base d'une chaîne alimentaire terrestre ?",
+              "wrong_answers": [
+                "Le super-prédateur",
+                "Le champignon géant"
+              ],
+              "correct_answer": "La plante verte",
+              "celebration": "Bravo ! Elle produit sa propre énergie pour nourrir tous les autres."
+            }
+          }
+        },
+        {
+          "unit_id": "2.2",
+          "unit_title": "Les Alliances Invisibles (Symbiose)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Dans la nature, s'entraider est souvent vital pour survivre.",
+                "visual": "Un poisson-clown blotti en toute sécurité dans une anémone de mer"
+              },
+              "screen_2": {
+                "text": "Ces pactes secrets et magiques s'appellent la symbiose.",
+                "visual": "La mascotte Sylva faisant un \"high five\" avec un joyeux petit champignon"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Est-ce un exemple de relation mutuellement bénéfique ?",
+              "card_true": {
+                "element": "L'abeille et la fleur",
+                "feedback": "Génial ! L'une se nourrit de nectar, l'autre voyage pour se reproduire."
+              },
+              "card_false": {
+                "element": "Le moustique et l'humain",
+                "feedback": "Aïe ! Le moustique est un parasite, il prend sans rien donner en retour."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Classe ces relations de la plus amicale à la pire :",
+              "ordered_elements": [
+                "Mutualisme (Gagnant-Gagnant)",
+                "Commensalisme (Neutre)",
+                "Parasitisme (Gagnant-Perdant)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Comment s'appelle l'alliance vitale entre un champignon et une algue ?",
+              "wrong_answers": [
+                "Une moisissure",
+                "Un fossile"
+              ],
+              "correct_answer": "Le lichen",
+              "celebration": "Bravo ! Ils fusionnent pour créer un super-organisme capable de vivre sur la roche nue."
+            }
+          }
+        },
+        {
+          "unit_id": "2.3",
+          "unit_title": "La Loterie des Mutations (Évolution)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "La nature teste tout le temps de nouvelles formes bizarres.",
+                "visual": "Plusieurs papillons de couleurs différentes volant au-dessus d'une fleur"
+              },
+              "screen_2": {
+                "text": "C'est l'évolution : les mieux adaptés survivent et se multiplient !",
+                "visual": "La mascotte Ondine observant un papillon parfaitement camouflé sur une feuille"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Qu'est-ce qui aide une espèce à survivre dans le temps ?",
+              "card_true": {
+                "element": "Une mutation utile",
+                "feedback": "Exact ! Un long cou pour manger les hautes feuilles, c'est malin !"
+              },
+              "card_false": {
+                "element": "Rester exactement pareil",
+                "feedback": "Aïe ! Si le climat change, l'espèce doit s'adapter ou disparaître."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Remets les étapes de l'évolution dans le bon ordre :",
+              "ordered_elements": [
+                "Mutation au hasard",
+                "Survie du mieux adapté",
+                "Transmission aux bébés"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel célèbre scientifique a expliqué l'évolution par la sélection naturelle ?",
+              "wrong_answers": [
+                "Albert Einstein",
+                "Marie Curie"
+              ],
+              "correct_answer": "Charles Darwin",
+              "celebration": "Bingo ! Son voyage aux îles Galápagos a changé la science pour toujours."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "chapter_id": 3,
+      "chapter_title": "L'Économie de la Biosphère (B1)",
+      "units": [
+        {
+          "unit_id": "3.1",
+          "unit_title": "Les Coursiers du Nectar (Pollinisation)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Pour se reproduire, les fleurs engagent des livreurs volants.",
+                "visual": "Une belle fleur colorée attirant une abeille en plein vol"
+              },
+              "screen_2": {
+                "text": "Contre du nectar sucré, les insectes transportent leur pollen !",
+                "visual": "La mascotte Melli couverte de poudre jaune avec un sac à dos"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Cet animal est-il un bon pollinisateur ?",
+              "card_true": {
+                "element": "Le papillon",
+                "feedback": "Vrai ! En butinant de fleur en fleur, il disperse le pollen."
+              },
+              "card_false": {
+                "element": "Le loup",
+                "feedback": "Oups ! Les loups chassent, ils ne butinent pas les pâquerettes !"
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Remets les étapes de la pollinisation dans le bon ordre :",
+              "ordered_elements": [
+                "L'insecte boit le nectar",
+                "Le pollen colle à ses poils",
+                "Il féconde une autre fleur"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Sans la pollinisation, que manquerait-il cruellement dans nos assiettes ?",
+              "wrong_answers": [
+                "L'eau minérale",
+                "Le sel marin"
+              ],
+              "correct_answer": "Les fruits et légumes",
+              "celebration": "Exact ! Sans eux, adieu les fraises, les pommes et le chocolat."
+            }
+          }
+        },
+        {
+          "unit_id": "3.2",
+          "unit_title": "L'Éternel Voyage Bleu (Cycle de l'eau)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "L'eau de la Terre ne disparaît jamais, elle voyage !",
+                "visual": "Une petite goutte d'eau avec un sac à dos"
+              },
+              "screen_2": {
+                "text": "Elle tourne en boucle entre ciel, terre et océan.",
+                "visual": "La mascotte Ondine surfant joyeusement sur une vague infinie"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Qu'est-ce qui fait monter l'eau de l'océan vers le ciel ?",
+              "card_true": {
+                "element": "La chaleur du soleil",
+                "feedback": "Parfait ! Le soleil chauffe l'eau qui s'évapore en gaz invisible."
+              },
+              "card_false": {
+                "element": "La gravité terrestre",
+                "feedback": "Oups ! La gravité sert à faire tomber la pluie, pas l'inverse."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Remets les étapes du cycle de l'eau dans l'ordre :",
+              "ordered_elements": [
+                "Évaporation (Océan)",
+                "Condensation (Nuages)",
+                "Précipitations (Pluie)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Où va une grande partie de l'eau qui tombe sur terre ?",
+              "wrong_answers": [
+                "Dans l'espace intersidéral",
+                "Elle brûle au contact du sol"
+              ],
+              "correct_answer": "Elle s'infiltre dans le sol",
+              "celebration": "Génial ! Elle remplit les nappes phréatiques, nos réserves d'eau secrètes."
+            }
+          }
+        },
+        {
+          "unit_id": "3.3",
+          "unit_title": "Le Coffre-Fort Noir (Carbone)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Le carbone est la brique de base du vivant.",
+                "visual": "Un atome de carbone brillant entouré de feuilles et d'animaux"
+              },
+              "screen_2": {
+                "text": "Les forêts le stockent comme un immense coffre-fort géant.",
+                "visual": "La mascotte Sylva fermant un coffre magique rempli de diamants noirs"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Ce processus aide-t-il à stocker le gaz carbonique ?",
+              "card_true": {
+                "element": "Un arbre qui grandit",
+                "feedback": "Super ! En poussant, le bois emprisonne le carbone pour de nombreuses années."
+              },
+              "card_false": {
+                "element": "Un feu de forêt",
+                "feedback": "Aïe ! Brûler du bois libère d'un seul coup tout le carbone enfoui."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne le cycle naturel du carbone :",
+              "ordered_elements": [
+                "Gaz dans l'air",
+                "L'arbre l'absorbe (Photosynthèse)",
+                "La feuille tombe et nourrit le sol"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel autre immense milieu naturel est notre meilleur puits de carbone ?",
+              "wrong_answers": [
+                "Le désert brûlant",
+                "La haute montagne"
+              ],
+              "correct_answer": "L'océan profond",
+              "celebration": "Bingo ! Ses eaux et ses algues microscopiques absorbent des tonnes de carbone."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "chapter_id": 4,
+      "chapter_title": "Les Sanctuaires Sauvages (B2)",
+      "units": [
+        {
+          "unit_id": "4.1",
+          "unit_title": "L'Île aux Lémuriens (Madagascar)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Une île isolée devient le laboratoire secret de la nature.",
+                "visual": "L'île de Madagascar flottant paisiblement sur un océan bleu scintillant"
+              },
+              "screen_2": {
+                "text": "Des espèces uniques vivent ici et absolument nulle part ailleurs.",
+                "visual": "La mascotte Sylva observant un maki catta à queue annelée perché dans un baobab"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Ce comportement décrit-il une espèce dite \"endémique\" ?",
+              "card_true": {
+                "element": "Vivre uniquement à Madagascar",
+                "feedback": "Exact ! Isolée de tout, l'espèce a évolué de façon unique et irremplaçable."
+              },
+              "card_false": {
+                "element": "Voyager sur tous les continents",
+                "feedback": "Faux ! Ça, c'est une espèce cosmopolite. L'espèce endémique reste strictement à la maison !"
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Retrace l'histoire fascinante de l'arrivée des lémuriens sur l'île :",
+              "ordered_elements": [
+                "Dérive sur des radeaux de bois",
+                "Arrivée sur l'île isolée",
+                "Évolution en espèces uniques"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel arbre géant au tronc massif est l'emblème de Madagascar ?",
+              "wrong_answers": [
+                "Le chêne centenaire",
+                "Le pin parasol"
+              ],
+              "correct_answer": "Le baobab",
+              "celebration": "Bravo ! Son tronc en forme de bouteille stocke l'eau pour survivre aux longues sécheresses."
+            }
+          }
+        },
+        {
+          "unit_id": "4.2",
+          "unit_title": "Les Métropoles Englouties (Coraux)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Les récifs coralliens sont les villes géantes de l'océan.",
+                "visual": "Une ville sous-marine lumineuse et colorée faite de coraux"
+              },
+              "screen_2": {
+                "text": "Ils sont bâtis par de minuscules animaux appelés polypes.",
+                "visual": "La mascotte Ondine regardant à la loupe un petit polype"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Est-ce un danger mortel pour les récifs coralliens ?",
+              "card_true": {
+                "element": "Le réchauffement de l'eau",
+                "feedback": "Vrai ! L'eau trop chaude stresse le corail et provoque son blanchissement."
+              },
+              "card_false": {
+                "element": "Les poissons-clowns",
+                "feedback": "Faux ! Ces poissons protègent le récif et vivent en parfaite harmonie avec lui."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne la triste étape du blanchissement corallien :",
+              "ordered_elements": [
+                "L'eau devient trop chaude",
+                "Le polype expulse son algue magique",
+                "Le corail devient blanc et s'affaiblit"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quelle est la véritable nature biologique d'un corail ?",
+              "wrong_answers": [
+                "Un rocher marin coloré",
+                "Une plante aquatique à fleurs"
+              ],
+              "correct_answer": "Un animal invertébré",
+              "celebration": "Bingo ! Ces petits bâtisseurs créent des structures calcaires gigantesques visibles depuis l'espace."
+            }
+          }
+        },
+        {
+          "unit_id": "4.3",
+          "unit_title": "Le Bal des Saisons (Forêts Tempérées)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Les forêts tempérées changent de visage quatre fois par an.",
+                "visual": "Un même grand chêne divisé en quatre quartiers (printemps, été, automne, hiver)"
+              },
+              "screen_2": {
+                "text": "Tout s'adapte : la sève ralentit, les animaux s'endorment.",
+                "visual": "La mascotte Melli portant une écharpe et observant un loir endormi"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Que font les arbres feuillus pour survivre au gel hivernal ?",
+              "card_true": {
+                "element": "Perdre toutes leurs feuilles",
+                "feedback": "Exact ! C'est vital pour économiser l'eau et l'énergie pendant le froid."
+              },
+              "card_false": {
+                "element": "Faire pousser des épines",
+                "feedback": "Oups ! C'est la stratégie des sapins et des pins, pas des chênes !"
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne le cycle magique du sol de la forêt en automne :",
+              "ordered_elements": [
+                "Les feuilles mortes tombent",
+                "Les insectes et champignons les mangent",
+                "Création d'humus (terre fertile)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Comment appelle-t-on le long sommeil profond des animaux en hiver ?",
+              "wrong_answers": [
+                "La migration lointaine",
+                "La métamorphose"
+              ],
+              "correct_answer": "L'hibernation",
+              "celebration": "Parfait ! Leur température baisse drastiquement pour ne consommer presque aucune énergie jusqu'au printemps."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "chapter_id": 5,
+      "chapter_title": "L'Éveil des Gardiens (C1/C2)",
+      "units": [
+        {
+          "unit_id": "5.1",
+          "unit_title": "Le Crépuscule des Géants (Extinction)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "De nombreuses espèces disparaissent à une vitesse jamais vue.",
+                "visual": "L'ombre géante d'un rhinocéros s'effaçant lentement dans la brume"
+              },
+              "screen_2": {
+                "text": "C'est la sixième extinction, causée par les activités humaines.",
+                "visual": "La mascotte Ondine regardant tristement un sablier dont le sable s'écoule"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Quelle est une cause majeure de cette extinction moderne ?",
+              "card_true": {
+                "element": "La destruction des habitats",
+                "feedback": "Vrai ! Raser les forêts détruit la maison de millions d'animaux innocents."
+              },
+              "card_false": {
+                "element": "La chute d'une météorite",
+                "feedback": "Faux ! Ça, c'était pour les dinosaures. Aujourd'hui, l'impact est humain."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne la tragique ligne de temps du déclin d'une espèce :",
+              "ordered_elements": [
+                "Perte de son habitat (Menace)",
+                "Population en chute libre (Danger)",
+                "Extinction totale (Disparition)"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel nom scientifique donne-t-on à notre époque, marquée par l'impact humain sur la Terre ?",
+              "wrong_answers": [
+                "Le Jurassique",
+                "L'Âge de Glace"
+              ],
+              "correct_answer": "L'Anthropocène",
+              "celebration": "Bingo ! Cela signifie \"l'ère de l'humain\", car nos actions transforment toute la biosphère."
+            }
+          }
+        },
+        {
+          "unit_id": "5.2",
+          "unit_title": "L'Arsenal de l'Espoir (Solutions)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "Il n'est pas trop tard pour sauver notre belle planète.",
+                "visual": "Des mains humaines plantant délicatement un jeune arbre dans la terre"
+              },
+              "screen_2": {
+                "text": "Conservation et innovation sont nos meilleurs boucliers de protection !",
+                "visual": "La mascotte Melli brandissant fièrement un bouclier en forme de feuille verte"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Est-ce une solution efficace pour protéger la biodiversité ?",
+              "card_true": {
+                "element": "Créer des réserves naturelles",
+                "feedback": "Génial ! Ces zones protégées offrent un sanctuaire sûr aux espèces menacées."
+              },
+              "card_false": {
+                "element": "Bétonner les rivières",
+                "feedback": "Oups ! Les cours d'eau naturels sont vitaux pour tout l'écosystème."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne les étapes pour restaurer une forêt détruite :",
+              "ordered_elements": [
+                "Protéger le sol nu",
+                "Replanter des espèces locales",
+                "Laisser la faune revenir"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Comment appelle-t-on les passages verts reliant les habitats naturels coupés par l'homme ?",
+              "wrong_answers": [
+                "Les autoroutes express",
+                "Les frontières invisibles"
+              ],
+              "correct_answer": "Les corridors écologiques",
+              "celebration": "Super ! Ils permettent aux animaux de voyager et se reproduire en toute sécurité."
+            }
+          }
+        },
+        {
+          "unit_id": "5.3",
+          "unit_title": "Cultiver l'Avenir (Agroécologie)",
+          "content": {
+            "EXERCICE_STORY": {
+              "screen_1": {
+                "text": "L'agriculture de demain imite la sagesse de la forêt.",
+                "visual": "Un champ foisonnant où légumes, arbres fruitiers et fleurs poussent ensemble"
+              },
+              "screen_2": {
+                "text": "C'est l'agroécologie : faire de la nature notre alliée.",
+                "visual": "La mascotte Sylva récoltant un grand panier de légumes avec fierté"
+              }
+            },
+            "EXERCICE_SWIPE": {
+              "question": "Est-ce un bon principe pour cultiver la terre durablement ?",
+              "card_true": {
+                "element": "Mélanger plusieurs espèces",
+                "feedback": "Génial ! Les plantes s'entraident, se protègent des maladies et nourrissent le sol ensemble."
+              },
+              "card_false": {
+                "element": "Asperger de pesticides chimiques",
+                "feedback": "Aïe ! Ces produits empoisonnent la terre, l'eau et tuent les insectes utiles."
+              }
+            },
+            "EXERCICE_DRAG_DROP": {
+              "instruction": "Ordonne les étapes de création d'un jardin en permaculture :",
+              "ordered_elements": [
+                "Observer le terrain naturel",
+                "Planter des espèces variées",
+                "Récolter en enrichissant le sol"
+              ]
+            },
+            "EXERCICE_QUIZ_FINAL": {
+              "question": "Quel petit animal souterrain est le meilleur ami de la terre fertile ?",
+              "wrong_answers": [
+                "La taupe géante",
+                "La cigale bruyante"
+              ],
+              "correct_answer": "Le ver de terre",
+              "celebration": "Bravo ! Ce laboureur infatigable aère le sol et crée un engrais naturel surpuissant."
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
