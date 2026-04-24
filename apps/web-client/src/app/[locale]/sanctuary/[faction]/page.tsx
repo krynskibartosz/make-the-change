@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
-import { getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
+import { getFactionContributionByKey, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Faction } from '@/lib/mock/types'
 import type { FactionThemeKey } from '@/lib/faction-theme'
@@ -54,7 +54,7 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
   }
 
   const theme = getFactionThemeByKey(factionKey as FactionThemeKey)
-  const contribution = getFactionContribution(factionKey as Faction)
+  const contribution = getFactionContributionByKey(factionKey as Exclude<FactionThemeKey, 'neutral'>)
   const contributions = getFactionContributions()
   const isLeading = contributions[0]?.themeKey === factionKey
 
