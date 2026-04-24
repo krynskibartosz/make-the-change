@@ -575,7 +575,7 @@ export default function ExerciseEngine() {
             {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} />}
             {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} />}
             {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} />}
-          </motion.div>
+          </motion.div>}
         </AnimatePresence>
       </div>
 
