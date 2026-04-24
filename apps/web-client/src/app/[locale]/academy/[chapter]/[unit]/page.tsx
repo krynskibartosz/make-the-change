@@ -60,7 +60,7 @@ const unitData = {
 
 function ExerciseHeader({ progress, total, onQuit }: { progress: number, total: number, onQuit: () => void }) {
   return (
-    <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4">
+    <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4 bg-[#05050A]/60 backdrop-blur-md border-b border-white/5">
       <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
         <X className="w-6 h-6" />
       </button>

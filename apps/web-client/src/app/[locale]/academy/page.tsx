@@ -6,6 +6,7 @@ import { Target, Flame, Leaf, Lock, Check, ChevronLeft } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 
 // DONNÉES DE TEST (MOCK DATA)
 const factionColor = "emerald" // Peut être emerald (Forêt), cyan (Eau) ou amber (Terre)
@@ -126,25 +127,17 @@ export default function AcademyPage() {
         </div>
       </main>
 
-      {/* ÉTAPE 5: ÉCRAN FULL-SCREEN (SAS DE PRÉPARATION) */}
+      {/* ÉTAPE 5: ÉCRAN FULL-SCREEN (SAS DE PRÉPARATION) VIA FULLSCREENSLIDEMODAL */}
       <AnimatePresence>
         {selectedUnit && (
-          <motion.div
-            initial={{ opacity: 0, y: '100%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-50 bg-[#05050A] flex flex-col overscroll-contain"
+          <FullScreenSlideModal
+            headerMode="dynamic"
+            title={selectedUnit.title}
+            onClose={() => setSelectedUnit(null)}
+            className="bg-[#05050A]"
           >
-            <div className="relative h-64 bg-emerald-900/30 rounded-b-[40px] overflow-hidden shrink-0">
+            <div className="relative h-64 bg-emerald-900/30 rounded-b-[40px] overflow-hidden shrink-0 mt-[-env(safe-area-inset-top)]">
               <div className="absolute inset-0 bg-gradient-to-t from-[#05050A] to-transparent z-10" />
-              
-              <button 
-                onClick={() => setSelectedUnit(null)}
-                className="absolute top-[max(1rem,env(safe-area-inset-top))] left-4 z-20 w-10 h-10 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-full text-white"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
               
               {/* Effet lumineux centré dans le header hero */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-emerald-500/30 blur-[60px] rounded-full" />
@@ -174,7 +167,7 @@ export default function AcademyPage() {
               </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 w-full p-6 pb-[max(2rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent">
+            <div className="sticky bottom-0 left-0 w-full p-6 pb-[max(2rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent z-20">
               <div className="mb-4 text-center">
                 <span className="inline-flex items-center gap-2 bg-emerald-900/40 border border-emerald-500/30 px-4 py-2 rounded-full text-emerald-400 font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                   🎁 Récompense à la clé : +{selectedUnit.reward}
@@ -189,7 +182,7 @@ export default function AcademyPage() {
                 DÉMARRER L'EXPLORATION
               </button>
             </div>
-          </motion.div>
+          </FullScreenSlideModal>
         )}
       </AnimatePresence>
       </div> {/* Fin du wrapper z-10 */}
