@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Check, Flame, Sprout, Crown, BookOpen, ChevronDown, Unlock, Trophy } from 'lucide-react'
+import { Lock, Check, Flame, Sprout, Crown, BookOpen, ChevronDown, Unlock, Trophy, Leaf, Clock, Brain, Gift } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter, Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -18,7 +18,7 @@ const LOADING_STEPS = [
   { label: 'Chargement du cours…',        duration: 650 },
   { label: 'Préparation des exercices…',   duration: 750 },
   { label: 'Ajustement à ton niveau…',     duration: 600 },
-  { label: 'C\'est parti 🚀',              duration: 400 },
+  { label: 'C\'est parti !',              duration: 400 },
 ]
 
 // ─── Sub-components ────────────────────────────────────────────────────────
@@ -114,7 +114,7 @@ function CourseLoadingScreen({ onComplete }: { onComplete: () => void }) {
         transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
         className="w-32 h-32 rounded-full bg-emerald-500/20 border border-emerald-500/30 shadow-[0_0_80px_rgba(16,185,129,0.3)] flex items-center justify-center mb-10"
       >
-        <span className="text-5xl">🌿</span>
+        <Leaf className="w-12 h-12 text-emerald-400" />
       </motion.div>
 
       <h2 className="text-2xl font-black text-white mb-2">Préparation du cours</h2>
@@ -161,77 +161,75 @@ function UnitNode({
   const isActive    = unit.status === 'active'
 
   return (
-    <button
-      onClick={() => {
-        if (isLocked) return onLocked(unit)
-        return onSelect(unit)
-      }}
-      className="relative group focus:outline-none"
-      aria-label={unit.title}
-    >
-      {/* ── Outer glow (active only) */}
+    <div className="relative flex flex-col items-center justify-center my-4">
+      {/* ── Active pulsing ring ── */}
       {isActive && (
         <motion.div
-          animate={{ scale: [1, 1.18, 1], opacity: [0.4, 0.7, 0.4] }}
+          animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 rounded-[24px] bg-emerald-500/30 blur-xl -z-10"
+          className="absolute inset-0 m-auto w-[100px] h-[100px] rounded-full bg-emerald-500/30 blur-md -z-10"
         />
       )}
 
-      {/* ── Main button surface */}
-      <div
+      {/* ── Main button surface ── */}
+      <button
+        onClick={() => {
+          if (isLocked) return onLocked(unit)
+          return onSelect(unit)
+        }}
         className={cn(
-          // Base: size + shape + transition snappy
-          'w-[72px] h-[72px] rounded-[22px] flex items-center justify-center relative transition-all duration-100',
-          // Active: vibrant gradient + deep 3D shadow
+          'w-[84px] h-[84px] rounded-full flex items-center justify-center relative transition-all duration-100 focus:outline-none group',
+          
+          // Active: vibrant gradient + deep 3D shadow + outline ring
           isActive && [
             'bg-gradient-to-b from-emerald-400 to-emerald-600',
-            'border-t border-white/25',
-            'shadow-[0_7px_0_#065f46,0_0_35px_rgba(16,185,129,0.45)]',
-            'group-hover:shadow-[0_5px_0_#065f46,0_0_35px_rgba(16,185,129,0.45)] group-hover:translate-y-[2px]',
-            'group-active:shadow-[0_1px_0_#065f46] group-active:translate-y-[6px]',
+            'shadow-[0_8px_0_#065f46]',
+            'ring-4 ring-emerald-500/20 ring-offset-4 ring-offset-[#05050A]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#065f46]',
+            'active:translate-y-[8px] active:shadow-none',
           ],
-          // Completed: subtle glass 3D
+          
+          // Completed: Solid emerald tone, less prominent than active
           isCompleted && [
-            'bg-gradient-to-b from-white/12 to-white/4',
-            'border border-emerald-500/25',
-            'shadow-[0_5px_0_rgba(52,211,153,0.15)]',
-            'group-hover:shadow-[0_3px_0_rgba(52,211,153,0.15)] group-hover:translate-y-[2px]',
-            'group-active:shadow-[0_1px_0_rgba(52,211,153,0.15)] group-active:translate-y-[4px]',
+            'bg-gradient-to-b from-emerald-500 to-emerald-700',
+            'shadow-[0_8px_0_#064e3b]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b]',
+            'active:translate-y-[8px] active:shadow-none',
           ],
-          // Locked: dark matte — minimal press
+          
+          // Locked: Dark grey/matte 3D
           isLocked && [
-            'bg-gradient-to-b from-white/5 to-black/30',
-            'border border-white/8',
-            'shadow-[0_3px_0_rgba(0,0,0,0.6)]',
-            'opacity-55',
-            'group-active:shadow-[0_1px_0_rgba(0,0,0,0.6)] group-active:translate-y-[2px]',
+            'bg-gradient-to-b from-white/10 to-white/5',
+            'shadow-[0_8px_0_#000]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#000]',
+            'active:translate-y-[8px] active:shadow-none',
           ],
         )}
+        aria-label={unit.title}
       >
-        {isActive    && <Flame className="w-8 h-8 text-white fill-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]" />}
-        {isCompleted && <Check className="w-8 h-8 text-emerald-400 drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]" strokeWidth={3} />}
-        {isLocked    && <Lock  className="w-7 h-7 text-white/30" />}
-
-        {/* Top-edge highlight (gives 3D "pill" effect) */}
+        {/* Top-edge highlight (3D "pill" inner glare) */}
         {!isLocked && (
-          <div className="absolute top-0 inset-x-3 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full" />
+          <div className="absolute top-[2px] inset-x-4 h-2 bg-gradient-to-b from-white/50 to-transparent rounded-t-full pointer-events-none" />
         )}
-      </div>
 
-      {/* ── "C'est ici!" bubble */}
+        {isActive    && <Flame className="w-10 h-10 text-white fill-white drop-shadow-md" />}
+        {isCompleted && <Check className="w-10 h-10 text-emerald-100 drop-shadow-md" strokeWidth={4} />}
+        {isLocked    && <Lock  className="w-8 h-8 text-white/20" />}
+      </button>
+
+      {/* ── "C'est ici!" bubble ── */}
       {isActive && (
         <motion.div
           initial={{ y: 0, opacity: 0.8 }}
-          animate={{ y: [-2, 4, -2], opacity: 1 }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-11 -right-24 bg-white text-black px-3 py-1.5 rounded-2xl rounded-bl-none text-sm font-bold shadow-xl flex items-center gap-1.5 whitespace-nowrap z-10"
+          animate={{ y: [-4, 4, -4], opacity: 1 }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -top-12 -right-20 bg-white text-black px-4 py-2 rounded-2xl rounded-bl-none text-sm font-black shadow-xl flex items-center gap-2 whitespace-nowrap z-20"
         >
-          <Image src="/sylva.png" alt="Sylva" width={22} height={22} className="object-contain" />
+          <Image src="/sylva.png" alt="Sylva" width={24} height={24} className="object-contain" />
           C'est ici !
         </motion.div>
       )}
-    </button>
+    </div>
   )
 }
 
@@ -474,10 +472,10 @@ export default function AcademyPage() {
                 )}
                 <div className="flex gap-4 mb-auto">
                   <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-white/90 text-sm font-medium flex items-center gap-2 shadow-lg">
-                    <span>⏱️</span> 2 min
+                    <Clock className="w-4 h-4 text-white/50" /> 2 min
                   </div>
                   <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-white/90 text-sm font-medium flex items-center gap-2 shadow-lg">
-                    <span>🧠</span> 4 exercices
+                    <Brain className="w-4 h-4 text-white/50" /> 4 exercices
                   </div>
                 </div>
               </div>
@@ -485,7 +483,7 @@ export default function AcademyPage() {
               <div className="sticky bottom-0 left-0 w-full p-6 pb-[max(2rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent z-20">
                 <div className="mb-4 text-center">
                   <span className="inline-flex items-center gap-2 bg-emerald-900/40 border border-emerald-500/30 px-4 py-2 rounded-full text-emerald-400 font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                    🎁 Récompense à la clé : +{selectedUnit.reward}
+                    <Gift className="w-4 h-4" /> Récompense à la clé : +{selectedUnit.reward}
                   </span>
                 </div>
                 <button
