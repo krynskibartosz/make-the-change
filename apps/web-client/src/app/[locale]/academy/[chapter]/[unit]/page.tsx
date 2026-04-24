@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useAnimation, useMotionValue, useTransform } from 'framer-motion'
 import { X, Check, ArrowRight, RefreshCcw } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { cn } from '@/lib/utils'
 import { DndContext, useDraggable, useDroppable, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor, closestCenter } from '@dnd-kit/core'
 import Image from 'next/image'
@@ -58,7 +59,7 @@ const unitData = {
 
 // --- COMPONENTS ---
 
-function ExerciseHeader({ progress, total, onQuit }: { progress: number, total: number, onQuit: () => void }) {
+function ExerciseHeader({ progress, total, onQuit, mascotte }: { progress: number, total: number, onQuit: () => void, mascotte: string }) {
   return (
     <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4 bg-[#05050A]/60 backdrop-blur-md border-b border-white/5">
       <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
@@ -90,9 +91,25 @@ function ExerciseHeader({ progress, total, onQuit }: { progress: number, total: 
           )
         })}
       </div>
+
+      {/* Mascotte flottante */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5, y: 5 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', bounce: 0.5, delay: 0.2 }}
+        className="w-10 h-10 shrink-0 relative"
+      >
+        <Image
+          src={`/${mascotte}.png`}
+          alt={`Mascotte ${mascotte}`}
+          fill
+          className="object-contain drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]"
+        />
+      </motion.div>
     </div>
   )
 }
+
 
 function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: () => void }) {
   const [currentScreen, setCurrentScreen] = useState(0)
@@ -375,11 +392,11 @@ function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correc
 function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: boolean, feedback: string, mascotte: string, onNext: () => void }) {
   return (
     <motion.div
-      initial={{ y: '100%' }}
-      animate={{ y: 0 }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       className={cn(
-        "fixed inset-0 z-[100] flex flex-col items-center justify-center p-8 text-center",
+        "absolute inset-0 z-[100] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]",
         correct ? "bg-emerald-500" : "bg-red-500"
       )}
     >
@@ -405,7 +422,7 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
   }, [])
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#05050A] flex flex-col items-center justify-center p-8 text-center">
+    <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -454,13 +471,13 @@ export default function ExerciseEngine() {
     router.push('/academy')
   }
 
-  if (isFinished) {
-    return <VictoryScreen unit={unitData} onFinish={() => router.push('/academy')} />
-  }
-
   return (
-    <div className="fixed inset-0 bg-[#05050A] flex flex-col overflow-hidden overscroll-none">
-      <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} />
+    <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="flex flex-col overflow-hidden h-full relative">
+      {isFinished ? (
+        <VictoryScreen unit={unitData} onFinish={() => router.push('/academy')} />
+      ) : (
+        <>
+          <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} mascotte={unitData.mascotte} />
 
       <div className="flex-1 w-full h-full relative">
         <AnimatePresence mode="wait">
@@ -490,7 +507,7 @@ export default function ExerciseEngine() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+            className="absolute inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -522,6 +539,8 @@ export default function ExerciseEngine() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+        </>
+      )}
+    </FullScreenSlideModal>
   )
 }
