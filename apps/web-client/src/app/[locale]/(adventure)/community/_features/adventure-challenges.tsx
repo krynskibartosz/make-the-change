@@ -369,7 +369,7 @@ export function AdventureChallenges({
             if (initialFaction) ecoFactUrl.set('faction', initialFaction)
             if (quest.id) ecoFactUrl.set('challengeId', quest.id)
             if (viewerId) ecoFactUrl.set('viewerId', viewerId)
-            const ecoFactPath = `/adventure/eco-fact/${initialDayKey || 'today'}${ecoFactUrl.toString() ? `?${ecoFactUrl.toString()}` : ''}`
+            const ecoFactPath = `/aventure/eco-fact/${initialDayKey || 'today'}${ecoFactUrl.toString() ? `?${ecoFactUrl.toString()}` : ''}`
             
             return (
               <Link
@@ -387,7 +387,7 @@ export function AdventureChallenges({
             if (initialFaction) harvestUrl.set('faction', initialFaction)
             if (quest.id) harvestUrl.set('challengeId', quest.id)
             if (viewerId) harvestUrl.set('viewerId', viewerId)
-            const harvestPath = `/adventure/daily-harvest/${initialDayKey || 'today'}${harvestUrl.toString() ? `?${harvestUrl.toString()}` : ''}`
+            const harvestPath = `/aventure/daily-harvest/${initialDayKey || 'today'}${harvestUrl.toString() ? `?${harvestUrl.toString()}` : ''}`
             
             return (
               isHarvestComplete ? (
