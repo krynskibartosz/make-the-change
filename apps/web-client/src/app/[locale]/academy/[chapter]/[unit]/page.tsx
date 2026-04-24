@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useAnimation, useMotionValue, useTransform } f
 import { X, Check, ArrowRight, RefreshCcw } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { DndContext, useDraggable, useDroppable, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from '@dnd-kit/core'
+import { DndContext, useDraggable, useDroppable, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor, closestCenter } from '@dnd-kit/core'
 import Image from 'next/image'
 
 // --- MOCK DATA (L'Unité 1.1: Les Forges de la Vie) ---
@@ -14,7 +14,7 @@ const unitData = {
   chapitre_id: "chapitre-1",
   titre: "Les Forges de la Vie",
   concept_cle: "Énergie, Minéraux, Hydratation",
-  mascotte: "💧", // Ondine
+  mascotte: "ondine", // 'ondine', 'sylva', ou 'melli'
   recompense: { type: "gouttes", montant: 10, icone: "💧" },
   exercices: [
     {
@@ -68,19 +68,19 @@ function ExerciseHeader({ progress, total, onQuit }: { progress: number, total: 
         {Array.from({ length: total }).map((_, i) => {
           const isCompleted = progress > i
           const isActive = progress === i
-          
+
           return (
             <div key={i} className="flex-1 h-full rounded-full bg-white/10 overflow-hidden relative">
               {/* Pulse effect for active step */}
               {isActive && (
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 bg-emerald-500/30"
                   animate={{ opacity: [0.3, 0.8, 0.3] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
               )}
               {/* Completed fill */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] origin-left"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: isCompleted ? 1 : 0 }}
@@ -115,7 +115,7 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
       <div className="absolute top-20 inset-x-4 z-10 flex gap-1 h-1">
         {exercise.ecrans.map((_: any, i: number) => (
           <div key={i} className="flex-1 bg-white/20 rounded-full overflow-hidden">
-            <motion.div 
+            <motion.div
               className="h-full bg-white"
               initial={{ width: 0 }}
               animate={{ width: i < currentScreen ? '100%' : i === currentScreen ? '100%' : '0%' }}
@@ -129,7 +129,7 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div 
+        <motion.div
           key={currentScreen}
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -140,15 +140,25 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
         />
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
 
-      <div className="absolute inset-0 flex">
-        <div className="flex-1" onClick={handlePrev} />
-        <div className="flex-1" onClick={handleNext} />
-      </div>
+      {/* Overlay gérant à la fois les Taps et les Swipes horizontaux */}
+      <motion.div 
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.2}
+        onDragEnd={(e, info) => {
+          if (info.offset.x < -50) handleNext()
+          else if (info.offset.x > 50) handlePrev()
+        }}
+        className="absolute inset-0 z-20 flex cursor-grab active:cursor-grabbing"
+      >
+        <div className="flex-1 h-full cursor-pointer" onClick={handlePrev} />
+        <div className="flex-1 h-full cursor-pointer" onClick={handleNext} />
+      </motion.div>
 
-      <div className="mt-auto relative z-10 p-8 pb-32">
-        <motion.h2 
+      <div className="mt-auto relative z-10 p-8 pb-32 pointer-events-none">
+        <motion.h2
           key={`text-${currentScreen}`}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -186,18 +196,18 @@ function SwipeExercise({ exercise, onResult }: { exercise: any, onResult: (corre
       <div className="relative w-full max-w-sm aspect-[3/4]">
         {/* Next Card preview */}
         <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-3xl scale-95 translate-y-4" />
-        
+
         {/* Draggable Card */}
-        <motion.div 
+        <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           style={{ x, rotate, opacity }}
           onDragEnd={handleDragEnd}
           className="absolute inset-0 bg-cover bg-center border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
           // Utilisation d'une belle image placeholder pour la carte
-          style={{ 
+          style={{
             x, rotate, opacity,
-            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1000&auto=format&fit=crop')` 
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1000&auto=format&fit=crop')`
           }}
         >
           <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full mb-8 flex items-center justify-center text-5xl border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.2)]">💧</div>
@@ -238,8 +248,8 @@ function DroppableSlot({ id, index, item }: { id: string, index: number, item: a
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div 
-        ref={setNodeRef} 
+      <div
+        ref={setNodeRef}
         className={cn(
           "w-full h-16 rounded-xl border-2 border-dashed flex items-center justify-center transition-colors",
           isOver ? "border-emerald-500 bg-emerald-500/10" : "border-white/20 bg-white/5",
@@ -276,7 +286,7 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
   }
 
   const handleVerify = () => {
-    const isCorrect = 
+    const isCorrect =
       slots.slot_0?.id === items[0].id &&
       slots.slot_1?.id === items[1].id &&
       slots.slot_2?.id === items[2].id
@@ -294,8 +304,8 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
   return (
     <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-hidden">
       <h2 className="text-xl font-bold text-white text-center mb-8">{exercise.consigne}</h2>
-      
-      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="flex-1 flex flex-col items-center max-w-sm mx-auto w-full">
           {/* Slots */}
           <div className="w-full flex flex-col items-center mb-8">
@@ -341,16 +351,16 @@ function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correc
   return (
     <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-y-auto pb-24">
       <h2 className="text-2xl font-black text-white text-center mb-12 shrink-0">{exercise.question}</h2>
-      
+
       <div className="flex flex-col gap-4 mt-auto">
         {exercise.options.map((opt: any, index: number) => (
-          <button 
+          <button
             key={index}
             onClick={() => handleSelect(index)}
             className={cn(
               "w-full p-6 rounded-3xl text-left font-bold text-lg transition-all active:scale-95",
-              selected === index 
-                ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)]" 
+              selected === index
+                ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)]"
                 : "bg-white/10 border border-white/10 text-white hover:bg-white/15"
             )}
           >
@@ -362,9 +372,9 @@ function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correc
   )
 }
 
-function FeedbackScreen({ correct, feedback, onNext }: { correct: boolean, feedback: string, onNext: () => void }) {
+function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: boolean, feedback: string, mascotte: string, onNext: () => void }) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ y: '100%' }}
       animate={{ y: 0 }}
       exit={{ opacity: 0 }}
@@ -373,13 +383,13 @@ function FeedbackScreen({ correct, feedback, onNext }: { correct: boolean, feedb
         correct ? "bg-emerald-500" : "bg-red-500"
       )}
     >
-      <div className="text-8xl mb-8">
-        {correct ? "🥳" : "🧐"}
+      <div className={cn("relative w-40 h-40 mb-8 transition-all duration-500", !correct && "grayscale sepia opacity-80 scale-95")}>
+        <Image src={`/${mascotte}.png`} alt="Mascotte" fill className="object-contain drop-shadow-2xl" />
       </div>
       <h2 className="text-4xl font-black text-black mb-4">{correct ? "Excellent !" : "Aïe !"}</h2>
       <p className="text-black/80 text-xl font-medium mb-16">{feedback}</p>
-      
-      <button 
+
+      <button
         onClick={onNext}
         className="mt-auto w-full bg-black text-white text-xl font-black rounded-3xl py-6 shadow-2xl active:scale-95 transition-transform"
       >
@@ -391,20 +401,12 @@ function FeedbackScreen({ correct, feedback, onNext }: { correct: boolean, feedb
 
 function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) {
   useEffect(() => {
-    try {
-      // Sécurisation de l'import CommonJS vs ESM pour Next.js (évite TypeError: confetti is not a function)
-      const fireConfetti = typeof confetti === 'function' ? confetti : (confetti as any).default
-      if (typeof fireConfetti === 'function') {
-        fireConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#34D399', '#059669'] })
-      }
-    } catch (e) {
-      console.error("Erreur confetti:", e)
-    }
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#34D399', '#059669'] })
   }, [])
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#05050A] flex flex-col items-center justify-center p-8 text-center">
-      <motion.div 
+      <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', bounce: 0.5 }}
@@ -412,11 +414,11 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
       >
         <Image src="/ondine.png" alt="Ondine la mascotte" width={120} height={120} className="object-contain" />
       </motion.div>
-      
+
       <h2 className="text-4xl font-black text-white mb-2">Unité Complétée !</h2>
       <p className="text-emerald-400 text-xl font-bold mb-12">+{unit.recompense.montant} {unit.recompense.type}</p>
-      
-      <button 
+
+      <button
         onClick={onFinish}
         className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_0_30px_rgba(16,185,129,0.4)] active:scale-95 transition-transform mt-auto mb-8"
       >
@@ -433,7 +435,7 @@ export default function ExerciseEngine() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [feedback, setFeedback] = useState<{ show: boolean, correct: boolean, text: string } | null>(null)
   const [showQuitModal, setShowQuitModal] = useState(false)
-  
+
   const currentExercise = unitData.exercices[currentStepIndex]
   const isFinished = currentStepIndex >= unitData.exercices.length
 
@@ -459,10 +461,10 @@ export default function ExerciseEngine() {
   return (
     <div className="fixed inset-0 bg-[#05050A] flex flex-col overflow-hidden overscroll-none">
       <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} />
-      
+
       <div className="flex-1 w-full h-full relative">
         <AnimatePresence mode="wait">
-          <motion.div 
+          <motion.div
             key={currentExercise.id}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -480,17 +482,17 @@ export default function ExerciseEngine() {
 
       <AnimatePresence>
         {feedback?.show && (
-          <FeedbackScreen correct={feedback.correct} feedback={feedback.text} onNext={handleNextStep} />
+          <FeedbackScreen correct={feedback.correct} feedback={feedback.text} mascotte={unitData.mascotte} onNext={handleNextStep} />
         )}
-        
+
         {showQuitModal && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -501,15 +503,15 @@ export default function ExerciseEngine() {
               </div>
               <h3 className="text-2xl font-black text-white mb-4">Quitter l'entraînement ?</h3>
               <p className="text-white/60 mb-8 font-medium">Toute ta progression dans cette unité sera perdue. Es-tu sûr de vouloir abandonner ?</p>
-              
+
               <div className="flex flex-col gap-3">
-                <button 
+                <button
                   onClick={() => setShowQuitModal(false)}
                   className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 active:scale-95 transition-transform"
                 >
                   NON, JE CONTINUE
                 </button>
-                <button 
+                <button
                   onClick={confirmQuit}
                   className="w-full bg-red-500/20 text-red-500 font-bold rounded-2xl py-4 active:scale-95 transition-transform"
                 >

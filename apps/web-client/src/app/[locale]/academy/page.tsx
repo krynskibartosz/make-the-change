@@ -28,9 +28,21 @@ export default function AcademyPage() {
   const [selectedUnit, setSelectedUnit] = useState<typeof syllabus.units[0] | null>(null)
 
   return (
-    <div className="min-h-[100dvh] bg-[#05050A] text-white overflow-x-hidden font-sans pb-[max(1rem,env(safe-area-inset-bottom))]">
-      {/* ÉTAPE 1: HEADER FIXE (GLASSMORPHISM) */}
-      <header className="fixed top-0 w-full z-40 backdrop-blur-md bg-white/5 border-b border-white/5 p-4 flex justify-between items-center pt-[max(1rem,env(safe-area-inset-top))]">
+    <div className="min-h-[100dvh] bg-[#05050A] text-white overflow-x-hidden font-sans pb-[max(1rem,env(safe-area-inset-bottom))] relative">
+      {/* Background Pattern (Parallax Effect) */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-20"
+        style={{
+          backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.8) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          backgroundAttachment: 'fixed'
+        }}
+      />
+      
+      {/* Contenu de la page avec un index z plus élevé pour passer au-dessus du pattern */}
+      <div className="relative z-10">
+        {/* ÉTAPE 1: HEADER FIXE (GLASSMORPHISM) */}
+        <header className="fixed top-0 w-full z-40 backdrop-blur-md bg-white/5 border-b border-white/5 p-4 flex justify-between items-center pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/5">
           <Target className="w-5 h-5 text-white/80" />
           <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
@@ -49,13 +61,22 @@ export default function AcademyPage() {
 
       <main className="pt-[calc(6rem+env(safe-area-inset-top))] px-6">
         {/* ÉTAPE 2: BANNIÈRE DE CHAPITRE */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center shadow-lg relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-4">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden flex flex-col items-center">
+          <div className="absolute top-0 right-0 p-4 z-10">
             <span className="text-sm font-bold text-white/80 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm">2/4 👑</span>
           </div>
-          <h2 className="text-emerald-400 text-xs font-black tracking-[0.2em] mb-2 uppercase">CHAPITRE 1</h2>
-          <h1 className="text-2xl font-bold text-white mb-2">{syllabus.chapter.title}</h1>
-          <p className="text-sm text-white/60">{syllabus.chapter.subtitle}</p>
+          
+          {/* Mascotte du Chapitre (Melli par exemple pour l'introduction) */}
+          <div className="w-24 h-24 mb-4 relative z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+            <Image src="/melli.png" alt="Melli" fill className="object-contain" />
+          </div>
+
+          <h2 className="text-emerald-400 text-xs font-black tracking-[0.2em] mb-2 uppercase relative z-10">CHAPITRE 1</h2>
+          <h1 className="text-3xl font-black text-white mb-2 relative z-10">{syllabus.chapter.title}</h1>
+          <p className="text-sm text-white/60 relative z-10 max-w-[250px]">{syllabus.chapter.subtitle}</p>
+          
+          {/* Effet lumineux derrière la bannière */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-500/10 blur-[50px] rounded-full" />
         </div>
 
         {/* ÉTAPE 3: ARBRE D'APPRENTISSAGE EN ZIGZAG (SANS LIGNE SVG) */}
@@ -171,6 +192,7 @@ export default function AcademyPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div> {/* Fin du wrapper z-10 */}
     </div>
   )
 }
