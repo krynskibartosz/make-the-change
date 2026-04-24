@@ -59,7 +59,9 @@ const unitData = {
 
 // --- COMPONENTS ---
 
-function ExerciseHeader({ progress, total, onQuit, mascotte }: { progress: number, total: number, onQuit: () => void, mascotte: string }) {
+function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, total: number, onQuit: () => void, lives: number }) {
+  const MAX_LIVES = 5
+
   return (
     <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4 bg-[#05050A]/60 backdrop-blur-md border-b border-white/5">
       <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
@@ -72,7 +74,6 @@ function ExerciseHeader({ progress, total, onQuit, mascotte }: { progress: numbe
 
           return (
             <div key={i} className="flex-1 h-full rounded-full bg-white/10 overflow-hidden relative">
-              {/* Pulse effect for active step */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 bg-emerald-500/30"
@@ -80,7 +81,6 @@ function ExerciseHeader({ progress, total, onQuit, mascotte }: { progress: numbe
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
               )}
-              {/* Completed fill */}
               <motion.div
                 className="absolute inset-0 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] origin-left"
                 initial={{ scaleX: 0 }}
@@ -92,24 +92,25 @@ function ExerciseHeader({ progress, total, onQuit, mascotte }: { progress: numbe
         })}
       </div>
 
-      {/* Mascotte flottante */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5, y: 5 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: 'spring', bounce: 0.5, delay: 0.2 }}
-        className="w-10 h-10 shrink-0 relative"
-      >
-        <Image
-          src={`/${mascotte}.png`}
-          alt={`Mascotte ${mascotte}`}
-          fill
-          className="object-contain drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]"
-        />
-      </motion.div>
+      {/* Vies (cœurs) */}
+      <div className="flex items-center gap-1 shrink-0">
+        {Array.from({ length: MAX_LIVES }).map((_, i) => (
+          <motion.span
+            key={i}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: i < lives ? 1 : 0.9 }}
+            className={cn(
+              'text-lg leading-none transition-all duration-300',
+              i < lives ? 'opacity-100' : 'opacity-20 grayscale'
+            )}
+          >
+            ❤️
+          </motion.span>
+        ))}
+      </div>
     </div>
   )
 }
-
 
 function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: () => void }) {
   const [currentScreen, setCurrentScreen] = useState(0)
@@ -439,8 +440,63 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
         onClick={onFinish}
         className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_0_30px_rgba(16,185,129,0.4)] active:scale-95 transition-transform mt-auto mb-8"
       >
-        RETOUR À L'ACADÉMIE
+        RETOUR À L'ACADÉmie
       </button>
+    </div>
+  )
+}
+
+function GameOverScreen({ onQuit }: { onQuit: () => void }) {
+  return (
+    <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <motion.div
+        initial={{ scale: 0, rotate: -20 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', bounce: 0.5 }}
+        className="text-8xl mb-6 select-none"
+      >
+        💔
+      </motion.div>
+
+      <motion.h2
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-4xl font-black text-white mb-3"
+      >
+        Plus de vies !
+      </motion.h2>
+
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+        className="text-white/60 text-base leading-relaxed mb-6 max-w-xs"
+      >
+        Tu as épuisé toutes tes vies. Reviens demain pour réessayer — elles se rechargent avec le temps.
+      </motion.p>
+
+      {/* Coeurs vides */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="flex gap-2 mb-12"
+      >
+        {Array.from({ length: 5 }).map((_, i) => (
+          <span key={i} className="text-2xl opacity-20 grayscale">❤️</span>
+        ))}
+      </motion.div>
+
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        onClick={onQuit}
+        className="w-full bg-white/10 text-white font-black text-lg rounded-2xl py-5 active:scale-95 transition-transform mt-auto"
+      >
+        RETOUR À L'ACADÉmie
+      </motion.button>
     </div>
   )
 }
@@ -452,11 +508,13 @@ export default function ExerciseEngine() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [feedback, setFeedback] = useState<{ show: boolean, correct: boolean, text: string } | null>(null)
   const [showQuitModal, setShowQuitModal] = useState(false)
+  const [lives, setLives] = useState(5)
 
   const currentExercise = unitData.exercices[currentStepIndex]
   const isFinished = currentStepIndex >= unitData.exercices.length
 
   const handleResult = (correct: boolean, text: string) => {
+    if (!correct) setLives(prev => Math.max(0, prev - 1))
     setFeedback({ show: true, correct, text })
   }
 
@@ -471,13 +529,17 @@ export default function ExerciseEngine() {
     router.push('/academy')
   }
 
+  const isGameOver = lives === 0
+
   return (
     <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="flex flex-col overflow-hidden h-full relative">
       {isFinished ? (
         <VictoryScreen unit={unitData} onFinish={() => router.push('/academy')} />
+      ) : isGameOver ? (
+        <GameOverScreen onQuit={() => router.push('/academy')} />
       ) : (
         <>
-          <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} mascotte={unitData.mascotte} />
+          <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} lives={lives} />
 
       <div className="flex-1 w-full h-full relative">
         <AnimatePresence mode="wait">
