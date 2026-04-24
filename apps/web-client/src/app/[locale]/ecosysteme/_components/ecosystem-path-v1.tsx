@@ -73,20 +73,20 @@ type StatusVisual = {
   line: string
 }
 
-const PERSPECTIVE_ICONS: Record<EcosystemPerspective, LucideIcon> = {
+export const PERSPECTIVE_ICONS: Record<EcosystemPerspective, LucideIcon> = {
   biome: MapIcon,
   project: HandHeart,
   species: CircleDot,
   faction: Sparkles,
 }
 
-const THEME_ICON: Record<EcosystemDefinition['theme'], LucideIcon> = {
+export const THEME_ICON: Record<EcosystemDefinition['theme'], LucideIcon> = {
   forest: TreePine,
   marine: Waves,
   pollinators: Sprout,
 }
 
-const NODE_VISUALS: Record<EcosystemNodeType, NodeVisual> = {
+export const NODE_VISUALS: Record<EcosystemNodeType, NodeVisual> = {
   base: {
     icon: Mountain,
     label: 'Base',
@@ -125,7 +125,7 @@ const NODE_VISUALS: Record<EcosystemNodeType, NodeVisual> = {
   },
 }
 
-const NODE_ICON_BY_NAME: Record<string, LucideIcon> = {
+export const NODE_ICON_BY_NAME: Record<string, LucideIcon> = {
   'Abeille noire': Bug,
   'Bourdon terrestre': Bug,
   Acropora: Fish,
@@ -134,7 +134,7 @@ const NODE_ICON_BY_NAME: Record<string, LucideIcon> = {
   'Tortue verte': Waves,
 }
 
-const STATUS_VISUALS = {
+export const STATUS_VISUALS = {
   locked: {
     label: 'Voile',
     icon: LockKeyhole,
@@ -167,7 +167,7 @@ const STATUS_VISUALS = {
   },
 } satisfies Record<EcosystemStatus, StatusVisual>
 
-const LEVEL_Y: Record<number, number> = {
+export const LEVEL_Y: Record<number, number> = {
   4: 8,
   3: 28,
   2: 50,
@@ -175,14 +175,14 @@ const LEVEL_Y: Record<number, number> = {
   0: 92,
 }
 
-function buildPathPoints(nodes: readonly EcosystemNode[]): PathPoint[] {
+export function buildPathPoints(nodes: readonly EcosystemNode[]): PathPoint[] {
   return nodes.map((node) => ({
     ...node,
     y: LEVEL_Y[node.trophicLevel] ?? 50,
   }))
 }
 
-function getNodeVisual(node: EcosystemNode) {
+export function getNodeVisual(node: EcosystemNode) {
   const visual = NODE_VISUALS[node.type]
   return {
     ...visual,
@@ -190,7 +190,7 @@ function getNodeVisual(node: EcosystemNode) {
   }
 }
 
-function isNodeEmphasized(
+export function isNodeEmphasized(
   node: EcosystemNode,
   ecosystem: EcosystemDefinition,
   perspective: EcosystemPerspective,
@@ -202,7 +202,7 @@ function isNodeEmphasized(
   return node.factionTags?.includes(ecosystem.factionFocus) ?? false
 }
 
-function getEdgeStatus(edge: EcosystemEdge, nodeById: Map<string, PathPoint>) {
+export function getEdgeStatus(edge: EcosystemEdge, nodeById: Map<string, PathPoint>) {
   const source = nodeById.get(edge.source)
   const target = nodeById.get(edge.target)
   if (source?.status === 'collapsed' || target?.status === 'collapsed') {
@@ -228,7 +228,7 @@ function getEdgeStatus(edge: EcosystemEdge, nodeById: Map<string, PathPoint>) {
   return 'discovered'
 }
 
-function EcosystemLines({
+export function EcosystemLines({
   edges,
   points,
   ecosystem,
@@ -289,7 +289,7 @@ function EcosystemLines({
   )
 }
 
-function EcosystemPathNode({
+export function EcosystemPathNode({
   point,
   species,
   emphasized,
@@ -386,7 +386,7 @@ function EcosystemPathNode({
   )
 }
 
-function EcosystemPicker({
+export function EcosystemPicker({
   activeId,
   unlockedIds,
   onSelect,
@@ -428,7 +428,7 @@ function EcosystemPicker({
   )
 }
 
-function PerspectiveTabs({
+export function PerspectiveTabs({
   perspective,
   onChange,
 }: {
@@ -465,7 +465,7 @@ function PerspectiveTabs({
   )
 }
 
-function FactionPanel({
+export function FactionPanel({
   activeFaction,
   onSelectEcosystem,
 }: {
@@ -507,7 +507,7 @@ function FactionPanel({
   )
 }
 
-function ContextPanel({
+export function ContextPanel({
   ecosystem,
   perspective,
   lockedCount,
@@ -620,7 +620,7 @@ function ContextPanel({
   )
 }
 
-function SpeciesStrip({
+export function SpeciesStrip({
   points,
   speciesById,
 }: {
