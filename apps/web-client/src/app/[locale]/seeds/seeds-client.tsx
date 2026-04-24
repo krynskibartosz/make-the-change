@@ -20,6 +20,13 @@ interface SeedsClientProps {
     monthly_points_allocation: number
   } | null
   currentDayKey: string
+  dailyQuests?: Array<{
+    id: string
+    title: string
+    type: string
+    reward: number
+    completed: boolean
+  }>
 }
 
 // Mock weekly analytics data (last 7 days) - Apple Fitness style
@@ -33,14 +40,7 @@ const MOCK_WEEKLY_DATA = [
   { day: 'Dim', seeds: 0, isToday: true },
 ]
 
-const MOCK_CHALLENGE_POSTERS = [
-  { id: '1', title: 'Marche 5km', reward: 100, image: '🚶', href: '/aventure?tab=defis' },
-  { id: '2', title: 'Plante un arbre', reward: 500, image: '🌳', href: '/collectif' },
-  { id: '3', title: 'Réduis tes déchets', reward: 75, image: '♻️', href: '/aventure?tab=defis' },
-  { id: '4', title: 'Éco-Fact du jour', reward: 50, image: '📖', href: `/aventure/eco-fact/today` },
-]
-
-export default function SeedsClient({ balance, transactions, subscription, currentDayKey }: SeedsClientProps) {
+export default function SeedsClient({ balance, transactions, subscription, currentDayKey, dailyQuests = [] }: SeedsClientProps) {
   const weeklyTotal = MOCK_WEEKLY_DATA.reduce((sum, day) => sum + day.seeds, 0)
   const maxDailySeeds = Math.max(...MOCK_WEEKLY_DATA.map(d => d.seeds), 1)
   const [isHeaderSticky, setIsHeaderSticky] = useState(false)
@@ -134,14 +134,14 @@ export default function SeedsClient({ balance, transactions, subscription, curre
       {/* Content Section */}
       <div className="relative z-10 px-5 pb-32 pt-8 sm:px-6">
         
-        {/* Quick Actions - Bento Layout */}
+        {/* Quick Actions - Bento Layout (Asymétrique 65/35) */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-12"
         >
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-[65%_35%] gap-4">
             {/* Card 1 - Faction Support */}
             <Link
               href="/collectif"
@@ -249,43 +249,50 @@ export default function SeedsClient({ balance, transactions, subscription, curre
           </motion.section>
         )}
 
-        {/* Challenge Carousel - Horizontal Scroll */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mb-12"
-        >
-          <h2 className="text-xl font-bold text-white mb-6">Gagner plus de graines</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-            {MOCK_CHALLENGE_POSTERS.map((poster, index) => (
-              <Link
-                key={poster.id}
-                href={poster.href}
-                className="flex-shrink-0 w-48 snap-start"
-              >
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + (index * 0.05), duration: 0.4 }}
-                  className="relative h-64 rounded-2xl overflow-hidden bg-gradient-to-b from-white/10 to-black border border-white/10 group"
+        {/* Challenge Carousel - Horizontal Scroll (Single Source of Truth) */}
+        {dailyQuests.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="mb-12"
+          >
+            <h2 className="text-xl font-bold text-white mb-6">Gagner plus de graines</h2>
+            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+              {dailyQuests.slice(0, 4).map((quest, index) => (
+                <Link
+                  key={quest.id}
+                  href={`/aventure?tab=defis`}
+                  className="flex-shrink-0 w-48 snap-start"
                 >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-6xl">{poster.image}</span>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="font-bold text-white mb-1">{poster.title}</h3>
-                    <div className="flex items-center gap-1 text-xs font-semibold text-lime-400">
-                      <span>+{poster.reward}</span>
-                      <Sprout className="h-3 w-3" />
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + (index * 0.05), duration: 0.4 }}
+                    className={cn(
+                      'relative h-64 rounded-2xl overflow-hidden bg-gradient-to-b from-white/10 to-black border border-white/10 group',
+                      quest.completed ? 'opacity-50' : ''
+                    )}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-6xl">
+                        {quest.type === 'education' ? '📖' : quest.type === 'daily_harvest' ? '✨' : quest.type === 'social' ? '🤝' : '🎯'}
+                      </span>
                     </div>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </motion.section>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <h3 className="font-bold text-white mb-1">{quest.title}</h3>
+                      <div className="flex items-center gap-1 text-xs font-semibold text-lime-400">
+                        <span>+{quest.reward}</span>
+                        <Sprout className="h-3 w-3" />
+                      </div>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </motion.section>
+        )}
 
         {/* History - Edge to Edge List */}
         <motion.section
