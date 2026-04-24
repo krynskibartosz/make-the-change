@@ -294,7 +294,7 @@ export default function AcademyPage() {
           </div>
 
           {/* Right: premium / subscription */}
-          <Link href="/premium" className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
+          <Link href="/pricing" className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
             <Crown className="w-4 h-4 fill-indigo-400/20" />
           </Link>
         </header>

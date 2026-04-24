@@ -194,12 +194,16 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
   )
 }
 
-function SwipeExercise({ exercise, onResult }: { exercise: any, onResult: (correct: boolean, feedback: string) => void }) {
+function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
   const x = useMotionValue(0)
   const rotate = useTransform(x, [-200, 200], [-15, 15])
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0])
   const bgCorrect = useTransform(x, [0, 150], ['rgba(16, 185, 129, 0)', 'rgba(16, 185, 129, 0.4)'])
   const bgWrong = useTransform(x, [0, -150], ['rgba(239, 68, 68, 0)', 'rgba(239, 68, 68, 0.4)'])
+
+  useEffect(() => {
+    x.set(0)
+  }, [attempt, x])
 
   const handleDragEnd = (e: any, info: any) => {
     if (info.offset.x > 100) {
@@ -282,7 +286,7 @@ function DroppableSlot({ id, index, item }: { id: string, index: number, item: a
   )
 }
 
-function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (correct: boolean, feedback: string) => void }) {
+function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
   const items = exercise.ordre_correct
   const [shuffledItems] = useState(() => [...items].sort(() => Math.random() - 0.5))
   const [slots, setSlots] = useState<Record<string, any>>({ slot_0: null, slot_1: null, slot_2: null })
@@ -291,6 +295,11 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } })
   )
+
+  useEffect(() => {
+    setSlots({ slot_0: null, slot_1: null, slot_2: null })
+    setAvailableItems(shuffledItems)
+  }, [attempt, shuffledItems])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -356,8 +365,12 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
   )
 }
 
-function QuizExercise({ exercise, onResult }: { exercise: any, onResult: (correct: boolean, feedback: string) => void }) {
+function QuizExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
   const [selected, setSelected] = useState<number | null>(null)
+
+  useEffect(() => {
+    setSelected(null)
+  }, [attempt])
 
   const handleSelect = (index: number) => {
     setSelected(index)
@@ -529,6 +542,8 @@ export default function ExerciseEngine() {
   const [showQuitModal, setShowQuitModal] = useState(false)
   const [lives, setLives] = useState(5)
 
+  const [attempt, setAttempt] = useState(0)
+
   const currentExercise = unitData.exercices[currentStepIndex]
   const isFinished = currentStepIndex >= unitData.exercices.length
 
@@ -538,9 +553,13 @@ export default function ExerciseEngine() {
   }
 
   const handleNextStep = () => {
+    const wasCorrect = feedback?.correct
     setFeedback(null)
-    if (feedback?.correct || currentExercise?.type === 'STORY') {
+    if (wasCorrect || currentExercise?.type === 'STORY') {
+      setAttempt(0)
       setCurrentStepIndex(prev => prev + 1)
+    } else {
+      setAttempt(prev => prev + 1)
     }
   }
 
@@ -572,9 +591,9 @@ export default function ExerciseEngine() {
           >
 
             {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
-            {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} />}
-            {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} />}
-            {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} />}
+            {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
+            {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
+            {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
           </motion.div>}
         </AnimatePresence>
       </div>
