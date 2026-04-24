@@ -283,10 +283,10 @@ export default function AcademyPage() {
 
           {/* Center: streak + seeds */}
           <div className="flex items-center gap-1.5">
-            <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10">
+            <Link href="/academy/streak" prefetch={false} className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 transition-transform hover:scale-105 active:scale-95">
               <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
               <span className="text-[11px] font-bold text-white">12 j</span>
-            </div>
+            </Link>
             <Link href="/seeds" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
               <Sprout className="h-3.5 w-3.5 text-lime-400" />
               <span className="text-[11px] font-bold text-white tabular-nums">2 450</span>
@@ -294,9 +294,9 @@ export default function AcademyPage() {
           </div>
 
           {/* Right: premium / subscription */}
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
+          <Link href="/premium" className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
             <Crown className="w-4 h-4 fill-indigo-400/20" />
-          </div>
+          </Link>
         </header>
 
 
