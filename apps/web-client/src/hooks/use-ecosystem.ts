@@ -1,51 +1,98 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  type EcosystemDefinition,
   type EcosystemNode,
   findCascadeNodeIds,
-  INITIAL_ECOSYSTEM_EDGES,
-  INITIAL_ECOSYSTEM_NODES,
 } from '@/lib/ecosystem/graph'
 
-export function useEcosystem() {
+export function useEcosystem(ecosystem: EcosystemDefinition, isAccessUnlocked: boolean) {
   const [nodes, setNodes] = useState<EcosystemNode[]>(() =>
-    INITIAL_ECOSYSTEM_NODES.map((node) => ({ ...node })),
+    ecosystem.nodes.map((node) => ({
+      ...node,
+      status: isAccessUnlocked ? node.status : node.focal ? 'discovered' : 'locked',
+    })),
   )
 
-  const edges = INITIAL_ECOSYSTEM_EDGES
+  useEffect(() => {
+    setNodes(
+      ecosystem.nodes.map((node) => ({
+        ...node,
+        status: isAccessUnlocked ? node.status : node.focal ? 'discovered' : 'locked',
+      })),
+    )
+  }, [ecosystem, isAccessUnlocked])
 
-  const triggerExtinction = useCallback((nodeId: string) => {
-    const impactedNodeIds = findCascadeNodeIds(nodeId, edges)
+  const edges = ecosystem.edges
 
+  const triggerExtinction = useCallback(
+    (nodeId: string) => {
+      const impactedNodeIds = findCascadeNodeIds(nodeId, edges)
+
+      setNodes((currentNodes) =>
+        currentNodes.map((node) =>
+          impactedNodeIds.has(node.id) && node.status !== 'locked'
+            ? {
+                ...node,
+                status: 'collapsed',
+              }
+            : node,
+        ),
+      )
+    },
+    [edges],
+  )
+
+  const healEcosystem = useCallback(() => {
+    setNodes(
+      ecosystem.nodes.map((node) => ({
+        ...node,
+        status: isAccessUnlocked ? node.status : node.focal ? 'discovered' : 'locked',
+      })),
+    )
+  }, [ecosystem, isAccessUnlocked])
+
+  const protectProjectArea = useCallback(() => {
     setNodes((currentNodes) =>
       currentNodes.map((node) =>
-        impactedNodeIds.has(node.id)
+        node.projectProtected && node.status !== 'locked'
           ? {
               ...node,
-              status: 'dead',
+              status: 'protected',
             }
           : node,
       ),
     )
   }, [])
 
-  const healEcosystem = useCallback(() => {
+  const revealLockedNodes = useCallback(() => {
     setNodes((currentNodes) =>
-      currentNodes.map((node) => ({
-        ...node,
-        status: 'healthy',
-      })),
+      currentNodes.map((node) =>
+        node.status === 'locked'
+          ? {
+              ...node,
+              status: 'discovered',
+            }
+          : node,
+      ),
     )
   }, [])
 
-  const hasDeadNodes = useMemo(() => nodes.some((node) => node.status === 'dead'), [nodes])
+  const hasDeadNodes = useMemo(() => nodes.some((node) => node.status === 'collapsed'), [nodes])
+  const lockedCount = useMemo(
+    () => nodes.filter((node) => node.status === 'locked').length,
+    [nodes],
+  )
 
   return {
     nodes,
     edges,
     triggerExtinction,
     healEcosystem,
+    protectProjectArea,
+    revealLockedNodes,
     hasDeadNodes,
+    lockedCount,
   }
 }
