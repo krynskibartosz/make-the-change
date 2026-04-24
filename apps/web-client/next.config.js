@@ -94,20 +94,10 @@ const nextConfig = {
         destination: '/aventure?tab=defis',
         permanent: true,
       },
-      {
-        source: '/biodex',
-        destination: '/aventure?tab=biodex',
-        permanent: true,
-      },
       // Support i18n (préfixes locales)
       {
         source: '/:locale/challenges',
         destination: '/:locale/aventure?tab=defis',
-        permanent: true,
-      },
-      {
-        source: '/:locale/biodex',
-        destination: '/:locale/aventure?tab=biodex',
         permanent: true,
       },
       {
