@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Target, Flame, Leaf, Lock, Check, ChevronLeft } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 // DONNÉES DE TEST (MOCK DATA)
@@ -22,6 +24,7 @@ const syllabus = {
 }
 
 export default function AcademyPage() {
+  const router = useRouter()
   const [selectedUnit, setSelectedUnit] = useState<typeof syllabus.units[0] | null>(null)
 
   return (
@@ -93,7 +96,7 @@ export default function AcademyPage() {
                     transition={{ repeat: Infinity, repeatType: 'reverse', duration: 1.5 }}
                     className="absolute -top-10 -right-24 bg-white text-black px-3 py-1.5 rounded-2xl rounded-bl-none text-sm font-bold shadow-xl flex items-center gap-1.5 whitespace-nowrap"
                   >
-                    <span>🦉</span> C'est ici !
+                    <Image src="/sylva.png" alt="Sylva" width={24} height={24} className="object-contain" /> C'est ici !
                   </motion.div>
                 )}
               </div>
@@ -158,8 +161,7 @@ export default function AcademyPage() {
               </div>
               <button 
                 onClick={() => {
-                  // TODO: remplacer 'chapitre-1' par l'ID réel du chapitre depuis les datas globales plus tard
-                  window.location.href = `/academy/chapitre-1/${selectedUnit.id}`
+                  router.push(`/academy/chapitre-1/${selectedUnit.id}`)
                 }}
                 className="w-full bg-emerald-500 hover:bg-emerald-400 text-black text-lg font-black rounded-2xl py-5 shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all active:scale-95"
               >

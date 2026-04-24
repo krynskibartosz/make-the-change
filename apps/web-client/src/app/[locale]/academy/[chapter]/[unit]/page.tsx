@@ -5,8 +5,8 @@ import { motion, AnimatePresence, useAnimation, useMotionValue, useTransform } f
 import { X, Check, ArrowRight, RefreshCcw } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import confetti from 'canvas-confetti'
-import { DndContext, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core'
+import { DndContext, useDraggable, useDroppable, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor } from '@dnd-kit/core'
+import Image from 'next/image'
 
 // --- MOCK DATA (L'Unité 1.1: Les Forges de la Vie) ---
 const unitData = {
@@ -21,8 +21,8 @@ const unitData = {
       id: "ex_1",
       type: "STORY",
       ecrans: [
-        { texte: "Soleil, eau, sol : les trois piliers de la vie.", bg: "bg-emerald-900" },
-        { texte: "Ensemble, ils forgent l'énergie de toute la nature.", bg: "bg-emerald-800" }
+        { texte: "Soleil, eau, sol : les trois piliers de la vie.", bg: "bg-emerald-900", img: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000&auto=format&fit=crop" },
+        { texte: "Ensemble, ils forgent l'énergie de toute la nature.", bg: "bg-emerald-800", img: "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000&auto=format&fit=crop" }
       ]
     },
     {
@@ -122,7 +122,8 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className={cn("absolute inset-0", exercise.ecrans[currentScreen].bg)}
+          className={cn("absolute inset-0 bg-cover bg-center", exercise.ecrans[currentScreen].bg)}
+          style={{ backgroundImage: exercise.ecrans[currentScreen].img ? `url(${exercise.ecrans[currentScreen].img})` : undefined }}
         />
       </AnimatePresence>
 
@@ -179,13 +180,19 @@ function SwipeExercise({ exercise, onResult }: { exercise: any, onResult: (corre
           dragConstraints={{ left: 0, right: 0 }}
           style={{ x, rotate, opacity }}
           onDragEnd={handleDragEnd}
-          className="absolute inset-0 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
+          className="absolute inset-0 bg-cover bg-center border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
+          // Utilisation d'une belle image placeholder pour la carte
+          style={{ 
+            x, rotate, opacity,
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1000&auto=format&fit=crop')` 
+          }}
         >
-          <div className="w-32 h-32 bg-white/5 rounded-full mb-8 flex items-center justify-center text-6xl">💧</div>
-          <h3 className="text-2xl font-black text-white text-center">Glisse pour répondre</h3>
-          <div className="mt-auto flex justify-between w-full text-sm font-bold text-white/50 uppercase tracking-widest">
-            <span>← {exercise.carte_gauche.nom}</span>
-            <span>{exercise.carte_droite.nom} →</span>
+          <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full mb-8 flex items-center justify-center text-5xl border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.2)]">💧</div>
+          <h3 className="text-2xl font-black text-white text-center">L'Eau Douce</h3>
+          <p className="text-white/70 text-center text-sm mt-2 mb-auto">Source de toute vie</p>
+          <div className="mt-auto flex justify-between w-full text-xs font-bold text-white uppercase tracking-widest bg-black/40 px-4 py-3 rounded-2xl backdrop-blur-md border border-white/10">
+            <span className="text-red-400">← {exercise.carte_gauche.nom}</span>
+            <span className="text-emerald-400">{exercise.carte_droite.nom} →</span>
           </div>
         </motion.div>
       </div>
@@ -237,7 +244,10 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
   const items = exercise.ordre_correct
   const [shuffledItems] = useState(() => [...items].sort(() => Math.random() - 0.5))
   const [slots, setSlots] = useState<Record<string, any>>({ slot_0: null, slot_1: null, slot_2: null })
-  const [availableItems, setAvailableItems] = useState(shuffledItems)
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } })
+  )
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -271,7 +281,7 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
     <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-hidden">
       <h2 className="text-xl font-bold text-white text-center mb-8">{exercise.consigne}</h2>
       
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
         <div className="flex-1 flex flex-col items-center max-w-sm mx-auto w-full">
           {/* Slots */}
           <div className="w-full flex flex-col items-center mb-8">
@@ -349,7 +359,9 @@ function FeedbackScreen({ correct, feedback, onNext }: { correct: boolean, feedb
         correct ? "bg-emerald-500" : "bg-red-500"
       )}
     >
-      <div className="text-8xl mb-8">{correct ? "🥳" : "🧐"}</div>
+      <div className="text-8xl mb-8">
+        {correct ? "🥳" : "🧐"}
+      </div>
       <h2 className="text-4xl font-black text-black mb-4">{correct ? "Excellent !" : "Aïe !"}</h2>
       <p className="text-black/80 text-xl font-medium mb-16">{feedback}</p>
       
@@ -374,9 +386,9 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', bounce: 0.5 }}
-        className="w-48 h-48 bg-white/5 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.3)] mb-12"
+        className="relative w-48 h-48 bg-white/5 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.3)] mb-12 overflow-hidden"
       >
-        <span className="text-7xl">{unit.recompense.icone}</span>
+        <Image src="/ondine.png" alt="Ondine la mascotte" width={120} height={120} className="object-contain" />
       </motion.div>
       
       <h2 className="text-4xl font-black text-white mb-2">Unité Complétée !</h2>
