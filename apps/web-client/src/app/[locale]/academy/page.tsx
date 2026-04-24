@@ -68,7 +68,7 @@ export default function AcademyPage() {
           
           {/* Mascotte du Chapitre (Melli par exemple pour l'introduction) */}
           <div className="w-24 h-24 mb-4 relative z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
-            <Image src="/melli.png" alt="Melli" fill className="object-contain" />
+            <Image src="/abeille-transparente.png" alt="Melli" fill className="object-contain" />
           </div>
 
           <h2 className="text-emerald-400 text-xs font-black tracking-[0.2em] mb-2 uppercase relative z-10">CHAPITRE 1</h2>

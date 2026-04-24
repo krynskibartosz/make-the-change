@@ -14,7 +14,7 @@ const unitData = {
   chapitre_id: "chapitre-1",
   titre: "Les Forges de la Vie",
   concept_cle: "Énergie, Minéraux, Hydratation",
-  mascotte: "ondine", // 'ondine', 'sylva', ou 'melli'
+  mascotte: "ondine", // 'ondine', 'sylva', ou 'abeille-transparente'
   recompense: { type: "gouttes", montant: 10, icone: "💧" },
   exercices: [
     {
