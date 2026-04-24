@@ -244,6 +244,7 @@ function DragDropExercise({ exercise, onResult }: { exercise: any, onResult: (co
   const items = exercise.ordre_correct
   const [shuffledItems] = useState(() => [...items].sort(() => Math.random() - 0.5))
   const [slots, setSlots] = useState<Record<string, any>>({ slot_0: null, slot_1: null, slot_2: null })
+  const [availableItems, setAvailableItems] = useState(shuffledItems)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } })
