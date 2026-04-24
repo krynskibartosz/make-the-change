@@ -391,7 +391,15 @@ function FeedbackScreen({ correct, feedback, onNext }: { correct: boolean, feedb
 
 function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) {
   useEffect(() => {
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#34D399', '#059669'] })
+    try {
+      // Sécurisation de l'import CommonJS vs ESM pour Next.js (évite TypeError: confetti is not a function)
+      const fireConfetti = typeof confetti === 'function' ? confetti : (confetti as any).default
+      if (typeof fireConfetti === 'function') {
+        fireConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10B981', '#34D399', '#059669'] })
+      }
+    } catch (e) {
+      console.error("Erreur confetti:", e)
+    }
   }, [])
 
   return (
