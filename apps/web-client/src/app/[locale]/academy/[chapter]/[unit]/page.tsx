@@ -291,31 +291,35 @@ function DraggableItem({ id, text }: { id: string, text: string }) {
   )
 }
 
-function DroppableSlot({ id, index, item }: { id: string, index: number, item: any }) {
+function DroppableSlot({ id, index, item, isWrong }: { id: string, index: number, item: any, isWrong?: boolean }) {
   const { isOver, setNodeRef } = useDroppable({ id })
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div
+      <motion.div
         ref={setNodeRef}
+        animate={isWrong ? { x: [0, -10, 10, -10, 10, 0] } : {}}
+        transition={{ duration: 0.5 }}
         className={cn(
           "w-full h-16 rounded-xl border-2 border-dashed flex items-center justify-center transition-colors",
           isOver ? "border-emerald-500 bg-emerald-500/10" : "border-white/20 bg-white/5",
-          item && "border-solid border-emerald-500/50 bg-emerald-500/20"
+          item && "border-solid border-emerald-500/50 bg-emerald-500/20",
+          isWrong && "border-red-500/50 bg-red-500/20"
         )}
       >
         {item ? <div className="text-white font-medium">{item.texte}</div> : <span className="text-white/30 text-sm">Emplacement {index + 1}</span>}
-      </div>
+      </motion.div>
       {index < 2 && <ArrowRight className="w-6 h-6 text-white/30 my-2 rotate-90" />}
     </div>
   )
 }
 
-function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
+function DragDropExercise({ exercise, onResult, attempt, showFeedback }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number, showFeedback?: boolean }) {
   const items = exercise.ordre_correct
   const [shuffledItems] = useState(() => [...items].sort(() => Math.random() - 0.5))
   const [slots, setSlots] = useState<Record<string, any>>({ slot_0: null, slot_1: null, slot_2: null })
   const [availableItems, setAvailableItems] = useState(shuffledItems)
+  const [wrongSlots, setWrongSlots] = useState<Set<number>>(new Set())
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } })
@@ -324,6 +328,7 @@ function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onRe
   useEffect(() => {
     setSlots({ slot_0: null, slot_1: null, slot_2: null })
     setAvailableItems(shuffledItems)
+    setWrongSlots(new Set())
   }, [attempt, shuffledItems])
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -344,6 +349,13 @@ function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onRe
       slots.slot_1?.id === items[1].id &&
       slots.slot_2?.id === items[2].id
 
+    if (!isCorrect) {
+      const wrongIndices = items.map((item: any, idx: number) =>
+        slots[`slot_${idx}` as keyof typeof slots]?.id !== item.id ? idx : -1
+      ).filter((i: number) => i !== -1)
+      setWrongSlots(new Set(wrongIndices))
+    }
+
     onResult(isCorrect, isCorrect ? "Parfait ! La chronologie est exacte." : "Mince ! L'ordre n'est pas le bon. Le soleil est le plus lointain.")
   }
 
@@ -362,9 +374,9 @@ function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onRe
         <div className="flex flex-col items-center max-w-sm mx-auto w-full">
           {/* Slots */}
           <div className="w-full flex flex-col items-center mb-8">
-            <DroppableSlot id="slot_0" index={0} item={slots.slot_0} />
-            <DroppableSlot id="slot_1" index={1} item={slots.slot_1} />
-            <DroppableSlot id="slot_2" index={2} item={slots.slot_2} />
+            <DroppableSlot id="slot_0" index={0} item={slots.slot_0} isWrong={wrongSlots.has(0)} />
+            <DroppableSlot id="slot_1" index={1} item={slots.slot_1} isWrong={wrongSlots.has(1)} />
+            <DroppableSlot id="slot_2" index={2} item={slots.slot_2} isWrong={wrongSlots.has(2)} />
           </div>
 
           {/* Available Items */}
@@ -381,7 +393,16 @@ function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onRe
           <button onClick={handleReset} className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[0_5px_0_rgba(0,0,0,0.4)] hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.4)] active:translate-y-1 transition-all duration-100">
             <RefreshCcw className="w-6 h-6" />
           </button>
-          <button onClick={handleVerify} className="flex-1 bg-emerald-500 text-black font-black text-lg rounded-2xl py-4 shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px] transition-all duration-100">
+          <button
+            onClick={handleVerify}
+            disabled={showFeedback}
+            className={cn(
+              "flex-1 font-black text-lg rounded-2xl py-4 transition-all duration-100",
+              showFeedback
+                ? "bg-emerald-500/50 text-black/50 cursor-not-allowed"
+                : "bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px]"
+            )}
+          >
             VÉRIFIER
           </button>
         </motion.div>
@@ -392,22 +413,42 @@ function DragDropExercise({ exercise, onResult, attempt }: { exercise: any, onRe
 
 function QuizExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
   const [selected, setSelected] = useState<number | null>(null)
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
 
   useEffect(() => {
     setSelected(null)
+    setIsCorrect(null)
   }, [attempt])
 
   const handleSelect = (index: number) => {
     setSelected(index)
     const opt = exercise.options[index]
+    const correct = opt.est_correct
+    setIsCorrect(correct)
     setTimeout(() => {
-      onResult(opt.est_correct, opt.est_correct ? exercise.anecdote_victoire : "Oups, ce n'est pas la bonne réponse.")
+      onResult(correct, correct ? exercise.anecdote_victoire : "Oups, ce n'est pas la bonne réponse.")
     }, 600)
   }
 
   return (
     <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-y-auto pb-24">
-      <h2 className="text-2xl font-black text-white text-center mb-12 shrink-0">{exercise.question}</h2>
+      <div className="flex flex-col items-center mb-8">
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          className="relative w-24 h-24 mb-4"
+        >
+          <Image src="/ondine.png" alt="Mascotte" fill className="object-contain" />
+          <motion.div
+            animate={{ rotate: [0, 10, -10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-2 -right-2 text-2xl"
+          >
+            ❓
+          </motion.div>
+        </motion.div>
+        <h2 className="text-2xl font-black text-white text-center">{exercise.question}</h2>
+      </div>
 
       <div className="flex flex-col gap-4 mt-auto">
         {exercise.options.map((opt: any, index: number) => (
@@ -416,15 +457,33 @@ function QuizExercise({ exercise, onResult, attempt }: { exercise: any, onResult
             onClick={() => handleSelect(index)}
             disabled={selected !== null}
             className={cn(
-              "w-full p-5 rounded-2xl text-left font-bold text-base transition-all duration-100",
+              "w-full p-5 rounded-2xl text-left font-bold text-base transition-all duration-100 active:scale-95",
               selected === index
-                ? "bg-emerald-500 text-black shadow-[0_2px_0_#065f46] translate-y-1"
-                : selected !== null
-                  ? "bg-white/5 border border-white/5 text-white/40 cursor-not-allowed"
-                  : "bg-white/10 border border-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-1"
+                ? isCorrect
+                  ? "bg-emerald-500 text-black shadow-[0_2px_0_#065f46] translate-y-1"
+                  : "bg-red-500 text-white shadow-[0_2px_0_#b91c1c] translate-y-1"
+                : selected !== null && opt.est_correct
+                  ? "bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400"
+                  : selected !== null
+                    ? "bg-white/5 border border-white/5 text-white/40 cursor-not-allowed"
+                    : "bg-white/10 border border-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-1"
             )}
           >
-            {opt.texte}
+            <div className="flex items-center gap-3">
+              <span className={cn(
+                "w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm shrink-0",
+                selected === index
+                  ? isCorrect
+                    ? "bg-black/20 text-black"
+                    : "bg-white/20 text-white"
+                  : selected !== null && opt.est_correct
+                    ? "bg-emerald-500/30 text-emerald-400"
+                    : "bg-white/10 text-white/70"
+              )}>
+                {String.fromCharCode(65 + index)}
+              </span>
+              <span>{opt.texte}</span>
+            </div>
           </button>
         ))}
       </div>
@@ -652,7 +711,7 @@ export default function ExerciseEngine() {
 
             {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
             {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
-            {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
+            {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} showFeedback={feedback?.show} />}
             {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
           </motion.div>}
         </AnimatePresence>
