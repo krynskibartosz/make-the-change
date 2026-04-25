@@ -155,9 +155,9 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
         <motion.div
           key={currentScreen}
           initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: 1, scale: 1.08 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, scale: { duration: 8, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' } }}
           className={cn("absolute inset-0 bg-cover bg-center", exercise.ecrans[currentScreen].bg)}
           style={{ backgroundImage: exercise.ecrans[currentScreen].img ? `url(${exercise.ecrans[currentScreen].img})` : undefined }}
         />
@@ -166,7 +166,7 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
 
       {/* Overlay gérant à la fois les Taps et les Swipes horizontaux */}
-      <motion.div 
+      <motion.div
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.2}
@@ -178,6 +178,17 @@ function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: ()
       >
         <div className="flex-1 h-full cursor-pointer" onClick={handlePrev} />
         <div className="flex-1 h-full cursor-pointer" onClick={handleNext} />
+      </motion.div>
+
+      {/* Indicateur de tap (onboarding invisible pour les 3 premières leçons) */}
+      <motion.div
+        initial={{ opacity: 0, x: 10 }}
+        animate={{ opacity: [0.4, 1, 0.4], x: [10, 15, 10] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute right-8 top-1/2 -translate-y-1/2 z-30 pointer-events-none"
+      >
+        <ChevronRight className="w-8 h-8 text-white/60" />
+        <span className="text-[10px] text-white/50 font-bold uppercase tracking-wider block text-center mt-1">Tapez</span>
       </motion.div>
 
       <div className="mt-auto relative z-10 p-8 pb-32 pointer-events-none">
@@ -207,9 +218,11 @@ function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResul
 
   const handleDragEnd = (e: any, info: any) => {
     if (info.offset.x > 100) {
+      // Swipe droite = OUI (confirme que l'élément affiché est correct)
       onResult(exercise.carte_droite.est_correct, exercise.carte_droite.feedback)
     } else if (info.offset.x < -100) {
-      onResult(exercise.carte_gauche.est_correct, exercise.carte_gauche.feedback)
+      // Swipe gauche = NON (l'élément affiché n'est pas correct)
+      onResult(!exercise.carte_droite.est_correct, exercise.carte_gauche.feedback)
     }
   }
 
@@ -238,9 +251,19 @@ function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResul
           </div>
           <h3 className="text-2xl font-black text-white text-center">L'Eau Douce</h3>
           <p className="text-white/70 text-center text-sm mt-2 mb-auto">Source de toute vie</p>
-          <div className="mt-auto flex justify-between w-full text-xs font-bold text-white uppercase tracking-widest bg-black/40 px-4 py-3 rounded-2xl backdrop-blur-md border border-white/10">
-            <span className="text-red-400 flex items-center gap-1"><ChevronLeft className="w-3.5 h-3.5" />{exercise.carte_gauche.nom}</span>
-            <span className="text-emerald-400 flex items-center gap-1">{exercise.carte_droite.nom}<ChevronRight className="w-3.5 h-3.5" /></span>
+          <div className="mt-auto flex justify-between w-full px-4 py-3">
+            <motion.div
+              animate={{ scale: x.get() < -50 ? 1.3 : 1, opacity: x.get() < -50 ? 1 : 0.5 }}
+              className="w-12 h-12 rounded-full bg-red-500/20 border-2 border-red-500/40 flex items-center justify-center"
+            >
+              <X className="w-6 h-6 text-red-400" />
+            </motion.div>
+            <motion.div
+              animate={{ scale: x.get() > 50 ? 1.3 : 1, opacity: x.get() > 50 ? 1 : 0.5 }}
+              className="w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center"
+            >
+              <Check className="w-6 h-6 text-emerald-400" />
+            </motion.div>
           </div>
         </motion.div>
       </div>
@@ -424,10 +447,36 @@ function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: bool
       }}
     >
       <div className="flex items-center gap-4 mb-4">
-        {/* Mascotte compacte */}
-        <div className={cn('relative w-14 h-14 shrink-0', !correct && 'grayscale opacity-60')}>
+        {/* Mascotte compacte avec animation selon succès/erreur */}
+        <motion.div
+          animate={correct 
+            ? { rotate: [0, -10, 10, -10, 0], scale: [1, 1.1, 1] } 
+            : { rotate: [0, -5, 5, -5, 0], y: [0, -2, 0] }
+          }
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          className={cn('relative w-14 h-14 shrink-0', !correct && 'grayscale opacity-70')}
+        >
           <Image src={`/${mascotte}.png`} alt="Mascotte" fill className="object-contain" />
-        </div>
+          {/* Expression supplémentaire selon état */}
+          {!correct && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="absolute -top-1 -right-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center"
+            >
+              <span className="text-xs">💧</span>
+            </motion.div>
+          )}
+          {correct && (
+            <motion.div
+              initial={{ scale: 0, rotate: -20 }}
+              animate={{ scale: 1, rotate: 0 }}
+              className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-400 rounded-full flex items-center justify-center"
+            >
+              <span className="text-xs">✨</span>
+            </motion.div>
+          )}
+        </motion.div>
         <div>
           <p className={cn('text-lg font-black', correct ? 'text-emerald-400' : 'text-red-400')}>
             {correct ? 'Excellent !' : 'Pas tout à fait...'}

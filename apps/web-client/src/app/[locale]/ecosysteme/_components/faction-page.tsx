@@ -16,7 +16,7 @@ export function FactionPage({ factionKey }: { factionKey: EcosystemFactionKey })
   const factionEcosystems = ECOSYSTEMS.filter((eco) => eco.factionFocus === factionKey)
 
   function handleSelectEcosystem(ecosystemId: string) {
-    router.push(`/ecosysteme/${ecosystemId}?perspective=faction`)
+    router.push(`/ecosysteme/${ecosystemId}`)
   }
 
   function handleBack() {

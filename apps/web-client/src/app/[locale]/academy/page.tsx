@@ -481,9 +481,9 @@ export default function AcademyPage() {
               </div>
 
               <div className="sticky bottom-0 left-0 w-full p-6 pb-[max(2rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent z-20">
-                <div className="mb-4 text-center">
-                  <span className="inline-flex items-center gap-2 bg-emerald-900/40 border border-emerald-500/30 px-4 py-2 rounded-full text-emerald-400 font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                    <Gift className="w-4 h-4" /> Récompense à la clé : +{selectedUnit.reward}
+                <div className="mb-6 mt-6 text-center">
+                  <span className="inline-flex items-center gap-2 bg-emerald-900/40 border border-emerald-500/30 px-4 py-2 rounded-full font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <Gift className="w-4 h-4 text-emerald-400" /> <span className="text-white">Récompense à la clé :</span> <span className="text-emerald-400">+{selectedUnit.reward}</span>
                   </span>
                 </div>
                 <button
