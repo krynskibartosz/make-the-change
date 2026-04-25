@@ -79,6 +79,19 @@ export function useEcosystem(ecosystem: EcosystemDefinition, isAccessUnlocked: b
     )
   }, [])
 
+  const revealNode = useCallback((nodeId: string) => {
+    setNodes((currentNodes) =>
+      currentNodes.map((node) =>
+        node.id === nodeId && node.status === 'locked'
+          ? {
+              ...node,
+              status: 'discovered',
+            }
+          : node,
+      ),
+    )
+  }, [])
+
   const hasDeadNodes = useMemo(() => nodes.some((node) => node.status === 'collapsed'), [nodes])
   const lockedCount = useMemo(
     () => nodes.filter((node) => node.status === 'locked').length,
@@ -92,6 +105,7 @@ export function useEcosystem(ecosystem: EcosystemDefinition, isAccessUnlocked: b
     healEcosystem,
     protectProjectArea,
     revealLockedNodes,
+    revealNode,
     hasDeadNodes,
     lockedCount,
   }

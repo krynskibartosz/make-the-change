@@ -1,19 +1,20 @@
 import type { Metadata } from 'next'
-import { FactionPage } from '../../_components/faction-page'
 import { notFound } from 'next/navigation'
-import { FACTION_COPY, type EcosystemFactionKey } from '@/lib/ecosystem/graph'
+import { type EcosystemFactionKey, FACTION_COPY } from '@/lib/ecosystem/graph'
+import { FactionPage } from '../../_components/faction-page'
 
 interface FactionPageProps {
-  params: {
+  params: Promise<{
     key: string
     locale: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: FactionPageProps): Promise<Metadata> {
-  const factionKey = params.key as EcosystemFactionKey
+  const { key } = await params
+  const factionKey = key as EcosystemFactionKey
   const faction = FACTION_COPY[factionKey]
-  
+
   if (!faction) {
     return {
       title: 'Faction non trouvée | Make the Change',
@@ -26,8 +27,9 @@ export async function generateMetadata({ params }: FactionPageProps): Promise<Me
 }
 
 export default async function FactionDetailPage({ params }: FactionPageProps) {
-  const factionKey = params.key as EcosystemFactionKey
-  
+  const { key } = await params
+  const factionKey = key as EcosystemFactionKey
+
   if (!FACTION_COPY[factionKey]) {
     notFound()
   }

@@ -1,19 +1,20 @@
 import type { Metadata } from 'next'
-import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { EcosystemDetail } from '../_components/ecosystem-detail'
 import { notFound } from 'next/navigation'
+import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { getEcosystemById } from '@/lib/ecosystem/graph'
+import { EcosystemDetail } from '../_components/ecosystem-detail'
 
 interface EcosystemDetailPageProps {
-  params: {
+  params: Promise<{
     id: string
     locale: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: EcosystemDetailPageProps): Promise<Metadata> {
-  const ecosystem = getEcosystemById(params.id)
-  
+  const { id } = await params
+  const ecosystem = getEcosystemById(id)
+
   if (!ecosystem) {
     return {
       title: 'Écosystème non trouvé | Make the Change',
@@ -26,8 +27,9 @@ export async function generateMetadata({ params }: EcosystemDetailPageProps): Pr
 }
 
 export default async function EcosystemDetailPage({ params }: EcosystemDetailPageProps) {
-  const ecosystem = getEcosystemById(params.id)
-  
+  const { id } = await params
+  const ecosystem = getEcosystemById(id)
+
   if (!ecosystem) {
     notFound()
   }
@@ -36,7 +38,7 @@ export default async function EcosystemDetailPage({ params }: EcosystemDetailPag
 
   return (
     <EcosystemDetail
-      ecosystemId={params.id}
+      ecosystemId={id}
       species={species.map((entry) => ({
         id: entry.id,
         name: entry.name_default,

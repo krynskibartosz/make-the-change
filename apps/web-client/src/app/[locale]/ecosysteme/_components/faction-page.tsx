@@ -1,13 +1,9 @@
 'use client'
 
+import { Button } from '@make-the-change/core/ui'
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@make-the-change/core/ui'
-import {
-  ECOSYSTEMS,
-  FACTION_COPY,
-  type EcosystemFactionKey,
-} from '@/lib/ecosystem/graph'
+import { ECOSYSTEMS, type EcosystemFactionKey, FACTION_COPY } from '@/lib/ecosystem/graph'
 import { cn } from '@/lib/utils'
 
 export function FactionPage({ factionKey }: { factionKey: EcosystemFactionKey }) {
@@ -39,12 +35,14 @@ export function FactionPage({ factionKey }: { factionKey: EcosystemFactionKey })
               shimmer={false}
               onClick={handleBack}
             />
-            
+
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-200/60">
                 Faction
               </p>
-              <h1 className="mt-2 text-3xl font-black tracking-normal text-white">{faction.name}</h1>
+              <h1 className="mt-2 text-3xl font-black tracking-normal text-white">
+                {faction.name}
+              </h1>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/50">
                 {faction.description}
               </p>

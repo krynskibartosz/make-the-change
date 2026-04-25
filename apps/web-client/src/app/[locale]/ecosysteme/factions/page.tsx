@@ -1,16 +1,16 @@
 'use client'
 
-import { ChevronLeft } from 'lucide-react'
 import { Button } from '@make-the-change/core/ui'
-import { FACTION_COPY, type EcosystemFactionKey } from '@/lib/ecosystem/graph'
+import { ChevronLeft } from 'lucide-react'
+import { type EcosystemFactionKey, FACTION_COPY } from '@/lib/ecosystem/graph'
 import { cn } from '@/lib/utils'
 
-function FactionCard({ 
-  factionKey, 
-  onSelect 
-}: { 
+function FactionCard({
+  factionKey,
+  onSelect,
+}: {
   factionKey: EcosystemFactionKey
-  onSelect: (factionKey: EcosystemFactionKey) => void 
+  onSelect: (factionKey: EcosystemFactionKey) => void
 }) {
   const faction = FACTION_COPY[factionKey]
 
@@ -50,7 +50,7 @@ export default function FactionsPage() {
               shimmer={false}
               onClick={() => window.history.back()}
             />
-            
+
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-200/60">
                 Factions

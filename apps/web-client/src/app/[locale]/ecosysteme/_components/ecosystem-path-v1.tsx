@@ -233,11 +233,15 @@ export function EcosystemLines({
   points,
   ecosystem,
   perspective,
+  visibleNodeIds,
+  selectedNodeId,
 }: {
   edges: readonly EcosystemEdge[]
   points: readonly PathPoint[]
   ecosystem: EcosystemDefinition
   perspective: EcosystemPerspective
+  visibleNodeIds?: ReadonlySet<string>
+  selectedNodeId?: string | null
 }) {
   const pointById = useMemo(() => new Map(points.map((point) => [point.id, point])), [points])
 
@@ -266,6 +270,11 @@ export function EcosystemLines({
 
         const status = getEdgeStatus(edge, pointById)
         const controlY = (source.y + target.y) / 2
+        const isVisible =
+          !visibleNodeIds || (visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target))
+        const isSelectedConnection =
+          Boolean(selectedNodeId) &&
+          (edge.source === selectedNodeId || edge.target === selectedNodeId)
         const emphasized =
           isNodeEmphasized(source, ecosystem, perspective) ||
           isNodeEmphasized(target, ecosystem, perspective)
@@ -277,11 +286,17 @@ export function EcosystemLines({
             className={cn(
               'transition-all duration-700 ease-in-out',
               STATUS_VISUALS[status].line,
-              emphasized ? 'opacity-100' : 'opacity-20',
+              isVisible
+                ? isSelectedConnection
+                  ? 'opacity-100'
+                  : emphasized
+                    ? 'opacity-90'
+                    : 'opacity-20'
+                : 'opacity-0',
             )}
             fill="none"
             strokeLinecap="round"
-            strokeWidth={emphasized ? '1.1' : '0.75'}
+            strokeWidth={isSelectedConnection ? '1.45' : emphasized ? '1.1' : '0.75'}
           />
         )
       })}
@@ -294,11 +309,19 @@ export function EcosystemPathNode({
   species,
   emphasized,
   onExtinction,
+  onSelect,
+  isSelected = false,
+  isVisible = true,
+  showInlineActions = true,
 }: {
   point: PathPoint
   species: EcosystemSpeciesPreview | undefined
   emphasized: boolean
-  onExtinction: (nodeId: string) => void
+  onExtinction?: (nodeId: string) => void
+  onSelect?: (nodeId: string) => void
+  isSelected?: boolean
+  isVisible?: boolean
+  showInlineActions?: boolean
 }) {
   const isCollapsed = point.status === 'collapsed'
   const isLocked = point.status === 'locked'
@@ -311,15 +334,31 @@ export function EcosystemPathNode({
   return (
     <section
       className={cn(
-        'absolute z-10 flex w-[6.6rem] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center transition-all duration-700 sm:w-[7.4rem]',
-        emphasized ? 'opacity-100' : 'opacity-40 grayscale',
+        'absolute z-10 flex w-[6.2rem] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center transition-all duration-700 sm:w-[7.4rem]',
+        onSelect && 'cursor-pointer outline-none',
+        isVisible
+          ? emphasized
+            ? 'pointer-events-auto scale-100 opacity-100'
+            : 'pointer-events-auto scale-100 opacity-40 grayscale'
+          : 'pointer-events-none scale-75 opacity-0',
       )}
       style={{ left: `${point.lane}%`, top: `${point.y}%` }}
       aria-label={`${point.name} - ${statusVisual.label}`}
+      role={onSelect ? 'button' : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      onClick={() => onSelect?.(point.id)}
+      onKeyDown={(event) => {
+        if (!onSelect) return
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onSelect(point.id)
+        }
+      }}
     >
       <div
         className={cn(
-          'relative flex h-[4.9rem] w-[4.9rem] items-center justify-center overflow-hidden rounded-full border backdrop-blur-md transition-all duration-700 ease-in-out sm:h-[5.4rem] sm:w-[5.4rem]',
+          'relative flex h-[4.65rem] w-[4.65rem] items-center justify-center overflow-hidden rounded-full border backdrop-blur-md transition-all duration-700 ease-in-out sm:h-[5.4rem] sm:w-[5.4rem]',
+          isSelected && 'ring-2 ring-white/70 ring-offset-2 ring-offset-[#05050A]',
           isCollapsed
             ? 'border-white/10 bg-white/5 text-white/35 opacity-50 grayscale'
             : isLocked
@@ -370,7 +409,7 @@ export function EcosystemPathNode({
         </p>
       </div>
 
-      {!isCollapsed && !isLocked ? (
+      {showInlineActions && !isCollapsed && !isLocked ? (
         <Button
           type="button"
           variant="destructive"
@@ -379,7 +418,10 @@ export function EcosystemPathNode({
           aria-label={`Simuler rupture ${point.name}`}
           icon={<Skull className="h-3 w-3" />}
           shimmer={false}
-          onClick={() => onExtinction(point.id)}
+          onClick={(event) => {
+            event.stopPropagation()
+            onExtinction?.(point.id)
+          }}
         />
       ) : null}
     </section>
@@ -436,10 +478,8 @@ export function PerspectiveTabs({
   onChange: (nextPerspective: EcosystemPerspective) => void
 }) {
   const perspectives = Object.entries(PERSPECTIVE_COPY).filter(
-    ([key]) => key !== 'faction'
-  ) as Array<
-    [EcosystemPerspective, (typeof PERSPECTIVE_COPY)[EcosystemPerspective]]
-  >
+    ([key]) => key !== 'faction',
+  ) as Array<[EcosystemPerspective, (typeof PERSPECTIVE_COPY)[EcosystemPerspective]]>
 
   return (
     <div className="grid grid-cols-3 gap-1 rounded-2xl border border-white/10 bg-white/[0.035] p-1">

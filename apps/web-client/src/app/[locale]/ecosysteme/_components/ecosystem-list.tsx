@@ -1,14 +1,10 @@
 'use client'
 
 import { Button } from '@make-the-change/core/ui'
-import { LockKeyhole, Sprout, TreePine, Waves, Users, type LucideIcon } from 'lucide-react'
-import { useState } from 'react'
+import { LockKeyhole, type LucideIcon, Sprout, TreePine, Users, Waves } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import {
-  ECOSYSTEMS,
-  type EcosystemDefinition,
-  type EcosystemFactionKey,
-} from '@/lib/ecosystem/graph'
+import { useState } from 'react'
+import { ECOSYSTEMS, type EcosystemDefinition } from '@/lib/ecosystem/graph'
 import { cn } from '@/lib/utils'
 
 const THEME_ICON: Record<EcosystemDefinition['theme'], LucideIcon> = {
@@ -19,7 +15,7 @@ const THEME_ICON: Record<EcosystemDefinition['theme'], LucideIcon> = {
 
 export function EcosystemList() {
   const router = useRouter()
-  const [unlockedEcosystemIds, setUnlockedEcosystemIds] = useState<Set<string>>(() => new Set())
+  const [unlockedEcosystemIds, _setUnlockedEcosystemIds] = useState<Set<string>>(() => new Set())
 
   function handleSelectEcosystem(ecosystemId: string) {
     router.push(`/ecosysteme/${ecosystemId}`)
@@ -60,7 +56,8 @@ export function EcosystemList() {
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ECOSYSTEMS.map((ecosystem) => {
             const Icon = THEME_ICON[ecosystem.theme]
-            const isUnlocked = ecosystem.access === 'available' || unlockedEcosystemIds.has(ecosystem.id)
+            const isUnlocked =
+              ecosystem.access === 'available' || unlockedEcosystemIds.has(ecosystem.id)
 
             return (
               <button
@@ -77,22 +74,24 @@ export function EcosystemList() {
               >
                 {/* Gradient overlay for hover effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/0 via-transparent to-cyan-500/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                
+
                 <div className="relative flex flex-col gap-4">
                   {/* Icon container with glass effect */}
-                  <div className={cn(
-                    'flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border backdrop-blur-md transition-all duration-500',
-                    isUnlocked 
-                      ? 'border-emerald-200/20 bg-gradient-to-br from-emerald-400/10 to-cyan-400/10 shadow-[0_0_30px_rgba(16,185,129,0.2)]'
-                      : 'border-white/10 bg-white/5'
-                  )}>
+                  <div
+                    className={cn(
+                      'flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border backdrop-blur-md transition-all duration-500',
+                      isUnlocked
+                        ? 'border-emerald-200/20 bg-gradient-to-br from-emerald-400/10 to-cyan-400/10 shadow-[0_0_30px_rgba(16,185,129,0.2)]'
+                        : 'border-white/10 bg-white/5',
+                    )}
+                  >
                     {isUnlocked ? (
                       <Icon className="h-8 w-8 text-emerald-100 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                     ) : (
                       <LockKeyhole className="h-8 w-8 text-white/30" />
                     )}
                   </div>
-                  
+
                   {/* Content */}
                   <div className="min-w-0 flex-1 space-y-1">
                     <p className="truncate text-xl font-semibold tracking-tight text-white/90 group-hover:text-white transition-colors">
