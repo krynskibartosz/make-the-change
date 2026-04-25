@@ -559,15 +559,18 @@ function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: bool
   )
 }
 
-function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) {
+function VictoryScreen({ unit, onFinish, comboCount }: { unit: any, onFinish: () => void, comboCount?: number }) {
   const [countedReward, setCountedReward] = useState(0)
+  const isPerfectCombo = comboCount === 5
+  const multiplier = isPerfectCombo ? 2 : 1
+  const finalReward = unit.recompense.montant * multiplier
 
   useEffect(() => {
     confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#10B981', '#34D399', '#059669', '#FBBF24'] })
   }, [])
 
   useEffect(() => {
-    const target = unit.recompense.montant
+    const target = finalReward
     const duration = 1000
     const steps = 20
     const increment = target / steps
@@ -584,7 +587,7 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
     }, duration / steps)
 
     return () => clearInterval(timer)
-  }, [unit.recompense.montant])
+  }, [finalReward])
 
   return (
     <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -604,9 +607,18 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
 
       <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tight whitespace-nowrap">Leçon Terminée !</h2>
       
-      <div className="flex items-center gap-3 bg-emerald-500/20 border-2 border-emerald-500/50 px-6 py-3 rounded-2xl mb-12 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+      <div className="flex items-center gap-3 bg-emerald-500/20 border-2 border-emerald-500/50 px-6 py-3 rounded-2xl mb-12 shadow-[0_0_30px_rgba(16,185,129,0.3)] relative">
         <span className="text-emerald-400 text-2xl font-black">+{countedReward}</span>
         <span className="text-emerald-400 text-lg font-bold capitalize">Graines 🌱</span>
+        {isPerfectCombo && (
+          <motion.div
+            initial={{ scale: 0, rotate: -20 }}
+            animate={{ scale: 1, rotate: 0 }}
+            className="absolute -top-3 -right-3 bg-amber-500 text-black text-xs font-black px-2 py-1 rounded-full border-2 border-amber-300"
+          >
+            x2 BONUS !
+          </motion.div>
+        )}
       </div>
 
       <button
@@ -616,6 +628,49 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
         RÉCUPÉRER MES GRAINES 🌱
       </button>
     </div>
+  )
+}
+
+function ComboAnimation({ level, onComplete }: { level: number, onComplete: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 1500)
+    return () => clearTimeout(timer)
+  }, [onComplete])
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
+        animate={{ opacity: 1, scale: 1.2, rotate: 0 }}
+        exit={{ opacity: 0, scale: 1.5, rotate: 15 }}
+        transition={{ type: 'spring', bounce: 0.5, duration: 0.8 }}
+        className="absolute inset-0 z-[200] flex items-center justify-center pointer-events-none"
+      >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 1.5 }}
+          className="text-center"
+        >
+          <div className="text-8xl mb-4">{level === 5 ? '🔥' : '✨'}</div>
+          <h2 className="text-6xl font-black text-white uppercase tracking-tight drop-shadow-[0_0_30px_rgba(16,185,129,0.8)]">
+            {level === 5 ? 'COMBO PARFAIT !' : `SÉRIE x${level} !`}
+          </h2>
+        </motion.div>
+      </motion.div>
+      <motion.div
+        initial={{ y: '-100%' }}
+        animate={{ y: '100%' }}
+        exit={{ y: '100%' }}
+        transition={{ duration: 0.6 }}
+        className="absolute inset-0 z-[150] pointer-events-none"
+        style={{
+          background: level === 5
+            ? 'linear-gradient(to bottom, transparent, rgba(251,191,36,0.3), transparent)'
+            : 'linear-gradient(to bottom, transparent, rgba(16,185,129,0.3), transparent)'
+        }}
+      />
+    </AnimatePresence>
   )
 }
 
@@ -682,6 +737,8 @@ export default function ExerciseEngine() {
   const [feedback, setFeedback] = useState<{ show: boolean, correct: boolean, text: string } | null>(null)
   const [showQuitModal, setShowQuitModal] = useState(false)
   const [lives, setLives] = useState(5)
+  const [comboCount, setComboCount] = useState(0)
+  const [showComboAnimation, setShowComboAnimation] = useState<{ show: boolean, level: number } | null>(null)
 
   const [attempt, setAttempt] = useState(0)
 
@@ -689,7 +746,17 @@ export default function ExerciseEngine() {
   const isFinished = currentStepIndex >= unitData.exercices.length
 
   const handleResult = (correct: boolean, text: string) => {
-    if (!correct) setLives(prev => Math.max(0, prev - 1))
+    if (!correct) {
+      setLives(prev => Math.max(0, prev - 1))
+      setComboCount(0)
+    } else {
+      setComboCount(prev => {
+        const newCount = prev + 1
+        if (newCount === 3) setShowComboAnimation({ show: true, level: 3 })
+        if (newCount === 5) setShowComboAnimation({ show: true, level: 5 })
+        return newCount
+      })
+    }
     setFeedback({ show: true, correct, text })
   }
 
@@ -713,7 +780,7 @@ export default function ExerciseEngine() {
   return (
     <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="flex flex-col overflow-hidden h-full relative">
       {isFinished ? (
-        <VictoryScreen unit={unitData} onFinish={() => router.push('/academy')} />
+        <VictoryScreen unit={unitData} comboCount={comboCount} onFinish={() => router.push('/academy')} />
       ) : isGameOver ? (
         <GameOverScreen onQuit={() => router.push('/academy')} />
       ) : (
@@ -742,6 +809,10 @@ export default function ExerciseEngine() {
       <AnimatePresence>
         {feedback?.show && (
           <FeedbackScreen correct={feedback.correct} feedback={feedback.text} mascotte={unitData.mascotte} onNext={handleNextStep} />
+        )}
+
+        {showComboAnimation?.show && (
+          <ComboAnimation level={showComboAnimation.level} onComplete={() => setShowComboAnimation(null)} />
         )}
 
         {showQuitModal && (
