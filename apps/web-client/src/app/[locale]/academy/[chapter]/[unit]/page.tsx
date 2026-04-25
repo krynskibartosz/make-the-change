@@ -17,7 +17,7 @@ const unitData = {
   titre: "Les Forges de la Vie",
   concept_cle: "Énergie, Minéraux, Hydratation",
   mascotte: "ondine", // 'ondine', 'sylva', ou 'abeille-transparente'
-  recompense: { type: "gouttes", montant: 10 },
+  recompense: { type: "graines", montant: 10 },
   exercices: [
     {
       id: "ex_1",
@@ -560,9 +560,31 @@ function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: bool
 }
 
 function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) {
+  const [countedReward, setCountedReward] = useState(0)
+
   useEffect(() => {
     confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#10B981', '#34D399', '#059669', '#FBBF24'] })
   }, [])
+
+  useEffect(() => {
+    const target = unit.recompense.montant
+    const duration = 1000
+    const steps = 20
+    const increment = target / steps
+    let current = 0
+
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= target) {
+        setCountedReward(target)
+        clearInterval(timer)
+      } else {
+        setCountedReward(Math.floor(current))
+      }
+    }, duration / steps)
+
+    return () => clearInterval(timer)
+  }, [unit.recompense.montant])
 
   return (
     <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -580,18 +602,18 @@ function VictoryScreen({ unit, onFinish }: { unit: any, onFinish: () => void }) 
         </motion.div>
       </motion.div>
 
-      <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tight">Leçon Terminée !</h2>
+      <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tight whitespace-nowrap">Leçon Terminée !</h2>
       
-      <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-3 rounded-2xl mb-12 shadow-lg">
-        <span className="text-emerald-400 text-2xl font-black">+{unit.recompense.montant}</span>
-        <span className="text-white/80 text-lg font-bold capitalize">{unit.recompense.type}</span>
+      <div className="flex items-center gap-3 bg-emerald-500/20 border-2 border-emerald-500/50 px-6 py-3 rounded-2xl mb-12 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+        <span className="text-emerald-400 text-2xl font-black">+{countedReward}</span>
+        <span className="text-emerald-400 text-lg font-bold capitalize">Graines 🌱</span>
       </div>
 
       <button
         onClick={onFinish}
         className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_7px_0_#065f46] hover:shadow-[0_5px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[6px] transition-all duration-100 mt-auto mb-8 uppercase tracking-wide"
       >
-        Continuer
+        RÉCUPÉRER MES GRAINES 🌱
       </button>
     </div>
   )
