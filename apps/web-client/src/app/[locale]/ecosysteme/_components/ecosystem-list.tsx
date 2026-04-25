@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@make-the-change/core/ui'
-import { LockKeyhole, type LucideIcon, Sprout, TreePine, Users, Waves } from 'lucide-react'
+import { Layers3, LockKeyhole, type LucideIcon, Sprout, TreePine, Users, Waves } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ECOSYSTEMS, type EcosystemDefinition } from '@/lib/ecosystem/graph'
@@ -23,6 +23,10 @@ export function EcosystemList() {
 
   function handleGoToFactions() {
     router.push('/ecosysteme/factions')
+  }
+
+  function handleGoToInteractionsLab() {
+    router.push('/ecosysteme/lab/interactions')
   }
 
   return (
@@ -52,6 +56,27 @@ export function EcosystemList() {
             />
           </div>
         </header>
+
+        <button
+          type="button"
+          className="group flex w-full items-center justify-between gap-4 rounded-[2rem] border border-cyan-200/15 bg-cyan-300/[0.06] p-4 text-left shadow-[0_0_36px_rgba(34,211,238,0.08)] transition-all duration-500 hover:border-cyan-200/25 hover:bg-cyan-300/[0.09]"
+          onClick={handleGoToInteractionsLab}
+        >
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/20 bg-cyan-300/10 text-cyan-100">
+              <Layers3 className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-black text-white">Microscope des interactions</p>
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/45">
+                Filtrer la toile par habitat, symbiose, protection, predation ou menaces.
+              </p>
+            </div>
+          </div>
+          <span className="shrink-0 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.12em] text-cyan-100">
+            Labo
+          </span>
+        </button>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ECOSYSTEMS.map((ecosystem) => {
