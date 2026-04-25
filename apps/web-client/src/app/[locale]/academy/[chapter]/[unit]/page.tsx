@@ -1,78 +1,81 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
-import { X, Check, ArrowRight, RefreshCcw, ChevronLeft, ChevronRight, Heart, HeartCrack, Droplet } from 'lucide-react'
-import { useRouter } from '@/i18n/navigation'
-import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { cn } from '@/lib/utils'
-import { DndContext, useDraggable, useDroppable, DragEndEvent, useSensor, useSensors, PointerSensor, TouchSensor, closestCenter } from '@dnd-kit/core'
-import Image from 'next/image'
+import {
+  closestCenter,
+  DndContext,
+  PointerSensor,
+  TouchSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
 import confetti from 'canvas-confetti'
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
+import {
+  ArrowRight,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Droplet,
+  Heart,
+  HeartCrack,
+  Lock,
+  RefreshCcw,
+  X,
+} from 'lucide-react'
+import Image from 'next/image'
+import { useParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
+import { useRouter } from '@/i18n/navigation'
+import {
+  MOCK_ACADEMY_VIEWER_ID,
+  academyRepository,
+  getChapterBySlug,
+  getDefaultAcademyProgress,
+  getUnitBySlug,
+  type AcademyDragDropExercise,
+  type AcademyExercise,
+  type AcademyQuizExercise,
+  type AcademyStoryExercise,
+  type AcademySwipeExercise,
+  type AcademyUnit,
+} from '@/lib/mock/mock-academy'
+import { cn } from '@/lib/utils'
 
-// --- MOCK DATA (L'Unité 1.1: Les Forges de la Vie) ---
-const unitData = {
-  id: "1.1",
-  chapitre_id: "chapitre-1",
-  titre: "Les Forges de la Vie",
-  concept_cle: "Énergie, Minéraux, Hydratation",
-  mascotte: "ondine", // 'ondine', 'sylva', ou 'abeille-transparente'
-  recompense: { type: "graines", montant: 10 },
-  exercices: [
-    {
-      id: "ex_1",
-      type: "STORY",
-      ecrans: [
-        { texte: "Soleil, eau, sol : les trois piliers de la vie.", bg: "bg-emerald-900", img: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000&auto=format&fit=crop" },
-        { texte: "Ensemble, ils forgent l'énergie de toute la nature.", bg: "bg-emerald-800", img: "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000&auto=format&fit=crop" }
-      ]
-    },
-    {
-      id: "ex_2",
-      type: "SWIPE",
-      question: "Est-ce un ingrédient indispensable à la création de la vie ?",
-      carte_droite: { nom: "L'eau douce", est_correct: true, feedback: "Génial ! Sans eau, les cellules de la vie ne peuvent pas s'hydrater." },
-      carte_gauche: { nom: "Le goudron", est_correct: false, feedback: "Oups ! Le goudron asphyxie nos sols et empêche l'eau de circuler." }
-    },
-    {
-      id: "ex_3",
-      type: "DRAG_DROP",
-      consigne: "Ordonne ces éléments du plus lointain au plus profond :",
-      ordre_correct: [
-        { id: "item1", texte: "Le Soleil (Espace)" },
-        { id: "item2", texte: "L'Eau (Surface)" },
-        { id: "item3", texte: "Les Minéraux (Sous-sol)" }
-      ]
-    },
-    {
-      id: "ex_4",
-      type: "QUIZ",
-      question: "Quel élément fournit l'énergie de base à presque toute la Terre ?",
-      options: [
-        { texte: "Le vent fougueux", est_correct: false },
-        { texte: "La roche magmatique", est_correct: false },
-        { texte: "Le Soleil", est_correct: true }
-      ],
-      anecdote_victoire: "Bingo ! Les plantes capturent sa lumière pour nourrir toute la chaîne alimentaire."
-    }
-  ]
-}
+const getParam = (value: string | string[] | undefined) =>
+  Array.isArray(value) ? value[0] : value
 
-// --- COMPONENTS ---
-
-function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, total: number, onQuit: () => void, lives: number }) {
+function ExerciseHeader({
+  progress,
+  total,
+  onQuit,
+  lives,
+}: {
+  progress: number
+  total: number
+  onQuit: () => void
+  lives: number
+}) {
   return (
-    <div className="absolute top-0 inset-x-0 z-50 p-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-4 bg-[#05050A]/60 backdrop-blur-md border-b border-white/5">
-      <button onClick={onQuit} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 text-white/60 hover:bg-black/40 hover:text-white transition-colors backdrop-blur-md shrink-0">
-        <X className="w-6 h-6" />
+    <div className="absolute inset-x-0 top-0 z-50 flex items-center gap-4 border-b border-white/5 bg-[#05050A]/60 p-4 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-md">
+      <button
+        type="button"
+        onClick={onQuit}
+        aria-label="Quitter l'entraînement"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black/20 text-white/60 backdrop-blur-md transition-colors hover:bg-black/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      >
+        <X className="h-6 w-6" />
       </button>
-      <div className="flex-1 flex gap-1.5 h-3">
-        {Array.from({ length: total }).map((_, i) => {
-          const isCompleted = progress > i
-          const isActive = progress === i
+      <div className="flex h-3 flex-1 gap-1.5">
+        {Array.from({ length: total }).map((_, index) => {
+          const isCompleted = progress > index
+          const isActive = progress === index
 
           return (
-            <div key={i} className="flex-1 h-full rounded-full bg-white/10 overflow-hidden relative">
+            <div key={index} className="relative h-full flex-1 overflow-hidden rounded-full bg-white/10">
               {isActive && (
                 <motion.div
                   className="absolute inset-0 bg-emerald-500/30"
@@ -81,35 +84,35 @@ function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, 
                 />
               )}
               <motion.div
-                className="absolute inset-0 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] origin-left"
+                className="absolute inset-0 origin-left bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: isCompleted ? 1 : 0 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
               />
             </div>
           )
         })}
       </div>
-
-      {/* Vies — compteur compact avec animation de perte */}
       <motion.div
         key={lives}
         animate={lives > 0 ? { x: [0, -5, 5, -5, 5, 0] } : { scale: [1, 1.15, 0.9, 1] }}
         transition={{ duration: 0.35, ease: 'easeInOut' }}
         className={cn(
-          'flex items-center gap-1.5 px-3 py-1.5 rounded-full border shrink-0 transition-colors duration-300',
-          lives >= 3
-            ? 'bg-red-500/10 border-red-500/25'
-            : lives >= 1
-              ? 'bg-amber-500/10 border-amber-500/25'
-              : 'bg-white/5 border-white/10 opacity-50'
+          'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 transition-colors duration-300',
+          lives >= 3 && 'border-red-500/25 bg-red-500/10',
+          lives >= 1 && lives < 3 && 'border-amber-500/25 bg-amber-500/10',
+          lives === 0 && 'border-white/10 bg-white/5 opacity-50',
         )}
       >
-        <Heart className="w-4 h-4 fill-current shrink-0" />
-        <span className={cn(
-          'text-sm font-black tabular-nums leading-none',
-          lives >= 3 ? 'text-red-400' : lives >= 1 ? 'text-amber-400' : 'text-white/30'
-        )}>
+        <Heart className="h-4 w-4 shrink-0 fill-current" />
+        <span
+          className={cn(
+            'text-sm font-black leading-none tabular-nums',
+            lives >= 3 && 'text-red-400',
+            lives >= 1 && lives < 3 && 'text-amber-400',
+            lives === 0 && 'text-white/30',
+          )}
+        >
           {lives}
         </span>
       </motion.div>
@@ -117,95 +120,111 @@ function ExerciseHeader({ progress, total, onQuit, lives }: { progress: number, 
   )
 }
 
-function StoryExercise({ exercise, onComplete }: { exercise: any, onComplete: () => void }) {
+function StoryExercise({
+  exercise,
+  onComplete,
+}: {
+  exercise: AcademyStoryExercise
+  onComplete: () => void
+}) {
   const [currentScreen, setCurrentScreen] = useState(0)
+  const reduceMotion = useReducedMotion()
+  const screen = exercise.screens[currentScreen]
 
   const handleNext = () => {
-    if (currentScreen < exercise.ecrans.length - 1) {
-      setCurrentScreen(prev => prev + 1)
-    } else {
-      onComplete()
+    if (currentScreen < exercise.screens.length - 1) {
+      setCurrentScreen((previous) => previous + 1)
+      return
     }
+
+    onComplete()
   }
 
   const handlePrev = () => {
-    if (currentScreen > 0) setCurrentScreen(prev => prev - 1)
+    if (currentScreen > 0) {
+      setCurrentScreen((previous) => previous - 1)
+    }
+  }
+
+  if (!screen) {
+    return null
   }
 
   return (
-    <div className="w-full h-full relative bg-black flex flex-col">
-      {/* ProgressBar style Instagram */}
-      <div className="absolute top-20 inset-x-4 z-10 flex gap-1 h-1">
-        {exercise.ecrans.map((_: any, i: number) => (
-          <div key={i} className="flex-1 bg-white/20 rounded-full overflow-hidden">
+    <div className="relative flex h-full w-full flex-col bg-black">
+      <div className="absolute inset-x-4 top-20 z-10 flex h-1 gap-1">
+        {exercise.screens.map((_, index) => (
+          <div key={index} className="flex-1 overflow-hidden rounded-full bg-white/20">
             <motion.div
               className="h-full bg-white"
               initial={{ width: 0 }}
-              animate={{ width: i < currentScreen ? '100%' : i === currentScreen ? '100%' : '0%' }}
-              transition={i === currentScreen ? { duration: 5, ease: 'linear' } : { duration: 0 }}
+              animate={{ width: index < currentScreen ? '100%' : index === currentScreen ? '100%' : '0%' }}
+              transition={index === currentScreen ? { duration: reduceMotion ? 0 : 5, ease: 'linear' } : { duration: 0 }}
               onAnimationComplete={() => {
-                if (i === currentScreen) handleNext()
+                if (!reduceMotion && index === currentScreen) {
+                  handleNext()
+                }
               }}
             />
           </div>
         ))}
       </div>
-
       <AnimatePresence mode="wait">
         <motion.div
           key={currentScreen}
           initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1.08 }}
+          animate={{ opacity: 1, scale: reduceMotion ? 1 : 1.08 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, scale: { duration: 8, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' } }}
-          className={cn("absolute inset-0 bg-cover bg-center", exercise.ecrans[currentScreen].bg)}
-          style={{ backgroundImage: exercise.ecrans[currentScreen].img ? `url(${exercise.ecrans[currentScreen].img})` : undefined }}
+          transition={{ duration: 0.6, scale: { duration: 8, ease: 'easeInOut', repeat: reduceMotion ? 0 : Infinity, repeatType: 'reverse' } }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: screen.imageUrl
+              ? `url(${screen.imageUrl})`
+              : 'linear-gradient(135deg, rgba(6,95,70,0.8), rgba(5,5,10,1))',
+          }}
         />
       </AnimatePresence>
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
-
-      {/* Overlay gérant à la fois les Taps et les Swipes horizontaux */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
       <motion.div
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.2}
-        onDragEnd={(e, info) => {
+        onDragEnd={(_, info) => {
           if (info.offset.x < -50) handleNext()
           else if (info.offset.x > 50) handlePrev()
         }}
         className="absolute inset-0 z-20 flex cursor-grab active:cursor-grabbing"
       >
-        <div className="flex-1 h-full cursor-pointer" onClick={handlePrev} />
-        <div className="flex-1 h-full cursor-pointer" onClick={handleNext} />
+        <button type="button" aria-label="Écran précédent" onClick={handlePrev} className="h-full flex-1 cursor-pointer" />
+        <button type="button" aria-label="Écran suivant" onClick={handleNext} className="h-full flex-1 cursor-pointer" />
       </motion.div>
-
-      {/* Indicateur de tap (onboarding invisible pour les 3 premières leçons) */}
       <motion.div
         initial={{ opacity: 0, x: 10 }}
-        animate={{ opacity: [0.4, 1, 0.4], x: [10, 15, 10] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute right-8 top-1/2 -translate-y-1/2 z-30 pointer-events-none"
+        animate={reduceMotion ? { opacity: 0.7 } : { opacity: [0.4, 1, 0.4], x: [10, 15, 10] }}
+        transition={{ duration: 2, repeat: reduceMotion ? 0 : Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute right-8 top-1/2 z-30 -translate-y-1/2"
       >
-        <ChevronRight className="w-8 h-8 text-white/60" />
-        <span className="text-[10px] text-white/50 font-bold uppercase tracking-wider block text-center mt-1">Tapez</span>
+        <ChevronRight className="h-8 w-8 text-white/60" />
+        <span className="mt-1 block text-center text-[10px] font-bold uppercase tracking-wider text-white/50">Tapez</span>
       </motion.div>
-
-      <div className="mt-auto relative z-10 p-8 pb-32 pointer-events-none">
-        <motion.h2
-          key={`text-${currentScreen}`}
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="text-3xl font-black text-white leading-tight"
-        >
-          {exercise.ecrans[currentScreen].texte}
+      <div className="pointer-events-none relative z-10 mt-auto p-8 pb-32">
+        <motion.h2 key={`text-${currentScreen}`} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-3xl font-black leading-tight text-white">
+          {screen.text}
         </motion.h2>
       </div>
     </div>
   )
 }
 
-function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
+function SwipeExercise({
+  exercise,
+  onResult,
+  attempt,
+}: {
+  exercise: AcademySwipeExercise
+  onResult: (correct: boolean, feedback: string) => void
+  attempt: number
+}) {
   const x = useMotionValue(0)
   const rotate = useTransform(x, [-200, 200], [-15, 15])
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0])
@@ -216,54 +235,57 @@ function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResul
     x.set(0)
   }, [attempt, x])
 
-  const handleDragEnd = (e: any, info: any) => {
-    if (info.offset.x > 100) {
-      // Swipe droite = OUI (confirme que l'élément affiché est correct)
-      onResult(exercise.carte_droite.est_correct, exercise.carte_droite.feedback)
-    } else if (info.offset.x < -100) {
-      // Swipe gauche = NON (l'élément affiché n'est pas correct)
-      onResult(!exercise.carte_droite.est_correct, exercise.carte_gauche.feedback)
-    }
+  const answer = (direction: 'left' | 'right') => {
+    const correct = direction === exercise.correctDirection
+    onResult(correct, correct ? exercise.correctFeedback : exercise.incorrectFeedback)
   }
 
   return (
-    <div className="w-full h-full relative bg-[#05050A] flex flex-col items-center justify-center p-6 pt-28 overflow-hidden">
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: bgCorrect }} />
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: bgWrong }} />
-
-      <h2 className="text-xl font-bold text-white text-center mb-10 relative z-10">{exercise.question}</h2>
-
-      <div className="relative w-full max-w-sm aspect-[3/4]">
-        <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-3xl scale-95 translate-y-4" />
-
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#05050A] p-6 pt-28">
+      <motion.div className="pointer-events-none absolute inset-0" style={{ backgroundColor: bgCorrect }} />
+      <motion.div className="pointer-events-none absolute inset-0" style={{ backgroundColor: bgWrong }} />
+      <h2 className="relative z-10 mb-10 text-center text-xl font-bold text-white">{exercise.question}</h2>
+      <div className="relative aspect-[3/4] w-full max-w-sm">
+        <div className="absolute inset-0 translate-y-4 scale-95 rounded-3xl border border-white/10 bg-white/5" />
         <motion.div
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           style={{
-            x, rotate, opacity,
-            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1000&auto=format&fit=crop')`
+            x,
+            rotate,
+            opacity,
+            backgroundImage: exercise.card.imageUrl
+              ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('${exercise.card.imageUrl}')`
+              : 'linear-gradient(to bottom, rgba(6,95,70,0.65), rgba(0,0,0,0.9))',
           }}
-          onDragEnd={handleDragEnd}
-          className="absolute inset-0 bg-cover bg-center border border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center shadow-2xl cursor-grab active:cursor-grabbing"
+          onDragEnd={(_, info) => {
+            if (info.offset.x > 100) answer('right')
+            else if (info.offset.x < -100) answer('left')
+          }}
+          className="absolute inset-0 flex cursor-grab flex-col items-center justify-center rounded-3xl border border-white/20 bg-cover bg-center p-8 shadow-2xl active:cursor-grabbing"
         >
-          <div className="w-24 h-24 bg-blue-500/10 backdrop-blur-md rounded-full mb-8 flex items-center justify-center border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
-            <Droplet className="w-12 h-12 text-blue-400 fill-blue-400" />
+          <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-blue-500/20 bg-blue-500/10 shadow-[0_0_30px_rgba(59,130,246,0.2)] backdrop-blur-md">
+            <Droplet className="h-12 w-12 fill-blue-400 text-blue-400" />
           </div>
-          <h3 className="text-2xl font-black text-white text-center">L'Eau Douce</h3>
-          <p className="text-white/70 text-center text-sm mt-2 mb-auto">Source de toute vie</p>
-          <div className="mt-auto flex justify-between w-full px-4 py-3">
-            <motion.div
-              animate={{ scale: x.get() < -50 ? 1.3 : 1, opacity: x.get() < -50 ? 1 : 0.5 }}
-              className="w-12 h-12 rounded-full bg-red-500/20 border-2 border-red-500/40 flex items-center justify-center"
+          <h3 className="text-center text-2xl font-black text-white">{exercise.card.title}</h3>
+          <p className="mb-auto mt-2 text-center text-sm text-white/70">{exercise.card.subtitle}</p>
+          <div className="mt-auto flex w-full justify-between px-4 py-3">
+            <button
+              type="button"
+              onClick={() => answer('left')}
+              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-red-500/40 bg-red-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+              aria-label={`Choisir ${exercise.leftLabel}`}
             >
-              <X className="w-6 h-6 text-red-400" />
-            </motion.div>
-            <motion.div
-              animate={{ scale: x.get() > 50 ? 1.3 : 1, opacity: x.get() > 50 ? 1 : 0.5 }}
-              className="w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center"
+              <X className="h-6 w-6 text-red-400" />
+            </button>
+            <button
+              type="button"
+              onClick={() => answer('right')}
+              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-emerald-500/40 bg-emerald-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+              aria-label={`Choisir ${exercise.rightLabel}`}
             >
-              <Check className="w-6 h-6 text-emerald-400" />
-            </motion.div>
+              <Check className="h-6 w-6 text-emerald-400" />
+            </button>
           </div>
         </motion.div>
       </div>
@@ -271,7 +293,7 @@ function SwipeExercise({ exercise, onResult, attempt }: { exercise: any, onResul
   )
 }
 
-function DraggableItem({ id, text }: { id: string, text: string }) {
+function DraggableItem({ id, text }: { id: string; text: string }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id })
   const style = transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined
 
@@ -282,8 +304,8 @@ function DraggableItem({ id, text }: { id: string, text: string }) {
       {...listeners}
       {...attributes}
       className={cn(
-        "bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-white font-medium text-center shadow-lg active:scale-105 active:shadow-2xl transition-shadow cursor-grab active:cursor-grabbing touch-none",
-        isDragging && "opacity-50 z-50 scale-105"
+        'cursor-grab touch-none rounded-xl border border-white/20 bg-white/10 p-4 text-center font-medium text-white shadow-lg backdrop-blur-md transition-shadow active:scale-105 active:cursor-grabbing active:shadow-2xl',
+        isDragging && 'z-50 scale-105 opacity-50',
       )}
     >
       {text}
@@ -291,116 +313,165 @@ function DraggableItem({ id, text }: { id: string, text: string }) {
   )
 }
 
-function DroppableSlot({ id, index, item, isWrong }: { id: string, index: number, item: any, isWrong?: boolean }) {
+function DroppableSlot({
+  id,
+  index,
+  item,
+  isWrong,
+}: {
+  id: string
+  index: number
+  item: { id: string; text: string } | null
+  isWrong?: boolean
+}) {
   const { isOver, setNodeRef } = useDroppable({ id })
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex w-full flex-col items-center">
       <motion.div
         ref={setNodeRef}
         animate={isWrong ? { x: [0, -10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.5 }}
         className={cn(
-          "w-full h-16 rounded-xl border-2 border-dashed flex items-center justify-center transition-colors",
-          isOver ? "border-emerald-500 bg-emerald-500/10" : "border-white/20 bg-white/5",
-          item && "border-solid border-emerald-500/50 bg-emerald-500/20",
-          isWrong && "border-red-500/50 bg-red-500/20"
+          'flex h-16 w-full items-center justify-center rounded-xl border-2 border-dashed transition-colors',
+          isOver ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/20 bg-white/5',
+          item && 'border-solid border-emerald-500/50 bg-emerald-500/20',
+          isWrong && 'border-red-500/50 bg-red-500/20',
         )}
       >
-        {item ? <div className="text-white font-medium">{item.texte}</div> : <span className="text-white/30 text-sm">Emplacement {index + 1}</span>}
+        {item ? (
+          <DraggableItem id={item.id} text={item.text} />
+        ) : (
+          <span className="text-sm text-white/30">Emplacement {index + 1}</span>
+        )}
       </motion.div>
-      {index < 2 && <ArrowRight className="w-6 h-6 text-white/30 my-2 rotate-90" />}
+      {index < 2 && <ArrowRight className="my-2 h-6 w-6 rotate-90 text-white/30" />}
     </div>
   )
 }
 
-function DragDropExercise({ exercise, onResult, attempt, showFeedback }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number, showFeedback?: boolean }) {
-  const items = exercise.ordre_correct
-  const [shuffledItems] = useState(() => [...items].sort(() => Math.random() - 0.5))
-  const [slots, setSlots] = useState<Record<string, any>>({ slot_0: null, slot_1: null, slot_2: null })
+function DragDropExercise({
+  exercise,
+  onResult,
+  attempt,
+  showFeedback,
+}: {
+  exercise: AcademyDragDropExercise
+  onResult: (correct: boolean, feedback: string) => void
+  attempt: number
+  showFeedback?: boolean
+}) {
+  const [shuffledItems, setShuffledItems] = useState(() => [...exercise.items].sort(() => Math.random() - 0.5))
+  const [slots, setSlots] = useState<Record<string, { id: string; text: string } | null>>({
+    slot_0: null,
+    slot_1: null,
+    slot_2: null,
+  })
   const [availableItems, setAvailableItems] = useState(shuffledItems)
   const [wrongSlots, setWrongSlots] = useState<Set<number>>(new Set())
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } })
+    useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } }),
   )
 
   useEffect(() => {
+    const nextItems = [...exercise.items].sort(() => Math.random() - 0.5)
+    setShuffledItems(nextItems)
     setSlots({ slot_0: null, slot_1: null, slot_2: null })
-    setAvailableItems(shuffledItems)
+    setAvailableItems(nextItems)
     setWrongSlots(new Set())
-  }, [attempt, shuffledItems])
+  }, [attempt, exercise.items])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (over && over.id.toString().startsWith('slot_')) {
-      const slotId = over.id as string
-      const item = availableItems.find(i => i.id === active.id)
-      if (item && !slots[slotId]) {
-        setSlots(prev => ({ ...prev, [slotId]: item }))
-        setAvailableItems(prev => prev.filter(i => i.id !== item.id))
+      const slotId = over.id.toString()
+      
+      // Check if the dragged item is from the available items or from a slot
+      const availableItem = availableItems.find((entry) => entry.id === active.id)
+      const sourceSlotId = Object.keys(slots).find(key => slots[key]?.id === active.id)
+      
+      // If the slot is empty, just place the item
+      if (!slots[slotId]) {
+        if (availableItem) {
+          // Item from available items -> place in slot
+          setSlots((previous) => ({ ...previous, [slotId]: availableItem }))
+          setAvailableItems((previous) => previous.filter((entry) => entry.id !== availableItem.id))
+        } else if (sourceSlotId) {
+          // Item from another slot -> move to this slot
+          setSlots((previous) => ({ ...previous, [slotId]: previous[sourceSlotId], [sourceSlotId]: null }))
+        }
+      } else {
+        // Slot is occupied, swap items
+        if (availableItem) {
+          // Item from available items -> swap with slot item
+          setSlots((previous) => ({ ...previous, [slotId]: availableItem }))
+          setAvailableItems((previous) => [...previous, previous[slotId]!].filter((entry) => entry.id !== availableItem.id))
+        } else if (sourceSlotId) {
+          // Item from another slot -> swap slots
+          setSlots((previous) => ({ ...previous, [slotId]: previous[sourceSlotId], [sourceSlotId]: previous[slotId] }))
+        }
       }
     }
   }
 
   const handleVerify = () => {
-    const isCorrect =
-      slots.slot_0?.id === items[0].id &&
-      slots.slot_1?.id === items[1].id &&
-      slots.slot_2?.id === items[2].id
+    const isCorrect = exercise.items.every((item, index) => slots[`slot_${index}`]?.id === item.id)
 
     if (!isCorrect) {
-      const wrongIndices = items.map((item: any, idx: number) =>
-        slots[`slot_${idx}` as keyof typeof slots]?.id !== item.id ? idx : -1
-      ).filter((i: number) => i !== -1)
+      const wrongIndices = exercise.items
+        .map((item, index) => (slots[`slot_${index}`]?.id !== item.id ? index : -1))
+        .filter((index) => index !== -1)
       setWrongSlots(new Set(wrongIndices))
     }
 
-    onResult(isCorrect, isCorrect ? "Parfait ! La chronologie est exacte." : "Mince ! L'ordre n'est pas le bon. Le soleil est le plus lointain.")
+    onResult(isCorrect, isCorrect ? "Parfait ! L'ordre est exact." : "Mince ! L'ordre n'est pas le bon. Observe les indices et réessaie.")
   }
 
   const handleReset = () => {
     setSlots({ slot_0: null, slot_1: null, slot_2: null })
     setAvailableItems(shuffledItems)
+    setWrongSlots(new Set())
   }
 
   const isComplete = Object.values(slots).every(Boolean)
 
   return (
-    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-28 overflow-y-auto pb-40">
-      <h2 className="text-xl font-bold text-white text-center mb-8 shrink-0">{exercise.consigne}</h2>
-
+    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-40 pt-28">
+      <h2 className="mb-8 shrink-0 text-center text-xl font-bold text-white">{exercise.instruction}</h2>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <div className="flex flex-col items-center max-w-sm mx-auto w-full">
-          {/* Slots */}
-          <div className="w-full flex flex-col items-center mb-8">
-            <DroppableSlot id="slot_0" index={0} item={slots.slot_0} isWrong={wrongSlots.has(0)} />
-            <DroppableSlot id="slot_1" index={1} item={slots.slot_1} isWrong={wrongSlots.has(1)} />
-            <DroppableSlot id="slot_2" index={2} item={slots.slot_2} isWrong={wrongSlots.has(2)} />
+        <div className="mx-auto flex w-full max-w-sm flex-col items-center">
+          <div className="mb-8 flex w-full flex-col items-center">
+            <DroppableSlot id="slot_0" index={0} item={slots.slot_0 ?? null} isWrong={wrongSlots.has(0)} />
+            <DroppableSlot id="slot_1" index={1} item={slots.slot_1 ?? null} isWrong={wrongSlots.has(1)} />
+            <DroppableSlot id="slot_2" index={2} item={slots.slot_2 ?? null} isWrong={wrongSlots.has(2)} />
           </div>
-
-          {/* Available Items */}
-          <div className="w-full flex flex-col gap-3">
-            {availableItems.map(item => (
-              <DraggableItem key={item.id} id={item.id} text={item.texte} />
+          <div className="flex w-full flex-col gap-3">
+            {availableItems.map((item) => (
+              <DraggableItem key={item.id} id={item.id} text={item.text} />
             ))}
           </div>
         </div>
       </DndContext>
-
       {isComplete && (
         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="sticky bottom-0 mt-8 flex gap-4">
-          <button onClick={handleReset} className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[0_5px_0_rgba(0,0,0,0.4)] hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.4)] active:translate-y-1 transition-all duration-100">
-            <RefreshCcw className="w-6 h-6" />
+          <button
+            type="button"
+            onClick={handleReset}
+            aria-label="Réinitialiser le classement"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.4)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.4)]"
+          >
+            <RefreshCcw className="h-6 w-6" />
           </button>
           <button
+            type="button"
             onClick={handleVerify}
             disabled={showFeedback}
             className={cn(
-              "flex-1 font-black text-lg rounded-2xl py-4 transition-all duration-100",
+              'flex-1 rounded-2xl py-4 text-lg font-black transition-all duration-100',
               showFeedback
-                ? "bg-emerald-500/50 text-black/50 cursor-not-allowed"
-                : "bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px]"
+                ? 'cursor-not-allowed bg-emerald-500/50 text-black/50'
+                : 'bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]',
             )}
           >
             VÉRIFIER
@@ -411,7 +482,17 @@ function DragDropExercise({ exercise, onResult, attempt, showFeedback }: { exerc
   )
 }
 
-function QuizExercise({ exercise, onResult, attempt }: { exercise: any, onResult: (correct: boolean, feedback: string) => void, attempt?: number }) {
+function QuizExercise({
+  exercise,
+  onResult,
+  attempt,
+  mascot,
+}: {
+  exercise: AcademyQuizExercise
+  onResult: (correct: boolean, feedback: string) => void
+  attempt: number
+  mascot: string
+}) {
   const [selected, setSelected] = useState<number | null>(null)
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
 
@@ -421,69 +502,48 @@ function QuizExercise({ exercise, onResult, attempt }: { exercise: any, onResult
   }, [attempt])
 
   const handleSelect = (index: number) => {
+    const option = exercise.options[index]
+    if (!option) {
+      return
+    }
+
     setSelected(index)
-    const opt = exercise.options[index]
-    const correct = opt.est_correct
-    setIsCorrect(correct)
-    setTimeout(() => {
-      onResult(correct, correct ? exercise.anecdote_victoire : "Oups, ce n'est pas la bonne réponse.")
+    setIsCorrect(option.isCorrect)
+    window.setTimeout(() => {
+      onResult(option.isCorrect, option.isCorrect ? exercise.successFeedback : exercise.failureFeedback)
     }, 600)
   }
 
   return (
-    <div className="w-full h-full relative bg-[#05050A] flex flex-col p-6 pt-32 overflow-y-auto pb-24">
-      <div className="flex flex-col items-center mb-8">
-        <motion.div
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          className="relative w-24 h-24 mb-4"
-        >
-          <Image src="/ondine.png" alt="Mascotte" fill className="object-contain" />
-          <motion.div
-            animate={{ rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-2 -right-2 text-2xl"
-          >
-            ❓
-          </motion.div>
+    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-24 pt-32">
+      <div className="mb-8 flex flex-col items-center">
+        <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative mb-4 h-24 w-24">
+          <Image src={`/${mascot}.png`} alt="" fill className="object-contain" />
         </motion.div>
-        <h2 className="text-2xl font-black text-white text-center">{exercise.question}</h2>
+        <h2 className="text-center text-2xl font-black text-white">{exercise.question}</h2>
       </div>
-
-      <div className="flex flex-col gap-4 mt-auto">
-        {exercise.options.map((opt: any, index: number) => (
+      <div className="mt-auto flex flex-col gap-4">
+        {exercise.options.map((option, index) => (
           <button
-            key={index}
+            type="button"
+            key={option.text}
             onClick={() => handleSelect(index)}
             disabled={selected !== null}
             className={cn(
-              "w-full p-5 rounded-2xl text-left font-bold text-base transition-all duration-100 active:scale-95",
-              selected === index
-                ? isCorrect
-                  ? "bg-emerald-500 text-black shadow-[0_2px_0_#065f46] translate-y-1"
-                  : "bg-red-500 text-white shadow-[0_2px_0_#b91c1c] translate-y-1"
-                : selected !== null && opt.est_correct
-                  ? "bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400"
-                  : selected !== null
-                    ? "bg-white/5 border border-white/5 text-white/40 cursor-not-allowed"
-                    : "bg-white/10 border border-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-1"
+              'w-full rounded-2xl p-5 text-left text-base font-bold transition-all duration-100 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
+              selected === index && isCorrect && 'translate-y-1 bg-emerald-500 text-black shadow-[0_2px_0_#065f46]',
+              selected === index && isCorrect === false && 'translate-y-1 bg-red-500 text-white shadow-[0_2px_0_#b91c1c]',
+              selected !== null && selected !== index && option.isCorrect && 'border-2 border-emerald-500 bg-emerald-500/20 text-emerald-400',
+              selected !== null && selected !== index && !option.isCorrect && 'cursor-not-allowed border border-white/5 bg-white/5 text-white/40',
+              selected === null && 'border border-white/10 bg-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.5)]',
             )}
           >
-            <div className="flex items-center gap-3">
-              <span className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm shrink-0",
-                selected === index
-                  ? isCorrect
-                    ? "bg-black/20 text-black"
-                    : "bg-white/20 text-white"
-                  : selected !== null && opt.est_correct
-                    ? "bg-emerald-500/30 text-emerald-400"
-                    : "bg-white/10 text-white/70"
-              )}>
+            <span className="flex items-center gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm font-black">
                 {String.fromCharCode(65 + index)}
               </span>
-              <span>{opt.texte}</span>
-            </div>
+              <span>{option.text}</span>
+            </span>
           </button>
         ))}
       </div>
@@ -491,66 +551,53 @@ function QuizExercise({ exercise, onResult, attempt }: { exercise: any, onResult
   )
 }
 
-function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: boolean, feedback: string, mascotte: string, onNext: () => void }) {
+function FeedbackScreen({
+  correct,
+  feedback,
+  mascot,
+  onNext,
+}: {
+  correct: boolean
+  feedback: string
+  mascot: string
+  onNext: () => void
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 60 }}
       transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-      className="absolute inset-x-0 bottom-0 z-[100] rounded-t-3xl border-t border-white/10 shadow-2xl p-6 pb-[max(2rem,env(safe-area-inset-bottom))]"
+      className="absolute inset-x-0 bottom-0 z-[100] rounded-t-3xl border-t border-white/10 p-6 pb-[max(2rem,env(safe-area-inset-bottom))] shadow-2xl"
       style={{
         background: correct
           ? 'linear-gradient(to top, rgba(16,185,129,0.15), rgba(5,5,10,0.98))'
-          : 'linear-gradient(to top, rgba(239,68,68,0.1), rgba(5,5,10,0.98))'
+          : 'linear-gradient(to top, rgba(239,68,68,0.1), rgba(5,5,10,0.98))',
       }}
     >
-      <div className="flex items-center gap-4 mb-4">
-        {/* Mascotte compacte avec animation selon succès/erreur */}
+      <div className="mb-4 flex items-center gap-4">
         <motion.div
-          animate={correct 
-            ? { rotate: [0, -10, 10, -10, 0], scale: [1, 1.1, 1] } 
-            : { rotate: [0, -5, 5, -5, 0], y: [0, -2, 0] }
-          }
+          animate={correct ? { rotate: [0, -10, 10, -10, 0], scale: [1, 1.1, 1] } : { rotate: [0, -5, 5, -5, 0], y: [0, -2, 0] }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
-          className={cn('relative w-14 h-14 shrink-0', !correct && 'grayscale opacity-70')}
+          className={cn('relative h-14 w-14 shrink-0', !correct && 'grayscale opacity-70')}
         >
-          <Image src={`/${mascotte}.png`} alt="Mascotte" fill className="object-contain" />
-          {/* Expression supplémentaire selon état */}
-          {!correct && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute -top-1 -right-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center"
-            >
-              <span className="text-xs">💧</span>
-            </motion.div>
-          )}
-          {correct && (
-            <motion.div
-              initial={{ scale: 0, rotate: -20 }}
-              animate={{ scale: 1, rotate: 0 }}
-              className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-400 rounded-full flex items-center justify-center"
-            >
-              <span className="text-xs">✨</span>
-            </motion.div>
-          )}
+          <Image src={`/${mascot}.png`} alt="" fill className="object-contain" />
         </motion.div>
         <div>
           <p className={cn('text-lg font-black', correct ? 'text-emerald-400' : 'text-red-400')}>
             {correct ? 'Excellent !' : 'Pas tout à fait...'}
           </p>
-          <p className="text-white/70 text-sm leading-snug">{feedback}</p>
+          <p className="text-sm leading-snug text-white/70">{feedback}</p>
         </div>
       </div>
-
       <button
+        type="button"
         onClick={onNext}
         className={cn(
-          'w-full font-black text-lg rounded-2xl py-5 transition-all duration-100 mt-2',
+          'mt-2 w-full rounded-2xl py-5 text-lg font-black transition-all duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
           correct
-            ? 'bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px]'
-            : 'bg-white/10 text-white border border-white/20 shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-[4px]'
+            ? 'bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]'
+            : 'border border-white/20 bg-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]',
         )}
       >
         CONTINUER
@@ -559,11 +606,17 @@ function FeedbackScreen({ correct, feedback, mascotte, onNext }: { correct: bool
   )
 }
 
-function VictoryScreen({ unit, onFinish, comboCount }: { unit: any, onFinish: () => void, comboCount?: number }) {
+function VictoryScreen({
+  unit,
+  alreadyCompleted,
+  onFinish,
+}: {
+  unit: AcademyUnit
+  alreadyCompleted: boolean
+  onFinish: () => void
+}) {
   const [countedReward, setCountedReward] = useState(0)
-  const isPerfectCombo = comboCount === 5
-  const multiplier = isPerfectCombo ? 2 : 1
-  const finalReward = unit.recompense.montant * multiplier
+  const finalReward = alreadyCompleted ? 0 : unit.reward.amount
 
   useEffect(() => {
     confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#10B981', '#34D399', '#059669', '#FBBF24'] })
@@ -571,70 +624,59 @@ function VictoryScreen({ unit, onFinish, comboCount }: { unit: any, onFinish: ()
 
   useEffect(() => {
     const target = finalReward
-    const duration = 1000
     const steps = 20
     const increment = target / steps
     let current = 0
-
-    const timer = setInterval(() => {
+    const timer = window.setInterval(() => {
       current += increment
       if (current >= target) {
         setCountedReward(target)
-        clearInterval(timer)
+        window.clearInterval(timer)
       } else {
         setCountedReward(Math.floor(current))
       }
-    }, duration / steps)
+    }, 50)
 
-    return () => clearInterval(timer)
+    return () => window.clearInterval(timer)
   }, [finalReward])
 
   return (
-    <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
+    <div className="flex flex-1 flex-col items-center justify-center bg-[#05050A] p-8 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-center">
       <motion.div
         initial={{ scale: 0, rotate: -10 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: 'spring', bounce: 0.6, duration: 0.8 }}
-        className="relative w-56 h-56 bg-gradient-to-b from-emerald-500/20 to-transparent border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.4)] mb-10 overflow-hidden"
+        className="mb-10 flex h-56 w-56 items-center justify-center overflow-hidden rounded-full border border-emerald-500/30 bg-gradient-to-b from-emerald-500/20 to-transparent shadow-[0_0_80px_rgba(16,185,129,0.4)]"
       >
-        <motion.div 
-          animate={{ y: [-5, 5, -5] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <Image src="/ondine.png" alt="Ondine la mascotte" width={140} height={140} className="object-contain drop-shadow-[0_10px_20px_rgba(16,185,129,0.5)]" />
+        <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
+          <Image src={`/${unit.mascot}.png`} alt="" width={140} height={140} className="object-contain drop-shadow-[0_10px_20px_rgba(16,185,129,0.5)]" />
         </motion.div>
       </motion.div>
-
-      <h2 className="text-4xl font-black text-white mb-4 uppercase tracking-tight whitespace-nowrap">Leçon Terminée !</h2>
-      
-      <div className="flex items-center gap-3 bg-emerald-500/20 border-2 border-emerald-500/50 px-6 py-3 rounded-2xl mb-12 shadow-[0_0_30px_rgba(16,185,129,0.3)] relative">
-        <span className="text-emerald-400 text-2xl font-black">+{countedReward}</span>
-        <span className="text-emerald-400 text-lg font-bold capitalize">Graines 🌱</span>
-        {isPerfectCombo && (
-          <motion.div
-            initial={{ scale: 0, rotate: -20 }}
-            animate={{ scale: 1, rotate: 0 }}
-            className="absolute -top-3 -right-3 bg-amber-500 text-black text-xs font-black px-2 py-1 rounded-full border-2 border-amber-300"
-          >
-            x2 BONUS !
-          </motion.div>
+      <h2 className="mb-4 text-4xl font-black uppercase tracking-tight text-white">Leçon terminée !</h2>
+      <div className="relative mb-12 flex items-center gap-3 rounded-2xl border-2 border-emerald-500/50 bg-emerald-500/20 px-6 py-3 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+        <span className="text-2xl font-black text-emerald-400">+{countedReward}</span>
+        <span className="text-lg font-bold capitalize text-emerald-400">Graines</span>
+        {alreadyCompleted && (
+          <span className="absolute -right-3 -top-3 rounded-full border border-white/10 bg-black px-2 py-1 text-xs font-black text-white/60">
+            Replay
+          </span>
         )}
       </div>
-
       <button
+        type="button"
         onClick={onFinish}
-        className="w-full bg-emerald-500 text-black text-xl font-black rounded-3xl py-6 shadow-[0_7px_0_#065f46] hover:shadow-[0_5px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[6px] transition-all duration-100 mt-auto mb-8 uppercase tracking-wide"
+        className="mb-8 mt-auto w-full rounded-3xl bg-emerald-500 py-6 text-xl font-black uppercase tracking-wide text-black shadow-[0_7px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_5px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[6px] active:shadow-[0_1px_0_#065f46]"
       >
-        RÉCUPÉRER MES GRAINES 🌱
+        Récupérer mes graines
       </button>
     </div>
   )
 }
 
-function ComboAnimation({ level, onComplete }: { level: number, onComplete: () => void }) {
+function ComboAnimation({ level, onComplete }: { level: number; onComplete: () => void }) {
   useEffect(() => {
-    const timer = setTimeout(onComplete, 1500)
-    return () => clearTimeout(timer)
+    const timer = window.setTimeout(onComplete, 1200)
+    return () => window.clearTimeout(timer)
   }, [onComplete])
 
   return (
@@ -644,117 +686,108 @@ function ComboAnimation({ level, onComplete }: { level: number, onComplete: () =
         animate={{ opacity: 1, scale: 1.2, rotate: 0 }}
         exit={{ opacity: 0, scale: 1.5, rotate: 15 }}
         transition={{ type: 'spring', bounce: 0.5, duration: 0.8 }}
-        className="absolute inset-0 z-[200] flex items-center justify-center pointer-events-none"
+        className="pointer-events-none absolute inset-0 z-[200] flex items-center justify-center"
       >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 1.5 }}
-          className="text-center"
-        >
-          <div className="text-8xl mb-4">{level === 5 ? '🔥' : '✨'}</div>
-          <h2 className="text-6xl font-black text-white uppercase tracking-tight drop-shadow-[0_0_30px_rgba(16,185,129,0.8)]">
-            {level === 5 ? 'COMBO PARFAIT !' : `SÉRIE x${level} !`}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.2 }} className="text-center">
+          <h2 className="text-5xl font-black uppercase tracking-tight text-white drop-shadow-[0_0_30px_rgba(16,185,129,0.8)]">
+            {level >= 4 ? 'Combo parfait !' : `Série x${level} !`}
           </h2>
         </motion.div>
       </motion.div>
-      <motion.div
-        initial={{ y: '-100%' }}
-        animate={{ y: '100%' }}
-        exit={{ y: '100%' }}
-        transition={{ duration: 0.6 }}
-        className="absolute inset-0 z-[150] pointer-events-none"
-        style={{
-          background: level === 5
-            ? 'linear-gradient(to bottom, transparent, rgba(251,191,36,0.3), transparent)'
-            : 'linear-gradient(to bottom, transparent, rgba(16,185,129,0.3), transparent)'
-        }}
-      />
     </AnimatePresence>
   )
 }
 
 function GameOverScreen({ onQuit }: { onQuit: () => void }) {
   return (
-    <div className="flex-1 bg-[#05050A] flex flex-col items-center justify-center p-8 text-center pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
-      <motion.div
-        initial={{ scale: 0, rotate: -20 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ type: 'spring', bounce: 0.5 }}
-        className="text-red-500 mb-8 drop-shadow-[0_0_30px_rgba(239,68,68,0.3)]"
-      >
-        <HeartCrack className="w-24 h-24" />
+    <div className="flex flex-1 flex-col items-center justify-center bg-[#05050A] p-8 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-center">
+      <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', bounce: 0.5 }} className="mb-8 text-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,0.3)]">
+        <HeartCrack className="h-24 w-24" />
       </motion.div>
-
-      <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="text-4xl font-black text-white mb-3"
-      >
-        Plus de vies !
-      </motion.h2>
-
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
-        className="text-white/60 text-base leading-relaxed mb-6 max-w-xs"
-      >
-        Tu as épuisé toutes tes vies. Reviens demain pour réessayer — elles se rechargent avec le temps.
-      </motion.p>
-
-      {/* Coeurs vides */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="flex gap-2 mb-12"
-      >
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Heart key={i} className="w-6 h-6 fill-current text-white opacity-20" />
-        ))}
-      </motion.div>
-
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
+      <h2 className="mb-3 text-4xl font-black text-white">Plus de vies !</h2>
+      <p className="mb-12 max-w-xs text-base leading-relaxed text-white/60">
+        Tu as épuisé toutes tes vies. Reviens plus tard pour réessayer.
+      </p>
+      <button
+        type="button"
         onClick={onQuit}
-        className="w-full bg-white/10 text-white font-black text-lg rounded-2xl py-5 shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-[4px] transition-all duration-100 mt-auto"
+        className="mt-auto w-full rounded-2xl bg-white/10 py-5 text-lg font-black text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
       >
-        RETOUR À L'ACADéMIE
-      </motion.button>
+        Retour à l'Académie
+      </button>
     </div>
   )
 }
 
-// --- ENGINE (STATE MACHINE) ---
+function renderExercise({
+  exercise,
+  onStoryComplete,
+  onResult,
+  attempt,
+  showFeedback,
+  mascot,
+}: {
+  exercise: AcademyExercise
+  onStoryComplete: () => void
+  onResult: (correct: boolean, feedback: string) => void
+  attempt: number
+  showFeedback?: boolean
+  mascot: string
+}) {
+  if (exercise.type === 'STORY') {
+    return <StoryExercise exercise={exercise} onComplete={onStoryComplete} />
+  }
+  if (exercise.type === 'SWIPE') {
+    return <SwipeExercise exercise={exercise} onResult={onResult} attempt={attempt} />
+  }
+  if (exercise.type === 'DRAG_DROP') {
+    return <DragDropExercise exercise={exercise} onResult={onResult} attempt={attempt} showFeedback={showFeedback} />
+  }
+  return <QuizExercise exercise={exercise} onResult={onResult} attempt={attempt} mascot={mascot} />
+}
 
 export default function ExerciseEngine() {
   const router = useRouter()
+  const params = useParams<{ chapter?: string | string[]; unit?: string | string[] }>()
+  const chapterSlug = getParam(params.chapter)
+  const unitSlug = getParam(params.unit)
+  const chapter = chapterSlug ? getChapterBySlug(chapterSlug) : null
+  const unit = chapterSlug && unitSlug ? getUnitBySlug(chapterSlug, unitSlug) : null
+  const [progress, setProgress] = useState(() => getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID))
+  const alreadyCompleted = unit ? progress.completedUnitIds.includes(unit.id) : false
+  const isLockedUnit = unit ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
-  const [feedback, setFeedback] = useState<{ show: boolean, correct: boolean, text: string } | null>(null)
+  const [feedback, setFeedback] = useState<{ show: boolean; correct: boolean; text: string } | null>(null)
   const [showQuitModal, setShowQuitModal] = useState(false)
   const [lives, setLives] = useState(5)
   const [comboCount, setComboCount] = useState(0)
-  const [showComboAnimation, setShowComboAnimation] = useState<{ show: boolean, level: number } | null>(null)
-
+  const [mistakes, setMistakes] = useState(0)
+  const [showComboAnimation, setShowComboAnimation] = useState<{ show: boolean; level: number } | null>(null)
   const [attempt, setAttempt] = useState(0)
 
-  const currentExercise = unitData.exercices[currentStepIndex]
-  const isFinished = currentStepIndex >= unitData.exercices.length
+  const currentExercise = unit?.exercises[currentStepIndex] ?? null
+  const isFinished = Boolean(unit && currentStepIndex >= unit.exercises.length)
+  const isGameOver = lives === 0
+
+  useEffect(() => {
+    const nextProgress = academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID)
+    setProgress(nextProgress)
+    setLives(Math.max(1, nextProgress.lives.remaining || 5))
+  }, [])
 
   const handleResult = (correct: boolean, text: string) => {
     if (!correct) {
-      setLives(prev => Math.max(0, prev - 1))
+      setLives((previous) => Math.max(0, previous - 1))
+      setMistakes((previous) => previous + 1)
       setComboCount(0)
     } else {
-      setComboCount(prev => {
-        const newCount = prev + 1
-        if (newCount === 3) setShowComboAnimation({ show: true, level: 3 })
-        if (newCount === 5) setShowComboAnimation({ show: true, level: 5 })
-        return newCount
+      setComboCount((previous) => {
+        const nextCount = previous + 1
+        if (nextCount === 3 || nextCount === unit?.exercises.length) {
+          setShowComboAnimation({ show: true, level: nextCount })
+        }
+        return nextCount
       })
     }
     setFeedback({ show: true, correct, text })
@@ -765,93 +798,129 @@ export default function ExerciseEngine() {
     setFeedback(null)
     if (wasCorrect || currentExercise?.type === 'STORY') {
       setAttempt(0)
-      setCurrentStepIndex(prev => prev + 1)
+      setCurrentStepIndex((previous) => previous + 1)
     } else {
-      setAttempt(prev => prev + 1)
+      setAttempt((previous) => previous + 1)
     }
   }
 
-  const confirmQuit = () => {
+  const handleFinish = () => {
+    if (unit) {
+      const correctAnswers = Math.max(0, unit.exercises.length - mistakes)
+      const score = Math.round((correctAnswers / unit.exercises.length) * 100)
+      academyRepository.completeUnit(MOCK_ACADEMY_VIEWER_ID, unit.id, { score, mistakes })
+    }
     router.push('/academy')
   }
 
-  const isGameOver = lives === 0
+  const handleQuit = () => {
+    router.push('/academy')
+  }
+
+  if (!chapter || !unit) {
+    return (
+      <FullScreenSlideModal headerMode="back" fallbackHref="/academy" className="bg-[#05050A] text-white">
+        <div className="flex min-h-full flex-col items-center justify-center px-6 text-center">
+          <h1 className="mb-3 text-3xl font-black">Unité introuvable</h1>
+          <p className="text-white/60">Ce cours n'existe pas dans le curriculum mock.</p>
+        </div>
+      </FullScreenSlideModal>
+    )
+  }
+
+  if (isLockedUnit) {
+    return (
+      <FullScreenSlideModal headerMode="back" fallbackHref="/academy" className="bg-[#05050A] text-white">
+        <div className="flex min-h-full flex-col items-center justify-center px-6 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-white/5">
+            <Lock className="h-9 w-9 text-white/40" />
+          </div>
+          <h1 className="mb-3 text-3xl font-black">Unité verrouillée</h1>
+          <p className="max-w-sm text-white/60">
+            Termine les niveaux précédents pour débloquer {unit.title}.
+          </p>
+        </div>
+      </FullScreenSlideModal>
+    )
+  }
 
   return (
-    <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="flex flex-col overflow-hidden h-full relative">
+    <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="relative flex h-full flex-col overflow-hidden">
       {isFinished ? (
-        <VictoryScreen unit={unitData} comboCount={comboCount} onFinish={() => router.push('/academy')} />
+        <VictoryScreen unit={unit} alreadyCompleted={alreadyCompleted} onFinish={handleFinish} />
       ) : isGameOver ? (
-        <GameOverScreen onQuit={() => router.push('/academy')} />
+        <GameOverScreen onQuit={handleQuit} />
       ) : (
         <>
-          <ExerciseHeader progress={currentStepIndex} total={unitData.exercices.length} onQuit={() => setShowQuitModal(true)} lives={lives} />
-
-      <div className="flex-1 w-full h-full relative">
-        <AnimatePresence mode="wait">
-          {currentExercise && <motion.div
-            key={currentExercise.id}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute inset-0"
-          >
-
-            {currentExercise.type === 'STORY' && <StoryExercise exercise={currentExercise} onComplete={handleNextStep} />}
-            {currentExercise.type === 'SWIPE' && <SwipeExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
-            {currentExercise.type === 'DRAG_DROP' && <DragDropExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} showFeedback={feedback?.show} />}
-            {currentExercise.type === 'QUIZ' && <QuizExercise exercise={currentExercise} onResult={handleResult} attempt={attempt} />}
-          </motion.div>}
-        </AnimatePresence>
-      </div>
-
-      <AnimatePresence>
-        {feedback?.show && (
-          <FeedbackScreen correct={feedback.correct} feedback={feedback.text} mascotte={unitData.mascotte} onNext={handleNextStep} />
-        )}
-
-        {showComboAnimation?.show && (
-          <ComboAnimation level={showComboAnimation.level} onComplete={() => setShowComboAnimation(null)} />
-        )}
-
-        {showQuitModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#111116] border border-white/10 rounded-3xl p-8 w-full max-w-sm text-center shadow-2xl"
-            >
-              <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <X className="w-8 h-8 text-red-500" />
-              </div>
-              <h3 className="text-2xl font-black text-white mb-4">Quitter l'entraînement ?</h3>
-              <p className="text-white/60 mb-8 font-medium">Toute ta progression dans cette unité sera perdue. Es-tu sûr de vouloir abandonner ?</p>
-
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={() => setShowQuitModal(false)}
-                  className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 shadow-[0_5px_0_rgba(0,0,0,0.4)] hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.4)] active:translate-y-1 transition-all duration-100"
+          <ExerciseHeader progress={currentStepIndex} total={unit.exercises.length} onQuit={() => setShowQuitModal(true)} lives={lives} />
+          <div className="relative h-full w-full flex-1">
+            <AnimatePresence mode="wait">
+              {currentExercise && (
+                <motion.div
+                  key={currentExercise.id}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  className="absolute inset-0"
                 >
-                  NON, JE CONTINUE
-                </button>
-                <button
-                  onClick={confirmQuit}
-                  className="w-full bg-red-500/20 text-red-500 font-bold rounded-2xl py-4 shadow-[0_5px_0_rgba(139,0,0,0.4)] hover:shadow-[0_3px_0_rgba(139,0,0,0.4)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(139,0,0,0.4)] active:translate-y-1 transition-all duration-100"
+                  {renderExercise({
+                    exercise: currentExercise,
+                    onStoryComplete: handleNextStep,
+                    onResult: handleResult,
+                    attempt,
+                    showFeedback: feedback?.show,
+                    mascot: unit.mascot,
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <AnimatePresence>
+            {feedback?.show && (
+              <FeedbackScreen correct={feedback.correct} feedback={feedback.text} mascot={unit.mascot} onNext={handleNextStep} />
+            )}
+            {showComboAnimation?.show && (
+              <ComboAnimation level={showComboAnimation.level} onComplete={() => setShowComboAnimation(null)} />
+            )}
+            {showQuitModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-8 text-center shadow-2xl"
                 >
-                  OUI, QUITTER
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
+                    <X className="h-8 w-8 text-red-500" />
+                  </div>
+                  <h3 className="mb-4 text-2xl font-black text-white">Quitter l'entraînement ?</h3>
+                  <p className="mb-8 font-medium text-white/60">Ta progression dans cette tentative sera perdue.</p>
+                  <div className="flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowQuitModal(false)}
+                      className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.4)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.4)]"
+                    >
+                      Non, je continue
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleQuit}
+                      className="w-full rounded-2xl bg-red-500/20 py-4 font-bold text-red-500 shadow-[0_5px_0_rgba(139,0,0,0.4)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(139,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300 active:translate-y-1 active:shadow-[0_1px_0_rgba(139,0,0,0.4)]"
+                    >
+                      Oui, quitter
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </FullScreenSlideModal>

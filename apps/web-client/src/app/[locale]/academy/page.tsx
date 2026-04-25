@@ -1,48 +1,100 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Check, Flame, Sprout, Crown, BookOpen, ChevronDown, Unlock, Trophy, Leaf, Clock, Brain, Gift } from 'lucide-react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import {
+  BookOpen,
+  Brain,
+  ChevronDown,
+  Clock,
+  Crown,
+  Flame,
+  Gift,
+  Leaf,
+  Lock,
+  RotateCcw,
+  Sprout,
+  Trophy,
+  Unlock,
+} from 'lucide-react'
 import Image from 'next/image'
-import { useRouter, Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { getCurrentChapter, getNextChapter, type AcademyUnit } from '@/lib/mock/mock-academy'
+import { Link, useRouter } from '@/i18n/navigation'
+import {
+  MOCK_ACADEMY_VIEWER_ID,
+  academyRepository,
+  decorateAcademyWithProgress,
+  getDefaultAcademyProgress,
+  getCurrentChapter,
+  getNextChapter,
+  type AcademyChapterWithStatus,
+  type AcademyProgress,
+  type AcademyUnitWithStatus,
+} from '@/lib/mock/mock-academy'
+import { cn, formatPoints } from '@/lib/utils'
 
-// ─── Data ──────────────────────────────────────────────────────────────────
-const currentChapter = getCurrentChapter()
-const nextChapter = getNextChapter()
-
-// ─── Loading steps ─────────────────────────────────────────────────────────
 const LOADING_STEPS = [
-  { label: 'Chargement du cours…', duration: 650 },
-  { label: 'Préparation des exercices…', duration: 750 },
-  { label: 'Ajustement à ton niveau…', duration: 600 },
-  { label: 'C\'est parti !', duration: 400 },
+  { label: 'Chargement du cours...', duration: 450 },
+  { label: 'Préparation des exercices...', duration: 550 },
+  { label: 'Ajustement à ton niveau...', duration: 450 },
+  { label: "C'est parti !", duration: 300 },
 ]
 
-// ─── Sub-components ────────────────────────────────────────────────────────
+function useAcademySurface() {
+  const [progress, setProgress] = useState<AcademyProgress>(() =>
+    getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
+  )
 
-function MascotSpacer({ mascotte, side, isLocked }: { mascotte: string; side: 'left' | 'right'; isLocked: boolean }) {
+  const refresh = useCallback(() => {
+    setProgress(academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID))
+  }, [])
+
+  const reset = useCallback(() => {
+    setProgress(academyRepository.resetProgress(MOCK_ACADEMY_VIEWER_ID))
+  }, [])
+
+  useEffect(() => {
+    refresh()
+  }, [refresh])
+
+  const chapters = useMemo(
+    () => decorateAcademyWithProgress(academyRepository.getCurriculum(), progress),
+    [progress],
+  )
+
+  return { chapters, progress, reset }
+}
+
+function MascotSpacer({
+  mascot,
+  side,
+  isLocked,
+}: {
+  mascot: string
+  side: 'left' | 'right'
+  isLocked: boolean
+}) {
+  const reduceMotion = useReducedMotion()
+
   return (
-    <div className="relative w-20 h-28 overflow-visible flex-shrink-0">
+    <div className="relative h-24 w-16 shrink-0 overflow-visible sm:w-20">
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 8 }}
-        animate={{ opacity: isLocked ? 0.2 : 1, scale: 1, y: [0, -6, 0] }}
+        animate={{ opacity: isLocked ? 0.2 : 1, scale: 1, y: reduceMotion ? 0 : [0, -6, 0] }}
         transition={{
           opacity: { duration: 0.4 },
           scale: { duration: 0.4 },
-          y: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
+          y: { duration: 3, repeat: reduceMotion ? 0 : Infinity, ease: 'easeInOut' },
         }}
         className={cn(
-          'absolute top-1/2 -translate-y-1/2 w-36 h-36 pointer-events-none',
-          side === 'right' ? 'left-full translate-x-2' : 'right-full -translate-x-2',
+          'pointer-events-none absolute top-1/2 h-28 w-28 -translate-y-1/2 sm:h-36 sm:w-36',
+          side === 'right' ? 'left-full translate-x-1 sm:translate-x-2' : 'right-full -translate-x-1 sm:-translate-x-2',
           isLocked && 'grayscale',
         )}
       >
         <Image
-          src={`/${mascotte}.png`}
-          alt={mascotte}
+          src={`/${mascot}.png`}
+          alt=""
           fill
           className={cn('object-contain drop-shadow-[0_0_20px_rgba(52,211,153,0.4)]', side === 'left' && 'scale-x-[-1]')}
         />
@@ -51,31 +103,35 @@ function MascotSpacer({ mascotte, side, isLocked }: { mascotte: string; side: 'l
   )
 }
 
-function LockedUnitModal({ unit, onClose }: { unit: AcademyUnit; onClose: () => void }) {
+function LockedUnitModal({ unit, onClose }: { unit: AcademyUnitWithStatus; onClose: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-end justify-center p-4 pb-[max(2rem,env(safe-area-inset-bottom))]"
+      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-4 pb-[max(2rem,env(safe-area-inset-bottom))] backdrop-blur-sm"
     >
       <motion.div
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 80, opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
-        className="bg-[#111116] border border-white/10 rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl"
       >
-        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
-          <Lock className="w-7 h-7 text-white/50" />
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5">
+          <Lock className="h-7 w-7 text-white/50" />
         </div>
-        <h3 className="text-xl font-black text-white mb-2">{unit.title}</h3>
-        <p className="text-white/50 text-sm leading-relaxed mb-6">
-          Termine tous les niveaux précédents pour débloquer celui-ci.
+        <h3 className="mb-2 text-xl font-black text-white">{unit.title}</h3>
+        <p className="mb-6 text-sm leading-relaxed text-white/50">
+          Termine les niveaux précédents pour débloquer celui-ci.
         </p>
-        <button onClick={onClose} className="w-full bg-white/10 text-white font-bold rounded-2xl py-4 shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 active:shadow-[0_1px_0_rgba(0,0,0,0.5)] active:translate-y-[4px] transition-all duration-100">
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
+        >
           Compris !
         </button>
       </motion.div>
@@ -86,146 +142,128 @@ function LockedUnitModal({ unit, onClose }: { unit: AcademyUnit; onClose: () => 
 function CourseLoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [stepIndex, setStepIndex] = useState(0)
   const [progress, setProgress] = useState(0)
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     let accumulated = 0
-    LOADING_STEPS.forEach((step, i) => {
-      setTimeout(() => {
-        setStepIndex(i)
-        setProgress(Math.round(((i + 1) / LOADING_STEPS.length) * 100))
-        if (i === LOADING_STEPS.length - 1) {
-          setTimeout(onComplete, step.duration)
+    const timers = LOADING_STEPS.map((step, index) => {
+      const timer = window.setTimeout(() => {
+        setStepIndex(index)
+        setProgress(Math.round(((index + 1) / LOADING_STEPS.length) * 100))
+        if (index === LOADING_STEPS.length - 1) {
+          window.setTimeout(onComplete, reduceMotion ? 50 : step.duration)
         }
-      }, accumulated)
+      }, reduceMotion ? index * 50 : accumulated)
       accumulated += step.duration
+      return timer
     })
-  }, [onComplete])
+
+    return () => timers.forEach(window.clearTimeout)
+  }, [onComplete, reduceMotion])
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[80] bg-[#05050A] flex flex-col items-center justify-center p-8 text-center"
+      className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-[#05050A] p-8 text-center"
     >
-      {/* Pulsing orb */}
       <motion.div
-        animate={{ scale: [1, 1.12, 1], opacity: [0.5, 1, 0.5] }}
+        animate={reduceMotion ? {} : { scale: [1, 1.12, 1], opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-        className="w-32 h-32 rounded-full bg-emerald-500/20 border border-emerald-500/30 shadow-[0_0_80px_rgba(16,185,129,0.3)] flex items-center justify-center mb-10"
+        className="mb-10 flex h-32 w-32 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/20 shadow-[0_0_80px_rgba(16,185,129,0.3)]"
       >
-        <Leaf className="w-12 h-12 text-emerald-400" />
+        <Leaf className="h-12 w-12 text-emerald-400" />
       </motion.div>
-
-      <h2 className="text-2xl font-black text-white mb-2">Préparation du cours</h2>
-
+      <h2 className="mb-2 text-2xl font-black text-white">Préparation du cours</h2>
       <AnimatePresence mode="wait">
         <motion.p
           key={stepIndex}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
-          className="text-white/50 text-sm mb-10 h-5"
+          className="mb-10 h-5 text-sm text-white/50"
         >
           {LOADING_STEPS[stepIndex]?.label}
         </motion.p>
       </AnimatePresence>
-
-      {/* Progress bar */}
-      <div className="w-full max-w-xs h-2.5 bg-white/10 rounded-full overflow-hidden mb-3">
+      <div className="mb-3 h-2.5 w-full max-w-xs overflow-hidden rounded-full bg-white/10">
         <motion.div
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="h-full bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.8)]"
+          transition={{ duration: reduceMotion ? 0 : 0.4, ease: 'easeOut' }}
+          className="h-full rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]"
         />
       </div>
-      <span className="text-white/30 text-xs tabular-nums">{progress}%</span>
+      <span className="text-xs tabular-nums text-white/30">{progress}%</span>
     </motion.div>
   )
 }
 
-/** Nœud de cours — design inspiré Duolingo/Brilliant avec ombre 3D et dégradé */
 function UnitNode({
   unit,
-  index,
   onSelect,
   onLocked,
 }: {
-  unit: AcademyUnit
-  index: number
-  onSelect: (unit: AcademyUnit) => void
-  onLocked: (unit: AcademyUnit) => void
+  unit: AcademyUnitWithStatus
+  onSelect: (unit: AcademyUnitWithStatus) => void
+  onLocked: (unit: AcademyUnitWithStatus) => void
 }) {
+  const reduceMotion = useReducedMotion()
   const isLocked = unit.status === 'locked'
   const isCompleted = unit.status === 'completed'
   const isActive = unit.status === 'active'
 
   return (
-    <div className="relative flex flex-col items-center justify-center my-4">
-      {/* ── Active pulsing ring ── */}
+    <div className="relative my-4 flex flex-col items-center justify-center">
       {isActive && (
         <motion.div
-          animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
+          animate={reduceMotion ? {} : { scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 m-auto w-[100px] h-[100px] rounded-full bg-emerald-500/30 blur-md -z-10"
+          className="absolute inset-0 -z-10 m-auto h-[100px] w-[100px] rounded-full bg-emerald-500/30 blur-md"
         />
       )}
-
-      {/* ── Main button surface ── */}
       <button
+        type="button"
         onClick={() => {
-          if (isLocked) return onLocked(unit)
-          return onSelect(unit)
+          if (isLocked) {
+            onLocked(unit)
+            return
+          }
+          onSelect(unit)
         }}
         className={cn(
-          'w-[84px] h-[84px] rounded-full flex items-center justify-center relative transition-all duration-100 focus:outline-none group',
-
-          // Active: vibrant gradient + deep 3D shadow + outline ring
+          'group relative flex h-[84px] w-[84px] items-center justify-center rounded-full transition-all duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300',
           isActive && [
-            'bg-gradient-to-b from-emerald-400 to-emerald-600',
-            'shadow-[0_8px_0_#065f46]',
+            'bg-gradient-to-b from-emerald-400 to-emerald-600 shadow-[0_8px_0_#065f46]',
             'ring-4 ring-emerald-500/20 ring-offset-4 ring-offset-[#05050A]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#065f46]',
-            'active:translate-y-[8px] active:shadow-none',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#065f46] active:translate-y-[8px] active:shadow-none',
           ],
-
-          // Completed: Golden mastery tone
           isCompleted && [
-            'bg-gradient-to-b from-emerald-500 to-emerald-700',
-            'shadow-[0_8px_0_#064e3b]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b]',
-            'active:translate-y-[8px] active:shadow-none',
+            'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_8px_0_#064e3b]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b] active:translate-y-[8px] active:shadow-none',
           ],
-
-          // Locked: Dark grey/matte 3D
           isLocked && [
-            'bg-gradient-to-b from-white/10 to-white/5',
-            'shadow-[0_8px_0_#000]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#000]',
-            'active:translate-y-[8px] active:shadow-none',
+            'bg-gradient-to-b from-white/10 to-white/5 shadow-[0_8px_0_#000]',
+            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#000] active:translate-y-[8px] active:shadow-none',
           ],
         )}
-        aria-label={unit.title}
+        aria-label={`${unit.title} - ${isLocked ? 'verrouillé' : isCompleted ? 'terminé' : 'actif'}`}
       >
-        {/* Top-edge highlight (3D "pill" inner glare) */}
         {!isLocked && (
-          <div className="absolute top-[2px] inset-x-4 h-2 bg-gradient-to-b from-white/50 to-transparent rounded-t-full pointer-events-none" />
+          <div className="pointer-events-none absolute inset-x-4 top-[2px] h-2 rounded-t-full bg-gradient-to-b from-white/50 to-transparent" />
         )}
-
-        {isActive && <Flame className="w-10 h-10 text-white fill-white drop-shadow-md" />}
-        {isCompleted && <Crown className="w-9 h-9 text-white fill-white drop-shadow-md" />}
-        {isLocked && <Lock className="w-8 h-8 text-white/20" />}
+        {isActive && <Flame className="h-10 w-10 fill-white text-white drop-shadow-md" />}
+        {isCompleted && <Crown className="h-9 w-9 fill-white text-white drop-shadow-md" />}
+        {isLocked && <Lock className="h-8 w-8 text-white/20" />}
       </button>
-
-      {/* ── "C'est ici!" bubble ── */}
       {isActive && (
         <motion.div
           initial={{ y: 0, opacity: 0.8 }}
-          animate={{ y: [-4, 4, -4], opacity: 1 }}
+          animate={reduceMotion ? { opacity: 1 } : { y: [-4, 4, -4], opacity: 1 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-12 -right-20 bg-white text-black px-4 py-2 rounded-2xl rounded-bl-none text-sm font-black shadow-xl flex items-center gap-2 whitespace-nowrap z-20"
+          className="absolute -top-12 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-2xl rounded-bl-none bg-white px-4 py-2 text-sm font-black text-black shadow-xl sm:left-auto sm:right-[-5rem] sm:translate-x-0"
         >
-          <Image src="/sylva.png" alt="Sylva" width={24} height={24} className="object-contain" />
+          <Image src={`/${unit.mascot}.png`} alt="" width={24} height={24} className="object-contain" />
           C'est ici !
         </motion.div>
       )}
@@ -233,201 +271,192 @@ function UnitNode({
   )
 }
 
-// ─── Page ──────────────────────────────────────────────────────────────────
+function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
+  return (
+    <div className="relative flex flex-col items-center overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 text-center shadow-2xl">
+      <div className="absolute right-0 top-0 z-10 p-4">
+        <span className="flex items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white/80 backdrop-blur-sm">
+          {chapter.completedUnitsCount}/{chapter.units.length} <Crown className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+        </span>
+      </div>
+      <div className="relative z-10 mb-4 h-24 w-24 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+        <Image src="/abeille-transparente.png" alt="" fill className="object-contain" />
+      </div>
+      <h2 className="relative z-10 mb-2 text-xs font-black uppercase tracking-[0.2em] text-emerald-400">
+        Chapitre {chapter.order} · {chapter.level}
+      </h2>
+      <h1 className="relative z-10 mb-2 text-3xl font-black text-white">{chapter.title}</h1>
+      <p className="relative z-10 max-w-[280px] text-sm text-white/60">{chapter.subtitle}</p>
+      <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[50px]" />
+    </div>
+  )
+}
 
 export default function AcademyPage() {
   const router = useRouter()
-  const [selectedUnit, setSelectedUnit] = useState<AcademyUnit | null>(null)
-  const [lockedUnit, setLockedUnit] = useState<AcademyUnit | null>(null)
+  const { chapters, progress, reset } = useAcademySurface()
+  const [selectedUnit, setSelectedUnit] = useState<AcademyUnitWithStatus | null>(null)
+  const [lockedUnit, setLockedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [loadingTarget, setLoadingTarget] = useState<string | null>(null)
 
+  const currentChapter = getCurrentChapter(chapters)
+  const nextChapter = getNextChapter(chapters, currentChapter.id)
   const units = currentChapter.units
 
-  const handleStartCourse = useCallback((unit: AcademyUnit) => {
-    setSelectedUnit(null)
-    setLoadingTarget(`/academy/chapitre-1/${unit.id}`)
-  }, [])
+  const handleStartCourse = useCallback(
+    (unit: AcademyUnitWithStatus) => {
+      const chapter = chapters.find((entry) => entry.id === unit.chapterId)
+      if (!chapter) {
+        return
+      }
+
+      setSelectedUnit(null)
+      setLoadingTarget(`/academy/${chapter.slug}/${unit.slug}`)
+    },
+    [chapters],
+  )
 
   const handleLoadingComplete = useCallback(() => {
-    if (loadingTarget) router.push(loadingTarget)
+    if (loadingTarget) {
+      router.push(loadingTarget)
+    }
   }, [loadingTarget, router])
 
   return (
     <FullScreenSlideModal
       headerMode="none"
-      className="bg-[#05050A] text-white overflow-x-hidden font-sans relative"
+      className="relative overflow-x-hidden bg-[#05050A] font-sans text-white"
       contentClassName="pb-[max(1rem,env(safe-area-inset-bottom))]"
     >
-      {/* Background dot-grid */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none opacity-20"
+        className="pointer-events-none absolute inset-0 z-0 opacity-20"
         style={{
           backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.8) 1px, transparent 1px)',
           backgroundSize: '32px 32px',
           backgroundAttachment: 'fixed',
         }}
       />
-
       <div className="relative z-10">
-        {/* ── HEADER ───────────────────────────────────────────────── */}
-        <header className="fixed top-0 w-full z-40 backdrop-blur-md bg-white/5 border-b border-white/5 px-4 flex justify-between items-center pt-[max(0.75rem,env(safe-area-inset-top))] pb-2.5">
-
-          {/* Left: chapter navigator */}
-          <Link href="/academy/chapters" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-95 group">
-            <BookOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            <span className="text-[11px] font-black text-white leading-none">Chapitre {currentChapter.id}</span>
-            <ChevronDown className="w-3 h-3 text-white/40 group-hover:text-white/70 transition-colors" />
+        <header className="fixed top-0 z-40 flex w-full items-center justify-between border-b border-white/5 bg-white/5 px-4 pb-2.5 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md">
+          <Link href="/academy/chapters" className="group flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-all hover:bg-white/10 active:scale-95">
+            <BookOpen className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+            <span className="text-[11px] font-black leading-none text-white">Chapitre {currentChapter.order}</span>
+            <ChevronDown className="h-3 w-3 text-white/40 transition-colors group-hover:text-white/70" />
           </Link>
 
-          {/* Center: streak + seeds */}
           <div className="flex items-center gap-1.5">
-            <Link href="/academy/streak" prefetch={false} className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 transition-transform hover:scale-105 active:scale-95">
-              <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
-              <span className="text-[11px] font-bold text-white">12 j</span>
+            <Link href="/academy/streak" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
+              <Flame className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
+              <span className="text-[11px] font-bold text-white">{progress.streak.current} j</span>
             </Link>
             <Link href="/seeds" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
               <Sprout className="h-3.5 w-3.5 text-lime-400" />
-              <span className="text-[11px] font-bold text-white tabular-nums">2 450</span>
+              <span className="text-[11px] font-bold tabular-nums text-white">{formatPoints(progress.seedsBalance)}</span>
             </Link>
           </div>
 
-          {/* Right: premium / subscription */}
-          <Link href="/pricing" className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 cursor-pointer shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-indigo-500/30 transition-colors active:scale-95">
-            <Crown className="w-4 h-4 fill-indigo-400/20" />
-          </Link>
+          <button
+            type="button"
+            onClick={reset}
+            aria-label="Réinitialiser la progression Academy"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </button>
         </header>
 
+        <main className="px-6 pt-[calc(6rem+env(safe-area-inset-top))]">
+          <ChapterBanner chapter={currentChapter} />
 
-        {/* ── MAIN ─────────────────────────────────────────────────── */}
-        <main className="pt-[calc(6rem+env(safe-area-inset-top))] px-6">
-          {/* Chapter banner */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden flex flex-col items-center">
-            <div className="absolute top-0 right-0 p-4 z-10">
-              <span className="text-sm font-bold text-white/80 bg-black/40 px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1.5">
-                2/4 <Crown className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-              </span>
-            </div>
-            <div className="w-24 h-24 mb-4 relative z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
-              <Image src="/abeille-transparente.png" alt="Melli" fill className="object-contain" />
-            </div>
-            <h2 className="text-emerald-400 text-xs font-black tracking-[0.2em] mb-2 uppercase relative z-10">CHAPITRE {currentChapter.id}</h2>
-            <h1 className="text-3xl font-black text-white mb-2 relative z-10">{currentChapter.title}</h1>
-            <p className="text-sm text-white/60 relative z-10 max-w-[250px]">{currentChapter.subtitle}</p>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-500/10 blur-[50px] rounded-full" />
-          </div>
-
-          {/* ── ZIGZAG TREE ─────────────────────────────────────────── */}
-          <div className="flex flex-col items-center mt-12 pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
+          <div className="mt-12 flex flex-col items-center pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
             {units.flatMap((unit, index) => {
               const nextUnit = units[index + 1]
               const isGoingLeft = index % 4 === 1
               const isGoingRight = index % 4 === 3
-              const alignmentClass = isGoingLeft ? 'mr-20' : isGoingRight ? 'ml-20' : ''
+              const alignmentClass = isGoingLeft ? 'mr-16 sm:mr-20' : isGoingRight ? 'ml-16 sm:ml-20' : ''
 
-              let mascotSpacer: JSX.Element | null = null
+              let mascotSpacer: React.ReactNode = null
               if (nextUnit) {
                 const nextAlignment = (index + 1) % 4
                 if (nextAlignment === 1) {
-                  mascotSpacer = <MascotSpacer key={`m-${index}`} mascotte={nextUnit.mascotte} side="right" isLocked={nextUnit.status === 'locked'} />
+                  mascotSpacer = (
+                    <MascotSpacer
+                      key={`m-${unit.id}`}
+                      mascot={nextUnit.mascot}
+                      side="right"
+                      isLocked={nextUnit.status === 'locked'}
+                    />
+                  )
                 } else if (nextAlignment === 3) {
-                  mascotSpacer = <MascotSpacer key={`m-${index}`} mascotte={nextUnit.mascotte} side="left" isLocked={nextUnit.status === 'locked'} />
+                  mascotSpacer = (
+                    <MascotSpacer
+                      key={`m-${unit.id}`}
+                      mascot={nextUnit.mascot}
+                      side="left"
+                      isLocked={nextUnit.status === 'locked'}
+                    />
+                  )
                 }
               }
 
-              const nodeEl = (
+              const node = (
                 <div key={unit.id} className={cn('relative mt-6', alignmentClass)}>
-                  <UnitNode unit={unit} index={index} onSelect={setSelectedUnit} onLocked={setLockedUnit} />
+                  <UnitNode unit={unit} onSelect={setSelectedUnit} onLocked={setLockedUnit} />
                 </div>
               )
 
-              return mascotSpacer ? [nodeEl, mascotSpacer] : [nodeEl]
+              return mascotSpacer ? [node, mascotSpacer] : [node]
             })}
           </div>
 
-          {/* ── NEXT CHAPTER TEASER ─────────────────────────────── */}
-          {(() => {
-            const chapterDone = units.every(u => u.status === 'completed')
-            return (
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }}
-                className={cn(
-                  'w-full rounded-3xl overflow-hidden border relative',
-                  chapterDone
-                    ? 'bg-gradient-to-br from-indigo-900/40 to-purple-900/30 border-indigo-500/40'
-                    : 'bg-white/3 border-white/8'
-                )}
-              >
-                {/* Glow de fond */}
-                {chapterDone && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/5 pointer-events-none" />
-                )}
-
-                <div className="relative z-10 p-6 flex flex-col gap-3">
-                  {/* Badge */}
-                  <span className={cn(
-                    'self-start text-[10px] font-black uppercase tracking-[0.18em] px-2.5 py-1 rounded-full border',
-                    chapterDone
-                      ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300'
-                      : 'bg-white/5 border-white/10 text-white/40'
-                  )}>
-                    À suivre
-                  </span>
-
-                  {/* Titre */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p className={cn(
-                        'text-xs font-bold uppercase tracking-widest mb-1',
-                        chapterDone ? 'text-indigo-400' : 'text-white/30'
-                      )}>
-                        {nextChapter ? `Chapitre ${nextChapter.id}` : 'Félicitations !'}
-                      </p>
-                      <h3 className={cn(
-                        'text-xl font-black leading-tight',
-                        chapterDone ? 'text-white' : 'text-white/40'
-                      )}>
-                        {nextChapter ? nextChapter.title : 'Tu as tout terminé'}
-                      </h3>
-                    </div>
-                    <div className={cn(
-                      'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0',
-                      chapterDone
-                        ? 'bg-indigo-500/20 border border-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.3)]'
-                        : 'bg-white/5 border border-white/10'
-                    )}>
-                      {chapterDone && nextChapter ? <Unlock className="w-5 h-5 text-indigo-400" /> : chapterDone ? <Trophy className="w-5 h-5 text-yellow-400" /> : <Lock className="w-5 h-5 text-white/40" />}
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className={cn(
-                    'text-sm leading-relaxed',
-                    chapterDone ? 'text-white/70' : 'text-white/25'
-                  )}>
-                    {chapterDone
-                      ? (nextChapter ? `Bravo ! Tu peux maintenant explorer : ${nextChapter.subtitle}` : 'Tu as exploré tous les chapitres de l\'académie !')
-                      : `Termine tous les niveaux du Chapitre ${currentChapter.id} pour débloquer la suite.`}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6, ease: 'easeOut' }}
+            className={cn(
+              'relative w-full overflow-hidden rounded-3xl border',
+              currentChapter.status === 'completed' && nextChapter
+                ? 'border-indigo-500/40 bg-gradient-to-br from-indigo-900/40 to-purple-900/30'
+                : 'border-white/10 bg-white/[0.03]',
+            )}
+          >
+            {currentChapter.status === 'completed' && nextChapter && (
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/5" />
+            )}
+            <div className="relative z-10 flex flex-col gap-3 p-6">
+              <span className="self-start rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/50">
+                À suivre
+              </span>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="mb-1 text-xs font-bold uppercase tracking-widest text-indigo-300">
+                    {nextChapter ? `Chapitre ${nextChapter.order}` : 'Félicitations'}
                   </p>
-
-                  {/* CTA */}
-                  {chapterDone && nextChapter && (
-                    <motion.button
-                      whileTap={{ y: 3, boxShadow: '0 1px 0 #3730a3' }}
-                      style={{ boxShadow: '0 5px 0 #3730a3' }}
-                      className="mt-2 w-full bg-indigo-600 text-white font-black text-sm rounded-2xl py-3.5 transition-colors hover:bg-indigo-500"
-                    >
-                      COMMENCER LE CHAPITRE {nextChapter.id}
-                    </motion.button>
+                  <h3 className="text-xl font-black leading-tight text-white">
+                    {nextChapter ? nextChapter.title : 'Tu as tout terminé'}
+                  </h3>
+                </div>
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                  {currentChapter.status === 'completed' && nextChapter ? (
+                    <Unlock className="h-5 w-5 text-indigo-400" />
+                  ) : nextChapter ? (
+                    <Lock className="h-5 w-5 text-white/40" />
+                  ) : (
+                    <Trophy className="h-5 w-5 text-yellow-400" />
                   )}
                 </div>
-              </motion.div>
-            )
-          })()}
+              </div>
+              <p className="text-sm leading-relaxed text-white/60">
+                {currentChapter.status === 'completed' && nextChapter
+                  ? `Bravo ! Tu peux maintenant explorer : ${nextChapter.subtitle}`
+                  : nextChapter
+                    ? `Termine tous les niveaux du Chapitre ${currentChapter.order} pour débloquer la suite.`
+                    : "Tu as exploré tous les chapitres de l'Académie."}
+              </p>
+            </div>
+          </motion.div>
         </main>
 
-        {/* ── MODALES ───────────────────────────────────────────────── */}
         <AnimatePresence>
           {selectedUnit && (
             <FullScreenSlideModal
@@ -437,12 +466,9 @@ export default function AcademyPage() {
               onClose={() => setSelectedUnit(null)}
               className="bg-[#05050A]"
             >
-              <div className="relative h-64 bg-emerald-900/30 rounded-b-[40px] overflow-hidden shrink-0 mt-[-env(safe-area-inset-top)]">
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#05050A] via-[#05050A]/20 to-transparent z-10 pointer-events-none" />
-                {/* Glow orb */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-emerald-500/25 blur-[70px] rounded-full" />
-                {/* Mascotte — centrée, en avant du gradient */}
+              <div className="relative mt-[-env(safe-area-inset-top)] h-64 shrink-0 overflow-hidden rounded-b-[40px] bg-emerald-900/30">
+                <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-[#05050A] via-[#05050A]/20 to-transparent" />
+                <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/25 blur-[70px]" />
                 <motion.div
                   initial={{ scale: 0.7, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: [0, -8, 0] }}
@@ -451,44 +477,38 @@ export default function AcademyPage() {
                     opacity: { duration: 0.3 },
                     y: { duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.4 },
                   }}
-                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-40 h-40 drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]"
+                  className="absolute bottom-4 left-1/2 z-20 h-40 w-40 -translate-x-1/2 drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]"
                 >
-                  <Image
-                    src={`/${selectedUnit.mascotte}.png`}
-                    alt={selectedUnit.mascotte}
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src={`/${selectedUnit.mascot}.png`} alt="" fill className="object-contain" />
                 </motion.div>
               </div>
-
-              <div className="flex-1 px-6 pt-8 pb-32 flex flex-col items-center text-center">
-                <span className="text-emerald-400 font-bold tracking-widest text-xs uppercase mb-4">
-                  Chapitre {currentChapter.id} — Unité {selectedUnit.id}
+              <div className="flex flex-1 flex-col items-center px-6 pb-32 pt-8 text-center">
+                <span className="mb-4 text-xs font-bold uppercase tracking-widest text-emerald-400">
+                  {currentChapter.title} · Unité {selectedUnit.order}
                 </span>
-                <h2 className="text-3xl font-black text-white mb-4 leading-tight">{selectedUnit.title}</h2>
-                {selectedUnit.description && (
-                  <p className="text-white/70 text-base leading-relaxed mb-8">{selectedUnit.description}</p>
-                )}
-                <div className="flex gap-4 mb-auto">
-                  <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-white/90 text-sm font-medium flex items-center gap-2 shadow-lg">
-                    <Clock className="w-4 h-4 text-white/50" /> 2 min
+                <h2 className="mb-4 text-3xl font-black leading-tight text-white">{selectedUnit.title}</h2>
+                <p className="mb-8 text-base leading-relaxed text-white/70">{selectedUnit.subtitle}</p>
+                <div className="mb-auto flex gap-4">
+                  <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-lg">
+                    <Clock className="h-4 w-4 text-white/50" /> {selectedUnit.durationMinutes} min
                   </div>
-                  <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-white/90 text-sm font-medium flex items-center gap-2 shadow-lg">
-                    <Brain className="w-4 h-4 text-white/50" /> 4 exercices
+                  <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-lg">
+                    <Brain className="h-4 w-4 text-white/50" /> {selectedUnit.exercises.length} exercices
                   </div>
                 </div>
               </div>
-
-              <div className="sticky bottom-0 left-0 w-full p-6 pb-[max(2rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent z-20">
+              <div className="sticky bottom-0 left-0 z-20 w-full bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent p-6 pb-[max(2rem,env(safe-area-inset-bottom))]">
                 <div className="mb-6 mt-6 text-center">
-                  <span className="inline-flex items-center gap-2 bg-emerald-900/40 border border-emerald-500/30 px-4 py-2 rounded-full font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                    <Gift className="w-4 h-4 text-emerald-400" /> <span className="text-white">Récompense à la clé :</span> <span className="text-emerald-400">+{selectedUnit.reward}</span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-900/40 px-4 py-2 font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <Gift className="h-4 w-4 text-emerald-400" />
+                    <span className="text-white">Récompense :</span>
+                    <span className="text-emerald-400">+{selectedUnit.reward.amount}</span>
                   </span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => handleStartCourse(selectedUnit)}
-                  className="w-full bg-emerald-500 text-black text-lg font-black rounded-2xl py-5 shadow-[0_6px_0_#065f46] hover:shadow-[0_4px_0_#065f46] hover:translate-y-0.5 active:shadow-[0_1px_0_#065f46] active:translate-y-[5px] transition-all duration-100"
+                  className="w-full rounded-2xl bg-emerald-500 py-5 text-lg font-black text-black shadow-[0_6px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]"
                 >
                   DÉMARRER L'EXPLORATION
                 </button>
@@ -500,9 +520,7 @@ export default function AcademyPage() {
             <LockedUnitModal key="locked-modal" unit={lockedUnit} onClose={() => setLockedUnit(null)} />
           )}
 
-          {loadingTarget && (
-            <CourseLoadingScreen key="loading-screen" onComplete={handleLoadingComplete} />
-          )}
+          {loadingTarget && <CourseLoadingScreen key="loading-screen" onComplete={handleLoadingComplete} />}
         </AnimatePresence>
       </div>
     </FullScreenSlideModal>
