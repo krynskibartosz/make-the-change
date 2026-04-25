@@ -23,6 +23,8 @@ export type EcosystemNodeType = 'base' | 'flora' | 'fauna' | 'habitat' | 'projec
 
 export type EcosystemRelation = 'nourrit' | 'habitat' | 'proie' | 'symbiose' | 'protege' | 'menace'
 
+export type EcosystemEvidenceLevel = 'verified' | 'plausible' | 'proxy' | 'needs_source'
+
 export type EcosystemPerspective = 'biome' | 'project' | 'species' | 'faction'
 
 export type EcosystemTheme = 'forest' | 'marine' | 'pollinators'
@@ -50,6 +52,12 @@ export type EcosystemEdge = {
   source: string
   target: string
   relation: EcosystemRelation
+  confidence: EcosystemEvidenceLevel
+  strength: number
+  explanation: string
+  sourceLabel: string
+  sourceUrl?: string
+  isProxy: boolean
 }
 
 export type EcosystemImpactProxy = {
@@ -240,21 +248,117 @@ export const ECOSYSTEMS: EcosystemDefinition[] = [
         status: 'protected',
         trophicLevel: 3,
         lane: 77,
-        summary: 'Point d_action concret : soutien apicole, suivi local, proxy d_impact.',
+        summary: "Point d'action concret : soutien apicole, suivi local, proxy d'impact.",
         projectProtected: true,
         factionTags: ['melli', 'sylva'],
       },
     ],
     edges: [
-      { source: 'sol-manakara', target: 'orchidee-manakara', relation: 'nourrit' },
-      { source: 'orchidee-manakara', target: 'abeille-noire-manakara', relation: 'symbiose' },
-      { source: 'orchidee-manakara', target: 'charancon-manakara', relation: 'habitat' },
-      { source: 'charancon-manakara', target: 'cameleon-manakara', relation: 'proie' },
-      { source: 'orchidee-manakara', target: 'vari-manakara', relation: 'habitat' },
-      { source: 'rucher-manakara', target: 'abeille-noire-manakara', relation: 'protege' },
-      { source: 'rucher-manakara', target: 'orchidee-manakara', relation: 'protege' },
-      { source: 'tavy-manakara', target: 'sol-manakara', relation: 'menace' },
-      { source: 'tavy-manakara', target: 'vari-manakara', relation: 'menace' },
+      {
+        source: 'sol-manakara',
+        target: 'orchidee-manakara',
+        relation: 'nourrit',
+        confidence: 'plausible',
+        strength: 0.7,
+        explanation:
+          "Lien ecologique general : les orchidees dependent du substrat, de l'humidite et des micro-habitats forestiers.",
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'orchidee-manakara',
+        target: 'abeille-noire-manakara',
+        relation: 'symbiose',
+        confidence: 'plausible',
+        strength: 0.62,
+        explanation:
+          'Relation de pollinisation representative. Elle doit etre precisee avec une orchidee et un pollinisateur documentes localement.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'orchidee-manakara',
+        target: 'charancon-manakara',
+        relation: 'habitat',
+        confidence: 'needs_source',
+        strength: 0.35,
+        explanation:
+          'Lien visuel de prototype : le charancon girafe depend de plantes hotes forestieres, mais pas specifiquement de ces orchidees.',
+        sourceLabel: 'Animalia - Giraffe weevil',
+        sourceUrl: 'https://animalia.bio/giraffe-weevil',
+        isProxy: true,
+      },
+      {
+        source: 'charancon-manakara',
+        target: 'cameleon-manakara',
+        relation: 'proie',
+        confidence: 'plausible',
+        strength: 0.52,
+        explanation:
+          'Le cameleon de Parson est insectivore et consomme notamment de grands insectes. Le charancon sert ici de proie representative a verifier localement.',
+        sourceLabel: 'Animal Diversity Web - Calumma parsonii',
+        sourceUrl: 'https://animaldiversity.org/accounts/Calumma_parsonii/',
+        isProxy: true,
+      },
+      {
+        source: 'orchidee-manakara',
+        target: 'vari-manakara',
+        relation: 'habitat',
+        confidence: 'needs_source',
+        strength: 0.32,
+        explanation:
+          'Lien a remplacer par une plante nourriciere ou pollinisee documentee. Le vari est bien une espece de canopee, mais ce lien precis reste faible.',
+        sourceLabel: 'Animal Diversity Web - Varecia variegata',
+        sourceUrl: 'https://animaldiversity.org/accounts/Varecia_variegata/',
+        isProxy: true,
+      },
+      {
+        source: 'rucher-manakara',
+        target: 'abeille-noire-manakara',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.84,
+        explanation:
+          "Lien projet : le rucher soutient directement le suivi apicole et sert de proxy d'impact pour les abeilles protegees.",
+        sourceLabel: 'Proxy partenaire - rucher',
+        isProxy: true,
+      },
+      {
+        source: 'rucher-manakara',
+        target: 'orchidee-manakara',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.48,
+        explanation:
+          "Effet indirect : la protection des pollinisateurs peut soutenir des plantes dependantes de pollinisation, mais ce n'est pas une mesure directe.",
+        sourceLabel: 'Proxy partenaire - pollinisation',
+        isProxy: true,
+      },
+      {
+        source: 'tavy-manakara',
+        target: 'sol-manakara',
+        relation: 'menace',
+        confidence: 'verified',
+        strength: 0.9,
+        explanation:
+          "Le brulis et la deforestation degradent directement les sols, la matiere organique et la structure de l'habitat.",
+        sourceLabel: 'IUCN SOS - forets de Madagascar',
+        sourceUrl:
+          'https://iucnsos.org/a-surprising-diversity-of-forest-fauna-benefit-from-varecia-variegata-conservation-action-work/',
+        isProxy: false,
+      },
+      {
+        source: 'tavy-manakara',
+        target: 'vari-manakara',
+        relation: 'menace',
+        confidence: 'verified',
+        strength: 0.88,
+        explanation:
+          'Le vari noir et blanc est fortement menace par la perte et la fragmentation des forets humides malgaches.',
+        sourceLabel: 'Animal Diversity Web - Varecia variegata',
+        sourceUrl: 'https://animaldiversity.org/accounts/Varecia_variegata/',
+        isProxy: false,
+      },
     ],
   },
   {
@@ -361,13 +465,87 @@ export const ECOSYSTEMS: EcosystemDefinition[] = [
       },
     ],
     edges: [
-      { source: 'eau-chaude-karimunjawa', target: 'acropora-karimunjawa', relation: 'menace' },
-      { source: 'acropora-karimunjawa', target: 'poisson-clown-karimunjawa', relation: 'habitat' },
-      { source: 'acropora-karimunjawa', target: 'demoiselle-karimunjawa', relation: 'habitat' },
-      { source: 'acropora-karimunjawa', target: 'nurserie-recif', relation: 'habitat' },
-      { source: 'nurserie-recif', target: 'tortue-karimunjawa', relation: 'habitat' },
-      { source: 'projet-corail', target: 'acropora-karimunjawa', relation: 'protege' },
-      { source: 'projet-corail', target: 'nurserie-recif', relation: 'protege' },
+      {
+        source: 'eau-chaude-karimunjawa',
+        target: 'acropora-karimunjawa',
+        relation: 'menace',
+        confidence: 'verified',
+        strength: 0.92,
+        explanation:
+          "Les coraux Acropora sont sensibles au stress thermique, au blanchissement et a la degradation de la qualite de l'eau.",
+        sourceLabel: 'OBIS - Acropora muricata',
+        sourceUrl: 'https://portal.obis.org/taxon/207007',
+        isProxy: false,
+      },
+      {
+        source: 'acropora-karimunjawa',
+        target: 'poisson-clown-karimunjawa',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.68,
+        explanation:
+          'Lien habitat representatif : les recifs coralliens fournissent refuges et structure a de nombreuses especes de poissons.',
+        sourceLabel: 'Coral Trait Database - Acropora',
+        sourceUrl: 'https://www.coraltraits.org/species/66',
+        isProxy: true,
+      },
+      {
+        source: 'acropora-karimunjawa',
+        target: 'demoiselle-karimunjawa',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.68,
+        explanation:
+          "Lien habitat representatif entre corail constructeur et petit poisson de recif. A confirmer avec l'espece locale exacte.",
+        sourceLabel: 'Coral Trait Database - Acropora',
+        sourceUrl: 'https://www.coraltraits.org/species/66',
+        isProxy: true,
+      },
+      {
+        source: 'acropora-karimunjawa',
+        target: 'nurserie-recif',
+        relation: 'habitat',
+        confidence: 'verified',
+        strength: 0.82,
+        explanation:
+          'Les coraux branchus construisent une structure tridimensionnelle qui sert de refuge et de zone de croissance.',
+        sourceLabel: 'Coral Trait Database - Acropora',
+        sourceUrl: 'https://www.coraltraits.org/species/66',
+        isProxy: false,
+      },
+      {
+        source: 'nurserie-recif',
+        target: 'tortue-karimunjawa',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.45,
+        explanation:
+          'Lien de territoire elargi : la tortue verte frequente les milieux recifaux, mais la relation avec cette nurserie precise reste indicative.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'projet-corail',
+        target: 'acropora-karimunjawa',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.86,
+        explanation:
+          'Lien projet : le fragment de corail suivi est une unite proxy de restauration, pas un comptage temps reel de survie.',
+        sourceLabel: 'Proxy partenaire - restauration corail',
+        isProxy: true,
+      },
+      {
+        source: 'projet-corail',
+        target: 'nurserie-recif',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.63,
+        explanation:
+          "Effet estime : restaurer des coraux constructeurs peut recreer de l'habitat pour juveniles, avec un impact a mesurer localement.",
+        sourceLabel: 'Proxy partenaire - restauration corail',
+        isProxy: true,
+      },
     ],
   },
   {
@@ -411,7 +589,7 @@ export const ECOSYSTEMS: EcosystemDefinition[] = [
         trophicLevel: 1,
         lane: 28,
         speciesId: MOCK_SPECIES_BUMBLEBEE_ID,
-        summary: 'Pollinisateur robuste, bon point d_entree pour la faction Melli.',
+        summary: "Pollinisateur robuste, bon point d'entree pour la faction Melli.",
         focal: true,
         factionTags: ['melli'],
       },
@@ -473,14 +651,94 @@ export const ECOSYSTEMS: EcosystemDefinition[] = [
       },
     ],
     edges: [
-      { source: 'haie-belgique', target: 'bourdon-belgique', relation: 'habitat' },
-      { source: 'haie-belgique', target: 'osmie-belgique', relation: 'habitat' },
-      { source: 'haie-belgique', target: 'megachile-belgique', relation: 'habitat' },
-      { source: 'haie-belgique', target: 'syrphe-belgique', relation: 'habitat' },
-      { source: 'syrphe-belgique', target: 'coccinelle-belgique', relation: 'symbiose' },
-      { source: 'projet-habeebee', target: 'haie-belgique', relation: 'protege' },
-      { source: 'projet-habeebee', target: 'bourdon-belgique', relation: 'protege' },
-      { source: 'projet-habeebee', target: 'osmie-belgique', relation: 'protege' },
+      {
+        source: 'haie-belgique',
+        target: 'bourdon-belgique',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.74,
+        explanation:
+          'Les haies fleuries fournissent nourriture et corridors aux pollinisateurs. Le lien exact depend de la composition florale locale.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'haie-belgique',
+        target: 'osmie-belgique',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.74,
+        explanation:
+          'Les abeilles solitaires utilisent des ressources florales et des sites de nidification associes aux habitats semi-naturels.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'haie-belgique',
+        target: 'megachile-belgique',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.66,
+        explanation:
+          'Lien representatif : les megachiles dependent de ressources florales et vegetales, mais le site exact doit etre verifie.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'haie-belgique',
+        target: 'syrphe-belgique',
+        relation: 'habitat',
+        confidence: 'plausible',
+        strength: 0.68,
+        explanation:
+          'Les syrphes adultes utilisent des fleurs, tandis que les larves de certaines especes jouent un role auxiliaire.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'syrphe-belgique',
+        target: 'coccinelle-belgique',
+        relation: 'symbiose',
+        confidence: 'needs_source',
+        strength: 0.38,
+        explanation:
+          'Lien a reformuler : syrphes et coccinelles sont surtout des auxiliaires complementaires contre les pucerons, pas une symbiose directe.',
+        sourceLabel: 'Modele pedagogique MTC',
+        isProxy: true,
+      },
+      {
+        source: 'projet-habeebee',
+        target: 'haie-belgique',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.7,
+        explanation:
+          'Lien projet : les micro-habitats et pratiques favorables sont representes comme protection de la haie.',
+        sourceLabel: 'Proxy partenaire - Habeebee',
+        isProxy: true,
+      },
+      {
+        source: 'projet-habeebee',
+        target: 'bourdon-belgique',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.76,
+        explanation:
+          "Lien proxy : l'action educative et les habitats favorables soutiennent les pollinisateurs, sans comptage individuel.",
+        sourceLabel: 'Proxy partenaire - Habeebee',
+        isProxy: true,
+      },
+      {
+        source: 'projet-habeebee',
+        target: 'osmie-belgique',
+        relation: 'protege',
+        confidence: 'proxy',
+        strength: 0.76,
+        explanation:
+          'Lien proxy : les habitats de nidification et ressources florales sont representes comme soutien aux abeilles solitaires.',
+        sourceLabel: 'Proxy partenaire - Habeebee',
+        isProxy: true,
+      },
     ],
   },
 ]

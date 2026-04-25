@@ -27,6 +27,7 @@ import {
   ECOSYSTEMS,
   type EcosystemDefinition,
   type EcosystemEdge,
+  type EcosystemEvidenceLevel,
   type EcosystemNode,
   type EcosystemNodeType,
   type EcosystemRelation,
@@ -159,6 +160,20 @@ const RELATION_LABEL: Record<EcosystemRelation, string> = {
   menace: 'menace',
 }
 
+const EVIDENCE_LABEL: Record<EcosystemEvidenceLevel, string> = {
+  verified: 'verifie',
+  plausible: 'plausible',
+  proxy: 'proxy',
+  needs_source: 'a sourcer',
+}
+
+const EVIDENCE_STYLE: Record<EcosystemEvidenceLevel, string> = {
+  verified: 'border-emerald-200/25 text-emerald-100',
+  plausible: 'border-cyan-200/25 text-cyan-100',
+  proxy: 'border-amber-200/25 text-amber-100',
+  needs_source: 'border-red-200/25 text-red-100',
+}
+
 const FALLBACK_RELATION_LAYER = RELATION_LAYERS[0]!
 
 function buildLabPoints(nodes: readonly EcosystemNode[]): LabPoint[] {
@@ -218,6 +233,9 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
   const detailEdges = selectedNodeId ? selectedEdges : []
   const selectedNode = selectedNodeId ? pointById.get(selectedNodeId) : null
   const selectedSpecies = selectedNode?.speciesId ? speciesById.get(selectedNode.speciesId) : null
+  const verifiedEdgesCount = activeEdges.filter((edge) => edge.confidence === 'verified').length
+  const proxyEdgesCount = activeEdges.filter((edge) => edge.isProxy).length
+  const needsSourceEdgesCount = activeEdges.filter((edge) => edge.confidence === 'needs_source').length
   const ThemeIcon = THEME_ICON[ecosystem.theme]
   const ActiveLayerIcon = activeLayer.icon
 
@@ -283,6 +301,11 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
               ))}
             </select>
           </label>
+        </div>
+        <div className="mx-auto mt-2 flex max-w-5xl justify-end gap-2 text-[0.62rem] font-black uppercase tracking-[0.12em] text-white/45">
+          <span>{verifiedEdgesCount} verifies</span>
+          <span>{proxyEdgesCount} proxies</span>
+          {needsSourceEdgesCount > 0 ? <span>{needsSourceEdgesCount} a sourcer</span> : null}
         </div>
       </header>
 
@@ -432,18 +455,49 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
                     >
                       <div className="flex items-center gap-2 text-[0.62rem] font-black uppercase tracking-[0.14em] text-white/35">
                         <span className={cn('h-2 w-2 rounded-full border', layer.chip)} />
-                        {RELATION_LABEL[edge.relation]}
+                        <span>{RELATION_LABEL[edge.relation]}</span>
+                        <span
+                          className={cn(
+                            'rounded-full border px-2 py-0.5',
+                            EVIDENCE_STYLE[edge.confidence],
+                          )}
+                        >
+                          {EVIDENCE_LABEL[edge.confidence]}
+                        </span>
                       </div>
                       <p className="mt-2 text-xs font-bold leading-relaxed text-white/70">
                         {source.name} <span className="text-white/30">vers</span> {target.name}
                       </p>
+                      <p className="mt-1 text-xs leading-relaxed text-white/45">
+                        {edge.explanation}
+                      </p>
+                      <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
+                        <div
+                          className="h-full rounded-full bg-white/45"
+                          style={{ width: `${Math.round(edge.strength * 100)}%` }}
+                        />
+                      </div>
+                      {edge.sourceUrl ? (
+                        <a
+                          href={edge.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-2 inline-flex text-[0.65rem] font-black uppercase tracking-[0.12em] text-white/40 underline-offset-4 hover:text-white hover:underline"
+                        >
+                          {edge.sourceLabel}
+                        </a>
+                      ) : (
+                        <p className="mt-2 text-[0.65rem] font-black uppercase tracking-[0.12em] text-white/30">
+                          {edge.sourceLabel}
+                        </p>
+                      )}
                     </div>
                   )
                 })
               ) : !selectedNodeId ? (
                 <p className="border-t border-white/10 pt-2 text-xs leading-relaxed text-white/45">
-                  {activeEdges.length} liens visibles. Touchez une espece pour isoler ses
-                  connexions.
+                  {activeEdges.length} liens visibles dont {verifiedEdgesCount} verifies. Touchez
+                  une espece pour lire les sources et les liens a sourcer.
                 </p>
               ) : (
                 <p className="border-t border-white/10 pt-2 text-xs leading-relaxed text-white/45">
