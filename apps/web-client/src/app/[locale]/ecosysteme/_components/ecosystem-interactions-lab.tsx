@@ -32,6 +32,7 @@ import {
   getEcosystemById,
 } from '@/lib/ecosystem/graph'
 import { cn } from '@/lib/utils'
+import type { SpeciesContext } from '@/types/context'
 
 type RelationLayerKey = 'all' | 'trophic' | 'habitat' | 'symbiose' | 'protege' | 'menace'
 
@@ -49,6 +50,10 @@ type RelationLayer = {
 
 type LabPoint = EcosystemNode & {
   y: number
+}
+
+type EcosystemInteractionsLabProps = {
+  species: SpeciesContext[]
 }
 
 const LEVEL_Y: Record<number, number> = {
@@ -177,13 +182,14 @@ function getActiveEdges(edges: readonly EcosystemEdge[], layer: RelationLayer) {
   return edges.filter((edge) => layer.relations.includes(edge.relation))
 }
 
-export function EcosystemInteractionsLab() {
+export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabProps) {
   const router = useRouter()
   const [ecosystemId, setEcosystemId] = useState(DEFAULT_ECOSYSTEM_ID)
   const [activeLayerKey, setActiveLayerKey] = useState<RelationLayerKey>('all')
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
 
   const ecosystem = useMemo(() => getEcosystemById(ecosystemId), [ecosystemId])
+  const speciesById = useMemo(() => new Map(species.map((entry) => [entry.id, entry])), [species])
   const points = useMemo(() => buildLabPoints(ecosystem.nodes), [ecosystem])
   const pointById = useMemo(() => new Map(points.map((point) => [point.id, point])), [points])
   const activeLayer =
@@ -210,6 +216,7 @@ export function EcosystemInteractionsLab() {
   }, [activeEdges, selectedNodeId])
   const detailEdges = selectedNodeId ? selectedEdges : []
   const selectedNode = selectedNodeId ? pointById.get(selectedNodeId) : null
+  const selectedSpecies = selectedNode?.speciesId ? speciesById.get(selectedNode.speciesId) : null
   const ThemeIcon = THEME_ICON[ecosystem.theme]
   const ActiveLayerIcon = activeLayer.icon
 
@@ -374,6 +381,8 @@ export function EcosystemInteractionsLab() {
 
               {points.map((point) => {
                 const Icon = point.name.includes('Abeille') ? Bug : NODE_ICON[point.type]
+                const pointSpecies = point.speciesId ? speciesById.get(point.speciesId) : null
+                const displayName = pointSpecies?.name_default ?? point.name
                 const isConnected = connectedNodeIds.has(point.id)
                 const isSelected = point.id === selectedNodeId
                 const hasSelectedFilter = Boolean(selectedNodeId)
@@ -398,7 +407,7 @@ export function EcosystemInteractionsLab() {
                   >
                     <span
                       className={cn(
-                        'flex h-12 w-12 items-center justify-center rounded-full border bg-[#05050A]/90 backdrop-blur-md transition-all duration-500 sm:h-14 sm:w-14',
+                        'relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border bg-[#05050A]/90 backdrop-blur-md transition-all duration-500 sm:h-14 sm:w-14',
                         isSelected
                           ? 'border-white bg-white text-[#05050A] ring-4 ring-white/15'
                           : point.status === 'threatened'
@@ -408,10 +417,22 @@ export function EcosystemInteractionsLab() {
                               : 'border-white/15 text-white/70',
                       )}
                     >
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                      {pointSpecies?.image_url ? (
+                        <img
+                          src={pointSpecies.image_url}
+                          alt={pointSpecies.name_default}
+                          className={cn(
+                            'h-full w-full object-cover transition-all duration-500',
+                            point.status === 'locked' && 'scale-105 grayscale opacity-45',
+                            !isConnected && 'grayscale opacity-55',
+                          )}
+                        />
+                      ) : (
+                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                      )}
                     </span>
                     <span className="max-w-full truncate rounded-full border border-white/10 bg-[#05050A]/80 px-2 py-1 text-[0.55rem] font-black text-white/70 sm:text-[0.58rem]">
-                      {point.name}
+                      {displayName}
                     </span>
                   </button>
                 )
@@ -421,8 +442,25 @@ export function EcosystemInteractionsLab() {
 
           <aside className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 order-3 max-h-[32dvh] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#08080F]/92 p-3 shadow-[0_-20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:static lg:order-none lg:max-h-none lg:overflow-visible lg:rounded-[2rem] lg:bg-white/[0.035] lg:p-4 lg:shadow-none lg:backdrop-blur-none">
             <div className="flex items-center gap-2">
-              <ActiveLayerIcon className="h-4 w-4 text-white/70" />
-              <h2 className="text-sm font-black text-white">Lecture active</h2>
+              {selectedSpecies?.image_url ? (
+                <img
+                  src={selectedSpecies.image_url}
+                  alt={selectedSpecies.name_default}
+                  className="h-8 w-8 shrink-0 rounded-xl border border-white/10 object-cover"
+                />
+              ) : (
+                <ActiveLayerIcon className="h-4 w-4 shrink-0 text-white/70" />
+              )}
+              <div className="min-w-0">
+                <h2 className="truncate text-sm font-black text-white">
+                  {selectedSpecies?.name_default ?? 'Lecture active'}
+                </h2>
+                {selectedSpecies ? (
+                  <p className="truncate text-[0.65rem] font-bold italic text-white/40">
+                    {selectedSpecies.scientific_name} - {selectedSpecies.conservation_status}
+                  </p>
+                ) : null}
+              </div>
             </div>
 
             <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-white/55 lg:mt-3 lg:line-clamp-none">
