@@ -28,7 +28,6 @@ import {
   EcosystemPathNode,
   getNodeVisual,
   isNodeEmphasized,
-  PerspectiveTabs,
   STATUS_VISUALS,
   THEME_ICON,
 } from './ecosystem-path-v1'
@@ -48,6 +47,8 @@ type EcosystemDetailProps = {
 }
 
 const INITIAL_GUIDE_STEP = 1
+
+const PERSPECTIVE_OPTIONS: EcosystemPerspective[] = ['biome', 'project', 'species', 'faction']
 
 function getGuidePriority(point: { type: string; trophicLevel: number }) {
   if (point.type === 'project') return 90 + point.trophicLevel
@@ -117,7 +118,6 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
     [nodes],
   )
   const ThemeIcon = THEME_ICON[ecosystem.theme]
-  const copy = PERSPECTIVE_COPY[perspective]
 
   useEffect(() => {
     if (!selectedNodeId || visibleNodeIds.has(selectedNodeId)) {
@@ -176,135 +176,122 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
     isGuideActive && selectedPoint ? Math.max(-52, Math.min(6, 28 - selectedPoint.y)) : 0
 
   return (
-    <main className="min-h-[100dvh] overflow-hidden bg-[#05050A] px-3 pb-[max(12rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-white sm:px-5">
-      <div className="mx-auto flex min-h-[calc(100dvh-2rem)] w-full max-w-4xl flex-col">
-        <header className="shrink-0 py-3">
-          <div className="flex items-center gap-3">
+    <main className="relative min-h-[100dvh] overflow-hidden bg-[#05050A] text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(16,185,129,0.12),transparent_34%),radial-gradient(circle_at_20%_70%,rgba(132,204,22,0.08),transparent_28%)]" />
+      <div className="mx-auto flex h-[100dvh] w-full max-w-4xl flex-col px-3 pb-[max(9.5rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
+        <header className="relative z-30 shrink-0">
+          <div className="flex items-center gap-2">
             <Button
               type="button"
               variant="glass"
               size="icon"
-              className="h-10 w-10 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
+              className="h-11 w-11 shrink-0 rounded-2xl border border-white/10 bg-[#05050A]/65 text-white backdrop-blur-xl"
               aria-label="Retour"
               icon={<ChevronLeft className="h-4 w-4" />}
               shimmer={false}
               onClick={() => router.back()}
             />
 
-            <div className="flex min-w-0 flex-1 items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-emerald-200/20 bg-emerald-300/10">
-                <ThemeIcon className="h-4 w-4 text-emerald-100" />
-              </div>
-              <div className="min-w-0">
-                <h1 className="truncate text-base font-black text-white">{ecosystem.name}</h1>
-                <p className="truncate text-xs text-white/45">{ecosystem.location}</p>
-              </div>
-            </div>
+            <label className="relative min-w-0 flex-1">
+              <span className="sr-only">Categorie</span>
+              <ThemeIcon className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-emerald-100" />
+              <select
+                className="h-11 w-full appearance-none truncate rounded-2xl border border-white/10 bg-[#05050A]/65 py-0 pl-9 pr-8 text-sm font-black text-white outline-none backdrop-blur-xl"
+                value={perspective}
+                onChange={(event) => handlePerspectiveChange(event.target.value as EcosystemPerspective)}
+              >
+                {PERSPECTIVE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {PERSPECTIVE_COPY[option].label}
+                  </option>
+                ))}
+              </select>
+            </label>
 
             <span
               className={cn(
-                'shrink-0 rounded-full px-3 py-1 text-xs font-black tabular-nums',
-                hasDeadNodes ? 'bg-red-400/10 text-red-100' : 'bg-emerald-300/10 text-emerald-100',
+                'shrink-0 rounded-2xl px-3 py-2 text-xs font-black tabular-nums backdrop-blur-xl',
+                hasDeadNodes
+                  ? 'bg-red-400/10 text-red-100'
+                  : 'bg-emerald-300/10 text-emerald-100',
               )}
             >
               {unlockedCount}/{nodes.length}
             </span>
           </div>
 
-          <div className="mt-3">
-            <PerspectiveTabs perspective={perspective} onChange={handlePerspectiveChange} />
-          </div>
-
-          <div className="mt-3 rounded-3xl border border-white/10 bg-white/[0.035] p-3">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[0.65rem] font-black uppercase tracking-[0.18em] text-emerald-200/55">
-                  {copy.label}
-                </p>
-                <p className="mt-1 text-sm font-black text-white">{copy.title}</p>
-                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/45">
-                  {ecosystem.thesis}
-                </p>
-              </div>
-              <div className="shrink-0 rounded-2xl border border-white/10 bg-[#05050A]/70 px-3 py-2 text-right">
-                <p className="text-sm font-black text-white">{ecosystem.impact.value}</p>
-                <p className="max-w-24 text-[0.6rem] leading-tight text-white/35">impact estime</p>
-              </div>
-            </div>
-
-            <div className="mt-3 flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {!isAccessUnlocked ? (
-                <Button
-                  type="button"
-                  variant="success"
-                  size="sm"
-                  className="h-9 shrink-0 rounded-2xl bg-emerald-300 text-[#05050A]"
-                  icon={<LockKeyhole className="h-3.5 w-3.5" />}
-                  onClick={unlockActiveEcosystem}
-                >
-                  Debloquer
-                </Button>
-              ) : null}
-
+          <div className="mt-2 flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {!isAccessUnlocked ? (
               <Button
                 type="button"
-                variant={canAdvance ? 'success' : 'glass'}
+                variant="success"
                 size="sm"
-                className={cn(
-                  'h-9 shrink-0 rounded-2xl',
-                  canAdvance
-                    ? 'bg-emerald-300 text-[#05050A]'
-                    : 'border border-white/10 bg-white/5 text-white',
-                )}
-                icon={
-                  canAdvance ? (
-                    <StepForward className="h-3.5 w-3.5" />
-                  ) : (
-                    <Play className="h-3.5 w-3.5" />
-                  )
-                }
-                shimmer={false}
-                onClick={canAdvance ? advanceGuide : restartGuide}
+                className="h-11 shrink-0 rounded-2xl bg-emerald-300 text-[#05050A]"
+                icon={<LockKeyhole className="h-3.5 w-3.5" />}
+                onClick={unlockActiveEcosystem}
               >
-                {canAdvance ? 'Suite' : 'Rejouer'}
+                Debloquer
               </Button>
+            ) : null}
 
+            <Button
+              type="button"
+              variant={canAdvance ? 'success' : 'glass'}
+              size="sm"
+              className={cn(
+                'h-11 shrink-0 rounded-2xl',
+                canAdvance
+                  ? 'bg-emerald-300 text-[#05050A]'
+                  : 'border border-white/10 bg-[#05050A]/65 text-white backdrop-blur-xl',
+              )}
+              icon={
+                canAdvance ? (
+                  <StepForward className="h-3.5 w-3.5" />
+                ) : (
+                  <Play className="h-3.5 w-3.5" />
+                )
+              }
+              shimmer={false}
+              onClick={canAdvance ? advanceGuide : restartGuide}
+            >
+              {canAdvance ? 'Suite' : 'Rejouer'}
+            </Button>
+
+            <Button
+              type="button"
+              variant="glass"
+              size="sm"
+              className="h-11 shrink-0 rounded-2xl border border-white/10 bg-[#05050A]/65 text-white backdrop-blur-xl"
+              icon={<Maximize2 className="h-3.5 w-3.5" />}
+              shimmer={false}
+              onClick={showFullWeb}
+            >
+              Tout voir
+            </Button>
+
+            {lockedCount > 0 ? (
               <Button
                 type="button"
                 variant="glass"
                 size="sm"
-                className="h-9 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
-                icon={<Maximize2 className="h-3.5 w-3.5" />}
+                className="h-11 shrink-0 rounded-2xl border border-white/10 bg-[#05050A]/65 text-white backdrop-blur-xl"
+                icon={<Eye className="h-3.5 w-3.5" />}
                 shimmer={false}
-                onClick={showFullWeb}
+                onClick={revealLockedNodes}
               >
-                Tout voir
+                Reveler
               </Button>
-
-              {lockedCount > 0 ? (
-                <Button
-                  type="button"
-                  variant="glass"
-                  size="sm"
-                  className="h-9 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
-                  icon={<Eye className="h-3.5 w-3.5" />}
-                  shimmer={false}
-                  onClick={revealLockedNodes}
-                >
-                  Reveler
-                </Button>
-              ) : null}
-            </div>
+            ) : null}
           </div>
         </header>
 
-        <section className="relative flex flex-1 items-center justify-center py-3">
+        <section className="relative flex flex-1 items-center justify-center">
           <div className="absolute left-0 top-3 z-20 rounded-full border border-white/10 bg-[#05050A]/80 px-3 py-1 text-[0.65rem] font-black text-white/45 backdrop-blur-md">
             {isGuideActive ? `Etape ${safeGuideStep + 1}/${nodes.length}` : 'Vue complete'}
           </div>
 
           <div
-            className="pointer-events-none relative h-[30rem] w-full max-w-[44rem] overflow-visible transition-transform duration-700 ease-in-out sm:h-[44rem]"
+            className="pointer-events-none relative h-[35rem] w-full max-w-[44rem] overflow-visible transition-transform duration-700 ease-in-out sm:h-[44rem]"
             style={{ transform: `translateY(${graphShift}%)` }}
           >
             <EcosystemLines
@@ -389,7 +376,7 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
                       type="button"
                       variant="success"
                       size="sm"
-                      className="h-9 shrink-0 rounded-2xl bg-emerald-300 text-[#05050A]"
+                      className="h-11 shrink-0 rounded-2xl bg-emerald-300 text-[#05050A]"
                       icon={<LockKeyhole className="h-3.5 w-3.5" />}
                       onClick={unlockActiveEcosystem}
                     >
@@ -400,7 +387,7 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
                     type="button"
                     variant="glass"
                     size="sm"
-                    className="h-9 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
+                    className="h-11 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
                     icon={<Eye className="h-3.5 w-3.5" />}
                     shimmer={false}
                     onClick={() => revealNode(selectedPoint.id)}
@@ -414,7 +401,7 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
                     type="button"
                     variant="destructive"
                     size="sm"
-                    className="h-9 shrink-0 rounded-2xl bg-red-500/15 text-red-100 ring-1 ring-red-300/20 hover:bg-red-500/25"
+                    className="h-11 shrink-0 rounded-2xl bg-red-500/15 text-red-100 ring-1 ring-red-300/20 hover:bg-red-500/25"
                     icon={<Skull className="h-3.5 w-3.5" />}
                     shimmer={false}
                     onClick={() => triggerExtinction(selectedPoint.id)}
@@ -426,7 +413,7 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
                     type="button"
                     variant="glass"
                     size="sm"
-                    className="h-9 shrink-0 rounded-2xl border border-emerald-200/20 bg-emerald-300/10 text-emerald-100"
+                    className="h-11 shrink-0 rounded-2xl border border-emerald-200/20 bg-emerald-300/10 text-emerald-100"
                     icon={<ShieldCheck className="h-3.5 w-3.5" />}
                     shimmer={false}
                     onClick={protectProjectArea}
@@ -439,7 +426,7 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
                       type="button"
                       variant="glass"
                       size="sm"
-                      className="h-9 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
+                      className="h-11 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
                       icon={<RotateCcw className="h-3.5 w-3.5" />}
                       shimmer={false}
                       onClick={healEcosystem}

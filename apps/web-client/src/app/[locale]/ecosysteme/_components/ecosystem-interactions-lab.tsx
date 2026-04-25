@@ -13,6 +13,7 @@ import {
   Mountain,
   PawPrint,
   ShieldCheck,
+  SlidersHorizontal,
   Skull,
   Sprout,
   TreePine,
@@ -231,115 +232,62 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
   }
 
   return (
-    <main className="min-h-[100dvh] overflow-x-hidden bg-[#05050A] px-3 pb-[max(9rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))] text-white sm:px-5 lg:overflow-hidden lg:pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="mx-auto flex min-h-[calc(100dvh-2rem)] w-full max-w-5xl flex-col">
-        <header className="shrink-0 py-2 lg:py-3">
-          <div className="flex items-center gap-3">
-            <Button
-              type="button"
-              variant="glass"
-              size="icon"
-              className="h-11 w-11 shrink-0 rounded-2xl border border-white/10 bg-white/5 text-white"
-              aria-label="Retour"
-              icon={<ArrowLeft className="h-4 w-4" />}
-              shimmer={false}
-              onClick={() => router.push('/ecosysteme')}
-            />
+    <main className="relative min-h-[100dvh] overflow-hidden bg-[#05050A] text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_15%,rgba(16,185,129,0.12),transparent_34%),radial-gradient(circle_at_80%_55%,rgba(34,211,238,0.08),transparent_28%)]" />
 
-            <div className="flex min-w-0 flex-1 items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                <ThemeIcon className="h-4 w-4 text-emerald-100" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[0.65rem] font-black uppercase tracking-[0.18em] text-emerald-200/60">
-                  Labo interactions
-                </p>
-                <h1 className="truncate text-base font-black text-white">{ecosystem.name}</h1>
-              </div>
-            </div>
+      <header className="absolute inset-x-0 top-0 z-40 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
+        <div className="mx-auto flex max-w-5xl items-center gap-2">
+          <Button
+            type="button"
+            variant="glass"
+            size="icon"
+            className="h-11 w-11 shrink-0 rounded-2xl border border-white/10 bg-[#05050A]/65 text-white backdrop-blur-xl"
+            aria-label="Retour"
+            icon={<ArrowLeft className="h-4 w-4" />}
+            shimmer={false}
+            onClick={() => router.push('/ecosysteme')}
+          />
 
-            <span className="shrink-0 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-black tabular-nums text-white/70">
-              {activeEdges.length}/{ecosystem.edges.length}
-            </span>
-          </div>
-
-          <div className="-mx-3 mt-3 flex snap-x gap-2 overflow-x-auto px-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {ECOSYSTEMS.map((entry) => {
-              const Icon = THEME_ICON[entry.theme]
-              const isActive = entry.id === ecosystem.id
-
-              return (
-                <button
-                  key={entry.id}
-                  type="button"
-                  className={cn(
-                    'flex h-11 shrink-0 snap-start items-center gap-2 rounded-2xl border px-3 text-left text-xs font-black transition-all duration-300',
-                    isActive
-                      ? 'border-emerald-200/30 bg-emerald-300/12 text-white'
-                      : 'border-white/10 bg-white/[0.04] text-white/45',
-                  )}
-                  onClick={() => changeEcosystem(entry.id)}
-                >
-                  <Icon className="h-3.5 w-3.5" />
+          <label className="relative min-w-0 flex-1">
+            <span className="sr-only">Ecosysteme</span>
+            <ThemeIcon className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-emerald-100" />
+            <select
+              className="h-11 w-full appearance-none truncate rounded-2xl border border-white/10 bg-[#05050A]/65 py-0 pl-9 pr-8 text-sm font-black text-white outline-none backdrop-blur-xl"
+              value={ecosystem.id}
+              onChange={(event) => changeEcosystem(event.target.value)}
+            >
+              {ECOSYSTEMS.map((entry) => (
+                <option key={entry.id} value={entry.id}>
                   {entry.shortName}
-                </button>
-              )
-            })}
-          </div>
-        </header>
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <section className="flex flex-1 flex-col gap-3 pb-3 lg:grid lg:grid-cols-[15rem_1fr_17rem]">
-          <aside className="order-1 grid grid-cols-3 gap-2 lg:order-none lg:flex lg:flex-col">
-            {RELATION_LAYERS.map((layer) => {
-              const Icon = layer.icon
-              const isActive = layer.key === activeLayer.key
-              const count = getActiveEdges(ecosystem.edges, layer).length
+          <label className="relative w-[8.7rem] shrink-0 sm:w-[11rem]">
+            <span className="sr-only">Filtre</span>
+            <SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-white/70" />
+            <select
+              className={cn(
+                'h-11 w-full appearance-none truncate rounded-2xl border py-0 pl-9 pr-7 text-xs font-black outline-none backdrop-blur-xl',
+                activeLayer.chip,
+                'bg-[#05050A]/65',
+              )}
+              value={activeLayer.key}
+              onChange={(event) => changeLayer(event.target.value as RelationLayerKey)}
+            >
+              {RELATION_LAYERS.map((layer) => (
+                <option key={layer.key} value={layer.key}>
+                  {layer.shortLabel} ({getActiveEdges(ecosystem.edges, layer).length})
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </header>
 
-              return (
-                <button
-                  key={layer.key}
-                  type="button"
-                  className={cn(
-                    'flex min-w-0 items-center gap-2 rounded-2xl border px-2.5 py-2.5 text-left transition-all duration-300 lg:px-3 lg:py-3',
-                    isActive
-                      ? layer.chip
-                      : 'border-white/10 bg-white/[0.035] text-white/45 hover:bg-white/[0.06]',
-                  )}
-                  onClick={() => changeLayer(layer.key)}
-                >
-                  <Icon className="h-3.5 w-3.5 shrink-0 lg:h-4 lg:w-4" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-xs font-black">{layer.shortLabel}</span>
-                    <span className="block text-[0.62rem] text-white/35">
-                      {count} lien{count > 1 ? 's' : ''}
-                    </span>
-                  </span>
-                </button>
-              )
-            })}
-          </aside>
-
-          <div className="order-2 flex h-[48dvh] min-h-[23rem] max-h-[30rem] flex-col rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-2 lg:order-none lg:h-auto lg:min-h-[31rem] lg:max-h-none lg:rounded-[2rem] lg:p-3">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-white/35">
-                  {activeLayer.label}
-                </p>
-                <p className="mt-1 hidden text-sm leading-relaxed text-white/55 sm:line-clamp-2 sm:block">
-                  {activeLayer.description}
-                </p>
-              </div>
-              <div
-                className={cn(
-                  'shrink-0 rounded-2xl border px-3 py-2 text-xs font-black',
-                  activeLayer.chip,
-                )}
-              >
-                {activeEdges.length} actifs
-              </div>
-            </div>
-
-            <div className="relative mt-2 flex-1 overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#05050A]/70 lg:mt-3 lg:rounded-[1.5rem]">
+      <section className="relative mx-auto h-[100dvh] w-full max-w-5xl px-1 pt-16 pb-[max(8.5rem,env(safe-area-inset-bottom))] sm:px-5 lg:pb-5">
+        <div className="relative h-full w-full overflow-hidden">
               <svg
                 className="pointer-events-none absolute inset-0 h-full w-full"
                 preserveAspectRatio="none"
@@ -437,10 +385,9 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
                   </button>
                 )
               })}
-            </div>
-          </div>
+        </div>
 
-          <aside className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 order-3 max-h-[32dvh] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#08080F]/92 p-3 shadow-[0_-20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:static lg:order-none lg:max-h-none lg:overflow-visible lg:rounded-[2rem] lg:bg-white/[0.035] lg:p-4 lg:shadow-none lg:backdrop-blur-none">
+        <aside className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-30 mx-auto max-w-5xl overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#08080F]/88 p-3 shadow-[0_-20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:static lg:mt-3 lg:max-h-none lg:rounded-2xl lg:bg-white/[0.035] lg:shadow-none">
             <div className="flex items-center gap-2">
               {selectedSpecies?.image_url ? (
                 <img
@@ -481,7 +428,7 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
                   return (
                     <div
                       key={`${edge.source}-${edge.target}-${edge.relation}-detail`}
-                      className="rounded-2xl border border-white/10 bg-[#05050A]/60 p-3"
+                      className="border-t border-white/10 py-2 first:border-t-0"
                     >
                       <div className="flex items-center gap-2 text-[0.62rem] font-black uppercase tracking-[0.14em] text-white/35">
                         <span className={cn('h-2 w-2 rounded-full border', layer.chip)} />
@@ -494,19 +441,18 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
                   )
                 })
               ) : !selectedNodeId ? (
-                <div className="rounded-2xl border border-white/10 bg-[#05050A]/60 p-3 text-xs leading-relaxed text-white/45">
+                <p className="border-t border-white/10 pt-2 text-xs leading-relaxed text-white/45">
                   {activeEdges.length} liens visibles. Touchez une espece pour isoler ses
                   connexions.
-                </div>
+                </p>
               ) : (
-                <div className="rounded-2xl border border-white/10 bg-[#05050A]/60 p-3 text-xs leading-relaxed text-white/45">
+                <p className="border-t border-white/10 pt-2 text-xs leading-relaxed text-white/45">
                   Aucun lien visible dans ce calque pour le noeud selectionne.
-                </div>
+                </p>
               )}
             </div>
-          </aside>
-        </section>
-      </div>
+        </aside>
+      </section>
     </main>
   )
 }
