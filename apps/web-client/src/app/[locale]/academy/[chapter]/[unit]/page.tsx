@@ -37,12 +37,14 @@ import {
   getActiveUnit,
   getChapterBySlug,
   getDefaultAcademyProgress,
+  getNextLessonForUnit,
   getUnitPrerequisite,
   getUnitBySlug,
   getEventUnitBySlug,
   isRewardAlreadyEarned,
   type AcademyDragDropExercise,
   type AcademyExercise,
+  type AcademyLesson,
   type AcademyQuizExercise,
   type AcademyStoryExercise,
   type AcademySwipeExercise,
@@ -954,7 +956,7 @@ export default function ExerciseEngine() {
   const [progress, setProgress] = useState(() => getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID))
   const [isProgressReady, setIsProgressReady] = useState(false)
   const alreadyCompleted = unit
-    ? progress.completedUnitIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
+    ? progress.completedUnitIds.includes(unit.id) || progress.completedEventIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
     : false
   const isLockedUnit = unit && isProgressReady && !isEvent ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
   const prerequisiteUnit = unit && !isEvent ? getUnitPrerequisite(unit.id, progress) ?? getActiveUnit(academyRepository.getCurriculum(), progress) : null
@@ -968,10 +970,14 @@ export default function ExerciseEngine() {
   const [mistakes, setMistakes] = useState(0)
   const [showComboAnimation, setShowComboAnimation] = useState<{ show: boolean; level: number } | null>(null)
   const [attempt, setAttempt] = useState(0)
+  const activeLesson: AcademyLesson | null = unit ? getNextLessonForUnit(unit, progress) : null
+  const [sessionExercises, setSessionExercises] = useState<AcademyExercise[]>(() => activeLesson?.exercises ?? unit?.exercises ?? [])
+  const [missedConceptIds, setMissedConceptIds] = useState<string[]>([])
 
-  const currentExercise = unit?.exercises[currentStepIndex] ?? null
-  const isFinished = Boolean(unit && currentStepIndex >= unit.exercises.length)
+  const currentExercise = sessionExercises[currentStepIndex] ?? null
+  const isFinished = Boolean(unit && currentStepIndex >= sessionExercises.length)
   const isGameOver = lives === 0
+  const canEarnUnitReward = Boolean(unit && activeLesson && activeLesson.order === unit.lessons.length && !alreadyCompleted)
 
   useEffect(() => {
     const nextProgress = academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID)
@@ -980,15 +986,38 @@ export default function ExerciseEngine() {
     setIsProgressReady(true)
   }, [])
 
+  useEffect(() => {
+    setSessionExercises(activeLesson?.exercises ?? unit?.exercises ?? [])
+    setCurrentStepIndex(0)
+    setFeedback(null)
+    setMissedConceptIds([])
+  }, [activeLesson?.id, unit?.id])
+
   const handleResult = (correct: boolean, text: string) => {
     if (!correct) {
       setLives((previous) => Math.max(0, previous - 1))
       setMistakes((previous) => previous + 1)
       setComboCount(0)
+      if (currentExercise?.conceptId) {
+        setMissedConceptIds((previous) =>
+          previous.includes(currentExercise.conceptId!)
+            ? previous
+            : [...previous, currentExercise.conceptId!],
+        )
+        const retryExercise = {
+          ...currentExercise,
+          id: `${currentExercise.id}-retry-${attempt + 1}`,
+        } as AcademyExercise
+        setSessionExercises((previous) =>
+          previous.some((exercise) => exercise.id === retryExercise.id)
+            ? previous
+            : [...previous, retryExercise],
+        )
+      }
     } else {
       setComboCount((previous) => {
         const nextCount = previous + 1
-        if (nextCount === 3 || nextCount === unit?.exercises.length) {
+        if (nextCount === 3 || nextCount === sessionExercises.length) {
           setShowComboAnimation({ show: true, level: nextCount })
         }
         return nextCount
@@ -1009,10 +1038,14 @@ export default function ExerciseEngine() {
   }
 
   const handleFinish = () => {
-    if (unit) {
-      const correctAnswers = Math.max(0, unit.exercises.length - mistakes)
-      const score = Math.round((correctAnswers / unit.exercises.length) * 100)
-      academyRepository.completeUnit(MOCK_ACADEMY_VIEWER_ID, unit.id, { score, mistakes })
+    if (unit && activeLesson) {
+      const correctAnswers = Math.max(0, sessionExercises.length - mistakes)
+      const score = Math.round((correctAnswers / sessionExercises.length) * 100)
+      academyRepository.completeLesson(MOCK_ACADEMY_VIEWER_ID, unit.id, activeLesson.id, {
+        score,
+        mistakes,
+        missedConceptIds,
+      })
     }
     router.push('/academy')
   }
@@ -1029,6 +1062,8 @@ export default function ExerciseEngine() {
     setComboCount(0)
     setMistakes(0)
     setShowComboAnimation(null)
+    setMissedConceptIds([])
+    setSessionExercises(activeLesson?.exercises ?? unit?.exercises ?? [])
     setAttempt((previous) => previous + 1)
   }
 
@@ -1093,12 +1128,12 @@ export default function ExerciseEngine() {
   return (
     <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="relative flex h-full flex-col overflow-hidden">
       {isFinished ? (
-        <VictoryScreen unit={unit} alreadyCompleted={alreadyCompleted} onFinish={handleFinish} />
+        <VictoryScreen unit={unit} alreadyCompleted={!canEarnUnitReward} onFinish={handleFinish} />
       ) : isGameOver ? (
         <GameOverScreen onQuit={handleQuit} onRetry={handleRetry} />
       ) : (
         <>
-          <ExerciseHeader progress={currentStepIndex} total={unit.exercises.length} onQuit={() => setShowQuitModal(true)} lives={lives} />
+          <ExerciseHeader progress={currentStepIndex} total={sessionExercises.length} onQuit={() => setShowQuitModal(true)} lives={lives} />
           <div className="relative h-full w-full flex-1">
             <AnimatePresence mode="wait">
               {currentExercise && (

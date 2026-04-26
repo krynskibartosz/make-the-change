@@ -35,6 +35,10 @@ import {
   getDefaultAcademyProgress,
   getCurrentChapter,
   getNextChapter,
+  getCursusById,
+  getCursusOptions,
+  getCompletedLessonCountForUnit,
+  getNextLessonForUnit,
   isRewardAlreadyEarned,
   getActiveEvents,
   getArchivedEvents,
@@ -65,6 +69,10 @@ function useAcademySurface() {
     setProgress(academyRepository.resetProgress(MOCK_ACADEMY_VIEWER_ID))
   }, [])
 
+  const setCursus = useCallback((cursusId: AcademyProgress['selectedCursusId']) => {
+    setProgress(academyRepository.setCursus(MOCK_ACADEMY_VIEWER_ID, cursusId))
+  }, [])
+
   useEffect(() => {
     refresh()
   }, [refresh])
@@ -74,7 +82,7 @@ function useAcademySurface() {
     [progress],
   )
 
-  return { chapters, progress, reset }
+  return { chapters, progress, reset, setCursus }
 }
 
 function MascotSpacer({
@@ -282,6 +290,47 @@ function CourseLoadingScreen({ onComplete }: { onComplete: () => void }) {
   )
 }
 
+function CursusSelector({
+  selectedId,
+  onSelect,
+}: {
+  selectedId: AcademyProgress['selectedCursusId']
+  onSelect: (cursusId: AcademyProgress['selectedCursusId']) => void
+}) {
+  const cursusOptions = getCursusOptions()
+  const selected = getCursusById(selectedId)
+
+  return (
+    <section className="mb-4 rounded-2xl border border-white/10 bg-black/35 p-3">
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/35">Cursus actif</p>
+          <h2 className="text-lg font-black text-white">{selected.title}</h2>
+          <p className="text-xs font-medium leading-relaxed text-white/50">{selected.subtitle}</p>
+        </div>
+        <Brain className="mt-1 h-5 w-5 shrink-0 text-emerald-300" />
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {cursusOptions.map((cursus) => (
+          <button
+            key={cursus.id}
+            type="button"
+            onClick={() => onSelect(cursus.id)}
+            className={cn(
+              'min-h-12 rounded-xl border px-2 py-2 text-[10px] font-black leading-tight transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
+              cursus.id === selectedId
+                ? 'border-emerald-400 bg-emerald-400/15 text-emerald-100'
+                : 'border-white/10 bg-white/5 text-white/45 active:scale-95',
+            )}
+          >
+            {cursus.title}
+          </button>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 function UnitNode({
   unit,
   onSelect,
@@ -408,6 +457,14 @@ function EventCard({ event, onStart }: { event: AcademyEvent; onStart: (e: Acade
         <p className="text-[10px] font-black uppercase tracking-[0.15em] text-amber-400/80">{event.sponsor.name}</p>
         <h3 className="text-sm font-black leading-snug text-white">{event.title}</h3>
         <p className="line-clamp-2 text-[11px] leading-relaxed text-white/55">{event.description}</p>
+        <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-2">
+          <p className="text-[10px] font-bold leading-relaxed text-white/50">
+            {event.sponsor.fundedAmount.toLocaleString('fr-FR')} € financés · {event.location}
+          </p>
+          <p className="mt-1 line-clamp-2 text-[10px] leading-relaxed text-amber-100/65">
+            {event.transparencyNote}
+          </p>
+        </div>
         {pct !== null && (
           <div className="mt-auto pt-2">
             <div className="mb-1 flex justify-between text-[10px] font-bold">
@@ -562,7 +619,7 @@ function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
 
 export default function AcademyPage() {
   const router = useRouter()
-  const { chapters, progress, reset } = useAcademySurface()
+  const { chapters, progress, reset, setCursus } = useAcademySurface()
   const [selectedUnit, setSelectedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [lockedUnit, setLockedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [loadingTarget, setLoadingTarget] = useState<string | null>(null)
@@ -582,6 +639,8 @@ export default function AcademyPage() {
   const selectedRewardEarned = selectedUnit
     ? isRewardAlreadyEarned(progress, selectedUnit.id)
     : false
+  const selectedLesson = selectedUnit ? getNextLessonForUnit(selectedUnit, progress) : null
+  const selectedCompletedLessons = selectedUnit ? getCompletedLessonCountForUnit(selectedUnit, progress) : 0
 
   const handleResetConfirmed = useCallback(() => {
     reset()
@@ -670,6 +729,7 @@ export default function AcademyPage() {
         </header>
 
         <main className="px-5 pt-[calc(5rem+env(safe-area-inset-top))]">
+          <CursusSelector selectedId={progress.selectedCursusId} onSelect={setCursus} />
           <EventCarousel onStartEvent={(event) => setLoadingTarget(`/academy/events/${event.slug}`)} />
           <ChapterBanner chapter={currentChapter} />
 
@@ -812,14 +872,19 @@ export default function AcademyPage() {
                   <span className="mb-1 block text-[10px] font-black uppercase tracking-[0.16em] text-emerald-300">
                     Objectif
                   </span>
-                  <p className="text-sm font-medium leading-relaxed text-white/80">{selectedUnit.learningGoal}</p>
+                  <p className="text-sm font-medium leading-relaxed text-white/80">
+                    {selectedLesson?.learningGoal ?? selectedUnit.learningGoal}
+                  </p>
                 </div>
                 <div className="mb-auto flex flex-wrap justify-center gap-3">
                   <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-lg">
-                    <Clock className="h-4 w-4 text-white/50" /> {selectedUnit.estimatedMinutes}
+                    <Clock className="h-4 w-4 text-white/50" /> {selectedLesson?.estimatedMinutes ?? selectedUnit.estimatedMinutes}
                   </div>
                   <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-lg">
-                    <Brain className="h-4 w-4 text-white/50" /> {selectedUnit.exercises.length} exercices
+                    <Brain className="h-4 w-4 text-white/50" /> {selectedLesson?.exercises.length ?? selectedUnit.exercises.length} exercices
+                  </div>
+                  <div className="flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-sm font-medium text-amber-100 shadow-lg">
+                    <Crown className="h-4 w-4 text-amber-300" /> Leçon {Math.min(selectedCompletedLessons + 1, selectedUnit.lessons.length)} / {selectedUnit.lessons.length}
                   </div>
                 </div>
               </div>

@@ -5,6 +5,18 @@ export type AcademyMascot = 'ondine' | 'sylva' | 'abeille-transparente'
 export type AcademyUnitStatus = 'completed' | 'active' | 'locked'
 export type AcademyChapterStatus = 'completed' | 'active' | 'locked'
 export type AcademyExerciseType = 'STORY' | 'SWIPE' | 'DRAG_DROP' | 'QUIZ'
+export type AcademyCursusId = 'living-mechanics' | 'nature-mysteries' | 'climate-solutions'
+export type AcademyLessonKind = 'discovery' | 'practice' | 'mastery' | 'legendary'
+export type AcademySponsorTier = 'trusted' | 'transition' | 'blocked'
+export type AcademyVerificationStatus = 'verified' | 'pending' | 'self_reported'
+
+export type AcademyCursus = {
+  id: AcademyCursusId
+  title: string
+  subtitle: string
+  tone: string
+  accentClass: string
+}
 
 export type AcademyReward = {
   type: 'seeds'
@@ -15,6 +27,9 @@ export type AcademyReward = {
 export type AcademyStoryExercise = {
   id: string
   type: 'STORY'
+  conceptId?: string
+  difficulty?: 'easy' | 'medium' | 'hard'
+  variantOf?: string
   screens: Array<{
     text: string
     imageUrl?: string
@@ -25,6 +40,9 @@ export type AcademyStoryExercise = {
 export type AcademySwipeExercise = {
   id: string
   type: 'SWIPE'
+  conceptId?: string
+  difficulty?: 'easy' | 'medium' | 'hard'
+  variantOf?: string
   question: string
   card: {
     title: string
@@ -41,6 +59,9 @@ export type AcademySwipeExercise = {
 export type AcademyDragDropExercise = {
   id: string
   type: 'DRAG_DROP'
+  conceptId?: string
+  difficulty?: 'easy' | 'medium' | 'hard'
+  variantOf?: string
   instruction: string
   items: Array<{
     id: string
@@ -51,6 +72,9 @@ export type AcademyDragDropExercise = {
 export type AcademyQuizExercise = {
   id: string
   type: 'QUIZ'
+  conceptId?: string
+  difficulty?: 'easy' | 'medium' | 'hard'
+  variantOf?: string
   question: string
   options: Array<{
     text: string
@@ -65,6 +89,26 @@ export type AcademyExercise =
   | AcademySwipeExercise
   | AcademyDragDropExercise
   | AcademyQuizExercise
+
+export type AcademyQuestionPool = {
+  conceptIds: string[]
+  story: AcademyStoryExercise[]
+  swipe: AcademySwipeExercise[]
+  dragDrop: AcademyDragDropExercise[]
+  quiz: AcademyQuizExercise[]
+}
+
+export type AcademyLesson = {
+  id: string
+  slug: string
+  title: string
+  kind: AcademyLessonKind
+  order: number
+  estimatedMinutes: string
+  learningGoal: string
+  reward?: AcademyReward
+  exercises: AcademyExercise[]
+}
 
 export type AcademyUnit = {
   id: string
@@ -81,6 +125,8 @@ export type AcademyUnit = {
   lockedHint?: string
   mascot: AcademyMascot
   reward: AcademyReward
+  lessons: AcademyLesson[]
+  questionPool: AcademyQuestionPool
   exercises: AcademyExercise[]
 }
 
@@ -104,11 +150,36 @@ export type AcademyUnitResult = {
   rewardEarned: number
 }
 
+export type AcademyLessonResult = {
+  lessonId: string
+  unitId: string
+  completedAt: string
+  score: number
+  mistakes: number
+  missedConceptIds: string[]
+}
+
+export type AcademyMistakeQueueItem = {
+  id: string
+  unitId: string
+  lessonId: string
+  exerciseId: string
+  conceptId: string
+  missedAt: string
+  resolved: boolean
+}
+
 export type AcademyProgress = {
   viewerId: string
+  selectedCursusId: AcademyCursusId
   completedUnitIds: string[]
+  completedEventIds: string[]
+  completedLessonIds: string[]
   activeUnitId: string
   unitResults: Record<string, AcademyUnitResult>
+  eventResults: Record<string, AcademyUnitResult>
+  lessonResults: Record<string, AcademyLessonResult>
+  mistakeQueue: AcademyMistakeQueueItem[]
   seedsBalance: number
   streak: {
     current: number
@@ -137,6 +208,13 @@ export type AcademyRepository = {
   getCurriculum(): AcademyChapter[]
   getProgress(viewerId: string): AcademyProgress
   saveProgress(viewerId: string, progress: AcademyProgress): AcademyProgress
+  setCursus(viewerId: string, cursusId: AcademyCursusId): AcademyProgress
+  completeLesson(
+    viewerId: string,
+    unitId: string,
+    lessonId: string,
+    result: Pick<AcademyLessonResult, 'score' | 'mistakes' | 'missedConceptIds'>,
+  ): AcademyProgress
   completeUnit(
     viewerId: string,
     unitId: string,
@@ -147,6 +225,12 @@ export type AcademyRepository = {
 
 export type AcademyEventSponsor = {
   name: string
+  tier: AcademySponsorTier
+  disclosure: string
+  fundedAmount: number
+  fundedAt: string
+  verificationStatus: AcademyVerificationStatus
+  claimBasis: string
   logoUrl?: string
   projectUrl?: string
 }
@@ -162,6 +246,10 @@ export type AcademyEvent = {
   expiresAt: string
   fundingGoal?: number
   fundingCurrent?: number
+  location: string
+  impactTarget: string
+  proofUrl?: string
+  transparencyNote: string
   mascot: AcademyMascot
   reward: AcademyReward
   archiveImageUrl?: string
@@ -189,9 +277,160 @@ const makeReward = (amount: number): AcademyReward => ({
   label: `${amount} Graines`,
 })
 
+export const ACADEMY_CURSUS: AcademyCursus[] = [
+  {
+    id: 'living-mechanics',
+    title: 'Mécanique du Vivant',
+    subtitle: 'Comprendre les rouages des écosystèmes.',
+    tone: 'Scientifique, précis, progressif.',
+    accentClass: 'emerald',
+  },
+  {
+    id: 'nature-mysteries',
+    title: 'Mystères de la Nature',
+    subtitle: 'Découvrir les super-pouvoirs du vivant.',
+    tone: 'Fascinant, visuel, accessible.',
+    accentClass: 'amber',
+  },
+  {
+    id: 'climate-solutions',
+    title: 'Défis Climat & Solutions',
+    subtitle: 'Relier savoir, terrain et passage à l’action.',
+    tone: 'Concret, lucide, orienté impact.',
+    accentClass: 'sky',
+  },
+]
+
+const normalizeConceptId = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+
+const getUnitConceptId = (unitId: string, concept: string) =>
+  `${unitId}-${normalizeConceptId(concept)}`
+
+const tagExercise = <T extends AcademyExercise>(
+  exercise: T,
+  conceptId: string,
+  difficulty: NonNullable<T['difficulty']>,
+  suffix: string,
+): T => ({
+  ...exercise,
+  id: `${exercise.id}-${suffix}`,
+  conceptId: exercise.conceptId ?? conceptId,
+  difficulty: exercise.difficulty ?? difficulty,
+  variantOf: exercise.variantOf ?? exercise.id,
+})
+
+const buildQuestionPool = (
+  unitId: string,
+  concept: string,
+  exercises: AcademyExercise[],
+): AcademyQuestionPool => {
+  const conceptId = getUnitConceptId(unitId, concept)
+  const tagged = exercises.map((exercise, index) =>
+    tagExercise(exercise, conceptId, index < 4 ? 'easy' : index < 9 ? 'medium' : 'hard', 'pool'),
+  )
+
+  return {
+    conceptIds: [conceptId],
+    story: tagged.filter((exercise): exercise is AcademyStoryExercise => exercise.type === 'STORY'),
+    swipe: tagged.filter((exercise): exercise is AcademySwipeExercise => exercise.type === 'SWIPE'),
+    dragDrop: tagged.filter((exercise): exercise is AcademyDragDropExercise => exercise.type === 'DRAG_DROP'),
+    quiz: tagged.filter((exercise): exercise is AcademyQuizExercise => exercise.type === 'QUIZ'),
+  }
+}
+
+const takeCycled = (
+  items: AcademyExercise[],
+  count: number,
+  difficulty: NonNullable<AcademyExercise['difficulty']>,
+  suffix: string,
+): AcademyExercise[] => {
+  if (items.length === 0) return []
+  return Array.from({ length: count }, (_, index) => {
+    const item = items[index % items.length]!
+    return tagExercise(item, item.conceptId ?? 'general', difficulty, `${suffix}-${index + 1}`)
+  })
+}
+
+const buildLessons = (
+  unit: Pick<AcademyUnit, 'id' | 'title' | 'concept'> & { rewardAmount: number },
+  exercises: AcademyExercise[],
+  questionPool: AcademyQuestionPool,
+): AcademyLesson[] => {
+  const conceptId = questionPool.conceptIds[0] ?? 'general'
+  const discoveryExercises = exercises.map((exercise, index) =>
+    tagExercise(exercise, conceptId, index < 4 ? 'easy' : index < 9 ? 'medium' : 'hard', 'discovery'),
+  )
+
+  return [
+    {
+      id: `${unit.id}-lesson-1`,
+      slug: 'decouverte',
+      title: 'Découverte',
+      kind: 'discovery',
+      order: 1,
+      estimatedMinutes: '3 min',
+      learningGoal: `Découvrir les bases : ${unit.concept}.`,
+      exercises: discoveryExercises,
+    },
+    {
+      id: `${unit.id}-lesson-2`,
+      slug: 'revision-active',
+      title: 'Révision active',
+      kind: 'practice',
+      order: 2,
+      estimatedMinutes: '3 min',
+      learningGoal: `Retrouver ${unit.concept.toLowerCase()} sans relire la théorie.`,
+      exercises: [
+        ...takeCycled(questionPool.swipe, 6, 'medium', 'practice-sw'),
+        ...takeCycled(questionPool.dragDrop, 2, 'medium', 'practice-dd'),
+        ...takeCycled(questionPool.quiz, 4, 'medium', 'practice-qz'),
+      ],
+    },
+    {
+      id: `${unit.id}-lesson-3`,
+      slug: 'maitrise',
+      title: 'Maîtrise',
+      kind: 'mastery',
+      order: 3,
+      estimatedMinutes: '3-4 min',
+      learningGoal: `Utiliser ${unit.concept.toLowerCase()} dans des liens logiques.`,
+      exercises: [
+        ...takeCycled(questionPool.swipe, 4, 'medium', 'mastery-sw'),
+        ...takeCycled(questionPool.quiz, 4, 'hard', 'mastery-qz'),
+        ...takeCycled(questionPool.dragDrop, 4, 'hard', 'mastery-dd'),
+      ],
+    },
+    {
+      id: `${unit.id}-lesson-4`,
+      slug: 'couronne',
+      title: 'Couronne',
+      kind: 'legendary',
+      order: 4,
+      estimatedMinutes: '3-4 min',
+      learningGoal: `Prouver que ${unit.concept.toLowerCase()} est vraiment acquis.`,
+      reward: makeReward(unit.rewardAmount),
+      exercises: [
+        ...takeCycled(questionPool.quiz, 5, 'hard', 'legendary-qz'),
+        ...takeCycled(questionPool.dragDrop, 3, 'hard', 'legendary-dd'),
+        ...takeCycled(questionPool.swipe, 4, 'hard', 'legendary-sw'),
+      ],
+    },
+  ]
+}
+
 const makeUnit = (
-  unit: Omit<AcademyUnit, 'reward'> & { rewardAmount: number },
-): AcademyUnit => ({
+  unit: Omit<AcademyUnit, 'reward' | 'lessons' | 'questionPool'> & { rewardAmount: number; lessons?: AcademyLesson[] },
+): AcademyUnit => {
+  const questionPool = buildQuestionPool(unit.id, unit.concept, unit.exercises)
+  const lessons = unit.lessons ?? buildLessons(unit, unit.exercises, questionPool)
+
+  return {
   id: unit.id,
   slug: unit.slug,
   chapterId: unit.chapterId,
@@ -208,8 +447,11 @@ const makeUnit = (
   lockedHint: unit.lockedHint ?? 'Termine ton unité active pour débloquer celle-ci.',
   mascot: unit.mascot,
   reward: makeReward(unit.rewardAmount),
-  exercises: unit.exercises,
-})
+  lessons,
+  questionPool,
+  exercises: lessons[0]?.exercises ?? unit.exercises,
+  }
+}
 
 const ACADEMY_CURRICULUM: AcademyChapter[] = [
   {
@@ -1103,11 +1345,23 @@ export const ACTIVE_EVENTS: AcademyEvent[] = [
       'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1200&auto=format&fit=crop',
     sponsor: {
       name: "L'Occitane en Provence",
+      tier: 'transition',
+      disclosure:
+        "Marque en transition : le contenu pédagogique reste éditorialement contrôlé par Biolingo, le sponsor finance le projet et sa visibilité.",
+      fundedAmount: 3240,
+      fundedAt: '2026-04-12',
+      verificationStatus: 'self_reported',
+      claimBasis: 'Montant déclaré pour le prototype, à remplacer par une preuve partenaire avant production.',
       projectUrl: 'https://loccitane.com',
     },
     expiresAt: '2026-05-15T23:59:59Z',
     fundingGoal: 5000,
     fundingCurrent: 3240,
+    location: 'Moorea, Polynésie française',
+    impactTarget: '1 000 boutures de corail fixées sur socles artificiels',
+    proofUrl: 'https://loccitane.com',
+    transparencyNote:
+      "Ce prototype n'affirme pas que la marque est verte : il affiche un financement précis pour un projet précis.",
     mascot: 'ondine',
     reward: { type: 'seeds', amount: 40, label: '40 Graines' },
     exercises: [
@@ -1168,10 +1422,25 @@ export const ARCHIVED_EVENTS: AcademyEvent[] = [
       "Patagonia a financé 2 000 propagules de mangrove sur la côte sénégalaise. Mission accomplie — voici le bilan.",
     imageUrl:
       'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1200&auto=format&fit=crop',
-    sponsor: { name: 'Patagonia', projectUrl: 'https://patagonia.com' },
+    sponsor: {
+      name: 'Patagonia',
+      tier: 'trusted',
+      disclosure:
+        'Partenaire à forte cohérence nature/outdoor. Archive conservée comme preuve de projet terminé.',
+      fundedAmount: 8000,
+      fundedAt: '2025-12-31',
+      verificationStatus: 'verified',
+      claimBasis: 'Bilan de prototype : 2 000 propagules, 12 ha restaurés.',
+      projectUrl: 'https://patagonia.com',
+    },
     expiresAt: '2025-12-31T23:59:59Z',
     fundingGoal: 8000,
     fundingCurrent: 8000,
+    location: 'Côte sénégalaise',
+    impactTarget: '2 000 propagules de mangrove plantées',
+    proofUrl: 'https://patagonia.com',
+    transparencyNote:
+      'Archive pédagogique : le financement est terminé, la leçon reste jouable et renvoie vers le bilan.',
     mascot: 'sylva',
     reward: { type: 'seeds', amount: 35, label: '35 Graines' },
     archiveImageUrl:
@@ -1229,6 +1498,12 @@ export function getEventUnitBySlug(slug: string): AcademyUnit | null {
   const allEvents = [...ACTIVE_EVENTS, ...ARCHIVED_EVENTS]
   const event = allEvents.find((e) => e.slug === slug || e.id === slug)
   if (!event) return null
+  const questionPool = buildQuestionPool(event.id, event.title, event.exercises)
+  const lessons = buildLessons(
+    { id: event.id, title: event.title, concept: event.title, rewardAmount: event.reward.amount },
+    event.exercises,
+    questionPool,
+  )
 
   return {
     id: event.id,
@@ -1245,7 +1520,9 @@ export function getEventUnitBySlug(slug: string): AcademyUnit | null {
     lockedHint: '',
     mascot: event.mascot,
     reward: event.reward,
-    exercises: event.exercises,
+    lessons,
+    questionPool,
+    exercises: lessons[0]?.exercises ?? event.exercises,
   }
 }
 
@@ -1281,9 +1558,15 @@ const getDefaultProgress = (viewerId: string): AcademyProgress => {
 
   return {
     viewerId,
+    selectedCursusId: 'living-mechanics',
     completedUnitIds: [],
+    completedEventIds: [],
+    completedLessonIds: [],
     activeUnitId: firstUnit.id,
     unitResults: {},
+    eventResults: {},
+    lessonResults: {},
+    mistakeQueue: [],
     seedsBalance: 0,
     streak: {
       current: 0,
@@ -1314,9 +1597,22 @@ const normalizeProgress = (viewerId: string, value: unknown): AcademyProgress =>
   }
 
   const allUnitIds = new Set(flattenUnits().map((unit) => unit.id))
+  const allEventIds = new Set([...ACTIVE_EVENTS, ...ARCHIVED_EVENTS].map((event) => event.id))
+  const allLessonIds = new Set([
+    ...flattenUnits().flatMap((unit) => unit.lessons.map((lesson) => lesson.id)),
+    ...[...ACTIVE_EVENTS, ...ARCHIVED_EVENTS].flatMap((event) =>
+      getEventUnitBySlug(event.slug)?.lessons.map((lesson) => lesson.id) ?? [],
+    ),
+  ])
   const completedUnitIds = Array.isArray(value.completedUnitIds)
     ? value.completedUnitIds.filter((id): id is string => typeof id === 'string' && allUnitIds.has(id))
     : defaults.completedUnitIds
+  const completedEventIds = Array.isArray(value.completedEventIds)
+    ? value.completedEventIds.filter((id): id is string => typeof id === 'string' && allEventIds.has(id))
+    : defaults.completedEventIds
+  const completedLessonIds = Array.isArray(value.completedLessonIds)
+    ? value.completedLessonIds.filter((id): id is string => typeof id === 'string' && allLessonIds.has(id))
+    : defaults.completedLessonIds
 
   const unitResults = isRecord(value.unitResults)
     ? Object.fromEntries(
@@ -1325,15 +1621,42 @@ const normalizeProgress = (viewerId: string, value: unknown): AcademyProgress =>
         ),
       ) as Record<string, AcademyUnitResult>
     : defaults.unitResults
+  const eventResults = isRecord(value.eventResults)
+    ? Object.fromEntries(
+        Object.entries(value.eventResults).filter(
+          ([unitId, result]) => allEventIds.has(unitId) && isRecord(result),
+        ),
+      ) as Record<string, AcademyUnitResult>
+    : defaults.eventResults
+  const lessonResults = isRecord(value.lessonResults)
+    ? Object.fromEntries(
+        Object.entries(value.lessonResults).filter(
+          ([lessonId, result]) => allLessonIds.has(lessonId) && isRecord(result),
+        ),
+      ) as Record<string, AcademyLessonResult>
+    : defaults.lessonResults
 
   const streak = isRecord(value.streak) ? value.streak : {}
   const lives = isRecord(value.lives) ? value.lives : {}
+  const selectedCursusId =
+    typeof value.selectedCursusId === 'string' &&
+    ACADEMY_CURSUS.some((cursus) => cursus.id === value.selectedCursusId)
+      ? (value.selectedCursusId as AcademyCursusId)
+      : defaults.selectedCursusId
 
   return {
     viewerId,
+    selectedCursusId,
     completedUnitIds,
+    completedEventIds,
+    completedLessonIds,
     activeUnitId: getNextActiveUnitId(completedUnitIds),
     unitResults,
+    eventResults,
+    lessonResults,
+    mistakeQueue: Array.isArray(value.mistakeQueue)
+      ? value.mistakeQueue.filter((entry): entry is AcademyMistakeQueueItem => isRecord(entry) && typeof entry.id === 'string')
+      : [],
     seedsBalance:
       typeof value.seedsBalance === 'number' && Number.isFinite(value.seedsBalance)
         ? Math.max(0, Math.floor(value.seedsBalance))
@@ -1395,7 +1718,8 @@ const writeStoredProgress = (entries: Record<string, AcademyProgress>) => {
 }
 
 const getUnitById = (unitId: string): AcademyUnit | null =>
-  flattenUnits().find((unit) => unit.id === unitId) ?? null
+  flattenUnits().find((unit) => unit.id === unitId) ??
+  getEventUnitBySlug(unitId)
 
 const getStoredProgressEntries = (): Record<string, AcademyProgress> => {
   const rawEntries = readStoredProgress()
@@ -1425,6 +1749,115 @@ export const localAcademyRepository: AcademyRepository = {
       [viewerId]: nextProgress,
     })
     return nextProgress
+  },
+
+  setCursus(viewerId, cursusId) {
+    const current = this.getProgress(viewerId)
+    return this.saveProgress(viewerId, {
+      ...current,
+      selectedCursusId: cursusId,
+    })
+  },
+
+  completeLesson(viewerId, unitId, lessonId, result) {
+    const unit = getUnitById(unitId)
+    const lesson = unit?.lessons.find((entry) => entry.id === lessonId)
+    if (!unit || !lesson) {
+      return this.getProgress(viewerId)
+    }
+
+    const current = this.getProgress(viewerId)
+    const timestamp = new Date().toISOString()
+    const today = getLocalDayKey()
+    const yesterday = getYesterdayDayKey(today)
+    const completedDays = current.streak.completedDays.includes(today)
+      ? current.streak.completedDays
+      : [...current.streak.completedDays, today].sort()
+    const nextCurrentStreak =
+      current.streak.lastActivityDay === today
+        ? current.streak.current || 1
+        : current.streak.lastActivityDay === yesterday
+          ? current.streak.current + 1
+          : 1
+    const isEvent = unit.chapterId === 'events'
+    const wasRewardAlreadyEarned = isEvent
+      ? Boolean(current.eventResults[unitId]?.rewardEarned)
+      : Boolean(current.unitResults[unitId]?.rewardEarned)
+    const completedLessonIds = current.completedLessonIds.includes(lessonId)
+      ? current.completedLessonIds
+      : [...current.completedLessonIds, lessonId]
+    const unitLessonIds = unit.lessons.map((entry) => entry.id)
+    const hasCompletedAllLessons = unitLessonIds.every((id) => completedLessonIds.includes(id))
+    const completedUnitIds = isEvent || !hasCompletedAllLessons || current.completedUnitIds.includes(unitId)
+      ? current.completedUnitIds
+      : [...current.completedUnitIds, unitId]
+    const completedEventIds = !isEvent || !hasCompletedAllLessons || current.completedEventIds.includes(unitId)
+      ? current.completedEventIds
+      : [...current.completedEventIds, unitId]
+    const resultRecord: AcademyUnitResult = {
+      unitId,
+      completedAt: (isEvent ? current.eventResults[unitId] : current.unitResults[unitId])?.completedAt ?? timestamp,
+      score: Math.max((isEvent ? current.eventResults[unitId] : current.unitResults[unitId])?.score ?? 0, result.score),
+      mistakes: Math.min((isEvent ? current.eventResults[unitId] : current.unitResults[unitId])?.mistakes ?? result.mistakes, result.mistakes),
+      rewardEarned: (isEvent ? current.eventResults[unitId] : current.unitResults[unitId])?.rewardEarned ?? unit.reward.amount,
+    }
+    const mistakeQueueAdditions = result.missedConceptIds.map((conceptId, index): AcademyMistakeQueueItem => ({
+      id: `${lessonId}-${conceptId}-${timestamp}-${index}`,
+      unitId,
+      lessonId,
+      exerciseId: lesson.exercises.find((exercise) => exercise.conceptId === conceptId)?.id ?? lesson.id,
+      conceptId,
+      missedAt: timestamp,
+      resolved: false,
+    }))
+
+    return this.saveProgress(viewerId, {
+      ...current,
+      completedLessonIds,
+      completedUnitIds,
+      completedEventIds,
+      activeUnitId: getNextActiveUnitId(completedUnitIds),
+      unitResults: isEvent
+        ? current.unitResults
+        : {
+            ...current.unitResults,
+            [unitId]: resultRecord,
+          },
+      eventResults: isEvent
+        ? {
+            ...current.eventResults,
+            [unitId]: resultRecord,
+          }
+        : current.eventResults,
+      lessonResults: {
+        ...current.lessonResults,
+        [lessonId]: {
+          lessonId,
+          unitId,
+          completedAt: current.lessonResults[lessonId]?.completedAt ?? timestamp,
+          score: Math.max(current.lessonResults[lessonId]?.score ?? 0, result.score),
+          mistakes: Math.min(current.lessonResults[lessonId]?.mistakes ?? result.mistakes, result.mistakes),
+          missedConceptIds: Array.from(new Set([
+            ...(current.lessonResults[lessonId]?.missedConceptIds ?? []),
+            ...result.missedConceptIds,
+          ])),
+        },
+      },
+      mistakeQueue: [...current.mistakeQueue, ...mistakeQueueAdditions],
+      seedsBalance: wasRewardAlreadyEarned || !hasCompletedAllLessons
+        ? current.seedsBalance
+        : current.seedsBalance + unit.reward.amount,
+      streak: {
+        current: nextCurrentStreak,
+        best: Math.max(current.streak.best, nextCurrentStreak),
+        lastActivityDay: today,
+        completedDays,
+      },
+      lives: {
+        remaining: 5,
+        updatedAt: timestamp,
+      },
+    })
   },
 
   completeUnit(viewerId, unitId, result) {
@@ -1519,6 +1952,41 @@ export function getNextUnit(unitId: string): AcademyUnit | null {
   return currentIndex >= 0 ? units[currentIndex + 1] ?? null : null
 }
 
+export function getCursusOptions(): AcademyCursus[] {
+  return ACADEMY_CURSUS
+}
+
+export function getCursusById(cursusId: AcademyCursusId): AcademyCursus {
+  return ACADEMY_CURSUS.find((cursus) => cursus.id === cursusId) ?? ACADEMY_CURSUS[0]!
+}
+
+export function getNextLessonForUnit(
+  unit: AcademyUnit,
+  progress: AcademyProgress,
+): AcademyLesson {
+  return (
+    unit.lessons.find((lesson) => !progress.completedLessonIds.includes(lesson.id)) ??
+    unit.lessons[unit.lessons.length - 1] ??
+    {
+      id: `${unit.id}-legacy-lesson`,
+      slug: 'legacy',
+      title: 'Leçon',
+      kind: 'discovery',
+      order: 1,
+      estimatedMinutes: unit.estimatedMinutes ?? '3 min',
+      learningGoal: unit.learningGoal ?? unit.concept,
+      exercises: unit.exercises,
+    }
+  )
+}
+
+export function getCompletedLessonCountForUnit(
+  unit: AcademyUnit,
+  progress: AcademyProgress,
+): number {
+  return unit.lessons.filter((lesson) => progress.completedLessonIds.includes(lesson.id)).length
+}
+
 export function getActiveUnit(
   chapters: AcademyChapter[] = academyRepository.getCurriculum(),
   progress: AcademyProgress,
@@ -1541,7 +2009,7 @@ export function isRewardAlreadyEarned(
   progress: AcademyProgress,
   unitId: string,
 ): boolean {
-  return Boolean(progress.unitResults[unitId]?.rewardEarned)
+  return Boolean(progress.unitResults[unitId]?.rewardEarned || progress.eventResults[unitId]?.rewardEarned)
 }
 
 export function decorateAcademyWithProgress(
