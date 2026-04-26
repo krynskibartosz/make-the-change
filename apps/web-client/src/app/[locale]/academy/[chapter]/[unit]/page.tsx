@@ -39,6 +39,7 @@ import {
   getDefaultAcademyProgress,
   getUnitPrerequisite,
   getUnitBySlug,
+  getEventUnitBySlug,
   isRewardAlreadyEarned,
   type AcademyDragDropExercise,
   type AcademyExercise,
@@ -938,15 +939,25 @@ export default function ExerciseEngine() {
   const params = useParams<{ chapter?: string | string[]; unit?: string | string[] }>()
   const chapterSlug = getParam(params.chapter)
   const unitSlug = getParam(params.unit)
-  const chapter = chapterSlug ? getChapterBySlug(chapterSlug) : null
-  const unit = chapterSlug && unitSlug ? getUnitBySlug(chapterSlug, unitSlug) : null
+  const isEvent = chapterSlug === 'events'
+  const chapter = isEvent
+    ? ({ id: 'events', slug: 'events', title: 'Événements', subtitle: '' } as any)
+    : chapterSlug
+      ? getChapterBySlug(chapterSlug)
+      : null
+  const unit =
+    isEvent && unitSlug
+      ? getEventUnitBySlug(unitSlug)
+      : chapterSlug && unitSlug
+        ? getUnitBySlug(chapterSlug, unitSlug)
+        : null
   const [progress, setProgress] = useState(() => getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID))
   const [isProgressReady, setIsProgressReady] = useState(false)
   const alreadyCompleted = unit
     ? progress.completedUnitIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
     : false
-  const isLockedUnit = unit && isProgressReady ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
-  const prerequisiteUnit = unit ? getUnitPrerequisite(unit.id, progress) ?? getActiveUnit(academyRepository.getCurriculum(), progress) : null
+  const isLockedUnit = unit && isProgressReady && !isEvent ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
+  const prerequisiteUnit = unit && !isEvent ? getUnitPrerequisite(unit.id, progress) ?? getActiveUnit(academyRepository.getCurriculum(), progress) : null
   const prerequisiteChapter = prerequisiteUnit ? getChapterBySlug(prerequisiteUnit.chapterId) : null
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)

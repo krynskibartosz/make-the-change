@@ -1,4 +1,4 @@
-﻿export const ACADEMY_PROGRESS_STORAGE_KEY = 'mtc_academy_progress_v1'
+export const ACADEMY_PROGRESS_STORAGE_KEY = 'mtc_academy_progress_v1'
 export const MOCK_ACADEMY_VIEWER_ID = 'mock-viewer'
 
 export type AcademyMascot = 'ondine' | 'sylva' | 'abeille-transparente'
@@ -143,6 +143,31 @@ export type AcademyRepository = {
     result: Pick<AcademyUnitResult, 'score' | 'mistakes'>,
   ): AcademyProgress
   resetProgress(viewerId: string): AcademyProgress
+}
+
+export type AcademyEventSponsor = {
+  name: string
+  logoUrl?: string
+  projectUrl?: string
+}
+
+export type AcademyEvent = {
+  id: string
+  slug: string
+  title: string
+  subtitle: string
+  description: string
+  imageUrl: string
+  sponsor: AcademyEventSponsor
+  expiresAt: string
+  fundingGoal?: number
+  fundingCurrent?: number
+  mascot: AcademyMascot
+  reward: AcademyReward
+  archiveImageUrl?: string
+  archiveCta?: string
+  archiveImpact?: string
+  exercises: AcademyExercise[]
 }
 
 const storyImages = {
@@ -1063,6 +1088,166 @@ const ACADEMY_CURRICULUM: AcademyChapter[] = [
     ],
   },
 ]
+
+// ─── Événements temporaires (sponsorisés) ────────────────────────────────────
+
+export const ACTIVE_EVENTS: AcademyEvent[] = [
+  {
+    id: 'event-coraux-loccitane-2026',
+    slug: 'bouturage-corail-loccitane',
+    title: 'Comment bouture-t-on un corail ?',
+    subtitle: "Le projet de L'Occitane en Polynésie française.",
+    description:
+      "L'Occitane finance 1 000 boutures de corail dans le lagon de Moorea. Apprends les gestes exacts de leurs biologistes marins.",
+    imageUrl:
+      'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1200&auto=format&fit=crop',
+    sponsor: {
+      name: "L'Occitane en Provence",
+      projectUrl: 'https://loccitane.com',
+    },
+    expiresAt: '2026-05-15T23:59:59Z',
+    fundingGoal: 5000,
+    fundingCurrent: 3240,
+    mascot: 'ondine',
+    reward: { type: 'seeds', amount: 40, label: '40 Graines' },
+    exercises: [
+      { id: 'ev1s1', type: 'STORY', screens: [
+        { text: "L'Occitane finance 1 000 boutures de corail dans le lagon de Moorea, Polynésie.", imageUrl: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1000', imagePrompt: 'Récif de Moorea' },
+        { text: "Une bouture, c'est comme une bouture de plante — un fragment qui régénère un récif entier.", imageUrl: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1000', imagePrompt: 'Biologiste et fragment corallien' },
+      ]},
+      { id: 'ev1sw1', type: 'SWIPE', question: 'Un corail est-il un animal ?',
+        card: { title: 'Le polype corallien', subtitle: 'Constructeur de récifs' }, correctDirection: 'right',
+        leftLabel: 'NON', rightLabel: 'OUI',
+        correctFeedback: "Exact ! Les coraux sont des animaux invertébrés — pas des plantes.",
+        incorrectFeedback: "Si ! Le corail est bien un animal — les polypes construisent les récifs." },
+      { id: 'ev1s2', type: 'STORY', screens: [
+        { text: "Étape 1 : choisir un fragment sain de 5 cm, coupé proprement pour éviter l'infection.", imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000', imagePrompt: 'Biologiste découpant un fragment corallien' },
+        { text: 'Étape 2 : fixer le fragment sur un socle artificiel en céramique à exactement 5 m de profondeur.', imageUrl: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1000', imagePrompt: 'Fragment corallien sur socle en mer' },
+      ]},
+      { id: 'ev1sw2', type: 'SWIPE', question: "Le réchauffement de l'eau menace-t-il les boutures de corail ?",
+        card: { title: 'Eau trop chaude (> 29°C)', subtitle: 'Stress thermique fatal' }, correctDirection: 'right',
+        leftLabel: 'NON', rightLabel: 'OUI',
+        correctFeedback: "Vrai ! Au-delà de 29°C, le corail blanchit et peut mourir.",
+        incorrectFeedback: "Si ! La chaleur est l'ennemi n°1 des boutures de corail." },
+      { id: 'ev1d1', type: 'DRAG_DROP', instruction: 'Ordonne les étapes du bouturage corallien :',
+        items: [{ id: 'ev1d1a', text: '✂️ Couper un fragment sain de 5 cm' }, { id: 'ev1d1b', text: '🪸 Fixer sur un socle artificiel' }, { id: 'ev1d1c', text: '📅 Surveiller pendant 6 mois' }] },
+      { id: 'ev1s3', type: 'STORY', screens: [
+        { text: 'La température idéale pour une bouture est entre 24°C et 28°C. Chaque degré compte.', imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000', imagePrompt: 'Thermomètre sous-marin sur récif' },
+      ]},
+      { id: 'ev1sw3', type: 'SWIPE', question: 'VRAI ou FAUX ?',
+        card: { title: 'Un corail peut se régénérer depuis un fragment de 5 cm.', subtitle: '⚡ Sprint 1' }, correctDirection: 'right', leftLabel: 'FAUX', rightLabel: 'VRAI',
+        correctFeedback: "Exact ! C'est tout le principe du bouturage.",
+        incorrectFeedback: "Si ! La régénération depuis un fragment est bien réelle." },
+      { id: 'ev1sw4', type: 'SWIPE', question: 'VRAI ou FAUX ?',
+        card: { title: "Les récifs coralliens abritent 25% des espèces marines.", subtitle: '⚡ Sprint 2' }, correctDirection: 'right', leftLabel: 'FAUX', rightLabel: 'VRAI',
+        correctFeedback: "Exact ! 0,1% de l'océan mais 25% de la biodiversité marine.",
+        incorrectFeedback: "Si ! Les récifs sont d'une richesse extraordinaire." },
+      { id: 'ev1sw5', type: 'SWIPE', question: 'VRAI ou FAUX ?',
+        card: { title: 'Le bouturage peut remplacer un récif naturel à 100%.', subtitle: '🔥 Sprint 3 — Combo !' }, correctDirection: 'left', leftLabel: 'FAUX', rightLabel: 'VRAI',
+        correctFeedback: "Exact ! Le bouturage aide mais ne remplace pas la protection.",
+        incorrectFeedback: "Non ! Le bouturage est un complément, pas un remplacement." },
+      { id: 'ev1d2', type: 'DRAG_DROP', instruction: 'Ordonne ces menaces pour un récif de la moins grave à la plus destructrice :',
+        items: [{ id: 'ev1d2a', text: '🐟 Surpêche locale' }, { id: 'ev1d2b', text: '🌡️ Réchauffement climatique' }, { id: 'ev1d2c', text: '🌊 Acidification des océans' }] },
+      { id: 'ev1q1', type: 'QUIZ', question: "À quelle profondeur les biologistes fixent-ils leurs boutures ?",
+        options: [{ text: '1 mètre (trop superficiel)', isCorrect: false }, { text: '5 mètres (idéal)', isCorrect: true }, { text: '20 mètres (trop sombre)', isCorrect: false }],
+        successFeedback: "Exact ! À 5 m, lumière et température sont optimales.", failureFeedback: "Pas tout à fait... 5 m est la profondeur idéale." },
+      { id: 'ev1q2', type: 'QUIZ', question: 'Quelle est la température max tolérable par un corail avant blanchissement ?',
+        options: [{ text: '20°C', isCorrect: false }, { text: '29°C', isCorrect: true }, { text: '35°C', isCorrect: false }],
+        successFeedback: "Exact ! Au-delà de 29°C, le blanchissement commence.", failureFeedback: "Raté... Le seuil critique est 29°C." },
+    ],
+  },
+]
+
+export const ARCHIVED_EVENTS: AcademyEvent[] = [
+  {
+    id: 'event-mangrove-2025',
+    slug: 'plantation-mangrove-2025',
+    title: 'Comment plante-t-on une mangrove ?',
+    subtitle: 'Patagonia au Sénégal — 2 000 propagules plantées.',
+    description:
+      "Patagonia a financé 2 000 propagules de mangrove sur la côte sénégalaise. Mission accomplie — voici le bilan.",
+    imageUrl:
+      'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1200&auto=format&fit=crop',
+    sponsor: { name: 'Patagonia', projectUrl: 'https://patagonia.com' },
+    expiresAt: '2025-12-31T23:59:59Z',
+    fundingGoal: 8000,
+    fundingCurrent: 8000,
+    mascot: 'sylva',
+    reward: { type: 'seeds', amount: 35, label: '35 Graines' },
+    archiveImageUrl:
+      'https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1200&auto=format&fit=crop',
+    archiveCta: 'Voir les 2 000 mangroves plantées',
+    archiveImpact: '2 000 propagules · 12 ha restaurés · ~480 t CO₂/an',
+    exercises: [
+      { id: 'arc1s1', type: 'STORY', screens: [
+        { text: "Les mangroves sont les forêts des côtes tropicales — racines dans l'eau, branches dans le ciel.", imageUrl: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000', imagePrompt: 'Mangrove côtière' },
+        { text: "Elles protègent les côtes ET séquestrent 5× plus de carbone qu'une forêt tropicale.", imageUrl: 'https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000', imagePrompt: 'Racines de mangrove' },
+      ]},
+      { id: 'arc1sw1', type: 'SWIPE', question: 'Les mangroves protègent-elles les côtes des tempêtes ?',
+        card: { title: 'La mangrove-bouclier', subtitle: 'Barrière naturelle côtière' }, correctDirection: 'right', leftLabel: 'NON', rightLabel: 'OUI',
+        correctFeedback: "Exact ! Leurs racines absorbent l'énergie des vagues.", incorrectFeedback: "Si ! Les mangroves protègent les populations côtières." },
+      { id: 'arc1s2', type: 'STORY', screens: [
+        { text: "Une 'propagule' est la graine-plantule de la mangrove — elle tombe et s'enracine directement dans la vase.", imageUrl: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1000', imagePrompt: 'Propagule de mangrove' },
+      ]},
+      { id: 'arc1sw2', type: 'SWIPE', question: "Une mangrove séquestre-t-elle plus de carbone qu'une forêt tropicale ?",
+        card: { title: 'La mangrove carbonique', subtitle: '5× plus efficace' }, correctDirection: 'right', leftLabel: 'NON', rightLabel: 'OUI',
+        correctFeedback: "Exact ! Elle stocke dans ses racines ET les sédiments marins.", incorrectFeedback: "Si ! La mangrove est championne du stockage carbone." },
+      { id: 'arc1d1', type: 'DRAG_DROP', instruction: "Ordonne les étapes de plantation d'une propagule :",
+        items: [{ id: 'a1', text: '🌱 Récolter les propagules mûres' }, { id: 'a2', text: '🌊 Planter dans la vase à marée basse' }, { id: 'a3', text: "📅 Surveiller 3 mois jusqu'à enracinement" }] },
+      { id: 'arc1s3', type: 'STORY', screens: [
+        { text: 'Résultat : 2 000 propagules plantées, 12 hectares restaurés sur la côte sénégalaise.', imageUrl: 'https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000', imagePrompt: 'Forêt de mangroves restaurée' },
+      ]},
+      { id: 'arc1sw3', type: 'SWIPE', question: 'VRAI ou FAUX ?', card: { title: 'Les mangroves abritent des nurseries pour de nombreux poissons.', subtitle: '⚡ Sprint 1' }, correctDirection: 'right', leftLabel: 'FAUX', rightLabel: 'VRAI', correctFeedback: "Exact ! 75% des poissons commerciaux passent par les mangroves.", incorrectFeedback: "Si ! Les mangroves sont des crèches marines." },
+      { id: 'arc1sw4', type: 'SWIPE', question: 'VRAI ou FAUX ?', card: { title: 'Détruire une mangrove libère le carbone stocké dans ses sédiments.', subtitle: '⚡ Sprint 2' }, correctDirection: 'right', leftLabel: 'FAUX', rightLabel: 'VRAI', correctFeedback: "Exact ! Des siècles de carbone libérés d'un coup.", incorrectFeedback: "Si ! Les sédiments stockent du carbone depuis des millénaires." },
+      { id: 'arc1sw5', type: 'SWIPE', question: 'VRAI ou FAUX ?', card: { title: 'La propagule flotte pour coloniser de nouvelles zones côtières.', subtitle: '🔥 Sprint 3' }, correctDirection: 'right', leftLabel: 'FAUX', rightLabel: 'VRAI', correctFeedback: "Exact ! Une stratégie de dispersion parfaite.", incorrectFeedback: "Si ! Les propagules flottent — elles colonisent naturellement." },
+      { id: 'arc1d2', type: 'DRAG_DROP', instruction: 'Ordonne les bénéfices de la mangrove par importance :',
+        items: [{ id: 'b1', text: '🐟 Nurserie pour les poissons' }, { id: 'b2', text: '🛡️ Protection des côtes' }, { id: 'b3', text: '💨 Stockage massif du carbone' }] },
+      { id: 'arc1q1', type: 'QUIZ', question: "Combien de fois plus de carbone une mangrove stocke-t-elle vs une forêt tropicale ?",
+        options: [{ text: '2 fois plus', isCorrect: false }, { text: '5 fois plus', isCorrect: true }, { text: '10 fois plus', isCorrect: false }],
+        successFeedback: "Exact ! 5× plus efficace grâce aux sédiments marins.", failureFeedback: "Pas tout à fait... C'est 5× plus efficace." },
+      { id: 'arc1q2', type: 'QUIZ', question: "Comment s'appelle la graine-plantule de la mangrove ?",
+        options: [{ text: 'Une spore', isCorrect: false }, { text: 'Une propagule', isCorrect: true }, { text: 'Un rhizome', isCorrect: false }],
+        successFeedback: "Exact ! La propagule s'enracine directement dans la vase.", failureFeedback: "Raté... C'est une propagule — stratégie unique de reproduction." },
+    ],
+  },
+]
+
+export function getActiveEvents(): AcademyEvent[] {
+  const now = new Date()
+  return ACTIVE_EVENTS.filter((event) => new Date(event.expiresAt) > now)
+}
+
+export function getArchivedEvents(): AcademyEvent[] {
+  const now = new Date()
+  return [
+    ...ACTIVE_EVENTS.filter((event) => new Date(event.expiresAt) <= now),
+    ...ARCHIVED_EVENTS,
+  ]
+}
+
+export function getEventUnitBySlug(slug: string): AcademyUnit | null {
+  const allEvents = [...ACTIVE_EVENTS, ...ARCHIVED_EVENTS]
+  const event = allEvents.find((e) => e.slug === slug || e.id === slug)
+  if (!event) return null
+
+  return {
+    id: event.id,
+    slug: event.slug,
+    chapterId: 'events',
+    title: event.title,
+    subtitle: event.subtitle,
+    concept: 'Mission Spéciale',
+    order: 0,
+    durationMinutes: 5,
+    estimatedMinutes: '5 min',
+    learningGoal: event.description,
+    replayLabel: event.archiveCta ?? "REJOUER L'ÉVÉNEMENT",
+    lockedHint: '',
+    mascot: event.mascot,
+    reward: event.reward,
+    exercises: event.exercises,
+  }
+}
 
 const flattenUnits = (chapters: AcademyChapter[] = ACADEMY_CURRICULUM): AcademyUnit[] =>
   chapters.flatMap((chapter) => chapter.units)

@@ -3,11 +3,13 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
   AlertTriangle,
+  Archive,
   BookOpen,
   Brain,
   ChevronDown,
   Clock,
   Crown,
+  ExternalLink,
   Flame,
   Gift,
   Leaf,
@@ -15,8 +17,10 @@ import {
   MoreHorizontal,
   RotateCcw,
   Sprout,
+  Timer,
   Trophy,
   Unlock,
+  Zap,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -32,7 +36,10 @@ import {
   getCurrentChapter,
   getNextChapter,
   isRewardAlreadyEarned,
+  getActiveEvents,
+  getArchivedEvents,
   type AcademyChapterWithStatus,
+  type AcademyEvent,
   type AcademyProgress,
   type AcademyUnitWithStatus,
 } from '@/lib/mock/mock-academy'
@@ -350,6 +357,188 @@ function UnitNode({
   )
 }
 
+function useCountdown(expiresAt: string) {
+  const [label, setLabel] = useState('')
+  useEffect(() => {
+    const update = () => {
+      const diff = new Date(expiresAt).getTime() - Date.now()
+      if (diff <= 0) { setLabel('Expiré'); return }
+      const d = Math.floor(diff / 86400000)
+      const h = Math.floor((diff % 86400000) / 3600000)
+      if (d > 0) setLabel(`${d}j ${h}h`)
+      else {
+        const m = Math.floor((diff % 3600000) / 60000)
+        setLabel(`${h}h ${m}m`)
+      }
+    }
+    update()
+    const id = setInterval(update, 60000)
+    return () => clearInterval(id)
+  }, [expiresAt])
+  return label
+}
+
+function EventCard({ event, onStart }: { event: AcademyEvent; onStart: (e: AcademyEvent) => void }) {
+  const countdown = useCountdown(event.expiresAt)
+  const pct = event.fundingGoal && event.fundingCurrent != null
+    ? Math.min(100, Math.round((event.fundingCurrent / event.fundingGoal) * 100))
+    : null
+
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onStart(event)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className="relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-950/60 via-[#0e0a00]/80 to-[#05050A] text-left shadow-[0_0_40px_rgba(245,158,11,0.12)] backdrop-blur-sm"
+    >
+      <div className="relative h-36 w-full overflow-hidden">
+        <Image src={event.imageUrl} alt={event.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0e0a00] via-[#0e0a00]/40 to-transparent" />
+        <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-black/60 px-2.5 py-1 backdrop-blur-sm">
+          <Timer className="h-3 w-3 text-amber-400" />
+          <span className="text-[10px] font-black tabular-nums text-amber-300">{countdown}</span>
+        </div>
+        <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-emerald-500/30 bg-black/60 px-2.5 py-1 backdrop-blur-sm">
+          <Zap className="h-3 w-3 text-emerald-400" />
+          <span className="text-[10px] font-black text-emerald-300">+{event.reward.amount} Graines</span>
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <p className="text-[10px] font-black uppercase tracking-[0.15em] text-amber-400/80">{event.sponsor.name}</p>
+        <h3 className="text-sm font-black leading-snug text-white">{event.title}</h3>
+        <p className="line-clamp-2 text-[11px] leading-relaxed text-white/55">{event.description}</p>
+        {pct !== null && (
+          <div className="mt-auto pt-2">
+            <div className="mb-1 flex justify-between text-[10px] font-bold">
+              <span className="text-white/50">Financement</span>
+              <span className="text-amber-300">{event.fundingCurrent?.toLocaleString('fr-FR')} / {event.fundingGoal?.toLocaleString('fr-FR')} €</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
+                className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_rgba(245,158,11,0.7)]"
+              />
+            </div>
+          </div>
+        )}
+        <div className="mt-2 flex items-center justify-center gap-1.5 rounded-2xl bg-amber-500 py-2.5 font-black text-xs text-black shadow-[0_4px_0_rgba(120,53,15,0.8)]">
+          <Leaf className="h-3.5 w-3.5" />
+          DÉMARRER LA LEÇON
+        </div>
+      </div>
+    </motion.button>
+  )
+}
+
+function EventCarousel({ onStartEvent }: { onStartEvent: (e: AcademyEvent) => void }) {
+  const events = useMemo(() => getActiveEvents(), [])
+  if (events.length === 0) return null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="mt-4"
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+        </span>
+        <h2 className="text-[11px] font-black uppercase tracking-[0.18em] text-amber-400">✨ Missions Actives</h2>
+        <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-black text-amber-300">{events.length}</span>
+      </div>
+      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} onStart={onStartEvent} />
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
+function ArchiveCard({ event }: { event: AcademyEvent }) {
+  const img = event.archiveImageUrl ?? event.imageUrl
+  return (
+    <div className="flex items-start gap-4 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl">
+        <Image src={img} alt={event.title} fill className="object-cover grayscale-[30%]" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/40">{event.sponsor.name}</p>
+        <h4 className="mb-1 text-sm font-black leading-snug text-white/90">{event.title}</h4>
+        {event.archiveImpact && (
+          <p className="mb-2 text-[11px] text-emerald-400/80">{event.archiveImpact}</p>
+        )}
+        <div className="flex gap-2">
+          {event.archiveCta && (
+            <a href={event.sponsor.projectUrl ?? '#'} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              <ExternalLink className="h-3 w-3" />
+              {event.archiveCta}
+            </a>
+          )}
+        </div>
+      </div>
+      <div className="shrink-0 rounded-full border border-emerald-500/20 bg-emerald-500/10 p-1.5">
+        <Trophy className="h-4 w-4 text-emerald-400" />
+      </div>
+    </div>
+  )
+}
+
+function ArchivesPanel() {
+  const archived = useMemo(() => getArchivedEvents(), [])
+  const [open, setOpen] = useState(false)
+  if (archived.length === 0) return null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+      className="mt-8 rounded-3xl border border-white/8 bg-white/[0.02] p-5"
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-3"
+      >
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+            <Archive className="h-4 w-4 text-white/50" />
+          </div>
+          <div className="text-left">
+            <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/40">🏆 Nos Victoires</p>
+            <p className="text-xs font-bold text-white/60">{archived.length} mission{archived.length > 1 ? 's' : ''} accomplie{archived.length > 1 ? 's' : ''}</p>
+          </div>
+        </div>
+        <ChevronDown className={cn('h-4 w-4 text-white/40 transition-transform duration-300', open && 'rotate-180')} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="mt-4 flex flex-col gap-3">
+              {archived.map((event) => <ArchiveCard key={event.id} event={event} />)}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
 function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
   return (
     <div className="relative flex min-h-[210px] flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-5 text-center shadow-2xl">
@@ -481,6 +670,7 @@ export default function AcademyPage() {
         </header>
 
         <main className="px-5 pt-[calc(5rem+env(safe-area-inset-top))]">
+          <EventCarousel onStartEvent={(event) => setLoadingTarget(`/academy/events/${event.slug}`)} />
           <ChapterBanner chapter={currentChapter} />
 
           <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3">
@@ -583,6 +773,8 @@ export default function AcademyPage() {
               </p>
             </div>
           </motion.div>
+
+          <ArchivesPanel />
         </main>
 
         <AnimatePresence>
