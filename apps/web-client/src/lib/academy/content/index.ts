@@ -10,6 +10,15 @@ import { waterUnit } from './units/chapter-1/water'
 import { alliancesUnit } from './units/chapter-2/alliances'
 import { mutationsUnit } from './units/chapter-2/mutations'
 import { predatorsUnit } from './units/chapter-2/predators'
+import { carbonUnit } from './units/chapter-3/carbon'
+import { pollinationUnit } from './units/chapter-3/pollination'
+import { waterCycleDeepUnit } from './units/chapter-3/water-cycle-deep'
+import { coralsUnit } from './units/chapter-4/corals'
+import { madagascarUnit } from './units/chapter-4/madagascar'
+import { seasonsUnit } from './units/chapter-4/seasons'
+import { extinctionsUnit } from './units/chapter-5/extinctions'
+import { permacultureUnit } from './units/chapter-5/permaculture'
+import { solutionsUnit } from './units/chapter-5/solutions'
 
 /**
  * Registre central des unités V2 (schéma riche, validé Zod).
@@ -34,6 +43,18 @@ const RAW_UNITS: AcademyUnitDefinition[] = [
   predatorsUnit,
   alliancesUnit,
   mutationsUnit,
+  // Chapitre 3
+  pollinationUnit,
+  waterCycleDeepUnit,
+  carbonUnit,
+  // Chapitre 4
+  madagascarUnit,
+  coralsUnit,
+  seasonsUnit,
+  // Chapitre 5
+  extinctionsUnit,
+  solutionsUnit,
+  permacultureUnit,
 ]
 
 // Validation Zod au chargement : toute unité incohérente fait crasher tôt.
