@@ -4,22 +4,29 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
   AlertTriangle,
   Archive,
+  Atom,
   BookOpen,
   Brain,
   ChevronDown,
   Clock,
   Crown,
+  Dna,
+  Droplets,
   ExternalLink,
   Flame,
   Gift,
+  Globe2,
   Leaf,
   Lock,
   MoreHorizontal,
+  PawPrint,
   RotateCcw,
   Sprout,
+  Sun,
   Timer,
   Trophy,
   Unlock,
+  Zap,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -30,7 +37,6 @@ import {
   academyRepository,
   decorateAcademyWithProgress,
   getActiveUnit,
-  getAllUnits,
   getDefaultAcademyProgress,
   getCurrentChapter,
   getNextChapter,
@@ -42,6 +48,7 @@ import {
   type AcademyChapterWithStatus,
   type AcademyEvent,
   type AcademyProgress,
+  type AcademyUnitKind,
   type AcademyUnitWithStatus,
 } from '@/lib/mock/mock-academy'
 import { cn, formatPoints } from '@/lib/utils'
@@ -52,6 +59,34 @@ const LOADING_STEPS = [
   { label: 'Ajustement à ton niveau...', duration: 450 },
   { label: "C'est parti !", duration: 300 },
 ]
+
+const UNIT_KIND_LABELS: Record<AcademyUnitKind, string> = {
+  foundation: 'Fondamental',
+  fauna: 'Faune',
+  flora: 'Flore',
+  training: 'Entraînement',
+  project: 'Projet',
+  boss: 'Boss final',
+}
+
+const UNIT_ICON_BY_KEY = {
+  atom: Atom,
+  crown: Crown,
+  dna: Dna,
+  fauna: PawPrint,
+  globe: Globe2,
+  leaf: Leaf,
+  paw: PawPrint,
+  sprout: Sprout,
+  sun: Sun,
+  water: Droplets,
+  zap: Zap,
+}
+
+function UnitIcon({ unit, className }: { unit: AcademyUnitWithStatus; className?: string }) {
+  const Icon = UNIT_ICON_BY_KEY[unit.iconKey as keyof typeof UNIT_ICON_BY_KEY] ?? Leaf
+  return <Icon className={className} />
+}
 
 function useAcademySurface() {
   const [progress, setProgress] = useState<AcademyProgress>(() =>
@@ -283,16 +318,25 @@ function UnitNode({
   const isLocked = unit.status === 'locked'
   const isCompleted = unit.status === 'completed'
   const isActive = unit.status === 'active'
+  const isBoss = unit.kind === 'boss'
   const stateLabel = isActive ? 'À continuer' : isCompleted ? 'Rejouer' : null
 
   return (
-    <div className="relative my-4 flex min-h-40 flex-col items-center justify-center">
+    <div
+      className={cn(
+        'relative my-4 flex flex-col items-center justify-start',
+        stateLabel ? 'min-h-48 pt-12' : 'min-h-44 pt-3',
+      )}
+    >
       {isActive && (
         <motion.div
           aria-hidden="true"
           animate={reduceMotion ? { opacity: 0.28 } : { scale: [0.94, 1.08, 0.94], opacity: [0.18, 0.34, 0.18] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 -z-10 m-auto h-32 w-32 rounded-full bg-emerald-400/25 blur-2xl"
+          className={cn(
+            'absolute inset-0 -z-10 m-auto h-32 w-32 rounded-full blur-2xl',
+            isBoss ? 'bg-amber-400/25' : 'bg-emerald-400/25',
+          )}
         />
       )}
       {stateLabel && (
@@ -303,11 +347,12 @@ function UnitNode({
           className={cn(
             'absolute top-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 text-[12px] font-black shadow-[0_10px_26px_rgba(0,0,0,0.24)]',
             isActive
-              ? 'border border-emerald-300/30 bg-emerald-400 text-[#03140d]'
+              ? isBoss
+                ? 'border border-amber-200/40 bg-amber-300 text-[#1b1103]'
+                : 'border border-emerald-300/30 bg-emerald-400 text-[#03140d]'
               : 'border border-emerald-400/18 bg-emerald-500/10 text-emerald-100/85',
           )}
         >
-          {isActive && <Image src={`/${unit.mascot}.png`} alt="" width={22} height={22} className="object-contain" />}
           {stateLabel}
         </motion.div>
       )}
@@ -323,26 +368,40 @@ function UnitNode({
         className={cn(
           'group relative flex h-[84px] w-[84px] items-center justify-center rounded-full transition-all duration-100 touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300',
           isActive && [
-            'h-[92px] w-[92px] bg-gradient-to-b from-emerald-300 via-emerald-500 to-emerald-700 shadow-[0_10px_0_#064e3b,0_0_34px_rgba(16,185,129,0.36)]',
-            'ring-2 ring-emerald-300/40 ring-offset-[6px] ring-offset-[#05050A]',
-            'hover:translate-y-[2px] hover:shadow-[0_8px_0_#064e3b,0_0_36px_rgba(16,185,129,0.42)] active:translate-y-[9px] active:shadow-[0_1px_0_#064e3b]',
+            'h-[92px] w-[92px]',
+            isBoss
+              ? 'bg-gradient-to-b from-amber-200 via-amber-400 to-orange-700 shadow-[0_10px_0_#78350f,0_0_34px_rgba(245,158,11,0.38)] ring-2 ring-amber-200/40 ring-offset-[6px] ring-offset-[#05050A] hover:translate-y-[2px] hover:shadow-[0_8px_0_#78350f,0_0_36px_rgba(245,158,11,0.42)] active:translate-y-[9px] active:shadow-[0_1px_0_#78350f]'
+              : 'bg-gradient-to-b from-emerald-300 via-emerald-500 to-emerald-700 shadow-[0_10px_0_#064e3b,0_0_34px_rgba(16,185,129,0.36)] ring-2 ring-emerald-300/40 ring-offset-[6px] ring-offset-[#05050A] hover:translate-y-[2px] hover:shadow-[0_8px_0_#064e3b,0_0_36px_rgba(16,185,129,0.42)] active:translate-y-[9px] active:shadow-[0_1px_0_#064e3b]',
           ],
           isCompleted && [
-            'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_8px_0_#064e3b]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b] active:translate-y-[8px] active:shadow-none',
+            isBoss
+              ? 'bg-gradient-to-b from-amber-300 to-orange-700 shadow-[0_8px_0_#78350f] hover:translate-y-[2px] hover:shadow-[0_6px_0_#78350f] active:translate-y-[8px] active:shadow-none'
+              : 'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_8px_0_#064e3b] hover:translate-y-[2px] hover:shadow-[0_6px_0_#064e3b] active:translate-y-[8px] active:shadow-none',
           ],
           isLocked && [
-            'bg-gradient-to-b from-white/10 to-white/5 shadow-[0_8px_0_#000]',
+            isBoss
+              ? 'border border-amber-300/10 bg-gradient-to-b from-amber-300/10 to-white/5 shadow-[0_8px_0_#000]'
+              : 'bg-gradient-to-b from-white/10 to-white/5 shadow-[0_8px_0_#000]',
             'hover:translate-y-[2px] hover:shadow-[0_6px_0_#000] active:translate-y-[8px] active:shadow-none',
           ],
         )}
-        aria-label={`${unit.title} - ${isLocked ? 'verrouillé' : isCompleted ? 'terminé' : 'actif'}`}
+        aria-label={`${unit.title} - ${UNIT_KIND_LABELS[unit.kind]} - ${isLocked ? 'verrouillé' : isCompleted ? 'terminé' : 'actif'}`}
       >
         {isCompleted && <div className="pointer-events-none absolute inset-x-5 top-[3px] h-1.5 rounded-full bg-emerald-100/25" />}
-        {isActive && <Flame className="h-10 w-10 fill-white text-white drop-shadow-md" />}
-        {isCompleted && <Crown className="h-9 w-9 fill-white text-white drop-shadow-md" />}
-        {isLocked && <Lock className="h-8 w-8 text-white/20" />}
+        {isLocked ? (
+          <Lock className={cn('h-8 w-8', isBoss ? 'text-amber-200/25' : 'text-white/20')} />
+        ) : (
+          <UnitIcon unit={unit} className="h-9 w-9 text-white drop-shadow-md" />
+        )}
       </button>
+      <div className="mt-4 max-w-[138px] text-center">
+        <p className={cn('text-sm font-black leading-tight', isLocked ? 'text-white/35' : 'text-white/90')}>
+          {unit.pathLabel}
+        </p>
+        <p className={cn('mt-1 text-[10px] font-black uppercase tracking-[0.14em]', isBoss ? 'text-amber-300/70' : 'text-emerald-300/60')}>
+          {UNIT_KIND_LABELS[unit.kind]}
+        </p>
+      </div>
     </div>
   )
 }
@@ -399,7 +458,9 @@ function EventCard({ event, onStart }: { event: AcademyEvent; onStart: (e: Acade
             {countdown}
           </span>
         </div>
-        <h3 className="truncate text-sm font-black leading-snug text-white">{event.title}</h3>
+        <h3 className="overflow-hidden text-sm font-black leading-snug text-white [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+          {event.title}
+        </h3>
         <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-white/50">
           Leçon making-of · {event.impactTarget}
         </p>
@@ -559,13 +620,23 @@ export default function AcademyPage() {
     activeUnitBase
       ? chapters.flatMap((chapter) => chapter.units).find((unit) => unit.id === activeUnitBase.id) ?? null
       : null
-  const totalUnitCount = getAllUnits().length
-  const completedTotal = progress.completedUnitIds.length
+  const currentChapterLessonTotal = units.reduce((total, unit) => total + unit.lessons.length, 0)
+  const completedCurrentChapterLessons = units.reduce(
+    (total, unit) => total + getCompletedLessonCountForUnit(unit, progress),
+    0,
+  )
+  const currentChapterLessonProgress = currentChapterLessonTotal > 0
+    ? Math.round((completedCurrentChapterLessons / currentChapterLessonTotal) * 100)
+    : 0
   const selectedRewardEarned = selectedUnit
     ? isRewardAlreadyEarned(progress, selectedUnit.id)
     : false
   const selectedLesson = selectedUnit ? getNextLessonForUnit(selectedUnit, progress) : null
   const selectedCompletedLessons = selectedUnit ? getCompletedLessonCountForUnit(selectedUnit, progress) : 0
+  const selectedLessonIndex = selectedUnit ? Math.min(selectedCompletedLessons + 1, selectedUnit.lessons.length) : 1
+  const selectedCanEarnReward = Boolean(
+    selectedUnit && selectedLessonIndex === selectedUnit.lessons.length && !selectedRewardEarned,
+  )
 
   const handleResetConfirmed = useCallback(() => {
     reset()
@@ -621,7 +692,7 @@ export default function AcademyPage() {
 
           <div className="flex items-center gap-1.5">
             <span className="hidden rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] font-black tabular-nums text-emerald-300 min-[390px]:inline-flex">
-              {completedTotal}/{totalUnitCount}
+              {completedCurrentChapterLessons}/{currentChapterLessonTotal}
             </span>
             <Link
               href="/academy/streak"
@@ -673,11 +744,13 @@ export default function AcademyPage() {
           <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3">
             <div className="mb-2 flex items-center justify-between text-[11px] font-black uppercase tracking-[0.14em] text-white/45">
               <span>Voyage Academy</span>
-              <span>{completedTotal}/{totalUnitCount} unités</span>
+              <span>{completedCurrentChapterLessons}/{currentChapterLessonTotal} leçons</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-white/10">
               <motion.div
-                animate={{ width: `${Math.round((completedTotal / totalUnitCount) * 100)}%` }}
+                data-academy-progress-bar
+                style={{ width: `${currentChapterLessonProgress}%` }}
+                animate={{ width: `${currentChapterLessonProgress}%` }}
                 className="h-full rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.75)]"
               />
             </div>
@@ -803,15 +876,18 @@ export default function AcademyPage() {
               </div>
               <div className="flex flex-1 flex-col items-center px-6 pb-32 pt-7 text-center">
                 <span className="mb-4 text-xs font-bold uppercase tracking-widest text-emerald-400">
-                  {currentChapter.title} · Unité {selectedUnit.order}
+                  {UNIT_KIND_LABELS[selectedUnit.kind]} · Leçon {selectedLessonIndex} / {selectedUnit.lessons.length}
                 </span>
                 <h2 className="mb-4 text-3xl font-black leading-tight text-white">{selectedUnit.title}</h2>
                 <p className="mb-5 text-base leading-relaxed text-white/70">{selectedUnit.subtitle}</p>
                 <div className="mb-5 w-full rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-left">
                   <span className="mb-1 block text-[10px] font-black uppercase tracking-[0.16em] text-emerald-300">
-                    Objectif
+                    Objectif de maîtrise
                   </span>
                   <p className="text-sm font-medium leading-relaxed text-white/80">
+                    {selectedUnit.masteryGoal}
+                  </p>
+                  <p className="mt-2 text-xs font-medium leading-relaxed text-white/55">
                     {selectedLesson?.learningGoal ?? selectedUnit.learningGoal}
                   </p>
                 </div>
@@ -823,7 +899,7 @@ export default function AcademyPage() {
                     <Brain className="h-4 w-4 text-white/50" /> {selectedLesson?.exercises.length ?? selectedUnit.exercises.length} exercices
                   </div>
                   <div className="flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-sm font-medium text-amber-100 shadow-lg">
-                    <Crown className="h-4 w-4 text-amber-300" /> Leçon {Math.min(selectedCompletedLessons + 1, selectedUnit.lessons.length)} / {selectedUnit.lessons.length}
+                    <Crown className="h-4 w-4 text-amber-300" /> Leçon {selectedLessonIndex} / {selectedUnit.lessons.length}
                   </div>
                 </div>
               </div>
@@ -833,11 +909,13 @@ export default function AcademyPage() {
                     <Gift className="h-4 w-4 text-emerald-400" />
                     {selectedRewardEarned ? (
                       <span className="text-white/70">{selectedUnit.replayLabel}</span>
-                    ) : (
+                    ) : selectedCanEarnReward ? (
                       <>
-                        <span className="text-white">Récompense :</span>
+                        <span className="text-white">Couronne :</span>
                         <span className="text-emerald-400">+{selectedUnit.reward.amount}</span>
                       </>
+                    ) : (
+                      <span className="text-white/70">Récompense à la Couronne</span>
                     )}
                   </span>
                 </div>

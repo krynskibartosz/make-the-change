@@ -7,6 +7,7 @@ export type AcademyChapterStatus = 'completed' | 'active' | 'locked'
 export type AcademyExerciseType = 'STORY' | 'SWIPE' | 'DRAG_DROP' | 'QUIZ'
 export type AcademyCursusId = 'living-mechanics' | 'nature-mysteries' | 'climate-solutions'
 export type AcademyLessonKind = 'discovery' | 'practice' | 'mastery' | 'legendary'
+export type AcademyUnitKind = 'foundation' | 'fauna' | 'flora' | 'training' | 'project' | 'boss'
 export type AcademySponsorTier = 'trusted' | 'transition' | 'blocked'
 export type AcademyVerificationStatus = 'verified' | 'pending' | 'self_reported'
 
@@ -117,6 +118,11 @@ export type AcademyUnit = {
   title: string
   subtitle: string
   concept: string
+  kind: AcademyUnitKind
+  iconKey: string
+  shortTitle: string
+  pathLabel: string
+  masteryGoal: string
   order: number
   durationMinutes: number
   estimatedMinutes?: string
@@ -358,7 +364,7 @@ const takeCycled = (
 }
 
 const buildLessons = (
-  unit: Pick<AcademyUnit, 'id' | 'title' | 'concept'> & { rewardAmount: number },
+  unit: Pick<AcademyUnit, 'id' | 'title' | 'concept'> & { kind?: AcademyUnitKind; rewardAmount: number },
   exercises: AcademyExercise[],
   questionPool: AcademyQuestionPool,
 ): AcademyLesson[] => {
@@ -366,6 +372,39 @@ const buildLessons = (
   const discoveryExercises = exercises.map((exercise, index) =>
     tagExercise(exercise, conceptId, index < 4 ? 'easy' : index < 9 ? 'medium' : 'hard', 'discovery'),
   )
+  const practiceExercises = unit.kind === 'training'
+    ? [
+        ...takeCycled(questionPool.swipe, 7, 'medium', 'practice-sw'),
+        ...takeCycled(questionPool.quiz, 3, 'medium', 'practice-qz'),
+        ...takeCycled(questionPool.dragDrop, 1, 'medium', 'practice-dd'),
+      ]
+    : [
+        ...takeCycled(questionPool.swipe, 6, 'medium', 'practice-sw'),
+        ...takeCycled(questionPool.dragDrop, 2, 'medium', 'practice-dd'),
+        ...takeCycled(questionPool.quiz, 4, 'medium', 'practice-qz'),
+      ]
+  const masteryExercises = unit.kind === 'boss'
+    ? [
+        ...takeCycled(questionPool.dragDrop, 4, 'hard', 'mastery-dd'),
+        ...takeCycled(questionPool.quiz, 5, 'hard', 'mastery-qz'),
+        ...takeCycled(questionPool.swipe, 2, 'hard', 'mastery-sw'),
+      ]
+    : [
+        ...takeCycled(questionPool.swipe, 4, 'medium', 'mastery-sw'),
+        ...takeCycled(questionPool.quiz, 4, 'hard', 'mastery-qz'),
+        ...takeCycled(questionPool.dragDrop, 4, 'hard', 'mastery-dd'),
+      ]
+  const legendaryExercises = unit.kind === 'boss'
+    ? [
+        ...takeCycled(questionPool.dragDrop, 5, 'hard', 'legendary-dd'),
+        ...takeCycled(questionPool.quiz, 5, 'hard', 'legendary-qz'),
+        ...takeCycled(questionPool.swipe, 2, 'hard', 'legendary-sw'),
+      ]
+    : [
+        ...takeCycled(questionPool.quiz, 5, 'hard', 'legendary-qz'),
+        ...takeCycled(questionPool.dragDrop, 3, 'hard', 'legendary-dd'),
+        ...takeCycled(questionPool.swipe, 4, 'hard', 'legendary-sw'),
+      ]
 
   return [
     {
@@ -386,11 +425,7 @@ const buildLessons = (
       order: 2,
       estimatedMinutes: '3 min',
       learningGoal: `Retrouver ${unit.concept.toLowerCase()} sans relire la théorie.`,
-      exercises: [
-        ...takeCycled(questionPool.swipe, 6, 'medium', 'practice-sw'),
-        ...takeCycled(questionPool.dragDrop, 2, 'medium', 'practice-dd'),
-        ...takeCycled(questionPool.quiz, 4, 'medium', 'practice-qz'),
-      ],
+      exercises: practiceExercises,
     },
     {
       id: `${unit.id}-lesson-3`,
@@ -400,11 +435,7 @@ const buildLessons = (
       order: 3,
       estimatedMinutes: '3-4 min',
       learningGoal: `Utiliser ${unit.concept.toLowerCase()} dans des liens logiques.`,
-      exercises: [
-        ...takeCycled(questionPool.swipe, 4, 'medium', 'mastery-sw'),
-        ...takeCycled(questionPool.quiz, 4, 'hard', 'mastery-qz'),
-        ...takeCycled(questionPool.dragDrop, 4, 'hard', 'mastery-dd'),
-      ],
+      exercises: masteryExercises,
     },
     {
       id: `${unit.id}-lesson-4`,
@@ -415,17 +446,15 @@ const buildLessons = (
       estimatedMinutes: '3-4 min',
       learningGoal: `Prouver que ${unit.concept.toLowerCase()} est vraiment acquis.`,
       reward: makeReward(unit.rewardAmount),
-      exercises: [
-        ...takeCycled(questionPool.quiz, 5, 'hard', 'legendary-qz'),
-        ...takeCycled(questionPool.dragDrop, 3, 'hard', 'legendary-dd'),
-        ...takeCycled(questionPool.swipe, 4, 'hard', 'legendary-sw'),
-      ],
+      exercises: legendaryExercises,
     },
   ]
 }
 
 const makeUnit = (
-  unit: Omit<AcademyUnit, 'reward' | 'lessons' | 'questionPool'> & { rewardAmount: number; lessons?: AcademyLesson[] },
+  unit: Omit<AcademyUnit, 'reward' | 'lessons' | 'questionPool' | 'kind' | 'iconKey' | 'shortTitle' | 'pathLabel' | 'masteryGoal'> &
+    Partial<Pick<AcademyUnit, 'kind' | 'iconKey' | 'shortTitle' | 'pathLabel' | 'masteryGoal'>> &
+    { rewardAmount: number; lessons?: AcademyLesson[] },
 ): AcademyUnit => {
   const questionPool = buildQuestionPool(unit.id, unit.concept, unit.exercises)
   const lessons = unit.lessons ?? buildLessons(unit, unit.exercises, questionPool)
@@ -437,6 +466,11 @@ const makeUnit = (
   title: unit.title,
   subtitle: unit.subtitle,
   concept: unit.concept,
+  kind: unit.kind ?? 'foundation',
+  iconKey: unit.iconKey ?? 'leaf',
+  shortTitle: unit.shortTitle ?? unit.title,
+  pathLabel: unit.pathLabel ?? unit.title,
+  masteryGoal: unit.masteryGoal ?? `Maîtriser ${unit.concept.toLowerCase()} dans une mini-mission.`,
   order: unit.order,
   durationMinutes: unit.durationMinutes,
   estimatedMinutes: unit.estimatedMinutes ?? '3-4 min',
@@ -453,181 +487,228 @@ const makeUnit = (
   }
 }
 
+type ChapterOneConcept = {
+  title: string
+  story: string
+  trueStatement: string
+  falseStatement: string
+  quizQuestion: string
+  quizCorrect: string
+  quizWrong: [string, string]
+}
+
+const makeChapterOneExercises = (
+  prefix: string,
+  imageKey: keyof typeof storyImages,
+  config: {
+    theme: string
+    conceptA: ChapterOneConcept
+    conceptB: ChapterOneConcept
+    conceptC: ChapterOneConcept
+    dragOne: [string, string, string]
+    dragTwo: [string, string, string]
+    finalQuestion: string
+    finalCorrect: string
+    finalWrong: [string, string]
+  },
+): AcademyExercise[] => {
+  const concepts = [config.conceptA, config.conceptB, config.conceptC]
+  const makeSwipe = (
+    concept: ChapterOneConcept,
+    index: number,
+    statement: string,
+    isTrue: boolean,
+    subtitle = config.theme,
+  ): AcademySwipeExercise => ({
+    id: `${prefix}sw${index}`,
+    type: 'SWIPE',
+    question: 'Vrai ou faux ?',
+    card: { title: statement, subtitle },
+    correctDirection: isTrue ? 'right' : 'left',
+    leftLabel: 'FAUX',
+    rightLabel: 'VRAI',
+    correctFeedback: `Exact ! ${concept.title} est bien compris.`,
+    incorrectFeedback: `Presque. Reviens au concept : ${concept.title}.`,
+  })
+
+  return [
+    { id: `${prefix}s1`, type: 'STORY', screens: [
+      { text: config.conceptA.story, imageUrl: storyImages[imageKey], imagePrompt: config.conceptA.title },
+      { text: config.conceptB.story, imageUrl: storyImages[imageKey], imagePrompt: config.conceptB.title },
+    ]},
+    makeSwipe(config.conceptA, 1, config.conceptA.trueStatement, true),
+    { id: `${prefix}s2`, type: 'STORY', screens: [
+      { text: config.conceptC.story, imageUrl: storyImages[imageKey], imagePrompt: config.conceptC.title },
+    ]},
+    makeSwipe(config.conceptB, 2, config.conceptB.falseStatement, false),
+    { id: `${prefix}d1`, type: 'DRAG_DROP', instruction: 'Place les éléments dans le bon ordre :',
+      items: config.dragOne.map((text, index) => ({ id: `${prefix}d1-${index + 1}`, text })) },
+    makeSwipe(config.conceptC, 3, config.conceptC.trueStatement, true, 'Sprint 1'),
+    makeSwipe(config.conceptA, 4, config.conceptA.falseStatement, false, 'Sprint 2'),
+    makeSwipe(config.conceptB, 5, config.conceptB.trueStatement, true, 'Sprint 3'),
+    { id: `${prefix}d2`, type: 'DRAG_DROP', instruction: 'Construis la logique complète :',
+      items: config.dragTwo.map((text, index) => ({ id: `${prefix}d2-${index + 1}`, text })) },
+    { id: `${prefix}q1`, type: 'QUIZ', question: config.conceptC.quizQuestion,
+      options: [
+        { text: config.conceptC.quizWrong[0], isCorrect: false },
+        { text: config.conceptC.quizWrong[1], isCorrect: false },
+        { text: config.conceptC.quizCorrect, isCorrect: true },
+      ],
+      successFeedback: `Parfait ! ${config.conceptC.title} est acquis.`,
+      failureFeedback: `Pas encore. La bonne réponse était : ${config.conceptC.quizCorrect}.` },
+    { id: `${prefix}q2`, type: 'QUIZ', question: config.finalQuestion,
+      options: [
+        { text: config.finalWrong[0], isCorrect: false },
+        { text: config.finalCorrect, isCorrect: true },
+        { text: config.finalWrong[1], isCorrect: false },
+      ],
+      successFeedback: 'Boss validé : tu relies les idées entre elles.',
+      failureFeedback: `Le cœur de la leçon : ${config.finalCorrect}.` },
+  ]
+}
+
+const CHAPTER_ONE_UNITS: AcademyUnit[] = [
+  makeUnit({
+    id: 'chapter-1-sun', slug: 'le-pouvoir-du-soleil', chapterId: 'chapter-1',
+    title: 'Le Pouvoir du Soleil', shortTitle: 'Le Soleil', pathLabel: 'Pouvoir solaire',
+    subtitle: "Découvre l'énergie primaire qui allume presque toute la vie.",
+    concept: 'Soleil, énergie, producteurs', kind: 'foundation', iconKey: 'sun',
+    masteryGoal: "Expliquer pourquoi le Soleil est le premier moteur des écosystèmes.",
+    order: 1, durationMinutes: 3, mascot: 'ondine', rewardAmount: 10,
+    exercises: makeChapterOneExercises('c1u1', 'sprout', {
+      theme: 'Énergie primaire',
+      conceptA: { title: 'Le Soleil source', story: "Le Soleil envoie l'énergie qui démarre la plupart des chaînes du vivant.", trueStatement: 'Le Soleil alimente la majorité des écosystèmes terrestres.', falseStatement: 'La lumière solaire ne sert qu’à réchauffer les roches.', quizQuestion: "Quel rôle joue le Soleil dans la nature ?", quizCorrect: "Source d'énergie primaire", quizWrong: ['Simple décor du ciel', 'Réserve de minéraux'] },
+      conceptB: { title: 'Les producteurs', story: 'Les producteurs capturent cette énergie avant tous les autres êtres vivants.', trueStatement: 'Les plantes sont des producteurs.', falseStatement: 'Les animaux produisent toute leur énergie à partir de rien.', quizQuestion: 'Qui capte d’abord la lumière ?', quizCorrect: 'Les producteurs', quizWrong: ['Les prédateurs', 'Les roches'] },
+      conceptC: { title: 'La chaîne énergétique', story: "Quand une plante grandit, l'énergie solaire entre dans la chaîne alimentaire.", trueStatement: 'Un herbivore récupère indirectement de l’énergie solaire.', falseStatement: 'Un prédateur n’a jamais de lien avec le Soleil.', quizQuestion: "Que transmet une chaîne alimentaire ?", quizCorrect: "De l'énergie", quizWrong: ['Du plastique', 'Du hasard pur'] },
+      dragOne: ['Soleil', 'Plante productrice', 'Herbivore'],
+      dragTwo: ['Lumière captée', 'Sucre fabriqué', 'Énergie partagée'],
+      finalQuestion: "Pourquoi le Soleil est-il le départ du chapitre ?",
+      finalCorrect: 'Il alimente les producteurs',
+      finalWrong: ['Il remplace l’eau', 'Il crée les animaux directement'],
+    }),
+  }),
+  makeUnit({
+    id: 'chapter-1-water', slug: 'le-voyage-de-leau', chapterId: 'chapter-1',
+    title: "Le Voyage de l'Eau", shortTitle: "L'Eau", pathLabel: 'Cycle bleu',
+    subtitle: "Suis l'eau qui circule entre ciel, sol et vivant.",
+    concept: 'Évaporation, pluie, infiltration', kind: 'foundation', iconKey: 'water',
+    masteryGoal: "Remettre le cycle de l'eau dans l'ordre et expliquer son rôle vivant.",
+    order: 2, durationMinutes: 3, mascot: 'ondine', rewardAmount: 10,
+    exercises: makeChapterOneExercises('c1u2', 'water', {
+      theme: "Cycle de l'eau",
+      conceptA: { title: 'Évaporation', story: "Le Soleil chauffe l'eau : elle s'évapore et monte vers l'atmosphère.", trueStatement: "L'évaporation transforme l'eau liquide en vapeur.", falseStatement: "L'évaporation enterre l'eau sous les roches.", quizQuestion: "Que devient l'eau qui s'évapore ?", quizCorrect: 'De la vapeur', quizWrong: ['Du sel', 'Du sable'] },
+      conceptB: { title: 'Nuages et pluie', story: "La vapeur se condense en nuages, puis retombe en pluie.", trueStatement: 'Les nuages peuvent rendre l’eau aux sols.', falseStatement: 'La pluie ne participe pas au cycle de l’eau.', quizQuestion: "Que font les nuages dans le cycle ?", quizCorrect: "Ils préparent la pluie", quizWrong: ['Ils bloquent la gravité', 'Ils créent du pétrole'] },
+      conceptC: { title: 'Infiltration', story: "Une partie de l'eau entre dans les sols et nourrit racines, nappes et rivières.", trueStatement: "Un sol vivant aide l'eau à s'infiltrer.", falseStatement: "Le béton aide toujours l'eau à entrer dans le sol.", quizQuestion: "Quel sol absorbe le mieux l'eau ?", quizCorrect: 'Un sol vivant', quizWrong: ['Du goudron', 'Du béton compact'] },
+      dragOne: ['Évaporation', 'Condensation', 'Pluie'],
+      dragTwo: ['Pluie', 'Infiltration', 'Racines nourries'],
+      finalQuestion: "Pourquoi l'eau est-elle un moteur du vivant ?",
+      finalCorrect: 'Elle transporte et permet les réactions',
+      finalWrong: ['Elle bloque les cellules', 'Elle remplace la lumière'],
+    }),
+  }),
+  makeUnit({
+    id: 'chapter-1-soil', slug: 'la-magie-des-sols', chapterId: 'chapter-1',
+    title: 'La Magie des Sols', shortTitle: 'Les Sols', pathLabel: 'Sols vivants',
+    subtitle: 'Entre dans la fabrique souterraine des nutriments.',
+    concept: 'Sols vivants, minéraux, racines', kind: 'foundation', iconKey: 'sprout',
+    masteryGoal: 'Distinguer un sol vivant d’un support mort et comprendre les nutriments.',
+    order: 3, durationMinutes: 3, mascot: 'sylva', rewardAmount: 10,
+    exercises: makeChapterOneExercises('c1u3', 'field', {
+      theme: 'Sols vivants',
+      conceptA: { title: 'Minéraux', story: 'Les minéraux sont les briques invisibles qui aident les plantes à se construire.', trueStatement: 'Les minéraux aident les plantes à grandir.', falseStatement: 'Les minéraux sont inutiles aux racines.', quizQuestion: 'Que fournissent les minéraux ?', quizCorrect: 'Des briques de croissance', quizWrong: ['Des ailes', 'De la lumière'] },
+      conceptB: { title: 'Sols vivants', story: 'Un sol vivant abrite microbes, champignons, racines et minuscules animaux.', trueStatement: 'Un sol vivant est rempli d’organismes.', falseStatement: 'Un bon sol est forcément stérile.', quizQuestion: 'Que trouve-t-on dans un sol vivant ?', quizCorrect: 'Des organismes utiles', quizWrong: ['Du vide', 'Uniquement du métal'] },
+      conceptC: { title: 'Racines', story: 'Les racines explorent le sol pour boire, s’ancrer et échanger.', trueStatement: 'Les racines absorbent eau et minéraux.', falseStatement: 'Les racines ne servent qu’à décorer.', quizQuestion: 'À quoi servent les racines ?', quizCorrect: 'Absorber et ancrer', quizWrong: ['Voler', 'Produire des nuages'] },
+      dragOne: ['Roche altérée', 'Minéraux disponibles', 'Racines nourries'],
+      dragTwo: ['Sol vivant', 'Microbes actifs', 'Plante plus forte'],
+      finalQuestion: 'Pourquoi le sol est-il une magie discrète ?',
+      finalCorrect: 'Il transforme la matière en nourriture',
+      finalWrong: ['Il bloque toute vie', 'Il remplace le Soleil'],
+    }),
+  }),
+  makeUnit({
+    id: 'chapter-1-plants-light', slug: 'les-plantes-mangent-la-lumiere', chapterId: 'chapter-1',
+    title: 'Les Plantes Mangent la Lumière', shortTitle: 'Photosynthèse', pathLabel: 'Lumière verte',
+    subtitle: 'Découvre comment une feuille fabrique du sucre avec le ciel.',
+    concept: 'Photosynthèse, feuilles, sucre', kind: 'flora', iconKey: 'leaf',
+    masteryGoal: 'Expliquer la photosynthèse sans jargon inutile.',
+    order: 4, durationMinutes: 3, mascot: 'sylva', rewardAmount: 15,
+    exercises: makeChapterOneExercises('c1u4', 'forest', {
+      theme: 'Photosynthèse',
+      conceptA: { title: 'Feuilles', story: 'Les feuilles sont des panneaux solaires vivants.', trueStatement: 'Les feuilles captent la lumière.', falseStatement: 'Les feuilles mangent de la terre avec des dents.', quizQuestion: 'Quel organe capte surtout la lumière ?', quizCorrect: 'La feuille', quizWrong: ['La griffe', 'La pierre'] },
+      conceptB: { title: 'Sucre végétal', story: 'Avec lumière, eau et air, la plante fabrique du sucre.', trueStatement: 'La photosynthèse produit du sucre.', falseStatement: 'La photosynthèse produit du goudron.', quizQuestion: 'Que fabrique la plante ?', quizCorrect: 'Du sucre', quizWrong: ['Du verre', 'Du sel marin'] },
+      conceptC: { title: 'Oxygène', story: 'La photosynthèse rejette aussi de l’oxygène dans l’air.', trueStatement: 'Les plantes libèrent de l’oxygène.', falseStatement: 'Les plantes détruisent tout l’oxygène.', quizQuestion: 'Quel gaz est libéré ?', quizCorrect: "De l'oxygène", quizWrong: ['Du mercure', 'Du sable'] },
+      dragOne: ['Lumière', 'Eau + CO2', 'Sucre + oxygène'],
+      dragTwo: ['Feuille active', 'Sucre fabriqué', 'Animal nourri'],
+      finalQuestion: 'Pourquoi les plantes sont-elles au centre du vivant ?',
+      finalCorrect: 'Elles fabriquent la base alimentaire',
+      finalWrong: ['Elles chassent les prédateurs', 'Elles arrêtent le cycle de l’eau'],
+    }),
+  }),
+  makeUnit({
+    id: 'chapter-1-training', slug: 'reflexes-du-vivant', chapterId: 'chapter-1',
+    title: 'Réflexes du Vivant', shortTitle: 'Réflexes', pathLabel: 'Entraînement',
+    subtitle: 'Révise vite : soleil, eau, sols et plantes.',
+    concept: 'Révision soleil eau sols plantes', kind: 'training', iconKey: 'zap',
+    masteryGoal: 'Reconnaître rapidement les quatre forces de base.',
+    order: 5, durationMinutes: 3, mascot: 'abeille-transparente', rewardAmount: 15,
+    exercises: makeChapterOneExercises('c1u5', 'sprout', {
+      theme: 'Sprint de révision',
+      conceptA: { title: 'Soleil + plantes', story: 'Tu connais déjà le duo : lumière puis sucre.', trueStatement: 'La lumière aide les plantes à fabriquer du sucre.', falseStatement: 'Les plantes poussent mieux sans aucune énergie.', quizQuestion: 'Quel duo démarre la chaîne ?', quizCorrect: 'Soleil et plantes', quizWrong: ['Béton et plastique', 'Ombre et goudron'] },
+      conceptB: { title: 'Eau + sols', story: 'L’eau circule mieux quand le sol reste vivant.', trueStatement: 'Un sol vivant aide l’eau à circuler.', falseStatement: 'Le béton nourrit mieux les racines qu’un sol vivant.', quizQuestion: 'Quel duo nourrit les racines ?', quizCorrect: 'Eau et sols', quizWrong: ['Vent et métal', 'Sel et goudron'] },
+      conceptC: { title: 'Chaîne complète', story: 'Soleil, eau, sol et plantes forment la base de tout le reste.', trueStatement: 'Les animaux dépendent indirectement des plantes.', falseStatement: 'Les animaux n’ont aucun lien avec les producteurs.', quizQuestion: 'Que révises-tu ici ?', quizCorrect: 'La base du vivant', quizWrong: ['Une liste de villes', 'Une recette de béton'] },
+      dragOne: ['Soleil', 'Plante', 'Animal'],
+      dragTwo: ['Pluie', 'Sol vivant', 'Racines'],
+      finalQuestion: 'Quel réflexe doit devenir automatique ?',
+      finalCorrect: 'Relier énergie, eau, sol et plantes',
+      finalWrong: ['Isoler chaque élément', 'Ignorer les producteurs'],
+    }),
+  }),
+  makeUnit({
+    id: 'chapter-1-life-factory', slug: 'la-fabrique-du-vivant', chapterId: 'chapter-1',
+    title: 'La Fabrique du Vivant', shortTitle: 'Fabrique', pathLabel: 'Synthèse',
+    subtitle: 'Assemble les forces invisibles en un système vivant.',
+    concept: 'Énergie, matière, croissance', kind: 'foundation', iconKey: 'atom',
+    masteryGoal: 'Construire une explication complète du vivant de base.',
+    order: 6, durationMinutes: 3, mascot: 'ondine', rewardAmount: 15,
+    exercises: makeChapterOneExercises('c1u6', 'forest', {
+      theme: 'Synthèse du vivant',
+      conceptA: { title: 'Énergie', story: 'L’énergie donne l’élan initial au système vivant.', trueStatement: 'Un écosystème a besoin d’un flux d’énergie.', falseStatement: 'Un écosystème fonctionne sans énergie.', quizQuestion: 'Que fournit l’énergie ?', quizCorrect: 'Un moteur de transformation', quizWrong: ['Un mur', 'Un cadenas'] },
+      conceptB: { title: 'Matière', story: 'La matière circule : eau, carbone, minéraux, sucres.', trueStatement: 'La matière circule entre sol, plantes et animaux.', falseStatement: 'La matière disparaît à chaque repas.', quizQuestion: 'Que fait la matière ?', quizCorrect: 'Elle circule et se transforme', quizWrong: ['Elle disparaît toujours', 'Elle devient du vide'] },
+      conceptC: { title: 'Croissance', story: 'Quand énergie et matière se rencontrent, le vivant peut grandir.', trueStatement: 'Grandir demande énergie et matière.', falseStatement: 'Grandir ne demande aucune ressource.', quizQuestion: 'De quoi dépend la croissance ?', quizCorrect: 'Énergie et matière', quizWrong: ['Silence et métal', 'Goudron et ombre'] },
+      dragOne: ['Énergie solaire', 'Matière disponible', 'Croissance vivante'],
+      dragTwo: ['Producteurs', 'Consommateurs', 'Décomposeurs'],
+      finalQuestion: 'Qu’est-ce qu’un écosystème assemble ?',
+      finalCorrect: 'Énergie, matière et relations',
+      finalWrong: ['Des éléments isolés', 'Uniquement des animaux'],
+    }),
+  }),
+  makeUnit({
+    id: 'chapter-1-boss', slug: 'cree-ton-ecosysteme', chapterId: 'chapter-1',
+    title: 'Crée Ton Écosystème', shortTitle: 'Boss final', pathLabel: 'Boss',
+    subtitle: 'Le test final : fais naître un mini-monde cohérent.',
+    concept: 'Écosystème, équilibre, synthèse', kind: 'boss', iconKey: 'crown',
+    masteryGoal: 'Prouver que tu peux relier les bases en un écosystème.',
+    order: 7, durationMinutes: 4, mascot: 'abeille-transparente', rewardAmount: 25,
+    exercises: makeChapterOneExercises('c1u7', 'forest', {
+      theme: 'Boss du chapitre',
+      conceptA: { title: 'Producteurs', story: 'Un écosystème commence par des producteurs capables de capter l’énergie.', trueStatement: 'Sans producteurs, la chaîne alimentaire s’effondre.', falseStatement: 'Les producteurs sont optionnels dans un écosystème.', quizQuestion: 'Qui démarre la chaîne ?', quizCorrect: 'Les producteurs', quizWrong: ['Les déchets plastiques', 'Les prédateurs seuls'] },
+      conceptB: { title: 'Cycles', story: 'L’eau et les nutriments doivent circuler pour éviter le blocage.', trueStatement: 'Un cycle garde les ressources disponibles.', falseStatement: 'Un cycle vivant doit toujours être bloqué.', quizQuestion: 'Pourquoi les cycles comptent-ils ?', quizCorrect: 'Ils remettent les ressources en circulation', quizWrong: ['Ils arrêtent la pluie', 'Ils suppriment les sols'] },
+      conceptC: { title: 'Équilibre', story: 'Un mini-monde tient grâce aux liens entre énergie, matière et espèces.', trueStatement: 'Un écosystème est un réseau de relations.', falseStatement: 'Un écosystème est une pile d’êtres isolés.', quizQuestion: 'Qu’est-ce qui stabilise un écosystème ?', quizCorrect: 'Des relations équilibrées', quizWrong: ['Un seul prédateur', 'Aucun producteur'] },
+      dragOne: ['Soleil', 'Plantes', 'Herbivores'],
+      dragTwo: ['Pluie', 'Sol vivant', 'Forêt stable'],
+      finalQuestion: 'Quel mini-monde est viable ?',
+      finalCorrect: 'Soleil, eau, sol, plantes et relations',
+      finalWrong: ['Prédateurs sans plantes', 'Béton sans cycle de l’eau'],
+    }),
+  }),
+]
+
 const ACADEMY_CURRICULUM: AcademyChapter[] = [
   {
     id: 'chapter-1', slug: 'alphabet-originel', title: "L'Alphabet Originel",
-    subtitle: 'Les éléments fondamentaux et les acteurs principaux de la nature.',
-    level: 'A1', order: 1, durationMinutes: 45, difficulty: 'debutant',
-    units: [
-      makeUnit({
-        id: 'unit-1-1', slug: 'les-forges-de-la-vie', chapterId: 'chapter-1',
-        title: 'Les Forges de la Vie', subtitle: "Soleil, eau, sols : l'énergie de départ.",
-        concept: 'Énergie, Minéraux, Hydratation', order: 1, durationMinutes: 3,
-        mascot: 'ondine', rewardAmount: 10,
-        exercises: [
-          { id: 'u11s1', type: 'STORY', screens: [
-            { text: 'Soleil, eau, sol : les trois piliers de la vie.', imageUrl: storyImages.sprout, imagePrompt: 'Pousse sous soleil' },
-            { text: "L'eau couvre 71% de la Terre, mais seuls 3% sont doux et accessibles.", imageUrl: storyImages.water, imagePrompt: 'Eau douce vs océan' },
-          ]},
-          { id: 'u11sw1', type: 'SWIPE', question: "Cet élément est-il indispensable à toute vie ?",
-            card: { title: "L'eau douce", subtitle: 'Présente dans chaque cellule vivante' }, correctDirection: 'right',
-            leftLabel: 'NON', rightLabel: 'OUI',
-            correctFeedback: "Exact ! Sans eau, aucune réaction chimique du vivant n'est possible.",
-            incorrectFeedback: "Oups ! L'eau est l'ingrédient n°1 de toute vie connue." },
-          { id: 'u11s2', type: 'STORY', screens: [
-            { text: 'Le Soleil est notre étoile-source : il alimente presque toute vie.', imageUrl: storyImages.forest, imagePrompt: 'Rayons soleil canopée' },
-            { text: 'Les plantes capturent sa lumière pour nourrir toute la chaîne alimentaire.', imageUrl: storyImages.sprout, imagePrompt: 'Feuille absorbant photons' },
-          ]},
-          { id: 'u11sw2', type: 'SWIPE', question: "Le goudron est-il un des piliers fondamentaux de la vie ?",
-            card: { title: 'Le goudron', subtitle: 'Asphalte synthétique' }, correctDirection: 'left',
-            leftLabel: 'NON', rightLabel: 'OUI',
-            correctFeedback: "Exact ! Le goudron asphyxie les sols et bloque la vie.",
-            incorrectFeedback: "Attention ! Le goudron détruit la vie, il n'en est pas un pilier." },
-          { id: 'u11d1', type: 'DRAG_DROP', instruction: 'Ordonne ces éléments du plus lointain au plus profond :',
-            items: [{ id: 'u11d1a', text: '☀️ Le Soleil (Espace)' }, { id: 'u11d1b', text: "💧 L'Eau (Surface)" }, { id: 'u11d1c', text: '🪨 Les Minéraux (Sous-sol)' }] },
-          { id: 'u11s3', type: 'STORY', screens: [
-            { text: "Les minéraux du sol sont les briques microscopiques de tout être vivant.", imageUrl: storyImages.field, imagePrompt: 'Sol fertile avec racines' },
-          ]},
-          { id: 'u11sw3', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: "L'eau de mer est potable pour les humains.", subtitle: '⚡ Sprint 1 — Vas-y !' }, correctDirection: 'left',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Exact ! L'eau salée déshydrate le corps humain.",
-            incorrectFeedback: "Aïe ! Boire de l'eau de mer est très dangereux." },
-          { id: 'u11sw4', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: 'Sans soleil, les plantes ne peuvent pas pousser.', subtitle: '⚡ Sprint 2 — Continue !' }, correctDirection: 'right',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Parfait ! La lumière est le carburant n°1 de la végétation.",
-            incorrectFeedback: 'Oups ! Sans lumière, la photosynthèse est impossible.' },
-          { id: 'u11sw5', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: 'Les minéraux du sol nourrissent les racines des plantes.', subtitle: '🔥 Sprint 3 — Combo en vue !' }, correctDirection: 'right',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Super ! Azote, phosphore... les minéraux construisent le vivant.",
-            incorrectFeedback: 'Presque ! Les minéraux sont essentiels à la croissance.' },
-          { id: 'u11d2', type: 'DRAG_DROP', instruction: "Ordonne la chaîne d'énergie de la nature :",
-            items: [{ id: 'u11d2a', text: "☀️ Le Soleil émet de l'énergie" }, { id: 'u11d2b', text: '🌿 Les plantes la capturent' }, { id: 'u11d2c', text: '🐾 Les animaux la consomment' }] },
-          { id: 'u11q1', type: 'QUIZ', question: "Quel pourcentage de l'eau terrestre est douce et accessible ?",
-            options: [{ text: 'Environ 50%', isCorrect: false }, { text: 'Environ 97%', isCorrect: false }, { text: 'Environ 3%', isCorrect: true }],
-            successFeedback: "Exact ! Seuls 3% sont doux, et une infime partie est accessible.",
-            failureFeedback: "Raté ! En réalité, seuls 3% de l'eau terrestre est douce." },
-          { id: 'u11q2', type: 'QUIZ', question: "Quel élément fournit l'énergie de base à presque toute la vie ?",
-            options: [{ text: 'Le vent fougueux', isCorrect: false }, { text: 'La roche magmatique', isCorrect: false }, { text: 'Le Soleil', isCorrect: true }],
-            successFeedback: "Bingo ! Les plantes capturent sa lumière pour nourrir toute la chaîne.",
-            failureFeedback: "Pas tout à fait... C'est bien le Soleil, notre étoile-source." },
-        ],
-      }),
-      makeUnit({
-        id: 'unit-1-2', slug: 'le-peuple-emeraude', chapterId: 'chapter-1',
-        title: 'Le Peuple Émeraude', subtitle: 'Les plantes, grandes usines solaires du vivant.',
-        concept: 'Photosynthèse, Racines, Feuilles', order: 2, durationMinutes: 3,
-        mascot: 'sylva', rewardAmount: 10,
-        exercises: [
-          { id: 'u12s1', type: 'STORY', screens: [
-            { text: 'Les plantes sont les usines solaires magiques de notre planète.', imageUrl: storyImages.forest, imagePrompt: 'Forêt baignée de lumière' },
-            { text: "Elles transforment la lumière du soleil en sucres qui nourrissent toute la chaîne du vivant.", imageUrl: storyImages.sprout, imagePrompt: 'Feuille verte et soleil' },
-          ]},
-          { id: 'u12sw1', type: 'SWIPE', question: 'La photosynthèse est-elle le super-pouvoir des plantes ?',
-            card: { title: 'La photosynthèse', subtitle: 'Lumière → Sucre' }, correctDirection: 'right',
-            leftLabel: 'NON', rightLabel: 'OUI',
-            correctFeedback: "Brillant ! Elles créent du sucre avec du soleil, de l'eau et du CO2.",
-            incorrectFeedback: "Si ! C'est bien leur super-pouvoir exclusif." },
-          { id: 'u12s2', type: 'STORY', screens: [
-            { text: "L'eau entre par les racines, monte dans la tige, puis s'évapore par les feuilles.", imageUrl: storyImages.sprout, imagePrompt: 'Coupe transversale plante' },
-            { text: "Ce circuit de l'eau s'appelle la transpiration végétale — une climatisation naturelle.", imageUrl: storyImages.forest, imagePrompt: 'Vapeur sortant des feuilles' },
-          ]},
-          { id: 'u12sw2', type: 'SWIPE', question: "Les racines absorbent-elles l'eau et les minéraux du sol ?",
-            card: { title: 'Les racines', subtitle: "Le réseau d'alimentation souterrain" }, correctDirection: 'right',
-            leftLabel: 'NON', rightLabel: 'OUI',
-            correctFeedback: "Exact ! Les racines sont les pompes d'aspiration de la plante.",
-            incorrectFeedback: "Si ! C'est bien le rôle des racines : absorber et ancrer." },
-          { id: 'u12d1', type: 'DRAG_DROP', instruction: "Ordonne le trajet magique de l'eau dans une plante :",
-            items: [{ id: 'u12d1a', text: '🌱 Les racines (Absorption)' }, { id: 'u12d1b', text: '🌿 La tige (Transport)' }, { id: 'u12d1c', text: '🍃 Les feuilles (Évaporation)' }] },
-          { id: 'u12s3', type: 'STORY', screens: [
-            { text: "La chlorophylle est le pigment vert qui capture la lumière — et donne leur couleur aux plantes.", imageUrl: storyImages.forest, imagePrompt: 'Chloroplastes verts en gros plan' },
-          ]},
-          { id: 'u12sw3', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: "Les feuilles fabriquent du sucre grâce à la lumière.", subtitle: '⚡ Sprint 1' }, correctDirection: 'right',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Exact ! C'est la photosynthèse à l'œuvre.",
-            incorrectFeedback: "Si ! Les feuilles sont de vraies petites usines à sucre." },
-          { id: 'u12sw4', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: "L'ombre améliore la photosynthèse des plantes.", subtitle: '⚡ Sprint 2' }, correctDirection: 'left',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Exact ! Sans lumière, la photosynthèse ralentit ou s'arrête.",
-            incorrectFeedback: "Pas tout à fait... L'ombre diminue la photosynthèse." },
-          { id: 'u12sw5', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: 'Les racines ancrent et nourrissent la plante.', subtitle: '🔥 Sprint 3 — Combo !' }, correctDirection: 'right',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Super ! Double rôle : ancrage et alimentation.",
-            incorrectFeedback: "Presque ! Les racines ont bien ces deux fonctions." },
-          { id: 'u12d2', type: 'DRAG_DROP', instruction: 'Ordonne les étapes de la photosynthèse :',
-            items: [{ id: 'u12d2a', text: '☀️ Capter la lumière solaire' }, { id: 'u12d2b', text: '💨 Absorber le CO2 et l\'eau' }, { id: 'u12d2c', text: '🍬 Produire du sucre et du O2' }] },
-          { id: 'u12q1', type: 'QUIZ', question: "Quel pigment donne leur couleur verte aux plantes et capte la lumière ?",
-            options: [{ text: 'La mélanine', isCorrect: false }, { text: 'La carotène', isCorrect: false }, { text: 'La chlorophylle', isCorrect: true }],
-            successFeedback: "Exact ! La chlorophylle est le moteur de la photosynthèse.",
-            failureFeedback: "Raté ! C'est la chlorophylle qui capte la lumière dans les plantes." },
-          { id: 'u12q2', type: 'QUIZ', question: "Quel super-pouvoir permet aux plantes de créer leur propre nourriture ?",
-            options: [{ text: 'La télékinésie', isCorrect: false }, { text: 'La digestion lente', isCorrect: false }, { text: 'La photosynthèse', isCorrect: true }],
-            successFeedback: "Super ! Elles créent du sucre avec du soleil, de l'eau et de l'air.",
-            failureFeedback: "Pas tout à fait... C'est la photosynthèse, le super-pouvoir végétal." },
-        ],
-      }),
-      makeUnit({
-        id: 'unit-1-3', slug: 'le-bestiaire-sauvage', chapterId: 'chapter-1',
-        title: 'Le Bestiaire Sauvage', subtitle: 'Animaux, mouvement et instincts de survie.',
-        concept: 'Animaux, Mouvement, Instinct', order: 3, durationMinutes: 3,
-        mascot: 'abeille-transparente', rewardAmount: 15,
-        exercises: [
-          { id: 'u13s1', type: 'STORY', screens: [
-            { text: 'Les animaux respirent, bougent et explorent chaque recoin du monde.', imageUrl: storyImages.field, imagePrompt: 'Plaine avec animaux en mouvement' },
-            { text: 'Contrairement aux plantes, ils se déplacent pour chasser, fuir ou explorer.', imageUrl: storyImages.forest, imagePrompt: 'Animaux en mouvement dans forêt' },
-          ]},
-          { id: 'u13sw1', type: 'SWIPE', question: 'Le mouvement autonome est-il une caractéristique du règne animal ?',
-            card: { title: 'Le mouvement autonome', subtitle: 'Chasser, fuir, explorer' }, correctDirection: 'right',
-            leftLabel: 'NON', rightLabel: 'OUI',
-            correctFeedback: "Exact ! C'est ce qui distingue les animaux des plantes.",
-            incorrectFeedback: "Si ! Se déplacer librement est propre aux animaux." },
-          { id: 'u13s2', type: 'STORY', screens: [
-            { text: "L'instinct guide les animaux dès la naissance — sans apprentissage.", imageUrl: storyImages.forest, imagePrompt: 'Bébé animal suivant sa mère' },
-            { text: "C'est leur GPS interne : un programme de survie intégré dans leurs gènes.", imageUrl: storyImages.field, imagePrompt: 'Migration animaux' },
-          ]},
-          { id: 'u13sw2', type: 'SWIPE', question: "L'instinct animal s'apprend-il par l'éducation ?",
-            card: { title: "L'instinct", subtitle: 'Programme de survie inné' }, correctDirection: 'left',
-            leftLabel: 'NON', rightLabel: 'OUI',
-            correctFeedback: "Exact ! L'instinct est inné, pas appris — il vient des gènes.",
-            incorrectFeedback: "Non ! L'instinct est inné, présent dès la naissance." },
-          { id: 'u13d1', type: 'DRAG_DROP', instruction: 'Classe ces animaux du plus lent au plus rapide :',
-            items: [{ id: 'u13d1a', text: '🐌 L\'escargot (Très lent)' }, { id: 'u13d1b', text: '🐺 Le loup (Rapide)' }, { id: 'u13d1c', text: '🦅 Le faucon pèlerin (Ultra rapide)' }] },
-          { id: 'u13s3', type: 'STORY', screens: [
-            { text: "Les animaux ont développé des systèmes de défense fascinants : camouflage, venin, vitesse.", imageUrl: storyImages.forest, imagePrompt: 'Animal camouflé dans la nature' },
-          ]},
-          { id: 'u13sw3', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: 'Les animaux sont fixés au sol comme les plantes.', subtitle: '⚡ Sprint 1' }, correctDirection: 'left',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Exact ! Les animaux se déplacent librement, contrairement aux plantes.",
-            incorrectFeedback: "Non ! Les animaux bougent — c'est leur grande force." },
-          { id: 'u13sw4', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: "L'instinct est présent dès la naissance chez les animaux.", subtitle: '⚡ Sprint 2' }, correctDirection: 'right',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Parfait ! C'est un programme génétique inné.",
-            incorrectFeedback: "Si ! L'instinct est inné, inscrit dans les gènes." },
-          { id: 'u13sw5', type: 'SWIPE', question: 'VRAI ou FAUX ?',
-            card: { title: 'Le faucon pèlerin est le plus rapide de tous les animaux en piqué.', subtitle: '🔥 Sprint 3 — Combo !' }, correctDirection: 'right',
-            leftLabel: 'FAUX', rightLabel: 'VRAI',
-            correctFeedback: "Exact ! Il atteint 390 km/h en piqué — record absolu !",
-            incorrectFeedback: "Si ! Le faucon pèlerin détient le record de vitesse animale." },
-          { id: 'u13d2', type: 'DRAG_DROP', instruction: 'Ordonne les niveaux de la chaîne trophique :',
-            items: [{ id: 'u13d2a', text: '🌿 Producteurs (Plantes)' }, { id: 'u13d2b', text: '🐇 Herbivores (Consommateurs 1)' }, { id: 'u13d2c', text: '🦊 Carnivores (Consommateurs 2)' }] },
-          { id: 'u13q1', type: 'QUIZ', question: "Quelle caractéristique est propre au règne animal ?",
-            options: [{ text: 'La photosynthèse', isCorrect: false }, { text: 'Les racines souterraines', isCorrect: false }, { text: 'Le mouvement autonome', isCorrect: true }],
-            successFeedback: "Exact ! Se déplacer librement distingue les animaux des autres êtres vivants.",
-            failureFeedback: "Pas tout à fait ! C'est le mouvement autonome qui définit les animaux." },
-          { id: 'u13q2', type: 'QUIZ', question: "Comment appelle-t-on la boussole interne qui guide les animaux dès la naissance ?",
-            options: [{ text: 'Le magnétisme', isCorrect: false }, { text: 'La photosynthèse', isCorrect: false }, { text: "L'instinct", isCorrect: true }],
-            successFeedback: "Parfait ! C'est ce GPS interne qui les aide à survivre dès la naissance.",
-            failureFeedback: "Raté... C'est l'instinct — un programme de survie inscrit dans leurs gènes." },
-        ],
-      }),
-    ],
+    subtitle: 'Comprends les forces invisibles qui font tourner notre monde.',
+    level: 'A1', order: 1, durationMinutes: 84, difficulty: 'debutant',
+    units: CHAPTER_ONE_UNITS,
   },
   {
     id: 'chapter-2', slug: 'grammaire-especes', title: 'La Grammaire des Espèces',
@@ -1500,7 +1581,7 @@ export function getEventUnitBySlug(slug: string): AcademyUnit | null {
   if (!event) return null
   const questionPool = buildQuestionPool(event.id, event.title, event.exercises)
   const lessons = buildLessons(
-    { id: event.id, title: event.title, concept: event.title, rewardAmount: event.reward.amount },
+    { id: event.id, title: event.title, concept: event.title, kind: 'project', rewardAmount: event.reward.amount },
     event.exercises,
     questionPool,
   )
@@ -1512,6 +1593,11 @@ export function getEventUnitBySlug(slug: string): AcademyUnit | null {
     title: event.title,
     subtitle: event.subtitle,
     concept: 'Mission Spéciale',
+    kind: 'project',
+    iconKey: 'globe',
+    shortTitle: 'Projet terrain',
+    pathLabel: 'Nœud projet',
+    masteryGoal: event.impactTarget,
     order: 0,
     durationMinutes: 5,
     estimatedMinutes: '5 min',
