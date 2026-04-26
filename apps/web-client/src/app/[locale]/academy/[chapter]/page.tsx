@@ -25,6 +25,7 @@ export default function ChapterPage() {
   const [progress, setProgress] = useState<AcademyProgress>(() =>
     getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
   )
+  const [lockedUnitTitle, setLockedUnitTitle] = useState<string | null>(null)
 
   useEffect(() => {
     setProgress(academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID))
@@ -79,8 +80,13 @@ export default function ChapterPage() {
               <button
                 type="button"
                 key={unit.id}
-                disabled={isLocked}
-                onClick={() => router.push(`/academy/${chapter.slug}/${unit.slug}`)}
+                onClick={() => {
+                  if (isLocked) {
+                    setLockedUnitTitle(unit.title)
+                    return
+                  }
+                  router.push(`/academy/${chapter.slug}/${unit.slug}`)
+                }}
                 className={cn(
                   'flex w-full items-center gap-4 rounded-3xl border p-4 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
                   isActive && 'border-emerald-500/30 bg-emerald-500/10',
@@ -111,6 +117,26 @@ export default function ChapterPage() {
             )
           })}
         </div>
+        {lockedUnitTitle && (
+          <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/70 p-4 pb-[max(2rem,env(safe-area-inset-bottom))] backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                <Lock className="h-7 w-7 text-white/45" />
+              </div>
+              <h3 className="mb-2 text-xl font-black text-white">{lockedUnitTitle}</h3>
+              <p className="mb-6 text-sm leading-relaxed text-white/55">
+                Termine les unités précédentes pour débloquer cette mission.
+              </p>
+              <button
+                type="button"
+                onClick={() => setLockedUnitTitle(null)}
+                className="w-full rounded-2xl bg-emerald-500 py-4 font-black text-black shadow-[0_5px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200"
+              >
+                Compris
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </FullScreenSlideModal>
   )

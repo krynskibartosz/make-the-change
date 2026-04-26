@@ -75,6 +75,10 @@ export type AcademyUnit = {
   concept: string
   order: number
   durationMinutes: number
+  estimatedMinutes?: string
+  learningGoal?: string
+  replayLabel?: string
+  lockedHint?: string
   mascot: AcademyMascot
   reward: AcademyReward
   exercises: AcademyExercise[]
@@ -263,6 +267,12 @@ const makeUnit = (
   concept: unit.concept,
   order: unit.order,
   durationMinutes: unit.durationMinutes,
+  estimatedMinutes: unit.estimatedMinutes ?? '2-3 min',
+  learningGoal:
+    unit.learningGoal ??
+    `Repérer l'idée clé : ${unit.concept.toLowerCase()}.`,
+  replayLabel: unit.replayLabel ?? 'Réviser sans regagner la récompense',
+  lockedHint: unit.lockedHint ?? 'Termine ton unité active pour débloquer celle-ci.',
   mascot: unit.mascot,
   reward: makeReward(unit.rewardAmount),
   exercises: makeExercises(unit.exercises),
@@ -1214,6 +1224,31 @@ export function getNextUnit(unitId: string): AcademyUnit | null {
   const units = flattenUnits()
   const currentIndex = units.findIndex((unit) => unit.id === unitId)
   return currentIndex >= 0 ? units[currentIndex + 1] ?? null : null
+}
+
+export function getActiveUnit(
+  chapters: AcademyChapter[] = academyRepository.getCurriculum(),
+  progress: AcademyProgress,
+): AcademyUnit | null {
+  return flattenUnits(chapters).find((unit) => unit.id === progress.activeUnitId) ?? null
+}
+
+export function getUnitPrerequisite(
+  unitId: string,
+  progress: AcademyProgress,
+): AcademyUnit | null {
+  if (progress.completedUnitIds.includes(unitId) || unitId === progress.activeUnitId) {
+    return null
+  }
+
+  return getUnitById(progress.activeUnitId)
+}
+
+export function isRewardAlreadyEarned(
+  progress: AcademyProgress,
+  unitId: string,
+): boolean {
+  return Boolean(progress.unitResults[unitId]?.rewardEarned)
 }
 
 export function decorateAcademyWithProgress(

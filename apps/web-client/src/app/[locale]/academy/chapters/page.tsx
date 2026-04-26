@@ -19,6 +19,7 @@ export default function ChaptersPage() {
   const [progress, setProgress] = useState<AcademyProgress>(() =>
     getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
   )
+  const [lockedChapterTitle, setLockedChapterTitle] = useState<string | null>(null)
 
   useEffect(() => {
     setProgress(academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID))
@@ -48,15 +49,16 @@ export default function ChaptersPage() {
                 type="button"
                 key={chapter.id}
                 onClick={() => {
-                  if (!isLocked) {
-                    router.push(`/academy/${chapter.slug}`)
+                  if (isLocked) {
+                    setLockedChapterTitle(chapter.title)
+                    return
                   }
+                  router.push(`/academy/${chapter.slug}`)
                 }}
                 whileTap={!isLocked ? { scale: 0.96 } : {}}
-                disabled={isLocked}
                 className={cn(
                   'relative flex w-full items-center gap-5 rounded-[32px] border-2 p-5 text-left transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
-                  !isLocked && 'cursor-pointer',
+                  'cursor-pointer',
                   isActive && 'border-emerald-500/30 bg-emerald-500/10',
                   isCompleted && 'border-transparent bg-white/5 hover:bg-white/10',
                   isLocked && 'border-transparent bg-white/[0.02] opacity-50 grayscale-[50%]',
@@ -103,6 +105,26 @@ export default function ChaptersPage() {
             )
           })}
         </div>
+        {lockedChapterTitle && (
+          <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/70 p-4 pb-[max(2rem,env(safe-area-inset-bottom))] backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                <Lock className="h-7 w-7 text-white/45" />
+              </div>
+              <h3 className="mb-2 text-xl font-black text-white">{lockedChapterTitle}</h3>
+              <p className="mb-6 text-sm leading-relaxed text-white/55">
+                Termine le chapitre actif pour débloquer cette partie du voyage.
+              </p>
+              <button
+                type="button"
+                onClick={() => setLockedChapterTitle(null)}
+                className="w-full rounded-2xl bg-emerald-500 py-4 font-black text-black shadow-[0_5px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200"
+              >
+                Compris
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </FullScreenSlideModal>
   )

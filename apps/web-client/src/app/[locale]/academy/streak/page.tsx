@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Check, Flame, Info, RotateCcw, Snowflake } from 'lucide-react'
+import { AlertTriangle, Check, Flame, Info, RotateCcw } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import {
@@ -20,6 +20,7 @@ export default function StreakPage() {
   const [progress, setProgress] = useState<AcademyProgress>(() =>
     getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
   )
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
 
   useEffect(() => {
     setProgress(academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID))
@@ -30,6 +31,7 @@ export default function StreakPage() {
 
   const reset = () => {
     setProgress(academyRepository.resetProgress(MOCK_ACADEMY_VIEWER_ID))
+    setShowResetConfirm(false)
   }
 
   return (
@@ -67,17 +69,17 @@ export default function StreakPage() {
           className="flex items-center justify-between gap-4 rounded-[32px] border border-white/10 bg-white/5 p-6"
         >
           <div className="flex items-center gap-5">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-blue-500/30 bg-blue-500/20">
-              <Snowflake className="h-7 w-7 text-blue-400" />
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-orange-500/30 bg-orange-500/15">
+              <Flame className="h-7 w-7 fill-orange-500 text-orange-500" />
             </div>
             <div>
-              <h3 className="mb-0.5 text-lg font-black text-white">Gels de série</h3>
-              <p className="text-sm text-white/50">Tu as 2 gels équipés sur 2</p>
+              <h3 className="mb-0.5 text-lg font-black text-white">Série locale</h3>
+              <p className="text-sm text-white/50">Une leçon terminée aujourd'hui maintient ta série.</p>
             </div>
           </div>
           <button
             type="button"
-            aria-label="Informations sur les gels de série"
+            aria-label="Informations sur la série locale"
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             <Info className="h-5 w-5 text-white/60" />
@@ -94,7 +96,7 @@ export default function StreakPage() {
             <h3 className="text-xl font-black capitalize text-white">{monthLabel}</h3>
             <button
               type="button"
-              onClick={reset}
+              onClick={() => setShowResetConfirm(true)}
               className="inline-flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-sm font-bold text-white/50 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               <RotateCcw className="h-4 w-4" />
@@ -136,6 +138,40 @@ export default function StreakPage() {
           </div>
         </motion.div>
       </div>
+      {showResetConfirm && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 p-5 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
+              <AlertTriangle className="h-7 w-7 text-amber-300" />
+            </div>
+            <h3 className="mb-2 text-xl font-black text-white">Effacer la série locale ?</h3>
+            <p className="mb-6 text-sm leading-relaxed text-white/55">
+              Toute la progression Academy locale sera remise à zéro sur cet appareil.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => setShowResetConfirm(false)}
+                className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className="w-full rounded-2xl bg-red-500/20 py-4 font-bold text-red-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+              >
+                Réinitialiser
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </FullScreenSlideModal>
   )
 }

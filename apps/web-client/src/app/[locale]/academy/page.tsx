@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
+  AlertTriangle,
   BookOpen,
   Brain,
   ChevronDown,
@@ -11,6 +12,7 @@ import {
   Gift,
   Leaf,
   Lock,
+  MoreHorizontal,
   RotateCcw,
   Sprout,
   Trophy,
@@ -24,9 +26,12 @@ import {
   MOCK_ACADEMY_VIEWER_ID,
   academyRepository,
   decorateAcademyWithProgress,
+  getActiveUnit,
+  getAllUnits,
   getDefaultAcademyProgress,
   getCurrentChapter,
   getNextChapter,
+  isRewardAlreadyEarned,
   type AcademyChapterWithStatus,
   type AcademyProgress,
   type AcademyUnitWithStatus,
@@ -103,7 +108,17 @@ function MascotSpacer({
   )
 }
 
-function LockedUnitModal({ unit, onClose }: { unit: AcademyUnitWithStatus; onClose: () => void }) {
+function LockedUnitModal({
+  unit,
+  activeUnit,
+  onClose,
+  onStartActive,
+}: {
+  unit: AcademyUnitWithStatus
+  activeUnit: AcademyUnitWithStatus | null
+  onClose: () => void
+  onStartActive: (unit: AcademyUnitWithStatus) => void
+}) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -125,15 +140,76 @@ function LockedUnitModal({ unit, onClose }: { unit: AcademyUnitWithStatus; onClo
         </div>
         <h3 className="mb-2 text-xl font-black text-white">{unit.title}</h3>
         <p className="mb-6 text-sm leading-relaxed text-white/50">
-          Termine les niveaux précédents pour débloquer celui-ci.
+          {activeUnit
+            ? `Termine "${activeUnit.title}" pour débloquer cette unité.`
+            : unit.lockedHint}
         </p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
-        >
-          Compris !
-        </button>
+        <div className="flex flex-col gap-3">
+          {activeUnit && (
+            <button
+              type="button"
+              onClick={() => onStartActive(activeUnit)}
+              className="w-full rounded-2xl bg-emerald-500 py-4 font-black text-black shadow-[0_5px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[4px] active:shadow-[0_1px_0_#065f46]"
+            >
+              Reprendre l'unité active
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
+          >
+            Retour au parcours
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function ResetConfirmModal({
+  onCancel,
+  onConfirm,
+}: {
+  onCancel: () => void
+  onConfirm: () => void
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 p-5 backdrop-blur-sm"
+    >
+      <motion.div
+        initial={{ scale: 0.94, opacity: 0, y: 16 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.94, opacity: 0, y: 16 }}
+        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl"
+      >
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
+          <AlertTriangle className="h-7 w-7 text-amber-300" />
+        </div>
+        <h3 className="mb-2 text-xl font-black text-white">Effacer la progression locale ?</h3>
+        <p className="mb-6 text-sm leading-relaxed text-white/55">
+          Cela remettra les unités, graines et série Academy à zéro sur cet appareil.
+        </p>
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
+          >
+            Annuler
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="w-full rounded-2xl bg-red-500/20 py-4 font-bold text-red-300 shadow-[0_5px_0_rgba(127,29,29,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(127,29,29,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 active:translate-y-[4px] active:shadow-[0_1px_0_rgba(127,29,29,0.5)]"
+          >
+            Réinitialiser
+          </button>
+        </div>
       </motion.div>
     </motion.div>
   )
@@ -256,15 +332,18 @@ function UnitNode({
         {isCompleted && <Crown className="h-9 w-9 fill-white text-white drop-shadow-md" />}
         {isLocked && <Lock className="h-8 w-8 text-white/20" />}
       </button>
-      {isActive && (
+      {(isActive || isCompleted) && (
         <motion.div
           initial={{ y: 0, opacity: 0.8 }}
-          animate={reduceMotion ? { opacity: 1 } : { y: [-4, 4, -4], opacity: 1 }}
+          animate={isActive && !reduceMotion ? { y: [-4, 4, -4], opacity: 1 } : { opacity: 1 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-12 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-2xl rounded-bl-none bg-white px-4 py-2 text-sm font-black text-black shadow-xl sm:left-auto sm:right-[-5rem] sm:translate-x-0"
+          className={cn(
+            'absolute -top-12 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-2xl rounded-bl-none px-4 py-2 text-sm font-black shadow-xl sm:left-auto sm:right-[-5rem] sm:translate-x-0',
+            isActive ? 'bg-white text-black' : 'border border-white/10 bg-black/80 text-white/75',
+          )}
         >
-          <Image src={`/${unit.mascot}.png`} alt="" width={24} height={24} className="object-contain" />
-          C'est ici !
+          {isActive && <Image src={`/${unit.mascot}.png`} alt="" width={24} height={24} className="object-contain" />}
+          {isActive ? 'À continuer' : 'Rejouer'}
         </motion.div>
       )}
     </div>
@@ -273,19 +352,19 @@ function UnitNode({
 
 function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
   return (
-    <div className="relative flex flex-col items-center overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 text-center shadow-2xl">
-      <div className="absolute right-0 top-0 z-10 p-4">
+    <div className="relative flex min-h-[210px] flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-5 text-center shadow-2xl">
+      <div className="absolute right-0 top-0 z-10 p-3">
         <span className="flex items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white/80 backdrop-blur-sm">
           {chapter.completedUnitsCount}/{chapter.units.length} <Crown className="h-4 w-4 fill-yellow-500 text-yellow-500" />
         </span>
       </div>
-      <div className="relative z-10 mb-4 h-24 w-24 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+      <div className="relative z-10 mb-3 h-16 w-16 drop-shadow-[0_0_15px_rgba(251,191,36,0.25)]">
         <Image src="/abeille-transparente.png" alt="" fill className="object-contain" />
       </div>
-      <h2 className="relative z-10 mb-2 text-xs font-black uppercase tracking-[0.2em] text-emerald-400">
+      <h2 className="relative z-10 mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-400">
         Chapitre {chapter.order} · {chapter.level}
       </h2>
-      <h1 className="relative z-10 mb-2 text-3xl font-black text-white">{chapter.title}</h1>
+      <h1 className="relative z-10 mb-2 text-2xl font-black leading-tight text-white">{chapter.title}</h1>
       <p className="relative z-10 max-w-[280px] text-sm text-white/60">{chapter.subtitle}</p>
       <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[50px]" />
     </div>
@@ -298,10 +377,28 @@ export default function AcademyPage() {
   const [selectedUnit, setSelectedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [lockedUnit, setLockedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [loadingTarget, setLoadingTarget] = useState<string | null>(null)
+  const [showDevMenu, setShowDevMenu] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
 
   const currentChapter = getCurrentChapter(chapters)
   const nextChapter = getNextChapter(chapters, currentChapter.id)
   const units = currentChapter.units
+  const activeUnitBase = getActiveUnit(academyRepository.getCurriculum(), progress)
+  const activeUnit =
+    activeUnitBase
+      ? chapters.flatMap((chapter) => chapter.units).find((unit) => unit.id === activeUnitBase.id) ?? null
+      : null
+  const totalUnitCount = getAllUnits().length
+  const completedTotal = progress.completedUnitIds.length
+  const selectedRewardEarned = selectedUnit
+    ? isRewardAlreadyEarned(progress, selectedUnit.id)
+    : false
+
+  const handleResetConfirmed = useCallback(() => {
+    reset()
+    setShowResetConfirm(false)
+    setShowDevMenu(false)
+  }, [reset])
 
   const handleStartCourse = useCallback(
     (unit: AcademyUnitWithStatus) => {
@@ -311,6 +408,7 @@ export default function AcademyPage() {
       }
 
       setSelectedUnit(null)
+      setLockedUnit(null)
       setLoadingTarget(`/academy/${chapter.slug}/${unit.slug}`)
     },
     [chapters],
@@ -345,6 +443,9 @@ export default function AcademyPage() {
           </Link>
 
           <div className="flex items-center gap-1.5">
+            <span className="hidden rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] font-black tabular-nums text-emerald-300 min-[390px]:inline-flex">
+              {completedTotal}/{totalUnitCount}
+            </span>
             <Link href="/academy/streak" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
               <Flame className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
               <span className="text-[11px] font-bold text-white">{progress.streak.current} j</span>
@@ -355,20 +456,47 @@ export default function AcademyPage() {
             </Link>
           </div>
 
-          <button
-            type="button"
-            onClick={reset}
-            aria-label="Réinitialiser la progression Academy"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            <RotateCcw className="h-4 w-4" />
-          </button>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowDevMenu((isOpen) => !isOpen)}
+              aria-label="Ouvrir les outils Academy"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
+            {showDevMenu && (
+              <div className="absolute right-0 top-11 w-48 rounded-2xl border border-white/10 bg-[#111116]/95 p-2 shadow-2xl backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={() => setShowResetConfirm(true)}
+                  className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Reset progression
+                </button>
+              </div>
+            )}
+          </div>
         </header>
 
-        <main className="px-6 pt-[calc(6rem+env(safe-area-inset-top))]">
+        <main className="px-5 pt-[calc(5rem+env(safe-area-inset-top))]">
           <ChapterBanner chapter={currentChapter} />
 
-          <div className="mt-12 flex flex-col items-center pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
+          <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3">
+            <div className="mb-2 flex items-center justify-between text-[11px] font-black uppercase tracking-[0.14em] text-white/45">
+              <span>Voyage Academy</span>
+              <span>{completedTotal}/{totalUnitCount} unités</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                animate={{ width: `${Math.round((completedTotal / totalUnitCount) * 100)}%` }}
+                className="h-full rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.75)]"
+              />
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
             {units.flatMap((unit, index) => {
               const nextUnit = units[index + 1]
               const isGoingLeft = index % 4 === 1
@@ -466,7 +594,7 @@ export default function AcademyPage() {
               onClose={() => setSelectedUnit(null)}
               className="bg-[#05050A]"
             >
-              <div className="relative mt-[-env(safe-area-inset-top)] h-64 shrink-0 overflow-hidden rounded-b-[40px] bg-emerald-900/30">
+              <div className="relative mt-[-env(safe-area-inset-top)] h-52 shrink-0 overflow-hidden rounded-b-[32px] bg-emerald-900/30">
                 <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-[#05050A] via-[#05050A]/20 to-transparent" />
                 <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/25 blur-[70px]" />
                 <motion.div
@@ -477,20 +605,26 @@ export default function AcademyPage() {
                     opacity: { duration: 0.3 },
                     y: { duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.4 },
                   }}
-                  className="absolute bottom-4 left-1/2 z-20 h-40 w-40 -translate-x-1/2 drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]"
+                  className="absolute bottom-2 left-1/2 z-20 h-32 w-32 -translate-x-1/2 drop-shadow-[0_0_30px_rgba(52,211,153,0.45)]"
                 >
                   <Image src={`/${selectedUnit.mascot}.png`} alt="" fill className="object-contain" />
                 </motion.div>
               </div>
-              <div className="flex flex-1 flex-col items-center px-6 pb-32 pt-8 text-center">
+              <div className="flex flex-1 flex-col items-center px-6 pb-32 pt-7 text-center">
                 <span className="mb-4 text-xs font-bold uppercase tracking-widest text-emerald-400">
                   {currentChapter.title} · Unité {selectedUnit.order}
                 </span>
                 <h2 className="mb-4 text-3xl font-black leading-tight text-white">{selectedUnit.title}</h2>
-                <p className="mb-8 text-base leading-relaxed text-white/70">{selectedUnit.subtitle}</p>
-                <div className="mb-auto flex gap-4">
+                <p className="mb-5 text-base leading-relaxed text-white/70">{selectedUnit.subtitle}</p>
+                <div className="mb-5 w-full rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-left">
+                  <span className="mb-1 block text-[10px] font-black uppercase tracking-[0.16em] text-emerald-300">
+                    Objectif
+                  </span>
+                  <p className="text-sm font-medium leading-relaxed text-white/80">{selectedUnit.learningGoal}</p>
+                </div>
+                <div className="mb-auto flex flex-wrap justify-center gap-3">
                   <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-lg">
-                    <Clock className="h-4 w-4 text-white/50" /> {selectedUnit.durationMinutes} min
+                    <Clock className="h-4 w-4 text-white/50" /> {selectedUnit.estimatedMinutes}
                   </div>
                   <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-lg">
                     <Brain className="h-4 w-4 text-white/50" /> {selectedUnit.exercises.length} exercices
@@ -501,8 +635,14 @@ export default function AcademyPage() {
                 <div className="mb-6 mt-6 text-center">
                   <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-900/40 px-4 py-2 font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                     <Gift className="h-4 w-4 text-emerald-400" />
-                    <span className="text-white">Récompense :</span>
-                    <span className="text-emerald-400">+{selectedUnit.reward.amount}</span>
+                    {selectedRewardEarned ? (
+                      <span className="text-white/70">{selectedUnit.replayLabel}</span>
+                    ) : (
+                      <>
+                        <span className="text-white">Récompense :</span>
+                        <span className="text-emerald-400">+{selectedUnit.reward.amount}</span>
+                      </>
+                    )}
                   </span>
                 </div>
                 <button
@@ -510,14 +650,28 @@ export default function AcademyPage() {
                   onClick={() => handleStartCourse(selectedUnit)}
                   className="w-full rounded-2xl bg-emerald-500 py-5 text-lg font-black text-black shadow-[0_6px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]"
                 >
-                  DÉMARRER L'EXPLORATION
+                  {selectedRewardEarned ? 'REJOUER LA MISSION' : 'COMMENCER'}
                 </button>
               </div>
             </FullScreenSlideModal>
           )}
 
           {lockedUnit && (
-            <LockedUnitModal key="locked-modal" unit={lockedUnit} onClose={() => setLockedUnit(null)} />
+            <LockedUnitModal
+              key="locked-modal"
+              unit={lockedUnit}
+              activeUnit={activeUnit}
+              onClose={() => setLockedUnit(null)}
+              onStartActive={handleStartCourse}
+            />
+          )}
+
+          {showResetConfirm && (
+            <ResetConfirmModal
+              key="reset-confirm-modal"
+              onCancel={() => setShowResetConfirm(false)}
+              onConfirm={handleResetConfirmed}
+            />
           )}
 
           {loadingTarget && <CourseLoadingScreen key="loading-screen" onComplete={handleLoadingComplete} />}

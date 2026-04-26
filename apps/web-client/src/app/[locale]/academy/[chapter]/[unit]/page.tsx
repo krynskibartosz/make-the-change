@@ -23,6 +23,7 @@ import {
   HeartCrack,
   Lock,
   RefreshCcw,
+  Sprout,
   X,
 } from 'lucide-react'
 import Image from 'next/image'
@@ -33,9 +34,12 @@ import { useRouter } from '@/i18n/navigation'
 import {
   MOCK_ACADEMY_VIEWER_ID,
   academyRepository,
+  getActiveUnit,
   getChapterBySlug,
   getDefaultAcademyProgress,
+  getUnitPrerequisite,
   getUnitBySlug,
+  isRewardAlreadyEarned,
   type AcademyDragDropExercise,
   type AcademyExercise,
   type AcademyQuizExercise,
@@ -157,14 +161,9 @@ function StoryExercise({
           <div key={index} className="flex-1 overflow-hidden rounded-full bg-white/20">
             <motion.div
               className="h-full bg-white"
-              initial={{ width: 0 }}
-              animate={{ width: index < currentScreen ? '100%' : index === currentScreen ? '100%' : '0%' }}
-              transition={index === currentScreen ? { duration: reduceMotion ? 0 : 5, ease: 'linear' } : { duration: 0 }}
-              onAnimationComplete={() => {
-                if (!reduceMotion && index === currentScreen) {
-                  handleNext()
-                }
-              }}
+              initial={false}
+              animate={{ width: index <= currentScreen ? '100%' : '0%' }}
+              transition={{ duration: reduceMotion ? 0 : 0.2, ease: 'easeOut' }}
             />
           </div>
         ))}
@@ -195,17 +194,17 @@ function StoryExercise({
         }}
         className="absolute inset-0 z-20 flex cursor-grab active:cursor-grabbing"
       >
-        <button type="button" aria-label="Écran précédent" onClick={handlePrev} className="h-full flex-1 cursor-pointer" />
-        <button type="button" aria-label="Écran suivant" onClick={handleNext} className="h-full flex-1 cursor-pointer" />
+        <button type="button" aria-label="Ecran precedent" onClick={handlePrev} className="h-full flex-1 cursor-pointer" />
+        <button type="button" aria-label="Ecran suivant" onClick={handleNext} className="h-full flex-1 cursor-pointer" />
       </motion.div>
       <motion.div
         initial={{ opacity: 0, x: 10 }}
-        animate={reduceMotion ? { opacity: 0.7 } : { opacity: [0.4, 1, 0.4], x: [10, 15, 10] }}
+        animate={reduceMotion ? { opacity: 0.85 } : { opacity: [0.65, 1, 0.65], x: [8, 14, 8] }}
         transition={{ duration: 2, repeat: reduceMotion ? 0 : Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute right-8 top-1/2 z-30 -translate-y-1/2"
+        className="pointer-events-none absolute bottom-24 right-6 z-30 flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-3 py-2 backdrop-blur-md"
       >
-        <ChevronRight className="h-8 w-8 text-white/60" />
-        <span className="mt-1 block text-center text-[10px] font-bold uppercase tracking-wider text-white/50">Tapez</span>
+        <span className="text-xs font-black text-white/80">Appuie pour continuer</span>
+        <ChevronRight className="h-5 w-5 text-white/70" />
       </motion.div>
       <div className="pointer-events-none relative z-10 mt-auto p-8 pb-32">
         <motion.h2 key={`text-${currentScreen}`} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-3xl font-black leading-tight text-white">
@@ -244,7 +243,10 @@ function SwipeExercise({
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#05050A] p-6 pt-28">
       <motion.div className="pointer-events-none absolute inset-0" style={{ backgroundColor: bgCorrect }} />
       <motion.div className="pointer-events-none absolute inset-0" style={{ backgroundColor: bgWrong }} />
-      <h2 className="relative z-10 mb-10 text-center text-xl font-bold text-white">{exercise.question}</h2>
+      <h2 className="relative z-10 mb-3 text-center text-xl font-bold text-white">{exercise.question}</h2>
+      <p className="relative z-10 mb-7 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-center text-xs font-bold text-white/55">
+        Choisis une réponse ou glisse la carte.
+      </p>
       <div className="relative aspect-[3/4] w-full max-w-sm">
         <div className="absolute inset-0 translate-y-4 scale-95 rounded-3xl border border-white/10 bg-white/5" />
         <motion.div
@@ -293,23 +295,39 @@ function SwipeExercise({
   )
 }
 
-function DraggableItem({ id, text }: { id: string; text: string }) {
+function DraggableItem({
+  id,
+  text,
+  isSelected,
+  onTap,
+}: {
+  id: string
+  text: string
+  isSelected?: boolean
+  onTap?: () => void
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id })
   const style = transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined
 
   return (
-    <div
+    <button
+      type="button"
       ref={setNodeRef}
       style={style}
+      onClick={(event) => {
+        event.stopPropagation()
+        onTap?.()
+      }}
       {...listeners}
       {...attributes}
       className={cn(
-        'cursor-grab touch-none rounded-xl border border-white/20 bg-white/10 p-4 text-center font-medium text-white shadow-lg backdrop-blur-md transition-shadow active:scale-105 active:cursor-grabbing active:shadow-2xl',
+        'cursor-grab touch-none rounded-xl border bg-white/10 p-4 text-center font-medium text-white shadow-lg backdrop-blur-md transition-all active:scale-105 active:cursor-grabbing active:shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
+        isSelected ? 'border-amber-300 bg-amber-300/15 shadow-[0_0_20px_rgba(251,191,36,0.2)]' : 'border-white/20',
         isDragging && 'z-50 scale-105 opacity-50',
       )}
     >
       {text}
-    </div>
+    </button>
   )
 }
 
@@ -334,34 +352,52 @@ function DroppableSlot({
   index,
   item,
   isWrong,
+  isTargeted,
+  onSlotTap,
+  onPlacedTap,
 }: {
   id: string
   index: number
   item: { id: string; text: string } | null
   isWrong?: boolean
+  isTargeted?: boolean
+  onSlotTap: () => void
+  onPlacedTap: () => void
 }) {
   const { isOver, setNodeRef } = useDroppable({ id })
 
   return (
     <div className="flex w-full flex-col items-center">
       <motion.div
+        role={item ? undefined : 'button'}
+        tabIndex={item ? undefined : 0}
         ref={setNodeRef}
+        aria-label={item ? undefined : isTargeted ? `Emplacement ${index + 1} - toucher pour placer` : `Emplacement ${index + 1}`}
+        onClick={item ? undefined : onSlotTap}
+        onKeyDown={(event) => {
+          if (!item && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault()
+            onSlotTap()
+          }
+        }}
         animate={isWrong ? { x: [0, -10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.5 }}
         className={cn(
-          'flex h-16 w-full items-center justify-center rounded-xl border-2 border-dashed transition-colors',
-          isOver ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/20 bg-white/5',
+          'flex min-h-14 w-full items-center justify-center rounded-xl border-2 border-dashed transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
+          isOver || isTargeted ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/20 bg-white/5',
           item && 'border-solid border-emerald-500/50 bg-emerald-500/20',
           isWrong && 'border-red-500/50 bg-red-500/20',
         )}
       >
         {item ? (
-          <DraggableItem id={item.id} text={item.text} />
+          <DraggableItem id={item.id} text={item.text} onTap={onPlacedTap} />
         ) : (
-          <span className="text-sm text-white/30">Emplacement {index + 1}</span>
+          <span className="text-sm text-white/35">
+            {isTargeted ? `Emplacement ${index + 1} - toucher pour placer` : `Emplacement ${index + 1}`}
+          </span>
         )}
       </motion.div>
-      {index < 2 && <ArrowRight className="my-2 h-6 w-6 rotate-90 text-white/30" />}
+      {index < 2 && <ArrowRight className="my-1 h-5 w-5 rotate-90 text-white/30" />}
     </div>
   )
 }
@@ -385,6 +421,7 @@ function DragDropExercise({
   })
   const [availableItems, setAvailableItems] = useState(shuffledItems)
   const [wrongSlots, setWrongSlots] = useState<Set<number>>(new Set())
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } }),
@@ -396,6 +433,7 @@ function DragDropExercise({
     setSlots({ slot_0: null, slot_1: null, slot_2: null })
     setAvailableItems(nextItems)
     setWrongSlots(new Set())
+    setSelectedItemId(null)
   }, [attempt, exercise.items])
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -427,20 +465,70 @@ function DragDropExercise({
           setAvailableItems((previous) => previous.filter((entry) => entry.id !== availableItem.id))
         } else if (sourceSlotId) {
           // Item from another slot -> move to this slot
-          setSlots((previous) => ({ ...previous, [slotId]: previous[sourceSlotId], [sourceSlotId]: null }))
+          setSlots((previous) => ({ ...previous, [slotId]: previous[sourceSlotId] ?? null, [sourceSlotId]: null }))
         }
       } else {
         // Slot is occupied, swap items
         if (availableItem) {
           // Item from available items -> swap with slot item
           setSlots((previous) => ({ ...previous, [slotId]: availableItem }))
-          setAvailableItems((previous) => [...previous, previous[slotId]!].filter((entry) => entry.id !== availableItem.id))
+          setAvailableItems((items) => {
+            const replacedItem = slots[slotId]
+            return replacedItem
+              ? [...items, replacedItem].filter((entry) => entry.id !== availableItem.id)
+              : items.filter((entry) => entry.id !== availableItem.id)
+          })
         } else if (sourceSlotId) {
           // Item from another slot -> swap slots
-          setSlots((previous) => ({ ...previous, [slotId]: previous[sourceSlotId], [sourceSlotId]: previous[slotId] }))
+          setSlots((previous) => ({
+            ...previous,
+            [slotId]: previous[sourceSlotId] ?? null,
+            [sourceSlotId]: previous[slotId] ?? null,
+          }))
         }
       }
     }
+    setSelectedItemId(null)
+    setWrongSlots(new Set())
+  }
+
+  const removeFromSlot = (slotId: string) => {
+    const item = slots[slotId]
+    if (!item) {
+      return
+    }
+
+    setSlots((previous) => ({ ...previous, [slotId]: null }))
+    setAvailableItems((previous) => [...previous, item])
+    setSelectedItemId(null)
+    setWrongSlots(new Set())
+  }
+
+  const placeSelectedInSlot = (slotId: string) => {
+    if (!selectedItemId) {
+      return
+    }
+
+    const selectedItem = availableItems.find((entry) => entry.id === selectedItemId)
+    if (!selectedItem) {
+      return
+    }
+
+    setSlots((previous) => {
+      const replacedItem = previous[slotId]
+      if (replacedItem) {
+        setAvailableItems((items) => [
+          ...items.filter((entry) => entry.id !== selectedItem.id),
+          replacedItem,
+        ])
+      } else {
+        setAvailableItems((items) => items.filter((entry) => entry.id !== selectedItem.id))
+      }
+
+      return { ...previous, [slotId]: selectedItem }
+    })
+    setSelectedItemId(null)
+    setWrongSlots(new Set())
   }
 
   const handleVerify = () => {
@@ -460,54 +548,89 @@ function DragDropExercise({
     setSlots({ slot_0: null, slot_1: null, slot_2: null })
     setAvailableItems(shuffledItems)
     setWrongSlots(new Set())
+    setSelectedItemId(null)
   }
 
   const isComplete = Object.values(slots).every(Boolean)
 
   return (
-    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-40 pt-28">
-      <h2 className="mb-8 shrink-0 text-center text-xl font-bold text-white">{exercise.instruction}</h2>
+    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-5 pb-40 pt-24">
+      <h2 className="mb-2 shrink-0 text-center text-lg font-bold text-white">{exercise.instruction}</h2>
+      <p className="mx-auto mb-4 max-w-sm rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-medium leading-relaxed text-white/55">
+        Place les éléments dans l'ordre. Tu peux glisser une carte ou la toucher puis choisir un emplacement.
+      </p>
+      <div className="mx-auto mb-4 flex w-full max-w-sm gap-3">
+        <button
+          type="button"
+          onClick={handleReset}
+          aria-label="Réinitialiser le classement"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white shadow-[0_4px_0_rgba(0,0,0,0.4)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_2px_0_rgba(0,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.4)]"
+        >
+          <RefreshCcw className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          onClick={handleVerify}
+          disabled={!isComplete || showFeedback}
+          className={cn(
+            'flex-1 rounded-2xl py-3 text-base font-black transition-all duration-100',
+            !isComplete || showFeedback
+              ? 'cursor-not-allowed bg-white/10 text-white/30'
+              : 'bg-emerald-500 text-black shadow-[0_5px_0_#065f46] hover:translate-y-0.5 hover:shadow-[0_3px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[4px] active:shadow-[0_1px_0_#065f46]',
+          )}
+        >
+          VALIDER
+        </button>
+      </div>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="mx-auto flex w-full max-w-sm flex-col items-center">
-          <div className="mb-8 flex w-full flex-col items-center">
-            <DroppableSlot id="slot_0" index={0} item={slots.slot_0 ?? null} isWrong={wrongSlots.has(0)} />
-            <DroppableSlot id="slot_1" index={1} item={slots.slot_1 ?? null} isWrong={wrongSlots.has(1)} />
-            <DroppableSlot id="slot_2" index={2} item={slots.slot_2 ?? null} isWrong={wrongSlots.has(2)} />
+          <div className="mb-4 flex w-full flex-col items-center">
+            <DroppableSlot
+              id="slot_0"
+              index={0}
+              item={slots.slot_0 ?? null}
+              isWrong={wrongSlots.has(0)}
+              isTargeted={Boolean(selectedItemId)}
+              onSlotTap={() => placeSelectedInSlot('slot_0')}
+              onPlacedTap={() => removeFromSlot('slot_0')}
+            />
+            <DroppableSlot
+              id="slot_1"
+              index={1}
+              item={slots.slot_1 ?? null}
+              isWrong={wrongSlots.has(1)}
+              isTargeted={Boolean(selectedItemId)}
+              onSlotTap={() => placeSelectedInSlot('slot_1')}
+              onPlacedTap={() => removeFromSlot('slot_1')}
+            />
+            <DroppableSlot
+              id="slot_2"
+              index={2}
+              item={slots.slot_2 ?? null}
+              isWrong={wrongSlots.has(2)}
+              isTargeted={Boolean(selectedItemId)}
+              onSlotTap={() => placeSelectedInSlot('slot_2')}
+              onPlacedTap={() => removeFromSlot('slot_2')}
+            />
           </div>
           <Droppable id="available-zone">
             <div className="flex w-full flex-col gap-3">
               {availableItems.map((item) => (
-                <DraggableItem key={item.id} id={item.id} text={item.text} />
+                <DraggableItem
+                  key={item.id}
+                  id={item.id}
+                  text={item.text}
+                  isSelected={selectedItemId === item.id}
+                  onTap={() => {
+                    setSelectedItemId((current) => (current === item.id ? null : item.id))
+                    setWrongSlots(new Set())
+                  }}
+                />
               ))}
             </div>
           </Droppable>
         </div>
       </DndContext>
-      {isComplete && (
-        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="sticky bottom-0 mt-8 flex gap-4">
-          <button
-            type="button"
-            onClick={handleReset}
-            aria-label="Réinitialiser le classement"
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.4)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.4)]"
-          >
-            <RefreshCcw className="h-6 w-6" />
-          </button>
-          <button
-            type="button"
-            onClick={handleVerify}
-            disabled={showFeedback}
-            className={cn(
-              'flex-1 rounded-2xl py-4 text-lg font-black transition-all duration-100',
-              showFeedback
-                ? 'cursor-not-allowed bg-emerald-500/50 text-black/50'
-                : 'bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]',
-            )}
-          >
-            VÉRIFIER
-          </button>
-        </motion.div>
-      )}
     </div>
   )
 }
@@ -524,11 +647,9 @@ function QuizExercise({
   mascot: string
 }) {
   const [selected, setSelected] = useState<number | null>(null)
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
 
   useEffect(() => {
     setSelected(null)
-    setIsCorrect(null)
   }, [attempt])
 
   const handleSelect = (index: number) => {
@@ -538,14 +659,23 @@ function QuizExercise({
     }
 
     setSelected(index)
-    setIsCorrect(option.isCorrect)
-    window.setTimeout(() => {
-      onResult(option.isCorrect, option.isCorrect ? exercise.successFeedback : exercise.failureFeedback)
-    }, 600)
+  }
+
+  const handleVerify = () => {
+    if (selected === null) {
+      return
+    }
+
+    const option = exercise.options[selected]
+    if (!option) {
+      return
+    }
+
+    onResult(option.isCorrect, option.isCorrect ? exercise.successFeedback : exercise.failureFeedback)
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-24 pt-32">
+    <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-36 pt-32">
       <div className="mb-8 flex flex-col items-center">
         <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative mb-4 h-24 w-24">
           <Image src={`/${mascot}.png`} alt="" fill className="object-contain" />
@@ -558,14 +688,10 @@ function QuizExercise({
             type="button"
             key={option.text}
             onClick={() => handleSelect(index)}
-            disabled={selected !== null}
             className={cn(
               'w-full rounded-2xl p-5 text-left text-base font-bold transition-all duration-100 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
-              selected === index && isCorrect && 'translate-y-1 bg-emerald-500 text-black shadow-[0_2px_0_#065f46]',
-              selected === index && isCorrect === false && 'translate-y-1 bg-red-500 text-white shadow-[0_2px_0_#b91c1c]',
-              selected !== null && selected !== index && option.isCorrect && 'border-2 border-emerald-500 bg-emerald-500/20 text-emerald-400',
-              selected !== null && selected !== index && !option.isCorrect && 'cursor-not-allowed border border-white/5 bg-white/5 text-white/40',
-              selected === null && 'border border-white/10 bg-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.5)]',
+              selected === index && 'translate-y-1 border-2 border-emerald-400 bg-emerald-500/20 text-white shadow-[0_2px_0_#065f46]',
+              selected !== index && 'border border-white/10 bg-white/10 text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.5)]',
             )}
           >
             <span className="flex items-center gap-3">
@@ -576,6 +702,21 @@ function QuizExercise({
             </span>
           </button>
         ))}
+      </div>
+      <div className="sticky bottom-0 mt-8 bg-gradient-to-t from-[#05050A] via-[#05050A]/95 to-transparent pt-8">
+        <button
+          type="button"
+          onClick={handleVerify}
+          disabled={selected === null}
+          className={cn(
+            'w-full rounded-2xl py-5 text-lg font-black transition-all duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200',
+            selected === null
+              ? 'cursor-not-allowed bg-white/10 text-white/30'
+              : 'bg-emerald-500 text-black shadow-[0_6px_0_#065f46] hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]',
+          )}
+        >
+          VALIDER
+        </button>
       </div>
     </div>
   )
@@ -682,14 +823,23 @@ function VictoryScreen({
           <Image src={`/${unit.mascot}.png`} alt="" width={140} height={140} className="object-contain drop-shadow-[0_10px_20px_rgba(16,185,129,0.5)]" />
         </motion.div>
       </motion.div>
-      <h2 className="mb-4 text-4xl font-black uppercase tracking-tight text-white">Leçon terminée !</h2>
-      <div className="relative mb-12 flex items-center gap-3 rounded-2xl border-2 border-emerald-500/50 bg-emerald-500/20 px-6 py-3 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
-        <span className="text-2xl font-black text-emerald-400">+{countedReward}</span>
-        <span className="text-lg font-bold capitalize text-emerald-400">Graines</span>
-        {alreadyCompleted && (
-          <span className="absolute -right-3 -top-3 rounded-full border border-white/10 bg-black px-2 py-1 text-xs font-black text-white/60">
-            Replay
-          </span>
+      <h2 className="mb-3 text-4xl font-black uppercase tracking-tight text-white">
+        {alreadyCompleted ? 'Révision terminée' : 'Leçon terminée !'}
+      </h2>
+      <p className="mb-6 max-w-xs text-sm font-medium leading-relaxed text-white/55">
+        {alreadyCompleted
+          ? 'Tu as renforcé cette notion. La récompense avait déjà été gagnée.'
+          : 'Belle progression. Ta série locale et la prochaine unité sont mises à jour.'}
+      </p>
+      <div className="relative mb-10 flex items-center gap-3 rounded-2xl border-2 border-emerald-500/50 bg-emerald-500/20 px-6 py-3 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+        {alreadyCompleted ? (
+          <span className="text-base font-black text-emerald-300">Récompense déjà gagnée</span>
+        ) : (
+          <>
+            <Sprout className="h-5 w-5 text-emerald-300" />
+            <span className="text-2xl font-black text-emerald-400">+{countedReward}</span>
+            <span className="text-lg font-bold capitalize text-emerald-400">Graines</span>
+          </>
         )}
       </div>
       <button
@@ -697,7 +847,7 @@ function VictoryScreen({
         onClick={onFinish}
         className="mb-8 mt-auto w-full rounded-3xl bg-emerald-500 py-6 text-xl font-black uppercase tracking-wide text-black shadow-[0_7px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_5px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[6px] active:shadow-[0_1px_0_#065f46]"
       >
-        Récupérer mes graines
+        {alreadyCompleted ? "Retour à l'Academy" : 'Continuer le voyage'}
       </button>
     </div>
   )
@@ -728,7 +878,7 @@ function ComboAnimation({ level, onComplete }: { level: number; onComplete: () =
   )
 }
 
-function GameOverScreen({ onQuit }: { onQuit: () => void }) {
+function GameOverScreen({ onQuit, onRetry }: { onQuit: () => void; onRetry: () => void }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center bg-[#05050A] p-8 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] text-center">
       <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', bounce: 0.5 }} className="mb-8 text-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,0.3)]">
@@ -736,12 +886,19 @@ function GameOverScreen({ onQuit }: { onQuit: () => void }) {
       </motion.div>
       <h2 className="mb-3 text-4xl font-black text-white">Plus de vies !</h2>
       <p className="mb-12 max-w-xs text-base leading-relaxed text-white/60">
-        Tu as épuisé toutes tes vies. Reviens plus tard pour réessayer.
+        Cette tentative est terminée. Tu peux reprendre tout de suite pour consolider la notion.
       </p>
       <button
         type="button"
+        onClick={onRetry}
+        className="mb-3 mt-auto w-full rounded-2xl bg-emerald-500 py-5 text-lg font-black text-black shadow-[0_6px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_4px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[5px] active:shadow-[0_1px_0_#065f46]"
+      >
+        Réessayer cette unité
+      </button>
+      <button
+        type="button"
         onClick={onQuit}
-        className="mt-auto w-full rounded-2xl bg-white/10 py-5 text-lg font-black text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
+        className="w-full rounded-2xl bg-white/10 py-5 text-lg font-black text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
       >
         Retour à l'Académie
       </button>
@@ -784,8 +941,13 @@ export default function ExerciseEngine() {
   const chapter = chapterSlug ? getChapterBySlug(chapterSlug) : null
   const unit = chapterSlug && unitSlug ? getUnitBySlug(chapterSlug, unitSlug) : null
   const [progress, setProgress] = useState(() => getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID))
-  const alreadyCompleted = unit ? progress.completedUnitIds.includes(unit.id) : false
-  const isLockedUnit = unit ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
+  const [isProgressReady, setIsProgressReady] = useState(false)
+  const alreadyCompleted = unit
+    ? progress.completedUnitIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
+    : false
+  const isLockedUnit = unit && isProgressReady ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
+  const prerequisiteUnit = unit ? getUnitPrerequisite(unit.id, progress) ?? getActiveUnit(academyRepository.getCurriculum(), progress) : null
+  const prerequisiteChapter = prerequisiteUnit ? getChapterBySlug(prerequisiteUnit.chapterId) : null
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [feedback, setFeedback] = useState<{ show: boolean; correct: boolean; text: string } | null>(null)
@@ -804,6 +966,7 @@ export default function ExerciseEngine() {
     const nextProgress = academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID)
     setProgress(nextProgress)
     setLives(Math.max(1, nextProgress.lives.remaining || 5))
+    setIsProgressReady(true)
   }, [])
 
   const handleResult = (correct: boolean, text: string) => {
@@ -847,12 +1010,34 @@ export default function ExerciseEngine() {
     router.push('/academy')
   }
 
+  const handleRetry = () => {
+    setCurrentStepIndex(0)
+    setFeedback(null)
+    setShowQuitModal(false)
+    setLives(5)
+    setComboCount(0)
+    setMistakes(0)
+    setShowComboAnimation(null)
+    setAttempt((previous) => previous + 1)
+  }
+
   if (!chapter || !unit) {
     return (
       <FullScreenSlideModal headerMode="back" fallbackHref="/academy" className="bg-[#05050A] text-white">
         <div className="flex min-h-full flex-col items-center justify-center px-6 text-center">
           <h1 className="mb-3 text-3xl font-black">Unité introuvable</h1>
           <p className="text-white/60">Ce cours n'existe pas dans le curriculum mock.</p>
+        </div>
+      </FullScreenSlideModal>
+    )
+  }
+
+  if (!isProgressReady) {
+    return (
+      <FullScreenSlideModal headerMode="none" className="bg-[#05050A] text-white">
+        <div className="flex min-h-full flex-col items-center justify-center px-6 text-center">
+          <div className="mb-5 h-12 w-12 rounded-full border-4 border-white/10 border-t-emerald-400" />
+          <p className="text-sm font-bold text-white/55">Synchronisation de ta progression...</p>
         </div>
       </FullScreenSlideModal>
     )
@@ -866,9 +1051,29 @@ export default function ExerciseEngine() {
             <Lock className="h-9 w-9 text-white/40" />
           </div>
           <h1 className="mb-3 text-3xl font-black">Unité verrouillée</h1>
-          <p className="max-w-sm text-white/60">
-            Termine les niveaux précédents pour débloquer {unit.title}.
+          <p className="mb-8 max-w-sm text-white/60">
+            {prerequisiteUnit
+              ? `Termine "${prerequisiteUnit.title}" pour débloquer ${unit.title}.`
+              : `Termine les niveaux précédents pour débloquer ${unit.title}.`}
           </p>
+          <div className="flex w-full max-w-sm flex-col gap-3">
+            {prerequisiteUnit && prerequisiteChapter && (
+              <button
+                type="button"
+                onClick={() => router.push(`/academy/${prerequisiteChapter.slug}/${prerequisiteUnit.slug}`)}
+                className="w-full rounded-2xl bg-emerald-500 py-4 font-black text-black shadow-[0_5px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[4px] active:shadow-[0_1px_0_#065f46]"
+              >
+                Reprendre l'unité active
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => router.push('/academy')}
+              className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
+            >
+              Retour à l'Academy
+            </button>
+          </div>
         </div>
       </FullScreenSlideModal>
     )
@@ -879,7 +1084,7 @@ export default function ExerciseEngine() {
       {isFinished ? (
         <VictoryScreen unit={unit} alreadyCompleted={alreadyCompleted} onFinish={handleFinish} />
       ) : isGameOver ? (
-        <GameOverScreen onQuit={handleQuit} />
+        <GameOverScreen onQuit={handleQuit} onRetry={handleRetry} />
       ) : (
         <>
           <ExerciseHeader progress={currentStepIndex} total={unit.exercises.length} onQuit={() => setShowQuitModal(true)} lives={lives} />
