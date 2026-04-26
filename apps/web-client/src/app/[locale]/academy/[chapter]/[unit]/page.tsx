@@ -313,6 +313,22 @@ function DraggableItem({ id, text }: { id: string; text: string }) {
   )
 }
 
+function Droppable({ id, children }: { id: string; children: React.ReactNode }) {
+  const { isOver, setNodeRef } = useDroppable({ id })
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={cn(
+        'transition-colors',
+        isOver ? 'bg-white/5' : '',
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
 function DroppableSlot({
   id,
   index,
@@ -384,12 +400,24 @@ function DragDropExercise({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-    if (over && over.id.toString().startsWith('slot_')) {
-      const slotId = over.id.toString()
-      
-      // Check if the dragged item is from the available items or from a slot
-      const availableItem = availableItems.find((entry) => entry.id === active.id)
-      const sourceSlotId = Object.keys(slots).find(key => slots[key]?.id === active.id)
+    if (!over) return
+
+    const overId = over.id.toString()
+    
+    // Check if the dragged item is from the available items or from a slot
+    const availableItem = availableItems.find((entry) => entry.id === active.id)
+    const sourceSlotId = Object.keys(slots).find(key => slots[key]?.id === active.id)
+
+    // Drop in available items zone (return to initial position)
+    if (overId === 'available-zone' && sourceSlotId) {
+      setSlots((previous) => ({ ...previous, [sourceSlotId]: null }))
+      setAvailableItems((previous) => [...previous, slots[sourceSlotId]!])
+      return
+    }
+
+    // Drop in a slot
+    if (overId.startsWith('slot_')) {
+      const slotId = overId
       
       // If the slot is empty, just place the item
       if (!slots[slotId]) {
@@ -446,11 +474,13 @@ function DragDropExercise({
             <DroppableSlot id="slot_1" index={1} item={slots.slot_1 ?? null} isWrong={wrongSlots.has(1)} />
             <DroppableSlot id="slot_2" index={2} item={slots.slot_2 ?? null} isWrong={wrongSlots.has(2)} />
           </div>
-          <div className="flex w-full flex-col gap-3">
-            {availableItems.map((item) => (
-              <DraggableItem key={item.id} id={item.id} text={item.text} />
-            ))}
-          </div>
+          <Droppable id="available-zone">
+            <div className="flex w-full flex-col gap-3">
+              {availableItems.map((item) => (
+                <DraggableItem key={item.id} id={item.id} text={item.text} />
+              ))}
+            </div>
+          </Droppable>
         </div>
       </DndContext>
       {isComplete && (
