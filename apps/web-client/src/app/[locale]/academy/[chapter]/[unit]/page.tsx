@@ -67,14 +67,14 @@ function ExerciseHeader({
   lives: number
 }) {
   return (
-    <div className="absolute inset-x-0 top-0 z-50 flex items-center gap-4 border-b border-white/5 bg-[#05050A]/60 p-4 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-md">
+    <div className="absolute inset-x-0 top-0 z-50 flex items-center gap-3 border-b border-white/5 bg-[#05050A]/60 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md">
       <button
         type="button"
         onClick={onQuit}
         aria-label="Quitter l'entraînement"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black/20 text-white/60 backdrop-blur-md transition-colors hover:bg-black/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-black/20 text-white/60 backdrop-blur-md transition-colors touch-manipulation hover:bg-black/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
-        <X className="h-6 w-6" />
+        <X className="h-5 w-5" />
       </button>
       <div className="flex h-3 flex-1 gap-1.5">
         {Array.from({ length: total }).map((_, index) => {
@@ -105,7 +105,7 @@ function ExerciseHeader({
         animate={lives > 0 ? { x: [0, -5, 5, -5, 5, 0] } : { scale: [1, 1.15, 0.9, 1] }}
         transition={{ duration: 0.35, ease: 'easeInOut' }}
         className={cn(
-          'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 transition-colors duration-300',
+          'flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border px-3 transition-colors duration-300',
           lives >= 3 && 'border-red-500/25 bg-red-500/10',
           lives >= 1 && lives < 3 && 'border-amber-500/25 bg-amber-500/10',
           lives === 0 && 'border-white/10 bg-white/5 opacity-50',

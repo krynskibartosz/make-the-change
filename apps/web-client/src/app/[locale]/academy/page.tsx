@@ -20,7 +20,6 @@ import {
   Timer,
   Trophy,
   Unlock,
-  Zap,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -35,8 +34,6 @@ import {
   getDefaultAcademyProgress,
   getCurrentChapter,
   getNextChapter,
-  getCursusById,
-  getCursusOptions,
   getCompletedLessonCountForUnit,
   getNextLessonForUnit,
   isRewardAlreadyEarned,
@@ -69,10 +66,6 @@ function useAcademySurface() {
     setProgress(academyRepository.resetProgress(MOCK_ACADEMY_VIEWER_ID))
   }, [])
 
-  const setCursus = useCallback((cursusId: AcademyProgress['selectedCursusId']) => {
-    setProgress(academyRepository.setCursus(MOCK_ACADEMY_VIEWER_ID, cursusId))
-  }, [])
-
   useEffect(() => {
     refresh()
   }, [refresh])
@@ -82,7 +75,7 @@ function useAcademySurface() {
     [progress],
   )
 
-  return { chapters, progress, reset, setCursus }
+  return { chapters, progress, reset }
 }
 
 function MascotSpacer({
@@ -135,22 +128,14 @@ function LockedUnitModal({
   onStartActive: (unit: AcademyUnitWithStatus) => void
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-4 pb-[max(2rem,env(safe-area-inset-bottom))] backdrop-blur-sm"
+    <FullScreenSlideModal
+      title="Unité verrouillée"
+      headerMode="close"
+      onClose={onClose}
+      className="z-[90] bg-[#05050A] text-white"
     >
-      <motion.div
-        initial={{ y: 80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 80, opacity: 0 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl"
-      >
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5">
+      <div className="mx-auto flex min-h-full max-w-sm flex-col items-center justify-center px-6 text-center">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5">
           <Lock className="h-7 w-7 text-white/50" />
         </div>
         <h3 className="mb-2 text-xl font-black text-white">{unit.title}</h3>
@@ -159,7 +144,7 @@ function LockedUnitModal({
             ? `Termine "${activeUnit.title}" pour débloquer cette unité.`
             : unit.lockedHint}
         </p>
-        <div className="flex flex-col gap-3">
+        <div className="flex w-full flex-col gap-3">
           {activeUnit && (
             <button
               type="button"
@@ -177,8 +162,8 @@ function LockedUnitModal({
             Retour au parcours
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </FullScreenSlideModal>
   )
 }
 
@@ -190,26 +175,21 @@ function ResetConfirmModal({
   onConfirm: () => void
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 p-5 backdrop-blur-sm"
+    <FullScreenSlideModal
+      title="Réinitialiser"
+      headerMode="close"
+      onClose={onCancel}
+      className="z-[90] bg-[#05050A] text-white"
     >
-      <motion.div
-        initial={{ scale: 0.94, opacity: 0, y: 16 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.94, opacity: 0, y: 16 }}
-        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl"
-      >
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
+      <div className="mx-auto flex min-h-full max-w-sm flex-col items-center justify-center px-6 text-center">
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
           <AlertTriangle className="h-7 w-7 text-amber-300" />
         </div>
         <h3 className="mb-2 text-xl font-black text-white">Effacer la progression locale ?</h3>
         <p className="mb-6 text-sm leading-relaxed text-white/55">
           Cela remettra les unités, graines et série Academy à zéro sur cet appareil.
         </p>
-        <div className="flex flex-col gap-3">
+        <div className="flex w-full flex-col gap-3">
           <button
             type="button"
             onClick={onCancel}
@@ -225,8 +205,8 @@ function ResetConfirmModal({
             Réinitialiser
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </FullScreenSlideModal>
   )
 }
 
@@ -290,47 +270,6 @@ function CourseLoadingScreen({ onComplete }: { onComplete: () => void }) {
   )
 }
 
-function CursusSelector({
-  selectedId,
-  onSelect,
-}: {
-  selectedId: AcademyProgress['selectedCursusId']
-  onSelect: (cursusId: AcademyProgress['selectedCursusId']) => void
-}) {
-  const cursusOptions = getCursusOptions()
-  const selected = getCursusById(selectedId)
-
-  return (
-    <section className="mb-4 rounded-2xl border border-white/10 bg-black/35 p-3">
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/35">Cursus actif</p>
-          <h2 className="text-lg font-black text-white">{selected.title}</h2>
-          <p className="text-xs font-medium leading-relaxed text-white/50">{selected.subtitle}</p>
-        </div>
-        <Brain className="mt-1 h-5 w-5 shrink-0 text-emerald-300" />
-      </div>
-      <div className="grid grid-cols-3 gap-2">
-        {cursusOptions.map((cursus) => (
-          <button
-            key={cursus.id}
-            type="button"
-            onClick={() => onSelect(cursus.id)}
-            className={cn(
-              'min-h-12 rounded-xl border px-2 py-2 text-[10px] font-black leading-tight transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
-              cursus.id === selectedId
-                ? 'border-emerald-400 bg-emerald-400/15 text-emerald-100'
-                : 'border-white/10 bg-white/5 text-white/45 active:scale-95',
-            )}
-          >
-            {cursus.title}
-          </button>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 function UnitNode({
   unit,
   onSelect,
@@ -344,15 +283,33 @@ function UnitNode({
   const isLocked = unit.status === 'locked'
   const isCompleted = unit.status === 'completed'
   const isActive = unit.status === 'active'
+  const stateLabel = isActive ? 'À continuer' : isCompleted ? 'Rejouer' : null
 
   return (
-    <div className="relative my-4 flex flex-col items-center justify-center">
+    <div className="relative my-4 flex min-h-40 flex-col items-center justify-center">
       {isActive && (
         <motion.div
-          animate={reduceMotion ? {} : { scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 -z-10 m-auto h-[100px] w-[100px] rounded-full bg-emerald-500/30 blur-md"
+          aria-hidden="true"
+          animate={reduceMotion ? { opacity: 0.28 } : { scale: [0.94, 1.08, 0.94], opacity: [0.18, 0.34, 0.18] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute inset-0 -z-10 m-auto h-32 w-32 rounded-full bg-emerald-400/25 blur-2xl"
         />
+      )}
+      {stateLabel && (
+        <motion.div
+          initial={{ y: 4, opacity: 0 }}
+          animate={isActive && !reduceMotion ? { y: [0, -3, 0], opacity: 1 } : { y: 0, opacity: 1 }}
+          transition={{ duration: 2.2, repeat: isActive ? Infinity : 0, ease: 'easeInOut' }}
+          className={cn(
+            'absolute top-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 text-[12px] font-black shadow-[0_10px_26px_rgba(0,0,0,0.24)]',
+            isActive
+              ? 'border border-emerald-300/30 bg-emerald-400 text-[#03140d]'
+              : 'border border-emerald-400/18 bg-emerald-500/10 text-emerald-100/85',
+          )}
+        >
+          {isActive && <Image src={`/${unit.mascot}.png`} alt="" width={22} height={22} className="object-contain" />}
+          {stateLabel}
+        </motion.div>
       )}
       <button
         type="button"
@@ -364,11 +321,11 @@ function UnitNode({
           onSelect(unit)
         }}
         className={cn(
-          'group relative flex h-[84px] w-[84px] items-center justify-center rounded-full transition-all duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300',
+          'group relative flex h-[84px] w-[84px] items-center justify-center rounded-full transition-all duration-100 touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300',
           isActive && [
-            'bg-gradient-to-b from-emerald-400 to-emerald-600 shadow-[0_8px_0_#065f46]',
-            'ring-4 ring-emerald-500/20 ring-offset-4 ring-offset-[#05050A]',
-            'hover:translate-y-[2px] hover:shadow-[0_6px_0_#065f46] active:translate-y-[8px] active:shadow-none',
+            'h-[92px] w-[92px] bg-gradient-to-b from-emerald-300 via-emerald-500 to-emerald-700 shadow-[0_10px_0_#064e3b,0_0_34px_rgba(16,185,129,0.36)]',
+            'ring-2 ring-emerald-300/40 ring-offset-[6px] ring-offset-[#05050A]',
+            'hover:translate-y-[2px] hover:shadow-[0_8px_0_#064e3b,0_0_36px_rgba(16,185,129,0.42)] active:translate-y-[9px] active:shadow-[0_1px_0_#064e3b]',
           ],
           isCompleted && [
             'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_8px_0_#064e3b]',
@@ -381,27 +338,11 @@ function UnitNode({
         )}
         aria-label={`${unit.title} - ${isLocked ? 'verrouillé' : isCompleted ? 'terminé' : 'actif'}`}
       >
-        {!isLocked && (
-          <div className="pointer-events-none absolute inset-x-4 top-[2px] h-2 rounded-t-full bg-gradient-to-b from-white/50 to-transparent" />
-        )}
+        {isCompleted && <div className="pointer-events-none absolute inset-x-5 top-[3px] h-1.5 rounded-full bg-emerald-100/25" />}
         {isActive && <Flame className="h-10 w-10 fill-white text-white drop-shadow-md" />}
         {isCompleted && <Crown className="h-9 w-9 fill-white text-white drop-shadow-md" />}
         {isLocked && <Lock className="h-8 w-8 text-white/20" />}
       </button>
-      {(isActive || isCompleted) && (
-        <motion.div
-          initial={{ y: 0, opacity: 0.8 }}
-          animate={isActive && !reduceMotion ? { y: [-4, 4, -4], opacity: 1 } : { opacity: 1 }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className={cn(
-            'absolute -top-12 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-2xl rounded-bl-none px-4 py-2 text-sm font-black shadow-xl sm:left-auto sm:right-[-5rem] sm:translate-x-0',
-            isActive ? 'bg-white text-black' : 'border border-white/10 bg-black/80 text-white/75',
-          )}
-        >
-          {isActive && <Image src={`/${unit.mascot}.png`} alt="" width={24} height={24} className="object-contain" />}
-          {isActive ? 'À continuer' : 'Rejouer'}
-        </motion.div>
-      )}
     </div>
   )
 }
@@ -429,9 +370,6 @@ function useCountdown(expiresAt: string) {
 
 function EventCard({ event, onStart }: { event: AcademyEvent; onStart: (e: AcademyEvent) => void }) {
   const countdown = useCountdown(event.expiresAt)
-  const pct = event.fundingGoal && event.fundingCurrent != null
-    ? Math.min(100, Math.round((event.fundingCurrent / event.fundingGoal) * 100))
-    : null
 
   return (
     <motion.button
@@ -439,52 +377,40 @@ function EventCard({ event, onStart }: { event: AcademyEvent; onStart: (e: Acade
       onClick={() => onStart(event)}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-950/60 via-[#0e0a00]/80 to-[#05050A] text-left shadow-[0_0_40px_rgba(245,158,11,0.12)] backdrop-blur-sm"
+      className="group relative flex min-h-[118px] w-full items-center gap-4 overflow-hidden rounded-[28px] border border-amber-300/18 bg-white/[0.03] p-4 text-left shadow-[0_16px_44px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-colors touch-manipulation hover:bg-white/[0.05] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
     >
-      <div className="relative h-36 w-full overflow-hidden">
-        <Image src={event.imageUrl} alt={event.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0e0a00] via-[#0e0a00]/40 to-transparent" />
-        <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-black/60 px-2.5 py-1 backdrop-blur-sm">
-          <Timer className="h-3 w-3 text-amber-400" />
-          <span className="text-[10px] font-black tabular-nums text-amber-300">{countdown}</span>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_45%,rgba(251,191,36,0.16),transparent_34%),linear-gradient(90deg,rgba(251,191,36,0.08),transparent_42%)]" />
+      <div className="relative flex h-[78px] w-[78px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-amber-300 via-amber-500 to-orange-700 shadow-[0_8px_0_rgba(120,53,15,0.9),0_0_26px_rgba(245,158,11,0.28)] ring-2 ring-amber-200/30 ring-offset-4 ring-offset-[#090805]">
+        <div className="relative h-[58px] w-[58px] overflow-hidden rounded-full border border-black/20">
+          <Image src={event.imageUrl} alt={event.title} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
         </div>
-        <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-emerald-500/30 bg-black/60 px-2.5 py-1 backdrop-blur-sm">
-          <Zap className="h-3 w-3 text-emerald-400" />
-          <span className="text-[10px] font-black text-emerald-300">+{event.reward.amount} Graines</span>
+        <div className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full border border-black/20 bg-amber-300 text-black shadow-[0_3px_0_rgba(120,53,15,0.8)]">
+          <Leaf className="h-3.5 w-3.5" />
         </div>
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.15em] text-amber-400/80">{event.sponsor.name}</p>
-        <h3 className="text-sm font-black leading-snug text-white">{event.title}</h3>
-        <p className="line-clamp-2 text-[11px] leading-relaxed text-white/55">{event.description}</p>
-        <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-2">
-          <p className="text-[10px] font-bold leading-relaxed text-white/50">
-            {event.sponsor.fundedAmount.toLocaleString('fr-FR')} € financés · {event.location}
-          </p>
-          <p className="mt-1 line-clamp-2 text-[10px] leading-relaxed text-amber-100/65">
-            {event.transparencyNote}
-          </p>
+      <div className="relative min-w-0 flex-1">
+        <div className="mb-1 flex items-center gap-2">
+          <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] text-amber-200">
+            Nœud projet
+          </span>
+          <span className="flex items-center gap-1 rounded-full bg-black/25 px-2 py-0.5 text-[10px] font-black tabular-nums text-amber-200">
+            <Timer className="h-3 w-3" />
+            {countdown}
+          </span>
         </div>
-        {pct !== null && (
-          <div className="mt-auto pt-2">
-            <div className="mb-1 flex justify-between text-[10px] font-bold">
-              <span className="text-white/50">Financement</span>
-              <span className="text-amber-300">{event.fundingCurrent?.toLocaleString('fr-FR')} / {event.fundingGoal?.toLocaleString('fr-FR')} €</span>
-            </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${pct}%` }}
-                transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
-                className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_rgba(245,158,11,0.7)]"
-              />
-            </div>
-          </div>
-        )}
-        <div className="mt-2 flex items-center justify-center gap-1.5 rounded-2xl bg-amber-500 py-2.5 font-black text-xs text-black shadow-[0_4px_0_rgba(120,53,15,0.8)]">
-          <Leaf className="h-3.5 w-3.5" />
-          DÉMARRER LA LEÇON
+        <h3 className="truncate text-sm font-black leading-snug text-white">{event.title}</h3>
+        <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-white/50">
+          Leçon making-of · {event.impactTarget}
+        </p>
+        <div className="mt-2 flex items-center gap-2 text-[10px] font-bold text-white/40">
+          <span className="truncate">{event.location}</span>
+          <span className="h-1 w-1 rounded-full bg-white/20" />
+          <span>{event.sponsor.name}</span>
         </div>
+      </div>
+      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-amber-300/20 bg-black/35 text-amber-200 transition-transform group-hover:translate-x-0.5">
+        <ChevronDown className="-rotate-90 h-4 w-4" />
       </div>
     </motion.button>
   )
@@ -506,10 +432,9 @@ function EventCarousel({ onStartEvent }: { onStartEvent: (e: AcademyEvent) => vo
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
         </span>
-        <h2 className="text-[11px] font-black uppercase tracking-[0.18em] text-amber-400">✨ Missions Actives</h2>
-        <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-black text-amber-300">{events.length}</span>
+        <h2 className="text-[11px] font-black uppercase tracking-[0.18em] text-amber-300">Mission active</h2>
       </div>
-      <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-col gap-3 pb-2">
         {events.map((event) => (
           <EventCard key={event.id} event={event} onStart={onStartEvent} />
         ))}
@@ -619,7 +544,7 @@ function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
 
 export default function AcademyPage() {
   const router = useRouter()
-  const { chapters, progress, reset, setCursus } = useAcademySurface()
+  const { chapters, progress, reset } = useAcademySurface()
   const [selectedUnit, setSelectedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [lockedUnit, setLockedUnit] = useState<AcademyUnitWithStatus | null>(null)
   const [loadingTarget, setLoadingTarget] = useState<string | null>(null)
@@ -683,8 +608,12 @@ export default function AcademyPage() {
         }}
       />
       <div className="relative z-10">
-        <header className="fixed top-0 z-40 flex w-full items-center justify-between border-b border-white/5 bg-white/5 px-4 pb-2.5 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md">
-          <Link href="/academy/chapters" className="group flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-all hover:bg-white/10 active:scale-95">
+        <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-2 border-b border-white/5 bg-white/5 px-3 pb-2.5 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md">
+          <Link
+            href="/academy/chapters"
+            aria-label={`Ouvrir les chapitres, chapitre ${currentChapter.order}`}
+            className="group flex min-h-11 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 transition-all touch-manipulation hover:bg-white/10 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+          >
             <BookOpen className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
             <span className="text-[11px] font-black leading-none text-white">Chapitre {currentChapter.order}</span>
             <ChevronDown className="h-3 w-3 text-white/40 transition-colors group-hover:text-white/70" />
@@ -694,11 +623,21 @@ export default function AcademyPage() {
             <span className="hidden rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] font-black tabular-nums text-emerald-300 min-[390px]:inline-flex">
               {completedTotal}/{totalUnitCount}
             </span>
-            <Link href="/academy/streak" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
+            <Link
+              href="/academy/streak"
+              prefetch={false}
+              aria-label={`Ouvrir la série Academy, ${progress.streak.current} jours`}
+              className="flex min-h-11 items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 transition-transform touch-manipulation hover:scale-[1.02] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300"
+            >
               <Flame className="h-3.5 w-3.5 fill-orange-500 text-orange-500" />
               <span className="text-[11px] font-bold text-white">{progress.streak.current} j</span>
             </Link>
-            <Link href="/seeds" prefetch={false} className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 transition-transform hover:scale-105 active:scale-95">
+            <Link
+              href="/seeds"
+              prefetch={false}
+              aria-label={`Ouvrir les graines, solde ${formatPoints(progress.seedsBalance)}`}
+              className="flex min-h-11 items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 transition-transform touch-manipulation hover:scale-[1.02] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-300"
+            >
               <Sprout className="h-3.5 w-3.5 text-lime-400" />
               <span className="text-[11px] font-bold tabular-nums text-white">{formatPoints(progress.seedsBalance)}</span>
             </Link>
@@ -709,7 +648,7 @@ export default function AcademyPage() {
               type="button"
               onClick={() => setShowDevMenu((isOpen) => !isOpen)}
               aria-label="Ouvrir les outils Academy"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors touch-manipulation hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               <MoreHorizontal className="h-4 w-4" />
             </button>
@@ -718,7 +657,7 @@ export default function AcademyPage() {
                 <button
                   type="button"
                   onClick={() => setShowResetConfirm(true)}
-                  className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  className="flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left text-sm font-bold text-white/70 transition-colors touch-manipulation hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Reset progression
@@ -729,8 +668,6 @@ export default function AcademyPage() {
         </header>
 
         <main className="px-5 pt-[calc(5rem+env(safe-area-inset-top))]">
-          <CursusSelector selectedId={progress.selectedCursusId} onSelect={setCursus} />
-          <EventCarousel onStartEvent={(event) => setLoadingTarget(`/academy/events/${event.slug}`)} />
           <ChapterBanner chapter={currentChapter} />
 
           <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3">
@@ -745,6 +682,8 @@ export default function AcademyPage() {
               />
             </div>
           </div>
+
+          <EventCarousel onStartEvent={(event) => setLoadingTarget(`/academy/events/${event.slug}`)} />
 
           <div className="mt-8 flex flex-col items-center pb-[max(8rem,calc(4rem+env(safe-area-inset-bottom)))]">
             {units.flatMap((unit, index) => {

@@ -139,21 +139,21 @@ export default function StreakPage() {
         </motion.div>
       </div>
       {showResetConfirm && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/75 p-5 backdrop-blur-sm"
+        <FullScreenSlideModal
+          title="Réinitialiser"
+          headerMode="close"
+          onClose={() => setShowResetConfirm(false)}
+          className="z-[90] bg-[#05050A] text-white"
         >
-          <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#111116] p-6 text-center shadow-2xl">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
+          <div className="mx-auto flex min-h-full max-w-sm flex-col items-center justify-center px-6 text-center">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
               <AlertTriangle className="h-7 w-7 text-amber-300" />
             </div>
             <h3 className="mb-2 text-xl font-black text-white">Effacer la série locale ?</h3>
             <p className="mb-6 text-sm leading-relaxed text-white/55">
               Toute la progression Academy locale sera remise à zéro sur cet appareil.
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex w-full flex-col gap-3">
               <button
                 type="button"
                 onClick={() => setShowResetConfirm(false)}
@@ -170,7 +170,7 @@ export default function StreakPage() {
               </button>
             </div>
           </div>
-        </motion.div>
+        </FullScreenSlideModal>
       )}
     </FullScreenSlideModal>
   )
