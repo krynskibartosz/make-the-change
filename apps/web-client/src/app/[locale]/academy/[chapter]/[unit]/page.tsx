@@ -650,6 +650,7 @@ function QuizExercise({
   mascot: string
 }) {
   const [selected, setSelected] = useState<number | null>(null)
+  const showHint = attempt > 0 && Boolean(exercise.hint)
 
   useEffect(() => {
     setSelected(null)
@@ -674,7 +675,10 @@ function QuizExercise({
       return
     }
 
-    onResult(option.isCorrect, option.isCorrect ? exercise.successFeedback : exercise.failureFeedback)
+    // V2 : feedback par option si défini, sinon fallback legacy global.
+    const optionFeedback = option.feedback
+    const fallback = option.isCorrect ? exercise.successFeedback : exercise.failureFeedback
+    onResult(option.isCorrect, optionFeedback ?? fallback)
   }
 
   return (
@@ -684,6 +688,15 @@ function QuizExercise({
           <Image src={`/${mascot}.png`} alt="" fill className="object-contain" />
         </motion.div>
         <h2 className="text-center text-2xl font-black text-white">{exercise.question}</h2>
+        {showHint && exercise.hint && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 max-w-md rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-center text-sm font-bold text-amber-200"
+          >
+            💡 {exercise.hint}
+          </motion.div>
+        )}
       </div>
       <div className="mt-auto flex flex-col gap-4">
         {exercise.options.map((option, index) => (

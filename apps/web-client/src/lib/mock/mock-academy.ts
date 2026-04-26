@@ -1,3 +1,6 @@
+import { getV2UnitsByChapter, listV2Units } from '@/lib/academy/content'
+import { v2UnitToLegacy } from '@/lib/academy/runtime'
+
 export const ACADEMY_PROGRESS_STORAGE_KEY = 'mtc_academy_progress_v1'
 export const MOCK_ACADEMY_VIEWER_ID = 'mock-viewer'
 
@@ -80,9 +83,17 @@ export type AcademyQuizExercise = {
   options: Array<{
     text: string
     isCorrect: boolean
+    /** V2 schema: feedback explicatif spécifique à l'option choisie. */
+    feedback?: string
+    /** V2 schema: id de la misconception ciblée par l'option (si applicable). */
+    misconceptionId?: string
   }>
   successFeedback: string
   failureFeedback: string
+  /** V2 schema: indice montré après une 1ère erreur. */
+  hint?: string
+  /** V2 schema: déclenche un slider métacognitif avant validation. */
+  confidenceCheck?: boolean
 }
 
 export type AcademyExercise =
@@ -703,7 +714,7 @@ const CHAPTER_ONE_UNITS: AcademyUnit[] = [
   }),
 ]
 
-const ACADEMY_CURRICULUM: AcademyChapter[] = [
+const LEGACY_ACADEMY_CURRICULUM: AcademyChapter[] = [
   {
     id: 'chapter-1', slug: 'alphabet-originel', title: "L'Alphabet Originel",
     subtitle: 'Comprends les forces invisibles qui font tourner notre monde.',
@@ -1561,6 +1572,51 @@ export const ARCHIVED_EVENTS: AcademyEvent[] = [
     ],
   },
 ]
+
+// ─── V2 overrides ────────────────────────────────────────────────────────────
+// Pour chaque chapitre, on calcule un curriculum « effectif » : chaque unité
+// présente dans le registre V2 (`src/lib/academy/content`) remplace son
+// équivalent legacy. Les unités legacy non migrées restent inchangées.
+// Cela permet une migration progressive sans casser l'app.
+
+const applyV2OverridesToChapter = (chapter: AcademyChapter): AcademyChapter => {
+  const v2Units = getV2UnitsByChapter(chapter.id)
+  if (v2Units.length === 0) return chapter
+
+  const v2ById = new Map(v2Units.map((unit) => [unit.id, unit]))
+  const v2Slugs = new Set(v2Units.map((unit) => unit.slug))
+
+  const orderedV2 = v2Units.slice().sort((a, b) => a.order - b.order)
+  const mergedUnits = chapter.units.map((legacyUnit) => {
+    const override = v2ById.get(legacyUnit.id) ?? (v2Slugs.has(legacyUnit.slug) ? v2Units.find((unit) => unit.slug === legacyUnit.slug) : null)
+    if (!override) return legacyUnit
+    const previousV2InChapter = orderedV2.filter((unit) => unit.order < override.order)
+    return v2UnitToLegacy(override, previousV2InChapter)
+  })
+
+  // Si une unité V2 n'a pas d'équivalent legacy (nouvelle unité ajoutée), on
+  // l'ajoute en respectant son order.
+  const legacyIds = new Set(chapter.units.map((unit) => unit.id))
+  const newUnits = orderedV2
+    .filter((unit) => !legacyIds.has(unit.id))
+    .map((unit) => {
+      const previousV2InChapter = orderedV2.filter((other) => other.order < unit.order)
+      return v2UnitToLegacy(unit, previousV2InChapter)
+    })
+
+  const allUnits = [...mergedUnits, ...newUnits].sort((a, b) => a.order - b.order)
+  return { ...chapter, units: allUnits }
+}
+
+const ACADEMY_CURRICULUM: AcademyChapter[] = LEGACY_ACADEMY_CURRICULUM.map(applyV2OverridesToChapter)
+
+if (process.env.NODE_ENV !== 'production') {
+  const v2Count = listV2Units().length
+  if (v2Count > 0) {
+    // eslint-disable-next-line no-console
+    console.info(`[academy] ${v2Count} unité(s) V2 active(s) dans le curriculum effectif.`)
+  }
+}
 
 export function getActiveEvents(): AcademyEvent[] {
   const now = new Date()
