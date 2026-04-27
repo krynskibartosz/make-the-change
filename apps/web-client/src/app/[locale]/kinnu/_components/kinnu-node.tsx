@@ -142,7 +142,15 @@ export function KinnuNode({ node, status, health, isSelected, isNewlyUnlocked, o
           </svg>
         )}
         
-        <Icon className={cn('relative z-10 h-7 w-7 transition-all duration-500', isMastered && health === 0 && 'opacity-60')} />
+        {node.imageUrl ? (
+          <img
+            src={node.imageUrl}
+            alt={node.name}
+            className={cn('relative z-10 h-7 w-7 rounded-full object-cover transition-all duration-500', isMastered && health === 0 && 'opacity-60')}
+          />
+        ) : (
+          <Icon className={cn('relative z-10 h-7 w-7 transition-all duration-500', isMastered && health === 0 && 'opacity-60')} />
+        )}
 
         {/* Badge statut */}
         <div
