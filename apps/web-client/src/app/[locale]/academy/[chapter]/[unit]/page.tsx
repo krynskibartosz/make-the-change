@@ -434,7 +434,7 @@ function DragDropExercise({
   attempt,
   showFeedback,
 }: {
-  exercise: AcademyDragDropExercise & { axis?: 'horizontal' | 'vertical'; slotCount?: number; correctFeedback?: string; incorrectFeedback?: string; items: Array<{ id: string; text: string; isDistractor?: boolean }> }
+  exercise: AcademyDragDropExercise
   onResult: (correct: boolean, feedback: string) => void
   attempt: number
   showFeedback?: boolean
@@ -583,8 +583,8 @@ function DragDropExercise({
       setWrongSlots(new Set(wrongIndices))
     }
 
-    const correctFb = (exercise as { correctFeedback?: string }).correctFeedback ?? "Parfait ! L'ordre est exact."
-    const incorrectFb = (exercise as { incorrectFeedback?: string }).incorrectFeedback ?? "Mince ! L'ordre n'est pas le bon. Observe les indices et réessaie."
+    const correctFb = exercise.correctFeedback ?? "Parfait ! L'ordre est exact."
+    const incorrectFb = exercise.incorrectFeedback ?? "Mince ! L'ordre n'est pas le bon. Observe les indices et réessaie."
     onResult(isCorrect, isCorrect ? correctFb : incorrectFb)
   }
 
