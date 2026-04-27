@@ -314,7 +314,7 @@ export const photosynthesisUnit: AcademyUnitDefinition = {
       learningObjective: 'Identifier la chlorophylle.',
       question: "Pourquoi les feuilles sont-elles vertes ?",
       options: [
-        { text: 'À cause d\'un pigment qui capte rouge et bleu mais réfléchit le vert', isCorrect: true, feedback: 'Exact. La chlorophylle absorbe rouge et bleu, et nous voyons le vert qui rebondit.' },
+        { text: 'Pigment qui absorbe rouge/bleu, reflète vert', isCorrect: true, feedback: 'Exact. La chlorophylle absorbe rouge et bleu, et nous voyons le vert qui rebondit.' },
         { text: 'Parce qu\'elles aiment le vert', isCorrect: false, feedback: 'Le vert est le résultat physique de l\'absorption sélective.' },
         { text: 'Pour se cacher des animaux', isCorrect: false, feedback: 'Ce n\'est pas la fonction. Le vert est un sous-produit.' },
       ],
@@ -357,7 +357,7 @@ export const photosynthesisUnit: AcademyUnitDefinition = {
       learningObjective: 'Distinguer photosynthèse et respiration.',
       question: 'Une plante respire-t-elle aussi ?',
       options: [
-        { text: 'Oui, jour et nuit. Elle consomme de l\'O₂ comme nous', isCorrect: true, feedback: 'Exact. Photosynthèse de jour seulement, respiration permanente.' },
+        { text: 'Oui, jour et nuit. Elle consomme de l\'O₂', isCorrect: true, feedback: 'Exact. Photosynthèse de jour seulement, respiration permanente.' },
         { text: 'Non, elle ne respire jamais', isCorrect: false, feedback: 'Faux. Toute cellule vivante respire.' },
         { text: 'Seulement la nuit', isCorrect: false, feedback: "La respiration est continue, mais c'est plus visible la nuit (pas de photosynthèse compensatoire)." },
       ],
@@ -425,7 +425,7 @@ export const photosynthesisUnit: AcademyUnitDefinition = {
       learningObjective: 'Que se passe-t-il sans lumière ?',
       question: 'Quel est le sort d\'une plante laissée dans le noir total ?',
       options: [
-        { text: 'Elle finit par mourir, faute de pouvoir refaire ses réserves', isCorrect: true, feedback: 'Exact. Elle continue de respirer, donc elle se vide de ses réserves.' },
+        { text: 'Elle meurt faute de refaire ses réserves', isCorrect: true, feedback: 'Exact. Elle continue de respirer, donc elle se vide de ses réserves.' },
         { text: 'Elle continue à pousser normalement', isCorrect: false, feedback: 'Sans lumière, plus de photosynthèse, plus de croissance durable.' },
         { text: 'Elle mange la terre pour compenser', isCorrect: false, feedback: 'Misconception. Elle ne mange pas la terre.', misconceptionId: 'plants-eat-soil' },
       ],
@@ -593,7 +593,7 @@ export const photosynthesisUnit: AcademyUnitDefinition = {
       cognitiveTags: ['sprint', 'misconception'],
       learningObjective: 'Sprint : feuilles tombent à cause de la lumière.',
       question: 'Vrai ou faux ?',
-      card: { title: "Les feuilles tombent à cause de la baisse de lumière, pas du froid.", subtitle: 'Sprint' },
+      card: { title: "Les feuilles tombent par baisse de lumière", subtitle: 'Sprint' },
       correctDirection: 'right',
       leftLabel: 'FAUX',
       rightLabel: 'VRAI',
