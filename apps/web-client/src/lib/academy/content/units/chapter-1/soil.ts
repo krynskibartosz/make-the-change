@@ -96,7 +96,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: "Identifier le rôle des micro-organismes du sol.",
       question: "À quoi servent les bactéries et champignons du sol ?",
       options: [
-        { text: 'Ils décomposent la matière morte en nutriments réutilisables', isCorrect: true, feedback: "Exact. Sans eux, les feuilles mortes s'accumuleraient sans nourrir les plantes." },
+        { text: 'Décomposent la matière morte en nutriments', isCorrect: true, feedback: "Exact. Sans eux, les feuilles mortes s'accumuleraient sans nourrir les plantes." },
         { text: 'Ils rendent les plantes malades', isCorrect: false, feedback: "Quelques-uns oui, mais la grande majorité sont neutres ou bénéfiques.", misconceptionId: 'bacteria-always-bad' },
         { text: 'Ils ne servent à rien', isCorrect: false, feedback: "Faux. Ils sont la condition d'un sol fertile.", misconceptionId: 'dead-soil-is-clean' },
       ],
@@ -233,7 +233,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Synthétiser : le sol est vivant, pas un support inerte.',
       question: 'Pourquoi protéger les sols vivants ?',
       options: [
-        { text: 'Parce qu\'ils nourrissent les plantes et stockent l\'eau', isCorrect: true, feedback: 'Exact. Sans eux, plus de cultures, plus de forêts, plus d\'absorption.' },
+        { text: 'Car ils nourrissent les plantes et gardent l\'eau', isCorrect: true, feedback: 'Exact. Sans eux, plus de cultures, plus de forêts, plus d\'absorption.' },
         { text: 'Parce qu\'ils sont jolis', isCorrect: false, feedback: 'Esthétique mais à côté du sujet. Le rôle écologique est central.' },
         { text: 'Parce qu\'ils stockent du pétrole', isCorrect: false, feedback: 'Le pétrole se forme dans des conditions très différentes, sur des millions d\'années.' },
       ],
@@ -315,7 +315,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Comprendre l\'érosion des sols nus.',
       question: "Pourquoi un sol nu (sans plantes) s'érode-t-il vite ?",
       options: [
-        { text: 'Sans racines pour le retenir, l\'eau et le vent emportent la terre', isCorrect: true, feedback: 'Exact. Les racines sont l\'armature qui retient les particules.' },
+        { text: 'L\'eau et le vent emportent la terre sans racines', isCorrect: true, feedback: 'Exact. Les racines sont l\'armature qui retient les particules.' },
         { text: 'Parce qu\'il manque de soleil', isCorrect: false, feedback: 'Le soleil n\'érode pas le sol.' },
         { text: 'Parce qu\'il est trop dur', isCorrect: false, feedback: 'Un sol dur s\'érode aussi en surface.' },
       ],
@@ -329,7 +329,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Étendre la notion de microbiome au corps humain.',
       question: 'Combien de bactéries vivent dans nos intestins ?',
       options: [
-        { text: '~40 000 milliards (autant que de cellules humaines)', isCorrect: true, feedback: 'Exact. On est statistiquement moitié humain, moitié bactérien.' },
+        { text: '~40 000 milliards (autant que de nos cellules)', isCorrect: true, feedback: 'Exact. On est statistiquement moitié humain, moitié bactérien.' },
         { text: 'Quelques millions', isCorrect: false, feedback: 'Beaucoup plus. ~40 000 milliards.', misconceptionId: 'bacteria-always-bad' },
         { text: 'Aucune chez les gens en bonne santé', isCorrect: false, feedback: 'Aucune = mort. Les bactéries intestinales sont vitales.', misconceptionId: 'bacteria-always-bad' },
       ],
@@ -357,7 +357,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Comprendre que la matière ne disparaît pas.',
       question: "Quand une feuille morte « disparaît » dans le sol, que devient sa matière ?",
       options: [
-        { text: 'Elle est recyclée en nutriments par les décomposeurs', isCorrect: true, feedback: 'Exact. Loi de conservation : la matière change de forme, ne disparaît pas.' },
+        { text: 'Recyclée en nutriments par les décomposeurs', isCorrect: true, feedback: 'Exact. Loi de conservation : la matière change de forme, ne disparaît pas.' },
         { text: 'Elle disparaît vraiment', isCorrect: false, feedback: 'La matière ne disparaît jamais. Elle est recyclée.' },
         { text: 'Elle se transforme en eau', isCorrect: false, feedback: 'Une partie va dans l\'eau du sol, mais l\'essentiel devient nutriments solides.' },
       ],
@@ -462,7 +462,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Identifier le sol fertile.',
       question: 'Quel est le signe d\'un sol vraiment fertile ?',
       options: [
-        { text: "Il est rempli d'organismes vivants visibles et invisibles", isCorrect: true, feedback: 'Exact. Plus de vie = plus de fertilité.' },
+        { text: "Plein d'organismes visibles et invisibles", isCorrect: true, feedback: 'Exact. Plus de vie = plus de fertilité.' },
         { text: 'Il est complètement nu et propre', isCorrect: false, feedback: 'Nu = sujet à l\'érosion + sans vie.', misconceptionId: 'dead-soil-is-clean' },
         { text: 'Il est très compacté', isCorrect: false, feedback: 'Compacté = pas d\'air, pas de vie.' },
       ],
@@ -476,7 +476,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Identifier le règne des champignons.',
       question: 'Pourquoi les champignons ne sont-ils pas des plantes ?',
       options: [
-        { text: 'Ils n\'ont pas de chlorophylle et ne font pas de photosynthèse', isCorrect: true, feedback: "Exact. Ils mangent du mort, pas de la lumière. Règne distinct." },
+        { text: 'Pas de chlorophylle ni de photosynthèse', isCorrect: true, feedback: "Exact. Ils mangent du mort, pas de la lumière. Règne distinct." },
         { text: 'Parce qu\'ils sont petits', isCorrect: false, feedback: 'La taille ne définit pas un règne. Certains champignons font des km.' },
         { text: 'Parce qu\'ils vivent sous terre', isCorrect: false, feedback: 'Beaucoup de plantes ont aussi des racines souterraines.' },
       ],
@@ -546,8 +546,8 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Choisir la formulation juste de « sol fertile ».',
       question: 'Quelle définition est la plus juste ?',
       options: [
-        { text: 'Un sol fertile est un écosystème vivant qui recycle la matière', isCorrect: true, feedback: 'Exact. C\'est un écosystème, pas un substrat passif.' },
-        { text: 'Un sol fertile est un sol enrichi de produits chimiques', isCorrect: false, feedback: 'Trop limité. La fertilité naît du vivant, pas des produits.' },
+        { text: 'Un écosystème vivant qui recycle la matière', isCorrect: true, feedback: 'Exact. C\'est un écosystème, pas un substrat passif.' },
+        { text: 'Un sol enrichi de produits chimiques', isCorrect: false, feedback: 'Trop limité. La fertilité naît du vivant, pas des produits.' },
         { text: 'Un sol fertile est un sol stérile bien drainé', isCorrect: false, feedback: 'Stérile = mort. Aucune fertilité durable.', misconceptionId: 'dead-soil-is-clean' },
       ],
       confidenceCheck: true,
@@ -614,7 +614,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningObjective: 'Synthétiser le rôle écosystémique du sol.',
       question: "Quel rôle clé un sol vivant joue-t-il dans le climat ?",
       options: [
-        { text: 'Il stocke du carbone, absorbe l\'eau et nourrit le vivant', isCorrect: true, feedback: 'Exact. Triple service : carbone, eau, nutriments.' },
+        { text: 'Stocke le carbone, absorbe l\'eau et nourrit', isCorrect: true, feedback: 'Exact. Triple service : carbone, eau, nutriments.' },
         { text: "Il n'a aucun rôle climatique", isCorrect: false, feedback: 'Faux. Les sols stockent ~3× plus de carbone que l\'atmosphère.' },
         { text: 'Il refroidit l\'air directement', isCorrect: false, feedback: 'Effet indirect via l\'eau et les plantes, pas direct.' },
       ],
