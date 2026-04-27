@@ -392,7 +392,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "Comprendre que l'énergie circule à sens unique.",
       question: "Que se passe-t-il quand un loup mange un lapin ?",
       options: [
-        { text: "Le loup récupère une partie de l'énergie solaire stockée par les plantes", isCorrect: true, feedback: "Exact. L'énergie remonte la chaîne, mais avec des pertes à chaque étape." },
+        { text: "Le loup récupère l'énergie solaire stockée", isCorrect: true, feedback: "Exact. L'énergie remonte la chaîne, mais avec des pertes à chaque étape." },
         { text: "Le loup crée de l'énergie nouvelle", isCorrect: false, feedback: "Aucun être vivant ne crée d'énergie. Il la transfère ou la transforme." },
         { text: "L'énergie disparaît", isCorrect: false, feedback: "Elle ne disparaît pas. Elle est utilisée et une partie est dissipée en chaleur." },
       ],

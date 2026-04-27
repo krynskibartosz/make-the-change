@@ -196,7 +196,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: "Choisir le sol qui absorbe le mieux l'eau.",
       question: "Quel sol absorbe le mieux une grosse pluie ?",
       options: [
-        { text: 'Un sol forestier riche en racines et matière organique', isCorrect: true, feedback: "Exact. Les racines créent des canaux, la matière organique stocke l'eau comme une éponge." },
+        { text: 'Un sol forestier riche et vivant', isCorrect: true, feedback: "Exact. Les racines créent des canaux, la matière organique stocke l'eau comme une éponge." },
         { text: 'Une route en goudron', isCorrect: false, feedback: "Le goudron repousse l'eau. C'est ce qui crée les flaques et les inondations.", misconceptionId: 'concrete-helps-drainage' },
         { text: 'Un parking en béton', isCorrect: false, feedback: "Le béton bloque l'infiltration. Idem que le goudron.", misconceptionId: 'concrete-helps-drainage' },
       ],
@@ -280,7 +280,7 @@ export const waterUnit: AcademyUnitDefinition = {
       cognitiveTags: [],
       learningObjective: "Identifier la transpiration des arbres.",
       question: 'Vrai ou faux ?',
-      card: { title: "Un grand arbre rejette des centaines de litres d'eau par jour dans l'air.", subtitle: 'Forêts' },
+      card: { title: "Un grand arbre rejette des centaines de L d'eau par jour", subtitle: 'Forêts' },
       correctDirection: 'right',
       leftLabel: 'FAUX',
       rightLabel: 'VRAI',
@@ -330,7 +330,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: 'Comprendre le rôle des glaciers comme réservoirs.',
       question: "Pourquoi la fonte des glaciers inquiète les scientifiques ?",
       options: [
-        { text: "Parce que les glaciers sont des réservoirs d'eau douce qui alimentent rivières et villes", isCorrect: true, feedback: "Exact. ~2 milliards de personnes dépendent de l'eau des glaciers." },
+        { text: "Les glaciers sont des réservoirs d'eau douce", isCorrect: true, feedback: "Exact. ~2 milliards de personnes dépendent de l'eau des glaciers." },
         { text: 'Parce que la glace fondue est polluée', isCorrect: false, feedback: 'La fonte elle-même n\'est pas polluante. Le problème est la perte du stock.' },
         { text: 'Parce que les glaciers absorbent du CO₂', isCorrect: false, feedback: "Les glaciers ne stockent pas de CO₂. Le sujet est la ressource en eau." },
       ],
@@ -358,7 +358,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: "Comprendre le rôle climatique des forêts tropicales.",
       question: "Pourquoi l'Amazonie est-elle souvent appelée « pompe à eau du continent » ?",
       options: [
-        { text: "Parce que ses arbres relâchent énormément de vapeur, qui retombe en pluie ailleurs", isCorrect: true, feedback: "Exact. L'Amazonie influence les pluies jusqu'en Argentine." },
+        { text: "Ses arbres relâchent de la vapeur qui retombe en pluie", isCorrect: true, feedback: "Exact. L'Amazonie influence les pluies jusqu'en Argentine." },
         { text: "Parce qu'elle pompe l'eau de l'océan vers la terre", isCorrect: false, feedback: "Aucun arbre ne pompe l'eau de l'océan. C'est l'évaporation qui le fait." },
         { text: "Parce qu'elle stocke des lacs souterrains", isCorrect: false, feedback: "Pas spécialement. Le mécanisme est aérien : transpiration → vapeur → pluie." },
       ],
@@ -428,7 +428,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: "Identifier les sources de la vapeur atmosphérique.",
       question: "D'où vient la vapeur d'eau de l'atmosphère ?",
       options: [
-        { text: 'Des océans, lacs ET de la transpiration des plantes', isCorrect: true, feedback: "Exact. Les trois sources comptent. Les forêts pèsent ~10 % de la vapeur globale." },
+        { text: 'Océans, lacs ET transpiration des plantes', isCorrect: true, feedback: "Exact. Les trois sources comptent. Les forêts pèsent ~10 % de la vapeur globale." },
         { text: 'Uniquement des océans', isCorrect: false, feedback: 'Trop restrictif. Les plantes contribuent significativement.' },
         { text: 'Uniquement des nuages existants', isCorrect: false, feedback: 'Les nuages reçoivent la vapeur, ils ne la créent pas.' },
       ],
