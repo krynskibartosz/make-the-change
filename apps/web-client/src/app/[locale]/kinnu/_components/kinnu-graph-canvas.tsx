@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { type KinnuEdge, type KinnuNode, KINNU_LEVEL_Y } from '@/lib/kinnu/graph'
-import { type KinnuNodeStatus } from '@/lib/kinnu/bridge'
+import { type ComputedKinnuStatus } from '@/lib/kinnu/bridge'
 import { KinnuNode as KinnuNodeComponent } from './kinnu-node'
 import { cn } from '@/lib/utils'
 
@@ -22,7 +22,7 @@ type PointWithY = KinnuNode & { y: number }
 type KinnuGraphCanvasProps = {
   nodes: KinnuNode[]
   edges: KinnuEdge[]
-  statuses: Record<string, KinnuNodeStatus>
+  statuses: Record<string, ComputedKinnuStatus>
   selectedNodeId: string | null
   newlyUnlockedIds: Set<string>
   onNodeClick: (id: string) => void
@@ -57,8 +57,10 @@ export function KinnuGraphCanvas({
           const tgt = pointById.get(edge.target)
           if (!src || !tgt) return null
 
-          const srcStatus = statuses[edge.source]
-          const tgtStatus = statuses[edge.target]
+          const srcStatusObj = statuses[edge.source]
+          const tgtStatusObj = statuses[edge.target]
+          const srcStatus = srcStatusObj?.status ?? 'locked'
+          const tgtStatus = tgtStatusObj?.status ?? 'locked'
           const bothVisible = srcStatus !== 'locked' && tgtStatus !== 'locked'
           const isSelected =
             selectedNodeId === edge.source || selectedNodeId === edge.target
@@ -86,16 +88,20 @@ export function KinnuGraphCanvas({
       </svg>
 
       {/* Nœuds */}
-      {points.map((point) => (
-        <KinnuNodeComponent
-          key={point.id}
-          node={point}
-          status={statuses[point.id] ?? 'locked'}
-          isSelected={point.id === selectedNodeId}
-          isNewlyUnlocked={newlyUnlockedIds.has(point.id)}
-          onClick={onNodeClick}
-        />
-      ))}
+      {points.map((point) => {
+        const s = statuses[point.id]
+        return (
+          <KinnuNodeComponent
+            key={point.id}
+            node={point}
+            status={s?.status ?? 'locked'}
+            health={s?.health ?? 1.0}
+            isSelected={point.id === selectedNodeId}
+            isNewlyUnlocked={newlyUnlockedIds.has(point.id)}
+            onClick={onNodeClick}
+          />
+        )
+      })}
     </div>
   )
 }

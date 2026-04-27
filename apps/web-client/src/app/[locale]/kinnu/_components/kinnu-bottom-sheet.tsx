@@ -50,11 +50,12 @@ const RELATION_LABEL: Record<string, string> = {
 type KinnuBottomSheetProps = {
   node: KinnuNode | null
   status: KinnuNodeStatus | null
+  health: number | null
   onMaster: (nodeId: string) => void
   onClose: () => void
 }
 
-export function KinnuBottomSheet({ node, status, onMaster, onClose }: KinnuBottomSheetProps) {
+export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: KinnuBottomSheetProps) {
   const Icon = node ? (NAME_ICON[node.name] ?? TYPE_ICON[node.type]) : Mountain
   const isMastered = status === 'mastered'
 
@@ -118,8 +119,8 @@ export function KinnuBottomSheet({ node, status, onMaster, onClose }: KinnuBotto
                   </p>
                   <h2 className="mt-1 text-xl font-black leading-tight text-white">{node.name}</h2>
                   {isMastered && (
-                    <p className="mt-1 text-[0.65rem] font-black uppercase tracking-[0.14em] text-amber-300">
-                      ✦ Concept maîtrisé
+                    <p className={cn("mt-1 text-[0.65rem] font-black uppercase tracking-[0.14em]", health === 0 ? "text-red-400" : "text-amber-300")}>
+                      {health === 0 ? '! Révision requise' : '✦ Concept maîtrisé'}
                     </p>
                   )}
                 </div>
@@ -147,6 +148,26 @@ export function KinnuBottomSheet({ node, status, onMaster, onClose }: KinnuBotto
                 </div>
               )}
 
+              {/* Jauge de Bouclier (Memory Shield) */}
+              {isMastered && health !== null && (
+                <div className="mt-3 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3">
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-[0.62rem] font-black uppercase tracking-[0.16em] text-white/35">
+                      Intégrité du bouclier
+                    </p>
+                    <span className={cn("text-[0.65rem] font-black", health > 0.5 ? "text-amber-300" : health > 0 ? "text-orange-400" : "text-red-400")}>
+                      {Math.round(health * 100)}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className={cn("h-full rounded-full transition-all duration-1000", health > 0.5 ? "bg-amber-400" : health > 0 ? "bg-orange-400" : "bg-red-500")}
+                      style={{ width: `${health * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Récompense */}
               {!isMastered && (
                 <div className="mt-3 flex items-center gap-2 rounded-2xl border border-lime-200/15 bg-lime-300/[0.06] px-4 py-2.5">
@@ -160,15 +181,25 @@ export function KinnuBottomSheet({ node, status, onMaster, onClose }: KinnuBotto
               {/* CTA */}
               <div className="mt-5">
                 {isMastered ? (
-                  <Button
-                    type="button"
-                    variant="glass"
-                    className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 font-black text-white"
-                    onClick={onClose}
-                    shimmer={false}
-                  >
-                    Fermer
-                  </Button>
+                  health !== null && health < 1 ? (
+                    <Button
+                      type="button"
+                      className="h-14 w-full rounded-2xl bg-amber-400 font-black text-[#05050A] hover:bg-amber-300"
+                      onClick={() => onMaster(node.id)}
+                    >
+                      ✦ Réviser le concept
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="glass"
+                      className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 font-black text-white"
+                      onClick={onClose}
+                      shimmer={false}
+                    >
+                      Fermer
+                    </Button>
+                  )
                 ) : (
                   <Button
                     type="button"

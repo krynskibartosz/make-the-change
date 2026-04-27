@@ -18,7 +18,8 @@ export default function KinnuHubPage() {
     let total = 0
 
     for (const world of KINNU_WORLDS) {
-      const count = progress[world.id]?.masteredNodeIds.length ?? 0
+      const masteryObj = progress[world.id]?.mastery
+      const count = masteryObj ? Object.keys(masteryObj).length : 0
       counts[world.id] = count
       total += computeKinnuScore(count)
     }

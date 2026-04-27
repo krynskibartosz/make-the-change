@@ -40,7 +40,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Poser le paradoxe : qu\'est-ce qui « nourrit » vraiment un arbre ?',
       screens: [
         {
-          text: "Un grand chêne pèse 5 tonnes. Aucune racine ne pourrait soulever autant de terre. D'où vient sa masse ?",
+          text: "Un grand chêne pèse 5 tonnes. Aucune racine ne ...'où vient sa masse ?",
           imagePrompt: 'Grand chêne majestueux sous un ciel clair',
           imageUrl: FOREST_IMAGE,
           kind: 'hook',
@@ -79,14 +79,14 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Révéler le mécanisme : la lumière fournit l\'énergie, le CO₂ fournit la matière.',
       screens: [
         {
-          text: "La feuille capte la lumière du Soleil. Avec elle, elle assemble du CO₂ de l'air en sucre solide.",
+          text: "La feuille capte la lumière du Soleil. Avec ell...'air en sucre solide.",
           imagePrompt: 'Rayon de soleil traversant une feuille verte translucide',
           imageUrl: STORY_IMAGE,
           kind: 'reveal',
           boldTokens: ['lumière'],
         },
         {
-          text: "Ce sucre devient bois, fruit, racine. Le Soleil est donc la source d'énergie de presque tout le vivant.",
+          text: "Ce sucre devient bois, fruit, racine. Le Soleil...'énergie de presque tout le vivant.",
           imagePrompt: 'Forêt baignée de soleil avec rayons traversant la canopée',
           imageUrl: FOREST_IMAGE,
           kind: 'reveal',
@@ -154,7 +154,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Introduire la notion de producteurs vs consommateurs.',
       screens: [
         {
-          text: "Tout ce qui fait sa propre énergie avec la lumière s'appelle un producteur. Plantes, algues, certaines bactéries.",
+          text: "Tout ce qui fait sa propre énergie avec la lumi...'appelle un producteur. Plantes, algues, certaines bactéries.",
           imagePrompt: 'Champ de jeunes pousses brillantes au lever du soleil',
           imageUrl: FIELD_IMAGE,
           kind: 'build-up',
@@ -520,7 +520,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Annoncer le boss : valider la maîtrise du rôle du Soleil.',
       screens: [
         {
-          text: 'Tu vas relier le Soleil à toute la vie. 14 questions pour prouver que le concept est vraiment ancré.',
+          text: 'Tu vas relier le Soleil à toute la vie. 14 ques...',
           imagePrompt: 'Soleil radieux au-dessus d\'un paysage diversifié',
           imageUrl: FIELD_IMAGE,
           kind: 'hook',
@@ -713,7 +713,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Donner la perspective : le Soleil unifie toute l\'Académie.',
       screens: [
         {
-          text: 'Sun, plantes, eau, animaux, climat : tout démarre par un photon. Tu viens de poser la première brique.',
+          text: 'Sun, plantes, eau, animaux, climat : tout démar...',
           imagePrompt: 'Photon qui se transforme en feuille, en eau, en animal',
           imageUrl: FOREST_IMAGE,
           kind: 'reveal',

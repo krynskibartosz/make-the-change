@@ -3,12 +3,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getKinnuWorldById } from '@/lib/kinnu/graph'
 import {
-  addMasteredNode,
   computeKinnuStatuses,
   getNewlyUnlockedIds,
-  loadWorldMasteredIds,
-  type KinnuNodeStatus,
+  loadWorldMastery,
+  masterNode,
+  addTimeOffsetDays,
+  type ComputedKinnuStatus,
+  type NodeMastery,
 } from '@/lib/kinnu/bridge'
+import { Clock } from 'lucide-react'
 import { KinnuGraphCanvas } from '../_components/kinnu-graph-canvas'
 import { KinnuBottomSheet } from '../_components/kinnu-bottom-sheet'
 import { KinnuHud } from '../_components/kinnu-hud'
@@ -17,19 +20,21 @@ export default function KinnuWorldPage({ params }: { params: { worldId: string }
   const world = useMemo(() => getKinnuWorldById(params.worldId), [params.worldId])
 
   // ─── Progress ────────────────────────────────────────────────────────────
-  const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set())
+  const [mastery, setMastery] = useState<Record<string, NodeMastery>>({})
   const [isReady, setIsReady] = useState(false)
   const [newlyUnlockedIds, setNewlyUnlockedIds] = useState<Set<string>>(new Set())
+  const [renderKey, setRenderKey] = useState(0) // Forcer un re-rendu lors du time-travel
 
   useEffect(() => {
-    setMasteredIds(loadWorldMasteredIds(params.worldId))
+    setMastery(loadWorldMastery(params.worldId))
     setIsReady(true)
   }, [params.worldId])
 
   // ─── Statuts calculés ────────────────────────────────────────────────────
-  const statuses = useMemo<Record<string, KinnuNodeStatus>>(
-    () => computeKinnuStatuses(world.nodes, masteredIds),
-    [world.nodes, masteredIds],
+  const statuses = useMemo<Record<string, ComputedKinnuStatus>>(
+    () => computeKinnuStatuses(world.nodes, mastery),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [world.nodes, mastery, renderKey],
   )
 
   // ─── Sélection ───────────────────────────────────────────────────────────
@@ -39,7 +44,9 @@ export default function KinnuWorldPage({ params }: { params: { worldId: string }
     () => world.nodes.find((n) => n.id === selectedNodeId) ?? null,
     [world.nodes, selectedNodeId],
   )
-  const selectedStatus = selectedNodeId ? (statuses[selectedNodeId] ?? null) : null
+  const selectedStatusObj = selectedNodeId ? (statuses[selectedNodeId] ?? null) : null
+  const selectedStatus = selectedStatusObj?.status ?? null
+  const selectedHealth = selectedStatusObj?.health ?? null
 
   const handleNodeClick = useCallback(
     (nodeId: string) => {
@@ -53,9 +60,9 @@ export default function KinnuWorldPage({ params }: { params: { worldId: string }
   // ─── Maîtrise ────────────────────────────────────────────────────────────
   const handleMaster = useCallback(
     (nodeId: string) => {
-      const unlocked = getNewlyUnlockedIds(world.nodes, masteredIds, nodeId)
-      const next = addMasteredNode(params.worldId, nodeId)
-      setMasteredIds(next)
+      const unlocked = getNewlyUnlockedIds(world.nodes, mastery, nodeId)
+      const nextMastery = masterNode(params.worldId, nodeId)
+      setMastery(nextMastery)
       setSelectedNodeId(null)
 
       // Flash des nœuds nouvellement débloqués
@@ -64,8 +71,14 @@ export default function KinnuWorldPage({ params }: { params: { worldId: string }
         setTimeout(() => setNewlyUnlockedIds(new Set()), 1800)
       }
     },
-    [world.nodes, masteredIds, params.worldId],
+    [world.nodes, mastery, params.worldId],
   )
+
+  // ─── Time Travel (Debug) ─────────────────────────────────────────────────
+  const handleTimeTravel = () => {
+    addTimeOffsetDays(1)
+    setRenderKey((k) => k + 1) // Force le recalcul de `statuses`
+  }
 
   return (
     <main className="relative min-h-[100dvh] overflow-hidden bg-[#05050A] text-white">
@@ -78,9 +91,21 @@ export default function KinnuWorldPage({ params }: { params: { worldId: string }
       {/* HUD */}
       <KinnuHud
         world={world}
-        masteredCount={masteredIds.size}
+        masteredCount={Object.keys(mastery).length}
         totalNodes={world.nodes.length}
       />
+
+      {/* Debug: Time Travel Button */}
+      <div className="absolute right-4 top-[5.5rem] z-50">
+        <button
+          onClick={handleTimeTravel}
+          className="flex items-center gap-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-wider text-purple-200 backdrop-blur-md transition-colors hover:bg-purple-500/20"
+          title="Avancer le temps de 1 jour pour tester la dégradation"
+        >
+          <Clock className="h-3.5 w-3.5" />
+          <span>+1 Jour</span>
+        </button>
+      </div>
 
       {/* Canvas graphe */}
       <section className="relative h-[100dvh] w-full px-2 pb-4 pt-28 sm:px-6">
@@ -111,6 +136,7 @@ export default function KinnuWorldPage({ params }: { params: { worldId: string }
       <KinnuBottomSheet
         node={selectedNode}
         status={selectedStatus}
+        health={selectedHealth}
         onMaster={handleMaster}
         onClose={handleClose}
       />
