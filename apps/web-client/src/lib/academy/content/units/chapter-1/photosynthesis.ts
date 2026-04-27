@@ -611,7 +611,7 @@ export const photosynthesisUnit: AcademyUnitDefinition = {
       learningObjective: 'Synthétiser la fonction écosystémique.',
       question: "La photosynthèse permet ces 3 choses simultanément :",
       options: [
-        { text: 'Nourrir le vivant + produire O₂ + stocker du carbone', isCorrect: true, feedback: 'Exact. Triple service vital.' },
+        { text: 'Nourrir vivant + produire O₂ + stocker carbone', isCorrect: true, feedback: 'Exact. Triple service vital.' },
         { text: 'Faire pousser des fleurs uniquement', isCorrect: false, feedback: 'Trop limité. Tous les producteurs en bénéficient.' },
         { text: "Refroidir l'air directement", isCorrect: false, feedback: 'Effet indirect via évapotranspiration, pas via photosynthèse pure.' },
       ],
