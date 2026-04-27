@@ -96,8 +96,8 @@ export const swipeExerciseSchema = exerciseBaseSchema.extend({
   type: z.literal('SWIPE'),
   question: z.string().min(1).max(110),
   card: z.object({
-    title: z.string().min(1).max(70),
-    subtitle: z.string().max(70).optional(),
+    title: z.string().min(1).max(100),
+    subtitle: z.string().max(100).optional(),
     imageUrl: z.string().url().optional(),
     imagePrompt: z.string().optional(),
   }),
