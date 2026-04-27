@@ -62,9 +62,65 @@ créant une narration **problème → théorie → solution** :
 - [x] **Phase 1** — Math hexagonale + 1 île statique
 - [x] **Phase 2** — 6 îles + Pan/Zoom navigable + données mockées
 - [x] **Phase 2.5** — Bottom Sheet basique (illustration placeholder + CTA)
-- [ ] **Phase 3** — Lien `Démarrer` → Academy (`/academy/[chapter]/[unit]`)
-- [ ] **Phase 4** — Fog of War + cross-links visuels animés
+- [x] **Phase 3** — Lien `Démarrer` → Academy (`/academy/[chapter]/[unit]`)
+- [x] **Phase 4** — Fog of War + cross-links visuels animés
 - [ ] **Phase 5** — Vraies illustrations 3D (origami / dioramas)
+- [ ] **Phase 6** — Sync progression Kinnu ↔ Academy (master auto à fin de cours)
+
+## Phase 3 — Mapping Academy
+
+Chaque Pathway expose `academyChapterSlug` + `academyUnitSlug` (voir
+`ACADEMY_MAPPING` dans `_lib/hex-grid-data.ts`). Le bouton **"Démarrer"**
+du Bottom Sheet appelle `router.push('/academy/<chapter>/<unit>')`.
+
+Les Pathways sans cours mappé (ex: `waters-2` Plancton, `air-2`
+Chauves-souris partiel) affichent un fallback "Cours Academy bientôt
+disponible" et conservent le toggle mock pour tester le déblocage.
+
+Mapping actuel (21/29 Pathways mappés) :
+
+| Île | Mappés | Manquants (besoin de nouveaux cours Academy) |
+|-----|--------|----------------------------------------------|
+| Foundations | 5/5 | — |
+| Waters | 1/5 | mangrove, plancton, baleines, abysses |
+| Continents | 4/5 | amazonie |
+| Air | 4/4 | — |
+| Anthropocene | 3/5 | invasif, assèchement |
+| Guardians | 5/5 | — |
+
+## Phase 4 — Fog of War & Cross-links
+
+### Fog of War
+
+3 niveaux d'opacité par hex selon la progression :
+
+| Niveau | Condition | Rendu |
+|--------|-----------|-------|
+| `visible` | Pathway `available` ou `mastered` | Pleine opacité |
+| `discovered` | Pathway `locked` mais ≥1 prérequis `mastered` | Opacité 0.55 |
+| `fogged` | Pathway `locked` et 0 prérequis `mastered` | Opacité 0.18 + blur |
+
+Les **îles entièrement fogged** masquent leur label.
+Les hex décoratifs **suivent le fog dominant** de leur île.
+
+### Cross-links inter-îles
+
+Lignes Bezier (courbes) entre Pathways requis d'îles différentes :
+
+- **Inactive** (les 2 endpoints `locked`) : pointillés très transparents
+- **Active** (≥1 endpoint `mastered`) : trait plein + particule animée
+  qui circule le long de la courbe
+- **Complete** (les 2 endpoints `mastered`) : trait épais blanc + halo
+  glow + circulation rapide
+
+Cross-links définis dans `getCrossIslandLinks()` (calculé depuis les
+champs `requires`). Exemples :
+
+- `foundations-3` (Toile Trophique) → `anthropocene-0` (Fièvre Planétaire)
+- `waters-0` (Récif) → `anthropocene-2` (Plastique)
+- `continents-0` (Amazonie) + `continents-4` (Pollens) → `guardians-0` (Agroforesterie)
+- `waters-0` + `anthropocene-0` → `guardians-1` (Coraux)
+- `continents-4` + `foundations-1` → `guardians-3` (Ruches)
 
 ## Test rapide
 

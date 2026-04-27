@@ -17,10 +17,52 @@ export type Pathway = {
   title: string
   shortLabel: string
   description: string
-  /** Slug du chapitre Academy correspondant (Phase 3) */
+  /** Slug du chapitre Academy (ex: 'alphabet-originel') */
   academyChapterSlug?: string
+  /** Slug de l'unité Academy (ex: 'la-fabrique-du-vivant') */
+  academyUnitSlug?: string
   /** Prérequis (IDs de Pathways) — supporte les cross-links inter-îles */
   requires: string[]
+}
+
+/**
+ * Mapping Pathway → Academy unit
+ * (chapter slug, unit slug) — manquant = pas de cours en face pour le moment
+ */
+const ACADEMY_MAPPING: Record<string, { chapter: string; unit: string }> = {
+  // ─── Foundations (Chapter 1 — L'Alphabet Originel) ────
+  'foundations-0': { chapter: 'alphabet-originel', unit: 'la-fabrique-du-vivant' },
+  'foundations-1': { chapter: 'alphabet-originel', unit: 'le-pouvoir-du-soleil' },
+  'foundations-2': { chapter: 'alphabet-originel', unit: 'le-voyage-de-leau' },
+  'foundations-3': { chapter: 'grammaire-especes', unit: 'le-festin-des-predateurs' },
+  'foundations-4': { chapter: 'alphabet-originel', unit: 'la-magie-des-sols' },
+
+  // ─── Waters (Chapter 4 — Sanctuaires Sauvages) ────────
+  'waters-0': { chapter: 'sanctuaires-sauvages', unit: 'les-metropoles-englouties' },
+
+  // ─── Continents (Chapters 2 & 3 & 4) ──────────────────
+  'continents-1': { chapter: 'sanctuaires-sauvages', unit: 'lile-aux-lemuriens' },
+  'continents-2': { chapter: 'grammaire-especes', unit: 'les-alliances-invisibles' },
+  'continents-3': { chapter: 'grammaire-especes', unit: 'la-loterie-des-mutations' },
+  'continents-4': { chapter: 'economie-biosphere', unit: 'les-coursiers-du-nectar' },
+
+  // ─── Air (Chapter 3 — L'Économie de la Biosphère) ─────
+  'air-0': { chapter: 'sanctuaires-sauvages', unit: 'le-bal-des-saisons' },
+  'air-1': { chapter: 'economie-biosphere', unit: 'leternel-voyage-bleu' },
+  'air-2': { chapter: 'alphabet-originel', unit: 'reflexes-du-vivant' },
+  'air-3': { chapter: 'economie-biosphere', unit: 'le-coffre-fort-noir' },
+
+  // ─── Anthropocene (Chapter 5 — L'Éveil des Gardiens) ──
+  'anthropocene-0': { chapter: 'eveil-gardiens', unit: 'le-crepuscule-des-geants' },
+  'anthropocene-1': { chapter: 'eveil-gardiens', unit: 'le-crepuscule-des-geants' },
+  'anthropocene-2': { chapter: 'eveil-gardiens', unit: 'le-crepuscule-des-geants' },
+
+  // ─── Guardians (Chapter 5 — solutions) ────────────────
+  'guardians-0': { chapter: 'eveil-gardiens', unit: 'cultiver-lavenir' },
+  'guardians-1': { chapter: 'eveil-gardiens', unit: 'larsenal-de-lespoir' },
+  'guardians-2': { chapter: 'eveil-gardiens', unit: 'larsenal-de-lespoir' },
+  'guardians-3': { chapter: 'eveil-gardiens', unit: 'cultiver-lavenir' },
+  'guardians-4': { chapter: 'eveil-gardiens', unit: 'larsenal-de-lespoir' },
 }
 
 export type IslandTheme = {
@@ -296,11 +338,73 @@ export const ISLANDS: Island[] = [
 ]
 
 // ───────────────────────────────────────────────────────────────────────────
+// POST-PROCESSING : inject Academy slugs into each Pathway
+// ───────────────────────────────────────────────────────────────────────────
+
+for (const island of ISLANDS) {
+  for (const pathway of island.pathways) {
+    const mapping = ACADEMY_MAPPING[pathway.id]
+    if (mapping) {
+      pathway.academyChapterSlug = mapping.chapter
+      pathway.academyUnitSlug = mapping.unit
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
 // LOOKUPS
 // ───────────────────────────────────────────────────────────────────────────
 
 export function getAllPathways(): Pathway[] {
   return ISLANDS.flatMap((island) => island.pathways)
+}
+
+/** Renvoie l'URL Academy d'un Pathway, ou null si pas mappé */
+export function getAcademyUrl(pathway: Pathway): string | null {
+  if (!pathway.academyChapterSlug || !pathway.academyUnitSlug) return null
+  return `/academy/${pathway.academyChapterSlug}/${pathway.academyUnitSlug}`
+}
+
+/** Tous les cross-links (paires de Pathways d'îles différentes) */
+export function getCrossIslandLinks(): Array<{ from: Pathway; to: Pathway }> {
+  const all = getAllPathways()
+  const byId = new Map(all.map((p) => [p.id, p]))
+  const links: Array<{ from: Pathway; to: Pathway }> = []
+
+  for (const pathway of all) {
+    for (const requiredId of pathway.requires) {
+      const required = byId.get(requiredId)
+      if (!required) continue
+      // Seuls les liens INTER-îles sont des cross-links
+      if (required.islandId !== pathway.islandId) {
+        links.push({ from: required, to: pathway })
+      }
+    }
+  }
+  return links
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// FOG OF WAR
+// ───────────────────────────────────────────────────────────────────────────
+
+export type FogLevel = 'visible' | 'discovered' | 'fogged'
+
+/**
+ * Niveau de brouillard d'un Pathway :
+ * - `visible` : non-locked (available ou mastered)
+ * - `discovered` : locked mais au moins un prérequis est mastered (entrevu)
+ * - `fogged` : locked et aucun prérequis mastered (inconnu)
+ */
+export function computeFogLevel(
+  pathway: Pathway,
+  masteredIds: ReadonlySet<string>,
+): FogLevel {
+  const status = computePathwayStatus(pathway, masteredIds)
+  if (status !== 'locked') return 'visible'
+  if (pathway.requires.length === 0) return 'discovered'
+  const someRequireMastered = pathway.requires.some((id) => masteredIds.has(id))
+  return someRequireMastered ? 'discovered' : 'fogged'
 }
 
 export function getIslandById(id: IslandId): Island {

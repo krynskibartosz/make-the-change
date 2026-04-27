@@ -1,13 +1,19 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Check, RotateCcw, X } from 'lucide-react'
+import { ArrowRight, BookOpen, Check, RotateCcw, X } from 'lucide-react'
+import { useRouter } from '@/i18n/navigation'
 import { HexGridCanvas } from './_components/hex-grid-canvas'
 import { HexHud } from './_components/hex-hud'
-import { getAllPathways, type Pathway } from './_lib/hex-grid-data'
+import {
+  getAcademyUrl,
+  getAllPathways,
+  type Pathway,
+} from './_lib/hex-grid-data'
 import { loadMasteredIds, resetProgress, saveMasteredIds } from './_lib/progress'
 
 export default function KinnuV2Page() {
+  const router = useRouter()
   const allPathways = useMemo(() => getAllPathways(), [])
   const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set())
   const [selectedPathway, setSelectedPathway] = useState<Pathway | null>(null)
@@ -23,11 +29,27 @@ export default function KinnuV2Page() {
     setSelectedPathway(pathway)
   }, [])
 
-  const handleMaster = useCallback(() => {
+  /** Phase 3 : démarrer un Pathway → naviguer vers l'Academy */
+  const handleStartPathway = useCallback(() => {
+    if (!selectedPathway) return
+    const url = getAcademyUrl(selectedPathway)
+    if (url) {
+      router.push(url)
+    }
+    // Fallback : si pas d'URL Academy, on ferme juste le sheet
+    setSelectedPathway(null)
+  }, [selectedPathway, router])
+
+  /** Toggle direct du statut (debug / fallback quand pas d'Academy mappée) */
+  const handleToggleMaster = useCallback(() => {
     if (!selectedPathway) return
     setMasteredIds((prev) => {
       const next = new Set(prev)
-      next.add(selectedPathway.id)
+      if (next.has(selectedPathway.id)) {
+        next.delete(selectedPathway.id)
+      } else {
+        next.add(selectedPathway.id)
+      }
       saveMasteredIds(next)
       return next
     })
@@ -41,6 +63,7 @@ export default function KinnuV2Page() {
   }, [])
 
   const isSelectedMastered = selectedPathway ? masteredIds.has(selectedPathway.id) : false
+  const selectedAcademyUrl = selectedPathway ? getAcademyUrl(selectedPathway) : null
 
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-[#05050A] text-white">
@@ -138,25 +161,56 @@ export default function KinnuV2Page() {
               {selectedPathway.description}
             </p>
 
-            {/* CTA */}
+            {/* CTA principal : Démarrer / Revoir → Academy */}
+            {selectedAcademyUrl ? (
+              <button
+                type="button"
+                onClick={handleStartPathway}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 py-4 text-sm font-black text-black shadow-[0_5px_0_#065f46] transition-transform active:translate-y-[3px] active:shadow-[0_2px_0_#065f46]"
+              >
+                {isSelectedMastered ? (
+                  <>
+                    <BookOpen className="h-4 w-4" />
+                    Revoir ce Pathway
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    Démarrer ce Pathway
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="rounded-2xl border border-amber-300/20 bg-amber-300/5 p-4 text-center">
+                <p className="text-[11px] font-bold text-amber-200/80">
+                  Cours Academy bientôt disponible pour ce Pathway.
+                </p>
+              </div>
+            )}
+
+            {/* CTA secondaire : toggle direct (debug / mock) */}
             <button
               type="button"
-              onClick={handleMaster}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 py-4 text-sm font-black text-black shadow-[0_5px_0_#065f46] transition-transform active:translate-y-[3px] active:shadow-[0_2px_0_#065f46]"
+              onClick={handleToggleMaster}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white/60 transition-colors hover:bg-white/10 hover:text-white"
             >
               {isSelectedMastered ? (
                 <>
-                  <Check className="h-4 w-4" />
-                  Revoir ce Pathway
+                  <X className="h-3 w-3" />
+                  Démasteriser (debug)
                 </>
               ) : (
-                <>Démarrer ce Pathway</>
+                <>
+                  <Check className="h-3 w-3" />
+                  Marquer comme maîtrisé (mock)
+                </>
               )}
             </button>
 
             {isSelectedMastered && (
               <p className="mt-3 text-center text-[11px] font-bold text-emerald-300">
-                ✓ Déjà masterisé
+                ✓ Déjà maîtrisé
               </p>
             )}
           </div>

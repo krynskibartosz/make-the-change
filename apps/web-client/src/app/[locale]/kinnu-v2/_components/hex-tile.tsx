@@ -2,7 +2,7 @@
 
 import { Lock } from 'lucide-react'
 import { axialToPixel, hexCorners, type HexCoord } from '../_lib/hex-math'
-import type { IslandTheme, PathwayStatus } from '../_lib/hex-grid-data'
+import type { FogLevel, IslandTheme, PathwayStatus } from '../_lib/hex-grid-data'
 
 type HexTileProps = {
   coord: HexCoord
@@ -10,6 +10,7 @@ type HexTileProps = {
   status: PathwayStatus
   label?: string
   isDecorative?: boolean
+  fog?: FogLevel
   onClick?: () => void
 }
 
@@ -19,6 +20,7 @@ export function HexTile({
   status,
   label,
   isDecorative = false,
+  fog = 'visible',
   onClick,
 }: HexTileProps) {
   const { x, y } = axialToPixel(coord.q, coord.r)
@@ -52,13 +54,19 @@ export function HexTile({
     strokeDasharray = '4 4'
   }
 
+  // Fog of War : opacité globale du <g>
+  const fogOpacity = fog === 'fogged' ? 0.18 : fog === 'discovered' ? 0.55 : 1
+  const fogFilter = fog === 'fogged' ? 'blur(1.5px)' : undefined
+
   return (
     <g
       className={isInteractive ? 'kinnu-v2-hex-interactive' : undefined}
       style={{
         cursor: isInteractive ? 'pointer' : 'default',
         transformOrigin: `${x}px ${y}px`,
-        transition: 'transform 200ms ease-out',
+        transition: 'transform 200ms ease-out, opacity 600ms ease-out, filter 600ms ease-out',
+        opacity: fogOpacity,
+        filter: fogFilter,
       }}
       onClick={isInteractive ? onClick : undefined}
       role={isInteractive ? 'button' : undefined}

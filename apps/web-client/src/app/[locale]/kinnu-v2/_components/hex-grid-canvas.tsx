@@ -8,10 +8,13 @@ import {
 } from '../_lib/hex-math'
 import {
   ISLANDS,
+  computeFogLevel,
   computePathwayStatus,
+  type FogLevel,
   type Pathway,
 } from '../_lib/hex-grid-data'
 import { HexTile } from './hex-tile'
+import { CrossLinkLines } from './cross-link-lines'
 
 type HexGridCanvasProps = {
   masteredIds: ReadonlySet<string>
@@ -151,16 +154,38 @@ export function HexGridCanvas({ masteredIds, onPathwayClick }: HexGridCanvasProp
     setTy(0)
   }
 
-  // ─── Détermine le set de Pathways (pour calcul du statut) ──────────────
+  // ─── Détermine le set de Pathways (pour calcul du statut + fog) ────────
   const pathwayStatusMap = useMemo(() => {
-    const map = new Map<string, ReturnType<typeof computePathwayStatus>>()
+    const map = new Map<string, { status: ReturnType<typeof computePathwayStatus>; fog: FogLevel }>()
     for (const island of ISLANDS) {
       for (const p of island.pathways) {
-        map.set(p.id, computePathwayStatus(p, masteredIds))
+        map.set(p.id, {
+          status: computePathwayStatus(p, masteredIds),
+          fog: computeFogLevel(p, masteredIds),
+        })
       }
     }
     return map
   }, [masteredIds])
+
+  /**
+   * Fog des hex décoratifs : déterminé par leur île
+   * - Si au moins 1 Pathway de l'île est `visible` → décoratif `discovered`
+   * - Sinon → `fogged`
+   */
+  const islandFogMap = useMemo(() => {
+    const map = new Map<string, FogLevel>()
+    for (const island of ISLANDS) {
+      const hasVisible = island.pathways.some(
+        (p) => pathwayStatusMap.get(p.id)?.fog === 'visible',
+      )
+      const hasDiscovered = island.pathways.some(
+        (p) => pathwayStatusMap.get(p.id)?.fog !== 'fogged',
+      )
+      map.set(island.id, hasVisible ? 'visible' : hasDiscovered ? 'discovered' : 'fogged')
+    }
+    return map
+  }, [pathwayStatusMap])
 
   // Position pixel du centre de chaque île (pour les labels)
   const islandLabelPositions = useMemo(() => {
@@ -231,45 +256,57 @@ export function HexGridCanvas({ masteredIds, onPathwayClick }: HexGridCanvasProp
           fill="url(#kinnu-v2-bg-glow)"
         />
 
+        {/* Cross-links inter-îles (en arrière-plan) */}
+        <CrossLinkLines masteredIds={masteredIds} />
+
         {/* Îles */}
-        {ISLANDS.map((island) => (
-          <g key={island.id}>
-            {/* Hexagones décoratifs */}
-            {island.decorativeHexes.map((coord, i) => (
-              <HexTile
-                key={`${island.id}-deco-${i}`}
-                coord={coord}
-                theme={island.theme}
-                status="locked"
-                isDecorative
-              />
-            ))}
-
-            {/* Pathways */}
-            {island.pathways.map((pathway) => {
-              const status = pathwayStatusMap.get(pathway.id) ?? 'locked'
-              return (
-                <HexTile
-                  key={pathway.id}
-                  coord={pathway.coord}
-                  theme={island.theme}
-                  status={status}
-                  label={pathway.shortLabel}
-                  onClick={() => onPathwayClick(pathway)}
-                />
-              )
-            })}
-          </g>
-        ))}
-
-        {/* Labels d'île */}
-        {islandLabelPositions.map((label) => {
-          const { x: lx, y: ly } = { x: label.cx, y: label.cy }
+        {ISLANDS.map((island) => {
+          const islandFog = islandFogMap.get(island.id) ?? 'fogged'
           return (
-            <g key={`label-${label.id}`} pointerEvents="none">
+            <g key={island.id}>
+              {/* Hexagones décoratifs (suivent le fog de l'île) */}
+              {island.decorativeHexes.map((coord, i) => (
+                <HexTile
+                  key={`${island.id}-deco-${i}`}
+                  coord={coord}
+                  theme={island.theme}
+                  status="locked"
+                  isDecorative
+                  fog={islandFog}
+                />
+              ))}
+
+              {/* Pathways */}
+              {island.pathways.map((pathway) => {
+                const entry = pathwayStatusMap.get(pathway.id)
+                const status = entry?.status ?? 'locked'
+                const fog = entry?.fog ?? 'fogged'
+                return (
+                  <HexTile
+                    key={pathway.id}
+                    coord={pathway.coord}
+                    theme={island.theme}
+                    status={status}
+                    label={pathway.shortLabel}
+                    fog={fog}
+                    onClick={() => onPathwayClick(pathway)}
+                  />
+                )
+              })}
+            </g>
+          )
+        })}
+
+        {/* Labels d'île (cachés si île totalement fogged) */}
+        {islandLabelPositions.map((label) => {
+          const islandFog = islandFogMap.get(label.id) ?? 'fogged'
+          if (islandFog === 'fogged') return null
+          const labelOpacity = islandFog === 'discovered' ? 0.45 : 1
+          return (
+            <g key={`label-${label.id}`} pointerEvents="none" style={{ transition: 'opacity 600ms' }} opacity={labelOpacity}>
               <text
-                x={lx}
-                y={ly}
+                x={label.cx}
+                y={label.cy}
                 textAnchor="middle"
                 style={{
                   fill: label.color,
