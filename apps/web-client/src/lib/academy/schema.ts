@@ -116,7 +116,7 @@ export type AcademySwipeExercise = z.infer<typeof swipeExerciseSchema>
 
 export const dragDropItemSchema = z.object({
   id: z.string().min(1),
-  text: z.string().min(1).max(50),
+  text: z.string().min(1).max(80),
   isDistractor: z.boolean().optional(),
 })
 export type AcademyDragDropItem = z.infer<typeof dragDropItemSchema>
@@ -138,7 +138,7 @@ export type AcademyDragDropExercise = z.infer<typeof dragDropExerciseSchema>
 // ─── QUIZ ─────────────────────────────────────────────────────────────────────
 
 export const quizOptionSchema = z.object({
-  text: z.string().min(1).max(50),
+  text: z.string().min(1).max(80),
   isCorrect: z.boolean(),
   feedback: z.string().min(1).max(160),
   misconceptionId: z.string().optional(),
