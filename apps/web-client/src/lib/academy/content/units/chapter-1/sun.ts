@@ -105,7 +105,7 @@ export const sunUnit: AcademyUnitDefinition = {
       question: "D'où vient l'énergie qui fait pousser un arbre ?",
       options: [
         {
-          text: 'De la lumière du Soleil',
+          text: 'Du Soleil',
           isCorrect: true,
           feedback: "Exact. La feuille transforme la lumière en sucre. C'est la photosynthèse.",
         },
@@ -279,7 +279,7 @@ export const sunUnit: AcademyUnitDefinition = {
       question: 'Pourquoi commence-t-on cette aventure par le Soleil ?',
       options: [
         {
-          text: "Parce qu'il alimente presque toute la vie",
+          text: "Il alimente toute la vie",
           isCorrect: true,
           feedback: 'Exact. Sans cette énergie de base, rien d\'autre ne fonctionne. On va explorer ce que sa lumière permet.',
         },
@@ -377,7 +377,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "D'où vient la masse d'un arbre ?",
       question: "Un arbre de 5 tonnes : d'où vient l'essentiel de sa masse ?",
       options: [
-        { text: "De l'air", isCorrect: true, feedback: "Exact. Le carbone du bois vient du CO₂ de l'air. Surprenant mais vrai." },
+        { text: "L'air", isCorrect: true, feedback: "Exact. Le carbone du bois vient du CO₂ de l'air. Surprenant mais vrai." },
         { text: 'Du sol', isCorrect: false, feedback: "Misconception classique. Si on pesait le sol avant et après, il aurait à peine bougé.", misconceptionId: 'plants-eat-soil' },
         { text: "De l'eau", isCorrect: false, feedback: "L'eau passe à travers, mais ne reste pas en majorité dans le bois sec." },
       ],
@@ -392,7 +392,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "Comprendre que l'énergie circule à sens unique.",
       question: "Que se passe-t-il quand un loup mange un lapin ?",
       options: [
-        { text: "Le loup récupère l'énergie solaire", isCorrect: true, feedback: "Exact. L'énergie remonte la chaîne, mais avec des pertes à chaque étape." },
+        { text: "Loup récupère l'énergie", isCorrect: true, feedback: "Exact. L'énergie remonte la chaîne, mais avec des pertes à chaque étape." },
         { text: "Le loup crée de l'énergie nouvelle", isCorrect: false, feedback: "Aucun être vivant ne crée d'énergie. Il la transfère ou la transforme." },
         { text: "L'énergie disparaît", isCorrect: false, feedback: "Elle ne disparaît pas. Elle est utilisée et une partie est dissipée en chaleur." },
       ],
@@ -406,9 +406,9 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "Connaître l'exception : les écosystèmes des sources hydrothermales.",
       question: "Au fond des océans, certains écosystèmes vivent sans Soleil. De quoi se nourrissent-ils ?",
       options: [
-        { text: "Énergie chimique", isCorrect: true, feedback: "Exact. Des bactéries utilisent le soufre pour faire leur énergie. C'est la chimiosynthèse." },
-        { text: "De la lumière des poissons-lanternes", isCorrect: false, feedback: "La bioluminescence existe, mais elle ne fournit pas assez d'énergie pour nourrir un écosystème." },
-        { text: "Du Soleil qui descend en profondeur", isCorrect: false, feedback: "À 2000 m, il fait nuit noire. Le Soleil ne va pas si profond." },
+        { text: "Énergie chimique des sources", isCorrect: true, feedback: "Exact. Des bactéries utilisent le soufre pour faire leur énergie. C'est la chimiosynthèse." },
+        { text: "De la lumière des poissons", isCorrect: false, feedback: "La bioluminescence existe, mais elle ne fournit pas assez d'énergie pour nourrir un écosystème." },
+        { text: "Soleil en profondeur", isCorrect: false, feedback: "À 2000 m, il fait nuit noire. Le Soleil ne va pas si profond." },
       ],
       confidenceCheck: true,
     },
@@ -538,7 +538,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Démontrer que la masse du bois vient du CO₂.',
       question: "Si on coupe un arbre adulte et qu'on pèse le sol autour, comment a-t-il évolué ?",
       options: [
-        { text: 'Il a à peine bougé', isCorrect: true, feedback: 'Exact. La masse du bois vient du CO₂, pas du sol.' },
+        { text: 'À peine bougé', isCorrect: true, feedback: 'Exact. La masse du bois vient du CO₂, pas du sol.' },
         { text: 'Il a perdu autant de poids que l\'arbre', isCorrect: false, feedback: "Misconception : si c'était vrai, le sol disparaîtrait sous les forêts.", misconceptionId: 'plants-eat-soil' },
         { text: 'Il a doublé de volume', isCorrect: false, feedback: 'Aucun mécanisme connu pour ça.' },
       ],
@@ -553,7 +553,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Identifier la source majoritaire d\'oxygène.',
       question: "Quelle est la plus grande source d'oxygène atmosphérique ?",
       options: [
-        { text: 'Le phytoplancton océanique', isCorrect: true, feedback: 'Exact. ~50 à 80 % vient des microalgues.' },
+        { text: 'Le phytoplancton', isCorrect: true, feedback: 'Exact. ~50 à 80 % vient des microalgues.' },
         { text: 'Les forêts tropicales', isCorrect: false, feedback: 'Importantes mais minoritaires. C\'est l\'océan qui domine.', misconceptionId: 'oxygen-from-trees-only' },
         { text: 'Les volcans', isCorrect: false, feedback: 'Les volcans rejettent du CO₂ et du SO₂, peu d\'O₂.' },
       ],
@@ -626,8 +626,8 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Choisir la formulation la plus juste de la photosynthèse.',
       question: 'Comment formuler la photosynthèse en une ligne ?',
       options: [
-        { text: 'Lumière + CO₂ + eau → sucre + oxygène', isCorrect: true, feedback: 'Exact. C\'est l\'équation simplifiée correcte.' },
-        { text: 'Terre + lumière → plante', isCorrect: false, feedback: 'La terre n\'apparaît pas dans l\'équation.' },
+        { text: 'Lumière + CO₂ + eau → sucre', isCorrect: true, feedback: 'Exact. C\'est l\'équation simplifiée correcte.' },
+        { text: 'Lumière → plante', isCorrect: false, feedback: 'La terre n\'apparaît pas dans l\'équation.' },
         { text: 'Eau seule → sucre', isCorrect: false, feedback: 'Sans lumière ni CO₂, rien ne se passe.' },
       ],
       confidenceCheck: true,
@@ -698,7 +698,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Relier le Soleil à plusieurs phénomènes simultanément.',
       question: 'Sans le Soleil, lesquels de ces phénomènes s\'arrêteraient ?',
       options: [
-        { text: "Photosynthèse, cycle de l'eau et vents", isCorrect: true, feedback: 'Exact. Le Soleil chauffe l\'air et l\'eau, ce qui crée vents et pluies.' },
+        { text: "Photosynthèse, eau et vents", isCorrect: true, feedback: 'Exact. Le Soleil chauffe l\'air et l\'eau, ce qui crée vents et pluies.' },
         { text: 'Seulement la photosynthèse', isCorrect: false, feedback: 'C\'est trop limité. Le Soleil fait aussi tourner le climat.' },
         { text: 'Seulement le cycle de l\'eau', isCorrect: false, feedback: 'Sans Soleil, plus de plantes non plus.' },
       ],
