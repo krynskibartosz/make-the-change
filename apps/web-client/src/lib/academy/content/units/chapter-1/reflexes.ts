@@ -197,7 +197,7 @@ export const reflexesUnit: AcademyUnitDefinition = {
       learningObjective: 'Synthétiser : la chaîne complète.',
       question: "Sans LE Soleil, ET sans sol vivant, qu'arrive-t-il aux écosystèmes ?",
       options: [
-        { text: 'Ils s\'effondrent : pas de photosynthèse, pas de cycle de l\'eau, pas de nutriments', isCorrect: true, feedback: 'Exact. Les 4 piliers sont interdépendants.' },
+        { text: 'Effondrement : pas de photosynthèse, ni cycle eau, ni nutriments', isCorrect: true, feedback: 'Exact. Les 4 piliers sont interdépendants.' },
         { text: 'Rien ne change', isCorrect: false, feedback: 'Le vivant entier dépend de ces 4 forces.' },
         { text: 'Ils se transforment en désert prospère', isCorrect: false, feedback: 'Sans Soleil, même les déserts seraient morts.' },
       ],
