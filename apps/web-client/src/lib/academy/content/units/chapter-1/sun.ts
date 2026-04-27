@@ -233,7 +233,7 @@ export const sunUnit: AcademyUnitDefinition = {
       question: 'Si tu enferme une plante dans une serre sans terre mais avec air et lumière, que se passe-t-il ?',
       options: [
         {
-          text: 'Elle survit (avec un peu d\'eau)',
+          text: 'Elle survit',
           isCorrect: true,
           feedback: "Exact. C'est la culture hydroponique : air + eau + lumière suffisent.",
         },
@@ -377,7 +377,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "D'où vient la masse d'un arbre ?",
       question: "Un arbre de 5 tonnes : d'où vient l'essentiel de sa masse ?",
       options: [
-        { text: "De l'air (CO₂)", isCorrect: true, feedback: "Exact. Le carbone du bois vient du CO₂ de l'air. Surprenant mais vrai." },
+        { text: "De l'air", isCorrect: true, feedback: "Exact. Le carbone du bois vient du CO₂ de l'air. Surprenant mais vrai." },
         { text: 'Du sol', isCorrect: false, feedback: "Misconception classique. Si on pesait le sol avant et après, il aurait à peine bougé.", misconceptionId: 'plants-eat-soil' },
         { text: "De l'eau", isCorrect: false, feedback: "L'eau passe à travers, mais ne reste pas en majorité dans le bois sec." },
       ],
@@ -392,7 +392,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "Comprendre que l'énergie circule à sens unique.",
       question: "Que se passe-t-il quand un loup mange un lapin ?",
       options: [
-        { text: "Le loup récupère l'énergie solaire stockée", isCorrect: true, feedback: "Exact. L'énergie remonte la chaîne, mais avec des pertes à chaque étape." },
+        { text: "Le loup récupère l'énergie solaire", isCorrect: true, feedback: "Exact. L'énergie remonte la chaîne, mais avec des pertes à chaque étape." },
         { text: "Le loup crée de l'énergie nouvelle", isCorrect: false, feedback: "Aucun être vivant ne crée d'énergie. Il la transfère ou la transforme." },
         { text: "L'énergie disparaît", isCorrect: false, feedback: "Elle ne disparaît pas. Elle est utilisée et une partie est dissipée en chaleur." },
       ],
@@ -406,7 +406,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: "Connaître l'exception : les écosystèmes des sources hydrothermales.",
       question: "Au fond des océans, certains écosystèmes vivent sans Soleil. De quoi se nourrissent-ils ?",
       options: [
-        { text: "De l'énergie chimique des sources hydrothermales", isCorrect: true, feedback: "Exact. Des bactéries utilisent le soufre pour faire leur énergie. C'est la chimiosynthèse." },
+        { text: "Énergie chimique", isCorrect: true, feedback: "Exact. Des bactéries utilisent le soufre pour faire leur énergie. C'est la chimiosynthèse." },
         { text: "De la lumière des poissons-lanternes", isCorrect: false, feedback: "La bioluminescence existe, mais elle ne fournit pas assez d'énergie pour nourrir un écosystème." },
         { text: "Du Soleil qui descend en profondeur", isCorrect: false, feedback: "À 2000 m, il fait nuit noire. Le Soleil ne va pas si profond." },
       ],
@@ -483,8 +483,8 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Confirmer le rôle du Soleil contre une option-piège esthétique.',
       question: "Quel est le rôle principal du Soleil dans la nature ?",
       options: [
-        { text: "Source d'énergie pour le vivant", isCorrect: true, feedback: 'Exact. Sa lumière démarre presque toute la chaîne du vivant.' },
-        { text: 'Décor du ciel pour les humains', isCorrect: false, feedback: "Ça, c'est pour nos yeux. Sa fonction biologique est bien plus profonde." },
+        { text: "Source d'énergie", isCorrect: true, feedback: 'Exact. Sa lumière démarre presque toute la chaîne du vivant.' },
+        { text: 'Décor du ciel', isCorrect: false, feedback: "Ça, c'est pour nos yeux. Sa fonction biologique est bien plus profonde." },
         { text: 'Réserve de minéraux', isCorrect: false, feedback: 'Le Soleil est du gaz incandescent, pas une mine de minéraux.' },
       ],
     },
@@ -539,7 +539,7 @@ export const sunUnit: AcademyUnitDefinition = {
       question: "Si on coupe un arbre adulte et qu'on pèse le sol autour, comment a-t-il évolué ?",
       options: [
         { text: 'Il a à peine bougé', isCorrect: true, feedback: 'Exact. La masse du bois vient du CO₂, pas du sol.' },
-        { text: 'Il a perdu autant de poids que l\'arbre', isCorrect: false, feedback: 'Misconception : si c\'était vrai, le sol disparaîtrait sous les forêts.', misconceptionId: 'plants-eat-soil' },
+        { text: 'Il a perdu autant de poids que l\'arbre', isCorrect: false, feedback: "Misconception : si c'était vrai, le sol disparaîtrait sous les forêts.", misconceptionId: 'plants-eat-soil' },
         { text: 'Il a doublé de volume', isCorrect: false, feedback: 'Aucun mécanisme connu pour ça.' },
       ],
     },
@@ -698,7 +698,7 @@ export const sunUnit: AcademyUnitDefinition = {
       learningObjective: 'Relier le Soleil à plusieurs phénomènes simultanément.',
       question: 'Sans le Soleil, lesquels de ces phénomènes s\'arrêteraient ?',
       options: [
-        { text: 'Les trois : photosynthèse, cycle de l\'eau, vents', isCorrect: true, feedback: 'Exact. Le Soleil chauffe l\'air et l\'eau, ce qui crée vents et pluies.' },
+        { text: "Photosynthèse, cycle de l'eau et vents", isCorrect: true, feedback: 'Exact. Le Soleil chauffe l\'air et l\'eau, ce qui crée vents et pluies.' },
         { text: 'Seulement la photosynthèse', isCorrect: false, feedback: 'C\'est trop limité. Le Soleil fait aussi tourner le climat.' },
         { text: 'Seulement le cycle de l\'eau', isCorrect: false, feedback: 'Sans Soleil, plus de plantes non plus.' },
       ],
