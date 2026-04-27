@@ -232,7 +232,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: "Synthétiser : l'eau est un transporteur, pas une consommable.",
       question: "Pourquoi protéger les sols vivants et les forêts ?",
       options: [
-        { text: 'Parce qu\'ils font tourner le cycle de l\'eau localement', isCorrect: true, feedback: "Exact. Sans eux, moins d'infiltration, moins d'évaporation, moins de pluies." },
+        { text: 'Ils font tourner le cycle de l\'eau localement', isCorrect: true, feedback: "Exact. Sans eux, moins d'infiltration, moins d'évaporation, moins de pluies." },
         { text: 'Parce qu\'ils créent l\'eau à partir de rien', isCorrect: false, feedback: "Aucun être vivant ne crée d'eau. Ils la transportent et la recyclent." },
         { text: 'Parce que c\'est joli', isCorrect: false, feedback: 'Esthétique mais pas le sujet. Le rôle hydrologique est central.' },
       ],
@@ -358,7 +358,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: "Comprendre le rôle climatique des forêts tropicales.",
       question: "Pourquoi l'Amazonie est-elle souvent appelée « pompe à eau du continent » ?",
       options: [
-        { text: "Ses arbres relâchent de la vapeur qui retombe en pluie", isCorrect: true, feedback: "Exact. L'Amazonie influence les pluies jusqu'en Argentine." },
+        { text: "Ses arbres relâchent de la vapeur en pluie", isCorrect: true, feedback: "Exact. L'Amazonie influence les pluies jusqu'en Argentine." },
         { text: "Parce qu'elle pompe l'eau de l'océan vers la terre", isCorrect: false, feedback: "Aucun arbre ne pompe l'eau de l'océan. C'est l'évaporation qui le fait." },
         { text: "Parce qu'elle stocke des lacs souterrains", isCorrect: false, feedback: "Pas spécialement. Le mécanisme est aérien : transpiration → vapeur → pluie." },
       ],
@@ -476,7 +476,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: 'Identifier le meilleur sol pour absorber la pluie.',
       question: 'Pour limiter une inondation, quel aménagement urbain est le plus efficace ?',
       options: [
-        { text: 'Désimperméabiliser les surfaces (parcs, sols vivants)', isCorrect: true, feedback: 'Exact. C\'est la stratégie « ville-éponge » utilisée à Copenhague et Singapour.' },
+        { text: 'Désimperméabiliser les surfaces', isCorrect: true, feedback: 'Exact. C\'est la stratégie « ville-éponge » utilisée à Copenhague et Singapour.' },
         { text: 'Bétonner pour évacuer plus vite', isCorrect: false, feedback: 'Le béton aggrave les inondations en empêchant l\'absorption.', misconceptionId: 'concrete-helps-drainage' },
         { text: 'Construire des routes plus larges', isCorrect: false, feedback: 'Plus de surface imperméable = plus de ruissellement.' },
       ],
@@ -580,7 +580,7 @@ export const waterUnit: AcademyUnitDefinition = {
       cognitiveTags: ['sprint'],
       learningObjective: "Sprint final : direction du cycle.",
       question: 'Vrai ou faux ?',
-      card: { title: "L'eau circule de la mer vers le ciel, puis vers la terre, puis retour à la mer.", subtitle: 'Sprint final' },
+      card: { title: "L'eau circule de la mer au ciel, à la terre, puis retour", subtitle: 'Sprint final' },
       correctDirection: 'right',
       leftLabel: 'FAUX',
       rightLabel: 'VRAI',
@@ -614,7 +614,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: 'Synthétiser : énergie + eau + vivant.',
       question: "Sans Soleil ET sans forêts, qu'arriverait-il au cycle de l'eau ?",
       options: [
-        { text: 'Il s\'effondrerait : moins d\'évaporation, moins de transpiration, moins de pluies', isCorrect: true, feedback: 'Exact. Le cycle dépend des deux moteurs : énergie solaire et vivant.' },
+        { text: 'Il s\'effondrerait : moins d\'évaporation et de pluies', isCorrect: true, feedback: 'Exact. Le cycle dépend des deux moteurs : énergie solaire et vivant.' },
         { text: 'Rien ne changerait', isCorrect: false, feedback: 'Le cycle dépend de l\'énergie pour démarrer.' },
         { text: 'Les océans déborderaient', isCorrect: false, feedback: 'Sans évaporation, les océans monteraient à peine. Le problème serait l\'absence de pluies sur terre.' },
       ],

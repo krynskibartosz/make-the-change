@@ -353,6 +353,8 @@ function Droppable({ id, children }: { id: string; children: React.ReactNode }) 
 function DroppableSlot({
   id,
   index,
+  slotCount,
+  axis,
   item,
   isWrong,
   isTargeted,
@@ -361,6 +363,8 @@ function DroppableSlot({
 }: {
   id: string
   index: number
+  slotCount: number
+  axis: 'horizontal' | 'vertical'
   item: { id: string; text: string } | null
   isWrong?: boolean
   isTargeted?: boolean
@@ -368,6 +372,15 @@ function DroppableSlot({
   onPlacedTap: () => void
 }) {
   const { isOver, setNodeRef } = useDroppable({ id })
+  const isLast = index === slotCount - 1
+
+  // Pyramide : index 0 = pic (étroit), index N-1 = base (large).
+  const widthPercent =
+    axis === 'vertical'
+      ? slotCount > 1
+        ? 55 + index * (45 / (slotCount - 1))
+        : 100
+      : 100
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -385,8 +398,10 @@ function DroppableSlot({
         }}
         animate={isWrong ? { x: [0, -10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.5 }}
+        style={axis === 'vertical' ? { width: `${widthPercent}%` } : undefined}
         className={cn(
-          'flex min-h-14 w-full items-center justify-center rounded-xl border-2 border-dashed transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
+          'flex min-h-14 items-center justify-center rounded-xl border-2 border-dashed transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300',
+          axis === 'horizontal' && 'w-full',
           isOver || isTargeted ? 'border-emerald-500 bg-emerald-500/10' : 'border-white/20 bg-white/5',
           item && 'border-solid border-emerald-500/50 bg-emerald-500/20',
           isWrong && 'border-red-500/50 bg-red-500/20',
@@ -395,12 +410,20 @@ function DroppableSlot({
         {item ? (
           <DraggableItem id={item.id} text={item.text} onTap={onPlacedTap} />
         ) : (
-          <span className="text-sm text-white/35">
+          <span className="px-2 text-center text-sm text-white/35">
             {isTargeted ? `Emplacement ${index + 1} - toucher pour placer` : `Emplacement ${index + 1}`}
           </span>
         )}
       </motion.div>
-      {index < 2 && <ArrowRight className="my-1 h-5 w-5 rotate-90 text-white/30" />}
+      {!isLast && (
+        <ArrowRight
+          className={cn(
+            'my-1 h-5 w-5 text-white/30',
+            axis === 'horizontal' && 'rotate-90',
+            axis === 'vertical' && '-rotate-90',
+          )}
+        />
+      )}
     </div>
   )
 }
@@ -411,17 +434,26 @@ function DragDropExercise({
   attempt,
   showFeedback,
 }: {
-  exercise: AcademyDragDropExercise
+  exercise: AcademyDragDropExercise & { axis?: 'horizontal' | 'vertical'; slotCount?: number; correctFeedback?: string; incorrectFeedback?: string; items: Array<{ id: string; text: string; isDistractor?: boolean }> }
   onResult: (correct: boolean, feedback: string) => void
   attempt: number
   showFeedback?: boolean
 }) {
+  const realItems = exercise.items.filter((item) => !item.isDistractor)
+  const slotCount = exercise.slotCount ?? realItems.length
+  const axis: 'horizontal' | 'vertical' = exercise.axis === 'vertical' ? 'vertical' : 'horizontal'
+
+  const buildEmptySlots = () =>
+    Array.from({ length: slotCount }).reduce<Record<string, { id: string; text: string } | null>>(
+      (acc, _, index) => {
+        acc[`slot_${index}`] = null
+        return acc
+      },
+      {},
+    )
+
   const [shuffledItems, setShuffledItems] = useState(() => [...exercise.items].sort(() => Math.random() - 0.5))
-  const [slots, setSlots] = useState<Record<string, { id: string; text: string } | null>>({
-    slot_0: null,
-    slot_1: null,
-    slot_2: null,
-  })
+  const [slots, setSlots] = useState<Record<string, { id: string; text: string } | null>>(() => buildEmptySlots())
   const [availableItems, setAvailableItems] = useState(shuffledItems)
   const [wrongSlots, setWrongSlots] = useState<Set<number>>(new Set())
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
@@ -433,11 +465,12 @@ function DragDropExercise({
   useEffect(() => {
     const nextItems = [...exercise.items].sort(() => Math.random() - 0.5)
     setShuffledItems(nextItems)
-    setSlots({ slot_0: null, slot_1: null, slot_2: null })
+    setSlots(buildEmptySlots())
     setAvailableItems(nextItems)
     setWrongSlots(new Set())
     setSelectedItemId(null)
-  }, [attempt, exercise.items])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attempt, exercise.items, slotCount])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -535,20 +568,28 @@ function DragDropExercise({
   }
 
   const handleVerify = () => {
-    const isCorrect = exercise.items.every((item, index) => slots[`slot_${index}`]?.id === item.id)
+    const correctOrder = realItems.every((item, index) => slots[`slot_${index}`]?.id === item.id)
+    const distractorIds = exercise.items.filter((item) => item.isDistractor).map((item) => item.id)
+    const placedIds = Object.values(slots)
+      .filter((entry): entry is { id: string; text: string } => Boolean(entry))
+      .map((entry) => entry.id)
+    const noDistractorPlaced = distractorIds.every((id) => !placedIds.includes(id))
+    const isCorrect = correctOrder && noDistractorPlaced
 
     if (!isCorrect) {
-      const wrongIndices = exercise.items
+      const wrongIndices = realItems
         .map((item, index) => (slots[`slot_${index}`]?.id !== item.id ? index : -1))
         .filter((index) => index !== -1)
       setWrongSlots(new Set(wrongIndices))
     }
 
-    onResult(isCorrect, isCorrect ? "Parfait ! L'ordre est exact." : "Mince ! L'ordre n'est pas le bon. Observe les indices et réessaie.")
+    const correctFb = (exercise as { correctFeedback?: string }).correctFeedback ?? "Parfait ! L'ordre est exact."
+    const incorrectFb = (exercise as { incorrectFeedback?: string }).incorrectFeedback ?? "Mince ! L'ordre n'est pas le bon. Observe les indices et réessaie."
+    onResult(isCorrect, isCorrect ? correctFb : incorrectFb)
   }
 
   const handleReset = () => {
-    setSlots({ slot_0: null, slot_1: null, slot_2: null })
+    setSlots(buildEmptySlots())
     setAvailableItems(shuffledItems)
     setWrongSlots(new Set())
     setSelectedItemId(null)
@@ -588,33 +629,23 @@ function DragDropExercise({
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="mx-auto flex w-full max-w-sm flex-col items-center">
           <div className="mb-4 flex w-full flex-col items-center">
-            <DroppableSlot
-              id="slot_0"
-              index={0}
-              item={slots.slot_0 ?? null}
-              isWrong={wrongSlots.has(0)}
-              isTargeted={Boolean(selectedItemId)}
-              onSlotTap={() => placeSelectedInSlot('slot_0')}
-              onPlacedTap={() => removeFromSlot('slot_0')}
-            />
-            <DroppableSlot
-              id="slot_1"
-              index={1}
-              item={slots.slot_1 ?? null}
-              isWrong={wrongSlots.has(1)}
-              isTargeted={Boolean(selectedItemId)}
-              onSlotTap={() => placeSelectedInSlot('slot_1')}
-              onPlacedTap={() => removeFromSlot('slot_1')}
-            />
-            <DroppableSlot
-              id="slot_2"
-              index={2}
-              item={slots.slot_2 ?? null}
-              isWrong={wrongSlots.has(2)}
-              isTargeted={Boolean(selectedItemId)}
-              onSlotTap={() => placeSelectedInSlot('slot_2')}
-              onPlacedTap={() => removeFromSlot('slot_2')}
-            />
+            {Array.from({ length: slotCount }).map((_, index) => {
+              const slotId = `slot_${index}`
+              return (
+                <DroppableSlot
+                  key={slotId}
+                  id={slotId}
+                  index={index}
+                  slotCount={slotCount}
+                  axis={axis}
+                  item={slots[slotId] ?? null}
+                  isWrong={wrongSlots.has(index)}
+                  isTargeted={Boolean(selectedItemId)}
+                  onSlotTap={() => placeSelectedInSlot(slotId)}
+                  onPlacedTap={() => removeFromSlot(slotId)}
+                />
+              )
+            })}
           </div>
           <Droppable id="available-zone">
             <div className="flex w-full flex-col gap-3">
@@ -638,6 +669,113 @@ function DragDropExercise({
   )
 }
 
+function ConfidenceCheckModal({
+  selectedOptionText,
+  onConfirm,
+  onCancel,
+}: {
+  selectedOptionText: string
+  onConfirm: (confidence: number) => void
+  onCancel: () => void
+}) {
+  const [confidence, setConfidence] = useState(50)
+
+  const label =
+    confidence >= 80
+      ? '🎯 Très sûr·e'
+      : confidence >= 55
+        ? '👍 Plutôt sûr·e'
+        : confidence >= 30
+          ? '🤔 Peu sûr·e'
+          : '🤷 Au hasard'
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="absolute inset-0 z-[300] flex items-center justify-center bg-black/85 p-6 backdrop-blur-md"
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        transition={{ type: 'spring', damping: 22, stiffness: 320 }}
+        className="w-full max-w-sm rounded-3xl border border-amber-400/20 bg-[#111116] p-6 shadow-2xl"
+      >
+        <div className="mb-2 text-center text-xs font-black uppercase tracking-widest text-amber-400">
+          🧠 Métacognition
+        </div>
+        <h3 className="mb-1 text-center text-xl font-black text-white">À quel point es-tu sûr·e ?</h3>
+        <p className="mb-6 text-center text-sm leading-snug text-white/60">
+          Ta réponse :<br />
+          <span className="font-bold text-white/90">« {selectedOptionText} »</span>
+        </p>
+
+        <div className="mb-2 flex justify-between text-[10px] font-bold uppercase tracking-wide text-white/40">
+          <span>0 %</span>
+          <span>100 %</span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          step={5}
+          value={confidence}
+          onChange={(event) => setConfidence(Number(event.target.value))}
+          aria-label="Niveau de confiance"
+          className="h-2 w-full cursor-pointer appearance-none rounded-full bg-white/10 accent-emerald-500"
+        />
+        <div className="mb-6 mt-3 flex flex-col items-center">
+          <div className="text-3xl font-black text-emerald-400 tabular-nums">{confidence}%</div>
+          <div className="mt-1 text-sm font-bold text-white/70">{label}</div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => onConfirm(confidence)}
+            className="w-full rounded-2xl bg-emerald-500 py-4 text-base font-black text-black shadow-[0_5px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[4px] active:shadow-[0_1px_0_#065f46]"
+          >
+            Valider ma réponse
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="w-full rounded-2xl bg-white/5 py-3 text-sm font-bold text-white/60 transition-colors hover:bg-white/10 hover:text-white/80"
+          >
+            Reconsidérer
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function buildConfidenceFeedback({
+  isCorrect,
+  confidence,
+  baseFeedback,
+}: {
+  isCorrect: boolean
+  confidence: number
+  baseFeedback: string
+}): string {
+  if (isCorrect && confidence >= 70) {
+    return `🎯 Sûr·e ET juste — c'est de la maîtrise.\n\n${baseFeedback}`
+  }
+  if (isCorrect && confidence < 40) {
+    return `✨ Tu doutais mais c'était bon. Refais-le pour ancrer.\n\n${baseFeedback}`
+  }
+  if (!isCorrect && confidence >= 70) {
+    return `🧠 Tu étais sûr·e mais c'est faux — c'est LE moment où on apprend.\n\n${baseFeedback}`
+  }
+  if (!isCorrect && confidence < 40) {
+    return `🤷 Tu doutais et c'était à raison. Voici l'explication :\n\n${baseFeedback}`
+  }
+  return baseFeedback
+}
+
 function QuizExercise({
   exercise,
   onResult,
@@ -650,10 +788,12 @@ function QuizExercise({
   mascot: string
 }) {
   const [selected, setSelected] = useState<number | null>(null)
+  const [showConfidence, setShowConfidence] = useState(false)
   const showHint = attempt > 0 && Boolean(exercise.hint)
 
   useEffect(() => {
     setSelected(null)
+    setShowConfidence(false)
   }, [attempt])
 
   const handleSelect = (index: number) => {
@@ -665,7 +805,7 @@ function QuizExercise({
     setSelected(index)
   }
 
-  const handleVerify = () => {
+  const emitResult = (confidence?: number) => {
     if (selected === null) {
       return
     }
@@ -678,8 +818,30 @@ function QuizExercise({
     // V2 : feedback par option si défini, sinon fallback legacy global.
     const optionFeedback = option.feedback
     const fallback = option.isCorrect ? exercise.successFeedback : exercise.failureFeedback
-    onResult(option.isCorrect, optionFeedback ?? fallback)
+    const baseFeedback = optionFeedback ?? fallback
+
+    const finalFeedback =
+      confidence !== undefined
+        ? buildConfidenceFeedback({ isCorrect: option.isCorrect, confidence, baseFeedback })
+        : baseFeedback
+
+    onResult(option.isCorrect, finalFeedback)
   }
+
+  const handleVerify = () => {
+    if (selected === null) {
+      return
+    }
+
+    if (exercise.confidenceCheck) {
+      setShowConfidence(true)
+      return
+    }
+
+    emitResult()
+  }
+
+  const selectedOptionText = selected !== null ? (exercise.options[selected]?.text ?? '') : ''
 
   return (
     <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-36 pt-32">
@@ -734,6 +896,18 @@ function QuizExercise({
           VALIDER
         </button>
       </div>
+      <AnimatePresence>
+        {showConfidence && (
+          <ConfidenceCheckModal
+            selectedOptionText={selectedOptionText}
+            onConfirm={(confidence) => {
+              setShowConfidence(false)
+              emitResult(confidence)
+            }}
+            onCancel={() => setShowConfidence(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
