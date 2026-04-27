@@ -614,7 +614,7 @@ export const waterUnit: AcademyUnitDefinition = {
       learningObjective: 'Synthétiser : énergie + eau + vivant.',
       question: "Sans Soleil ET sans forêts, qu'arriverait-il au cycle de l'eau ?",
       options: [
-        { text: 'Il s\'effondrerait : moins d\'évaporation et de pluies', isCorrect: true, feedback: 'Exact. Le cycle dépend des deux moteurs : énergie solaire et vivant.' },
+        { text: 'Il s\'effondrerait : moins d\'évaporation', isCorrect: true, feedback: 'Exact. Le cycle dépend des deux moteurs : énergie solaire et vivant.' },
         { text: 'Rien ne changerait', isCorrect: false, feedback: 'Le cycle dépend de l\'énergie pour démarrer.' },
         { text: 'Les océans déborderaient', isCorrect: false, feedback: 'Sans évaporation, les océans monteraient à peine. Le problème serait l\'absence de pluies sur terre.' },
       ],
