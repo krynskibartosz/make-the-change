@@ -1,3 +1,12 @@
+import { redirect } from 'next/navigation'
+
+// Ancien dashboard desktop supprimé — redesigné mobile-first.
+// L'onglet Profil (/dashboard/profile) remplace cette page.
+export default function DashboardPage() {
+  redirect('/dashboard/profile')
+}
+
+// --- DEAD CODE BELOW (conservé temporairement pour référence) ---
 import {
   Badge,
   Button,

@@ -7,7 +7,6 @@ import {
   Coins,
   CreditCard,
   Home,
-  LayoutDashboard,
   Leaf,
   LogOut,
   type LucideIcon,
@@ -48,7 +47,6 @@ type NavigationKey = keyof Messages['navigation']
 type AccountNavItem = { href: string; icon: LucideIcon; labelKey?: NavigationKey; label?: string }
 
 const baseAccountNavPrimaryItems: AccountNavItem[] = [
-  { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
   { href: '/dashboard/profile', labelKey: 'profile', icon: User },
   { href: '/dashboard/investments', label: 'Mes contributions', icon: PiggyBank },
   { href: '/dashboard/orders', labelKey: 'my_orders', icon: ShoppingBag },

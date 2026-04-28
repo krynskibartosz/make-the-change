@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@make-the-change/core/ui'
-import { Clapperboard, Plus, Rss, User, Users } from 'lucide-react'
+import { Rss, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -23,25 +23,6 @@ export function CommunityMobileBottomNav({ user }: CommunityMobileBottomNavProps
       icon: Rss,
       label: tCommunity('sidebar.feed'),
       isActive: pathname === '/community',
-    },
-    {
-      href: '/community/reels',
-      icon: Clapperboard,
-      label: tCommunity('sidebar.reels'),
-      isActive: pathname.startsWith('/community/reels'),
-    },
-    {
-      href: '/community/reels/new',
-      icon: Plus,
-      label: tCommunity('sidebar.post_reel'),
-      isActive: pathname.startsWith('/community/reels/new'),
-      isAction: true,
-    },
-    {
-      href: '/community/guilds',
-      icon: Users,
-      label: tCommunity('sidebar.guilds'),
-      isActive: pathname.startsWith('/community/guilds'),
     },
   ]
 
@@ -86,7 +67,7 @@ export function CommunityMobileBottomNav({ user }: CommunityMobileBottomNavProps
 
           <li className="flex min-w-0 flex-1">
             <Link
-              href={user ? '/dashboard' : '/login'}
+              href={user ? '/dashboard/profile' : '/login'}
               aria-current={isDashboard ? 'page' : undefined}
               className={cn(
                 navLinkClass,

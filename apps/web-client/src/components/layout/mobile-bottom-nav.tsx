@@ -43,7 +43,6 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   const isProjects = pathname.startsWith('/projets') || pathname.startsWith('/projects')
   const isCollective =
     pathname.startsWith('/collectif') ||
-    pathname.startsWith('/leaderboard') ||
     pathname.startsWith('/community')
   const isMarket =
     pathname.startsWith('/marche') ||

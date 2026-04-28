@@ -1,4 +1,4 @@
-import 'server-only'
+﻿import 'server-only'
 
 import type { Database } from '@make-the-change/core/database-types'
 import type {
@@ -7,26 +7,14 @@ import type {
   ContributorScope,
   FeedScope,
   FeedSort,
-  Guild,
-  GuildMember,
-  HashtagStats,
   Post,
   PostMediaAsset,
 } from '@make-the-change/core/shared'
 import { cache } from 'react'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import {
-  getMockCollectiveGuilds,
-  getMockGuildBySlug,
-  getMockGuildLeaderboard,
-} from '@/lib/mock/mock-collective'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getPublicAppUrl } from '@/lib/public-url'
-import {
-  extractHashtagsFromText,
-  hashtagLabelFromSlug,
-  sanitizeHashtagSlug,
-} from '@/lib/social/hashtags'
+import { extractHashtagsFromText, sanitizeHashtagSlug } from '@/lib/social/hashtags'
 import { createClient } from '@/lib/supabase/server'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asBoolean, asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
@@ -36,15 +24,7 @@ export type FeedQueryOptions = {
   limit?: number
   sort?: FeedSort
   hashtagSlug?: string
-  guildId?: string
   scope?: FeedScope
-}
-
-export type ReelsFeedScope = Extract<FeedScope, 'all' | 'following'>
-export type ReelsFeedQueryOptions = {
-  page?: number
-  limit?: number
-  scope?: ReelsFeedScope
 }
 export type CommentSort = 'top' | 'newest'
 export type CommentsPageQueryOptions = {
@@ -62,9 +42,6 @@ type PostRowWithCounts = PostViewRow & {
   og_image_url?: string | null
 }
 type CommentViewRow = Database['social']['Views']['comments_with_authors']['Row']
-type HashtagStatsViewRow = Database['social']['Views']['hashtag_stats']['Row'] & {
-  hashtag_slug?: string | null
-}
 type PostMediaRow = Pick<
   Database['social']['Tables']['post_media']['Row'],
   'post_id' | 'public_url' | 'sort_order' | 'status' | 'mime_type' | 'width' | 'height'
@@ -81,56 +58,13 @@ type ContributorAggregation = {
   score: number
 }
 
-type GuildDetails = {
-  guild: Guild
-  members: GuildMember[]
-}
 
-type GuildLeaderboardEntry = {
-  guild_id: string
-  guild_name: string
-  guild_slug: string
-  guild_logo_url: string | null
-  members_count: number
-  posts_count: number
-  reactions_received: number
-  comments_received: number
-  score: number
-}
-
-type ReelsFeedRow = {
-  id: string
-  author_id: string
-  content: string | null
-  image_urls: string[] | null
-  project_update_id: string | null
-  type: Post['type']
-  visibility: Post['visibility']
-  metadata: Record<string, unknown> | null
-  created_at: string
-  updated_at: string
-  author_full_name: string | null
-  author_avatar_url: string | null
-  shares_count: number | null
-  share_kind: Post['share_kind']
-  source_post_id: string | null
-  reactions_count: number | null
-  comments_count: number | null
-  public_url: string | null
-  mime_type: string | null
-}
-
-const FEED_WINDOW_SIZE = 300
 const DEFAULT_FEED_LIMIT = 20
 const CACHED_FEED_WINDOW_SIZE = 300
 
 export const COMMUNITY_CACHE_TAGS = {
   feed: 'community:feed',
-  hashtags: 'community:hashtags',
-  guilds: 'community:guilds',
-  leaderboard: 'community:leaderboard',
   post: (postId: string) => `community:post:${postId}`,
-  guild: (guildId: string) => `community:guild:${guildId}`,
 } as const
 
 const isPostType = (value: unknown): value is Post['type'] =>
@@ -209,14 +143,13 @@ const computePostScore = (
 const parseFeedOptions = (
   optionsOrPage: FeedQueryOptions | number | undefined,
   legacyLimit: number | undefined,
-): Required<FeedQueryOptions> => {
+): Required<Omit<FeedQueryOptions, 'scope'>> & { scope: FeedScope } => {
   if (typeof optionsOrPage === 'number') {
     return {
       page: Math.max(1, optionsOrPage),
       limit: Math.max(1, legacyLimit || DEFAULT_FEED_LIMIT),
       sort: 'newest',
       hashtagSlug: '',
-      guildId: '',
       scope: 'all',
     }
   }
@@ -228,7 +161,6 @@ const parseFeedOptions = (
     limit: Math.max(1, asNumber(options.limit, DEFAULT_FEED_LIMIT)),
     sort: isFeedSort(options.sort) ? options.sort : 'newest',
     hashtagSlug: sanitizeHashtagSlug(asString(options.hashtagSlug)),
-    guildId: asString(options.guildId).trim(),
     scope: isFeedScope(options.scope) ? options.scope : 'all',
   }
 }
@@ -406,60 +338,7 @@ const filterPostsByHashtag = (posts: Post[], hashtagSlug: string): Post[] => {
   return posts.filter((post) => post.hashtags?.includes(hashtagSlug))
 }
 
-const filterPostsByGuildId = (posts: Post[], guildId: string): Post[] => {
-  const normalizedGuildId = asString(guildId).trim()
-  if (!normalizedGuildId) {
-    return posts
-  }
 
-  return posts.filter((post) => {
-    const postGuildId =
-      asString(post.guild_id).trim() || asString((post.metadata || {}).guild_id).trim()
-    return postGuildId === normalizedGuildId
-  })
-}
-
-const filterRowsByGuildIds = (rows: unknown[], guildIds: string[]): unknown[] => {
-  if (guildIds.length === 0) {
-    return []
-  }
-
-  const guildIdsSet = new Set(guildIds.map((guildId) => guildId.trim()).filter(Boolean))
-  if (guildIdsSet.size === 0) {
-    return []
-  }
-
-  return rows.filter((row) => {
-    if (!isRecord(row)) {
-      return false
-    }
-
-    const metadata = isRecord(row.metadata) ? row.metadata : {}
-    const guildId = extractGuildIdFromRow(row, metadata)
-    return !!guildId && guildIdsSet.has(guildId)
-  })
-}
-
-const filterRowsByAuthorIds = (rows: unknown[], authorIds: Set<string>): unknown[] => {
-  if (authorIds.size === 0) {
-    return []
-  }
-
-  return rows.filter((row) => {
-    if (!isRecord(row)) {
-      return false
-    }
-
-    const authorId = asString(row.author_id).trim()
-    if (authorId && authorIds.has(authorId)) {
-      return true
-    }
-
-    const metadata = isRecord(row.metadata) ? row.metadata : {}
-    const producerId = asString(metadata.producer_id).trim()
-    return !!producerId && authorIds.has(producerId)
-  })
-}
 
 const sortPosts = (posts: Post[], sort: FeedSort): Post[] => {
   const sorted = [...posts]
@@ -773,35 +652,6 @@ const getUserGuildIds = async (userId: string): Promise<string[]> => {
     .filter((guildId): guildId is string => guildId.length > 0)
 }
 
-const getFollowedAuthorIds = async (userId: string): Promise<Set<string>> => {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
-    .schema('social')
-    .from('follows')
-    .select('following_id, producer_id')
-    .eq('follower_id', userId)
-
-  if (error || !data) {
-    return new Set()
-  }
-
-  const authorIds = new Set<string>()
-
-  for (const follow of data) {
-    const followingId = asString(follow.following_id).trim()
-    if (followingId) {
-      authorIds.add(followingId)
-    }
-
-    const producerId = asString(follow.producer_id).trim()
-    if (producerId) {
-      authorIds.add(producerId)
-    }
-  }
-
-  return authorIds
-}
 
 const POSTS_SELECT_EXPRESSION = `
       *,
@@ -809,24 +659,6 @@ const POSTS_SELECT_EXPRESSION = `
       comments:comments (count)
     `
 
-const fetchPostsWindowDynamic = async (
-  sort: FeedSort,
-  visibility: Post['visibility'],
-  from: number,
-  to: number,
-) => {
-  const supabase = await createClient()
-
-  let query = supabase
-    .schema('social')
-    .from('posts_with_authors')
-    .select(POSTS_SELECT_EXPRESSION)
-    .eq('visibility', visibility)
-
-  query = query.order('created_at', { ascending: sort === 'oldest' })
-
-  return query.range(from, to)
-}
 
 const fetchPublicPostsWindowCached = async (sort: FeedSort, from: number, to: number) => {
   const supabase = createStaticClient()
@@ -846,26 +678,6 @@ const fetchPublicPostsWindowCached = async (sort: FeedSort, from: number, to: nu
   return data
 }
 
-const mergeAndDeduplicatePostRows = (rows: unknown[]): unknown[] => {
-  const map = new Map<string, unknown>()
-
-  for (const row of rows) {
-    if (!isRecord(row)) {
-      continue
-    }
-
-    const id = asString(row.id)
-    if (!id) {
-      continue
-    }
-
-    if (!map.has(id)) {
-      map.set(id, row)
-    }
-  }
-
-  return [...map.values()]
-}
 
 const buildQuotedPostSummary = (post: Post): Post['source_post'] => ({
   id: post.id,
@@ -963,13 +775,8 @@ const hydrateQuoteSourcePosts = async (posts: Post[]): Promise<Post[]> => {
   })
 }
 
-const getFeedPublic = async (options: Required<FeedQueryOptions>) => {
-  const inMemoryProcessing =
-    options.sort === 'best' ||
-    !!options.hashtagSlug ||
-    !!options.guildId ||
-    options.scope === 'my_guilds' ||
-    options.scope === 'following'
+const getFeedPublic = async (options: ReturnType<typeof parseFeedOptions>) => {
+  const inMemoryProcessing = options.sort === 'best' || !!options.hashtagSlug
   const from = (options.page - 1) * options.limit
   const to = from + options.limit - 1
   const windowTo = inMemoryProcessing ? Math.max(CACHED_FEED_WINDOW_SIZE - 1, to) : to
@@ -985,7 +792,6 @@ const getFeedPublic = async (options: Required<FeedQueryOptions>) => {
 
   posts = await mergePostMediaIntoPosts(posts, true)
   posts = filterPostsByHashtag(posts, options.hashtagSlug)
-  posts = filterPostsByGuildId(posts, options.guildId)
   posts = await hydrateQuoteSourcePosts(posts)
   posts = sortPosts(posts, options.sort)
 
@@ -1014,90 +820,8 @@ export async function getFeed(
     data: { user },
   } = await supabase.auth.getUser()
 
-  const inMemoryProcessing =
-    options.sort === 'best' ||
-    !!options.hashtagSlug ||
-    !!options.guildId ||
-    options.scope === 'my_guilds' ||
-    options.scope === 'following'
-  const from = (options.page - 1) * options.limit
-  const to = from + options.limit - 1
-  const windowTo = inMemoryProcessing ? Math.max(FEED_WINDOW_SIZE - 1, to) : to
-
-  let rawRows: unknown[] = []
-
-  if (options.scope === 'following') {
-    if (!user) {
-      return []
-    }
-
-    const [followedAuthorIds, guildIds, publicRows, guildResult] = await Promise.all([
-      getFollowedAuthorIds(user.id),
-      getUserGuildIds(user.id),
-      fetchPublicPostsWindowCached(options.sort, 0, windowTo),
-      fetchPostsWindowDynamic(options.sort, 'guild_only', 0, windowTo),
-    ])
-
-    if (followedAuthorIds.size === 0) {
-      return []
-    }
-
-    if (guildResult.error) {
-      console.error('Error fetching following scoped feed:', {
-        guildError: guildResult.error,
-      })
-      throw new Error("Impossible de charger le fil d'actualité")
-    }
-
-    rawRows = mergeAndDeduplicatePostRows([
-      ...filterRowsByAuthorIds(publicRows, followedAuthorIds),
-      ...filterRowsByAuthorIds(
-        filterRowsByGuildIds(guildResult.data || [], guildIds),
-        followedAuthorIds,
-      ),
-    ])
-  } else if (options.scope === 'my_guilds') {
-    if (!user) {
-      return []
-    }
-
-    const guildIds = await getUserGuildIds(user.id)
-    if (guildIds.length === 0) {
-      return []
-    }
-
-    const [publicRows, guildResult] = await Promise.all([
-      fetchPublicPostsWindowCached(options.sort, 0, windowTo),
-      fetchPostsWindowDynamic(options.sort, 'guild_only', 0, windowTo),
-    ])
-
-    if (guildResult.error) {
-      console.error('Error fetching guild scoped feed:', {
-        guildError: guildResult.error,
-      })
-      throw new Error("Impossible de charger le fil d'actualité")
-    }
-
-    rawRows = mergeAndDeduplicatePostRows([
-      ...publicRows,
-      ...filterRowsByGuildIds(guildResult.data || [], guildIds),
-    ])
-  } else {
-    const publicPosts = await getFeedPublic(options)
-    return applyViewerStateToPosts(publicPosts, user?.id)
-  }
-
-  let posts = rawRows
-    .map((row) => mapRowToPost(row, false))
-    .filter((post): post is Post => post !== null)
-
-  posts = await mergePostMediaIntoPosts(posts, false)
-  posts = filterPostsByHashtag(posts, options.hashtagSlug)
-  posts = filterPostsByGuildId(posts, options.guildId)
-  posts = await hydrateQuoteSourcePosts(posts)
-  posts = sortPosts(posts, options.sort)
-  const paginatedPosts = posts.slice(from, to + 1)
-  return applyViewerStateToPosts(paginatedPosts, user?.id)
+  const publicPosts = await getFeedPublic(options)
+  return applyViewerStateToPosts(publicPosts, user?.id)
 }
 
 export async function getHashtagFeed(
@@ -1107,95 +831,6 @@ export async function getHashtagFeed(
   return getFeed({ ...options, hashtagSlug: slug })
 }
 
-export async function getReelsFeed(options: ReelsFeedQueryOptions = {}): Promise<Post[]> {
-  const page = Math.max(1, asNumber(options.page, 1))
-  const limit = Math.max(1, asNumber(options.limit, 20))
-  const scope: ReelsFeedScope = options.scope === 'following' ? 'following' : 'all'
-
-  // For public reels, use static client to avoid authentication issues
-  const useStaticClient = scope === 'all'
-  const supabase = useStaticClient ? createStaticClient() : await createClient()
-  
-  let user = null
-  if (!useStaticClient) {
-    const { data: userData } = await supabase.auth.getUser()
-    user = userData?.user || null
-  }
-
-  try {
-    const { data, error } = await supabase.schema('social').rpc('get_reels_feed', {
-      p_page: page,
-      p_limit: limit,
-      p_scope: scope,
-      p_user_id: user?.id || null,
-    })
-
-    if (error) {
-      console.error('Error fetching reels feed:', error)
-      // If it's a timeout error, return empty array gracefully
-      if (error.code === '57014' || error.message?.includes('timeout')) {
-        console.warn('Reels feed timed out, returning empty result')
-        return []
-      }
-      return []
-    }
-
-    if (!data || data.length === 0) {
-      return []
-    }
-
-    // Mapper les résultats vers le format Post
-    const posts = (data as ReelsFeedRow[]).map((row) => ({
-      id: row.id,
-      author_id: row.author_id,
-      content: row.content,
-      image_urls: row.image_urls || [],
-      project_update_id: row.project_update_id,
-      type: row.type,
-      visibility: row.visibility,
-      metadata: row.metadata || {},
-      created_at: row.created_at,
-      updated_at: row.updated_at,
-      author: {
-        id: row.author_id,
-        full_name: row.author_full_name || 'Utilisateur',
-        avatar_url: asString(row.author_avatar_url),
-      },
-      hashtags: [],
-      shares_count: row.shares_count || 0,
-      author_type: 'citizen' as const,
-      share_kind: row.share_kind || 'original',
-      source_post_id: row.source_post_id,
-      source_post: null,
-      guild_id: null,
-      reactions_count: row.reactions_count || 0,
-      comments_count: row.comments_count || 0,
-      user_has_reacted: false,
-      user_has_bookmarked: false,
-      media: row.public_url
-        ? [
-            {
-              url: row.public_url,
-              mime_type: row.mime_type,
-              kind: getMediaKind(asString(row.mime_type)),
-              width: null,
-              height: null,
-              sort_order: 0,
-            },
-          ]
-        : [],
-      primary_video_url: row.public_url || null,
-      primary_video_mime_type: row.mime_type || null,
-      score: 0,
-    }))
-
-    const postsWithMedia = await mergePostMediaIntoPosts(posts, useStaticClient)
-    return applyViewerStateToPosts(postsWithMedia, user?.id)
-  } catch (error) {
-    console.error('Unexpected error fetching reels feed:', error)
-    return []
-  }
-}
 
 /**
  * Fetch feed posts for a specific user
@@ -1227,7 +862,7 @@ export async function getUserFeed(userId: string, page = 1, limit = 20) {
 
   if (error) {
     console.error('Error fetching user feed:', JSON.stringify(error, null, 2))
-    throw new Error("Impossible de charger le fil d'actualité de l'utilisateur")
+    throw new Error("Impossible de charger le fil d'actualitÃ© de l'utilisateur")
   }
 
   let mappedPosts = (posts || [])
@@ -1446,162 +1081,6 @@ export async function getViewerBookmarkedPosts(limit = 40): Promise<Post[]> {
   return getViewerSavedPosts('bookmarks', limit)
 }
 
-export async function getTrendingHashtags(limit = 8): Promise<HashtagStats[]> {
-  const normalizedLimit = Math.max(1, limit)
-  const supabase = createStaticClient()
-
-  const { data: statsRows, error } = await supabase
-    .schema('social')
-    .from('hashtag_stats')
-    .select('*')
-    .order('total_count', { ascending: false })
-    .limit(normalizedLimit)
-
-  if (!error && statsRows && statsRows.length > 0) {
-    return statsRows
-      .map((row: HashtagStatsViewRow) => {
-        const slug = sanitizeHashtagSlug(asString(row.slug))
-        if (!slug) {
-          return null
-        }
-
-        return {
-          slug,
-          label: asString(row.label) || hashtagLabelFromSlug(slug),
-          total_count: asNumber(row.total_count, asNumber(row.usage_count, 0)),
-          today_count: asNumber(row.today_count, 0),
-          month_count: asNumber(row.month_count, 0),
-          year_count: asNumber(row.year_count, 0),
-        } satisfies HashtagStats
-      })
-      .filter((entry: HashtagStats | null): entry is HashtagStats => entry !== null)
-  }
-
-  const feedPosts = await getFeedPublic(
-    parseFeedOptions({ page: 1, limit: CACHED_FEED_WINDOW_SIZE, sort: 'newest' }, undefined),
-  )
-  const now = new Date()
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const startOfYear = new Date(now.getFullYear(), 0, 1)
-
-  const aggregate = new Map<string, HashtagStats>()
-
-  for (const post of feedPosts) {
-    const createdAt = new Date(post.created_at)
-    const hashtags = post.hashtags || []
-
-    for (const slug of hashtags) {
-      const current =
-        aggregate.get(slug) ||
-        ({
-          slug,
-          label: hashtagLabelFromSlug(slug),
-          total_count: 0,
-          today_count: 0,
-          month_count: 0,
-          year_count: 0,
-        } satisfies HashtagStats)
-
-      current.total_count += 1
-      if (createdAt >= startOfDay) {
-        current.today_count += 1
-      }
-      if (createdAt >= startOfMonth) {
-        current.month_count += 1
-      }
-      if (createdAt >= startOfYear) {
-        current.year_count += 1
-      }
-
-      aggregate.set(slug, current)
-    }
-  }
-
-  return [...aggregate.values()]
-    .sort((a, b) => b.total_count - a.total_count)
-    .slice(0, normalizedLimit)
-}
-
-export async function getHashtagStats(slug: string): Promise<HashtagStats> {
-  const normalizedSlug = sanitizeHashtagSlug(slug)
-  if (!normalizedSlug) {
-    return {
-      slug: '',
-      label: '',
-      total_count: 0,
-      today_count: 0,
-      month_count: 0,
-      year_count: 0,
-    }
-  }
-
-  const supabase = createStaticClient()
-
-  const { data, error } = await supabase
-    .schema('social')
-    .from('hashtag_stats')
-    .select('*')
-    .eq('slug', normalizedSlug)
-    .maybeSingle()
-
-  if (!error && data) {
-    return {
-      slug: normalizedSlug,
-      label: asString(data.label) || hashtagLabelFromSlug(normalizedSlug),
-      total_count: asNumber(data.total_count, asNumber(data.usage_count, 0)),
-      today_count: asNumber(data.today_count, 0),
-      month_count: asNumber(data.month_count, 0),
-      year_count: asNumber(data.year_count, 0),
-    }
-  }
-
-  const posts = await getFeedPublic(
-    parseFeedOptions(
-      {
-        page: 1,
-        limit: CACHED_FEED_WINDOW_SIZE,
-        sort: 'newest',
-        hashtagSlug: normalizedSlug,
-      },
-      undefined,
-    ),
-  )
-
-  const now = new Date()
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const startOfYear = new Date(now.getFullYear(), 0, 1)
-
-  let todayCount = 0
-  let monthCount = 0
-  let yearCount = 0
-
-  for (const post of posts) {
-    const createdAt = new Date(post.created_at)
-
-    if (createdAt >= startOfDay) {
-      todayCount += 1
-    }
-
-    if (createdAt >= startOfMonth) {
-      monthCount += 1
-    }
-
-    if (createdAt >= startOfYear) {
-      yearCount += 1
-    }
-  }
-
-  return {
-    slug: normalizedSlug,
-    label: hashtagLabelFromSlug(normalizedSlug),
-    total_count: posts.length,
-    today_count: todayCount,
-    month_count: monthCount,
-    year_count: yearCount,
-  }
-}
 
 export async function getTopContributors(
   scope: ContributorScope = 'all',
@@ -1816,364 +1295,4 @@ export async function getCommentsPage(
     totalCount: count || sortedComments.length,
     page,
   }
-}
-const mapGuildRow = (
-  row: unknown,
-  membersCount: number,
-  isMember: boolean,
-  fallbackXpTotal: number,
-): Guild | null => {
-  if (!isRecord(row)) {
-    return null
-  }
-
-  const id = asString(row.id)
-  const slug = asString(row.slug)
-  const name = asString(row.name)
-
-  if (!id || !slug || !name) {
-    return null
-  }
-
-  const guildType = asString(row.type)
-  const mappedType: Guild['type'] =
-    guildType === 'invite_only' ||
-    guildType === 'corporate' ||
-    guildType === 'school' ||
-    guildType === 'family'
-      ? guildType
-      : 'open'
-
-  return {
-    id,
-    name,
-    slug,
-    description: asString(row.description) || null,
-    logo_url: asString(row.logo_url) || null,
-    banner_url: asString(row.banner_url) || null,
-    owner_id: asString(row.owner_id) || '',
-    type: mappedType,
-    metadata: isRecord(row.metadata) ? row.metadata : {},
-    created_at: asString(row.created_at) || new Date().toISOString(),
-    updated_at: asString(row.updated_at) || new Date().toISOString(),
-    members_count: membersCount,
-    xp_total: asNumber(row.xp_total, fallbackXpTotal),
-    is_member: isMember,
-  }
-}
-
-const getGuildsPublic = async (limit: number): Promise<Guild[]> => {
-  const normalizedLimit = Math.max(1, limit)
-  const supabase = createStaticClient()
-
-  const { data: guildRows, error } = await supabase
-    .schema('identity')
-    .from('guilds')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(normalizedLimit)
-
-  if (error || !guildRows) {
-    return []
-  }
-
-  const guildIds = guildRows
-    .map((row: unknown) => (isRecord(row) ? asString(row.id) : ''))
-    .filter((guildId): guildId is string => guildId.length > 0)
-
-  if (guildIds.length === 0) {
-    return []
-  }
-
-  const { data: membersRows } = await supabase
-    .schema('identity')
-    .from('guild_members')
-    .select('guild_id')
-    .in('guild_id', guildIds)
-
-  const membersCountByGuild = new Map<string, number>()
-  for (const memberRow of membersRows || []) {
-    const guildId = asString(memberRow.guild_id)
-    if (!guildId) {
-      continue
-    }
-
-    membersCountByGuild.set(guildId, (membersCountByGuild.get(guildId) || 0) + 1)
-  }
-
-  return guildRows
-    .map((row: unknown) =>
-      mapGuildRow(
-        row,
-        membersCountByGuild.get(isRecord(row) ? asString(row.id) : '') || 0,
-        false,
-        asNumber(isRecord(row) ? row.xp_total : 0, 0),
-      ),
-    )
-    .filter((guild): guild is Guild => guild !== null)
-}
-
-export async function getGuilds(limit = 24): Promise<Guild[]> {
-  if (isMockDataSource) {
-    const session = await getMockViewerSession()
-    return getMockCollectiveGuilds(session).slice(0, Math.max(1, limit))
-  }
-
-  const guilds = await getGuildsPublic(limit)
-  if (guilds.length === 0) {
-    return []
-  }
-
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return guilds
-  }
-
-  const guildIds = guilds.map((guild) => guild.id)
-  const { data: memberships } = await supabase
-    .schema('identity')
-    .from('guild_members')
-    .select('guild_id')
-    .eq('user_id', user.id)
-    .in('guild_id', guildIds)
-
-  const memberGuildIds = new Set(
-    (memberships || [])
-      .map((row: { guild_id: string | null }) => asString(row.guild_id))
-      .filter((guildId): guildId is string => guildId.length > 0),
-  )
-
-  return guilds.map((guild) => ({
-    ...guild,
-    is_member: memberGuildIds.has(guild.id),
-  }))
-}
-
-export async function getGuildBySlug(slug: string): Promise<GuildDetails | null> {
-  const normalizedSlug = asString(slug).trim()
-  if (!normalizedSlug) {
-    return null
-  }
-
-  if (isMockDataSource) {
-    const session = await getMockViewerSession()
-    const guild = getMockGuildBySlug(normalizedSlug, session)
-
-    if (!guild) {
-      return null
-    }
-
-    return {
-      guild,
-      members: [],
-    }
-  }
-
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const { data: guildRow, error } = await supabase
-    .schema('identity')
-    .from('guilds')
-    .select('*')
-    .eq('slug', normalizedSlug)
-    .maybeSingle()
-
-  if (error || !guildRow) {
-    return null
-  }
-
-  const guildId = asString(guildRow.id)
-  if (!guildId) {
-    return null
-  }
-
-  const [memberRowsResult, membershipsResult] = await Promise.all([
-    supabase
-      .schema('identity')
-      .from('guild_members')
-      .select('guild_id, user_id, role, joined_at')
-      .eq('guild_id', guildId)
-      .order('joined_at', { ascending: true })
-      .limit(50),
-    user
-      ? supabase
-          .schema('identity')
-          .from('guild_members')
-          .select('guild_id')
-          .eq('guild_id', guildId)
-          .eq('user_id', user.id)
-          .maybeSingle()
-      : Promise.resolve({ data: null, error: null }),
-  ])
-
-  const memberRows = memberRowsResult.data || []
-  const memberIds = memberRows
-    .map((row: { user_id: string | null }) => asString(row.user_id))
-    .filter((userId): userId is string => userId.length > 0)
-
-  let profilesById = new Map<string, { full_name: string; avatar_url: string | null }>()
-
-  if (memberIds.length > 0) {
-    const { data: profileRows } = await supabase
-      .from('profiles')
-      .select('id, first_name, last_name, avatar_url')
-      .in('id', memberIds)
-
-    profilesById = new Map(
-      (profileRows || [])
-        .map((profile: Record<string, unknown>) => {
-          const profileId = asString(profile.id)
-          if (!profileId) {
-            return null
-          }
-
-          const fullName =
-            [asString(profile.first_name), asString(profile.last_name)].filter(Boolean).join(' ') ||
-            'Utilisateur'
-
-          return [
-            profileId,
-            { full_name: fullName, avatar_url: asString(profile.avatar_url) || null },
-          ] as const
-        })
-        .filter(
-          (
-            entry: readonly [string, { full_name: string; avatar_url: string | null }] | null,
-          ): entry is readonly [string, { full_name: string; avatar_url: string | null }] =>
-            entry !== null,
-        ),
-    )
-  }
-
-  const guild = mapGuildRow(guildRow, memberRows.length, !!membershipsResult.data, 0)
-
-  if (!guild) {
-    return null
-  }
-
-  const members: GuildMember[] = memberRows.map((memberRow: Record<string, unknown>) => {
-    const userId = asString(memberRow.user_id)
-    const profile = profilesById.get(userId)
-    const role = asString(memberRow.role)
-
-    return {
-      guild_id: guildId,
-      user_id: userId,
-      role: role === 'officer' || role === 'leader' ? role : 'member',
-      joined_at: asString(memberRow.joined_at) || new Date().toISOString(),
-      user: {
-        id: userId,
-        full_name: profile?.full_name || 'Utilisateur',
-        avatar_url: profile?.avatar_url || null,
-      },
-    }
-  })
-
-  return {
-    guild,
-    members,
-  }
-}
-
-export async function getGuildLeaderboard(
-  period: 'weekly' | 'monthly' = 'monthly',
-  limit = 10,
-): Promise<GuildLeaderboardEntry[]> {
-  if (isMockDataSource) {
-    return getMockGuildLeaderboard().slice(0, Math.max(1, limit))
-  }
-
-  const normalizedLimit = Math.max(1, limit)
-  const supabase = createStaticClient()
-
-  const guilds = await getGuildsPublic(500)
-
-  if (guilds.length === 0) {
-    return []
-  }
-
-  const startDate = new Date()
-  if (period === 'weekly') {
-    startDate.setDate(startDate.getDate() - 7)
-  } else {
-    startDate.setMonth(startDate.getMonth() - 1)
-  }
-
-  const { data: postRows, error } = await supabase
-    .schema('social')
-    .from('posts_with_authors')
-    .select(`
-      guild_id,
-      metadata,
-      created_at,
-      reactions:reactions (count),
-      comments:comments (count)
-    `)
-    .eq('visibility', 'guild_only')
-    .gte('created_at', startDate.toISOString())
-
-  if (error || !postRows) {
-    return guilds
-      .map((guild) => ({
-        guild_id: guild.id,
-        guild_name: guild.name,
-        guild_slug: guild.slug,
-        guild_logo_url: guild.logo_url || null,
-        members_count: guild.members_count || 0,
-        posts_count: 0,
-        reactions_received: 0,
-        comments_received: 0,
-        score: guild.xp_total || 0,
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, normalizedLimit)
-  }
-
-  const aggregation = new Map<string, GuildLeaderboardEntry>()
-
-  for (const guild of guilds) {
-    aggregation.set(guild.id, {
-      guild_id: guild.id,
-      guild_name: guild.name,
-      guild_slug: guild.slug,
-      guild_logo_url: guild.logo_url || null,
-      members_count: guild.members_count || 0,
-      posts_count: 0,
-      reactions_received: 0,
-      comments_received: 0,
-      score: 0,
-    })
-  }
-
-  for (const postRow of postRows) {
-    const postRecord = isRecord(postRow) ? postRow : null
-    const postMetadata = postRecord && isRecord(postRecord.metadata) ? postRecord.metadata : {}
-    const guildId = postRecord ? extractGuildIdFromRow(postRecord, postMetadata) : null
-    if (!guildId) {
-      continue
-    }
-
-    const entry = aggregation.get(guildId)
-    if (!entry) {
-      continue
-    }
-
-    entry.posts_count += 1
-    entry.reactions_received += extractCount(postRow.reactions)
-    entry.comments_received += extractCount(postRow.comments)
-    entry.score =
-      entry.posts_count * 3 +
-      entry.reactions_received * 2 +
-      entry.comments_received * 1.5 +
-      entry.members_count
-  }
-
-  return [...aggregation.values()].sort((a, b) => b.score - a.score).slice(0, normalizedLimit)
 }

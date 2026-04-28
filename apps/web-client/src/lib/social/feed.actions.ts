@@ -29,10 +29,6 @@ const SHARE_EVENT_TYPES = new Set<ShareEventType>([
 
 const SHARE_TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 30
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-const REEL_STORAGE_BUCKET = 'community-media'
-const MAX_REEL_VIDEO_SIZE_BYTES = 100 * 1024 * 1024
-const MAX_REEL_DURATION_SECONDS = 60
-const REEL_ALLOWED_VIDEO_MIME_TYPES = new Set(['video/mp4'])
 
 const safeRevalidateTag = (tag: string) => {
   try {
@@ -51,23 +47,13 @@ const normalizeUuid = (value: string, errorLabel: string) => {
   return normalized
 }
 
-const normalizeStoragePath = (value: string) => asString(value).trim().replace(/^\/+/, '')
 
 const invalidateCommunityCaches = (input?: { postId?: string | null; guildId?: string | null }) => {
   safeRevalidateTag(COMMUNITY_CACHE_TAGS.feed)
-  safeRevalidateTag(COMMUNITY_CACHE_TAGS.hashtags)
-  safeRevalidateTag(COMMUNITY_CACHE_TAGS.guilds)
-  safeRevalidateTag(COMMUNITY_CACHE_TAGS.leaderboard)
 
   const postId = asString(input?.postId).trim()
-  const guildId = asString(input?.guildId).trim()
-
   if (postId) {
     safeRevalidateTag(COMMUNITY_CACHE_TAGS.post(postId))
-  }
-
-  if (guildId) {
-    safeRevalidateTag(COMMUNITY_CACHE_TAGS.guild(guildId))
   }
 }
 
@@ -406,7 +392,6 @@ export async function toggleFollowProducer(producerId: string) {
 export async function createPost(
   content: string,
   imageUrls: string[] = [],
-  options?: { guildId?: string | null },
 ) {
   const supabase = await createClient()
   const {
@@ -422,35 +407,10 @@ export async function createPost(
     throw new Error('Le contenu ne peut pas être vide')
   }
 
-  const normalizedGuildId = asString(options?.guildId).trim()
   const hashtags = extractHashtagsFromText(trimmedContent)
   const metadata: Record<string, unknown> = {
     hashtags,
     share_kind: 'original',
-  }
-
-  if (normalizedGuildId) {
-    const { data: membership, error: membershipError } = await supabase
-      .schema('identity')
-      .from('guild_members')
-      .select('guild_id')
-      .eq('guild_id', normalizedGuildId)
-      .eq('user_id', user.id)
-      .maybeSingle()
-
-    if (membershipError || !membership) {
-      throw new Error('Vous devez être membre de cette guilde pour publier')
-    }
-
-    const { data: guildRow } = await supabase
-      .schema('identity')
-      .from('guilds')
-      .select('slug')
-      .eq('id', normalizedGuildId)
-      .maybeSingle()
-
-    metadata.guild_id = normalizedGuildId
-    metadata.guild_slug = asString(guildRow?.slug) || null
   }
 
   const payload: Record<string, unknown> = {
@@ -458,7 +418,7 @@ export async function createPost(
     content: trimmedContent,
     image_urls: imageUrls,
     type: 'user_post',
-    visibility: normalizedGuildId ? 'guild_only' : 'public',
+    visibility: 'public',
     share_kind: 'original',
     source_post_id: null,
     metadata,
@@ -477,152 +437,14 @@ export async function createPost(
     // Best effort while hashtag schema is being rolled out.
   }
 
-  invalidateCommunityCaches({
-    postId: asString(insertResponse.data.id),
-    guildId: normalizedGuildId || null,
-  })
+  invalidateCommunityCaches({ postId: asString(insertResponse.data.id) })
   revalidatePath('/community')
-  revalidatePath('/community/hashtags')
-  revalidatePath('/community/trending')
   revalidatePath('/dashboard')
   revalidatePath('/profile/[id]')
 
   return insertResponse.data
 }
 
-export type CreateVideoPostInput = {
-  content?: string | null
-  hashtags?: string[]
-  publicUrl: string
-  storagePath: string
-  storageBucket?: string
-  mimeType: string
-  sizeBytes: number
-  width?: number | null
-  height?: number | null
-  durationSeconds?: number | null
-}
-
-export async function createVideoPost(input: CreateVideoPostInput) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    throw new Error('Vous devez être connecté pour publier')
-  }
-
-  const normalizedContent = asString(input.content).trim()
-  const normalizedPublicUrl = asString(input.publicUrl).trim()
-  const normalizedStoragePath = normalizeStoragePath(input.storagePath)
-  const normalizedStorageBucket = asString(input.storageBucket).trim() || REEL_STORAGE_BUCKET
-  const normalizedMimeType = asString(input.mimeType).trim().toLowerCase()
-  const normalizedSizeBytes = Math.max(0, asNumber(input.sizeBytes, 0))
-  const normalizedDurationSeconds = asNumber(input.durationSeconds, 0)
-  const normalizedWidth = asNumber(input.width, 0) || null
-  const normalizedHeight = asNumber(input.height, 0) || null
-
-  if (!normalizedPublicUrl || !normalizedStoragePath) {
-    throw new Error('Vidéo invalide')
-  }
-
-  if (normalizedStorageBucket !== REEL_STORAGE_BUCKET) {
-    throw new Error('Bucket non autorisé')
-  }
-
-  if (!normalizedStoragePath.startsWith(`${user.id}/`)) {
-    throw new Error('Chemin vidéo invalide')
-  }
-
-  if (!REEL_ALLOWED_VIDEO_MIME_TYPES.has(normalizedMimeType)) {
-    throw new Error('Seuls les fichiers MP4 sont autorisés')
-  }
-
-  if (normalizedSizeBytes <= 0 || normalizedSizeBytes > MAX_REEL_VIDEO_SIZE_BYTES) {
-    throw new Error('La vidéo dépasse la taille maximale de 100MB')
-  }
-
-  if (normalizedDurationSeconds > MAX_REEL_DURATION_SECONDS) {
-    throw new Error('La vidéo dépasse la durée maximale de 60 secondes')
-  }
-
-  const normalizedHashtags = [
-    ...new Set(
-      [
-        ...extractHashtagsFromText(normalizedContent),
-        ...(input.hashtags || []).map((tag) => sanitizeHashtagSlug(tag)),
-      ].filter(Boolean),
-    ),
-  ]
-
-  const metadata: Record<string, unknown> = {
-    hashtags: normalizedHashtags,
-    share_kind: 'original',
-    post_format: 'reel',
-    primary_video_url: normalizedPublicUrl,
-    primary_video_mime_type: normalizedMimeType,
-    video_duration_seconds: normalizedDurationSeconds || null,
-  }
-
-  const payload: Record<string, unknown> = {
-    author_id: user.id,
-    content: normalizedContent || null,
-    image_urls: [],
-    type: 'user_post',
-    visibility: 'public',
-    share_kind: 'original',
-    source_post_id: null,
-    metadata,
-  }
-
-  const insertResponse = await insertPost(payload)
-
-  if (insertResponse.error || !insertResponse.data) {
-    console.error('Error creating video post:', JSON.stringify(insertResponse.error, null, 2))
-    throw new Error('Impossible de publier la vidéo')
-  }
-
-  const postId = asString(insertResponse.data.id).trim()
-  if (!postId) {
-    throw new Error('Impossible de publier la vidéo')
-  }
-
-  const { error: mediaError } = await supabase.schema('social').from('post_media').insert({
-    post_id: postId,
-    owner_id: user.id,
-    public_url: normalizedPublicUrl,
-    storage_bucket: normalizedStorageBucket,
-    storage_path: normalizedStoragePath,
-    mime_type: normalizedMimeType,
-    size_bytes: normalizedSizeBytes,
-    width: normalizedWidth,
-    height: normalizedHeight,
-    sort_order: 0,
-    status: 'ready',
-  })
-
-  if (mediaError) {
-    await supabase.schema('social').from('posts').delete().eq('id', postId)
-    console.error('Error linking video media:', JSON.stringify(mediaError, null, 2))
-    throw new Error('Impossible de publier la vidéo')
-  }
-
-  try {
-    await upsertHashtagRelations(postId, normalizedHashtags)
-  } catch {
-    // Best effort while hashtag schema is being rolled out.
-  }
-
-  invalidateCommunityCaches({ postId })
-  revalidatePath('/community')
-  revalidatePath('/community/reels')
-  revalidatePath('/community/reels/new')
-  revalidatePath('/dashboard')
-  revalidatePath('/profile/[id]')
-
-  return insertResponse.data
-}
 
 export async function createQuoteRepost(
   sourcePostId: string,
@@ -711,8 +533,6 @@ export async function createQuoteRepost(
     guildId: asString(sourcePost.guild_id),
   })
   revalidatePath('/community')
-  revalidatePath('/community/hashtags')
-  revalidatePath('/community/trending')
   revalidatePath(`/community/posts/${sourcePost.id}`)
   revalidatePath('/dashboard')
   revalidatePath('/profile/[id]')

@@ -3,8 +3,6 @@
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@make-the-change/core/ui'
 import {
   Bookmark,
-  Clapperboard,
-  Feather,
   Flame,
   Heart,
   Home,
@@ -12,7 +10,6 @@ import {
   MoreHorizontal,
   Search,
   ShoppingBag,
-  Users,
   Rss,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -79,20 +76,6 @@ export function AdventureLeftSidebar({ user }: AdventureLeftSidebarProps) {
           <Rss className="w-7 h-7 stroke-[1.5px]" />
           <span className="hidden text-lg sm:inline">{tCommunity('sidebar.feed')}</span>
         </Link>
-                <Link
-          href="/community/reels"
-          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
-        >
-          <Clapperboard className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.reels')}</span>
-        </Link>
-        <Link
-          href="/community/guilds"
-          className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
-        >
-          <Users className="w-7 h-7 stroke-[1.5px]" />
-          <span className="hidden text-lg sm:inline">{tCommunity('sidebar.guilds')}</span>
-        </Link>
         <Link
           href="/community/likes"
           className="group flex w-fit items-center gap-5 rounded-full p-3 transition-colors hover:bg-muted sm:w-full sm:px-4 sm:py-3"
@@ -109,28 +92,12 @@ export function AdventureLeftSidebar({ user }: AdventureLeftSidebarProps) {
         </Link>
       </nav>
 
-      {/* CTA Button */}
-      <div className="mt-6 flex w-full justify-center sm:block">
-        <Button
-          asChild
-          size="lg"
-          className="h-[52px] w-[52px] rounded-full p-0 text-[17px] font-bold shadow-md sm:h-[52px] sm:w-full sm:px-6 lg:px-8"
-        >
-          <Link href="/community/posts/new">
-            <span className="hidden sm:inline">{tCommunity('sidebar.update_post')}</span>
-            <Feather className="h-6 w-6 sm:hidden" />
-          </Link>
-        </Button>
-        <Button asChild variant="outline" size="sm" className="mt-2 hidden w-full sm:inline-flex">
-          <Link href="/community/reels/new">{tCommunity('sidebar.post_reel')}</Link>
-        </Button>
-      </div>
 
       {/* Profile / Login at bottom */}
       <div className="mt-auto flex w-full justify-center pt-4 sm:block">
         {user ? (
           <Link
-            href="/dashboard"
+            href="/dashboard/profile"
             className="mt-2 flex w-fit items-center justify-between gap-3 rounded-full p-3 transition-colors hover:bg-muted sm:w-full"
           >
             <div className="flex items-center gap-3">

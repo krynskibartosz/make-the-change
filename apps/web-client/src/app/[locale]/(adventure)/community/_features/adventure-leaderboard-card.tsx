@@ -2,7 +2,7 @@ import type { ContributorScope } from '@make-the-change/core/shared'
 import { Avatar, AvatarFallback, AvatarImage, Badge } from '@make-the-change/core/ui'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { getTopContributors, getTrendingHashtags } from '@/lib/social/feed.reads'
+import { getTopContributors } from '@/lib/social/feed.reads'
 
 type AdventureLeaderboardCardProps = {
   contributorScope?: ContributorScope
@@ -46,10 +46,7 @@ export async function AdventureLeaderboardCard({
 }: AdventureLeaderboardCardProps) {
   const t = await getTranslations('community')
 
-  const [topContributors, trendingHashtags] = await Promise.all([
-    getTopContributors(contributorScope, 5),
-    getTrendingHashtags(7),
-  ])
+  const topContributors = await getTopContributors(contributorScope, 5)
 
   return (
     <div className="space-y-4">
@@ -104,46 +101,9 @@ export async function AdventureLeaderboardCard({
             <p className="text-sm text-muted-foreground">{t('leaderboard.no_contributors')}</p>
           )}
 
-          <Link
-            href="/leaderboard"
-            prefetch={false}
-            className="mt-2 inline-block text-sm text-primary hover:underline"
-          >
-            {t('leaderboard.full_leaderboard')}
-          </Link>
         </div>
       </div>
 
-      <div className="bg-muted/30 rounded-2xl p-4">
-        <h2 className="mb-4 text-xl font-extrabold">{t('sidebar.trending_hashtags')}</h2>
-        <div className="space-y-2">
-          {trendingHashtags.length > 0 ? (
-            trendingHashtags.map((hashtag) => (
-              <Link
-                key={hashtag.slug}
-                href={buildHashtagFeedHref(hashtag.slug)}
-                prefetch={false}
-                className="flex items-center justify-between rounded-lg bg-background px-3 py-2 text-sm transition-colors hover:bg-background/70"
-              >
-                <span className="font-medium text-foreground">#{hashtag.slug}</span>
-                <span className="text-muted-foreground">
-                  {hashtag.total_count.toLocaleString()}
-                </span>
-              </Link>
-            ))
-          ) : (
-            <p className="text-sm text-muted-foreground">{t('trending.no_trending')}</p>
-          )}
-        </div>
-
-        <Link
-          href="/community"
-          prefetch={false}
-          className="mt-3 inline-block text-sm text-primary hover:underline"
-        >
-          {t('leaderboard.show_more')}
-        </Link>
-      </div>
     </div>
   )
 }
