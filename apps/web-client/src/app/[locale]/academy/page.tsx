@@ -51,6 +51,8 @@ import {
   type AcademyUnitKind,
   type AcademyUnitWithStatus,
 } from '@/lib/mock/mock-academy'
+import { isUnlimitedLives } from '@/lib/lives'
+import { LivesCounter } from '@/components/lives-counter'
 import { cn, formatPoints } from '@/lib/utils'
 
 const LOADING_STEPS = [
@@ -651,11 +653,21 @@ export default function AcademyPage() {
         return
       }
 
+      const latestProgress = academyRepository.regenerateLives(MOCK_ACADEMY_VIEWER_ID)
+      const unlimited = isUnlimitedLives(latestProgress.seedsBalance)
+
+      if (!unlimited && latestProgress.lives.remaining <= 0) {
+        setSelectedUnit(null)
+        setLockedUnit(null)
+        router.push('/academy/out-of-lives')
+        return
+      }
+
       setSelectedUnit(null)
       setLockedUnit(null)
       setLoadingTarget(`/academy/${chapter.slug}/${unit.slug}`)
     },
-    [chapters],
+    [chapters, router],
   )
 
   const handleLoadingComplete = useCallback(() => {
@@ -694,6 +706,12 @@ export default function AcademyPage() {
             <span className="hidden rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] font-black tabular-nums text-emerald-300 min-[390px]:inline-flex">
               {completedCurrentChapterLessons}/{currentChapterLessonTotal}
             </span>
+            <LivesCounter
+              lives={progress.lives.remaining}
+              unlimited={isUnlimitedLives(progress.seedsBalance)}
+              updatedAt={progress.lives.updatedAt}
+              onClick={() => router.push('/academy/out-of-lives')}
+            />
             <Link
               href="/academy/streak"
               prefetch={false}

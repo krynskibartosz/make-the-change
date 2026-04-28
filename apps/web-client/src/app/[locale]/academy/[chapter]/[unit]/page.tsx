@@ -50,6 +50,7 @@ import {
   type AcademySwipeExercise,
   type AcademyUnit,
 } from '@/lib/mock/mock-academy'
+import { isUnlimitedLives } from '@/lib/lives'
 import { cn } from '@/lib/utils'
 
 const getParam = (value: string | string[] | undefined) =>
@@ -1167,9 +1168,18 @@ export default function ExerciseEngine() {
   const canEarnUnitReward = Boolean(unit && activeLesson && activeLesson.order === unit.lessons.length && !alreadyCompleted)
 
   useEffect(() => {
-    const nextProgress = academyRepository.getProgress(MOCK_ACADEMY_VIEWER_ID)
+    if (isGameOver) {
+      const timer = window.setTimeout(() => {
+        router.replace('/academy/out-of-lives')
+      }, 1400)
+      return () => window.clearTimeout(timer)
+    }
+  }, [isGameOver, router])
+
+  useEffect(() => {
+    const nextProgress = academyRepository.regenerateLives(MOCK_ACADEMY_VIEWER_ID)
     setProgress(nextProgress)
-    setLives(Math.max(1, nextProgress.lives.remaining || 5))
+    setLives(nextProgress.lives.remaining)
     setIsProgressReady(true)
   }, [])
 
@@ -1182,7 +1192,14 @@ export default function ExerciseEngine() {
 
   const handleResult = (correct: boolean, text: string) => {
     if (!correct) {
-      setLives((previous) => Math.max(0, previous - 1))
+      const unlimited = isUnlimitedLives(progress.seedsBalance)
+      let nextLives = lives
+      if (!unlimited) {
+        const nextProgress = academyRepository.spendLife(MOCK_ACADEMY_VIEWER_ID)
+        setProgress(nextProgress)
+        nextLives = nextProgress.lives.remaining
+      }
+      setLives(nextLives)
       setMistakes((previous) => previous + 1)
       setComboCount(0)
       if (currentExercise?.conceptId) {
@@ -1242,16 +1259,7 @@ export default function ExerciseEngine() {
   }
 
   const handleRetry = () => {
-    setCurrentStepIndex(0)
-    setFeedback(null)
-    setShowQuitModal(false)
-    setLives(5)
-    setComboCount(0)
-    setMistakes(0)
-    setShowComboAnimation(null)
-    setMissedConceptIds([])
-    setSessionExercises(activeLesson?.exercises ?? unit?.exercises ?? [])
-    setAttempt((previous) => previous + 1)
+    router.replace('/academy/out-of-lives')
   }
 
   if (!chapter || !unit) {

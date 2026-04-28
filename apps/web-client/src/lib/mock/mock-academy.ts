@@ -1,5 +1,12 @@
 ﻿import { getV2UnitsByChapter, listV2Units } from '@/lib/academy/content'
 import { v2UnitToLegacy } from '@/lib/academy/runtime'
+import {
+  MAX_LIVES,
+  SEEDS_COST,
+  computeRegenLives,
+  isUnlimitedLives,
+  type LivesState,
+} from '@/lib/lives'
 
 export const ACADEMY_PROGRESS_STORAGE_KEY = 'mtc_academy_progress_v1'
 export const MOCK_ACADEMY_VIEWER_ID = 'mock-viewer'
@@ -248,6 +255,14 @@ export type AcademyRepository = {
     result: Pick<AcademyUnitResult, 'score' | 'mistakes'>,
   ): AcademyProgress
   resetProgress(viewerId: string): AcademyProgress
+  /** Spend 1 life and persist. Returns updated progress. */
+  spendLife(viewerId: string): AcademyProgress
+  /** Apply pending regen and persist. Returns updated progress. */
+  regenerateLives(viewerId: string): AcademyProgress
+  /** Spend SEEDS_COST graines to refill to MAX_LIVES. Returns null if insufficient balance. */
+  spendSeedsForLives(viewerId: string): AcademyProgress | null
+  /** Award +1 life (e.g. after training). Capped at MAX_LIVES. */
+  awardTrainingLife(viewerId: string): AcademyProgress
 }
 
 export type AcademyEventSponsor = {
@@ -1173,10 +1188,6 @@ export const localAcademyRepository: AcademyRepository = {
         lastActivityDay: today,
         completedDays,
       },
-      lives: {
-        remaining: 5,
-        updatedAt: timestamp,
-      },
     })
   },
 
@@ -1226,10 +1237,6 @@ export const localAcademyRepository: AcademyRepository = {
         lastActivityDay: today,
         completedDays,
       },
-      lives: {
-        remaining: 5,
-        updatedAt: timestamp,
-      },
     })
   },
 
@@ -1241,6 +1248,50 @@ export const localAcademyRepository: AcademyRepository = {
       [viewerId]: nextProgress,
     })
     return nextProgress
+  },
+
+  spendLife(viewerId) {
+    const current = this.getProgress(viewerId)
+    if (current.lives.remaining <= 0) return current
+    const wasAtMax = current.lives.remaining === MAX_LIVES
+    const nextLives: LivesState = {
+      remaining: current.lives.remaining - 1,
+      updatedAt: wasAtMax ? new Date().toISOString() : current.lives.updatedAt,
+    }
+    return this.saveProgress(viewerId, { ...current, lives: nextLives })
+  },
+
+  regenerateLives(viewerId) {
+    const current = this.getProgress(viewerId)
+    const unlimited = isUnlimitedLives(current.seedsBalance)
+    const regenLives = computeRegenLives(current.lives, unlimited)
+    if (
+      regenLives.remaining === current.lives.remaining &&
+      regenLives.updatedAt === current.lives.updatedAt
+    ) {
+      return current
+    }
+    return this.saveProgress(viewerId, { ...current, lives: regenLives })
+  },
+
+  spendSeedsForLives(viewerId) {
+    const current = this.getProgress(viewerId)
+    if (current.seedsBalance < SEEDS_COST) return null
+    return this.saveProgress(viewerId, {
+      ...current,
+      seedsBalance: current.seedsBalance - SEEDS_COST,
+      lives: { remaining: MAX_LIVES, updatedAt: new Date().toISOString() },
+    })
+  },
+
+  awardTrainingLife(viewerId) {
+    const current = this.getProgress(viewerId)
+    const unlimited = isUnlimitedLives(current.seedsBalance)
+    const nextRemaining = unlimited ? MAX_LIVES : Math.min(MAX_LIVES, current.lives.remaining + 1)
+    return this.saveProgress(viewerId, {
+      ...current,
+      lives: { remaining: nextRemaining, updatedAt: new Date().toISOString() },
+    })
   },
 }
 

@@ -11,6 +11,13 @@ import {
   type Pathway,
 } from './_lib/hex-grid-data'
 import { loadMasteredIds, resetProgress, saveMasteredIds } from './_lib/progress'
+import {
+  MOCK_ACADEMY_VIEWER_ID,
+  academyRepository,
+  getDefaultAcademyProgress,
+  type AcademyProgress,
+} from '@/lib/mock/mock-academy'
+import { isUnlimitedLives } from '@/lib/lives'
 
 export default function KinnuV2Page() {
   const router = useRouter()
@@ -18,10 +25,15 @@ export default function KinnuV2Page() {
   const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set())
   const [selectedPathway, setSelectedPathway] = useState<Pathway | null>(null)
   const [isReady, setIsReady] = useState(false)
+  const [academyProgress, setAcademyProgress] = useState<AcademyProgress>(() =>
+    getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
+  )
 
   // Hydratation depuis localStorage
   useEffect(() => {
     setMasteredIds(loadMasteredIds())
+    const prog = academyRepository.regenerateLives(MOCK_ACADEMY_VIEWER_ID)
+    setAcademyProgress(prog)
     setIsReady(true)
   }, [])
 
@@ -29,16 +41,23 @@ export default function KinnuV2Page() {
     setSelectedPathway(pathway)
   }, [])
 
-  /** Phase 3 : démarrer un Pathway → naviguer vers l'Academy */
+  /** Phase 3 : démarrer un Pathway → naviguer vers l'Academy, avec vérif vies */
   const handleStartPathway = useCallback(() => {
     if (!selectedPathway) return
+
+    const unlimited = isUnlimitedLives(academyProgress.seedsBalance)
+    if (!unlimited && academyProgress.lives.remaining <= 0) {
+      setSelectedPathway(null)
+      router.push('/academy/out-of-lives')
+      return
+    }
+
     const url = getAcademyUrl(selectedPathway)
     if (url) {
       router.push(url)
     }
-    // Fallback : si pas d'URL Academy, on ferme juste le sheet
     setSelectedPathway(null)
-  }, [selectedPathway, router])
+  }, [selectedPathway, router, academyProgress])
 
   /** Toggle direct du statut (debug / fallback quand pas d'Academy mappée) */
   const handleToggleMaster = useCallback(() => {
@@ -85,7 +104,14 @@ export default function KinnuV2Page() {
       />
 
       {/* HUD */}
-      <HexHud masteredCount={masteredIds.size} totalPathways={allPathways.length} />
+      <HexHud
+        masteredCount={masteredIds.size}
+        totalPathways={allPathways.length}
+        lives={academyProgress.lives.remaining}
+        unlimited={isUnlimitedLives(academyProgress.seedsBalance)}
+        livesUpdatedAt={academyProgress.lives.updatedAt}
+        onLivesClick={() => router.push('/academy/out-of-lives')}
+      />
 
       {/* Reset (debug) */}
       <button

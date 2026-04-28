@@ -2,13 +2,18 @@
 
 import { ArrowLeft, Hexagon, Sparkles } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { LivesCounter } from '@/components/lives-counter'
 
 type HexHudProps = {
   masteredCount: number
   totalPathways: number
+  lives: number
+  unlimited?: boolean
+  livesUpdatedAt?: string
+  onLivesClick?: () => void
 }
 
-export function HexHud({ masteredCount, totalPathways }: HexHudProps) {
+export function HexHud({ masteredCount, totalPathways, lives, unlimited, livesUpdatedAt, onLivesClick }: HexHudProps) {
   const pct = totalPathways > 0 ? Math.round((masteredCount / totalPathways) * 100) : 0
 
   return (
@@ -36,13 +41,22 @@ export function HexHud({ masteredCount, totalPathways }: HexHudProps) {
         </h1>
       </div>
 
-      {/* Score */}
-      <div className="pointer-events-auto flex h-11 items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/5 px-4 backdrop-blur-md">
-        <Sparkles className="h-3.5 w-3.5 text-amber-300" />
-        <span className="text-[11px] font-black tabular-nums text-amber-100">
-          {masteredCount}/{totalPathways}
-        </span>
-        <span className="text-[10px] font-bold tabular-nums text-amber-200/70">{pct}%</span>
+      {/* Right side: lives + score */}
+      <div className="pointer-events-auto flex items-center gap-2">
+        <LivesCounter
+          lives={lives}
+          unlimited={unlimited}
+          updatedAt={livesUpdatedAt}
+          onClick={onLivesClick}
+          className="bg-black/50 backdrop-blur-md"
+        />
+        <div className="flex h-11 items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/5 px-4 backdrop-blur-md">
+          <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+          <span className="text-[11px] font-black tabular-nums text-amber-100">
+            {masteredCount}/{totalPathways}
+          </span>
+          <span className="text-[10px] font-bold tabular-nums text-amber-200/70">{pct}%</span>
+        </div>
       </div>
     </header>
   )
