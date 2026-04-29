@@ -21,7 +21,7 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import { buildPublicAppUrl } from '@/lib/public-url'
 import { formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { FloatingActionButtons, ProductDetailAddToCartButton } from './floating-action-buttons'
+import { FloatingActionButtons } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
 import { getProductContext } from '@/lib/api/product-context.service'
 import { ProductImpactSection } from './components/product-impact-section'
@@ -313,18 +313,7 @@ export async function ProductDetails({
 
                 {/* Action Buttons */}
                 <div className="space-y-4">
-                  <ProductDetailAddToCartButton
-                    className="w-full h-14 text-lg font-bold rounded-full bg-primary hover:bg-primary/90 hover:scale-105 transition-all shadow-lg"
-                    productId={product.id}
-                    productName={productName || t('card.default_name')}
-                    productSlug={product.slug}
-                    pricePoints={displayPoints}
-                    priceEuros={priceEuros}
-                    imageUrl={coverImage || null}
-                    fulfillmentMethod={product.fulfillment_method}
-                    stockQuantity={product.stock_quantity}
-                    inStock={inStock}
-                  />
+              
                   <Button
                     variant="outline"
                     className="w-full h-14 text-lg font-bold rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"

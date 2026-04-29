@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '@make-the-change/core/ui'
-import { Clock, Flame, ShoppingCart } from 'lucide-react'
+import { Clock, Flame } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
+import { useState } from 'react'
 import { QuantityStepper } from '@/components/ui/quantity-stepper'
 import { formatCurrency } from '@/lib/utils'
 
@@ -45,43 +45,25 @@ function useProductAddToCart({
   inStock,
 }: ProductCartPayload) {
   const t = useTranslations('products')
-  const { addItem, items, removeItem, setQuantity } = useCart()
-
-  const cartItem = items.find((item) => item.productId === productId)
-  const quantity = cartItem?.quantity || 0
+  const [quantity, setQuantity] = useState(0)
 
   const handleIncrement = () => {
     if (!inStock) return
     if (stockQuantity && quantity >= stockQuantity) return
-
-    const normalizedPriceEuros = normalizePriceEuros(priceEuros)
-
-    addItem({
-      productId,
-      quantity: 1,
-      snapshot: {
-        name: productName || t('card.default_name'),
-        slug: productSlug || '',
-        pricePoints: normalizePricePoints(pricePoints),
-        imageUrl,
-        ...(normalizedPriceEuros !== null ? { priceEuros: normalizedPriceEuros } : {}),
-        ...(fulfillmentMethod !== undefined ? { fulfillmentMethod } : {}),
-        ...(stockQuantity !== undefined ? { stockQuantity } : {}),
-      },
-    })
+    setQuantity(quantity + 1)
   }
 
   const handleDecrement = () => {
     if (quantity <= 1) {
-      removeItem(productId)
+      setQuantity(0)
     } else {
-      setQuantity(productId, quantity - 1)
+      setQuantity(quantity - 1)
     }
   }
 
   const addToCart = () => {
     handleIncrement()
-    // Only show snackbar on initial add if desired, or relying on stepper feedback
+    // Cart functionality removed - TODO: implement alternative
   }
 
   return { addToCart, handleIncrement, handleDecrement, quantity, t }
@@ -109,7 +91,7 @@ export function ProductDetailAddToCartButton({
     <Button className={className} size="lg" disabled={!payload.inStock} onClick={addToCart}>
       {payload.inStock ? (
         <>
-          <ShoppingCart className="mr-2 h-5 w-5" />
+          <Flame className="mr-2 h-5 w-5" />
           {t('card.add_to_cart')}
         </>
       ) : (
@@ -169,7 +151,7 @@ export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActi
       >
         {payload.inStock ? (
           <>
-            <ShoppingCart className="mr-3 h-6 w-6" />
+            <Flame className="mr-3 h-6 w-6" />
             {t('card.add_to_cart')}
           </>
         ) : (

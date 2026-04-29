@@ -5,7 +5,7 @@ import type { BlogPost } from '@/app/[locale]/(focus)/blog/_features/blog-types'
 import type { ProductCardProduct } from '@/app/[locale]/(marketing)/products/_features/product-card'
 import { getMockProjects } from '@/app/[locale]/(marketing)/projects/_features/mock-projects'
 import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
-import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service'
+// import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service' // CMS deleted
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
@@ -17,7 +17,7 @@ type AsyncResult<T> = {
   error: unknown
 }
 
-type HomeContent = Awaited<ReturnType<typeof getPageContent>>
+type HomeContent = any // CMS deleted - using fallback content
 
 export type HomeServerData = {
   user: User | null
@@ -209,74 +209,73 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .order('created_at', { ascending: false })
 
   const homeContentPromise = toAsyncResult(
-  getPageContent('home').catch(async (error) => {
-    console.warn('[home] Failed to fetch page content, using fallback:', error)
-    // Return minimal fallback content to prevent crashes
-    return {
-      hero: {
-        badge: 'Welcome',
-        title: 'Make the Change',
-        subtitle: 'Building a sustainable future together',
-        cta_primary: 'Get Started',
-        cta_secondary: 'Learn More'
-      },
-      stats: {
-        projects: 'Active Projects',
-        members: 'Community Members',
-        global_impact: 'Global Impact',
-        points_generated: 'Points Generated',
-        points_label: 'Points'
-      },
-      universe: {
-        title: 'Our Universe',
-        description: 'Explore our ecosystem of change',
-        cards: {
-          projects: {
-            title: 'Projects',
-            description: 'Support impactful initiatives',
-            cta: 'Explore Projects'
+    // CMS deleted - using fallback content directly
+    (async () => {
+      return {
+        hero: {
+          badge: 'Welcome',
+          title: 'Make the Change',
+          subtitle: 'Building a sustainable future together',
+          cta_primary: 'Get Started',
+          cta_secondary: 'Learn More'
+        },
+        stats: {
+          projects: 'Active Projects',
+          members: 'Community Members',
+          global_impact: 'Global Impact',
+          points_generated: 'Points Generated',
+          points_label: 'Points'
+        },
+        universe: {
+          title: 'Our Universe',
+          description: 'Explore our ecosystem of change',
+          cards: {
+            projects: {
+              title: 'Projects',
+              description: 'Support impactful initiatives',
+              cta: 'Explore Projects'
+            },
+            products: {
+              title: 'Products',
+              description: 'Ethical and sustainable choices',
+              cta: 'Shop Products'
+            },
+            community: {
+              title: 'Community',
+              description: 'Join like-minded changemakers',
+              cta: 'Join Community'
+            }
+          }
+        },
+        features: {
+          title: 'Features',
+          invest: {
+            title: 'Invest',
+            description: 'Put your money where it matters'
           },
-          products: {
-            title: 'Products',
-            description: 'Ethical and sustainable choices',
-            cta: 'Shop Products'
+          earn: {
+            title: 'Earn',
+            description: 'Get rewarded for your impact'
           },
-          community: {
-            title: 'Community',
-            description: 'Join like-minded changemakers',
-            cta: 'Join Community'
+          redeem: {
+            title: 'Redeem',
+            description: 'Turn points into real rewards'
+          },
+          explore: 'Explore Opportunities'
+        },
+        cta: {
+          title: 'Ready to Make a Difference?',
+          description: 'Join our community of changemakers',
+          button: 'Get Started Now',
+          stats: {
+            engagement: 'Engaged Community',
+            transparency: 'Full Transparency',
+            community: 'Growing Community'
           }
         }
-      },
-      features: {
-        title: 'Features',
-        invest: {
-          title: 'Invest',
-          description: 'Put your money where it matters'
-        },
-        earn: {
-          title: 'Earn',
-          description: 'Get rewarded for your impact'
-        },
-        redeem: {
-          title: 'Redeem',
-          description: 'Turn points into real rewards'
-        },
-        explore: 'Explore Opportunities'
-      },
-      cta: {
-        title: 'Ready to Make a Difference?',
-        description: 'Join our community of changemakers',
-        button: 'Get Started Now',
-        stats: {
-          engagement: 'Engaged Community',
-          transparency: 'Full Transparency',
-          community: 'Growing Community'
-        }
       }
-    }
-  })
-)
+    })()
+  )
   const pointsGeneratedQuery = supabase.rpc('get_total_points_generated')
   const latestPostsPromise = toAsyncResult(getBlogPosts())
 

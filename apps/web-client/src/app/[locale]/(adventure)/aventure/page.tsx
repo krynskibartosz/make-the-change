@@ -4,13 +4,11 @@ import { Suspense } from 'react'
 import {
   AdventurePageFrame,
   getAdventureSidebarUser,
-} from '@/app/[locale]/(adventure)/community/_features/adventure-page-frame'
-import { AdventureRightRail } from '@/app/[locale]/(adventure)/community/_features/adventure-right-rail'
-import { AdventureTabs } from '@/app/[locale]/(adventure)/community/_features/adventure-tabs'
-import { AdventureChallenges } from '@/app/[locale]/(adventure)/community/_features/adventure-challenges'
+} from '@/app/[locale]/(adventure)/aventure/_features/adventure-page-frame'
 import { getCurrentMockChallengeSurface } from '@/lib/mock/mock-challenge-progress-server'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
+import { AdventureChallenges } from './_features/adventure-challenges'
 
 type AdventureHubProps = {
   searchParams: Promise<{
@@ -45,16 +43,12 @@ export default async function AdventureHubPage({ searchParams }: AdventureHubPro
   return (
     <AdventurePageFrame
       sidebarUser={sidebarUser}
-      rightRail={<AdventureRightRail variant="default" activeTag="" />}
       showStickyHeader={true}
       showSeason={false}
       showRewardIcon={false}
     >
       <div className="relative w-full">
-        <Suspense fallback={null}>
-          <AdventureTabs />
-        </Suspense>
-
+ 
         <Suspense fallback={fallbackLoader}>
           <AdventureChallenges
             initialFaction={currentViewer?.faction ?? null}

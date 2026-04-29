@@ -2,10 +2,8 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import {
   AdventurePageFrame,
-  getAdventureSidebarUser,
-} from '@/app/[locale]/(adventure)/community/_features/adventure-page-frame'
-import { AdventureMovement } from '@/app/[locale]/(adventure)/community/_features/adventure-movement'
-import { AdventureRightRail } from '@/app/[locale]/(adventure)/community/_features/adventure-right-rail'
+} from '@/app/[locale]/(adventure)/aventure/_features/adventure-page-frame'
+import { AdventureMovement } from '@/app/[locale]/(adventure)/aventure/_features/adventure-movement'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,12 +19,9 @@ const fallbackLoader = (
 )
 
 export default async function CollectifPage() {
-  const sidebarUser = await getAdventureSidebarUser()
 
   return (
     <AdventurePageFrame
-      sidebarUser={sidebarUser}
-      rightRail={<AdventureRightRail variant="default" activeTag="" />}
       showStickyHeader={true}
       showSeeds={false}
     >

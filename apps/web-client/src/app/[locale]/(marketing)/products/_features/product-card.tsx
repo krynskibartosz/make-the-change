@@ -3,11 +3,9 @@
 import type { Json } from '@make-the-change/core/database-types'
 import { Button } from '@make-the-change/core/ui'
 import { ProductCard as SharedProductCard } from '@make-the-change/core/ui/next'
-import { Heart, Plus, ShoppingBag } from 'lucide-react'
+import { Heart, Plus } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useState } from 'react'
-import { useCartUI } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
-import { useCart } from '@/app/[locale]/(marketing-no-footer)/cart/_features/use-cart'
 import { buildProductCardBadges } from '@/app/[locale]/(marketing)/products/_features/product-card-badges'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getRandomProductImage } from '@/lib/placeholder-images'
@@ -61,8 +59,6 @@ const getFirstString = (value: unknown): string | null => {
 export function ProductCard({ product, className, priority = false }: ProductCardProps) {
   const t = useTranslations('products.card')
   const locale = useLocale()
-  const { addItem } = useCart()
-  const { openCart, showSnackbar } = useCartUI()
   const [isAdding, setIsAdding] = useState(false)
 
   const localizedName = getLocalizedContent(
@@ -110,35 +106,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     setIsAdding(true)
 
     setTimeout(() => {
-      const normalizedPriceEuros = product.price_eur_equivalent
-        ? Number(product.price_eur_equivalent)
-        : null
-
-      addItem({
-        productId: product.id,
-        quantity: 1,
-        snapshot: {
-          name: localizedName,
-          slug: product.slug || '',
-          pricePoints: Number(product.price_points || 0),
-          imageUrl: mainImage,
-          ...(normalizedPriceEuros !== null ? { priceEuros: normalizedPriceEuros } : {}),
-          ...(product.fulfillment_method !== undefined
-            ? { fulfillmentMethod: product.fulfillment_method }
-            : {}),
-          ...(product.stock_quantity !== undefined
-            ? { stockQuantity: product.stock_quantity }
-            : {}),
-        },
-      })
-
-      showSnackbar({
-        message: t('added_message'),
-        actionLabel: t('view_action'),
-        onAction: openCart,
-        durationMs: 3000,
-      })
-
+      // Cart functionality removed - TODO: implement alternative
       setIsAdding(false)
     }, 400)
   }
@@ -201,7 +169,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
                   t('out_of_stock')
                 ) : (
                   <>
-                    <ShoppingBag className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4" />
                     {t('add_to_cart')}
                   </>
                 )}

@@ -145,7 +145,7 @@ export function SanctuaryContent({
                     <span
                       className={cn(
                         'text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border',
-                        rarityStyle.badge
+                        rarityStyle?.badge
                       )}
                     >
                       {species.rarity}

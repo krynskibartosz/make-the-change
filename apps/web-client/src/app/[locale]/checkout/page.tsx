@@ -1,81 +1,8 @@
 import { getLocale } from 'next-intl/server'
-import { CheckoutClient } from '@/app/[locale]/(marketing-no-footer)/checkout/_features/checkout-client'
-import { SectionContainer } from '@/components/ui/section-container'
 import { redirect } from '@/i18n/navigation'
-import { isMockDataSource } from '@/lib/mock/data-source'
-import { getCurrentProfile, getCurrentViewer } from '@/lib/mock/mock-session-server'
-import { getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
-import { createClient } from '@/lib/supabase/server'
 
 export default async function CheckoutPage() {
-  if (isMockDataSource) {
-    const [profile, viewer] = await Promise.all([getCurrentProfile(), getCurrentViewer()])
-    const pointsBalance = viewer
-      ? await getCurrentMockWalletBalance(viewer.viewerId, viewer.faction)
-      : 0
-    const defaultAddress = {
-      firstName: profile?.displayName.split(' ')[0] || '',
-      lastName: profile?.displayName.split(' ').slice(1).join(' ') || '',
-      street: profile?.addressStreet || '',
-      city: profile?.city || '',
-      postalCode: profile?.addressPostalCode || '',
-      country: profile?.country || '',
-    }
-
-    return (
-      <section className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-muted/25">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-40 top-0 h-110 w-110 rounded-full bg-primary/10 blur-[100px]" />
-          <div className="absolute -right-40 bottom-0 h-105 w-105 rounded-full bg-marketing-positive-500/10 blur-[100px]" />
-        </div>
-
-        <SectionContainer size="lg" className="relative py-6 sm:py-10">
-          <CheckoutClient pointsBalance={pointsBalance} defaultAddress={defaultAddress} />
-        </SectionContainer>
-      </section>
-    )
-  }
-
-  const supabase = await createClient()
+  // Checkout functionality removed - redirecting to home
   const locale = await getLocale()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return redirect({ href: `/login?returnTo=${encodeURIComponent('/checkout')}`, locale })
-  }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select(
-      'first_name, last_name, address_street, address_city, address_postal_code, address_country_code, points_balance',
-    )
-    .eq('id', user.id)
-    .single()
-
-  const pointsBalance = Number(profile?.points_balance || 0)
-
-  const defaultAddress = {
-    firstName: profile?.first_name || '',
-    lastName: profile?.last_name || '',
-    street: profile?.address_street || '',
-    city: profile?.address_city || '',
-    postalCode: profile?.address_postal_code || '',
-    country: profile?.address_country_code || '',
-  }
-
-  return (
-    <section className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-muted/25">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-40 top-0 h-110 w-110 rounded-full bg-primary/10 blur-[100px]" />
-        <div className="absolute -right-40 bottom-0 h-105 w-105 rounded-full bg-marketing-positive-500/10 blur-[100px]" />
-      </div>
-
-      <SectionContainer size="lg" className="relative py-6 sm:py-10">
-        <CheckoutClient pointsBalance={pointsBalance} defaultAddress={defaultAddress} />
-      </SectionContainer>
-    </section>
-  )
+  return redirect({ href: '/', locale })
 }

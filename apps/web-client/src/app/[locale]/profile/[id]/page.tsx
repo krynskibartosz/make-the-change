@@ -13,15 +13,12 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { MockPublicProfilePage } from '@/app/[locale]/profile/[id]/mock-public-profile'
 import { ProfileHeader } from '@/components/profile/profile-header'
-import { FeedClient } from '@/components/social/feed-client'
-import { FollowToggleButton } from '@/components/social/follow-toggle-button'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentProfile, getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockPublicProfile } from '@/lib/mock/mock-viewer'
-import { getUserFeed } from '@/lib/social/feed.reads'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
@@ -175,8 +172,6 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     leaderboardRank: 0, // We don't have rank in this view yet, can improved later
   })
 
-  // Fetch social feed posts
-  const userPosts = await getUserFeed(id, 1, 10)
 
   // Map badge strings to UI objects
   const milestoneBadges = badgeLabels.map((label) => {
@@ -213,15 +208,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
         impactScore={impactScore}
         readonly={true}
       />
-      {!isOwnProfile ? (
-        <div className="-mt-3 flex justify-end">
-          <FollowToggleButton
-            targetType="user"
-            targetId={id}
-            initialFollowing={isFollowingProfile}
-          />
-        </div>
-      ) : null}
+
 
       <Tabs defaultValue="impact" className="w-full">
         <TabsList className="mb-6">
@@ -403,18 +390,6 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               </Card>
             </div>
           </div>
-        </TabsContent>
-
-        <TabsContent value="activite">
-          <Suspense
-            fallback={
-              <div className="flex h-48 items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            }
-          >
-            <FeedClient initialPosts={userPosts} hideCreatePost />
-          </Suspense>
         </TabsContent>
 
         <TabsContent value="badges">

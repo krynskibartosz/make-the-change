@@ -10,7 +10,6 @@ import {
 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { FollowToggleButton } from '@/components/social/follow-toggle-button'
 import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { isMockDataSource } from '@/lib/mock/data-source'
@@ -21,7 +20,6 @@ import {
   getMockProducerBySlug,
   type MockProducerListProduct,
   type MockProducerListProject,
-  type MockProducerSeed,
   type MockProducerSpeciesCard,
 } from '../_features/mock-producers'
 
@@ -192,20 +190,7 @@ function ProducerDetailView({
               </p>
             ) : null}
           </div>
-          <div className="shrink-0">
-            {showFollowButton ? (
-              <FollowToggleButton
-                targetType="producer"
-                targetId={producer.id}
-                initialFollowing={isFollowingProducer}
-                className="h-auto rounded-2xl border-0 bg-lime-400 px-6 py-2.5 text-sm font-bold text-[#0B0F15] hover:bg-lime-300"
-              />
-            ) : (
-              <div className="rounded-2xl border border-lime-400/20 bg-lime-400/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-lime-300">
-                Partenaire en vedette
-              </div>
-            )}
-          </div>
+
         </div>
       </div>
 

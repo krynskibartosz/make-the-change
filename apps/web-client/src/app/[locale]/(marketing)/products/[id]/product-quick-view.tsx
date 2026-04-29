@@ -4,19 +4,17 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Award, Flame, Package, Star, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
+import {  Flame, Package, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { formatCurrency, getLocalizedContent } from '@/lib/utils'
+import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { ProductDetailAddToCartButton } from './floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
 import { ProductFavoriteButton } from './product-favorite-button'
 import { ProductShareButton } from './product-share-button'
 import { ProductCheckoutView } from './product-checkout-view'
 import { ProductFiatCheckoutView } from './product-fiat-checkout-view'
-import { ArrowLeft } from 'lucide-react'
 
 type ProductQuickViewProps = {
   product: ProductWithRelations

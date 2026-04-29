@@ -42,8 +42,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 	const session = getClientMockViewerSession()
 	const userFaction = session?.faction ?? initialFaction
 
-	const factionThemeKey = resolveFactionThemeKey(userFaction)
-	const factionTheme = getFactionTheme(factionThemeKey)
+	const factionTheme = getFactionTheme(userFaction)
 
 	// Micro-onboarding: afficher FactionCarousel si l'utilisateur vient de se connecter via Magic Link et n'a pas encore choisi de faction
 	useEffect(() => {
@@ -206,7 +205,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 			) : null}
 
 			{/* Micro-onboarding faction (post-Magic Link) */}
-			{showFactionModal && <FactionCarousel onFactionSelect={handleFactionSelect} />}
+			{showFactionModal && <FactionCarousel onFactionSelect={(faction) => handleFactionSelect(faction.value as any)} />}
 		</>
 	)
 }

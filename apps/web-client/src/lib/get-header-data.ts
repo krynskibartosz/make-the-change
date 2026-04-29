@@ -1,4 +1,3 @@
-import { getMenu } from '@/app/[locale]/admin/cms/_features/cms.service'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
@@ -12,7 +11,7 @@ export type HeaderUser = {
 
 export type HeaderData = {
   user: HeaderUser
-  menuData: Awaited<ReturnType<typeof getMenu>>
+  menuData: Awaited<any>
 }
 
 /**
@@ -22,7 +21,8 @@ export type HeaderData = {
 export async function getHeaderData(locale?: string): Promise<HeaderData> {
   if (isMockDataSource) {
     const viewer = await getCurrentViewer()
-    const menuData = await getMenu('main-header', locale)
+    // CMS deleted - using null fallback for menuData
+    const menuData = null
 
     return {
       user: viewer
@@ -41,12 +41,11 @@ export async function getHeaderData(locale?: string): Promise<HeaderData> {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [menuData, profileData] = await Promise.all([
-    getMenu('main-header', locale),
-    user
-      ? supabase.from('profiles').select('avatar_url, metadata').eq('id', user.id).single()
-      : Promise.resolve({ data: null }),
-  ])
+  // CMS deleted - using null fallback for menuData
+  const menuData = null
+  const profileData = user
+    ? await supabase.from('profiles').select('avatar_url, metadata').eq('id', user.id).single()
+    : { data: null }
 
   const headerProfile = profileData.data
 

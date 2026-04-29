@@ -2,8 +2,6 @@
 
 import { type Brand, AppThemeProvider as ThemeProvider } from '@make-the-change/core'
 import { Suspense, type PropsWithChildren } from 'react'
-import { CartProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-provider'
-import { CartUIProvider } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-ui-provider'
 import { SetupGuard } from '@/components/app/setup-guard'
 import { Toaster } from '@/components/ui/toaster'
 
@@ -22,16 +20,12 @@ export function Providers({ children, initialBrand, initialCustomVars }: Provide
       {...(initialBrand !== undefined ? { initialBrand } : {})}
       {...(initialCustomVars !== undefined ? { initialCustomVars } : {})}
     >
-      <CartProvider>
-        <CartUIProvider>
-          <Toaster>
-            <Suspense fallback={null}>
-              <SetupGuard />
-            </Suspense>
-            {children}
-          </Toaster>
-        </CartUIProvider>
-      </CartProvider>
+      <Toaster>
+        <Suspense fallback={null}>
+          <SetupGuard />
+        </Suspense>
+        {children}
+      </Toaster>
     </ThemeProvider>
   )
 }

@@ -250,7 +250,14 @@ export default function EcoFactPage({ params }: { params: { dayKey: string; loca
     reward: 50,
     rewardBadge: 'Éco-Conscient',
     completedAt: isCompleted ? new Date().toISOString() : null,
+    claimedAt: isCompleted ? new Date().toISOString() : null,
     dayKey: params.dayKey,
+    monthKey: params.dayKey.slice(0, 7),
+    startDate: new Date().toISOString(),
+    endDate: new Date(Date.now() + 86400000).toISOString(),
+    status: isCompleted ? 'completed' : 'available',
+    seriesId: 'eco-fact' as any, // TODO: Add 'eco-fact' to ChallengeArchetypeId
+    slug: 'eco-fact-1',
     metadata: {
       articleTitle: "Le monde secret des pollinisateurs",
       articleSummary: 'Les pollinisateurs sont essentiels à 75% des cultures alimentaires mondiales.',

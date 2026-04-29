@@ -39,5 +39,5 @@ export default async function SeedsPage({ params }: SeedsPageProps) {
     completed: challenge.status === 'completed',
   }))
 
-  return <SeedsClient balance={balance} transactions={transactions} subscription={subscription} currentDayKey={currentDayKey} dailyQuests={dailyQuests} />
+  return <SeedsClient balance={balance} transactions={transactions} />
 }

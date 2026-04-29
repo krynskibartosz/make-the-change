@@ -1,8 +1,5 @@
 import { connection } from 'next/server'
 import { Suspense, type PropsWithChildren } from 'react'
-import { CartDock } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-dock'
-import { CartSheet } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-sheet'
-import { CartSnackbar } from '@/app/[locale]/(marketing-no-footer)/cart/_features/cart-snackbar'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
@@ -23,11 +20,6 @@ function CommunityLayoutShell({ children, user }: CommunityLayoutShellProps) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <main className="flex-1">{children}</main>
-      <CartSheet />
-      <CartSnackbar />
-      <Suspense fallback={null}>
-        <CartDock />
-      </Suspense>
       <MobileBottomNav user={user} />
     </div>
   )

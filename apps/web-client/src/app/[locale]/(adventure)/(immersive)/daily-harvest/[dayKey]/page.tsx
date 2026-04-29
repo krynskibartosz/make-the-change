@@ -65,7 +65,17 @@ export default function DailyHarvestPage({ params }: { params: { dayKey: string;
     completedAt: isCompleted ? new Date().toISOString() : null,
     claimedAt: isCompleted ? new Date().toISOString() : null,
     dayKey: params.dayKey,
-    metadata: {},
+    monthKey: params.dayKey.slice(0, 7),
+    startDate: new Date().toISOString(),
+    endDate: new Date(Date.now() + 86400000).toISOString(),
+    status: isCompleted ? 'completed' : 'available',
+    seriesId: 'daily-harvest',
+    slug: 'daily-harvest-1',
+    metadata: {
+      hint: 'TODO',
+      nextStep: 'TODO',
+      themeLabel: 'TODO',
+    },
   }
 
   const clearChargeInterval = useCallback(() => {
