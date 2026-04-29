@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { Clock, Gift, Sprout } from 'lucide-react'
 import { cn } from '@/lib/utils'
