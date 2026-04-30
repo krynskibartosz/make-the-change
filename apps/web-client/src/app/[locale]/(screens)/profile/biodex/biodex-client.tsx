@@ -108,7 +108,7 @@ export function BiodexClient({ species }: BiodexClientProps) {
       <div className='sticky top-0 z-50 bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/10'>
         <div className='px-6 py-4'>
           <Link
-            href='/adventure/aventure'
+            href='/profile'
             className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
           >
             <ArrowLeft className='h-5 w-5' />

@@ -35,7 +35,6 @@ const getFormDataFile = (formData: FormData, key: string): File | null => {
 const revalidateMockProfileSurfaces = (viewerId: string) => {
   revalidatePath('/', 'layout')
   revalidatePath('/menu')
-  revalidatePath('/aventure')
   revalidatePath('/profile')
   revalidatePath('/profile/settings')
   revalidatePath(`/profile/${viewerId}`)

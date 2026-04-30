@@ -21,12 +21,12 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const normalizedPath = pathname.replace(/\/+$/, '')
   const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
   const isSettingsPage =
-    pathname === '/dashboard/settings' || pathname.startsWith('/dashboard/settings/')
+    pathname === '/profile/settings' || pathname.startsWith('/profile/settings/')
   const isInvestmentsPage = pathname === '/profile/investments'
   const isHome = pathname === '/'
   const isImmersive =
-    pathname.includes('/aventure/eco-fact/') ||
-    pathname.includes('/aventure/daily-harvest/') ||
+    pathname.includes('/challenges/eco-fact/') ||
+    pathname.includes('/challenges/daily-harvest/') ||
     pathname.startsWith('/academy')
 
   if (isInvestFlow || isSettingsPage || isInvestmentsPage || isHome || isImmersive) {
@@ -35,9 +35,7 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
 
   const isChallenges =
     pathname.startsWith('/challenges') ||
-    pathname.startsWith('/defis') ||
-    pathname === '/aventure' ||
-    pathname.startsWith('/aventure/')
+    pathname.startsWith('/defis')
   const isProjects =
     pathname.startsWith('/projects') ||
     pathname.startsWith('/projets')

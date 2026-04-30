@@ -399,7 +399,7 @@ const getTopicCta = (topic: TopicTheme) => {
 
   if (topic.linkedSpeciesId) {
     return {
-      href: '/aventure?tab=biodex',
+      href: '/profile/biodex',
       label: 'Explorer le Biodex',
     }
   }
