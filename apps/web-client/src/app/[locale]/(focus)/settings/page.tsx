@@ -192,7 +192,7 @@ export default async function SettingsPage() {
       {
         label: 'Notifications',
         icon: Bell,
-        href: '/dashboard/settings/notifications',
+        href: '/profile/settings/notifications',
         iconWrapperClassName: 'bg-red-500',
         iconClassName: 'text-white',
       },
@@ -442,7 +442,7 @@ export default async function SettingsPage() {
     {
       label: 'Notifications',
       icon: Bell,
-      href: '/dashboard/settings/notifications',
+      href: '/profile/settings/notifications',
       iconWrapperClassName: 'bg-red-500',
       iconClassName: 'text-white',
     },

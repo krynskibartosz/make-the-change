@@ -31,7 +31,7 @@ export async function updateAccount(formData: FormData): Promise<AccountState> {
     })
 
     revalidatePath('/account')
-    revalidatePath('/dashboard/settings')
+    revalidatePath('/profile/settings')
     return { success: 'Profil mis à jour' }
   }
 
@@ -50,6 +50,6 @@ export async function updateAccount(formData: FormData): Promise<AccountState> {
   if (error) return { error: error.message }
 
   revalidatePath('/account')
-  revalidatePath('/dashboard/settings')
+  revalidatePath('/profile/settings')
   return { success: 'Profil mis à jour' }
 }

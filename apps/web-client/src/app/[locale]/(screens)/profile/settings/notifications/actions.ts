@@ -36,7 +36,7 @@ export async function updateNotifications(
       },
     })
 
-    revalidatePath('/dashboard/settings/notifications')
+    revalidatePath('/profile/settings/notifications')
     return { success: 'Préférences mises à jour' }
   }
 
@@ -78,6 +78,6 @@ export async function updateNotifications(
 
   if (error) return { error: error.message }
 
-  revalidatePath('/dashboard/settings/notifications')
+  revalidatePath('/profile/settings/notifications')
   return { success: 'Préférences mises à jour' }
 }

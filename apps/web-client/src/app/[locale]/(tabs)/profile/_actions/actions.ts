@@ -37,7 +37,7 @@ const revalidateMockProfileSurfaces = (viewerId: string) => {
   revalidatePath('/menu')
   revalidatePath('/aventure')
   revalidatePath('/profile')
-  revalidatePath('/dashboard/settings')
+  revalidatePath('/profile/settings')
   revalidatePath(`/profile/${viewerId}`)
 }
 
