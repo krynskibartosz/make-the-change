@@ -47,7 +47,7 @@ function FactionMascotSelector() {
   )
 }
 
-export default async function GuestProfilePage() {
+export default async function GuestProfile() {
   const { lockedSpecies } = await getBiodexPreviewData({
     unlockedLimit: 0,
     lockedLimit: 4,

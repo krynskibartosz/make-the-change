@@ -141,7 +141,7 @@ export const getClientMockViewerSession = (): MockViewerSession | null => {
   return parseMockViewerSessionValue(readCookieValue(document.cookie, MOCK_AUTH_COOKIE_NAME))
 }
 
-export const sanitizeReturnTo = (value: string, fallback = '/dashboard/profile'): string => {
+export const sanitizeReturnTo = (value: string, fallback = '/profile'): string => {
   if (value.startsWith('/') && !value.startsWith('//')) {
     return value
   }

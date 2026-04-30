@@ -53,7 +53,7 @@ export async function updateSettings(
     })
 
     revalidatePath('/dashboard/settings')
-    revalidatePath('/dashboard/profile')
+    revalidatePath('/profile')
 
     return { success: 'Paramètres mis à jour', locale: languageCode }
   }
@@ -110,7 +110,7 @@ export async function updateSettings(
   }
 
   revalidatePath('/dashboard/settings')
-  revalidatePath('/dashboard/profile')
+  revalidatePath('/profile')
 
   return { success: 'Paramètres mis à jour', locale: languageCode }
 }

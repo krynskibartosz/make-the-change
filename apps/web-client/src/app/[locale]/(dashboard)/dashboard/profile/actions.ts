@@ -36,7 +36,7 @@ const revalidateMockProfileSurfaces = (viewerId: string) => {
   revalidatePath('/', 'layout')
   revalidatePath('/menu')
   revalidatePath('/aventure')
-  revalidatePath('/dashboard/profile')
+  revalidatePath('/profile')
   revalidatePath('/dashboard/settings')
   revalidatePath(`/profile/${viewerId}`)
 }
@@ -137,7 +137,7 @@ export async function updateProfile(data: ProfileFormValues): Promise<ProfileSta
   }
 
   try {
-    revalidatePath('/dashboard/profile')
+    revalidatePath('/profile')
     return { success: 'Profil mis a jour avec succes' }
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Failed to update profile' }
@@ -252,7 +252,7 @@ export async function updateProfileMedia(
 
     if (updateError) throw new Error(updateError.message)
 
-    revalidatePath('/dashboard/profile')
+    revalidatePath('/profile')
     return { success: 'Profil visuel mis a jour' }
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Echec du televersement' }
@@ -318,7 +318,7 @@ export async function updateProfileImages(images: {
 
     if (updateError) throw new Error(updateError.message)
 
-    revalidatePath('/dashboard/profile')
+    revalidatePath('/profile')
     return { success: 'Image mise a jour' }
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Echec de la mise a jour' }

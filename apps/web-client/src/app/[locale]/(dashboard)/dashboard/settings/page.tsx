@@ -253,7 +253,7 @@ export default async function SettingsPage() {
         <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/30 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
           <div className="relative flex h-12 items-center justify-center">
             <Link
-              href="/dashboard/profile"
+              href="/profile"
               aria-label="Fermer"
               className="absolute left-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/5"
             >
@@ -510,7 +510,7 @@ export default async function SettingsPage() {
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/30 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl supports-[backdrop-filter]:bg-black/25">
         <div className="relative flex h-12 items-center justify-center">
           <Link
-            href="/dashboard/profile"
+            href="/profile"
             aria-label="Fermer"
             className="absolute left-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/5"
           >

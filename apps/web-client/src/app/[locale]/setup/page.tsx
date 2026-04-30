@@ -17,7 +17,7 @@ export default async function SetupPage({ searchParams }: SetupPageProps) {
 
   if (!isMockDataSource) {
     const locale = await getLocale()
-    redirect({ href: '/dashboard/profile', locale })
+    redirect({ href: '/profile', locale })
   }
 
   const viewer = await getCurrentViewer()

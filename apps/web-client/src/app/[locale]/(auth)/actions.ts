@@ -40,7 +40,7 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
 
     return {
       success: 'true',
-      redirectUrl: sanitizeReturnTo(returnToRaw, '/dashboard/profile'),
+      redirectUrl: sanitizeReturnTo(returnToRaw, '/profile'),
     }
   }
 
@@ -202,7 +202,7 @@ export async function completeMockSetup(formData: FormData) {
   const locale = await getLocale()
 
   if (!isMockDataSource) {
-    redirect({ href: '/dashboard/profile', locale })
+    redirect({ href: '/profile', locale })
   }
 
   const factionValue = getFormDataString(formData, 'faction')

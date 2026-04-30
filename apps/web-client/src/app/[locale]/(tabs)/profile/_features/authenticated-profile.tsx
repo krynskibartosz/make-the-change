@@ -3,11 +3,9 @@ import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
-import { getCurrentProfile } from '@/lib/mock/mock-session-server'
-import { AnimatedMascot } from './animated-mascot'
+import { AnimatedMascot } from '@/app/[locale]/(dashboard)/dashboard/profile/animated-mascot'
 
-export default async function ProfilePage() {
-  const profile = await getCurrentProfile()
+export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
   const accentTheme = getFactionTheme(profile?.faction ?? null)
   const collectiveGoal = getCollectiveGoal()
   const factionContribution = getFactionContribution(profile?.faction ?? null)
