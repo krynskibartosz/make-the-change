@@ -82,7 +82,7 @@ export function InvestClient({ project }: InvestClientProps) {
 
     setLoading(true)
     await new Promise((resolve) => setTimeout(resolve, 1500))
-    router.push('/dashboard/investments')
+    router.push('/profile/investments')
     setLoading(false)
   }
 

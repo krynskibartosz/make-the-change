@@ -54,7 +54,7 @@ function InvestmentPaymentForm({ onSuccess }: { onSuccess: () => void }) {
     try {
       const pathname = window.location.pathname
       const locale = pathname.split('/')[1] || 'fr'
-      const returnUrl = `${window.location.origin}/${locale}/dashboard/investments`
+      const returnUrl = `${window.location.origin}/${locale}/profile/investments`
 
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
@@ -355,7 +355,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
                     }}
                   >
                     <InvestmentPaymentForm
-                      onSuccess={() => router.push('/dashboard/investments')}
+                      onSuccess={() => router.push('/profile/investments')}
                     />
                   </Elements>
                 </>

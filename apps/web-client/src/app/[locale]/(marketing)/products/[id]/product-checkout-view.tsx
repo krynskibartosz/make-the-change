@@ -265,7 +265,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
           
           {/* Bouton Secondaire (Utilitaires) */}
           <button
-            onClick={() => router.push('/dashboard/investments')}
+            onClick={() => router.push('/profile/investments')}
             className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
           >
             Suivre ma récompense

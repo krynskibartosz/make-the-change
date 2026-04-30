@@ -185,7 +185,7 @@ export default async function SettingsPage() {
       {
         label: 'Mes contributions & achats',
         icon: ReceiptText,
-        href: '/dashboard/investments',
+        href: '/profile/investments',
         iconWrapperClassName: 'bg-gray-500/20',
         iconClassName: 'text-white',
       },
@@ -436,7 +436,7 @@ export default async function SettingsPage() {
     {
       label: 'Mes contributions & achats',
       icon: ReceiptText,
-      href: '/dashboard/investments',
+      href: '/profile/investments',
       iconWrapperClassName: 'bg-gray-500/20',
       iconClassName: 'text-white',
     },

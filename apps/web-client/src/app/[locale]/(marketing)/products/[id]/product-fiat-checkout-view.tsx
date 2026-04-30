@@ -86,7 +86,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
             Utiliser mes points
           </button>
           <button
-            onClick={() => router.push('/dashboard/investments')}
+            onClick={() => router.push('/profile/investments')}
             className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
           >
             Suivre ma commande →
