@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function SeedsPage({ params }: SeedsPageProps) {
+export default async function ProfileSeedsPage({ params }: SeedsPageProps) {
   const session = getClientMockViewerSession()
   const viewerId = session?.viewerId ?? null
   const balance = getMockWalletBalance(viewerId ?? '')

@@ -19,7 +19,7 @@ export function ChallengesTabHeader() {
   return (
     <div className="flex items-center justify-end w-full">
       <Link
-        href="/seeds"
+        href="/profile/seeds"
         prefetch={false}
         className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 transition-transform hover:scale-105 active:scale-95"
       >

@@ -276,7 +276,7 @@ export default function OutOfLivesPage() {
           </p>
           <button
             type="button"
-            onClick={() => router.push('/seeds')}
+            onClick={() => router.push('/profile/seeds')}
             className="relative flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-400/30 bg-violet-500/15 py-3.5 text-sm font-black text-violet-200 transition-all hover:bg-violet-500/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300"
           >
             Découvrir l'abonnement

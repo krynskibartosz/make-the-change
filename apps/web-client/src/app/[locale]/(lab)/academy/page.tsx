@@ -722,7 +722,7 @@ export default function AcademyPage() {
               <span className="text-[11px] font-bold text-white">{progress.streak.current} j</span>
             </Link>
             <Link
-              href="/seeds"
+              href="/profile/seeds"
               prefetch={false}
               aria-label={`Ouvrir les graines, solde ${formatPoints(progress.seedsBalance)}`}
               className="flex min-h-11 items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 transition-transform touch-manipulation hover:scale-[1.02] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-300"
