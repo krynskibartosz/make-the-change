@@ -360,7 +360,7 @@ export function ChallengesTabContent({
             if (initialFaction) ecoFactUrl.set('faction', initialFaction)
             if (quest.id) ecoFactUrl.set('challengeId', quest.id)
             if (viewerId) ecoFactUrl.set('viewerId', viewerId)
-            const ecoFactPath = `/eco-fact/${initialDayKey || 'today'}${ecoFactUrl.toString() ? `?${ecoFactUrl.toString()}` : ''}`
+            const ecoFactPath = `/challenges/eco-fact/${initialDayKey || 'today'}${ecoFactUrl.toString() ? `?${ecoFactUrl.toString()}` : ''}`
             
             return (
               <Link
@@ -378,7 +378,7 @@ export function ChallengesTabContent({
             if (initialFaction) harvestUrl.set('faction', initialFaction)
             if (quest.id) harvestUrl.set('challengeId', quest.id)
             if (viewerId) harvestUrl.set('viewerId', viewerId)
-            const harvestPath = `/daily-harvest/${initialDayKey || 'today'}${harvestUrl.toString() ? `?${harvestUrl.toString()}` : ''}`
+            const harvestPath = `/challenges/daily-harvest/${initialDayKey || 'today'}${harvestUrl.toString() ? `?${harvestUrl.toString()}` : ''}`
             
             return (
               isHarvestComplete ? (

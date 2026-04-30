@@ -8,12 +8,12 @@ export function Step6Paywall() {
   
   const handleSubscribe = () => {
     // Après abonnement, rediriger vers le dashboard
-    router.push('/aventure?tab=defis')
+    router.push('/challenges')
   }
   
   const handleDismiss = () => {
     // Si l'utilisateur refuse, quand même le laisser accéder à l'app
-    router.push('/aventure?tab=defis')
+    router.push('/challenges')
   }
   
   return (

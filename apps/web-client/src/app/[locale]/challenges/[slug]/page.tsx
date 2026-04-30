@@ -190,7 +190,7 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
       className="min-h-[calc(100svh-4rem)] bg-gradient-to-b from-background via-background to-muted/20 py-4 sm:py-8"
     >
       <div className="space-y-6">
-        <Link href="/aventure?tab=defis">
+        <Link href="/challenges">
           <Button variant="ghost" size="sm" className="hover:bg-muted/50">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour aux defis
@@ -345,7 +345,7 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
                 variant="outline"
                 className="h-12 w-full rounded-2xl border-border/60 text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-muted/50"
               >
-                <Link href="/aventure?tab=defis" className="flex items-center justify-center gap-2">
+                <Link href="/challenges" className="flex items-center justify-center gap-2">
                   <Target className="h-4 w-4" />
                   Retour au hub
                 </Link>

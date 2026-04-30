@@ -66,7 +66,7 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
       return
     }
 
-    router.push('/aventure?tab=defis')
+    router.push('/challenges')
   }, [router, userState])
 
   return (

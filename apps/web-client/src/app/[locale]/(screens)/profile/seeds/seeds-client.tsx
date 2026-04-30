@@ -68,7 +68,7 @@ export default function SeedsClient({ balance, transactions }: SeedsClientProps)
       <div className="sticky top-0 z-50 bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/10">
         <div className="px-6 py-4 flex items-center justify-between">
           <Link
-            href="/aventure?tab=defis"
+            href="/challenges"
             className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -95,7 +95,7 @@ export default function SeedsClient({ balance, transactions }: SeedsClientProps)
           <h2 className="text-xl font-bold text-white mb-6">Besoin de graines ?</h2>
           <div className="space-y-3">
             <Link
-              href="/aventure/immersive/daily-harvest/today"
+              href="/challenges/daily-harvest/today"
               className="block relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
             >
               <div className="p-5 flex items-center justify-between">
@@ -115,7 +115,7 @@ export default function SeedsClient({ balance, transactions }: SeedsClientProps)
               </div>
             </Link>
             <Link
-              href="/aventure/immersive/eco-fact/today"
+              href="/challenges/eco-fact/today"
               className="block relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
             >
               <div className="p-5 flex items-center justify-between">
