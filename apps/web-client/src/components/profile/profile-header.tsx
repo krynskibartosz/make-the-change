@@ -3,7 +3,7 @@
 import { Badge, Button } from '@make-the-change/core/ui'
 import { ExternalLink } from 'lucide-react'
 import { useState } from 'react'
-import { updateProfileImages } from '@/app/[locale]/(dashboard)/dashboard/profile/actions'
+import { updateProfileImages } from '@/app/[locale]/(tabs)/profile/_actions/actions'
 import { uploadImages } from '@/app/actions/upload-images'
 import { Link } from '@/i18n/navigation'
 import { getRandomCoverImage } from '@/lib/placeholder-images'

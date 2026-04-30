@@ -47,7 +47,6 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
     pathname.startsWith('/community')
   const isProfile =
     pathname.startsWith('/profile') ||
-    pathname.startsWith('/dashboard/profile') ||
     pathname.startsWith('/u/')
 
   const navLinkClass =

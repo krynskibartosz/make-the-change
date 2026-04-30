@@ -3,7 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
-import { AnimatedMascot } from '@/app/[locale]/(dashboard)/dashboard/profile/animated-mascot'
+import { AnimatedMascot } from '@/app/[locale]/(tabs)/profile/_components/animated-mascot'
 
 export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
   const accentTheme = getFactionTheme(profile?.faction ?? null)
