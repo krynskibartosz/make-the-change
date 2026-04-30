@@ -496,7 +496,7 @@ const buildCollectiveBravoChallenge = (
     max: progressSnapshot.max,
     reward: 100,
     rewardBadge,
-    href: '/collectif',
+    href: '/impact',
     startDate: dayKey,
     endDate: dayKey,
     status: toChallengeStatus(progressSnapshot),

@@ -1,7 +1,7 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { Flame, Globe, ShoppingBag, User, Users } from 'lucide-react'
+import { Flame, Globe, User, Users } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -16,10 +16,9 @@ type BottomNavItem = {
   isActive: boolean
 }
 
-export function MobileBottomNav({ user }: MobileBottomNavProps) {
+export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const pathname = usePathname()
   const normalizedPath = pathname.replace(/\/+$/, '')
-  const hasAuthenticatedUser = Boolean(user)
   const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
   const isSettingsPage =
     pathname === '/dashboard/settings' || pathname.startsWith('/dashboard/settings/')
@@ -34,53 +33,47 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
     return null
   }
 
-  const isAdventure = pathname === '/aventure' || pathname.startsWith('/aventure/')
-  const isDefis =
-    pathname === '/defis' ||
-    pathname.startsWith('/defis/') ||
+  const isChallenges =
     pathname.startsWith('/challenges') ||
-    isAdventure
-  const isProjects = pathname.startsWith('/projets') || pathname.startsWith('/projects')
-  const isCollective =
+    pathname.startsWith('/defis') ||
+    pathname === '/aventure' ||
+    pathname.startsWith('/aventure/')
+  const isProjects =
+    pathname.startsWith('/projects') ||
+    pathname.startsWith('/projets')
+  const isImpact =
+    pathname.startsWith('/impact') ||
     pathname.startsWith('/collectif') ||
     pathname.startsWith('/community')
-  const isMarket =
-    pathname.startsWith('/marche') ||
-    pathname.startsWith('/products') || pathname.startsWith('/cart') || pathname.startsWith('/checkout')
   const isProfile =
-    pathname.startsWith('/dashboard/profile') ||
     pathname.startsWith('/profile') ||
+    pathname.startsWith('/dashboard/profile') ||
     pathname.startsWith('/u/')
+
   const navLinkClass =
     'flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors'
 
   const navItems: BottomNavItem[] = [
     {
-      href: '/defis',
+      href: '/challenges',
       icon: Flame,
       label: 'Défis',
-      isActive: isDefis,
+      isActive: isChallenges,
     },
     {
-      href: '/projets',
+      href: '/projects',
       icon: Globe,
       label: 'Projets',
       isActive: isProjects,
     },
     {
-      href: '/collectif',
+      href: '/impact',
       icon: Users,
       label: 'Collectif',
-      isActive: isCollective,
+      isActive: isImpact,
     },
     {
-      href: '/marche',
-      icon: ShoppingBag,
-      label: 'Récompense',
-      isActive: isMarket,
-    },
-    {
-      href: hasAuthenticatedUser ? '/dashboard/profile' : '/profile',
+      href: '/profile',
       icon: User,
       label: 'Profil',
       isActive: isProfile,
@@ -89,7 +82,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/80 backdrop-blur-lg pb-[calc(env(safe-area-inset-bottom)+0.35rem)] md:hidden">
-      <nav aria-label={hasAuthenticatedUser ? 'Navigation mobile utilisateur' : 'Navigation mobile'}>
+      <nav aria-label="Navigation mobile">
         <ul className="m-0 flex h-[4.5rem] list-none items-stretch">
           {navItems.map((item) => {
             const Icon = item.icon

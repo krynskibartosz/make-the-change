@@ -1,6 +1,5 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   BookOpen,
@@ -14,10 +13,9 @@ import {
 } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { useActionAuth } from '@/hooks/use-action-auth'
 import { useHaptic } from '@/hooks/use-haptic'
 import { Link } from '@/i18n/navigation'
-import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/lib/faction-theme'
+import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
 import { recordClientMockChallengeCompletion } from '@/lib/mock/mock-challenge-progress'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
@@ -34,7 +32,7 @@ type QuestTheme = {
   progressClassName: string
 }
 
-type AdventureChallengesProps = {
+type ChallengesTabContentProps = {
   initialFaction?: Faction | null
   viewerId?: string | null
   initialDayKey?: string | null
@@ -93,14 +91,14 @@ const FACTION_CONTENT = {
 } as const
 
 
-export function AdventureChallenges({
+export function ChallengesTabContent({
   initialFaction = null,
   viewerId = null,
   initialDayKey = null,
   initialDayLabel = "aujourd'hui",
   initialDailyQuests = [],
   initialMonthlyQuest = null,
-}: AdventureChallengesProps) {
+}: ChallengesTabContentProps) {
   const haptic = useHaptic()
   
   const [dailyQuests, setDailyQuests] = useState<DailyQuest[]>(initialDailyQuests)

@@ -1,22 +1,18 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Bird, Clock, Crown, Droplets, Globe, Gift, Leaf, Lock, PawPrint, Sparkles, Sprout, Star, Target, Trophy, X, type LucideIcon } from 'lucide-react'
+import { Bird, Crown, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
 import {
   getClientPersistedMockChallengeStates,
   recordClientMockCollectiveBravo,
 } from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
-import { getCurrentSeason, getSeasonProgress, getSeasonTimeRemaining } from '@/lib/mock/mock-seasons'
-import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
-import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
-import { useActionAuth } from '@/hooks/use-action-auth'
 import { useHaptic } from '@/hooks/use-haptic'
 import { resolveFactionThemeKey } from '@/lib/faction-theme'
 
@@ -455,92 +451,24 @@ function ImpactCard({
   )
 }
 
-interface AdventureMovementClientProps {
+interface ImpactTabClientProps {
   initialFaction: Faction | null
   viewerId: string | null
   currentDayKey: string
 }
 
-function SeasonCountdown() {
-  const currentSeason = getCurrentSeason()
-  const [timeRemaining, setTimeRemaining] = useState<number>(0)
 
-  useEffect(() => {
-    const updateCountdown = () => {
-      setTimeRemaining(getSeasonTimeRemaining())
-    }
 
-    updateCountdown()
-    const interval = setInterval(updateCountdown, 1000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const formatTimeRemaining = (ms: number) => {
-    const rtf = new Intl.RelativeTimeFormat('fr', {
-      numeric: 'auto',
-      style: 'narrow'
-    })
-    
-    const seconds = Math.floor(ms / 1000)
-    const minutes = Math.floor(seconds / 60)
-    const hours = Math.floor(minutes / 60)
-    const days = Math.floor(hours / 24)
-
-    if (days > 0) {
-      return rtf.format(days, 'day')
-    }
-    if (hours > 0) {
-      return rtf.format(hours, 'hour')
-    }
-    if (minutes > 0) {
-      return rtf.format(minutes, 'minute')
-    }
-    return rtf.format(seconds, 'second')
-  }
-
-  if (!currentSeason) return null
-
-  return (
-    <div className="mb-4 flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <Clock className="h-4 w-4 text-white/40" />
-        <p className="text-[11px] font-medium text-white/40">
-          ⏱️ {currentSeason.name} • {formatTimeRemaining(timeRemaining)} restantes
-        </p>
-      </div>
-      <Link
-        href="/collectif/reward"
-        className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-400 transition-transform hover:scale-110 active:scale-95"
-        aria-label="Voir la récompense du mois"
-      >
-        <Gift className="h-3.5 w-3.5" />
-      </Link>
-    </div>
-  )
-}
-
-export function AdventureMovementClient({
+export function ImpactTabClient({
   initialFaction,
   viewerId,
   currentDayKey,
-}: AdventureMovementClientProps) {
+}: ImpactTabClientProps) {
   const searchParams = useSearchParams()
-  const router = useRouter()
-  const { guardAction } = useActionAuth({
-    viewerId,
-    faction: initialFaction,
-  })
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
   const [persistedBravoIds, setPersistedBravoIds] = useState<string[]>([])
   const [feedFilter, setFeedFilter] = useState<'faction' | 'global'>(initialFaction ? 'faction' : 'global')
 
-  // État utilisateur pour la logique de redirection
-  const session = getClientMockViewerSession()
-  const subscription = session ? getMockSubscription(session.viewerId) : null
-  const hasSubscription = subscription?.status === 'active'
-  const isConnected = !!session
-  
   const collectiveGoal = getCollectiveGoal()
   const factionContributions = getFactionContributions()
   const activeContribution = getFactionContribution(initialFaction)

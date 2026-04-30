@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Gift, Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
+import { Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
 import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
 import { getFactionThemeByKey } from '@/lib/faction-theme'
-import { getClientMockViewerSession } from '@/lib/mock/mock-session'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { Faction } from '@/lib/mock/types'
 
@@ -14,8 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function CollectifRewardPage() {
-  const session = getClientMockViewerSession()
+export default async function ImpactRewardPage() {
+  const session = await getMockViewerSession()
   const initialFaction: Faction | null = session?.faction ?? null
   const subscription = session ? getMockSubscription(session.viewerId) : null
   const hasSubscription = subscription?.status === 'active'
@@ -39,7 +39,7 @@ export default async function CollectifRewardPage() {
         {/* Back button */}
         <div className="absolute left-5 top-8 sm:left-6 z-10">
           <Link
-            href="/collectif"
+            href="/impact"
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
           >
             ←
@@ -194,7 +194,7 @@ export default async function CollectifRewardPage() {
             </Link>
           ) : (
             <Link
-              href="/collectif"
+              href="/impact"
               className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-sm font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
             >
               Retour au collectif

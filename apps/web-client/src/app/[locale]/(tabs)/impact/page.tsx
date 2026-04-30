@@ -1,35 +1,30 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import {
-  AdventurePageFrame,
-} from '@/app/[locale]/(adventure)/aventure/_features/adventure-page-frame'
-import { AdventureMovement } from '@/app/[locale]/(adventure)/aventure/_features/adventure-movement'
+import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
+import { ImpactTabHeader } from './_features/impact-tab-header'
+import { ImpactTab } from './_features/impact-tab'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `Collectif | Make the Change`,
+    title: `Impact | Make the Change`,
   }
 }
 
 const fallbackLoader = (
   <div className="h-[40vh] w-full flex flex-col gap-4 items-center justify-center animate-pulse text-muted-foreground">
     <div className="h-10 w-10 rounded-full border-4 border-lime-400 border-t-transparent animate-spin" />
-    <p className="font-medium">Chargement du collectif...</p>
+    <p className="font-medium">Chargement de l'impact...</p>
   </div>
 )
 
-export default async function CollectifPage() {
-
+export default async function ImpactPage() {
   return (
-    <AdventurePageFrame
-      showStickyHeader={true}
-      showSeeds={false}
-    >
+    <TabScreen header={<ImpactTabHeader />}>
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>
-          <AdventureMovement />
+          <ImpactTab />
         </Suspense>
       </div>
-    </AdventurePageFrame>
+    </TabScreen>
   )
 }

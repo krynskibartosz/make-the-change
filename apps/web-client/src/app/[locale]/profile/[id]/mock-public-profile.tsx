@@ -238,7 +238,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
                 </div>
 
                 <Link
-                  href="/collectif"
+                  href="/impact"
                   className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                 >
                   Rejoindre la quête du mois
