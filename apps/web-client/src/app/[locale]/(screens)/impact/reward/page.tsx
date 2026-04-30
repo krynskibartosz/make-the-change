@@ -187,7 +187,7 @@ export default async function ImpactRewardPage() {
             </Link>
           ) : !hasSubscription ? (
             <Link
-              href="/dashboard/subscription"
+              href="/profile/subscription"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-amber-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(251,191,36,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
               Débloquer les récompenses <Crown className="inline h-[1.2em] w-[1.2em] align-text-bottom" />

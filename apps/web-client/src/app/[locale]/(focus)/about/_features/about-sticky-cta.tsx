@@ -62,7 +62,7 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
     }
 
     if (!userState.hasSubscription) {
-      router.push('/dashboard/subscription')
+      router.push('/profile/subscription')
       return
     }
 

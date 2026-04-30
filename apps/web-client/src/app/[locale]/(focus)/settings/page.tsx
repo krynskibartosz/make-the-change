@@ -199,7 +199,7 @@ export default async function SettingsPage() {
       {
         label: 'Abonnement & Avantages',
         icon: Sparkles,
-        href: '/dashboard/subscription',
+        href: '/profile/subscription',
         iconWrapperClassName: 'bg-lime-500',
         iconClassName: 'text-black',
         highlight: true,
@@ -449,7 +449,7 @@ export default async function SettingsPage() {
     {
       label: 'Abonnement & Avantages',
       icon: Sparkles,
-      href: '/dashboard/subscription',
+      href: '/profile/subscription',
       iconWrapperClassName: 'bg-lime-500',
       iconClassName: 'text-black',
       highlight: true,
