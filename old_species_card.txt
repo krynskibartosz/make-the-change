@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import type { SpeciesContext } from '@/types/context'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -10,7 +10,7 @@ interface SpeciesCardEnhancedProps {
 	onLockedClick?: (species: SpeciesContext) => void
 }
 
-// ─── Rareté déduite du statut de conservation IUCN ───────────────────────────
+// ÔöÇÔöÇÔöÇ Raret├® d├®duite du statut de conservation IUCN ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 type Rarity = 'common' | 'rare' | 'legendary'
 
 function getRarity(status: string | null | undefined): Rarity {
@@ -28,33 +28,33 @@ function getRarity(status: string | null | undefined): Rarity {
 	}
 }
 
-// ─── Emoji silhouette basé sur le statut de conservation ─────────────────────
+// ÔöÇÔöÇÔöÇ Emoji silhouette bas├® sur le statut de conservation ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 function getSpeciesEmoji(
 	status: string | null | undefined,
 	name: string
 ): string {
 	const s = status?.toUpperCase()
 	// Legendary / critically endangered
-	if (s === 'CR' || s === 'EW' || s === 'EX') return '🦁'
-	if (s === 'EN') return '🐺'
-	if (s === 'VU') return '🦉'
-	if (s === 'NT') return '🦊'
+	if (s === 'CR' || s === 'EW' || s === 'EX') return '­ƒªü'
+	if (s === 'EN') return '­ƒÉ║'
+	if (s === 'VU') return '­ƒªë'
+	if (s === 'NT') return '­ƒªè'
 	// Fallback based on name hints
 	const n = name.toLowerCase()
 	if (n.includes('abeille') || n.includes('bee') || n.includes('apis'))
-		return '🐝'
+		return '­ƒÉØ'
 	if (n.includes('aigle') || n.includes('eagle') || n.includes('hawk'))
-		return '🦅'
-	if (n.includes('ours') || n.includes('bear')) return '🐻'
-	if (n.includes('loup') || n.includes('wolf')) return '🐺'
-	if (n.includes('renard') || n.includes('fox')) return '🦊'
-	if (n.includes('cerf') || n.includes('deer')) return '🦌'
-	if (n.includes('lynx') || n.includes('chat') || n.includes('cat')) return '🐱'
+		return '­ƒªà'
+	if (n.includes('ours') || n.includes('bear')) return '­ƒÉ╗'
+	if (n.includes('loup') || n.includes('wolf')) return '­ƒÉ║'
+	if (n.includes('renard') || n.includes('fox')) return '­ƒªè'
+	if (n.includes('cerf') || n.includes('deer')) return '­ƒªî'
+	if (n.includes('lynx') || n.includes('chat') || n.includes('cat')) return '­ƒÉ▒'
 	if (n.includes('baleine') || n.includes('whale') || n.includes('dauphin'))
-		return '🐋'
-	if (n.includes('tortue') || n.includes('turtle')) return '🐢'
-	if (n.includes('papillon') || n.includes('butterfly')) return '🦋'
-	return '🌿'
+		return '­ƒÉï'
+	if (n.includes('tortue') || n.includes('turtle')) return '­ƒÉó'
+	if (n.includes('papillon') || n.includes('butterfly')) return '­ƒªï'
+	return '­ƒî┐'
 }
 
 const RARITY_STYLES: Record<
@@ -74,7 +74,7 @@ const RARITY_STYLES: Record<
 	legendary: {
 		border: 'border-white/5',
 		badge: 'bg-amber-400/15 text-amber-400 border-amber-400/20',
-		label: 'Légendaire',
+		label: 'L├®gendaire',
 	},
 }
 

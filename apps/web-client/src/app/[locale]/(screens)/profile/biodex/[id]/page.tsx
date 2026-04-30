@@ -81,7 +81,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
             </p>
             {species.description_scientific && (
               <Link
-                href={`/biodex/${id}/story`}
+                href={`/profile/biodex/${id}/story`}
                 className="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300"
               >
                 <BookOpen className="h-4 w-4" />

@@ -153,7 +153,7 @@ export default function SeedsClient({ balance, transactions }: SeedsClientProps)
               return (
                 <Link
                   key={evolution.id}
-                  href="/biodex"
+                  href="/profile/biodex"
                   className="flex-shrink-0 w-48 snap-start"
                 >
                   <motion.div

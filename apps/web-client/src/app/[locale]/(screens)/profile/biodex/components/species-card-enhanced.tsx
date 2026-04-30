@@ -157,7 +157,7 @@ export function SpeciesCardEnhanced({
 	if (!isLocked) {
 		return (
 			<Link
-				href={`/biodex/${species.id}`}
+				href={`/profile/biodex/${species.id}`}
 				className='block w-full text-left'
 			>
 				{cardInner}

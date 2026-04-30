@@ -117,7 +117,7 @@ export function SanctuaryContent({
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-black text-white">Galerie du Biodex</h2>
-          <Link href="/biodex" className="text-sm font-semibold text-white/60 hover:text-white">
+          <Link href="/profile/biodex" className="text-sm font-semibold text-white/60 hover:text-white">
             Voir tout →
           </Link>
         </div>
@@ -129,7 +129,7 @@ export function SanctuaryContent({
             return (
               <Link
                 key={species.id}
-                href={species.isUnlocked ? `/biodex/${species.id}` : "/onboarding/step-0"}
+                href={species.isUnlocked ? `/profile/biodex/${species.id}` : "/onboarding/step-0"}
                 className={cn(
                   'relative flex aspect-[4/5] w-40 shrink-0 snap-center flex-col overflow-hidden rounded-3xl border p-3 transition-transform duration-150 active:scale-[0.97]',
                   species.isUnlocked ? 'bg-background/50 border-white/5' : 'bg-white/5 border-white/5'

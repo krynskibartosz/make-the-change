@@ -135,7 +135,7 @@ export default async function ProfilePage() {
             {unlockedSpecies.map((species) => (
               <Link
                 key={species.id}
-                href={`/biodex/${species.id}`}
+                href={`/profile/biodex/${species.id}`}
                 className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4"
               >
                 <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-400">
@@ -173,7 +173,7 @@ export default async function ProfilePage() {
           </div>
 
           <Link
-            href="/biodex"
+            href="/profile/biodex"
             className="mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors text-lime-400"
           >
             Voir la liste complète du BioDex

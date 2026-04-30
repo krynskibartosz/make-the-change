@@ -3,7 +3,7 @@
 import { ArrowLeft, Leaf, Lock, Sparkles, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
-import { SpeciesCardEnhanced } from '@/app/[locale]/biodex/components/species-card-enhanced'
+import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/components/species-card-enhanced'
 import type { SpeciesContext } from '@/types/context'
 import { Link } from '@/i18n/navigation'
 import { FactionCarousel } from '@/app/[locale]/(auth)/_features/faction-carousel'
@@ -75,11 +75,11 @@ export function BiodexClient({ species }: BiodexClientProps) {
   const handleFactionSelect = async (faction: { id: string; value: string; name: string; mascotName: string; description: string; colorTheme: string; accentColor: string; accentText: string; buttonText: string; image: string }) => {
     const formData = new FormData()
     formData.append('faction', faction.value)
-    formData.append('returnTo', '/biodex')
+    formData.append('returnTo', '/profile/biodex')
     
     sessionStorage.setItem('faction-onboarding-dismissed', '1')
     setShowFactionModal(false)
-    router.push('/biodex')
+    router.push('/profile/biodex')
   }
 
   const sortedSpecies = useMemo(() => {

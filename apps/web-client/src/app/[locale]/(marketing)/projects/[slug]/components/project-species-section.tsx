@@ -49,7 +49,7 @@ function SpeciesCard({ species }: { species: ProjectSpecies }) {
           </Badge>
         </div>
         <div className="mt-2">
-          <Link href={`/biodex/${species.id}`}>
+          <Link href={`/profile/biodex/${species.id}`}>
             <Button size="sm" variant="outline" className="w-full">
               Voir dans le BioDex →
             </Button>

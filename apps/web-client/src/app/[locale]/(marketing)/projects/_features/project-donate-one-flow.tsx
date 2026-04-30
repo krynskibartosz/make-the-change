@@ -262,7 +262,7 @@ export function ProjectDonateOneFlow({
       setIsSendingMagicLink(false)
       setClaimSaved(true)
       setTimeout(() => {
-        router.push('/biodex')
+        router.push('/profile/biodex')
       }, 2000)
     }, 1200)
   }
@@ -679,10 +679,10 @@ export function ProjectDonateOneFlow({
             type="button"
             onClick={() => {
               if (discoveredSpeciesId) {
-                router.push(`/biodex/${discoveredSpeciesId}`)
+                router.push(`/profile/biodex/${discoveredSpeciesId}`)
                 return
               }
-              router.push('/biodex')
+              router.push('/profile/biodex')
             }}
             className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
           >
