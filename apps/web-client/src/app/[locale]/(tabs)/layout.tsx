@@ -1,5 +1,5 @@
 import { Suspense, type PropsWithChildren } from 'react'
-import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
+import { MobileBottomNav } from '@/app/[locale]/(tabs)/_components/mobile-bottom-nav'
 
 export default function TabsLayout({ children }: PropsWithChildren) {
   return (

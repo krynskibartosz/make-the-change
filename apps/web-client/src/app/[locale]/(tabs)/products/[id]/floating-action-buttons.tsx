@@ -4,7 +4,7 @@ import { Button } from '@make-the-change/core/ui'
 import { Clock, Flame } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
-import { QuantityStepper } from '@/components/ui/quantity-stepper'
+import { QuantityStepper } from '@/app/[locale]/(tabs)/products/_components/quantity-stepper'
 import { formatCurrency } from '@/lib/utils'
 
 interface ProductCartPayload {

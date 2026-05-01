@@ -2,7 +2,7 @@
 
 import { type Brand, AppThemeProvider as ThemeProvider } from '@make-the-change/core'
 import { Suspense, type PropsWithChildren } from 'react'
-import { SetupGuard } from '@/components/app/setup-guard'
+import { SetupGuard } from '@/app/_components/setup-guard'
 import { Toaster } from '@/components/ui/toaster'
 
 interface ProvidersProps extends PropsWithChildren {
