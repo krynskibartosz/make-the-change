@@ -16,7 +16,7 @@ import {
   academyRepository,
   getDefaultAcademyProgress,
   type AcademyProgress,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 
 export default function KinnuV2Page() {

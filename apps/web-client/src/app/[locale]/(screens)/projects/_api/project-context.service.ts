@@ -1,12 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { isRecord, asString, asNumber, asStringArray } from '@/lib/type-guards'
-import type { 
-  ProjectContext, 
-  ProjectSpecies, 
-  ProjectChallenge, 
-  ProducerProduct, 
-  ProjectImpact 
-} from '@/types/context'
+import type { ProjectContext, ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 
 export async function getProjectContext(slug: string): Promise<ProjectContext | null> {
   const supabase = await createClient()

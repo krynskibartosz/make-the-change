@@ -57,13 +57,7 @@ import {
   MOCK_SPECIES_OSMIA_ID,
   MOCK_SPECIES_SYRPHID_ID,
 } from '@/lib/mock/mock-ids'
-import type {
-  DonationOption,
-  ProducerProduct,
-  ProjectChallenge,
-  ProjectImpact,
-  ProjectSpecies,
-} from '@/types/context'
+import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 
 type MockProjectProducer = {
   id: string

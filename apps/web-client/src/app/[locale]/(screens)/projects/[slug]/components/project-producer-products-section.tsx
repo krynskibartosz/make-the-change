@@ -1,6 +1,6 @@
 // Producer products carousel component
 import { Package } from 'lucide-react'
-import type { ProducerProduct } from '@/types/context'
+import type { ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 

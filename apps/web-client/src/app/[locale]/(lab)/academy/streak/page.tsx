@@ -11,7 +11,7 @@ import {
   getDefaultAcademyProgress,
   getMonthActivityDays,
   type AcademyProgress,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { cn } from '@/lib/utils'
 
 const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D']

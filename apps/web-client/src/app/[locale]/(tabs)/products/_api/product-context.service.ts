@@ -1,11 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { isRecord, asString, asNumber, asStringArray } from '@/lib/type-guards'
-import type { 
-  ProductContext, 
-  SupportedProject, 
-  LinkedSpecies, 
-  ProductImpact 
-} from '@/types/context'
+import type { ProductContext, SupportedProject, LinkedSpecies, ProductImpact } from '@/app/[locale]/(tabs)/products/_types/product'
 
 const toNullableNumber = (value: unknown): number | null => {
   if (value === null || value === undefined) {

@@ -1,5 +1,5 @@
 import { MOCK_PROJECTS } from './mock-projects'
-import type { DonationOption } from '@/types/context'
+import type { DonationOption } from '@/app/[locale]/(screens)/projects/_types/project'
 
 export const getDonationOptionsByProjectId = (projectId: string): DonationOption[] => {
   const project = MOCK_PROJECTS.find((p) => p.id === projectId)

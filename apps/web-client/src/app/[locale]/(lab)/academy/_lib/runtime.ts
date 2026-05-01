@@ -4,7 +4,7 @@ import type {
   AcademyLesson as LegacyLesson,
   AcademyQuestionPool as LegacyQuestionPool,
   AcademyUnit as LegacyUnit,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { generateLessonExercises } from './lesson-generator'
 import type {
   AcademyChapterDefinition,

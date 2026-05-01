@@ -9,7 +9,7 @@ import { ProjectProducerProductsSection } from './project-producer-products-sect
 import { ProjectAssociatedProjectsSection } from './project-associated-projects-section'
 import { ProjectSpeciesImpactSection } from './project-species-impact-section'
 import { ProjectUnlockSpeciesSection } from './project-unlock-species-section'
-import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/types/context'
+import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import type { RelatedProject } from '../project-detail-data'
 
 const isVideoMedia = (source: string) => /\.(mp4|webm|ogg|mov|m4v)$/i.test(source)

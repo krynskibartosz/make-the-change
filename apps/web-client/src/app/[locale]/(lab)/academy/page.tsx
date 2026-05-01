@@ -50,7 +50,7 @@ import {
   type AcademyProgress,
   type AcademyUnitKind,
   type AcademyUnitWithStatus,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { LivesCounter } from '@/app/[locale]/(lab)/_components/lives-counter'
 import { cn, formatPoints } from '@/lib/utils'

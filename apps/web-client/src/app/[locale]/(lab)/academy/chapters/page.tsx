@@ -13,7 +13,7 @@ import {
   getCursusOptions,
   getDefaultAcademyProgress,
   type AcademyProgress,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { cn } from '@/lib/utils'
 
 function CursusSummary({

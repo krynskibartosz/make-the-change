@@ -34,7 +34,7 @@ import {
   getEcosystemById,
 } from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
-import type { SpeciesContext } from '@/types/context'
+import type { SpeciesContext } from '@/types/species'
 
 type RelationLayerKey = 'all' | 'trophic' | 'habitat' | 'symbiose' | 'protege' | 'menace'
 

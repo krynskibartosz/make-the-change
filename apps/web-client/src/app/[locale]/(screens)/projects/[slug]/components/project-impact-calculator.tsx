@@ -1,5 +1,5 @@
 import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish } from 'lucide-react'
-import type { DonationOption, ProjectImpact } from '@/types/context'
+import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 
 type ImpactMode = 'project' | 'checkout'
 

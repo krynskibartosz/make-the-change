@@ -16,7 +16,7 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-calculator'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
-import type { DonationOption } from '@/types/context'
+import type { DonationOption } from '@/app/[locale]/(screens)/projects/_types/project'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'

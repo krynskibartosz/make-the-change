@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@make-the-change/core/ui'
-import type { ProjectImpact } from '@/types/context'
+import type { ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 
 interface ProjectImpactSectionProps {
   impact: ProjectImpact | null

@@ -48,7 +48,7 @@ import {
   MOCK_SPECIES_APIS_LIGUSTICA_ID,
 } from '@/lib/mock/mock-ids'
 import type { Faction } from '@/lib/mock/types'
-import type { SpeciesContext } from '@/types/context'
+import type { SpeciesContext } from '@/types/species'
 
 const createUserStatus = (isUnlocked: boolean, level: number) => ({
   isUnlocked,

@@ -1,4 +1,4 @@
-import type { SpeciesContext } from '@/types/context'
+import type { SpeciesContext } from '@/types/species'
 import {
   MOCK_CHALLENGE_DAILY_HARVEST_ID,
   MOCK_CHALLENGE_ECO_FACT_ID,

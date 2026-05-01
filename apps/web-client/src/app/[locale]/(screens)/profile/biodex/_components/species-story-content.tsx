@@ -1,4 +1,4 @@
-import type { SpeciesContext } from '@/types/context'
+import type { SpeciesContext } from '@/types/species'
 
 interface SpeciesStoryContentProps {
   species: SpeciesContext

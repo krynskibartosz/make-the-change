@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { Clock, Gift } from 'lucide-react'
-import { getCurrentSeason, getSeasonTimeRemaining } from '@/lib/mock/mock-seasons'
+import { getCurrentSeason, getSeasonTimeRemaining } from '@/app/[locale]/(tabs)/impact/_lib/mock-seasons'
 
 export function ImpactTabHeader() {
   const currentSeason = getCurrentSeason()

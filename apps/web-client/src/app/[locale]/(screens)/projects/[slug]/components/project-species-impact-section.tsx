@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@make-the-change/core/ui'
-import type { ProjectSpecies } from '@/types/context'
+import type { ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 
 interface ProjectSpeciesImpactSectionProps {
   projectType?: string | null

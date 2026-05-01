@@ -9,7 +9,7 @@ import {
   MOCK_ACADEMY_VIEWER_ID,
   academyRepository,
   getDefaultAcademyProgress,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import {
   MAX_LIVES,
   SEEDS_COST,

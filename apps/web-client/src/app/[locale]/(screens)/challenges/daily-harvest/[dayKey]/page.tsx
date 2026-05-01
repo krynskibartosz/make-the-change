@@ -2,8 +2,7 @@
 
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, Suspense } from 'react'
-import { ArrowLeft, CheckCircle2, Lock, Sparkles, Sprout, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowLeft, Sprout } from 'lucide-react'
 
 import { useHaptic } from '@/hooks/use-haptic'
 import { Link } from '@/i18n/navigation'
@@ -175,10 +174,10 @@ function DailyHarvestContent() {
             background: accentTheme.key === 'pollinisateurs'
               ? 'linear-gradient(to top, rgba(251, 191, 36, 0.3) 0%, transparent 100%)'
               : accentTheme.key === 'forets'
-              ? 'linear-gradient(to top, rgba(52, 211, 153, 0.3) 0%, transparent 100%)'
-              : accentTheme.key === 'mers'
-              ? 'linear-gradient(to top, rgba(59, 130, 246, 0.3) 0%, transparent 100%)'
-              : 'linear-gradient(to top, rgba(163, 230, 53, 0.3) 0%, transparent 100%)',
+                ? 'linear-gradient(to top, rgba(52, 211, 153, 0.3) 0%, transparent 100%)'
+                : accentTheme.key === 'mers'
+                  ? 'linear-gradient(to top, rgba(59, 130, 246, 0.3) 0%, transparent 100%)'
+                  : 'linear-gradient(to top, rgba(163, 230, 53, 0.3) 0%, transparent 100%)',
           }}
         />
 
@@ -191,10 +190,10 @@ function DailyHarvestContent() {
             background: accentTheme.key === 'pollinisateurs'
               ? 'rgba(251, 191, 36, 1)'
               : accentTheme.key === 'forets'
-              ? 'rgba(52, 211, 153, 1)'
-              : accentTheme.key === 'mers'
-              ? 'rgba(59, 130, 246, 1)'
-              : 'rgba(163, 230, 53, 1)',
+                ? 'rgba(52, 211, 153, 1)'
+                : accentTheme.key === 'mers'
+                  ? 'rgba(59, 130, 246, 1)'
+                  : 'rgba(163, 230, 53, 1)',
           }}
         />
 
@@ -242,10 +241,10 @@ function DailyHarvestContent() {
                       accentTheme.key === 'pollinisateurs'
                         ? '#FBBF24'
                         : accentTheme.key === 'forets'
-                        ? '#34D399'
-                        : accentTheme.key === 'mers'
-                        ? '#3B82F6'
-                        : '#A3E635'
+                          ? '#34D399'
+                          : accentTheme.key === 'mers'
+                            ? '#3B82F6'
+                            : '#A3E635'
                     }
                     strokeWidth='8'
                     strokeLinecap='round'
@@ -256,10 +255,10 @@ function DailyHarvestContent() {
                       filter: accentTheme.key === 'pollinisateurs'
                         ? 'drop-shadow(0 0 8px rgba(251,191,36,0.5))'
                         : accentTheme.key === 'forets'
-                        ? 'drop-shadow(0 0 8px rgba(52,211,153,0.5))'
-                        : accentTheme.key === 'mers'
-                        ? 'drop-shadow(0 0 8px rgba(59,130,246,0.5))'
-                        : 'drop-shadow(0 0 8px rgba(163,230,53,0.5))',
+                          ? 'drop-shadow(0 0 8px rgba(52,211,153,0.5))'
+                          : accentTheme.key === 'mers'
+                            ? 'drop-shadow(0 0 8px rgba(59,130,246,0.5))'
+                            : 'drop-shadow(0 0 8px rgba(163,230,53,0.5))',
                     }}
                   />
                 </svg>

@@ -11,7 +11,7 @@ import {
   academyRepository,
   getDefaultAcademyProgress,
   type AcademyProgress,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { MAX_LIVES, isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { cn } from '@/lib/utils'
 

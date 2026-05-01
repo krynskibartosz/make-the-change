@@ -1,13 +1,7 @@
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import type {
-  DonationOption,
-  ProducerProduct,
-  ProjectChallenge,
-  ProjectImpact,
-  ProjectSpecies,
-} from '@/types/context'
+import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { getMockProjectBySlug, getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
 
 export type ProjectProducer = {

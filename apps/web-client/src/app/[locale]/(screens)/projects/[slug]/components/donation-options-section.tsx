@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/navigation'
-import type { DonationOption } from '@/types/context'
+import type { DonationOption } from '@/app/[locale]/(screens)/projects/_types/project'
 
 type DonationOptionsSectionProps = {
   options: DonationOption[]

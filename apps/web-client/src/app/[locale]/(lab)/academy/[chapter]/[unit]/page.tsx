@@ -49,7 +49,7 @@ import {
   type AcademyStoryExercise,
   type AcademySwipeExercise,
   type AcademyUnit,
-} from '@/lib/mock/mock-academy'
+} from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { cn } from '@/lib/utils'
 

@@ -3,14 +3,7 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSpeciesContext, getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
 import { isRecord, asString, asNumber, asStringArray } from '@/lib/type-guards'
-import type { 
-  SpeciesContext, 
-  AssociatedProject, 
-  AssociatedProducer, 
-  AssociatedChallenge, 
-  UserSpeciesStatus,
-  SpeciesFilters
-} from '@/types/context'
+import type { SpeciesContext, AssociatedProject, AssociatedProducer, AssociatedChallenge, UserSpeciesStatus, SpeciesFilters } from '@/types/species'
 
 const toNullableNumber = (value: unknown): number | null => {
   if (value === null || value === undefined) {
