@@ -1,7 +1,7 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState, type UIEvent } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState, type UIEvent, Suspense } from 'react'
 import { ArrowLeft, BookOpen, ChevronRight, CheckCircle2, Lock, Sprout, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -219,7 +219,8 @@ function EcoFactArticleView({
   )
 }
 
-export default function EcoFactPage({ params }: { params: { dayKey: string; locale: string } }) {
+function EcoFactContent() {
+  const params = useParams<{ dayKey: string; locale: string }>()
   const searchParams = useSearchParams()
   const haptic = useHaptic()
   const contentRef = useRef<HTMLDivElement | null>(null)
@@ -637,5 +638,13 @@ export default function EcoFactPage({ params }: { params: { dayKey: string; loca
         onClose={() => setIsArticleOpen(false)}
       />
     </div>
+  )
+}
+
+export default function EcoFactPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0B0F15]" />}>
+      <EcoFactContent />
+    </Suspense>
   )
 }

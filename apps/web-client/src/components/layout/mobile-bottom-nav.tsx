@@ -1,7 +1,7 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { Flame, Globe, User, Users } from 'lucide-react'
+import { Flame, Globe, User, Users, Gift } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -26,6 +26,7 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const isProjects = pathname.startsWith('/projects')
   const isImpact = pathname.startsWith('/impact')
   const isProfile = pathname.startsWith('/profile')
+  const isProducts = pathname.startsWith('/products')
 
   const navLinkClass =
     'flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors'
@@ -48,6 +49,12 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
       icon: Users,
       label: 'Collectif',
       isActive: isImpact,
+    },
+    {
+      href: '/products',
+      icon: Gift,
+      label: 'Récompenses',
+      isActive: isProducts,
     },
     {
       href: '/profile',

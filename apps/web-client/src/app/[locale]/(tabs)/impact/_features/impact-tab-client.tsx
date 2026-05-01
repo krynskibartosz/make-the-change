@@ -355,7 +355,7 @@ function ImpactCard({
           )}
         />
       ) : factionImage && event.isSystem ? (
-        <Link href={`/sanctuary/${factionThemeKey}`} prefetch={false} className="block transition-transform hover:scale-110 active:scale-95">
+        <Link href={`/impact/sanctuary/${factionThemeKey}`} prefetch={false} className="block transition-transform hover:scale-110 active:scale-95">
           <img
             src={factionImage}
             alt={event.faction}
@@ -600,7 +600,7 @@ export function ImpactTabClient({
                     )}
 
                     {/* Mascotte */}
-                    <Link href={`/sanctuary/${contribution.themeKey}`} className={cn(sizeClass, 'relative drop-shadow-2xl transition-transform hover:scale-110 active:scale-95')}>
+                    <Link href={`/impact/sanctuary/${contribution.themeKey}`} className={cn(sizeClass, 'relative drop-shadow-2xl transition-transform hover:scale-110 active:scale-95')}>
                       <img
                         src={mascotSrc}
                         alt={contribution.label}

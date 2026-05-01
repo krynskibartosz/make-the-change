@@ -1,7 +1,7 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState, Suspense } from 'react'
 import { ArrowLeft, CheckCircle2, Lock, Sparkles, Sprout, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -33,7 +33,8 @@ const FACTION_CONTENT = {
   },
 } as const
 
-export default function DailyHarvestPage({ params }: { params: { dayKey: string; locale: string } }) {
+function DailyHarvestContent() {
+  const params = useParams<{ dayKey: string; locale: string }>()
   const searchParams = useSearchParams()
   const haptic = useHaptic()
   const [phase, setPhase] = useState<'idle' | 'charging' | 'revealed'>('idle')
@@ -365,5 +366,13 @@ export default function DailyHarvestPage({ params }: { params: { dayKey: string;
         )}
       </div>
     </div>
+  )
+}
+
+export default function DailyHarvestPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0B0F15]" />}>
+      <DailyHarvestContent />
+    </Suspense>
   )
 }
