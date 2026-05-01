@@ -64,7 +64,7 @@ export const ProfileHeader = ({
       // 1. Upload to Storage
       const result = await uploadImages(formData)
 
-      if (result.success && result.urls && result.urls.length > 0) {
+      if (result.success && result.urls?.length > 0) {
         const newUrl = result.urls[0]
 
         // 2. Update DB
