@@ -22,8 +22,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -48,8 +46,8 @@ jobs:
 
       - name: Supabase type drift gate
         run: |
-          if [ -z "${SUPABASE_PROJECT_ID:-}" ] || [ -z "${SUPABASE_ACCESS_TOKEN:-}" ]; then
-            echo "Skipping Supabase drift gate: SUPABASE_PROJECT_ID or SUPABASE_ACCESS_TOKEN is missing."
+          if [ -z "${SUPABASE_PROJECT_ID:-}" ]; then
+            echo "Skipping Supabase drift gate: SUPABASE_PROJECT_ID is missing."
             exit 0
           fi
           pnpm --filter @make-the-change/core db:types:check
