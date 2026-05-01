@@ -117,6 +117,3 @@ export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProp
     </section>
   )
 }
->
-  )
-}

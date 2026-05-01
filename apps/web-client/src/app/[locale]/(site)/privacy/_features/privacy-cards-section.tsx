@@ -75,10 +75,6 @@ export function PrivacyCardsSection({
           {contact.cta}
         </Link>
       </aside>
-    </section>
-  )
-}
-    </div>
     </div>
   )
 }

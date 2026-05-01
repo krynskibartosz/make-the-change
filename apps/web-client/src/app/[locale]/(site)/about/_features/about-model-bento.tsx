@@ -148,6 +148,3 @@ export function AboutModelBento({ overline, gamification, circular, transparency
     </section>
   )
 }
-on>
-  )
-}

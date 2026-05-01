@@ -166,6 +166,3 @@ export function AboutTeamCarousel({ title, subtitle, members }: AboutTeamProps) 
     </section>
   )
 }
-on>
-  )
-}
