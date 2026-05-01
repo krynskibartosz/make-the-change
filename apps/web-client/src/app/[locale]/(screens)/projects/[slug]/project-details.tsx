@@ -5,7 +5,7 @@ import { MarketingCtaBand } from '@/app/[locale]/(site)/_features/marketing-cta-
 import { MarketingHeroShell } from '@/app/[locale]/(site)/_features/marketing-hero-shell'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
-import { getProjectContext } from '@/lib/api/project-context.service'
+import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
 import { EcosystemCard } from '@/app/[locale]/(screens)/profile/investments/_components/ecosystem-card'
