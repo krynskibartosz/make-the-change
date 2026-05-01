@@ -236,7 +236,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                   <input
                     aria-label="Couleur Primaire"
                     aria-labelledby="base-ui-_r_1_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 px-4 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 text-sm px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
                     data-filled=""
                     id="--primary-token"
                     name="--primary"
@@ -262,7 +262,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                 >
                   <input
                     aria-labelledby="base-ui-_r_1_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     data-filled=""
                     id="--primary-token"
                     name="--primary"
@@ -326,7 +326,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                   <input
                     aria-label="Couleur Secondaire"
                     aria-labelledby="base-ui-_r_7_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 px-4 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 text-sm px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
                     data-filled=""
                     id="--secondary-token"
                     name="--secondary"
@@ -352,7 +352,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                 >
                   <input
                     aria-labelledby="base-ui-_r_7_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     data-filled=""
                     id="--secondary-token"
                     name="--secondary"
@@ -416,7 +416,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                   <input
                     aria-label="Couleur Accent"
                     aria-labelledby="base-ui-_r_d_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 px-4 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 text-sm px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
                     data-filled=""
                     id="--accent-token"
                     name="--accent"
@@ -442,7 +442,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                 >
                   <input
                     aria-labelledby="base-ui-_r_d_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     data-filled=""
                     id="--accent-token"
                     name="--accent"
@@ -506,7 +506,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                   <input
                     aria-label="Couleur Fond"
                     aria-labelledby="base-ui-_r_j_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 px-4 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 text-sm px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
                     data-filled=""
                     id="--background-token"
                     name="--background"
@@ -532,7 +532,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                 >
                   <input
                     aria-labelledby="base-ui-_r_j_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     data-filled=""
                     id="--background-token"
                     name="--background"
@@ -596,7 +596,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                   <input
                     aria-label="Couleur Texte"
                     aria-labelledby="base-ui-_r_p_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 px-4 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 text-sm px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
                     data-filled=""
                     id="--foreground-token"
                     name="--foreground"
@@ -622,7 +622,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                 >
                   <input
                     aria-labelledby="base-ui-_r_p_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     data-filled=""
                     id="--foreground-token"
                     name="--foreground"
@@ -686,7 +686,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                   <input
                     aria-label="Couleur Bordure"
                     aria-labelledby="base-ui-_r_v_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 px-4 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90 text-sm px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:border-primary/70 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 h-full w-full cursor-pointer !rounded-2xl !border-0 !bg-transparent !p-0 opacity-0"
                     data-filled=""
                     id="--border-token"
                     name="--border"
@@ -712,7 +712,7 @@ exports[`ThemeBuilder layout > keeps the rendered structure stable 1`] = `
                 >
                   <input
                     aria-labelledby="base-ui-_r_v_"
-                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                    class="flex rounded-2xl transition-all duration-300 bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] dark:dark:bg-background/90 h-11 px-4 text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-primary/30 focus-visible:shadow-md disabled:cursor-not-allowed disabled:opacity-50 hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95 w-full !h-auto !rounded-none !border-0 !bg-transparent !px-0 !py-0 text-sm font-black tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
                     data-filled=""
                     id="--border-token"
                     name="--border"
