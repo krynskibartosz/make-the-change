@@ -6,19 +6,19 @@ export type BrandGuidelinePageSlug =
   | 'voice'
   | 'assets'
 
-export interface BrandGuidelineNavItem {
+export type BrandGuidelineNavItem = {
   slug: BrandGuidelinePageSlug
   href: string
   labelKey: string
 }
 
-export interface BrandGuidelineNavGroup {
+export type BrandGuidelineNavGroup = {
   id: string
   labelKey: 'foundation' | 'identity' | 'writing' | 'resources'
   items: readonly BrandGuidelinePageSlug[]
 }
 
-export interface BrandGuidelineTheme {
+export type BrandGuidelineTheme = {
   heroClass: string
   headingClass: string
   paragraphClass: string

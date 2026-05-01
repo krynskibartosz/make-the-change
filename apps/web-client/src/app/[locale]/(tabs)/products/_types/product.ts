@@ -1,5 +1,5 @@
 // Product Context Types
-export interface ProductContext {
+export type ProductContext = {
   id: string
   name_default: string
   slug: string
@@ -21,7 +21,7 @@ export interface ProductContext {
   user_actions?: any
 }
 
-export interface SupportedProject {
+export type SupportedProject = {
   id: string
   name: string
   impactPercentage: number
@@ -29,7 +29,7 @@ export interface SupportedProject {
   status: string
 }
 
-export interface LinkedSpecies {
+export type LinkedSpecies = {
   id: string
   name: string
   icon: string | null
@@ -37,7 +37,7 @@ export interface LinkedSpecies {
   impact: string | null
 }
 
-export interface ProductImpact {
+export type ProductImpact = {
   environmental: {
     co2Footprint: number | null
     waterUsage: number | null

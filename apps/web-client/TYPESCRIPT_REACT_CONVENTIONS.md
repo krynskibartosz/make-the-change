@@ -32,26 +32,12 @@ Scope: `apps/web-client`
 <script type="application/ld+json">{JSON.stringify(payload)}</script>
 ```
 
-## 7) Before/After examples from this repo
-- `ComponentProps*` + native prop passthrough:
-  - Before: custom props duplicated manually, no native element passthrough.
-  - After: `src/components/ui/page-hero.tsx` and `src/components/ui/section-container.tsx` use `ComponentPropsWithoutRef` + `Omit` for reusable typed wrappers.
-- Avoid HTML attribute collisions when extending intrinsic props:
-  - Before: `title` prop conflict on section wrappers possible.
-  - After: `src/app/[locale]/(marketing)/_features/marketing-cta-band.tsx` uses `Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'title'>`.
-- Utility types with real value (not cosmetic):
-  - Before: ad-hoc query parsing.
-  - After: `src/app/[locale]/(marketing)/products/_features/query-state.ts` uses `Extract`, `Exclude`, `NoInfer` for parse/build safety and fallback constraints.
-- JSON-LD without dangerous HTML injection:
-  - Before: raw HTML injection for script tags.
-  - After: `src/app/[locale]/(marketing)/products/[id]/product-details.tsx` and `src/app/[locale]/(marketing)/projects/[slug]/project-details.tsx` render JSON-LD via `<script>{json}</script>`.
-
-## 8) tsconfig strictness
+## 7) tsconfig strictness
 - `strict` remains enabled.
 - `verbatimModuleSyntax` enabled.
 - `noUncheckedIndexedAccess` enabled.
 
-## 9) CI and local gates
+## 8) CI and local gates
 - Mandatory local checks:
   - `pnpm --filter @make-the-change/web-client type-check`
   - `pnpm --filter @make-the-change/web-client lint`
@@ -59,13 +45,3 @@ Scope: `apps/web-client`
 - Metrics:
   - `pnpm --filter @make-the-change/web-client ts:metrics`
   - `pnpm --filter @make-the-change/web-client ts:metrics:check`
-
-## 10) Canonical examples in repo
-- Home view-model extraction: `src/app/[locale]/(marketing)/(home)/_features/home.view-model.ts`
-- Home page wiring: `src/app/[locale]/(marketing)/(home)/page.tsx`
-- Dashboard save/status typing cleanup:
-  - `src/app/[locale]/(dashboard)/_features/lib/hooks/use-optimistic-auto-save.ts`
-  - `src/app/[locale]/(dashboard)/_features/save-status-indicator.tsx`
-- Supabase query cleanup examples:
-  - `src/app/[locale]/(marketing)/products/_features/get-products.ts`
-  - `src/app/[locale]/(dashboard)/dashboard/orders/page.tsx`

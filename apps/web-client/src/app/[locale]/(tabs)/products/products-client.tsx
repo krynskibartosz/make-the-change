@@ -51,7 +51,7 @@ import {
 } from '@/app/[locale]/(tabs)/products/_features/query-state'
 import { ClientCatalogProductCard } from './components/client-catalog-product-card'
 
-export interface Product {
+export type Product = {
   id: string
   name_default: string
   short_description_default?: string | null
@@ -70,17 +70,17 @@ export interface Product {
   created_at: string
 }
 
-export interface Category {
+export type Category = {
   id: string
   name_default: string
 }
 
-export interface Producer {
+export type Producer = {
   id: string
   name_default: string
 }
 
-interface ProductsClientProps {
+type ProductsClientProps = {
   products: Product[]
   categories: Category[]
   producers: Producer[]

@@ -1,4 +1,4 @@
-﻿import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(lab)/academy/_lib/content'
+import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(lab)/academy/_lib/content'
 import { v2UnitToLegacy } from '@/app/[locale]/(lab)/academy/_lib/runtime'
 import {
   MAX_LIVES,
@@ -1337,7 +1337,7 @@ export function getNextLessonForUnit(
 ): AcademyLesson {
   return (
     unit.lessons.find((lesson) => !progress.completedLessonIds.includes(lesson.id)) ??
-    unit.lessons[unit.lessons.length - 1] ??
+    unit.lessons.at(-1) ??
     {
       id: `${unit.id}-legacy-lesson`,
       slug: 'legacy',
@@ -1426,7 +1426,7 @@ export function getCurrentChapter(
   const currentChapter =
     chapters.find((chapter) => chapter.status === 'active') ??
     chapters.find((chapter) => chapter.status === 'locked') ??
-    chapters[chapters.length - 1]
+    chapters.at(-1)
 
   if (!currentChapter) {
     throw new Error('Academy surface requires at least one chapter.')

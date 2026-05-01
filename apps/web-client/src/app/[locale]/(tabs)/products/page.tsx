@@ -5,7 +5,7 @@ import { getLocalizedContent } from '@/lib/utils'
 import { getProductStaticResources, getProducts } from './_features/get-products'
 import { type Category, type Producer, type Product, ProductsClient } from './products-client'
 
-interface ProductsPageProps {
+type ProductsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 

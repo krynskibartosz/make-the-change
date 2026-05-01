@@ -1,6 +1,6 @@
 import { Sparkles } from 'lucide-react'
 
-interface MarketHeaderProps {
+type MarketHeaderProps = {
   balance?: number
 }
 

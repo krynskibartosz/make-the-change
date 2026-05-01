@@ -1,5 +1,5 @@
 // Species Context Types
-export interface SpeciesContext {
+export type SpeciesContext = {
   id: string
   name_default: string
   scientific_name: string
@@ -20,7 +20,7 @@ export interface SpeciesContext {
   diet?: string | null
 }
 
-export interface AssociatedProject {
+export type AssociatedProject = {
   id: string
   slug?: string | null
   name: string
@@ -30,7 +30,7 @@ export interface AssociatedProject {
   userParticipation: boolean
 }
 
-export interface AssociatedProducer {
+export type AssociatedProducer = {
   id: string
   name: string
   location: string | null
@@ -38,7 +38,7 @@ export interface AssociatedProducer {
   projectsCount: number
 }
 
-export interface AssociatedChallenge {
+export type AssociatedChallenge = {
   id: string
   name: string
   type: string
@@ -47,14 +47,14 @@ export interface AssociatedChallenge {
   userProgress: number | null
 }
 
-export interface UserSpeciesStatus {
+export type UserSpeciesStatus = {
   isUnlocked: boolean
   unlockedDate: string | null
   unlockSource: string | null
   progressionLevel: number
 }
 
-export interface SpeciesFilters {
+export type SpeciesFilters = {
   category?: string
   status?: string
   biome?: string

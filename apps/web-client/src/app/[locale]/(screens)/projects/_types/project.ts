@@ -1,5 +1,5 @@
 // Project Context Types
-export interface ProjectContext {
+export type ProjectContext = {
   id: string
   name_default: string
   slug: string
@@ -23,7 +23,7 @@ export interface ProjectContext {
   target_budget?: number | null
 }
 
-export interface ProjectSpecies {
+export type ProjectSpecies = {
   id: string
   name: string
   scientificName: string
@@ -33,7 +33,7 @@ export interface ProjectSpecies {
   role: string
 }
 
-export interface ProjectChallenge {
+export type ProjectChallenge = {
   id: string
   name: string
   type: string
@@ -42,7 +42,7 @@ export interface ProjectChallenge {
   rewards: any[]
 }
 
-export interface ProducerProduct {
+export type ProducerProduct = {
   id: string
   name: string
   price: number
@@ -54,7 +54,7 @@ export interface ProducerProduct {
   format?: string // ex: "bocal", "sachet", "tirage photo"
 }
 
-export interface ProjectImpact {
+export type ProjectImpact = {
   co2Absorbed: number | null
   biodiversityGain: number | null
   jobsCreated: number | null
@@ -78,7 +78,7 @@ export interface ProjectImpact {
 }
 
 // Donation Types
-export interface DonationReward {
+export type DonationReward = {
   points: number
   certificate: boolean
   photo: boolean
@@ -86,7 +86,7 @@ export interface DonationReward {
   updates: boolean
 }
 
-export interface DonationImpact {
+export type DonationImpact = {
   unitsRestored: number
   unitsLabel: string
   survivalRate: string
@@ -95,7 +95,7 @@ export interface DonationImpact {
   description?: string
 }
 
-export interface DonationOption {
+export type DonationOption = {
   id: string
   projectId: string
   name: string

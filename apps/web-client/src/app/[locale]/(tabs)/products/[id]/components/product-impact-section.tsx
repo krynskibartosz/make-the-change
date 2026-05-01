@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@make-the-change/core/ui'
 import type { ProductImpact } from '@/app/[locale]/(tabs)/products/_types/product'
 
-interface ProductImpactSectionProps {
+type ProductImpactSectionProps = {
   impact: ProductImpact | null
   locale?: string
 }

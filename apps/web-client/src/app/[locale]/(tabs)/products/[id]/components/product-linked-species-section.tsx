@@ -2,7 +2,7 @@ import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import type { LinkedSpecies } from '@/app/[locale]/(tabs)/products/_types/product'
 import Link from 'next/link'
 
-interface ProductLinkedSpeciesSectionProps {
+type ProductLinkedSpeciesSectionProps = {
   species: LinkedSpecies[] | null
   locale?: string
 }

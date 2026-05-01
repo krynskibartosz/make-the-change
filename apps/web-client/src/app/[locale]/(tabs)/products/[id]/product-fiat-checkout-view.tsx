@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { Check, CreditCard, Gift, Loader2, Lock, MapPin, Package, Sparkles, X } from 'lucide-react'
 
-interface ProductFiatCheckoutViewProps {
+type ProductFiatCheckoutViewProps = {
   product: any
   selectedFormat: {
     id: string

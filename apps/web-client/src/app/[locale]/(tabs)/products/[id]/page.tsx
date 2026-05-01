@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { getPublicProductById } from './product-detail-data'
 import { ProductDetails } from './product-details'
 
-interface ProductDetailPageProps {
+type ProductDetailPageProps = {
   params: Promise<{
     id: string
   }>

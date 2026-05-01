@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { QuantityStepper } from '@/app/[locale]/(tabs)/products/_components/quantity-stepper'
 import { formatCurrency } from '@/lib/utils'
 
-interface ProductCartPayload {
+type ProductCartPayload = {
   productId: string
   productName: string
   productSlug?: string | null
@@ -19,11 +19,11 @@ interface ProductCartPayload {
   inStock: boolean
 }
 
-interface ProductDetailAddToCartButtonProps extends ProductCartPayload {
+type ProductDetailAddToCartButtonProps = ProductCartPayload & {
   className?: string
 }
 
-interface FloatingActionButtonsProps extends ProductCartPayload {
+type FloatingActionButtonsProps = ProductCartPayload & {
   displayPrice: number
 }
 

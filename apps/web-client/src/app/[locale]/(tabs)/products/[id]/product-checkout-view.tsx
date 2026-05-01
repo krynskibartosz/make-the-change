@@ -5,7 +5,7 @@ import { useRouter } from '@/i18n/navigation'
 import { ArrowLeft, MapPin, Plus, Sparkles, X, Loader2 } from 'lucide-react'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
-interface ProductCheckoutViewProps {
+type ProductCheckoutViewProps = {
   product: any
   selectedFormat: {
     id: string

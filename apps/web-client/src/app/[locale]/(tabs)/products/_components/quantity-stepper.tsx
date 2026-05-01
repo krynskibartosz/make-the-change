@@ -4,7 +4,7 @@ import { Button } from '@make-the-change/core/ui'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface QuantityStepperProps {
+type QuantityStepperProps = {
   quantity: number
   maxQuantity?: number | null
   onIncrement: () => void
