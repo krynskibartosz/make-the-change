@@ -18,34 +18,14 @@ type BottomNavItem = {
 
 export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const normalizedPath = pathname.replace(/\/+$/, '')
-  const isInvestFlow = /\/(projects|projets)\/[^/]+\/(invest|investir)$/.test(normalizedPath)
-  const isSettingsPage =
-    pathname === '/profile/settings' || pathname.startsWith('/profile/settings/')
-  const isInvestmentsPage = pathname === '/profile/investments'
-  const isHome = pathname === '/'
-  const isImmersive =
-    pathname.includes('/challenges/eco-fact/') ||
-    pathname.includes('/challenges/daily-harvest/') ||
-    pathname.startsWith('/academy')
 
-  if (isInvestFlow || isSettingsPage || isInvestmentsPage || isHome || isImmersive) {
-    return null
-  }
+  // Le routeur App Router (via les Route Groups) s'occupe de ne rendre ce composant 
+  // que sur les pages concernées. Plus besoin des gros if (isImmersive) return null !
 
-  const isChallenges =
-    pathname.startsWith('/challenges') ||
-    pathname.startsWith('/defis')
-  const isProjects =
-    pathname.startsWith('/projects') ||
-    pathname.startsWith('/projets')
-  const isImpact =
-    pathname.startsWith('/impact') ||
-    pathname.startsWith('/collectif') ||
-    pathname.startsWith('/community')
-  const isProfile =
-    pathname.startsWith('/profile') ||
-    pathname.startsWith('/u/')
+  const isChallenges = pathname.startsWith('/challenges')
+  const isProjects = pathname.startsWith('/projects')
+  const isImpact = pathname.startsWith('/impact')
+  const isProfile = pathname.startsWith('/profile')
 
   const navLinkClass =
     'flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors'
@@ -99,7 +79,7 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
                     className={cn(
                       'flex h-8 w-12 items-center justify-center rounded-xl transition-all',
                       item.isActive
-                        ? 'scale-105 bg-lime-400/18 ring-1 ring-lime-400/35'
+                        ? 'scale-105 bg-lime-400/20 ring-1 ring-lime-400/30'
                         : 'bg-transparent',
                     )}
                   >
