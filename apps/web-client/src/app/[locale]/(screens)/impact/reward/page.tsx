@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
-import { getMockProducts } from '@/app/[locale]/(marketing)/products/_features/mock-products'
+import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
 import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
@@ -180,7 +180,7 @@ export default async function ImpactRewardPage() {
             </Link>
           ) : !initialFaction ? (
             <Link
-              href="/welcome/setup"
+              href="/onboarding/setup"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
               Choisir votre faction <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />

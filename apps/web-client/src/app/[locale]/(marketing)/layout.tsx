@@ -2,7 +2,6 @@ import { getLocale } from 'next-intl/server'
 import { Suspense, type PropsWithChildren } from 'react'
 
 import { MainContent } from '@/components/layout/main-content'
-import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav'
 import { getHeaderData, type HeaderData } from '@/lib/get-header-data'
 
 type MarketingScaffoldProps = PropsWithChildren<{
@@ -59,8 +58,6 @@ function MarketingScaffold({ children, user, menuData }: MarketingScaffoldProps)
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <MainContent>{children}</MainContent>
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-     
-      <MobileBottomNav user={user ? { id: user.id, email: user.email } : null} />
     </div>
   )
 }

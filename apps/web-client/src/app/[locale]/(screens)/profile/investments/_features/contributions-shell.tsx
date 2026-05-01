@@ -17,7 +17,7 @@ export function ContributionsShell({ title = 'Historique', children }: Contribut
       router.back()
       return
     }
-    router.push('/dashboard')
+    router.push('/profile')
   }
 
   useEffect(() => {

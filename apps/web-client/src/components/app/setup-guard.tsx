@@ -6,7 +6,7 @@ import { usePathname, useRouter } from '@/i18n/navigation'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 
-const bypassPrefixes = ['/login', '/register', '/setup']
+const bypassPrefixes = ['/login', '/register', '/onboarding/setup']
 
 export function SetupGuard() {
   const pathname = usePathname()
@@ -29,7 +29,7 @@ export function SetupGuard() {
 
     const query = searchParams.toString()
     const currentUrl = query ? `${pathname}?${query}` : pathname
-    router.replace(`/setup?returnTo=${encodeURIComponent(currentUrl)}`)
+    router.replace(`/onboarding/setup?returnTo=${encodeURIComponent(currentUrl)}`)
   }, [pathname, router, searchParams])
 
   return null

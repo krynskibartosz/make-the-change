@@ -50,7 +50,7 @@ export function useActionAuth(fallbackViewer?: ActionAuthFallback) {
         return
       }
 
-      router.push(`/setup?returnTo=${encodeURIComponent(returnTo)}`)
+      router.push(`/onboarding/setup?returnTo=${encodeURIComponent(returnTo)}`)
     },
     [fallbackViewer?.faction, fallbackViewer?.viewerId, pathname, router, searchParams],
   )

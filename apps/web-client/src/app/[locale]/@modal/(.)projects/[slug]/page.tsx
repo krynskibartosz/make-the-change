@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { getPublicProjectBySlug } from '@/app/[locale]/(marketing)/projects/[slug]/project-detail-data'
-import { ProjectQuickView } from '@/app/[locale]/(marketing)/projects/[slug]/project-quick-view'
+import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
+import { ProjectQuickView } from '@/app/[locale]/(screens)/projects/[slug]/project-quick-view'
 import { getLocalizedContent } from '@/lib/utils'
 
 interface InterceptedProjectPageProps {

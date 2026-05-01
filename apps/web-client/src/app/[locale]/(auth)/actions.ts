@@ -96,7 +96,7 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
 
     return {
       success: 'true',
-      redirectUrl: `/setup?returnTo=${encodeURIComponent(
+      redirectUrl: `/onboarding/setup?returnTo=${encodeURIComponent(
         sanitizeReturnTo(returnToRaw, '/defis'),
       )}`,
     }
@@ -215,7 +215,7 @@ export async function completeMockSetup(formData: FormData) {
       : null
 
   if (!faction) {
-    redirect({ href: '/setup', locale })
+    redirect({ href: '/onboarding/setup', locale })
   }
 
   const session = await getMockViewerSession()

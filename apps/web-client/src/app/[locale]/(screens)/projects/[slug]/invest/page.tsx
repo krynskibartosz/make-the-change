@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { ProjectInvestOneFlow } from '@/app/[locale]/(tabs)/projects/_features/project-invest-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
@@ -22,7 +21,7 @@ const toOptionalAmount = (value: string | string[] | undefined): number | undefi
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined
 }
 
-interface InterceptedInvestPageProps {
+interface InvestPageProps {
   params: Promise<{
     slug: string
   }>
@@ -32,10 +31,7 @@ interface InterceptedInvestPageProps {
   }>
 }
 
-export default async function InterceptedProjectInvestPage({
-  params,
-  searchParams,
-}: InterceptedInvestPageProps) {
+export default async function InvestPage({ params, searchParams }: InvestPageProps) {
   const { slug } = await params
   const query = await searchParams
   const locale = await getLocale()
@@ -54,27 +50,21 @@ export default async function InterceptedProjectInvestPage({
   const unlockedSpecies = speciesList.find((species) => species.user_status?.isUnlocked)
 
   return (
-    <FullScreenSlideModal
-      fallbackHref={`/projects/${project.slug}`}
-      headerMode="close"
-      refreshOnClose={true}
-    >
-      <ProjectInvestOneFlow
-        project={{
-          id: project.id,
-          slug: project.slug,
-          name: getLocalizedContent(project.name_i18n, locale, project.name_default),
-          type: project.type,
-          coverImage: project.hero_image_url,
-          currentFunding: project.current_funding,
-          targetBudget: project.target_budget,
-        }}
-        presentation="modal"
-        isAuthenticated={Boolean(user)}
-        source={toOptionalString(query.source)}
-        initialAmount={toOptionalAmount(query.amount)}
-        discoveredSpeciesId={unlockedSpecies?.id ?? null}
-      />
-    </FullScreenSlideModal>
+    <ProjectInvestOneFlow
+      project={{
+        id: project.id,
+        slug: project.slug,
+        name: getLocalizedContent(project.name_i18n, locale, project.name_default),
+        type: project.type,
+        coverImage: project.hero_image_url,
+        currentFunding: project.current_funding,
+        targetBudget: project.target_budget,
+      }}
+      presentation="page"
+      isAuthenticated={Boolean(user)}
+      source={toOptionalString(query.source)}
+      initialAmount={toOptionalAmount(query.amount)}
+      discoveredSpeciesId={unlockedSpecies?.id ?? null}
+    />
   )
 }
