@@ -257,7 +257,7 @@ function EcoFactContent() {
     startDate: new Date().toISOString(),
     endDate: new Date(Date.now() + 86400000).toISOString(),
     status: isCompleted ? 'completed' : 'available',
-    seriesId: 'eco-fact' as any, // TODO: Add 'eco-fact' to ChallengeArchetypeId
+    seriesId: 'eco-fact',
     slug: 'eco-fact-1',
     metadata: {
       articleTitle: "Le monde secret des pollinisateurs",
