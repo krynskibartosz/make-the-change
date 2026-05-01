@@ -23,7 +23,7 @@ export function getRandomInt(min: number, max: number): number {
     crypto.getRandomValues(byteArray)
     randomValue = 0
     for (let i = 0; i < bytesNeeded; i++) {
-      randomValue = (randomValue << 8) + byteArray[i]!
+      randomValue = (randomValue * 256) + byteArray[i]!
     }
     // Handle modulo bias
   } while (randomValue >= maxValue - (maxValue % range))
