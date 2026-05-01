@@ -13,6 +13,7 @@ import {
   type AcademyProgress,
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { MAX_LIVES, isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
+import { getRandomInt } from '@/lib/crypto'
 import { cn } from '@/lib/utils'
 
 const TRAINING_QUESTIONS = [
@@ -53,7 +54,7 @@ export default function TrainingPage() {
   const [progress, setProgress] = useState<AcademyProgress>(() =>
     getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
   )
-  const [qIndex, setQIndex] = useState(() => Math.floor(Math.random() * TRAINING_QUESTIONS.length))
+  const [qIndex, setQIndex] = useState(() => getRandomInt(0, TRAINING_QUESTIONS.length))
   const [answered, setAnswered] = useState<boolean | null>(null)
   const [done, setDone] = useState(false)
 
