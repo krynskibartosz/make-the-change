@@ -65,7 +65,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           {/* Text content — z-20 to stay above gradient */}
           <div className="relative z-20">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-500/30 bg-lime-500/20 px-3 py-1.5 backdrop-blur-md">
-              <Bird className="h-4 w-4 text-lime-400" />
+              <Bird className="h-4 w-4 text-lime-400" aria-hidden="true" />
               <span className="text-xs font-bold uppercase tracking-widest text-lime-400">
                 BioDex
               </span>
@@ -87,7 +87,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
           >
             <div className="flex justify-between items-start w-full">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/20 text-orange-400">
-                <Flame className="h-5 w-5 shrink-0 animate-pulse" />
+                <Flame className="h-5 w-5 shrink-0 animate-pulse" aria-hidden="true" />
               </div>
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
@@ -96,7 +96,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                 transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
                 className="px-1.5 py-0.5 rounded-full bg-lime-500/10 text-lime-400 text-[10px] font-bold tabular-nums whitespace-nowrap shrink-0"
               >
-                +150 <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
+                +150 <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" aria-hidden="true" />
               </motion.div>
             </div>
 
@@ -161,7 +161,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                   <img src="/ondine.png" alt="Gardiens des mers" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
                 <div className="relative z-40 -ml-3 flex h-7 w-7 items-center justify-center rounded-full border border-lime-400/20 bg-lime-400/10 shadow-sm backdrop-blur-md transition-all group-hover:scale-110 group-hover:bg-lime-400/20">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="3">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="3" aria-hidden="true">
                     <path d="M12 5v14M5 12h14" />
                   </svg>
                 </div>
@@ -187,7 +187,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
             className="group flex w-full items-center justify-center gap-2 rounded-3xl border border-white/10 bg-white/5 p-5 font-bold text-white backdrop-blur-md transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
           >
             Découvrir l'aventure
-            <ArrowRight className="h-5 w-5 text-lime-400 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-5 w-5 text-lime-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </motion.div>
       </motion.div>

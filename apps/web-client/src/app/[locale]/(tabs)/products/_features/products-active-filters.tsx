@@ -52,7 +52,7 @@ export function ProductsActiveFilters({
                 className="group inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
               >
                 <span>{chip.label}</span>
-                <X className="h-3.5 w-3.5 text-muted-foreground transition group-hover:text-primary" />
+                <X className="h-3.5 w-3.5 text-muted-foreground transition group-hover:text-primary" aria-hidden="true" />
               </button>
             </li>
           ))}

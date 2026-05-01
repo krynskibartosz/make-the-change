@@ -27,7 +27,7 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
           </div>
         </div>
         <div className="relative">
-          <div className="absolute -top-8 -left-3 select-none font-serif text-[100px] leading-none text-white/[0.03] pointer-events-none z-0">
+          <div className="absolute -top-8 -left-3 select-none font-serif text-[100px] leading-none text-white/[0.03] pointer-events-none z-0" aria-hidden="true">
             "
           </div>
           <blockquote className={`relative z-10 border-l-2 pl-4 ${isGregory ? 'border-amber-500/20' : 'border-emerald-500/20'}`}>
@@ -41,7 +41,7 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
           aria-label={member.linkedinLabel}
           className="mt-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.05] bg-white/[0.05] text-white transition-colors hover:bg-white/10"
         >
-          <Linkedin className="h-4 w-4" />
+          <Linkedin className="h-4 w-4" aria-hidden="true" />
         </a>
       </article>
     )
@@ -80,6 +80,7 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
         {/* Watermark quote mark with slide-in */}
         <motion.div
           className="absolute -top-8 -left-3 select-none font-serif text-[100px] leading-none text-white/[0.03] pointer-events-none z-0 will-change-transform"
+          aria-hidden="true"
           initial={{ opacity: 0, x: -20 }}
           animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
           transition={{ duration: 1.2, delay: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
@@ -109,7 +110,7 @@ function TeamMemberCard({ member, isGregory }: { member: AboutTeamProps['members
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
       >
-        <Linkedin className="h-4 w-4" />
+        <Linkedin className="h-4 w-4" aria-hidden="true" />
       </motion.a>
     </article>
   )
@@ -122,9 +123,9 @@ export function AboutTeamCarousel({ title, subtitle, members }: AboutTeamProps) 
 
   if (prefersReducedMotion) {
     return (
-      <section ref={sectionRef} className="relative mt-20 py-20 sm:py-24">
+      <section ref={sectionRef} aria-labelledby="team-title" className="relative mt-20 py-20 sm:py-24">
         <div className="px-6 mb-12">
-          <h2 className="mb-3 text-3xl font-bold text-white tracking-tight text-balance">{title}</h2>
+          <h2 id="team-title" className="mb-3 text-3xl font-bold text-white tracking-tight text-balance">{title}</h2>
           <p className="text-base font-light text-gray-400 mb-12">{subtitle}</p>
         </div>
         <div className="flex flex-col gap-20 px-6">
@@ -163,5 +164,8 @@ export function AboutTeamCarousel({ title, subtitle, members }: AboutTeamProps) 
         ))}
       </div>
     </section>
+  )
+}
+on>
   )
 }

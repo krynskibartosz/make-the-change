@@ -19,10 +19,11 @@ function GamificationCard({ title, description }: AboutModelBlock) {
       transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {/* Glow */}
-      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-emerald-500/20 blur-[50px] z-0" />
+      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-emerald-500/20 blur-[50px] z-0" aria-hidden="true" />
       {/* Watermark with parallax */}
       <motion.div
         className="absolute -bottom-6 -right-2 text-[120px] leading-none font-black italic text-white/[0.02] pointer-events-none z-0 select-none will-change-transform"
+        aria-hidden="true"
         style={{ y }}
       >
         01
@@ -49,10 +50,11 @@ function CircularCard({ title, description }: AboutModelBlock) {
       transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {/* Glow */}
-      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-amber-500/20 blur-[50px] z-0" />
+      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-amber-500/20 blur-[50px] z-0" aria-hidden="true" />
       {/* Watermark with parallax */}
       <motion.div
         className="absolute -bottom-6 -right-2 text-[120px] leading-none font-black italic text-white/[0.02] pointer-events-none z-0 select-none will-change-transform"
+        aria-hidden="true"
         style={{ y }}
       >
         02
@@ -79,10 +81,11 @@ function TransparencyCard({ title, description }: AboutModelBlock) {
       transition={{ duration: 0.8, delay: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {/* Glow */}
-      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-blue-500/20 blur-[50px] z-0" />
+      <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-8 h-56 w-56 rounded-full bg-blue-500/20 blur-[50px] z-0" aria-hidden="true" />
       {/* Watermark with parallax */}
       <motion.div
         className="absolute -bottom-6 -right-2 text-[120px] leading-none font-black italic text-white/[0.02] pointer-events-none z-0 select-none will-change-transform"
+        aria-hidden="true"
         style={{ y }}
       >
         03
@@ -101,12 +104,12 @@ export function AboutModelBento({ overline, gamification, circular, transparency
 
   if (prefersReducedMotion) {
     return (
-      <section ref={sectionRef} className="mt-12 py-16 sm:py-20">
+      <section ref={sectionRef} aria-labelledby="model-title" className="mt-12 py-16 sm:py-20">
         <div className="mb-12 flex flex-col items-start px-8">
           <span className="mb-3 text-[10px] font-bold uppercase tracking-[0.25em] text-amber-500">
             Notre Modèle
           </span>
-          <h2 className="mb-8 text-3xl font-bold text-white tracking-tight">Un cercle vertueux.</h2>
+          <h2 id="model-title" className="mb-8 text-3xl font-bold text-white tracking-tight">Un cercle vertueux.</h2>
         </div>
         <div className="flex flex-col gap-6 px-6">
           <GamificationCard {...gamification} />
@@ -143,5 +146,8 @@ export function AboutModelBento({ overline, gamification, circular, transparency
         <TransparencyCard {...transparency} />
       </div>
     </section>
+  )
+}
+on>
   )
 }

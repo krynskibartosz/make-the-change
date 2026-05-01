@@ -33,9 +33,9 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
   ] as const
 
   return (
-    <section className={variant === 'muted' ? 'bg-muted/30 py-16 md:py-20' : 'bg-background py-16 md:py-20'}>
+    <section aria-labelledby="faq-title" className={variant === 'muted' ? 'bg-muted/30 py-16 md:py-20' : 'bg-background py-16 md:py-20'}>
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
-        <h2 className="text-left text-2xl font-bold text-foreground sm:text-3xl">{t('faq.title')}</h2>
+        <h2 id="faq-title" className="text-left text-2xl font-bold text-foreground sm:text-3xl">{t('faq.title')}</h2>
         <p className="mt-3 max-w-2xl text-left text-sm text-muted-foreground sm:text-base">
           {t('faq.subtitle')}
         </p>
@@ -56,9 +56,11 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
               >
                 <button
                   type="button"
+                  id={`faq-question-${item.id}`}
                   className="group flex w-full items-center justify-between gap-4 px-5 py-5 text-left outline-none"
                   onClick={() => setOpenItem((current) => (current === item.id ? null : item.id))}
                   aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${item.id}`}
                 >
                   <span className="text-base font-bold text-foreground sm:text-lg">{item.question}</span>
                   <span
@@ -67,13 +69,16 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
                       isOpen && 'border-lime-200 bg-lime-50 text-lime-600 dark:border-lime-500/30 dark:bg-lime-500/20 dark:text-lime-400',
                     )}
                   >
-                    {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                    {isOpen ? <Minus className="h-5 w-5" aria-hidden="true" /> : <Plus className="h-5 w-5" aria-hidden="true" />}
                   </span>
                 </button>
 
                 <AnimatePresence initial={false}>
                   {isOpen ? (
                     <motion.div
+                      id={`faq-answer-${item.id}`}
+                      role="region"
+                      aria-labelledby={`faq-question-${item.id}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

@@ -33,12 +33,15 @@ export function ContactCtaSection({ title, description, primary }: ContactCtaPro
             >
               <Link href="/register">
                 {primary}
-                <ArrowRight className="ml-2 h-6 w-6" />
+                <ArrowRight className="ml-2 h-6 w-6" aria-hidden="true" />
               </Link>
             </Button>
           </div>
         </div>
       </div>
+    </section>
+  )
+}
     </div>
   )
 }

@@ -17,7 +17,7 @@ export async function HomeFinalCtaSection({ variant = 'default' }: HomeFinalCtaS
   ] as const
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-32">
+    <section aria-labelledby="final-cta-title" className="relative overflow-hidden py-24 md:py-32">
       {/* Ciel étoilé abstrait ou halo de lumière vert */}
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(126,211,33,0.1),transparent_70%)]"
@@ -26,7 +26,7 @@ export async function HomeFinalCtaSection({ variant = 'default' }: HomeFinalCtaS
 
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-4xl font-black tracking-tight text-foreground dark:text-white sm:text-5xl lg:text-6xl text-balance">
+          <h2 id="final-cta-title" className="text-4xl font-black tracking-tight text-foreground dark:text-white sm:text-5xl lg:text-6xl text-balance">
             {t('final_cta.title')}
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground dark:text-white/70 sm:text-lg">

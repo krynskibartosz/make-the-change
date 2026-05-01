@@ -11,14 +11,14 @@ export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProp
 
   if (prefersReducedMotion) {
     return (
-      <section ref={sectionRef} className="mx-auto max-w-xl px-8 py-24 flex flex-col items-start">
+      <section ref={sectionRef} aria-labelledby="genesis-title" className="mx-auto max-w-xl px-8 py-24 flex flex-col items-start">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" aria-hidden="true" />
           ORIGINES
         </div>
-        <h2 className="mb-8 text-left text-3xl font-bold text-white tracking-tight leading-[1.1] text-balance md:text-4xl">{title}</h2>
+        <h2 id="genesis-title" className="mb-8 text-left text-3xl font-bold text-white tracking-tight leading-[1.1] text-balance md:text-4xl">{title}</h2>
         <div className="relative flex flex-col gap-6 pl-8">
-          <div className="absolute left-0 top-1 bottom-1 h-[calc(100%-8px)] w-[2px] rounded-full bg-gradient-to-b from-emerald-500/50 via-white/10 to-transparent" />
+          <div className="absolute left-0 top-1 bottom-1 h-[calc(100%-8px)] w-[2px] rounded-full bg-gradient-to-b from-emerald-500/50 via-white/10 to-transparent" aria-hidden="true" />
           <p className="text-base font-light leading-[1.8] text-gray-300">{paragraph1}</p>
           <p className="text-base font-light leading-[1.8] text-gray-300">
             Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le{' '}
@@ -64,6 +64,7 @@ export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProp
         {/* Gradient line with drawing animation */}
         <motion.div
           className="absolute left-0 top-1 bottom-1 h-[calc(100%-8px)] w-[2px] rounded-full bg-gradient-to-b from-emerald-500/50 via-white/10 to-transparent origin-top"
+          aria-hidden="true"
           initial={{ scaleY: 0, opacity: 0 }}
           animate={isInView ? { scaleY: 1, opacity: 1 } : { scaleY: 0, opacity: 0 }}
           transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
@@ -114,5 +115,8 @@ export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProp
         </motion.p>
       </div>
     </section>
+  )
+}
+>
   )
 }

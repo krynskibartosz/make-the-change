@@ -29,11 +29,11 @@ export function BlogShell({ title = 'Blog', children }: BlogShellProps) {
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 active:scale-95"
             aria-label="Retour"
           >
-            <ChevronLeft className="h-5 w-5 text-white" />
+            <ChevronLeft className="h-5 w-5 text-white" aria-hidden="true" />
           </button>
-          <span className="absolute left-1/2 -translate-x-1/2 truncate max-w-[60%] text-sm font-medium text-white/80">
+          <p className="absolute left-1/2 -translate-x-1/2 truncate max-w-[60%] text-sm font-medium text-white/80 m-0">
             {title}
-          </span>
+          </p>
         </div>
       </header>
 
@@ -61,7 +61,7 @@ export function ArticleHeader() {
         className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center active:bg-white/10 transition-colors"
         aria-label="Retour"
       >
-        <ChevronLeft className="h-5 w-5 text-white" />
+        <ChevronLeft className="h-5 w-5 text-white" aria-hidden="true" />
       </button>
       <button
         type="button"
@@ -69,7 +69,7 @@ export function ArticleHeader() {
         className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center active:bg-white/10 transition-colors"
         aria-label="Partager"
       >
-        <Share2 className="h-5 w-5 text-white" />
+        <Share2 className="h-5 w-5 text-white" aria-hidden="true" />
       </button>
     </header>
   )

@@ -71,7 +71,7 @@ export const ClientCatalogProductCard = ({
   // ── Vue Liste (desktop fallback) ────────────────────────────────────────────
   if (view === 'list') {
     return (
-      <div itemScope itemType="https://schema.org/Product">
+      <article itemScope itemType="https://schema.org/Product">
         <Link
           href={`/products/${product.id}`}
           className="group flex items-center gap-4 px-5 py-4 active:bg-white/5 transition-colors"
@@ -97,8 +97,8 @@ export const ClientCatalogProductCard = ({
               <h3 className="text-sm font-bold text-white truncate flex-1">
                 {product.name_default}
               </h3>
-              {isBio && <Leaf className="w-3 h-3 text-emerald-400 shrink-0" />}
-              {isArtisan && <BadgeCheck className="w-3 h-3 text-sky-400 shrink-0" />}
+              {isBio && <Leaf className="w-3 h-3 text-emerald-400 shrink-0" aria-hidden="true" />}
+              {isArtisan && <BadgeCheck className="w-3 h-3 text-sky-400 shrink-0" aria-hidden="true" />}
             </div>
 
             {/* Producteur */}
@@ -113,7 +113,7 @@ export const ClientCatalogProductCard = ({
               <span className="text-[11px] font-semibold text-red-400/80">{outOfStockLabel}</span>
             ) : points > 0 ? (
               <div className="flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-lime-400 shrink-0" />
+                <Sparkles className="w-3 h-3 text-lime-400 shrink-0" aria-hidden="true" />
                 <span className="text-sm font-black text-lime-400 tabular-nums">
                   {points.toLocaleString('fr-FR')}
                 </span>
@@ -122,13 +122,13 @@ export const ClientCatalogProductCard = ({
             ) : null}
           </div>
         </Link>
-      </div>
+      </article>
     )
   }
 
   // ── Vue Grille (défaut, mobile-first) ───────────────────────────────────────
   return (
-    <div itemScope itemType="https://schema.org/Product" className="h-full">
+    <article itemScope itemType="https://schema.org/Product" className="h-full">
       <Link
         href={`/products/${product.id}`}
         className="group flex h-full flex-col rounded-2xl overflow-hidden bg-white/[0.04] border border-white/8 hover:border-white/16 transition-all active:scale-[0.98]"
@@ -192,7 +192,7 @@ export const ClientCatalogProductCard = ({
             {/* Prix en points */}
             {inStock && points > 0 ? (
               <div className="flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-lime-400 shrink-0" />
+                <Sparkles className="w-3 h-3 text-lime-400 shrink-0" aria-hidden="true" />
                 <span className="text-sm font-black text-lime-400 tabular-nums leading-none">
                   {points.toLocaleString('fr-FR')}
                 </span>
@@ -205,18 +205,18 @@ export const ClientCatalogProductCard = ({
             <div className="flex items-center gap-1 ml-auto">
               {isBio && (
                 <span title="Produit naturel / bio">
-                  <Leaf className="w-3.5 h-3.5 text-emerald-400" />
+                  <Leaf className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                 </span>
               )}
               {isArtisan && (
                 <span title="Produit artisanal">
-                  <BadgeCheck className="w-3.5 h-3.5 text-sky-400" />
+                  <BadgeCheck className="w-3.5 h-3.5 text-sky-400" aria-hidden="true" />
                 </span>
               )}
             </div>
           </div>
         </div>
       </Link>
-    </div>
+    </article>
   )
 }

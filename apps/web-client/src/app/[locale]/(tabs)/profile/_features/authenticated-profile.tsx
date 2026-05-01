@@ -23,7 +23,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
             aria-label="Paramètres"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
           >
-            <Settings className="h-5 w-5" />
+            <Settings className="h-5 w-5" aria-hidden="true" />
           </Link>
         </div>
       </header>
@@ -32,6 +32,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
         <section className="relative pt-6">
           <div
             className={`pointer-events-none absolute left-1/2 top-12 h-40 w-40 -translate-x-1/2 rounded-full blur-3xl ${accentTheme.accentGlow}`}
+            aria-hidden="true"
           />
 
           <div className="relative z-10 mx-auto mt-4 h-28 w-28 overflow-hidden rounded-full border-4 border-[#0B0F15] shadow-xl">
@@ -52,7 +53,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <div
             className={`mx-auto mt-2 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide ${accentTheme.badgeClassName} ${accentTheme.accentText} ${accentTheme.accentShadow}`}
           >
-            <Flame className="h-3.5 w-3.5 fill-current" />
+            <Flame className="h-3.5 w-3.5 fill-current" aria-hidden="true" />
             {profile?.streakDays || 12} jours de série
           </div>
 
@@ -61,17 +62,17 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           </p>
         </section>
 
-        <section className="mb-10 mt-8 grid grid-cols-2 gap-3">
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Bug className="h-5 w-5 text-amber-400" />
+        <ul className="mb-10 mt-8 grid grid-cols-2 gap-3 m-0 p-0 list-none">
+          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Bug className="h-5 w-5 text-amber-400" aria-hidden="true" />
             <div className="mt-2 text-2xl font-black tabular-nums text-white">
               {(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">ABEILLES SAUVÉES</div>
-          </div>
+          </li>
 
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Droplets className="h-5 w-5 text-orange-400" />
+          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Droplets className="h-5 w-5 text-orange-400" aria-hidden="true" />
             <div className="mt-2 text-2xl font-black tabular-nums text-white">
               {(profile?.honeyGeneratedKg || 0.77).toLocaleString('fr-FR', {
                 minimumFractionDigits: 2,
@@ -80,10 +81,10 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               kg
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">MIEL GÉNÉRÉ</div>
-          </div>
+          </li>
 
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Wind className="h-5 w-5 text-blue-400" />
+          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />
             <div className="mt-2 text-2xl font-black tabular-nums text-white">
               {(profile?.co2CapturedKg || 3.85).toLocaleString('fr-FR', {
                 minimumFractionDigits: 2,
@@ -92,16 +93,16 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               kg
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CO2 CAPTURÉ</div>
-          </div>
+          </li>
 
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} />
+          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+            <Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} aria-hidden="true" />
             <div className={`mt-2 text-2xl font-black tabular-nums ${accentTheme.accentText}`}>
               {(profile?.points || 2450).toLocaleString('fr-FR')}
             </div>
             <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">POINTS D&apos;IMPACT</div>
-          </div>
-        </section>
+          </li>
+        </ul>
 
         <section className="mb-10 px-0">
           <Link
@@ -110,14 +111,14 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           >
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                <Crown className="h-6 w-6 text-amber-400" />
+                <Crown className="h-6 w-6 text-amber-400" aria-hidden="true" />
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-black text-amber-400">Passez au niveau supérieur</span>
-                <span className="mt-0.5 text-xs font-medium text-amber-400/80">Découvrez les privilèges des Gardiens.</span>
+                <p className="mt-0.5 text-xs font-medium text-amber-400/80 m-0">Découvrez les privilèges des Gardiens.</p>
               </div>
             </div>
-            <ArrowRight className="h-5 w-5 shrink-0 text-amber-400/50" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-amber-400/50" aria-hidden="true" />
           </Link>
         </section>
 
@@ -129,53 +130,59 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
             </span>
           </div>
 
-          <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="-mx-4 flex list-none snap-x gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden m-0 p-0">
             {unlockedSpecies.map((species) => (
-              <Link
-                key={species.id}
-                href={`/profile/biodex/${species.id}`}
-                className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4"
-              >
-                <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-400">
-                  {species.rarity}
-                </span>
-                <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/20">
-                  <img src={species.image} alt={species.name} className="h-full w-full object-cover" />
-                </div>
-                <p className="mt-3 text-sm font-bold text-white">{species.name}</p>
-              </Link>
+              <li key={species.id}>
+                <Link
+                  href={`/profile/biodex/${species.id}`}
+                  className="relative block w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4"
+                >
+                  <article>
+                    <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-400">
+                      {species.rarity}
+                    </span>
+                    <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/20">
+                      <img src={species.image} alt={species.name} className="h-full w-full object-cover" />
+                    </div>
+                    <p className="mt-3 text-sm font-bold text-white">{species.name}</p>
+                  </article>
+                </Link>
+              </li>
             ))}
 
             {lockedSpecies.map((species) => (
-              <button
-                key={species.id}
-                type="button"
-                className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left"
-              >
-                <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
-                  <Lock className="h-3.5 w-3.5 text-white/55" />
-                </span>
-                <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
-                  Verrouillé
-                </span>
-                <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
-                  <img
-                    src={species.image}
-                    alt={species.name}
-                    className="h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px] transition-all duration-700"
-                  />
-                </div>
-                <p className="mt-3 text-sm font-semibold text-white/60">{species.name}</p>
-              </button>
+              <li key={species.id}>
+                <button
+                  type="button"
+                  className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left"
+                >
+                  <article>
+                    <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
+                      <Lock className="h-3.5 w-3.5 text-white/55" aria-hidden="true" />
+                    </span>
+                    <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
+                      Verrouillé
+                    </span>
+                    <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
+                      <img
+                        src={species.image}
+                        alt={species.name}
+                        className="h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px] transition-all duration-700"
+                      />
+                    </div>
+                    <p className="mt-3 text-sm font-semibold text-white/60">{species.name}</p>
+                  </article>
+                </button>
+              </li>
             ))}
-          </div>
+          </ul>
 
           <Link
             href="/profile/biodex"
             className="mt-1 inline-flex items-center gap-2 text-sm font-semibold transition-colors text-lime-400"
           >
             Voir la liste complète du BioDex
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </section>
 
@@ -183,8 +190,8 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <section className="mt-8">
             {/* IDENTITY POD */}
             <div className={`relative rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
-              {/* Halo d'ambiance - encapsulé pour ne pas déborder */}
-              <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none">
+              {/* Halo d'ambiance */}
+              <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none" aria-hidden="true">
                 <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-40 ${accentTheme.accentBg}`} />
               </div>
 
@@ -203,7 +210,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                     {factionContribution.label}
                   </h2>
                   <p className="mt-2 text-sm font-medium text-white/60">
-                    <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />{' '}
+                    <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" aria-hidden="true" />{' '}
                     <span className="font-black text-white">
                       {(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds).toLocaleString('fr-FR')}
                     </span>{' '}
@@ -215,7 +222,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               {/* PONT : Teasing + CTA */}
               <div className="relative z-10 mt-6 space-y-4">
                 <div className="flex items-center gap-2">
-                  <Flame className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
+                  <Flame className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} aria-hidden="true" />
                   <p className="text-xs font-semibold text-white/80">
                     Ta faction génère{' '}
                     <span className={`font-black ${accentTheme.accentText}`}>
@@ -230,7 +237,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                   className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                 >
                   Rejoindre la quête du mois
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>
@@ -240,13 +247,13 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
             {/* GUEST IDENTITY POD */}
             <div className={`relative rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
               {/* Halo d'ambiance */}
-              <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none">
+              <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none" aria-hidden="true">
                 <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-20 ${accentTheme.accentBg}`} />
               </div>
 
               {/* LAYOUT HAUT : Icône + Infos */}
               <div className="relative z-10 flex flex-row items-center justify-between">
-                <div className="relative flex -mt-8 h-24 w-[30%] shrink-0 items-center justify-center drop-shadow-2xl">
+                <div className="relative flex -mt-8 h-24 w-[30%] shrink-0 items-center justify-center drop-shadow-2xl" aria-hidden="true">
                   <div className={`absolute inset-0 scale-[1.2] rounded-full blur-2xl opacity-30 ${accentTheme.accentBg}`} />
                   <Target className={`relative z-10 h-10 w-10 scale-[1.1] ${accentTheme.accentText}`} />
                 </div>
@@ -267,7 +274,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               {/* PONT : Teasing + CTA */}
               <div className="relative z-10 mt-6 space-y-4">
                 <div className="flex items-center gap-2">
-                  <Sparkles className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
+                  <Sparkles className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} aria-hidden="true" />
                   <p className="text-xs font-semibold text-white/80">
                     Multipliez votre impact en équipe
                   </p>
@@ -278,7 +285,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                   className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                 >
                   Choisir ma Faction
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>
@@ -290,10 +297,11 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
         >
           <div
             className={`pointer-events-none absolute left-1/2 mt-[-3rem] h-40 w-40 -translate-x-1/2 rounded-full blur-3xl ${accentTheme.accentGlow}`}
+            aria-hidden="true"
           />
           <div className="relative z-10">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
-              <Gift className={`h-7 w-7 ${accentTheme.accentTextSoft}`} />
+              <Gift className={`h-7 w-7 ${accentTheme.accentTextSoft}`} aria-hidden="true" />
             </div>
             <h3 className="mt-3 text-lg font-black text-white">Invitez vos amis</h3>
             <p className="mb-4 mt-2 text-balance text-sm text-white/70">

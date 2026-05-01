@@ -26,6 +26,8 @@ export function QuantityStepper({
 
   return (
     <div
+      role="group"
+      aria-label="Sélecteur de quantité"
       className={cn(
         'flex items-center justify-between rounded-xl border border-input bg-background shadow-sm',
         size === 'lg' ? 'h-12 w-full' : 'h-10 w-full',
@@ -44,11 +46,12 @@ export function QuantityStepper({
           size === 'lg' ? 'w-12' : 'w-10',
           isDeleteAction && 'text-destructive hover:text-destructive hover:bg-destructive/10',
         )}
+        aria-label={isDeleteAction ? "Supprimer l'article" : "Diminuer la quantité"}
       >
         {isDeleteAction ? (
-          <Trash2 className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} />
+          <Trash2 className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} aria-hidden="true" />
         ) : (
-          <Minus className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} />
+          <Minus className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} aria-hidden="true" />
         )}
       </Button>
 
@@ -62,12 +65,13 @@ export function QuantityStepper({
           e.stopPropagation()
           if (!isMaxReached) onIncrement()
         }}
+        aria-label="Augmenter la quantité"
         className={cn(
           'h-full rounded-l-none hover:bg-muted text-muted-foreground transition-colors disabled:opacity-50',
           size === 'lg' ? 'w-12' : 'w-10',
         )}
       >
-        <Plus className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} />
+        <Plus className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} aria-hidden="true" />
       </Button>
     </div>
   )

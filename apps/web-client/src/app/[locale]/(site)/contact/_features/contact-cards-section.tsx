@@ -105,7 +105,7 @@ export function ContactCardsSection({ email, social, faq, office }: ContactCards
 
           <div className="relative z-10">
             <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-marketing-info-500/10 text-marketing-info-600 transition-transform duration-500 group-hover:scale-110">
-              <HelpCircle className="h-7 w-7" />
+              <HelpCircle className="h-7 w-7" aria-hidden="true" />
             </div>
             <h3 className="mb-3 text-2xl font-black">{faq.title}</h3>
             <p className="text-sm font-medium text-muted-foreground">{faq.description}</p>
@@ -157,6 +157,15 @@ export function ContactCardsSection({ email, social, faq, office }: ContactCards
               {office.coordinates}
             </div>
           </div>
+        </div>
+      </div>
+    </MarketingSection>
+  )
+}
+Section>
+  )
+}
+v>
         </div>
       </div>
     </MarketingSection>

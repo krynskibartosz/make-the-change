@@ -151,8 +151,9 @@ function ProducerDetailView({
           <Link
             href="/producers"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 backdrop-blur-xl transition-all active:scale-90"
+            aria-label="Retour aux producteurs"
           >
-            <ArrowLeft className="h-5 w-5 text-white" />
+            <ArrowLeft className="h-5 w-5 text-white" aria-hidden="true" />
           </Link>
           {producer.contact_website ? (
             <a
@@ -160,8 +161,9 @@ function ProducerDetailView({
               target="_blank"
               rel="noreferrer"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 backdrop-blur-xl transition-all active:scale-90"
+              aria-label="Visiter le site web du partenaire"
             >
-              <ExternalLink className="h-5 w-5 text-white" />
+              <ExternalLink className="h-5 w-5 text-white" aria-hidden="true" />
             </a>
           ) : null}
         </div>
@@ -181,7 +183,7 @@ function ProducerDetailView({
             </h1>
             {location ? (
               <p className="mt-2 flex items-center gap-1.5 text-sm font-bold uppercase tracking-wider text-white/40">
-                <MapPin className="h-3.5 w-3.5 shrink-0" /> {location}
+                <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /> {location}
               </p>
             ) : null}
             {producer.type ? (
@@ -194,42 +196,43 @@ function ProducerDetailView({
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-3 gap-3 px-5">
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-          <Trees className="mb-2 h-5 w-5 text-emerald-400" />
+      <ul aria-label="Statistiques du partenaire" className="mt-8 grid grid-cols-3 gap-3 px-5 m-0 p-0 list-none">
+        <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+          <Trees className="mb-2 h-5 w-5 text-emerald-400" aria-hidden="true" />
           <div className="text-2xl font-black leading-none text-white">{projects.length}</div>
           <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
             PROJETS
           </div>
-        </div>
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-          <Leaf className="mb-2 h-5 w-5 text-lime-400" />
+        </li>
+        <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+          <Leaf className="mb-2 h-5 w-5 text-lime-400" aria-hidden="true" />
           <div className="text-2xl font-black leading-none text-white">{species.length}</div>
           <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
             ESPECES
           </div>
-        </div>
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-          <Package className="mb-2 h-5 w-5 text-sky-400" />
+        </li>
+        <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
+          <Package className="mb-2 h-5 w-5 text-sky-400" aria-hidden="true" />
           <div className="text-2xl font-black leading-none text-white">{products.length}</div>
           <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
             PRODUITS
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
 
       {species.length > 0 ? (
         <section className="mt-10">
           <h2 className="mb-4 px-5 text-xl font-bold tracking-tight">Especes a decouvrir</h2>
-          <div className="hide-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <ul aria-label="Espèces à découvrir" className="hide-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none">
             {species.map((entry) => (
-              <div
+              <li
                 key={entry.id}
                 className="group relative flex aspect-[4/5] w-40 shrink-0 snap-center flex-col overflow-hidden rounded-[2.5rem] border border-white/5 bg-white/5 p-3 transition-all active:scale-[0.98]"
               >
+                <article className="w-full h-full flex flex-col">
                 <div className="mb-2 flex justify-end">
                   <div className="flex h-7 w-7 items-center justify-center rounded-full border border-lime-400/20 bg-lime-400/20 shadow-lg">
-                    <Sparkles className="h-3.5 w-3.5 text-lime-400" />
+                    <Sparkles className="h-3.5 w-3.5 text-lime-400" aria-hidden="true" />
                   </div>
                 </div>
                 <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/5 bg-white/5">
@@ -242,25 +245,27 @@ function ProducerDetailView({
                 <div className="mt-2.5 px-1">
                   <p className="truncate text-sm font-bold leading-tight text-white">{entry.name}</p>
                 </div>
-              </div>
+                </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       ) : null}
 
       {projects.length > 0 ? (
         <section className="mt-10 w-full max-w-full overflow-hidden">
-          <h3 className="mb-4 px-5 text-xl font-bold tracking-tight text-white">
+          <h2 className="mb-4 px-5 text-xl font-bold tracking-tight text-white">
             Explorez leurs projets
-          </h3>
+          </h2>
 
-          <div className="ml-5 flex gap-4 overflow-x-auto overflow-y-hidden pb-4 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <ul aria-label="Projets du partenaire" className="ml-5 flex gap-4 overflow-x-auto overflow-y-hidden pb-4 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none">
             {projects.map((project) => (
+              <li key={project.id}>
               <Link
-                key={project.id}
                 href={project.slug ? `/projects/${project.slug}` : '/projects'}
-                className="group relative h-[160px] min-w-[240px] w-[240px] shrink-0 overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all active:scale-95"
+                className="group relative h-[160px] min-w-[240px] w-[240px] shrink-0 overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all active:scale-95 block"
               >
+                <article className="w-full h-full">
                 {project.hero_image_url ? (
                   <img
                     src={project.hero_image_url}
@@ -269,7 +274,7 @@ function ProducerDetailView({
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                    <Leaf className="h-8 w-8 text-white/50" />
+                    <Leaf className="h-8 w-8 text-white/50" aria-hidden="true" />
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
@@ -281,22 +286,25 @@ function ProducerDetailView({
                     {project.name_default}
                   </h4>
                 </div>
+                </article>
               </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       ) : null}
 
       {products.length > 0 ? (
         <section className="mt-10">
-          <h3 className="mb-4 px-5 text-xl font-bold tracking-tight text-white">Leurs produits</h3>
-          <div className="ml-5 flex gap-4 overflow-x-auto pb-4 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <h2 className="mb-4 px-5 text-xl font-bold tracking-tight text-white">Leurs produits</h2>
+          <ul aria-label="Produits du partenaire" className="ml-5 flex gap-4 overflow-x-auto pb-4 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none">
             {products.map((product) => (
+              <li key={product.id}>
               <Link
-                key={product.id}
                 href={product.slug ? `/products/${product.slug}` : '/products'}
-                className="group min-w-[150px] w-[150px] shrink-0 rounded-[2rem] border border-white/5 bg-[#1A1F26] p-3 shadow-xl transition-all active:scale-95"
+                className="group min-w-[150px] w-[150px] shrink-0 rounded-[2rem] border border-white/5 bg-[#1A1F26] p-3 shadow-xl transition-all active:scale-95 block"
               >
+                <article className="w-full h-full flex flex-col">
                 <div className="mb-3 flex aspect-square w-full items-center justify-center overflow-hidden rounded-[1.5rem] bg-white/5">
                   {product.image_url ? (
                     <img
@@ -305,7 +313,7 @@ function ProducerDetailView({
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   ) : (
-                    <Leaf className="h-8 w-8 text-white/40" />
+                    <Leaf className="h-8 w-8 text-white/40" aria-hidden="true" />
                   )}
                 </div>
                 <h4 className="mb-2 line-clamp-2 text-xs font-black leading-tight text-white">
@@ -316,41 +324,43 @@ function ProducerDetailView({
                     <span className="text-sm font-black tracking-tighter text-lime-400">
                       {product.price_points.toLocaleString('fr-FR')}
                     </span>
-                    <Sparkles className="h-3 w-3 text-lime-400" />
+                    <Sparkles className="h-3 w-3 text-lime-400" aria-hidden="true" />
                   </div>
                 ) : null}
+                </article>
               </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       ) : null}
 
-      <div className="mt-10 px-5">
-        <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+      <section className="mt-10 px-5">
+        <h2 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 m-0">
           L'histoire du partenaire
-        </p>
+        </h2>
         <p className="text-[15px] font-medium leading-relaxed text-white/70 text-pretty">
           {producer.description_default}
         </p>
-      </div>
+      </section>
 
       {producer.certifications.length > 0 ? (
-        <div className="mt-8 px-5">
-          <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+        <section className="mt-8 px-5">
+          <h2 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 m-0">
             Certifications & labels
-          </p>
-          <div className="flex flex-wrap gap-2.5">
+          </h2>
+          <ul aria-label="Certifications et labels" className="flex flex-wrap gap-2.5 m-0 p-0 list-none">
             {producer.certifications.map((item) => (
-              <span
+              <li
                 key={item}
                 className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-white/60"
               >
-                <ShieldCheck className="h-3.5 w-3.5 text-lime-400" />
+                <ShieldCheck className="h-3.5 w-3.5 text-lime-400" aria-hidden="true" />
                 {item}
-              </span>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </section>
       ) : null}
 
       {producer.contact_website ? (
@@ -361,7 +371,7 @@ function ProducerDetailView({
             rel="noreferrer"
             className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/10 text-sm font-black text-white transition-all active:scale-95"
           >
-            <ExternalLink className="h-4 w-4 text-white/50" />
+            <ExternalLink className="h-4 w-4 text-white/50" aria-hidden="true" />
             Visiter leur site web
           </a>
         </div>

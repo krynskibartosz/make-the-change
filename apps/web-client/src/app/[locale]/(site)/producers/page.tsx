@@ -71,7 +71,7 @@ export default async function ProducersPage() {
 
   return (
     <section className="pb-12 pt-0 md:pb-16 md:pt-2">
-      <div className="py-8 md:pb-12 md:pt-24">
+      <header className="py-8 md:pb-12 md:pt-24">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
@@ -82,10 +82,10 @@ export default async function ProducersPage() {
             </p>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="mx-auto w-full max-w-[1920px] px-4 pb-24 pt-8 md:px-8 lg:px-12 lg:pb-16 lg:pt-10">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 m-0 p-0 list-none">
           {producers.map((producer) => {
             const hasValidSlug =
               typeof producer.slug === 'string' && producer.slug.trim().length > 0
@@ -94,7 +94,8 @@ export default async function ProducersPage() {
               : []
 
             const content = (
-              <Card className="h-full overflow-hidden transition-all hover:shadow-lg">
+              <article className="h-full">
+                <Card className="h-full overflow-hidden transition-all hover:shadow-lg">
                 <div className="aspect-video w-full overflow-hidden bg-muted">
                   <img
                     src={images[0] || getRandomProducerImage(producer.name_default?.length || 0)}
@@ -107,7 +108,7 @@ export default async function ProducersPage() {
                     <div>
                       <h3 className="text-xl font-bold">{producer.name_default}</h3>
                       <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4" />
+                        <MapPin className="h-4 w-4" aria-hidden="true" />
                         <span>
                           {[producer.address_city, producer.address_country_code]
                             .filter(Boolean)
@@ -126,27 +127,30 @@ export default async function ProducersPage() {
 
                   <div className="flex items-center text-sm font-medium text-primary">
                     {hasValidSlug ? t('discover') : t('details_coming_soon')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
+              </article>
             )
 
             if (!hasValidSlug) {
               return (
-                <div key={producer.id} className="cursor-not-allowed opacity-80">
+                <li key={producer.id} className="cursor-not-allowed opacity-80">
                   {content}
-                </div>
+                </li>
               )
             }
 
             return (
-              <Link key={producer.id} href={`/producers/${producer.slug}`}>
-                {content}
-              </Link>
+              <li key={producer.id}>
+                <Link href={`/producers/${producer.slug}`} className="block h-full">
+                  {content}
+                </Link>
+              </li>
             )
           })}
-        </div>
+        </ul>
 
         {producers.length === 0 && (
           <div className="col-span-full py-20 text-center">

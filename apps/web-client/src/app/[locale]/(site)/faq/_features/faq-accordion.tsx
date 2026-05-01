@@ -34,11 +34,11 @@ export function FaqAccordion({
         })}
       </script>
 
-      <div className="relative z-10 flex flex-col gap-3 px-6 mb-12">
+      <ul className="relative z-10 flex flex-col gap-3 px-6 mb-12 m-0 list-none p-0">
         {items.map((item) => {
           const isOpen = activeId === item.id
           return (
-            <div
+            <li
               key={item.id}
               className={cn(
                 'overflow-hidden rounded-2xl border bg-[#1A1F26] transition-all duration-300',
@@ -47,6 +47,7 @@ export function FaqAccordion({
             >
               <button
                 type="button"
+                id={`faq-button-${item.id}`}
                 onClick={() => setActiveId(isOpen ? null : item.id)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-panel-${item.id}`}
@@ -60,6 +61,7 @@ export function FaqAccordion({
                     'h-5 w-5 flex-shrink-0 text-gray-500 transition-transform duration-300',
                     isOpen && 'rotate-180 text-white/80',
                   )}
+                  aria-hidden="true"
                 />
               </button>
 
@@ -67,6 +69,8 @@ export function FaqAccordion({
                 {isOpen && (
                   <motion.div
                     id={`faq-panel-${item.id}`}
+                    role="region"
+                    aria-labelledby={`faq-button-${item.id}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -79,13 +83,13 @@ export function FaqAccordion({
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </li>
           )
         })}
-      </div>
+      </ul>
 
-      <div className="relative z-10 mx-6 flex flex-col items-center rounded-3xl border border-white/[0.05] bg-gradient-to-b from-white/[0.05] to-transparent p-6 text-center">
-        <p className="mb-2 text-lg font-bold text-white">{footerTitle}</p>
+      <aside aria-labelledby="faq-footer-title" className="relative z-10 mx-6 flex flex-col items-center rounded-3xl border border-white/[0.05] bg-gradient-to-b from-white/[0.05] to-transparent p-6 text-center">
+        <h2 id="faq-footer-title" className="mb-2 text-lg font-bold text-white">{footerTitle}</h2>
         <p className="mb-6 text-sm text-gray-400 text-pretty">{footerDescription}</p>
         <Link
           href="/contact"
@@ -93,7 +97,7 @@ export function FaqAccordion({
         >
           {footerCta}
         </Link>
-      </div>
+      </aside>
     </>
   )
 }

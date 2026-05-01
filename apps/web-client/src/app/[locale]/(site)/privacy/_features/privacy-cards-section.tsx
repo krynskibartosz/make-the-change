@@ -60,10 +60,10 @@ export function PrivacyCardsSection({
       </div>
 
       {/* CARTE 4 — CTA (fullwidth, centré) */}
-      <div className="relative col-span-2 mt-2 flex flex-col items-center overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-[#1A1F26] to-[#0B0F15] p-6 text-center">
+      <aside aria-labelledby="privacy-cta-title" className="relative col-span-2 mt-2 flex flex-col items-center overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-b from-[#1A1F26] to-[#0B0F15] p-6 text-center">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-full bg-white/[0.04] blur-2xl" />
         <div className="relative z-10 flex flex-col gap-1 mb-4">
-          <h3 className="text-lg font-bold text-white">{contact.title}</h3>
+          <h2 id="privacy-cta-title" className="text-lg font-bold text-white">{contact.title}</h2>
           <p className="mx-auto max-w-[260px] text-xs leading-relaxed text-gray-400">
             {contact.description}
           </p>
@@ -74,7 +74,11 @@ export function PrivacyCardsSection({
         >
           {contact.cta}
         </Link>
-      </div>
+      </aside>
+    </section>
+  )
+}
+    </div>
     </div>
   )
 }

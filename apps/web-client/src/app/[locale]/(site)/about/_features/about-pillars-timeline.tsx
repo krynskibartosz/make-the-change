@@ -54,11 +54,12 @@ export function AboutPillarsTimeline({
   const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1])
 
   return (
-    <section className="relative px-6 py-20 sm:py-24">
+    <section aria-label="Nos piliers" className="relative px-6 py-20 sm:py-24">
       <div className="mx-auto max-w-xl">
-        <span className="mb-12 block text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-400/90">
+        <span aria-hidden="true" className="mb-12 block text-[11px] font-semibold uppercase tracking-[0.4em] text-amber-400/90">
           {overline}
         </span>
+        <h2 className="sr-only">Nos piliers</h2>
 
         <ol ref={containerRef} className="relative space-y-10 pl-6">
           {/* Animated gradient timeline line: centered on icon */}

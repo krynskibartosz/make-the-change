@@ -20,12 +20,12 @@ export default async function FaqPage() {
   return (
     <FaqShell title="FAQ">
       {/* Halo lumineux */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-lime-500/5 blur-[100px] pointer-events-none z-0" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-lime-500/5 blur-[100px] pointer-events-none z-0" aria-hidden="true" />
 
       {/* HERO */}
       <div className="relative z-10 px-6 pt-24 pb-8 flex flex-col items-start">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.05] bg-white/[0.03] px-3 py-1.5">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-400" />
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-400" aria-hidden="true" />
           <span className="text-[10px] font-bold uppercase tracking-widest text-lime-400">
             {viewModel.badge}
           </span>

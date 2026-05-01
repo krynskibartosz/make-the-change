@@ -18,16 +18,16 @@ export function AboutLetter({ body, signature }: AboutLetterProps) {
           pour la biodiversité. Un écosystème où chaque swipe sur un écran plante une graine, où chaque défi relevé restaure un habitat, et où l'action commune devient une seconde nature. Le collectif n'attend plus que vous.
         </p>
         <div className="flex items-center justify-center gap-4 text-gray-500 font-medium tracking-[0.2em] uppercase text-[10px] w-full">
-          <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-gray-500"></div>
+          <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-gray-500" aria-hidden="true"></div>
           Les fondateurs, Grégory & Bartosz
-          <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-gray-500"></div>
+          <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-gray-500" aria-hidden="true"></div>
         </div>
       </section>
     )
   }
 
   return (
-    <section ref={sectionRef} className="mx-auto flex max-w-2xl flex-col items-center justify-center px-6 sm:px-10 py-24 text-center">
+    <section ref={sectionRef} aria-label="Lettre des fondateurs" className="mx-auto flex max-w-2xl flex-col items-center justify-center px-6 sm:px-10 py-24 text-center">
       {/* Main paragraph with slow majestic fade-up */}
       <motion.p
         className="text-[17px] sm:text-lg text-gray-300 leading-[1.8] font-light text-pretty mb-12 drop-shadow-sm"
@@ -50,6 +50,7 @@ export function AboutLetter({ body, signature }: AboutLetterProps) {
         {/* Left line - draws from right to left */}
         <motion.div
           className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-gray-500 origin-right"
+          aria-hidden="true"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: 'easeOut' }}
@@ -58,6 +59,7 @@ export function AboutLetter({ body, signature }: AboutLetterProps) {
         {/* Right line - draws from left to right */}
         <motion.div
           className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-gray-500 origin-left"
+          aria-hidden="true"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: 'easeOut' }}

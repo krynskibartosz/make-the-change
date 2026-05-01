@@ -48,53 +48,58 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <BlogShell title="Blog">
       {/* Halo lumineux */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-lime-500/5 blur-[100px] pointer-events-none z-0" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-lime-500/5 blur-[100px] pointer-events-none z-0" aria-hidden="true" />
 
       {/* HERO éditorial */}
-      <div className="relative z-10 px-6 pt-24 pb-6 flex flex-col items-start">
-        <span className="text-[10px] font-bold tracking-[0.25em] text-lime-400 uppercase mb-3">
+      <header className="relative z-10 px-6 pt-24 pb-6 flex flex-col items-start">
+        <p className="text-[10px] font-bold tracking-[0.25em] text-lime-400 uppercase mb-3 m-0">
           {t('badge')}
-        </span>
+        </p>
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-balance text-white hyphens-none leading-[1.1]">
           {t('title')}
         </h1>
         <p className="text-base font-light leading-relaxed text-pretty text-gray-400">
           {t('description')}
         </p>
-      </div>
+      </header>
 
       {/* Chips catégories scrollables */}
       {categories.length > 0 ? (
-        <div className="relative z-10 w-full overflow-x-auto pb-2 mb-6 pt-2 px-6 flex gap-2" style={{ scrollbarWidth: 'none' }}>
-          <Link
-            href="/blog"
-            className={cn(
-              'whitespace-nowrap px-4 py-2 rounded-full text-sm',
-              normalizedCategory === 'all'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'border border-white/10 bg-white/5 text-gray-400',
-            )}
-          >
-            {t('categories.all')}
-          </Link>
-          {categories.map((category) => {
-            const isActive = normalizedCategory === category.toLowerCase()
-            return (
+        <nav aria-label="Catégories du blog" className="relative z-10 w-full overflow-x-auto pb-2 mb-6 pt-2 px-6" style={{ scrollbarWidth: 'none' }}>
+          <ul className="flex gap-2 m-0 p-0 list-none items-center">
+            <li>
               <Link
-                key={category}
-                href={`/blog?category=${encodeURIComponent(category)}`}
+                href="/blog"
                 className={cn(
-                  'whitespace-nowrap px-4 py-2 rounded-full text-sm',
-                  isActive
+                  'whitespace-nowrap px-4 py-2 rounded-full text-sm block',
+                  normalizedCategory === 'all'
                     ? 'bg-lime-400 text-[#0B0F15] font-bold'
                     : 'border border-white/10 bg-white/5 text-gray-400',
                 )}
               >
-                {category}
+                {t('categories.all')}
               </Link>
-            )
-          })}
-        </div>
+            </li>
+            {categories.map((category) => {
+              const isActive = normalizedCategory === category.toLowerCase()
+              return (
+                <li key={category}>
+                  <Link
+                    href={`/blog?category=${encodeURIComponent(category)}`}
+                    className={cn(
+                      'whitespace-nowrap px-4 py-2 rounded-full text-sm block',
+                      isActive
+                        ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                        : 'border border-white/10 bg-white/5 text-gray-400',
+                    )}
+                  >
+                    {category}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
       ) : null}
 
       {/* Hero Card : article à la une */}
@@ -103,6 +108,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           href={`/blog/${featuredPost.slug}`}
           className="relative z-10 mx-6 mb-8 block overflow-hidden rounded-3xl aspect-[4/5] sm:aspect-video border border-white/5 shadow-2xl bg-[#1A1F26] group"
         >
+          <article className="h-full w-full">
           {featuredPost.coverImage ? (
             // biome-ignore lint/performance/noImgElement: blog cover can be remote
             <img
@@ -116,30 +122,34 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/80 to-transparent" />
 
           <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col items-start">
-            <span className="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider mb-3">
+            <p className="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider mb-3 m-0">
               À la une
-            </span>
+            </p>
             <h2 className="text-2xl font-black text-white mb-2 leading-tight text-balance">
               {featuredPost.title}
             </h2>
-            <span className="text-xs text-gray-300 font-medium">
-              {featuredPost.publishedAt ? formatDate(featuredPost.publishedAt) : null}
-            </span>
+            {featuredPost.publishedAt ? (
+              <time dateTime={String(featuredPost.publishedAt)} className="text-xs text-gray-300 font-medium">
+                {formatDate(featuredPost.publishedAt)}
+              </time>
+            ) : null}
           </div>
+          </article>
         </Link>
       ) : null}
 
       {/* Flux d'articles : liste compacte */}
       {otherPosts.length > 0 ? (
-        <div className="relative z-10 px-6 flex flex-col gap-6 mb-12">
+        <ul className="relative z-10 px-6 flex flex-col gap-6 mb-12 m-0 p-0 list-none">
           {otherPosts.map((post) => {
             const primaryTag = post.tags[0]
             return (
-              <Link
-                key={post.id}
-                href={`/blog/${post.slug}`}
-                className="flex items-center gap-4 group cursor-pointer w-full hover:bg-white/[0.02] p-2 -mx-2 rounded-2xl transition-colors"
-              >
+              <li key={post.id}>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="block group cursor-pointer w-full hover:bg-white/[0.02] p-2 -mx-2 rounded-2xl transition-colors"
+                >
+                  <article className="flex items-center gap-4 w-full">
                 <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden shrink-0 border border-white/5 bg-[#1A1F26]">
                   {post.coverImage ? (
                     // biome-ignore lint/performance/noImgElement: blog cover can be remote
@@ -154,26 +164,30 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 </div>
                 <div className="flex flex-col justify-center flex-1 min-w-0 py-1">
                   {primaryTag ? (
-                    <span className="text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-1.5">
+                    <p className="text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-1.5 m-0">
                       {primaryTag}
-                    </span>
+                    </p>
                   ) : null}
                   <h3 className="text-base font-bold text-white leading-snug line-clamp-2 mb-2 text-pretty">
                     {post.title}
                   </h3>
-                  <span className="text-xs text-gray-500">
-                    {post.publishedAt ? formatDate(post.publishedAt) : null}
-                  </span>
+                  {post.publishedAt ? (
+                    <time dateTime={String(post.publishedAt)} className="text-xs text-gray-500">
+                      {formatDate(post.publishedAt)}
+                    </time>
+                  ) : null}
                 </div>
-              </Link>
+                  </article>
+                </Link>
+              </li>
             )
           })}
-        </div>
+        </ul>
       ) : (
-        <div className="relative z-10 mx-6 flex flex-col items-center rounded-3xl border border-white/[0.05] bg-gradient-to-b from-white/[0.05] to-transparent p-8 text-center">
-          <p className="mb-2 text-base font-bold text-white">{t('empty_title')}</p>
+        <section aria-labelledby="empty-blog-title" className="relative z-10 mx-6 flex flex-col items-center rounded-3xl border border-white/[0.05] bg-gradient-to-b from-white/[0.05] to-transparent p-8 text-center">
+          <h2 id="empty-blog-title" className="mb-2 text-base font-bold text-white">{t('empty_title')}</h2>
           <p className="text-sm text-gray-400 text-pretty">{t('empty_description')}</p>
-        </div>
+        </section>
       )}
     </BlogShell>
   )

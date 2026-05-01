@@ -151,7 +151,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
             }}
             aria-label={t('wishlist_action')}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className="h-4 w-4" aria-hidden="true" />
           </button>
         ),
         mediaOverlay: (
@@ -169,7 +169,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
                   t('out_of_stock')
                 ) : (
                   <>
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                     {t('add_to_cart')}
                   </>
                 )}
@@ -184,7 +184,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
               disabled={isOutOfStock || isAdding}
               aria-label={isOutOfStock ? t('out_of_stock') : t('add_to_cart')}
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="h-5 w-5" aria-hidden="true" />
             </Button>
           </>
         ),

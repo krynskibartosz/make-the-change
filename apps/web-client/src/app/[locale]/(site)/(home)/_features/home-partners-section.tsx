@@ -55,8 +55,8 @@ function HomePartnersCarousel({
 
       <div className="relative flex w-full flex-col overflow-hidden py-4">
         {/* Masques de fondu sur les bords pour l'effet d'apparition/disparition du marquee */}
-        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-24 bg-gradient-to-r from-background via-background/80 to-transparent" />
-        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-24 bg-gradient-to-l from-background via-background/80 to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-24 bg-gradient-to-r from-background via-background/80 to-transparent" aria-hidden="true" />
+        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-24 bg-gradient-to-l from-background via-background/80 to-transparent" aria-hidden="true" />
 
         <motion.ul
           className="flex w-max items-center py-6"
@@ -84,10 +84,10 @@ function HomePartnersCarousel({
 export const HomePartnersSection = (props: HomePartnersSectionProps) => {
   if (props.mode === 'empty')
     return (
-      <section className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
+      <section aria-labelledby="partners-empty-title" className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-12 text-center shadow-sm backdrop-blur-sm sm:px-10">
-            <h2 className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
+            <h2 id="partners-empty-title" className="text-3xl font-bold text-foreground md:text-4xl">{props.emptyTitle}</h2>
             <p className="mt-4 text-base text-muted-foreground sm:text-lg">
               {props.emptyDescription}
             </p>

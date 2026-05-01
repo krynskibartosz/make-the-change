@@ -40,9 +40,9 @@ export function ContactCopyButton({
     >
       <span className="sr-only">{srLabel}</span>
       {copied ? (
-        <Check className="h-5 w-5 animate-in zoom-in duration-300" />
+        <Check className="h-5 w-5 animate-in zoom-in duration-300" aria-hidden="true" />
       ) : (
-        <Copy className="h-5 w-5" />
+        <Copy className="h-5 w-5" aria-hidden="true" />
       )}
     </Button>
   )

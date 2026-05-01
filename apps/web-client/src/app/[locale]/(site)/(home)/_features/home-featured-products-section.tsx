@@ -46,7 +46,7 @@ export const HomeFeaturedProductsSection = ({
             className="w-36 shrink-0 snap-start group flex flex-col gap-2.5 active:scale-[0.98] transition-transform block"
           >
             <div className="w-full aspect-[4/5] rounded-2xl border border-lime-500/30 bg-lime-900/10 flex items-center justify-center">
-              <ArrowRight size={20} className="text-lime-400 transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={20} className="text-lime-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </div>
             <div className="px-1">
               <span className="text-sm font-bold text-lime-400 leading-snug">{viewAllLabel}</span>

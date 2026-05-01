@@ -80,7 +80,7 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
         className="group mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-4 text-base font-bold text-white shadow-[0_8px_32px_-8px_rgba(16,185,129,0.7)] transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1117]"
       >
         <span>{getConditionalLabel()}</span>
-        <ArrowRight className="h-5 w-5 transition group-hover:translate-x-0.5" />
+        <ArrowRight className="h-5 w-5 transition group-hover:translate-x-0.5" aria-hidden="true" />
       </button>
     </div>
   )

@@ -185,11 +185,11 @@ const ProductsFiltersSidebar = ({
             {allCategoriesLabel}
           </button>
           <ScrollArea className="max-h-96 pr-1">
-            <div className="space-y-2">
+            <ul className="space-y-2 m-0 p-0 list-none">
               {categoryOptions
                 .filter((option) => option.value)
                 .map((option) => (
-                  <div key={option.value} className="flex items-center space-x-3">
+                  <li key={option.value} className="flex items-center space-x-3">
                     <Checkbox
                       id={`cat-${option.value}`}
                       checked={category === option.value}
@@ -201,9 +201,9 @@ const ProductsFiltersSidebar = ({
                     >
                       {option.label}
                     </label>
-                  </div>
+                  </li>
                 ))}
-            </div>
+            </ul>
           </ScrollArea>
         </AccordionContent>
       </AccordionItem>
@@ -221,11 +221,11 @@ const ProductsFiltersSidebar = ({
             {allProducersLabel}
           </button>
           <ScrollArea className="max-h-96 pr-1">
-            <div className="space-y-2">
+            <ul className="space-y-2 m-0 p-0 list-none">
               {producerOptions
                 .filter((option) => option.value)
                 .map((option) => (
-                  <div key={option.value} className="flex items-center space-x-3">
+                  <li key={option.value} className="flex items-center space-x-3">
                     <Checkbox
                       id={`prod-${option.value}`}
                       checked={producer === option.value}
@@ -237,9 +237,9 @@ const ProductsFiltersSidebar = ({
                     >
                       {option.label}
                     </label>
-                  </div>
+                  </li>
                 ))}
-            </div>
+            </ul>
           </ScrollArea>
         </AccordionContent>
       </AccordionItem>
@@ -257,11 +257,11 @@ const ProductsFiltersSidebar = ({
             {allTagsLabel}
           </button>
           <ScrollArea className="max-h-96 pr-1">
-            <div className="space-y-2">
+            <ul className="space-y-2 m-0 p-0 list-none">
               {tagOptions
                 .filter((option) => option.value)
                 .map((option) => (
-                  <div key={option.value} className="flex items-center space-x-3">
+                  <li key={option.value} className="flex items-center space-x-3">
                     <Checkbox
                       id={`tag-${option.value}`}
                       checked={tag === option.value}
@@ -273,9 +273,9 @@ const ProductsFiltersSidebar = ({
                     >
                       {option.label}
                     </label>
-                  </div>
+                  </li>
                 ))}
-            </div>
+            </ul>
           </ScrollArea>
         </AccordionContent>
       </AccordionItem>
@@ -485,10 +485,10 @@ export const ProductsClient = ({
   return (
     <>
       {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
-      <div className="px-6 pt-8 pb-4">
+      <header className="px-6 pt-8 pb-4">
         <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">{tProducts('title')}</h1>
         <p className="text-white/60 text-[15px] mt-3 font-medium">{tProducts('subtitle')}</p>
-      </div>
+      </header>
 
       {/* Desktop sticky top search bar — hidden on mobile */}
       <div className="hidden md:block sticky top-[4.5rem] z-30 border-b border-border bg-background/95 backdrop-blur">
@@ -525,7 +525,7 @@ export const ProductsClient = ({
                       placeholder={tProducts('filters.tag_label')}
                     />
                     <ComboboxTrigger className="absolute right-1 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-muted">
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      <ArrowUpDown className="h-3.5 w-3.5" aria-hidden="true" />
                     </ComboboxTrigger>
                   </div>
                   <ComboboxPortal>
@@ -569,7 +569,7 @@ export const ProductsClient = ({
                 >
                   <SelectTrigger className="rounded-full bg-white/5 border border-white/10 px-5 py-2.5 text-sm transition-transform active:scale-95 flex items-center gap-2 w-full lg:w-[220px] text-foreground hover:bg-white/10 data-[placeholder]:text-foreground">
                     <div className="flex min-w-0 items-center gap-2 w-full justify-center">
-                      <ArrowUpDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <ArrowUpDown className="h-4 w-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
                       <span className="truncate font-medium">{sortLabel}</span>
                     </div>
                   </SelectTrigger>
@@ -594,7 +594,7 @@ export const ProductsClient = ({
                   aria-pressed={view === 'grid'}
                   aria-label={tProducts('view.grid')}
                 >
-                  <LayoutGrid className="h-3.5 w-3.5" />
+                  <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>{tProducts('view.grid')}</span>
                 </button>
                 <button
@@ -607,7 +607,7 @@ export const ProductsClient = ({
                   aria-pressed={view === 'list'}
                   aria-label={tProducts('view.list')}
                 >
-                  <ListIcon className="h-3.5 w-3.5" />
+                  <ListIcon className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>{tProducts('view.list')}</span>
                 </button>
               </div>
@@ -627,7 +627,7 @@ export const ProductsClient = ({
       </div>
 
       {/* ── DOCK FLOTTANT (Thumb Zone) — identique à /projects ─────────────── */}
-      <div
+      <nav aria-label="Filtres rapides"
         className="md:hidden fixed mb-1 left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
@@ -639,7 +639,7 @@ export const ProductsClient = ({
             className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-white/5 text-lime-400 transition-all active:scale-95 shrink-0 mx-1"
             aria-label="Solde Points d'Impact"
           >
-            <Sparkles className="w-3.5 h-3.5 shrink-0" />
+            <Sparkles className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span className="text-[13px] font-black tabular-nums tracking-tight">
               {isConnected ? userPoints.toLocaleString('fr-FR') : '--'}
             </span>
@@ -647,9 +647,10 @@ export const ProductsClient = ({
 
           {/* Séparateur vertical - plus visible pour séparer clairement le portefeuille des filtres */}
           <div className="w-px mr-3 h-6 bg-white/25 shrink-0" />
-          <div className="flex items-center gap-1 w-full mr-2">
+          <ul className="flex items-center gap-1 w-full mr-2 m-0 p-0 list-none">
 
             {/* Filtre Tous */}
+            <li>
             <button
               type="button"
               onClick={() => updateQuery({ category: '' })}
@@ -660,11 +661,12 @@ export const ProductsClient = ({
             >
               <span className="text-[13px] font-bold">Tous</span>
             </button>
+            </li>
 
             {/* Filtre par catégorie — les 3 premières catégories */}
             {categories.slice(0, 3).map((cat) => (
+              <li key={cat.id}>
               <button
-                key={cat.id}
                 type="button"
                 onClick={() => updateQuery({ category: cat.id })}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${initialQueryState.category === cat.id
@@ -674,10 +676,11 @@ export const ProductsClient = ({
               >
                 <span className="text-[13px] font-medium">{cat.name_default}</span>
               </button>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-      </div>
+      </nav>
 
       {/* Products Area — Fixed structure */}
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12 pt-10 pb-64 md:pb-16 lg:pt-14">
@@ -726,7 +729,7 @@ export const ProductsClient = ({
             {/* ── Grille Reward Store — grid-cols-2 mobile, liste en desktop ── */}
             {products.length === 0 ? (
               <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 text-center">
-                <Package className="mb-4 h-12 w-12 text-muted-foreground/50" />
+                <Package className="mb-4 h-12 w-12 text-muted-foreground/50" aria-hidden="true" />
                 <h3 className="text-lg font-bold text-foreground">{tProducts('empty_state.title')}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{tProducts('empty_state.description')}</p>
                 {hasActiveFilters ? (
@@ -737,16 +740,16 @@ export const ProductsClient = ({
               </div>
             ) : (
               /* Mobile : grille 2 colonnes / Desktop : suit le toggle vue */
-              <div
+              <ul
                 className={
                   view === 'list'
-                    ? 'flex flex-col divide-y divide-white/[0.06] -mx-4 md:-mx-8 lg:-mx-12'
-                    : 'grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+                    ? 'flex flex-col divide-y divide-white/[0.06] -mx-4 md:-mx-8 lg:-mx-12 m-0 p-0 list-none'
+                    : 'grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 m-0 p-0 list-none'
                 }
               >
                 {products.map((product) => (
+                  <li key={product.id}>
                   <ClientCatalogProductCard
-                    key={product.id}
                     view={view}
                     product={product}
                     featuredLabel={tProducts('featured')}
@@ -755,8 +758,9 @@ export const ProductsClient = ({
                     pointsLabel={tProducts('card.points')}
                     viewLabel={tProducts('card.view_action')}
                   />
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
 
             {/* Pagination */}
