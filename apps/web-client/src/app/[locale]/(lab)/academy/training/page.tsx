@@ -12,7 +12,7 @@ import {
   getDefaultAcademyProgress,
   type AcademyProgress,
 } from '@/lib/mock/mock-academy'
-import { MAX_LIVES, isUnlimitedLives } from '@/lib/lives'
+import { MAX_LIVES, isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { cn } from '@/lib/utils'
 
 const TRAINING_QUESTIONS = [

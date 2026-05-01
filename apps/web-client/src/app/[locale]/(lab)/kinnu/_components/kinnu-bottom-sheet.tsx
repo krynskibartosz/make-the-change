@@ -14,8 +14,8 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { Button } from '@make-the-change/core/ui'
-import { type KinnuNode, type KinnuNodeType } from '@/lib/kinnu/graph'
-import { type KinnuNodeStatus, KINNU_SCORE_PER_NODE } from '@/lib/kinnu/bridge'
+import { type KinnuNode, type KinnuNodeType } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
+import { type KinnuNodeStatus, KINNU_SCORE_PER_NODE } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 import { cn } from '@/lib/utils'
 
 const TYPE_ICON: Record<KinnuNodeType, LucideIcon> = {

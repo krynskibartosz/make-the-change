@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { getKinnuWorldById } from '@/lib/kinnu/graph'
+import { getKinnuWorldById } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
 import {
   computeKinnuStatuses,
   getNewlyUnlockedIds,
@@ -10,7 +10,7 @@ import {
   addTimeOffsetDays,
   type ComputedKinnuStatus,
   type NodeMastery,
-} from '@/lib/kinnu/bridge'
+} from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 import { Clock } from 'lucide-react'
 import { KinnuGraphCanvas } from '../_components/kinnu-graph-canvas'
 import { KinnuBottomSheet } from '../_components/kinnu-bottom-sheet'

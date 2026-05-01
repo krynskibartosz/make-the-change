@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { InterceptedRouteDialog } from '@/app/[locale]/@modal/_components/intercepted-route-dialog'
 import { REGISTER_MODAL_CONTENT_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
-import { RegisterForm } from '@/components/auth/register-form'
+import { RegisterForm } from '@/app/[locale]/(auth)/_components/register-form'
 
 export default function InterceptedRegister() {
   return (

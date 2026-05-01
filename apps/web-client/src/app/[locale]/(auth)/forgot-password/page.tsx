@@ -1,5 +1,5 @@
 import { connection } from 'next/server'
-import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
+import { ForgotPasswordForm } from '@/app/[locale]/(auth)/_components/forgot-password-form'
 
 export default async function ForgotPasswordPage() {
   await connection()

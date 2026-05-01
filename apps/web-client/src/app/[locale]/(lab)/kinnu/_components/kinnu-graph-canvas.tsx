@@ -1,8 +1,8 @@
 'use client'
 
 import { useMemo } from 'react'
-import { type KinnuEdge, type KinnuNode, KINNU_LEVEL_Y } from '@/lib/kinnu/graph'
-import { type ComputedKinnuStatus } from '@/lib/kinnu/bridge'
+import { type KinnuEdge, type KinnuNode, KINNU_LEVEL_Y } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
+import { type ComputedKinnuStatus } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 import { KinnuNode as KinnuNodeComponent } from './kinnu-node'
 import { cn } from '@/lib/utils'
 

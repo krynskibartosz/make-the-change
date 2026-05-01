@@ -16,7 +16,7 @@ import {
   formatMsCountdown,
   isUnlimitedLives,
   msUntilNextRegen,
-} from '@/lib/lives'
+} from '@/app/[locale]/(lab)/_lib/lives'
 import { cn } from '@/lib/utils'
 
 function RegenTimer({ lives, updatedAt }: { lives: number; updatedAt: string }) {

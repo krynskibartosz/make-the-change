@@ -51,8 +51,8 @@ import {
   type AcademyUnitKind,
   type AcademyUnitWithStatus,
 } from '@/lib/mock/mock-academy'
-import { isUnlimitedLives } from '@/lib/lives'
-import { LivesCounter } from '@/components/lives-counter'
+import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
+import { LivesCounter } from '@/app/[locale]/(lab)/_components/lives-counter'
 import { cn, formatPoints } from '@/lib/utils'
 
 const LOADING_STEPS = [

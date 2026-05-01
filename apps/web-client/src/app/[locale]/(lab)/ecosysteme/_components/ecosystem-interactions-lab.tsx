@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Button } from '@make-the-change/core/ui'
 import {
@@ -32,7 +32,7 @@ import {
   type EcosystemNodeType,
   type EcosystemRelation,
   getEcosystemById,
-} from '@/lib/ecosystem/graph'
+} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 import type { SpeciesContext } from '@/types/context'
 

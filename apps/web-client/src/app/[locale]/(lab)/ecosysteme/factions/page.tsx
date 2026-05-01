@@ -1,8 +1,8 @@
-'use client'
+﻿'use client'
 
 import { Button } from '@make-the-change/core/ui'
 import { ChevronLeft } from 'lucide-react'
-import { type EcosystemFactionKey, FACTION_COPY } from '@/lib/ecosystem/graph'
+import { type EcosystemFactionKey, FACTION_COPY } from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 
 function FactionCard({

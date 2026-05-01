@@ -1,7 +1,7 @@
 'use client'
 
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
+import { ForgotPasswordForm } from '@/app/[locale]/(auth)/_components/forgot-password-form'
 
 export default function InterceptedForgotPassword() {
   return (

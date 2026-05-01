@@ -1,12 +1,12 @@
-﻿import { getV2UnitsByChapter, listV2Units } from '@/lib/academy/content'
-import { v2UnitToLegacy } from '@/lib/academy/runtime'
+﻿import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(lab)/academy/_lib/content'
+import { v2UnitToLegacy } from '@/app/[locale]/(lab)/academy/_lib/runtime'
 import {
   MAX_LIVES,
   SEEDS_COST,
   computeRegenLives,
   isUnlimitedLives,
   type LivesState,
-} from '@/lib/lives'
+} from '@/app/[locale]/(lab)/_lib/lives'
 
 export const ACADEMY_PROGRESS_STORAGE_KEY = 'mtc_academy_progress_v1'
 export const MOCK_ACADEMY_VIEWER_ID = 'mock-viewer'

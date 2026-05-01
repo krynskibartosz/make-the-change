@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { InterceptedRouteDialog } from '@/app/[locale]/@modal/_components/intercepted-route-dialog'
 import { LOGIN_MODAL_CONTENT_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
-import { LoginForm } from '@/components/auth/login-form'
+import { LoginForm } from '@/app/[locale]/(auth)/_components/login-form'
 
 export default function InterceptedLogin() {
   return (

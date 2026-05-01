@@ -1,11 +1,11 @@
-'use client'
+﻿'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   type EcosystemDefinition,
   type EcosystemNode,
   findCascadeNodeIds,
-} from '@/lib/ecosystem/graph'
+} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
 
 export function useEcosystem(ecosystem: EcosystemDefinition, isAccessUnlocked: boolean) {
   const [nodes, setNodes] = useState<EcosystemNode[]>(() =>

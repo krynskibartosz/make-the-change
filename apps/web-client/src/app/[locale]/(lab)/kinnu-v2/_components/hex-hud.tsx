@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Hexagon, Sparkles } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { LivesCounter } from '@/components/lives-counter'
+import { LivesCounter } from '@/app/[locale]/(lab)/_components/lives-counter'
 
 type HexHudProps = {
   masteredCount: number

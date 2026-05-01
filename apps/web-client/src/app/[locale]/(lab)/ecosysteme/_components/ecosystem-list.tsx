@@ -1,10 +1,10 @@
-'use client'
+﻿'use client'
 
 import { Button } from '@make-the-change/core/ui'
 import { Layers3, LockKeyhole, type LucideIcon, Sprout, TreePine, Users, Waves } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { ECOSYSTEMS, type EcosystemDefinition } from '@/lib/ecosystem/graph'
+import { ECOSYSTEMS, type EcosystemDefinition } from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 
 const THEME_ICON: Record<EcosystemDefinition['theme'], LucideIcon> = {

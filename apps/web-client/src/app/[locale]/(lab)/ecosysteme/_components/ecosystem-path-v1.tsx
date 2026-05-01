@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Button } from '@make-the-change/core/ui'
 import {
@@ -39,7 +39,7 @@ import {
   FACTION_COPY,
   getEcosystemById,
   PERSPECTIVE_COPY,
-} from '@/lib/ecosystem/graph'
+} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 
 type EcosystemSpeciesPreview = {

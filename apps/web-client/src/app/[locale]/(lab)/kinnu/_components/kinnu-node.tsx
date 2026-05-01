@@ -13,8 +13,8 @@ import {
   Sprout,
   type LucideIcon,
 } from 'lucide-react'
-import { type KinnuNode, type KinnuNodeType } from '@/lib/kinnu/graph'
-import { type KinnuNodeStatus } from '@/lib/kinnu/bridge'
+import { type KinnuNode, type KinnuNodeType } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
+import { type KinnuNodeStatus } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 import { cn } from '@/lib/utils'
 
 // ─── Icônes par type et par nom ───────────────────────────────────────────────

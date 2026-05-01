@@ -1,7 +1,7 @@
 'use client'
 
 import { LockKeyhole, MapPin, Sprout, TreePine, Waves, type LucideIcon } from 'lucide-react'
-import { type KinnuWorld, type KinnuTheme } from '@/lib/kinnu/graph'
+import { type KinnuWorld, type KinnuTheme } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
 import { cn } from '@/lib/utils'
 
 const THEME_ICON: Record<KinnuTheme, LucideIcon> = {

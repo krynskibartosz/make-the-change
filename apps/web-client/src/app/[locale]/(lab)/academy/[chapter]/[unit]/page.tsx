@@ -50,7 +50,7 @@ import {
   type AcademySwipeExercise,
   type AcademyUnit,
 } from '@/lib/mock/mock-academy'
-import { isUnlimitedLives } from '@/lib/lives'
+import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { cn } from '@/lib/utils'
 
 const getParam = (value: string | string[] | undefined) =>

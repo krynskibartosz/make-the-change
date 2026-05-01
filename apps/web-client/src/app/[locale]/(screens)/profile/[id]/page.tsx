@@ -12,7 +12,7 @@ import { Crown, Leaf, Loader2, MapPin, Sparkles, Trophy, Wallet } from 'lucide-r
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { MockPublicProfilePage } from '@/app/[locale]/(screens)/profile/[id]/mock-public-profile'
-import { ProfileHeader } from '@/components/profile/profile-header'
+import { ProfileHeader } from '@/app/[locale]/(tabs)/profile/_components/profile-header'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { getLevelProgress, getMilestoneBadges } from '@/lib/gamification'

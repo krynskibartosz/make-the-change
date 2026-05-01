@@ -2,8 +2,8 @@
 
 import { ArrowLeft, Brain, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { type KinnuWorld } from '@/lib/kinnu/graph'
-import { computeKinnuScore } from '@/lib/kinnu/bridge'
+import { type KinnuWorld } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
+import { computeKinnuScore } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 
 type KinnuHudProps = {
   world: KinnuWorld

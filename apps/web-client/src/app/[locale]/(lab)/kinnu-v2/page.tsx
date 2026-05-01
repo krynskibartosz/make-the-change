@@ -17,7 +17,7 @@ import {
   getDefaultAcademyProgress,
   type AcademyProgress,
 } from '@/lib/mock/mock-academy'
-import { isUnlimitedLives } from '@/lib/lives'
+import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 
 export default function KinnuV2Page() {
   const router = useRouter()

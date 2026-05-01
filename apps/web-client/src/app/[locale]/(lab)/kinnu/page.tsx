@@ -3,8 +3,8 @@
 import { Brain } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { KINNU_WORLDS } from '@/lib/kinnu/graph'
-import { loadKinnuProgress, computeKinnuScore } from '@/lib/kinnu/bridge'
+import { KINNU_WORLDS } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
+import { loadKinnuProgress, computeKinnuScore } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 import { KinnuWorldCard } from './_components/kinnu-world-card'
 
 export default function KinnuHubPage() {

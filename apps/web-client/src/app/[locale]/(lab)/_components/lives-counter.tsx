@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Heart, Infinity } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { formatMsCountdown, msUntilNextRegen } from '@/lib/lives'
+import { formatMsCountdown, msUntilNextRegen } from '@/app/[locale]/(lab)/_lib/lives'
 import { cn } from '@/lib/utils'
 
 type LivesCounterProps = {
