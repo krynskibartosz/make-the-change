@@ -3,7 +3,7 @@ import { getLocalizedContent } from '@/lib/utils'
 import {
   formatEcologicalImpact,
   ProjectThumbnailCard,
-} from '@/app/[locale]/(marketing)/_features/project-thumbnail-card'
+} from '@/app/[locale]/(site)/_features/project-thumbnail-card'
 import type { RelatedProject } from '../project-detail-data'
 
 type SimilarProjectsCarouselProps = {

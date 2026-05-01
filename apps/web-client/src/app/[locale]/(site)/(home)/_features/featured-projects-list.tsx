@@ -6,7 +6,7 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import {
   formatEcologicalImpact,
   ProjectThumbnailCard,
-} from '@/app/[locale]/(marketing)/_features/project-thumbnail-card'
+} from '@/app/[locale]/(site)/_features/project-thumbnail-card'
 
 type FeaturedProject = {
   id: string

@@ -1,4 +1,4 @@
-import { MarketingHero } from '@/app/[locale]/(marketing)/_features/marketing-hero'
+import { MarketingHero } from '@/app/[locale]/(site)/_features/marketing-hero'
 import type { ContactHeroProps } from './contact.types'
 
 export function ContactHeroSection({ badge, title, description }: ContactHeroProps) {

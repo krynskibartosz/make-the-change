@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
-import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
-import { ProductThumbnailCard } from '@/app/[locale]/(marketing)/_features/product-thumbnail-card'
+import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
+import { ProductThumbnailCard } from '@/app/[locale]/(site)/_features/product-thumbnail-card'
 import type { ProductCardProduct } from '@/app/[locale]/(tabs)/products/_features/product-card'
 import { Link } from '@/i18n/navigation'
 

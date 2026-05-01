@@ -82,56 +82,7 @@ const nextConfig = {
       },
     ]
   },
-  async redirects() {
-    return [
-      {
-        source: '/challenges',
-        destination: '/aventure?tab=defis',
-        permanent: true,
-      },
-      {
-        source: '/challenges/:slug',
-        destination: '/aventure?tab=defis',
-        permanent: true,
-      },
-      // Support i18n (préfixes locales)
-      {
-        source: '/:locale/challenges',
-        destination: '/:locale/aventure?tab=defis',
-        permanent: true,
-      },
-      {
-        source: '/community',
-        destination: '/collectif',
-        permanent: true,
-      },
-      {
-        source: '/:locale/community',
-        destination: '/:locale/collectif',
-        permanent: true,
-      },
-      {
-        source: '/aventure/guilds',
-        destination: '/community/guilds',
-        permanent: true,
-      },
-      {
-        source: '/aventure/guilds/:slug',
-        destination: '/community/guilds/:slug',
-        permanent: true,
-      },
-      {
-        source: '/:locale/aventure/guilds',
-        destination: '/:locale/community/guilds',
-        permanent: true,
-      },
-      {
-        source: '/:locale/aventure/guilds/:slug',
-        destination: '/:locale/community/guilds/:slug',
-        permanent: true,
-      },
-    ]
-  },
+
 }
 
 export default withNextIntl(nextConfig)

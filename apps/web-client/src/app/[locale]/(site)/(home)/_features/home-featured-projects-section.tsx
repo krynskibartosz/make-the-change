@@ -1,5 +1,5 @@
-import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
-import { FeaturedProjectsList } from '@/app/[locale]/(marketing)/(home)/_features/featured-projects-list'
+import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
+import { FeaturedProjectsList } from '@/app/[locale]/(site)/(home)/_features/featured-projects-list'
 import type { HomeFeaturedProject } from './home.types'
 
 type HomeFeaturedProjectsSectionProps = {

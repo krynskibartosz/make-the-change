@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { HeroParallaxBackground } from '../../../(marketing)/(home)/_features/hero-parallax-background'
+import { HeroParallaxBackground } from '@/app/[locale]/(site)/(home)/_features/hero-parallax-background'
 import type { AboutHeroProps } from './about.types'
 
 const HERO_VIDEO_URL = '/videos/home-header.mp4'

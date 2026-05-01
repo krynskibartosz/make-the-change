@@ -1,6 +1,6 @@
 import { Button } from '@make-the-change/core/ui'
 import { Globe } from 'lucide-react'
-import { MarketingCtaBand } from '@/app/[locale]/(marketing)/_features/marketing-cta-band'
+import { MarketingCtaBand } from '@/app/[locale]/(site)/_features/marketing-cta-band'
 import { Link } from '@/i18n/navigation'
 import type { AboutCtaProps } from './about.types'
 

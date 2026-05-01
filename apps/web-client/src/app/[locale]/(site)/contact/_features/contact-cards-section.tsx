@@ -9,7 +9,7 @@ import {
   MapPin,
   Twitter,
 } from 'lucide-react'
-import { MarketingSection } from '@/app/[locale]/(marketing)/_features/marketing-section'
+import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
 import { Link } from '@/i18n/navigation'
 import { ContactCopyButton } from '../contact-copy-button'
 import type { ContactCardsProps } from './contact.types'

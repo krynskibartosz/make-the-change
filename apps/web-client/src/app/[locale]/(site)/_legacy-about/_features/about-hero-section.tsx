@@ -1,5 +1,5 @@
 import { Globe, Leaf, Sparkles, Users } from 'lucide-react'
-import { MarketingHeroShell } from '@/app/[locale]/(marketing)/_features/marketing-hero-shell'
+import { MarketingHeroShell } from '@/app/[locale]/(site)/_features/marketing-hero-shell'
 import type { AboutHeroProps } from './about.types'
 
 export function AboutHeroSection({ badge, title, intro, cards }: AboutHeroProps) {
