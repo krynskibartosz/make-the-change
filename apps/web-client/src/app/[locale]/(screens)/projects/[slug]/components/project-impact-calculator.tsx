@@ -33,6 +33,14 @@ const formatInteger = (value: number): string =>
     maximumFractionDigits: 0,
   }).format(value)
 
+const formatCompact = (value: number): string => {
+  if (value < 10000) return formatInteger(value)
+  return new Intl.NumberFormat('fr-FR', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value)
+}
+
 const formatDecimal = (value: number): string =>
   new Intl.NumberFormat('fr-FR', {
     minimumFractionDigits: 0,
@@ -169,22 +177,22 @@ export function ProjectImpactCalculator({
           <div className="grid grid-cols-2 gap-3">
             {projectType === 'reef' || isDonationProject ? (
               <>
-                <MetricCard icon={Waves} valueWhole={formatInteger(corals)} label="Boutures plantées" />
+                <MetricCard icon={Waves} valueWhole={formatCompact(corals)} label="Boutures plantées" />
                 <MetricCard icon={Hexagon} prefix="~ Environ" valueWhole={areaParts.whole} valueFraction={areaParts.fraction} unit="m²" label="Surface restaurée" />
-                <MetricCard icon={Fish} prefix="~ Environ" valueWhole={formatInteger(fishShelter)} label="Poissons abrités" />
-                <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={formatInteger(habitatCreated)} label="Points biodiversité" />
+                <MetricCard icon={Fish} prefix="~ Environ" valueWhole={formatCompact(fishShelter)} label="Poissons abrités" />
+                <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={formatCompact(habitatCreated)} label="Points biodiversité" />
               </>
             ) : projectType === 'orchard' ? (
               <>
-                <MetricCard icon={TreePine} valueWhole={formatInteger(olivesSupported)} label="Oliviers soutenus" />
+                <MetricCard icon={TreePine} valueWhole={formatCompact(olivesSupported)} label="Oliviers soutenus" />
                 <MetricCard icon={Droplets} prefix="Jusqu'à" valueWhole={oilParts.whole} valueFraction={oilParts.fraction} unit="L" label="Huile estimée" />
                 <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={co2SequesteredParts.whole} valueFraction={co2SequesteredParts.fraction} unit="kg" label="CO₂ séquestré (est.)" colSpan />
               </>
             ) : (
               <>
-                <MetricCard icon={Bug} prefix="~ Environ" valueWhole={formatInteger(bees)} label="Abeilles parrainées" />
+                <MetricCard icon={Bug} prefix="~ Environ" valueWhole={formatCompact(bees)} label="Abeilles parrainées" />
                 <MetricCard icon={Hexagon} prefix="Jusqu'à" valueWhole={honeyParts.whole} valueFraction={honeyParts.fraction} unit="kg" label="Récolte potentielle" />
-                <MetricCard icon={Flower2} prefix="> Plus de" valueWhole={formatInteger(flowers)} label="Fleurs pollinisées" />
+                <MetricCard icon={Flower2} prefix="> Plus de" valueWhole={formatCompact(flowers)} label="Fleurs pollinisées" />
                 <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={co2Parts.whole} valueFraction={co2Parts.fraction} unit="kg" label="CO₂ compensé (est.)" />
               </>
             )}
@@ -194,21 +202,21 @@ export function ProjectImpactCalculator({
         <div className="flex w-full items-start justify-between border-y border-white/5 py-6 my-4">
           {projectType === 'reef' || isDonationProject ? (
             <>
-              <CheckoutMetric icon={Waves} iconColorClass="text-lime-400" valueWhole={formatInteger(corals)} label="Boutures" />
+              <CheckoutMetric icon={Waves} iconColorClass="text-lime-400" valueWhole={formatCompact(corals)} label="Boutures" />
               <CheckoutMetric icon={Hexagon} iconColorClass="text-amber-500" prefix="~ Environ" valueWhole={areaParts.whole} valueFraction={areaParts.fraction} unit="m²" label="Surface" />
-              <CheckoutMetric icon={Fish} iconColorClass="text-sky-400" prefix="~ Environ" valueWhole={formatInteger(fishShelter)} label="Refuges" />
+              <CheckoutMetric icon={Fish} iconColorClass="text-sky-400" prefix="~ Environ" valueWhole={formatCompact(fishShelter)} label="Refuges" />
             </>
           ) : projectType === 'orchard' ? (
             <>
-              <CheckoutMetric icon={TreePine} iconColorClass="text-lime-400" valueWhole={formatInteger(olivesSupported)} label="Oliviers" />
+              <CheckoutMetric icon={TreePine} iconColorClass="text-lime-400" valueWhole={formatCompact(olivesSupported)} label="Oliviers" />
               <CheckoutMetric icon={Droplets} iconColorClass="text-amber-500" prefix="Jusqu'à" valueWhole={oilParts.whole} valueFraction={oilParts.fraction} unit="L" label="Huile" />
               <CheckoutMetric icon={Cloud} iconColorClass="text-sky-400" prefix="~ Environ" valueWhole={co2SequesteredParts.whole} valueFraction={co2SequesteredParts.fraction} unit="kg" label="CO₂" />
             </>
           ) : (
             <>
-              <CheckoutMetric icon={Bug} iconColorClass="text-lime-400" prefix="~ Environ" valueWhole={formatInteger(bees)} label="Abeilles" />
+              <CheckoutMetric icon={Bug} iconColorClass="text-lime-400" prefix="~ Environ" valueWhole={formatCompact(bees)} label="Abeilles" />
               <CheckoutMetric icon={Hexagon} iconColorClass="text-amber-500" prefix="Jusqu'à" valueWhole={honeyParts.whole} valueFraction={honeyParts.fraction} unit="kg" label="Miel" />
-              <CheckoutMetric icon={Flower2} iconColorClass="text-sky-400" prefix="> Plus de" valueWhole={formatInteger(flowers)} label="Fleurs" />
+              <CheckoutMetric icon={Flower2} iconColorClass="text-sky-400" prefix="> Plus de" valueWhole={formatCompact(flowers)} label="Fleurs" />
             </>
           )}
         </div>
