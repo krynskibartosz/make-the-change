@@ -1,10 +1,13 @@
-import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Wind, Sprout } from 'lucide-react'
+import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Settings, Sparkles, Target, Wind, Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
 import { getFactionContribution } from '@/lib/mock/mock-factions'
 import { AnimatedMascot } from '@/app/[locale]/(tabs)/profile/_components/animated-mascot'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
+import { ProfileSettingsHeader } from '@/app/[locale]/(tabs)/profile/_components/profile-settings-header'
+import { BioDexCard } from '@/app/[locale]/(tabs)/_components/biodex-card'
+import { ImpactCard } from '@/app/[locale]/(tabs)/profile/_components/impact-card'
 
 export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
   const accentTheme = getFactionTheme(profile?.faction ?? null)
@@ -14,20 +17,8 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
     lockedLimit: 2,
   })
 
-  const profileHeader = (
-    <div className="mx-auto flex h-12 w-full max-w-3xl items-center justify-end px-4">
-      <Link
-        href="/profile/settings"
-        aria-label="Paramètres"
-        className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:bg-white/10"
-      >
-        <Settings className="h-5 w-5" aria-hidden="true" />
-      </Link>
-    </div>
-  )
-
   return (
-    <TabScreen header={profileHeader}>
+    <TabScreen header={<ProfileSettingsHeader href="/profile/settings" />}>
       <div className="min-h-screen text-white">
         <main className="mx-auto w-full max-w-3xl px-4">
         <section className="relative pt-6">
@@ -64,44 +55,43 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
         </section>
 
         <ul className="mb-10 mt-8 grid grid-cols-2 gap-3 m-0 p-0 list-none">
-          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Bug className="h-5 w-5 text-amber-400" aria-hidden="true" />
-            <div className="mt-2 text-2xl font-black tabular-nums text-white">
-              {(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
-            </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">ABEILLES SAUVÉES</div>
+          <li>
+            <ImpactCard
+              icon={<Bug className="h-5 w-5 text-amber-400" aria-hidden="true" />}
+              value={(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
+              label="ABEILLES SAUVÉES"
+            />
           </li>
 
-          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Droplets className="h-5 w-5 text-orange-400" aria-hidden="true" />
-            <div className="mt-2 text-2xl font-black tabular-nums text-white">
-              {(profile?.honeyGeneratedKg || 0.77).toLocaleString('fr-FR', {
+          <li>
+            <ImpactCard
+              icon={<Droplets className="h-5 w-5 text-orange-400" aria-hidden="true" />}
+              value={`${(profile?.honeyGeneratedKg || 0.77).toLocaleString('fr-FR', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
-              })}{' '}
-              kg
-            </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">MIEL GÉNÉRÉ</div>
+              })} kg`}
+              label="MIEL GÉNÉRÉ"
+            />
           </li>
 
-          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />
-            <div className="mt-2 text-2xl font-black tabular-nums text-white">
-              {(profile?.co2CapturedKg || 3.85).toLocaleString('fr-FR', {
+          <li>
+            <ImpactCard
+              icon={<Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />}
+              value={`${(profile?.co2CapturedKg || 3.85).toLocaleString('fr-FR', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
-              })}{' '}
-              kg
-            </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CO2 CAPTURÉ</div>
+              })} kg`}
+              label="CO2 CAPTURÉ"
+            />
           </li>
 
-          <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-            <Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} aria-hidden="true" />
-            <div className={`mt-2 text-2xl font-black tabular-nums ${accentTheme.accentText}`}>
-              {(profile?.points || 2450).toLocaleString('fr-FR')}
-            </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">POINTS D&apos;IMPACT</div>
+          <li>
+            <ImpactCard
+              icon={<Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} aria-hidden="true" />}
+              value={(profile?.points || 2450).toLocaleString('fr-FR')}
+              label="POINTS D'IMPACT"
+              valueClassName={accentTheme.accentText}
+            />
           </li>
         </ul>
 
@@ -134,46 +124,20 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <ul className="-mx-4 flex list-none snap-x gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden m-0 p-0">
             {unlockedSpecies.map((species) => (
               <li key={species.id}>
-                <Link
+                <BioDexCard
+                  species={species}
+                  variant="unlocked"
                   href={`/profile/biodex/${species.id}`}
-                  className="relative block w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4"
-                >
-                  <article>
-                    <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-400">
-                      {species.rarity}
-                    </span>
-                    <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/20">
-                      <img src={species.image} alt={species.name} className="h-full w-full object-cover" />
-                    </div>
-                    <p className="mt-3 text-sm font-bold text-white">{species.name}</p>
-                  </article>
-                </Link>
+                />
               </li>
             ))}
 
             {lockedSpecies.map((species) => (
               <li key={species.id}>
-                <button
-                  type="button"
-                  className="relative w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left"
-                >
-                  <article>
-                    <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
-                      <Lock className="h-3.5 w-3.5 text-white/55" aria-hidden="true" />
-                    </span>
-                    <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
-                      Verrouillé
-                    </span>
-                    <div className="mt-3 aspect-square overflow-hidden rounded-xl bg-black/30">
-                      <img
-                        src={species.image}
-                        alt={species.name}
-                        className="h-full w-full scale-105 object-cover grayscale contrast-125 opacity-40 blur-[2px] transition-all duration-700"
-                      />
-                    </div>
-                    <p className="mt-3 text-sm font-semibold text-white/60">{species.name}</p>
-                  </article>
-                </button>
+                <BioDexCard
+                  species={species}
+                  variant="locked"
+                />
               </li>
             ))}
           </ul>
