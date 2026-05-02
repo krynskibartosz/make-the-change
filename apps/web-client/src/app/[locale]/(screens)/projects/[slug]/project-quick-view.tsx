@@ -316,7 +316,7 @@ export async function ProjectQuickView({
 
         <div
           className={cn(
-            'border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl',
+            'border-t border-white/5 bg-background/80 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg',
             isPageMode ? 'sticky bottom-0 z-20' : 'relative shrink-0',
           )}
         >
