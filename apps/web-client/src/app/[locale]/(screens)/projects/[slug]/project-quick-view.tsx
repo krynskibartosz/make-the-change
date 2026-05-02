@@ -12,6 +12,7 @@ import { ProjectImpactCalculator } from './components/project-impact-calculator'
 import { ProjectProducerProductsSection } from './components/project-producer-products-section'
 import { ProjectQuickViewHero } from './components/project-quick-view-hero'
 import { SimilarProjectsCarousel } from './components/similar-projects-carousel'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import {
   getRelatedProjectsByType,
   type PublicProject,
@@ -314,12 +315,7 @@ export async function ProjectQuickView({
           </div>
         </div>
 
-        <div
-          className={cn(
-            'border-t border-white/5 bg-background/80 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg',
-            isPageMode ? 'sticky bottom-0 z-20' : 'relative shrink-0',
-          )}
-        >
+        <BottomActionBar className={isPageMode ? 'sticky bottom-0 z-20' : 'relative shrink-0'}>
           {isFundingClosed ? (
             <Button
               className="h-14 w-full justify-center gap-0 rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 [&_svg]:hidden"
@@ -334,7 +330,7 @@ export async function ProjectQuickView({
               </Button>
             </Link>
           )}
-        </div>
+        </BottomActionBar>
       </div>
     </div>
   )

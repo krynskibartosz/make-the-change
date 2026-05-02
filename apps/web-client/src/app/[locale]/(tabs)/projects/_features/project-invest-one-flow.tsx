@@ -17,6 +17,7 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-calculator'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -634,90 +635,90 @@ export function ProjectInvestOneFlow({
         </div>
       </div>
 
-      {step === 'impact' ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/5 bg-background/80 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg md:hidden">
-            <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
-              Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Points d&apos;Impact</span> <Sparkles className="h-4 w-4" />
-            </p>
+      {(step === 'impact' || step === 'payment' || (step === 'success' && (isAuthenticated || claimSaved)) || showGuestClaimFooter) ? (
+        <BottomActionBar className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none md:hidden">
+          {step === 'impact' ? (
+            <>
+              <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
+                Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Points d&apos;Impact</span> <Sparkles className="h-4 w-4" />
+              </p>
+              <Button
+                type="button"
+                onClick={goToPayment}
+                className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+              >
+                Valider mon impact
+              </Button>
+            </>
+          ) : null}
+
+          {step === 'payment' ? (
             <Button
               type="button"
-              onClick={goToPayment}
-              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+              disabled={isProcessing}
+              onClick={goToSuccess}
+              className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
             >
-              Valider mon impact
+              {isProcessing ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Traitement en cours...
+                </>
+              ) : (
+                <>
+                  <Lock className="h-5 w-5" />
+                  {`Payer ${formatAmountNumber(amountEur)} €`}
+                </>
+              )}
             </Button>
-        </div>
-      ) : null}
+          ) : null}
 
-      {step === 'payment' ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/5 bg-background/80 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg md:hidden">
-          <Button
-            type="button"
-            disabled={isProcessing}
-            onClick={goToSuccess}
-            className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
-          >
-            {isProcessing ? (
-              <>
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Traitement en cours...
-              </>
-            ) : (
-              <>
-                <Lock className="h-5 w-5" />
-                {`Payer ${formatAmountNumber(amountEur)} €`}
-              </>
-            )}
-          </Button>
-        </div>
-      ) : null}
+          {step === 'success' && (isAuthenticated || claimSaved) ? (
+            <>
+              <Button
+                type="button"
+                onClick={() => {
+                  if (discoveredSpeciesId) {
+                    router.push(`/profile/biodex/${discoveredSpeciesId}`)
+                    return
+                  }
+                  router.push('/profile/biodex')
+                }}
+                className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+              >
+                Admirer dans mon BioDex
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  router.push('/products')
+                }}
+                className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
+              >
+                Visiter les Récompenses
+              </Button>
+            </>
+          ) : null}
 
-      {step === 'success' && (isAuthenticated || claimSaved) ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/5 bg-background/80 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg md:hidden">
-          <Button
-            type="button"
-            onClick={() => {
-              if (discoveredSpeciesId) {
-                router.push(`/profile/biodex/${discoveredSpeciesId}`)
-                return
-              }
-              router.push('/profile/biodex')
-            }}
-            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
-          >
-            Admirer dans mon BioDex
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => {
-              router.push('/products')
-            }}
-            className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
-          >
-            Visiter les Récompenses
-          </Button>
-        </div>
-      ) : null}
-
-      {showGuestClaimFooter ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/5 bg-background/80 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg md:hidden">
-          <Button
-            type="button"
-            disabled={isSendingMagicLink}
-            onClick={() => {
-              if (!isValidEmail(claimEmail)) {
-                focusClaimEmailInput()
-                return
-              }
-              submitClaim()
-            }}
-            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
-          >
-            {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-            Créer mon compte en 1 clic
-          </Button>
-        </div>
+          {showGuestClaimFooter ? (
+            <Button
+              type="button"
+              disabled={isSendingMagicLink}
+              onClick={() => {
+                if (!isValidEmail(claimEmail)) {
+                  focusClaimEmailInput()
+                  return
+                }
+                submitClaim()
+              }}
+              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
+            >
+              {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+              Créer mon compte en 1 clic
+            </Button>
+          ) : null}
+        </BottomActionBar>
       ) : null}
     </div>
   )
