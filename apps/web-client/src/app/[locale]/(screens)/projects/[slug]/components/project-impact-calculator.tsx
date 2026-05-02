@@ -1,7 +1,8 @@
-import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish, Info } from 'lucide-react'
+import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish } from 'lucide-react'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn } from '@/lib/utils'
 import { formatInteger, formatCompact, formatDecimal } from '@/lib/formatters'
+import { ImpactDisclaimer } from './impact-disclaimer'
 
 type ImpactMode = 'project' | 'checkout'
 
@@ -101,6 +102,7 @@ export function ProjectImpactCalculator({
   projectType = 'beehive',
   projectImpact = null,
 }: ProjectImpactCalculatorProps) {
+
   const displayAmount = Number.isFinite(amount) ? Math.max(amount, 0) : baseAmount
 
   // Calculer les métriques selon le type de projet et les ratios par €
@@ -139,22 +141,16 @@ export function ProjectImpactCalculator({
     <section className="w-full">
       {!isCheckoutMode ? (
         <>
-          <div className="flex items-start justify-between gap-4">
+          <ImpactDisclaimer>
             <div>
               <h3 className="text-xl font-bold text-white">
                 Impact potentiel généré
               </h3>
-              <p className="mb-4 mt-1 text-sm text-white/60">
+              <p className="mt-1 text-sm text-white/60">
                 {`Basé sur ${formatInteger(displayAmount)} € ${isDonationProject ? 'donnés' : 'investis'}`}
               </p>
             </div>
-            <div 
-              className="group relative flex h-8 w-8 shrink-0 cursor-help items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
-              title="La nature est vivante et imprévisible. Ces chiffres sont des estimations scientifiques de votre impact potentiel, calculées selon les standards de nos partenaires terrain."
-            >
-              <Info className="h-4 w-4 text-white/50 group-hover:text-white/80" />
-            </div>
-          </div>
+          </ImpactDisclaimer>
 
           <div className="grid grid-cols-2 gap-3">
             {projectType === 'reef' || isDonationProject ? (
