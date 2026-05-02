@@ -1,5 +1,6 @@
-import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish } from 'lucide-react'
+import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish, Info } from 'lucide-react'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
+import { cn } from '@/lib/utils'
 
 type ImpactMode = 'project' | 'checkout'
 
@@ -43,6 +44,64 @@ const splitDecimalValue = (value: number): { whole: string; fraction: string | n
   return { whole, fraction: fraction ?? null }
 }
 
+const smartRound = (val: number): number => {
+  if (val >= 1000) return Math.round(val / 100) * 100
+  if (val >= 100) return Math.round(val / 10) * 10
+  return Math.round(val)
+}
+
+function MetricCard({ icon: Icon, prefix, valueWhole, valueFraction, unit, label, colSpan = false }: any) {
+  return (
+    <article className={cn("w-full rounded-2xl bg-white/4 p-5 sm:p-6", colSpan && "col-span-2")}>
+      <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
+        <Icon className="h-5 w-5 text-lime-400" />
+      </div>
+      <div className="mt-1 flex flex-col justify-end min-h-[3.5rem]">
+        {prefix && (
+          <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-0.5">{prefix}</span>
+        )}
+        <div className="text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out flex items-baseline gap-0.5">
+          <span>{valueWhole}</span>
+          {(valueFraction || unit) && (
+            <span className="text-lg font-bold text-white/50">
+              {valueFraction ? `,${valueFraction}` : ''}
+              {unit ? ` ${unit}` : ''}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
+        {label}
+      </div>
+    </article>
+  )
+}
+
+function CheckoutMetric({ icon: Icon, prefix, valueWhole, valueFraction, unit, label, iconColorClass = "text-lime-400" }: any) {
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
+      <Icon className={cn("mb-1 h-6 w-6 drop-shadow-sm", iconColorClass)} />
+      <div className="flex flex-col items-center justify-center min-h-[3rem]">
+        {prefix && (
+          <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest -mb-0.5">{prefix}</span>
+        )}
+        <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
+          <span>{valueWhole}</span>
+          {(valueFraction || unit) && (
+            <span className="text-sm font-bold text-white/50">
+              {valueFraction ? `,${valueFraction}` : ''}
+              {unit ? ` ${unit}` : ''}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+        {label}
+      </div>
+    </div>
+  )
+}
+
 export function ProjectImpactCalculator({
   baseAmount,
   amount,
@@ -55,7 +114,7 @@ export function ProjectImpactCalculator({
   const displayAmount = Number.isFinite(amount) ? Math.max(amount, 0) : baseAmount
 
   // Calculer les métriques selon le type de projet et les ratios par €
-  const bees = Math.round((projectImpact?.beesPerEur || 152) * displayAmount)
+  const bees = smartRound((projectImpact?.beesPerEur || 152) * displayAmount)
   const honeyGrams = (projectImpact?.honeyGramsPerEur || 7.7) * displayAmount
   const honeyKg = honeyGrams / 1000
   const co2Grams = (projectImpact?.beesPerEur ? 38.5 : 0) * displayAmount
@@ -64,7 +123,7 @@ export function ProjectImpactCalculator({
   const co2Parts = splitDecimalValue(co2Kg)
 
   // Nouvelles métriques pour les abeilles
-  const flowers = Math.round((projectImpact?.flowersPerEur || 1154) * displayAmount)
+  const flowers = smartRound((projectImpact?.flowersPerEur || 1154) * displayAmount)
   const propolisGrams = (projectImpact?.propolisGramsPerEur || 0.0385) * displayAmount
   const waxGrams = (projectImpact?.waxGramsPerEur || 0.92) * displayAmount
   const pollenGrams = (projectImpact?.pollenGramsPerEur || 7.7) * displayAmount
@@ -73,13 +132,14 @@ export function ProjectImpactCalculator({
   // Métriques pour les coraux
   const corals = Math.round(displayAmount / 18) // Basé sur les donation options
   const areaRestored = (projectImpact?.blueCarbonPotential || 0.5) * corals
-  const habitatCreated = Math.round((projectImpact?.biodiversityPoints || 5) * corals)
-  const fishShelter = Math.round((projectImpact?.fishShelterCapacity || 3) * corals)
+  const habitatCreated = smartRound((projectImpact?.biodiversityPoints || 5) * corals)
+  const fishShelter = smartRound((projectImpact?.fishShelterCapacity || 3) * corals)
   const areaParts = splitDecimalValue(areaRestored)
 
   // Métriques pour les oliviers
   const olivesSupported = Math.round((projectImpact?.olivesSupported || 1) * (displayAmount / 150))
   const oilGeneratedLiters = (projectImpact?.oilGeneratedLiters || 4) * olivesSupported
+  const oilParts = splitDecimalValue(oilGeneratedLiters)
   const co2SequesteredKg = (projectImpact?.co2SequesteredPerOlive || 10) * olivesSupported
   const co2SequesteredParts = splitDecimalValue(co2SequesteredKg)
 
@@ -89,168 +149,43 @@ export function ProjectImpactCalculator({
     <section className="w-full">
       {!isCheckoutMode ? (
         <>
-          <h3 className="text-xl font-bold text-white">
-            {isDonationProject ? 'Impact collectif déjà généré' : 'Impact collectif déjà généré'}
-          </h3>
-          <p className="mb-4 mt-1 text-sm text-white/60">
-            {`Basé sur ${formatInteger(displayAmount)} € ${isDonationProject ? 'donnés' : 'investis'}`}
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-bold text-white">
+                Impact potentiel généré
+              </h3>
+              <p className="mb-4 mt-1 text-sm text-white/60">
+                {`Basé sur ${formatInteger(displayAmount)} € ${isDonationProject ? 'donnés' : 'investis'}`}
+              </p>
+            </div>
+            <div 
+              className="group relative flex h-8 w-8 shrink-0 cursor-help items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/10"
+              title="La nature est vivante et imprévisible. Ces chiffres sont des estimations scientifiques de votre impact potentiel, calculées selon les standards de nos partenaires terrain."
+            >
+              <Info className="h-4 w-4 text-white/50 group-hover:text-white/80" />
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             {projectType === 'reef' || isDonationProject ? (
               <>
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Waves className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(corals)}
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Coraux restaurés
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Hexagon className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {areaParts.whole}
-                    <span className="text-lg font-bold text-white/50">
-                      {areaParts.fraction ? `,${areaParts.fraction}` : ''}
-                      {' '}m²
-                    </span>
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Surface restaurée
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Fish className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(fishShelter)}
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Refuges poissons
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Cloud className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(habitatCreated)}
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Points biodiversité
-                  </div>
-                </article>
+                <MetricCard icon={Waves} valueWhole={formatInteger(corals)} label="Boutures plantées" />
+                <MetricCard icon={Hexagon} prefix="~ Environ" valueWhole={areaParts.whole} valueFraction={areaParts.fraction} unit="m²" label="Surface restaurée" />
+                <MetricCard icon={Fish} prefix="~ Environ" valueWhole={formatInteger(fishShelter)} label="Poissons abrités" />
+                <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={formatInteger(habitatCreated)} label="Points biodiversité" />
               </>
             ) : projectType === 'orchard' ? (
               <>
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <TreePine className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(olivesSupported)}
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Oliviers soutenus
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Droplets className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(oilGeneratedLiters)}
-                    <span className="text-lg font-bold text-white/50">{' '}L</span>
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Huile générée
-                  </div>
-                </article>
-
-                <article className="col-span-2 w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Cloud className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {co2SequesteredParts.whole}
-                    <span className="text-lg font-bold text-white/50">
-                      {co2SequesteredParts.fraction ? `,${co2SequesteredParts.fraction}` : ''}
-                      {' '}kg
-                    </span>
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    CO₂ séquestré
-                  </div>
-                </article>
+                <MetricCard icon={TreePine} valueWhole={formatInteger(olivesSupported)} label="Oliviers soutenus" />
+                <MetricCard icon={Droplets} prefix="Jusqu'à" valueWhole={oilParts.whole} valueFraction={oilParts.fraction} unit="L" label="Huile estimée" />
+                <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={co2SequesteredParts.whole} valueFraction={co2SequesteredParts.fraction} unit="kg" label="CO₂ séquestré (est.)" colSpan />
               </>
             ) : (
               <>
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Bug className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(bees)}
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Abeilles protégées
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Hexagon className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {honeyParts.whole}
-                    <span className="text-lg font-bold text-white/50">
-                      {honeyParts.fraction ? `,${honeyParts.fraction}` : ''}
-                      {' '}kg
-                    </span>
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Miel généré
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Flower2 className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {formatInteger(flowers)}
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    Fleurs butinées
-                  </div>
-                </article>
-
-                <article className="w-full rounded-2xl bg-white/4 p-5 sm:p-6">
-                  <div className="inline-flex mb-3 rounded-full bg-white/5 p-2">
-                    <Cloud className="h-5 w-5 text-lime-400" />
-                  </div>
-                  <div className="mt-2 text-3xl font-black text-white tabular-nums tracking-tight transition-all duration-300 ease-out">
-                    {co2Parts.whole}
-                    <span className="text-lg font-bold text-white/50">
-                      {co2Parts.fraction ? `,${co2Parts.fraction}` : ''}
-                      {' '}kg
-                    </span>
-                  </div>
-                  <div className="mt-2 text-xs font-semibold text-white/65 uppercase tracking-[0.08em]">
-                    CO₂ capturé
-                  </div>
-                </article>
+                <MetricCard icon={Bug} prefix="~ Environ" valueWhole={formatInteger(bees)} label="Abeilles parrainées" />
+                <MetricCard icon={Hexagon} prefix="Jusqu'à" valueWhole={honeyParts.whole} valueFraction={honeyParts.fraction} unit="kg" label="Récolte potentielle" />
+                <MetricCard icon={Flower2} prefix="> Plus de" valueWhole={formatInteger(flowers)} label="Fleurs pollinisées" />
+                <MetricCard icon={Cloud} prefix="~ Environ" valueWhole={co2Parts.whole} valueFraction={co2Parts.fraction} unit="kg" label="CO₂ compensé (est.)" />
               </>
             )}
           </div>
@@ -259,109 +194,21 @@ export function ProjectImpactCalculator({
         <div className="flex w-full items-start justify-between border-y border-white/5 py-6 my-4">
           {projectType === 'reef' || isDonationProject ? (
             <>
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Waves className="mb-1 h-6 w-6 text-lime-400 drop-shadow-sm" />
-                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(corals)}
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Coraux
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Hexagon className="mb-1 h-6 w-6 text-amber-500 drop-shadow-sm" />
-                <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
-                  <span>{areaParts.whole}</span>
-                  <span className="text-sm font-bold text-white/50">
-                    {areaParts.fraction ? `,${areaParts.fraction}` : ''}
-                    {' '}m²
-                  </span>
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Surface
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Fish className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
-                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(fishShelter)}
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Refuges
-                </div>
-              </div>
+              <CheckoutMetric icon={Waves} iconColorClass="text-lime-400" valueWhole={formatInteger(corals)} label="Boutures" />
+              <CheckoutMetric icon={Hexagon} iconColorClass="text-amber-500" prefix="~ Environ" valueWhole={areaParts.whole} valueFraction={areaParts.fraction} unit="m²" label="Surface" />
+              <CheckoutMetric icon={Fish} iconColorClass="text-sky-400" prefix="~ Environ" valueWhole={formatInteger(fishShelter)} label="Refuges" />
             </>
           ) : projectType === 'orchard' ? (
             <>
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <TreePine className="mb-1 h-6 w-6 text-lime-400 drop-shadow-sm" />
-                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(olivesSupported)}
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Oliviers
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Droplets className="mb-1 h-6 w-6 text-amber-500 drop-shadow-sm" />
-                <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
-                  <span>{formatInteger(oilGeneratedLiters)}</span>
-                  <span className="text-sm font-bold text-white/50">{' '}L</span>
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Huile
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Cloud className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
-                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(co2SequesteredKg)}
-                  <span className="text-sm font-bold text-white/50">{' '}kg</span>
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  CO₂
-                </div>
-              </div>
+              <CheckoutMetric icon={TreePine} iconColorClass="text-lime-400" valueWhole={formatInteger(olivesSupported)} label="Oliviers" />
+              <CheckoutMetric icon={Droplets} iconColorClass="text-amber-500" prefix="Jusqu'à" valueWhole={oilParts.whole} valueFraction={oilParts.fraction} unit="L" label="Huile" />
+              <CheckoutMetric icon={Cloud} iconColorClass="text-sky-400" prefix="~ Environ" valueWhole={co2SequesteredParts.whole} valueFraction={co2SequesteredParts.fraction} unit="kg" label="CO₂" />
             </>
           ) : (
             <>
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Bug className="mb-1 h-6 w-6 text-lime-400 drop-shadow-sm" />
-                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(bees)}
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Abeilles
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Hexagon className="mb-1 h-6 w-6 text-amber-500 drop-shadow-sm" />
-                <div className="flex items-baseline justify-center gap-0.5 text-2xl font-black text-white tabular-nums tracking-tighter">
-                  <span>{honeyParts.whole}</span>
-                  <span className="text-sm font-bold text-white/50">
-                    {honeyParts.fraction ? `,${honeyParts.fraction}` : ''}
-                    {' '}kg
-                  </span>
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Miel
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-                <Flower2 className="mb-1 h-6 w-6 text-sky-400 drop-shadow-sm" />
-                <div className="text-2xl font-black text-white tabular-nums tracking-tighter">
-                  {formatInteger(flowers)}
-                </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
-                  Fleurs
-                </div>
-              </div>
+              <CheckoutMetric icon={Bug} iconColorClass="text-lime-400" prefix="~ Environ" valueWhole={formatInteger(bees)} label="Abeilles" />
+              <CheckoutMetric icon={Hexagon} iconColorClass="text-amber-500" prefix="Jusqu'à" valueWhole={honeyParts.whole} valueFraction={honeyParts.fraction} unit="kg" label="Miel" />
+              <CheckoutMetric icon={Flower2} iconColorClass="text-sky-400" prefix="> Plus de" valueWhole={formatInteger(flowers)} label="Fleurs" />
             </>
           )}
         </div>
