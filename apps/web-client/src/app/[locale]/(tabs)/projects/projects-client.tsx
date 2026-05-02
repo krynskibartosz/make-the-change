@@ -12,6 +12,16 @@ const BEEHIVE_REFERENCE_VALUE_EUR = 1300
 const BEEHIVE_REFERENCE_POPULATION = 50000
 const BEES_PER_EUR = BEEHIVE_REFERENCE_POPULATION / BEEHIVE_REFERENCE_VALUE_EUR
 
+const formatCompact = (value: number): string => {
+  if (value < 10000) {
+    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
+  }
+  return new Intl.NumberFormat('fr-FR', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value)
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 type RawClientProject = {
   id: string | null
@@ -215,7 +225,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                     </div>
                     <p className="text-[13px]">
                       <span className="text-lime-400 font-black tabular-nums tracking-tight">
-                        {impactValue.toLocaleString('fr-FR')}
+                        {formatCompact(impactValue)}
                       </span>{' '}
                       <span className="text-white/70 font-medium">{impactLabel}</span>
                     </p>
