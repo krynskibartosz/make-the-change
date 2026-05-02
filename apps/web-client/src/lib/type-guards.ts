@@ -1,10 +1,12 @@
-export const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
 
-export const asString = (value: unknown, fallback = ''): string =>
-  typeof value === 'string' ? value : fallback
+export function asString(value: unknown, fallback = ''): string {
+  return typeof value === 'string' ? value : fallback
+}
 
-export const asNumber = (value: unknown, fallback = 0): number => {
+export function asNumber(value: unknown, fallback = 0): number {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return value
   }
@@ -19,10 +21,11 @@ export const asNumber = (value: unknown, fallback = 0): number => {
   return fallback
 }
 
-export const asBoolean = (value: unknown, fallback = false): boolean =>
-  typeof value === 'boolean' ? value : fallback
+export function asBoolean(value: unknown, fallback = false): boolean {
+  return typeof value === 'boolean' ? value : fallback
+}
 
-export const asStringArray = (value: unknown): string[] => {
+export function asStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) {
     return []
   }
@@ -30,7 +33,7 @@ export const asStringArray = (value: unknown): string[] => {
   return value.filter((entry): entry is string => typeof entry === 'string')
 }
 
-export const asArray = (value: unknown): unknown[] => {
+export function asArray(value: unknown): unknown[] {
   if (Array.isArray(value)) {
     return value
   }

@@ -11,11 +11,7 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 const BIO_TAGS = ['bio', 'nature', 'naturel', 'botanique', 'organique', 'écologique', 'ecologique']
 const ARTISAN_TAGS = ['artisanal', 'artisan', 'fait main', 'handmade', 'local']
 
-const hasBioTag = (tags?: string[] | null) =>
-  tags?.some((t) => BIO_TAGS.some((bio) => t.toLowerCase().includes(bio))) ?? false
-
-const hasArtisanTag = (tags?: string[] | null) =>
-  tags?.some((t) => ARTISAN_TAGS.some((a) => t.toLowerCase().includes(a))) ?? false
+// Helpers moved to bottom
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -47,12 +43,12 @@ type ClientCatalogProductCardProps = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export const ClientCatalogProductCard = ({
+export function ClientCatalogProductCard({
   product,
   outOfStockLabel,
   pointsLabel,
   view = 'grid',
-}: ClientCatalogProductCardProps) => {
+}: ClientCatalogProductCardProps) {
   const imageUrl =
     sanitizeImageUrl(product.image_url) ||
     (Array.isArray(product.images) && product.images.length > 0
@@ -219,4 +215,12 @@ export const ClientCatalogProductCard = ({
       </Link>
     </article>
   )
+}
+
+function hasBioTag(tags?: string[] | null): boolean {
+  return tags?.some((t) => BIO_TAGS.some((bio) => t.toLowerCase().includes(bio))) ?? false
+}
+
+function hasArtisanTag(tags?: string[] | null): boolean {
+  return tags?.some((t) => ARTISAN_TAGS.some((a) => t.toLowerCase().includes(a))) ?? false
 }

@@ -89,7 +89,7 @@ const FALLBACK_SPECIES: FallbackSpecies[] = [
   },
 ]
 
-const getRarityLabel = (status: string | null | undefined): BiodexPreviewSpecies['rarity'] => {
+function getRarityLabel(status: string | null | undefined): BiodexPreviewSpecies['rarity'] {
   const normalized = status?.toUpperCase()
   if (normalized === 'EN' || normalized === 'CR' || normalized === 'EW' || normalized === 'EX') {
     return 'Légendaire'
@@ -100,11 +100,11 @@ const getRarityLabel = (status: string | null | undefined): BiodexPreviewSpecies
   return 'Commun'
 }
 
-const sortByUnlockAndName = <
+function sortByUnlockAndName<
   T extends { name_default: string; isUnlocked: boolean },
 >(
   list: T[],
-): T[] => {
+): T[] {
   return [...list].sort((a, b) => {
     if (a.isUnlocked && !b.isUnlocked) return -1
     if (!a.isUnlocked && b.isUnlocked) return 1

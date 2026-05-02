@@ -93,7 +93,7 @@ type AdminPermissions = {
   roles: string[]
 }
 
-const toAdminPermissions = (value: unknown): AdminPermissions => {
+function toAdminPermissions(value: unknown): AdminPermissions {
   if (!isRecord(value)) {
     return {
       canAccessAdmin: false,

@@ -81,7 +81,7 @@ function HomePartnersCarousel({
   )
 }
 
-export const HomePartnersSection = (props: HomePartnersSectionProps) => {
+export function HomePartnersSection(props: HomePartnersSectionProps) {
   if (props.mode === 'empty')
     return (
       <section aria-labelledby="partners-empty-title" className={cn('py-16', props.variant === 'muted' && 'bg-muted/30')}>

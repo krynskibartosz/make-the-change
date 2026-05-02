@@ -166,9 +166,9 @@ export const resetSeasonCounters = (newSeasonId: string): void => {
 export const getSeasonTimeRemaining = (): number => {
   const currentSeason = getCurrentSeason()
   if (!currentSeason) return 0
-  const endDate = new Date(currentSeason.endDate)
-  const now = new Date()
-  const remaining = endDate.getTime() - now.getTime()
+  const endMs = Date.parse(currentSeason.endDate)
+  const nowMs = Date.now()
+  const remaining = endMs - nowMs
   return Math.max(0, remaining)
 }
 
@@ -176,10 +176,10 @@ export const getSeasonTimeRemaining = (): number => {
 export const getSeasonProgress = (): number => {
   const currentSeason = getCurrentSeason()
   if (!currentSeason) return 0
-  const startDate = new Date(currentSeason.startDate)
-  const endDate = new Date(currentSeason.endDate)
-  const now = new Date()
-  const totalDuration = endDate.getTime() - startDate.getTime()
-  const elapsed = now.getTime() - startDate.getTime()
+  const startMs = Date.parse(currentSeason.startDate)
+  const endMs = Date.parse(currentSeason.endDate)
+  const nowMs = Date.now()
+  const totalDuration = endMs - startMs
+  const elapsed = nowMs - startMs
   return Math.min(100, Math.max(0, (elapsed / totalDuration) * 100))
 }

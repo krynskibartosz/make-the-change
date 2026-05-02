@@ -22,12 +22,12 @@ const WEIGHTS = {
   invested: 0.5,
 }
 
-export const calculateImpactScore = ({ points, projects, invested }: ImpactInputs) => {
+export function calculateImpactScore({ points, projects, invested }: ImpactInputs) {
   const score = points * WEIGHTS.points + projects * WEIGHTS.projects + invested * WEIGHTS.invested
   return Math.max(0, Math.round(score))
 }
 
-export const getLevelProgress = (score: number) => {
+export function getLevelProgress(score: number) {
   const current = LEVEL_THRESHOLDS.find(
     (threshold) => score >= threshold.min && score <= threshold.max,
   )
@@ -47,12 +47,12 @@ export const getLevelProgress = (score: number) => {
   }
 }
 
-export const getMilestoneBadges = ({
+export function getMilestoneBadges({
   points,
   projects,
   invested,
   leaderboardRank,
-}: ImpactInputs & { leaderboardRank?: number }) => {
+}: ImpactInputs & { leaderboardRank?: number }) {
   const badges: string[] = []
 
   if (projects >= 1) badges.push('Premier projet')

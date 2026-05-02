@@ -33,10 +33,11 @@ export type ToastWithIconProps = {
   toast: ManagedToast
 }
 
-const isToastVariant = (value: unknown): value is ToastVariant =>
-  typeof value === 'string' && Object.hasOwn(toastIcons, value)
+function isToastVariant(value: unknown): value is ToastVariant {
+  return typeof value === 'string' && Object.hasOwn(toastIcons, value)
+}
 
-const isRenderableNode = (value: unknown): value is ReactNode => {
+function isRenderableNode(value: unknown): value is ReactNode {
   if (value === null) return true
 
   switch (typeof value) {
@@ -61,7 +62,7 @@ const isRenderableNode = (value: unknown): value is ReactNode => {
   return false
 }
 
-const toToastData = (value: unknown): ToastData => {
+function toToastData(value: unknown): ToastData {
   if (!isRecord(value)) {
     return {}
   }

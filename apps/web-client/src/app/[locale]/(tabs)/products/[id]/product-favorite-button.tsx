@@ -13,11 +13,7 @@ type ProductFavoriteButtonProps = {
   className?: string
 }
 
-const readFavoriteIds = (): string[] => {
-  const raw = JSON.parse(localStorage.getItem('product_favorites') || '[]') as unknown
-  return Array.isArray(raw) ? raw.filter((id): id is string => typeof id === 'string') : []
-}
-
+// Helpers moved to bottom
 export function ProductFavoriteButton({
   productId,
   productName,
@@ -92,4 +88,9 @@ export function ProductFavoriteButton({
       </span>
     </Button>
   )
+}
+
+function readFavoriteIds(): string[] {
+  const raw = JSON.parse(localStorage.getItem('product_favorites') || '[]') as unknown
+  return Array.isArray(raw) ? raw.filter((id): id is string => typeof id === 'string') : []
 }

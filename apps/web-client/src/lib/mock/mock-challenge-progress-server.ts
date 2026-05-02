@@ -103,7 +103,7 @@ export async function getCurrentMockChallengeTimeZone(): Promise<string> {
 
 export async function getCurrentMockChallengeDayKey(): Promise<string> {
   const timeZone = await getCurrentMockChallengeTimeZone()
-  return getMockCalendarDayKey(new Date(), timeZone)
+  return getMockCalendarDayKey(Date.now(), timeZone)
 }
 
 export async function getCurrentMockChallengeStates(

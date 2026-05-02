@@ -50,14 +50,15 @@ type SearchParamsWithGet = URLSearchParams | ReadonlyURLSearchParams
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
-const hasGetMethod = (source: SearchParamsSource): source is SearchParamsWithGet =>
-  source instanceof URLSearchParams ||
-  (typeof source === 'object' &&
-    source !== null &&
-    'get' in source &&
-    typeof source.get === 'function')
+function hasGetMethod(source: SearchParamsSource): source is SearchParamsWithGet {
+  return source instanceof URLSearchParams ||
+    (typeof source === 'object' &&
+      source !== null &&
+      'get' in source &&
+      typeof source.get === 'function')
+}
 
-const getRawParam = (source: SearchParamsSource, key: string): string | undefined => {
+function getRawParam(source: SearchParamsSource, key: string): string | undefined {
   if (hasGetMethod(source)) {
     const result = source.get(key)
     return typeof result === 'string' ? result : undefined
@@ -72,24 +73,24 @@ const getRawParam = (source: SearchParamsSource, key: string): string | undefine
   return value
 }
 
-const sanitizeSearch = (value?: string): string => {
+function sanitizeSearch(value?: string): string {
   if (!value) return ''
   return value.trim().slice(0, 120)
 }
 
-const sanitizeTag = (value?: string): string => {
+function sanitizeTag(value?: string): string {
   if (!value) return ''
   return value.trim().slice(0, 64)
 }
 
-const sanitizeUuid = (value?: string): string => {
+function sanitizeUuid(value?: string): string {
   if (!value) return ''
   return UUID_REGEX.test(value) ? value : ''
 }
 
 const CATEGORY_TOKEN_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i
 
-const sanitizeCategory = (value?: string): string => {
+function sanitizeCategory(value?: string): string {
   if (!value) return ''
 
   const trimmed = value.trim().slice(0, 80)
@@ -102,7 +103,7 @@ const sanitizeCategory = (value?: string): string => {
   return CATEGORY_TOKEN_REGEX.test(trimmed) ? trimmed.toLowerCase() : ''
 }
 
-const sanitizePage = (value?: string): number => {
+function sanitizePage(value?: string): number {
   if (!value) return 1
 
   const parsed = Number.parseInt(value, 10)
@@ -113,33 +114,38 @@ const sanitizePage = (value?: string): number => {
   return parsed
 }
 
-const sanitizeTextField = (field: SearchTextField, value?: string): string =>
-  field === 'search' ? sanitizeSearch(value) : sanitizeTag(value)
+function sanitizeTextField(field: SearchTextField, value?: string): string {
+  return field === 'search' ? sanitizeSearch(value) : sanitizeTag(value)
+}
 
-const withFallback = <T>(value: T | undefined, fallback: NoInfer<T>): T => value ?? fallback
+function withFallback<T>(value: T | undefined, fallback: NoInfer<T>): T {
+  return value ?? fallback
+}
 
-export const toPersistedProductsQueryState = (
+export function toPersistedProductsQueryState(
   state: ProductsQueryState,
-): Pick<ProductsQueryState, PersistedProductsQueryField> => ({
-  search: state.search,
-  category: state.category,
-  producer: state.producer,
-  tag: state.tag,
-  sort: state.sort,
-  view: state.view,
-})
+): Pick<ProductsQueryState, PersistedProductsQueryField> {
+  return {
+    search: state.search,
+    category: state.category,
+    producer: state.producer,
+    tag: state.tag,
+    sort: state.sort,
+    view: state.view,
+  }
+}
 
-export const isProductSort = (value: string | null | undefined): value is ProductSort => {
+export function isProductSort(value: string | null | undefined): value is ProductSort {
   if (!value) return false
   return PRODUCT_SORT_VALUES.some((sort) => sort === value)
 }
 
-export const isProductView = (value: string | null | undefined): value is ProductView => {
+export function isProductView(value: string | null | undefined): value is ProductView {
   if (!value) return false
   return PRODUCT_VIEW_VALUES.some((view) => view === value)
 }
 
-export const parseProductsQueryState = (source: SearchParamsSource): ProductsQueryState => {
+export function parseProductsQueryState(source: SearchParamsSource): ProductsQueryState {
   const textFilters: Record<SearchTextField, string> = {
     search: '',
     tag: '',
@@ -172,7 +178,7 @@ export const parseProductsQueryState = (source: SearchParamsSource): ProductsQue
   }
 }
 
-export const buildProductsSearchParams = (state: ProductsQueryState): URLSearchParams => {
+export function buildProductsSearchParams(state: ProductsQueryState): URLSearchParams {
   const params = new URLSearchParams()
 
   for (const field of SEARCH_TEXT_FIELDS) {

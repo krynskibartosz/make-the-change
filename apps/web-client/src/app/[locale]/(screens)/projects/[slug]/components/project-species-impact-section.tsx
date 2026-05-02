@@ -37,39 +37,7 @@ const BEEHIVE_IMPACT_METRICS: ImpactMetric[] = [
   { label: 'Fleurs sauvages butinées', unit: 'fleurs', fullCycleValue: 1500000, decimals: 0 },
 ]
 
-const normalizeForMatch = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-
-const hasBeeSignal = (value: string | null | undefined) => {
-  if (!value) return false
-  const normalized = normalizeForMatch(value)
-  return BEE_KEYWORDS.some((keyword) => normalized.includes(keyword))
-}
-
-const getHoneySpeciesContext = (
-  projectType: string | null | undefined,
-  species: ProjectSpecies[] | null | undefined,
-) => {
-  if (hasBeeSignal(projectType)) {
-    const beeSpecies = species?.find((entry) => hasBeeSignal(entry.name))
-    return beeSpecies?.name || 'Abeille'
-  }
-
-  const beeSpecies = species?.find(
-    (entry) => hasBeeSignal(entry.name) || hasBeeSignal(entry.scientificName),
-  )
-  return beeSpecies?.name || null
-}
-
-const formatImpactValue = (value: number, decimals: number) =>
-  new Intl.NumberFormat('fr-FR', {
-    minimumFractionDigits: decimals === 0 ? 0 : Math.min(2, decimals),
-    maximumFractionDigits: decimals,
-  }).format(value)
-
+// Helpers moved to bottom
 export function ProjectSpeciesImpactSection({
   projectType,
   species,
@@ -178,4 +146,39 @@ export function ProjectSpeciesImpactSection({
       </Card>
     </section>
   )
+}
+
+function normalizeForMatch(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
+function hasBeeSignal(value: string | null | undefined): boolean {
+  if (!value) return false
+  const normalized = normalizeForMatch(value)
+  return BEE_KEYWORDS.some((keyword) => normalized.includes(keyword))
+}
+
+function getHoneySpeciesContext(
+  projectType: string | null | undefined,
+  species: ProjectSpecies[] | null | undefined,
+): string | null {
+  if (hasBeeSignal(projectType)) {
+    const beeSpecies = species?.find((entry) => hasBeeSignal(entry.name))
+    return beeSpecies?.name || 'Abeille'
+  }
+
+  const beeSpecies = species?.find(
+    (entry) => hasBeeSignal(entry.name) || hasBeeSignal(entry.scientificName),
+  )
+  return beeSpecies?.name || null
+}
+
+function formatImpactValue(value: number, decimals: number): string {
+  return new Intl.NumberFormat('fr-FR', {
+    minimumFractionDigits: decimals === 0 ? 0 : Math.min(2, decimals),
+    maximumFractionDigits: decimals,
+  }).format(value)
 }

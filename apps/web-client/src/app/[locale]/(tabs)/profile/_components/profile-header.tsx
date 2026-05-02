@@ -27,7 +27,7 @@ type ProfileHeaderProps = {
   readonly?: boolean
 }
 
-export const ProfileHeader = ({
+export function ProfileHeader({
   userId,
   name,
   email,
@@ -36,7 +36,7 @@ export const ProfileHeader = ({
   coverUrl: initialCoverUrl,
   impactScore = 0,
   readonly = false,
-}: ProfileHeaderProps) => {
+}: ProfileHeaderProps) {
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl)
   const [coverUrl, setCoverUrl] = useState(initialCoverUrl)
   const [isAvatarLoading, setIsAvatarLoading] = useState(false)

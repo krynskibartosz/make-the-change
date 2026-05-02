@@ -41,7 +41,7 @@ interface ThemeSelectionProps {
   initialConfig?: ThemeConfig | null
 }
 
-export const ThemeSelection = ({ initialConfig }: ThemeSelectionProps) => {
+export function ThemeSelection({ initialConfig }: ThemeSelectionProps) {
   const { setTheme, theme } = useTheme()
   const { brand, setBrand, customVars, setCustomVars } = useThemeBrand()
   const [mounted, setMounted] = React.useState(false)

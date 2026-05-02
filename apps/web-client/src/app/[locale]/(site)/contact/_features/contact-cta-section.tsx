@@ -39,9 +39,6 @@ export function ContactCtaSection({ title, description, primary }: ContactCtaPro
           </div>
         </div>
       </div>
-    </section>
-  )
-}
     </div>
   )
 }

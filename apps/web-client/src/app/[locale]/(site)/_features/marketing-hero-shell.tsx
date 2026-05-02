@@ -10,14 +10,14 @@ type MarketingHeroShellProps = {
   paddingClassName?: string
 }
 
-export const MarketingHeroShell = ({
+export function MarketingHeroShell({
   background,
   children,
   className,
   containerClassName,
   minHeightClassName = 'min-h-[70vh]',
   paddingClassName = 'pt-32 pb-20 lg:pt-48 lg:pb-32',
-}: MarketingHeroShellProps) => {
+}: MarketingHeroShellProps) {
   return (
     <section
       className={cn(

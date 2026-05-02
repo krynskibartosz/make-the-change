@@ -32,7 +32,7 @@ export type HomeServerData = {
   blogPostsState: DataState<BlogPost[]>
 }
 
-const toAsyncResult = async <T>(promise: Promise<T>): Promise<AsyncResult<T>> => {
+async function toAsyncResult<T>(promise: Promise<T>): Promise<AsyncResult<T>> {
   try {
     const data = await promise
     return { data, error: null }
@@ -41,7 +41,7 @@ const toAsyncResult = async <T>(promise: Promise<T>): Promise<AsyncResult<T>> =>
   }
 }
 
-const toCountState = (count: number | null, error: unknown): DataState<number> => {
+function toCountState(count: number | null, error: unknown): DataState<number> {
   if (error) {
     return { status: 'unknown', error }
   }
@@ -53,7 +53,7 @@ const toCountState = (count: number | null, error: unknown): DataState<number> =
   return { status: 'ready', value: count }
 }
 
-const toRpcNumberState = (value: number | bigint | null, error: unknown): DataState<number> => {
+function toRpcNumberState(value: number | bigint | null, error: unknown): DataState<number> {
   if (error) {
     return { status: 'unknown', error }
   }
@@ -70,7 +70,7 @@ const toRpcNumberState = (value: number | bigint | null, error: unknown): DataSt
   return { status: 'ready', value: numericValue }
 }
 
-const toArrayState = <T>(data: T[] | null, error: unknown): DataState<T[]> => {
+function toArrayState<T>(data: T[] | null, error: unknown): DataState<T[]> {
   if (error) {
     return { status: 'unknown', error }
   }
@@ -86,10 +86,10 @@ const toArrayState = <T>(data: T[] | null, error: unknown): DataState<T[]> => {
   return { status: 'ready', value: data }
 }
 
-const mapReadyState = <TRaw, TNormalized>(
+function mapReadyState<TRaw, TNormalized>(
   state: DataState<TRaw[]>,
   mapper: (row: TRaw) => TNormalized,
-): DataState<TNormalized[]> => {
+): DataState<TNormalized[]> {
   if (state.status !== 'ready') {
     return state
   }
@@ -100,13 +100,13 @@ const mapReadyState = <TRaw, TNormalized>(
   }
 }
 
-const logUnknownState = (label: string, state: DataState<unknown>) => {
+function logUnknownState(label: string, state: DataState<unknown>) {
   if (state.status === 'unknown') {
     console.error('[home][unknown_state]', { label, error: state.error ?? null })
   }
 }
 
-const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
+function toLocalizedRecord(value: unknown): Record<string, string> | null {
   if (!isRecord(value)) {
     return null
   }
@@ -144,7 +144,7 @@ const HOME_B2C_KEYWORDS = (
 
 const HOME_B2C_STRICT = process.env.HOME_B2C_STRICT === 'true'
 
-const isB2CDesirableProduct = (product: ProductCardProduct): boolean => {
+function isB2CDesirableProduct(product: ProductCardProduct): boolean {
   const haystack = [
     product.name_default || '',
     product.short_description_default || '',
@@ -156,7 +156,7 @@ const isB2CDesirableProduct = (product: ProductCardProduct): boolean => {
   return HOME_B2C_KEYWORDS.some((keyword) => haystack.includes(keyword))
 }
 
-const filterHomeProducts = (products: ProductCardProduct[]): ProductCardProduct[] => {
+function filterHomeProducts(products: ProductCardProduct[]): ProductCardProduct[] {
   const matches = products.filter(isB2CDesirableProduct)
   if (matches.length > 0) return matches
   return HOME_B2C_STRICT ? [] : products

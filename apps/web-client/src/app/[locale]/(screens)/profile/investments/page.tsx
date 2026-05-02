@@ -3,6 +3,7 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { getMockInvestments, getMockOrders, type MockOrderRecord } from '@/lib/mock/mock-member-data'
 import { getCurrentMockOrders } from '@/lib/mock/mock-order-history-server'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import { ContributionsShell } from './_features/contributions-shell'
 import { ActivityList } from './_features/activity-list'
 
@@ -94,7 +95,7 @@ export default async function InvestmentsPage() {
     amount_eur: Number(inv.amount_eur_equivalent || 0),
     amount_points: Number(inv.amount_points || 0),
     status: String(inv.status || 'pending'),
-    created_at: String(inv.created_at || new Date().toISOString()),
+    created_at: String(inv.created_at || getCurrentIsoDate()),
     project: normalizeProject(inv.project),
     type: 'investment',
   }))
@@ -127,7 +128,7 @@ export default async function InvestmentsPage() {
     amount_eur: Number(don.amount_eur_equivalent || 0),
     amount_points: Number(don.amount_points || 0),
     status: String(don.status || 'pending'),
-    created_at: String(don.created_at || new Date().toISOString()),
+    created_at: String(don.created_at || getCurrentIsoDate()),
     project: normalizeProject(don.project),
     type: 'donation',
   }))
@@ -160,7 +161,7 @@ export default async function InvestmentsPage() {
       amount_eur: totalEuros,
       amount_points: Number(order.total_points || 0),
       status: String(order.status || 'pending'),
-      created_at: String(order.created_at || new Date().toISOString()),
+      created_at: String(order.created_at || getCurrentIsoDate()),
       product: productSnapshot
         ? {
             name_default: typeof productSnapshot.name === 'string' ? productSnapshot.name : null,

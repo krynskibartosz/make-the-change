@@ -16,10 +16,11 @@ const HTML_ENTITIES: Record<string, string> = {
   '&nbsp;': ' ',
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
 
-const sanitizeTipTapNode = (value: unknown): TipTapNode | null => {
+function sanitizeTipTapNode(value: unknown): TipTapNode | null {
   if (!isRecord(value) || typeof value.type !== 'string') {
     return null
   }
@@ -56,7 +57,7 @@ const sanitizeTipTapNode = (value: unknown): TipTapNode | null => {
   }
 }
 
-const isTipTapDoc = (value: unknown): value is TipTapDoc => {
+function isTipTapDoc(value: unknown): value is TipTapDoc {
   if (!isRecord(value) || value.type !== 'doc') {
     return false
   }
@@ -68,7 +69,7 @@ const isTipTapDoc = (value: unknown): value is TipTapDoc => {
   return true
 }
 
-const decodeHtmlEntities = (value: string): string => {
+function decodeHtmlEntities(value: string): string {
   let decoded = value
   for (const [entity, replacement] of Object.entries(HTML_ENTITIES)) {
     decoded = decoded.split(entity).join(replacement)
@@ -76,7 +77,7 @@ const decodeHtmlEntities = (value: string): string => {
   return decoded
 }
 
-const convertHtmlToSafeText = (value: string): string => {
+function convertHtmlToSafeText(value: string): string {
   const withoutScripts = value.replace(SCRIPT_TAG_PATTERN, ' ').replace(STYLE_TAG_PATTERN, ' ')
   const withBreaks = withoutScripts
     .replace(LI_OPEN_PATTERN, '- ')
@@ -94,12 +95,14 @@ const convertHtmlToSafeText = (value: string): string => {
     .trim()
 }
 
-const legacyText = (value: string): BlogPostContent => ({
-  kind: 'legacyText',
-  text: value,
-})
+function legacyText(value: string): BlogPostContent {
+  return {
+    kind: 'legacyText',
+    text: value,
+  }
+}
 
-const parseSerializedJson = (value: string): unknown | null => {
+function parseSerializedJson(value: string): unknown | null {
   try {
     return JSON.parse(value)
   } catch {
@@ -107,7 +110,7 @@ const parseSerializedJson = (value: string): unknown | null => {
   }
 }
 
-export const parseBlogContent = (rawContent: unknown): BlogPostContent => {
+export function parseBlogContent(rawContent: unknown): BlogPostContent {
   if (rawContent === null || rawContent === undefined) {
     return legacyText('')
   }
@@ -153,12 +156,12 @@ export const parseBlogContent = (rawContent: unknown): BlogPostContent => {
   return legacyText(String(rawContent))
 }
 
-export const blogContentToText = (content: BlogPostContent): string => {
+export function blogContentToText(content: BlogPostContent): string {
   if (content.kind === 'legacyText') {
     return content.text
   }
 
-  const extractNodeText = (node: TipTapNode): string => {
+  function extractNodeText(node: TipTapNode): string {
     if (node.type === 'text') {
       return node.text ?? ''
     }

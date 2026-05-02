@@ -20,89 +20,7 @@ const geocodeCache = new Map<string, { lat: number; lng: number } | null>()
 
 let googleMapsLoaderPromise: Promise<any> | null = null
 
-const loadGoogleMaps = async (apiKey: string): Promise<any> => {
-  if (typeof window === 'undefined') {
-    throw new Error('Google Maps is only available in the browser')
-  }
-
-  const windowWithGoogle = window as Window & { google?: any }
-  if (windowWithGoogle.google?.maps) {
-    return windowWithGoogle.google
-  }
-
-  if (googleMapsLoaderPromise) {
-    return googleMapsLoaderPromise
-  }
-
-  googleMapsLoaderPromise = new Promise((resolve, reject) => {
-    const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID) as HTMLScriptElement | null
-
-    const handleLoad = () => {
-      const google = (window as Window & { google?: any }).google
-      if (google?.maps) {
-        resolve(google)
-      } else {
-        reject(new Error('Google Maps API loaded but unavailable on window'))
-      }
-    }
-
-    const handleError = () => {
-      reject(new Error('Failed to load Google Maps script'))
-    }
-
-    if (existingScript) {
-      existingScript.addEventListener('load', handleLoad, { once: true })
-      existingScript.addEventListener('error', handleError, { once: true })
-      return
-    }
-
-    const script = document.createElement('script')
-    script.id = GOOGLE_MAPS_SCRIPT_ID
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly`
-    script.async = true
-    script.defer = true
-    script.addEventListener('load', handleLoad, { once: true })
-    script.addEventListener('error', handleError, { once: true })
-    document.head.appendChild(script)
-  })
-
-  return googleMapsLoaderPromise
-}
-
-const resolveProjectQuery = (project: ClientCatalogProject) =>
-  [project.address_city, project.address_country_code].filter(Boolean).join(', ').trim()
-
-const resolveProjectPosition = async (
-  google: any,
-  project: ClientCatalogProject,
-): Promise<{ lat: number; lng: number } | null> => {
-  if (typeof project.latitude === 'number' && typeof project.longitude === 'number') {
-    return { lat: project.latitude, lng: project.longitude }
-  }
-
-  const query = resolveProjectQuery(project)
-  if (!query) return null
-
-  if (geocodeCache.has(query)) {
-    return geocodeCache.get(query) || null
-  }
-
-  const geocoder = new google.maps.Geocoder()
-  const geocodeResult = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
-    geocoder.geocode({ address: query }, (results: any, status: any) => {
-      if (status !== 'OK' || !results?.[0]?.geometry?.location) {
-        resolve(null)
-        return
-      }
-      const location = results[0].geometry.location
-      resolve({ lat: location.lat(), lng: location.lng() })
-    })
-  })
-
-  geocodeCache.set(query, geocodeResult)
-  return geocodeResult
-}
-
+// Helpers moved to bottom
 export function ProjectsGoogleMapView({ projects }: ProjectsGoogleMapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<any>(null)
@@ -296,4 +214,88 @@ export function ProjectsGoogleMapView({ projects }: ProjectsGoogleMapViewProps) 
       ) : null}
     </div>
   )
+}
+
+async function loadGoogleMaps(apiKey: string): Promise<any> {
+  if (typeof window === 'undefined') {
+    throw new Error('Google Maps is only available in the browser')
+  }
+
+  const windowWithGoogle = window as Window & { google?: any }
+  if (windowWithGoogle.google?.maps) {
+    return windowWithGoogle.google
+  }
+
+  if (googleMapsLoaderPromise) {
+    return googleMapsLoaderPromise
+  }
+
+  googleMapsLoaderPromise = new Promise((resolve, reject) => {
+    const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID) as HTMLScriptElement | null
+
+    const handleLoad = () => {
+      const google = (window as Window & { google?: any }).google
+      if (google?.maps) {
+        resolve(google)
+      } else {
+        reject(new Error('Google Maps API loaded but unavailable on window'))
+      }
+    }
+
+    const handleError = () => {
+      reject(new Error('Failed to load Google Maps script'))
+    }
+
+    if (existingScript) {
+      existingScript.addEventListener('load', handleLoad, { once: true })
+      existingScript.addEventListener('error', handleError, { once: true })
+      return
+    }
+
+    const script = document.createElement('script')
+    script.id = GOOGLE_MAPS_SCRIPT_ID
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly`
+    script.async = true
+    script.defer = true
+    script.addEventListener('load', handleLoad, { once: true })
+    script.addEventListener('error', handleError, { once: true })
+    document.head.appendChild(script)
+  })
+
+  return googleMapsLoaderPromise
+}
+
+function resolveProjectQuery(project: ClientCatalogProject): string {
+  return [project.address_city, project.address_country_code].filter(Boolean).join(', ').trim()
+}
+
+async function resolveProjectPosition(
+  google: any,
+  project: ClientCatalogProject,
+): Promise<{ lat: number; lng: number } | null> {
+  if (typeof project.latitude === 'number' && typeof project.longitude === 'number') {
+    return { lat: project.latitude, lng: project.longitude }
+  }
+
+  const query = resolveProjectQuery(project)
+  if (!query) return null
+
+  if (geocodeCache.has(query)) {
+    return geocodeCache.get(query) || null
+  }
+
+  const geocoder = new google.maps.Geocoder()
+  const geocodeResult = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
+    geocoder.geocode({ address: query }, (results: any, status: any) => {
+      if (status !== 'OK' || !results?.[0]?.geometry?.location) {
+        resolve(null)
+        return
+      }
+      const location = results[0].geometry.location
+      resolve({ lat: location.lat(), lng: location.lng() })
+    })
+  })
+
+  geocodeCache.set(query, geocodeResult)
+  return geocodeResult
 }

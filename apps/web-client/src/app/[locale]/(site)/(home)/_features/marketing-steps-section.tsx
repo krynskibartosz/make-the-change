@@ -23,7 +23,7 @@ type StepItem = {
   }>
 }
 
-export const MarketingStepsSection = ({ variant = 'default' }: MarketingStepsSectionProps) => {
+export function MarketingStepsSection({ variant = 'default' }: MarketingStepsSectionProps) {
   const t = useTranslations('home_v2')
   const prefersReducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)

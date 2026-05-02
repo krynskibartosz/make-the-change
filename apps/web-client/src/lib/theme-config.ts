@@ -3,10 +3,11 @@ import { asString, isRecord } from '@/lib/type-guards'
 
 const BRAND_SET = new Set<string>(THEMES.map((theme) => theme.id))
 
-export const isBrand = (value: unknown): value is Brand =>
-  typeof value === 'string' && BRAND_SET.has(value)
+export function isBrand(value: unknown): value is Brand {
+  return typeof value === 'string' && BRAND_SET.has(value)
+}
 
-const parseCustomVars = (value: unknown): Record<string, string> => {
+function parseCustomVars(value: unknown): Record<string, string> {
   if (!isRecord(value)) {
     return {}
   }
@@ -18,7 +19,7 @@ const parseCustomVars = (value: unknown): Record<string, string> => {
   )
 }
 
-const parseUserTheme = (value: unknown): UserTheme | null => {
+function parseUserTheme(value: unknown): UserTheme | null {
   if (!isRecord(value)) {
     return null
   }
@@ -40,7 +41,7 @@ const parseUserTheme = (value: unknown): UserTheme | null => {
   }
 }
 
-export const parseThemeConfig = (value: unknown): ThemeConfig | null => {
+export function parseThemeConfig(value: unknown): ThemeConfig | null {
   if (!isRecord(value)) {
     return null
   }

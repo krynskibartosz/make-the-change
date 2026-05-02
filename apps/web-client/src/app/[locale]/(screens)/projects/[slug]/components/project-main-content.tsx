@@ -12,17 +12,7 @@ import { ProjectUnlockSpeciesSection } from './project-unlock-species-section'
 import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import type { RelatedProject } from '../project-detail-data'
 
-const isVideoMedia = (source: string) => /\.(mp4|webm|ogg|mov|m4v)$/i.test(source)
-
-const getVideoMimeType = (source: string) => {
-  const normalized = source.toLowerCase()
-  if (normalized.endsWith('.mov')) return 'video/quicktime'
-  if (normalized.endsWith('.webm')) return 'video/webm'
-  if (normalized.endsWith('.ogg')) return 'video/ogg'
-  if (normalized.endsWith('.m4v')) return 'video/x-m4v'
-  return 'video/mp4'
-}
-
+// Helpers moved to bottom
 type ProjectMainContentProject = {
   type: string | null
   name_default: string
@@ -220,4 +210,17 @@ export async function ProjectMainContent({
       </section>
     </div>
   )
+}
+
+function isVideoMedia(source: string): boolean {
+  return /\.(mp4|webm|ogg|mov|m4v)$/i.test(source)
+}
+
+function getVideoMimeType(source: string): string {
+  const normalized = source.toLowerCase()
+  if (normalized.endsWith('.mov')) return 'video/quicktime'
+  if (normalized.endsWith('.webm')) return 'video/webm'
+  if (normalized.endsWith('.ogg')) return 'video/ogg'
+  if (normalized.endsWith('.m4v')) return 'video/x-m4v'
+  return 'video/mp4'
 }

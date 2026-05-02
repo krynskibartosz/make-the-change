@@ -37,37 +37,13 @@ type ClientCatalogProjectCardProps = {
   view?: 'grid' | 'list'
 }
 
-const getLocationLabel = (project: ClientCatalogProject): string | undefined => {
-  if (project.address_city && project.address_country_code) {
-    return `${project.address_city}, ${project.address_country_code}`
-  }
+// Helpers moved to bottom
 
-  return undefined
-}
-
-const getProgressPercent = (project: ClientCatalogProject): number | null => {
-  if (project.funding_progress !== null && project.funding_progress !== undefined) {
-    return project.funding_progress
-  }
-
-  if (
-    project.current_funding !== null &&
-    project.current_funding !== undefined &&
-    project.target_budget !== null &&
-    project.target_budget !== undefined &&
-    project.target_budget > 0
-  ) {
-    return (project.current_funding / project.target_budget) * 100
-  }
-
-  return null
-}
-
-export const ClientCatalogProjectCard = ({
+export function ClientCatalogProjectCard({
   project,
   labels,
   view = 'grid',
-}: ClientCatalogProjectCardProps) => {
+}: ClientCatalogProjectCardProps) {
   const imageUrl = sanitizeImageUrl(project.hero_image_url)
   const locationLabel = getLocationLabel(project)
   const progressPercent = getProgressPercent(project)
@@ -156,4 +132,30 @@ export const ClientCatalogProjectCard = ({
       </Link>
     </div>
   )
+}
+
+function getLocationLabel(project: ClientCatalogProject): string | undefined {
+  if (project.address_city && project.address_country_code) {
+    return `${project.address_city}, ${project.address_country_code}`
+  }
+
+  return undefined
+}
+
+function getProgressPercent(project: ClientCatalogProject): number | null {
+  if (project.funding_progress !== null && project.funding_progress !== undefined) {
+    return project.funding_progress
+  }
+
+  if (
+    project.current_funding !== null &&
+    project.current_funding !== undefined &&
+    project.target_budget !== null &&
+    project.target_budget !== undefined &&
+    project.target_budget > 0
+  ) {
+    return (project.current_funding / project.target_budget) * 100
+  }
+
+  return null
 }

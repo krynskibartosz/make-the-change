@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 
 type HapticPattern = number | number[]
 
-export const useHaptic = () => {
+export function useHaptic() {
   const isSupported =
     typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function'
 

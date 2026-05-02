@@ -1,5 +1,5 @@
 import type { ChallengeArchetypeId } from '@/lib/mock/types'
-
+import { getCurrentIsoDate } from '@/lib/date-utils'
 export const MOCK_CHALLENGE_PROGRESS_COOKIE_NAME = 'mtc_mock_challenge_progress'
 
 const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30
@@ -162,7 +162,7 @@ export const recordClientMockChallengeCompletion = ({
   dayKey,
   archetypeId,
   max,
-  timestamp = new Date().toISOString(),
+  timestamp = getCurrentIsoDate(),
 }: {
   viewerId: string
   dayKey: string
@@ -198,7 +198,7 @@ export const recordClientMockCollectiveBravo = ({
   dayKey,
   targetId,
   max = 3,
-  timestamp = new Date().toISOString(),
+  timestamp = getCurrentIsoDate(),
 }: {
   viewerId: string
   dayKey: string

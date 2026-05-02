@@ -277,7 +277,7 @@ export const isValidMockDayKey = (value: string | null | undefined): value is st
   typeof value === 'string' && DAY_KEY_PATTERN.test(value)
 
 export const getMockCalendarDayKey = (
-  date = new Date(),
+  date: Date | number = Date.now(),
   timeZone = DEFAULT_TIMEZONE,
 ): string => {
   const formatter = new Intl.DateTimeFormat('en-CA', {

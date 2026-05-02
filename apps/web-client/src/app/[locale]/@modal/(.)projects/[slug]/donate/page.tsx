@@ -7,13 +7,15 @@ import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
 
-const isDonationType = (value: unknown): value is 'reef' | 'coral' =>
-  value === 'reef' || value === 'coral'
+function isDonationType(value: unknown): value is 'reef' | 'coral' {
+  return value === 'reef' || value === 'coral'
+}
 
-const toOptionalString = (value: string | string[] | undefined): string | undefined =>
-  typeof value === 'string' && value.trim() ? value : undefined
+function toOptionalString(value: string | string[] | undefined): string | undefined {
+  return typeof value === 'string' && value.trim() ? value : undefined
+}
 
-const toOptionalAmount = (value: string | string[] | undefined): number | undefined => {
+function toOptionalAmount(value: string | string[] | undefined): number | undefined {
   if (typeof value !== 'string') {
     return undefined
   }

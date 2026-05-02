@@ -34,28 +34,7 @@ type ProductCardProps = {
   priority?: boolean
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
-
-const toRecord = (value: unknown): Record<string, unknown> | null =>
-  isRecord(value) ? value : null
-
-const toStringArray = (value: unknown): string[] => {
-  if (!Array.isArray(value)) {
-    return []
-  }
-
-  return value.filter((entry): entry is string => typeof entry === 'string')
-}
-
-const getFirstString = (value: unknown): string | null => {
-  if (typeof value !== 'string' || value.trim().length === 0) {
-    return null
-  }
-
-  return value
-}
-
+// Helpers moved to bottom
 export function ProductCard({ product, className, priority = false }: ProductCardProps) {
   const t = useTranslations('products.card')
   const locale = useLocale()
@@ -204,4 +183,28 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       }}
     />
   )
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function toRecord(value: unknown): Record<string, unknown> | null {
+  return isRecord(value) ? value : null
+}
+
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return []
+  }
+
+  return value.filter((entry): entry is string => typeof entry === 'string')
+}
+
+function getFirstString(value: unknown): string | null {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    return null
+  }
+
+  return value
 }

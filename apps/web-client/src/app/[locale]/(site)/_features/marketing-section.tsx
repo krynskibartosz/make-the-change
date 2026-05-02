@@ -14,7 +14,7 @@ type MarketingSectionProps = {
   contentClassName?: string
 }
 
-export const MarketingSection = ({
+export function MarketingSection({
   title,
   description,
   hideDescriptionOnMobile = false,
@@ -24,7 +24,7 @@ export const MarketingSection = ({
   size = 'md',
   className,
   contentClassName,
-}: MarketingSectionProps) => {
+}: MarketingSectionProps) {
   const sectionProps = {
     hideDescriptionOnMobile,
     variant,

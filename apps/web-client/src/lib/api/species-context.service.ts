@@ -3,9 +3,10 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSpeciesContext, getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
 import { isRecord, asString, asNumber, asStringArray } from '@/lib/type-guards'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import type { SpeciesContext, AssociatedProject, AssociatedProducer, AssociatedChallenge, UserSpeciesStatus, SpeciesFilters } from '@/types/species'
 
-const toNullableNumber = (value: unknown): number | null => {
+function toNullableNumber(value: unknown): number | null {
   if (value === null || value === undefined) {
     return null
   }
@@ -13,7 +14,7 @@ const toNullableNumber = (value: unknown): number | null => {
   return Number.isFinite(parsed) ? parsed : null
 }
 
-const toNullableString = (value: unknown): string | null => {
+function toNullableString(value: unknown): string | null {
   if (value === null || value === undefined) return null
   const str = asString(value)
   return str === '' ? null : str
@@ -39,7 +40,7 @@ function ensurePrototypeUnlockedSpecies(speciesList: SpeciesContext[]): SpeciesC
       ...species,
       user_status: {
         isUnlocked: true,
-        unlockedDate: new Date().toISOString(),
+        unlockedDate: getCurrentIsoDate(),
         unlockSource: PROTOTYPE_UNLOCK_SOURCE,
         progressionLevel: species.user_status?.progressionLevel ?? 1,
       },

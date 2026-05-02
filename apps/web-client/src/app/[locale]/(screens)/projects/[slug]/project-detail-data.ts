@@ -59,161 +59,7 @@ export type RelatedProject = {
   target_budget: number | null
 }
 
-const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  return Object.fromEntries(
-    Object.entries(value).filter(
-      (entry): entry is [string, string] => typeof entry[1] === 'string',
-    ),
-  )
-}
-
-const toNullableString = (value: unknown): string | null => {
-  const parsed = asString(value)
-  return parsed || null
-}
-
-const toNullableNumber = (value: unknown): number | null => {
-  if (value === null || value === undefined) {
-    return null
-  }
-
-  const parsed = asNumber(value, Number.NaN)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
-const toProducer = (value: unknown): ProjectProducer | null => {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  const id = asString(value.id)
-  const nameDefault = asString(value.name_default)
-  if (!id || !nameDefault) {
-    return null
-  }
-
-  return {
-    id,
-    slug: toNullableString(value.slug),
-    name_default: nameDefault,
-    name_i18n: toLocalizedRecord(value.name_i18n),
-    description_default: toNullableString(value.description_default),
-    description_i18n: toLocalizedRecord(value.description_i18n),
-    contact_website: toNullableString(value.contact_website),
-    images: asStringArray(value.images),
-  }
-}
-
-const toPublicProject = (value: unknown): PublicProject | null => {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  const id = asString(value.id)
-  const slug = asString(value.slug)
-  const nameDefault = asString(value.name_default)
-  if (!id || !slug || !nameDefault) {
-    return null
-  }
-
-  return {
-    id,
-    slug,
-    is_mock: false,
-    status: toNullableString(value.status),
-    type: toNullableString(value.type),
-    name_default: nameDefault,
-    name_i18n: toLocalizedRecord(value.name_i18n),
-    description_default: toNullableString(value.description_default),
-    description_i18n: toLocalizedRecord(value.description_i18n),
-    long_description_default: toNullableString(value.long_description_default),
-    long_description_i18n: toLocalizedRecord(value.long_description_i18n),
-    address_city: toNullableString(value.address_city),
-    address_country_code: toNullableString(value.address_country_code),
-    launch_date: toNullableString(value.launch_date),
-    maturity_date: toNullableString(value.maturity_date),
-    current_funding: toNullableNumber(value.current_funding),
-    target_budget: toNullableNumber(value.target_budget),
-    hero_image_url: toNullableString(value.hero_image_url),
-    images: asStringArray(value.images),
-    producer: toProducer(value.producer),
-  }
-}
-
-const toPublicProjectFromMock = (
-  project: ReturnType<typeof getMockProjects>[number],
-): PublicProject => {
-  return {
-    id: project.id,
-    slug: project.slug,
-    is_mock: true,
-    status: project.status,
-    type: project.type,
-    name_default: project.name_default,
-    name_i18n: project.name_i18n || null,
-    description_default: project.description_default,
-    description_i18n: project.description_i18n || null,
-    long_description_default: project.long_description_default,
-    long_description_i18n: project.long_description_i18n || null,
-    address_city: project.address_city,
-    address_country_code: project.address_country_code,
-    launch_date: project.launch_date,
-    maturity_date: project.maturity_date,
-    current_funding: project.current_funding,
-    target_budget: project.target_budget,
-    unit_price_eur: project.unit_price_eur || null,
-    unit_label: project.unit_label || null,
-    hero_image_url: project.hero_image_url,
-    images: project.images || null,
-    producer: {
-      id: project.producer.id,
-      slug: project.producer.slug,
-      name_default: project.producer.name_default,
-      name_i18n: project.producer.name_i18n || null,
-      description_default: project.producer.description_default,
-      description_i18n: project.producer.description_i18n || null,
-      contact_website: project.producer.contact_website,
-      images: project.producer.images || null,
-    },
-    species: project.species || null,
-    challenges: project.challenges || null,
-    producer_products: project.producer_products || null,
-    donation_options: project.donation_options || null,
-    is_donation_project: Boolean(project.donation_options?.length),
-    expected_impact: project.expected_impact || null,
-  }
-}
-
-const toRelatedProject = (value: unknown): RelatedProject | null => {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  const id = asString(value.id)
-  const slug = asString(value.slug)
-  const nameDefault = asString(value.name_default)
-  if (!id || !slug || !nameDefault) {
-    return null
-  }
-
-  return {
-    id,
-    slug,
-    type: toNullableString(value.type),
-    name_default: nameDefault,
-    name_i18n: toLocalizedRecord(value.name_i18n),
-    description_default: toNullableString(value.description_default),
-    description_i18n: toLocalizedRecord(value.description_i18n),
-    hero_image_url: toNullableString(value.hero_image_url),
-    current_funding: toNullableNumber(value.current_funding),
-    target_budget: toNullableNumber(value.target_budget),
-  }
-}
-
+// Helpers moved to bottom
 export async function getPublicProjectBySlug(slug: string): Promise<PublicProject | null> {
   const mockProject = getMockProjectBySlug(slug)
   if (mockProject) {
@@ -332,5 +178,161 @@ export async function getRelatedProjectsByType({
   return [...mockRelatedProjects, ...dedupedDatabaseProjects].slice(0, limit)
 }
 
-const isUuid = (value: string) =>
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+function toLocalizedRecord(value: unknown): Record<string, string> | null {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      (entry): entry is [string, string] => typeof entry[1] === 'string',
+    ),
+  )
+}
+
+function toNullableString(value: unknown): string | null {
+  const parsed = asString(value)
+  return parsed || null
+}
+
+function toNullableNumber(value: unknown): number | null {
+  if (value === null || value === undefined) {
+    return null
+  }
+
+  const parsed = asNumber(value, Number.NaN)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
+function toProducer(value: unknown): ProjectProducer | null {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  const nameDefault = asString(value.name_default)
+  if (!id || !nameDefault) {
+    return null
+  }
+
+  return {
+    id,
+    slug: toNullableString(value.slug),
+    name_default: nameDefault,
+    name_i18n: toLocalizedRecord(value.name_i18n),
+    description_default: toNullableString(value.description_default),
+    description_i18n: toLocalizedRecord(value.description_i18n),
+    contact_website: toNullableString(value.contact_website),
+    images: asStringArray(value.images),
+  }
+}
+
+function toPublicProject(value: unknown): PublicProject | null {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  const slug = asString(value.slug)
+  const nameDefault = asString(value.name_default)
+  if (!id || !slug || !nameDefault) {
+    return null
+  }
+
+  return {
+    id,
+    slug,
+    is_mock: false,
+    status: toNullableString(value.status),
+    type: toNullableString(value.type),
+    name_default: nameDefault,
+    name_i18n: toLocalizedRecord(value.name_i18n),
+    description_default: toNullableString(value.description_default),
+    description_i18n: toLocalizedRecord(value.description_i18n),
+    long_description_default: toNullableString(value.long_description_default),
+    long_description_i18n: toLocalizedRecord(value.long_description_i18n),
+    address_city: toNullableString(value.address_city),
+    address_country_code: toNullableString(value.address_country_code),
+    launch_date: toNullableString(value.launch_date),
+    maturity_date: toNullableString(value.maturity_date),
+    current_funding: toNullableNumber(value.current_funding),
+    target_budget: toNullableNumber(value.target_budget),
+    hero_image_url: toNullableString(value.hero_image_url),
+    images: asStringArray(value.images),
+    producer: toProducer(value.producer),
+  }
+}
+
+function toPublicProjectFromMock(
+  project: ReturnType<typeof getMockProjects>[number],
+): PublicProject {
+  return {
+    id: project.id,
+    slug: project.slug,
+    is_mock: true,
+    status: project.status,
+    type: project.type,
+    name_default: project.name_default,
+    name_i18n: project.name_i18n || null,
+    description_default: project.description_default,
+    description_i18n: project.description_i18n || null,
+    long_description_default: project.long_description_default,
+    long_description_i18n: project.long_description_i18n || null,
+    address_city: project.address_city,
+    address_country_code: project.address_country_code,
+    launch_date: project.launch_date,
+    maturity_date: project.maturity_date,
+    current_funding: project.current_funding,
+    target_budget: project.target_budget,
+    unit_price_eur: project.unit_price_eur || null,
+    unit_label: project.unit_label || null,
+    hero_image_url: project.hero_image_url,
+    images: project.images || null,
+    producer: {
+      id: project.producer.id,
+      slug: project.producer.slug,
+      name_default: project.producer.name_default,
+      name_i18n: project.producer.name_i18n || null,
+      description_default: project.producer.description_default,
+      description_i18n: project.producer.description_i18n || null,
+      contact_website: project.producer.contact_website,
+      images: project.producer.images || null,
+    },
+    species: project.species || null,
+    challenges: project.challenges || null,
+    producer_products: project.producer_products || null,
+    donation_options: project.donation_options || null,
+    is_donation_project: Boolean(project.donation_options?.length),
+    expected_impact: project.expected_impact || null,
+  }
+}
+
+function toRelatedProject(value: unknown): RelatedProject | null {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = asString(value.id)
+  const slug = asString(value.slug)
+  const nameDefault = asString(value.name_default)
+  if (!id || !slug || !nameDefault) {
+    return null
+  }
+
+  return {
+    id,
+    slug,
+    type: toNullableString(value.type),
+    name_default: nameDefault,
+    name_i18n: toLocalizedRecord(value.name_i18n),
+    description_default: toNullableString(value.description_default),
+    description_i18n: toLocalizedRecord(value.description_i18n),
+    hero_image_url: toNullableString(value.hero_image_url),
+    current_funding: toNullableNumber(value.current_funding),
+    target_budget: toNullableNumber(value.target_budget),
+  }
+}
+
+function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+}

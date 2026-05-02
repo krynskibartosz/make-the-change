@@ -27,12 +27,7 @@ type FloatingActionButtonsProps = ProductCartPayload & {
   displayPrice: number
 }
 
-const normalizePricePoints = (value: number) =>
-  Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0
-
-const normalizePriceEuros = (value: number | null | undefined) =>
-  typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : null
-
+// Helpers moved to bottom
 function useProductAddToCart({
   productId,
   productName,
@@ -163,4 +158,12 @@ export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActi
       </Button>
     </div>
   )
+}
+
+function normalizePricePoints(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0
+}
+
+function normalizePriceEuros(value: number | null | undefined): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : null
 }

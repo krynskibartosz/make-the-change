@@ -91,21 +91,7 @@ type ProductsClientProps = {
 
 type SelectOption = { value: string; label: string }
 
-const createSelectOptions = <T extends { id: string; name_default: string }>(
-  items: T[] | undefined,
-  allLabel: string,
-): SelectOption[] => [
-    { value: '', label: allLabel },
-    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
-  ]
-
-const getSortOptions = (tProducts: (key: string) => string): SelectOption[] => [
-  { value: 'featured_first', label: tProducts('sort.featured') },
-  { value: 'name_asc', label: tProducts('sort.name_asc') },
-  { value: 'name_desc', label: tProducts('sort.name_desc') },
-  { value: 'price_asc', label: tProducts('sort.price_asc') },
-  { value: 'price_desc', label: tProducts('sort.price_desc') },
-]
+// Helpers moved to bottom
 
 type ProductsFiltersSidebarProps = {
   title?: string
@@ -129,7 +115,7 @@ type ProductsFiltersSidebarProps = {
   onTagChange: (value: string) => void
 }
 
-const ProductsFiltersSidebar = ({
+function ProductsFiltersSidebar({
   title,
   clearLabel,
   categoryLabel,
@@ -149,148 +135,150 @@ const ProductsFiltersSidebar = ({
   onCategoryChange,
   onProducerChange,
   onTagChange,
-}: ProductsFiltersSidebarProps) => (
-  <div className="pb-4 md:pb-5">
-    <div className="mb-4 flex items-center justify-between gap-3">
-      {title && <h3 className="text-lg font-black tracking-tight">{title}</h3>}
+}: ProductsFiltersSidebarProps) {
+  return (
+    <div className="pb-4 md:pb-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        {title && <h3 className="text-lg font-black tracking-tight">{title}</h3>}
 
-      {showClear && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={onReset}
-          className="h-auto px-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
-        >
-          {clearLabel}
-        </Button>
-      )}
+        {showClear && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={onReset}
+            className="h-auto px-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+          >
+            {clearLabel}
+          </Button>
+        )}
+      </div>
+
+      <Accordion
+        type="multiple"
+        defaultValue={['categories', 'producers', 'tags']}
+        className="w-full"
+      >
+        <AccordionItem value="categories">
+          <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
+            {categoryLabel}
+          </AccordionTrigger>
+          <AccordionContent>
+            <button
+              type="button"
+              onClick={() => onCategoryChange('')}
+              className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+            >
+              {allCategoriesLabel}
+            </button>
+            <ScrollArea className="max-h-96 pr-1">
+              <ul className="space-y-2 m-0 p-0 list-none">
+                {categoryOptions
+                  .filter((option) => option.value)
+                  .map((option) => (
+                    <li key={option.value} className="flex items-center space-x-3">
+                      <Checkbox
+                        id={`cat-${option.value}`}
+                        checked={category === option.value}
+                        onCheckedChange={(checked) => onCategoryChange(checked ? option.value : '')}
+                      />
+                      <label
+                        htmlFor={`cat-${option.value}`}
+                        className="cursor-pointer text-sm font-medium leading-none text-muted-foreground hover:text-foreground"
+                      >
+                        {option.label}
+                      </label>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollArea>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="producers">
+          <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
+            {producerLabel}
+          </AccordionTrigger>
+          <AccordionContent>
+            <button
+              type="button"
+              onClick={() => onProducerChange('')}
+              className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+            >
+              {allProducersLabel}
+            </button>
+            <ScrollArea className="max-h-96 pr-1">
+              <ul className="space-y-2 m-0 p-0 list-none">
+                {producerOptions
+                  .filter((option) => option.value)
+                  .map((option) => (
+                    <li key={option.value} className="flex items-center space-x-3">
+                      <Checkbox
+                        id={`prod-${option.value}`}
+                        checked={producer === option.value}
+                        onCheckedChange={(checked) => onProducerChange(checked ? option.value : '')}
+                      />
+                      <label
+                        htmlFor={`prod-${option.value}`}
+                        className="cursor-pointer text-sm font-medium leading-none text-muted-foreground hover:text-foreground"
+                      >
+                        {option.label}
+                      </label>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollArea>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="tags">
+          <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
+            {tagLabel}
+          </AccordionTrigger>
+          <AccordionContent>
+            <button
+              type="button"
+              onClick={() => onTagChange('')}
+              className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+            >
+              {allTagsLabel}
+            </button>
+            <ScrollArea className="max-h-96 pr-1">
+              <ul className="space-y-2 m-0 p-0 list-none">
+                {tagOptions
+                  .filter((option) => option.value)
+                  .map((option) => (
+                    <li key={option.value} className="flex items-center space-x-3">
+                      <Checkbox
+                        id={`tag-${option.value}`}
+                        checked={tag === option.value}
+                        onCheckedChange={(checked) => onTagChange(checked ? option.value : '')}
+                      />
+                      <label
+                        htmlFor={`tag-${option.value}`}
+                        className="cursor-pointer text-sm font-medium leading-none text-muted-foreground hover:text-foreground"
+                      >
+                        {option.label}
+                      </label>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollArea>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
+  )
+}
 
-    <Accordion
-      type="multiple"
-      defaultValue={['categories', 'producers', 'tags']}
-      className="w-full"
-    >
-      <AccordionItem value="categories">
-        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
-          {categoryLabel}
-        </AccordionTrigger>
-        <AccordionContent>
-          <button
-            type="button"
-            onClick={() => onCategoryChange('')}
-            className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
-          >
-            {allCategoriesLabel}
-          </button>
-          <ScrollArea className="max-h-96 pr-1">
-            <ul className="space-y-2 m-0 p-0 list-none">
-              {categoryOptions
-                .filter((option) => option.value)
-                .map((option) => (
-                  <li key={option.value} className="flex items-center space-x-3">
-                    <Checkbox
-                      id={`cat-${option.value}`}
-                      checked={category === option.value}
-                      onCheckedChange={(checked) => onCategoryChange(checked ? option.value : '')}
-                    />
-                    <label
-                      htmlFor={`cat-${option.value}`}
-                      className="cursor-pointer text-sm font-medium leading-none text-muted-foreground hover:text-foreground"
-                    >
-                      {option.label}
-                    </label>
-                  </li>
-                ))}
-            </ul>
-          </ScrollArea>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="producers">
-        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
-          {producerLabel}
-        </AccordionTrigger>
-        <AccordionContent>
-          <button
-            type="button"
-            onClick={() => onProducerChange('')}
-            className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
-          >
-            {allProducersLabel}
-          </button>
-          <ScrollArea className="max-h-96 pr-1">
-            <ul className="space-y-2 m-0 p-0 list-none">
-              {producerOptions
-                .filter((option) => option.value)
-                .map((option) => (
-                  <li key={option.value} className="flex items-center space-x-3">
-                    <Checkbox
-                      id={`prod-${option.value}`}
-                      checked={producer === option.value}
-                      onCheckedChange={(checked) => onProducerChange(checked ? option.value : '')}
-                    />
-                    <label
-                      htmlFor={`prod-${option.value}`}
-                      className="cursor-pointer text-sm font-medium leading-none text-muted-foreground hover:text-foreground"
-                    >
-                      {option.label}
-                    </label>
-                  </li>
-                ))}
-            </ul>
-          </ScrollArea>
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="tags">
-        <AccordionTrigger className="text-sm font-bold transition-colors cursor-pointer hover:no-underline hover:text-primary hover:cursor-pointer">
-          {tagLabel}
-        </AccordionTrigger>
-        <AccordionContent>
-          <button
-            type="button"
-            onClick={() => onTagChange('')}
-            className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
-          >
-            {allTagsLabel}
-          </button>
-          <ScrollArea className="max-h-96 pr-1">
-            <ul className="space-y-2 m-0 p-0 list-none">
-              {tagOptions
-                .filter((option) => option.value)
-                .map((option) => (
-                  <li key={option.value} className="flex items-center space-x-3">
-                    <Checkbox
-                      id={`tag-${option.value}`}
-                      checked={tag === option.value}
-                      onCheckedChange={(checked) => onTagChange(checked ? option.value : '')}
-                    />
-                    <label
-                      htmlFor={`tag-${option.value}`}
-                      className="cursor-pointer text-sm font-medium leading-none text-muted-foreground hover:text-foreground"
-                    >
-                      {option.label}
-                    </label>
-                  </li>
-                ))}
-            </ul>
-          </ScrollArea>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  </div>
-)
-
-export const ProductsClient = ({
+export function ProductsClient({
   products,
   categories,
   producers,
   availableTags,
   pagination,
   initialQueryState,
-}: ProductsClientProps) => {
+}: ProductsClientProps) {
   const tProducts = useTranslations('products')
   const tCommon = useTranslations('common')
   const router = useRouter()
@@ -786,3 +774,23 @@ export const ProductsClient = ({
 }
 
 export default ProductsClient
+
+function createSelectOptions<T extends { id: string; name_default: string }>(
+  items: T[] | undefined,
+  allLabel: string,
+): SelectOption[] {
+  return [
+    { value: '', label: allLabel },
+    ...(items?.map((item) => ({ value: item.id, label: item.name_default })) || []),
+  ]
+}
+
+function getSortOptions(tProducts: (key: string) => string): SelectOption[] {
+  return [
+    { value: 'featured_first', label: tProducts('sort.featured') },
+    { value: 'name_asc', label: tProducts('sort.name_asc') },
+    { value: 'name_desc', label: tProducts('sort.name_desc') },
+    { value: 'price_asc', label: tProducts('sort.price_asc') },
+    { value: 'price_desc', label: tProducts('sort.price_desc') },
+  ]
+}

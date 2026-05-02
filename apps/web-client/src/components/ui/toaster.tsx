@@ -10,10 +10,12 @@ function ToastList() {
   return toasts.map((toast) => <ToastWithIcon key={toast.id} toast={toast} />)
 }
 
-export const Toaster = ({ children }: PropsWithChildren) => (
-  <ToastProvider toastManager={toastManager}>
-    {children}
-    <ToastViewport />
-    <ToastList />
-  </ToastProvider>
-)
+export function Toaster({ children }: PropsWithChildren) {
+  return (
+    <ToastProvider toastManager={toastManager}>
+      {children}
+      <ToastViewport />
+      <ToastList />
+    </ToastProvider>
+  )
+}

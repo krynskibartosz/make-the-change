@@ -36,7 +36,7 @@ export function ProjectTimeline({ updates }: { updates: ProjectUpdate[] }) {
                 <span>•</span>
                 <time dateTime={update.published_at || ''}>
                   {update.published_at
-                    ? formatDistanceToNow(new Date(update.published_at), {
+                    ? formatDistanceToNow(Date.parse(update.published_at), {
                         addSuffix: true,
                         locale: fr,
                       })

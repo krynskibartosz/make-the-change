@@ -16,7 +16,7 @@ type MarketingHeroProps = {
   descriptionClassName?: string
 }
 
-export const MarketingHero = ({
+export function MarketingHero({
   title,
   description,
   badge,
@@ -28,7 +28,7 @@ export const MarketingHero = ({
   contentClassName = 'mx-auto max-w-4xl',
   titleClassName,
   descriptionClassName,
-}: MarketingHeroProps) => {
+}: MarketingHeroProps) {
   const shellProps = {
     minHeightClassName,
     containerClassName: cn('text-center', containerClassName),

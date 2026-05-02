@@ -11,11 +11,11 @@ type HomeFeaturedProductsSectionProps = {
   variant?: 'default' | 'muted'
 }
 
-export const HomeFeaturedProductsSection = ({
+export function HomeFeaturedProductsSection({
   title,
   viewAllLabel,
   products,
-}: HomeFeaturedProductsSectionProps) => {
+}: HomeFeaturedProductsSectionProps) {
   const visibleProducts = products.filter((product) => (product.stock_quantity || 0) > 0)
 
   return (

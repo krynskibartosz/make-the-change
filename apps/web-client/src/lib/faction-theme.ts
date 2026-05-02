@@ -66,19 +66,19 @@ const FACTION_THEMES: Record<FactionThemeKey, FactionTheme> = {
   },
 }
 
-export const resolveFactionThemeKey = (
+export function resolveFactionThemeKey(
   faction: Faction | null | undefined,
-): FactionThemeKey => {
+): FactionThemeKey {
   if (faction === 'Vie Sauvage') return 'pollinisateurs'
   if (faction === 'Terres & Forêts') return 'forets'
   if (faction === 'Gardiens des mers') return 'mers'
   return 'neutral'
 }
 
-export const getFactionTheme = (faction: Faction | null | undefined): FactionTheme => {
+export function getFactionTheme(faction: Faction | null | undefined): FactionTheme {
   return FACTION_THEMES[resolveFactionThemeKey(faction)]
 }
 
-export const getFactionThemeByKey = (themeKey: FactionThemeKey): FactionTheme => {
+export function getFactionThemeByKey(themeKey: FactionThemeKey): FactionTheme {
   return FACTION_THEMES[themeKey]
 }

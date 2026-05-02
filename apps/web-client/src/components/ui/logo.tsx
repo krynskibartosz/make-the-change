@@ -9,13 +9,13 @@ interface LogoProps {
   height?: number
 }
 
-export const Logo = ({
+export function Logo({
   className,
   variant = 'full',
   colorMode = 'default',
   width,
   height,
-}: LogoProps) => {
+}: LogoProps) {
   // Dimensions par défaut basées sur le type
   const defaultWidth = variant === 'full' ? 180 : 40
   const defaultHeight = variant === 'full' ? 50 : 40
@@ -27,13 +27,11 @@ export const Logo = ({
   } else {
     // Variant Full
     if (colorMode === 'dark') {
-      src = '/images/logo-text-on-black.png' // Texte blanc pour fond noir (nom de fichier à confirmer selon contenu réel)
-      // Note: Si "logo-text-on-black.png" signifie "logo avec texte NOIR" (pour fond blanc), alors la logique est inversée.
-      // Basé sur le nommage standard : "text-on-black" = "texte fait pour aller sur du noir" => donc texte BLANC.
+      src = '/images/logo-text-on-black.png'
     } else if (colorMode === 'light') {
-      src = '/images/logo-text-on-white.png' // Texte sombre pour fond blanc
+      src = '/images/logo-text-on-white.png'
     } else {
-      src = '/images/logo-full.png' // Logo couleur original
+      src = '/images/logo-full.png'
     }
   }
 

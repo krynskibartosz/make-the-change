@@ -7,17 +7,7 @@ interface EcosystemCardProps {
     ecosystem: any
 }
 
-// Map ecosystem icons
-const getEcosystemIcon = (iconName?: string) => {
-    switch (iconName) {
-        case 'forest': return <Leaf className="h-5 w-5 text-green-600" />
-        case 'water': return <Droplet className="h-5 w-5 text-blue-500" />
-        case 'solar': return <Sun className="h-5 w-5 text-yellow-500" />
-        case 'wind': return <Wind className="h-5 w-5 text-gray-500" />
-        default: return <Leaf className="h-5 w-5 text-green-600" />
-    }
-}
-
+// Helpers moved to bottom
 export function EcosystemCard({ ecosystem }: EcosystemCardProps) {
     if (!ecosystem) return null
 
@@ -65,4 +55,14 @@ export function EcosystemCard({ ecosystem }: EcosystemCardProps) {
             </CardContent>
         </Card>
     )
+}
+
+function getEcosystemIcon(iconName?: string) {
+    switch (iconName) {
+        case 'forest': return <Leaf className="h-5 w-5 text-green-600" />
+        case 'water': return <Droplet className="h-5 w-5 text-blue-500" />
+        case 'solar': return <Sun className="h-5 w-5 text-yellow-500" />
+        case 'wind': return <Wind className="h-5 w-5 text-gray-500" />
+        default: return <Leaf className="h-5 w-5 text-green-600" />
+    }
 }

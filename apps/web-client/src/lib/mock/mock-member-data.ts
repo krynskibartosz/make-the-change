@@ -1,4 +1,5 @@
 import type { SpeciesContext } from '@/types/species'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import {
   MOCK_CHALLENGE_DAILY_HARVEST_ID,
   MOCK_CHALLENGE_ECO_FACT_ID,
@@ -599,7 +600,7 @@ export const buildSyntheticMockOrder = (
     shipping_cost_euros: 0,
     tax_euros: 0,
     total_euros: 0,
-    created_at: new Date().toISOString(),
+    created_at: getCurrentIsoDate(),
     tracking_number: null,
     carrier: null,
     shipping_address: {

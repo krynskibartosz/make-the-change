@@ -162,12 +162,3 @@ export function ContactCardsSection({ email, social, faq, office }: ContactCards
     </MarketingSection>
   )
 }
-Section>
-  )
-}
-v>
-        </div>
-      </div>
-    </MarketingSection>
-  )
-}

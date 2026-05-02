@@ -50,10 +50,11 @@ const PROJECT_STATUS_VALUES = [
   'funded',
 ] as const satisfies readonly ProjectStatusFilter[]
 
-const isProjectStatusFilter = (value: string): value is ProjectStatusFilter =>
-  PROJECT_STATUS_VALUES.some((entry) => entry === value)
+function isProjectStatusFilter(value: string): value is ProjectStatusFilter {
+  return PROJECT_STATUS_VALUES.some((entry) => entry === value)
+}
 
-const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
+function toLocalizedRecord(value: unknown): Record<string, string> | null {
   if (!isRecord(value)) {
     return null
   }
@@ -65,12 +66,12 @@ const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
   )
 }
 
-const toNullableString = (value: unknown): string | null => {
+function toNullableString(value: unknown): string | null {
   const parsed = asString(value)
   return parsed || null
 }
 
-const toNullableNumber = (value: unknown): number | null => {
+function toNullableNumber(value: unknown): number | null {
   if (value === null || value === undefined) {
     return null
   }
@@ -79,7 +80,7 @@ const toNullableNumber = (value: unknown): number | null => {
   return Number.isFinite(parsed) ? parsed : null
 }
 
-const toNullableBoolean = (value: unknown): boolean | null => {
+function toNullableBoolean(value: unknown): boolean | null {
   if (value === null || value === undefined) {
     return null
   }
@@ -87,7 +88,7 @@ const toNullableBoolean = (value: unknown): boolean | null => {
   return typeof value === 'boolean' ? value : null
 }
 
-const toProducer = (value: unknown): ProjectListItem['producer'] => {
+function toProducer(value: unknown): ProjectListItem['producer'] {
   if (!isRecord(value)) {
     return null
   }
@@ -100,7 +101,7 @@ const toProducer = (value: unknown): ProjectListItem['producer'] => {
   }
 }
 
-const toProjectListItem = (value: unknown): ProjectListItem | null => {
+function toProjectListItem(value: unknown): ProjectListItem | null {
   if (!isRecord(value)) {
     return null
   }
@@ -134,9 +135,9 @@ const toProjectListItem = (value: unknown): ProjectListItem | null => {
   }
 }
 
-const toMockProjectListItem = (
+function toMockProjectListItem(
   project: ReturnType<typeof getMockProjects>[number],
-): ProjectListItem => {
+): ProjectListItem {
   const fundingProgress =
     project.target_budget > 0 ? Math.min((project.current_funding / project.target_budget) * 100, 100) : 0
 
@@ -169,7 +170,7 @@ const toMockProjectListItem = (
   }
 }
 
-const matchesSearch = (project: ProjectListItem, search: string) => {
+function matchesSearch(project: ProjectListItem, search: string) {
   if (!search) return true
   const query = search.trim().toLowerCase()
   if (!query) return true
@@ -185,7 +186,7 @@ const matchesSearch = (project: ProjectListItem, search: string) => {
   return haystack.includes(query)
 }
 
-const matchesStatus = (project: ProjectListItem, status: string) => {
+function matchesStatus(project: ProjectListItem, status: string) {
   if (status === 'all') return true
   return project.status === status
 }

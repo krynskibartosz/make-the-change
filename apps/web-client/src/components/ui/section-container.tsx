@@ -31,7 +31,7 @@ const variantClasses = {
   glass: 'bg-background/70 backdrop-blur',
 } satisfies Record<SectionContainerVariant, string>
 
-export const SectionContainer = ({
+export function SectionContainer({
   title,
   description,
   hideDescriptionOnMobile = false,
@@ -41,29 +41,31 @@ export const SectionContainer = ({
   variant = 'default',
   size = 'md',
   ...rest
-}: SectionContainerProps) => (
-  <section {...rest} className={cn(sizeClasses[size], variantClasses[variant], className)}>
-    <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
-      {(title || action) && (
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            {title && <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>}
-            {description && (
-              <p
-                className={cn(
-                  'mt-2 text-lg',
-                  variant === 'primary' ? 'opacity-90' : 'text-muted-foreground',
-                  hideDescriptionOnMobile && 'hidden sm:block',
-                )}
-              >
-                {description}
-              </p>
-            )}
+}: SectionContainerProps) {
+  return (
+    <section {...rest} className={cn(sizeClasses[size], variantClasses[variant], className)}>
+      <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-12">
+        {(title || action) && (
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              {title && <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>}
+              {description && (
+                <p
+                  className={cn(
+                    'mt-2 text-lg',
+                    variant === 'primary' ? 'opacity-90' : 'text-muted-foreground',
+                    hideDescriptionOnMobile && 'hidden sm:block',
+                  )}
+                >
+                  {description}
+                </p>
+              )}
+            </div>
+            {action}
           </div>
-          {action}
-        </div>
-      )}
-      {children}
-    </div>
-  </section>
-)
+        )}
+        {children}
+      </div>
+    </section>
+  )
+}

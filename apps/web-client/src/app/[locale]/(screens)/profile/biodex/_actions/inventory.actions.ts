@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import { revalidatePath } from 'next/cache'
 
 /**
@@ -75,7 +76,7 @@ export async function useItem(itemId: string) {
         .from('user_inventory')
         .update({
             quantity: inventoryItem.quantity - 1,
-            updated_at: new Date().toISOString()
+            updated_at: getCurrentIsoDate()
         })
         .eq('id', inventoryItem.id)
 

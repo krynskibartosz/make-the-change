@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 
 /**
  * Fetch the active quests and the user's progress on them
@@ -128,8 +129,8 @@ export async function claimQuestReward(questId: string) {
         .from('user_quests')
         .update({
             status: 'claimed',
-            claimed_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            claimed_at: getCurrentIsoDate(),
+            updated_at: getCurrentIsoDate()
         })
         .eq('id', userQuest.id)
 

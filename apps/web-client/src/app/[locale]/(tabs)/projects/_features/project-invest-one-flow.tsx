@@ -23,11 +23,7 @@ type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
 const REWARD_PREVIEW_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
-const formatAmountPlain = (value: number): string =>
-  `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
-const formatAmountNumber = (value: number): string =>
-  new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
-
+// Helpers moved to bottom
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
   : null
@@ -76,11 +72,7 @@ type ProjectInvestOneFlowProps = {
   discoveredSpeciesId?: string | null
 }
 
-const clampAmount = (value: number, min: number, max: number): number =>
-  Math.min(Math.max(value, min), max)
-
-const isValidEmail = (value: string): boolean => /.+@.+\..+/.test(value)
-
+// Helpers moved to bottom
 export function ProjectInvestOneFlow({
   project,
   presentation = 'page',
@@ -729,4 +721,20 @@ export function ProjectInvestOneFlow({
       ) : null}
     </div>
   )
+}
+
+function formatAmountPlain(value: number): string {
+  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
+}
+
+function formatAmountNumber(value: number): string {
+  return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
+}
+
+function clampAmount(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
+
+function isValidEmail(value: string): boolean {
+  return /.+@.+\..+/.test(value)
 }

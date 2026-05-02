@@ -115,13 +115,15 @@ export default function AuthLayout({ children }: PropsWithChildren) {
   )
 }
 
-const Badge = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <span
-    className={cn(
-      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-      className,
-    )}
-  >
-    {children}
-  </span>
-)
+function Badge({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+        className,
+      )}
+    >
+      {children}
+    </span>
+  )
+}

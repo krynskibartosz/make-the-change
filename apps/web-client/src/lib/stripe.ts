@@ -2,7 +2,7 @@ import Stripe from 'stripe'
 
 let stripeSingleton: Stripe | null = null
 
-export const getStripe = () => {
+export function getStripe() {
   const apiKey = process.env.STRIPE_SECRET_KEY
   if (!apiKey) {
     throw new Error('STRIPE_SECRET_KEY is not set')

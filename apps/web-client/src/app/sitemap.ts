@@ -43,6 +43,72 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ? []
     : await getDatabasePosts()
 
+  const sitemapEntry: MetadataRoute.Sitemap = []
+
+  // 1. Static Routes
+  routes.forEach((route) => {
+    locales.forEach((locale) => {
+      sitemapEntry.push({
+        url: `${baseUrl}/${locale}${route}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: route === '' ? 1 : 0.8,
+      })
+    })
+  })
+
+  // 2. Dynamic Projects
+  if (projects) {
+    projects.forEach((project) => {
+      const slugOrId = project.slug || project.id
+      locales.forEach((locale) => {
+        sitemapEntry.push({
+          url: `${baseUrl}/${locale}/projects/${slugOrId}`,
+          lastModified: project.updated_at ? new Date(project.updated_at) : new Date(),
+          changeFrequency: 'daily',
+          priority: 0.9,
+        })
+      })
+    })
+  }
+
+  // 3. Dynamic Products
+  if (products) {
+    products.forEach((product) => {
+      const slugOrId = product.slug || product.id
+      locales.forEach((locale) => {
+        sitemapEntry.push({
+          url: `${baseUrl}/${locale}/products/${slugOrId}`,
+          lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
+          changeFrequency: 'daily',
+          priority: 0.9,
+        })
+      })
+    })
+  }
+
+  // 4. Dynamic Blog Posts
+  if (posts) {
+    posts.forEach((post) => {
+      const slugOrId = post.slug || post.id
+      const date = post.published_at ? new Date(post.published_at) : new Date()
+
+      locales.forEach((locale) => {
+        sitemapEntry.push({
+          url: `${baseUrl}/${locale}/blog/${slugOrId}`,
+          lastModified: date,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        })
+      })
+    })
+  }
+
+  return sitemapEntry
+}
+
+// --- Helper DB functions (hoisted to bottom for top-down readability) ---
+
 async function getDatabaseProjects() {
   const supabase = createStaticClient()
   const { data } = await supabase
@@ -74,71 +140,4 @@ async function getDatabasePosts() {
     .eq('status', 'published')
 
   return data || []
-}
-
-  const sitemapEntry: MetadataRoute.Sitemap = []
-
-  // 1. Static Routes
-  routes.forEach((route) => {
-    locales.forEach((locale) => {
-      sitemapEntry.push({
-        url: `${baseUrl}/${locale}${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: route === '' ? 1 : 0.8,
-      })
-    })
-  })
-
-  // 2. Dynamic Projects
-  if (projects) {
-    projects.forEach((project) => {
-      const slugOrId = project.slug || project.id
-      locales.forEach((locale) => {
-        sitemapEntry.push({
-          url: `${baseUrl}/${locale}/projects/${slugOrId}`,
-          lastModified: new Date(project.updated_at || new Date()),
-          changeFrequency: 'daily',
-          priority: 0.9,
-        })
-      })
-    })
-  }
-
-  // 3. Dynamic Products
-  if (products) {
-    products.forEach((product) => {
-      const slugOrId = product.slug || product.id
-      locales.forEach((locale) => {
-        sitemapEntry.push({
-          url: `${baseUrl}/${locale}/products/${slugOrId}`,
-          lastModified: new Date(product.updated_at || new Date()),
-          changeFrequency: 'daily',
-          priority: 0.9,
-        })
-      })
-    })
-  }
-
-  // 4. Dynamic Blog Posts
-  if (posts) {
-    posts.forEach((post) => {
-      const slugOrId = post.slug || post.id
-      // Use published_at as last modified if updated_at is not available, or just use published_at
-      // The blog_posts schema we saw had published_at but not explicitly updated_at in the SELECT const,
-      // though it likely exists. Let's strictly use what we saw: published_at.
-      const date = post.published_at ? new Date(post.published_at) : new Date()
-
-      locales.forEach((locale) => {
-        sitemapEntry.push({
-          url: `${baseUrl}/${locale}/blog/${slugOrId}`,
-          lastModified: date,
-          changeFrequency: 'weekly',
-          priority: 0.7,
-        })
-      })
-    })
-  }
-
-  return sitemapEntry
 }

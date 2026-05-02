@@ -9,17 +9,19 @@ type HomeFeaturedProjectsSectionProps = {
   variant?: 'default' | 'muted'
 }
 
-export const HomeFeaturedProjectsSection = ({
+export function HomeFeaturedProjectsSection({
   title,
   viewAllLabel,
   projects,
   variant = 'default',
-}: HomeFeaturedProjectsSectionProps) => (
-  <MarketingSection title={title} variant={variant} size="lg" className="overflow-hidden bg-[#121619] text-white">
-    <div
-      className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(126,211,33,0.12),transparent_60%)]"
-      aria-hidden="true"
-    />
-    <FeaturedProjectsList projects={projects} viewAllLabel={viewAllLabel} />
-  </MarketingSection>
-)
+}: HomeFeaturedProjectsSectionProps) {
+  return (
+    <MarketingSection title={title} variant={variant} size="lg" className="overflow-hidden bg-[#121619] text-white">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(126,211,33,0.12),transparent_60%)]"
+        aria-hidden="true"
+      />
+      <FeaturedProjectsList projects={projects} viewAllLabel={viewAllLabel} />
+    </MarketingSection>
+  )
+}

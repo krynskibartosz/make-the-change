@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import { createDefaultMockProfileOverrides } from '@/lib/mock/mock-profile-overrides'
 import {
   getMockProfileOverrides,
@@ -127,7 +128,7 @@ export async function updateProfile(data: ProfileFormValues): Promise<ProfileSta
       address_postal_code: postalCode,
       address_country_code: country,
       bio,
-      updated_at: new Date().toISOString(),
+      updated_at: getCurrentIsoDate(),
     })
     .eq('id', user.id)
 
@@ -245,7 +246,7 @@ export async function updateProfileMedia(
           ...currentMetadata,
           ...uploaded,
         },
-        updated_at: new Date().toISOString(),
+        updated_at: getCurrentIsoDate(),
       })
       .eq('id', user.id)
 
@@ -311,7 +312,7 @@ export async function updateProfileImages(images: {
       .from('profiles')
       .update({
         metadata: newMetadata,
-        updated_at: new Date().toISOString(),
+        updated_at: getCurrentIsoDate(),
       })
       .eq('id', user.id)
 

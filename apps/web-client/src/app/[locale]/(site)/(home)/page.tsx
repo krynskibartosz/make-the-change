@@ -22,17 +22,17 @@ import { HeroParallaxBackground } from './_features/hero-parallax-background'
 const HERO_VIDEO_URL = '/videos/home-header.mp4'
 const HERO_POSTER_URL = '/images/home-header-poster.jpeg'
 
-const toLocaleForOpenGraph = (locale: string) => {
+function toLocaleForOpenGraph(locale: string) {
   if (locale === 'fr') return 'fr_FR'
   if (locale === 'nl') return 'nl_NL'
   return 'en_US'
 }
 
-export const generateMetadata = async ({
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>
-}): Promise<Metadata> => {
+}): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata' })
   const baseUrl = getPublicAppUrl()
@@ -60,7 +60,7 @@ export const generateMetadata = async ({
   }
 }
 
-const HomePage = async () => {
+async function HomePage() {
   const t = await getTranslations('home_v2')
   const localeValue = await getLocale()
   const locale: Locale = isLocale(localeValue) ? localeValue : defaultLocale

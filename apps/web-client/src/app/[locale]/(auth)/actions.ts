@@ -20,7 +20,7 @@ export type AuthState = {
   redirectUrl?: string
 }
 
-const getFormDataString = (formData: FormData, key: string): string => {
+function getFormDataString(formData: FormData, key: string): string {
   const value = formData.get(key)
   return typeof value === 'string' ? asString(value) : ''
 }

@@ -3,11 +3,12 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import { asString } from '@/lib/type-guards'
 import type { TipTapDoc } from '../blog-types'
 import { blogContentToText, parseBlogContent } from '../content/parse-blog-content'
 
-const getFormDataString = (formData: FormData, key: string): string => {
+function getFormDataString(formData: FormData, key: string): string {
   const value = formData.get(key)
   return typeof value === 'string' ? asString(value).trim() : ''
 }
@@ -52,10 +53,11 @@ export async function createBlogPost(formData: FormData) {
   redirect(`/admin/cms/blog/${data.id}`)
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
 
-const isTipTapDoc = (value: unknown): value is TipTapDoc => {
+function isTipTapDoc(value: unknown): value is TipTapDoc {
   if (!isRecord(value) || value.type !== 'doc') {
     return false
   }
@@ -67,7 +69,7 @@ const isTipTapDoc = (value: unknown): value is TipTapDoc => {
   return true
 }
 
-const normalizeTipTapContent = (serializedContent: string): string => {
+function normalizeTipTapContent(serializedContent: string): string {
   const trimmed = serializedContent.trim()
   if (!trimmed) {
     return JSON.stringify({
@@ -132,9 +134,9 @@ export async function updateBlogPost(id: string, data: UpdateBlogPostInput) {
     .from('blog_posts')
     .update({
       ...normalizedData,
-      updated_at: new Date().toISOString(),
+      updated_at: getCurrentIsoDate(),
       updated_by: user.id,
-      published_at: normalizedData.status === 'published' ? new Date().toISOString() : undefined,
+      published_at: normalizedData.status === 'published' ? getCurrentIsoDate() : undefined,
     })
     .eq('id', id)
 

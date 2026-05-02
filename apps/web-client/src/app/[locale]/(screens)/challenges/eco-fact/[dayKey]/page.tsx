@@ -13,6 +13,7 @@ import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { MockChallengeDetail } from '@/lib/mock/mock-challenges'
 import type { Faction } from '@/lib/mock/types'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import { cn } from '@/lib/utils'
 
 const FACTION_CONTENT = {
@@ -250,11 +251,11 @@ function EcoFactContent() {
     max: 1,
     reward: 50,
     rewardBadge: 'Éco-Conscient',
-    completedAt: isCompleted ? new Date().toISOString() : null,
-    claimedAt: isCompleted ? new Date().toISOString() : null,
+    completedAt: isCompleted ? getCurrentIsoDate() : null,
+    claimedAt: isCompleted ? getCurrentIsoDate() : null,
     dayKey: params.dayKey,
     monthKey: params.dayKey.slice(0, 7),
-    startDate: new Date().toISOString(),
+    startDate: getCurrentIsoDate(),
     endDate: new Date(Date.now() + 86400000).toISOString(),
     status: isCompleted ? 'completed' : 'available',
     seriesId: 'eco-fact' as any, // TODO: Add 'eco-fact' to ChallengeArchetypeId
@@ -351,7 +352,7 @@ function EcoFactContent() {
   }, [])
 
   const handleValidate = useCallback(() => {
-    const timestamp = new Date().toISOString()
+    const timestamp = getCurrentIsoDate()
     setIsCompleted(true)
     setIsUnlocked(true)
     setScrollProgress(100)

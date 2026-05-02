@@ -10,18 +10,7 @@ interface ProjectAssociatedProjectsSectionProps {
   locale: string
 }
 
-const getFundingProgress = (currentFunding: number, targetBudget: number) => {
-  if (targetBudget <= 0) return 0
-  return Math.min((currentFunding / targetBudget) * 100, 100)
-}
-
-const formatTypeLabel = (value: string | null) => {
-  if (!value) return null
-  return value
-    .replace(/[_-]+/g, ' ')
-    .replace(/\b\w/g, (match) => match.toUpperCase())
-}
-
+// Helpers moved to bottom
 export function ProjectAssociatedProjectsSection({
   projects,
   locale,
@@ -112,4 +101,16 @@ export function ProjectAssociatedProjectsSection({
       </div>
     </section>
   )
+}
+
+function getFundingProgress(currentFunding: number, targetBudget: number): number {
+  if (targetBudget <= 0) return 0
+  return Math.min((currentFunding / targetBudget) * 100, 100)
+}
+
+function formatTypeLabel(value: string | null): string | null {
+  if (!value) return null
+  return value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, (match) => match.toUpperCase())
 }

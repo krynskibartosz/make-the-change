@@ -21,6 +21,7 @@ import { getCurrentProfile, getMockViewerSession } from '@/lib/mock/mock-session
 import { getMockPublicProfile } from '@/lib/mock/mock-viewer'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
+import { getCurrentIsoDate } from '@/lib/date-utils'
 import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -374,7 +375,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                     <div>
                       <dt className="text-muted-foreground">Membre depuis</dt>
                       <dd className="font-medium">
-                        {formatDate(profile.created_at || new Date())}
+                        {formatDate(profile.created_at || getCurrentIsoDate())}
                       </dd>
                     </div>
                     <div>

@@ -48,10 +48,11 @@ type BuildHomeViewModelInput = {
   labels: HomeViewModelLabels
 }
 
-const toAlternatingVariant = (visibleSectionsCount: number): HomeSectionVariant =>
-  visibleSectionsCount % 2 === 0 ? 'muted' : 'default'
+function toAlternatingVariant(visibleSectionsCount: number): HomeSectionVariant {
+  return visibleSectionsCount % 2 === 0 ? 'muted' : 'default'
+}
 
-export const buildHomeViewModel = ({
+export function buildHomeViewModel({
   user,
   activeProjectsState,
   activeProductsState,
@@ -62,7 +63,7 @@ export const buildHomeViewModel = ({
   activeProducersState,
   blogPostsState,
   labels,
-}: BuildHomeViewModelInput) => {
+}: BuildHomeViewModelInput) {
   const heroContextualCta = user
     ? { href: '/projects', label: labels.heroInvestCta }
     : { href: '/register', label: labels.heroRegisterCta }

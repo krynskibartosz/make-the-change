@@ -39,73 +39,7 @@ import { Link, useRouter } from '@/i18n/navigation'
 import { isRecord } from '@/lib/type-guards'
 import { cn } from '@/lib/utils'
 
-// Map email domains to their webmail URLs
-const emailProviders: Record<string, { name: string; url: string; icon?: string }> = {
-  'gmail.com': { name: 'Gmail', url: 'https://mail.google.com' },
-  'googlemail.com': { name: 'Gmail', url: 'https://mail.google.com' },
-  'outlook.com': { name: 'Outlook', url: 'https://outlook.live.com' },
-  'hotmail.com': { name: 'Outlook', url: 'https://outlook.live.com' },
-  'live.com': { name: 'Outlook', url: 'https://outlook.live.com' },
-  'msn.com': { name: 'Outlook', url: 'https://outlook.live.com' },
-  'yahoo.com': { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' },
-  'yahoo.fr': { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' },
-  'icloud.com': { name: 'iCloud Mail', url: 'https://www.icloud.com/mail' },
-  'me.com': { name: 'iCloud Mail', url: 'https://www.icloud.com/mail' },
-  'protonmail.com': { name: 'ProtonMail', url: 'https://mail.protonmail.com' },
-  'proton.me': { name: 'Proton Mail', url: 'https://mail.proton.me' },
-}
-
-function getEmailProvider(email: string) {
-  const domain = email.split('@')[1]?.toLowerCase()
-  if (!domain) return null
-  return emailProviders[domain] || null
-}
-
-const REGISTER_WIZARD_STORAGE_KEY = 'register_wizard'
-const WIZARD_MIN_STEP = 1
-const WIZARD_MAX_STEP = 3
-
-type RegisterWizardDraft = {
-  firstName: string
-  lastName: string
-  email: string
-  terms: boolean
-  step: number
-}
-
-const clampWizardStep = (value: number) =>
-  Math.min(WIZARD_MAX_STEP, Math.max(WIZARD_MIN_STEP, value))
-
-const parseWizardStep = (value: string | null): number | null => {
-  if (value === null) return null
-
-  const parsed = Number.parseInt(value, 10)
-  if (Number.isNaN(parsed)) return null
-
-  return clampWizardStep(parsed)
-}
-
-const isString = (value: unknown): value is string => typeof value === 'string'
-
-const parseRegisterWizardDraft = (value: string): Partial<RegisterWizardDraft> | null => {
-  try {
-    const parsed: unknown = JSON.parse(value)
-    if (!isRecord(parsed)) {
-      return null
-    }
-
-    return {
-      firstName: isString(parsed.firstName) ? parsed.firstName : undefined,
-      lastName: isString(parsed.lastName) ? parsed.lastName : undefined,
-      email: isString(parsed.email) ? parsed.email : undefined,
-      terms: typeof parsed.terms === 'boolean' ? parsed.terms : undefined,
-      step: typeof parsed.step === 'number' ? parsed.step : undefined,
-    }
-  } catch {
-    return null
-  }
-}
-
+// Helpers moved to bottom
 type RegisterFormProps = {
   modal?: boolean
 }
@@ -601,4 +535,73 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
       </CardFooter>
     </Card>
   )
+}
+
+const REGISTER_WIZARD_STORAGE_KEY = 'register_wizard'
+const WIZARD_MIN_STEP = 1
+const WIZARD_MAX_STEP = 3
+
+type RegisterWizardDraft = {
+  firstName: string
+  lastName: string
+  email: string
+  terms: boolean
+  step: number
+}
+
+const emailProviders: Record<string, { name: string; url: string; icon?: string }> = {
+  'gmail.com': { name: 'Gmail', url: 'https://mail.google.com' },
+  'googlemail.com': { name: 'Gmail', url: 'https://mail.google.com' },
+  'outlook.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+  'hotmail.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+  'live.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+  'msn.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+  'yahoo.com': { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' },
+  'yahoo.fr': { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' },
+  'icloud.com': { name: 'iCloud Mail', url: 'https://www.icloud.com/mail' },
+  'me.com': { name: 'iCloud Mail', url: 'https://www.icloud.com/mail' },
+  'protonmail.com': { name: 'ProtonMail', url: 'https://mail.protonmail.com' },
+  'proton.me': { name: 'Proton Mail', url: 'https://mail.proton.me' },
+}
+
+function getEmailProvider(email: string) {
+  const domain = email.split('@')[1]?.toLowerCase()
+  if (!domain) return null
+  return emailProviders[domain] || null
+}
+
+function clampWizardStep(value: number): number {
+  return Math.min(WIZARD_MAX_STEP, Math.max(WIZARD_MIN_STEP, value))
+}
+
+function parseWizardStep(value: string | null): number | null {
+  if (value === null) return null
+
+  const parsed = Number.parseInt(value, 10)
+  if (Number.isNaN(parsed)) return null
+
+  return clampWizardStep(parsed)
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+
+function parseRegisterWizardDraft(value: string): Partial<RegisterWizardDraft> | null {
+  try {
+    const parsed: unknown = JSON.parse(value)
+    if (!isRecord(parsed)) {
+      return null
+    }
+
+    return {
+      firstName: isString(parsed.firstName) ? parsed.firstName : undefined,
+      lastName: isString(parsed.lastName) ? parsed.lastName : undefined,
+      email: isString(parsed.email) ? parsed.email : undefined,
+      terms: typeof parsed.terms === 'boolean' ? parsed.terms : undefined,
+      step: typeof parsed.step === 'number' ? parsed.step : undefined,
+    }
+  } catch {
+    return null
+  }
 }
