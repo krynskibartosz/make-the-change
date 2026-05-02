@@ -73,7 +73,7 @@ export default async function GuestProfile() {
 
   return (
     <TabScreen header={profileHeader}>
-      <div className="min-h-screen bg-[#0B0F15] text-white">
+      <div className="min-h-screen text-white">
         <main className="mx-auto w-full max-w-3xl">
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
           <h1 className="mb-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>

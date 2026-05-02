@@ -30,7 +30,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
 
   return (
     <TabScreen header={profileHeader}>
-      <div className="min-h-screen bg-[#0B0F15] text-white">
+      <div className="min-h-screen text-white">
         <main className="mx-auto w-full max-w-3xl px-4">
         <section className="relative pt-6">
           <div
