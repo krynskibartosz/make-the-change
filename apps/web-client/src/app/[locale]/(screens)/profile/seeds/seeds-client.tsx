@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { Sprout, Zap, BookOpen, PawPrint, ArrowLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 
 interface SpeciesEvolution {
   id: string
@@ -62,28 +63,27 @@ const MOCK_EVOLUTIONS: SpeciesEvolution[] = [
 
 export default function SeedsClient({ balance, transactions }: SeedsClientProps) {
 
-  return (
-    <div className="min-h-screen bg-[#0B0F15]">
-      {/* Header with back button - Style like eco-fact/daily-harvest */}
-      <div className="sticky top-0 z-50 bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/10">
-        <div className="px-6 py-4 flex items-center justify-between">
-          <Link
-            href="/challenges"
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span className="text-sm font-medium">Retour</span>
-          </Link>
-          <div className="flex items-center gap-2 relative">
-            <div className="absolute inset-0 bg-amber-500/12 blur-[60px]" />
-            <Sprout className="w-5 h-5 text-amber-400 relative z-10" />
-            <span className="text-lg font-bold text-white tabular-nums relative z-10">{balance.toLocaleString('fr-FR')}</span>
-          </div>
-        </div>
+  const screenHeader = (
+    <div className="flex w-full items-center justify-between">
+      <Link
+        href="/challenges"
+        className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+      >
+        <ArrowLeft className="h-5 w-5" />
+        <span className="text-sm font-medium">Retour</span>
+      </Link>
+      <div className="flex items-center gap-2 relative">
+        <div className="absolute inset-0 bg-amber-500/12 blur-[60px]" />
+        <Sprout className="w-5 h-5 text-amber-400 relative z-10" />
+        <span className="text-lg font-bold text-white tabular-nums relative z-10">{balance.toLocaleString('fr-FR')}</span>
       </div>
+    </div>
+  )
 
+  return (
+    <Screen header={screenHeader}>
       {/* Content Section */}
-      <div className="relative z-10 px-5 pb-32 pt-24 sm:px-6">
+      <div className="relative z-10 px-5 pb-32 pt-6 sm:px-6">
         
         {/* Quick Earn - Besoin de graines ? */}
         <motion.section
@@ -238,6 +238,6 @@ export default function SeedsClient({ balance, transactions }: SeedsClientProps)
           </div>
         </motion.section>
       </div>
-    </div>
+    </Screen>
   )
 }

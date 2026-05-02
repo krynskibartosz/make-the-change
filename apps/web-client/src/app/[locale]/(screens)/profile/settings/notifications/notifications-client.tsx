@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { updateNotifications } from './actions'
+import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 
 type NotificationsClientProps = {
   initial: {
@@ -102,21 +103,23 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-[#0B0F15] text-white flex flex-col pb-12">
-      {/* Header */}
-      <div className="sticky top-0 z-50 px-4 py-4 flex items-center bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/5">
-        <button
-          onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
-          aria-label="Retour"
-        >
-          <ArrowLeft className="h-5 w-5 text-white" />
-        </button>
-        <span className="flex-1 text-center text-base font-semibold text-white">Notifications</span>
-        <div className="w-10" />
-      </div>
+  const screenHeader = (
+    <div className="flex w-full items-center justify-between">
+      <button
+        onClick={() => router.back()}
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+        aria-label="Retour"
+      >
+        <ArrowLeft className="h-5 w-5 text-white" />
+      </button>
+      <span className="text-base font-semibold text-white">Notifications</span>
+      <div className="w-10" />
+    </div>
+  )
 
+  return (
+    <Screen header={screenHeader}>
+      <div className="text-white flex flex-col pb-12">
       {/* Hero */}
       <div className="px-6 pt-8 pb-6">
         <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Préférences</h1>
@@ -176,6 +179,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
           onToggle={() => handleToggle('leaderboard')}
         />
       </div>
-    </div>
+      </div>
+    </Screen>
   )
 }

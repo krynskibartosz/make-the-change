@@ -12,6 +12,7 @@ import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/li
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
+import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 
 const FALLBACK_SPECIES_PROJECTS = [
   {
@@ -102,20 +103,20 @@ export function BiodexClient({ species }: BiodexClientProps) {
       ? selectedLockedSpecies.associated_projects
       : FALLBACK_SPECIES_PROJECTS
 
+  const screenHeader = (
+    <div className="flex w-full items-center">
+      <Link
+        href='/profile'
+        className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
+      >
+        <ArrowLeft className='h-5 w-5' />
+        <span className='text-sm font-medium'>Retour aux défis</span>
+      </Link>
+    </div>
+  )
+
   return (
-    <div className='min-h-screen bg-[#0B0F15]'>
-      {/* Header with back button */}
-      <div className='sticky top-0 z-50 bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/10'>
-        <div className='px-6 py-4'>
-          <Link
-            href='/profile'
-            className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
-          >
-            <ArrowLeft className='h-5 w-5' />
-            <span className='text-sm font-medium'>Retour aux défis</span>
-          </Link>
-        </div>
-      </div>
+    <Screen header={screenHeader}>
 
       {/* Inline Header */}
       <div className='w-full px-6 pt-6 pb-5'>
@@ -229,6 +230,6 @@ export function BiodexClient({ species }: BiodexClientProps) {
       {showFactionModal && (
         <FactionCarousel onFactionSelect={handleFactionSelect} />
       )}
-    </div>
+    </Screen>
   )
 }
