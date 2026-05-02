@@ -51,6 +51,7 @@ import {
   type AcademyUnit,
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
+import { secureShuffle } from '@/lib/crypto'
 import { cn } from '@/lib/utils'
 
 const getParam = (value: string | string[] | undefined) =>
@@ -453,7 +454,7 @@ function DragDropExercise({
       {},
     )
 
-  const [shuffledItems, setShuffledItems] = useState(() => [...exercise.items].sort(() => Math.random() - 0.5))
+  const [shuffledItems, setShuffledItems] = useState(() => secureShuffle(exercise.items))
   const [slots, setSlots] = useState<Record<string, { id: string; text: string } | null>>(() => buildEmptySlots())
   const [availableItems, setAvailableItems] = useState(shuffledItems)
   const [wrongSlots, setWrongSlots] = useState<Set<number>>(new Set())
@@ -464,7 +465,7 @@ function DragDropExercise({
   )
 
   useEffect(() => {
-    const nextItems = [...exercise.items].sort(() => Math.random() - 0.5)
+    const nextItems = secureShuffle(exercise.items)
     setShuffledItems(nextItems)
     setSlots(buildEmptySlots())
     setAvailableItems(nextItems)
