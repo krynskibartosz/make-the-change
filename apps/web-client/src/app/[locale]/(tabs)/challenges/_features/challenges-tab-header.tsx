@@ -21,7 +21,7 @@ export function ChallengesTabHeader() {
       <Link
         href="/profile/seeds"
         prefetch={false}
-        className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 transition-transform hover:scale-105 active:scale-95"
+        className="relative flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 transition-transform hover:scale-105 active:scale-95 after:absolute after:-inset-3"
       >
         <Sprout className="h-3.5 w-3.5 text-lime-400" />
         <span className="text-xs font-bold text-white tabular-nums">

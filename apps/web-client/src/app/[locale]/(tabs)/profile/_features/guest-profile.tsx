@@ -41,11 +41,12 @@ export default async function GuestProfile() {
     unlockedLimit: 0,
     lockedLimit: 4,
   })
+
   const collectiveGoal = getCollectiveGoal()
   const factionContributions = getFactionContributions()
 
   return (
-    <TabScreen header={<ProfileSettingsHeader href="/settings" />}>
+    <TabScreen header={<ProfileSettingsHeader href="/profile/settings" />}>
       <div className="min-h-screen text-white">
         <main className="mx-auto w-full max-w-3xl">
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
