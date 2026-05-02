@@ -15,8 +15,8 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
   })
 
   const profileHeader = (
-      <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
+      <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-[#0B0F15]/80 backdrop-blur-lg">
+        <div className="mx-auto flex h-16 w-full max-w-3xl items-center justify-end px-4">
           <Link
             href="/profile/settings"
             aria-label="Paramètres"
