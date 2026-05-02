@@ -15,7 +15,7 @@ export function ProjectProducerProductsSection({ products }: ProjectProducerProd
     <section className="w-full max-w-full overflow-hidden">
       <h3 className="mb-4 text-xl font-bold text-white">Produits du partenaire</h3>
 
-      <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden">
+      <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

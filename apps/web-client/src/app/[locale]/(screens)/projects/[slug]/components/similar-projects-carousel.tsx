@@ -76,7 +76,7 @@ export function SimilarProjectsCarousel({
     <section className="w-full max-w-full overflow-hidden">
       <h3 className="mb-4 text-xl font-bold text-white">Explorez d&apos;autres projets</h3>
 
-      <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {shouldUseFallback
           ? mockCards.map((card) => (
               <div key={card.id} className="relative w-[70vw] max-w-[260px] aspect-square shrink-0 snap-start rounded-3xl overflow-hidden border border-white/10 group active:scale-[0.98] transition-transform">
