@@ -315,7 +315,7 @@ export async function ProjectQuickView({
           </div>
         </div>
 
-        <BottomActionBar className={isPageMode ? 'sticky bottom-0 z-20' : 'relative shrink-0'}>
+        <BottomActionBar className={isPageMode ? 'sticky bottom-0 z-20' : 'fixed bottom-0 left-0 right-0 z-40 w-full'}>
           {isFundingClosed ? (
             <Button
               className="h-14 w-full justify-center gap-0 rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 [&_svg]:hidden"
