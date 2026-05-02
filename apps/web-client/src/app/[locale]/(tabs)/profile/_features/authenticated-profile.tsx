@@ -9,6 +9,16 @@ import { ProfileSettingsHeader } from '@/app/[locale]/(tabs)/profile/_components
 import { BioDexCard } from '@/app/[locale]/(tabs)/_components/biodex-card'
 import { ImpactCard } from '@/app/[locale]/(tabs)/profile/_components/impact-card'
 
+const formatCompact = (value: number, isDecimal = false): string => {
+  if (value < 10000) {
+    return new Intl.NumberFormat('fr-FR', isDecimal ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : { maximumFractionDigits: 0 }).format(value)
+  }
+  return new Intl.NumberFormat('fr-FR', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value)
+}
+
 export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
   const accentTheme = getFactionTheme(profile?.faction ?? null)
   const factionContribution = getFactionContribution(profile?.faction ?? null)
@@ -58,7 +68,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <li>
             <ImpactCard
               icon={<Bug className="h-5 w-5 text-amber-400" aria-hidden="true" />}
-              value={(profile?.beesSaved || 3800).toLocaleString('fr-FR')}
+              value={formatCompact(profile?.beesSaved || 3800)}
               label="ABEILLES SAUVÉES"
             />
           </li>
@@ -66,10 +76,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <li>
             <ImpactCard
               icon={<Droplets className="h-5 w-5 text-orange-400" aria-hidden="true" />}
-              value={`${(profile?.honeyGeneratedKg || 0.77).toLocaleString('fr-FR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })} kg`}
+              value={`${formatCompact(profile?.honeyGeneratedKg || 0.77, true)} kg`}
               label="MIEL GÉNÉRÉ"
             />
           </li>
@@ -77,10 +84,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <li>
             <ImpactCard
               icon={<Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />}
-              value={`${(profile?.co2CapturedKg || 3.85).toLocaleString('fr-FR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })} kg`}
+              value={`${formatCompact(profile?.co2CapturedKg || 3.85, true)} kg`}
               label="CO2 CAPTURÉ"
             />
           </li>
@@ -88,7 +92,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           <li>
             <ImpactCard
               icon={<Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} aria-hidden="true" />}
-              value={(profile?.points || 2450).toLocaleString('fr-FR')}
+              value={formatCompact(profile?.points || 2450)}
               label="POINTS D'IMPACT"
               valueClassName={accentTheme.accentText}
             />
@@ -177,7 +181,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                   <p className="mt-2 text-sm font-medium text-white/60">
                     <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" aria-hidden="true" />{' '}
                     <span className="font-black text-white">
-                      {(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds).toLocaleString('fr-FR')}
+                      {formatCompact(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds)}
                     </span>{' '}
                     graines apportées
                   </p>
