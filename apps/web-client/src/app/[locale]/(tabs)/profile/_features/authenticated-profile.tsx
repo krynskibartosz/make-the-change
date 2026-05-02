@@ -1,21 +1,20 @@
-import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Trophy, Wind, Sprout } from 'lucide-react'
+import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Lock, Settings, Sparkles, Target, Wind, Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
-import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
+import { getFactionContribution } from '@/lib/mock/mock-factions'
 import { AnimatedMascot } from '@/app/[locale]/(tabs)/profile/_components/animated-mascot'
+import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 
 export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
   const accentTheme = getFactionTheme(profile?.faction ?? null)
-  const collectiveGoal = getCollectiveGoal()
   const factionContribution = getFactionContribution(profile?.faction ?? null)
   const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
     unlockedLimit: 2,
     lockedLimit: 2,
   })
 
-  return (
-    <div className="min-h-screen bg-[#0B0F15] pb-32 text-white">
+  const profileHeader = (
       <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0B0F15]/95 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-end px-4">
           <Link
@@ -27,8 +26,12 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
           </Link>
         </div>
       </header>
+  )
 
-      <main className="mx-auto w-full max-w-3xl px-4">
+  return (
+    <TabScreen header={profileHeader}>
+      <div className="min-h-screen bg-[#0B0F15] text-white">
+        <main className="mx-auto w-full max-w-3xl px-4">
         <section className="relative pt-6">
           <div
             className={`pointer-events-none absolute left-1/2 top-12 h-40 w-40 -translate-x-1/2 rounded-full blur-3xl ${accentTheme.accentGlow}`}
@@ -228,7 +231,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                     <span className={`font-black ${accentTheme.accentText}`}>
                       {factionContribution.contributionShare}%
                     </span>{' '}
-                    de l'effort collectif ce mois-ci
+                  de l&apos;effort collectif ce mois-ci
                   </p>
                 </div>
 
@@ -266,7 +269,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                     Aucune Faction
                   </h2>
                   <p className="mt-2 text-balance text-sm font-medium text-white/60">
-                    Rejoignez les rangs pour orienter l'effort de l'Essaim.
+                  Rejoignez les rangs pour orienter l&apos;effort de l&apos;Essaim.
                   </p>
                 </div>
               </div>
@@ -316,7 +319,8 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
             </button>
           </div>
         </section>
-      </main>
-    </div>
+        </main>
+      </div>
+    </TabScreen>
   )
 }
