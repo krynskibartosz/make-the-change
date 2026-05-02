@@ -13,6 +13,7 @@ import type { MockChallengeDetail } from '@/lib/mock/mock-challenges'
 import type { Faction } from '@/lib/mock/types'
 import { getCurrentIsoDate } from '@/lib/date-utils'
 import { cn } from '@/lib/utils'
+import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 
 const FACTION_CONTENT = {
   neutral: {
@@ -150,38 +151,21 @@ function DailyHarvestContent() {
   const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
   const pageTitle = hasFaction ? FACTION_CONTENT[contentKey as keyof typeof FACTION_CONTENT]?.title : "Les Défis Quotidiens"
 
+  const screenHeader = (
+    <div className="flex w-full items-center">
+      <Link
+        href='/challenges'
+        className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
+      >
+        <ArrowLeft className='h-5 w-5' />
+        <span className='text-sm font-medium'>Retour aux défis</span>
+      </Link>
+    </div>
+  )
+
   return (
-    <div className='min-h-screen bg-[#0B0F15]'>
-      {/* Header with back button */}
-      <div className='sticky top-0 z-50 bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/10'>
-        <div className='px-6 py-4'>
-          <Link
-            href='/challenges'
-            className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
-          >
-            <ArrowLeft className='h-5 w-5' />
-            <span className='text-sm font-medium'>Retour aux défis</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <div className='relative flex min-h-[calc(100vh-73px)] flex-col items-center justify-center overflow-hidden px-6'>
-        {/* Gradient de remplissage full screen */}
-        <div
-          className='absolute inset-0 transition-all duration-75 ease-linear'
-          style={{
-            opacity: progress / 100,
-            background: accentTheme.key === 'pollinisateurs'
-              ? 'linear-gradient(to top, rgba(251, 191, 36, 0.3) 0%, transparent 100%)'
-              : accentTheme.key === 'forets'
-                ? 'linear-gradient(to top, rgba(52, 211, 153, 0.3) 0%, transparent 100%)'
-                : accentTheme.key === 'mers'
-                  ? 'linear-gradient(to top, rgba(59, 130, 246, 0.3) 0%, transparent 100%)'
-                  : 'linear-gradient(to top, rgba(163, 230, 53, 0.3) 0%, transparent 100%)',
-          }}
-        />
-
+    <Screen header={screenHeader} contentClassName="flex flex-col">
+      <div className='relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden px-6'>
         {/* Bordure de progression sur tout l'écran */}
         <div
           className='absolute inset-0 pointer-events-none transition-all duration-75 ease-linear'
@@ -365,7 +349,7 @@ function DailyHarvestContent() {
           </div>
         )}
       </div>
-    </div>
+    </Screen>
   )
 }
 

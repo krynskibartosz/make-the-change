@@ -15,6 +15,7 @@ import type { MockChallengeDetail } from '@/lib/mock/mock-challenges'
 import type { Faction } from '@/lib/mock/types'
 import { getCurrentIsoDate } from '@/lib/date-utils'
 import { cn } from '@/lib/utils'
+import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 
 const FACTION_CONTENT = {
   neutral: {
@@ -374,23 +375,25 @@ function EcoFactContent() {
   const contentKey = themeKey === 'neutral' ? 'forets' : themeKey
   const pageTitle = hasFaction ? FACTION_CONTENT[contentKey as keyof typeof FACTION_CONTENT]?.title : "Les Défis Quotidiens"
 
-  return (
-    <div className='min-h-screen bg-[#0B0F15]'>
-      {/* Header with back button */}
-      <div className='sticky top-0 z-50 bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/10'>
-        <div className='px-6 py-4'>
-          <Link
-            href='/challenges'
-            className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
-          >
-            <ArrowLeft className='h-5 w-5' />
-            <span className='text-sm font-medium'>Retour aux défis</span>
-          </Link>
-        </div>
-      </div>
+  const screenHeader = (
+    <div className="flex w-full items-center">
+      <Link
+        href='/challenges'
+        className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
+      >
+        <ArrowLeft className='h-5 w-5' />
+        <span className='text-sm font-medium'>Retour aux défis</span>
+      </Link>
+    </div>
+  )
 
-      {/* Main content */}
-      <div ref={contentRef} onScroll={handleScroll} className='relative flex-1 overflow-y-auto pb-44'>
+  return (
+    <Screen
+      header={screenHeader}
+      contentRef={contentRef}
+      onScroll={handleScroll}
+      contentClassName='relative pb-44'
+    >
         <div className='relative isolate min-h-[46vh] px-6 pt-6'>
           <div className='pointer-events-none absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
           {hasFaction ? (
@@ -591,7 +594,6 @@ function EcoFactContent() {
             </button>
           </div>
         </motion.div>
-      </div>
 
       {/* Fixed bottom action bar */}
       <div className='fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/95 to-transparent px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-12'>
@@ -638,7 +640,7 @@ function EcoFactContent() {
         open={isArticleOpen}
         onClose={() => setIsArticleOpen(false)}
       />
-    </div>
+    </Screen>
   )
 }
 

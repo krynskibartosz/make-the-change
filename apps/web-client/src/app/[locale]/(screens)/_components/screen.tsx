@@ -6,9 +6,11 @@ type ScreenProps = {
   header?: ReactNode
   className?: string
   contentClassName?: string
+  onScroll?: React.UIEventHandler<HTMLDivElement>
+  contentRef?: React.Ref<HTMLDivElement>
 }
 
-export function Screen({ header, children, className, contentClassName }: ScreenProps) {
+export function Screen({ header, children, className, contentClassName, onScroll, contentRef }: ScreenProps) {
   return (
     <div className={cn('fixed inset-0 z-40 bg-[#0B0F15]', className)}>
       {header && (
@@ -19,6 +21,8 @@ export function Screen({ header, children, className, contentClassName }: Screen
         </header>
       )}
       <div
+        ref={contentRef}
+        onScroll={onScroll}
         className={cn(
           'h-[100dvh] w-full overflow-y-auto overflow-x-hidden overscroll-y-contain',
           header ? 'pt-[calc(3.5rem+max(0.75rem,env(safe-area-inset-top)))]' : 'pt-0',
