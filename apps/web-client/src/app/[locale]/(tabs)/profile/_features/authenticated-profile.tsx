@@ -8,16 +8,7 @@ import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { ProfileSettingsHeader } from '@/app/[locale]/(tabs)/profile/_components/profile-settings-header'
 import { BioDexCard } from '@/app/[locale]/(tabs)/_components/biodex-card'
 import { ImpactCard } from '@/app/[locale]/(tabs)/profile/_components/impact-card'
-
-const formatCompact = (value: number, isDecimal = false): string => {
-  if (value < 10000) {
-    return new Intl.NumberFormat('fr-FR', isDecimal ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : { maximumFractionDigits: 0 }).format(value)
-  }
-  return new Intl.NumberFormat('fr-FR', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(value)
-}
+import { formatCompact } from '@/lib/formatters'
 
 export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
   const accentTheme = getFactionTheme(profile?.faction ?? null)

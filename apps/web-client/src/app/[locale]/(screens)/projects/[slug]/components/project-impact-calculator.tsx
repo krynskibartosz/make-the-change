@@ -1,6 +1,7 @@
 import { Bug, Cloud, Hexagon, Lock, Waves, Flower2, Droplets, TreePine, Fish, Info } from 'lucide-react'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn } from '@/lib/utils'
+import { formatInteger, formatCompact, formatDecimal } from '@/lib/formatters'
 
 type ImpactMode = 'project' | 'checkout'
 
@@ -27,25 +28,6 @@ const DONATION_REFERENCE_IMPACT = {
 } as const
 
 const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png' // Image générique de fallback
-
-const formatInteger = (value: number): string =>
-  new Intl.NumberFormat('fr-FR', {
-    maximumFractionDigits: 0,
-  }).format(value)
-
-const formatCompact = (value: number): string => {
-  if (value < 10000) return formatInteger(value)
-  return new Intl.NumberFormat('fr-FR', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(value)
-}
-
-const formatDecimal = (value: number): string =>
-  new Intl.NumberFormat('fr-FR', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(value)
 
 const splitDecimalValue = (value: number): { whole: string; fraction: string | null } => {
   const [whole = '0', fraction] = formatDecimal(value).split(',')

@@ -6,21 +6,12 @@ import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
 import { useState, useEffect } from 'react'
+import { formatCompact } from '@/lib/formatters'
 
 // ─── Constants (coherent with project-species-impact-section.tsx) ────────────
 const BEEHIVE_REFERENCE_VALUE_EUR = 1300
 const BEEHIVE_REFERENCE_POPULATION = 50000
 const BEES_PER_EUR = BEEHIVE_REFERENCE_POPULATION / BEEHIVE_REFERENCE_VALUE_EUR
-
-const formatCompact = (value: number): string => {
-  if (value < 10000) {
-    return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
-  }
-  return new Intl.NumberFormat('fr-FR', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(value)
-}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type RawClientProject = {

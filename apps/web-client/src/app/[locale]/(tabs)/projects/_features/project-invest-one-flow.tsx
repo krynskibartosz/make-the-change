@@ -18,6 +18,7 @@ import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-calculator'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
+import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -723,15 +724,6 @@ export function ProjectInvestOneFlow({
     </div>
   )
 }
-
-function formatAmountPlain(value: number): string {
-  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
-}
-
-function formatAmountNumber(value: number): string {
-  return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
-}
-
 function clampAmount(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }

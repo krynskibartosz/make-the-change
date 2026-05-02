@@ -18,6 +18,7 @@ import {
   type PublicProject,
   type RelatedProject,
 } from './project-detail-data'
+import { formatAmountNumber } from '@/lib/formatters'
 
 type ProjectQuickViewProps = {
   project: PublicProject
@@ -32,11 +33,6 @@ const formatBadgeLabel = (value: string | null | undefined): string | null => {
   if (!normalized) return null
   return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
 }
-
-const formatAmountNumber = (amount: number): string =>
-  new Intl.NumberFormat('fr-FR', {
-    maximumFractionDigits: 0,
-  }).format(amount)
 
 const getWebsiteLabel = (url: string | null): string | null => {
   if (!url) return null
