@@ -1,7 +1,7 @@
-import { Leaf, BookOpen } from 'lucide-react'
-import Link from 'next/link'
+import { BookOpen } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import { getSpeciesContext } from '@/lib/api/species-context.service'
-import { BackButton } from '@/components/back-button'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { EvolutionTimeline } from '@/app/[locale]/(screens)/profile/biodex/_components/evolution-timeline'
 import { BentoGrid } from '@/app/[locale]/(screens)/profile/biodex/_components/bento-grid'
 import { SizeWeightWidget } from '@/app/[locale]/(screens)/profile/biodex/_components/bento-size-weight'
@@ -21,27 +21,22 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
 
   if (!species) {
     return (
-      <div className="min-h-screen bg-[#0B0F15] text-white">
-        <main className="mx-auto w-full max-w-2xl pb-12">
-          <div className="flex items-center justify-center px-5 pt-12">
-            <div className="text-white/50">Espèce non trouvée</div>
-          </div>
-        </main>
-      </div>
+      <FullScreenSlideModal fallbackHref='/profile/biodex' headerMode='back'>
+        <div className='flex h-full items-center justify-center'>
+          <p className='text-white/50'>Espèce non trouvée</p>
+        </div>
+      </FullScreenSlideModal>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F15] text-white">
-      <main className="mx-auto w-full max-w-2xl pb-12">
-        <header className="flex items-center justify-between px-5 pb-4 pt-12">
-          <BackButton />
-
-          <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
-            <Leaf className="h-4 w-4 text-emerald-400" />
-            <span className="text-sm font-bold text-emerald-400 tabular-nums">{currentSeeds}</span>
-          </div>
-        </header>
+    <FullScreenSlideModal
+      title={species.name_default}
+      fallbackHref='/profile/biodex'
+      headerMode='dynamic'
+      contentClassName='overflow-y-auto'
+    >
+      <main className='mx-auto w-full max-w-2xl pb-12'>
 
         <section className="mt-4">
           <div className="relative flex aspect-square w-full items-center justify-center">
@@ -112,6 +107,6 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
           canEvolve={currentSeeds >= REQUIRED_SEEDS}
         />
       </main>
-    </div>
+    </FullScreenSlideModal>
   )
 }
