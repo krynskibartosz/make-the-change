@@ -588,15 +588,15 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     status: 'active',
     type: 'beehive',
     featured: true,
-    name_default: "Ruchers d'apiculteurs independants a Antsirabe",
+    name_default: "Ruchers d'apiculteurs indépendants",
     name_i18n: {
-      fr: "Ruchers d'apiculteurs independants a Antsirabe",
-      en: 'Independent Beekeepers Apiaries in Antsirabe',
+      fr: "Ruchers d'apiculteurs indépendants",
+      en: 'Independent Beekeepers Apiaries',
     },
     description_default:
-      "Affilie a la cooperative, ce rucher de 45 colonies pres d'Analamazoatra soutient une apiculture locale durable a Antsirabe.",
+      "Affilie a la cooperative, ce rucher de 45 colonies pres d'Analamazoatra soutient une apiculture locale durable.",
     description_i18n: {
-      fr: "Affilie a la cooperative, ce rucher de 45 colonies pres d'Analamazoatra soutient une apiculture locale durable a Antsirabe.",
+      fr: "Affilie a la cooperative, ce rucher de 45 colonies pres d'Analamazoatra soutient une apiculture locale durable.",
       en: 'Andraina and his assistant manage 45 hives near the Analamazoatra reserve to support sustainable local beekeeping.',
     },
     long_description_default:
@@ -660,10 +660,10 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     status: 'active',
     type: 'beehive',
     featured: true,
-    name_default: 'Miellerie de Manakara',
+    name_default: 'Miellerie Ilanga Nature',
     name_i18n: {
-      fr: 'Miellerie de Manakara',
-      en: 'Manakara Honey House',
+      fr: 'Miellerie Ilanga Nature',
+      en: 'Ilanga Nature Honey House',
     },
     description_default:
       "Projet Ilanga Nature a Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
@@ -798,10 +798,10 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     status: 'active',
     type: 'orchard',
     featured: true,
-    name_default: 'Oliviers en Sardaigne',
+    name_default: 'Oliveraie toscane',
     name_i18n: {
-      fr: 'Oliviers en Sardaigne',
-      en: 'Olive Trees in Sardinia',
+      fr: 'Oliveraie toscane',
+      en: 'Tuscan Olive Orchard',
     },
     description_default:
       '10 000 oliviers issus de plusieurs variétés toscanes (Leccino, Frantoio, Leccio del Corno) avec un moulin pour le pressage directement sur le site.',
@@ -928,16 +928,16 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     status: 'active',
     type: 'beehive',
     featured: true,
-    name_default: 'Habeebee Belgique',
+    name_default: 'Ruches urbaines pour les pollinisateurs locaux',
     name_i18n: {
-      fr: 'Habeebee Belgique',
-      en: 'Habeebee Belgium',
+      fr: 'Ruches urbaines pour les pollinisateurs locaux',
+      en: 'Urban Hives for Local Pollinators',
     },
     description_default:
-      'Projet d\'apiculture urbaine en Belgique pour soutenir les pollinisateurs locaux et développer des produits écologiques.',
+      'Apiculture urbaine pour soutenir les pollinisateurs locaux et développer des cosmétiques écologiques.',
     description_i18n: {
-      fr: 'Projet d\'apiculture urbaine en Belgique pour soutenir les pollinisateurs locaux et développer des produits écologiques.',
-      en: 'Urban beekeeping project in Belgium to support local pollinators and develop ecological products.',
+      fr: 'Apiculture urbaine pour soutenir les pollinisateurs locaux et développer des cosmétiques écologiques.',
+      en: 'Urban beekeeping to support local pollinators and develop ecological cosmetics.',
     },
     long_description_default:
       'Habeebee est un projet d\'apiculture urbaine basé en Belgique, dédié à la protection des pollinisateurs locaux et à la production de cosmétiques écologiques. Nos ruches sont installées dans des zones urbaines et périurbaines, permettant aux abeilles de butiner dans les jardins et espaces verts locaux.\n\nLe projet vise à créer un réseau de ruches urbaines connectées, chaque ruche hébergeant environ 50 000 abeilles. Ces abeilles pollinisent les plantes locales, contribuant à la biodiversité urbaine et à la production de fruits et légumes dans les jardins alentour.\n\nLes produits dérivés de notre miel sont transformés localement en cosmétiques naturels : savons doux, huiles visage et shampoings solides. Chaque produit est conçu avec des ingrédients respectueux de l\'environnement et sans produits chimiques.\n\nCe projet s\'inscrit dans une démarche d\'ancrage écologique, reconnectant les citadens à la nature et sensibilisant à l\'importance des pollinisateurs dans nos écosystèmes.',
