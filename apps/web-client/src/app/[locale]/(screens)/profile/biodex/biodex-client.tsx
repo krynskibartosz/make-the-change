@@ -136,9 +136,9 @@ export function BiodexClient({ species }: BiodexClientProps) {
       {/* Inline Header */}
       <div className='w-full px-6 pt-6 pb-5'>
         <h1 className='text-3xl font-bold tracking-tight text-white mb-1'>Mon BioDex</h1>
-        <p className='text-sm text-white/50 mb-4'>Espèces sauvées grâce à vos dons</p>
+        <p className='text-sm text-white/50 mb-4'>{unlockedCount} / {totalCount} espèces sauvées</p>
         <div className='flex items-center gap-3'>
-          <div className='flex-1 relative h-1.5 rounded-full bg-white/10 overflow-hidden'>
+          <div className='flex-1 relative h-0.5 rounded-full bg-white/10 overflow-hidden'>
             <div
               className={cn(
                 'absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out',
@@ -147,16 +147,13 @@ export function BiodexClient({ species }: BiodexClientProps) {
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <span className='text-xs font-semibold text-white/50 tabular-nums shrink-0'>
-            {unlockedCount} / {totalCount}
-          </span>
         </div>
       </div>
 
       {/* Grid */}
       <div className='w-full px-6 pb-36 pt-2'>
         {sortedSpecies.length > 0 ? (
-          <div className='grid grid-cols-2 gap-3'>
+          <div className='grid grid-cols-2 gap-6'>
             {sortedSpecies.map((item) => (
               <SpeciesCardEnhanced
                 key={item.id}

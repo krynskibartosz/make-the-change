@@ -2,7 +2,6 @@
 import type { SpeciesContext } from '@/types/species'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { Lock } from 'lucide-react'
 
 interface SpeciesCardEnhancedProps {
 	species: SpeciesContext
@@ -59,21 +58,18 @@ function getSpeciesEmoji(
 
 const RARITY_STYLES: Record<
 	Rarity,
-	{ border: string; badge: string; label: string }
+	{ textColor: string; label: string }
 > = {
 	common: {
-		border: 'border-white/5',
-		badge: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
+		textColor: 'text-emerald-500/60',
 		label: 'Commun',
 	},
 	rare: {
-		border: 'border-white/5',
-		badge: 'bg-blue-500/15 text-blue-400 border-blue-500/20',
+		textColor: 'text-blue-400/70',
 		label: 'Rare',
 	},
 	legendary: {
-		border: 'border-white/5',
-		badge: 'bg-amber-400/15 text-amber-400 border-amber-400/20',
+		textColor: 'text-amber-400/80',
 		label: 'Légendaire',
 	},
 }
@@ -92,65 +88,44 @@ export function SpeciesCardEnhanced({
 	)
 
 	const cardInner = (
-		<div
-			className={cn(
-				'relative flex flex-col p-3 aspect-[4/5] w-full overflow-hidden rounded-3xl border',
-				'transition-transform duration-150 active:scale-[0.97]',
-				isLocked
-					? 'bg-white/5 border-white/5'
-					: 'bg-background/50 border-white/5'
-			)}
-		>
-			{/* Top row: rarity badge OR small lock icon (top-right) */}
-			<div className='flex justify-end shrink-0 mb-2'>
-				{isLocked ? (
-					<div className='flex items-center justify-center h-6 w-6 rounded-full bg-white/5 border border-white/10'>
-						<Lock className='h-3 w-3 text-white/30' />
-					</div>
-				) : (
-					<span
-						className={cn(
-							'text-[9px] font-black uppercase tracking-widest rounded-full px-2 py-0.5 border',
-							rarityStyle.badge
-						)}
-					>
-						{rarityStyle.label}
-					</span>
-				)}
-			</div>
-
-			{/* Middle: visual area (flex-1) */}
-			<div
-				className={cn(
-					'flex-1 rounded-2xl overflow-hidden relative flex items-center justify-center',
-					isLocked && 'bg-white/5 border border-white/5'
-				)}
-			>
+		<div className='flex flex-col items-center gap-2 transition-transform duration-150 active:scale-[0.97]'>
+			{/* Floating image — no container */}
+			<div className='w-full aspect-square'>
 				{species.image_url ? (
 					<img
 						src={species.image_url}
 						alt={species.name_default}
 						className={cn(
-							'h-full w-full object-cover transition-all duration-700',
-							isLocked && 'scale-105 grayscale contrast-125 opacity-40 blur-[2px]'
+							'h-full w-full object-contain transition-all duration-700',
+							isLocked && 'grayscale opacity-40 blur-sm'
 						)}
 					/>
 				) : (
-					<span className='text-4xl opacity-20'>{silhouetteEmoji}</span>
+					<div className='h-full w-full flex items-center justify-center'>
+						<span className={cn('text-5xl', isLocked && 'opacity-20')}>{silhouetteEmoji}</span>
+					</div>
 				)}
 			</div>
 
-			{/* Bottom: species name */}
-			<div className='shrink-0 mt-2'>
-				<p
-					className={cn(
-						'text-sm font-semibold truncate leading-tight',
-						isLocked ? 'text-white/60' : 'text-white/90'
-					)}
-				>
-					{species.name_default}
-				</p>
-			</div>
+			{/* Species name — centered, wraps naturally */}
+			<p
+				className={cn(
+					'text-sm font-medium text-center leading-snug',
+					isLocked ? 'text-white/40' : 'text-white/90'
+				)}
+			>
+				{species.name_default}
+			</p>
+
+			{/* Rarity — subtle typographic indicator */}
+			<p
+				className={cn(
+					'text-[10px] uppercase tracking-wider font-medium',
+					isLocked ? 'text-white/20' : rarityStyle.textColor
+				)}
+			>
+				{rarityStyle.label}
+			</p>
 		</div>
 	)
 
@@ -158,7 +133,7 @@ export function SpeciesCardEnhanced({
 		return (
 			<Link
 				href={`/profile/biodex/${species.id}`}
-				className='block w-full text-left'
+				className='block w-full'
 			>
 				{cardInner}
 			</Link>
@@ -169,7 +144,7 @@ export function SpeciesCardEnhanced({
 		<button
 			type='button'
 			onClick={() => onLockedClick?.(species)}
-			className='w-full text-left'
+			className='w-full'
 		>
 			{cardInner}
 		</button>
