@@ -14,8 +14,8 @@ Make the Change est une application mobile-first en construction autour d'une bo
 flowchart TD
   A["Aventure"] --> B["Academy et missions"]
   A --> C["Projets"]
-  C --> D["Don pur ou soutien producteur"]
-  D --> E["Graines ou Points d'Impact"]
+  C --> D["Don ou soutien"]
+  D --> E["Graines ou valeur boutique"]
   E --> F["BioDex, progression, recompenses"]
   F --> A
 ```
@@ -38,7 +38,7 @@ Le code `apps/web-client` utilise le route group `(tabs)` avec 5 onglets mobiles
 | Aventure      | `/adventure`   | hub quotidien: action, projet, BioDex, collectif |
 | Projets       | `/projects`    | catalogue des projets                            |
 | Collectif     | `/impact`      | feed, factions, objectif collectif               |
-| Avantages     | `/products`    | boutique produits et Points d'Impact             |
+| Avantages     | `/products`    | boutique produits et valeur boutique impact      |
 | Profil        | `/profile`     | profil, stats, BioDex, settings                  |
 
 Composant de navigation: `src/app/[locale]/(tabs)/_components/mobile-bottom-nav.tsx`.
@@ -53,7 +53,7 @@ Le premier onglet est maintenant **Aventure** dans le code.
 | Defis     | `/challenges` | page secondaire pour missions/challenges detailles                  |
 | Projets   | `/projects`   | soutenir ou donner a des projets reels                              |
 | Collectif | `/impact`     | impact commun, factions, feed, campagnes                            |
-| Avantages | `/products`   | boutique en Points d'Impact et euros                                |
+| Avantages | `/products`   | boutique en valeur boutique impact et euros                         |
 | Profil    | `/profile`    | identite, progression, BioDex, historique, settings                 |
 
 `Aventure` n'est pas un simple renommage de `Defis`. Il devient le hub principal et renvoie vers `/challenges` quand l'utilisateur veut voir les missions en detail.
@@ -78,7 +78,7 @@ Blocs presents ou attendus dans le hub:
 5. BioDex: espece recente, verrouillee ou liee au projet.
 6. Objectif collectif ou faction.
 7. Academy/Defis comme acces secondaire.
-8. Avantage disponible ou solde Points d'Impact, de facon discrete.
+8. Avantage disponible ou solde de valeur boutique, de facon discrete.
 
 Personnalisation cible:
 
@@ -97,28 +97,34 @@ Le hub ne doit donc pas devenir une simple liste de defis. Il doit relier appren
 
 Les projets sont le coeur business et impact du produit.
 
-### Types De Projets
+### Types D'Action
 
-| Type               | Role                                                     | Gain utilisateur                                      |
-| ------------------ | -------------------------------------------------------- | ----------------------------------------------------- |
-| Don pur            | financer un projet sans produit associe                  | Graines, BioDex si espece liee                        |
-| Soutien producteur | financer un projet qui produit une contrepartie tangible | Points d'Impact, bonus symbolique possible en Graines |
+L'app doit presenter seulement deux actions principales:
+
+| Action             | Role                                           | Gain utilisateur                                             |
+| ------------------ | ---------------------------------------------- | ------------------------------------------------------------ |
+| Faire un don       | soutenir un projet sans produit associe direct | Graines, BioDex si espece liee                               |
+| Soutenir un projet | soutenir un projet producteur ou partenaire    | valeur boutique impact, bonus symbolique possible en Graines |
+
+Les formulations contextuelles comme "soutenir une ruche", "faire un don pour les coraux" ou "debloquer une espece" sont acceptables, mais ne doivent pas devenir des categories systeme supplementaires.
 
 ### Regles Produit
 
-- Un don pur ne donne pas de Points d'Impact.
+- Un don pur ne donne pas de valeur boutique impact.
 - Un don pur peut debloquer une espece BioDex si le projet est explicitement lie a cette espece.
-- Un soutien producteur donne principalement des Points d'Impact.
+- Un soutien producteur donne principalement de la valeur boutique impact.
 - Un soutien producteur peut donner un petit bonus de Graines, comme reconnaissance symbolique.
 - Les projets doivent etre reliables a un producteur, une localisation, une histoire et idealement une espece principale.
+- Ne pas utiliser "financement" dans l'UI utilisateur; preferer "soutien", "don", "contribution", "geste", "projet" ou "impact".
+- Ne jamais afficher "Points biodiversite" comme monnaie ou recompense utilisateur.
 
 ## 5. Avantages Et Boutique
 
-**Cible validee**: les produits peuvent etre obtenus via Points d'Impact ou achetes en euros.
+**Cible validee**: les produits peuvent etre obtenus via valeur boutique impact ou achetes en euros.
 
 Priorite UX:
 
-1. utiliser les Points d'Impact;
+1. utiliser la valeur boutique impact;
 2. permettre l'achat en euros;
 3. ne pas presenter l'achat produit comme l'action la plus impactante.
 
@@ -202,7 +208,7 @@ Le profil doit regrouper:
 
 - identite utilisateur;
 - faction et mascotte;
-- soldes Graines / Points d'Impact;
+- soldes Graines / valeur boutique impact;
 - progression;
 - BioDex personnel;
 - historique contributions/achats;
@@ -243,8 +249,8 @@ Positionnement:
 Regles:
 
 - inclure un budget de soutien mensuel;
-- ne pas donner de Points d'Impact mensuels gratuits;
-- les Points d'Impact apparaissent seulement si le budget soutient un projet producteur;
+- ne pas donner de valeur boutique impact mensuelle gratuite;
+- cette valeur boutique apparait seulement si le budget soutient un projet producteur;
 - inclure des avantages: contenus avances, rapports, badge, priorite, avantages boutique.
 
 ## 12. RSE / Entreprise
@@ -253,7 +259,7 @@ La RSE est un pilier cible.
 
 Offres produit possibles:
 
-- financement de projets;
+- soutien de projets;
 - abonnement ou budget de soutien pour employes;
 - sponsoring discret;
 - rapports d'impact;

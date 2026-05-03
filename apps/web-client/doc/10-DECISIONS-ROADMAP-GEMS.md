@@ -22,18 +22,18 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 
 ## 2. Les 10 Documents
 
-| Fichier                           | Role                                  |
-| --------------------------------- | ------------------------------------- |
-| `01-VISION.md`                    | nord commun, promesse, principes      |
-| `02-PRODUIT.md`                   | features, navigation, cible produit   |
-| `03-TECHNIQUE.md`                 | architecture actuelle `web-client`    |
-| `04-BUSINESS-RSE-MODELE.md`       | revenus, RSE, abonnement, marketplace |
-| `05-DESIGN-UX-UI.md`              | direction design et UX                |
-| `06-GAMIFICATION-ECONOMIE.md`     | Graines, Points, Academy, BioDex      |
-| `07-BIODIVERSITE-BIODEX.md`       | especes, science, lore, BioDex        |
-| `08-CONTENU-TON-I18N.md`          | copy, lexique, ton, langues           |
-| `09-DONNEES-MOCK-API-SUPABASE.md` | donnees actuelles et contrats         |
-| `10-DECISIONS-ROADMAP-GEMS.md`    | gouvernance et evolution              |
+| Fichier                           | Role                                      |
+| --------------------------------- | ----------------------------------------- |
+| `01-VISION.md`                    | nord commun, promesse, principes          |
+| `02-PRODUIT.md`                   | features, navigation, cible produit       |
+| `03-TECHNIQUE.md`                 | architecture actuelle `web-client`        |
+| `04-BUSINESS-RSE-MODELE.md`       | revenus, RSE, abonnement, marketplace     |
+| `05-DESIGN-UX-UI.md`              | direction design et UX                    |
+| `06-GAMIFICATION-ECONOMIE.md`     | Graines, valeur boutique, Academy, BioDex |
+| `07-BIODIVERSITE-BIODEX.md`       | especes, science, lore, BioDex            |
+| `08-CONTENU-TON-I18N.md`          | copy, lexique, ton, langues               |
+| `09-DONNEES-MOCK-API-SUPABASE.md` | donnees actuelles et contrats             |
+| `10-DECISIONS-ROADMAP-GEMS.md`    | gouvernance et evolution                  |
 
 ## 3. Statuts
 
@@ -76,11 +76,13 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 
 ### Economie
 
-- Conserver deux monnaies: Graines et Points d'Impact.
+- Conserver deux monnaies: Graines et valeur boutique impact.
 - Don pur -> Graines uniquement.
-- Soutien producteur -> Points d'Impact principalement.
+- Soutien producteur -> valeur boutique impact principalement.
 - Bonus Graines possible pour soutien producteur, mais modere.
 - Pas d'achat direct de Graines dans la cible actuelle.
+- Nom de la valeur boutique a trancher: `Points d'Impact` existe aujourd'hui; `Credits Impact` est recommande a evaluer.
+- Interdit produit: ne pas creer de "Points biodiversite".
 
 ### BioDex
 
@@ -92,16 +94,16 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 ### Business
 
 - Marketplace partenaire selectionnee.
-- Produits achetables en Points d'Impact et en euros.
-- Priorite UX aux Points d'Impact.
+- Produits achetables en valeur boutique impact et en euros.
+- Priorite UX a la valeur boutique impact.
 - Abonnement unique `Ambassadeur`.
 - Abonnement = budget de soutien + avantages.
-- Pas de Points d'Impact mensuels gratuits.
+- Pas de valeur boutique impact mensuelle gratuite.
 
 ### RSE
 
 - RSE = pilier cible.
-- Offres: financement projets, abonnement employes, sponsoring discret, rapports d'impact.
+- Offres: soutien de projets, abonnement employes, sponsoring discret, rapports d'impact.
 - Meme app coeur B2C/salaries, avec couche entreprise legere.
 
 ### Design
@@ -199,7 +201,7 @@ Documents prioritaires:
 
 Role:
 
-- structurer Graines, Points, Academy, BioDex;
+- structurer Graines, valeur boutique, Academy, BioDex;
 - eviter le pay-to-win;
 - relier progression et impact.
 

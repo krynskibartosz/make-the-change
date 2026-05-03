@@ -57,7 +57,7 @@ Regle:
 - identite;
 - faction;
 - avatar;
-- soldes Graines / Points d'Impact;
+- soldes Graines / valeur boutique impact;
 - progression;
 - historique;
 - abonnement.
@@ -85,7 +85,7 @@ Regle:
 
 - projet producteur;
 - montant;
-- Points d'Impact accordes;
+- valeur boutique impact accordee;
 - bonus Graines eventuel;
 - espece debloquee si liee.
 
@@ -93,7 +93,7 @@ Regle:
 
 - producteur;
 - prix euros;
-- cout Points d'Impact;
+- cout en valeur boutique impact;
 - stock ou disponibilite;
 - projets/especes lies;
 - mode fulfillment.
@@ -111,7 +111,7 @@ Regle:
 
 - entreprise;
 - budget;
-- projets finances;
+- projets soutenus;
 - employes invites;
 - campagnes;
 - rapports.
@@ -242,6 +242,7 @@ Chaque flux doit clarifier:
 - quelle monnaie est accordee;
 - quelle preuve d'impact est creee;
 - quel objet est mis a jour.
+- ne pas creer de troisieme monnaie comme `biodiversityPoints` cote utilisateur; si le champ existe, le traiter comme metrique interne a renommer.
 
 ## 9. Mocks Vs Cible
 
@@ -257,13 +258,13 @@ Chaque flux doit clarifier:
 
 ## 10. Risques
 
-| Risque                               | Garde-fou                            |
-| ------------------------------------ | ------------------------------------ |
-| Supabase pris comme cible definitive | partir des docs produit              |
-| mocks ignores                        | ils portent la vision recente        |
-| Points crees sans producteur         | appliquer regles business            |
-| don confondu avec soutien            | separer Donation et Producer Support |
-| espece debloquee sans lien           | verifier projet-espece               |
+| Risque                                | Garde-fou                            |
+| ------------------------------------- | ------------------------------------ |
+| Supabase pris comme cible definitive  | partir des docs produit              |
+| mocks ignores                         | ils portent la vision recente        |
+| valeur boutique creee sans producteur | appliquer regles business            |
+| don confondu avec soutien             | separer Donation et Producer Support |
+| espece debloquee sans lien            | verifier projet-espece               |
 
 ## 11. Questions A Decider
 

@@ -77,7 +77,7 @@ Make the Change doit se situer entre quatre univers:
 - **Plateforme d'impact**: projets reels, partenaires, dons, soutiens producteurs, RSE.
 - **Application educative**: Academy, contenus biodiversite, vulgarisation scientifique.
 - **Aventure mobile**: mascottes, factions, BioDex, progression, Graines.
-- **Marketplace selectionnee**: produits partenaires, Points d'Impact, achats en euros.
+- **Marketplace selectionnee**: produits partenaires, valeur boutique, achats en euros.
 
 Le positionnement recommande est:
 
@@ -106,11 +106,11 @@ Est motive par la progression, les especes debloquees, les niveaux, les badges, 
 
 ### 5.4 Acheteur Responsable
 
-Cherche des produits utiles, beaux ou alimentaires, lies a des producteurs et projets. Il peut acheter en euros ou utiliser ses Points d'Impact.
+Cherche des produits utiles, beaux ou alimentaires, lies a des producteurs et projets. Il peut acheter en euros ou utiliser sa valeur boutique.
 
 ### 5.5 Entreprise / RSE
 
-Cherche a financer des projets biodiversite, engager ses collaborateurs, obtenir des preuves d'impact, et produire des rapports ou contenus RSE credibles.
+Cherche a soutenir des projets biodiversite, engager ses collaborateurs, obtenir des preuves d'impact, et produire des rapports ou contenus RSE credibles.
 
 ## 6. Mascottes Et Factions
 
@@ -151,18 +151,21 @@ Il remplace l'idee trop etroite de `Defis` comme onglet principal. Son role est 
 
 **Cible validee**: conserver deux monnaies separees.
 
-| Monnaie         | Role                                              | Sources principales                             | Usage                                         |
-| --------------- | ------------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
-| Graines         | Engagement, apprentissage, progression symbolique | dons purs, Academy, missions, bonus symboliques | progression, contenus BioDex, Academy, badges |
-| Points d'Impact | Valeur economique liee aux projets producteurs    | soutiens producteurs uniquement                 | produits partenaires, marketplace             |
+| Monnaie                       | Role                                                                 | Sources principales                             | Usage                                         |
+| ----------------------------- | -------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
+| Graines                       | Engagement, apprentissage, progression symbolique                    | dons purs, Academy, missions, bonus symboliques | progression, contenus BioDex, Academy, badges |
+| Valeur boutique impact        | Valeur economique liee aux projets producteurs                       | soutiens producteurs uniquement                 | produits partenaires, marketplace             |
+| Nom actuel / cible a trancher | `Points d'Impact` aujourd'hui; `Credits Impact` recommande a evaluer | n/a                                             | n/a                                           |
 
 Pourquoi deux monnaies:
 
 - les Graines representent l'engagement et la progression;
-- les Points d'Impact representent une valeur boutique;
+- la valeur boutique impact represente un credit echangeable;
 - fusionner les deux brouillerait la difference entre apprendre, donner, soutenir un producteur et acheter.
 
 **Hypothese forte**: ne pas vendre directement des Graines. Cela transformerait la progression en achat de niveau et affaiblirait la confiance.
+
+**Regle lexicale importante**: ne pas creer de troisieme monnaie comme "Points biodiversite". Les abeilles, fleurs, coraux, metres carres de recif, CO2 ou huile sont des metriques d'impact, pas une monnaie.
 
 ## 9. Academy
 
@@ -209,7 +212,7 @@ Sources de revenus cible:
 - commissions sur dons;
 - commissions ou marges sur produits partenaires;
 - abonnement unique Ambassadeur;
-- financement de projets par entreprises;
+- soutien de projets par entreprises;
 - abonnement ou budget de soutien pour employes;
 - sponsoring discret;
 - rapports d'impact RSE;

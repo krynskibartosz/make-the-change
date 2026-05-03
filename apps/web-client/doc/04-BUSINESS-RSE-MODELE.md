@@ -10,13 +10,13 @@
 Make the Change doit combiner un modele B2C et un modele B2B/RSE.
 
 Le B2C apporte l'usage, la communaute, la marketplace et la credibilite produit.
-Le B2B/RSE peut devenir un moteur economique majeur: financement de projets, engagement collaborateurs, rapports d'impact et sponsoring discret.
+Le B2B/RSE peut devenir un moteur economique majeur: soutien de projets, engagement collaborateurs, rapports d'impact et sponsoring discret.
 
 ## 2. Principes Economiques
 
 1. L'argent doit rester relie a un impact comprehensible.
 2. Les recompenses ne doivent pas faire oublier la biodiversite.
-3. Les Points d'Impact ne doivent pas etre crees sans soutien producteur.
+3. La valeur boutique impact ne doit pas etre creee sans soutien producteur.
 4. Les Graines ne doivent pas etre achetees directement dans la cible actuelle.
 5. Les offres RSE doivent produire des preuves exploitables par l'entreprise.
 
@@ -27,7 +27,7 @@ Le B2B/RSE peut devenir un moteur economique majeur: financement de projets, eng
 | Commissions sur dons        | Cible validee   | revenu simple, marge limitee mais credible |
 | Commissions/marges produits | Cible validee   | via marketplace partenaire selectionnee    |
 | Abonnement Ambassadeur      | Cible validee   | abonnement unique avec budget de soutien   |
-| Financement RSE de projets  | Hypothese forte | potentiel majeur                           |
+| Soutien RSE de projets      | Hypothese forte | potentiel majeur                           |
 | Abonnement/budget employes  | Hypothese forte | engagement interne entreprise              |
 | Sponsoring discret          | Hypothese forte | utile si non intrusif                      |
 | Rapports RSE                | Hypothese forte | valeur B2B claire                          |
@@ -40,18 +40,18 @@ Regle cible:
 
 - donnent uniquement des Graines;
 - peuvent debloquer une espece BioDex si le projet est explicitement lie a cette espece;
-- ne donnent pas de Points d'Impact;
+- ne donnent pas de valeur boutique impact;
 - peuvent donner certificat, badge, update terrain ou contenu.
 
 Justification:
 
-Un don pur ne genere pas de produit. Donner des Points d'Impact creerait une dette boutique sans contrepartie economique claire.
+Un don pur ne genere pas de produit. Donner une valeur boutique impact creerait une dette boutique sans contrepartie economique claire.
 
 ## 5. Soutiens Producteurs
 
 Regle cible:
 
-- donnent principalement des Points d'Impact;
+- donnent principalement de la valeur boutique impact;
 - peuvent donner un petit bonus de Graines comme reconnaissance symbolique;
 - peuvent debloquer une espece si le projet est explicitement lie a celle-ci.
 
@@ -59,7 +59,7 @@ Exemple conceptuel:
 
 ```text
 50 EUR de soutien producteur
--> Points d'Impact selon regle economique
+-> valeur boutique impact selon regle economique
 -> petit bonus de Graines possible
 -> espece liee debloquee si le projet en contient une
 ```
@@ -72,7 +72,7 @@ Modele recommande:
 
 - Make the Change selectionne les produits phares;
 - les produits sont lies a des producteurs/projets;
-- l'utilisateur peut payer en euros ou Points d'Impact;
+- l'utilisateur peut payer en euros ou valeur boutique impact;
 - Make the Change prend une commission ou marge negociee;
 - le stock propre est a eviter au debut si possible.
 
@@ -81,13 +81,19 @@ Experience utilisateur:
 - ressentie comme une boutique Make the Change;
 - operationnellement proche d'une marketplace partenaire.
 
-## 7. Points D'Impact
+## 7. Valeur Boutique Impact
 
 Role:
 
 - credit de valeur lie aux projets producteurs;
 - utilisable dans la boutique;
 - pas une monnaie universelle d'engagement.
+
+Nom:
+
+- nom actuel dans le code/docs: `Points d'Impact`;
+- nom recommande a evaluer: `Credits Impact`, plus clair pour une valeur echangeable;
+- ne pas confondre avec les metriques d'impact.
 
 Regles:
 
@@ -136,8 +142,8 @@ Promesse secondaire:
 
 ### 9.2 Regles
 
-- ne pas donner de Points d'Impact mensuels gratuits;
-- generer des Points seulement si le budget soutient un projet producteur;
+- ne pas donner de valeur boutique impact mensuelle gratuite;
+- generer cette valeur seulement si le budget soutient un projet producteur;
 - donner eventuellement un petit bonus de Graines de fidelite;
 - ne pas bloquer l'Academy de base derriere l'abonnement.
 
@@ -157,20 +163,20 @@ La RSE doit etre un pilier strategique.
 
 ### 10.1 Offres RSE
 
-| Offre                 | Description                                          | Valeur entreprise                      |
-| --------------------- | ---------------------------------------------------- | -------------------------------------- |
-| Financement de projet | l'entreprise finance un projet ou une tranche        | impact clair et communicable           |
-| Abonnement employes   | budget de soutien ou acces Ambassadeur pour salaries | engagement collaborateurs              |
-| Sponsoring discret    | mention sur campagne/projet/rapport                  | visibilite sans pollution publicitaire |
-| Rapports d'impact     | donnees, recits, preuves, exports                    | reporting RSE                          |
-| Campagnes internes    | objectifs collectifs, challenges equipe              | animation RH/RSE                       |
+| Offre               | Description                                          | Valeur entreprise                      |
+| ------------------- | ---------------------------------------------------- | -------------------------------------- |
+| Soutien de projet   | l'entreprise soutient un projet ou une tranche       | impact clair et communicable           |
+| Abonnement employes | budget de soutien ou acces Ambassadeur pour salaries | engagement collaborateurs              |
+| Sponsoring discret  | mention sur campagne/projet/rapport                  | visibilite sans pollution publicitaire |
+| Rapports d'impact   | donnees, recits, preuves, exports                    | reporting RSE                          |
+| Campagnes internes  | objectifs collectifs, challenges equipe              | animation RH/RSE                       |
 
 ### 10.2 Espace Entreprise
 
 Cible:
 
 - tableau de bord;
-- projets finances;
+- projets soutenus;
 - impact agrege;
 - participation employes;
 - contenus exportables;
@@ -225,7 +231,7 @@ Academy de base:
 | Risque                   | Pourquoi              | Garde-fou                           |
 | ------------------------ | --------------------- | ----------------------------------- |
 | e-commerce avant impact  | affaiblit la mission  | projets toujours centraux           |
-| Points gratuits          | dette boutique        | Points uniquement via producteurs   |
+| valeur boutique gratuite | dette boutique        | valeur uniquement via producteurs   |
 | achat de Graines         | pay-to-win symbolique | ne pas vendre directement           |
 | sponsoring intrusif      | perte de confiance    | sponsoring discret et contextualise |
 | RSE greenwashing         | risque reputational   | preuves, projets, transparence      |
@@ -237,5 +243,5 @@ Academy de base:
 - Part du budget Ambassadeur affectee aux projets.
 - Taux de commission sur dons.
 - Taux de commission ou marge produits.
-- Conditions d'expiration des Points d'Impact.
+- Conditions d'expiration de la valeur boutique impact.
 - Priorite de lancement B2C vs B2B/RSE.

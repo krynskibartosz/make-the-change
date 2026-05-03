@@ -38,9 +38,9 @@ Principes:
 | Onglet    | Route actuelle | Intention UX                                        |
 | --------- | -------------- | --------------------------------------------------- |
 | Aventure  | `/adventure`   | hub quotidien, progression, Academy, action du jour |
-| Projets   | `/projects`    | choisir un projet a soutenir ou financer            |
+| Projets   | `/projects`    | choisir un projet a soutenir ou auquel donner       |
 | Collectif | `/impact`      | voir l'impact commun et les factions                |
-| Avantages | `/products`    | utiliser Points d'Impact ou acheter                 |
+| Avantages | `/products`    | utiliser la valeur boutique impact ou acheter       |
 | Profil    | `/profile`     | soi, progression, BioDex, historiques               |
 
 L'ancienne page `Defis` reste accessible via `/challenges`, mais elle n'est plus l'onglet principal.
@@ -60,7 +60,7 @@ Il doit repondre a:
 
 ### 4.2 Structure Recommandee
 
-1. Header sombre avec soldes Graines / Points d'Impact.
+1. Header sombre avec soldes Graines / valeur boutique impact.
 2. Hero compact avec mascotte/faction.
 3. Objectif en cours / cycle.
 4. Action prioritaire du jour.
@@ -154,6 +154,7 @@ Style cible:
 - donnees lisibles;
 - CTA clair;
 - transparence sur le type: don pur ou soutien producteur.
+- aucun jargon de financement dans l'UI utilisateur.
 
 Les pages projet doivent inspirer confiance avant de generer de l'emotion.
 
@@ -164,7 +165,7 @@ Style cible:
 - marketplace premium selectionnee;
 - produits desirables;
 - lien clair avec producteur/projet;
-- priorite aux Points d'Impact;
+- priorite a la valeur boutique impact;
 - achat euros disponible mais secondaire dans la narration.
 
 ## 11. BioDex

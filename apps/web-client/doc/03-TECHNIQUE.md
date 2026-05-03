@@ -212,10 +212,12 @@ Actuel:
 
 Regles produit a preserver:
 
-- don pur -> Graines, pas Points d'Impact;
-- soutien producteur -> Points d'Impact;
-- achat produit -> euros ou Points d'Impact;
-- abonnement Ambassadeur -> budget de soutien, pas Points gratuits.
+- don pur -> Graines, pas valeur boutique impact;
+- soutien producteur -> valeur boutique impact;
+- achat produit -> euros ou valeur boutique impact;
+- abonnement Ambassadeur -> budget de soutien, pas valeur boutique gratuite;
+- aucune monnaie ou metrique nommee "Points biodiversite";
+- UI utilisateur: eviter "financement" et "investissement"; preferer "don", "soutien", "contribution", "geste", "impact".
 
 ## 8. Supabase
 
@@ -263,15 +265,17 @@ Points de vigilance:
 
 ## 11. Dettes Techniques Observees
 
-| Dette                                                                   | Impact                                |
-| ----------------------------------------------------------------------- | ------------------------------------- |
-| `ignoreBuildErrors: true` dans `next.config.js`                         | risque production                     |
-| gros fichiers mock                                                      | difficile a maintenir                 |
-| gros ecrans Academy / flows projets                                     | refactoring progressif necessaire     |
-| ancien nom `Artisans Locaux` encore present dans certains types/actions | incoherence faction                   |
-| melange mock/supabase                                                   | source de confusion                   |
-| `/challenges` encore present comme mecanique secondaire                 | conserver tant que les liens existent |
-| textes Aventure V0 hardcodes                                            | i18n a extraire avant production      |
+| Dette                                                                   | Impact                                 |
+| ----------------------------------------------------------------------- | -------------------------------------- |
+| `ignoreBuildErrors: true` dans `next.config.js`                         | risque production                      |
+| gros fichiers mock                                                      | difficile a maintenir                  |
+| gros ecrans Academy / flows projets                                     | refactoring progressif necessaire      |
+| ancien nom `Artisans Locaux` encore present dans certains types/actions | incoherence faction                    |
+| melange mock/supabase                                                   | source de confusion                    |
+| `/challenges` encore present comme mecanique secondaire                 | conserver tant que les liens existent  |
+| textes Aventure V0 hardcodes                                            | i18n a extraire avant production       |
+| flow don affichant encore valeur boutique impact                        | a aligner avec regle don -> Graines    |
+| libelle `Points biodiversite` dans impact coraux                        | a remplacer par metrique non monetaire |
 
 ## 12. Regle Pour Les Gems Tech
 

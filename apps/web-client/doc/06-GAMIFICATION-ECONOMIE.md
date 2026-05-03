@@ -20,10 +20,16 @@ La progression doit donner envie de revenir sans transformer l'app en jeu de rec
 
 ## 2. Deux Monnaies
 
-| Monnaie         | Nature                                          | Ne pas confondre avec |
-| --------------- | ----------------------------------------------- | --------------------- |
-| Graines         | engagement, apprentissage, progression          | credit boutique       |
-| Points d'Impact | valeur economique issue de soutiens producteurs | XP ou score moral     |
+| Monnaie                | Nature                                          | Ne pas confondre avec              |
+| ---------------------- | ----------------------------------------------- | ---------------------------------- |
+| Graines                | engagement, apprentissage, progression          | credit boutique                    |
+| Valeur boutique impact | valeur economique issue de soutiens producteurs | XP, score moral, metrique d'impact |
+
+Nom de la valeur boutique:
+
+- nom actuel: `Points d'Impact`;
+- nom recommande a evaluer: `Credits Impact`;
+- tant que la decision n'est pas tranchee, raisonner en "valeur boutique impact".
 
 ## 3. Graines
 
@@ -47,7 +53,7 @@ Regle:
 
 - ne pas vendre directement les Graines dans la cible actuelle.
 
-## 4. Points D'Impact
+## 4. Valeur Boutique Impact
 
 Sources:
 
@@ -62,9 +68,10 @@ Usages:
 
 Regles:
 
-- pas de Points pour dons purs;
-- pas de Points mensuels gratuits dans l'abonnement;
-- pas de Points comme simple recompense de quiz.
+- pas de valeur boutique pour dons purs;
+- pas de valeur boutique mensuelle gratuite dans l'abonnement;
+- pas de valeur boutique comme simple recompense de quiz.
+- pas de "Points biodiversite": les indicateurs biodiversite sont des metriques, pas une monnaie.
 
 ## 5. Academy
 
@@ -190,7 +197,7 @@ Role gamification:
 
 Interdits recommandes:
 
-- Points d'Impact gratuits mensuels;
+- valeur boutique gratuite mensuelle;
 - achat de statut sans impact;
 - achat direct massif de Graines.
 
@@ -204,7 +211,7 @@ Types:
 - espece debloquee;
 - titre;
 - item cosmetique;
-- Points d'Impact uniquement si lien producteur;
+- valeur boutique impact uniquement si lien producteur;
 - produit via boutique.
 
 La recompense doit toujours pouvoir etre expliquee.
@@ -215,12 +222,12 @@ La recompense doit toujours pouvoir etre expliquee.
 flowchart TD
   A["Aventure propose une action"] --> B{"Type d'action"}
   B --> C["Academy"]
-  B --> D["Don pur"]
-  B --> E["Soutien producteur"]
+  B --> D["Faire un don"]
+  B --> E["Soutenir un projet"]
   C --> F["Graines"]
   D --> F
   D --> G["BioDex si espece liee"]
-  E --> H["Points d'Impact"]
+  E --> H["Valeur boutique impact"]
   E --> I["Bonus Graines modere"]
   E --> G
   F --> J["Progression / contenus"]

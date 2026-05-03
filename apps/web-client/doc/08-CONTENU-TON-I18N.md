@@ -32,17 +32,17 @@ Tonalite cible:
 
 ## 3. Lexique Recommande
 
-| Concept                    | Terme recommande                                 |
-| -------------------------- | ------------------------------------------------ |
-| Paiement projet producteur | soutien                                          |
-| Don sans produit           | don                                              |
-| Monnaie engagement         | Graines                                          |
-| Credit boutique            | Points d'Impact                                  |
-| Abonnement                 | Ambassadeur                                      |
-| Premier onglet             | Aventure                                         |
-| Boutique                   | Avantages en navigation, Boutique dans le detail |
-| Entreprise                 | partenaire RSE, entreprise partenaire            |
-| Progression                | aventure, parcours, niveau, decouverte           |
+| Concept                    | Terme recommande                                              |
+| -------------------------- | ------------------------------------------------------------- |
+| Action projet producteur   | soutien                                                       |
+| Projet sans produit direct | don                                                           |
+| Monnaie engagement         | Graines                                                       |
+| Credit boutique            | valeur boutique impact; `Credits Impact` recommande a evaluer |
+| Abonnement                 | Ambassadeur                                                   |
+| Premier onglet             | Aventure                                                      |
+| Boutique                   | Avantages en navigation, Boutique dans le detail              |
+| Entreprise                 | partenaire RSE, entreprise partenaire                         |
+| Progression                | aventure, parcours, niveau, decouverte                        |
 
 ## 4. Termes A Eviter
 
@@ -55,6 +55,8 @@ Tonalite cible:
 - promesses absolues;
 - achat d'impact sans preuve;
 - monnaie gratuite pour tout.
+- financement dans l'UI utilisateur;
+- Points biodiversite comme monnaie ou recompense.
 
 ## 5. Microcopy Par Contexte
 
@@ -130,7 +132,8 @@ Objectif:
 
 Exemples:
 
-- "Utiliser mes Points d'Impact"
+- "Utiliser mes credits"
+- "Utiliser ma valeur impact"
 - "Acheter en euros"
 - "Produit lie a un partenaire"
 - "Voir le projet associe"
@@ -146,7 +149,7 @@ Objectif:
 Exemples:
 
 - "Rapport d'impact"
-- "Projet finance"
+- "Projet soutenu"
 - "Engagement collaborateurs"
 - "Campagne RSE"
 
@@ -193,17 +196,17 @@ Cible:
 
 ## 9. Noms Propres
 
-| Element                 | Nom             |
-| ----------------------- | --------------- |
-| App                     | Make the Change |
-| Onglet cible            | Aventure        |
-| Mascotte pollinisateurs | Melli           |
-| Mascotte forets         | Sylva           |
-| Mascotte mers           | Ondine          |
-| Monnaie engagement      | Graines         |
-| Monnaie boutique        | Points d'Impact |
-| Abonnement              | Ambassadeur     |
-| Collection especes      | BioDex          |
+| Element                 | Nom                                                                     |
+| ----------------------- | ----------------------------------------------------------------------- |
+| App                     | Make the Change                                                         |
+| Onglet cible            | Aventure                                                                |
+| Mascotte pollinisateurs | Melli                                                                   |
+| Mascotte forets         | Sylva                                                                   |
+| Mascotte mers           | Ondine                                                                  |
+| Monnaie engagement      | Graines                                                                 |
+| Monnaie boutique        | nom final a trancher: Points d'Impact actuel, Credits Impact recommande |
+| Abonnement              | Ambassadeur                                                             |
+| Collection especes      | BioDex                                                                  |
 
 ## 10. Communication Sur L'IA
 
