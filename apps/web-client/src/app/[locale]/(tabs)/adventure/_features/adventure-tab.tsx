@@ -153,169 +153,145 @@ export function AdventureTab({
       />
 
       <div className="mx-auto flex w-full max-w-3xl flex-col pb-8 pt-2">
+        
+        {/* Zone 1 : La Fenêtre d'Impact (Hero & Conversion) */}
+        <div className="mb-10 flex flex-col">
+          <div className="px-5 pb-5">
+            <h1 className="text-[26px] font-black tracking-tight text-white">Salut {firstName} ! 👋</h1>
+            <p className="mt-1 text-sm font-medium text-white/60 leading-relaxed">
+              L'espèce <strong className="text-white">{featuredSpecies?.name || 'emblématique'}</strong> a besoin de la faction <strong className={cn(theme.accentText)}>{presentation.label}</strong> aujourd'hui.
+            </p>
+          </div>
 
-        {/* Zone 1 : En-tête (Bonjour organique) */}
-        <div className="px-6 pb-6">
-          <h1 className="text-[28px] font-extrabold tracking-tight text-white leading-tight">
-            Salut {firstName} ! <span className="align-middle">👋</span>
-          </h1>
-          <p className="mt-2 text-[16px] leading-relaxed text-[#A1A1A6]">
-            L'{featuredSpecies?.name || 'espèce emblématique'} a besoin de {presentation.mascotName} et toi aujourd'hui.
-          </p>
-        </div>
-
-        {/* Zone 2 : Carte conversion (visuel fusionné + CTA lime) */}
-        <div className="px-6 mb-10">
-          <Link
-            href={recommendedProject?.href || '/projects'}
-            className="group block relative overflow-hidden rounded-[32px] bg-[#15151A] h-[380px] active:scale-[0.99] transition-transform"
-          >
-            {/* Photo projet en background plein cadre */}
-            {recommendedProject?.imageUrl ? (
-              <img
-                src={recommendedProject.imageUrl}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-[#1a1f2a] to-[#0B0F15]" />
-            )}
-
-            {/* Dégradé noir profond bottom -> top pour lisibilité */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 via-50% to-transparent pointer-events-none" />
-
-            {/* Espèce détourée superposée (émotion) */}
-            {featuredSpecies?.imageUrl && (
-              <img
-                src={featuredSpecies.imageUrl}
-                alt={featuredSpecies.name}
-                className={cn(
-                  "absolute left-[-4%] bottom-[28%] w-[62%] max-w-[320px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] pointer-events-none",
-                  !featuredSpecies.isUnlocked && "grayscale opacity-60",
-                )}
-              />
-            )}
-
-            {!featuredSpecies?.isUnlocked && featuredSpecies && (
-              <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full">
-                <Lock className="w-3 h-3 text-white/70" />
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-white/70">À débloquer</span>
+          <div className="px-4 relative">
+            <div className="relative overflow-hidden rounded-[24px] bg-[#15151A] border border-white/5 h-44">
+              <div className="absolute inset-0 grid grid-cols-2">
+                <div className="relative bg-[#080b0f]">
+                  {featuredSpecies?.imageUrl && (
+                    <img src={featuredSpecies.imageUrl} alt="" className={cn("w-full h-full object-cover", !featuredSpecies.isUnlocked && "grayscale opacity-30")} />
+                  )}
+                  {!featuredSpecies?.isUnlocked && (
+                    <div className="absolute top-3 left-3 bg-black/50 p-1.5 rounded-full backdrop-blur-sm">
+                      <Lock className="w-3.5 h-3.5 text-white/70" />
+                    </div>
+                  )}
+                </div>
+                <div className="relative">
+                  {recommendedProject?.imageUrl && (
+                    <img src={recommendedProject.imageUrl} alt="" className="w-full h-full object-cover opacity-90" />
+                  )}
+                </div>
               </div>
-            )}
 
-            {/* Contenu bas (sur partie sombre) */}
-            <div className="absolute bottom-0 inset-x-0 p-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70 mb-2">
-                📍 {recommendedProject?.location || 'Terrain partenaire'}{featuredSpecies?.conservationStatus ? ' • Espèce protégée' : ''}
-              </p>
-              <h2 className="text-[20px] font-bold text-white leading-tight mb-4">
-                {recommendedProject?.name || 'Projet de restauration'}
-              </h2>
-              <div
-                className="flex w-full h-14 items-center justify-center rounded-[16px] bg-lime-400 text-black text-[16px] font-bold shadow-[0_10px_30px_rgba(163,230,53,0.25)] group-active:scale-[0.98] transition-transform"
-              >
-                Soutenir & Débloquer
+              <div className="absolute inset-y-0 left-1/2 -ml-6 w-12 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/50 to-transparent pointer-events-none" />
+
+              <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none">
+                <p className="text-sm font-black text-white truncate drop-shadow-md">{recommendedProject?.name || 'Projet de restauration'}</p>
               </div>
             </div>
-          </Link>
+
+            <div className="relative z-20 -mt-6 flex justify-center px-4">
+              <Link
+                href={recommendedProject?.href || '/projects'}
+                className="flex w-full h-14 items-center justify-center rounded-[20px] bg-lime-400 text-[#0B0F15] text-[17px] font-black shadow-[0_10px_30px_rgba(163,230,53,0.2)] active:scale-95 transition-transform"
+              >
+                Soutenir & Débloquer
+              </Link>
+            </div>
+          </div>
         </div>
 
-        {/* Zone 3 : Contribution gratuite (Finch-card) */}
-        <div className="px-6 mb-10">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35 mb-3 ml-1">
+        {/* Zone 2 : Le Focus du Jour */}
+        <div className="px-4 mb-10">
+          <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/40 mb-3 ml-1">
             Ta contribution gratuite
           </h2>
           {primaryQuest ? (
             primaryQuest.progress < primaryQuest.max ? (
-              <Link
-                href={primaryQuest.href}
-                className="flex items-center justify-between gap-3 bg-[#1C1C1E] rounded-[24px] p-4 active:scale-[0.98] transition-transform"
-              >
-                <div className="flex min-w-0 flex-1 items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2C2C2E]">
-                    <PrimaryIcon className="h-5 w-5 text-white" strokeWidth={1.5} />
+              <Link href={primaryQuest.href} className="flex items-center justify-between bg-[#15151A] rounded-[20px] p-4 border border-white/5 active:scale-[0.98] transition-transform">
+                <div className="flex items-center gap-3">
+                  <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/5", theme.accentText)}>
+                    <PrimaryIcon className="h-5 w-5" />
                   </span>
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 pr-2">
                     <p className="text-[15px] font-bold text-white truncate">{primaryQuest.title}</p>
-                    <p className="text-xs text-[#A1A1A6] line-clamp-1 mt-0.5">{primaryQuest.description}</p>
+                    <p className="text-xs text-white/50 line-clamp-1">{primaryQuest.description}</p>
                   </div>
                 </div>
-                <div className="shrink-0 flex items-center gap-1 h-9 rounded-full bg-white/5 px-3 text-[13px] font-bold text-lime-400 tabular-nums">
-                  +{primaryQuest.reward} <Sprout className="w-3.5 h-3.5" />
+                <div className={cn("text-[13px] font-bold whitespace-nowrap bg-transparent flex items-center gap-1", theme.accentText)}>
+                  +{primaryQuest.reward} <Sprout className="w-3.5 h-3.5" /> <span className="hidden sm:inline">{primaryQuest.cta}</span>
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center justify-between gap-3 bg-[#1C1C1E] rounded-[24px] p-4">
-                <div className="flex min-w-0 flex-1 items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2C2C2E]">
-                    <CheckCircle2 className="h-5 w-5 text-lime-400" strokeWidth={1.5} />
+              <div className="flex items-center justify-between bg-[#15151A] rounded-[20px] p-4 border border-lime-400/20">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime-400/10">
+                    <CheckCircle2 className="h-5 w-5 text-lime-400" />
                   </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[15px] font-bold text-white/50 line-through truncate">{primaryQuest.title}</p>
-                    <p className="text-xs text-[#A1A1A6] mt-0.5">Fait ! À demain.</p>
+                  <div className="min-w-0">
+                    <p className="text-[15px] font-bold text-white/60 line-through truncate">{primaryQuest.title}</p>
                   </div>
                 </div>
-                <div className="shrink-0 flex items-center h-9 rounded-full bg-white/5 px-3 text-[13px] font-bold text-lime-400">
-                  ✓
+                <div className="text-[13px] font-bold text-lime-400">
+                  ✅ Fait ! À demain.
                 </div>
               </div>
             )
           ) : (
-            <div className="bg-[#1C1C1E] rounded-[24px] p-4 text-sm text-[#A1A1A6]">
-              Aucune quête pour aujourd'hui.
-            </div>
+             <div className="bg-[#15151A] rounded-[20px] p-4 border border-white/5 text-sm text-white/50">
+               Aucune quête pour aujourd'hui.
+             </div>
           )}
         </div>
 
-        {/* Zone 4 : Menu système (touche Apple) */}
-        <div className="px-6">
-          <div className="rounded-[24px] bg-[#1C1C1E] overflow-hidden">
-            <Link href="/challenges" className="flex items-center justify-between py-4 pl-5 pr-5 active:bg-white/[0.03] transition-colors">
-              <div className="flex items-center gap-4 min-w-0">
-                <BookOpen className="w-5 h-5 shrink-0 text-[#8E8E93]" strokeWidth={1.75} />
-                <span className="text-[15px] font-semibold text-white truncate">Academy & Défis</span>
-              </div>
-              <ChevronRight className="w-4 h-4 shrink-0 text-[#8E8E93]" />
-            </Link>
-
-            <div className="ml-[52px] h-px bg-[#333333]" />
-
-            <Link href="/profile/biodex" className="flex items-center justify-between py-4 pl-5 pr-5 active:bg-white/[0.03] transition-colors">
-              <div className="flex items-center gap-4 min-w-0">
-                <PawPrint className="w-5 h-5 shrink-0 text-[#8E8E93]" strokeWidth={1.75} />
-                <span className="text-[15px] font-semibold text-white truncate">Ton BioDex</span>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-[13px] font-medium text-[#8E8E93] tabular-nums">
-                  {featuredSpecies?.isUnlocked ? 'Suivi' : 'À débloquer'}
-                </span>
-                <ChevronRight className="w-4 h-4 text-[#8E8E93]" />
-              </div>
-            </Link>
-
-            <div className="ml-[52px] h-px bg-[#333333]" />
-
-            <Link href="/impact" className="flex items-center justify-between py-4 pl-5 pr-5 active:bg-white/[0.03] transition-colors">
-              <div className="flex items-center gap-4 min-w-0">
-                <ShieldCheck className="w-5 h-5 shrink-0 text-[#8E8E93]" strokeWidth={1.75} />
-                <span className="text-[15px] font-semibold text-white truncate">Objectif de Faction</span>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-[13px] font-medium text-[#8E8E93] tabular-nums">{Math.round(collectiveProgress)}%</span>
-                <ChevronRight className="w-4 h-4 text-[#8E8E93]" />
-              </div>
-            </Link>
-
-            <div className="ml-[52px] h-px bg-[#333333]" />
-
-            <Link href="/products" className="flex items-center justify-between py-4 pl-5 pr-5 active:bg-white/[0.03] transition-colors">
-              <div className="flex items-center gap-4 min-w-0">
-                <Package className="w-5 h-5 shrink-0 text-[#8E8E93]" strokeWidth={1.75} />
-                <span className="text-[15px] font-semibold text-white truncate">Avantages disponibles</span>
-              </div>
-              <ChevronRight className="w-4 h-4 shrink-0 text-[#8E8E93]" />
-            </Link>
-          </div>
+        {/* Zone 3 : L'Écosystème */}
+        <div className="px-4">
+          <ul className="rounded-[24px] bg-[#15151A] border border-white/5 divide-y divide-white/5">
+            <li>
+              <Link href="/challenges" className="flex items-center justify-between p-5 active:bg-white/[0.02] transition-colors rounded-t-[24px]">
+                <div className="flex items-center gap-3.5">
+                  <BookOpen className="w-5 h-5 text-white/50" />
+                  <span className="text-[15px] font-semibold text-white/90">Academy & Défis</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/20" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/profile/biodex" className="flex items-center justify-between p-5 active:bg-white/[0.02] transition-colors">
+                <div className="flex items-center gap-3.5">
+                  <PawPrint className="w-5 h-5 text-white/50" />
+                  <span className="text-[15px] font-semibold text-white/90">Ton BioDex</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-white/40 tabular-nums">
+                    {featuredSpecies?.isUnlocked ? 'Espèce suivie' : 'À débloquer'}
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-white/20" />
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link href="/impact" className="flex items-center justify-between p-5 active:bg-white/[0.02] transition-colors">
+                <div className="flex items-center gap-3.5">
+                  <ShieldCheck className="w-5 h-5 text-white/50" />
+                  <span className="text-[15px] font-semibold text-white/90">Objectif de Faction</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[13px] font-bold text-white/60 tabular-nums">{Math.round(collectiveProgress)}%</span>
+                  <ChevronRight className="w-4 h-4 text-white/20" />
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link href="/products" className="flex items-center justify-between p-5 active:bg-white/[0.02] transition-colors rounded-b-[24px]">
+                <div className="flex items-center gap-3.5">
+                  <Package className="w-5 h-5 text-white/50" />
+                  <span className="text-[15px] font-semibold text-white/90">Avantages disponibles</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/20" />
+              </Link>
+            </li>
+          </ul>
         </div>
 
       </div>
