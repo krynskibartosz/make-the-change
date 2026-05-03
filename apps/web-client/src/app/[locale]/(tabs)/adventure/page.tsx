@@ -176,7 +176,7 @@ export default async function AdventurePage() {
 
   return (
     <TabScreen
-      header={<AdventureTabHeader seeds={seeds} impactPoints={impactPoints} />}
+      header={<AdventureTabHeader faction={faction} seeds={seeds} impactPoints={impactPoints} />}
       className="bg-[#0B0F15]"
       contentClassName="scroll-pt-6"
     >
