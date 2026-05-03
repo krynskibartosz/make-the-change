@@ -122,13 +122,11 @@ export function ProjectInvestOneFlow({
   const [amountInput, setAmountInput] = useState(String(defaultAmount))
   const [guestEmail, setGuestEmail] = useState('')
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
-  const [claimEmail, setClaimEmail] = useState('')
   const [claimSaved, setClaimSaved] = useState(false)
   const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
   const [isProcessing, setIsProcessing] = useState(false)
   const amountInputRef = useRef<HTMLInputElement | null>(null)
-  const claimEmailInputRef = useRef<HTMLInputElement | null>(null)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
 
@@ -271,27 +269,17 @@ export function ProjectInvestOneFlow({
   }
 
   const submitClaim = () => {
-    if (!isValidEmail(claimEmail)) {
+    if (!isValidEmail(guestEmail)) {
       return
     }
     setIsSendingMagicLink(true)
     setTimeout(() => {
       setIsSendingMagicLink(false)
       setClaimSaved(true)
-      // Redirection vers le BioDex après validation Magic Link
       setTimeout(() => {
         router.push('/profile/biodex')
       }, 2000)
     }, 1200)
-  }
-
-  const focusClaimEmailInput = () => {
-    if (!claimEmailInputRef.current) {
-      return
-    }
-
-    claimEmailInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    claimEmailInputRef.current.focus()
   }
 
   const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
@@ -611,19 +599,14 @@ export function ProjectInvestOneFlow({
                     Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
                   </p>
                   <div className="grid gap-2">
-                    <input
-                      ref={claimEmailInputRef}
-                      type="email"
-                      value={claimEmail}
-                      onChange={(event) => setClaimEmail(event.target.value)}
-                      placeholder="Email"
-                      className="h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
-                    />
+                    <p className="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 flex items-center text-base text-white/60 truncate">
+                      {guestEmail}
+                    </p>
                     <Button
                       type="button"
                       onClick={submitClaim}
                       className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
-                      disabled={!isValidEmail(claimEmail) || isSendingMagicLink}
+                      disabled={isSendingMagicLink}
                     >
                       {isSendingMagicLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Créer mon compte en 1 clic
@@ -720,13 +703,7 @@ export function ProjectInvestOneFlow({
             <Button
               type="button"
               disabled={isSendingMagicLink}
-              onClick={() => {
-                if (!isValidEmail(claimEmail)) {
-                  focusClaimEmailInput()
-                  return
-                }
-                submitClaim()
-              }}
+              onClick={submitClaim}
               className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
             >
               {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
