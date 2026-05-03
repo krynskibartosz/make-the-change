@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
   Sprout,
+  UsersRound,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import {
