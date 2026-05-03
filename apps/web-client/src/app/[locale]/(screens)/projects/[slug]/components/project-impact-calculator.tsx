@@ -15,6 +15,7 @@ type ProjectImpactCalculatorProps = {
   donationOptions?: DonationOption[] | null
   projectType?: string
   projectImpact?: ProjectImpact | null
+  showSpeciesCard?: boolean
 }
 
 const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png'
@@ -40,7 +41,7 @@ function MetricCard({
       </div>
       <div className="mt-1 flex min-h-[3.5rem] flex-col justify-end">
         {prefix ? (
-          <span className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
+          <span className="mb-0.5 text-xs font-bold uppercase tracking-widest text-white/40">
             {prefix}
           </span>
         ) : null}
@@ -54,7 +55,7 @@ function MetricCard({
           )}
         </div>
       </div>
-      <div className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-white/65">
+      <div className="mt-2 text-sm font-semibold uppercase tracking-[0.08em] text-white/65">
         {label}
       </div>
     </article>
@@ -75,7 +76,7 @@ function CheckoutMetric({
       <Icon className={cn('mb-1 h-6 w-6 drop-shadow-sm', iconColorClass)} />
       <div className="flex min-h-[3rem] flex-col items-center justify-center">
         {prefix ? (
-          <span className="-mb-0.5 text-[9px] font-bold uppercase tracking-widest text-white/40">
+          <span className="-mb-0.5 text-xs font-bold uppercase tracking-widest text-white/40">
             {prefix}
           </span>
         ) : null}
@@ -89,7 +90,7 @@ function CheckoutMetric({
           )}
         </div>
       </div>
-      <div className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+      <div className="mt-1 text-xs font-bold uppercase tracking-widest text-white/40">
         {label}
       </div>
     </div>
@@ -104,6 +105,7 @@ export function ProjectImpactCalculator({
   donationOptions = null,
   projectType = 'beehive',
   projectImpact = null,
+  showSpeciesCard = true,
 }: ProjectImpactCalculatorProps) {
   const displayAmount = Number.isFinite(amount) ? Math.max(amount, 0) : baseAmount
   const metrics = getProjectImpactMetrics({
@@ -128,14 +130,14 @@ export function ProjectImpactCalculator({
         <>
           <ImpactDisclaimer>
             <div>
-              <h3 className="text-xl font-bold text-white">Impact potentiel généré</h3>
+              <h3 className="text-xl font-bold text-white">Impact total du projet</h3>
               <p className="mt-1 text-sm text-white/60">
-                {`Basé sur ${formatInteger(displayAmount)} € ${isDonationProject ? 'de don' : 'de soutien'}`}
+                {`${formatInteger(displayAmount)} € collectés à ce jour`}
               </p>
             </div>
           </ImpactDisclaimer>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {metrics.kind === 'reef' ? (
               <>
                 <MetricCard
@@ -264,34 +266,36 @@ export function ProjectImpactCalculator({
         </div>
       )}
 
-      <article className="mt-3 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-linear-to-br from-black/55 to-black/35 py-3">
-        <div className="relative ml-3 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/50">
-          <img
-            src={BIODEX_REWARD_IMAGE_URL}
-            alt={isDonationProject ? "Silhouette d'une espèce marine" : "Silhouette de l'Abeille Noire"}
-            className="h-full w-full object-cover brightness-0 opacity-50"
-          />
-          <Lock className="absolute bottom-1 right-1 h-4 w-4 text-white/45" />
-        </div>
+      {showSpeciesCard ? (
+        <article className="mt-3 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-linear-to-br from-black/55 to-black/35 py-3">
+          <div className="relative ml-3 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/50">
+            <img
+              src={BIODEX_REWARD_IMAGE_URL}
+              alt={isDonationProject ? "Silhouette d'une espèce marine" : "Silhouette de l'Abeille Noire"}
+              className="h-full w-full object-cover brightness-0 opacity-50"
+            />
+            <Lock className="absolute bottom-1 right-1 h-4 w-4 text-white/45" />
+          </div>
 
-        <div className="min-w-0">
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-white/50">
-            {isCheckoutMode ? 'ESPÈCE À DÉBLOQUER' : 'ESPÈCE ASSOCIÉE À CE PROJET'}
-          </p>
-          <p className="text-sm font-bold text-white">
-            {isDonationProject ? 'Espèce marine' : "L'Abeille Noire"}
-          </p>
-          <p className="mt-0.5 text-xs text-white/70">
-            {isCheckoutMode
-              ? isDonationProject
-                ? "Faites un don pour l'ajouter à votre collection."
-                : "Soutenez ce projet pour l'ajouter à votre collection."
-              : isDonationProject
-                ? 'Faune marine associée à ce projet.'
-                : 'Faune locale associée à ce projet.'}
-          </p>
-        </div>
-      </article>
+          <div className="min-w-0">
+            <p className="mb-1 text-xs font-bold uppercase tracking-widest text-white/50">
+              {isCheckoutMode ? 'ESPÈCE À DÉBLOQUER' : 'ESPÈCE ASSOCIÉE À CE PROJET'}
+            </p>
+            <p className="text-sm font-bold text-white">
+              {isDonationProject ? 'Espèce marine' : "L'Abeille Noire"}
+            </p>
+            <p className="mt-0.5 text-sm text-white/70">
+              {isCheckoutMode
+                ? isDonationProject
+                  ? "Faites un don pour l'ajouter à votre collection."
+                  : "Soutenez ce projet pour l'ajouter à votre collection."
+                : isDonationProject
+                  ? 'Faune marine associée à ce projet.'
+                  : 'Faune locale associée à ce projet.'}
+            </p>
+          </div>
+        </article>
+      ) : null}
     </section>
   )
 }

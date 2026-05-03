@@ -7,8 +7,8 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import type { DonationOption, ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { DonationOptionsSection } from './components/donation-options-section'
 import { ProjectImpactCalculator } from './components/project-impact-calculator'
+import { ProjectSpeciesTeaser } from './components/project-species-teaser'
 import { ProjectProducerProductsSection } from './components/project-producer-products-section'
 import { ProjectQuickViewHero } from './components/project-quick-view-hero'
 import { SimilarProjectsCarousel } from './components/similar-projects-carousel'
@@ -192,42 +192,37 @@ export async function ProjectQuickView({
                 </Badge>
               ) : null}
             </div>
-
-            <div className="pt-1">
-              <div className="mb-2 flex items-baseline justify-between">
-                <div className="flex items-baseline">
-                  <span className="text-4xl font-black tabular-nums tracking-tight text-lime-400">
-                    {formatAmountNumber(currentFunding)}{' '}
-                    <span className="text-2xl text-lime-400/80">EUR</span>
-                  </span>
-                  <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
-                    / {formatAmountNumber(targetBudget)} EUR
-                  </span>
-                </div>
-                <span className="text-sm font-bold tabular-nums tracking-tight text-white">
-                  {Math.round(fundingProgress)}%
-                </span>
-              </div>
-              <Progress
-                value={fundingProgress}
-                className="h-2 rounded-full bg-muted"
-                indicatorClassName="bg-gradient-to-r from-primary to-marketing-positive-600"
-              />
-            </div>
           </aside>
 
-          <div className="mt-5 space-y-6 pb-40 sm:pb-44 lg:px-6">
+          <div className="mt-5 space-y-8 pb-40 sm:pb-44 lg:px-6">
             {projectDescription ? (
               <p className="whitespace-pre-wrap px-4 text-sm leading-relaxed text-pretty text-white/80 sm:px-5 sm:text-base">
                 {projectDescription}
               </p>
             ) : null}
 
+            <div className="px-4 sm:px-5">
+              <ProjectSpeciesTeaser isDonationProject={isDonationProject} />
+            </div>
+
+            <div className="px-4 sm:px-5">
+              <ProjectImpactCalculator
+                baseAmount={100}
+                amount={currentFunding}
+                mode="project"
+                isDonationProject={isDonationProject}
+                donationOptions={project.donation_options || undefined}
+                projectType={project.type || undefined}
+                projectImpact={project.expected_impact}
+                showSpeciesCard={false}
+              />
+            </div>
+
             {project.producer ? (
               producerHref ? (
                 <a
                   href={producerHref}
-                  className="group block w-full cursor-pointer border-y border-white/5 px-4 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
+                  className="group block w-full cursor-pointer border-y border-white/5 px-4 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60"
                 >
                   <div className="-mx-2 flex items-center gap-4 rounded-2xl px-2 py-2 transition-all duration-200 group-hover:bg-white/5 group-active:scale-[0.99] group-active:bg-white/10">
                     {producerImage ? (
@@ -245,7 +240,7 @@ export async function ProjectQuickView({
                       <p className="truncate text-sm font-bold text-foreground underline-offset-4 group-hover:underline">
                         {organizerName}
                       </p>
-                      <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                      <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
                         {organizerDescription}
                       </p>
                     </div>
@@ -268,38 +263,55 @@ export async function ProjectQuickView({
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-foreground">{organizerName}</p>
-                      <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                      <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
                         {organizerDescription}
                       </p>
                     </div>
                     {websiteUrl && websiteLabel ? (
-                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary">
+                      <a
+                        href={websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                      >
                         <Globe className="h-3 w-3" />
                         {websiteLabel}
-                      </span>
+                      </a>
                     ) : null}
                   </div>
                 </section>
               )
             ) : null}
 
+            <div className="px-4 sm:px-5">
+              <div>
+                <div className="mb-2 flex items-baseline justify-between">
+                  <div className="flex items-baseline">
+                    <span className="text-3xl font-black tabular-nums tracking-tight text-emerald-400">
+                      {formatAmountNumber(currentFunding)}{' '}
+                      <span className="text-xl text-emerald-400/70">EUR</span>
+                    </span>
+                    <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
+                      / {formatAmountNumber(targetBudget)} EUR
+                    </span>
+                  </div>
+                  <span className="text-sm font-bold tabular-nums tracking-tight text-white">
+                    {Math.round(fundingProgress)}%
+                  </span>
+                </div>
+                <Progress
+                  value={fundingProgress}
+                  className="h-2 rounded-full bg-muted"
+                  indicatorClassName="bg-gradient-to-r from-emerald-500 to-marketing-positive-600"
+                />
+              </div>
+            </div>
+
             {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
               <div className="px-4 sm:px-5">
                 <ProjectProducerProductsSection products={resolvedProducerProducts} />
               </div>
             ) : null}
-
-            <div className="px-4 sm:px-5">
-              <ProjectImpactCalculator
-                baseAmount={100}
-                amount={currentFunding}
-                mode="project"
-                isDonationProject={isDonationProject}
-                donationOptions={project.donation_options || undefined}
-                projectType={project.type || undefined}
-                projectImpact={project.expected_impact}
-              />
-            </div>
 
             <div className="w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
@@ -321,7 +333,7 @@ export async function ProjectQuickView({
             </Button>
           ) : (
             <Link href={investPath} className="block w-full">
-              <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
+              <Button className="h-14 w-full items-center justify-center rounded-2xl bg-emerald-500 text-lg font-black text-white transition-transform active:scale-95 hover:bg-emerald-400 [&_svg]:hidden">
                 {isDonationProject ? 'Faire un don' : 'Soutenir ce projet'}
               </Button>
             </Link>
