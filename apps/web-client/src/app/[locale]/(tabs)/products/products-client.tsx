@@ -614,60 +614,22 @@ export function ProductsClient({
         </div>
       </div>
 
-      {/* ── DOCK FLOTTANT (Thumb Zone) — identique à /projects ─────────────── */}
-      <nav aria-label="Filtres rapides"
-        className="md:hidden fixed mb-1 left-0 right-0 z-40 flex justify-center pointer-events-none px-4"
+      {/* ── DOCK FLOTTANT (Thumb Zone) — Solde élégant ───────────────────────── */}
+      {/* TODO: Réactiver les filtres quand le catalogue dépassera 15 produits */}
+      <nav aria-label="Solde Points d'Impact"
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 pointer-events-none"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="bg-background/80  backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
-
-          {/* Bouton Points — remplace le bouton Map de /projects */}
-          <Link
-            href="/products/balance"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-white/5 text-lime-400 transition-all active:scale-95 shrink-0 mx-1"
-            aria-label="Solde Points d'Impact"
-          >
-            <Sparkles className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-            <span className="text-[13px] font-black tabular-nums tracking-tight">
-              {isConnected ? userPoints.toLocaleString('fr-FR') : '--'}
-            </span>
-          </Link>
-
-          {/* Séparateur vertical - plus visible pour séparer clairement le portefeuille des filtres */}
-          <div className="w-px mr-3 h-6 bg-white/25 shrink-0" />
-          <ul className="flex items-center gap-1 w-full mr-2 m-0 p-0 list-none">
-
-            {/* Filtre Tous */}
-            <li>
-            <button
-              type="button"
-              onClick={() => updateQuery({ category: '' })}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${!initialQueryState.category
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
-                }`}
-            >
-              <span className="text-[13px] font-bold">Tous</span>
-            </button>
-            </li>
-
-            {/* Filtre par catégorie — les 3 premières catégories */}
-            {categories.slice(0, 3).map((cat) => (
-              <li key={cat.id}>
-              <button
-                type="button"
-                onClick={() => updateQuery({ category: cat.id })}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${initialQueryState.category === cat.id
-                  ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                  : 'hover:bg-white/5 text-white/70'
-                  }`}
-              >
-                <span className="text-[13px] font-medium">{cat.name_default}</span>
-              </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Link
+          href="/products/balance"
+          className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-full bg-zinc-900/90 backdrop-blur-md border border-white/10 text-white transition-all active:scale-95 shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+          aria-label="Solde Points d'Impact"
+        >
+          <Sparkles className="w-4 h-4 text-lime-400 shrink-0" aria-hidden="true" />
+          <span className="text-sm font-black tabular-nums tracking-tight">
+            {isConnected ? userPoints.toLocaleString('fr-FR') : '--'}
+          </span>
+        </Link>
       </nav>
 
       {/* Products Area — Fixed structure */}
@@ -728,13 +690,7 @@ export function ProductsClient({
               </div>
             ) : (
               /* Mobile : grille 2 colonnes / Desktop : suit le toggle vue */
-              <ul
-                className={
-                  view === 'list'
-                    ? 'flex flex-col divide-y divide-white/[0.06] -mx-4 md:-mx-8 lg:-mx-12 m-0 p-0 list-none'
-                    : 'grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 m-0 p-0 list-none'
-                }
-              >
+              <ul className="grid grid-cols-2 gap-4 m-0 p-0 list-none">
                 {products.map((product) => (
                   <li key={product.id}>
                   <ClientCatalogProductCard

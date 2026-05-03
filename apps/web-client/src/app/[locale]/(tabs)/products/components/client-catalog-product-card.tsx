@@ -125,23 +125,23 @@ export function ClientCatalogProductCard({
   // ── Vue Grille (défaut, mobile-first) ───────────────────────────────────────
   return (
     <article itemScope itemType="https://schema.org/Product" className="h-full">
+      <meta itemProp="name" content={product.name_default} />
+      <meta itemProp="image" content={imageUrl || ''} />
+      <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+        <meta itemProp="price" content={`${points}`} />
+        <meta itemProp="priceCurrency" content="PTS" />
+        <meta
+          itemProp="availability"
+          content={inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}
+        />
+      </div>
+
       <Link
         href={`/products/${product.id}`}
-        className="group flex h-full flex-col rounded-2xl overflow-hidden bg-white/[0.04] border border-white/8 hover:border-white/16 transition-all active:scale-[0.98]"
+        className="group flex h-full flex-col gap-2 active:scale-[0.98] transition-transform"
       >
-        <meta itemProp="name" content={product.name_default} />
-        <meta itemProp="image" content={imageUrl || ''} />
-        <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
-          <meta itemProp="price" content={`${points}`} />
-          <meta itemProp="priceCurrency" content="PTS" />
-          <meta
-            itemProp="availability"
-            content={inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}
-          />
-        </div>
-
-        {/* ── Image carrée ── */}
-        <div className="relative aspect-square w-full overflow-hidden bg-white/5">
+        {/* ── Image avec ratio 4/5 ── */}
+        <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-zinc-800">
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -166,30 +166,27 @@ export function ClientCatalogProductCard({
           )}
         </div>
 
-        {/* ── Contenu ── */}
-        <div className="flex flex-col flex-1 p-3 gap-1">
+        {/* ── Contenu cardless ── */}
+        <div className="flex flex-col gap-0.5 mt-2">
+          {/* Producteur */}
+          {product.producer_name && (
+            <span className="text-xs text-zinc-400 uppercase tracking-wider">
+              {product.producer_name}
+            </span>
+          )}
+
           {/* Titre */}
-          <h3 className="text-sm font-bold text-white truncate leading-snug group-hover:text-lime-400 transition-colors">
+          <h3 className="text-sm font-semibold text-white line-clamp-2">
             {product.name_default}
           </h3>
 
-          {/* Producteur */}
-          {product.producer_name && (
-            <p className="text-[11px] text-white/40 font-medium truncate">
-              {product.producer_name}
-            </p>
-          )}
-
-          {/* Spacer */}
-          <div className="flex-1" />
-
           {/* Prix + icônes certification */}
-          <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center gap-1 mt-1">
             {/* Prix en points */}
             {inStock && points > 0 ? (
               <div className="flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-lime-400 shrink-0" aria-hidden="true" />
-                <span className="text-sm font-black text-lime-400 tabular-nums leading-none">
+                <Sparkles className="w-4 h-4 text-lime-400 shrink-0" aria-hidden="true" />
+                <span className="text-sm font-bold text-lime-400 tabular-nums">
                   {points.toLocaleString('fr-FR')}
                 </span>
               </div>
