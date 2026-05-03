@@ -43,7 +43,7 @@ export function BioDexCard({ species, variant = 'unlocked', href, className }: B
           )}
         />
       </div>
-      <p className={cn("mt-3 text-sm truncate", isLocked ? "font-semibold text-white/60" : "font-bold text-white")}>
+      <p className={cn("mt-3 text-sm line-clamp-2 min-h-[2.5rem]", isLocked ? "font-semibold text-white/60" : "font-bold text-white")}>
         {species.name}
       </p>
     </article>
