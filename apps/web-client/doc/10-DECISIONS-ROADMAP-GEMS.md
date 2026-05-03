@@ -48,6 +48,8 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 ### Vision Produit
 
 - Priorite cible: soutenir/donner > comprendre/decouvrir > progresser > recompenses.
+- Boucle coeur validee: Aventure orchestre, soutien/don convertit, preuve simple + pedagogique rassure, Academy/BioDex/projets donnent la raison de revenir.
+- Moment magique recherche: l'utilisateur ressent que son geste est petit, mais relie a quelque chose de vivant et de reel.
 - Le produit est encore en construction; les docs doivent accepter l'incertitude.
 - Les anciennes docs hors `apps/web-client/doc` ne sont pas source de verite.
 
@@ -58,6 +60,13 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 - `Aventure` est le hub quotidien.
 - `/challenges` reste une page secondaire pour les missions et challenges detailles.
 - Le concept trop etroit de `Defis` ne doit plus etre traite comme onglet principal.
+
+### Preuve D'Impact
+
+- V1: preuve simple + preuve pedagogique.
+- Preuve operationnelle seulement si documentee.
+- Preuve mesuree seulement plus tard, si validee.
+- Ne pas afficher de promesse du type "vous avez sauve X especes" sans preuve robuste.
 
 ### Academy
 
@@ -105,6 +114,8 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 
 - `Aventure` doit rester la premiere page apres ouverture/connexion.
 - Le hub Aventure doit inclure Academy, mission/action, projet, BioDex, collectif et recompense discrete.
+- La raison de revenir recommandee est: D comme orchestrateur quotidien, B+C+A comme moteurs reels.
+- Traduction: Aventure orchestre; Academy apprend; BioDex attache; projets prouvent.
 - L'abonnement Ambassadeur doit etre vendu d'abord comme soutien mensuel biodiversite.
 - Les contenus premium doivent enrichir l'experience sans bloquer l'apprentissage de base.
 - La RSE peut devenir le principal moteur economique si elle est bien prouvee.

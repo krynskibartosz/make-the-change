@@ -103,6 +103,14 @@ Il doit presenter:
 
 Il remplace l'idee trop limitee de "Defis" comme onglet principal. Les Defis restent une page secondaire et une source d'actions pour le hub.
 
+Regle de retention validee:
+
+- Aventure orchestre l'impulsion quotidienne;
+- Academy fournit une action courte et comprehensible;
+- BioDex cree l'attachement emotionnel;
+- les projets apportent la preuve et le sens;
+- les missions ne doivent pas devenir une routine vide de relation a l'impact reel.
+
 ## 7. Missions Et Challenges
 
 Types actuels observes:

@@ -16,7 +16,7 @@ export function AdventureTabHeader({
   impactPoints,
 }: AdventureTabHeaderProps) {
   const themeKey = resolveFactionThemeKey(faction);
-  const mascotImage = themeKey === 'pollinisateurs' ? '/abeille-transparente.png' : themeKey === 'forets' ? '/sylva.png' : themeKey === 'mers' ? '/ondine.png' : '/images/logo-icon-bee.png';
+  const mascotImage = themeKey === 'pollinisateurs' ? '/abeille-transparente.png' : themeKey === 'forets' ? '/sylva.png' : themeKey === 'mers' ? '/ondine.png' : '/images/abeille-transparente.png';
 
   return (
     <div className="flex w-full items-center justify-between gap-3 relative z-50">

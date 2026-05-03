@@ -62,6 +62,13 @@ Le premier onglet est maintenant **Aventure** dans le code.
 
 **Actuel implemente V0**: route `/adventure`, premier onglet mobile, hub quotidien.
 
+Role produit:
+
+- Aventure accueille et orchestre;
+- les projets convertissent via soutien ou don reel;
+- BioDex, Academy et Collectif donnent du sens, de l'attachement et de la retention;
+- Avantages reste secondaire et ne doit pas dominer la page.
+
 Blocs presents ou attendus dans le hub:
 
 1. Carte hero courte avec mascotte, faction et progression.
@@ -79,6 +86,12 @@ Personnalisation cible:
 - accents visuels selon faction;
 - recommandations adaptees;
 - pas trois experiences separees a maintenir.
+
+Raison de revenir validee:
+
+> Aventure donne l'impulsion quotidienne. Academy donne une action courte. BioDex donne l'attachement emotionnel. Les projets donnent la preuve et le sens.
+
+Le hub ne doit donc pas devenir une simple liste de defis. Il doit relier apprentissage, projet, espece, impact et progression.
 
 ## 4. Projets
 

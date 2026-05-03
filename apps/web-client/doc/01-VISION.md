@@ -45,6 +45,31 @@ Priorite cible validee:
 
 Les recompenses sont importantes, mais elles ne doivent pas devenir le coeur moral du produit. Elles prolongent l'engagement; elles ne remplacent pas l'impact.
 
+## 3.1 Boucle Coeur Validee
+
+Decision produit centrale:
+
+> Le hub Aventure est le point d'entree. La vraie conversion coeur est soutenir ou donner a un projet reel.
+
+Boucle emotionnelle et business:
+
+1. L'utilisateur entre dans Aventure.
+2. Aventure lui propose une action utile et contextualisee.
+3. Cette action l'amene idealement a soutenir ou donner a un projet reel.
+4. Le soutien/don declenche un moment de preuve: projet concret, espece ou ecosysteme lie, explication courte.
+5. Cette preuve nourrit l'Aventure, le BioDex, l'Academy et la raison de revenir.
+
+Moment magique recherche:
+
+> "Mon geste est petit, mais il est relie a quelque chose de vivant et de reel."
+
+Preuve cible V1:
+
+- toujours une preuve simple: projet, montant, type d'action, statut;
+- toujours une preuve pedagogique: pourquoi ce projet compte pour une espece ou un ecosysteme;
+- preuve operationnelle seulement si elle est documentee;
+- preuve mesuree seulement plus tard, si elle est validee.
+
 ## 4. Positionnement
 
 Make the Change doit se situer entre quatre univers:
