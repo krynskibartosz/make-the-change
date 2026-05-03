@@ -277,7 +277,7 @@ export function ProjectInvestOneFlow({
       setIsSendingMagicLink(false)
       setClaimSaved(true)
       setTimeout(() => {
-        router.push('/profile/biodex')
+        router.replace('/profile/biodex')
       }, 2000)
     }, 1200)
   }
@@ -677,10 +677,10 @@ export function ProjectInvestOneFlow({
                 type="button"
                 onClick={() => {
                   if (discoveredSpeciesId) {
-                    router.push(`/profile/biodex/${discoveredSpeciesId}`)
+                    router.replace(`/profile/biodex/${discoveredSpeciesId}`)
                     return
                   }
-                  router.push('/profile/biodex')
+                  router.replace('/profile/biodex')
                 }}
                 className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
               >
@@ -690,7 +690,7 @@ export function ProjectInvestOneFlow({
                 type="button"
                 variant="ghost"
                 onClick={() => {
-                  router.push('/products')
+                  router.replace('/products')
                 }}
                 className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
               >
