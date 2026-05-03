@@ -70,6 +70,7 @@ export default async function InterceptedProjectInvestPage({
           coverImage: project.hero_image_url,
           currentFunding: project.current_funding,
           targetBudget: project.target_budget,
+          expectedImpact: project.expected_impact,
         }}
         presentation="modal"
         isAuthenticated={Boolean(user)}

@@ -76,6 +76,7 @@ export default async function InterceptedProjectDonatePage({
           currentFunding: project.current_funding,
           targetBudget: project.target_budget,
           donationOptions: project.donation_options,
+          expectedImpact: project.expected_impact,
         }}
         presentation="modal"
         isAuthenticated={Boolean(user)}

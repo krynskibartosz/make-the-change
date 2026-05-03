@@ -82,7 +82,7 @@ export async function createInvestmentAction(
 
   if (createError || !created) {
     console.error('[invest] create investment failed', createError)
-    return { errorCode: 'UNKNOWN', message: 'Impossible de créer l’investissement.' }
+    return { errorCode: 'UNKNOWN', message: 'Impossible de créer le soutien.' }
   }
 
   // 2. Create Stripe PaymentIntent with strict metadata

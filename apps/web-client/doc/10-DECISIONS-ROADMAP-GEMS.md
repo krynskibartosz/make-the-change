@@ -81,7 +81,7 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 - Soutien producteur -> valeur boutique impact principalement.
 - Bonus Graines possible pour soutien producteur, mais modere.
 - Pas d'achat direct de Graines dans la cible actuelle.
-- Nom de la valeur boutique a trancher: `Points d'Impact` existe aujourd'hui; `Credits Impact` est recommande a evaluer.
+- Nom de la valeur boutique tranche: `Credits Impact`.
 - Interdit produit: ne pas creer de "Points biodiversite".
 
 ### BioDex

@@ -15,7 +15,7 @@ const CreateDonationSchema = z.object({
 export type CreateDonationInput = z.infer<typeof CreateDonationSchema>
 
 export type CreateDonationResult =
-  | { donationId: string; clientSecret: string; pointsEarned: number }
+  | { donationId: string; clientSecret: string; seedsEarned: number }
   | { errorCode: 'UNAUTHENTICATED' | 'INVALID' | 'UNKNOWN'; message: string }
 
 const isDonationType = (value: unknown): value is 'reef' | 'coral' =>
@@ -51,14 +51,14 @@ export async function createDonationAction(
 
   const donationOption = getDonationOptionById(parsed.data.donationOptionId)
   if (!donationOption) {
-    return { errorCode: 'INVALID', message: 'Option de donation invalide.' }
+    return { errorCode: 'INVALID', message: 'Option de don invalide.' }
   }
 
   if (donationOption.projectId !== parsed.data.projectId) {
-    return { errorCode: 'INVALID', message: 'Option de donation incompatible.' }
+    return { errorCode: 'INVALID', message: 'Option de don incompatible.' }
   }
 
-  const points = donationOption.rewards.points
+  const seeds = donationOption.rewards.seeds
 
   // 1. Create Donation (Pending)
   const { data: created, error: createError } = await supabase
@@ -67,7 +67,7 @@ export async function createDonationAction(
       user_id: user.id,
       project_id: parsed.data.projectId,
       donation_option_id: parsed.data.donationOptionId,
-      amount_points: points,
+      amount_points: seeds,
       amount_eur_equivalent: donationOption.price,
       status: 'pending',
     })
@@ -76,7 +76,7 @@ export async function createDonationAction(
 
   if (createError || !created) {
     console.error('[donation] create donation failed', createError)
-    return { errorCode: 'UNKNOWN', message: 'Impossible de créer la donation.' }
+    return { errorCode: 'UNKNOWN', message: 'Impossible de créer le don.' }
   }
 
   // 2. Create Stripe PaymentIntent with strict metadata
@@ -112,7 +112,7 @@ export async function createDonationAction(
     return {
       donationId: created.id,
       clientSecret: paymentIntent.client_secret,
-      pointsEarned: points,
+      seedsEarned: seeds,
     }
   } catch (stripeError: unknown) {
     console.error('[donation] stripe error', stripeError)

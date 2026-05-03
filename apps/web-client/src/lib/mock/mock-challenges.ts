@@ -166,7 +166,7 @@ const DAY_THEME_LIBRARY: TopicTheme[] = [
     key: 'circuits-locaux',
     label: 'Circuits locaux',
     articleTitle: 'Acheter local peut aussi renforcer des ecosystemes entiers',
-    fact: 'des filieres courtes peuvent financer des pratiques plus respectueuses des habitats.',
+    fact: 'des filières courtes peuvent soutenir des pratiques plus respectueuses des habitats.',
     impact: 'quand une production locale tient, elle porte aussi des paysages vivants.',
     ritual: 'relie produit concret, producteur et ecosysteme d origine.',
     socialFocus: 'les bravos qui valorisent les producteurs engages.',

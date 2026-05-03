@@ -27,9 +27,8 @@ La progression doit donner envie de revenir sans transformer l'app en jeu de rec
 
 Nom de la valeur boutique:
 
-- nom actuel: `Points d'Impact`;
-- nom recommande a evaluer: `Credits Impact`;
-- tant que la decision n'est pas tranchee, raisonner en "valeur boutique impact".
+- nom final: `Credits Impact`;
+- nom retenu car il distingue mieux la boutique des graines.
 
 ## 3. Graines
 

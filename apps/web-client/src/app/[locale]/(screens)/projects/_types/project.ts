@@ -62,6 +62,7 @@ export type ProjectImpact = {
   // Métriques détaillées par € pour les abeilles
   beesPerEur?: number
   honeyGramsPerEur?: number
+  co2GramsPerEur?: number
   flowersPerEur?: number
   propolisGramsPerEur?: number
   waxGramsPerEur?: number
@@ -70,7 +71,6 @@ export type ProjectImpact = {
   // Métriques détaillées pour les coraux
   fishShelterCapacity?: number
   blueCarbonPotential?: number
-  biodiversityPoints?: number
   // Métriques détaillées pour les oliviers
   olivesSupported?: number
   oilGeneratedLiters?: number
@@ -79,7 +79,8 @@ export type ProjectImpact = {
 
 // Donation Types
 export type DonationReward = {
-  points: number
+  seeds: number
+  points?: number
   certificate: boolean
   photo: boolean
   location: boolean

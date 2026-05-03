@@ -115,12 +115,12 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
   const displayOrderEuros = filteredOrders.reduce((sum, order) => sum + order.amount_eur, 0)
 
   // Determine bento labels based on filter
-  const leftLabel = filter === 'order' ? 'Total Achat' : 'Impact Total'
+  const leftLabel = filter === 'order' ? 'Total Achat' : 'Total Soutiens'
   const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayInvested
-  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'pts') : '€'
-  const rightLabel = filter === 'investment' ? 'Points Gagnés' : 'Points Dépensés'
+  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'crédits') : '€'
+  const rightLabel = filter === 'investment' ? 'Crédits gagnés' : 'Crédits dépensés'
   const rightValue = filter === 'investment' ? userInvestments.reduce((sum, inv) => sum + inv.amount_points, 0) : displayPoints
-  const rightUnit = 'pts'
+  const rightUnit = 'crédits'
 
   return (
     <>
@@ -186,7 +186,7 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
                     )}
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-lime-400/80 mb-0.5">
-                        Impact
+                        Soutien
                       </span>
                       <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
                         {project?.name_default || 'Projet'}
@@ -232,7 +232,7 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
                     )}
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-lime-400/80 mb-0.5">
-                        Donation
+                        Don
                       </span>
                       <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
                         {project?.name_default || 'Projet'}
@@ -291,7 +291,7 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5 ml-2">
                     <span className="text-sm font-black tracking-tight text-white">
-                      {paidInEuros ? `${formatEuros(order.amount_eur)} €` : `${formatEuros(order.amount_points)} pts`}
+                      {paidInEuros ? `${formatEuros(order.amount_eur)} €` : `${formatEuros(order.amount_points)} crédits`}
                     </span>
                     <span className={getStatusBadgeClass(order.status)}>
                       {statusLabel}

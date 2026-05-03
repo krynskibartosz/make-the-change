@@ -42,7 +42,7 @@ export type RankedFactionContribution = FactionContribution & {
 
 const COLLECTIVE_GOAL: CollectiveGoal = {
   title: 'La Grande Récolte de Printemps',
-  summary: "Ce mois-ci, les 3 factions réunissent leurs graines pour financer un nouveau rucher Ilanga Nature à Madagascar.",
+    summary: "Ce mois-ci, les 3 factions réunissent leurs graines pour soutenir un nouveau rucher Ilanga Nature à Madagascar.",
   projectName: 'Rucher de Manakara',
   currentSeeds: 38240,
   targetSeeds: 50000,

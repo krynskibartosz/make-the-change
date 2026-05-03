@@ -170,7 +170,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
     return (
       <Card className="border bg-background/70 shadow-sm backdrop-blur">
         <CardContent className="p-6 text-center text-sm text-muted-foreground">
-          Ce projet ne peut pas être investi pour le moment.
+          Ce projet ne peut pas être soutenu pour le moment.
         </CardContent>
       </Card>
     )
@@ -180,7 +180,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
     <div className="space-y-5 pb-[calc(6rem+env(safe-area-inset-bottom))]">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Investir</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Soutenir</p>
           <h1 className="mt-2 truncate text-2xl font-bold sm:text-3xl">{project.name}</h1>
         </div>
         <Badge variant="secondary" className="rounded-full">
@@ -254,10 +254,10 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               />
               <div className="rounded-2xl border bg-background/60 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Points estimés
+                  Crédits estimés
                 </p>
                 <p className="mt-2 text-2xl font-semibold text-primary tabular-nums">
-                  {calc ? formatPoints(calc.total_points) : '—'} pts
+                  {calc ? formatPoints(calc.total_points) : '—'} crédits
                 </p>
               </div>
             </div>
@@ -287,19 +287,19 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Base</p>
                 <p className="mt-2 text-lg font-semibold tabular-nums">
-                  {calc ? formatPoints(calc.base_points) : '—'} pts
+                  {calc ? formatPoints(calc.base_points) : '—'} crédits
                 </p>
               </div>
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Bonus</p>
                 <p className="mt-2 text-lg font-semibold tabular-nums text-client-emerald-600 dark:text-client-emerald-400">
-                  +{calc ? formatPoints(calc.bonus_points) : '—'} pts
+                  +{calc ? formatPoints(calc.bonus_points) : '—'} crédits
                 </p>
               </div>
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Total</p>
                 <p className="mt-2 text-lg font-semibold tabular-nums text-primary">
-                  {calc ? formatPoints(calc.total_points) : '—'} pts
+                  {calc ? formatPoints(calc.total_points) : '—'} crédits
                 </p>
               </div>
             </div>
@@ -308,7 +308,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Votre solde</span>
                 <span className="font-semibold tabular-nums">
-                  {formatPoints(pointsBalance)} pts
+                  {formatPoints(pointsBalance)} crédits
                 </span>
               </div>
             </div>
@@ -335,7 +335,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Montant</p>
               <p className="mt-2 text-2xl font-semibold tabular-nums">{amountEur}€</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Vous recevrez {calc ? formatPoints(calc.total_points) : '—'} points.
+                Vous recevrez {calc ? formatPoints(calc.total_points) : '—'} Crédits Impact.
               </p>
             </div>
 
@@ -367,8 +367,8 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
             ) : (
               <>
                 <p className="text-sm text-muted-foreground">
-                  Votre investissement sera créé en statut{' '}
-                  <span className="font-medium">pending</span>. Les points seront crédités après
+                  Votre soutien sera créé en statut{' '}
+                  <span className="font-medium">pending</span>. Les Crédits Impact seront crédités après
                   confirmation du paiement par Stripe.
                 </p>
 
@@ -396,10 +396,10 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
             {pointsEarned > 0 ? (
               <div className="rounded-2xl border bg-background/60 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Points prévus
+                  Crédits prévus
                 </p>
                 <p className="mt-2 text-lg font-semibold tabular-nums text-primary">
-                  +{formatPoints(pointsEarned)} pts
+                  +{formatPoints(pointsEarned)} crédits
                 </p>
               </div>
             ) : null}
@@ -416,7 +416,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
             </p>
           </div>
           <Badge variant="secondary" className={cn('rounded-full', clientSecret && 'opacity-60')}>
-            {calc ? `+${formatPoints(calc.total_points)} pts` : '—'}
+            {calc ? `+${formatPoints(calc.total_points)} crédits` : '—'}
           </Badge>
         </div>
       </div>

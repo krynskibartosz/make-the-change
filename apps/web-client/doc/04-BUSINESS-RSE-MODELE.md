@@ -91,8 +91,8 @@ Role:
 
 Nom:
 
-- nom actuel dans le code/docs: `Points d'Impact`;
-- nom recommande a evaluer: `Credits Impact`, plus clair pour une valeur echangeable;
+- nom final: `Credits Impact`;
+- nom retenu car plus clair pour une valeur echangeable;
 - ne pas confondre avec les metriques d'impact.
 
 Regles:

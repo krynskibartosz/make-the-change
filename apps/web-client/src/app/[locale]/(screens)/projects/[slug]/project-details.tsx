@@ -16,6 +16,7 @@ import { ProjectMainContent } from './components/project-main-content'
 import { ProjectSidebar } from './components/project-sidebar'
 import { ProjectQuickView } from './project-quick-view'
 import { getRelatedProjectsByType, type PublicProject } from './project-detail-data'
+import { getProjectPrimaryAction } from './project-action'
 
 type ProjectDetailsProps = {
   project: PublicProject
@@ -89,6 +90,7 @@ export async function ProjectDetails({
     limit: 4,
   })
   const producerProducts = projectContext?.producer_products || project.producer_products || null
+  const primaryAction = getProjectPrimaryAction(project, 'cta_band')
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -247,18 +249,18 @@ export async function ProjectDetails({
               <>
                 <span className="block text-marketing-overlay-light">{localizedTitle}</span>
                 <span className="mt-2 block animate-gradient bg-linear-to-r from-marketing-positive-400 via-marketing-gradient-mid-300 to-marketing-positive-400 bg-clip-text text-transparent bg-300%">
-                  {t('detail.invest_now')}
+                  {primaryAction.label}
                 </span>
               </>
             }
             description={localizedDesc || t('subtitle')}
             primaryAction={
-              <Link href={`/projects/${project.slug}/invest?source=cta_band`}>
+              <Link href={primaryAction.href}>
                 <Button
                   size="lg"
                   className="h-16 rounded-full border-none bg-marketing-positive-500 px-10 text-lg font-bold text-marketing-overlay-light shadow-[0_0_50px_-10px_hsl(var(--marketing-positive) / 0.4)] transition-all hover:scale-105 hover:bg-marketing-positive-400"
                 >
-                  {t('detail.invest_now')}
+                  {primaryAction.label}
                 </Button>
               </Link>
             }

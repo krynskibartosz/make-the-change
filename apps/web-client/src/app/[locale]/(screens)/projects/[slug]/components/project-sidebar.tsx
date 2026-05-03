@@ -3,6 +3,7 @@ import { Calendar, Globe, Leaf, Share2, Target } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { formatCurrency, getLocalizedContent } from '@/lib/utils'
+import { getProjectPrimaryAction } from '../project-action'
 
 type ProjectProducer = {
   name_default: string
@@ -19,6 +20,9 @@ type ProjectSidebarProject = {
   maturity_date: string | null
   current_funding: number | null
   target_budget: number | null
+  type?: string | null
+  is_donation_project?: boolean | null
+  donation_options?: unknown[] | null
   producer: ProjectProducer | null
 }
 
@@ -70,6 +74,7 @@ export async function ProjectSidebar({
       )
     : t('subtitle')
   const websiteLabel = getWebsiteLabel(project.producer?.contact_website || null)
+  const primaryAction = getProjectPrimaryAction(project, 'detail_sidebar')
 
   return (
     <div className="lg:col-span-4 space-y-6">
@@ -118,12 +123,12 @@ export async function ProjectSidebar({
             </div>
 
             <div className="space-y-3">
-              <Link href={`/projects/${project.slug}/invest?source=detail_sidebar`} className="block w-full">
+              <Link href={primaryAction.href} className="block w-full">
                 <Button
                   size="lg"
                   className="w-full h-14 text-lg font-bold rounded-full shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"
                 >
-                  {t('detail.invest_now')}
+                  {primaryAction.label}
                 </Button>
               </Link>
 

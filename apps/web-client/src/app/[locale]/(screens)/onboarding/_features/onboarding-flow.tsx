@@ -221,7 +221,7 @@ export function OnboardingFlow() {
                 {
                   id: "flore",
                   title: "Terres & Forêts",
-                  desc: "Financez la plantation d'arbres et l'agroforesterie.",
+        desc: "Soutenez la plantation d'arbres et l'agroforesterie.",
                   icon: "🌳",
                   color: "hover:border-emerald-500/50 hover:bg-emerald-500/10",
                   activeColor: "border-emerald-500 bg-emerald-500/20",

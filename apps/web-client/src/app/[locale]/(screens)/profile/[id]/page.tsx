@@ -182,7 +182,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     if (label.includes('projet')) {
       icon = Leaf
       color = 'text-primary'
-    } else if (label.includes('Investisseur')) {
+    } else if (label.includes('Soutien') || label.includes('Investisseur')) {
       icon = Wallet
       color = 'text-primary'
     } else if (label.includes('Top')) {
@@ -245,7 +245,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                         </div>
                         <Progress value={levelProgress.progress} className="h-2 bg-primary/10" />
                         <p className="text-xs text-primary/60">
-                          {formatPoints(levelProgress.nextMin - impactScore)} points pour le
+                          {formatPoints(levelProgress.nextMin - impactScore)} crédits pour le
                           prochain niveau
                         </p>
                       </div>
@@ -259,7 +259,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
                         <Wallet className="h-5 w-5" />
                       </div>
-                      <h3 className="font-semibold">Investissements</h3>
+                      <h3 className="font-semibold">Soutiens</h3>
                     </div>
                     <div className="space-y-4">
                       <div>
@@ -267,7 +267,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                         <p className="text-2xl font-bold">{profile.projects_count}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Total investi (est.)</p>
+                        <p className="text-sm text-muted-foreground">Total soutenu (est.)</p>
                         <p className="text-2xl font-bold">
                           {formatCurrency(profile.total_invested_eur || 0)}
                         </p>
@@ -335,7 +335,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                                   {project.name_default}
                                 </Link>
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                  <span>Investissement</span>
+                                  <span>Soutien</span>
                                   <span>•</span>
                                   <span>{formatDate(investment.created_at)}</span>
                                   {project.location_city && (
@@ -351,7 +351,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                               </div>
                             </div>
                             <Badge variant="secondary">
-                              +{formatPoints(investment.amount_points || 0)} pts
+                              +{formatPoints(investment.amount_points || 0)} crédits
                             </Badge>
                           </CardContent>
                         </Card>

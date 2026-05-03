@@ -11,7 +11,7 @@ export function MarketHeader({ balance = 2450 }: MarketHeaderProps) {
       <button
         type="button"
         className="flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 transition-transform active:scale-95"
-        aria-label="Solde Points d'Impact"
+        aria-label="Solde Crédits Impact"
       >
         <Sparkles className="h-4 w-4 text-lime-400" aria-hidden="true" />
         <span className="tabular-nums text-sm font-bold tracking-wide text-lime-400">

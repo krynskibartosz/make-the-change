@@ -66,7 +66,7 @@ export function SanctuaryContent({
           
           <div className="text-center">
             <p className="text-5xl font-black text-white mb-2">450</p>
-            <p className="text-sm text-white/50">Ruches financées</p>
+          <p className="text-sm text-white/50">Ruches soutenues</p>
           </div>
           
           <div className="text-center">

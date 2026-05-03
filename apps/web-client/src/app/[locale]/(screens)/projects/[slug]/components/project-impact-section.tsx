@@ -23,7 +23,7 @@ export function ProjectImpactSection({ impact }: ProjectImpactSectionProps) {
         />
         <ImpactMetric
           label="Biodiversité"
-          value={impact.biodiversityGain ? `${impact.biodiversityGain} pts` : 'N/A'}
+          value={impact.biodiversityGain ? `${impact.biodiversityGain}` : 'N/A'}
           icon="🦋"
           trend="positive"
         />

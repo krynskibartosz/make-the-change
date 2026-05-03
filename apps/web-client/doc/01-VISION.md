@@ -155,7 +155,7 @@ Il remplace l'idee trop etroite de `Defis` comme onglet principal. Son role est 
 | ----------------------------- | -------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
 | Graines                       | Engagement, apprentissage, progression symbolique                    | dons purs, Academy, missions, bonus symboliques | progression, contenus BioDex, Academy, badges |
 | Valeur boutique impact        | Valeur economique liee aux projets producteurs                       | soutiens producteurs uniquement                 | produits partenaires, marketplace             |
-| Nom actuel / cible a trancher | `Points d'Impact` aujourd'hui; `Credits Impact` recommande a evaluer | n/a                                             | n/a                                           |
+| Nom final                     | `Credits Impact`                                              | n/a                                             | n/a                                           |
 
 Pourquoi deux monnaies:
 

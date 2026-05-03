@@ -84,7 +84,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
             <ImpactCard
               icon={<Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} aria-hidden="true" />}
               value={formatCompact(profile?.points || 2450)}
-              label="POINTS D'IMPACT"
+              label="CRÉDITS IMPACT"
               valueClassName={accentTheme.accentText}
             />
           </li>

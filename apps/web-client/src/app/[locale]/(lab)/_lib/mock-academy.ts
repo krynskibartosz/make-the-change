@@ -625,14 +625,14 @@ export const ACTIVE_EVENTS: AcademyEvent[] = [
     title: 'Comment bouture-t-on un corail ?',
     subtitle: "Le projet de L'Occitane en Polynésie française.",
     description:
-      "L'Occitane finance 1 000 boutures de corail dans le lagon de Moorea. Apprends les gestes exacts de leurs biologistes marins.",
+      "L'Occitane soutient 1 000 boutures de corail dans le lagon de Moorea. Apprends les gestes exacts de leurs biologistes marins.",
     imageUrl:
       'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1200&auto=format&fit=crop',
     sponsor: {
       name: "L'Occitane en Provence",
       tier: 'transition',
       disclosure:
-        "Marque en transition : le contenu pédagogique reste éditorialement contrôlé par Biolingo, le sponsor finance le projet et sa visibilité.",
+        "Marque en transition : le contenu pédagogique reste éditorialement contrôlé par Biolingo, le sponsor soutient le projet et sa visibilité.",
       fundedAmount: 3240,
       fundedAt: '2026-04-12',
       verificationStatus: 'self_reported',
@@ -646,12 +646,12 @@ export const ACTIVE_EVENTS: AcademyEvent[] = [
     impactTarget: '1 000 boutures de corail fixées sur socles artificiels',
     proofUrl: 'https://loccitane.com',
     transparencyNote:
-      "Ce prototype n'affirme pas que la marque est verte : il affiche un financement précis pour un projet précis.",
+      "Ce prototype n'affirme pas que la marque est verte : il affiche un soutien précis pour un projet précis.",
     mascot: 'ondine',
     reward: { type: 'seeds', amount: 40, label: '40 Graines' },
     exercises: [
       { id: 'ev1s1', type: 'STORY', screens: [
-        { text: "L'Occitane finance 1 000 boutures de corail dans le lagon de Moorea, Polynésie.", imageUrl: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1000', imagePrompt: 'Récif de Moorea' },
+        { text: "L'Occitane soutient 1 000 boutures de corail dans le lagon de Moorea, Polynésie.", imageUrl: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1000', imagePrompt: 'Récif de Moorea' },
         { text: "Une bouture, c'est comme une bouture de plante — un fragment qui régénère un récif entier.", imageUrl: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=1000', imagePrompt: 'Biologiste et fragment corallien' },
       ]},
       { id: 'ev1sw1', type: 'SWIPE', question: 'Un corail est-il un animal ?',
@@ -704,7 +704,7 @@ export const ARCHIVED_EVENTS: AcademyEvent[] = [
     title: 'Comment plante-t-on une mangrove ?',
     subtitle: 'Patagonia au Sénégal — 2 000 propagules plantées.',
     description:
-      "Patagonia a financé 2 000 propagules de mangrove sur la côte sénégalaise. Mission accomplie — voici le bilan.",
+      "Patagonia a soutenu 2 000 propagules de mangrove sur la côte sénégalaise. Mission accomplie — voici le bilan.",
     imageUrl:
       'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1200&auto=format&fit=crop',
     sponsor: {
@@ -725,7 +725,7 @@ export const ARCHIVED_EVENTS: AcademyEvent[] = [
     impactTarget: '2 000 propagules de mangrove plantées',
     proofUrl: 'https://patagonia.com',
     transparencyNote:
-      'Archive pédagogique : le financement est terminé, la leçon reste jouable et renvoie vers le bilan.',
+      'Archive pédagogique : le soutien est terminé, la leçon reste jouable et renvoie vers le bilan.',
     mascot: 'sylva',
     reward: { type: 'seeds', amount: 35, label: '35 Graines' },
     archiveImageUrl:

@@ -160,7 +160,7 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
       <div className="mx-6 bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
         <SettingRow
           title="Mises à jour Projets"
-          description="Photos et avancées de vos investissements."
+            description="Photos et avancées de vos soutiens."
           checked={settings.project_updates}
           onToggle={() => handleToggle('project_updates')}
         />

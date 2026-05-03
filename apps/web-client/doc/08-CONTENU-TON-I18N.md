@@ -37,7 +37,7 @@ Tonalite cible:
 | Action projet producteur   | soutien                                                       |
 | Projet sans produit direct | don                                                           |
 | Monnaie engagement         | Graines                                                       |
-| Credit boutique            | valeur boutique impact; `Credits Impact` recommande a evaluer |
+| Credit boutique            | Credits Impact                                                |
 | Abonnement                 | Ambassadeur                                                   |
 | Premier onglet             | Aventure                                                      |
 | Boutique                   | Avantages en navigation, Boutique dans le detail              |
@@ -204,7 +204,7 @@ Cible:
 | Mascotte forets         | Sylva                                                                   |
 | Mascotte mers           | Ondine                                                                  |
 | Monnaie engagement      | Graines                                                                 |
-| Monnaie boutique        | nom final a trancher: Points d'Impact actuel, Credits Impact recommande |
+| Monnaie boutique        | Credits Impact |
 | Abonnement              | Ambassadeur                                                             |
 | Collection especes      | BioDex                                                                  |
 

@@ -57,8 +57,8 @@ export function getMilestoneBadges({
 
   if (projects >= 1) badges.push('Premier projet')
   if (projects >= 10) badges.push('10 projets')
-  if (points >= 1000) badges.push('1000 points')
-  if (invested >= 1000) badges.push('Investisseur engage')
+  if (points >= 1000) badges.push('1000 crédits')
+  if (invested >= 1000) badges.push('Soutien engagé')
   if (leaderboardRank && leaderboardRank <= 10) badges.push('Top 10')
 
   return badges

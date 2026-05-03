@@ -14,7 +14,7 @@ export function DonationOptionsSection({
 }: DonationOptionsSectionProps) {
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-bold text-foreground">Options de donation</h3>
+      <h3 className="text-sm font-bold text-foreground">Repères de don</h3>
       <div className="grid gap-3">
         {options.map((option) => (
           <Link
@@ -25,7 +25,7 @@ export function DonationOptionsSection({
             <div>
               <p className="font-bold text-foreground">{option.name}</p>
               <p className="text-sm text-muted-foreground">
-                {option.quantity} {option.unitLabel} • +{option.rewards.points} pts
+                Environ {option.quantity} {option.unitLabel} associés • +{option.rewards.seeds} graines
               </p>
             </div>
             <span className="text-lg font-bold text-lime-400">{option.price}€</span>

@@ -21,7 +21,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
   const router = useRouter()
   const unitPrice = selectedFormat.euros
   const shippingCost = 4.90
-  const pointsPerUnit = Math.round((unitPrice + shippingCost) * 10)
+  const creditsPerUnit = Math.round((unitPrice + shippingCost) * 10)
 
   const [quantity, setQuantity] = useState(1)
   const [paymentState, setPaymentState] = useState<PaymentState>('idle')
@@ -29,7 +29,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
 
   const subtotal = unitPrice * quantity
   const total = subtotal + shippingCost
-  const totalPointsEarned = pointsPerUnit * quantity
+  const totalCreditsEarned = creditsPerUnit * quantity
 
   const formattedTotal = new Intl.NumberFormat('fr-FR', {
     minimumFractionDigits: 2,
@@ -71,10 +71,10 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-lime-400/0 via-lime-400 to-lime-400/0" />
           <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3">Récompense débloquée</p>
           <div className="flex items-center justify-center gap-3">
-            <span className="text-5xl font-black text-lime-400 tabular-nums leading-none">+{totalPointsEarned}</span>
+            <span className="text-5xl font-black text-lime-400 tabular-nums leading-none">+{totalCreditsEarned}</span>
             <Sparkles className="w-8 h-8 text-lime-400" />
           </div>
-          <p className="text-white/40 text-sm mt-3">Ces points ont été ajoutés à votre solde.</p>
+          <p className="text-white/40 text-sm mt-3">Ces Crédits Impact ont été ajoutés à votre solde.</p>
         </div>
 
         {/* CTAs — La Boucle Gamification */}
@@ -83,7 +83,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
             onClick={() => router.push('/projects')}
             className="w-full bg-lime-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(132,204,22,0.25)]"
           >
-            Utiliser mes points
+            Utiliser mes crédits
           </button>
           <button
             onClick={() => router.push('/profile/investments')}
@@ -168,8 +168,8 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
             <span className="text-sm text-white/50 flex items-center gap-2">
               <Gift className="w-4 h-4 text-lime-400" /> Récompense incluse
             </span>
-            <span key={totalPointsEarned} className="flex items-center gap-1.5 text-lime-400 font-bold bg-lime-400/10 px-2.5 py-1 rounded-lg text-sm animate-in fade-in zoom-in duration-300">
-              + {totalPointsEarned} <Sparkles className="w-3.5 h-3.5" />
+            <span key={totalCreditsEarned} className="flex items-center gap-1.5 text-lime-400 font-bold bg-lime-400/10 px-2.5 py-1 rounded-lg text-sm animate-in fade-in zoom-in duration-300">
+              + {totalCreditsEarned} <Sparkles className="w-3.5 h-3.5" />
             </span>
           </div>
         </div>

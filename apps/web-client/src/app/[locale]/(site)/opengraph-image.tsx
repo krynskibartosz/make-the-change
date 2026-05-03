@@ -13,7 +13,7 @@ export default async function Image({ params }: { params: { locale: string } }) 
   const subtitle =
     {
       en: 'Invest in biodiversity',
-      fr: 'Investissez dans la biodiversité',
+  fr: 'Soutenez la biodiversité',
       nl: 'Investeer in biodiversiteit',
     }[locale] || 'Invest in biodiversity'
 

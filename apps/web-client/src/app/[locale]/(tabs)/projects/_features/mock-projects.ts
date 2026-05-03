@@ -454,7 +454,7 @@ const coralSpecies: ProjectSpecies[] = [
 const coralProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_CORAL_3_ID,
-    name: 'Pack 3 coraux',
+    name: '3 coraux',
     price: 55,
     category: 'Corail',
     impactPercentage: 25,
@@ -495,7 +495,7 @@ const coralDonationOptions: DonationOption[] = [
     quantity: 3,
     unitLabel: 'corail',
     rewards: {
-      points: 55,
+      seeds: 55,
       certificate: true,
       photo: true,
       location: true,
@@ -513,12 +513,12 @@ const coralDonationOptions: DonationOption[] = [
   {
     id: MOCK_DONATION_CORAL_6_ID,
     projectId: MOCK_PROJECT_CORAL_ID,
-    name: 'Pack 6 coraux',
+    name: '6 coraux',
     price: 100,
     quantity: 6,
     unitLabel: 'corail',
     rewards: {
-      points: 100,
+      seeds: 100,
       certificate: true,
       photo: true,
       location: true,
@@ -536,12 +536,12 @@ const coralDonationOptions: DonationOption[] = [
   {
     id: MOCK_DONATION_CORAL_12_ID,
     projectId: MOCK_PROJECT_CORAL_ID,
-    name: 'Pack 12 coraux (mini araignée)',
+    name: '12 coraux',
     price: 180,
     quantity: 12,
     unitLabel: 'corail',
     rewards: {
-      points: 180,
+      seeds: 180,
       certificate: true,
       photo: true,
       location: true,
@@ -559,12 +559,12 @@ const coralDonationOptions: DonationOption[] = [
   {
     id: MOCK_DONATION_CORAL_18_ID,
     projectId: MOCK_PROJECT_CORAL_ID,
-    name: 'Pack 18 coraux (araignée complète)',
+    name: '18 coraux',
     price: 250,
     quantity: 18,
     unitLabel: 'corail',
     rewards: {
-      points: 250,
+      seeds: 250,
       certificate: true,
       photo: true,
       location: true,
@@ -920,7 +920,6 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       timeline: null,
       fishShelterCapacity: 3,
       blueCarbonPotential: 0.5,
-      biodiversityPoints: 5,
     },
   },
   {

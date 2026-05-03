@@ -16,9 +16,11 @@ import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-calculator'
+import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
+import type { ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -66,6 +68,7 @@ type ProjectInvestOneFlowProps = {
     coverImage?: string | null
     currentFunding?: number | null
     targetBudget?: number | null
+    expectedImpact?: ProjectImpact | null
   }
   presentation?: 'modal' | 'page'
   isAuthenticated: boolean
@@ -137,7 +140,18 @@ export function ProjectInvestOneFlow({
     })
   }, [amountEur, project.type, rules.expected_bonus])
   const formattedAmount = formatAmountNumber(amountEur)
-  const protectedBees = formatPoints(Math.round((amountEur / 100) * 3800))
+  const supportMetrics = getProjectImpactMetrics({
+    amount: amountEur,
+    projectType: project.type,
+    projectImpact: project.expectedImpact ?? null,
+  })
+  const protectedBees = supportMetrics.kind === 'bees' ? formatPoints(supportMetrics.bees) : formatPoints(0)
+  const supportImpactLabel =
+    supportMetrics.kind === 'bees'
+      ? `${protectedBees} abeilles`
+      : supportMetrics.kind === 'orchard'
+        ? `${formatPoints(supportMetrics.olivesSupported)} oliviers`
+        : 'ce projet'
 
   useEffect(() => {
     if (step !== 'success') return
@@ -385,7 +399,7 @@ export function ProjectInvestOneFlow({
               </div>
 
               <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
-                <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={null} />
+                <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expectedImpact ?? null} />
               </div>
             </div>
           </section>
@@ -411,11 +425,11 @@ export function ProjectInvestOneFlow({
                 {/* CONTENU DE L'ÉTAPE 2 (Rollback UI + Nouveaux Tags) */}
                 <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
                   <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
-                    2. Parrainez & Cumulez
+                    Soutenez & Cumulez
                   </h3>
                   
                   <p className="text-white/60 text-[14px] leading-relaxed mb-4 pr-4">
-                    Chaque euro investi pour la planète se transforme instantanément en points d'impact sur votre compte.
+                    Votre soutien génère des Crédits Impact utilisables dans les avantages partenaires.
                   </p>
 
                   {/* LES TAGS VISUELS (Alignés et aérés) */}
@@ -521,8 +535,8 @@ export function ProjectInvestOneFlow({
                 Impact Validé !
               </motion.h1>
               <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
-                Vos <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> viennent de protéger{' '}
-                <span className="font-bold text-white tabular-nums">{protectedBees}</span> abeilles.
+                Votre soutien de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}
+                <span className="font-bold text-white tabular-nums">{supportImpactLabel}</span>.
               </p>
 
               <motion.div
@@ -577,7 +591,7 @@ export function ProjectInvestOneFlow({
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
                   <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
-                    {`+ ${formatPoints(points.total_points)} Points d'Impact`} <Sparkles className="h-5 w-5" />
+                    {`+ ${formatPoints(points.total_points)} Crédits Impact`} <Sparkles className="h-5 w-5" />
                   </p>
                   <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
                     À dépenser dans les Récompenses
@@ -641,14 +655,14 @@ export function ProjectInvestOneFlow({
           {step === 'impact' ? (
             <>
               <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
-                Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Points d&apos;Impact</span> <Sparkles className="h-4 w-4" />
+              Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Crédits Impact</span> <Sparkles className="h-4 w-4" />
               </p>
               <Button
                 type="button"
                 onClick={goToPayment}
                 className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
               >
-                Valider mon impact
+                Soutenir ce projet
               </Button>
             </>
           ) : null}

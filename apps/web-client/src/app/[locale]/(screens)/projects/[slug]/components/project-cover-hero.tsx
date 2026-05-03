@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { cn, formatCurrency } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
+import { getProjectPrimaryAction } from '../project-action'
 
 type ProjectCoverHeroProject = {
   id: string
@@ -19,6 +20,8 @@ type ProjectCoverHeroProject = {
   launch_date: string | null
   unit_price_eur?: number | null
   unit_label?: string | null
+  is_donation_project?: boolean | null
+  donation_options?: unknown[] | null
 }
 
 type ProjectCoverHeroProps = {
@@ -43,6 +46,7 @@ export async function ProjectCoverHero({
     project.status === 'active' ? t('filter.status.active') : t('filter.status.completed')
   const mediaTransitionName = getEntityViewTransitionName('project', project.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
+  const primaryAction = getProjectPrimaryAction(project, 'detail_hero')
 
   return (
     <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -112,12 +116,12 @@ export async function ProjectCoverHero({
         </div>
 
         <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-450">
-          <Link href={`/projects/${project.slug}/invest?source=detail_hero`}>
+          <Link href={primaryAction.href}>
             <Button
               size="lg"
               className="h-14 px-9 text-base rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] transition-all"
             >
-              {t('detail.invest_now')}
+              {primaryAction.label}
             </Button>
           </Link>
         </div>

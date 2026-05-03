@@ -121,7 +121,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
             <div className={`mt-2 text-2xl font-black tabular-nums ${accentTheme.accentText}`}>
               {profile.points.toLocaleString('fr-FR')}
             </div>
-            <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">POINTS D&apos;IMPACT</div>
+                <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CRÉDITS IMPACT</div>
           </div>
         </section>
 

@@ -15,8 +15,9 @@ import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatPoints } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-calculator'
+import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/components/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
-import type { DonationOption } from '@/app/[locale]/(screens)/projects/_types/project'
+import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -64,6 +65,7 @@ type ProjectDonateOneFlowProps = {
     currentFunding?: number | null
     targetBudget?: number | null
     donationOptions: DonationOption[]
+    expectedImpact?: ProjectImpact | null
   }
   presentation?: 'modal' | 'page'
   isAuthenticated: boolean
@@ -85,9 +87,8 @@ export function ProjectDonateOneFlow({
 
   const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
 
-  // Utiliser les prix des donation options comme montants rapides
-  const quickAmounts = project.donationOptions.map((opt) => opt.price)
-  const defaultAmount = quickAmounts[0] || 55
+  const quickAmounts = [20, 50, 100]
+  const defaultAmount = 20
 
   // État pour le montant (comme dans le flow soutien)
   const [amountEur, setAmountEur] = useState(() => {
@@ -127,14 +128,20 @@ export function ProjectDonateOneFlow({
 
   const stepIndex = FLOW_STEPS.indexOf(step)
 
-  const points = useMemo(() => {
+  const seeds = useMemo(() => {
     const option = project.donationOptions.find((opt) => opt.price === amountEur)
-    return option?.rewards.points || Math.round(amountEur * 1.5)
+    return option?.rewards.seeds || Math.max(1, Math.round(amountEur))
   }, [amountEur, project.donationOptions])
 
   const formattedAmount = formatAmountNumber(amountEur)
-  const selectedOption = project.donationOptions.find((opt) => opt.price === amountEur)
-  const unitsRestored = selectedOption?.impact.unitsRestored || Math.round(amountEur / 18)
+  const donationMetrics = getProjectImpactMetrics({
+    amount: amountEur,
+    projectType: project.type,
+    isDonationProject: true,
+    donationOptions: project.donationOptions,
+    projectImpact: project.expectedImpact ?? null,
+  })
+  const unitsRestored = donationMetrics.kind === 'reef' ? donationMetrics.corals : Math.max(1, Math.round(amountEur / 30))
 
   useEffect(() => {
     if (step !== 'success') return
@@ -383,7 +390,7 @@ export function ProjectDonateOneFlow({
                   isDonationProject={true}
                   donationOptions={project.donationOptions}
                   projectType={project.type}
-                  projectImpact={null}
+                  projectImpact={project.expectedImpact ?? null}
                 />
               </div>
             </div>
@@ -410,17 +417,17 @@ export function ProjectDonateOneFlow({
 
                 <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
                   <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
-                    Parrainez & Cumulez
+                    Donnez & Débloquez
                   </h3>
                   
                   <p className="text-white/60 text-[14px] leading-relaxed mb-4">
-                    Chaque euro investi pour la planète se transforme instantanément en points d'impact sur votre compte.
+                    Votre don soutient directement ce projet et vous fait progresser dans le BioDex.
                   </p>
 
                   <div className="flex flex-wrap gap-2">
                     <div className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-bold">1€ = 1 ✨</span>
+                      <span className="text-[12px] font-bold">+{formatPoints(seeds)} graines</span>
                     </div>
 
                     <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
@@ -518,8 +525,8 @@ export function ProjectDonateOneFlow({
                 Impact Validé !
               </motion.h1>
               <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
-                Vos <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> viennent de restaurer{' '}
-                <span className="font-bold text-white tabular-nums">{unitsRestored}</span> coraux.
+                Votre don de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}
+                <span className="font-bold text-white tabular-nums">{unitsRestored}</span> coraux du projet.
               </p>
 
               <motion.div
@@ -572,10 +579,10 @@ export function ProjectDonateOneFlow({
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
                   <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
-                    {`+ ${formatPoints(points)} Points d'Impact`} <Sparkles className="h-5 w-5" />
+                    {`+ ${formatPoints(seeds)} graines`} <Sparkles className="h-5 w-5" />
                   </p>
                   <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
-                    À dépenser dans les Récompenses
+                    Pour faire progresser votre aventure
                   </p>
                 </div>
               </motion.div>
@@ -634,7 +641,7 @@ export function ProjectDonateOneFlow({
       {step === 'impact' ? (
         <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
             <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
-              Vous allez recevoir <span className="font-black">+{formatPoints(points)} Points d&apos;Impact</span> <Sparkles className="h-4 w-4" />
+              Vous allez recevoir <span className="font-black">+{formatPoints(seeds)} graines</span> <Sparkles className="h-4 w-4" />
             </p>
             <Button
               type="button"
@@ -688,11 +695,11 @@ export function ProjectDonateOneFlow({
             type="button"
             variant="ghost"
             onClick={() => {
-              router.push('/products')
+              router.push(`/projects/${project.slug}`)
             }}
             className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
           >
-            Visiter les Récompenses
+            Retour au projet
           </Button>
         </div>
       ) : null}
