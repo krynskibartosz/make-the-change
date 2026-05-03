@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Leaf, Lock, Sparkles, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/components/species-card-enhanced'
 import type { SpeciesContext } from '@/types/species'
 import { Link } from '@/i18n/navigation'
@@ -49,6 +49,11 @@ export function BiodexClient({ species }: BiodexClientProps) {
   const router = useRouter()
   const [selectedLockedSpecies, setSelectedLockedSpecies] = useState<SpeciesContext | null>(null)
   const [showFactionModal, setShowFactionModal] = useState(false)
+  const [titleVisible, setTitleVisible] = useState(false)
+
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setTitleVisible(e.currentTarget.scrollTop > 80)
+  }, [])
 
   // Mock data - in production this would be fetched server-side
   const session = getClientMockViewerSession()
@@ -104,19 +109,29 @@ export function BiodexClient({ species }: BiodexClientProps) {
       : FALLBACK_SPECIES_PROJECTS
 
   const screenHeader = (
-    <div className="flex w-full items-center">
-      <Link
-        href='/profile'
-        className='inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors'
+    <div className='flex w-full items-center gap-2'>
+      <button
+        type='button'
+        onClick={() => router.back()}
+        className='inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/60 hover:text-white transition-colors -ml-1'
+        aria-label='Retour'
       >
         <ArrowLeft className='h-5 w-5' />
-        <span className='text-sm font-medium'>Retour aux défis</span>
-      </Link>
+      </button>
+      <span
+        className={cn(
+          'flex-1 text-center text-sm font-semibold text-white transition-opacity duration-300',
+          titleVisible ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        Mon BioDex
+      </span>
+      <span aria-hidden className='h-9 w-9 shrink-0' />
     </div>
   )
 
   return (
-    <Screen header={screenHeader}>
+    <Screen header={screenHeader} onScroll={handleScroll}>
 
       {/* Inline Header */}
       <div className='w-full px-6 pt-6 pb-5'>
