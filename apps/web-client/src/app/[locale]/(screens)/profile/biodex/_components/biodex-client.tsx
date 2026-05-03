@@ -3,7 +3,7 @@
 import { ArrowLeft, Leaf, Lock, Sparkles, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/components/species-card-enhanced'
+import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/_components/species-card-enhanced'
 import type { SpeciesContext } from '@/types/species'
 import { Link } from '@/i18n/navigation'
 import { FactionCarousel } from '@/app/[locale]/(auth)/_features/faction-carousel'

@@ -1,5 +1,5 @@
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { BiodexClient } from './biodex-client'
+import { BiodexClient } from './_components/biodex-client'
 
 export default async function BiodexPage() {
   const speciesList = await getSpeciesContextList()
