@@ -50,7 +50,7 @@ import {
   type ProductsQueryState,
 } from '@/app/[locale]/(tabs)/products/_features/query-state'
 import { ClientCatalogProductCard } from './components/client-catalog-product-card'
-
+// comment for new build
 export type Product = {
   id: string
   name_default: string
