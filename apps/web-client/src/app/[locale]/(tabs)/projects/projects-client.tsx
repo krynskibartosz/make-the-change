@@ -257,53 +257,57 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             <Map className="w-4 h-4" />
           </button>
 
-          {/* Séparateur vertical */}
-          <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
-          <div className="flex items-center gap-1 w-full mr-2">
+          {normalizedProjects.length >= 20 && (
+            <>
+              {/* Séparateur vertical */}
+              <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
+              <div className="flex items-center gap-1 w-full mr-2">
 
-            <button
-              onClick={() => setActiveCategory('all')}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'all'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
-                }`}
-            >
-              <span className="text-[13px] font-bold">Tous</span>
-            </button>
+                <button
+                  onClick={() => setActiveCategory('all')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'all'
+                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                    : 'hover:bg-white/5 text-white/70'
+                    }`}
+                >
+                  <span className="text-[13px] font-bold">Tous</span>
+                </button>
 
-            <button
-              onClick={() => setActiveCategory('forets')}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'forets'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
-                }`}
-            >
-              <TreePine className="w-3.5 h-3.5" />
-              <span className="text-[13px] font-medium">Forêts</span>
-            </button>
+                <button
+                  onClick={() => setActiveCategory('forets')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'forets'
+                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                    : 'hover:bg-white/5 text-white/70'
+                    }`}
+                >
+                  <TreePine className="w-3.5 h-3.5" />
+                  <span className="text-[13px] font-medium">Forêts</span>
+                </button>
 
-            <button
-              onClick={() => setActiveCategory('faune')}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'faune'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
-                }`}
-            >
-              <Bug className="w-3.5 h-3.5" />
-              <span className="text-[13px] font-medium">Faune</span>
-            </button>
+                <button
+                  onClick={() => setActiveCategory('faune')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'faune'
+                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                    : 'hover:bg-white/5 text-white/70'
+                    }`}
+                >
+                  <Bug className="w-3.5 h-3.5" />
+                  <span className="text-[13px] font-medium">Faune</span>
+                </button>
 
-            <button
-              onClick={() => setActiveCategory('oceans')}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'oceans'
-                ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                : 'hover:bg-white/5 text-white/70'
-                }`}
-            >
-              <Waves className="w-3.5 h-3.5" />
-              <span className="text-[13px] font-medium">Océans</span>
-            </button>
-          </div>
+                <button
+                  onClick={() => setActiveCategory('oceans')}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'oceans'
+                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
+                    : 'hover:bg-white/5 text-white/70'
+                    }`}
+                >
+                  <Waves className="w-3.5 h-3.5" />
+                  <span className="text-[13px] font-medium">Océans</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
