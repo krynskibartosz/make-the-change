@@ -1,223 +1,264 @@
-# Make the Change — Référence Produit
+# Make the Change - Reference Produit Web Client
 
-> **Audience :** Fondateur, partenaire business, futures IAs reprenant le projet.
-> Ce document est la source de vérité pour toutes les features, leur statut et leur logique métier.
-
----
-
-## 1. Navigation Principale (Mobile-First)
-
-L'application est conçue exclusivement pour **mobile**. La navigation principale est une barre de 5 onglets fixée en bas de l'écran.
-
-```
-[ 🔥 Défis ] [ 🌍 Projets ] [ 👥 Collectif ] [ 🛍 Récompense ] [ 👤 Profil ]
-```
-
-Les routes internes sont des alias de redirection :
-- `/defis` → `/aventure?tab=defis`
-- `/projets` → `/projects`
-- `/marche` → `/products`
-
-La navigation disparaît sur les pages immersives (Academy, flux d'investissement, settings).
+> Source produit pour les Gems.
+> Perimetre: `apps/web-client` uniquement.
+> Objectif: decrire le produit actuel, la cible et les zones ouvertes sans figer artificiellement le futur.
 
 ---
 
-## 2. Les Mascottes & Factions
+## 1. Resume Executif
 
-### Principe
-Au choix d'une mascotte correspond une faction, une couleur d'interface et un univers de projets mis en avant. Le système est déjà implémenté dans le code.
+Make the Change est une application mobile-first en construction autour d'une boucle:
 
-### Mapping complet
-
-| Mascotte | Image | Faction (valeur interne) | Thème UI | Couleur |
-|---|---|---|---|---|
-| **Melli** | `public/abeille-transparente.png` | `'Vie Sauvage'` | `pollinisateurs` | Amber 🟡 |
-| **Sylva** | `public/sylva.png` | `'Terres & Forêts'` | `forets` | Emerald 🟢 |
-| **Ondine** | `public/ondine.png` | `'Gardiens des mers'` | `mers` | Bleu 🔵 |
-
-### Ce qui reste à faire (V1)
-L'onboarding doit afficher les **images des mascottes** (style choix Pokémon) au lieu d'un texte brut pour le choix de faction. L'architecture technique est prête.
-
-> ⚠️ **Bug connu dans le code** : `actions.ts` (auth setup) utilise `'Artisans Locaux'` pour la 3e faction mais la vraie valeur interne est `'Gardiens des mers'`. À corriger.
-
----
-
-## 3. L'Économie : Monnaies & Projets
-
-### Les deux monnaies
-
-| Monnaie | Comment gagner | Comment dépenser |
-|---|---|---|
-| 🌱 **Graines** | Don pur à un projet, défis complétés, leçons Academy réussies | Progression BioDex, recharge vies Academy, récompenses quêtes |
-| ⭐ **Points d'Impact** | Soutien financier à un projet producteur | Échange de produits dans la boutique |
-
-### Les deux types de projets
-
-#### Projet "Don pur"
-- Le projet ne peut pas offrir de contrepartie produit (ex : restauration de récifs coralliens).
-- Contribution → **Graines** accordées à l'utilisateur.
-- Pas de retour économique direct.
-
-#### Projet "Soutien producteur"
-- Le projet génère des produits (ex : miellerie artisanale, savonnerie).
-- L'utilisateur investit de l'argent réel (ex : 50 €).
-- En contrepartie → **Points d'Impact** qui peuvent être échangés en boutique contre des produits issus de ces projets.
-
----
-
-## 4. La Boutique (Récompense)
-
-### Modes de paiement coexistants
-1. **Achat en euros** (Stripe) — achat classique, aucune récompense accordée.
-2. **Échange Points d'Impact** — le solde de Points est utilisé pour obtenir des produits partenaires.
-
-> ⚠️ **À évaluer plus tard** : option "les Points réduisent le prix en euros" (modèle crédits hybride).
-
-### Produits
-Issus des projets producteurs soutenus sur la plateforme et de partenaires sélectionnés (ex : miel Ilanga Nature, savons, huiles).
-
----
-
-## 5. Le BioDex
-
-Collection interactive d'espèces animales et végétales liées aux projets soutenus.
-
-### Mécaniques
-- **Déblocage** : soutenir un projet débloque automatiquement les espèces associées à ce projet.
-- **Rareté** : Commun / Rare / Épique / Légendaire — selon le statut de menace réel de l'espèce.
-- **Évolution** (V2) : dépenser des Graines pour faire progresser le "niveau de protection" d'une espèce.
-
-### Statut V1
-Le BioDex est présent en V1 mais **secondaire** par rapport aux projets et à la boutique. La grille d'espèces débloquées est visible. L'évolution est une feature V2.
-
----
-
-## 6. L'Académie
-
-Module d'apprentissage interactif sur la biodiversité, style Duolingo.
-
-### Structure pédagogique
-```
-Cursus → Chapitre → Unité → 4 Leçons (discovery / practice / mastery / legendary)
-                                    ↓
-                              Exercices (STORY / SWIPE / QUIZ / DRAG_DROP)
+```mermaid
+flowchart TD
+  A["Aventure"] --> B["Academy et missions"]
+  A --> C["Projets"]
+  C --> D["Don pur ou soutien producteur"]
+  D --> E["Graines ou Points d'Impact"]
+  E --> F["BioDex, progression, recompenses"]
+  F --> A
 ```
 
-### Système de vies
-- 5 vies maximum. Une vie perdue à chaque mauvaise réponse.
-- Régénération automatique toutes les 30 minutes.
-- Recharge possible : attendre / dépenser 400 Graines / faire un mini-quiz d'entraînement (+1 vie).
-- Les utilisateurs avec ≥ 10 000 Graines ont des vies illimitées (statut Ambassadeur).
+Priorite cible validee:
 
-### Statut actuel
-🔬 **Lab interne — non accessible en production.**
-- Contenu pédagogique à revoir et valider.
-- Décision d'inclusion en V1 à valider avec le partenaire.
-- `kinnu-v2` est une variante visuelle (interface hexagonale) du même parcours — également en lab.
+1. Soutenir ou donner a des projets reels.
+2. Comprendre la biodiversite et l'impact.
+3. Progresser dans l'aventure.
+4. Acceder a des recompenses.
 
----
+## 2. Navigation Principale
 
-## 7. Les Défis
+### 2.1 Actuel Dans Le Code
 
-Défis quotidiens et missions proposés à l'utilisateur pour maintenir l'engagement.
+Le code `apps/web-client` utilise le route group `(tabs)` avec 5 onglets mobiles:
 
-### Types
-- `eco-fact` : apprendre un fait écologique, valider par un quiz rapide.
-- `daily-harvest` : action quotidienne (contribution, partage).
-- `give-bravo` : encourager un autre membre de la communauté.
+| Onglet actuel | Route actuelle | Role actuel                        |
+| ------------- | -------------- | ---------------------------------- |
+| Defis         | `/challenges`  | missions et challenges             |
+| Projets       | `/projects`    | catalogue des projets              |
+| Collectif     | `/impact`      | feed, factions, objectif collectif |
+| Recompenses   | `/products`    | boutique produits                  |
+| Profil        | `/profile`     | profil, stats, BioDex, settings    |
 
-### Récompenses
-Compléter un défi → **Graines** accordées.
+Composant de navigation: `src/app/[locale]/(tabs)/_components/mobile-bottom-nav.tsx`.
 
----
+### 2.2 Cible Validee
 
-## 8. Le Collectif (Community)
+Le premier onglet doit devenir **Aventure**.
 
-Section communautaire allégée.
+| Onglet cible | Role cible                                                          |
+| ------------ | ------------------------------------------------------------------- |
+| Aventure     | hub quotidien: Academy, mission, projet, BioDex, objectif collectif |
+| Projets      | soutenir ou donner a des projets reels                              |
+| Collectif    | impact commun, factions, feed, campagnes                            |
+| Recompenses  | boutique en Points d'Impact et euros                                |
+| Profil       | identite, progression, BioDex, historique, settings                 |
 
-### Ce qui est conservé en V1
-- **Feed d'activité** : flux des actions récentes de la communauté (dons, défis complétés, badges).
-- **Posts** : contenus publiés et gérés par l'équipe Make the Change (pas de contenu utilisateur libre).
-- **Progression des factions** : objectif collectif mensuel partagé entre les 3 factions.
+`Aventure` ne doit pas etre un simple renommage de `Defis`. Il doit absorber les missions, la progression et l'Academy.
 
-### Ce qui est supprimé du code (hors scope)
-- ❌ Guilds / Tribus (ancienne feature, abandonnée)
-- ❌ Reels (jamais pensé mobile)
-- ❌ Hashtags
-- ❌ Posts utilisateurs libres
+## 3. Hub Aventure
 
-> Le Collectif est optionnel pour le bon fonctionnement de l'app. L'app tourne sans cette section.
+**Cible validee**: premiere page apres ouverture ou connexion.
 
----
+Blocs recommandes:
 
-## 9. Le Profil Utilisateur
+1. Carte hero courte avec mascotte, faction et progression.
+2. Continuer l'Academy.
+3. Action prioritaire du jour.
+4. Projet recommande.
+5. BioDex: espece recente, verrouillee ou liee au projet.
+6. Objectif collectif ou faction.
+7. Recompense disponible ou solde Points d'Impact, de facon discrete.
 
-Accessible depuis le 5e onglet de navigation.
+Personnalisation cible:
 
-### Contenu
-- Photo / nom / mascotte & faction
-- Solde Graines + Points d'Impact
-- Niveau (explorateur → protecteur → ambassadeur)
-- BioDex personnel (espèces débloquées)
-- Accès aux Paramètres
+- meme structure pour tous;
+- accents visuels selon faction;
+- recommandations adaptees;
+- pas trois experiences separees a maintenir.
 
-### Niveaux utilisateur
-Calculés depuis le score d'impact :
+## 4. Projets
 
-| Niveau | Score d'impact |
-|---|---|
-| Explorateur | 0 – 999 |
-| Protecteur | 1 000 – 4 999 |
-| Ambassadeur | 5 000 + |
+Les projets sont le coeur business et impact du produit.
 
-> Score d'impact = `(points × 1) + (projets soutenus × 250) + (euros investis × 0.5)`
+### Types De Projets
 
----
+| Type               | Role                                                     | Gain utilisateur                                      |
+| ------------------ | -------------------------------------------------------- | ----------------------------------------------------- |
+| Don pur            | financer un projet sans produit associe                  | Graines, BioDex si espece liee                        |
+| Soutien producteur | financer un projet qui produit une contrepartie tangible | Points d'Impact, bonus symbolique possible en Graines |
 
-## 10. Les Paramètres
+### Regles Produit
 
-Page full-screen mobile accessible depuis le Profil.
+- Un don pur ne donne pas de Points d'Impact.
+- Un don pur peut debloquer une espece BioDex si le projet est explicitement lie a cette espece.
+- Un soutien producteur donne principalement des Points d'Impact.
+- Un soutien producteur peut donner un petit bonus de Graines, comme reconnaissance symbolique.
+- Les projets doivent etre reliables a un producteur, une localisation, une histoire et idealement une espece principale.
 
-### Pour un utilisateur non connecté
-- Bouton de connexion
-- Blog, À propos, FAQ, Contact, Confidentialité
+## 5. Recompenses Et Boutique
 
-### Pour un utilisateur connecté
-- Accès au profil complet (`/account`)
-- Contributions & achats
-- Notifications
-- Abonnement & Avantages
-- Blog, À propos, FAQ, Contact, Confidentialité
+**Cible validee**: les produits peuvent etre obtenus via Points d'Impact ou achetes en euros.
 
----
+Priorite UX:
 
-## 11. L'Onboarding
+1. utiliser les Points d'Impact;
+2. permettre l'achat en euros;
+3. ne pas presenter l'achat produit comme l'action la plus impactante.
 
-Tunnel d'inscription en plusieurs étapes (7 étapes dans le code).
+Modele cible:
 
-### Rôle
-Introduire l'utilisateur à l'app, lui faire choisir sa mascotte/faction, configurer son profil.
+- marketplace partenaire selectionnee;
+- Make the Change choisit les produits phares;
+- experience utilisateur type boutique Make the Change;
+- operationnellement, logique partenaire/commission plutot que stock propre au depart.
 
-### Statut
-✅ V1. Le flux existe. **À améliorer** : l'onboarding doit être contextuel selon l'action de l'utilisateur (premier don, première leçon...). Les contextes exacts sont à définir avec le partenaire.
+## 6. Academy
 
----
+**Cible validee**: l'Academy est une brique produit importante.
 
-## 12. Features à Supprimer du Code
+**Hypothese forte**: ne pas rendre l'Academy obligatoire avant un don, un soutien ou un achat.
 
-Liste des modules qui existent dans le code mais sont **hors scope produit** :
+Role:
 
-| Route / Module | Raison |
-|---|---|
-| `/dashboard` (sidebar desktop) | Redesigné mobile-first. Remplacé par l'onglet Profil + settings full-screen. |
-| `/dashboard/messages` | Messagerie producteurs non pensée pour mobile. |
-| `/leaderboard` | Ancienne feature abandonnée. |
-| `/community/guilds` | Système de tribus abandonné. |
-| `/community/reels` | Jamais pensé mobile. |
-| Hashtags community | Hors scope V1. |
-| `(adventure)/community/posts/new` | Posts = gérés par l'équipe, pas par l'utilisateur. |
+- apprendre;
+- gagner des Graines;
+- renforcer la comprehension des projets;
+- nourrir le hub Aventure;
+- creer de la retention.
 
-### Features en "Lab" (à garder dans le code, non publiques)
-- `/kinnu-v2` — variante visuelle de l'Académie
-- `/ecosysteme` — exploration carte de l'écosystème
-- `/academy` — jusqu'à validation partenaire
+Structure observee dans le code:
+
+- route group `(lab)`;
+- routes `academy`, `academy/[chapter]`, `academy/[chapter]/[unit]`;
+- variantes `kinnu` et `kinnu-v2`;
+- contenus pedagogiques riches et encore a consolider.
+
+Statut produit recommande:
+
+- Academy de base gratuite;
+- contenus avances possibles via abonnement Ambassadeur;
+- pas de paywall sur l'apprentissage fondamental.
+
+## 7. BioDex
+
+Le BioDex represente la relation de l'utilisateur au vivant.
+
+### Structure Cible
+
+| Couche    | Acces       | Contenu                                                  |
+| --------- | ----------- | -------------------------------------------------------- |
+| Public    | tous        | fiche courte, role ecologique, statut, projet lie        |
+| Debloquee | impact reel | image complete, fiche enrichie, lien personnel au projet |
+| Amelioree | Graines     | contenus exclusifs, niveaux, anecdotes, progression      |
+
+Regle centrale:
+
+- une espece se debloque uniquement si un projet donne/soutenu est explicitement lie a elle.
+
+Evolution visuelle:
+
+- bonne idee pour la magie du produit;
+- a traiter en V2 si les assets IA sont valides humainement et coherents.
+
+## 8. Collectif Et Factions
+
+Actuel:
+
+- page `/impact`;
+- feed d'activite;
+- objectif collectif;
+- contributions par faction;
+- bravos et signaux sociaux.
+
+Cible:
+
+- rendre l'impact visible;
+- renforcer l'engagement;
+- soutenir les campagnes;
+- ne pas transformer la plateforme en competition pure.
+
+La faction donne une couleur, une mascotte, un contexte et un sentiment d'appartenance. Elle ne doit pas enfermer l'utilisateur dans une experience differente ou limiter ses projets.
+
+## 9. Profil
+
+Le profil doit regrouper:
+
+- identite utilisateur;
+- faction et mascotte;
+- soldes Graines / Points d'Impact;
+- progression;
+- BioDex personnel;
+- historique contributions/achats;
+- parametres;
+- abonnement Ambassadeur le moment venu.
+
+Actuel:
+
+- `/profile`;
+- sous-ecrans `account`, `biodex`, `investments`, `seeds`, `settings`, `subscription`.
+
+## 10. Onboarding
+
+Actuel:
+
+- onboarding en plusieurs ecrans;
+- selection de faction/mascotte via carousel;
+- mode mock avec setup utilisateur;
+- bug connu cote valeurs de faction dans certaines actions: ancienne valeur `Artisans Locaux` a ne plus utiliser en cible.
+
+Cible:
+
+- faire choisir un compagnon/faction;
+- expliquer la boucle: soutenir, apprendre, progresser;
+- envoyer vers Aventure;
+- ne pas surcharger avec trop de decisions initiales.
+
+## 11. Abonnement Ambassadeur
+
+**Cible validee**: un seul abonnement cible, nom recommande `Ambassadeur`.
+
+Positionnement:
+
+- soutien mensuel biodiversite;
+- experience enrichie;
+- pas un simple pass premium.
+
+Regles:
+
+- inclure un budget de soutien mensuel;
+- ne pas donner de Points d'Impact mensuels gratuits;
+- les Points d'Impact apparaissent seulement si le budget soutient un projet producteur;
+- inclure des avantages: contenus avances, rapports, badge, priorite, avantages boutique.
+
+## 12. RSE / Entreprise
+
+La RSE est un pilier cible.
+
+Offres produit possibles:
+
+- financement de projets;
+- abonnement ou budget de soutien pour employes;
+- sponsoring discret;
+- rapports d'impact;
+- campagnes internes;
+- challenges d'equipe.
+
+Experience recommandee:
+
+- meme app coeur que B2C;
+- couche entreprise legere pour budget, badge, reporting, campagnes.
+
+## 13. Statuts Produit
+
+| Domaine                  | Statut                                   |
+| ------------------------ | ---------------------------------------- |
+| Projets                  | coeur produit                            |
+| Boutique                 | importante, mais recompense secondaire   |
+| Academy                  | validee comme brique forte               |
+| Aventure                 | cible validee pour remplacer Defis       |
+| BioDex                   | cible: public + collection + progression |
+| RSE                      | pilier business cible                    |
+| Evolution IA des especes | futur / V2                               |
+| Achat direct de Graines  | deconseille                              |

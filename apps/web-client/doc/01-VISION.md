@@ -1,93 +1,203 @@
-# Make the Change — Vision & Concept
+# Make the Change - Vision et Cap Produit
 
-> **Audience :** Partenaire business, équipe, investisseurs.
-> Ce document décrit le "pourquoi" du projet en termes accessibles, sans jargon technique.
-
----
-
-## 1. Le Pitch
-
-Make the Change transforme l'action écologique passive (le don, l'achat) en une **expérience active, ludique et communautaire**.
-
-L'objectif : rendre la protection de la biodiversité aussi engageante qu'un jeu vidéo, tout en générant un **impact réel et traçable** sur le terrain.
-
-> *"Sauvez le monde, une graine à la fois."*
+> Source de contexte pour les Gems Gemini.
+> Perimetre: `apps/web-client` uniquement.
+> Ce document decrit la vision cible en assumant que le produit est encore en construction.
 
 ---
 
-## 2. Les Trois Mascottes & Factions
+## 1. Role Du Document
 
-Lors de l'inscription, l'utilisateur choisit une mascotte — comme un starter Pokémon. Ce choix le place dans une **faction**, influence l'esthétique de son interface et oriente les projets qui lui sont mis en avant.
+Ce fichier donne le nord commun a tous les experts IA: produit, design, business, RSE, biodiversite, gamification et technique.
 
-| Mascotte | Faction | Élément | Focus |
-|---|---|---|---|
-| **Melli** 🐝 | Vie Sauvage | Air | Pollinisateurs, abeilles sauvages, couloirs de migration |
-| **Sylva** 🌿 | Terres & Forêts | Terre | Reforestation, espèces forestières, lutte contre l'érosion |
-| **Ondine** 🌊 | Gardiens des mers | Eau | Récifs coralliens, tortues, mammifères marins |
+Il ne doit pas etre lu comme un cahier des charges fige. Make the Change est un produit en construction; certaines decisions peuvent changer. Les documents utilisent donc des statuts pour eviter les confusions.
 
-Chaque faction a sa propre couleur d'interface et participe à des **objectifs collectifs** communs (ex : financer un rucher communautaire).
+## 2. Convention De Statut
 
----
+- **Actuel**: observe dans le code actuel de `apps/web-client`.
+- **Cible validee**: decision confirmee pendant la phase de cadrage.
+- **Hypothese forte**: recommandation actuelle a suivre sauf contradiction future.
+- **A decider**: sujet encore ouvert.
+- **Futur**: piste pertinente mais pas prioritaire pour la premiere version produit.
 
-## 3. Profils Utilisateurs Cibles
+Ces statuts ne creent pas des documents supplementaires. Ils servent a aider les Gems a raisonner sans transformer une idee provisoire en verite definitive.
 
-- **L'Éco-Engagé** — Veut voir l'impact concret de ses contributions (photos terrain, données réelles). Prioritise les projets de conservation.
-- **Le Gamer / Collectionneur** — Motivé par le BioDex (collection d'espèces), les niveaux, les badges et la complétion.
-- **L'Apprenant** — Passe du temps dans l'Académie pour comprendre les enjeux écologiques via des exercices interactifs (type Duolingo).
+## 3. Pitch
 
----
+Make the Change aide les personnes et les organisations a soutenir des projets biodiversite concrets, a comprendre leur impact, et a progresser dans une experience mobile vivante.
 
-## 4. Les 5 Sections Principales de l'App
+La promesse centrale n'est pas seulement de donner, acheter ou jouer. La boucle cible est:
 
-L'application est centrée sur un usage **mobile** avec 5 onglets de navigation :
+```mermaid
+flowchart LR
+  A["Soutenir ou donner"] --> B["Comprendre l'impact"]
+  B --> C["Progresser dans l'aventure"]
+  C --> D["Debloquer BioDex, contenus et recompenses"]
+  D --> A
+```
 
-| Onglet | Description |
-|---|---|
-| 🔥 **Défis** | Défis quotidiens et missions pour gagner des Graines |
-| 🌍 **Projets** | Catalogue des projets de conservation à soutenir |
-| 👥 **Collectif** | Feed d'activité de la communauté et progression des factions |
-| 🛍 **Récompense** | Boutique pour dépenser ses Points d'Impact |
-| 👤 **Profil** | Profil personnel, mascotte, soldes, paramètres |
+Priorite cible validee:
 
----
+1. Soutenir ou donner a des projets reels.
+2. Decouvrir et comprendre la biodiversite.
+3. Progresser dans une aventure gamifiee.
+4. Recevoir des recompenses tangibles ou symboliques.
 
-## 5. L'Économie : Comment Ça Fonctionne
+Les recompenses sont importantes, mais elles ne doivent pas devenir le coeur moral du produit. Elles prolongent l'engagement; elles ne remplacent pas l'impact.
 
-L'app repose sur **deux monnaies virtuelles** pour distinguer l'engagement écologique de l'achat :
+## 4. Positionnement
 
-### 🌱 Les Graines
-Gagnées par : faire un don à un projet pur, compléter des défis, progresser dans l'Académie.
-Utilisées pour : progression dans le BioDex, vies dans l'Académie, récompenses.
+Make the Change doit se situer entre quatre univers:
 
-### ⭐ Les Points d'Impact
-Gagnés par : soutenir financièrement un **projet producteur** (ex : investir dans une miellerie).
-Utilisés pour : échanger des produits dans la boutique issus de ces projets.
+- **Plateforme d'impact**: projets reels, partenaires, dons, soutiens producteurs, RSE.
+- **Application educative**: Academy, contenus biodiversite, vulgarisation scientifique.
+- **Aventure mobile**: mascottes, factions, BioDex, progression, Graines.
+- **Marketplace selectionnee**: produits partenaires, Points d'Impact, achats en euros.
 
----
+Le positionnement recommande est:
 
-## 6. Deux Types de Projets
+> Une app d'impact premium avec une couche d'aventure vivante.
 
-| Type | Exemple | Contrepartie |
-|---|---|---|
-| **Don pur** | Restauration de récifs coralliens | Graines |
-| **Soutien producteur** | Miellerie artisanale à Madagascar | Points d'Impact échangeables en boutique |
+Elle ne doit pas devenir:
 
----
+- un jeu mobile qui utilise la biodiversite comme decor;
+- une boutique qui utilise l'ecologie comme argument;
+- une ONG froide sans plaisir d'usage;
+- un produit enfantin qui affaiblit la confiance au moment du paiement.
 
-## 7. Scope V1 vs Futur
+## 5. Publics Cibles
 
-### V1 (en cours de développement)
-- ✅ Onboarding avec choix de mascotte/faction
-- ✅ Catalogue de projets (don + soutien)
-- ✅ Boutique (achat euros + échange Points d'Impact)
-- ✅ BioDex basique (collection d'espèces débloquées par les projets soutenus)
-- ✅ Feed collectif (activité de la communauté)
-- ✅ Profil utilisateur avec stats et paramètres
-- 🔬 Académie interactive (en développement, validation en cours)
+### 5.1 Utilisateur B2C Engage
 
-### V2+ (futur)
-- Évolution des espèces BioDex (dépenser des Graines pour progresser le niveau d'une espèce)
-- Leaderboard public entre utilisateurs
-- Onboardings contextuels enrichis (à définir selon les sections clés)
-- Posts utilisateurs dans le Collectif (actuellement gérés par l'équipe uniquement)
-- Académie en production publique (si non validée en V1)
+Veut soutenir des projets concrets, voir des preuves, comprendre ou va son argent, et se sentir utile.
+
+### 5.2 Utilisateur Curieux / Apprenant
+
+Veut comprendre la biodiversite sans lire des articles scientifiques longs. L'Academy et le BioDex doivent l'aider a apprendre progressivement.
+
+### 5.3 Utilisateur Collectionneur / Gamifie
+
+Est motive par la progression, les especes debloquees, les niveaux, les badges, les objectifs collectifs et les mascottes.
+
+### 5.4 Acheteur Responsable
+
+Cherche des produits utiles, beaux ou alimentaires, lies a des producteurs et projets. Il peut acheter en euros ou utiliser ses Points d'Impact.
+
+### 5.5 Entreprise / RSE
+
+Cherche a financer des projets biodiversite, engager ses collaborateurs, obtenir des preuves d'impact, et produire des rapports ou contenus RSE credibles.
+
+## 6. Mascottes Et Factions
+
+**Cible validee**: les mascottes sont un fil rouge emotionnel fort, mais leur presence doit etre calibree selon le contexte.
+
+| Mascotte | Faction           | Theme                        | Role narratif                              |
+| -------- | ----------------- | ---------------------------- | ------------------------------------------ |
+| Melli    | Vie Sauvage       | Pollinisateurs / faune       | Energie, pollinisation, proximite locale   |
+| Sylva    | Terres & Forets   | Sols / forets / regeneration | Croissance, protection terrestre, patience |
+| Ondine   | Gardiens des mers | Oceans / recifs / eau        | Fluidite, protection marine, sensibilite   |
+
+### Presence Recommandee
+
+- Forte: onboarding, hub Aventure, Academy, BioDex, moments de succes.
+- Moyenne: profil, objectifs de faction, notifications, empty states.
+- Discrete: paiement, don, soutien producteur, legal, pages de confiance.
+
+La mascotte doit accompagner, pas infantiliser.
+
+## 7. Premier Onglet Cible: Aventure
+
+**Cible validee**: le premier onglet cible doit devenir `Aventure`.
+
+Il remplace progressivement l'idee trop etroite de `Defis`. Son role est celui d'un hub quotidien:
+
+- continuer l'Academy;
+- voir l'action prioritaire du jour;
+- decouvrir un projet recommande;
+- suivre une espece BioDex;
+- voir l'objectif collectif ou de faction;
+- acceder aux recompenses sans transformer la page en boutique.
+
+`Aventure` doit etre la page de retour naturelle apres connexion ou ouverture de l'app.
+
+## 8. Monnaies Et Valeur Symbolique
+
+**Cible validee**: conserver deux monnaies separees.
+
+| Monnaie         | Role                                              | Sources principales                             | Usage                                         |
+| --------------- | ------------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
+| Graines         | Engagement, apprentissage, progression symbolique | dons purs, Academy, missions, bonus symboliques | progression, contenus BioDex, Academy, badges |
+| Points d'Impact | Valeur economique liee aux projets producteurs    | soutiens producteurs uniquement                 | produits partenaires, marketplace             |
+
+Pourquoi deux monnaies:
+
+- les Graines representent l'engagement et la progression;
+- les Points d'Impact representent une valeur boutique;
+- fusionner les deux brouillerait la difference entre apprendre, donner, soutenir un producteur et acheter.
+
+**Hypothese forte**: ne pas vendre directement des Graines. Cela transformerait la progression en achat de niveau et affaiblirait la confiance.
+
+## 9. Academy
+
+**Cible validee**: l'Academy est une brique importante du produit.
+
+**Hypothese forte**: elle ne doit pas etre obligatoire pour payer, donner, soutenir ou acheter.
+
+Role cible:
+
+- eduquer;
+- renforcer la comprehension de l'impact;
+- nourrir la retention;
+- donner des Graines;
+- servir de moteur narratif dans le hub Aventure.
+
+Academy de base recommandee:
+
+- gratuite;
+- visible;
+- integree a l'Aventure;
+- eventuellement completee plus tard par des contenus avances inclus dans l'abonnement Ambassadeur.
+
+## 10. BioDex
+
+**Cible validee**: le BioDex doit combiner encyclopedie accessible et collection personnelle.
+
+Structure cible:
+
+- fiche publique courte;
+- contenu enrichi debloque par impact reel;
+- contenus supplementaires ou niveaux de connaissance/protection ameliores avec des Graines;
+- evolution visuelle IA possible en V2 apres validation artistique.
+
+Regle centrale:
+
+> Une espece ne se debloque que si le projet soutenu ou donne est explicitement lie a cette espece.
+
+## 11. Business Et RSE
+
+Make the Change doit etre pense a la fois en B2C et en B2B/RSE.
+
+Sources de revenus cible:
+
+- commissions sur dons;
+- commissions ou marges sur produits partenaires;
+- abonnement unique Ambassadeur;
+- financement de projets par entreprises;
+- abonnement ou budget de soutien pour employes;
+- sponsoring discret;
+- rapports d'impact RSE;
+- contenus premium avances, sans bloquer l'Academy de base.
+
+La RSE peut devenir un pilier majeur, pas seulement un canal secondaire.
+
+## 12. Principe Directeur Pour Les Gems
+
+Quand un Gem hesite, il doit prioriser:
+
+1. la credibilite de l'impact reel;
+2. la clarte pour l'utilisateur;
+3. la coherence entre soutien, education, progression et recompense;
+4. la confiance au moment de l'argent;
+5. la magie emotionnelle des mascottes et de l'aventure.
+
+Les anciennes documentations hors `apps/web-client/doc` ne sont pas des sources de verite pour cette base Gemini.
