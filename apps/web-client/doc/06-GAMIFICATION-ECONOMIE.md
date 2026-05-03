@@ -90,7 +90,7 @@ Hypothese forte:
 
 ## 6. Aventure
 
-L'onglet Aventure devient l'orchestrateur gamifie.
+L'onglet Aventure est maintenant l'orchestrateur gamifie principal en V0.
 
 Il doit presenter:
 
@@ -101,7 +101,7 @@ Il doit presenter:
 - objectif collectif;
 - progression personnelle.
 
-Il remplace l'idee trop limitee de "Defis".
+Il remplace l'idee trop limitee de "Defis" comme onglet principal. Les Defis restent une page secondaire et une source d'actions pour le hub.
 
 ## 7. Missions Et Challenges
 

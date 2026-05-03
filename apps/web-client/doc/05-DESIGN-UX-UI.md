@@ -33,23 +33,23 @@ Principes:
 - lisibilite forte;
 - animations utiles, pas decoratives.
 
-## 3. Onglets Cibles
+## 3. Onglets Actuels Et Cibles
 
-| Onglet      | Intention UX                                        |
-| ----------- | --------------------------------------------------- |
-| Aventure    | hub quotidien, progression, Academy, action du jour |
-| Projets     | choisir un projet a soutenir ou financer            |
-| Collectif   | voir l'impact commun et les factions                |
-| Recompenses | utiliser Points d'Impact ou acheter                 |
-| Profil      | soi, progression, BioDex, historiques               |
+| Onglet    | Route actuelle | Intention UX                                        |
+| --------- | -------------- | --------------------------------------------------- |
+| Aventure  | `/adventure`   | hub quotidien, progression, Academy, action du jour |
+| Projets   | `/projects`    | choisir un projet a soutenir ou financer            |
+| Collectif | `/impact`      | voir l'impact commun et les factions                |
+| Avantages | `/products`    | utiliser Points d'Impact ou acheter                 |
+| Profil    | `/profile`     | soi, progression, BioDex, historiques               |
 
-L'onglet `Aventure` est la priorite design a cadrer.
+L'ancienne page `Defis` reste accessible via `/challenges`, mais elle n'est plus l'onglet principal.
 
 ## 4. Hub Aventure
 
 ### 4.1 Role
 
-Le hub Aventure est la page d'accueil connectee cible.
+Le hub Aventure est la page d'accueil connectee actuelle en V0.
 
 Il doit repondre a:
 
@@ -60,13 +60,15 @@ Il doit repondre a:
 
 ### 4.2 Structure Recommandee
 
-1. Hero compact avec mascotte/faction.
-2. Carte "Continuer l'Academy".
-3. Action prioritaire du jour.
-4. Projet recommande.
-5. BioDex: espece proche ou debloquee.
-6. Objectif collectif.
-7. Recompense ou solde discret.
+1. Header sombre avec soldes Graines / Points d'Impact.
+2. Hero compact avec mascotte/faction.
+3. Objectif en cours / cycle.
+4. Action prioritaire du jour.
+5. Academy / Defis comme acces secondaire.
+6. Projet recommande.
+7. BioDex: espece proche, liee ou a debloquer.
+8. Objectif collectif.
+9. Avantage ou solde discret.
 
 ### 4.3 Personnalisation
 
@@ -206,5 +208,5 @@ Principes:
 | trop de mascottes partout       | infantilisation             | hierarchiser leur presence         |
 | trop sobre                      | perte de magie              | moments de progression vivants     |
 | trop jeu mobile                 | perte de confiance paiement | sobriete dans l'argent             |
-| onglet Defis trop etroit        | experience fragmentee       | hub Aventure                       |
+| hub Aventure trop charge        | perte de priorite           | une action principale visible      |
 | trois factions trop differentes | maintenance lourde          | meme structure, accents differents |

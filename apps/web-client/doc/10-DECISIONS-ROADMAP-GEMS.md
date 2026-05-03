@@ -53,9 +53,11 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 
 ### Navigation
 
-- Le premier onglet cible est `Aventure`.
-- `Aventure` devient le hub quotidien.
-- Il remplace progressivement le concept trop etroit de `Defis`.
+- Le premier onglet est maintenant `Aventure`.
+- La route actuelle de l'onglet est `/adventure`.
+- `Aventure` est le hub quotidien.
+- `/challenges` reste une page secondaire pour les missions et challenges detailles.
+- Le concept trop etroit de `Defis` ne doit plus etre traite comme onglet principal.
 
 ### Academy
 
@@ -101,7 +103,7 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 
 ## 5. Hypotheses Fortes
 
-- `Aventure` doit etre la premiere page apres ouverture/connexion.
+- `Aventure` doit rester la premiere page apres ouverture/connexion.
 - Le hub Aventure doit inclure Academy, mission/action, projet, BioDex, collectif et recompense discrete.
 - L'abonnement Ambassadeur doit etre vendu d'abord comme soutien mensuel biodiversite.
 - Les contenus premium doivent enrichir l'experience sans bloquer l'apprentissage de base.
@@ -112,7 +114,7 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 
 ### Produit
 
-- Route finale de l'onglet Aventure: `/challenges`, `/adventure`, `/aventure` ou autre.
+- Faut-il garder `/adventure` en anglais ou prevoir plus tard une route localisee `/aventure` ?
 - Place exacte du leaderboard.
 - Poids du Collectif dans la V1.
 
@@ -140,7 +142,7 @@ Il ne remplace pas les instructions propres a chaque Gem. Les sections "a faire 
 ### Technique
 
 - Schema Supabase cible.
-- Migration route `challenges` vers `Aventure`.
+- Stabilisation de `/adventure` et conservation de `/challenges` comme secondaire.
 - Decoupage des gros fichiers mock.
 - Integration Stripe finale.
 
@@ -172,7 +174,7 @@ Documents prioritaires:
 
 Role:
 
-- designer le hub Aventure;
+- iterer sur le hub Aventure V0;
 - ameliorer coherence visuelle;
 - calibrer mascottes et sobriete.
 
@@ -236,9 +238,9 @@ Role:
 
 ## 8. Ordre De Travail Recommande
 
-1. Refondre le hub `Aventure`.
+1. Iterer sur le hub `Aventure` V0 maintenant implemente.
 2. Clarifier les composants et donnees du hub.
-3. Integrer Academy comme brique visible.
+3. Integrer Academy comme brique plus visible.
 4. Clarifier la relation projet -> espece -> BioDex.
 5. Renforcer design system local `web-client`.
 6. Formaliser abonnement Ambassadeur.

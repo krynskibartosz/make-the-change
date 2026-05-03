@@ -169,6 +169,7 @@ Fichiers:
 
 - `src/lib/mock/mock-challenges.ts`
 - `src/lib/mock/mock-challenge-progress.ts`
+- `src/lib/mock/mock-challenge-progress-server.ts`
 - `src/app/[locale]/(tabs)/challenges/_actions/quest.actions.ts`
 
 Role:
@@ -176,6 +177,20 @@ Role:
 - missions;
 - progression;
 - reclamation de recompenses.
+
+### Adventure
+
+Fichiers:
+
+- `src/app/[locale]/(tabs)/adventure/page.tsx`
+- `src/app/[locale]/(tabs)/adventure/_features/adventure-tab.tsx`
+
+Role:
+
+- agreger les donnees mock existantes;
+- afficher la surface quotidienne principale;
+- relier challenges, projets, BioDex, collectif et avantages;
+- ne pas creer encore un modele de donnees separe si les sources existantes suffisent.
 
 ## 6. API Routes Actuelles
 
@@ -235,6 +250,7 @@ Chaque flux doit clarifier:
 | projets    | mock + Supabase partiel | contrats propres               |
 | produits   | mock + services         | marketplace partenaire         |
 | BioDex     | mock riche              | donnees validees + progression |
+| Aventure   | agregation mock V0      | hub personnalise               |
 | Academy    | contenu local/lab       | produit integre                |
 | RSE        | peu/pas present         | modele B2B                     |
 | abonnement | page/idee               | Ambassadeur avec budget        |

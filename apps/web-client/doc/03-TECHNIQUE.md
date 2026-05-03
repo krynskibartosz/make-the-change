@@ -75,7 +75,7 @@ Regle:
 
 Routes principales mobiles:
 
-- `/challenges`
+- `/adventure`
 - `/projects`
 - `/impact`
 - `/products`
@@ -87,9 +87,15 @@ Composant nav:
 
 Cible produit:
 
-- remplacer conceptuellement `challenges` par `Aventure`;
-- la route peut evoluer plus tard vers `/adventure` ou `/aventure`;
-- ne pas faire ce renommage sans decision technique explicite.
+- `adventure` est maintenant l'onglet principal;
+- `challenges` reste une page secondaire pour les missions et details de challenges;
+- ne pas supprimer `/challenges` sans audit des liens internes.
+
+Fichiers Aventure:
+
+- `src/app/[locale]/(tabs)/adventure/page.tsx`
+- `src/app/[locale]/(tabs)/adventure/_features/adventure-tab.tsx`
+- `src/app/[locale]/(tabs)/adventure/_features/adventure-tab-header.tsx`
 
 ### 4.2 `(screens)`
 
@@ -257,14 +263,15 @@ Points de vigilance:
 
 ## 11. Dettes Techniques Observees
 
-| Dette                                                                   | Impact                            |
-| ----------------------------------------------------------------------- | --------------------------------- |
-| `ignoreBuildErrors: true` dans `next.config.js`                         | risque production                 |
-| gros fichiers mock                                                      | difficile a maintenir             |
-| gros ecrans Academy / flows projets                                     | refactoring progressif necessaire |
-| ancien nom `Artisans Locaux` encore present dans certains types/actions | incoherence faction               |
-| melange mock/supabase                                                   | source de confusion               |
-| routes actuelles pas encore alignees avec `Aventure` cible              | migration a planifier             |
+| Dette                                                                   | Impact                                |
+| ----------------------------------------------------------------------- | ------------------------------------- |
+| `ignoreBuildErrors: true` dans `next.config.js`                         | risque production                     |
+| gros fichiers mock                                                      | difficile a maintenir                 |
+| gros ecrans Academy / flows projets                                     | refactoring progressif necessaire     |
+| ancien nom `Artisans Locaux` encore present dans certains types/actions | incoherence faction                   |
+| melange mock/supabase                                                   | source de confusion                   |
+| `/challenges` encore present comme mecanique secondaire                 | conserver tant que les liens existent |
+| textes Aventure V0 hardcodes                                            | i18n a extraire avant production      |
 
 ## 12. Regle Pour Les Gems Tech
 

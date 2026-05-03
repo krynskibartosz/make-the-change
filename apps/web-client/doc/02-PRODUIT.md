@@ -33,43 +33,45 @@ Priorite cible validee:
 
 Le code `apps/web-client` utilise le route group `(tabs)` avec 5 onglets mobiles:
 
-| Onglet actuel | Route actuelle | Role actuel                        |
-| ------------- | -------------- | ---------------------------------- |
-| Defis         | `/challenges`  | missions et challenges             |
-| Projets       | `/projects`    | catalogue des projets              |
-| Collectif     | `/impact`      | feed, factions, objectif collectif |
-| Recompenses   | `/products`    | boutique produits                  |
-| Profil        | `/profile`     | profil, stats, BioDex, settings    |
+| Onglet actuel | Route actuelle | Role actuel                                      |
+| ------------- | -------------- | ------------------------------------------------ |
+| Aventure      | `/adventure`   | hub quotidien: action, projet, BioDex, collectif |
+| Projets       | `/projects`    | catalogue des projets                            |
+| Collectif     | `/impact`      | feed, factions, objectif collectif               |
+| Avantages     | `/products`    | boutique produits et Points d'Impact             |
+| Profil        | `/profile`     | profil, stats, BioDex, settings                  |
 
 Composant de navigation: `src/app/[locale]/(tabs)/_components/mobile-bottom-nav.tsx`.
 
-### 2.2 Cible Validee
+### 2.2 Cible Et Transition
 
-Le premier onglet doit devenir **Aventure**.
+Le premier onglet est maintenant **Aventure** dans le code.
 
-| Onglet cible | Role cible                                                          |
-| ------------ | ------------------------------------------------------------------- |
-| Aventure     | hub quotidien: Academy, mission, projet, BioDex, objectif collectif |
-| Projets      | soutenir ou donner a des projets reels                              |
-| Collectif    | impact commun, factions, feed, campagnes                            |
-| Recompenses  | boutique en Points d'Impact et euros                                |
-| Profil       | identite, progression, BioDex, historique, settings                 |
+| Espace    | Route         | Role cible                                                          |
+| --------- | ------------- | ------------------------------------------------------------------- |
+| Aventure  | `/adventure`  | hub quotidien: Academy, mission, projet, BioDex, objectif collectif |
+| Defis     | `/challenges` | page secondaire pour missions/challenges detailles                  |
+| Projets   | `/projects`   | soutenir ou donner a des projets reels                              |
+| Collectif | `/impact`     | impact commun, factions, feed, campagnes                            |
+| Avantages | `/products`   | boutique en Points d'Impact et euros                                |
+| Profil    | `/profile`    | identite, progression, BioDex, historique, settings                 |
 
-`Aventure` ne doit pas etre un simple renommage de `Defis`. Il doit absorber les missions, la progression et l'Academy.
+`Aventure` n'est pas un simple renommage de `Defis`. Il devient le hub principal et renvoie vers `/challenges` quand l'utilisateur veut voir les missions en detail.
 
 ## 3. Hub Aventure
 
-**Cible validee**: premiere page apres ouverture ou connexion.
+**Actuel implemente V0**: route `/adventure`, premier onglet mobile, hub quotidien.
 
-Blocs recommandes:
+Blocs presents ou attendus dans le hub:
 
 1. Carte hero courte avec mascotte, faction et progression.
-2. Continuer l'Academy.
+2. Objectif en cours / cycle.
 3. Action prioritaire du jour.
 4. Projet recommande.
 5. BioDex: espece recente, verrouillee ou liee au projet.
 6. Objectif collectif ou faction.
-7. Recompense disponible ou solde Points d'Impact, de facon discrete.
+7. Academy/Defis comme acces secondaire.
+8. Avantage disponible ou solde Points d'Impact, de facon discrete.
 
 Personnalisation cible:
 
@@ -97,7 +99,7 @@ Les projets sont le coeur business et impact du produit.
 - Un soutien producteur peut donner un petit bonus de Graines, comme reconnaissance symbolique.
 - Les projets doivent etre reliables a un producteur, une localisation, une histoire et idealement une espece principale.
 
-## 5. Recompenses Et Boutique
+## 5. Avantages Et Boutique
 
 **Cible validee**: les produits peuvent etre obtenus via Points d'Impact ou achetes en euros.
 
@@ -255,9 +257,10 @@ Experience recommandee:
 | Domaine                  | Statut                                   |
 | ------------------------ | ---------------------------------------- |
 | Projets                  | coeur produit                            |
-| Boutique                 | importante, mais recompense secondaire   |
+| Boutique / Avantages     | importante, mais recompense secondaire   |
 | Academy                  | validee comme brique forte               |
-| Aventure                 | cible validee pour remplacer Defis       |
+| Aventure                 | implemente V0 comme onglet principal     |
+| Defis                    | page secondaire conservee                |
 | BioDex                   | cible: public + collection + progression |
 | RSE                      | pilier business cible                    |
 | Evolution IA des especes | futur / V2                               |

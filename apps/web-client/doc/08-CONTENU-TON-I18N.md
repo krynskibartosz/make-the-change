@@ -32,17 +32,17 @@ Tonalite cible:
 
 ## 3. Lexique Recommande
 
-| Concept                    | Terme recommande                       |
-| -------------------------- | -------------------------------------- |
-| Paiement projet producteur | soutien                                |
-| Don sans produit           | don                                    |
-| Monnaie engagement         | Graines                                |
-| Credit boutique            | Points d'Impact                        |
-| Abonnement                 | Ambassadeur                            |
-| Premier onglet             | Aventure                               |
-| Boutique                   | Recompenses ou Boutique selon contexte |
-| Entreprise                 | partenaire RSE, entreprise partenaire  |
-| Progression                | aventure, parcours, niveau, decouverte |
+| Concept                    | Terme recommande                                 |
+| -------------------------- | ------------------------------------------------ |
+| Paiement projet producteur | soutien                                          |
+| Don sans produit           | don                                              |
+| Monnaie engagement         | Graines                                          |
+| Credit boutique            | Points d'Impact                                  |
+| Abonnement                 | Ambassadeur                                      |
+| Premier onglet             | Aventure                                         |
+| Boutique                   | Avantages en navigation, Boutique dans le detail |
+| Entreprise                 | partenaire RSE, entreprise partenaire            |
+| Progression                | aventure, parcours, niveau, decouverte           |
 
 ## 4. Termes A Eviter
 
@@ -87,6 +87,23 @@ Exemples:
 - "Reprendre votre parcours"
 - "Gagner des Graines"
 - "Comprendre cette espece"
+
+### Aventure
+
+Objectif:
+
+- orientation;
+- motivation;
+- priorite du jour;
+- lien entre apprentissage, projet, BioDex et impact.
+
+Exemples:
+
+- "Action prioritaire"
+- "Continuer l'aventure"
+- "Projet recommande"
+- "Espece a debloquer"
+- "Objectif en cours"
 
 ### BioDex
 
@@ -211,6 +228,6 @@ Pour les assets IA:
 
 - Ton exact de l'abonnement Ambassadeur.
 - Niveau de tutoiement/vouvoiement.
-- Noms finaux des routes et onglets.
+- Noms finaux des sous-pages et libelles secondaires.
 - Politique publique de mention IA.
 - Style des rapports RSE.

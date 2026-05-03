@@ -105,20 +105,22 @@ Cherche a financer des projets biodiversite, engager ses collaborateurs, obtenir
 
 La mascotte doit accompagner, pas infantiliser.
 
-## 7. Premier Onglet Cible: Aventure
+## 7. Premier Onglet: Aventure
 
-**Cible validee**: le premier onglet cible doit devenir `Aventure`.
+**Actuel V0**: le premier onglet mobile est maintenant `Aventure`, route `/adventure`.
 
-Il remplace progressivement l'idee trop etroite de `Defis`. Son role est celui d'un hub quotidien:
+Il remplace l'idee trop etroite de `Defis` comme onglet principal. Son role est celui d'un hub quotidien:
 
 - continuer l'Academy;
 - voir l'action prioritaire du jour;
 - decouvrir un projet recommande;
 - suivre une espece BioDex;
 - voir l'objectif collectif ou de faction;
-- acceder aux recompenses sans transformer la page en boutique.
+- acceder aux avantages sans transformer la page en boutique.
 
 `Aventure` doit etre la page de retour naturelle apres connexion ou ouverture de l'app.
+
+`/challenges` reste une page secondaire pour les missions et challenges detailles.
 
 ## 8. Monnaies Et Valeur Symbolique
 
