@@ -44,7 +44,7 @@ export function AdventureTabHeader({
           aria-label={`${impactPoints} points d'impact`}
           className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"
         >
-          <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+          <Sparkles className="h-3.5 w-3.5 text-white/80" />
           <span className="text-[12px] font-black tabular-nums text-white">
             {formatCompact(impactPoints)}
           </span>
