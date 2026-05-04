@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   ChevronRight,
   Compass,
-  Leaf,
   Lock,
   Package,
   PawPrint,
@@ -78,25 +77,25 @@ const FACTION_PRESENTATION: Record<
   FactionPresentation
 > = {
   neutral: {
-    label: 'Exploration libre',
+    label: 'Melli',
     mascotImage: '/abeille-transparente.png',
     headline: 'Choisis ton prochain pas pour le vivant.',
     message: 'Apprends, soutiens un projet concret et fais grandir ton impact.',
   },
   pollinisateurs: {
-    label: 'Vie Sauvage',
+    label: 'Melli',
     mascotImage: '/abeille-transparente.png',
     headline: "Melli a repéré une action utile pour aujourd'hui.",
     message: 'Fais avancer les pollinisateurs sans perdre le fil de ton impact.',
   },
   forets: {
-    label: 'Terres et Forêts',
+    label: 'Sylva',
     mascotImage: '/sylva.png',
     headline: "Sylva t'ouvre un chemin court et concret.",
     message: 'Un apprentissage, un projet, une espèce: garde le vivant visible.',
   },
   mers: {
-    label: 'Gardiens des mers',
+    label: 'Ondine',
     mascotImage: '/ondine.png',
     headline: 'Ondine garde le cap sur ton impact du jour.',
     message: 'Explore, comprends et soutiens les écosystèmes qui en ont besoin.',
@@ -203,9 +202,6 @@ export function AdventureTab({
   const biodexActionsLeft = featuredSpecies?.isUnlocked ? 0 : Math.max(2 - completedQuests, 1)
   const speciesName = featuredSpecies?.name || 'emblématique'
   const projectName = recommendedProject?.name || 'Projet de restauration'
-  const projectProgress = recommendedProject
-    ? getProgressPercent(recommendedProject.fundingProgress, 100)
-    : 0
   const isPrimaryQuestComplete = primaryQuest ? primaryQuest.progress >= primaryQuest.max : false
   const heroSpeciesImage = featuredSpecies?.imageUrl || HERO_SPECIES_FALLBACK_IMAGE
   const biodexPreviewImage =
@@ -225,7 +221,7 @@ export function AdventureTab({
       />
 
       <div className="mx-auto flex w-full max-w-3xl flex-col pb-8 pt-2">
-        <div className="px-5 pb-5">
+        <div className="px-5 pb-6">
           <h1 className="text-[26px] font-black tracking-tight text-white">Salut {firstName} !</h1>
           <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
             L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
@@ -233,7 +229,7 @@ export function AdventureTab({
           </p>
         </div>
 
-        <div className="px-4">
+        <div className="px-4 pb-6">
           <div className="relative h-40 overflow-hidden rounded-[30px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.34)] sm:h-48">
             <div className="absolute inset-0 grid grid-cols-2">
               <div className="relative bg-[#080b0f]">
@@ -272,44 +268,10 @@ export function AdventureTab({
             <div className="pointer-events-none absolute inset-y-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/50 to-transparent" />
           </div>
 
-          <div className="px-1 pt-4">
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/55">
-                {recommendedProject?.location || 'Terrain partenaire'}
-              </span>
-              {recommendedProject?.typeLabel && (
-                <span
-                  className={cn(
-                    'rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em]',
-                    theme.badgeClassName,
-                    theme.accentText,
-                  )}
-                >
-                  {recommendedProject.typeLabel}
-                </span>
-              )}
-            </div>
+          <div className="px-1 pt-5">
             <h2 className="text-[22px] font-black leading-tight tracking-tight text-white">
               {projectName}
             </h2>
-            {recommendedProject?.description && (
-              <p className="mt-2 line-clamp-1 text-sm font-medium leading-relaxed text-white/58">
-                {recommendedProject.description}
-              </p>
-            )}
-
-            <div className="mt-3">
-              <div className="mb-2 flex items-center justify-between gap-3">
-                <span className="flex items-center gap-1.5 text-xs font-bold text-white/48">
-                  <Leaf className={cn('h-3.5 w-3.5', theme.accentText)} />
-                  Progression du projet
-                </span>
-                <span className="text-xs font-black tabular-nums text-white">
-                  {Math.round(projectProgress)}%
-                </span>
-              </div>
-              <ProgressBar value={projectProgress} />
-            </div>
 
             <Link
               href={recommendedProject?.href || '/projects'}
@@ -325,7 +287,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="px-4 pb-6">
           <div className="flex items-end justify-between gap-4 px-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
@@ -473,7 +435,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="mt-5 px-4">
+        <div className="px-4 pb-6">
           <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.055] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
             <div
               className={cn(
@@ -502,7 +464,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="mt-7 space-y-4 px-4">
+        <div className=" space-y-4 px-4">
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
