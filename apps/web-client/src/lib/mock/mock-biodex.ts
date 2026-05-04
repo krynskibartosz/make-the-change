@@ -680,7 +680,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Trachelophorus giraffa doit son nom au cou extrêmement allongé du mâle, résultat d\'une sélection sexuelle intense pour les combats intrasexuels. La femelle, au cou bien plus court, découpe et roule méticuleusement une feuille de Dichaetanthera (arbuste malgache) en un cylindre protecteur autour d\'un unique œuf. Ce comportement de construction de nid foliaire, unique chez les coléoptères de cette complexité, est entièrement instinctif. Le mâle monte la garde durant l\'oviposition, éloignant les rivaux par des affrontements spectaculaires au coup de cou.',
     conservation_status: 'VU',
-    image_url: '/images/diaromas/Charaçon girafe.png',
+    image_url: '/images/diaromas/Charançon girafe.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
