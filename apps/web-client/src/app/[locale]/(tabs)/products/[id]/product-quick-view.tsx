@@ -241,7 +241,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                       className={`flex-1 flex items-center justify-center h-12 rounded-xl text-sm font-bold transition-all active:scale-95 ${
                         selectedFormat.id === format.id
                           ? 'bg-amber-300 text-[#120d04] shadow-lg'
-                          : 'bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10'
+                          : 'bg-white/5 border border-white/20 text-white/90 font-semibold hover:bg-white/10 hover:border-white/30 transition-colors'
                       }`}
                     >
                       {format.id}
@@ -261,7 +261,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </section>
 
             {/* ── PROFIL GUSTATIF + LIVRAISON (Séduction suite) ── */}
-            <div className="px-1 flex gap-8 border-y border-white/5 py-4 mb-6">
+            <div className="px-1 flex gap-8 pt-2 pb-10">
               {/* PROFIL GUSTATIF */}
               <div className="flex flex-col gap-2">
                 <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Profil Gustatif</span>
@@ -282,47 +282,23 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               </div>
             </div>
 
-            {product.producer && (
-              <section className="group border-y border-white/5 py-5 transition-colors hover:bg-white/[0.02]">
-                <a href={`/${locale}/producers/${product.producer.slug || product.producer.id}`} className="flex items-center gap-4">
-                  {producerImage ? (
-                    <img
-                      src={producerImage}
-                      alt={producerName}
-                      className="h-12 w-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-105">
-                      {producerName[0]?.toUpperCase() || 'P'}
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-foreground underline-offset-4 group-hover:underline">
-                      {producerName}
-                    </p>
-                    <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                      {producerDescription}
-                    </p>
-                  </div>
-                </a>
-              </section>
-            )}
-
-            {product.certifications && product.certifications.length > 0 && (
-              <section className="rounded-2xl border border-white/10 bg-background/40 p-4">
-                <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">
+            {product.certifications && product.certifications.filter(c => !/^Origine\b/i.test(c)).length > 0 && (
+              <section className="px-1 pb-6">
+                <h2 className="mb-2 text-[11px] font-bold uppercase tracking-widest text-white/40">
                   {t('detail.certifications')}
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {product.certifications.map((certification, index) => (
-                    <Badge
-                      key={`${certification}-${index}`}
-                      variant="outline"
-                      className="border-white/10 bg-white/5 text-emerald-400"
-                    >
-                      {certification}
-                    </Badge>
-                  ))}
+                  {product.certifications
+                    .filter(c => !/^Origine\b/i.test(c))
+                    .map((certification, index) => (
+                      <Badge
+                        key={`${certification}-${index}`}
+                        variant="outline"
+                        className="border-white/10 bg-white/5 text-emerald-400"
+                      >
+                        {certification}
+                      </Badge>
+                    ))}
                 </div>
               </section>
             )}
@@ -365,7 +341,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               {/* Accordéon Conservation */}
               <button
                 onClick={() => setIsConservationOpen(v => !v)}
-                className="w-full flex items-center justify-between py-4 border-b border-white/5"
+                className="w-full flex items-center justify-between py-4"
               >
                 <span className="text-sm font-bold text-white">Conservation</span>
                 <ChevronDown className={`w-4 h-4 text-white/30 transition-transform duration-200 ${isConservationOpen ? 'rotate-180' : ''}`} />
@@ -379,7 +355,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="py-4 border-b border-white/5">
+                    <div className="py-4">
                       <p className="text-[13px] text-white/70 leading-relaxed">
                         À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).
                       </p>
