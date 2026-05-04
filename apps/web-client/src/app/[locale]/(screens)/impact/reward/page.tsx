@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
+import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
 import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
@@ -32,6 +33,7 @@ export default async function ImpactRewardPage() {
   else if (activeContribution?.themeKey === 'mers') mascotSrc = '/ondine.png'
 
   const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
+  const remainingSeeds = Math.max(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds, 0)
 
   return (
     <div className="min-h-screen bg-[#0B0F15]">
@@ -85,7 +87,7 @@ export default async function ImpactRewardPage() {
               />
             </div>
             <p className="mt-2 text-center text-[11px] text-white/40">
-              Plus que {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> restantes
+              Plus que <CurrencyAmount kind="seeds" value={remainingSeeds} className="font-bold" /> restantes
             </p>
           </div>
 
@@ -137,8 +139,11 @@ export default async function ImpactRewardPage() {
                     </div>
                     <div className="mt-3 flex flex-col gap-0.5">
                       <p className="text-sm font-bold text-white line-clamp-1">{product.name_default}</p>
-                      <p className="text-xs text-white/50 line-clamp-1">{product.short_description_default}</p>
-                      <p className="mt-1 text-sm font-black text-amber-400">{product.price_points} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /></p>
+                      <CurrencyAmount
+                        kind="impactCredits"
+                        value={product.price_points}
+                        className="mt-1 text-sm font-black"
+                      />
                     </div>
                   </Link>
                 ))}
