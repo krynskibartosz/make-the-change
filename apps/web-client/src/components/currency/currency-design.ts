@@ -1,6 +1,7 @@
 export type CurrencyKind = 'seeds' | 'impactCredits'
 
 export type CurrencyIconName = 'Sprout' | 'Hexagon'
+export type CurrencyTone = 'semantic' | 'inherit'
 
 type CurrencyDesign = {
   icon: CurrencyIconName
@@ -44,4 +45,15 @@ export const CURRENCY_DESIGN = {
 
 export function getCurrencyDesign(kind: CurrencyKind): CurrencyDesign {
   return CURRENCY_DESIGN[kind]
+}
+
+export function getCurrencyToneClassName(
+  kind: CurrencyKind,
+  tone: CurrencyTone = 'semantic',
+): string | undefined {
+  if (tone === 'inherit') {
+    return undefined
+  }
+
+  return getCurrencyDesign(kind).toneClassName
 }

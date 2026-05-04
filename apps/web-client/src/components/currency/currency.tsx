@@ -1,7 +1,12 @@
 import type { ComponentPropsWithoutRef } from 'react'
 import { Hexagon, Sprout, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getCurrencyDesign, type CurrencyKind } from './currency-design'
+import {
+  getCurrencyDesign,
+  getCurrencyToneClassName,
+  type CurrencyKind,
+  type CurrencyTone,
+} from './currency-design'
 
 const CURRENCY_ICONS = {
   Sprout,
@@ -17,16 +22,17 @@ function formatCurrencyValue(value: number, notation: 'standard' | 'compact') {
 
 type CurrencyIconProps = ComponentPropsWithoutRef<'svg'> & {
   kind: CurrencyKind
+  tone?: CurrencyTone
 }
 
-export function CurrencyIcon({ kind, className, ...props }: CurrencyIconProps) {
+export function CurrencyIcon({ kind, tone = 'semantic', className, ...props }: CurrencyIconProps) {
   const design = getCurrencyDesign(kind)
   const Icon = CURRENCY_ICONS[design.icon]
 
   return (
     <Icon
       aria-hidden="true"
-      className={cn('shrink-0', design.toneClassName, className)}
+      className={cn('shrink-0', getCurrencyToneClassName(kind, tone), className)}
       {...props}
     />
   )
@@ -38,6 +44,7 @@ type CurrencyAmountProps = ComponentPropsWithoutRef<'span'> & {
   notation?: 'standard' | 'compact'
   prefix?: string
   showLabel?: boolean
+  tone?: CurrencyTone
 }
 
 export function CurrencyAmount({
@@ -46,6 +53,7 @@ export function CurrencyAmount({
   notation = 'standard',
   prefix,
   showLabel = false,
+  tone = 'semantic',
   className,
   ...props
 }: CurrencyAmountProps) {
@@ -55,14 +63,18 @@ export function CurrencyAmount({
   return (
     <span
       aria-label={`${prefix || ''}${formattedValue} ${design.ariaLabel}`}
-      className={cn('inline-flex items-center gap-1 tabular-nums', design.toneClassName, className)}
+      className={cn(
+        'inline-flex items-center gap-1 tabular-nums',
+        getCurrencyToneClassName(kind, tone),
+        className,
+      )}
       {...props}
     >
       <span aria-hidden="true">
         {prefix}
         {formattedValue}
       </span>
-      <CurrencyIcon kind={kind} className="h-[1.1em] w-[1.1em]" />
+      <CurrencyIcon kind={kind} tone={tone} className="h-[1.1em] w-[1.1em]" />
       {showLabel && <span aria-hidden="true">{design.label}</span>}
     </span>
   )

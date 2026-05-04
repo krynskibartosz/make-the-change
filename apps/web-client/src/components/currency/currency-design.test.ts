@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CURRENCY_DESIGN, getCurrencyDesign } from './currency-design'
+import { CURRENCY_DESIGN, getCurrencyDesign, getCurrencyToneClassName } from './currency-design'
 
 describe('currency design identity', () => {
   it('keeps seeds visually organic and separate from shop value', () => {
@@ -18,5 +18,10 @@ describe('currency design identity', () => {
     expect(CURRENCY_DESIGN.impactCredits.surfaceClassName).toBe(
       'border-amber-300/25 bg-amber-300/10 text-amber-300',
     )
+  })
+
+  it('lets filled CTA content inherit the foreground color', () => {
+    expect(getCurrencyToneClassName('impactCredits', 'inherit')).toBe(undefined)
+    expect(getCurrencyToneClassName('impactCredits')).toBe('text-amber-300')
   })
 })
