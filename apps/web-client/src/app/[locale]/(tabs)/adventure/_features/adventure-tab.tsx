@@ -587,13 +587,13 @@ export function AdventureTab({
                         theme.accentText,
                       )}
                     >
-                      La récompense du mois
+                      AVANTAGE DU MOIS
                     </p>
                     <h3 className="mt-1 text-[18px] font-black leading-tight text-white">
-                      Le Privilège de l'Essaim
+                      Le Défi Ilanga Nature
                     </h3>
                     <p className="mt-2 line-clamp-2 text-xs font-semibold leading-relaxed text-white/50">
-                      Ilanga Nature débloque un avantage si le collectif atteint 100%.
+                      Atteignons ensemble les 100 % en récoltant des Graines ! En remerciement de cet effort commun, notre partenaire Ilanga Nature débloquera des avantages exclusifs pour toute la communauté.
                     </p>
                   </div>
                   <ProgressRing
@@ -610,7 +610,7 @@ export function AdventureTab({
                     </span>
                     <span className="flex items-center gap-1 text-xs font-black text-emerald-300">
                       <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
-                      restantes
+                      à récolter
                     </span>
                   </div>
                   <ProgressBar value={rewardProgress} />
@@ -621,9 +621,9 @@ export function AdventureTab({
                     <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-400/10 text-amber-300">
                       <Droplets className="h-4 w-4" />
                     </div>
-                    <p className="text-sm font-black leading-tight text-white">15% privilège</p>
+                    <p className="text-sm font-black leading-tight text-white">-15 % d'avantage</p>
                     <p className="mt-1 line-clamp-1 text-[11px] font-semibold text-white/44">
-                      Miel Ilanga
+                      Sur la récolte de miel de notre partenaire.
                     </p>
                   </div>
 
@@ -632,10 +632,10 @@ export function AdventureTab({
                       <Sparkles className="h-4 w-4" />
                     </div>
                     <p className="line-clamp-1 text-sm font-black leading-tight text-white">
-                      {activeContribution?.prestigeTitle || collectiveGoal.prestigeRewardTitle}
+                      Halo de victoire
                     </p>
                     <p className="mt-1 line-clamp-1 text-[11px] font-semibold text-white/44">
-                      Prestige faction
+                      La faction ayant récolté le plus de Graines obtiendra un éclat cosmétique exclusif.
                     </p>
                   </div>
                 </div>
@@ -651,10 +651,10 @@ export function AdventureTab({
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
-                      Récompense produit
+                      AVANTAGE DISPONIBLE
                     </p>
                     <h3 className="mt-1 text-[17px] font-black leading-tight text-white">
-                      {canClaimRewardProduct ? 'Prêt à échanger' : 'Presque à toi'}
+                      {canClaimRewardProduct ? 'Débloqué grâce à votre impact' : 'Encore un effort'}
                     </h3>
                   </div>
                   <span className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-amber-300/12 text-amber-300">
@@ -673,6 +673,11 @@ export function AdventureTab({
                         />
                       </div>
                       <div className="min-w-0 py-1">
+                        {rewardProduct.producer?.name_default && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">
+                            {rewardProduct.producer.name_default}
+                          </span>
+                        )}
                         <p className="line-clamp-2 text-[15px] font-black leading-tight text-white">
                           {rewardProduct.name_default}
                         </p>
@@ -683,27 +688,38 @@ export function AdventureTab({
                     </div>
 
                     <div>
-                      <div className="mb-2 flex items-center justify-between gap-3">
-                        <span className="text-xs font-bold text-white/42">
-                          {canClaimRewardProduct
-                            ? 'Échange disponible'
-                            : `Encore ${formatImpactPoints(rewardProductMissing)} crédits`}
-                        </span>
-                        <CurrencyAmount
-                          kind="impactCredits"
-                          value={rewardProduct.price_points}
-                          notation="compact"
-                          className="text-xs font-black"
-                        />
-                      </div>
-                      <ProgressBar
-                        value={rewardProductProgress}
-                        indicatorClassName={getCurrencyDesign('impactCredits').progressClassName}
-                      />
+                      {canClaimRewardProduct ? (
+                        <div className="flex items-center justify-between gap-3">
+                          <CurrencyAmount
+                            kind="impactCredits"
+                            value={rewardProduct.price_points}
+                            notation="compact"
+                            className="text-xs font-black"
+                          />
+                        </div>
+                      ) : (
+                        <>
+                          <div className="mb-2 flex items-center justify-between gap-3">
+                            <span className="text-xs font-bold text-white/42">
+                              Encore {formatImpactPoints(rewardProductMissing)} pour cet avantage
+                            </span>
+                            <CurrencyAmount
+                              kind="impactCredits"
+                              value={rewardProduct.price_points}
+                              notation="compact"
+                              className="text-xs font-black"
+                            />
+                          </div>
+                          <ProgressBar
+                            value={rewardProductProgress}
+                            indicatorClassName={getCurrencyDesign('impactCredits').progressClassName}
+                          />
+                        </>
+                      )}
                     </div>
 
                     <p className="flex items-center gap-2 text-sm font-black text-amber-300">
-                      {canClaimRewardProduct ? 'Échanger maintenant' : 'Voir la récompense'}
+                      {canClaimRewardProduct ? 'Utiliser mes crédits' : 'Voir le produit'}
                       <ChevronRight className="h-4 w-4" />
                     </p>
                   </>
