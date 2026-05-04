@@ -1,4 +1,4 @@
-import { Sparkles, Sprout } from "lucide-react";
+import { CurrencyIcon } from "@/components/currency";
 import { Link } from "@/i18n/navigation";
 import { formatCompact } from "@/lib/formatters";
 import { resolveFactionThemeKey } from "@/lib/faction-theme";
@@ -33,7 +33,7 @@ export function AdventureTabHeader({
           aria-label={`${seeds} graines`}
           className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"
         >
-          <Sprout className="h-3.5 w-3.5 text-lime-300" />
+          <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
           <span className="text-[12px] font-black tabular-nums text-white">
             {formatCompact(seeds)}
           </span>
@@ -44,7 +44,7 @@ export function AdventureTabHeader({
           aria-label={`${impactPoints} crédits impact`}
           className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"
         >
-          <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+          <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
           <span className="text-[12px] font-black tabular-nums text-white">
             {formatCompact(impactPoints)}
           </span>

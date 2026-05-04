@@ -28,8 +28,8 @@ import {
   List as ListIcon,
   Package,
   Search,
-  Sparkles,
 } from 'lucide-react'
+import { CurrencyAmount } from '@/components/currency'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
@@ -625,10 +625,15 @@ export function ProductsClient({
           className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-full bg-zinc-900/90 backdrop-blur-md border border-white/10 text-white transition-all active:scale-95 shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
           aria-label="Solde Crédits Impact"
         >
-          <Sparkles className="w-4 h-4 text-lime-400 shrink-0" aria-hidden="true" />
-          <span className="text-sm font-black tabular-nums tracking-tight">
-            {isConnected ? userPoints.toLocaleString('fr-FR') : '--'}
-          </span>
+          {isConnected ? (
+            <CurrencyAmount
+              kind="impactCredits"
+              value={userPoints}
+              className="text-sm font-black tracking-tight"
+            />
+          ) : (
+            <span className="text-sm font-black tabular-nums tracking-tight text-amber-300">--</span>
+          )}
         </Link>
       </nav>
 

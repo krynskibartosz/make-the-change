@@ -13,6 +13,8 @@ import {
   Trophy,
   UsersRound,
 } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
+import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
@@ -119,7 +121,15 @@ function getProgressPercent(progress: number, max: number) {
   return Math.min(Math.max((progress / max) * 100, 0), 100)
 }
 
-function ProgressBar({ value, className }: { value: number; className?: string }) {
+function ProgressBar({
+  value,
+  className,
+  indicatorClassName,
+}: {
+  value: number
+  className?: string
+  indicatorClassName?: string
+}) {
   return (
     <div
       className={cn(
@@ -128,7 +138,10 @@ function ProgressBar({ value, className }: { value: number; className?: string }
       )}
     >
       <div
-        className="h-full rounded-full bg-lime-400 shadow-[0_0_18px_rgba(163,230,53,0.36)]"
+        className={cn(
+          'h-full rounded-full',
+          indicatorClassName || getCurrencyDesign('seeds').progressClassName,
+        )}
         style={{ width: `${Math.round(value)}%` }}
       />
     </div>
@@ -210,9 +223,17 @@ export function AdventureTab({
     featuredSpecies?.isUnlocked && featuredSpecies.imageUrl
       ? featuredSpecies.imageUrl
       : BIODEX_LOCKED_IMAGE
-  const impactCreditsLabel = formatImpactPoints(impactPoints)
   const rewardProgress = collectiveGoal.progress || collectiveProgress
   const remainingSeeds = Math.max(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds, 0)
+  const rewardProduct = getRewardProduct(impactPoints)
+  const rewardProductHref = rewardProduct?.slug ? `/products/${rewardProduct.slug}` : '/products'
+  const rewardProductProgress = rewardProduct
+    ? getProgressPercent(impactPoints, rewardProduct.price_points)
+    : 0
+  const rewardProductMissing = rewardProduct
+    ? Math.max(rewardProduct.price_points - impactPoints, 0)
+    : 0
+  const canClaimRewardProduct = !!rewardProduct && rewardProductMissing === 0
 
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10">
@@ -225,7 +246,7 @@ export function AdventureTab({
       />
 
       <div className="mx-auto flex w-full max-w-3xl flex-col pb-8 pt-2">
-        <div className="px-5 pb-8">
+        <div className="px-5 pb-16">
           <h1 className="text-[26px] font-black tracking-tight text-white">Salut {firstName} !</h1>
           <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
             L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
@@ -233,7 +254,7 @@ export function AdventureTab({
           </p>
         </div>
 
-        <div className="px-4 pb-8">
+        <div className="px-4 pb-16">
           <div className="relative h-40 overflow-hidden rounded-[30px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.34)] sm:h-48">
             <div className="absolute inset-0 grid grid-cols-2">
               <div className="relative bg-[#080b0f]">
@@ -291,7 +312,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="px-4 pb-8">
+        <div className="px-4 pb-16">
           <div className="flex items-end justify-between gap-4 px-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
@@ -414,10 +435,11 @@ export function AdventureTab({
                           <span className="text-xs font-bold text-white/42">
                             Récompense immédiate
                           </span>
-                          <span className="flex items-center gap-1 text-xs font-black text-lime-300">
-                            +{primaryQuest.reward}
-                            <Sprout className="h-3.5 w-3.5" />
-                          </span>
+                          <CurrencyAmount
+                            kind="seeds"
+                            value={primaryQuest.reward}
+                            className="text-xs font-black"
+                          />
                         </div>
                         <ProgressBar value={questProgress} />
                       </div>
@@ -439,7 +461,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="px-4 pb-8">
+        <div className="px-4 pb-16">
           <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.055] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
             <div
               className={cn(
@@ -586,8 +608,8 @@ export function AdventureTab({
                     <span className="text-xs font-bold text-white/42">
                       Plus que {formatSeedCount(remainingSeeds)} graines
                     </span>
-                    <span className="flex items-center gap-1 text-xs font-black text-lime-300">
-                      <Sprout className="h-3.5 w-3.5" />
+                    <span className="flex items-center gap-1 text-xs font-black text-emerald-300">
+                      <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
                       restantes
                     </span>
                   </div>
@@ -621,18 +643,18 @@ export function AdventureTab({
             </Link>
 
             <Link
-              href="/products"
-              className="relative block min-h-52 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.05] p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
+              href={rewardProductHref}
+              className="relative block min-h-64 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.05] p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
             >
               <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-amber-300/10 blur-3xl" />
-              <div className="relative flex h-full flex-col justify-between">
+              <div className="relative flex h-full flex-col justify-between gap-4">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
-                      Récompenses
+                      Récompense produit
                     </p>
                     <h3 className="mt-1 text-[17px] font-black leading-tight text-white">
-                      Avantages disponibles
+                      {canClaimRewardProduct ? 'Prêt à échanger' : 'Presque à toi'}
                     </h3>
                   </div>
                   <span className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-amber-300/12 text-amber-300">
@@ -640,15 +662,68 @@ export function AdventureTab({
                   </span>
                 </div>
 
-                <div>
-                  <p className="text-sm font-semibold leading-snug text-white/64">
-                    Convertis tes crédits en récompenses utiles, sans casser l'immersion.
-                  </p>
-                  <p className="mt-3 flex items-center gap-2 text-sm font-black text-amber-300">
-                    {impactCreditsLabel} crédits impact
-                    <ChevronRight className="h-4 w-4" />
-                  </p>
-                </div>
+                {rewardProduct ? (
+                  <>
+                    <div className="grid grid-cols-[5.25rem_1fr] gap-3">
+                      <div className="aspect-square overflow-hidden rounded-[22px] border border-white/10 bg-black/20">
+                        <img
+                          src={rewardProduct.image_url}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 py-1">
+                        <p className="line-clamp-2 text-[15px] font-black leading-tight text-white">
+                          {rewardProduct.name_default}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-xs font-semibold leading-snug text-white/46">
+                          {rewardProduct.short_description_default}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-3">
+                        <span className="text-xs font-bold text-white/42">
+                          {canClaimRewardProduct
+                            ? 'Échange disponible'
+                            : `Encore ${formatImpactPoints(rewardProductMissing)} crédits`}
+                        </span>
+                        <CurrencyAmount
+                          kind="impactCredits"
+                          value={rewardProduct.price_points}
+                          notation="compact"
+                          className="text-xs font-black"
+                        />
+                      </div>
+                      <ProgressBar
+                        value={rewardProductProgress}
+                        indicatorClassName={getCurrencyDesign('impactCredits').progressClassName}
+                      />
+                    </div>
+
+                    <p className="flex items-center gap-2 text-sm font-black text-amber-300">
+                      {canClaimRewardProduct ? 'Échanger maintenant' : 'Voir la récompense'}
+                      <ChevronRight className="h-4 w-4" />
+                    </p>
+                  </>
+                ) : (
+                  <div>
+                    <p className="text-sm font-semibold leading-snug text-white/64">
+                      Convertis tes crédits en récompenses utiles, sans casser l'immersion.
+                    </p>
+                    <p className="mt-3 flex items-center gap-2 text-sm font-black text-amber-300">
+                      <CurrencyAmount
+                        kind="impactCredits"
+                        value={impactPoints}
+                        notation="compact"
+                        showLabel
+                        className="text-sm font-black"
+                      />
+                      <ChevronRight className="h-4 w-4" />
+                    </p>
+                  </div>
+                )}
               </div>
             </Link>
           </div>
@@ -667,4 +742,17 @@ function formatImpactPoints(value: number) {
 
 function formatSeedCount(value: number) {
   return new Intl.NumberFormat('fr-FR').format(value).replace(/\u202f/g, ' ')
+}
+
+function getRewardProduct(impactPoints: number) {
+  const products = getMockProducts()
+    .filter((product) => product.stock_quantity > 0)
+    .sort((first, second) => first.price_points - second.price_points)
+
+  const claimableProducts = products.filter((product) => product.price_points <= impactPoints)
+  if (claimableProducts.length > 0) {
+    return claimableProducts[claimableProducts.length - 1]
+  }
+
+  return products.find((product) => product.price_points > impactPoints) || products[0] || null
 }

@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react'
+import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
 
 type MarketHeaderProps = {
   balance?: number
@@ -10,13 +10,10 @@ export function MarketHeader({ balance = 2450 }: MarketHeaderProps) {
       <h1 className="text-2xl font-black tracking-tight text-white">Récompenses</h1>
       <button
         type="button"
-        className="flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1.5 transition-transform active:scale-95"
+        className={`flex items-center gap-2 rounded-full border px-3 py-1.5 transition-transform active:scale-95 ${getCurrencyDesign('impactCredits').surfaceClassName}`}
         aria-label="Solde Crédits Impact"
       >
-        <Sparkles className="h-4 w-4 text-lime-400" aria-hidden="true" />
-        <span className="tabular-nums text-sm font-bold tracking-wide text-lime-400">
-          {balance.toLocaleString('fr-FR')}
-        </span>
+        <CurrencyAmount kind="impactCredits" value={balance} className="text-sm font-bold tracking-wide" />
       </button>
     </header>
   )
