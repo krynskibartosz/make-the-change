@@ -236,7 +236,7 @@ export function AdventureTab({
   const canClaimRewardProduct = !!rewardProduct && rewardProductMissing === 0
 
   return (
-    <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10 mt-4">
+    <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10 pt-7">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-white/[0.03] to-[#0B0F15]" />
       <div
         className={cn(
