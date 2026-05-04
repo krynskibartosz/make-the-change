@@ -30,6 +30,7 @@ type PublicProduct = {
   featured?: boolean | null
   category_id?: string | null
   producer_id?: string | null
+  producer_name?: string | null
   image_url?: string | null
   images?: string[] | null
   tags?: string[] | null
@@ -126,6 +127,7 @@ const toPublicProduct = (value: unknown): PublicProduct | null => {
     featured: toNullableBoolean(value.featured),
     category_id: toNullableString(value.category_id),
     producer_id: toNullableString(value.producer_id),
+    producer_name: toNullableString(value.producer_name),
     image_url: toNullableString(value.image_url),
     images: asStringArray(value.images),
     tags: asStringArray(value.tags),
@@ -196,6 +198,7 @@ const toMockPublicProduct = (
   image_url: product.image_url,
   images: product.images,
   tags: product.tags,
+  producer_name: product.producer?.name_default || null,
 })
 
 const matchesMockFilters = (product: PublicProduct, filters: ProductsQueryState) => {
