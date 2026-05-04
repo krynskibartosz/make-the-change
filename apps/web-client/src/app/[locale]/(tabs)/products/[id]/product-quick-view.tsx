@@ -386,7 +386,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
         </div>
 
         {/* ── Sticky Bottom Bar ── */}
-        <BottomActionBar className="relative shrink-0 sm:px-6">
+        <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20 sm:px-6">
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
           
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
