@@ -4,12 +4,14 @@ import {
   CheckCircle2,
   ChevronRight,
   Compass,
+  Leaf,
   Lock,
   Package,
   PawPrint,
   ShieldCheck,
   Sparkles,
   Sprout,
+  Trophy,
   UsersRound,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
@@ -66,7 +68,6 @@ export type AdventureTabProps = {
 
 type FactionPresentation = {
   label: string
-  mascotName: string
   mascotImage: string
   headline: string
   message: string
@@ -78,28 +79,24 @@ const FACTION_PRESENTATION: Record<
 > = {
   neutral: {
     label: 'Exploration libre',
-    mascotName: 'Melli',
     mascotImage: '/abeille-transparente.png',
     headline: 'Choisis ton prochain pas pour le vivant.',
     message: 'Apprends, soutiens un projet concret et fais grandir ton impact.',
   },
   pollinisateurs: {
     label: 'Vie Sauvage',
-    mascotName: 'Melli',
     mascotImage: '/abeille-transparente.png',
     headline: "Melli a repéré une action utile pour aujourd'hui.",
     message: 'Fais avancer les pollinisateurs sans perdre le fil de ton impact.',
   },
   forets: {
     label: 'Terres et Forêts',
-    mascotName: 'Sylva',
     mascotImage: '/sylva.png',
     headline: "Sylva t'ouvre un chemin court et concret.",
     message: 'Un apprentissage, un projet, une espèce: garde le vivant visible.',
   },
   mers: {
     label: 'Gardiens des mers',
-    mascotName: 'Ondine',
     mascotImage: '/ondine.png',
     headline: 'Ondine garde le cap sur ton impact du jour.',
     message: 'Explore, comprends et soutiens les écosystèmes qui en ont besoin.',
@@ -111,6 +108,11 @@ const QUEST_ICONS: Record<AdventureQuestCard['type'], LucideIcon> = {
   social: UsersRound,
   daily_harvest: Sparkles,
 }
+
+const ACADEMY_CARD_IMAGE = '/coral-karimunjawa.jpg'
+const BIODEX_LOCKED_IMAGE = '/images/diaromas/Cam%C3%A9l%C3%A9on%20de%20Parson.png'
+const HERO_SPECIES_FALLBACK_IMAGE = '/images/diaromas/Indri.png'
+const GUIDE_MASCOT_IMAGE = '/aura.png'
 
 function getProgressPercent(progress: number, max: number) {
   if (max <= 0) return 0
@@ -133,7 +135,15 @@ function ProgressBar({ value, className }: { value: number; className?: string }
   )
 }
 
-function ProgressRing({ value, label }: { value: number; label: string }) {
+function ProgressRing({
+  value,
+  label,
+  className,
+}: {
+  value: number
+  label: string
+  className?: string
+}) {
   const roundedValue = Math.round(Math.min(Math.max(value, 0), 100))
 
   return (
@@ -156,7 +166,7 @@ function ProgressRing({ value, label }: { value: number; label: string }) {
           strokeDasharray={`${roundedValue * 2.01} 201`}
           strokeLinecap="round"
           strokeWidth="8"
-          className="text-lime-400 drop-shadow-[0_0_10px_rgba(163,230,53,0.45)]"
+          className={className}
         />
       </svg>
       <span className="text-lg font-black tabular-nums text-white">{roundedValue}%</span>
@@ -182,7 +192,7 @@ export function AdventureTab({
   const themeKey = resolveFactionThemeKey(faction)
   const presentation = FACTION_PRESENTATION[themeKey]
   const theme = getFactionTheme(faction)
-  const firstName = displayName?.split(' ')[0] || 'Explorateur'
+  const firstName = displayName?.trim().split(/\s+/)[0] || 'Explorateur'
   const primaryIcon = primaryQuest ? QUEST_ICONS[primaryQuest.type] : Compass
   const PrimaryIcon = primaryIcon
   const academyProgress = getProgressPercent(monthlyProgress, monthlyMax)
@@ -193,6 +203,16 @@ export function AdventureTab({
   const biodexActionsLeft = featuredSpecies?.isUnlocked ? 0 : Math.max(2 - completedQuests, 1)
   const speciesName = featuredSpecies?.name || 'emblématique'
   const projectName = recommendedProject?.name || 'Projet de restauration'
+  const projectProgress = recommendedProject
+    ? getProgressPercent(recommendedProject.fundingProgress, 100)
+    : 0
+  const isPrimaryQuestComplete = primaryQuest ? primaryQuest.progress >= primaryQuest.max : false
+  const heroSpeciesImage = featuredSpecies?.imageUrl || HERO_SPECIES_FALLBACK_IMAGE
+  const biodexPreviewImage =
+    featuredSpecies?.isUnlocked && featuredSpecies.imageUrl
+      ? featuredSpecies.imageUrl
+      : BIODEX_LOCKED_IMAGE
+  const impactCreditsLabel = formatImpactPoints(impactPoints)
 
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10">
@@ -205,292 +225,449 @@ export function AdventureTab({
       />
 
       <div className="mx-auto flex w-full max-w-3xl flex-col pb-8 pt-2">
-        <div className="mb-8 flex flex-col">
-          <div className="px-5 pb-5">
-            <h1 className="text-[26px] font-black tracking-tight text-white">
-              Salut {firstName} !
-            </h1>
-            <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
-              L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
-              <strong className={cn(theme.accentText)}>{presentation.mascotName}</strong>{' '}
-              aujourd'hui.
-            </p>
-          </div>
+        <div className="px-5 pb-5">
+          <h1 className="text-[26px] font-black tracking-tight text-white">Salut {firstName} !</h1>
+          <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
+            L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
+            <strong className={cn(theme.accentText)}>{presentation.label}</strong> aujourd'hui.
+          </p>
+        </div>
 
-          <div className="px-4">
-            <div className="relative h-52 overflow-hidden rounded-[28px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.32)]">
-              <div className="absolute inset-0 grid grid-cols-2">
-                <div className="relative bg-[#080b0f]">
-                  {featuredSpecies?.imageUrl ? (
-                    <img
-                      src={featuredSpecies.imageUrl}
-                      alt=""
-                      className={cn(
-                        'h-full w-full object-cover',
-                        !featuredSpecies.isUnlocked && 'grayscale opacity-35',
-                      )}
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center bg-white/[0.03]">
-                      <PawPrint className="h-12 w-12 text-white/15" />
-                    </div>
+        <div className="px-4">
+          <div className="relative h-40 overflow-hidden rounded-[30px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.34)] sm:h-48">
+            <div className="absolute inset-0 grid grid-cols-2">
+              <div className="relative bg-[#080b0f]">
+                <img
+                  src={heroSpeciesImage}
+                  alt=""
+                  className={cn(
+                    'h-full w-full object-cover',
+                    !featuredSpecies?.isUnlocked && 'grayscale opacity-55',
                   )}
-                  {!featuredSpecies?.isUnlocked && (
-                    <div className="absolute left-3 top-3 rounded-full bg-black/55 p-1.5 backdrop-blur-sm">
-                      <Lock className="h-3.5 w-3.5 text-white/75" />
-                    </div>
-                  )}
-                </div>
-                <div className="relative bg-[#10151c]">
-                  {recommendedProject?.imageUrl ? (
-                    <img
-                      src={recommendedProject.imageUrl}
-                      alt=""
-                      className="h-full w-full object-cover opacity-95"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center bg-white/[0.03]">
-                      <Sprout className="h-12 w-12 text-white/15" />
-                    </div>
-                  )}
-                </div>
+                />
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/45 to-transparent" />
+                {!featuredSpecies?.isUnlocked && (
+                  <div className="absolute left-3 top-3 rounded-full bg-black/55 p-1.5 backdrop-blur-sm">
+                    <Lock className="h-3.5 w-3.5 text-white/75" />
+                  </div>
+                )}
               </div>
 
-              <div className="pointer-events-none absolute inset-y-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/45 to-transparent" />
+              <div className="relative bg-[#10151c]">
+                {recommendedProject?.imageUrl ? (
+                  <img
+                    src={recommendedProject.imageUrl}
+                    alt=""
+                    className="h-full w-full object-cover opacity-95"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center bg-white/[0.03]">
+                    <Sprout className="h-12 w-12 text-white/15" />
+                  </div>
+                )}
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent" />
+              </div>
             </div>
 
-            <div className="px-1 pt-4">
-              <div className="mb-3 flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/55">
-                  {recommendedProject?.location || 'Terrain partenaire'}
+            <div className="pointer-events-none absolute inset-y-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/50 to-transparent" />
+          </div>
+
+          <div className="px-1 pt-4">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/55">
+                {recommendedProject?.location || 'Terrain partenaire'}
+              </span>
+              {recommendedProject?.typeLabel && (
+                <span
+                  className={cn(
+                    'rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em]',
+                    theme.badgeClassName,
+                    theme.accentText,
+                  )}
+                >
+                  {recommendedProject.typeLabel}
+                </span>
+              )}
+            </div>
+            <h2 className="text-[22px] font-black leading-tight tracking-tight text-white">
+              {projectName}
+            </h2>
+            {recommendedProject?.description && (
+              <p className="mt-2 line-clamp-1 text-sm font-medium leading-relaxed text-white/58">
+                {recommendedProject.description}
+              </p>
+            )}
+
+            <div className="mt-3">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-white/48">
+                  <Leaf className={cn('h-3.5 w-3.5', theme.accentText)} />
+                  Progression du projet
+                </span>
+                <span className="text-xs font-black tabular-nums text-white">
+                  {Math.round(projectProgress)}%
                 </span>
               </div>
-              <h2 className="text-[22px] font-black leading-tight tracking-tight text-white">
-                {projectName}
-              </h2>
-              {recommendedProject?.description && (
-                <p className="mt-2 line-clamp-2 text-sm font-medium leading-relaxed text-white/58">
-                  {recommendedProject.description}
-                </p>
+              <ProgressBar value={projectProgress} />
+            </div>
+
+            <Link
+              href={recommendedProject?.href || '/projects'}
+              className={cn(
+                'mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-[18px] text-[16px] font-black text-[#0B0F15] transition-transform active:scale-[0.98]',
+                theme.accentBg,
+                theme.accentShadow,
               )}
+            >
+              Soutenir & Débloquer
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <div className="flex items-end justify-between gap-4 px-4">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
+                Ma quête active
+              </p>
+              <h2 className="mt-1 text-xl font-black tracking-tight text-white">
+                Choisis ton prochain pas
+              </h2>
+            </div>
+            <span className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-xs font-black tabular-nums text-white/62">
+              {quests.length ? `${completedQuests}/${quests.length}` : '0/0'}
+            </span>
+          </div>
+
+          <div className="-mx-4 mt-3 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex snap-x gap-4 pb-2">
               <Link
-                href={recommendedProject?.href || '/projects'}
-                className={cn(
-                  'mt-5 flex h-[52px] w-full items-center justify-center gap-2 rounded-[18px] text-[16px] font-black text-[#0B0F15] transition-transform active:scale-[0.98]',
-                  theme.accentBg,
-                  theme.accentShadow,
-                )}
+                href="/academy"
+                className="group relative flex min-h-[19rem] w-[82vw] max-w-[23rem] shrink-0 snap-start overflow-hidden rounded-[34px] border border-white/10 bg-[#07110f] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.32)] transition-transform active:scale-[0.985] sm:w-[23rem]"
               >
-                Soutenir & Débloquer
-                <ChevronRight className="h-4 w-4" />
+                <img
+                  src={ACADEMY_CARD_IMAGE}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover opacity-92 transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/12 via-black/28 to-[#06110e]/94" />
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#06110e] to-transparent" />
+
+                <div className="relative flex h-full min-h-[17rem] w-full flex-col justify-between">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/14 bg-black/28 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-white backdrop-blur-md">
+                      <BookOpen className="h-3.5 w-3.5" />
+                      Académie
+                    </span>
+                    <span className="rounded-full bg-white/12 px-2.5 py-1 text-[10px] font-bold text-white/84 backdrop-blur-md">
+                      {dayLabel}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-xs font-bold text-white/58">Chapitre en cours</p>
+                    <h3 className="text-[24px] font-black leading-[1.02] tracking-tight text-white">
+                      {monthlyObjective}
+                    </h3>
+                    <p className="mt-3 line-clamp-2 text-sm font-semibold leading-relaxed text-white/68">
+                      Reprends le cours illustré et transforme ton apprentissage en action utile.
+                    </p>
+
+                    <div className="mt-5 flex items-center gap-3">
+                      <ProgressBar value={academyProgress} className="flex-1 bg-white/14" />
+                      <span className="text-sm font-black tabular-nums text-lime-300">
+                        {Math.round(academyProgress)}%
+                      </span>
+                    </div>
+
+                    <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-[#07110f] shadow-[0_12px_28px_rgba(0,0,0,0.28)]">
+                      Continuer
+                      <ChevronRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              <Link
+                href={primaryQuest?.href || '/challenges'}
+                className="relative flex min-h-[19rem] w-[82vw] max-w-[23rem] shrink-0 snap-start overflow-hidden rounded-[34px] border border-white/10 bg-[#14171d] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.28)] transition-transform active:scale-[0.985] sm:w-[23rem]"
+              >
+                <div
+                  className={cn(
+                    'absolute -right-16 -top-16 h-48 w-48 rounded-full blur-[52px]',
+                    theme.accentGlow,
+                  )}
+                />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgba(255,255,255,0.12),transparent_28%),linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]" />
+
+                <div className="relative flex h-full min-h-[17rem] w-full flex-col justify-between">
+                  <div className="flex items-start justify-between gap-4">
+                    <span
+                      className={cn(
+                        'flex h-14 w-14 shrink-0 items-center justify-center rounded-[22px] border',
+                        isPrimaryQuestComplete
+                          ? 'border-lime-300/30 bg-lime-300/12 text-lime-300'
+                          : 'border-white/10 bg-white/[0.07]',
+                        theme.accentText,
+                      )}
+                    >
+                      {isPrimaryQuestComplete ? (
+                        <CheckCircle2 className="h-7 w-7 text-lime-300" />
+                      ) : (
+                        <PrimaryIcon className="h-7 w-7" />
+                      )}
+                    </span>
+                    <span
+                      className={cn(
+                        'rounded-full border px-3 py-1.5 text-xs font-black tabular-nums',
+                        isPrimaryQuestComplete
+                          ? 'border-lime-400/30 bg-lime-400/10 text-lime-300'
+                          : 'border-white/10 bg-black/20 text-white/70',
+                      )}
+                    >
+                      {primaryQuest ? `${primaryQuest.progress}/${primaryQuest.max}` : '0/1'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-xs font-black uppercase tracking-[0.14em] text-white/36">
+                      Défi du jour
+                    </p>
+                    <h3 className="text-[24px] font-black leading-[1.04] tracking-tight text-white">
+                      {primaryQuest?.title || "Aucune quête pour aujourd'hui"}
+                    </h3>
+                    <p className="mt-3 line-clamp-3 text-sm font-semibold leading-relaxed text-white/58">
+                      {primaryQuest?.description ||
+                        'Reviens demain pour une nouvelle contribution gratuite.'}
+                    </p>
+
+                    {primaryQuest && (
+                      <div className="mt-5">
+                        <div className="mb-2 flex items-center justify-between gap-3">
+                          <span className="text-xs font-bold text-white/42">
+                            Récompense immédiate
+                          </span>
+                          <span className="flex items-center gap-1 text-xs font-black text-lime-300">
+                            +{primaryQuest.reward}
+                            <Sprout className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                        <ProgressBar value={questProgress} />
+                      </div>
+                    )}
+
+                    <div
+                      className={cn(
+                        'mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black text-[#0B0F15]',
+                        theme.accentBg,
+                      )}
+                    >
+                      {primaryQuest?.cta || 'Voir le défi'}
+                      <ChevronRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </div>
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="space-y-4 px-4">
-          <Link
-            href="/challenges"
-            className="group block overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.055] shadow-[0_14px_44px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-transform active:scale-[0.985]"
-          >
-            <div className="grid grid-cols-[5.5rem_1fr] gap-4 p-4">
-              <div
-                className={cn(
-                  'relative flex min-h-28 items-center justify-center overflow-hidden rounded-[22px] border border-white/10',
-                  theme.accentBgSoft,
-                )}
-              >
-                <div className={cn('absolute inset-0 opacity-50', theme.accentGlow)} />
-                <BookOpen className={cn('relative h-9 w-9', theme.accentText)} />
-                <Sparkles className="absolute right-3 top-3 h-4 w-4 text-white/45" />
+        <div className="mt-5 px-4">
+          <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.055] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
+            <div
+              className={cn(
+                'absolute -right-10 -top-12 h-28 w-28 rounded-full blur-3xl',
+                theme.accentGlow,
+              )}
+            />
+            <div className="relative flex items-center gap-3">
+              <div className="relative flex h-16 w-16 shrink-0 items-end justify-center overflow-hidden rounded-[22px] bg-black/20">
+                <img
+                  src={GUIDE_MASCOT_IMAGE}
+                  alt=""
+                  className="h-16 w-16 object-contain drop-shadow-[0_14px_20px_rgba(0,0,0,0.35)]"
+                />
               </div>
-              <div className="min-w-0 py-1">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
-                    Academy
-                  </p>
-                  <span className="rounded-full bg-white/[0.06] px-2 py-1 text-[10px] font-bold text-white/54">
-                    {dayLabel}
-                  </span>
-                </div>
-                <h3 className="mt-2 text-[17px] font-black leading-tight text-white">
-                  {monthlyObjective}
-                </h3>
-                <p className="mt-1 line-clamp-2 text-xs font-medium leading-relaxed text-white/52">
-                  Continue le chapitre en cours et transforme ton apprentissage en graines d'impact.
+              <div className="min-w-0">
+                <p className={cn('text-xs font-black', theme.accentText)}>Aura te guide</p>
+                <h2 className="mt-0.5 text-[15px] font-black leading-tight text-white">
+                  {presentation.headline}
+                </h2>
+                <p className="mt-1 line-clamp-2 text-xs font-semibold leading-relaxed text-white/55">
+                  {presentation.message}
                 </p>
-                <div className="mt-4 flex items-center gap-3">
-                  <ProgressBar value={academyProgress} className="flex-1" />
-                  <span className={cn('text-xs font-black tabular-nums', theme.accentText)}>
-                    {Math.round(academyProgress)}%
-                  </span>
-                </div>
               </div>
             </div>
-          </Link>
+          </div>
+        </div>
+
+        <div className="mt-7 space-y-4 px-4">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
+                Progression
+              </p>
+              <h2 className="mt-1 text-xl font-black tracking-tight text-white">
+                Tes objectifs vivants
+              </h2>
+            </div>
+            <Trophy className={cn('h-5 w-5', theme.accentText)} />
+          </div>
 
           <Link
-            href={primaryQuest?.href || '/challenges'}
-            className="block rounded-[26px] border border-white/10 bg-[#15151A]/92 p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
+            href={featuredSpecies?.href || '/profile/biodex'}
+            className="group relative block min-h-[15rem] overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.055] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-transform active:scale-[0.985]"
           >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex min-w-0 gap-3">
-                <span
-                  className={cn(
-                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] bg-white/[0.06]',
-                    theme.accentText,
-                  )}
-                >
-                  {primaryQuest && primaryQuest.progress >= primaryQuest.max ? (
-                    <CheckCircle2 className="h-6 w-6 text-lime-400" />
-                  ) : (
-                    <PrimaryIcon className="h-6 w-6" />
-                  )}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
-                    Défi du jour
-                  </p>
-                  <h3 className="mt-1 text-[16px] font-black leading-tight text-white">
-                    {primaryQuest?.title || "Aucune quête pour aujourd'hui"}
-                  </h3>
-                  <p className="mt-1 line-clamp-2 text-xs font-medium leading-relaxed text-white/52">
-                    {primaryQuest?.description ||
-                      'Reviens demain pour une nouvelle contribution gratuite.'}
-                  </p>
+            <div
+              className={cn(
+                'absolute -right-10 -top-10 h-48 w-48 rounded-full blur-[56px]',
+                theme.accentGlow,
+              )}
+            />
+            <img
+              src={biodexPreviewImage}
+              alt=""
+              className={cn(
+                'pointer-events-none absolute -right-14 bottom-0 h-56 w-72 object-contain object-bottom opacity-75 transition-transform duration-700 group-hover:scale-105',
+                !featuredSpecies?.isUnlocked && 'grayscale saturate-0 opacity-50',
+              )}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0B0F15] to-transparent" />
+
+            <div className="relative flex min-h-[13rem] max-w-[64%] flex-col justify-between">
+              <div>
+                <div className="mb-3 flex items-center gap-2">
+                  <span
+                    className={cn(
+                      'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.12em]',
+                      theme.badgeClassName,
+                      theme.accentText,
+                    )}
+                  >
+                    {featuredSpecies?.isUnlocked ? (
+                      <PawPrint className="h-3.5 w-3.5" />
+                    ) : (
+                      <Lock className="h-3.5 w-3.5" />
+                    )}
+                    BioDex
+                  </span>
                 </div>
+                <h3 className="text-[25px] font-black leading-[1.02] tracking-tight text-white">
+                  {featuredSpecies?.isUnlocked ? 'Espèce suivie' : 'Débloque ton BioDex'}
+                </h3>
+                <p className="mt-3 text-sm font-semibold leading-relaxed text-white/62">
+                  {featuredSpecies?.isUnlocked
+                    ? `${speciesName} est dans ton carnet vivant.`
+                    : `Plus que ${biodexActionsLeft} actions pour révéler ${speciesName}.`}
+                </p>
               </div>
-              <div className="flex shrink-0 flex-col items-end gap-2">
-                <span
-                  className={cn(
-                    'rounded-full border px-2.5 py-1 text-xs font-black tabular-nums',
-                    primaryQuest && primaryQuest.progress >= primaryQuest.max
-                      ? 'border-lime-400/30 bg-lime-400/10 text-lime-300'
-                      : 'border-white/10 bg-white/[0.05] text-white/64',
-                  )}
-                >
-                  {primaryQuest ? `${primaryQuest.progress}/${primaryQuest.max}` : '0/1'}
-                </span>
-                <ChevronRight className="h-4 w-4 text-white/24" />
-              </div>
+
+              <span
+                className={cn(
+                  'inline-flex items-center gap-2 text-sm font-black',
+                  theme.accentText,
+                )}
+              >
+                Ouvrir le carnet
+                <ChevronRight className="h-4 w-4" />
+              </span>
             </div>
-            {primaryQuest && (
-              <div className="mt-4 flex items-center gap-3">
-                <ProgressBar value={questProgress} className="flex-1" />
-                <span className="flex items-center gap-1 text-xs font-black text-lime-300">
-                  +{primaryQuest.reward}
-                  <Sprout className="h-3.5 w-3.5" />
-                </span>
-              </div>
-            )}
           </Link>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Link
-              href={featuredSpecies?.href || '/profile/biodex'}
-              className="group block min-h-48 overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.055] p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
-            >
-              <div className="flex h-full flex-col justify-between">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
-                      BioDex
-                    </p>
-                    <h3 className="mt-1 text-[17px] font-black text-white">
-                      {featuredSpecies?.isUnlocked ? 'Espèce suivie' : 'Débloque ton BioDex'}
-                    </h3>
-                  </div>
-                  <span className="rounded-full border border-white/10 bg-black/25 p-2">
-                    {featuredSpecies?.isUnlocked ? (
-                      <PawPrint className="h-4 w-4 text-lime-300" />
-                    ) : (
-                      <Lock className="h-4 w-4 text-white/60" />
-                    )}
-                  </span>
-                </div>
-                <div className="mt-5 flex items-end gap-4">
-                  <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[24px] border border-white/10 bg-[#080b0f]">
-                    {featuredSpecies?.imageUrl ? (
-                      <img
-                        src={featuredSpecies.imageUrl}
-                        alt=""
-                        className={cn(
-                          'h-full w-full object-cover',
-                          !featuredSpecies.isUnlocked && 'grayscale opacity-25',
-                        )}
-                      />
-                    ) : (
-                      <PawPrint className="h-9 w-9 text-white/12" />
-                    )}
-                    {!featuredSpecies?.isUnlocked && (
-                      <div className="absolute inset-0 bg-black/18" />
-                    )}
-                  </div>
-                  <div className="min-w-0 pb-1">
-                    <p className="line-clamp-3 text-sm font-semibold leading-snug text-white/68">
-                      {featuredSpecies?.isUnlocked
-                        ? `${speciesName} est dans ton carnet vivant.`
-                        : `Plus que ${biodexActionsLeft} actions pour révéler ${speciesName}.`}
-                    </p>
-                    <p className={cn('mt-2 text-xs font-black', theme.accentText)}>
-                      Voir le BioDex
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            <Link
               href="/impact"
-              className="block min-h-48 rounded-[26px] border border-white/10 bg-[#15151A]/92 p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
+              className="relative block min-h-52 overflow-hidden rounded-[30px] border border-white/10 bg-[#15151A]/92 p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
             >
-              <div className="flex h-full flex-col justify-between">
+              <div
+                className={cn(
+                  'absolute -right-8 -top-12 h-36 w-36 rounded-full blur-3xl',
+                  theme.accentGlow,
+                )}
+              />
+              <div className="relative flex h-full flex-col justify-between">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
                       Objectif de faction
                     </p>
                     <h3 className="mt-1 text-[17px] font-black leading-tight text-white">
-                      {presentation.label} est presque au but
+                      Cap collectif: {Math.round(collectiveProgress)}%
                     </h3>
                   </div>
                   <ShieldCheck className={cn('h-5 w-5', theme.accentText)} />
                 </div>
+
                 <div className="mt-5 flex items-center justify-between gap-4">
                   <div className="min-w-0">
+                    <div className="mb-3 flex -space-x-2">
+                      <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.08]">
+                        <img
+                          src={presentation.mascotImage}
+                          alt=""
+                          className="h-full w-full object-contain"
+                        />
+                      </span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.08] text-[11px] font-black text-white">
+                        {firstName.charAt(0).toUpperCase()}
+                      </span>
+                      <span
+                        className={cn(
+                          'flex h-8 w-8 items-center justify-center rounded-full border text-[10px] font-black',
+                          theme.accentBorder,
+                          theme.accentBgSoft,
+                          theme.accentText,
+                        )}
+                      >
+                        +{Math.max(quests.length - completedQuests, 1)}
+                      </span>
+                    </div>
                     <p className="text-sm font-semibold leading-snug text-white/64">
                       Chaque action collective renforce la saison en cours.
-                    </p>
-                    <p className="mt-2 text-xs font-bold text-white/38">
-                      {formatImpactPoints(impactPoints)} crédits impact disponibles
                     </p>
                   </div>
                   <ProgressRing
                     value={collectiveProgress}
                     label={`Objectif de faction ${Math.round(collectiveProgress)}%`}
+                    className={theme.accentText}
                   />
                 </div>
               </div>
             </Link>
-          </div>
 
-          <Link
-            href="/products"
-            className="flex items-center justify-between rounded-[24px] border border-white/10 bg-white/[0.045] p-4 backdrop-blur-xl transition-transform active:scale-[0.985]"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-white/[0.06] text-amber-300">
-                <Package className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-[15px] font-black text-white">Avantages disponibles</p>
-                <p className="text-xs font-medium text-white/46">
-                  Convertis tes crédits en récompenses utiles.
-                </p>
+            <Link
+              href="/products"
+              className="relative block min-h-52 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.05] p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
+            >
+              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-amber-300/10 blur-3xl" />
+              <div className="relative flex h-full flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
+                      Récompenses
+                    </p>
+                    <h3 className="mt-1 text-[17px] font-black leading-tight text-white">
+                      Avantages disponibles
+                    </h3>
+                  </div>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-[16px] bg-amber-300/12 text-amber-300">
+                    <Package className="h-5 w-5" />
+                  </span>
+                </div>
+
+                <div>
+                  <p className="text-sm font-semibold leading-snug text-white/64">
+                    Convertis tes crédits en récompenses utiles, sans casser l'immersion.
+                  </p>
+                  <p className="mt-3 flex items-center gap-2 text-sm font-black text-amber-300">
+                    {impactCreditsLabel} crédits impact
+                    <ChevronRight className="h-4 w-4" />
+                  </p>
+                </div>
               </div>
-            </div>
-            <ChevronRight className="h-4 w-4 text-white/24" />
-          </Link>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
