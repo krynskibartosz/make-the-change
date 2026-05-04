@@ -326,7 +326,10 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
               layout
               layoutId={DOCK_LAYOUT_ID}
               transition={DOCK_TRANSITION}
-              className="pointer-events-auto flex max-w-full items-center overflow-hidden rounded-full border border-white/10 bg-[#0B0F15]/92 p-1 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl"
+              initial={false}
+              animate={{ borderRadius: 999, padding: 4 }}
+              className="pointer-events-auto flex w-fit max-w-full transform-gpu items-center justify-center overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl will-change-transform"
+              style={{ width: 'fit-content' }}
             >
               {/* Bouton Map — à gauche du dock */}
               <motion.button
@@ -334,7 +337,6 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                 onClick={() => updateViewMode('map')}
                 className="flex h-11 items-center justify-center gap-2 rounded-full bg-lime-400 px-5 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)] transition active:scale-[0.98]"
                 aria-label="Afficher la carte des projets"
-                layout="position"
               >
                 <MapIcon className="h-4 w-4" />
                 Carte

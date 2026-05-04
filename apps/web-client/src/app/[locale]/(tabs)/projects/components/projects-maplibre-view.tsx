@@ -192,6 +192,11 @@ export function ProjectsMapView({
     setIsDockExpanded(false)
   }, [])
 
+  const handleShowCurrentView = useCallback(() => {
+    collapseDock()
+    onShowCurrentView()
+  }, [collapseDock, onShowCurrentView])
+
   const clearSelectedProject = useCallback(() => {
     setSelectedProjectId(null)
   }, [])
@@ -317,7 +322,7 @@ export function ProjectsMapView({
       />
 
       {mappedProjectsCount === 0 ? (
-        isVisible && <MapEmptyState onShowCurrentView={onShowCurrentView} />
+        isVisible && <MapEmptyState onShowCurrentView={handleShowCurrentView} />
       ) : (
         <AnimatePresence initial={false}>
           {isVisible && (
@@ -330,7 +335,7 @@ export function ProjectsMapView({
               selectedFeature={selectedFeature}
               onClearSelection={clearSelectedProject}
               onCollapse={collapseDock}
-              onShowCurrentView={onShowCurrentView}
+              onShowCurrentView={handleShowCurrentView}
               onToggleExpanded={toggleDockExpanded}
             />
           )}
