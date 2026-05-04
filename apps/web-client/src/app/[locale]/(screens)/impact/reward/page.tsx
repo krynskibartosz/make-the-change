@@ -147,10 +147,10 @@ export default async function ImpactRewardPage() {
                         <CurrencyAmount
                           kind="impactCredits"
                           value={product.price_points}
-                          className="mt-1 text-sm font-black"
+                          className="text-sm font-black"
                         />
                       ) : (
-                        <div className="mt-1 flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5">
                           <span className="text-xs text-white/25 line-through">{product.price_points} ⬡</span>
                           <span className="flex items-center gap-1 text-sm font-black text-white/40">
                             {Math.round(product.price_points * 0.85)} ⬡
