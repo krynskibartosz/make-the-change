@@ -119,12 +119,10 @@ export function ProjectDonateOneFlow({
   const [step, setStep] = useState<FlowStep>('impact')
   const [guestEmail, setGuestEmail] = useState('')
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
-  const [claimEmail, setClaimEmail] = useState('')
   const [claimSaved, setClaimSaved] = useState(false)
   const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
   const [isProcessing, setIsProcessing] = useState(false)
-  const claimEmailInputRef = useRef<HTMLInputElement | null>(null)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
 
@@ -257,7 +255,7 @@ export function ProjectDonateOneFlow({
   }
 
   const submitClaim = () => {
-    if (!claimEmail || !/.+@.+\..+/.test(claimEmail)) {
+    if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) {
       return
     }
     setIsSendingMagicLink(true)
@@ -265,18 +263,9 @@ export function ProjectDonateOneFlow({
       setIsSendingMagicLink(false)
       setClaimSaved(true)
       setTimeout(() => {
-        router.push('/profile/biodex')
+        router.replace('/profile/biodex')
       }, 2000)
     }, 1200)
-  }
-
-  const focusClaimEmailInput = () => {
-    if (!claimEmailInputRef.current) {
-      return
-    }
-
-    claimEmailInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    claimEmailInputRef.current.focus()
   }
 
   const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
@@ -599,19 +588,14 @@ export function ProjectDonateOneFlow({
                     Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
                   </p>
                   <div className="grid gap-2">
-                    <input
-                      ref={claimEmailInputRef}
-                      type="email"
-                      value={claimEmail}
-                      onChange={(event) => setClaimEmail(event.target.value)}
-                      placeholder="Email"
-                      className="h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
-                    />
+                    <p className="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 flex items-center text-base text-white/60 truncate">
+                      {guestEmail}
+                    </p>
                     <Button
                       type="button"
                       onClick={submitClaim}
                       className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
-                      disabled={!claimEmail || !/.+@.+\..+/.test(claimEmail) || isSendingMagicLink}
+                      disabled={isSendingMagicLink}
                     >
                       {isSendingMagicLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Créer mon compte en 1 clic
@@ -682,10 +666,10 @@ export function ProjectDonateOneFlow({
             type="button"
             onClick={() => {
               if (discoveredSpeciesId) {
-                router.push(`/profile/biodex/${discoveredSpeciesId}`)
+                router.replace(`/profile/biodex/${discoveredSpeciesId}`)
                 return
               }
-              router.push('/profile/biodex')
+              router.replace('/profile/biodex')
             }}
             className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
           >
@@ -695,7 +679,7 @@ export function ProjectDonateOneFlow({
             type="button"
             variant="ghost"
             onClick={() => {
-              router.push(`/projects/${project.slug}`)
+              router.replace(`/projects/${project.slug}`)
             }}
             className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
           >
@@ -709,13 +693,7 @@ export function ProjectDonateOneFlow({
           <Button
             type="button"
             disabled={isSendingMagicLink}
-            onClick={() => {
-              if (!claimEmail || !/.+@.+\..+/.test(claimEmail)) {
-                focusClaimEmailInput()
-                return
-              }
-              submitClaim()
-            }}
+            onClick={submitClaim}
             className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
           >
             {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
