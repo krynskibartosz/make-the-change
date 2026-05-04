@@ -189,27 +189,25 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           </div>
 
           {product.producer && (
-            <div className="px-4 sm:px-0 mt-2">
-              <a
-                href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}
-                className="flex items-center gap-3 py-3 border-y border-white/5 group"
-              >
-                {producerImage ? (
-                  <img src={producerImage} alt={producerName} className="h-8 w-8 rounded-full object-cover shrink-0" />
-                ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary shrink-0">
-                    {producerName[0]?.toUpperCase() || 'P'}
-                  </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Soutient</p>
-                  <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors truncate">
-                    {producerName}{product.producer.address_city ? ` · ${product.producer.address_city}` : ''}{product.producer.address_country_code ? `, ${product.producer.address_country_code.toUpperCase()}` : ''}
-                  </p>
+            <a
+              href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}
+              className="flex items-center gap-3 px-4 py-3 border-y border-white/5 group mt-2"
+            >
+              {producerImage ? (
+                <img src={producerImage} alt={producerName} className="h-8 w-8 rounded-full object-cover shrink-0" />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary shrink-0">
+                  {producerName[0]?.toUpperCase() || 'P'}
                 </div>
-                <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors shrink-0" />
-              </a>
-            </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Producteur partenaire</p>
+                <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors truncate">
+                  {producerName}{product.producer.address_city ? ` · ${product.producer.address_city}` : ''}{product.producer.address_country_code ? `, ${product.producer.address_country_code.toUpperCase()}` : ''}
+                </p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors shrink-0" />
+            </a>
           )}
 
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
@@ -224,30 +222,28 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {/* ── SÉLECTEUR DE FORMAT ── */}
-            <div className="px-1 mb-2 mt-2">
-              <div className="bg-white/[0.02] border-t border-b border-white/5 py-4 px-1 sm:p-4 sm:rounded-2xl sm:border">
-                <div className="flex justify-between items-end mb-3">
-                  <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Choisir le format</span>
-                  <div className="flex items-center gap-1.5 rounded-lg bg-amber-300/10 px-2.5 py-1">
-                    <span className="text-[11px] text-white/50 font-medium">Votre solde :</span>
-                    <CurrencyAmount kind="impactCredits" value={userBalance} className="text-xs font-bold" />
-                  </div>
+            <div className="px-1 pt-4 pb-2">
+              <div className="flex justify-between items-end mb-3">
+                <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Choisir le format</span>
+                <div className="flex items-center gap-1.5 rounded-lg bg-amber-300/10 px-2.5 py-1">
+                  <span className="text-[11px] text-white/50 font-medium">Votre solde :</span>
+                  <CurrencyAmount kind="impactCredits" value={userBalance} className="text-xs font-bold" />
                 </div>
-                <div className="flex gap-2">
-                  {formats.map((format) => (
-                    <button
-                      key={format.id}
-                      onClick={() => setSelectedFormat(format)}
-                      className={`flex-1 flex items-center justify-center h-12 rounded-xl text-sm font-bold transition-all active:scale-95 ${
-                        selectedFormat.id === format.id
-                          ? 'bg-amber-300 text-[#120d04] shadow-lg'
-                          : 'bg-white/5 border border-white/20 text-white/90 font-semibold hover:bg-white/10 hover:border-white/30 transition-colors'
-                      }`}
-                    >
-                      {format.id}
-                    </button>
-                  ))}
-                </div>
+              </div>
+              <div className="flex gap-2">
+                {formats.map((format) => (
+                  <button
+                    key={format.id}
+                    onClick={() => setSelectedFormat(format)}
+                    className={`flex-1 flex items-center justify-center h-12 rounded-xl text-sm font-bold transition-all active:scale-95 ${
+                      selectedFormat.id === format.id
+                        ? 'bg-amber-300 text-[#120d04] shadow-lg'
+                        : 'bg-white/5 border border-white/20 text-white/90 font-semibold hover:bg-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    {format.id}
+                  </button>
+                ))}
               </div>
             </div>
 
