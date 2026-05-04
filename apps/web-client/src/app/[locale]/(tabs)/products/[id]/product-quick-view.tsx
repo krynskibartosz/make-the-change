@@ -191,7 +191,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           {product.producer && (
             <a
               href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}
-              className="flex items-center gap-3 px-4 py-3 border-y border-white/5 group mt-2"
+              className="flex items-center gap-3 px-4 py-3 border-y border-white/5 group mt-4"
             >
               {producerImage ? (
                 <img src={producerImage} alt={producerName} className="h-8 w-8 rounded-full object-cover shrink-0" />
@@ -212,14 +212,16 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
 
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
             {/* ── Scarcity Indicator ── */}
-            {inStock && selectedFormat.stock < 20 && (
-              <div className="flex items-center gap-1.5 mb-3 px-1">
-                <Flame className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                <span className="text-xs font-bold text-orange-500">
-                  Série limitée · Plus que {selectedFormat.stock} exemplaire{selectedFormat.stock > 1 ? 's' : ''}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center gap-1.5 px-1 min-h-[20px]">
+              {inStock && selectedFormat.stock < 20 && (
+                <>
+                  <Flame className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                  <span className="text-xs font-bold text-orange-500">
+                    Série limitée · Plus que {selectedFormat.stock} exemplaire{selectedFormat.stock > 1 ? 's' : ''}
+                  </span>
+                </>
+              )}
+            </div>
 
             {/* ── SÉLECTEUR DE FORMAT ── */}
             <div className="px-1 pt-4 pb-2">
