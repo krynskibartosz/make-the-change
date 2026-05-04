@@ -6,12 +6,22 @@ import {
   type MapLayerMouseEvent,
   Map as MapLibreMap,
   type MapRef,
-  NavigationControl,
   Source,
 } from '@vis.gl/react-maplibre'
-import { ArrowUpRight, Bug, List, MapPin, TreePine, Waves, X } from 'lucide-react'
+import { AnimatePresence, motion, type Transition } from 'framer-motion'
+import {
+  ArrowUpRight,
+  Bug,
+  ChevronDown,
+  ChevronUp,
+  List,
+  MapPin,
+  TreePine,
+  Waves,
+  X,
+} from 'lucide-react'
 import { type GeoJSONSource, LngLatBounds, type MapGeoJSONFeature } from 'maplibre-gl'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { type PointerEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -24,7 +34,10 @@ import {
 } from '../_features/project-map-data'
 
 type ProjectsMapViewProps = {
+  isVisible: boolean
   projects: ProjectMapSourceProject[]
+  dockLayoutId: string
+  dockTransition: Transition
   onShowCurrentView: () => void
 }
 
@@ -111,9 +124,17 @@ const pointLayer: LayerProps = {
   },
 }
 
-export function ProjectsMapView({ projects, onShowCurrentView }: ProjectsMapViewProps) {
+export function ProjectsMapView({
+  isVisible,
+  projects,
+  dockLayoutId,
+  dockTransition,
+  onShowCurrentView,
+}: ProjectsMapViewProps) {
   const mapRef = useRef<MapRef | null>(null)
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
+  const [isDockExpanded, setIsDockExpanded] = useState(false)
+  const [isMapReady, setIsMapReady] = useState(false)
   const featureCollection = useMemo(() => buildProjectMapFeatureCollection(projects), [projects])
   const mappedProjectsCount = featureCollection.features.length
 
@@ -144,52 +165,103 @@ export function ProjectsMapView({ projects, onShowCurrentView }: ProjectsMapView
     }
 
     map.fitBounds(bounds, {
-      padding: { top: 120, right: 40, bottom: 280, left: 40 },
+      padding: { top: 72, right: 36, bottom: 180, left: 36 },
       maxZoom: 4.6,
       duration: 800,
     })
   }, [featureCollection.features])
 
-  const handleMapClick = useCallback(async (event: MapLayerMouseEvent) => {
-    const feature = event.features?.[0]
-    const coordinates = getFeaturePointCoordinates(feature)
-    if (!feature || !coordinates) {
-      return
-    }
+  const collapseDock = useCallback(() => {
+    setSelectedProjectId(null)
+    setIsDockExpanded(false)
+  }, [])
 
-    if (feature.layer.id === CLUSTER_LAYER_ID) {
-      const source = mapRef.current?.getSource(SOURCE_ID) as GeoJSONSource | undefined
-      const clusterId = Number(feature.properties?.cluster_id)
-      if (!source || !Number.isFinite(clusterId)) {
-        return
-      }
+  const clearSelectedProject = useCallback(() => {
+    setSelectedProjectId(null)
+  }, [])
 
-      const zoom = await source.getClusterExpansionZoom(clusterId)
-      mapRef.current?.easeTo({
-        center: coordinates,
-        zoom,
-        duration: 520,
-      })
-      return
-    }
+  const toggleDockExpanded = useCallback(() => {
+    setSelectedProjectId(null)
+    setIsDockExpanded((isExpanded) => !isExpanded)
+  }, [])
 
-    if (feature.layer.id === POINT_LAYER_ID || feature.layer.id === POINT_HALO_LAYER_ID) {
-      const properties = feature.properties as Partial<ProjectMapFeatureProperties> | null
-      if (!properties?.id) {
-        return
-      }
+  const handleMapLoad = useCallback(() => {
+    fitProjectsInView()
+    window.setTimeout(() => setIsMapReady(true), 2800)
+  }, [fitProjectsInView])
 
-      setSelectedProjectId(properties.id)
-      mapRef.current?.easeTo({
-        center: coordinates,
-        zoom: Math.max(mapRef.current.getZoom(), 3.2),
-        duration: 480,
-      })
+  const handleMapIdle = useCallback(() => {
+    setIsMapReady(true)
+  }, [])
+
+  const handleMapRender = useCallback(() => {
+    if (mapRef.current?.loaded()) {
+      setIsMapReady(true)
     }
   }, [])
 
+  const handleMapTransitionComplete = useCallback(() => {
+    if (isVisible) {
+      mapRef.current?.resize()
+    }
+  }, [isVisible])
+
+  const handleMapClick = useCallback(
+    async (event: MapLayerMouseEvent) => {
+      const feature = event.features?.[0]
+      const coordinates = getFeaturePointCoordinates(feature)
+      if (!feature || !coordinates) {
+        collapseDock()
+        return
+      }
+
+      if (feature.layer.id === CLUSTER_LAYER_ID) {
+        collapseDock()
+        const source = mapRef.current?.getSource(SOURCE_ID) as GeoJSONSource | undefined
+        const clusterId = Number(feature.properties?.cluster_id)
+        if (!source || !Number.isFinite(clusterId)) {
+          return
+        }
+
+        const zoom = await source.getClusterExpansionZoom(clusterId)
+        mapRef.current?.easeTo({
+          center: coordinates,
+          zoom,
+          duration: 520,
+        })
+        return
+      }
+
+      if (feature.layer.id === POINT_LAYER_ID || feature.layer.id === POINT_HALO_LAYER_ID) {
+        const properties = feature.properties as Partial<ProjectMapFeatureProperties> | null
+        if (!properties?.id) {
+          return
+        }
+
+        setSelectedProjectId(properties.id)
+        setIsDockExpanded(true)
+        mapRef.current?.easeTo({
+          center: coordinates,
+          zoom: Math.max(mapRef.current.getZoom(), 3.2),
+          offset: [0, -92],
+          duration: 480,
+        })
+      }
+    },
+    [collapseDock],
+  )
+
   return (
-    <div className="fixed inset-0 z-40 overflow-hidden bg-[#05070A] text-white">
+    <motion.div
+      className={`fixed inset-0 z-40 overflow-hidden bg-[#05070A] text-white ${
+        isVisible ? 'pointer-events-auto' : 'pointer-events-none'
+      }`}
+      initial={false}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+      onAnimationComplete={handleMapTransitionComplete}
+      aria-hidden={!isVisible}
+    >
       <MapLibreMap
         ref={mapRef}
         initialViewState={INITIAL_WORLD_VIEW}
@@ -199,11 +271,12 @@ export function ProjectsMapView({ projects, onShowCurrentView }: ProjectsMapView
         attributionControl={false}
         interactiveLayerIds={[CLUSTER_LAYER_ID, POINT_LAYER_ID, POINT_HALO_LAYER_ID]}
         onClick={handleMapClick}
-        onLoad={fitProjectsInView}
+        onIdle={handleMapIdle}
+        onLoad={handleMapLoad}
+        onRender={handleMapRender}
         cursor="pointer"
         style={{ width: '100%', height: '100dvh' }}
       >
-        <NavigationControl position="top-right" showCompass={false} visualizePitch={false} />
         <Source
           id={SOURCE_ID}
           type="geojson"
@@ -219,66 +292,158 @@ export function ProjectsMapView({ projects, onShowCurrentView }: ProjectsMapView
         </Source>
       </MapLibreMap>
 
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-50 px-4 pt-[max(0.85rem,env(safe-area-inset-top))]">
-        <div className="mx-auto flex max-w-3xl items-start justify-between gap-3">
-          <button
-            type="button"
-            onClick={onShowCurrentView}
-            className="pointer-events-auto flex h-11 items-center gap-2 rounded-full border border-white/10 bg-[#0B0F15]/88 px-3 text-[13px] font-bold text-white shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition active:scale-95"
-          >
-            <List className="h-4 w-4 text-lime-400" />
-            Projets
-          </button>
+      {isVisible && !isMapReady && <MapLoadingOverlay />}
 
-          <div className="pointer-events-auto rounded-2xl border border-white/10 bg-[#0B0F15]/82 px-3 py-2 text-right shadow-[0_10px_30px_rgba(0,0,0,0.32)] backdrop-blur-xl">
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-lime-400">
-              Carte mondiale
-            </p>
-            <p className="mt-0.5 text-[12px] font-semibold text-white/75">
-              {mappedProjectsCount.toLocaleString('fr-FR')} projet
-              {mappedProjectsCount > 1 ? 's' : ''} localisé
-              {mappedProjectsCount > 1 ? 's' : ''}
-            </p>
-          </div>
-        </div>
-      </div>
+      <MapAttributionOverlay
+        isVisible={
+          isVisible && isMapReady && mappedProjectsCount > 0 && !selectedFeature && !isDockExpanded
+        }
+      />
 
       {mappedProjectsCount === 0 ? (
-        <MapEmptyState onShowCurrentView={onShowCurrentView} />
+        isVisible && <MapEmptyState onShowCurrentView={onShowCurrentView} />
       ) : (
-        <ProjectMapSheet
-          featureCollection={featureCollection}
-          selectedFeature={selectedFeature}
-          onClearSelection={() => setSelectedProjectId(null)}
-        />
+        <AnimatePresence initial={false}>
+          {isVisible && (
+            <ProjectMapDock
+              dockLayoutId={dockLayoutId}
+              dockTransition={dockTransition}
+              featureCollection={featureCollection}
+              isExpanded={isDockExpanded}
+              mappedProjectsCount={mappedProjectsCount}
+              selectedFeature={selectedFeature}
+              onClearSelection={clearSelectedProject}
+              onCollapse={collapseDock}
+              onShowCurrentView={onShowCurrentView}
+              onToggleExpanded={toggleDockExpanded}
+            />
+          )}
+        </AnimatePresence>
       )}
+    </motion.div>
+  )
+}
+
+function MapLoadingOverlay() {
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[60] flex items-end justify-center bg-[#05070A] px-5 pb-[calc(4.5rem+env(safe-area-inset-bottom)+6.5rem)] text-white">
+      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#0B0F15]/90 px-4 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+        <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-lime-400 shadow-[0_0_18px_rgba(163,230,53,0.75)]" />
+        <span className="text-[13px] font-black">Chargement de la carte</span>
+      </div>
     </div>
   )
 }
 
-function ProjectMapSheet({
-  featureCollection,
-  selectedFeature,
-  onClearSelection,
-}: {
-  featureCollection: ProjectMapFeatureCollection
-  selectedFeature: ProjectMapFeature | null
-  onClearSelection: () => void
-}) {
-  const featuredProjects = featureCollection.features.slice(0, 3)
+function MapAttributionOverlay({ isVisible }: { isVisible: boolean }) {
+  if (!isVisible) {
+    return null
+  }
 
   return (
-    <section
-      className="fixed inset-x-3 z-50 mx-auto max-w-xl rounded-[1.35rem] border border-white/10 bg-[#0B0F15]/92 p-3 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl"
-      style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.75rem)' }}
+    <p
+      className="fixed left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#0B0F15]/45 px-2 py-1 text-[10px] font-semibold leading-none text-white/45 shadow-[0_8px_24px_rgba(0,0,0,0.2)] backdrop-blur-md"
+      style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 4.45rem)' }}
+    >
+      &copy; OpenFreeMap &copy; OpenStreetMap contributors
+    </p>
+  )
+}
+
+function ProjectMapDock({
+  dockLayoutId,
+  dockTransition,
+  featureCollection,
+  isExpanded,
+  mappedProjectsCount,
+  selectedFeature,
+  onClearSelection,
+  onCollapse,
+  onShowCurrentView,
+  onToggleExpanded,
+}: {
+  dockLayoutId: string
+  dockTransition: Transition
+  featureCollection: ProjectMapFeatureCollection
+  isExpanded: boolean
+  mappedProjectsCount: number
+  selectedFeature: ProjectMapFeature | null
+  onClearSelection: () => void
+  onCollapse: () => void
+  onShowCurrentView: () => void
+  onToggleExpanded: () => void
+}) {
+  const dragStartY = useRef<number | null>(null)
+  const featuredProjects = featureCollection.features.slice(0, 6)
+  const isOpen = Boolean(selectedFeature) || isExpanded
+
+  const handleHandlePointerDown = useCallback((event: PointerEvent<HTMLButtonElement>) => {
+    dragStartY.current = event.clientY
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }, [])
+
+  const handleHandlePointerUp = useCallback(
+    (event: PointerEvent<HTMLButtonElement>) => {
+      const startY = dragStartY.current
+      dragStartY.current = null
+
+      if (startY !== null && event.clientY - startY > 28) {
+        onCollapse()
+      }
+    },
+    [onCollapse],
+  )
+
+  return (
+    <motion.section
+      layout
+      layoutId={dockLayoutId}
+      transition={dockTransition}
+      className={`fixed inset-x-3 z-50 mx-auto max-w-xl border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-[border-radius,padding,transform] duration-300 ${
+        isOpen ? 'rounded-[1.35rem] p-3' : 'rounded-full p-1'
+      }`}
+      style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)' }}
       aria-label={selectedFeature ? 'Projet sélectionné' : 'Projets visibles sur la carte'}
     >
+      <AnimatePresence initial={false} mode="popLayout">
+        {isOpen && (
+          <motion.button
+            key="map-dock-handle"
+            type="button"
+            onClick={onCollapse}
+            onPointerDown={handleHandlePointerDown}
+            onPointerUp={handleHandlePointerUp}
+            className="mx-auto mb-2 flex h-4 w-16 items-center justify-center rounded-full text-white/45 transition hover:text-white/70 active:scale-95"
+            aria-label="Replier le dock de la carte"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.16 }}
+          >
+            <span className="h-1 w-10 rounded-full bg-current" />
+          </motion.button>
+        )}
+      </AnimatePresence>
       {selectedFeature ? (
         <SelectedProjectCard feature={selectedFeature} onClearSelection={onClearSelection} />
+      ) : !isExpanded ? (
+        <CollapsedMapDock
+          mappedProjectsCount={mappedProjectsCount}
+          onShowCurrentView={onShowCurrentView}
+          onToggleExpanded={onToggleExpanded}
+        />
       ) : (
         <div>
-          <div className="flex items-center justify-between gap-3 px-1">
-            <div>
+          <div className="flex items-center justify-between gap-2 px-1">
+            <button
+              type="button"
+              onClick={onShowCurrentView}
+              className="flex h-10 shrink-0 items-center gap-2 rounded-full bg-white/[0.07] px-3 text-[13px] font-bold text-white/82 transition hover:bg-white/10 active:scale-95"
+            >
+              <List className="h-4 w-4 text-lime-400" />
+              Projets
+            </button>
+            <div className="min-w-0 flex-1">
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
                 Explorer
               </p>
@@ -286,12 +451,17 @@ function ProjectMapSheet({
                 {featureCollection.features.length.toLocaleString('fr-FR')} projets sur la carte
               </h2>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lime-400/15 text-lime-400">
-              <MapPin className="h-5 w-5" />
-            </div>
+            <button
+              type="button"
+              onClick={onCollapse}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-white/72 transition hover:bg-white/10 active:scale-95"
+              aria-label="Replier le dock de la carte"
+            >
+              <ChevronDown className="h-4 w-4" />
+            </button>
           </div>
 
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="scrollbar-hide mt-3 grid auto-cols-[8.75rem] grid-flow-col gap-2 overflow-x-auto pb-1">
             {featuredProjects.map((feature) => (
               <ProjectMiniTile key={feature.properties.id} feature={feature} />
             ))}
@@ -299,7 +469,46 @@ function ProjectMapSheet({
           <MapAttribution />
         </div>
       )}
-    </section>
+    </motion.section>
+  )
+}
+
+function CollapsedMapDock({
+  mappedProjectsCount,
+  onShowCurrentView,
+  onToggleExpanded,
+}: {
+  mappedProjectsCount: number
+  onShowCurrentView: () => void
+  onToggleExpanded: () => void
+}) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <button
+        type="button"
+        onClick={onShowCurrentView}
+        className="flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white/[0.07] px-3 text-[12px] font-bold text-white/78 transition hover:bg-white/10 active:scale-95"
+        aria-label="Revenir aux projets"
+      >
+        <List className="h-4 w-4" />
+        Liste
+      </button>
+
+      <button
+        type="button"
+        onClick={onToggleExpanded}
+        className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-lime-400 px-3 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)] transition active:scale-[0.98]"
+        aria-expanded={false}
+      >
+        <MapPin className="h-4 w-4 shrink-0" />
+        <span className="truncate">
+          {mappedProjectsCount.toLocaleString('fr-FR')} projet
+          {mappedProjectsCount > 1 ? 's' : ''} localisé
+          {mappedProjectsCount > 1 ? 's' : ''}
+        </span>
+        <ChevronUp className="h-4 w-4 shrink-0" />
+      </button>
+    </div>
   )
 }
 
@@ -376,10 +585,14 @@ function SelectedProjectCard({
   )
 }
 
-function MapAttribution() {
+function MapAttribution({ compact = false }: { compact?: boolean }) {
   return (
-    <p className="mt-3 px-1 text-[10px] font-medium leading-none text-white/35">
-      © OpenFreeMap © OpenStreetMap contributors
+    <p
+      className={`px-1 text-[10px] font-medium leading-none text-white/35 ${
+        compact ? 'mt-1.5 text-center' : 'mt-3'
+      }`}
+    >
+      &copy; OpenFreeMap &copy; OpenStreetMap contributors
     </p>
   )
 }
