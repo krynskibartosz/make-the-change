@@ -212,7 +212,7 @@ export function AdventureTab({
             </h1>
             <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
               L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
-              <strong className={cn(theme.accentText)}>{presentation.label}</strong> aujourd'hui.
+              <strong className={cn(theme.accentText)}>{presentation.mascotName}</strong> aujourd'hui.
             </p>
           </div>
 
