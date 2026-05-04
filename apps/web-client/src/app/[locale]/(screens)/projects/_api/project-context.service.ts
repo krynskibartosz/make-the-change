@@ -115,6 +115,7 @@ function mapProducerProduct(data: unknown): ProducerProduct | null {
     id,
     name,
     price: asNumber(data.price) || 0,
+    price_points: asNumber(data.price_points) ?? null,
     category: asString(data.category) || '',
     impactPercentage: asNumber(data.impactPercentage) || 0,
     image_url: asString(data.image_url)

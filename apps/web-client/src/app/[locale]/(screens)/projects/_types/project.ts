@@ -46,6 +46,7 @@ export type ProducerProduct = {
   id: string
   name: string
   price: number
+  price_points?: number | null
   category: string
   impactPercentage: number
   image_url?: string | null
