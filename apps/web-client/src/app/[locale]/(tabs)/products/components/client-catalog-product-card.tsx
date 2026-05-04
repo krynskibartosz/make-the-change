@@ -39,7 +39,6 @@ type ClientCatalogProductCardProps = {
   lowStockLabel: string
   pointsLabel: string
   viewLabel: string
-  view?: 'grid' | 'list'
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -47,7 +46,6 @@ type ClientCatalogProductCardProps = {
 export function ClientCatalogProductCard({
   product,
   outOfStockLabel,
-  view = 'grid',
 }: ClientCatalogProductCardProps) {
   const imageUrl =
     sanitizeImageUrl(product.image_url) ||
@@ -64,64 +62,6 @@ export function ClientCatalogProductCard({
   const isBio = hasBioTag(product.tags)
   const isArtisan = hasArtisanTag(product.tags)
 
-  // ── Vue Liste (desktop fallback) ────────────────────────────────────────────
-  if (view === 'list') {
-    return (
-      <article itemScope itemType="https://schema.org/Product">
-        <Link
-          href={`/products/${product.id}`}
-          className="group flex items-center gap-4 px-5 py-4 active:bg-white/5 transition-colors"
-        >
-          {/* Image */}
-          <div className="w-16 h-16 shrink-0 rounded-2xl overflow-hidden bg-white/5 relative">
-            {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt={product.name_default}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full bg-white/10" />
-            )}
-          </div>
-
-          {/* Infos */}
-          <div className="flex-1 min-w-0">
-            {/* Titre + badges certification */}
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <h3 className="text-sm font-bold text-white truncate flex-1">
-                {product.name_default}
-              </h3>
-              {isBio && <Leaf className="w-3 h-3 text-emerald-400 shrink-0" aria-hidden="true" />}
-              {isArtisan && <BadgeCheck className="w-3 h-3 text-sky-400 shrink-0" aria-hidden="true" />}
-            </div>
-
-            {/* Producteur */}
-            {product.producer_name && (
-              <p className="text-[11px] text-white/40 font-medium truncate mb-1.5">
-                {product.producer_name}
-              </p>
-            )}
-
-            {/* Prix ou rupture */}
-            {!inStock ? (
-              <span className="text-[11px] font-semibold text-red-400/80">{outOfStockLabel}</span>
-            ) : points > 0 ? (
-              <CurrencyAmount
-                kind="impactCredits"
-                value={points}
-                showLabel
-                className="text-sm font-black"
-              />
-            ) : null}
-          </div>
-        </Link>
-      </article>
-    )
-  }
-
-  // ── Vue Grille (défaut, mobile-first) ───────────────────────────────────────
   return (
     <article itemScope itemType="https://schema.org/Product" className="h-full">
       <meta itemProp="name" content={product.name_default} />
