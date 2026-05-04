@@ -130,10 +130,7 @@ export function ProjectImpactCalculator({
         <>
           <ImpactDisclaimer>
             <div>
-              <h3 className="text-xl font-bold text-white">Impact total du projet</h3>
-              <p className="mt-1 text-sm text-white/60">
-                {`${formatInteger(displayAmount)} € collectés à ce jour`}
-              </p>
+              <h3 className="text-xl font-bold text-white">Ce que ce projet permet de réaliser</h3>
             </div>
           </ImpactDisclaimer>
 

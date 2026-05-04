@@ -15,8 +15,8 @@ export function ProjectSpeciesTeaser({ isDonationProject = false }: ProjectSpeci
           alt={isDonationProject ? "Silhouette d'une espèce marine" : "Silhouette de l'Abeille Noire"}
           className="h-full w-full object-cover brightness-0 opacity-40"
         />
-        <div className="absolute bottom-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 backdrop-blur-sm">
-          <Lock className="h-3 w-3 text-white/60" />
+        <div className="absolute bottom-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white/10 border border-white/15 backdrop-blur-sm">
+          <Lock className="h-3 w-3 text-white/80" />
         </div>
       </div>
 

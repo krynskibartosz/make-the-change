@@ -27,10 +27,23 @@ type ProjectQuickViewProps = {
   relatedProjects?: RelatedProject[]
 }
 
-const formatBadgeLabel = (value: string | null | undefined): string | null => {
+const formatBadgeLabel = (value: string | null | undefined, locale: string): string | null => {
   if (!value) return null
   const normalized = value.replace(/[_-]+/g, ' ').trim()
   if (!normalized) return null
+  
+  // Traduction des types de projet
+  const typeTranslations: Record<string, Record<string, string>> = {
+    beehive: { fr: 'Rucher', en: 'Beehive' },
+    orchard: { fr: 'Verger', en: 'Orchard' },
+    reef: { fr: 'Récif', en: 'Reef' },
+  }
+  
+  const lowerValue = normalized.toLowerCase()
+  if (typeTranslations[lowerValue]?.[locale]) {
+    return typeTranslations[lowerValue][locale]
+  }
+  
   return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
 }
 
@@ -76,7 +89,7 @@ export async function ProjectQuickView({
     .join(', ')
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
-  const typeLabel = formatBadgeLabel(project.type)
+  const typeLabel = formatBadgeLabel(project.type, locale)
 
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
 
@@ -222,7 +235,7 @@ export async function ProjectQuickView({
               producerHref ? (
                 <a
                   href={producerHref}
-                  className="group block w-full cursor-pointer border-y border-white/5 px-4 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60"
+                  className="group block w-full cursor-pointer border-y border-white/5 px-4 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
                 >
                   <div className="-mx-2 flex items-center gap-4 rounded-2xl px-2 py-2 transition-all duration-200 group-hover:bg-white/5 group-active:scale-[0.99] group-active:bg-white/10">
                     {producerImage ? (
@@ -287,9 +300,9 @@ export async function ProjectQuickView({
               <div>
                 <div className="mb-2 flex items-baseline justify-between">
                   <div className="flex items-baseline">
-                    <span className="text-3xl font-black tabular-nums tracking-tight text-emerald-400">
+                    <span className="text-2xl font-bold tabular-nums tracking-tight text-emerald-400">
                       {formatAmountNumber(currentFunding)}{' '}
-                      <span className="text-xl text-emerald-400/70">EUR</span>
+                      <span className="text-lg text-emerald-400/70">EUR</span>
                     </span>
                     <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
                       / {formatAmountNumber(targetBudget)} EUR
@@ -302,7 +315,7 @@ export async function ProjectQuickView({
                 <Progress
                   value={fundingProgress}
                   className="h-2 rounded-full bg-muted"
-                  indicatorClassName="bg-gradient-to-r from-emerald-500 to-marketing-positive-600"
+                  indicatorClassName="bg-gradient-to-r from-primary to-marketing-positive-600"
                 />
               </div>
             </div>
@@ -333,7 +346,7 @@ export async function ProjectQuickView({
             </Button>
           ) : (
             <Link href={investPath} className="block w-full">
-              <Button className="h-14 w-full items-center justify-center rounded-2xl bg-emerald-500 text-lg font-black text-white transition-transform active:scale-95 hover:bg-emerald-400 [&_svg]:hidden">
+              <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
                 {isDonationProject ? 'Faire un don' : 'Soutenir ce projet'}
               </Button>
             </Link>
