@@ -236,7 +236,7 @@ export function AdventureTab({
   const canClaimRewardProduct = !!rewardProduct && rewardProductMissing === 0
 
   return (
-    <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10">
+    <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10 mt-4">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-white/[0.03] to-[#0B0F15]" />
       <div
         className={cn(
@@ -245,8 +245,8 @@ export function AdventureTab({
         )}
       />
 
-      <div className="mx-auto flex w-full max-w-3xl flex-col pb-8 pt-2">
-        <div className="px-5 pb-16">
+      <div className="mx-auto flex w-full max-w-3xl flex-col pt-2">
+        <div className="px-5 pb-8">
           <h1 className="text-[26px] font-black tracking-tight text-white">Salut {firstName} !</h1>
           <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
             L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
@@ -461,36 +461,8 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="px-4 pb-16">
-          <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.055] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
-            <div
-              className={cn(
-                'absolute -right-10 -top-12 h-28 w-28 rounded-full blur-3xl',
-                theme.accentGlow,
-              )}
-            />
-            <div className="relative flex items-center gap-3">
-              <div className="relative flex h-16 w-16 shrink-0 items-end justify-center overflow-hidden rounded-[22px] bg-black/20">
-                <img
-                  src={GUIDE_MASCOT_IMAGE}
-                  alt=""
-                  className="h-16 w-16 object-contain drop-shadow-[0_14px_20px_rgba(0,0,0,0.35)]"
-                />
-              </div>
-              <div className="min-w-0">
-                <p className={cn('text-xs font-black', theme.accentText)}>Aura te guide</p>
-                <h2 className="mt-0.5 text-[15px] font-black leading-tight text-white">
-                  {presentation.headline}
-                </h2>
-                <p className="mt-1 line-clamp-2 text-xs font-semibold leading-relaxed text-white/55">
-                  {presentation.message}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className=" space-y-4 px-4">
+        <div className="space-y-8 px-4">
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
