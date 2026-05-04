@@ -65,11 +65,11 @@ export default async function ImpactRewardPage() {
             <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${activeTheme.accentTextSoft}`}>
               AVANTAGE DU MOIS
             </p>
-            <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
+            <h2 className="mt-1 text-2xl font-black text-white">Le Défi Ilanga Nature</h2>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
-              Si l'Essaim atteint 100%, notre partenaire{' '}
+              Atteignons ensemble les 100 % en récoltant des Graines ! En remerciement de cet effort commun, notre partenaire{' '}
               <span className="font-semibold text-white">Ilanga Nature</span>{' '}
-              débloquera un privilège exclusif sur sa boutique — un geste de gratitude pour tous les Gardiens participants.
+              débloquera des avantages exclusifs pour toute la communauté.
             </p>
           </div>
 
@@ -86,21 +86,21 @@ export default async function ImpactRewardPage() {
               />
             </div>
             <p className="mt-2 text-center text-[11px] text-white/40">
-              Plus que <CurrencyAmount kind="seeds" value={remainingSeeds} className="font-bold" /> restantes
+              Plus que <CurrencyAmount kind="seeds" value={remainingSeeds} className="font-bold" /> à récolter
             </p>
           </div>
 
           {/* Récompenses (Sleek List) */}
           <div className="space-y-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Ce qui vous attend</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Récompenses à débloquer</p>
 
             <div className="flex items-center gap-5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
                 <Droplets className="h-4 w-4 text-amber-400" />
               </div>
               <div className="flex-1 border-b border-white/5 pb-4">
-                <p className="text-base font-bold text-white">15% de privilège</p>
-                <p className="text-sm text-white/50">Sur la récolte de miel Ilanga Nature</p>
+                <p className="text-base font-bold text-white">-15 % d'avantage</p>
+                <p className="text-sm text-white/50">Sur la récolte de miel de notre partenaire.</p>
               </div>
             </div>
 
@@ -109,8 +109,8 @@ export default async function ImpactRewardPage() {
                 <Sparkles className="h-4 w-4 text-violet-400" />
               </div>
               <div className="flex-1 pb-2">
-                <p className="text-base font-bold text-white">{collectiveGoal.prestigeRewardTitle}</p>
-                <p className="text-sm text-white/50">{collectiveGoal.prestigeRewardSummary}</p>
+                <p className="text-base font-bold text-white">Halo de victoire</p>
+                <p className="text-sm text-white/50">La faction ayant récolté le plus de Graines obtiendra un éclat cosmétique exclusif.</p>
               </div>
             </div>
           </div>
@@ -195,7 +195,7 @@ export default async function ImpactRewardPage() {
               href="/onboarding/step-0"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
-              Rejoindre pour participer <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+              Contribuer à l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
             </Link>
           ) : !initialFaction ? (
             <Link
