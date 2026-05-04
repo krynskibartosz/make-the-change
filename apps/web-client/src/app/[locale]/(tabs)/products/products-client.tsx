@@ -111,7 +111,7 @@ export function ProductsClient({
       {/* ── DOCK FLOTTANT (Thumb Zone) — Solde élégant ───────────────────────── */}
       {/* TODO: Réactiver les filtres quand le catalogue dépassera 15 produits */}
       <nav aria-label="Solde Crédits Impact"
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 pointer-events-none"
+        className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 pointer-events-none mb-1"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
         <Link
