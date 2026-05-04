@@ -202,7 +202,6 @@ export function AdventureTab({
     ? getProgressPercent(primaryQuest.progress, primaryQuest.max)
     : 0
   const completedQuests = quests.filter((quest) => quest.progress >= quest.max).length
-  const biodexActionsLeft = featuredSpecies?.isUnlocked ? 0 : Math.max(2 - completedQuests, 1)
   const speciesName = featuredSpecies?.name || 'emblématique'
   const projectName = recommendedProject?.name || 'Projet de restauration'
   const isPrimaryQuestComplete = primaryQuest ? primaryQuest.progress >= primaryQuest.max : false
@@ -521,12 +520,14 @@ export function AdventureTab({
                   </span>
                 </div>
                 <h3 className="text-[25px] font-black leading-[1.02] tracking-tight text-white">
-                  {featuredSpecies?.isUnlocked ? 'Espèce suivie' : 'Débloque ton BioDex'}
+                  {featuredSpecies?.isUnlocked
+                    ? 'Fais évoluer la fiche'
+                    : 'Fiche BioDex en attente'}
                 </h3>
                 <p className="mt-3 text-sm font-semibold leading-relaxed text-white/62">
                   {featuredSpecies?.isUnlocked
-                    ? `${speciesName} est dans ton carnet vivant.`
-                    : `Plus que ${biodexActionsLeft} actions pour révéler ${speciesName}.`}
+                    ? `Révèle plus de contenu sur ${speciesName}: habitat, menaces et anecdotes.`
+                    : `${speciesName} se débloque via le soutien du projet en haut. Sa fiche évolutive t'attend ensuite.`}
                 </p>
               </div>
 
@@ -536,7 +537,7 @@ export function AdventureTab({
                   theme.accentText,
                 )}
               >
-                Ouvrir le carnet
+                {featuredSpecies?.isUnlocked ? 'Faire évoluer' : 'Voir la fiche'}
                 <ChevronRight className="h-4 w-4" />
               </span>
             </div>
