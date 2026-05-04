@@ -212,87 +212,83 @@ export function AdventureTab({
             </h1>
             <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
               L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
-              <strong className={cn(theme.accentText)}>{presentation.mascotName}</strong> aujourd'hui.
+              <strong className={cn(theme.accentText)}>{presentation.mascotName}</strong>{' '}
+              aujourd'hui.
             </p>
           </div>
 
           <div className="px-4">
-            <article className="overflow-hidden rounded-[28px] border border-white/10 bg-[#15151A]/90 shadow-[0_18px_60px_rgba(0,0,0,0.36)] backdrop-blur-xl">
-              <div className="relative h-52 overflow-hidden bg-[#080b0f]">
-                <div className="absolute inset-0 grid grid-cols-2">
-                  <div className="relative bg-[#080b0f]">
-                    {featuredSpecies?.imageUrl ? (
-                      <img
-                        src={featuredSpecies.imageUrl}
-                        alt=""
-                        className={cn(
-                          'h-full w-full object-cover',
-                          !featuredSpecies.isUnlocked && 'grayscale opacity-35',
-                        )}
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center bg-white/[0.03]">
-                        <PawPrint className="h-12 w-12 text-white/15" />
-                      </div>
-                    )}
-                    {!featuredSpecies?.isUnlocked && (
-                      <div className="absolute left-3 top-3 rounded-full bg-black/55 p-1.5 backdrop-blur-sm">
-                        <Lock className="h-3.5 w-3.5 text-white/75" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="relative bg-[#10151c]">
-                    {recommendedProject?.imageUrl ? (
-                      <img
-                        src={recommendedProject.imageUrl}
-                        alt=""
-                        className="h-full w-full object-cover opacity-95"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center bg-white/[0.03]">
-                        <Sprout className="h-12 w-12 text-white/15" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="pointer-events-none absolute inset-y-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/45 to-transparent" />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black via-black/72 to-transparent" />
-
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <div className="mb-2 flex flex-wrap items-center gap-2">
-                  
-                    <span className="rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/60 backdrop-blur-sm">
-                      {recommendedProject?.location || 'Terrain partenaire'}
-                    </span>
-                  </div>
-                  <h2 className="text-lg font-black leading-tight text-white drop-shadow-md">
-                    {projectName}
-                  </h2>
-                  
-                </div>
-              </div>
-
-              <div className="space-y-4 p-4 pt-3">
-                <Link
-                  href={recommendedProject?.href || '/projects'}
-                  className={cn(
-                    'flex h-14 w-full items-center justify-center gap-2 rounded-[20px] text-[17px] font-black text-[#0B0F15] transition-transform active:scale-[0.98]',
-                    theme.accentBg,
-                    theme.accentShadow,
+            <div className="relative h-52 overflow-hidden rounded-[28px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.32)]">
+              <div className="absolute inset-0 grid grid-cols-2">
+                <div className="relative bg-[#080b0f]">
+                  {featuredSpecies?.imageUrl ? (
+                    <img
+                      src={featuredSpecies.imageUrl}
+                      alt=""
+                      className={cn(
+                        'h-full w-full object-cover',
+                        !featuredSpecies.isUnlocked && 'grayscale opacity-35',
+                      )}
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-white/[0.03]">
+                      <PawPrint className="h-12 w-12 text-white/15" />
+                    </div>
                   )}
-                >
-                  Soutenir & Débloquer
-                  <ChevronRight className="h-4 w-4" />
-                </Link>
+                  {!featuredSpecies?.isUnlocked && (
+                    <div className="absolute left-3 top-3 rounded-full bg-black/55 p-1.5 backdrop-blur-sm">
+                      <Lock className="h-3.5 w-3.5 text-white/75" />
+                    </div>
+                  )}
+                </div>
+                <div className="relative bg-[#10151c]">
+                  {recommendedProject?.imageUrl ? (
+                    <img
+                      src={recommendedProject.imageUrl}
+                      alt=""
+                      className="h-full w-full object-cover opacity-95"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-white/[0.03]">
+                      <Sprout className="h-12 w-12 text-white/15" />
+                    </div>
+                  )}
+                </div>
               </div>
-            </article>
+
+              <div className="pointer-events-none absolute inset-y-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/45 to-transparent" />
+            </div>
+
+            <div className="px-1 pt-4">
+              <div className="mb-3 flex flex-wrap items-center gap-2">
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/55">
+                  {recommendedProject?.location || 'Terrain partenaire'}
+                </span>
+              </div>
+              <h2 className="text-[22px] font-black leading-tight tracking-tight text-white">
+                {projectName}
+              </h2>
+              {recommendedProject?.description && (
+                <p className="mt-2 line-clamp-2 text-sm font-medium leading-relaxed text-white/58">
+                  {recommendedProject.description}
+                </p>
+              )}
+              <Link
+                href={recommendedProject?.href || '/projects'}
+                className={cn(
+                  'mt-5 flex h-[52px] w-full items-center justify-center gap-2 rounded-[18px] text-[16px] font-black text-[#0B0F15] transition-transform active:scale-[0.98]',
+                  theme.accentBg,
+                  theme.accentShadow,
+                )}
+              >
+                Soutenir & Débloquer
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
 
         <div className="space-y-4 px-4">
-      
-
           <Link
             href="/challenges"
             className="group block overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.055] shadow-[0_14px_44px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-transform active:scale-[0.985]"
