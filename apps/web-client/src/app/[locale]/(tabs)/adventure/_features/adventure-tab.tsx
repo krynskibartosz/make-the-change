@@ -226,7 +226,7 @@ export function AdventureTab({
       />
 
       <div className="mx-auto flex w-full max-w-3xl flex-col pb-8 pt-2">
-        <div className="px-5 pb-6">
+        <div className="px-5 pb-8">
           <h1 className="text-[26px] font-black tracking-tight text-white">Salut {firstName} !</h1>
           <p className="mt-1 text-sm font-medium leading-relaxed text-white/60">
             L'espèce <strong className="text-white">{speciesName}</strong> a besoin de la faction{' '}
@@ -234,7 +234,7 @@ export function AdventureTab({
           </p>
         </div>
 
-        <div className="px-4 pb-6">
+        <div className="px-4 pb-8">
           <div className="relative h-40 overflow-hidden rounded-[30px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.34)] sm:h-48">
             <div className="absolute inset-0 grid grid-cols-2">
               <div className="relative bg-[#080b0f]">
@@ -292,7 +292,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="px-4 pb-6">
+        <div className="px-4 pb-8">
           <div className="flex items-end justify-between gap-4 px-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/34">
@@ -440,7 +440,7 @@ export function AdventureTab({
           </div>
         </div>
 
-        <div className="px-4 pb-6">
+        <div className="px-4 pb-8">
           <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.055] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
             <div
               className={cn(
