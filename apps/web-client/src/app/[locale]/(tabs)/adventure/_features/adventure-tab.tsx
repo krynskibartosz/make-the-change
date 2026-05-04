@@ -4,10 +4,10 @@ import {
   CheckCircle2,
   ChevronRight,
   Compass,
+  Droplets,
   Lock,
   Package,
   PawPrint,
-  ShieldCheck,
   Sparkles,
   Sprout,
   Trophy,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
+import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 
@@ -191,6 +192,8 @@ export function AdventureTab({
   const themeKey = resolveFactionThemeKey(faction)
   const presentation = FACTION_PRESENTATION[themeKey]
   const theme = getFactionTheme(faction)
+  const collectiveGoal = getCollectiveGoal()
+  const activeContribution = getFactionContribution(faction)
   const firstName = displayName?.trim().split(/\s+/)[0] || 'Explorateur'
   const primaryIcon = primaryQuest ? QUEST_ICONS[primaryQuest.type] : Compass
   const PrimaryIcon = primaryIcon
@@ -209,6 +212,8 @@ export function AdventureTab({
       ? featuredSpecies.imageUrl
       : BIODEX_LOCKED_IMAGE
   const impactCreditsLabel = formatImpactPoints(impactPoints)
+  const rewardProgress = collectiveGoal.progress || collectiveProgress
+  const remainingSeeds = Math.max(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds, 0)
 
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 md:pb-10">
@@ -539,61 +544,77 @@ export function AdventureTab({
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Link
-              href="/impact"
-              className="relative block min-h-52 overflow-hidden rounded-[30px] border border-white/10 bg-[#15151A]/92 p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
+              href="/impact/reward"
+              className="relative block min-h-64 overflow-hidden rounded-[30px] border border-white/10 bg-[#15151A]/92 p-4 shadow-[0_14px_44px_rgba(0,0,0,0.24)] backdrop-blur-xl transition-transform active:scale-[0.985]"
             >
               <div
                 className={cn(
-                  'absolute -right-8 -top-12 h-36 w-36 rounded-full blur-3xl',
+                  'absolute -right-8 -top-12 h-40 w-40 rounded-full blur-3xl',
                   theme.accentGlow,
                 )}
               />
-              <div className="relative flex h-full flex-col justify-between">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-white/36">
-                      Objectif de faction
-                    </p>
-                    <h3 className="mt-1 text-[17px] font-black leading-tight text-white">
-                      Cap collectif: {Math.round(collectiveProgress)}%
-                    </h3>
-                  </div>
-                  <ShieldCheck className={cn('h-5 w-5', theme.accentText)} />
-                </div>
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-lime-400/[0.06] to-transparent" />
 
-                <div className="mt-5 flex items-center justify-between gap-4">
+              <div className="relative flex h-full flex-col justify-between gap-5">
+                <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="mb-3 flex -space-x-2">
-                      <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.08]">
-                        <img
-                          src={presentation.mascotImage}
-                          alt=""
-                          className="h-full w-full object-contain"
-                        />
-                      </span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.08] text-[11px] font-black text-white">
-                        {firstName.charAt(0).toUpperCase()}
-                      </span>
-                      <span
-                        className={cn(
-                          'flex h-8 w-8 items-center justify-center rounded-full border text-[10px] font-black',
-                          theme.accentBorder,
-                          theme.accentBgSoft,
-                          theme.accentText,
-                        )}
-                      >
-                        +{Math.max(quests.length - completedQuests, 1)}
-                      </span>
-                    </div>
-                    <p className="text-sm font-semibold leading-snug text-white/64">
-                      Chaque action collective renforce la saison en cours.
+                    <p
+                      className={cn(
+                        'text-[11px] font-black uppercase tracking-[0.14em]',
+                        theme.accentText,
+                      )}
+                    >
+                      La récompense du mois
+                    </p>
+                    <h3 className="mt-1 text-[18px] font-black leading-tight text-white">
+                      Le Privilège de l'Essaim
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-xs font-semibold leading-relaxed text-white/50">
+                      Ilanga Nature débloque un avantage si le collectif atteint 100%.
                     </p>
                   </div>
                   <ProgressRing
-                    value={collectiveProgress}
-                    label={`Objectif de faction ${Math.round(collectiveProgress)}%`}
+                    value={rewardProgress}
+                    label={`Progression collective ${Math.round(rewardProgress)}%`}
                     className={theme.accentText}
                   />
+                </div>
+
+                <div>
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <span className="text-xs font-bold text-white/42">
+                      Plus que {formatSeedCount(remainingSeeds)} graines
+                    </span>
+                    <span className="flex items-center gap-1 text-xs font-black text-lime-300">
+                      <Sprout className="h-3.5 w-3.5" />
+                      restantes
+                    </span>
+                  </div>
+                  <ProgressBar value={rewardProgress} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="rounded-[18px] border border-white/8 bg-white/[0.045] p-3">
+                    <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-400/10 text-amber-300">
+                      <Droplets className="h-4 w-4" />
+                    </div>
+                    <p className="text-sm font-black leading-tight text-white">15% privilège</p>
+                    <p className="mt-1 line-clamp-1 text-[11px] font-semibold text-white/44">
+                      Miel Ilanga
+                    </p>
+                  </div>
+
+                  <div className="rounded-[18px] border border-white/8 bg-white/[0.045] p-3">
+                    <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-violet-400/10 text-violet-300">
+                      <Sparkles className="h-4 w-4" />
+                    </div>
+                    <p className="line-clamp-1 text-sm font-black leading-tight text-white">
+                      {activeContribution?.prestigeTitle || collectiveGoal.prestigeRewardTitle}
+                    </p>
+                    <p className="mt-1 line-clamp-1 text-[11px] font-semibold text-white/44">
+                      Prestige faction
+                    </p>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -641,4 +662,8 @@ function formatImpactPoints(value: number) {
     notation: 'compact',
     maximumFractionDigits: 1,
   }).format(value)
+}
+
+function formatSeedCount(value: number) {
+  return new Intl.NumberFormat('fr-FR').format(value).replace(/\u202f/g, ' ')
 }
