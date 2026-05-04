@@ -9,6 +9,9 @@ const countryFlags: Record<string, string> = {
   France: '🇫🇷',
   Belgium: '🇧🇪',
   Sardinia: '🇮🇹',
+  Indonésie: '🇮🇩',
+  Europe: '🇪🇺',
+  Italy: '🇮🇹',
 }
 
 export function OriginWidget({ originCountry }: OriginWidgetProps) {

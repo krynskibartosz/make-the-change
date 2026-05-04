@@ -99,6 +99,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       },
     ],
     user_status: createUserStatus(false, 1),
+    weight: '0.1 g',
+    size: '12 mm',
+    diet: 'Nectarivore / Pollinivore',
+    origin_country: 'Madagascar',
     habitat: [
       'Forêts Primaires Humides de l\'Est et Zones Côtières (Z4)',
       'Mosaïques de Prairies Boisées et Hauts Plateaux du Centre (Z3)',
@@ -128,12 +132,18 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Coccinella septempunctata',
     description_default:
       'Coléoptère prédateur iconique au corps rouge vif. C\'est l\'un des piliers naturels de la lutte biologique dans les systèmes agricoles tempérés.',
+    description_scientific:
+      'La Coccinella septempunctata est le coléoptère prédateur le plus répandu en Europe tempérée, consommant jusqu\'a 5 000 pucerons par an. Ses sept points noirs sur élytres rouges constituent un signal aposématique renforcé par la réflexe autohémorragique : la coccinelle sécrète une hémolymphe amère (coccinelline) depuis ses articulations tibiales. Elle est capable de diapause imaginale dans les litières forestières, supportant des froids jusqu\'a -20°C. L\'invasion de la coccinelle asiatique (Harmonia axyridis), introduite par les jardineries, déplace les populations locales par compétition alimentaire et pathogènes transmis.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Coccinelle.png',
     associated_projects: [],
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '30 mg',
+    size: '5–8 mm',
+    diet: 'Insectivore (pucerons)',
+    origin_country: 'France',
     habitat: ['Champs agricoles', 'Prairies', 'Jardins'],
     threats: ['Pesticides toxiques', 'Compétition avec la coccinelle asiatique'],
   },
@@ -144,6 +154,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Olea europaea',
     description_default:
       'Arbre fondateur du maquis dont la variété sauvage (oléastre) recèle un riche patrimoine génétique. Il souffre massivement d\'infections racinaires à Phytophthora en Sardaigne.',
+    description_scientific:
+      'L\'Olea europaea est un arbre millénaire dont certains spécimens sarden atteignent 3 000 ans. Sa résilience au stress hydrique repose sur un système racinaire profond et des feuilles coriàces à épicuticule cireuse réduisant la transpiration de 70 %. En Sardaigne, la sous-variété sylvestris (oléastre) constitue un réservoir génétique unique face aux pathogènes. La bactérie Xylella fastidiosa, vectée par Philaenus spumarius, colonise le xylème et provoque le syndrome d\'assèchement rapide de l\'olivier (OQDS), menaçant un patrimoine agronomique millénaire. La sous-espèce maderensis constitue un refuge génétique insulaire pour la biodiversité de l\'espèce.',
     conservation_status: 'DD',
     image_url: '/images/diaromas/Olivier .png',
     associated_projects: [
@@ -160,6 +172,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: null,
+    size: '8–15 m',
+    diet: null,
+    origin_country: 'Sardinia',
     habitat: ['Maquis méditerranéen', 'Zones agroforestières', 'Garrigues', 'Terrains arides'],
     threats: ['Bactérie Xylella fastidiosa', 'Phytophthora (clades 2, 6, 8)', 'Changement climatique', 'Abandon des terrains agricoles'],
   },
@@ -169,6 +185,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Acropora muricata',
     description_default:
       'Espèce de corail scléractiniaire arborescent qui construit la topographie complexe du récif. Il est fortement menacé par le blanchissement thermique et le Syndrome Blanc.',
+    description_scientific:
+      'Acropora muricata est un constructeur de récifs dont les branches digitées peuvent atteindre 2 m de diamètre. Sa croissance (10–15 cm/an) dépend d\'une symbiose obligatoire avec des dinoflagellés endosymbiotes (Symbiodinium spp.) fournissant jusqu\'à 90 % de son énergie via la photosynthèse. Un stress thermique de +1°C soutenu sur 4 semaines provoque la rupture de cette symbiose et le blanchissement. Les fragments peuvent être bouturés en pépinières sous-marines pour la restauration des récifs de Karimunjawa.',
     conservation_status: 'VU',
     image_url: '/images/diaromas/Acropora  Corail corne de cerf.png',
     associated_projects: [
@@ -185,6 +203,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: null,
+    size: 'jusqu\'a 2 m',
+    diet: 'Zooxanthelles (photosynthèse)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens peu profonds', 'Lagons', 'Pentés récifales externes', 'Zones de forte luminosité'],
     threats: ['Blanchissement thermique', 'Syndrome Blanc des Acroporidés', 'Acidification des océans', 'Destructuration des récifs'],
   },
@@ -194,6 +216,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Bombus terrestris',
     description_default:
       'Grand pollinisateur eusocial à l\'efficacité redoutable, souvent commercialisé. Ses ouvrières sont capables d\'apprendre les couleurs des fleurs pour optimiser le butinage.',
+    description_scientific:
+      'Bombus terrestris est le bourdon le plus étudié au monde et le pollinisateur commercial le plus vendu (colonies exportées dans 60 pays). Son efficacité de pollinisation par « buzz » (sonication vibratoire à 400 Hz) libère le pollen des anthères poriticides jusqu\'a 50× plus efficacement que l\'abeille domestique. Ses colonies annuelles (400–600 ouvrières) prennent des décisions collectives via des signaux chimiques. Son succès commercial constitue paradoxalement une menace pour les bourdons natifs : propagation de pathogènes et compétition alimentaire avec les espèces sauvages locales.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Bourdon terrestre.png',
     associated_projects: [
@@ -210,6 +234,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '0.3–0.85 g',
+    size: '20–26 mm',
+    diet: 'Nectarivore / Pollinivore',
+    origin_country: 'Belgium',
     habitat: ['Prairies agricoles', 'Jardins urbains', 'Lisières de bois', 'Cultures sous serre'],
     threats: ['Pollution par les pesticides', 'Perte de ressources florales', 'Maladies pathogènes'],
   },
@@ -219,6 +247,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Osmia bicornis',
     description_default:
       'Abeille maçonne solitaire recouverte de poils roux denses. Elle gère intelligemment la répartition des sexes de sa progéniture en fonction de sa propre taille corporelle.',
+    description_scientific:
+      'Osmia bicornis est une abeille solitaire à nidification primotemporale (mars–juin) dont les femelles maçonnent des cellules avec de la boue dans des cavités préexistantes. Sa capacité de pollinisation est jusqu\'a 2 500× supérieure à celle d\'Apis mellifera par visite florale. Elle ajuste la ratio des sexes de sa progéniture selon sa taille corporelle : les femelles (plus grandes) sont placées dans les cellules du fond, les mâles à l\'avant, optimisant la survie selon le modèle de Trivers-Willard. L\'extinction de son parasitoïde naturel Cacoxenus indagator est essentielle à la réussite des hôtels à insectes.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Osmie rousse.png',
     associated_projects: [
@@ -235,6 +265,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '70 mg',
+    size: '10–12 mm',
+    diet: 'Pollinivore',
+    origin_country: 'Belgium',
     habitat: ['Vergers', 'Jardins', 'Zones urbaines', 'Lisières forestières'],
     threats: ['Perte de sites de nidification', 'Pesticides', 'Urbanisation'],
   },
@@ -244,6 +278,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Megachile centuncularis',
     description_default:
       'Abeille solitaire coupeuse de feuilles qui maçonne ses nids au-dessus du sol. Elle subit une forte compétition de la part d\'espèces invasives dans les hôtels à insectes.',
+    description_scientific:
+      'Megachile centuncularis découpe des disques de feuilles (rosiers, lilas) avec ses mandibules pour tapisser ses cellules de nidification. Elle transporte le pollen sur les poils scopaux de l\'abdomen, non sur les pattes, ce qui la rend très efficace pour la pollinisation des légumineuses et des rosées. Sa présence dans les hôtels à insectes est un bioindicateur de la disponibilité en végétation florale diversifiée dans un rayon de 300 m. La Mégachile sculptée (M. sculpturalis), espèce invasive nord-américaine arrivée en Europe en 2008, la concurrence directement pour les sites de nidification.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Mégachile.png',
     associated_projects: [
@@ -260,6 +296,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '40 mg',
+    size: '11–13 mm',
+    diet: 'Pollinivore',
+    origin_country: 'Belgium',
     habitat: ['Jardins', 'Prairies fleuries', 'Zones rudérales'],
     threats: ['Intensification agricole', 'Compétition par la Mégachile sculptée invasive'],
   },
@@ -269,6 +309,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Episyrphus balteatus',
     description_default:
       'Mouche déguisée en guêpe (mimétisme batésien) et excellent migrateur. Elle présente une écologie duelle fascinante entre son stade larvaire et adulte.',
+    description_scientific:
+      'Episyrphus balteatus est l\'un des insectes migrateurs les plus actifs d\'Europe, réalisant des mouvements de masse au-dessus des cols alpins (jusqu\'a 4 milliards d\'individus/an). Son mimétisme batésien imite les bandes jaunes et noires des guêpes. Ses larves aphidiphages consomment jusqu\'a 800 pucerons avant la nymphose. Les adultes s\'orientent par détection du flux optique pour un vol à contre-vent précis, capacité aéronautique étudiée pour la robotique des micro-drones. L\'adulte se nourrit de nectar et joue un rôle de pollinisateur généraliste essentiel dans les aérosystèmes tempérés.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Syrphe ceinturé.png',
     associated_projects: [
@@ -285,6 +327,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '20–35 mg',
+    size: '10–12 mm',
+    diet: 'Adulte : Nectarivore / Larve : Aphidiphage',
+    origin_country: 'Belgium',
     habitat: ['Cultures agricoles', 'Prairies', 'Jardins', 'Lisières'],
     threats: ['Application de pesticides à large spectre', 'Monoculture'],
   },
@@ -294,6 +340,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Gonepteryx rhamni',
     description_default:
       'Lépidoptère robuste aux ailes mimétiques de feuilles, capable d\'hiverner à l\'état adulte. Il apparaît aux premiers jours chauds de l\'année.',
+    description_scientific:
+      'Gonepteryx rhamni détient le record de longévité imaginale chez les Lépidoptères européens : jusqu\'à 13 mois, grâce à une double diapause (étivation + hibernation). Son aile antérieure mimétique d\'une feuille (nervures en relief, pointe apicale typique) est l\'une des adaptations camouflantes les plus parfaites du règne animal. Sa production de glycérol permet la survie cellulaire jusqu\'à -20°C. Le dimorphisme sexuel est spectaculaire : le mâle est jaune citron pur, la femelle blanc-verdâtre, mimétisant respectivement les feuilles jeunes et ternies.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Papillon citron.png',
     associated_projects: [
@@ -310,6 +358,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '0.2–0.3 g',
+    size: '52–60 mm (envergure)',
+    diet: 'Nectarivore',
+    origin_country: 'Belgium',
     habitat: ['Lisières boisées', 'Haies', 'Jardins', 'Vergers'],
     threats: ['Perte de plantes hôtes (Rhamnus)', 'Pesticides', 'Fragmentation'],
   },
@@ -319,6 +371,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Aglais io',
     description_default:
       'Papillon vif orné d\'ocelles dissuasives. Ses chenilles dépendent quasi exclusivement de la présence d\'orties dioïques pour leur développement.',
+    description_scientific:
+      'Aglais io possède quatre faux-yeux (ocelles) reproduisant la physionomie faciale d\'un hibou. La réponse de sursaut de ces ocelles réduit les attaques de prédateurs de 60 % dans les expériences de terrain. Ses chenilles grégaires construisent des toiles protectrices sur les orties. Les adultes hibernent dans les fissures et grottes jusqu\'à 9 mois grâce à une baisse du métabolisme de 95 %, se gorgeant de nectar de saule lors des redoux hivernaux pour reconstituer leurs réserves énergétiques avant le froid définitif.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Paon-du-jour.png',
     associated_projects: [
@@ -335,8 +389,12 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '0.3–0.5 g',
+    size: '55–65 mm (envergure)',
+    diet: 'Nectarivore',
+    origin_country: 'Belgium',
     habitat: ['Prairies humides', 'Lisières forestières', 'Jardins'],
-    threats: ['Fauchage agricole intensif', 'Éradication des orties par herbicides'],
+    threats: ['Perte d\'habitat (orties)', 'Pesticides', 'Fragmentation'],
   },
   {
     id: MOCK_SPECIES_HEDGEHOG_ID,
@@ -344,6 +402,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Erinaceus europaeus',
     description_default:
       'Petit mammifère omnivore récemment reclassé à cause de graves déclins démographiques (jusqu\'à 50% dans certaines régions). Il est hautement vulnérable à la fragmentation de son territoire.',
+    description_scientific:
+      'Erinaceus europaeus possède entre 5 000 et 7 000 épines kératinées creuses, capables de se hérisser via le muscle orbicularis en moins de 100 ms. Sa résistance aux venins de serpents (facteur protéique sérique ERINACIN) et aux toxines végétales est documentée. En hibernation, sa température corporelle chute à 2°C et son rythme cardiaque de 190 à 20 bpm, réduisant le métabolisme de 93 %. Les populations britanniques ont décliné de 75 % depuis les années 1950 ; en Belgique, l\'espèce est menacée par la densification des réseaux routiers et l\'emploi massif de slug pellets au méthiocarbe.',
     conservation_status: 'NT',
     image_url: '/images/diaromas/Hérisson européen.png',
     associated_projects: [
@@ -360,6 +420,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '600–1 200 g',
+    size: '23–27 cm',
+    diet: 'Insectivore / Omnivore',
+    origin_country: 'Belgium',
     habitat: ['Prairies', 'Haies', 'Jardins', 'Lisières forestières'],
     threats: ['Trafic routier', 'Perte d\'habitat', 'Pesticides (anti-limaces)', 'Suppression des haies'],
   },
@@ -388,6 +452,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '6–9.5 kg',
+    size: '64–72 cm',
+    diet: 'Folivore strict',
+    origin_country: 'Madagascar',
     habitat: [
       'Forêts pluviales tropicales primaires de basse altitude',
       'Forêts denses humides sempervirentes',
@@ -432,6 +500,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '6–8.5 kg',
+    size: '47–55 cm',
+    diet: 'Folivore / Frugivore',
+    origin_country: 'Madagascar',
     habitat: [
       'Forêts pluviales humides de l\'est et du nord-est de Madagascar',
       'Canopée forestière avec grands arbres matures',
@@ -479,6 +551,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '3–3.8 kg',
+    size: '51–57 cm',
+    diet: 'Frugivore / Nectarivore',
+    origin_country: 'Madagascar',
     habitat: [
       'Forêts pluviales primaires',
       'Forêts secondaires anciennes non perturbées',
@@ -573,6 +649,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '60–180 g',
+    size: '38–52 cm',
+    diet: 'Insectivore',
+    origin_country: 'Madagascar',
     habitat: [
       'Forêts caducifoliées sèches de basse altitude',
       'Ripisylves riveraines et végétation secondaire',
@@ -597,8 +677,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Trachelophorus giraffa',
     description_default:
       'Coléoptère unique au long cou et au comportement de roulement défensif. Les femelles construisent des nids complexes pour leurs larves sur des feuilles de plantes hôtes.',
+    description_scientific:
+      'Trachelophorus giraffa doit son nom au cou extrêmement allongé du mâle, résultat d\'une sélection sexuelle intense pour les combats intrasexuels. La femelle, au cou bien plus court, découpe et roule méticuleusement une feuille de Dichaetanthera (arbuste malgache) en un cylindre protecteur autour d\'un unique œuf. Ce comportement de construction de nid foliaire, unique chez les coléoptères de cette complexité, est entièrement instinctif. Le mâle monte la garde durant l\'oviposition, éloignant les rivaux par des affrontements spectaculaires au coup de cou.',
     conservation_status: 'VU',
-    image_url: '/images/diaromas/Charançon girafe.png',
+    image_url: '/images/diaromas/Charaçon girafe.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -613,6 +695,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '< 1 g',
+    size: '25–30 mm',
+    diet: 'Herbivore (feuilles)',
+    origin_country: 'Madagascar',
     habitat: ['Forêts humides', 'Zones de transition forestière', 'Plantations'],
     threats: ['Déforestation', 'Perte de plantes hôtes', 'Fragmentation'],
   },
@@ -622,6 +708,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Dyscophus antongilii',
     description_default:
       'La Grenouille tomate de Madagascar est un amphibien terrestre massif et fouisseur, célèbre pour sa coloration rouge vif aposématique qui avertit les prédateurs de sa toxine adhésive. Sa reproduction est explosive et liée aux pluies torrentielles, ses têtards jouant un rôle vital de purification biologique dans les eaux stagnantes.',
+    weight: '40–230 g',
+    size: '6–10.5 cm',
+    diet: 'Insectivore',
+    origin_country: 'Madagascar',
     description_scientific:
       'La Grenouille tomate (Dyscophus antongilii) appartient à la famille des Microhylidae, sous-famille des Dyscophinae, un clade strictement endémique de Madagascar. Amphibien terrestre fouisseur présentant un dimorphisme sexuel prononcé (femelles jusqu\'à 10,5 cm, 230g ; mâles 6-6,5 cm, 41g), elle arbore une coloration rouge vif aposématique signalant une défense chimique puissante : une sécrétion muqueuse adhésive et irritante capable d\'engluer les prédateurs et de provoquer des réactions inflammatoires des muqueuses. Sa reproduction explosive synchronisée avec les moussons (octobre-janvier) produit 1000-1500 œufs flottants éclosant en 36 heures. Les têtards filtreurs pélagiques jouent un rôle écologique crucial en prévenant l\'eutrophisation des micro-bassins. Initialement classée NT et inscrite à l\'Annexe I de la CITES en 1987 suite au braconnage massif pour le commerce terrariophile, l\'espèce a été reclassée LC en 2017 et transférée à l\'Annexe II en 2016 grâce au succès de l\'élevage en captivité ex-situ et à sa plasticité écologique remarquable.',
     conservation_status: 'LC',
@@ -661,6 +751,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Corythornis madagascariensis',
     description_default:
       'Petit martin-pêcheur endémique au plumage écarlate et bleu profond. Il dépend des rivières et zones humides intactes pour se nourrir de poissons et d\'amphibiens.',
+    description_scientific:
+      'Corythornis madagascariensis est l\'un des deux martin-pêcheurs endémiques de Madagascar. Il chasse en plongeant depuis un perchoir fixe au-dessus de l\'eau, localisant ses proies grâce à une vision qui compense la réfraction optique de l\'interface air-eau. Ses nids sont forés dans les berges argileuses par les deux parents. Sa dépendance aux cours d\'eau forestiers clairs en fait un indicateur biologique fiable de la qualité des eaux douces malgaches, menacées par l\'érosion et la déforestation.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Martin-chasseur pygmée.png',
     associated_projects: [
@@ -677,6 +769,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '14–18 g',
+    size: '13 cm',
+    diet: 'Piscivore / Insectivore',
+    origin_country: 'Madagascar',
     habitat: ['Cours d\'eau', 'Rivières', 'Zones humides', 'Forêts riveraines'],
     threats: ['Pollution de l\'eau', 'Destruction des ripisylves', 'Perte de zones humides'],
   },
@@ -686,6 +782,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Coua caerulea',
     description_default:
       'Coucou terrestre endémique au plumage bleu iridescent, capable de se déplacer rapidement au sol. Il est un important disperseur de graines dans les forêts malgaches.',
+    description_scientific:
+      'Coua caerulea est un coucou terrestre endémique de Madagascar, connu pour son plumage bleu iridescent et sa capacité à se déplacer rapidement au sol. Il est un important disperseur de graines dans les forêts malgaches, contribuant ainsi à la régénération des écosystèmes forestiers. Il se nourrit d\'invertébrés, de fruits et de lézards, et est considéré comme une espèce clé pour le maintien de la biodiversité dans les forêts malgaches.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Coua bleu.png',
     associated_projects: [
@@ -702,6 +800,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '170–200 g',
+    size: '48–52 cm',
+    diet: 'Omnivore (invertébrés, fruits, lézards)',
+    origin_country: 'Madagascar',
     habitat: ['Forêts sèches', 'Forêts humides', 'Zones de transition'],
     threats: ['Déforestation', 'Fragmentation', 'Perte d\'habitat'],
   },
@@ -711,6 +813,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Phelsuma laticauda',
     description_default:
       'Gecko diurne au corps vert vif et à la queue écarlate, capable de se nourrir de nectar et de pollen. Il est un pollinisateur important pour les plantes forestières malgaches.',
+    description_scientific:
+      'Phelsuma laticauda est un gecko diurne endémique de Madagascar, connu pour son corps vert vif et sa queue écarlate. Il est un important pollinisateur pour les plantes forestières malgaches, se nourrissant de nectar et de pollen. Il est également un indicateur de la santé des écosystèmes forestiers, car il dépend de la présence de plantes à fleurs pour sa survie.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Gecko diurne.png',
     associated_projects: [
@@ -727,6 +831,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '10–20 g',
+    size: '10–14 cm',
+    diet: 'Insectivore / Nectarivore',
+    origin_country: 'Madagascar',
     habitat: ['Forêts humides', 'Forêts sèches', 'Plantations', 'Zones arbustives'],
     threats: ['Commerce international illégal', 'Perte d\'habitat', 'Déforestation'],
   },
@@ -736,6 +844,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Athene superciliaris',
     description_default:
       'Chouette endémique de Madagascar au plumage brun strié et aux yeux jaunes. Elle dépend des arbres creux et des zones ouvertes pour chasser les petits mammifères et insectes.',
+    description_scientific:
+      'Athene superciliaris est une chouette endémique de Madagascar aux sourcils blancs distinctifs. Rapace nocturne, elle chasse des insectes, petits vertébrés (geckos, caméléons) et rongeurs depuis un poste d\'afflút fixe. Sa nidification dans les cavités d\'arbres matures en fait un indicateur de la présence de vieux arbres creux, ressource critique pour de nombreuses espèces de la faune malgache.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Chouette chevêche.png',
     associated_projects: [
@@ -752,6 +862,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '100–180 g',
+    size: '23–27 cm',
+    diet: 'Insectivore / Carnivore',
+    origin_country: 'Madagascar',
     habitat: ['Bocages', 'Vergers', 'Prairies', 'Zones ouvertes'],
     threats: ['Pesticides', 'Disparition des arbres creux', 'Perte d\'habitat'],
   },
@@ -761,6 +875,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Upupa epops',
     description_default:
       'Oiseau au plumage brun orangé et à la huppe spectaculaire. Il est un insectivore important des zones agricoles et des vergers, se nourrissant de larves et d\'insectes du sol.',
+    description_scientific:
+      'Upupa epops possède un bec long et courbé permettant de sonder la terre et les écorces pour extraire des larves et des vers. Les femelles produisent une sécrétion antimicrobienne via une glande uropygiale spécialisée, riche en bactéries productrices d\'antibiotiques naturels. Dans les oliveraies sardes, elle joue un rôle crucial de régulation des ravageurs (Bactrocera oleae, Prays oleae), réduisant les besoins en pesticides.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Huppe fasciée.png',
     associated_projects: [
@@ -777,6 +893,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '46–89 g',
+    size: '25–32 cm',
+    diet: 'Insectivore (larves, vers de terre)',
+    origin_country: 'Sardinia',
     habitat: ['Vergers', 'Prairies', 'Bocages', 'Zones agricoles'],
     threats: ['Pesticides', 'Disparition des vieux arbres', 'Perte d\'habitat'],
   },
@@ -787,6 +907,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Acropora muricata',
     description_default:
       'Espèce de corail scléractiniaire arborescent qui construit la topographie complexe du récif. Il est fortement menacé par le blanchissement thermique et le Syndrome Blanc.',
+    description_scientific:
+      'Acropora muricata est un constructeur de récifs dont les branches digitées atteignent 2 m de diamètre. Sa croissance (10–15 cm/an) dépend de la symbiose obligatoire avec des dinoflagellés endosymbiotes (Symbiodinium spp.) fournissant jusqu\'à 90 % de son énergie. Sous un stress thermique (+1°C sur 4 semaines), cette symbiose se rompt, provoquant le blanchissement. Les fragments de corail peuvent être bouturés pour la restauration artificielle des récifs dans l\'archipel de Karimunjawa.',
     conservation_status: 'VU',
     image_url: '/images/diaromas/Acropora  Corail corne de cerf.png',
     associated_projects: [
@@ -803,6 +925,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: null,
+    size: 'jusqu\'à 2 m',
+    diet: 'Zooxanthelles (photosynthèse)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens peu profonds', 'Lagons', 'Pentés récifales externes', 'Zones de forte luminosité'],
     threats: ['Blanchissement thermique', 'Syndrome Blanc des Acroporidés', 'Acidification des océans', 'Destructuration des récifs'],
   },
@@ -812,6 +938,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Amphiprion ocellaris',
     description_default:
       'Poisson emblématique en symbiose obligatoire avec les anémones. Il est essentiel à l\'équilibre du récif et dépend entièrement de la santé des coraux hôtes.',
+    description_scientific:
+      'Amphiprion ocellaris vit en symbiose mutualiste avec l\'anémone de mer, qu\'il protège de ses prédateurs en échange d\'abri. Sa protection contre le venin de l\'anémone repose sur une glycoprotéine spéciale dans son mucus. C\'est une espèce hermaphrodite protéandrique : si la femelle dominante disparaît, le mâle dominant se transforme en femelle. La popularité aquariophile massive post-Nemo (2003) a provoqué une surpêche de 40 % des populations sauvages en deux ans.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Poisson clown.png',
     associated_projects: [
@@ -828,6 +956,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '10–30 g',
+    size: '8–11 cm',
+    diet: 'Omnivore (plancton, algues)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens', 'Anémones', 'Zones de faible profondeur'],
     threats: ['Dégradation des récifs', 'Commerce aquariophile', 'Blanchissement des coraux hôtes'],
   },
@@ -837,6 +969,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Chrysiptera cyanea',
     description_default:
       'Poisson récifal au bleu électrique vif, territorial et agressif. Il est un indicateur sensible de la santé du récif corallien et de la qualité de l\'eau.',
+    description_scientific:
+      'Chrysiptera cyanea est un poisson récifal hautement territorial qui cultive des jardins d\'algues filamenteuses sur son territoire. Son bleu électrique est produit par des nanostructures d\'iridophores réfléchissant préférentiellement à 450 nm. Sa présence en grand nombre signale des récifs à forte couverture corallienne et à faible sédimentation, en faisant un bioindicateur de la santé récifale.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Demoiselle bleue.png',
     associated_projects: [
@@ -853,6 +987,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '3–8 g',
+    size: '6–8 cm',
+    diet: 'Herbivore / Omnivore (algues, zooplancton)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens', 'Pentés externes', 'Zones de fort courant'],
     threats: ['Dégradation des récifs', 'Blanchissement', 'Pollution'],
   },
@@ -862,6 +1000,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Chaetodon auriga',
     description_default:
       'Poisson aux motifs spectaculaires et spécialiste des coraux pour l\'alimentation. Il dépend fortement de la santé des coraux branchus pour sa survie.',
+    description_scientific:
+      'Chaetodon auriga se spécialise dans le raclage des polypes coralliens grâce à son museau allongé et à ses dents fine-incisives. Le faux-œil postérieur sur la nageoire dorsale constitue un leurre confondant les prédateurs sur la direction de fuite. Sa densité décline avant même que le blanchissement corallien soit visible à l\'œil nu, en faisant l\'un des premiers indicateurs de stress des récifs.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Poisson-papillon.png',
     associated_projects: [
@@ -878,6 +1018,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '60–130 g',
+    size: '18–23 cm',
+    diet: 'Corallivore / Carnivore (polypes, vers)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens', 'Pentés externes', 'Zones de forte luminosité'],
     threats: ['Perte de coraux', 'Blanchissement', 'Dégradation des récifs'],
   },
@@ -887,6 +1031,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Hippocampus bargibanti',
     description_default:
       'Hippocampe pygmée endémique des gorgones des récifs tropicaux. Il est extrêmement spécialisé et dépend entièrement de la présence de gorgones saines pour sa survie.',
+    description_scientific:
+      'Hippocampus bargibanti est le maître du camouflage récifal : ses tubercules cutanés reproduisent exactement la couleur et la texture de la gorgone hôte (Muricella plectana), avec une précision telle qu\'il a été découvert par accident en 1969. Incapable de nager sur de longues distances, il passe toute sa vie sur une seule gorgone. Comme tous les hippocampes, c\'est le mâle qui gestate les jeunes dans une poche ventrale.',
     conservation_status: 'VU',
     image_url: '/images/diaromas/Hippocampe.png',
     associated_projects: [
@@ -903,6 +1049,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '< 1 g',
+    size: '1.4–2.7 cm',
+    diet: 'Carnivore (copépodes, amphipodes)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens', 'Gorgones', 'Herbiers marins', 'Zones de faible profondeur'],
     threats: ['Commerce international', 'Dégradation des récifs', 'Pollution', 'Perte de gorgones'],
   },
@@ -912,6 +1062,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Chelonia mydas',
     description_default:
       'Tortue marine herbivore majestueuse, essentielle à l\'équilibre des herbiers et récifs. Elle parcourt des milliers de kilomètres entre ses sites de reproduction et d\'alimentation.',
+    description_scientific:
+      'Chelonia mydas est le seul reptile herbivore exclusivement marin à l\'âge adulte, se nourrissant d\'herbiers et d\'algues. Ce régime contribue à maintenir les herbiers courts et productifs, un service écologique unique. Elle réalise des migrations de 2 000 km entre sites d\'alimentation et plages de nidification natales (philopatrie). L\'élévation des températures des plages de nidification féminise massivement les portées, menaçant la viabilité des populations à long terme.',
     conservation_status: 'EN',
     image_url: '/images/diaromas/Tortue verte.png',
     associated_projects: [
@@ -928,6 +1080,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '136–200 kg',
+    size: '80–120 cm',
+    diet: 'Herbivore (herbiers marins, algues)',
+    origin_country: 'Indonésie',
     habitat: ['Récifs coralliens', 'Herbiers marins', 'Zones côtières', 'Sites de reproduction'],
     threats: ['Chasse', 'Pollution', 'Prises accidentelles', 'Destruction des sites de nidification', 'Changement climatique'],
   },
@@ -938,6 +1094,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Liotrigona bitika',
     description_default:
       'Considérée comme la plus petite abeille sans dard du monde, plus petite qu\'une drosophile. Sa taille microscopique lui permet de polliniser des fleurs endémiques minuscules, inaccessibles aux autres insectes pollinisateurs.',
+    description_scientific:
+      'Liotrigona bitika est l\'une des plus petites abeilles eusociales au monde (< 2 mm), appartenant au groupe des Méliponines sans dard. Sa taille microscopique lui permet d\'accéder aux fleurs tubulaires minuscules inaccessibles aux autres pollinisateurs. Les colonies nichent exclusivement dans les cavités des grands arbres matures des forêts décidues sèches de l\'ouest malgache. La disparition de ces arbres centenaires constitue la menace principale pour l\'espèce.',
     conservation_status: 'NE',
     image_url: '/images/diaromas/Abeilles pollinisatrices.png',
     associated_projects: [
@@ -954,6 +1112,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '< 2 mg',
+    size: '1.8–2 mm',
+    diet: 'Pollinivore / Nectarivore',
+    origin_country: 'Madagascar',
     habitat: ['Forêts pluviales', 'Lisières forestières', 'Grands arbres de nidification', 'Canopée'],
     threats: ['Perte de grands arbres de nidification', 'Compétition avec les fourmis invasives', 'Fragmentation'],
   },
@@ -963,6 +1125,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     scientific_name: 'Apis mellifera ligustica',
     description_default:
       'Sous-espèce apicole extrêmement populaire originaire de la péninsule italienne. Elle soutient le rendement commercial et la résilience florale des paysages secs.',
+    description_scientific:
+      'Apis mellifera ligustica est la sous-espèce la plus commercialisée au monde (tempérament doux, forte production de miel, faible essaimage). En Sardaigne, elle constitue un pollinisateur clé des oliveraies et du maquis méditerranéen. Cependant, son introduction massive crée une compétition alimentaire sévère avec les abeilles sauvages locales pour les ressources florales, constituant une menace indirecte pour la biodiversité.',
     conservation_status: 'NE',
     image_url: '/images/diaromas/Abeilles pollinisatrices.png',
     associated_projects: [
@@ -979,6 +1143,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),
+    weight: '0.1 g',
+    size: '12–15 mm',
+    diet: 'Nectarivore / Pollinivore',
+    origin_country: 'Sardinia',
     habitat: ['Maquis', 'Vergers', 'Zones agroforestières', 'Jardins'],
     threats: ['Acariens parasites (Varroa)', 'Pesticides systémiques', 'Aléas climatiques'],
   },
