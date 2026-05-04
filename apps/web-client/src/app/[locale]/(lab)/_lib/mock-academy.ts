@@ -1,5 +1,5 @@
-import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(lab)/academy/_lib/content'
-import { v2UnitToLegacy } from '@/app/[locale]/(lab)/academy/_lib/runtime'
+import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(screens)/academy/_lib/content'
+import { v2UnitToLegacy } from '@/app/[locale]/(screens)/academy/_lib/runtime'
 import {
   MAX_LIVES,
   SEEDS_COST,
