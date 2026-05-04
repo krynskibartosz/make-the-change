@@ -8,6 +8,7 @@ import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import { MOCK_PRODUCER_ILANGA_ID } from '@/lib/mock/mock-ids'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import type { Faction } from '@/lib/mock/types'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,19 +39,15 @@ export default async function ImpactRewardPage() {
   const isGoalReached = collectiveGoal.progress >= 100
 
   return (
-    <div className="min-h-screen bg-[#0B0F15]">
-      <div className="flex min-h-screen flex-col relative">
-        {/* Back button */}
-        <div className="absolute left-5 top-8 sm:left-6 z-10">
-          <Link
-            href="/impact"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            ←
-          </Link>
-        </div>
-
-        <div className="flex flex-col gap-8 px-5 pb-28 pt-8 sm:px-6">
+    <FullScreenSlideModal
+      title="AVANTAGE DU MOIS"
+      fallbackHref="/impact"
+      headerMode="dynamic"
+      className="bg-[#0B0F15]"
+      contentClassName="overflow-y-auto overscroll-contain"
+    >
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-8 px-5 pb-28 pt-16 sm:px-6">
           {/* En-tête : Mascotte & Titre */}
           <div className="flex flex-col items-center text-center">
             {initialFaction ? (
@@ -231,6 +228,6 @@ export default async function ImpactRewardPage() {
           )}
         </div>
       </div>
-    </div>
+    </FullScreenSlideModal>
   )
 }
