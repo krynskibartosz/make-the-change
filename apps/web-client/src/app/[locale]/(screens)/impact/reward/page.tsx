@@ -43,7 +43,7 @@ export default async function ImpactRewardPage() {
       title="AVANTAGE DU MOIS"
       fallbackHref="/impact"
       headerMode="dynamic"
-      className="bg-[#0B0F15]"
+      className="bg-[#0B0F15] pt-2"
       contentClassName="overflow-y-auto overscroll-contain"
     >
       <div className="flex flex-col">
