@@ -70,14 +70,7 @@ const ProjectsMapView = dynamic(
   () => import('./components/projects-maplibre-view').then((module) => module.ProjectsMapView),
   {
     ssr: false,
-    loading: () => (
-      <div className="fixed inset-0 z-40 flex items-center justify-center bg-[#05070A] text-white">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-lime-400 border-t-transparent" />
-          <p className="text-sm font-bold text-white/70">Chargement de la carte...</p>
-        </div>
-      </div>
-    ),
+    loading: () => null,
   },
 )
 
