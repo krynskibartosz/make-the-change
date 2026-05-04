@@ -7,6 +7,7 @@ import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-p
 import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
+import { MOCK_PRODUCER_ILANGA_ID } from '@/lib/mock/mock-ids'
 import type { Faction } from '@/lib/mock/types'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,7 +26,7 @@ export default async function ImpactRewardPage() {
   const collectiveGoal = getCollectiveGoal()
   const activeContribution = getFactionContribution(initialFaction)
   const ilangaProducts = getMockProducts().filter(
-    (p) => p.producer_id === 'mock-producer-ilanga-nature',
+    (p) => p.producer_id === MOCK_PRODUCER_ILANGA_ID,
   )
 
   let mascotSrc = '/sylva.png'
@@ -34,6 +35,7 @@ export default async function ImpactRewardPage() {
 
   const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
   const remainingSeeds = Math.max(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds, 0)
+  const isGoalReached = collectiveGoal.progress >= 100
 
   return (
     <div className="min-h-screen bg-[#0B0F15]">
@@ -64,7 +66,7 @@ export default async function ImpactRewardPage() {
               </div>
             )}
             <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${activeTheme.accentTextSoft}`}>
-              La Récompense du Mois
+              AVANTAGE DU MOIS
             </p>
             <h2 className="mt-1 text-2xl font-black text-white">Le Privilège de l'Essaim</h2>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
@@ -93,7 +95,7 @@ export default async function ImpactRewardPage() {
 
           {/* Récompenses (Sleek List) */}
           <div className="space-y-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Ce qui vous attend</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Ce qui vous attend</p>
 
             <div className="flex items-center gap-5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
@@ -126,7 +128,7 @@ export default async function ImpactRewardPage() {
                 {ilangaProducts.map((product) => (
                   <Link
                     key={product.id}
-                    href={`/products/${product.slug}`}
+                    href={`/products/${product.id}`}
                     prefetch={false}
                     className="group flex w-44 shrink-0 snap-center flex-col overflow-hidden transition-transform active:scale-[0.97]"
                   >
@@ -138,12 +140,27 @@ export default async function ImpactRewardPage() {
                       />
                     </div>
                     <div className="mt-3 flex flex-col gap-0.5">
+                      {product.producer?.name_default && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">
+                          {product.producer.name_default}
+                        </span>
+                      )}
                       <p className="text-sm font-bold text-white line-clamp-1">{product.name_default}</p>
-                      <CurrencyAmount
-                        kind="impactCredits"
-                        value={product.price_points}
-                        className="mt-1 text-sm font-black"
-                      />
+                      {isGoalReached ? (
+                        <CurrencyAmount
+                          kind="impactCredits"
+                          value={product.price_points}
+                          className="mt-1 text-sm font-black"
+                        />
+                      ) : (
+                        <div className="mt-1 flex items-center gap-1.5">
+                          <span className="text-xs text-white/25 line-through">{product.price_points} ⬡</span>
+                          <span className="flex items-center gap-1 text-sm font-black text-white/40">
+                            {Math.round(product.price_points * 0.85)} ⬡
+                            <Lock className="h-3 w-3" />
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </Link>
                 ))}
@@ -161,13 +178,13 @@ export default async function ImpactRewardPage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-bold text-white/60">Accès Récompenses</span>
+                <span className="text-sm font-bold text-white/60">Accès Avantages</span>
                 <span className="rounded-full bg-amber-400/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400">
                   👑 Gardiens
                 </span>
               </div>
               <p className="mt-0.5 text-[11px] text-white/40">
-                Débloquez les récompenses exclusives de la saison collective.
+                Débloquez les avantages exclusifs de la saison collective.
               </p>
             </div>
             <Lock className="h-4 w-4 shrink-0 text-white/25" />
@@ -195,14 +212,21 @@ export default async function ImpactRewardPage() {
               href="/profile/subscription"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-amber-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(251,191,36,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
-              Débloquer les récompenses <Crown className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+              Débloquer les avantages <Crown className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
             </Link>
-          ) : (
+          ) : isGoalReached ? (
             <Link
               href="/impact"
               className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-sm font-bold text-white transition-transform hover:scale-[1.02] active:scale-95"
             >
               Retour au collectif
+            </Link>
+          ) : (
+            <Link
+              href="/adventure"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
+            >
+              Contribuer à l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
             </Link>
           )}
         </div>
