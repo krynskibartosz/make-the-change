@@ -1,17 +1,15 @@
 'use client'
 
-import { Lock as LockIcon, Map, MapPin, TreePine, Bug, Waves } from 'lucide-react'
+import { Lock as LockIcon, Map as MapIcon, MapPin, TreePine, Waves } from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useCallback } from 'react'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
-import { useState, useEffect } from 'react'
-import { formatCompact } from '@/lib/formatters'
-
-// ─── Constants (coherent with project-species-impact-section.tsx) ────────────
-const BEEHIVE_REFERENCE_VALUE_EUR = 1300
-const BEEHIVE_REFERENCE_POPULATION = 50000
-const BEES_PER_EUR = BEEHIVE_REFERENCE_POPULATION / BEEHIVE_REFERENCE_VALUE_EUR
+import { getProjectImpactDisplay } from './_features/project-map-data'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type RawClientProject = {
@@ -35,14 +33,14 @@ type RawClientProject = {
   type: string | null
   unit_label: string | null
   producer?:
-  | {
-    name_default?: string | null
-    name_i18n?: Record<string, string> | null
-    description_default?: string | null
-    description_i18n?: Record<string, string> | null
-  }
-  | Record<string, unknown>
-  | null
+    | {
+        name_default?: string | null
+        name_i18n?: Record<string, string> | null
+        description_default?: string | null
+        description_i18n?: Record<string, string> | null
+      }
+    | Record<string, unknown>
+    | null
 }
 
 interface ProjectsClientProps {
@@ -59,11 +57,28 @@ type ClientProject = {
   description_default: string
   address_city: string | null
   address_country_code: string | null
+  latitude: number | null
+  longitude: number | null
   hero_image_url: string | null
   current_funding: number | null
   type: string | null
   unit_label: string | null
 }
+
+const ProjectsMapView = dynamic(
+  () => import('./components/projects-maplibre-view').then((module) => module.ProjectsMapView),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="fixed inset-0 z-40 flex items-center justify-center bg-[#05070A] text-white">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-lime-400 border-t-transparent" />
+          <p className="text-sm font-bold text-white/70">Chargement de la carte...</p>
+        </div>
+      </div>
+    ),
+  },
+)
 
 const normalizeProject = (
   project: RawClientProject,
@@ -86,6 +101,8 @@ const normalizeProject = (
     ),
     address_city: project.address_city,
     address_country_code: project.address_country_code,
+    latitude: project.latitude,
+    longitude: project.longitude,
     hero_image_url: project.hero_image_url,
     current_funding: project.current_funding,
     type: project.type,
@@ -102,31 +119,55 @@ function BeeSilhouette() {
   )
 }
 
-// ─── Categories ───────────────────────────────────────────────────────────────
-const CATEGORIES = [
-  { id: 'all', label: 'Tous' },
-  { id: 'forets', label: '🌳 Forêts' },
-  { id: 'faune', label: '🐝 Faune' },
-  { id: 'oceans', label: '🌊 Océans' },
-]
-
 // ─── Component ────────────────────────────────────────────────────────────────
-export function ProjectsClient({ projects }: ProjectsClientProps) {
+export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
   const locale = useLocale()
-  const [activeCategory, setActiveCategory] = useState<string>('all')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const normalizedProjects = projects.map((project, index) =>
     normalizeProject(project, index, locale),
   )
+  const queryView = searchParams.get('view')
+  const viewMode = queryView === 'map' || (!queryView && initialView === 'map') ? 'map' : 'grid'
+
+  const updateViewMode = useCallback(
+    (nextView: 'grid' | 'map') => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (nextView === 'map') {
+        params.set('view', 'map')
+      } else {
+        params.delete('view')
+      }
+
+      const nextQuery = params.toString()
+      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname)
+    },
+    [pathname, router, searchParams],
+  )
+
+  if (viewMode === 'map') {
+    return (
+      <ProjectsMapView
+        projects={normalizedProjects}
+        onShowCurrentView={() => updateViewMode('grid')}
+      />
+    )
+  }
 
   return (
     // Wrapper principal — overflow-x-hidden corrige le scroll horizontal cassé
     <div className="w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40">
-
       {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
       <div className="px-6 pt-8 pb-4">
-        <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">Nos projets</h1>
-        <p className="text-white/60 text-[15px] mt-3 font-medium">Découvrez et soutenez des projets vérifiés.</p>
+        <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">
+          Nos projets
+        </h1>
+        <p className="text-white/60 text-[15px] mt-3 font-medium">
+          Découvrez et soutenez des projets vérifiés.
+        </p>
       </div>
 
       {/* ── LISTE DES CARTES ────────────────────────────────────────────────── */}
@@ -139,28 +180,10 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
               : 'Localisation mystère'
 
           // Impact réel cohérent avec project-species-impact-section.tsx
-          const funding = project.current_funding || 0
-          const projectType = project.type || 'beehive'
-          const unitLabel = project.unit_label || 'abeille'
-
-          let impactValue = 0
-          let impactLabel = ''
-
-          if (projectType === 'orchard') {
-            // Pour les oliviers : calcul basé sur unit_price_eur (150€ par olivier)
-            const OLIVE_PRICE_EUR = 150
-            impactValue = Math.round(funding / OLIVE_PRICE_EUR)
-            impactLabel = 'oliviers protégés'
-          } else if (projectType === 'reef') {
-            // Pour les coraux : calcul basé sur unit_price_eur (30€ par corail)
-            const CORAL_PRICE_EUR = 30
-            impactValue = Math.round(funding / CORAL_PRICE_EUR)
-            impactLabel = 'coraux plantés'
-          } else {
-            // Pour les abeilles : calcul standard
-            impactValue = Math.round(funding * BEES_PER_EUR)
-            impactLabel = 'abeilles protégées'
-          }
+          const impact = getProjectImpactDisplay(project)
+          const impactValue = impact.value
+          const impactLabel = impact.label
+          const projectType = impact.kind
 
           return (
             <Link
@@ -209,7 +232,11 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                       ) : projectType === 'reef' ? (
                         <Waves className="w-3 h-3 text-lime-400" />
                       ) : (
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-lime-400">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-3 h-3 text-lime-400"
+                        >
                           <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
                         </svg>
                       )}
@@ -224,13 +251,18 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                 ) : (
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-6 h-6 rounded-full bg-lime-400/20 flex items-center justify-center shrink-0">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3 text-lime-400">
-                        <circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" />
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="w-3 h-3 text-lime-400"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 8v4l3 3" />
                       </svg>
                     </div>
-                    <p className="text-[13px] text-white/70">
-                      Collecte en cours de démarrage
-                    </p>
+                    <p className="text-[13px] text-white/70">Collecte en cours de démarrage</p>
                   </div>
                 )}
               </div>
@@ -239,9 +271,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
         })}
 
         {normalizedProjects.length === 0 && (
-          <div className="text-center text-white/50 py-12">
-            Aucun projet trouvé pour le moment.
-          </div>
+          <div className="text-center text-white/50 py-12">Aucun projet trouvé pour le moment.</div>
         )}
       </div>
 
@@ -253,61 +283,14 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
       >
         <div className="bg-background/80  backdrop-blur-lg border border-border/70 p-1 rounded-full flex items-center shadow-[0_8px_30px_rgba(0,0,0,0.4)] pointer-events-auto overflow-x-auto scrollbar-hide max-w-full">
           {/* Bouton Map — à gauche du dock */}
-          <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/5 text-white/70 transition-all active:scale-95 shrink-0 mx-1">
-            <Map className="w-4 h-4" />
+          <button
+            type="button"
+            onClick={() => updateViewMode('map')}
+            className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/5 text-white/70 transition-all active:scale-95 shrink-0 mx-1"
+            aria-label="Afficher la carte des projets"
+          >
+            <MapIcon className="w-4 h-4" />
           </button>
-
-          {normalizedProjects.length >= 20 && (
-            <>
-              {/* Séparateur vertical */}
-              <div className="w-px mr-2 h-5 bg-white/15 shrink-0" />
-              <div className="flex items-center gap-1 w-full mr-2">
-
-                <button
-                  onClick={() => setActiveCategory('all')}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'all'
-                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                    : 'hover:bg-white/5 text-white/70'
-                    }`}
-                >
-                  <span className="text-[13px] font-bold">Tous</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveCategory('forets')}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'forets'
-                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                    : 'hover:bg-white/5 text-white/70'
-                    }`}
-                >
-                  <TreePine className="w-3.5 h-3.5" />
-                  <span className="text-[13px] font-medium">Forêts</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveCategory('faune')}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'faune'
-                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                    : 'hover:bg-white/5 text-white/70'
-                    }`}
-                >
-                  <Bug className="w-3.5 h-3.5" />
-                  <span className="text-[13px] font-medium">Faune</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveCategory('oceans')}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-all active:scale-95 shrink-0 ${activeCategory === 'oceans'
-                    ? 'bg-lime-400 text-[#0B0F15] font-bold'
-                    : 'hover:bg-white/5 text-white/70'
-                    }`}
-                >
-                  <Waves className="w-3.5 h-3.5" />
-                  <span className="text-[13px] font-medium">Océans</span>
-                </button>
-              </div>
-            </>
-          )}
         </div>
       </div>
     </div>

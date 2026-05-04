@@ -3,6 +3,7 @@
 @import "@make-the-change/core/css/themes/client";
 @import "../styles/theme-definitions.css";
 @import "../styles/scrollbar.css";
+@import "maplibre-gl/dist/maplibre-gl.css";
 
 @source "../**/*.{ts,tsx}";
 
