@@ -8,7 +8,7 @@ import {
   type MapRef,
   Source,
 } from '@vis.gl/react-maplibre'
-import { AnimatePresence, motion, type Transition } from 'framer-motion'
+import { AnimatePresence, motion, type Transition, type Variants } from 'framer-motion'
 import {
   ArrowUpRight,
   Bug,
@@ -47,6 +47,22 @@ const CLUSTER_LAYER_ID = 'projects-map-clusters'
 const CLUSTER_COUNT_LAYER_ID = 'projects-map-cluster-count'
 const POINT_HALO_LAYER_ID = 'projects-map-point-halo'
 const POINT_LAYER_ID = 'projects-map-points'
+
+const dockContentVariants = {
+  initial: { opacity: 0, scale: 0.985, y: 8 },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1], delay: 0.03 },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.985,
+    y: -6,
+    transition: { duration: 0.12, ease: [0.4, 0, 1, 1] },
+  },
+} satisfies Variants
 
 const INITIAL_WORLD_VIEW = {
   longitude: 8,
@@ -399,9 +415,9 @@ function ProjectMapDock({
       layout
       layoutId={dockLayoutId}
       transition={dockTransition}
-      className={`fixed inset-x-3 z-50 mx-auto max-w-xl border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-[border-radius,padding,transform] duration-300 ${
-        isOpen ? 'rounded-[1.35rem] p-3' : 'rounded-full p-1'
-      }`}
+      initial={false}
+      animate={{ borderRadius: isOpen ? 22 : 999, padding: isOpen ? 12 : 4 }}
+      className="fixed inset-x-3 z-50 mx-auto max-w-xl overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transform-gpu will-change-transform"
       style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)' }}
       aria-label={selectedFeature ? 'Projet sélectionné' : 'Projets visibles sur la carte'}
     >
@@ -424,51 +440,81 @@ function ProjectMapDock({
           </motion.button>
         )}
       </AnimatePresence>
-      {selectedFeature ? (
-        <SelectedProjectCard feature={selectedFeature} onClearSelection={onClearSelection} />
-      ) : !isExpanded ? (
-        <CollapsedMapDock
-          mappedProjectsCount={mappedProjectsCount}
-          onShowCurrentView={onShowCurrentView}
-          onToggleExpanded={onToggleExpanded}
-        />
-      ) : (
-        <div>
-          <div className="flex items-center justify-between gap-2 px-1">
-            <button
-              type="button"
-              onClick={onShowCurrentView}
-              className="flex h-10 shrink-0 items-center gap-2 rounded-full bg-white/[0.07] px-3 text-[13px] font-bold text-white/82 transition hover:bg-white/10 active:scale-95"
-            >
-              <List className="h-4 w-4 text-lime-400" />
-              Projets
-            </button>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
-                Explorer
-              </p>
-              <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-white">
-                {featureCollection.features.length.toLocaleString('fr-FR')} projets sur la carte
-              </h2>
+      <AnimatePresence initial={false} mode="popLayout">
+        {selectedFeature ? (
+          <motion.div
+            key={`selected-${selectedFeature.properties.id}`}
+            layout
+            variants={dockContentVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <SelectedProjectCard feature={selectedFeature} onClearSelection={onClearSelection} />
+          </motion.div>
+        ) : !isExpanded ? (
+          <motion.div
+            key="collapsed"
+            layout
+            variants={dockContentVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <CollapsedMapDock
+              mappedProjectsCount={mappedProjectsCount}
+              onShowCurrentView={onShowCurrentView}
+              onToggleExpanded={onToggleExpanded}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="expanded"
+            layout
+            variants={dockContentVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <div className="flex items-center justify-between gap-2 px-1">
+              <button
+                type="button"
+                onClick={onShowCurrentView}
+                className="flex h-10 shrink-0 items-center gap-2 rounded-full bg-white/[0.07] px-3 text-[13px] font-bold text-white/82 transition hover:bg-white/10 active:scale-95"
+              >
+                <List className="h-4 w-4 text-lime-400" />
+                Projets
+              </button>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
+                  Explorer
+                </p>
+                <div className="mt-0.5 flex min-w-0 items-baseline gap-1.5">
+                  <h2 className="shrink-0 text-[18px] font-black tracking-tight text-white">
+                    {featureCollection.features.length.toLocaleString('fr-FR')} projets
+                  </h2>
+                  <span className="truncate text-[12px] font-bold text-white/48">sur la carte</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onCollapse}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-white/72 transition hover:bg-white/10 active:scale-95"
+                aria-label="Replier le dock de la carte"
+              >
+                <ChevronDown className="h-4 w-4" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={onCollapse}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-white/72 transition hover:bg-white/10 active:scale-95"
-              aria-label="Replier le dock de la carte"
-            >
-              <ChevronDown className="h-4 w-4" />
-            </button>
-          </div>
 
-          <div className="scrollbar-hide mt-3 grid auto-cols-[8.75rem] grid-flow-col gap-2 overflow-x-auto pb-1">
-            {featuredProjects.map((feature) => (
-              <ProjectMiniTile key={feature.properties.id} feature={feature} />
-            ))}
-          </div>
-          <MapAttribution />
-        </div>
-      )}
+            <div className="scrollbar-hide mt-3 grid auto-cols-[8.75rem] grid-flow-col gap-2 overflow-x-auto pb-1">
+              {featuredProjects.map((feature) => (
+                <ProjectMiniTile key={feature.properties.id} feature={feature} />
+              ))}
+            </div>
+            <MapAttribution />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.section>
   )
 }
