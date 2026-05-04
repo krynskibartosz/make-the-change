@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Flame, Package, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
+import { Flame, Package, Truck, Leaf, Hexagon, Info, ShieldCheck, ChevronRight, ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
 import { useRouter } from '@/i18n/navigation'
@@ -57,6 +57,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isFiatCheckoutOpen, setIsFiatCheckoutOpen] = useState(false)
   const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
+  const [isCompositionOpen, setIsCompositionOpen] = useState(false)
+  const [isConservationOpen, setIsConservationOpen] = useState(false)
 
   const displayPoints = selectedFormat.points
   const displayPrice = selectedFormat.euros
@@ -171,16 +173,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   {productName}
                 </h1>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  <span className="bg-white/5 border border-white/10 text-white/70 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Hexagon className="w-3 h-3"/> Miel
-                  </span>
-                  <span className="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Trophy className="w-3 h-3"/> Bestseller
-                  </span>
-                  {/* NOUVEAU TAG issu des catégories */}
-                  <span className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Bug className="w-3 h-3"/> Abeille Noire
-                  </span>
+                  {product.tags && product.tags[0] && (
+                    <span className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                      <Leaf className="w-3 h-3" /> {product.tags[0]}
+                    </span>
+                  )}
                   {product.featured && (
                     <span className="bg-amber-400/10 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
                       👑 Accès anticipé Gardiens
@@ -191,11 +188,44 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </aside>
           </div>
 
+          {product.producer && (
+            <div className="px-4 sm:px-0 mt-2">
+              <a
+                href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}
+                className="flex items-center gap-3 py-3 border-y border-white/5 group"
+              >
+                {producerImage ? (
+                  <img src={producerImage} alt={producerName} className="h-8 w-8 rounded-full object-cover shrink-0" />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary shrink-0">
+                    {producerName[0]?.toUpperCase() || 'P'}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Soutient</p>
+                  <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors truncate">
+                    {producerName}{product.producer.address_city ? ` · ${product.producer.address_city}` : ''}{product.producer.address_country_code ? `, ${product.producer.address_country_code.toUpperCase()}` : ''}
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors shrink-0" />
+              </a>
+            </div>
+          )}
+
           <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
-            {/* ── LA BENTO GRID INTERACTIVE ── */}
-            <div className="grid grid-cols-2 gap-3 px-1 mb-6 mt-2">
-              {/* BENTO 1 : SÉLECTEUR DE FORMAT */}
-              <div className="col-span-2 bg-white/[0.02] border-t border-b border-white/5 py-4 px-1 sm:p-4 sm:rounded-2xl sm:border">
+            {/* ── Scarcity Indicator ── */}
+            {inStock && selectedFormat.stock < 20 && (
+              <div className="flex items-center gap-1.5 mb-3 px-1">
+                <Flame className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                <span className="text-xs font-bold text-orange-500">
+                  Série limitée · Plus que {selectedFormat.stock} exemplaire{selectedFormat.stock > 1 ? 's' : ''}
+                </span>
+              </div>
+            )}
+
+            {/* ── SÉLECTEUR DE FORMAT ── */}
+            <div className="px-1 mb-2 mt-2">
+              <div className="bg-white/[0.02] border-t border-b border-white/5 py-4 px-1 sm:p-4 sm:rounded-2xl sm:border">
                 <div className="flex justify-between items-end mb-3">
                   <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Choisir le format</span>
                   <div className="flex items-center gap-1.5 rounded-lg bg-amber-300/10 px-2.5 py-1">
@@ -209,8 +239,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                       key={format.id}
                       onClick={() => setSelectedFormat(format)}
                       className={`flex-1 flex items-center justify-center h-12 rounded-xl text-sm font-bold transition-all active:scale-95 ${
-                        selectedFormat.id === format.id 
-                          ? 'bg-amber-300 text-[#120d04] shadow-lg' 
+                        selectedFormat.id === format.id
+                          ? 'bg-amber-300 text-[#120d04] shadow-lg'
                           : 'bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10'
                       }`}
                     >
@@ -219,32 +249,38 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   ))}
                 </div>
               </div>
+            </div>
 
-              {/* BENTO 2 : PROFIL GUSTATIF */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+            {/* ── DESCRIPTION (Séduction) ── */}
+            <section className="px-1 pt-4 mb-4">
+              <h3 className="text-sm font-bold text-white mb-2">À propos de ce miel</h3>
+              <p className="text-white/70 leading-relaxed text-[14px]">
+                Récolté de manière artisanale, il reflète la richesse des écosystèmes locaux et le travail des apiculteurs engagés.
+                Au-delà de ses qualités, ce miel soutient une apiculture durable et participe à la préservation du vivant grâce à la pollinisation.
+              </p>
+            </section>
+
+            {/* ── PROFIL GUSTATIF + LIVRAISON (Séduction suite) ── */}
+            <div className="px-1 flex gap-8 border-y border-white/5 py-4 mb-6">
+              {/* PROFIL GUSTATIF */}
+              <div className="flex flex-col gap-2">
                 <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Profil Gustatif</span>
-                <div className="flex flex-wrap gap-1.5 mt-1">
+                <div className="flex flex-wrap gap-1.5">
                   <span className="bg-orange-500/20 text-orange-400 border border-orange-500/20 px-2 py-1 rounded-md text-[10px] font-bold">Ambré</span>
                   <span className="bg-amber-500/20 text-amber-400 border border-amber-500/20 px-2 py-1 rounded-md text-[10px] font-bold">Boisé</span>
                   <span className="bg-green-500/20 text-green-400 border border-green-500/20 px-2 py-1 rounded-md text-[10px] font-bold">Frais</span>
                 </div>
               </div>
 
-              {/* BENTO 3 : EXPÉDITION */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col justify-between">
-                <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Livraison</span>
-                <span className="text-sm font-medium text-white mt-2">2 - 3 jours</span>
+              {/* LIVRAISON */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-1.5">
+                  <Truck className="w-3.5 h-3.5 text-white/30" />
+                  <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Livraison</span>
+                </div>
+                <span className="text-sm font-medium text-white">2 – 3 jours</span>
               </div>
             </div>
-
-            {/* ── LA DESCRIPTION ÉPURÉE (Histoire) ── */}
-            <section className="px-1 mb-10">
-              <h3 className="text-sm font-bold text-white mb-2">À propos de ce miel</h3>
-              <p className="text-white/70 leading-relaxed text-[14px]">
-                Récolté de manière artisanale, il reflète la richesse des écosystèmes locaux et le travail des apiculteurs engagés. 
-                Au-delà de ses qualités, ce miel soutient une apiculture durable et participe à la préservation du vivant grâce à la pollinisation.
-              </p>
-            </section>
 
             {product.producer && (
               <section className="group border-y border-white/5 py-5 transition-colors hover:bg-white/[0.02]">
@@ -292,26 +328,65 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             )}
 
             {/* BLOC COMPOSITION ET CONSERVATION */}
-            <div className="px-1 mt-8 space-y-5">
-              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">Informations produit</h3>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4 flex flex-col justify-between min-h-[5rem]">
-                  <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Ingrédients</span>
-                  <p className="text-sm font-medium text-white">100% miel d'Eucalyptus</p>
-                </div>
-                <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4 flex flex-col justify-between min-h-[5rem]">
-                  <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Origine</span>
-                  <p className="text-sm font-medium text-white">Madagascar</p>
-                </div>
-              </div>
+            <div className="px-1 mt-8">
+              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Informations produit</h3>
 
-              <div className="bg-[#1A1F26] border border-white/5 rounded-2xl p-4">
-                <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-2">Conditions de conservation</span>
-                <p className="text-[13px] text-white/70 leading-relaxed">
-                  À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).
-                </p>
-              </div>
+              {/* Accordéon Composition */}
+              <button
+                onClick={() => setIsCompositionOpen(v => !v)}
+                className="w-full flex items-center justify-between py-4 border-b border-white/5"
+              >
+                <span className="text-sm font-bold text-white">Composition & Origine</span>
+                <ChevronDown className={`w-4 h-4 text-white/30 transition-transform duration-200 ${isCompositionOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {isCompositionOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="py-4 border-b border-white/5 grid grid-cols-2 gap-4">
+                      <div>
+                        <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Ingrédients</span>
+                        <p className="text-sm font-medium text-white">100% miel d'Eucalyptus</p>
+                      </div>
+                      <div>
+                        <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Origine</span>
+                        <p className="text-sm font-medium text-white">Madagascar</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Accordéon Conservation */}
+              <button
+                onClick={() => setIsConservationOpen(v => !v)}
+                className="w-full flex items-center justify-between py-4 border-b border-white/5"
+              >
+                <span className="text-sm font-bold text-white">Conservation</span>
+                <ChevronDown className={`w-4 h-4 text-white/30 transition-transform duration-200 ${isConservationOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {isConservationOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="py-4 border-b border-white/5">
+                      <p className="text-[13px] text-white/70 leading-relaxed">
+                        À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* BOUTON DÉCLENCHEUR NUTRITION */}
@@ -340,16 +415,6 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#0B0F15] to-transparent" />
           
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
-            {/* Scarcity indicator */}
-            {inStock && (
-              <div className="flex items-center justify-center gap-1.5 mb-2">
-                <Flame className="w-3.5 h-3.5 text-orange-500" />
-                <span className="text-xs font-bold text-orange-500">
-                  {selectedFormat.stock < 20 ? `Série limitée • Plus que ${selectedFormat.stock} exemplaires` : 'En stock • Prêt à expédier'}
-                </span>
-              </div>
-            )}
-
             {/* Boutons d'Achat Dynamiques */}
             {userBalance >= displayPoints ? (
               <>
@@ -358,7 +423,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   onClick={() => setIsCheckoutOpen(true)}
                   className={`flex w-full h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
                 >
-                  Échanger <CurrencyAmount kind="impactCredits" value={displayPoints} className="text-[17px] font-black" />
+                  Utiliser mes crédits <CurrencyAmount kind="impactCredits" value={displayPoints} className="text-[17px] font-black" />
                 </button>
                 
                 {displayPrice > 0 && (

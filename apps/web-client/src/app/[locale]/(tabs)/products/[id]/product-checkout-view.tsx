@@ -156,7 +156,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             }}
             className={`w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-lg font-black shadow-[0_0_30px_rgba(252,211,77,0.14)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100 ${getCurrencyDesign('impactCredits').ctaClassName}`}
           >
-            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'échange")}
+            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'utilisation")}
           </button>
         </div>
       </div>
