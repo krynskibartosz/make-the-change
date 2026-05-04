@@ -11,6 +11,7 @@ import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { ProductWithRelations } from './product-detail-data'
 import { ProductFavoriteButton } from './product-favorite-button'
 import { ProductShareButton } from './product-share-button'
@@ -385,8 +386,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
         </div>
 
         {/* ── Sticky Bottom Bar ── */}
-        <div className="relative shrink-0 border-t border-white/10 bg-[#0B0F15]/90 p-4 backdrop-blur-xl sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#0B0F15] to-transparent" />
+        <BottomActionBar className="relative shrink-0 sm:px-6">
+          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
           
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
             {/* Boutons d'Achat Dynamiques */}
@@ -433,9 +434,9 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               </>
             )}
           </div>
-        </div>
+        </BottomActionBar>
       </div>
-      
+
       {/* ── Checkout Modal Interceptée ── */}
       {isCheckoutOpen && (
         <ProductCheckoutView 
