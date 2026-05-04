@@ -261,15 +261,7 @@ export function AdventureTab({
 
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
-                    <span
-                      className={cn(
-                        'rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em]',
-                        theme.badgeClassName,
-                        theme.accentText,
-                      )}
-                    >
-                      {recommendedProject?.typeLabel || 'Mission terrain'}
-                    </span>
+                  
                     <span className="rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/60 backdrop-blur-sm">
                       {recommendedProject?.location || 'Terrain partenaire'}
                     </span>
@@ -277,24 +269,11 @@ export function AdventureTab({
                   <h2 className="text-lg font-black leading-tight text-white drop-shadow-md">
                     {projectName}
                   </h2>
-                  <p className="mt-1 line-clamp-2 text-xs font-medium leading-relaxed text-white/68 drop-shadow-md">
-                    {recommendedProject?.description ||
-                      'Un projet concret pour protéger le vivant.'}
-                  </p>
+                  
                 </div>
               </div>
 
               <div className="space-y-4 p-4 pt-3">
-                <div>
-                  <div className="mb-2 flex items-center justify-between text-xs font-bold text-white/52">
-                    <span>{recommendedProject?.speciesName || speciesName}</span>
-                    <span className="tabular-nums">
-                      {Math.round(recommendedProject?.fundingProgress ?? 0)}%
-                    </span>
-                  </div>
-                  <ProgressBar value={recommendedProject?.fundingProgress ?? 0} />
-                </div>
-
                 <Link
                   href={recommendedProject?.href || '/projects'}
                   className={cn(
@@ -312,16 +291,7 @@ export function AdventureTab({
         </div>
 
         <div className="space-y-4 px-4">
-          <div className="flex items-end justify-between px-1">
-            <div>
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/40">
-                Prochaines actions
-              </h2>
-              <p className="mt-1 text-sm font-medium text-white/64">
-                Des widgets qui poussent la mission, pas un menu.
-              </p>
-            </div>
-          </div>
+      
 
           <Link
             href="/challenges"
