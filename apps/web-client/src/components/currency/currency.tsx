@@ -36,6 +36,7 @@ type CurrencyAmountProps = ComponentPropsWithoutRef<'span'> & {
   kind: CurrencyKind
   value: number
   notation?: 'standard' | 'compact'
+  prefix?: string
   showLabel?: boolean
 }
 
@@ -43,19 +44,24 @@ export function CurrencyAmount({
   kind,
   value,
   notation = 'standard',
+  prefix,
   showLabel = false,
   className,
   ...props
 }: CurrencyAmountProps) {
   const design = getCurrencyDesign(kind)
+  const formattedValue = formatCurrencyValue(value, notation)
 
   return (
     <span
-      aria-label={`${formatCurrencyValue(value, notation)} ${design.ariaLabel}`}
+      aria-label={`${prefix || ''}${formattedValue} ${design.ariaLabel}`}
       className={cn('inline-flex items-center gap-1 tabular-nums', design.toneClassName, className)}
       {...props}
     >
-      <span aria-hidden="true">{formatCurrencyValue(value, notation)}</span>
+      <span aria-hidden="true">
+        {prefix}
+        {formattedValue}
+      </span>
       <CurrencyIcon kind={kind} className="h-[1.1em] w-[1.1em]" />
       {showLabel && <span aria-hidden="true">{design.label}</span>}
     </span>

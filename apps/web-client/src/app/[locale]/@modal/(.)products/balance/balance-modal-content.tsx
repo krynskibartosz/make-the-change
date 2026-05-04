@@ -2,7 +2,8 @@
 
 import { Button } from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
-import { ArrowRight, Sparkles, TreeDeciduous, Droplet , Clock } from 'lucide-react'
+import { ArrowRight, TreeDeciduous, Droplet, Clock, Hexagon } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import type { MockPointsTransactionRecord } from '@/lib/mock/mock-member-data'
 import { useEffect, useState } from 'react'
@@ -31,7 +32,7 @@ function getTransactionIcon(label: string) {
   const lowerLabel = label.toLowerCase()
   if (lowerLabel.includes('commande') || lowerLabel.includes('miel')) return Droplet
   if (lowerLabel.includes('contribution') || lowerLabel.includes('projet')) return TreeDeciduous
-  return Sparkles
+  return Hexagon
 }
 
 // Components
@@ -41,11 +42,9 @@ function BalanceCard({ balance }: { balance: number }) {
       <div className="absolute inset-0 bg-gradient-radial from-amber-400/5 via-transparent to-transparent opacity-50" />
       <div className="relative">
         <p className="mb-2 text-xs font-medium tracking-widest text-white/50 uppercase">
-          Graines disponibles
+          Crédits Impact disponibles
         </p>
-        <p className="text-5xl font-black text-white tabular-nums">
-          ✨ {balance.toLocaleString('fr-FR')}
-        </p>
+        <CurrencyAmount kind="impactCredits" value={balance} className="text-5xl font-black text-white" />
       </div>
     </div>
   )
@@ -81,7 +80,7 @@ function GoalProgressBar() {
         />
       </div>
       <p className="text-xs text-white/60">
-        Plus que {remaining} ✨ pour débloquer !
+        Plus que {remaining} crédits pour débloquer !
       </p>
     </div>
   )
@@ -99,7 +98,7 @@ function ImpactHistoryList({ transactions }: { transactions: MockPointsTransacti
         return (
           <div key={transaction.id} className="flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4">
             <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-              isPositive ? 'bg-lime-400/20 text-lime-400' : 'bg-white/10 text-white/80'
+              isPositive ? 'bg-amber-300/15 text-amber-300' : 'bg-white/10 text-white/80'
             }`}>
               <Icon className="h-5 w-5" />
             </div>
@@ -108,9 +107,10 @@ function ImpactHistoryList({ transactions }: { transactions: MockPointsTransacti
               <p className="text-xs text-white/50">{formatRelativeDate(transaction.createdAt)}</p>
             </div>
             <p className={`text-sm font-bold tabular-nums ${
-              isPositive ? 'text-lime-400' : 'text-white/80'
+              isPositive ? 'text-amber-300' : 'text-white/80'
             }`}>
-              {isPositive ? '+' : ''}{transaction.delta} ✨
+              {isPositive ? '+' : ''}{Math.abs(transaction.delta).toLocaleString('fr-FR')}
+              <CurrencyIcon kind="impactCredits" className="ml-1 inline h-3.5 w-3.5 align-text-bottom" />
             </p>
           </div>
         )
@@ -136,7 +136,7 @@ function VisitorState() {
           Ton impact a de la valeur.
         </h1>
         <p className="max-w-md text-lg text-white/70">
-          Rejoins le collectif pour collecter des Graines ✨ à chaque action et débloque des récompenses éco-responsables exclusives.
+          Rejoins le collectif, soutiens des projets producteurs et transforme tes Crédits Impact en avantages éco-responsables.
         </p>
         <div className="flex w-full max-w-sm flex-col gap-3">
           <Link href="/onboarding/step-0">
@@ -165,7 +165,7 @@ function BeginnerState() {
       <div className="w-full max-w-md space-y-8">
         {/* Carte solde */}
         <div className="flex flex-col items-center rounded-3xl border border-white/10 bg-white/5 p-8">
-          <p className="text-5xl font-black text-white tabular-nums">✨ 0</p>
+          <CurrencyAmount kind="impactCredits" value={0} className="text-5xl font-black text-white" />
           <div className="mt-4">
             <img src="/sylva.png" alt="Sylva" className="h-24 w-24 object-contain drop-shadow-2xl" />
           </div>
@@ -174,10 +174,10 @@ function BeginnerState() {
         {/* Message d'encouragement */}
         <div className="text-center">
           <h3 className="mb-2 text-2xl font-bold text-white">
-            Tout commence par une graine.
+            Tout commence par un soutien concret.
           </h3>
           <p className="text-white/70">
-            Ton portefeuille est prêt. Soutiens ton premier projet pour commencer ta récolte et faire grandir ton impact.
+            Ton portefeuille est prêt. Soutiens ton premier projet producteur pour générer tes premiers Crédits Impact.
           </p>
         </div>
 

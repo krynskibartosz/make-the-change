@@ -1,7 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { BadgeCheck, Leaf, Sparkles } from 'lucide-react'
+import { BadgeCheck, Leaf } from 'lucide-react'
+import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -46,7 +47,6 @@ type ClientCatalogProductCardProps = {
 export function ClientCatalogProductCard({
   product,
   outOfStockLabel,
-  pointsLabel,
   view = 'grid',
 }: ClientCatalogProductCardProps) {
   const imageUrl =
@@ -108,13 +108,12 @@ export function ClientCatalogProductCard({
             {!inStock ? (
               <span className="text-[11px] font-semibold text-red-400/80">{outOfStockLabel}</span>
             ) : points > 0 ? (
-              <div className="flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-lime-400 shrink-0" aria-hidden="true" />
-                <span className="text-sm font-black text-lime-400 tabular-nums">
-                  {points.toLocaleString('fr-FR')}
-                </span>
-                <span className="text-xs font-semibold text-white/50">{pointsLabel}</span>
-              </div>
+              <CurrencyAmount
+                kind="impactCredits"
+                value={points}
+                showLabel
+                className="text-sm font-black"
+              />
             ) : null}
           </div>
         </Link>
@@ -184,12 +183,7 @@ export function ClientCatalogProductCard({
           <div className="flex items-center gap-1 mt-1">
             {/* Prix en points */}
             {inStock && points > 0 ? (
-              <div className="flex items-center gap-1">
-                <Sparkles className="w-4 h-4 text-lime-400 shrink-0" aria-hidden="true" />
-                <span className="text-sm font-bold text-lime-400 tabular-nums">
-                  {points.toLocaleString('fr-FR')}
-                </span>
-              </div>
+              <CurrencyAmount kind="impactCredits" value={points} className="text-sm font-bold" />
             ) : inStock ? (
               <span className="text-xs font-semibold text-white/50">Gratuit</span>
             ) : null}

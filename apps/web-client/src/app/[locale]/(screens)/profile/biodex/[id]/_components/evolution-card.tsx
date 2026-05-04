@@ -1,4 +1,5 @@
-import { Lock, Sprout, HelpCircle } from 'lucide-react'
+import { Lock, HelpCircle } from 'lucide-react'
+import { CurrencyAmount } from '@/components/currency'
 
 interface EvolutionCardProps {
   currentSeeds: number
@@ -17,8 +18,8 @@ export function EvolutionCard({ currentSeeds, requiredSeeds = 500, canEvolve = f
 
           <div className="mb-2 flex justify-between text-sm">
             <span className="text-white/60">Graines requises</span>
-            <span className="font-bold text-emerald-400 tabular-nums">
-              {currentSeeds} / {requiredSeeds} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
+            <span className="font-bold text-emerald-300 tabular-nums">
+              {currentSeeds} / <CurrencyAmount kind="seeds" value={requiredSeeds} className="font-bold" />
             </span>
           </div>
 
@@ -35,13 +36,13 @@ export function EvolutionCard({ currentSeeds, requiredSeeds = 500, canEvolve = f
             className={`
               mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-4 font-bold transition-colors
               ${canEvolve
-                ? 'bg-amber-500 text-white hover:bg-amber-600'
+                ? 'bg-emerald-400 text-black hover:bg-emerald-300'
                 : 'border border-white/20 bg-transparent text-white/40 cursor-not-allowed'
               }
             `}
           >
             {canEvolve ? (
-              <>Faire évoluer ({requiredSeeds} 🌱)</>
+              <>Faire évoluer (<CurrencyAmount kind="seeds" value={requiredSeeds} className="font-bold" />)</>
             ) : (
               <>
                 <Lock className="h-4 w-4" />
@@ -52,7 +53,7 @@ export function EvolutionCard({ currentSeeds, requiredSeeds = 500, canEvolve = f
 
           <p className="mt-4 text-center text-xs text-white/40">
             Faites des{' '}
-            <span className="text-lime-400 underline decoration-lime-400/30">Défis Quotidiens</span>{' '}
+            <span className="text-emerald-300 underline decoration-emerald-300/30">Défis Quotidiens</span>{' '}
             pour gagner plus de graines.
           </p>
         </div>

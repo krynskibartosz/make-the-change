@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
-import {  Flame, Package, Sparkles, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
+import { Flame, Package, Truck, Trophy, Hexagon, Info, ShieldCheck, ChevronRight, X, Bug } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
+import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
 import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
@@ -197,11 +198,9 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               <div className="col-span-2 bg-white/[0.02] border-t border-b border-white/5 py-4 px-1 sm:p-4 sm:rounded-2xl sm:border">
                 <div className="flex justify-between items-end mb-3">
                   <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Choisir le format</span>
-                  <div className="flex items-center gap-1.5 bg-lime-400/10 px-2.5 py-1 rounded-lg">
+                  <div className="flex items-center gap-1.5 rounded-lg bg-amber-300/10 px-2.5 py-1">
                     <span className="text-[11px] text-white/50 font-medium">Votre solde :</span>
-                    <span className="flex items-center gap-1 text-xs font-bold text-lime-400 tabular-nums">
-                      {userBalance} <Sparkles className="w-3.5 h-3.5" />
-                    </span>
+                    <CurrencyAmount kind="impactCredits" value={userBalance} className="text-xs font-bold" />
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -211,7 +210,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                       onClick={() => setSelectedFormat(format)}
                       className={`flex-1 flex items-center justify-center h-12 rounded-xl text-sm font-bold transition-all active:scale-95 ${
                         selectedFormat.id === format.id 
-                          ? 'bg-lime-400 text-[#0B0F15] shadow-lg' 
+                          ? 'bg-amber-300 text-[#120d04] shadow-lg' 
                           : 'bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10'
                       }`}
                     >
@@ -357,9 +356,9 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 <button 
                   key={`exchange-${selectedFormat.points}`}
                   onClick={() => setIsCheckoutOpen(true)}
-                  className="flex w-full h-14 items-center justify-center gap-2 rounded-2xl bg-lime-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300"
+                  className={`flex w-full h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
                 >
-                  Échanger <span className="tabular-nums">{displayPoints.toLocaleString('fr-FR')}</span> <Sparkles className="w-4 h-4" />
+                  Échanger <CurrencyAmount kind="impactCredits" value={displayPoints} className="text-[17px] font-black" />
                 </button>
                 
                 {displayPrice > 0 && (
@@ -380,7 +379,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 <button 
                   key={`buy-${selectedFormat.euros}`}
                   onClick={() => setIsFiatCheckoutOpen(true)}
-                  className="flex w-full h-14 items-center justify-center gap-2 rounded-2xl bg-lime-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.2)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300"
+                  className="flex w-full h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(52,211,153,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 hover:bg-emerald-300"
                 >
                   Acheter pour {new Intl.NumberFormat('fr-FR', {
                     style: 'currency',
@@ -389,7 +388,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   }).format(displayPrice)}
                 </button>
                 <div className="mt-2 text-center text-xs text-white/60">
-                  Il vous manque <span className="font-bold text-lime-400">{displayPoints - userBalance} ✨</span> pour l'obtenir gratuitement.{' '}
+                  Il vous manque <CurrencyAmount kind="impactCredits" value={displayPoints - userBalance} className="font-bold" /> pour l'obtenir gratuitement.{' '}
                   <a href={`/${locale}/projects`} className="text-white underline decoration-white/30 hover:decoration-white transition-all">Soutenir un projet</a>
                 </div>
               </>

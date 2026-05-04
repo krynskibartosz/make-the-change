@@ -1,5 +1,6 @@
 'use client'
-import { Lock, Sprout } from 'lucide-react'
+import { Lock } from 'lucide-react'
+import { CurrencyIcon } from '@/components/currency'
 import { cn } from '@/lib/utils'
 
 interface StickyEvolutionBarProps {
@@ -24,11 +25,11 @@ export function StickyEvolutionBar({
           <div className='mb-1.5 flex items-center justify-between'>
             <span className='text-xs text-white/40'>Améliorer la fiche</span>
             <div className='flex items-center gap-1'>
-              <Sprout className='h-3 w-3 text-lime-400' />
+              <CurrencyIcon kind='seeds' className='h-3 w-3' />
               <span
                 className={cn(
                   'text-xs font-bold tabular-nums',
-                  canEvolve ? 'text-lime-400' : 'text-white/40',
+                  canEvolve ? 'text-emerald-300' : 'text-white/40',
                 )}
               >
                 {currentSeeds} / {requiredSeeds}
@@ -37,7 +38,7 @@ export function StickyEvolutionBar({
           </div>
           <div className='h-0.5 w-full overflow-hidden rounded-full bg-white/10'>
             <div
-              className='h-full rounded-full bg-lime-400 transition-all duration-700'
+              className='h-full rounded-full bg-emerald-400 transition-all duration-700'
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -49,7 +50,7 @@ export function StickyEvolutionBar({
           className={cn(
             'h-11 shrink-0 rounded-2xl px-5 text-sm font-bold transition-all',
             canEvolve
-              ? 'bg-lime-400 text-black active:scale-95'
+              ? 'bg-emerald-400 text-black active:scale-95'
               : 'cursor-pointer border border-white/10 bg-white/5 text-white/30',
           )}
         >

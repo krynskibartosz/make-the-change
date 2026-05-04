@@ -15,6 +15,7 @@ import Image from 'next/image'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { MarketingCtaBand } from '@/app/[locale]/(site)/_features/marketing-cta-band'
 import { MarketingHeroShell } from '@/app/[locale]/(site)/_features/marketing-hero-shell'
+import { CurrencyAmount } from '@/components/currency'
 import { SectionContainer } from '@/components/ui/section-container'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -292,9 +293,12 @@ export async function ProductDetails({
                   </div>
                   {/* Price: Points primary, euros secondary */}
                   <div className="flex flex-col gap-1 mb-4">
-                    <span className="text-3xl font-black text-lime-400">
-                      {displayPoints.toLocaleString('fr-FR')} Points
-                    </span>
+                    <CurrencyAmount
+                      kind="impactCredits"
+                      value={displayPoints}
+                      showLabel
+                      className="text-3xl font-black"
+                    />
                     {priceEuros !== null && priceEuros > 0 && (
                       <span className="text-sm text-muted-foreground">ou {formatCurrency(priceEuros)}</span>
                     )}

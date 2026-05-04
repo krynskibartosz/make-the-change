@@ -131,6 +131,23 @@ Recommandations:
 - elements ludiques reserves aux bons moments;
 - pas de surcharge d'effets visuels dans les parcours argent.
 
+### 7.1 Identite Visuelle Des Monnaies
+
+Les deux economies doivent rester separees par composant, pas seulement par intention:
+
+| Monnaie | Icone V0 | Couleur | Contexte |
+| ------- | -------- | ------- | -------- |
+| Graines | `Sprout` | vert / emerald | Academy, missions, BioDex, progression |
+| Credits Impact | `Hexagon` | ambre / premium | boutique, checkout, soutien producteur |
+
+Regles:
+
+- ne pas utiliser `Sparkles` pour les Credits Impact;
+- ne pas afficher les Credits Impact en vert;
+- ne pas afficher les Graines dans la boutique ou le checkout produit;
+- utiliser les composants/tokens `Currency*` au lieu de classes couleur libres;
+- ne jamais distinguer une monnaie uniquement par la couleur.
+
 ## 8. Academy
 
 Style cible:

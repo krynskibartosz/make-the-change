@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
-import { ArrowLeft, MapPin, Plus, Sparkles, X, Loader2 } from 'lucide-react'
+import { ArrowLeft, MapPin, Plus, X, Loader2 } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 type ProductCheckoutViewProps = {
@@ -92,9 +93,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             {/* Lignes de détail */}
             <div className="flex justify-between items-center text-sm">
               <span className="text-white/60">Sous-total ({quantity}x)</span>
-              <span className="flex items-center gap-1 text-white font-medium tabular-nums">
-                {totalCost.toLocaleString('fr-FR')} <Sparkles className="w-3.5 h-3.5 text-lime-400" />
-              </span>
+              <CurrencyAmount kind="impactCredits" value={totalCost} className="font-medium" />
             </div>
             <div className="flex justify-between items-center text-sm">
               <span className="text-white/60">Livraison (France)</span>
@@ -106,17 +105,13 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             {/* Total */}
             <div className="flex justify-between items-center">
               <span className="text-white font-bold">Total à échanger</span>
-              <span className="flex items-center gap-1.5 text-xl font-black text-white tabular-nums">
-                - {totalCost.toLocaleString('fr-FR')} <Sparkles className="w-5 h-5 text-lime-400" />
-              </span>
+              <CurrencyAmount kind="impactCredits" value={totalCost} prefix="-" className="text-xl font-black" />
             </div>
             
             {/* Rassurance Solde */}
             <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
               <span className="text-white/40 text-xs">Nouveau solde estimé</span>
-              <span className="flex items-center gap-1 text-lime-400 font-bold text-sm tabular-nums">
-                {newBalance.toLocaleString('fr-FR')} <Sparkles className="w-3.5 h-3.5" />
-              </span>
+              <CurrencyAmount kind="impactCredits" value={newBalance} className="text-sm font-bold" />
             </div>
           </div>
 
@@ -159,7 +154,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
                 setStep(3)
               }, 1500)
             }}
-            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-lime-400 py-4 text-lg font-black text-[#0B0F15] shadow-[0_0_30px_rgba(132,204,22,0.15)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100"
+            className={`w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-lg font-black shadow-[0_0_30px_rgba(252,211,77,0.14)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100 ${getCurrencyDesign('impactCredits').ctaClassName}`}
           >
             {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'échange")}
           </button>
@@ -222,14 +217,14 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#0B0F15] animate-in fade-in zoom-in-95 duration-500">
         {/* Halo lumineux central */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime-400/20 blur-[80px]"></div>
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-300/15 blur-[80px]"></div>
 
         {/* Visuel Héroïque - Artefact Magique */}
         <div className="relative z-10 animate-[bounce_3s_ease-in-out_infinite]">
           {/* Halo de l'artefact */}
-          <div className="absolute inset-0 bg-lime-400/20 blur-2xl rounded-full"></div>
+          <div className="absolute inset-0 bg-amber-300/15 blur-2xl rounded-full"></div>
           {/* L'image */}
-          <div className="relative w-40 h-40 rounded-2xl overflow-hidden drop-shadow-[0_20px_50px_rgba(132,204,22,0.4)] border border-lime-400/30">
+          <div className="relative w-40 h-40 rounded-2xl overflow-hidden drop-shadow-[0_20px_50px_rgba(252,211,77,0.28)] border border-amber-300/30">
             {imageUrl && (
               <img src={imageUrl} alt={product.name_default} className="w-full h-full object-cover" />
             )}
@@ -238,9 +233,9 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
 
         {/* Typographie de Triomphe */}
         <div className="z-10 mt-10 space-y-3 px-6 text-center">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-4 py-1.5">
-            <Sparkles className="h-4 w-4 text-lime-400" />
-            <span className="text-xs font-bold uppercase tracking-widest text-lime-400">Échange réussi</span>
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/10 px-4 py-1.5">
+            <CurrencyIcon kind="impactCredits" className="h-4 w-4" />
+            <span className="text-xs font-bold uppercase tracking-widest text-amber-300">Échange réussi</span>
           </div>
 
           <h2 className="text-4xl font-black leading-tight tracking-tight text-white">
@@ -258,7 +253,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
           {/* Bouton Primaire (La Boucle) */}
           <button
             onClick={() => router.push('/projects')}
-            className="w-full bg-lime-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-lime-500 shadow-[0_0_30px_rgba(132,204,22,0.2)]"
+            className="w-full bg-emerald-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-emerald-300 shadow-[0_0_30px_rgba(52,211,153,0.18)]"
           >
             Soutenir un projet
           </button>

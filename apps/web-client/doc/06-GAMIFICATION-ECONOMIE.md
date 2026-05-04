@@ -30,6 +30,13 @@ Nom de la valeur boutique:
 - nom final: `Credits Impact`;
 - nom retenu car il distingue mieux la boutique des graines.
 
+Regle UI:
+
+- Graines: `Sprout`, vert/emerald, contextes Academy / missions / BioDex;
+- Credits Impact: `Hexagon`, ambre premium, contextes boutique / checkout / soutien producteur;
+- toute interface doit passer par les composants/tokens de monnaie dedies;
+- les metriques d'impact ne doivent pas reprendre les silhouettes ou styles de monnaie.
+
 ## 3. Graines
 
 Sources:

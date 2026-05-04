@@ -8,7 +8,8 @@ import {
 } from '@make-the-change/core/ui'
 import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, CheckCircle, CheckCircle2, Lock, MapPin, Gift, RefreshCw, ShieldCheck, Sparkles, Loader2 } from 'lucide-react'
+import { ArrowLeft, CheckCircle, CheckCircle2, Lock, MapPin, Gift, RefreshCw, ShieldCheck, Loader2 } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -423,9 +424,9 @@ export function ProjectInvestOneFlow({
                   {/* LES TAGS VISUELS (Alignés et aérés) */}
                   <div className="flex flex-wrap gap-2">
                     
-                    <div className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-bold">1€ = 1 ✨</span>
+                    <div className="bg-amber-300/10 border border-amber-300/25 text-amber-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <CurrencyIcon kind="impactCredits" className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-bold">1€ = 1 crédit</span>
                     </div>
 
                     <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
@@ -578,8 +579,8 @@ export function ProjectInvestOneFlow({
                     Nouvelle espèce débloquée
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
-                  <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-lime-400 drop-shadow-[0_0_10px_rgba(132,204,22,0.4)] [@media(max-height:800px)]:text-xl">
-                    {`+ ${formatPoints(points.total_points)} Crédits Impact`} <Sparkles className="h-5 w-5" />
+                  <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-amber-300 drop-shadow-[0_0_10px_rgba(252,211,77,0.28)] [@media(max-height:800px)]:text-xl">
+                    <CurrencyAmount kind="impactCredits" value={points.total_points} showLabel className="text-2xl font-black [@media(max-height:800px)]:text-xl" />
                   </p>
                   <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
                     À dépenser dans les Récompenses
@@ -637,8 +638,8 @@ export function ProjectInvestOneFlow({
         <BottomActionBar className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none md:hidden">
           {step === 'impact' ? (
             <>
-              <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-lime-400">
-              Vous allez recevoir <span className="font-black">+{formatPoints(points.total_points)} Crédits Impact</span> <Sparkles className="h-4 w-4" />
+              <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-amber-300">
+              Vous allez recevoir <CurrencyAmount kind="impactCredits" value={points.total_points} showLabel className="font-black" />
               </p>
               <Button
                 type="button"

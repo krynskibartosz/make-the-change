@@ -5,6 +5,7 @@ import { Clock, Flame } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { QuantityStepper } from '@/app/[locale]/(tabs)/products/_components/quantity-stepper'
+import { CurrencyAmount } from '@/components/currency'
 import { formatCurrency } from '@/lib/utils'
 
 type ProductCartPayload = {
@@ -130,11 +131,9 @@ export function FloatingActionButtons({ displayPrice, ...payload }: FloatingActi
           </span>
         </div>
       )}
-      {/* Price hierarchy: Points primary, euros secondary */}
+      {/* Price hierarchy: Credits primary, euros secondary */}
       <div className="mb-3 flex items-baseline justify-center gap-2">
-        <span className="text-2xl font-bold text-lime-400">
-          {displayPoints.toLocaleString('fr-FR')} Points
-        </span>
+        <CurrencyAmount kind="impactCredits" value={displayPoints} showLabel className="text-2xl font-bold" />
         {displayPrice > 0 && (
           <span className="text-sm text-muted-foreground">ou {formatCurrency(displayPrice)}</span>
         )}

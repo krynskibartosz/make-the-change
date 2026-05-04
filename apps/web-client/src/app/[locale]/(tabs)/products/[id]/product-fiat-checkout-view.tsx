@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
-import { Check, CreditCard, Gift, Loader2, Lock, MapPin, Package, Sparkles, X } from 'lucide-react'
+import { Check, CreditCard, Gift, Loader2, Lock, MapPin, Package, X } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 
 type ProductFiatCheckoutViewProps = {
   product: any
@@ -67,12 +68,12 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
         </p>
 
         {/* LE CŒUR DE LA GAMIFICATION : La carte de Cashback */}
-        <div className="w-full bg-[#1A1F26] border border-lime-400/30 rounded-3xl p-6 text-center relative overflow-hidden mb-8 shadow-xl">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-lime-400/0 via-lime-400 to-lime-400/0" />
+        <div className="w-full bg-[#1A1F26] border border-amber-300/30 rounded-3xl p-6 text-center relative overflow-hidden mb-8 shadow-xl">
+          <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-amber-300/0 via-amber-300 to-amber-300/0" />
           <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3">Récompense débloquée</p>
           <div className="flex items-center justify-center gap-3">
-            <span className="text-5xl font-black text-lime-400 tabular-nums leading-none">+{totalCreditsEarned}</span>
-            <Sparkles className="w-8 h-8 text-lime-400" />
+            <span className="text-5xl font-black text-amber-300 tabular-nums leading-none">+{totalCreditsEarned}</span>
+            <CurrencyIcon kind="impactCredits" className="w-8 h-8" />
           </div>
           <p className="text-white/40 text-sm mt-3">Ces Crédits Impact ont été ajoutés à votre solde.</p>
         </div>
@@ -81,7 +82,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
         <div className="w-full flex flex-col gap-3 mt-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           <button
             onClick={() => router.push('/projects')}
-            className="w-full bg-lime-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(132,204,22,0.25)]"
+            className={`w-full font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(252,211,77,0.18)] ${getCurrencyDesign('impactCredits').ctaClassName}`}
           >
             Utiliser mes crédits
           </button>
@@ -166,11 +167,15 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           <div className="h-px w-full bg-white/10 my-3" />
           <div className="flex justify-between items-center pt-1">
             <span className="text-sm text-white/50 flex items-center gap-2">
-              <Gift className="w-4 h-4 text-lime-400" /> Récompense incluse
+              <Gift className="w-4 h-4 text-amber-300" /> Récompense incluse
             </span>
-            <span key={totalCreditsEarned} className="flex items-center gap-1.5 text-lime-400 font-bold bg-lime-400/10 px-2.5 py-1 rounded-lg text-sm animate-in fade-in zoom-in duration-300">
-              + {totalCreditsEarned} <Sparkles className="w-3.5 h-3.5" />
-            </span>
+            <CurrencyAmount
+              key={totalCreditsEarned}
+              kind="impactCredits"
+              value={totalCreditsEarned}
+              prefix="+"
+              className="rounded-lg bg-amber-300/10 px-2.5 py-1 text-sm font-bold animate-in fade-in zoom-in duration-300"
+            />
           </div>
         </div>
 
