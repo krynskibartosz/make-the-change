@@ -630,9 +630,12 @@ function SelectedProjectCard({
 }) {
   const imageUrl = sanitizeImageUrl(feature.properties.imageUrl)
   const Icon = getImpactIcon(feature.properties.impactKind)
+  const iconColor = getImpactIconColor(feature.properties.impactKind)
+  const iconBg = getImpactIconBg(feature.properties.impactKind)
 
   return (
     <article>
+      {/* Image — propre, sans overlay ni texte */}
       <div className="relative aspect-[16/9] overflow-hidden bg-white/10">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" />
@@ -649,33 +652,35 @@ function SelectedProjectCard({
         </button>
       </div>
 
+      {/* Info — titre, lieu, métrique colorée uniquement sur l'icône */}
       <div className="min-w-0 px-4 pb-4 pt-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <h2 className="line-clamp-2 text-[20px] font-black leading-tight tracking-tight text-white">
-              {feature.properties.name}
-            </h2>
-            <p className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium text-white/55">
-              <MapPin className="h-4 w-4 shrink-0" />
-              <span className="truncate">{feature.properties.location}</span>
-            </p>
-          </div>
-        </div>
+        <h2 className="line-clamp-2 text-[20px] font-black leading-tight tracking-tight text-white">
+          {feature.properties.name}
+        </h2>
+        <p className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium text-white/50">
+          <MapPin className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{feature.properties.location}</span>
+        </p>
 
+        {/* Métrique : icône colorée par type, valeur + label en neutre */}
         <div className="mt-3 flex items-center gap-2">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-lime-400">
-            <Icon className="h-4 w-4" />
+          <span
+            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${iconBg}`}
+          >
+            <Icon className={`h-3.5 w-3.5 ${iconColor}`} />
           </span>
-          <p className="min-w-0 text-[13px] font-semibold text-white/78">
+          <p className="min-w-0 text-[13px] leading-none">
             {feature.properties.impactValue > 0 ? (
               <>
-                <span className="font-black text-lime-400">
+                <span className="font-black text-white/90">
                   {formatCompact(feature.properties.impactValue)}
-                </span>{' '}
-                {feature.properties.impactLabel}
+                </span>
+                <span className="ml-1 font-medium text-white/55">
+                  {feature.properties.impactLabel}
+                </span>
               </>
             ) : (
-              feature.properties.impactLabel
+              <span className="font-medium text-white/55">{feature.properties.impactLabel}</span>
             )}
           </p>
         </div>
@@ -713,6 +718,8 @@ function ProjectMiniTile({
   onSelectProject: (feature: ProjectMapFeature) => void
 }) {
   const imageUrl = sanitizeImageUrl(feature.properties.imageUrl)
+  const Icon = getImpactIcon(feature.properties.impactKind)
+  const iconColor = getImpactIconColor(feature.properties.impactKind)
 
   return (
     <button
@@ -721,16 +728,39 @@ function ProjectMiniTile({
       className="min-w-0 overflow-hidden rounded-2xl bg-white/[0.055] text-left transition active:scale-[0.98]"
       aria-label={`Afficher ${feature.properties.name} sur la carte`}
     >
-      <div className="aspect-[4/5] bg-white/10">
+      {/* Image — format paysage 4/3, sans overlay ni texte */}
+      <div className="aspect-[4/3] overflow-hidden bg-white/10">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full bg-white/10" />
         )}
       </div>
-      <p className="truncate px-2.5 py-2.5 text-[12px] font-bold text-white/82">
-        {feature.properties.name}
-      </p>
+
+      {/* Info — titre sur 2 lignes + métrique compacte */}
+      <div className="px-2.5 pb-2.5 pt-2">
+        <p className="line-clamp-2 text-[12px] font-bold leading-tight text-white/85">
+          {feature.properties.name}
+        </p>
+        {/* Métrique : icône colorée par type, valeur neutre */}
+        <div className="mt-1.5 flex items-center gap-1">
+          <Icon className={`h-3 w-3 shrink-0 ${iconColor}`} />
+          <p className="min-w-0 truncate text-[11px] leading-none">
+            {feature.properties.impactValue > 0 ? (
+              <>
+                <span className="font-black text-white/85">
+                  {formatCompact(feature.properties.impactValue)}
+                </span>
+                <span className="ml-0.5 font-medium text-white/45">
+                  {feature.properties.impactLabel}
+                </span>
+              </>
+            ) : (
+              <span className="font-medium text-white/45">{feature.properties.impactLabel}</span>
+            )}
+          </p>
+        </div>
+      </div>
     </button>
   )
 }
@@ -779,4 +809,18 @@ function getImpactIcon(kind: ProjectMapFeatureProperties['impactKind']) {
   if (kind === 'orchard') return TreePine
   if (kind === 'reef') return Waves
   return Bug
+}
+
+/** Couleur de l'icône selon le type d'impact — seule la couleur varie, pas le texte */
+function getImpactIconColor(kind: ProjectMapFeatureProperties['impactKind']): string {
+  if (kind === 'orchard') return 'text-emerald-400'
+  if (kind === 'reef') return 'text-sky-400'
+  return 'text-amber-400'
+}
+
+/** Fond de l'icône (SelectedProjectCard uniquement) */
+function getImpactIconBg(kind: ProjectMapFeatureProperties['impactKind']): string {
+  if (kind === 'orchard') return 'bg-emerald-400/15'
+  if (kind === 'reef') return 'bg-sky-400/15'
+  return 'bg-amber-400/15'
 }
