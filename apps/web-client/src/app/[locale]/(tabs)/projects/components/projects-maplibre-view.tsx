@@ -34,7 +34,7 @@ type ProjectsMapViewProps = {
   onShowCurrentView: () => void
 }
 
-const MAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
+const MAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/dark'
 const SOURCE_ID = 'projects-map-source'
 const CLUSTER_LAYER_ID = 'projects-map-clusters'
 const CLUSTER_COUNT_LAYER_ID = 'projects-map-cluster-count'
@@ -70,11 +70,11 @@ const clusterLayer: LayerProps = {
   source: SOURCE_ID,
   filter: ['has', 'point_count'],
   paint: {
-    'circle-color': ['step', ['get', 'point_count'], '#a3e635', 8, '#34d399', 20, '#22d3ee'],
-    'circle-radius': ['step', ['get', 'point_count'], 19, 8, 25, 20, 33],
-    'circle-stroke-color': 'rgba(11,15,21,0.88)',
+    'circle-color': ['step', ['get', 'point_count'], '#9AE600', 8, '#5EEA8D', 20, '#38BDF8'],
+    'circle-radius': ['step', ['get', 'point_count'], 18, 8, 24, 20, 31],
+    'circle-stroke-color': 'rgba(5,7,10,0.92)',
     'circle-stroke-width': 4,
-    'circle-opacity': 0.95,
+    'circle-opacity': 0.9,
   },
 }
 
@@ -89,7 +89,7 @@ const clusterCountLayer: LayerProps = {
     'text-font': ['Noto Sans Bold'],
   },
   paint: {
-    'text-color': '#0b0f15',
+    'text-color': '#05070A',
   },
 }
 
@@ -103,13 +103,13 @@ const pointHaloLayer: LayerProps = {
       'match',
       ['get', 'impactKind'],
       'reef',
-      '#22d3ee',
+      '#38BDF8',
       'orchard',
-      '#84cc16',
-      '#facc15',
+      '#A3E635',
+      '#FACC15',
     ],
     'circle-radius': 15,
-    'circle-opacity': 0.18,
+    'circle-opacity': 0.2,
   },
 }
 
@@ -123,13 +123,13 @@ const pointLayer: LayerProps = {
       'match',
       ['get', 'impactKind'],
       'reef',
-      '#22d3ee',
+      '#38BDF8',
       'orchard',
-      '#84cc16',
-      '#facc15',
+      '#A3E635',
+      '#FACC15',
     ],
     'circle-radius': 7,
-    'circle-stroke-color': '#0b0f15',
+    'circle-stroke-color': '#05070A',
     'circle-stroke-width': 3,
   },
 }
@@ -386,17 +386,17 @@ export function ProjectsMapView({
 function MapPreparingCanvas({ isVisible }: { isVisible: boolean }) {
   return (
     <motion.div
-      className="pointer-events-none fixed inset-0 z-10 bg-[#8FB3E8]"
+      className="pointer-events-none fixed inset-0 z-10 bg-[#08111A]"
       initial={false}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       aria-hidden
     >
-      <div className="absolute inset-0 opacity-55 [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:44px_44px]" />
-      <div className="absolute left-[-16%] top-[6%] h-[25%] w-[58%] rounded-[52%] bg-[#d8dfc4]/70" />
-      <div className="absolute right-[-18%] top-[22%] h-[28%] w-[62%] rounded-[50%] bg-[#d8dfc4]/60" />
-      <div className="absolute bottom-[18%] left-[12%] h-[20%] w-[48%] rounded-[48%] bg-[#d8dfc4]/52" />
-      <div className="absolute inset-0 bg-[#0B0F15]/[0.03]" />
+      <div className="absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(163,230,53,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.07)_1px,transparent_1px)] [background-size:44px_44px]" />
+      <div className="absolute left-[-16%] top-[6%] h-[25%] w-[58%] rounded-[52%] bg-[#123225]/72" />
+      <div className="absolute right-[-18%] top-[22%] h-[28%] w-[62%] rounded-[50%] bg-[#0E2A3B]/68" />
+      <div className="absolute bottom-[18%] left-[12%] h-[20%] w-[48%] rounded-[48%] bg-[#182A1D]/66" />
+      <div className="absolute inset-0 bg-[#05070A]/35" />
     </motion.div>
   )
 }

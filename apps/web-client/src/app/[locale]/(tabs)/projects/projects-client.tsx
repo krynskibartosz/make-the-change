@@ -378,28 +378,29 @@ function ProjectsMapBootPlaceholder({
 }) {
   return (
     <motion.div
-      className="fixed inset-0 z-40 overflow-hidden bg-[#8FB3E8] text-white"
+      className="fixed inset-0 z-40 overflow-hidden bg-[#08111A] text-white"
       initial={false}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
       aria-label="Préparation de la carte des projets"
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-55 [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:44px_44px]"
+        className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(163,230,53,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.07)_1px,transparent_1px)] [background-size:44px_44px]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute left-[-16%] top-[6%] h-[25%] w-[58%] rounded-[52%] bg-[#d8dfc4]/70"
+        className="pointer-events-none absolute left-[-16%] top-[6%] h-[25%] w-[58%] rounded-[52%] bg-[#123225]/72"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute right-[-18%] top-[22%] h-[28%] w-[62%] rounded-[50%] bg-[#d8dfc4]/60"
+        className="pointer-events-none absolute right-[-18%] top-[22%] h-[28%] w-[62%] rounded-[50%] bg-[#0E2A3B]/68"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute bottom-[18%] left-[12%] h-[20%] w-[48%] rounded-[48%] bg-[#d8dfc4]/52"
+        className="pointer-events-none absolute bottom-[18%] left-[12%] h-[20%] w-[48%] rounded-[48%] bg-[#182A1D]/66"
         aria-hidden
       />
+      <div className="pointer-events-none absolute inset-0 bg-[#05070A]/35" aria-hidden />
 
       <motion.section
         layout
