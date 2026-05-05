@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   BookOpen,
+  Bug,
   CheckCircle2,
   ChevronRight,
   Compass,
@@ -10,13 +11,16 @@ import {
   PawPrint,
   Sparkles,
   Sprout,
+  TreePine,
   Trophy,
   UsersRound,
+  Waves,
 } from 'lucide-react'
 import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
 import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
+import { formatCompact } from '@/lib/formatters'
 import { getCollectiveGoal } from '@/lib/mock/mock-factions'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
@@ -42,6 +46,9 @@ export type AdventureProjectCard = {
   fundingProgress: number
   typeLabel: string
   speciesName: string | null
+  impactValue: number
+  impactLabel: string
+  impactKind: 'beehive' | 'orchard' | 'reef'
 }
 
 export type AdventureSpeciesCard = {
@@ -289,6 +296,36 @@ export function AdventureTab({
             <h2 className="text-[19px] font-black leading-tight tracking-tight text-white">
               {projectName}
             </h2>
+
+            {recommendedProject && (
+              <div className="mt-2.5 flex items-center gap-1.5">
+                {(() => {
+                  const Icon = getImpactIcon(recommendedProject.impactKind)
+                  const iconColor = getImpactIconColor(recommendedProject.impactKind)
+                  return (
+                    <>
+                      <Icon className={cn('h-4 w-4 shrink-0', iconColor)} />
+                      <p className="min-w-0 truncate text-[13px] leading-none">
+                        {recommendedProject.impactValue > 0 ? (
+                          <>
+                            <span className="font-black text-white/90">
+                              {formatCompact(recommendedProject.impactValue)}
+                            </span>
+                            <span className="ml-1 font-medium text-white/55">
+                              {recommendedProject.impactLabel}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-medium text-white/55">
+                            {recommendedProject.impactLabel}
+                          </span>
+                        )}
+                      </p>
+                    </>
+                  )
+                })()}
+              </div>
+            )}
 
             <Link
               href={recommendedProject?.href || '/projects'}
@@ -738,4 +775,16 @@ function getRewardProduct(impactPoints: number) {
   }
 
   return products.find((product) => product.price_points > impactPoints) || products[0] || null
+}
+
+function getImpactIcon(kind: AdventureProjectCard['impactKind']) {
+  if (kind === 'orchard') return TreePine
+  if (kind === 'reef') return Waves
+  return Bug
+}
+
+function getImpactIconColor(kind: AdventureProjectCard['impactKind']): string {
+  if (kind === 'orchard') return 'text-emerald-400'
+  if (kind === 'reef') return 'text-sky-400'
+  return 'text-amber-400'
 }
