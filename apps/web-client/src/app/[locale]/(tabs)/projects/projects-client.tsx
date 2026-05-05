@@ -40,14 +40,14 @@ type RawClientProject = {
   species?: ProjectListSpeciesSeed[] | null
   linked_species?: ProjectSpeciesPreview[] | null
   producer?:
-    | {
-        name_default?: string | null
-        name_i18n?: Record<string, string> | null
-        description_default?: string | null
-        description_i18n?: Record<string, string> | null
-      }
-    | Record<string, unknown>
-    | null
+  | {
+    name_default?: string | null
+    name_i18n?: Record<string, string> | null
+    description_default?: string | null
+    description_i18n?: Record<string, string> | null
+  }
+  | Record<string, unknown>
+  | null
 }
 
 interface ProjectsClientProps {
@@ -272,9 +272,8 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
       )}
 
       <div
-        className={`w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40 transition-opacity duration-300 ${
-          isMapView ? 'pointer-events-none opacity-0' : 'opacity-100'
-        }`}
+        className={`w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40 transition-opacity duration-300 ${isMapView ? 'pointer-events-none opacity-0' : 'opacity-100'
+          }`}
         aria-hidden={isMapView}
       >
         {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
@@ -390,7 +389,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         {/* bottom = hauteur nav (4.5rem) + safe-area-bottom + gap 8px */}
         {!isMapView && (
           <div
-            className="fixed mb-1 left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
+            className="fixed  left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
             style={{ bottom: VIEW_SWITCHER_BOTTOM }}
           >
             <motion.div
