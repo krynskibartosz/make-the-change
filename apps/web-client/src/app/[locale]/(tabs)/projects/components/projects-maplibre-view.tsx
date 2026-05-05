@@ -725,11 +725,11 @@ function ProjectMiniTile({
     <button
       type="button"
       onClick={() => onSelectProject(feature)}
-      className="min-w-0 overflow-hidden rounded-2xl bg-white/[0.055] text-left transition active:scale-[0.98]"
+      className="min-w-0 text-left transition active:scale-[0.98]"
       aria-label={`Afficher ${feature.properties.name} sur la carte`}
     >
-      {/* Image — format paysage 4/3, sans overlay ni texte */}
-      <div className="aspect-[4/3] overflow-hidden bg-white/10">
+      {/* Image — coins arrondis portés ici, pas sur le wrapper */}
+      <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-white/10">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" />
         ) : (
@@ -737,8 +737,8 @@ function ProjectMiniTile({
         )}
       </div>
 
-      {/* Info — titre sur 2 lignes + métrique compacte */}
-      <div className="px-2.5 pb-2.5 pt-2">
+      {/* Info — texte directement sur le fond sombre du panneau */}
+      <div className="pb-1 pt-2">
         <p className="line-clamp-2 text-[12px] font-bold leading-tight text-white/85">
           {feature.properties.name}
         </p>
