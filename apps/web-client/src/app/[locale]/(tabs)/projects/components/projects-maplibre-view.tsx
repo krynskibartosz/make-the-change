@@ -9,17 +9,7 @@ import {
   Source,
 } from '@vis.gl/react-maplibre'
 import { AnimatePresence, motion, type Transition, type Variants } from 'framer-motion'
-import {
-  ArrowUpRight,
-  Bug,
-  ChevronDown,
-  ChevronUp,
-  List,
-  MapPin,
-  TreePine,
-  Waves,
-  X,
-} from 'lucide-react'
+import { ArrowUpRight, Bug, ChevronUp, List, MapPin, TreePine, Waves, X } from 'lucide-react'
 import { type GeoJSONSource, LngLatBounds, type MapGeoJSONFeature } from 'maplibre-gl'
 import {
   type PointerEvent,
@@ -57,6 +47,7 @@ const CLUSTER_LAYER_ID = 'projects-map-clusters'
 const CLUSTER_COUNT_LAYER_ID = 'projects-map-cluster-count'
 const POINT_HALO_LAYER_ID = 'projects-map-point-halo'
 const POINT_LAYER_ID = 'projects-map-points'
+const MAP_DOCK_BOTTOM = 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)'
 
 const dockContentVariants = {
   initial: { opacity: 0, scale: 0.985, y: 8 },
@@ -236,10 +227,6 @@ export function ProjectsMapView({
     onShowCurrentView()
   }, [collapseDock, onShowCurrentView])
 
-  const clearSelectedProject = useCallback(() => {
-    setSelectedProjectId(null)
-  }, [])
-
   const toggleDockExpanded = useCallback(() => {
     setSelectedProjectId(null)
     setIsDockExpanded((isExpanded) => !isExpanded)
@@ -371,23 +358,24 @@ export function ProjectsMapView({
       {mappedProjectsCount === 0 ? (
         isVisible && <MapEmptyState onShowCurrentView={handleShowCurrentView} />
       ) : (
-        <AnimatePresence initial={false}>
-          {isVisible && !isBootPlaceholderVisible && (
-            <ProjectMapDock
-              dockLayoutId={dockLayoutId}
-              dockTransition={dockTransition}
-              featureCollection={featureCollection}
-              isMapReady={isMapReady}
-              isExpanded={isDockExpanded}
-              mappedProjectsCount={mappedProjectsCount}
-              selectedFeature={selectedFeature}
-              onClearSelection={clearSelectedProject}
-              onCollapse={collapseDock}
-              onShowCurrentView={handleShowCurrentView}
-              onToggleExpanded={toggleDockExpanded}
-            />
-          )}
-        </AnimatePresence>
+        <>
+          <AnimatePresence initial={false}>
+            {isVisible && !isBootPlaceholderVisible && (
+              <ProjectMapDock
+                dockLayoutId={dockLayoutId}
+                dockTransition={dockTransition}
+                featureCollection={featureCollection}
+                isMapReady={isMapReady}
+                isExpanded={isDockExpanded}
+                mappedProjectsCount={mappedProjectsCount}
+                selectedFeature={selectedFeature}
+                onCollapse={collapseDock}
+                onShowCurrentView={handleShowCurrentView}
+                onToggleExpanded={toggleDockExpanded}
+              />
+            )}
+          </AnimatePresence>
+        </>
       )}
     </motion.div>
   )
@@ -480,7 +468,6 @@ function ProjectMapDock({
   isExpanded,
   mappedProjectsCount,
   selectedFeature,
-  onClearSelection,
   onCollapse,
   onShowCurrentView,
   onToggleExpanded,
@@ -492,7 +479,6 @@ function ProjectMapDock({
   isExpanded: boolean
   mappedProjectsCount: number
   selectedFeature: ProjectMapFeature | null
-  onClearSelection: () => void
   onCollapse: () => void
   onShowCurrentView: () => void
   onToggleExpanded: () => void
@@ -535,9 +521,11 @@ function ProjectMapDock({
       layoutId={dockLayoutId}
       transition={dockTransition}
       initial={false}
-      animate={{ borderRadius: isOpen ? 22 : 999, padding: isOpen ? 12 : 4 }}
-      className="fixed inset-x-3 z-50 mx-auto max-w-xl overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transform-gpu will-change-transform"
-      style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)' }}
+      animate={{ borderRadius: isOpen ? 24 : 999, padding: isOpen ? 0 : 4 }}
+      className={`fixed z-50 overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transform-gpu will-change-transform ${
+        isOpen ? 'inset-x-3 mx-auto max-w-xl' : 'inset-x-0 mx-auto w-fit max-w-[calc(100%-1.5rem)]'
+      }`}
+      style={{ bottom: MAP_DOCK_BOTTOM }}
       aria-label={selectedFeature ? 'Projet sélectionné' : 'Projets visibles sur la carte'}
     >
       <AnimatePresence initial={false} mode="popLayout">
@@ -548,7 +536,7 @@ function ProjectMapDock({
             onClick={onCollapse}
             onPointerDown={handleHandlePointerDown}
             onPointerUp={handleHandlePointerUp}
-            className="mx-auto mb-2 flex h-4 w-16 items-center justify-center rounded-full text-white/45 transition hover:text-white/70 active:scale-95"
+            className="mx-auto mb-2 mt-2 flex h-4 w-16 items-center justify-center rounded-full text-white/45 transition hover:text-white/70 active:scale-95"
             aria-label="Faire glisser pour replier le dock"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
@@ -569,7 +557,7 @@ function ProjectMapDock({
             animate="animate"
             exit="exit"
           >
-            <SelectedProjectCard feature={selectedFeature} onClearSelection={onClearSelection} />
+            <SelectedProjectCard feature={selectedFeature} onClose={onCollapse} />
           </motion.div>
         ) : !isExpanded ? (
           <motion.div
@@ -597,42 +585,28 @@ function ProjectMapDock({
             animate="animate"
             exit="exit"
           >
-            <div className="flex items-center justify-between gap-2 px-1">
-              <button
-                type="button"
-                onClick={onShowCurrentView}
-                className="flex h-10 shrink-0 items-center gap-2 rounded-full bg-white/[0.07] px-3 text-[13px] font-bold text-white/82 transition hover:bg-white/10 active:scale-95"
-              >
-                <List className="h-4 w-4 text-lime-400" />
-                Projets
-              </button>
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
-                  Explorer
-                </p>
-                <div className="mt-0.5 flex min-w-0 items-baseline gap-1.5">
-                  <h2 className="shrink-0 text-[18px] font-black tracking-tight text-white">
-                    {featureCollection.features.length.toLocaleString('fr-FR')} projets
-                  </h2>
-                  <span className="truncate text-[12px] font-bold text-white/48">sur la carte</span>
-                </div>
-              </div>
+            <div className="flex items-center justify-between gap-3 px-4 pt-3">
+              <h2 className="min-w-0 flex-1 truncate text-[18px] font-black tracking-tight text-white">
+                {featureCollection.features.length.toLocaleString('fr-FR')} projets localisés
+              </h2>
               <button
                 type="button"
                 onClick={onCollapse}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-white/72 transition hover:bg-white/10 active:scale-95"
-                aria-label="Réduire le panneau des projets"
+                aria-label="Fermer le panneau des projets"
               >
-                <ChevronDown className="h-4 w-4" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="scrollbar-hide mt-3 grid auto-cols-[8.75rem] grid-flow-col gap-2 overflow-x-auto pb-1">
+            <div className="scrollbar-hide mt-3 grid auto-cols-[10.25rem] grid-flow-col gap-2.5 overflow-x-auto px-4 pb-4">
               {featuredProjects.map((feature) => (
                 <ProjectMiniTile key={feature.properties.id} feature={feature} />
               ))}
             </div>
-            <MapAttribution />
+            <div className="px-4 pb-4">
+              <MapAttribution compact />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -654,17 +628,16 @@ function CollapsedMapDock({
   onToggleExpanded: () => void
 }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex max-w-full items-center gap-1.5">
       <button
         type="button"
         onClick={onShowCurrentView}
-        className="flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white/[0.07] px-3 text-[12px] font-bold text-white/78 transition hover:bg-white/10 active:scale-95"
-        aria-label="Revenir aux projets"
+        className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-white/[0.08] px-4 text-[13px] font-black text-white/82 transition hover:bg-white/[0.12] active:scale-[0.98]"
+        aria-label="Revenir à la liste des projets"
       >
         <List className="h-4 w-4" />
-        Liste
+        <span>Liste</span>
       </button>
-
       {isMapReady ? (
         <MapDockReadyButton
           mappedProjectsCount={mappedProjectsCount}
@@ -679,51 +652,50 @@ function CollapsedMapDock({
 
 function SelectedProjectCard({
   feature,
-  onClearSelection,
+  onClose,
 }: {
   feature: ProjectMapFeature
-  onClearSelection: () => void
+  onClose: () => void
 }) {
   const imageUrl = sanitizeImageUrl(feature.properties.imageUrl)
   const Icon = getImpactIcon(feature.properties.impactKind)
 
   return (
-    <article className="grid grid-cols-[86px_minmax(0,1fr)] gap-3">
-      <div className="relative h-full min-h-[112px] overflow-hidden rounded-2xl bg-white/10">
+    <article>
+      <div className="relative aspect-[16/9] overflow-hidden bg-white/10">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full bg-white/10" />
         )}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#0B0F15]/72 text-white/82 shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-md transition hover:bg-[#0B0F15]/82 active:scale-95"
+          aria-label="Fermer le projet sélectionné"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
-      <div className="min-w-0">
+      <div className="min-w-0 px-4 pb-4 pt-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <h2 className="line-clamp-2 text-[17px] font-black leading-tight tracking-tight text-white">
+            <h2 className="line-clamp-2 text-[20px] font-black leading-tight tracking-tight text-white">
               {feature.properties.name}
             </h2>
-            <p className="mt-1 flex items-center gap-1.5 text-[12px] font-medium text-white/52">
-              <MapPin className="h-3.5 w-3.5 shrink-0" />
+            <p className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium text-white/55">
+              <MapPin className="h-4 w-4 shrink-0" />
               <span className="truncate">{feature.properties.location}</span>
             </p>
           </div>
-
-          <button
-            type="button"
-            onClick={onClearSelection}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/8 text-white/70 transition hover:bg-white/12 active:scale-95"
-            aria-label="Fermer le projet sélectionné"
-          >
-            <X className="h-4 w-4" />
-          </button>
         </div>
 
         <div className="mt-3 flex items-center gap-2">
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-lime-400">
-            <Icon className="h-3.5 w-3.5" />
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-lime-400">
+            <Icon className="h-4 w-4" />
           </span>
-          <p className="min-w-0 text-[12px] font-semibold text-white/75">
+          <p className="min-w-0 text-[13px] font-semibold text-white/78">
             {feature.properties.impactValue > 0 ? (
               <>
                 <span className="font-black text-lime-400">
@@ -739,12 +711,12 @@ function SelectedProjectCard({
 
         <Link
           href={`/projects/${feature.properties.slug}`}
-          className="mt-3 inline-flex h-10 items-center gap-2 rounded-full bg-lime-400 px-4 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.25)] transition active:scale-95"
+          className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-lime-400 px-5 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.25)] transition active:scale-95"
         >
           Voir le projet
           <ArrowUpRight className="h-4 w-4" />
         </Link>
-        <MapAttribution />
+        <MapAttribution compact />
       </div>
     </article>
   )
@@ -770,14 +742,14 @@ function ProjectMiniTile({ feature }: { feature: ProjectMapFeature }) {
       href={`/projects/${feature.properties.slug}`}
       className="min-w-0 overflow-hidden rounded-2xl bg-white/[0.055] transition active:scale-[0.98]"
     >
-      <div className="aspect-[4/3] bg-white/10">
+      <div className="aspect-[4/5] bg-white/10">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full bg-white/10" />
         )}
       </div>
-      <p className="truncate px-2 py-2 text-[11px] font-bold text-white/80">
+      <p className="truncate px-2.5 py-2.5 text-[12px] font-bold text-white/82">
         {feature.properties.name}
       </p>
     </Link>

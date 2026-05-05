@@ -81,6 +81,7 @@ const DOCK_TRANSITION = {
   damping: 34,
   mass: 0.85,
 }
+const VIEW_SWITCHER_BOTTOM = 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)'
 
 const normalizeProject = (
   project: RawClientProject,
@@ -337,7 +338,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         {!isMapView && (
           <div
             className="fixed mb-1 left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
-            style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)' }}
+            style={{ bottom: VIEW_SWITCHER_BOTTOM }}
           >
             <motion.div
               layout
@@ -406,20 +407,19 @@ function ProjectsMapBootPlaceholder({
         transition={dockTransition}
         initial={false}
         animate={{ borderRadius: 999, padding: 4 }}
-        className="fixed inset-x-3 z-50 mx-auto max-w-xl overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transform-gpu will-change-transform"
-        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)' }}
+        className="fixed inset-x-0 z-[60] mx-auto w-fit max-w-[calc(100%-1.5rem)] transform-gpu overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl will-change-transform"
+        style={{ bottom: VIEW_SWITCHER_BOTTOM }}
       >
-        <div className="flex items-center gap-1.5">
+        <div className="flex max-w-full items-center gap-1.5">
           <button
             type="button"
             onClick={onShowCurrentView}
-            className="flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white/[0.07] px-3 text-[12px] font-bold text-white/78 transition hover:bg-white/10 active:scale-95"
-            aria-label="Revenir aux projets"
+            className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-white/[0.08] px-4 text-[13px] font-black text-white/82 transition hover:bg-white/[0.12] active:scale-[0.98]"
+            aria-label="Revenir à la liste des projets"
           >
             <List className="h-4 w-4" />
             Liste
           </button>
-
           <div
             className="relative flex h-11 min-w-0 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-lime-400 px-3 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)]"
             aria-live="polite"
