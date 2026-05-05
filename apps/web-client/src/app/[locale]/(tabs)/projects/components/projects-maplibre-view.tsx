@@ -21,7 +21,15 @@ import {
   X,
 } from 'lucide-react'
 import { type GeoJSONSource, LngLatBounds, type MapGeoJSONFeature } from 'maplibre-gl'
-import { type PointerEvent, useCallback, useMemo, useRef, useState } from 'react'
+import {
+  type PointerEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -35,9 +43,11 @@ import {
 
 type ProjectsMapViewProps = {
   isVisible: boolean
+  isBootPlaceholderVisible: boolean
   projects: ProjectMapSourceProject[]
   dockLayoutId: string
   dockTransition: Transition
+  onShellReady: () => void
   onShowCurrentView: () => void
 }
 
@@ -142,12 +152,16 @@ const pointLayer: LayerProps = {
 
 export function ProjectsMapView({
   isVisible,
+  isBootPlaceholderVisible,
   projects,
   dockLayoutId,
   dockTransition,
+  onShellReady,
   onShowCurrentView,
 }: ProjectsMapViewProps) {
   const mapRef = useRef<MapRef | null>(null)
+  const isMapReadyRef = useRef(false)
+  const mapReadyFallbackTimeoutRef = useRef<number | null>(null)
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [isDockExpanded, setIsDockExpanded] = useState(false)
   const [isMapReady, setIsMapReady] = useState(false)
@@ -160,6 +174,31 @@ export function ProjectsMapView({
       null,
     [featureCollection.features, selectedProjectId],
   )
+
+  useLayoutEffect(() => {
+    onShellReady()
+  }, [onShellReady])
+
+  const clearMapReadyFallback = useCallback(() => {
+    if (mapReadyFallbackTimeoutRef.current === null) {
+      return
+    }
+
+    window.clearTimeout(mapReadyFallbackTimeoutRef.current)
+    mapReadyFallbackTimeoutRef.current = null
+  }, [])
+
+  const markMapReady = useCallback(() => {
+    if (isMapReadyRef.current) {
+      return
+    }
+
+    isMapReadyRef.current = true
+    clearMapReadyFallback()
+    setIsMapReady(true)
+  }, [clearMapReadyFallback])
+
+  useEffect(() => clearMapReadyFallback, [clearMapReadyFallback])
 
   const fitProjectsInView = useCallback(() => {
     const map = mapRef.current
@@ -208,18 +247,21 @@ export function ProjectsMapView({
 
   const handleMapLoad = useCallback(() => {
     fitProjectsInView()
-    window.setTimeout(() => setIsMapReady(true), 2800)
-  }, [fitProjectsInView])
+    clearMapReadyFallback()
+    if (!isMapReadyRef.current) {
+      mapReadyFallbackTimeoutRef.current = window.setTimeout(markMapReady, 2200)
+    }
+  }, [clearMapReadyFallback, fitProjectsInView, markMapReady])
 
   const handleMapIdle = useCallback(() => {
-    setIsMapReady(true)
-  }, [])
+    markMapReady()
+  }, [markMapReady])
 
   const handleMapRender = useCallback(() => {
     if (mapRef.current?.loaded()) {
-      setIsMapReady(true)
+      markMapReady()
     }
-  }, [])
+  }, [markMapReady])
 
   const handleMapTransitionComplete = useCallback(() => {
     if (isVisible) {
@@ -283,6 +325,8 @@ export function ProjectsMapView({
       onAnimationComplete={handleMapTransitionComplete}
       aria-hidden={!isVisible}
     >
+      <MapPreparingCanvas isVisible={isVisible && !isMapReady} />
+
       <MapLibreMap
         ref={mapRef}
         initialViewState={INITIAL_WORLD_VIEW}
@@ -313,11 +357,14 @@ export function ProjectsMapView({
         </Source>
       </MapLibreMap>
 
-      {isVisible && !isMapReady && <MapLoadingOverlay />}
-
       <MapAttributionOverlay
         isVisible={
-          isVisible && isMapReady && mappedProjectsCount > 0 && !selectedFeature && !isDockExpanded
+          isVisible &&
+          !isBootPlaceholderVisible &&
+          isMapReady &&
+          mappedProjectsCount > 0 &&
+          !selectedFeature &&
+          !isDockExpanded
         }
       />
 
@@ -325,11 +372,12 @@ export function ProjectsMapView({
         isVisible && <MapEmptyState onShowCurrentView={handleShowCurrentView} />
       ) : (
         <AnimatePresence initial={false}>
-          {isVisible && (
+          {isVisible && !isBootPlaceholderVisible && (
             <ProjectMapDock
               dockLayoutId={dockLayoutId}
               dockTransition={dockTransition}
               featureCollection={featureCollection}
+              isMapReady={isMapReady}
               isExpanded={isDockExpanded}
               mappedProjectsCount={mappedProjectsCount}
               selectedFeature={selectedFeature}
@@ -345,14 +393,67 @@ export function ProjectsMapView({
   )
 }
 
-function MapLoadingOverlay() {
+function MapPreparingCanvas({ isVisible }: { isVisible: boolean }) {
   return (
-    <div className="pointer-events-none fixed inset-0 z-[60] flex items-end justify-center bg-[#05070A] px-5 pb-[calc(4.5rem+env(safe-area-inset-bottom)+6.5rem)] text-white">
-      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#0B0F15]/90 px-4 py-3 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
-        <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-lime-400 shadow-[0_0_18px_rgba(163,230,53,0.75)]" />
-        <span className="text-[13px] font-black">Chargement de la carte</span>
-      </div>
+    <motion.div
+      className="pointer-events-none fixed inset-0 z-10 bg-[#8FB3E8]"
+      initial={false}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+      aria-hidden
+    >
+      <div className="absolute inset-0 opacity-55 [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:44px_44px]" />
+      <div className="absolute left-[-16%] top-[6%] h-[25%] w-[58%] rounded-[52%] bg-[#d8dfc4]/70" />
+      <div className="absolute right-[-18%] top-[22%] h-[28%] w-[62%] rounded-[50%] bg-[#d8dfc4]/60" />
+      <div className="absolute bottom-[18%] left-[12%] h-[20%] w-[48%] rounded-[48%] bg-[#d8dfc4]/52" />
+      <div className="absolute inset-0 bg-[#0B0F15]/[0.03]" />
+    </motion.div>
+  )
+}
+
+function MapDockLoadingButton({ showSlowHint }: { showSlowHint: boolean }) {
+  return (
+    <div
+      className="relative flex h-11 min-w-0 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-lime-400 px-3 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)]"
+      aria-live="polite"
+    >
+      <motion.span
+        className="absolute inset-y-0 left-0 w-16 bg-white/35"
+        animate={{ x: ['-110%', '680%'] }}
+        transition={{ duration: 1.45, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
+      />
+      <span className="relative h-2.5 w-2.5 rounded-full bg-[#0B0F15]">
+        <span className="absolute inset-0 animate-ping rounded-full bg-[#0B0F15]/45" />
+      </span>
+      <span className="relative truncate">
+        {showSlowHint ? 'Connexion lente' : 'Carte en préparation'}
+      </span>
     </div>
+  )
+}
+
+function MapDockReadyButton({
+  mappedProjectsCount,
+  onToggleExpanded,
+}: {
+  mappedProjectsCount: number
+  onToggleExpanded: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggleExpanded}
+      className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-lime-400 px-3 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)] transition active:scale-[0.98]"
+      aria-expanded={false}
+    >
+      <MapPin className="h-4 w-4 shrink-0" />
+      <span className="truncate">
+        {mappedProjectsCount.toLocaleString('fr-FR')} projet
+        {mappedProjectsCount > 1 ? 's' : ''} localisé
+        {mappedProjectsCount > 1 ? 's' : ''}
+      </span>
+      <ChevronUp className="h-4 w-4 shrink-0" />
+    </button>
   )
 }
 
@@ -375,6 +476,7 @@ function ProjectMapDock({
   dockLayoutId,
   dockTransition,
   featureCollection,
+  isMapReady,
   isExpanded,
   mappedProjectsCount,
   selectedFeature,
@@ -386,6 +488,7 @@ function ProjectMapDock({
   dockLayoutId: string
   dockTransition: Transition
   featureCollection: ProjectMapFeatureCollection
+  isMapReady: boolean
   isExpanded: boolean
   mappedProjectsCount: number
   selectedFeature: ProjectMapFeature | null
@@ -397,6 +500,17 @@ function ProjectMapDock({
   const dragStartY = useRef<number | null>(null)
   const featuredProjects = featureCollection.features.slice(0, 6)
   const isOpen = Boolean(selectedFeature) || isExpanded
+  const [showSlowHint, setShowSlowHint] = useState(false)
+
+  useEffect(() => {
+    if (isMapReady) {
+      setShowSlowHint(false)
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => setShowSlowHint(true), 4500)
+    return () => window.clearTimeout(timeoutId)
+  }, [isMapReady])
 
   const handleHandlePointerDown = useCallback((event: PointerEvent<HTMLButtonElement>) => {
     dragStartY.current = event.clientY
@@ -435,7 +549,7 @@ function ProjectMapDock({
             onPointerDown={handleHandlePointerDown}
             onPointerUp={handleHandlePointerUp}
             className="mx-auto mb-2 flex h-4 w-16 items-center justify-center rounded-full text-white/45 transition hover:text-white/70 active:scale-95"
-            aria-label="Replier le dock de la carte"
+            aria-label="Faire glisser pour replier le dock"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -467,7 +581,9 @@ function ProjectMapDock({
             exit="exit"
           >
             <CollapsedMapDock
+              isMapReady={isMapReady}
               mappedProjectsCount={mappedProjectsCount}
+              showSlowHint={showSlowHint}
               onShowCurrentView={onShowCurrentView}
               onToggleExpanded={onToggleExpanded}
             />
@@ -505,7 +621,7 @@ function ProjectMapDock({
                 type="button"
                 onClick={onCollapse}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-white/72 transition hover:bg-white/10 active:scale-95"
-                aria-label="Replier le dock de la carte"
+                aria-label="Réduire le panneau des projets"
               >
                 <ChevronDown className="h-4 w-4" />
               </button>
@@ -525,11 +641,15 @@ function ProjectMapDock({
 }
 
 function CollapsedMapDock({
+  isMapReady,
   mappedProjectsCount,
+  showSlowHint,
   onShowCurrentView,
   onToggleExpanded,
 }: {
+  isMapReady: boolean
   mappedProjectsCount: number
+  showSlowHint: boolean
   onShowCurrentView: () => void
   onToggleExpanded: () => void
 }) {
@@ -545,20 +665,14 @@ function CollapsedMapDock({
         Liste
       </button>
 
-      <button
-        type="button"
-        onClick={onToggleExpanded}
-        className="flex h-11 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-lime-400 px-3 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)] transition active:scale-[0.98]"
-        aria-expanded={false}
-      >
-        <MapPin className="h-4 w-4 shrink-0" />
-        <span className="truncate">
-          {mappedProjectsCount.toLocaleString('fr-FR')} projet
-          {mappedProjectsCount > 1 ? 's' : ''} localisé
-          {mappedProjectsCount > 1 ? 's' : ''}
-        </span>
-        <ChevronUp className="h-4 w-4 shrink-0" />
-      </button>
+      {isMapReady ? (
+        <MapDockReadyButton
+          mappedProjectsCount={mappedProjectsCount}
+          onToggleExpanded={onToggleExpanded}
+        />
+      ) : (
+        <MapDockLoadingButton showSlowHint={showSlowHint} />
+      )}
     </div>
   )
 }

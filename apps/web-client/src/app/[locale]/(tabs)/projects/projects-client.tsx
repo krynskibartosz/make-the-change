@@ -1,11 +1,11 @@
 'use client'
 
-import { LayoutGroup, motion } from 'framer-motion'
-import { Lock as LockIcon, Map as MapIcon, MapPin, TreePine, Waves } from 'lucide-react'
+import { LayoutGroup, motion, type Transition } from 'framer-motion'
+import { List, Lock as LockIcon, Map as MapIcon, MapPin, TreePine, Waves } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -128,13 +128,15 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const normalizedProjects = projects.map((project, index) =>
-    normalizeProject(project, index, locale),
+  const normalizedProjects = useMemo(
+    () => projects.map((project, index) => normalizeProject(project, index, locale)),
+    [locale, projects],
   )
   const queryView = searchParams.get('view')
   const viewMode = queryView === 'map' || (!queryView && initialView === 'map') ? 'map' : 'grid'
   const isMapView = viewMode === 'map'
   const [shouldMountMap, setShouldMountMap] = useState(isMapView)
+  const [isMapShellReady, setIsMapShellReady] = useState(false)
 
   useEffect(() => {
     if (isMapView) {
@@ -180,14 +182,29 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
     [pathname, router, searchParams],
   )
 
+  const showMapBootPlaceholder = isMapView && !isMapShellReady
+  const handleMapShellReady = useCallback(() => {
+    setIsMapShellReady(true)
+  }, [])
+
   return (
     <LayoutGroup id="projects-view-layout">
+      {showMapBootPlaceholder && (
+        <ProjectsMapBootPlaceholder
+          dockLayoutId={DOCK_LAYOUT_ID}
+          dockTransition={DOCK_TRANSITION}
+          onShowCurrentView={() => updateViewMode('grid')}
+        />
+      )}
+
       {shouldMountMap && (
         <ProjectsMapView
           isVisible={isMapView}
+          isBootPlaceholderVisible={showMapBootPlaceholder}
           projects={normalizedProjects}
           dockLayoutId={DOCK_LAYOUT_ID}
           dockTransition={DOCK_TRANSITION}
+          onShellReady={handleMapShellReady}
           onShowCurrentView={() => updateViewMode('grid')}
         />
       )}
@@ -346,6 +363,80 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         )}
       </div>
     </LayoutGroup>
+  )
+}
+
+function ProjectsMapBootPlaceholder({
+  dockLayoutId,
+  dockTransition,
+  onShowCurrentView,
+}: {
+  dockLayoutId: string
+  dockTransition: Transition
+  onShowCurrentView: () => void
+}) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-40 overflow-hidden bg-[#8FB3E8] text-white"
+      initial={false}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      aria-label="Préparation de la carte des projets"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-55 [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:44px_44px]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute left-[-16%] top-[6%] h-[25%] w-[58%] rounded-[52%] bg-[#d8dfc4]/70"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute right-[-18%] top-[22%] h-[28%] w-[62%] rounded-[50%] bg-[#d8dfc4]/60"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute bottom-[18%] left-[12%] h-[20%] w-[48%] rounded-[48%] bg-[#d8dfc4]/52"
+        aria-hidden
+      />
+
+      <motion.section
+        layout
+        layoutId={dockLayoutId}
+        transition={dockTransition}
+        initial={false}
+        animate={{ borderRadius: 999, padding: 4 }}
+        className="fixed inset-x-3 z-50 mx-auto max-w-xl overflow-hidden border border-white/10 bg-[#0B0F15]/92 shadow-[0_-18px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl transform-gpu will-change-transform"
+        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)' }}
+      >
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onShowCurrentView}
+            className="flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white/[0.07] px-3 text-[12px] font-bold text-white/78 transition hover:bg-white/10 active:scale-95"
+            aria-label="Revenir aux projets"
+          >
+            <List className="h-4 w-4" />
+            Liste
+          </button>
+
+          <div
+            className="relative flex h-11 min-w-0 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-lime-400 px-3 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.2)]"
+            aria-live="polite"
+          >
+            <motion.span
+              className="absolute inset-y-0 left-0 w-16 bg-white/35"
+              animate={{ x: ['-110%', '680%'] }}
+              transition={{ duration: 1.45, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
+            />
+            <span className="relative h-2.5 w-2.5 rounded-full bg-[#0B0F15]">
+              <span className="absolute inset-0 animate-ping rounded-full bg-[#0B0F15]/45" />
+            </span>
+            <span className="relative truncate">Carte en préparation</span>
+          </div>
+        </div>
+      </motion.section>
+    </motion.div>
   )
 }
 
