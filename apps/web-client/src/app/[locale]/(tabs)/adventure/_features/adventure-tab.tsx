@@ -13,11 +13,11 @@ import {
   Trophy,
   UsersRound,
 } from 'lucide-react'
-import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
+import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
-import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
+import { getCollectiveGoal } from '@/lib/mock/mock-factions'
 import type { Faction } from '@/lib/mock/types'
 import { cn } from '@/lib/utils'
 
@@ -113,8 +113,6 @@ const QUEST_ICONS: Record<AdventureQuestCard['type'], LucideIcon> = {
 
 const ACADEMY_CARD_IMAGE = '/coral-karimunjawa.jpg'
 const BIODEX_LOCKED_IMAGE = '/images/diaromas/Cam%C3%A9l%C3%A9on%20de%20Parson.png'
-const HERO_SPECIES_FALLBACK_IMAGE = '/images/diaromas/Indri.png'
-const GUIDE_MASCOT_IMAGE = '/aura.png'
 
 function getProgressPercent(progress: number, max: number) {
   if (max <= 0) return 0
@@ -206,7 +204,7 @@ export function AdventureTab({
   const presentation = FACTION_PRESENTATION[themeKey]
   const theme = getFactionTheme(faction)
   const collectiveGoal = getCollectiveGoal()
-  const activeContribution = getFactionContribution(faction)
+
   const firstName = displayName?.trim().split(/\s+/)[0] || 'Explorateur'
   const primaryIcon = primaryQuest ? QUEST_ICONS[primaryQuest.type] : Compass
   const PrimaryIcon = primaryIcon
@@ -218,7 +216,7 @@ export function AdventureTab({
   const speciesName = featuredSpecies?.name || 'emblématique'
   const projectName = recommendedProject?.name || 'Projet de restauration'
   const isPrimaryQuestComplete = primaryQuest ? primaryQuest.progress >= primaryQuest.max : false
-  const heroSpeciesImage = featuredSpecies?.imageUrl || HERO_SPECIES_FALLBACK_IMAGE
+  // heroSpeciesImage supprimé : le bloc hero affiche uniquement la photo terrain
   const biodexPreviewImage =
     featuredSpecies?.isUnlocked && featuredSpecies.imageUrl
       ? featuredSpecies.imageUrl
@@ -255,46 +253,40 @@ export function AdventureTab({
         </div>
 
         <div className="px-4 pb-16">
-          <div className="relative h-40 overflow-hidden rounded-[30px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.34)] sm:h-48">
-            <div className="absolute inset-0 grid grid-cols-2">
-              <div className="relative bg-[#080b0f]">
-                <img
-                  src={heroSpeciesImage}
-                  alt=""
-                  className={cn(
-                    'h-full w-full object-cover',
-                    !featuredSpecies?.isUnlocked && 'grayscale opacity-55',
-                  )}
-                />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/45 to-transparent" />
-                {!featuredSpecies?.isUnlocked && (
-                  <div className="absolute left-3 top-3 rounded-full bg-black/55 p-1.5 backdrop-blur-sm">
-                    <Lock className="h-3.5 w-3.5 text-white/75" />
-                  </div>
-                )}
+          {/* Hero image — photo terrain 100% large, sans IA en vis-à-vis */}
+          <div
+            className="relative overflow-hidden rounded-[30px] bg-[#080b0f] shadow-[0_18px_60px_rgba(0,0,0,0.34)]"
+            style={{ aspectRatio: '16/9' }}
+          >
+            {recommendedProject?.imageUrl ? (
+              <img
+                src={recommendedProject.imageUrl}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center bg-white/[0.03]">
+                <Sprout className="h-12 w-12 text-white/15" />
               </div>
+            )}
+            {/* Gradient léger — lisibilité du badge, pas de texte sur image */}
+            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/40 to-transparent" />
 
-              <div className="relative bg-[#10151c]">
-                {recommendedProject?.imageUrl ? (
-                  <img
-                    src={recommendedProject.imageUrl}
-                    alt=""
-                    className="h-full w-full object-cover opacity-95"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center bg-white/[0.03]">
-                    <Sprout className="h-12 w-12 text-white/15" />
-                  </div>
-                )}
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/35 to-transparent" />
-              </div>
+            {/* Pilule BioDex mystère — glassmorphism, coin bas gauche */}
+            <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full border border-white/10 bg-[#0B0F15]/70 px-3 py-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.35)] backdrop-blur-md">
+              {/* Silhouette floutée — évoque le mystère de l'espèce */}
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/10">
+                <PawPrint className="h-3 w-3 text-white/45" style={{ filter: 'blur(1px)' }} />
+              </span>
+              <span className="text-[11px] font-bold tracking-wide text-white/72">
+                1 espèce à débloquer
+              </span>
             </div>
-
-            <div className="pointer-events-none absolute inset-y-0 left-1/2 -ml-8 w-16 bg-gradient-to-r from-[#080b0f] via-[#080b0f]/50 to-transparent" />
           </div>
 
-          <div className="px-1 pt-5">
-            <h2 className="text-[22px] font-black leading-tight tracking-tight text-white">
+          <div className="px-1 pt-4">
+            {/* Titre réduit — laisse de l'air pour la section Ma quête active */}
+            <h2 className="text-[19px] font-black leading-tight tracking-tight text-white">
               {projectName}
             </h2>
 
@@ -306,7 +298,7 @@ export function AdventureTab({
                 theme.accentShadow,
               )}
             >
-              Soutenir & Débloquer
+              Soutenir ce projet
               <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
@@ -461,7 +453,6 @@ export function AdventureTab({
           </div>
         </div>
 
-
         <div className="space-y-8 px-4">
           <div className="flex items-end justify-between gap-4">
             <div>
@@ -565,7 +556,9 @@ export function AdventureTab({
                       Le Défi Ilanga Nature
                     </h3>
                     <p className="mt-2 line-clamp-2 text-xs font-semibold leading-relaxed text-white/50">
-                      Atteignons ensemble les 100 % en récoltant des Graines ! En remerciement de cet effort commun, notre partenaire Ilanga Nature débloquera des avantages exclusifs pour toute la communauté.
+                      Atteignons ensemble les 100 % en récoltant des Graines ! En remerciement de
+                      cet effort commun, notre partenaire Ilanga Nature débloquera des avantages
+                      exclusifs pour toute la communauté.
                     </p>
                   </div>
                   <ProgressRing
@@ -581,8 +574,7 @@ export function AdventureTab({
                       Plus que {formatSeedCount(remainingSeeds)} graines
                     </span>
                     <span className="flex items-center gap-1 text-xs font-black text-emerald-300">
-                      <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
-                      à récolter
+                      <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />à récolter
                     </span>
                   </div>
                   <ProgressBar value={rewardProgress} />
@@ -607,7 +599,8 @@ export function AdventureTab({
                       Halo de victoire
                     </p>
                     <p className="mt-1 line-clamp-1 text-[11px] font-semibold text-white/44">
-                      La faction ayant récolté le plus de Graines obtiendra un éclat cosmétique exclusif.
+                      La faction ayant récolté le plus de Graines obtiendra un éclat cosmétique
+                      exclusif.
                     </p>
                   </div>
                 </div>
@@ -684,7 +677,9 @@ export function AdventureTab({
                           </div>
                           <ProgressBar
                             value={rewardProductProgress}
-                            indicatorClassName={getCurrencyDesign('impactCredits').progressClassName}
+                            indicatorClassName={
+                              getCurrencyDesign('impactCredits').progressClassName
+                            }
                           />
                         </>
                       )}
