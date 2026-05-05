@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildProjectMapFeatureCollection,
+  getProjectFocusCameraOptions,
   getProjectImpactDisplay,
   type ProjectMapSourceProject,
 } from './project-map-data'
@@ -72,6 +73,22 @@ describe('project map data', () => {
       value: 0,
       label: 'Collecte en cours de démarrage',
       kind: 'beehive',
+    })
+  })
+
+  it('keeps the selected project in focus without zooming out', () => {
+    expect(getProjectFocusCameraOptions([4.3517, 50.8503], 2)).toEqual({
+      center: [4.3517, 50.8503],
+      zoom: 3.2,
+      offset: [0, -92],
+      duration: 480,
+    })
+
+    expect(getProjectFocusCameraOptions([4.3517, 50.8503], 5)).toEqual({
+      center: [4.3517, 50.8503],
+      zoom: 5,
+      offset: [0, -92],
+      duration: 480,
     })
   })
 })

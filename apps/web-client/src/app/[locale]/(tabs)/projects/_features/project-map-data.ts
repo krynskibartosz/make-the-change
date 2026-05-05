@@ -49,12 +49,22 @@ export type ProjectMapFeatureCollection = {
   features: ProjectMapFeature[]
 }
 
+export type ProjectFocusCameraOptions = {
+  center: [number, number]
+  zoom: number
+  offset: [number, number]
+  duration: number
+}
+
 const BEEHIVE_REFERENCE_VALUE_EUR = 1300
 const BEEHIVE_REFERENCE_POPULATION = 50000
 const BEES_PER_EUR = BEEHIVE_REFERENCE_POPULATION / BEEHIVE_REFERENCE_VALUE_EUR
 
 const OLIVE_PRICE_EUR = 150
 const CORAL_PRICE_EUR = 30
+const PROJECT_FOCUS_MIN_ZOOM = 3.2
+const PROJECT_FOCUS_VERTICAL_OFFSET = -92
+const PROJECT_FOCUS_DURATION_MS = 480
 
 export function buildProjectMapFeatureCollection(
   projects: ProjectMapSourceProject[],
@@ -135,6 +145,18 @@ export function getProjectLocation(project: {
   )
 
   return locationParts.length > 0 ? locationParts.join(', ') : 'Localisation mystère'
+}
+
+export function getProjectFocusCameraOptions(
+  coordinates: [number, number],
+  currentZoom: number,
+): ProjectFocusCameraOptions {
+  return {
+    center: coordinates,
+    zoom: Math.max(currentZoom, PROJECT_FOCUS_MIN_ZOOM),
+    offset: [0, PROJECT_FOCUS_VERTICAL_OFFSET],
+    duration: PROJECT_FOCUS_DURATION_MS,
+  }
 }
 
 function hasValidCoordinates(

@@ -11,20 +11,13 @@ import {
 import { AnimatePresence, motion, type Transition, type Variants } from 'framer-motion'
 import { ArrowUpRight, Bug, ChevronUp, List, MapPin, TreePine, Waves, X } from 'lucide-react'
 import { type GeoJSONSource, LngLatBounds, type MapGeoJSONFeature } from 'maplibre-gl'
-import {
-  type PointerEvent,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import {
   buildProjectMapFeatureCollection,
+  getProjectFocusCameraOptions,
   type ProjectMapFeature,
   type ProjectMapFeatureCollection,
   type ProjectMapFeatureProperties,
@@ -232,6 +225,18 @@ export function ProjectsMapView({
     setIsDockExpanded((isExpanded) => !isExpanded)
   }, [])
 
+  const focusProjectOnMap = useCallback((feature: ProjectMapFeature) => {
+    setSelectedProjectId(feature.properties.id)
+    setIsDockExpanded(true)
+
+    const map = mapRef.current
+    if (!map) {
+      return
+    }
+
+    map.easeTo(getProjectFocusCameraOptions(feature.geometry.coordinates, map.getZoom()))
+  }, [])
+
   const handleMapLoad = useCallback(() => {
     fitProjectsInView()
     clearMapReadyFallback()
@@ -290,12 +295,8 @@ export function ProjectsMapView({
 
         setSelectedProjectId(properties.id)
         setIsDockExpanded(true)
-        mapRef.current?.easeTo({
-          center: coordinates,
-          zoom: Math.max(mapRef.current.getZoom(), 3.2),
-          offset: [0, -92],
-          duration: 480,
-        })
+        const map = mapRef.current
+        map?.easeTo(getProjectFocusCameraOptions(coordinates, map.getZoom()))
       }
     },
     [collapseDock],
@@ -370,6 +371,7 @@ export function ProjectsMapView({
                 mappedProjectsCount={mappedProjectsCount}
                 selectedFeature={selectedFeature}
                 onCollapse={collapseDock}
+                onSelectProject={focusProjectOnMap}
                 onShowCurrentView={handleShowCurrentView}
                 onToggleExpanded={toggleDockExpanded}
               />
@@ -469,6 +471,7 @@ function ProjectMapDock({
   mappedProjectsCount,
   selectedFeature,
   onCollapse,
+  onSelectProject,
   onShowCurrentView,
   onToggleExpanded,
 }: {
@@ -480,10 +483,10 @@ function ProjectMapDock({
   mappedProjectsCount: number
   selectedFeature: ProjectMapFeature | null
   onCollapse: () => void
+  onSelectProject: (feature: ProjectMapFeature) => void
   onShowCurrentView: () => void
   onToggleExpanded: () => void
 }) {
-  const dragStartY = useRef<number | null>(null)
   const featuredProjects = featureCollection.features.slice(0, 6)
   const isOpen = Boolean(selectedFeature) || isExpanded
   const [showSlowHint, setShowSlowHint] = useState(false)
@@ -498,23 +501,6 @@ function ProjectMapDock({
     return () => window.clearTimeout(timeoutId)
   }, [isMapReady])
 
-  const handleHandlePointerDown = useCallback((event: PointerEvent<HTMLButtonElement>) => {
-    dragStartY.current = event.clientY
-    event.currentTarget.setPointerCapture(event.pointerId)
-  }, [])
-
-  const handleHandlePointerUp = useCallback(
-    (event: PointerEvent<HTMLButtonElement>) => {
-      const startY = dragStartY.current
-      dragStartY.current = null
-
-      if (startY !== null && event.clientY - startY > 28) {
-        onCollapse()
-      }
-    },
-    [onCollapse],
-  )
-
   return (
     <motion.section
       layout
@@ -528,25 +514,6 @@ function ProjectMapDock({
       style={{ bottom: MAP_DOCK_BOTTOM }}
       aria-label={selectedFeature ? 'Projet sélectionné' : 'Projets visibles sur la carte'}
     >
-      <AnimatePresence initial={false} mode="popLayout">
-        {isOpen && (
-          <motion.button
-            key="map-dock-handle"
-            type="button"
-            onClick={onCollapse}
-            onPointerDown={handleHandlePointerDown}
-            onPointerUp={handleHandlePointerUp}
-            className="mx-auto mb-2 mt-2 flex h-4 w-16 items-center justify-center rounded-full text-white/45 transition hover:text-white/70 active:scale-95"
-            aria-label="Faire glisser pour replier le dock"
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.16 }}
-          >
-            <span className="h-1 w-10 rounded-full bg-current" />
-          </motion.button>
-        )}
-      </AnimatePresence>
       <AnimatePresence initial={false} mode="popLayout">
         {selectedFeature ? (
           <motion.div
@@ -601,7 +568,11 @@ function ProjectMapDock({
 
             <div className="scrollbar-hide mt-3 grid auto-cols-[10.25rem] grid-flow-col gap-2.5 overflow-x-auto px-4 pb-4">
               {featuredProjects.map((feature) => (
-                <ProjectMiniTile key={feature.properties.id} feature={feature} />
+                <ProjectMiniTile
+                  key={feature.properties.id}
+                  feature={feature}
+                  onSelectProject={onSelectProject}
+                />
               ))}
             </div>
             <div className="px-4 pb-4">
@@ -711,7 +682,7 @@ function SelectedProjectCard({
 
         <Link
           href={`/projects/${feature.properties.slug}`}
-          className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-lime-400 px-5 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.25)] transition active:scale-95"
+          className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-lime-400 px-5 text-[13px] font-black text-[#0B0F15] shadow-[0_8px_24px_rgba(163,230,53,0.25)] transition active:scale-95"
         >
           Voir le projet
           <ArrowUpRight className="h-4 w-4" />
@@ -734,13 +705,21 @@ function MapAttribution({ compact = false }: { compact?: boolean }) {
   )
 }
 
-function ProjectMiniTile({ feature }: { feature: ProjectMapFeature }) {
+function ProjectMiniTile({
+  feature,
+  onSelectProject,
+}: {
+  feature: ProjectMapFeature
+  onSelectProject: (feature: ProjectMapFeature) => void
+}) {
   const imageUrl = sanitizeImageUrl(feature.properties.imageUrl)
 
   return (
-    <Link
-      href={`/projects/${feature.properties.slug}`}
-      className="min-w-0 overflow-hidden rounded-2xl bg-white/[0.055] transition active:scale-[0.98]"
+    <button
+      type="button"
+      onClick={() => onSelectProject(feature)}
+      className="min-w-0 overflow-hidden rounded-2xl bg-white/[0.055] text-left transition active:scale-[0.98]"
+      aria-label={`Afficher ${feature.properties.name} sur la carte`}
     >
       <div className="aspect-[4/5] bg-white/10">
         {imageUrl ? (
@@ -752,7 +731,7 @@ function ProjectMiniTile({ feature }: { feature: ProjectMapFeature }) {
       <p className="truncate px-2.5 py-2.5 text-[12px] font-bold text-white/82">
         {feature.properties.name}
       </p>
-    </Link>
+    </button>
   )
 }
 
