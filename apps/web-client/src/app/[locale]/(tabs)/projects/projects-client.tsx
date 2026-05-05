@@ -1,7 +1,7 @@
 'use client'
 
 import { LayoutGroup, motion, type Transition } from 'framer-motion'
-import { List, Lock as LockIcon, Map as MapIcon, MapPin, TreePine, Waves } from 'lucide-react'
+import { List, Map as MapIcon, MapPin, PawPrint, TreePine, Waves } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -10,7 +10,11 @@ import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
-import { getProjectImpactDisplay } from './_features/project-map-data'
+import type {
+  ProjectListSpeciesSeed,
+  ProjectSpeciesPreview,
+} from './_features/project-list-species'
+import { getProjectImpactDisplay, type ProjectMapImpactKind } from './_features/project-map-data'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type RawClientProject = {
@@ -33,6 +37,8 @@ type RawClientProject = {
   hero_image_url: string | null
   type: string | null
   unit_label: string | null
+  species?: ProjectListSpeciesSeed[] | null
+  linked_species?: ProjectSpeciesPreview[] | null
   producer?:
     | {
         name_default?: string | null
@@ -64,6 +70,7 @@ type ClientProject = {
   current_funding: number | null
   type: string | null
   unit_label: string | null
+  linked_species: ProjectSpeciesPreview[] | null
 }
 
 const ProjectsMapView = dynamic(
@@ -82,6 +89,20 @@ const DOCK_TRANSITION = {
   mass: 0.85,
 }
 const VIEW_SWITCHER_BOTTOM = 'calc(4.5rem + env(safe-area-inset-bottom) + 0.9rem)'
+const IMPACT_KIND_STYLES: Record<ProjectMapImpactKind, { bg: string; icon: string }> = {
+  beehive: {
+    bg: 'bg-amber-400/15',
+    icon: 'text-amber-300',
+  },
+  orchard: {
+    bg: 'bg-emerald-400/15',
+    icon: 'text-emerald-300',
+  },
+  reef: {
+    bg: 'bg-sky-400/15',
+    icon: 'text-sky-300',
+  },
+}
 
 const normalizeProject = (
   project: RawClientProject,
@@ -110,15 +131,55 @@ const normalizeProject = (
     current_funding: project.current_funding,
     type: project.type,
     unit_label: project.unit_label,
+    linked_species: project.linked_species || null,
   }
 }
 
 // Silhouette SVG d'abeille (inline, pas de dépendance externe)
-function BeeSilhouette() {
+function BeeSilhouette({ className = 'w-5 h-5 opacity-30 text-white' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 opacity-30 text-white">
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
       <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
     </svg>
+  )
+}
+
+function ProjectSpeciesTeaser({ species }: { species: ProjectSpeciesPreview[] | null }) {
+  if (!species || species.length === 0) {
+    return null
+  }
+
+  const firstSpecies = species[0]
+  if (!firstSpecies) {
+    return null
+  }
+
+  const unlockedSpecies = species.find((entry) => entry.isUnlocked)
+  const label = unlockedSpecies
+    ? species.length === 1
+      ? `Espèce liée : ${unlockedSpecies.name}`
+      : `${species.length} espèces liées`
+    : species.length === 1
+      ? '1 espèce à débloquer'
+      : `${species.length} espèces à débloquer`
+  const isLocked = !unlockedSpecies
+
+  return (
+    <div className="mt-2 flex items-center gap-2">
+      <div className="relative flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/[0.06]">
+        {firstSpecies.imageUrl ? (
+          <img
+            src={firstSpecies.imageUrl}
+            alt=""
+            className={`h-full w-full object-cover ${isLocked ? 'scale-110 grayscale blur-[1.5px] opacity-45' : 'opacity-85'}`}
+          />
+        ) : (
+          <PawPrint className={`h-3.5 w-3.5 ${isLocked ? 'text-white/30' : 'text-white/60'}`} />
+        )}
+        {isLocked ? <div className="absolute inset-0 bg-black/20" aria-hidden /> : null}
+      </div>
+      <p className="text-[13px] font-medium text-white/58">{label}</p>
+    </div>
   )
 }
 
@@ -240,6 +301,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
             const impactValue = impact.value
             const impactLabel = impact.label
             const projectType = impact.kind
+            const impactTheme = IMPACT_KIND_STYLES[projectType]
 
             return (
               <Link
@@ -247,7 +309,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                 href={`/projects/${project.slug}`}
                 className="group block text-left active:scale-[0.98] transition-transform duration-200"
               >
-                {/* A. Image + Teasing BioDex */}
+                {/* A. Image */}
                 <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-4 bg-white/5">
                   {imageUrl ? (
                     <img
@@ -258,14 +320,6 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                   ) : (
                     <div className="w-full h-full bg-white/10" />
                   )}
-
-                  {/* Macaron BioDex — silhouette + cadenas, sans texte */}
-                  <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md border border-white/10 rounded-full p-2 flex items-center gap-2 shadow-2xl">
-                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center overflow-hidden">
-                      <BeeSilhouette />
-                    </div>
-                    <LockIcon className="w-4 h-4 text-white/50 mr-1" />
-                  </div>
                 </div>
 
                 {/* B. Contenu textuel — typo millimétrée */}
@@ -282,23 +336,19 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                   {/* Impact collectif — donnée réelle calculée comme la page détail */}
                   {impactValue > 0 ? (
                     <div className="flex items-center gap-2 mt-1">
-                      <div className="w-6 h-6 rounded-full bg-lime-400/20 flex items-center justify-center shrink-0">
+                      <div
+                        className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
+                      >
                         {projectType === 'orchard' ? (
-                          <TreePine className="w-3 h-3 text-lime-400" />
+                          <TreePine className={`w-3 h-3 ${impactTheme.icon}`} />
                         ) : projectType === 'reef' ? (
-                          <Waves className="w-3 h-3 text-lime-400" />
+                          <Waves className={`w-3 h-3 ${impactTheme.icon}`} />
                         ) : (
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-3 h-3 text-lime-400"
-                          >
-                            <path d="M12 2C9.8 2 8 3.8 8 6v1H6.5C5.1 7 4 8.1 4 9.5v2C4 13.4 5.6 15 7.5 15H8v1.5C8 19 9.8 21 12 21s4-2 4-4.5V15h.5c1.9 0 3.5-1.6 3.5-3.5v-2C20 8.1 18.9 7 17.5 7H16V6c0-2.2-1.8-4-4-4zm0 2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm-4 5h8v.5c0 .8-.7 1.5-1.5 1.5H8.5C7.7 11 7 10.3 7 9.5V9h1zm1 4h6v1.5C15 18 13.7 19 12 19s-3-1-3-3.5V13z" />
-                          </svg>
+                          <BeeSilhouette className={`w-3 h-3 ${impactTheme.icon}`} />
                         )}
                       </div>
                       <p className="text-[13px]">
-                        <span className="text-lime-400 font-black tabular-nums tracking-tight">
+                        <span className="text-white/90 font-black tabular-nums tracking-tight">
                           {formatCompact(impactValue)}
                         </span>{' '}
                         <span className="text-white/70 font-medium">{impactLabel}</span>
@@ -306,13 +356,15 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2 mt-1">
-                      <div className="w-6 h-6 rounded-full bg-lime-400/20 flex items-center justify-center shrink-0">
+                      <div
+                        className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
+                      >
                         <svg
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="2"
-                          className="w-3 h-3 text-lime-400"
+                          className={`w-3 h-3 ${impactTheme.icon}`}
                         >
                           <circle cx="12" cy="12" r="10" />
                           <path d="M12 8v4l3 3" />
@@ -321,6 +373,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                       <p className="text-[13px] text-white/70">Collecte en cours de démarrage</p>
                     </div>
                   )}
+                  <ProjectSpeciesTeaser species={project.linked_species} />
                 </div>
               </Link>
             )

@@ -4,6 +4,7 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { getMockProjects } from './mock-projects'
+import type { ProjectListSpeciesSeed } from './project-list-species'
 
 export type GetProjectsOptions = {
   status?: string
@@ -32,6 +33,7 @@ type ProjectListItem = {
   hero_image_url: string | null
   type: string | null
   unit_label: string | null
+  species: ProjectListSpeciesSeed[] | null
   producer:
     | {
         name_default?: string | null
@@ -102,6 +104,36 @@ function toProducer(value: unknown): ProjectListItem['producer'] {
   }
 }
 
+function toProjectListSpecies(value: unknown): ProjectListSpeciesSeed | null {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const id = toNullableString(value.id)
+  const name = toNullableString(value.name) || toNullableString(value.name_default)
+  if (!id || !name) {
+    return null
+  }
+
+  return {
+    id,
+    name,
+    icon: toNullableString(value.icon) || toNullableString(value.image_url),
+  }
+}
+
+function toProjectListSpeciesArray(value: unknown): ProjectListSpeciesSeed[] | null {
+  if (!Array.isArray(value)) {
+    return null
+  }
+
+  const species = value
+    .map((entry) => toProjectListSpecies(entry))
+    .filter((entry): entry is ProjectListSpeciesSeed => entry !== null)
+
+  return species.length > 0 ? species : null
+}
+
 function toProjectListItem(value: unknown): ProjectListItem | null {
   if (!isRecord(value)) {
     return null
@@ -132,6 +164,7 @@ function toProjectListItem(value: unknown): ProjectListItem | null {
     hero_image_url: toNullableString(value.hero_image_url),
     type: toNullableString(value.type),
     unit_label: toNullableString(value.unit_label),
+    species: toProjectListSpeciesArray(value.species),
     producer: toProducer(value.producer),
   }
 }
@@ -140,7 +173,9 @@ function toMockProjectListItem(
   project: ReturnType<typeof getMockProjects>[number],
 ): ProjectListItem {
   const fundingProgress =
-    project.target_budget > 0 ? Math.min((project.current_funding / project.target_budget) * 100, 100) : 0
+    project.target_budget > 0
+      ? Math.min((project.current_funding / project.target_budget) * 100, 100)
+      : 0
 
   return {
     id: project.id,
@@ -162,6 +197,7 @@ function toMockProjectListItem(
     hero_image_url: project.hero_image_url,
     type: project.type,
     unit_label: project.unit_label || null,
+    species: toProjectListSpeciesArray(project.species),
     producer: {
       name_default: project.producer.name_default,
       name_i18n: project.producer.name_i18n || null,
@@ -194,59 +230,59 @@ function matchesStatus(project: ProjectListItem, status: string) {
 
 // TODO: Re-enable unstable_cache before public launch for optimal performance (revalidate: 3600, tags: ['projects-list'])
 export const getProjects = async (options: GetProjectsOptions = {}) => {
-    const { status = 'all', search } = options
-    const mockProjects = getMockProjects()
-      .map((project) => toMockProjectListItem(project))
-      .filter((project) => matchesStatus(project, status))
-      .filter((project) => matchesSearch(project, search || ''))
+  const { status = 'all', search } = options
+  const mockProjects = getMockProjects()
+    .map((project) => toMockProjectListItem(project))
+    .filter((project) => matchesStatus(project, status))
+    .filter((project) => matchesSearch(project, search || ''))
 
-    if (isMockDataSource) {
-      return mockProjects
-    }
+  if (isMockDataSource) {
+    return mockProjects
+  }
 
-    const supabase = createStaticClient()
+  const supabase = createStaticClient()
 
-    // Build query
-    let projectsQuery = supabase
-      .from('public_projects')
-      .select(`
+  // Build query
+  let projectsQuery = supabase
+    .from('public_projects')
+    .select(`
         *,
         producer:public_producers!producer_id(*)
       `)
-      .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false })
 
-    // Apply filters
-    if (status !== 'all' && isProjectStatusFilter(status)) {
-      projectsQuery = projectsQuery.eq('status', status)
-    }
+  // Apply filters
+  if (status !== 'all' && isProjectStatusFilter(status)) {
+    projectsQuery = projectsQuery.eq('status', status)
+  }
 
-    if (search) {
-      projectsQuery = projectsQuery.ilike('name_default', `%${search}%`)
-    }
+  if (search) {
+    projectsQuery = projectsQuery.ilike('name_default', `%${search}%`)
+  }
 
-    const { data, error } = await projectsQuery
+  const { data, error } = await projectsQuery
 
-    if (error) {
-      console.error('[projects] fetch failed', error)
-      throw error
-    }
+  if (error) {
+    console.error('[projects] fetch failed', error)
+    throw error
+  }
 
-    const databaseProjects = Array.isArray(data)
-      ? data
-          .map((entry) => toProjectListItem(entry))
-          .filter((entry): entry is ProjectListItem => entry !== null)
-      : []
+  const databaseProjects = Array.isArray(data)
+    ? data
+        .map((entry) => toProjectListItem(entry))
+        .filter((entry): entry is ProjectListItem => entry !== null)
+    : []
 
-    const mockSlugs = new Set(
-      mockProjects
-        .map((project) => project.slug)
-        .filter((slug): slug is string => typeof slug === 'string' && slug.length > 0),
-    )
+  const mockSlugs = new Set(
+    mockProjects
+      .map((project) => project.slug)
+      .filter((slug): slug is string => typeof slug === 'string' && slug.length > 0),
+  )
 
-    const dedupedDatabaseProjects = databaseProjects.filter((project) => {
-      if (!project.slug) return true
-      return !mockSlugs.has(project.slug)
-    })
+  const dedupedDatabaseProjects = databaseProjects.filter((project) => {
+    if (!project.slug) return true
+    return !mockSlugs.has(project.slug)
+  })
 
   return [...mockProjects, ...dedupedDatabaseProjects]
 }
