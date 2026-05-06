@@ -617,7 +617,7 @@ export const getMockMonthlyQuestOverview = ({
   return {
     title: `Cycle de ${monthLabel}`,
     timeLeft: `${remainingDays} jours restants`,
-    objective: 'Valide 20 jours de presence',
+    objective: 'Explore 20 jours de vie sous-marine',
     progress: Math.min(uniqueCompletedDays.size, 20),
     max: 20,
     completedDays: uniqueCompletedDays.size,
