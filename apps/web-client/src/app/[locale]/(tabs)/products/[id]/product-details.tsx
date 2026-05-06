@@ -307,7 +307,7 @@ export async function ProductDetails({
                   <div className="flex items-center gap-2 mb-4">
                     {inStock ? (
                       <>
-                        <span className="text-sm font-black uppercase tracking-wide text-orange-400">🔥 Série limitée — Plus que 12 exemplaires</span>
+                        <span className="text-sm font-black uppercase tracking-wide text-orange-400">🔥 Série limitée{product.stock_quantity ? ` — Plus que ${product.stock_quantity} exemplaire${product.stock_quantity > 1 ? 's' : ''}` : ''}</span>
                       </>
                     ) : (
                       <p className="text-sm font-bold text-destructive uppercase tracking-tight">{stockStatus}</p>

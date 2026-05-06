@@ -102,10 +102,24 @@ export function ProductsClient({
 
   return (
     <>
-      {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
-      <header className="px-6 pt-8 pb-4">
-        <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">{tProducts('title')}</h1>
-        <p className="text-white/60 text-[15px] mt-3 font-medium">{tProducts('subtitle')}</p>
+      {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────────── */}
+      <header className="px-6 pt-8 pb-4 flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">{tProducts('title')}</h1>
+          <p className="text-white/60 text-[15px] mt-3 font-medium">{tProducts('subtitle')}</p>
+          <p className="text-white/35 text-[11px] mt-1.5 font-medium uppercase tracking-wider">
+            Les prix sont affichés en Credits Impact
+          </p>
+        </div>
+        {isConnected && (
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/60 border border-white/10 mt-2 shrink-0">
+            <CurrencyAmount
+              kind="impactCredits"
+              value={userPoints}
+              className="text-sm font-black tracking-tight"
+            />
+          </div>
+        )}
       </header>
 
       {/* ── DOCK FLOTTANT (Thumb Zone) — Solde élégant ───────────────────────── */}

@@ -863,7 +863,7 @@
   },
   "products": {
     "title": "Avantages Partenaires",
-    "subtitle": "Utilisez vos Crédits Impact pour soutenir les produits de nos producteurs locaux",
+    "subtitle": "Échangez vos Credits Impact contre des produits liés aux projets et producteurs partenaires.",
     "search_placeholder": "Rechercher des produits...",
     "featured": "Mis en avant",
     "product_list": "produits",
@@ -921,7 +921,7 @@
     "detail": {
       "description": "Description",
       "producer": "Producteur",
-      "certifications": "Certifications",
+      "certifications": "Engagements produit",
       "exchange": "Échanger"
     },
     "detail_page": {

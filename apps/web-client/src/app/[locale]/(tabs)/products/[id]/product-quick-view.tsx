@@ -49,9 +49,9 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
 
   const userBalance = 2450;
   const formats: ProductFormat[] = [
-    { id: "140g", points: 550, euros: 5.50, stock: 12 },
-    { id: "250g", points: 950, euros: 9.50, stock: 45 },
-    { id: "500g", points: 1800, euros: 18.00, stock: 3 }
+    { id: "140g", points: 350, euros: 3.50, stock: 12 },
+    { id: "250g", points: 650, euros: 6.50, stock: 45 },
+    { id: "500g", points: 1200, euros: 12.00, stock: 3 }
   ];
   const defaultFormat = formats[0]!
   const [selectedFormat, setSelectedFormat] = useState<ProductFormat>(defaultFormat);
@@ -181,7 +181,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   )}
                   {product.featured && (
                     <span className="bg-amber-400/10 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                      👑 Accès anticipé Gardiens
+                      👑 Accès anticipé · Gardiens des mers
                     </span>
                   )}
                 </div>
@@ -252,15 +252,14 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
 
             {/* ── DESCRIPTION (Séduction) ── */}
             <section className="px-1 pt-4 mb-4">
-              <h3 className="text-sm font-bold text-white mb-2">À propos de ce miel</h3>
+              <h3 className="text-sm font-bold text-white mb-2">À propos de ce produit</h3>
               <p className="text-white/70 leading-relaxed text-[14px]">
-                Récolté de manière artisanale, il reflète la richesse des écosystèmes locaux et le travail des apiculteurs engagés.
-                Au-delà de ses qualités, ce miel soutient une apiculture durable et participe à la préservation du vivant grâce à la pollinisation.
+                {productDescription || 'Découvrez ce produit partenaire soigneusement sélectionné parmi nos producteurs engagés.'}
               </p>
             </section>
 
             {/* ── PROFIL GUSTATIF + LIVRAISON (Séduction suite) ── */}
-            <div className="px-1 flex gap-8 pt-2 pb-10">
+            <div className="px-1 flex gap-8 pt-2 pb-6">
               {/* PROFIL GUSTATIF */}
               <div className="flex flex-col gap-2">
                 <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Profil Gustatif</span>
@@ -280,6 +279,19 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 <span className="text-sm font-medium text-white">2 – 3 jours</span>
               </div>
             </div>
+
+            {/* LIEN VERS LES PROJETS ASSOCIÉS */}
+            {product.producer && (
+              <div className="px-1 pt-4 pb-2 border-t border-white/5">
+                <p className="text-[10px] text-white/30 uppercase tracking-widest font-bold mb-1.5">Projet associé</p>
+                <a
+                  href={`/${locale}/projects`}
+                  className="text-sm font-semibold text-white/60 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  Voir les projets soutenus →
+                </a>
+              </div>
+            )}
 
             {product.certifications && product.certifications.filter(c => !/^Origine\b/i.test(c)).length > 0 && (
               <section className="px-1 pb-6">

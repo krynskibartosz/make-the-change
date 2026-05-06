@@ -40,7 +40,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-[#0B0F15] animate-in fade-in slide-in-from-bottom-[5%] duration-300">
         <div className="flex items-center justify-between p-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-2">
-          <h2 className="text-xl font-bold text-white">Votre récompense</h2>
+          <h2 className="text-xl font-bold text-white">Votre échange</h2>
           <button 
             onClick={onClose}
             className="rounded-full p-2 transition-colors hover:bg-white/10 active:scale-95"
@@ -239,7 +239,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
           </div>
 
           <h2 className="text-4xl font-black leading-tight tracking-tight text-white">
-            Votre récompense<br/>est en route !
+            Votre produit<br/>est en route !
           </h2>
 
           <p className="mx-auto mt-4 max-w-sm text-[15px] leading-relaxed text-white/60">
@@ -263,7 +263,7 @@ export function ProductCheckoutView({ product, selectedFormat, onClose }: Produc
             onClick={() => router.push('/profile/investments')}
             className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
           >
-            Suivre ma récompense
+            Suivre ma commande
           </button>
         </div>
       </div>
