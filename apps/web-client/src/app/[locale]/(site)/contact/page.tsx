@@ -12,10 +12,11 @@ import {
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-type Subject = 'bug' | 'partnership' | 'other'
+type Subject = 'bug' | 'partnership' | 'other' | 'order'
 
 export default function ContactPage() {
   const [selectedSubject, setSelectedSubject] = useState<Subject>('bug')
+  const [isSent, setIsSent] = useState(false)
   const router = useRouter()
 
   return (
@@ -109,65 +110,80 @@ export default function ContactPage() {
       </div>
 
       {/* 3. FORMULAIRE - Flat, intégré au fond */}
-      <div className="relative z-10 px-6 mb-20 flex flex-col gap-6">
-        {/* A. Sélecteur de Sujet (Chips) */}
-        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">
-          Ou envoyez un message
-        </span>
-
-        {/* Chips sujet */}
-        <div className="w-full overflow-x-auto pb-3 flex gap-2">
-          {([
-            { id: 'bug' as Subject, label: 'Bug / Technique' },
-            { id: 'partnership' as Subject, label: 'Partenariat' },
-            { id: 'other' as Subject, label: 'Autre' },
-          ]).map((chip) => {
-            const isActive = selectedSubject === chip.id
-            return (
-              <button
-                key={chip.id}
-                type="button"
-                onClick={() => setSelectedSubject(chip.id)}
-                className={
-                  isActive
-                    ? 'whitespace-nowrap px-4 py-2 rounded-full bg-lime-400 text-[#0B0F15] font-bold text-sm transition shrink-0'
-                    : 'whitespace-nowrap px-4 py-2 rounded-full border border-white/10 bg-[#1A1F26] text-gray-400 text-sm transition shrink-0'
-                }
-              >
-                {chip.label}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Inset grouped fields */}
-        <div className="bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
-          <div className="px-4 py-3 border-b border-white/5 focus-within:bg-white/[0.02] transition-colors">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre email</label>
-            <input
-              type="email"
-              placeholder="Pour vous recontacter..."
-              className="w-full bg-transparent text-white text-base focus:outline-none placeholder:text-gray-600 font-medium"
-            />
+      <form 
+        onSubmit={(e) => { e.preventDefault(); setIsSent(true); }}
+        className="relative z-10 px-6 mb-20 flex flex-col gap-6"
+      >
+        {isSent ? (
+          <div className="bg-lime-500/10 border border-lime-500/20 rounded-2xl p-6 text-center animate-in fade-in zoom-in duration-300">
+            <h3 className="text-xl font-bold text-lime-400 mb-2">Message envoyé</h3>
+            <p className="text-sm text-gray-400">Merci, votre demande a bien été transmise. Nous vous répondrons sous 24 à 48h.</p>
           </div>
-          <div className="px-4 py-3 focus-within:bg-white/[0.02] transition-colors">
-            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre message</label>
-            <textarea
-              rows={4}
-              placeholder="Décrivez votre demande en détail..."
-              className="w-full bg-transparent text-white text-base focus:outline-none placeholder:text-gray-600 font-medium resize-none"
-            />
-          </div>
-        </div>
+        ) : (
+          <>
+            {/* A. Sélecteur de Sujet (Chips) */}
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">
+              Ou envoyez un message
+            </span>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(132,204,22,0.15)] flex items-center justify-center"
-        >
-          Envoyer le message
-        </button>
-      </div>
+            {/* Chips sujet */}
+            <div className="w-full overflow-x-auto pb-3 flex gap-2">
+              {([
+                { id: 'bug' as Subject, label: 'Bug ou problème technique' },
+                { id: 'order' as Subject, label: 'Question sur une commande' },
+                { id: 'partnership' as Subject, label: 'Partenariat' },
+                { id: 'other' as Subject, label: 'Autre' },
+              ]).map((chip) => {
+                const isActive = selectedSubject === chip.id
+                return (
+                  <button
+                    key={chip.id}
+                    type="button"
+                    onClick={() => setSelectedSubject(chip.id)}
+                    className={
+                      isActive
+                        ? 'whitespace-nowrap px-4 py-2 rounded-full bg-lime-400 text-[#0B0F15] font-bold text-sm transition shrink-0'
+                        : 'whitespace-nowrap px-4 py-2 rounded-full border border-white/10 bg-[#1A1F26] text-gray-400 text-sm transition shrink-0'
+                    }
+                  >
+                    {chip.label}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Inset grouped fields */}
+            <div className="bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
+              <div className="px-4 py-3 border-b border-white/5 focus-within:bg-white/[0.02] transition-colors">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre email</label>
+                <input
+                  type="email"
+                  required
+                  placeholder="Pour vous recontacter..."
+                  className="w-full bg-transparent text-white text-base focus:outline-none placeholder:text-gray-600 font-medium"
+                />
+              </div>
+              <div className="px-4 py-3 focus-within:bg-white/[0.02] transition-colors">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre message</label>
+                <textarea
+                  rows={4}
+                  required
+                  placeholder="Décrivez votre demande en détail..."
+                  className="w-full bg-transparent text-white text-base focus:outline-none placeholder:text-gray-600 font-medium resize-none"
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(132,204,22,0.15)] flex items-center justify-center"
+            >
+              Envoyer le message
+            </button>
+          </>
+        )}
+      </form>
     </div>
   )
 }

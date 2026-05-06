@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { buildPrivacyViewModel } from './_features/privacy.view-model'
 import { PrivacyCardsSection } from './_features/privacy-cards-section'
 import { PrivacyShell } from './_features/privacy-shell'
@@ -27,6 +28,17 @@ export default async function PrivacyPage() {
       </section>
 
       <PrivacyCardsSection {...viewModel.cards} />
+
+      {/* FULL POLICY LINK */}
+      <section className="relative z-10 px-6 pb-20 pt-4 flex flex-col items-center text-center">
+        <p className="text-sm text-gray-400 mb-2">Pour plus de détails sur le traitement de vos données :</p>
+        <Link
+          href="/legal/privacy"
+          className="text-sm font-bold text-lime-400 hover:text-lime-300 transition-colors"
+        >
+          Consulter la politique de confidentialité complète
+        </Link>
+      </section>
     </PrivacyShell>
   )
 }

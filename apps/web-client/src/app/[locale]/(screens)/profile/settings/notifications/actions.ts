@@ -30,6 +30,7 @@ export async function updateNotifications(
         product_updates: formData.get('product_updates') === 'on',
         leaderboard: formData.get('leaderboard') === 'on',
         marketing: formData.get('marketing') === 'on',
+        academy: formData.get('academy') === 'on',
         email: formData.get('notify_email') === 'on',
         push: formData.get('notify_push') === 'on',
         monthly_report: formData.get('notify_monthly') === 'on',
@@ -65,6 +66,7 @@ export async function updateNotifications(
     product_updates: formData.get('product_updates') === 'on',
     leaderboard: formData.get('leaderboard') === 'on',
     marketing: formData.get('marketing') === 'on',
+    academy: formData.get('academy') === 'on',
     // Channels
     email: formData.get('notify_email') === 'on',
     push: formData.get('notify_push') === 'on',

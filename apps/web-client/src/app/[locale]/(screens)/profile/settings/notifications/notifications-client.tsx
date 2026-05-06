@@ -13,6 +13,7 @@ type NotificationsClientProps = {
     product_updates: boolean
     leaderboard: boolean
     marketing: boolean
+    academy: boolean
     // Channels
     email: boolean
     push: boolean
@@ -20,7 +21,7 @@ type NotificationsClientProps = {
   }
 }
 
-type ToggleKey = 'push' | 'monthly_report' | 'email' | 'project_updates' | 'product_updates' | 'leaderboard' | 'marketing'
+type ToggleKey = 'push' | 'monthly_report' | 'email' | 'project_updates' | 'product_updates' | 'leaderboard' | 'marketing' | 'academy'
 
 function ToggleSwitch({ checked, onToggle }: { checked: boolean; onToggle: () => void }) {
   return (
@@ -86,13 +87,15 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
     const formData = new FormData()
     Object.entries(settings).forEach(([k, v]) => {
       if (v) {
-        formData.append(k, k)
+        formData.append(k, 'on')
       }
     })
 
     // Toggle the current key in the form data
     if (!settings[key]) {
-      formData.append(key, key)
+      formData.append(key, 'on')
+    } else {
+      formData.delete(key)
     }
 
     try {
@@ -139,14 +142,14 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         />
         <div className="border-b border-white/5" />
         <SettingRow
-          title="Résumé Mensuel"
-          description="Votre rapport d'impact par email."
+          title="Rapport mensuel d'impact"
+          description="Votre résumé d'impact par email."
           checked={settings.monthly_report}
           onToggle={() => handleToggle('monthly_report')}
         />
         <div className="border-b border-white/5" />
         <SettingRow
-          title="Email"
+          title="Emails importants"
           description="Mises à jour majeures de la plateforme."
           checked={settings.email}
           onToggle={() => handleToggle('email')}
@@ -159,24 +162,31 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
       </div>
       <div className="mx-6 bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
         <SettingRow
-          title="Mises à jour Projets"
-            description="Photos et avancées de vos soutiens."
+          title="Mises à jour projets"
+          description="Photos, nouvelles et avancées de vos soutiens."
           checked={settings.project_updates}
           onToggle={() => handleToggle('project_updates')}
         />
         <div className="border-b border-white/5" />
         <SettingRow
-          title={"Récompenses"}
-          description="Nouveaux produits et réassorts limités."
+          title="Avantages partenaires"
+          description="Nouveaux produits, offres limitées et réassorts."
           checked={settings.product_updates}
           onToggle={() => handleToggle('product_updates')}
         />
         <div className="border-b border-white/5" />
         <SettingRow
-          title="Classement & Collectif"
-          description="Votre rang et les actions de la communauté."
+          title="Collectif & factions"
+          description="Objectifs communs, bravos et activité de la communauté."
           checked={settings.leaderboard}
           onToggle={() => handleToggle('leaderboard')}
+        />
+        <div className="border-b border-white/5" />
+        <SettingRow
+          title="Academy & BioDex"
+          description="Nouveaux cours, missions et découvertes."
+          checked={settings.academy}
+          onToggle={() => handleToggle('academy')}
         />
       </div>
       </div>
