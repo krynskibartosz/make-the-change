@@ -197,7 +197,7 @@ export default async function SettingsPage() {
         iconClassName: 'text-white',
       },
       {
-        label: 'Abonnement & Avantages',
+        label: 'Ambassadeur & Avantages',
         icon: Sparkles,
         href: '/profile/subscription',
         iconWrapperClassName: 'bg-lime-500',
@@ -448,7 +448,7 @@ export default async function SettingsPage() {
       iconClassName: 'text-white',
     },
     {
-      label: 'Abonnement & Avantages',
+      label: 'Ambassadeur & Avantages',
       icon: Sparkles,
       href: '/profile/subscription',
       iconWrapperClassName: 'bg-lime-500',

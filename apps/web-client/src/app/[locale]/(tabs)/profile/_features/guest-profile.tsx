@@ -1,7 +1,7 @@
 import { Bug, Droplets, Gift, Wind } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
-import { getCollectiveGoal, getFactionContributions } from '@/lib/mock/mock-factions'
+
 import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { ProfileSettingsHeader } from '@/app/[locale]/(tabs)/profile/_components/profile-settings-header'
@@ -42,8 +42,6 @@ export default async function GuestProfile() {
     lockedLimit: 4,
   })
 
-  const collectiveGoal = getCollectiveGoal()
-  const factionContributions = getFactionContributions()
 
   return (
     <TabScreen header={<ProfileSettingsHeader href="/profile/settings" />}>
@@ -77,8 +75,8 @@ export default async function GuestProfile() {
             <ImpactCard
               variant="locked"
               icon={<Gift className="h-5 w-5 text-lime-400" aria-hidden="true" />}
-              value="0"
-              label="+500 GRAINES"
+              value="—"
+              label="GRAINES"
             />
           </li>
         </ul>

@@ -18,6 +18,7 @@ export function AccountClient({ firstName, lastName, username, email }: AccountC
 
   const [form, setForm] = useState({ firstName, lastName })
   const initial = { firstName, lastName }
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const hasChanges = form.firstName !== initial.firstName || form.lastName !== initial.lastName
 
@@ -68,6 +69,7 @@ export function AccountClient({ firstName, lastName, username, email }: AccountC
                 <span className="text-white/50 mr-0.5 text-base font-medium">@</span>
                 <span className="text-white text-base font-medium">{username}</span>
               </div>
+              <span className="mt-0.5 text-[10px] text-white/30">Le pseudo ne peut pas être modifié après création.</span>
             </div>
             <Lock className="h-4 w-4 text-white/30 shrink-0" />
           </div>
@@ -121,6 +123,7 @@ export function AccountClient({ firstName, lastName, username, email }: AccountC
                 Adresse Email
               </span>
               <span className="text-white text-base font-medium">{email}</span>
+              <span className="mt-0.5 text-[10px] text-white/30">Pour modifier votre email, contactez le support.</span>
             </div>
             <Lock className="h-4 w-4 text-white/30 shrink-0" />
           </div>
@@ -136,20 +139,46 @@ export function AccountClient({ firstName, lastName, username, email }: AccountC
         </div>
 
         {/* Danger zone */}
-        <div className="flex justify-center mt-8 pb-8">
-          <button
-            type="button"
-            className="text-xs font-bold text-red-500/70 hover:text-red-500 transition-colors uppercase tracking-widest"
-          >
-            Supprimer mon compte
-          </button>
-        </div>
+        {showDeleteConfirm ? (
+          <div className="mx-4 mt-8 mb-8 rounded-2xl border border-red-500/20 bg-red-500/5 p-5">
+            <p className="text-sm font-bold text-red-400 mb-2">Confirmer la suppression</p>
+            <p className="text-xs text-white/50 leading-relaxed mb-5">
+              Cette action supprimera votre compte, votre progression et vos données personnelles associées.
+              Certaines données de transaction peuvent être conservées pour raisons légales.
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/70 transition-colors active:bg-white/5"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                className="flex-1 rounded-xl bg-red-500/10 border border-red-500/30 py-3 text-sm font-bold text-red-400 transition-colors active:bg-red-500/20"
+              >
+                Confirmer la suppression
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex justify-center mt-8 pb-8">
+            <button
+              type="button"
+              onClick={() => setShowDeleteConfirm(true)}
+              className="text-xs font-bold text-red-500/70 hover:text-red-500 transition-colors uppercase tracking-widest"
+            >
+              Supprimer mon compte
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Sticky save button */}
       <div className="fixed bottom-0 left-0 w-full z-50 flex flex-col">
         <div className="h-8 w-full bg-gradient-to-t from-[#0B0F15] to-transparent pointer-events-none" />
-        <div className="bg-[#0B0F15] px-6 pb-8 pt-2 w-full border-t border-white/5">
+        <div className="bg-[#0B0F15] px-6 pt-2 pb-[max(2rem,env(safe-area-inset-bottom))] w-full border-t border-white/5">
           <button
             type="button"
             onClick={handleSave}
