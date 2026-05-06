@@ -174,16 +174,16 @@ export async function ProjectQuickView({
         isPageMode ? 'min-h-screen bg-background' : 'h-full min-h-full bg-transparent',
       )}
     >
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Glow discret sous le hero – donne l'ambiance du projet */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* Glow ambiance – partiellement au-dessus du hero, visible en halo */}
         <div
-          className="absolute -right-24 top-20 h-64 w-64 rounded-full blur-[100px]"
-          style={{ backgroundColor: `rgb(${glowRgb} / 0.07)` }}
+          className="absolute -right-20 -top-16 h-72 w-72 rounded-full blur-[100px]"
+          style={{ backgroundColor: `rgb(${glowRgb} / 0.10)` }}
         />
-        {/* Glow de destination – attire doucement le regard vers le CTA */}
+        {/* Glow de destination – ancré en bas, attire le regard vers le CTA */}
         <div
-          className="absolute bottom-0 left-1/2 h-80 w-[36rem] -translate-x-1/2 translate-y-1/3 rounded-full blur-[140px]"
-          style={{ backgroundColor: `rgb(${glowRgb} / 0.12)` }}
+          className="absolute -bottom-20 left-1/2 h-80 w-[36rem] -translate-x-1/2 rounded-full blur-[140px]"
+          style={{ backgroundColor: `rgb(${glowRgb} / 0.13)` }}
         />
       </div>
 
