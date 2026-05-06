@@ -1,15 +1,14 @@
 import type { Metadata } from 'next'
 import { connection } from 'next/server'
-import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
-import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
+import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { getFactionContributionByKey, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import type { Faction } from '@/lib/mock/types'
 import type { FactionThemeKey } from '@/lib/faction-theme'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
-import { BackButton } from '@/components/back-button'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { SanctuaryHero } from './_components/sanctuary-hero'
 import { SanctuaryContent } from './_components/sanctuary-content'
 
@@ -80,13 +79,14 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
     : `La nature a besoin d'un coup de pouce. Semons ensemble de nouvelles graines aujourd'hui.`
 
   return (
-    <div className="min-h-screen bg-[#0B0F15]">
-      <div className="relative min-h-screen">
-        {/* Back button */}
-        <div className="absolute left-5 top-8 sm:left-6 z-10">
-          <BackButton />
-        </div>
-
+    <FullScreenSlideModal
+      title={factionConfig.title}
+      fallbackHref="/impact"
+      headerMode="dynamic"
+      className="bg-[#0B0F15]"
+      contentClassName="overflow-y-auto overscroll-contain"
+    >
+      <div className="flex flex-col">
         <SanctuaryHero
           mascot={factionConfig.mascot}
           name={factionConfig.name}
@@ -103,6 +103,6 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
           biodexData={biodexData}
         />
       </div>
-    </div>
+    </FullScreenSlideModal>
   )
 }
