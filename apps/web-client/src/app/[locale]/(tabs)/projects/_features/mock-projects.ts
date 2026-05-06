@@ -126,7 +126,7 @@ const antsirabeProducts: ProducerProduct[] = [
     size: '250g',
     type: 'impact',
     format: 'bocal',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
@@ -138,7 +138,7 @@ const antsirabeProducts: ProducerProduct[] = [
     size: '140g',
     type: 'impact',
     format: 'bocal',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
 ]
 
@@ -165,7 +165,7 @@ const manakaraProducts: ProducerProduct[] = [
     size: '250g',
     type: 'impact',
     format: 'bocal',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
@@ -177,7 +177,7 @@ const manakaraProducts: ProducerProduct[] = [
     size: '140g',
     type: 'impact',
     format: 'bocal',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
 ]
 
@@ -204,7 +204,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     size: '250g',
     type: 'impact',
     format: 'bocal',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
@@ -216,7 +216,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     size: '140g',
     type: 'impact',
     format: 'bocal',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_LITCHI_ID,
@@ -225,7 +225,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 500,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_NIAOULI_ID,
@@ -234,7 +234,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 450,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_MOKARANA_ID,
@@ -243,7 +243,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 550,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_FORETS_SECHES_ID,
@@ -252,7 +252,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 500,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_FORETS_HUMIDES_ID,
@@ -261,7 +261,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 600,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_CACTUS_ID,
@@ -270,7 +270,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 500,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_JUJUBIER_ID,
@@ -279,7 +279,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 450,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_BAIES_ROSES_ID,
@@ -288,7 +288,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 600,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_FORETS_PRIMAIRES_ID,
@@ -297,7 +297,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
     price_points: 650,
     category: 'Miel',
     impactPercentage: 35,
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
 ]
 
@@ -398,7 +398,7 @@ const habeebeeProducts: ProducerProduct[] = [
     impactPercentage: 30,
     type: 'impact',
     format: 'savon',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_HUILE_VISAGE_ID,
@@ -409,7 +409,7 @@ const habeebeeProducts: ProducerProduct[] = [
     impactPercentage: 30,
     type: 'impact',
     format: 'flacon',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_SHAMPOING_ID,
@@ -420,7 +420,7 @@ const habeebeeProducts: ProducerProduct[] = [
     impactPercentage: 30,
     type: 'impact',
     format: 'shampoing',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
 ]
 
@@ -434,7 +434,7 @@ const sardiniaProducts: ProducerProduct[] = [
     impactPercentage: 40,
     type: 'impact',
     format: 'bouteille',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_HUILE_FRANTOIO_ID,
@@ -445,7 +445,7 @@ const sardiniaProducts: ProducerProduct[] = [
     impactPercentage: 40,
     type: 'impact',
     format: 'bouteille',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
   {
     id: MOCK_PRODUCT_HUILE_LECCIO_ID,
@@ -456,7 +456,7 @@ const sardiniaProducts: ProducerProduct[] = [
     impactPercentage: 40,
     type: 'impact',
     format: 'bouteille',
-    image_url: '/images/products/miel-eucalyptus-ilanga.jpg',
+    image_url: '/images/products/miel eucalytpus ilanga-v2.png',
   },
 ]
 
