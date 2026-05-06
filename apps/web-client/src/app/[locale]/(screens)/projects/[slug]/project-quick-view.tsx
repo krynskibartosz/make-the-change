@@ -225,7 +225,11 @@ export async function ProjectQuickView({
               {typeLabel ? (
                 <Badge
                   variant="outline"
-                  className="border-primary/25 bg-primary/5 text-primary"
+                  style={{
+                    borderColor: glowRgba(glow, 0.30),
+                    backgroundColor: glowRgba(glow, 0.08),
+                    color: glowRgba(glow, 0.90),
+                  }}
                 >
                   {typeLabel}
                 </Badge>
@@ -247,7 +251,10 @@ export async function ProjectQuickView({
             ) : null}
 
             <div className="px-4 sm:px-5">
-              <ProjectSpeciesTeaser isDonationProject={isDonationProject} />
+              <ProjectSpeciesTeaser
+                isDonationProject={isDonationProject}
+                accentColor={glowRgba(glow, 0.75)}
+              />
             </div>
 
             <div className="px-4 sm:px-5">
@@ -260,6 +267,7 @@ export async function ProjectQuickView({
                 projectType={project.type || undefined}
                 projectImpact={project.expected_impact}
                 showSpeciesCard={false}
+                accentColor={glowRgba(glow, 1)}
               />
             </div>
 

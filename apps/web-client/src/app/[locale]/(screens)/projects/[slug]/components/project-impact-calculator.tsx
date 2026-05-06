@@ -16,6 +16,7 @@ type ProjectImpactCalculatorProps = {
   projectType?: string
   projectImpact?: ProjectImpact | null
   showSpeciesCard?: boolean
+  accentColor?: string
 }
 
 const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png'
@@ -33,11 +34,12 @@ function MetricCard({
   unit,
   label,
   colSpan = false,
+  iconColor = '#a3e635', // lime-400 par défaut
 }: any) {
   return (
     <article className={cn('w-full rounded-2xl bg-white/4 p-5 sm:p-6', colSpan && 'col-span-2')}>
       <div className="mb-3 inline-flex rounded-full bg-white/5 p-2">
-        <Icon className="h-5 w-5 text-lime-400" />
+        <Icon className="h-5 w-5" style={{ color: iconColor }} />
       </div>
       <div className="mt-1 flex min-h-[3.5rem] flex-col justify-end">
         {prefix ? (
@@ -106,6 +108,7 @@ export function ProjectImpactCalculator({
   projectType = 'beehive',
   projectImpact = null,
   showSpeciesCard = true,
+  accentColor = '#a3e635', // lime-400 par défaut
 }: ProjectImpactCalculatorProps) {
   const displayAmount = Number.isFinite(amount) ? Math.max(amount, 0) : baseAmount
   const metrics = getProjectImpactMetrics({
@@ -145,6 +148,7 @@ export function ProjectImpactCalculator({
                   prefix="~ Environ"
                   valueWhole={formatCompact(metrics.corals)}
                   label="Coraux associés"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Hexagon}
@@ -153,23 +157,26 @@ export function ProjectImpactCalculator({
                   valueFraction={areaParts?.fraction}
                   unit={areaParts ? 'm²' : undefined}
                   label="Surface récifale"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Fish}
                   prefix="~ Environ"
                   valueWhole={formatCompact(metrics.fishShelter)}
                   label="Refuges marins"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Cloud}
                   prefix="~ Estimé"
                   valueWhole={metrics.survivalRate ?? '60-85%'}
                   label="Survie à 12 mois"
+                  iconColor={accentColor}
                 />
               </>
             ) : metrics.kind === 'orchard' ? (
               <>
-                <MetricCard icon={TreePine} valueWhole={formatCompact(metrics.olivesSupported)} label="Oliviers soutenus" />
+                <MetricCard icon={TreePine} valueWhole={formatCompact(metrics.olivesSupported)} label="Oliviers soutenus" iconColor={accentColor} />
                 <MetricCard
                   icon={Droplets}
                   prefix="Jusqu'à"
@@ -177,6 +184,7 @@ export function ProjectImpactCalculator({
                   valueFraction={oilParts.fraction}
                   unit="L"
                   label="Huile estimée"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Cloud}
@@ -186,6 +194,7 @@ export function ProjectImpactCalculator({
                   unit="kg"
                   label="CO₂ séquestré (est.)"
                   colSpan
+                  iconColor={accentColor}
                 />
               </>
             ) : (
@@ -195,6 +204,7 @@ export function ProjectImpactCalculator({
                   prefix="~ Environ"
                   valueWhole={formatCompact(metrics.bees)}
                   label="Abeilles associées"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Hexagon}
@@ -203,12 +213,14 @@ export function ProjectImpactCalculator({
                   valueFraction={honeyParts.fraction}
                   unit="kg"
                   label="Récolte potentielle"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Flower2}
                   prefix="> Plus de"
                   valueWhole={formatCompact(metrics.flowers)}
                   label="Fleurs visitées"
+                  iconColor={accentColor}
                 />
                 <MetricCard
                   icon={Cloud}
@@ -217,6 +229,7 @@ export function ProjectImpactCalculator({
                   valueFraction={co2Parts.fraction}
                   unit="kg"
                   label="CO₂ associé (est.)"
+                  iconColor={accentColor}
                 />
               </>
             )}

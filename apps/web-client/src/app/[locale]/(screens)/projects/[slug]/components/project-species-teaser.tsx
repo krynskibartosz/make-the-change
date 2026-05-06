@@ -4,9 +4,13 @@ const BIODEX_REWARD_IMAGE_URL = '/images/diaromas/abeille noire.png'
 
 type ProjectSpeciesTeaserProps = {
   isDonationProject?: boolean
+  accentColor?: string
 }
 
-export function ProjectSpeciesTeaser({ isDonationProject = false }: ProjectSpeciesTeaserProps) {
+export function ProjectSpeciesTeaser({
+  isDonationProject = false,
+  accentColor = 'rgba(52, 211, 153, 0.75)', // emerald-400/75 par défaut
+}: ProjectSpeciesTeaserProps) {
   return (
     <article className="flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-transparent p-4">
       <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/50">
@@ -21,7 +25,10 @@ export function ProjectSpeciesTeaser({ isDonationProject = false }: ProjectSpeci
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="mb-0.5 text-xs font-bold uppercase tracking-widest text-emerald-400/70">
+        <p
+          className="mb-0.5 text-xs font-bold uppercase tracking-widest"
+          style={{ color: accentColor }}
+        >
           Espèce associée
         </p>
         <p className="text-base font-bold text-white">
