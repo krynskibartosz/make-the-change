@@ -28,12 +28,12 @@ export function formatEcologicalImpact(
     case 'olive_tree': {
       const trees = Math.floor(currentFunding / 50)
       if (trees <= 0) return undefined
-      return `${trees} oliviers préservés`
+      return `${trees} oliviers soutenus`
     }
     case 'coral': {
       const corals = Math.floor(currentFunding / 18)
       if (corals <= 0) return undefined
-      return `${corals} coraux transplantés`
+      return `${corals} coraux plantés`
     }
     default:
       return undefined

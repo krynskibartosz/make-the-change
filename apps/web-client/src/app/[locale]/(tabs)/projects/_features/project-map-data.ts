@@ -116,7 +116,7 @@ export function getProjectImpactDisplay(project: {
   if (projectType === 'orchard' || projectType === 'olive_tree') {
     return {
       value: Math.round(funding / OLIVE_PRICE_EUR),
-      label: funding > 0 ? 'oliviers protégés' : 'Collecte en cours de démarrage',
+      label: funding > 0 ? 'oliviers soutenus' : 'Collecte en cours de démarrage',
       kind: 'orchard',
     }
   }
@@ -131,7 +131,7 @@ export function getProjectImpactDisplay(project: {
 
   return {
     value: Math.round(funding * BEES_PER_EUR),
-    label: funding > 0 ? 'abeilles protégées' : 'Collecte en cours de démarrage',
+    label: funding > 0 ? 'abeilles soutenues' : 'Collecte en cours de démarrage',
     kind: 'beehive',
   }
 }

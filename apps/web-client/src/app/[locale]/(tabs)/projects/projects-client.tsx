@@ -155,14 +155,15 @@ function ProjectSpeciesTeaser({ species }: { species: ProjectSpeciesPreview[] | 
   }
 
   const unlockedSpecies = species.find((entry) => entry.isUnlocked)
-  const label = unlockedSpecies
-    ? species.length === 1
-      ? `Espèce liée : ${unlockedSpecies.name}`
-      : `${species.length} espèces liées`
-    : species.length === 1
-      ? '1 espèce à débloquer'
-      : `${species.length} espèces à débloquer`
   const isLocked = !unlockedSpecies
+  const mainSpecies = unlockedSpecies || firstSpecies
+
+  const label =
+    species.length === 1
+      ? isLocked
+        ? `BioDex : ${mainSpecies.name} à débloquer`
+        : `Espèce liée : ${mainSpecies.name}`
+      : `${mainSpecies.name} · +${species.length - 1} espèces liées`
 
   return (
     <div className="mt-2 flex items-center gap-2">
@@ -282,7 +283,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
             Nos projets
           </h1>
           <p className="text-white/60 text-[15px] mt-3 font-medium">
-            Découvrez et soutenez des projets vérifiés.
+            Découvrez et soutenez des projets de terrain sélectionnés.
           </p>
         </div>
 
