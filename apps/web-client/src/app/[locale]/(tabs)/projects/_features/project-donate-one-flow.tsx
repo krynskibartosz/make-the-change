@@ -82,11 +82,11 @@ export function ProjectDonateOneFlow({
   discoveredSpeciesId = null,
   initialOptionId = null,
 }: ProjectDonateOneFlowProps) {
-  const t = useTranslations('projects.invest_page')
+  const t = useTranslations('projects.donate_page')
   const router = useRouter()
   const haptic = useHaptic()
 
-  const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
+  const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string; image_url?: string | null } | null>(null)
 
   const quickAmounts = [20, 50, 100]
   const defaultAmount = 20
@@ -106,7 +106,7 @@ export function ProjectDonateOneFlow({
     if (discoveredSpeciesId) {
       getMockSpeciesContextClient(discoveredSpeciesId).then((species) => {
         if (species) {
-          setDiscoveredSpecies({ name_default: species.name_default })
+          setDiscoveredSpecies({ name_default: species.name_default, image_url: species.image_url })
         }
       })
     }
@@ -140,7 +140,11 @@ export function ProjectDonateOneFlow({
     donationOptions: project.donationOptions,
     projectImpact: project.expectedImpact ?? null,
   })
-  const unitsRestored = donationMetrics.kind === 'reef' ? donationMetrics.corals : Math.max(1, Math.round(amountEur / 30))
+  // Préférer l'impact déclaré sur l'option de don sélectionnée ; fallback sur le ratio par défaut.
+  const matchedOption = project.donationOptions.find((opt) => opt.price === amountEur)
+  const unitsRestored = donationMetrics.kind === 'reef'
+    ? donationMetrics.corals
+    : matchedOption?.impact.unitsRestored ?? Math.max(1, Math.round(amountEur / 30))
 
   useEffect(() => {
     if (step !== 'success') return
@@ -539,7 +543,7 @@ export function ProjectDonateOneFlow({
                     )}
                   />
                   <img
-                    src={REWARD_PREVIEW_IMAGE}
+                    src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
                     alt="Espèce débloquée"
                     className={cn(
                       'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
@@ -633,7 +637,7 @@ export function ProjectDonateOneFlow({
               onClick={goToPayment}
               className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
             >
-              Continuer vers le paiement
+              Faire un don
             </Button>
         </div>
       ) : null}
