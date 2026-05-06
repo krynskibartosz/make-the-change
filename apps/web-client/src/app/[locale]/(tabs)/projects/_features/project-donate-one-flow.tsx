@@ -396,7 +396,7 @@ export function ProjectDonateOneFlow({
             <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="text-center">
                 <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
-                  Votre don pour la nature
+                  Votre don au projet
                 </p>
                 <div className="mb-8 flex items-baseline justify-center gap-1.5">
                   <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
@@ -407,7 +407,7 @@ export function ProjectDonateOneFlow({
 
                 <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
                   <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
-                    Donnez & Débloquez
+                    Donnez & Participez
                   </h3>
                   
                   <p className="text-white/60 text-[14px] leading-relaxed mb-4">
@@ -427,7 +427,7 @@ export function ProjectDonateOneFlow({
 
                     <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
                       <CheckCircle className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-medium">Impact vérifié</span>
+                      <span className="text-[12px] font-medium">Impact documenté</span>
                     </div>
                   </div>
                 </div>
@@ -512,7 +512,7 @@ export function ProjectDonateOneFlow({
                 transition={{ duration: 0.45, ease: 'easeOut' }}
                 className="mt-6 text-center text-4xl font-black tracking-tight text-white [@media(max-height:800px)]:mt-2 [@media(max-height:800px)]:text-3xl"
               >
-                Impact Validé !
+                Don confirmé !
               </motion.h1>
               <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
                 Votre don de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}

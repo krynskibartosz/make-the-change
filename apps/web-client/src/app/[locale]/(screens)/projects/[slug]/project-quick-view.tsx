@@ -317,6 +317,9 @@ export async function ProjectQuickView({
                   className="h-2 rounded-full bg-muted"
                   indicatorClassName="bg-gradient-to-r from-primary to-marketing-positive-600"
                 />
+                <p className="mt-2 text-xs text-white/40">
+                  Cet objectif couvre l&apos;équipement, le suivi terrain et la valorisation des produits du projet.
+                </p>
               </div>
             </div>
 

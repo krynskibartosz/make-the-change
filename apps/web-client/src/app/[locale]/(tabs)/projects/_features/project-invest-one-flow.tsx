@@ -402,7 +402,7 @@ export function ProjectInvestOneFlow({
             <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="text-center">
                 <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
-                  Votre don pour la nature
+                  Votre soutien au projet
                 </p>
                 <div className="mb-8 flex items-baseline justify-center gap-1.5">
                   <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
@@ -414,11 +414,11 @@ export function ProjectInvestOneFlow({
                 {/* CONTENU DE L'ÉTAPE 2 (Rollback UI + Nouveaux Tags) */}
                 <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
                   <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
-                    Soutenez & Cumulez
+                    Soutien producteur
                   </h3>
                   
                   <p className="text-white/60 text-[14px] leading-relaxed mb-4 pr-4">
-                    Votre soutien génère des Crédits Impact utilisables dans les avantages partenaires.
+                    Votre soutien aide ce projet et ouvre des Credits Impact utilisables auprès de partenaires sélectionnés.
                   </p>
 
                   {/* LES TAGS VISUELS (Alignés et aérés) */}
@@ -426,8 +426,13 @@ export function ProjectInvestOneFlow({
                     
                     <div className="bg-amber-300/10 border border-amber-300/25 text-amber-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
                       <CurrencyIcon kind="impactCredits" className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-bold">1€ = 1 crédit</span>
+                      <span className="text-[12px] font-bold">{points.total_points} Credits Impact</span>
                     </div>
+                    {points.bonus_points > 0 ? (
+                      <div className="bg-amber-300/10 border border-amber-300/25 text-amber-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                        <span className="text-[12px] font-bold">Dont {points.bonus_points} de bonus</span>
+                      </div>
+                    ) : null}
 
                     <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5" />
@@ -436,7 +441,7 @@ export function ProjectInvestOneFlow({
 
                     <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
                       <CheckCircle className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-medium">Impact vérifié</span>
+                      <span className="text-[12px] font-medium">Projet documenté</span>
                     </div>
 
                   </div>
@@ -521,7 +526,7 @@ export function ProjectInvestOneFlow({
                 transition={{ duration: 0.45, ease: 'easeOut' }}
                 className="mt-6 text-center text-4xl font-black tracking-tight text-white [@media(max-height:800px)]:mt-2 [@media(max-height:800px)]:text-3xl"
               >
-                Impact Validé !
+                Projet soutenu !
               </motion.h1>
               <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
                 Votre soutien de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}
@@ -583,7 +588,7 @@ export function ProjectInvestOneFlow({
                     <CurrencyAmount kind="impactCredits" value={points.total_points} showLabel className="text-2xl font-black [@media(max-height:800px)]:text-xl" />
                   </p>
                   <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
-                    À dépenser dans les Récompenses
+                    À utiliser dans les Avantages partenaires
                   </p>
                 </div>
               </motion.div>
@@ -695,7 +700,7 @@ export function ProjectInvestOneFlow({
                 }}
                 className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
               >
-                Visiter les Récompenses
+                Visiter les Avantages partenaires
               </Button>
             </>
           ) : null}
