@@ -1,7 +1,7 @@
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import { getMockProductByIdentifier, type MockProductSeed } from '../_features/mock-products'
+import { getMockProductByIdentifier, type MockProductSeed } from '@/app/[locale]/(tabs)/products/_features/mock-products'
 
 export type ProductProducer = {
   id: string

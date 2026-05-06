@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { getPublicProductById } from '@/app/[locale]/(tabs)/products/[id]/product-detail-data'
-import { ProductQuickView } from '@/app/[locale]/(tabs)/products/[id]/product-quick-view'
+import { getPublicProductById } from '@/app/[locale]/(screens)/products/[id]/product-detail-data'
+import { ProductQuickView } from '@/app/[locale]/(screens)/products/[id]/product-quick-view'
 import { getLocalizedContent } from '@/lib/utils'
 
 interface InterceptedProductPageProps {
