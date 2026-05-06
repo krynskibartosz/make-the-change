@@ -18,39 +18,39 @@ export function BioDexCard({ species, variant = 'unlocked', href, className }: B
   const isLocked = variant === 'locked'
 
   const content = (
-    <article>
-      {isLocked && (
-        <span className="absolute right-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-black/30">
-          <Lock className="h-3.5 w-3.5 text-white/55" aria-hidden="true" />
-        </span>
-      )}
-      {isLocked ? (
-        <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-white/40">
-          Verrouillé
-        </span>
-      ) : (
-        <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-400">
-          {species.rarity || 'COMMUN'}
-        </span>
-      )}
-      <div className={cn("mt-3 aspect-square overflow-hidden rounded-xl", isLocked ? "bg-black/30" : "bg-black/20")}>
+    <article className="flex flex-col items-center gap-2">
+      <div className="w-full aspect-square relative flex items-center justify-center">
+        {isLocked && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <Lock className="h-6 w-6 text-white/50" aria-hidden="true" />
+          </div>
+        )}
         <img
           src={species.image}
           alt={species.name}
           className={cn(
-            "h-full w-full object-cover transition-all duration-700",
-            isLocked && "scale-105 grayscale contrast-125 opacity-40 blur-[2px]"
+            "h-full w-full object-contain transition-all duration-700",
+            isLocked && "grayscale opacity-40 blur-sm"
           )}
         />
       </div>
-      <p className={cn("mt-3 text-sm line-clamp-2 min-h-[2.5rem]", isLocked ? "font-semibold text-white/60" : "font-bold text-white")}>
+      <p className={cn("text-sm font-medium text-center leading-snug", isLocked ? "text-white/40" : "text-white/90")}>
         {species.name}
       </p>
+      {isLocked ? (
+        <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">
+          À DÉCOUVRIR
+        </p>
+      ) : (
+        <p className={cn("text-[10px] font-bold uppercase tracking-widest", getRarityTextColor(species.rarity))}>
+          {species.rarity || 'COMMUN'}
+        </p>
+      )}
     </article>
   )
 
   const wrapperClassName = cn(
-    "relative block w-40 shrink-0 snap-center rounded-2xl border border-white/10 bg-white/5 p-4 text-left transition-opacity hover:opacity-80 active:scale-[0.98]",
+    "relative block w-28 shrink-0 snap-center transition-transform duration-150 hover:opacity-80 active:scale-[0.97]",
     className
   )
 
@@ -59,4 +59,11 @@ export function BioDexCard({ species, variant = 'unlocked', href, className }: B
   }
 
   return <button type="button" className={wrapperClassName}>{content}</button>
+}
+
+function getRarityTextColor(rarity?: string) {
+  const r = rarity?.toUpperCase()
+  if (r === 'LÉGENDAIRE' || r === 'CRITIQUE') return 'text-amber-400/80'
+  if (r === 'RARE' || r === 'MENACÉE') return 'text-blue-400/70'
+  return 'text-emerald-500/60'
 }
