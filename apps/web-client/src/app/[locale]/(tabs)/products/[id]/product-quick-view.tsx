@@ -29,10 +29,38 @@ type ProductFormat = {
   stock: number
 }
 
+// ─── Glow contextuel par catégorie produit ──────────────────────────────────
+type ProductGlowTone = 'amber' | 'sky' | 'rose' | 'teal' | 'green'
+
+const PRODUCT_GLOW: Record<ProductGlowTone, { r: number; g: number; b: number }> = {
+  amber: { r: 245, g: 158, b: 11  }, // amber-500  → miel        (couleur du miel)
+  sky:   { r: 14,  g: 165, b: 233 }, // sky-500    → savon       (propre, eau, fraîcheur)
+  rose:  { r: 244, g: 114, b: 182 }, // pink-400   → huile visage (soin, beauté)
+  teal:  { r: 20,  g: 184, b: 166 }, // teal-500   → shampoing   (fraîcheur capillaire)
+  green: { r: 16,  g: 185, b: 129 }, // emerald-500 → huile d'olive (couleur olive)
+}
+
+function getProductGlowTone(categoryId: string | null | undefined): ProductGlowTone {
+  const id = categoryId?.toLowerCase() ?? ''
+  if (id.includes('olive'))   return 'green'
+  if (id.includes('soap'))    return 'sky'
+  if (id.includes('shampoo')) return 'teal'
+  if (id.includes('oil'))     return 'rose'
+  return 'amber' // honey + défaut
+}
+
+function productGlowRgba(tone: { r: number; g: number; b: number }, alpha: number): string {
+  return `rgba(${tone.r}, ${tone.g}, ${tone.b}, ${alpha})`
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 export function ProductQuickView({ product }: ProductQuickViewProps) {
   const t = useTranslations('products')
   const locale = useLocale()
   const router = useRouter()
+
+  const glowTone = getProductGlowTone(product.category_id)
+  const glow = PRODUCT_GLOW[glowTone]
 
   const coverImage =
     sanitizeImageUrl(product.image_url) ||
@@ -116,8 +144,16 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
   return (
     <div className="relative flex h-full min-h-full flex-col bg-transparent">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-marketing-positive-500/10 blur-3xl" />
+        {/* Glow ambiance haut – halo discret au-dessus du visuel */}
+        <div
+          className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
+          style={{ backgroundColor: productGlowRgba(glow, 0.12) }}
+        />
+        {/* Glow de destination bas – lumière d'appel vers le CTA */}
+        <div
+          className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full blur-3xl"
+          style={{ backgroundColor: productGlowRgba(glow, 0.15) }}
+        />
       </div>
 
       <div className="relative flex h-full flex-col">
