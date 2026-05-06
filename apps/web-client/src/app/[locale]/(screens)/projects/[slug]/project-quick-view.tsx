@@ -27,6 +27,23 @@ type ProjectQuickViewProps = {
   relatedProjects?: RelatedProject[]
 }
 
+// ─── Glow contextuel par type de projet ────────────────────────────────────
+type ProjectGlowTone = 'yellow' | 'green' | 'blue'
+
+const PROJECT_GLOW_RGB: Record<ProjectGlowTone, string> = {
+  yellow: '245 158 11', // amber-500  → beehive / pollinisateur
+  green: '16 185 129',  // emerald-500 → agroforestry / olive_tree / forêt
+  blue: '14 165 233',   // sky-500     → coral_restoration / océan
+}
+
+function getProjectGlowTone(type: string | null | undefined): ProjectGlowTone {
+  const t = type?.toLowerCase() ?? ''
+  if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) return 'blue'
+  if (t.includes('agroforestry') || t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) return 'green'
+  return 'yellow' // beehive par défaut
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 const formatBadgeLabel = (value: string | null | undefined, locale: string): string | null => {
   if (!value) return null
   const normalized = value.replace(/[_-]+/g, ' ').trim()
@@ -65,6 +82,9 @@ export async function ProjectQuickView({
   const t = await getTranslations('projects')
   const locale = await getLocale()
   const isPageMode = mode === 'page'
+
+  const glowTone = getProjectGlowTone(project.type)
+  const glowRgb = PROJECT_GLOW_RGB[glowTone]
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
@@ -154,9 +174,17 @@ export async function ProjectQuickView({
         isPageMode ? 'min-h-screen bg-background' : 'h-full min-h-full bg-transparent',
       )}
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full bg-marketing-positive-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Glow discret sous le hero – donne l'ambiance du projet */}
+        <div
+          className="absolute -right-24 top-20 h-64 w-64 rounded-full blur-[100px]"
+          style={{ backgroundColor: `rgb(${glowRgb} / 0.07)` }}
+        />
+        {/* Glow de destination – attire doucement le regard vers le CTA */}
+        <div
+          className="absolute bottom-0 left-1/2 h-80 w-[36rem] -translate-x-1/2 translate-y-1/3 rounded-full blur-[140px]"
+          style={{ backgroundColor: `rgb(${glowRgb} / 0.12)` }}
+        />
       </div>
 
       <div
