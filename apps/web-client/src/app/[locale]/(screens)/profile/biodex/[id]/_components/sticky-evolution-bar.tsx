@@ -23,7 +23,7 @@ export function StickyEvolutionBar({
       <div className='mx-auto flex w-full max-w-2xl items-center gap-4'>
         <div className='min-w-0 flex-1'>
           <div className='mb-1.5 flex items-center justify-between'>
-            <span className='text-xs text-white/40'>Améliorer la fiche</span>
+            <span className='text-xs text-white/40'>Approfondir la fiche</span>
             <div className='flex items-center gap-1'>
               <CurrencyIcon kind='seeds' className='h-3 w-3' />
               <span
@@ -32,7 +32,7 @@ export function StickyEvolutionBar({
                   canEvolve ? 'text-emerald-300' : 'text-white/40',
                 )}
               >
-                {currentSeeds} / {requiredSeeds}
+                {requiredSeeds} nécessaires · {currentSeeds} disponibles
               </span>
             </div>
           </div>
@@ -55,11 +55,11 @@ export function StickyEvolutionBar({
           )}
         >
           {canEvolve ? (
-            <>Améliorer ({requiredSeeds} 🌱)</>
+            <>Approfondir ({requiredSeeds} 🌱)</>
           ) : (
             <span className='flex items-center gap-1.5'>
               <Lock className='h-3.5 w-3.5' />
-              Améliorer
+              Approfondir
             </span>
           )}
         </button>

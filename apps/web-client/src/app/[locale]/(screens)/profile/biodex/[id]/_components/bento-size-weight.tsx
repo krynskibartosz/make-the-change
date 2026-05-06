@@ -6,7 +6,9 @@ interface SizeWeightWidgetProps {
 }
 
 export function SizeWeightWidget({ size, weight }: SizeWeightWidgetProps) {
-  const displayValue = size && weight ? `${size} / ${weight}` : 'Non spécifié'
+  const formattedSize = size?.replace('.', ',')
+  const formattedWeight = weight?.replace('.', ',')
+  const displayValue = formattedSize && formattedWeight ? `${formattedSize} / ${formattedWeight}` : 'Non spécifié'
 
   return (
     <div className="rounded-3xl border border-white/5 bg-white/5 p-4 backdrop-blur-sm">

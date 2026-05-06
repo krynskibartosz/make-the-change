@@ -104,7 +104,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 						<div className='flex-1'>
 							<h1 className='text-lg font-black text-white'>BioDex</h1>
 							<p className='text-xs text-white/50'>
-								{sortedSpecies.filter((s) => s.user_status?.isUnlocked).length} / {sortedSpecies.length} débloquées
+								{sortedSpecies.filter((s) => s.user_status?.isUnlocked).length} / {sortedSpecies.length} espèces découvertes
 							</p>
 						</div>
 					</div>
@@ -159,7 +159,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 						<div className='mb-4 flex items-center justify-between'>
 							<div className='inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1'>
 								<Lock className='h-3.5 w-3.5 text-white/50' />
-								<span className='text-[10px] font-bold uppercase tracking-widest text-white/50'>Espèce verrouillée</span>
+								<span className='text-[10px] font-bold uppercase tracking-widest text-white/50'>Espèce à découvrir</span>
 							</div>
 							<button
 								type='button'
@@ -172,7 +172,7 @@ export function BiodexEnhanced({ species, initialFaction }: BiodexEnhancedProps)
 						</div>
 						<h3 className='text-2xl font-black tracking-tight text-white'>{selectedLockedSpecies.name_default}</h3>
 						<p className='mt-2 text-sm leading-relaxed text-white/70'>
-							Soutenez un projet lié à cette espèce pour la débloquer dans votre BioDex et découvrir sa fiche complète.
+							Débloquez-la via un projet lié.
 						</p>
 						<div className='mt-5 space-y-3'>
 							<p className='text-[11px] font-bold uppercase tracking-widest text-white/40'>Projets qui peuvent l'aider</p>

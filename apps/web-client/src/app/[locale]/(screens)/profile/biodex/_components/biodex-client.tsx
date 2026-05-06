@@ -136,7 +136,7 @@ export function BiodexClient({ species }: BiodexClientProps) {
       {/* Inline Header */}
       <div className='w-full px-6 pt-6 pb-5'>
         <h1 className='text-3xl font-bold tracking-tight text-white mb-1'>Mon BioDex</h1>
-        <p className='text-sm text-white/50 mb-4'>{unlockedCount} / {totalCount} espèces sauvées</p>
+        <p className='text-sm text-white/50 mb-4'>{unlockedCount} / {totalCount} espèces découvertes</p>
         <div className='flex items-center gap-3'>
           <div className='flex-1 relative h-0.5 rounded-full bg-white/10 overflow-hidden'>
             <div
@@ -190,7 +190,7 @@ export function BiodexClient({ species }: BiodexClientProps) {
             <div className='mb-4 flex items-center justify-between'>
               <div className='inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1'>
                 <Lock className='h-3.5 w-3.5 text-white/50' />
-                <span className='text-[10px] font-bold uppercase tracking-widest text-white/50'>Espèce verrouillée</span>
+                <span className='text-[10px] font-bold uppercase tracking-widest text-white/50'>Espèce à découvrir</span>
               </div>
               <button
                 type='button'
@@ -203,7 +203,7 @@ export function BiodexClient({ species }: BiodexClientProps) {
             </div>
             <h3 className='text-2xl font-black tracking-tight text-white'>{selectedLockedSpecies.name_default}</h3>
             <p className='mt-2 text-sm leading-relaxed text-white/70'>
-              Soutenez un projet lié à cette espèce pour la débloquer dans votre BioDex et découvrir sa fiche complète.
+              Débloquez-la via un projet lié.
             </p>
             <div className='mt-5 space-y-3'>
               <p className='text-[11px] font-bold uppercase tracking-widest text-white/40'>Projets qui peuvent l'aider</p>

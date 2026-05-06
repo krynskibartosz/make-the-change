@@ -23,7 +23,7 @@ export function ImpactCard({ projects }: ImpactCardProps) {
         <CheckCircle className='h-5 w-5 shrink-0 text-emerald-400' />
         <div className='min-w-0 flex-1'>
           <p className='text-[10px] font-bold uppercase tracking-wider text-emerald-400/80'>
-            Protégée grâce à votre soutien
+            Projet lié à votre soutien
           </p>
           <p className='truncate text-sm font-semibold text-white/90'>{displayProject.name}</p>
         </div>
@@ -54,7 +54,7 @@ export function ImpactCard({ projects }: ImpactCardProps) {
       <Lock className='h-5 w-5 shrink-0 text-white/30' />
       <div className='min-w-0 flex-1'>
         <p className='text-[10px] font-bold uppercase tracking-wider text-white/40'>
-          Soutenez pour révéler cette espèce
+          Débloquez via un projet lié
         </p>
         <p className='truncate text-sm font-semibold text-white/60'>{displayProject.name}</p>
       </div>

@@ -115,7 +115,7 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
             {mainThreat && (
               <div className='px-5'>
                 <h3 className='mb-3 text-xs font-bold uppercase tracking-wider text-white/40'>
-                  Défi principal
+                  Menace principale
                 </h3>
                 <div className='rounded-2xl border border-orange-500/20 bg-orange-500/10 px-4 py-3'>
                   <div className='flex items-center gap-3'>
@@ -174,7 +174,7 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
                     <div className='h-2.5 w-4/5 rounded-full bg-white/5' />
                     <div className='h-2.5 w-3/5 rounded-full bg-white/5' />
                     <p className='mt-3 text-xs text-white/30'>
-                      Améliorez la fiche pour découvrir l&apos;histoire de cette espèce.
+                      Approfondissez la fiche pour découvrir l&apos;histoire de cette espèce.
                     </p>
                   </div>
                 )}
@@ -232,11 +232,17 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
                 </div>
                 {!isLevel2Unlocked && (
                   <p className='mt-2 text-xs text-white/30'>
-                    Améliorez la fiche (Niveau 2) pour lire la description complète.
+                    Approfondissez la fiche (Niveau 2) pour lire la description complète.
                   </p>
                 )}
               </div>
             )}
+
+            <div className='px-5 mt-8'>
+              <p className='text-center text-xs text-white/30'>
+                Données à vérifier / Sources scientifiques
+              </p>
+            </div>
           </div>
         )}
       </div>
@@ -253,7 +259,7 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
       {showToast && (
         <div className='pointer-events-none fixed inset-x-4 bottom-28 z-[60] flex items-center justify-center'>
           <div className='animate-in fade-in slide-in-from-bottom-2 rounded-2xl border border-white/10 bg-white/10 px-5 py-3 text-sm font-medium text-white/90 shadow-xl backdrop-blur-md duration-300'>
-            Continuez l&apos;Aventure ou l&apos;Academy pour gagner des Graines !
+            Continuez l&apos;Aventure ou l&apos;Academy pour récolter des Graines !
           </div>
         </div>
       )}

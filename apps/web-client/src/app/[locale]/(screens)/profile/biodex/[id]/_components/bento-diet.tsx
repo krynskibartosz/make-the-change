@@ -13,7 +13,10 @@ const dietIcons: Record<string, React.ReactNode> = {
 
 export function DietWidget({ diet }: DietWidgetProps) {
   const icon = diet ? dietIcons[diet] || <Bug className="h-5 w-5 text-emerald-400" /> : <Bug className="h-5 w-5 text-emerald-400" />
-  const displayValue = diet || 'Régime inconnu'
+  let displayValue = diet || 'Régime inconnu'
+  if (displayValue.toLowerCase().includes('nectarivore') && displayValue.toLowerCase().includes('pollinivore')) {
+    displayValue = 'Nectar et pollen'
+  }
 
   return (
     <div className="rounded-3xl border border-white/5 bg-white/5 p-4 backdrop-blur-sm">

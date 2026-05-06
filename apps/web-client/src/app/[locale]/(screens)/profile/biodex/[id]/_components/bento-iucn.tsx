@@ -8,7 +8,7 @@ const iucnConfig: Record<string, { label: string; color: string }> = {
   VU: { label: 'Vulnérable', color: 'bg-yellow-500' },
   NT: { label: 'Quasi menacé', color: 'bg-blue-500' },
   LC: { label: 'Préoccupation mineure', color: 'bg-emerald-500' },
-  DD: { label: 'Données insuffisantes', color: 'bg-gray-500' },
+  DD: { label: 'Données scientifiques limitées', color: 'bg-gray-500' },
 }
 
 export function IUCNWidget({ conservationStatus }: IUCNWidgetProps) {

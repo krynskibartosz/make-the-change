@@ -29,14 +29,14 @@ export function HabitatCarousel({ habitats }: HabitatCarouselProps) {
   return (
     <div className="mx-5">
       <h3 className="mb-3 font-bold text-white">Habitats</h3>
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+      <div className="flex flex-wrap gap-2">
         {habitats.map((habitat, index) => (
           <div
             key={index}
-            className="flex shrink-0 snap-center items-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-4 py-3 backdrop-blur-sm"
+            className="flex items-center gap-2 rounded-2xl border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm"
           >
             {getHabitatIcon(habitat)}
-            <span className="text-sm text-white/90">{habitat}</span>
+            <span className="text-xs text-white/90 text-wrap text-center max-w-[200px]">{habitat}</span>
           </div>
         ))}
       </div>
