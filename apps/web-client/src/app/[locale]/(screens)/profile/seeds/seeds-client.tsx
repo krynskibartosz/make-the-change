@@ -2,20 +2,12 @@
 
 import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
-import { Sprout, Zap, BookOpen, PawPrint, ArrowLeft } from 'lucide-react'
+import { useRouter } from '@/i18n/navigation'
+import { Sprout, Zap, BookOpen, ArrowLeft, TrendingUp, TrendingDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
-
-interface SpeciesEvolution {
-  id: string
-  name: string
-  currentStage: string
-  nextStage: string
-  currentSeeds: number
-  requiredSeeds: number
-  icon: string
-  category: string
-}
+import { useCallback, useState } from 'react'
+import type { SpeciesContext } from '@/types/species'
 
 interface SeedsClientProps {
   balance: number
@@ -25,217 +17,362 @@ interface SeedsClientProps {
     delta: number
     createdAt: string
   }>
+  currentDayKey: string
+  featuredSpecies: SpeciesContext[]
 }
 
-// Mock data pour les évolutions disponibles
-const MOCK_EVOLUTIONS: SpeciesEvolution[] = [
-  {
-    id: 'lynx',
-    name: 'Lynx',
-    currentStage: 'Lynceau',
-    nextStage: 'Lynx Adulte',
-    currentSeeds: 1200,
-    requiredSeeds: 1500,
-    icon: '🐱',
-    category: 'Mammifère'
-  },
-  {
-    id: 'owl',
-    name: 'Hibou',
-    currentStage: 'Poussin',
-    nextStage: 'Hibou Grand-Duc',
-    currentSeeds: 800,
-    requiredSeeds: 1200,
-    icon: '🦉',
-    category: 'Oiseau'
-  },
-  {
-    id: 'butterfly',
-    name: 'Papillon Monarque',
-    currentStage: 'Chenille',
-    nextStage: 'Papillon',
-    currentSeeds: 450,
-    requiredSeeds: 800,
-    icon: '🦋',
-    category: 'Insecte'
-  }
-]
+// ─── Rareté déduite du statut IUCN (aligné sur species-card-enhanced.tsx) ───
+type Rarity = 'common' | 'rare' | 'legendary'
 
-export default function SeedsClient({ balance, transactions }: SeedsClientProps) {
+function getRarity(status: string | null | undefined): Rarity {
+  switch (status?.toUpperCase()) {
+    case 'EN':
+    case 'CR':
+    case 'EW':
+    case 'EX':
+      return 'legendary'
+    case 'VU':
+    case 'NT':
+      return 'rare'
+    default:
+      return 'common'
+  }
+}
+
+const RARITY_STYLES: Record<Rarity, { textColor: string; label: string; borderColor: string }> = {
+  common: {
+    textColor: 'text-emerald-500/60',
+    label: 'Commun',
+    borderColor: 'border-white/5',
+  },
+  rare: {
+    textColor: 'text-blue-400/70',
+    label: 'Rare',
+    borderColor: 'border-blue-400/20',
+  },
+  legendary: {
+    textColor: 'text-amber-400/80',
+    label: 'Légendaire',
+    borderColor: 'border-amber-400/25',
+  },
+}
+
+// ─── Fallback emoji (aligné sur species-card-enhanced.tsx) ───────────────────
+function getSpeciesEmoji(status: string | null | undefined, name: string): string {
+  const s = status?.toUpperCase()
+  if (s === 'CR' || s === 'EW' || s === 'EX') return '🦁'
+  if (s === 'EN') return '🐺'
+  if (s === 'VU') return '🦉'
+  if (s === 'NT') return '🦊'
+  const n = name.toLowerCase()
+  if (n.includes('abeille') || n.includes('apis')) return '🐝'
+  if (n.includes('bourdon')) return '🐝'
+  if (n.includes('papillon')) return '🦋'
+  if (n.includes('coccinelle')) return '🐞'
+  if (n.includes('tortue')) return '🐢'
+  if (n.includes('corail') || n.includes('acropora')) return '🪸'
+  if (n.includes('olivier')) return '🫒'
+  if (n.includes('grenouille')) return '🐸'
+  if (n.includes('caméléon')) return '🦎'
+  if (n.includes('lémurien') || n.includes('indri') || n.includes('sifaka') || n.includes('vari')) return '🐒'
+  return '🌿'
+}
+
+// ─── Libellé catégorie de transaction ────────────────────────────────────────
+function getTransactionCategory(label: string, delta: number): { icon: React.ReactNode; color: string } {
+  const l = label.toLowerCase()
+  if (delta > 0) {
+    return {
+      icon: <TrendingUp className="h-3.5 w-3.5" />,
+      color: 'text-amber-400',
+    }
+  }
+  return {
+    icon: <TrendingDown className="h-3.5 w-3.5" />,
+    color: 'text-white/40',
+  }
+}
+
+export default function SeedsClient({
+  balance,
+  transactions,
+  currentDayKey,
+  featuredSpecies,
+}: SeedsClientProps) {
+  const router = useRouter()
+  const [titleVisible, setTitleVisible] = useState(false)
+
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setTitleVisible(e.currentTarget.scrollTop > 80)
+  }, [])
 
   const screenHeader = (
-    <div className="flex w-full items-center justify-between">
-      <Link
-        href="/challenges"
-        className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+    <div className="flex w-full items-center gap-2">
+      <button
+        type="button"
+        onClick={() => router.back()}
+        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/60 hover:text-white transition-colors -ml-1"
+        aria-label="Retour"
       >
         <ArrowLeft className="h-5 w-5" />
-        <span className="text-sm font-medium">Retour</span>
-      </Link>
-      <div className="flex items-center gap-2 relative">
-        <div className="absolute inset-0 bg-amber-500/12 blur-[60px]" />
-        <Sprout className="w-5 h-5 text-amber-400 relative z-10" />
-        <span className="text-lg font-bold text-white tabular-nums relative z-10">{balance.toLocaleString('fr-FR')}</span>
+      </button>
+      <span
+        className={cn(
+          'flex-1 text-center text-sm font-semibold text-white transition-opacity duration-300',
+          titleVisible ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        Mes Graines
+      </span>
+      {/* Icône balance visible dans la navbar — disparaît quand le titre est visible */}
+      <div className={cn(
+        'flex items-center gap-1.5 transition-opacity duration-300',
+        titleVisible ? 'opacity-0' : 'opacity-100',
+      )}>
+        <Sprout className="w-4 h-4 text-amber-400" />
+        <span className="text-sm font-bold text-white tabular-nums">
+          {balance.toLocaleString('fr-FR')}
+        </span>
       </div>
     </div>
   )
 
   return (
-    <Screen header={screenHeader}>
-      {/* Content Section */}
-      <div className="relative z-10 px-5 pb-32 pt-6 sm:px-6">
-        
-        {/* Quick Earn - Besoin de graines ? */}
+    <Screen header={screenHeader} onScroll={handleScroll}>
+      <div className="relative z-10 px-5 pb-32 sm:px-6">
+
+        {/* ── Inline Header ─────────────────────────────────────────── */}
+        <div className="pt-6 pb-8">
+          <div className="flex items-end justify-between mb-1">
+            <h1 className="text-3xl font-bold tracking-tight text-white">Mes Graines</h1>
+            <div className="flex items-center gap-1.5 pb-1">
+              <Sprout className="w-5 h-5 text-amber-400" />
+              <span className="text-2xl font-bold text-white tabular-nums">
+                {balance.toLocaleString('fr-FR')}
+              </span>
+            </div>
+          </div>
+          <p className="text-sm text-white/50">
+            Gagnez des Graines en complétant vos défis quotidiens
+          </p>
+        </div>
+
+        {/* ── Défis du jour ─────────────────────────────────────────── */}
         <motion.section
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="mb-12"
+          transition={{ delay: 0.1, duration: 0.5 }}
+          className="mb-10"
         >
-          <h2 className="text-xl font-bold text-white mb-6">Besoin de graines ?</h2>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">
+            Gagner des Graines
+          </h2>
           <div className="space-y-3">
+            {/* Récolte quotidienne */}
             <Link
-              href="/challenges/daily-harvest/today"
-              className="block relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
+              href={`/challenges/daily-harvest/${currentDayKey}`}
+              className="block relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-amber-500/30 active:scale-[0.98] transition-all"
             >
               <div className="p-5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-amber-400/10 flex items-center justify-center">
-                    <Zap className="h-6 w-6 text-amber-400" />
+                  <div className="w-12 h-12 rounded-2xl bg-amber-400/10 flex items-center justify-center shrink-0">
+                    <Zap className="h-5 w-5 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">Récolte quotidienne</h3>
-                    <p className="text-xs text-white/40">Action immédiate</p>
+                    <h3 className="font-bold text-white text-sm">Récolte quotidienne</h3>
+                    <p className="text-xs text-white/40 mt-0.5">Action immédiate · disponible aujourd'hui</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-amber-400 tabular-nums">+150</span>
-                  <Sprout className="w-5 h-5 text-amber-400" />
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="text-lg font-bold text-amber-400 tabular-nums">+50</span>
+                  <Sprout className="w-4 h-4 text-amber-400" />
                 </div>
               </div>
             </Link>
+
+            {/* Éco-Fact du jour */}
             <Link
-              href="/challenges/eco-fact/today"
-              className="block relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-amber-500/30 transition-all"
+              href={`/challenges/eco-fact/${currentDayKey}`}
+              className="block relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden hover:border-sky-400/30 active:scale-[0.98] transition-all"
             >
               <div className="p-5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-sky-400/10 flex items-center justify-center">
-                    <BookOpen className="h-6 w-6 text-sky-400" />
+                  <div className="w-12 h-12 rounded-2xl bg-sky-400/10 flex items-center justify-center shrink-0">
+                    <BookOpen className="h-5 w-5 text-sky-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white">Éco-Fact du jour</h3>
-                    <p className="text-xs text-white/40">Apprends & gagne</p>
+                    <h3 className="font-bold text-white text-sm">Éco-Fact du jour</h3>
+                    <p className="text-xs text-white/40 mt-0.5">Apprends & gagne · lecture 30 sec</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <span className="text-lg font-bold text-amber-400 tabular-nums">+50</span>
-                  <Sprout className="w-5 h-5 text-amber-400" />
+                  <Sprout className="w-4 h-4 text-amber-400" />
                 </div>
               </div>
             </Link>
           </div>
         </motion.section>
 
-        {/* Évolutions disponibles - BioDex Style */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.6 }}
-          className="mb-12"
-        >
-          <h2 className="text-xl font-bold text-white mb-6">Évolutions disponibles</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-            {MOCK_EVOLUTIONS.map((evolution, index) => {
-              const progress = (evolution.currentSeeds / evolution.requiredSeeds) * 100
-              const canAfford = balance >= (evolution.requiredSeeds - evolution.currentSeeds)
-              
-              return (
-                <Link
-                  key={evolution.id}
-                  href="/profile/biodex"
-                  className="flex-shrink-0 w-48 snap-start"
-                >
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 + (index * 0.1), duration: 0.4 }}
-                    className="relative flex flex-col p-4 aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl transition-transform duration-150 active:scale-[0.97] hover:border-amber-500/30"
+        {/* ── Espèces à soutenir — BioDex Style ────────────────────── */}
+        {featuredSpecies.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="mb-10"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-white/40">
+                Espèces à soutenir
+              </h2>
+              <Link
+                href="/profile/biodex"
+                className="text-xs text-amber-400/80 hover:text-amber-400 font-medium transition-colors"
+              >
+                Voir tout →
+              </Link>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory scrollbar-hide -mx-5 px-5">
+              {featuredSpecies.map((species, index) => {
+                const rarity = getRarity(species.conservation_status)
+                const rarityStyle = RARITY_STYLES[rarity]
+                const emoji = getSpeciesEmoji(species.conservation_status, species.name_default)
+                const isUnlocked = species.user_status?.isUnlocked ?? false
+
+                return (
+                  <Link
+                    key={species.id}
+                    href={isUnlocked ? `/profile/biodex/${species.id}` : '/profile/biodex'}
+                    className="flex-shrink-0 w-36 snap-start"
                   >
-                    {/* Emoji silhouette */}
-                    <div className="flex-1 flex items-center justify-center">
-                      <span className="text-6xl">{evolution.icon}</span>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="space-y-3">
-                      <div>
-                        <h3 className="font-bold text-white text-sm mb-1">{evolution.name}</h3>
-                        <p className="text-xs text-white/40">{evolution.currentStage} → {evolution.nextStage}</p>
-                      </div>
-                      
-                      {/* Progress bar */}
-                      <div className="space-y-1">
-                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ delay: 0.5 + (index * 0.1), duration: 0.5 }}
-                            className="h-full bg-amber-400 rounded-full"
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.92 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.25 + index * 0.07, duration: 0.4 }}
+                      className={cn(
+                        'flex flex-col items-center gap-2 p-3 rounded-3xl border bg-white/5 backdrop-blur-xl transition-all duration-150 active:scale-[0.97]',
+                        rarityStyle.borderColor,
+                      )}
+                    >
+                      {/* Image ou emoji */}
+                      <div className="w-full aspect-square">
+                        {species.image_url ? (
+                          <img
+                            src={species.image_url}
+                            alt={species.name_default}
+                            className={cn(
+                              'h-full w-full object-contain transition-all duration-700',
+                              !isUnlocked && 'grayscale opacity-40 blur-[2px]',
+                            )}
                           />
-                        </div>
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-white/40">
-                            {evolution.currentSeeds}/{evolution.requiredSeeds} <Sprout className="inline w-3 h-3" />
-                          </span>
-                          {canAfford ? (
-                            <span className="text-amber-400 font-semibold">Évoluer</span>
-                          ) : (
-                            <span className="text-white/30">+</span>
-                          )}
-                        </div>
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center">
+                            <span className={cn('text-4xl', !isUnlocked && 'opacity-20')}>
+                              {emoji}
+                            </span>
+                          </div>
+                        )}
                       </div>
+
+                      {/* Nom */}
+                      <p
+                        className={cn(
+                          'text-xs font-medium text-center leading-snug line-clamp-2',
+                          !isUnlocked ? 'text-white/40' : 'text-white/90',
+                        )}
+                      >
+                        {species.name_default}
+                      </p>
+
+                      {/* Rareté */}
+                      <p className={cn('text-[10px] uppercase tracking-wider font-medium', !isUnlocked ? 'text-white/20' : rarityStyle.textColor)}>
+                        {rarityStyle.label}
+                      </p>
+                    </motion.div>
+                  </Link>
+                )
+              })}
+            </div>
+          </motion.section>
+        )}
+
+        {/* ── Historique des transactions ───────────────────────────── */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">
+            Historique
+          </h2>
+
+          {transactions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <Sprout className="h-10 w-10 text-white/10 mb-3" />
+              <p className="text-sm text-white/30">Aucune transaction pour l'instant</p>
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
+              {transactions.slice(0, 12).map((transaction, index) => {
+                const { icon, color } = getTransactionCategory(transaction.label, transaction.delta)
+                const hoursAgo = Math.floor(
+                  (Date.now() - new Date(transaction.createdAt).getTime()) / (1000 * 60 * 60),
+                )
+                const timeLabel =
+                  hoursAgo < 1
+                    ? "À l'instant"
+                    : hoursAgo < 24
+                    ? `Il y a ${hoursAgo}h`
+                    : `Il y a ${Math.floor(hoursAgo / 24)}j`
+
+                return (
+                  <motion.div
+                    key={transaction.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.35 + index * 0.03, duration: 0.3 }}
+                    className={cn(
+                      'flex items-center justify-between px-5 py-4',
+                      index < transactions.slice(0, 12).length - 1 && 'border-b border-white/5',
+                    )}
+                  >
+                    {/* Icône + label */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={cn('shrink-0', color)}>
+                        {icon}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-white/90 truncate">
+                          {transaction.label}
+                        </p>
+                        <p className="text-xs text-white/30 mt-0.5">{timeLabel}</p>
+                      </div>
+                    </div>
+
+                    {/* Montant */}
+                    <div className="flex items-center gap-1 shrink-0 ml-4">
+                      <span
+                        className={cn(
+                          'font-bold text-sm tabular-nums',
+                          transaction.delta > 0 ? 'text-amber-400' : 'text-white/40',
+                        )}
+                      >
+                        {transaction.delta > 0 ? '+' : ''}
+                        {transaction.delta.toLocaleString('fr-FR')}
+                      </span>
+                      <Sprout
+                        className={cn(
+                          'h-3.5 w-3.5',
+                          transaction.delta > 0 ? 'text-amber-400' : 'text-white/30',
+                        )}
+                      />
                     </div>
                   </motion.div>
-                </Link>
-              )
-            })}
-          </div>
-        </motion.section>
-
-        {/* History - Apple Wallet Style */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
-          <h2 className="text-xl font-bold text-white mb-6">Mon carnet de route</h2>
-          <div className="space-y-4">
-            {transactions.slice(0, 10).map((transaction, index) => (
-              <motion.div
-                key={transaction.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + (index * 0.03), duration: 0.3 }}
-                className="flex items-center justify-between py-3"
-              >
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-white text-sm">{transaction.label}</p>
-                    <span className={cn(
-                      'font-bold text-sm tabular-nums ml-4',
-                      transaction.delta > 0 ? 'text-amber-400' : 'text-white/40'
-                    )}>
-                      {transaction.delta > 0 ? '+' : ''}{transaction.delta} <Sprout className="inline h-4 w-4 align-text-bottom" />
-                    </span>
-                  </div>
-                  <p className="text-xs text-white/30 mt-1">
-                    Il y a {Math.floor((Date.now() - new Date(transaction.createdAt).getTime()) / (1000 * 60 * 60))}h
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </motion.section>
       </div>
     </Screen>
