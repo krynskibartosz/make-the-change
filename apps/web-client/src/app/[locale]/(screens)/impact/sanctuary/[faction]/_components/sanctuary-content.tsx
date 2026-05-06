@@ -61,7 +61,7 @@ export function SanctuaryContent({
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
           <div className="text-center">
             <p className="text-5xl font-black text-white mb-2">1.2M</p>
-            <p className="text-sm text-white/50">Abeilles protégées</p>
+            <p className="text-sm text-white/50">abeilles soutenues</p>
           </div>
           
           <div className="text-center">
@@ -98,7 +98,7 @@ export function SanctuaryContent({
                 <p className={`text-3xl font-black ${theme.accentText}`}>{contribution?.contributionShare || 0}%</p>
               </div>
             </div>
-            <p className="text-sm text-white/50 mt-2">De l'effort total porté par {factionConfig.name}</p>
+            <p className="text-sm text-white/50 mt-2">De l'effort collectif porté par {factionConfig.name}</p>
             {isLeading && (
               <span className={`inline-block mt-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white ${theme.accentText}`}>
                 Leader !
@@ -193,7 +193,7 @@ export function SanctuaryContent({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.6 }}
       >
-        <h2 className="text-2xl font-black text-white mb-6">Les Héros de la Semaine</h2>
+        <h2 className="text-2xl font-black text-white mb-6">Contributeurs de la semaine</h2>
         
         <div className="flex gap-6">
           {[
@@ -211,7 +211,7 @@ export function SanctuaryContent({
             return (
               <div key={i} className="flex-shrink-0 text-center">
                 <div className="relative mb-3">
-                  <div className={`h-20 w-20 rounded-full border-3 p-1 ${haloColors[i] || haloColors[2]}`}>
+                  <div className={`h-20 w-20 rounded-full border-2 p-1 ${haloColors[i] || haloColors[2]}`}>
                     <img
                       src={hero.avatar}
                       alt={hero.name}

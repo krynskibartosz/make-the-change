@@ -90,17 +90,17 @@ export default async function ImpactRewardPage() {
             </p>
           </div>
 
-          {/* Récompenses (Sleek List) */}
+          {/* Avantages (Sleek List) */}
           <div className="space-y-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Récompenses à débloquer</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Avantages à débloquer</p>
 
             <div className="flex items-center gap-5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
                 <Droplets className="h-4 w-4 text-amber-400" />
               </div>
               <div className="flex-1 border-b border-white/5 pb-4">
-                <p className="text-base font-bold text-white">-15 % d'avantage</p>
-                <p className="text-sm text-white/50">Sur la récolte de miel de notre partenaire.</p>
+                <p className="text-base font-bold text-white">-15% sur les miels Ilanga Nature</p>
+                <p className="text-sm text-white/50">Débloqué pour toute la communauté si l'objectif est atteint.</p>
               </div>
             </div>
 
@@ -150,12 +150,15 @@ export default async function ImpactRewardPage() {
                           className="text-sm font-black"
                         />
                       ) : (
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs text-white/25 line-through">{product.price_points} ⬡</span>
-                          <span className="flex items-center gap-1 text-sm font-black text-white/40">
-                            {Math.round(product.price_points * 0.85)} ⬡
-                            <Lock className="h-3 w-3" />
-                          </span>
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-white/25 line-through">{product.price_points} ⬡</span>
+                            <span className="flex items-center gap-1 text-sm font-black text-white/40">
+                              {Math.round(product.price_points * 0.85)} ⬡
+                              <Lock className="h-3 w-3" />
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-white/30">Débloqué si la communauté atteint 100%</span>
                         </div>
                       )}
                     </div>
@@ -166,6 +169,26 @@ export default async function ImpactRewardPage() {
             </div>
           )}
         </div>
+
+        {/* Section : Comment contribuer ? */}
+        {!isGoalReached && (
+          <div className="mx-5 mb-4 rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-4 sm:mx-6">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white/40">Comment contribuer ?</p>
+            <ul className="space-y-2.5">
+              {([
+                { label: "Continuer l'Academy", detail: '+25 Graines par leçon' },
+                { label: 'Soutenir un projet lié', detail: '+ contribution symbolique' },
+                { label: 'Envoyer un Bravo', detail: '+ micro-contribution sociale' },
+                { label: 'Découvrir une espèce BioDex', detail: 'Progression de faction' },
+              ] as Array<{ label: string; detail: string }>).map((item) => (
+                <li key={item.label} className="flex items-center justify-between gap-3">
+                  <span className="text-sm text-white/70">{item.label}</span>
+                  <span className="shrink-0 text-xs font-semibold text-white/30">{item.detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Encart abonnement contextuel si connecté sans abonnement */}
         {isConnected && initialFaction && !hasSubscription && (

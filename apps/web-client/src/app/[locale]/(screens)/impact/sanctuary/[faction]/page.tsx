@@ -68,8 +68,15 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
   const isLeading = contributions[0]?.themeKey === factionKey
   const biodexData = await getBiodexPreviewData({ unlockedLimit: 5, lockedLimit: 5 })
 
+  const factionProjectLabel =
+    factionKey === 'pollinisateurs'
+      ? 'les projets liés aux pollinisateurs'
+      : factionKey === 'forets'
+        ? 'les projets de reforestation'
+        : 'les projets de restauration marine'
+
   const factionMessage = isLeading
-    ? `Votre énergie est incroyable ce mois-ci ! Nos ${factionKey === 'pollinisateurs' ? 'ruches' : factionKey === 'forets' ? 'forêts' : 'océans'} bourdonnent de vie grâce à vous.`
+    ? `Votre énergie porte la communauté ce mois-ci. Ensemble, vous faites avancer ${factionProjectLabel}.`
     : `La nature a besoin d'un coup de pouce. Semons ensemble de nouvelles graines aujourd'hui.`
 
   return (

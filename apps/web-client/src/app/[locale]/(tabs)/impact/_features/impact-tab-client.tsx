@@ -53,7 +53,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     name: 'EcoGuerrier',
     profileId: 'eco-guerrier',
     time: 'Il y a 14 min',
-    action: 'A complété un défi qui renforce la part de Melli dans la récolte commune.',
+    action: 'A complété une mission et ajouté des Graines à la récolte de Melli.',
     icon: Trophy,
     iconColor: 'text-amber-400',
     actionHighlight: 'Melli',
@@ -144,7 +144,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     id: 'evt-9',
     name: 'Ondine',
     time: 'Il y a 2 jours',
-    action: 'Les récifs coralliens de la zone 3 ont retrouvé 15% de leur biodiversité grâce à vos efforts.',
+    action: 'La campagne récifs progresse : la zone 3 atteint 15% de son objectif de suivi.',
     icon: Droplets,
     iconColor: 'text-cyan-400',
     actionHighlight: '15%',
@@ -548,7 +548,7 @@ export function ImpactTabClient({
           />
         </div>
         <p className="mb-8 text-center text-sm font-medium text-white/60">
-          {collectiveGoal.progress}% accomplis • Encore {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />
+          {collectiveGoal.progress}% accomplis · Encore {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> pour débloquer l'avantage collectif
         </p>
 
 
