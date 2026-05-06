@@ -72,7 +72,7 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
   return (
     <div
       className="px-4 pt-10"
-      style={{ paddingBottom: 'calc(2.5rem + env(safe-area-inset-bottom))' }}
+      style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}
     >
       <button
         type="button"

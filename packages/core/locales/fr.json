@@ -616,13 +616,14 @@
     "hero": {
       "overline": "LE COLLECTIF",
       "title": "Le digital au service du vivant.",
-      "subtitle": "Make the Change n'est pas qu'une application. C'est un collectif citoyen qui transforme le virtuel en impact physique. Ne subissez plus l'éco-anxiété, agissez depuis votre poche.",
+      "subtitle": "Make the Change n'est pas qu'une application. C'est un collectif citoyen qui transforme les gestes numériques en actions concrètes pour le vivant. Face à l'éco-anxiété, reprenez une part d'action.",
       "imageAlt": "Forêt sombre et brumeuse"
     },
     "genesis": {
       "title": "D'une thèse étudiante à un écosystème mondial.",
       "paragraph1": "Il y a plus de 5 ans, l'idée de Make the Change naissait sur les bancs de l'école. La conviction était simple : la protection du vivant culpabilise, alors qu'elle devrait motiver.",
-      "paragraph2": "Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le jeu, la technologie et la transparence."
+      "paragraph2": "Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée.",
+      "paragraph3": "Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le jeu, la technologie et la transparence."
     },
     "model": {
       "overline": "UN CERCLE VERTUEUX, DU VIRTUEL AU RÉEL",
@@ -631,12 +632,33 @@
         "description": "Réaliser des actions pour la planète ne doit plus être une corvée. Nous utilisons la gamification pour transformer vos efforts quotidiens en une aventure stimulante."
       },
       "circular": {
-        "title": "Soutenir la terre, récolter ses fruits.",
-        "description": "Votre engagement numérique soutient directement des projets de biodiversité sur le terrain. En retour, ces terres restaurées créent de la richesse locale (comme du miel ou de l'artisanat). Ces produits nous sont retournés, et nous vous les offrons en échange de vos points d'impact. La boucle est bouclée."
+        "title": "Soutenir la terre, soutenir ses gardiens.",
+        "description": "Votre engagement numérique soutient directement des projets de biodiversité sur le terrain. En retour, ces terres restaurées créent de la richesse locale (comme du miel ou de l'artisanat). Ces produits nous sont retournés, et nous vous les proposons en échange de vos crédits impact. La boucle est bouclée."
       },
       "transparency": {
         "title": "Un impact traçable.",
-        "description": "Pas de greenwashing. Des partenariats locaux forts et une traçabilité totale pour que vous sachiez exactement quelle olivier, quelle ruche ou quelle espèce vous avez aidé à soutenir aujourd'hui."
+        "description": "Transparence avant promesse : projets documentés, partenaires identifiés et impact pédagogique. Pas de greenwashing, vous savez exactement quel olivier, quelle ruche ou quelle espèce vous avez aidé à soutenir aujourd'hui."
+      }
+    },
+    "field_proof": {
+      "title": "Déjà connecté au terrain",
+      "description": "Depuis plusieurs années, le collectif collabore déjà avec des producteurs, apiculteurs, associations et acteurs locaux entre la Belgique, Madagascar et d'autres territoires engagés pour le vivant.",
+      "projects": {
+        "apiculture": "Apiculture à Madagascar",
+        "corals": "Restauration corallienne",
+        "olives": "Oliviers centenaires",
+        "partners": "Partenaires locaux vérifiés"
+      }
+    },
+    "timeline": {
+      "overline": "NOTRE HISTOIRE",
+      "title": "Le temps long",
+      "events": {
+        "y2019": "Idée étudiante",
+        "y2021": "Premiers prototypes",
+        "y2023": "Terrain Madagascar",
+        "y2025": "V1 publique",
+        "y2026": "Collectif européen"
       }
     },
     "team": {
@@ -658,7 +680,7 @@
       }
     },
     "letter": {
-      "body": "Dans 3 ans, nous voulons que Make the Change soit le plus grand collectif citoyen d'Europe pour la biodiversité. Un écosystème où chaque swipe sur un écran plante une graine, où chaque défi relevé restaure un habitat, et où l'action commune devient une seconde nature. Le collectif n'attend plus que vous.",
+      "body": "Notre ambition : faire de Make the Change l'un des plus grands collectifs citoyens européens dédiés au vivant. Un écosystème où chaque swipe sur un écran plante une graine, où chaque défi relevé restaure un habitat, et où l'action commune devient une seconde nature. Le collectif n'attend plus que vous.",
       "signature": "— Les fondateurs, Grégory & Bartosz"
     },
     "cta": {

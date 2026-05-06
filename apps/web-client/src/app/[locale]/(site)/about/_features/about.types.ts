@@ -9,6 +9,7 @@ export type AboutGenesisProps = {
   title: string
   paragraph1: string
   paragraph2: string
+  paragraph3: string
 }
 
 export type AboutModelBlock = {
@@ -47,16 +48,27 @@ export type AboutCtaProps = {
   label: string
 }
 
-export type AboutPillarEntry = {
+export type AboutFieldProofProps = {
   title: string
   description: string
+  projects: {
+    apiculture: string
+    corals: string
+    olives: string
+    partners: string
+  }
 }
 
-export type AboutPillarsProps = {
+export type AboutTimelineProps = {
   overline: string
-  engagement: AboutPillarEntry
-  swarm: AboutPillarEntry
-  impact: AboutPillarEntry
+  title: string
+  events: {
+    y2019: string
+    y2021: string
+    y2023: string
+    y2025: string
+    y2026: string
+  }
 }
 
 export type AboutViewModel = {
@@ -66,4 +78,6 @@ export type AboutViewModel = {
   team: AboutTeamProps
   letter: AboutLetterProps
   cta: AboutCtaProps
+  fieldProof: AboutFieldProofProps
+  timeline: AboutTimelineProps
 }

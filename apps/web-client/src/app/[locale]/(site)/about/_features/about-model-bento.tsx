@@ -3,10 +3,12 @@
 import { motion, useInView, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 import type { AboutModelBlock, AboutModelProps } from './about.types'
+import { useAboutScrollContainer } from './about-scroll-shell'
 
 function GamificationCard({ title, description }: AboutModelBlock) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const { scrollY } = useScroll()
+  const container = useAboutScrollContainer()
+  const { scrollY } = useScroll({ container: container || undefined })
   const y = useTransform(scrollY, [0, 200], [0, -15], { clamp: true })
 
   return (
@@ -15,7 +17,7 @@ function GamificationCard({ title, description }: AboutModelBlock) {
       className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent p-8 transition-transform duration-300 ease-out active:scale-[0.98]"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.15, root: container || undefined }}
       transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {/* Glow */}
@@ -37,7 +39,8 @@ function GamificationCard({ title, description }: AboutModelBlock) {
 
 function CircularCard({ title, description }: AboutModelBlock) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const { scrollY } = useScroll()
+  const container = useAboutScrollContainer()
+  const { scrollY } = useScroll({ container: container || undefined })
   const y = useTransform(scrollY, [0, 200], [0, -15], { clamp: true })
 
   return (
@@ -46,7 +49,7 @@ function CircularCard({ title, description }: AboutModelBlock) {
       className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent p-8 transition-transform duration-300 ease-out active:scale-[0.98]"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.15, root: container || undefined }}
       transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {/* Glow */}
@@ -68,7 +71,8 @@ function CircularCard({ title, description }: AboutModelBlock) {
 
 function TransparencyCard({ title, description }: AboutModelBlock) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const { scrollY } = useScroll()
+  const container = useAboutScrollContainer()
+  const { scrollY } = useScroll({ container: container || undefined })
   const y = useTransform(scrollY, [0, 200], [0, -15], { clamp: true })
 
   return (
@@ -77,7 +81,7 @@ function TransparencyCard({ title, description }: AboutModelBlock) {
       className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.06] to-transparent p-8 transition-transform duration-300 ease-out active:scale-[0.98]"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.15, root: container || undefined }}
       transition={{ duration: 0.8, delay: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {/* Glow */}
@@ -107,7 +111,7 @@ export function AboutModelBento({ overline, gamification, circular, transparency
       <section ref={sectionRef} aria-labelledby="model-title" className="mt-12 py-16 sm:py-20">
         <div className="mb-12 flex flex-col items-start px-8">
           <span className="mb-3 text-[10px] font-bold uppercase tracking-[0.25em] text-amber-500">
-            Notre Modèle
+            {overline}
           </span>
           <h2 id="model-title" className="mb-8 text-3xl font-bold text-white tracking-tight">Un cercle vertueux.</h2>
         </div>
@@ -129,7 +133,7 @@ export function AboutModelBento({ overline, gamification, circular, transparency
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Notre Modèle
+          {overline}
         </motion.span>
         <motion.h2
           className="mb-8 text-3xl font-bold text-white tracking-tight"

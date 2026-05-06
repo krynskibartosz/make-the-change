@@ -6,6 +6,8 @@ import { AboutModelBento } from './_features/about-model-bento'
 import { AboutScrollShell } from './_features/about-scroll-shell'
 import { AboutStickyCta } from './_features/about-sticky-cta'
 import { AboutTeamCarousel } from './_features/about-team-carousel'
+import { AboutFieldProof } from './_features/about-field-proof'
+import { AboutChronologyTimeline } from './_features/about-chronology-timeline'
 import { buildAboutViewModel } from './_features/about.view-model'
 
 export default async function AboutPage() {
@@ -17,7 +19,9 @@ export default async function AboutPage() {
       <AboutHeroManifest {...viewModel.hero} />
       <AboutGenesis {...viewModel.genesis} />
       <AboutModelBento {...viewModel.model} />
+      <AboutChronologyTimeline {...viewModel.timeline} />
       <AboutTeamCarousel {...viewModel.team} />
+      <AboutFieldProof {...viewModel.fieldProof} />
       <AboutLetter {...viewModel.letter} />
       <AboutStickyCta {...viewModel.cta} />
     </AboutScrollShell>

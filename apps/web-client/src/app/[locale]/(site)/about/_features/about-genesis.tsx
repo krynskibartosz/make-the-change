@@ -4,7 +4,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 import type { AboutGenesisProps } from './about.types'
 
-export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProps) {
+export function AboutGenesis({ title, paragraph1, paragraph2, paragraph3 }: AboutGenesisProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, amount: 0.15 })
   const prefersReducedMotion = useReducedMotion()
@@ -20,12 +20,8 @@ export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProp
         <div className="relative flex flex-col gap-6 pl-8">
           <div className="absolute left-0 top-1 bottom-1 h-[calc(100%-8px)] w-[2px] rounded-full bg-gradient-to-b from-emerald-500/50 via-white/10 to-transparent" aria-hidden="true" />
           <p className="text-base font-light leading-[1.8] text-gray-300">{paragraph1}</p>
-          <p className="text-base font-light leading-[1.8] text-gray-300">
-            Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le{' '}
-            <span className="font-medium text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">jeu</span>, la{' '}
-            <span className="font-medium text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">technologie</span> et la{' '}
-            <span className="font-medium text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">transparence</span>.
-          </p>
+          <p className="text-base font-light leading-[1.8] text-gray-300">{paragraph2}</p>
+          <p className="text-base font-light leading-[1.8] text-gray-300">{paragraph3}</p>
         </div>
       </section>
     )
@@ -80,38 +76,24 @@ export function AboutGenesis({ title, paragraph1, paragraph2 }: AboutGenesisProp
           {paragraph1}
         </motion.p>
 
-        {/* Paragraph 2 with sequential word glow effects */}
+        {/* Paragraph 2 with fade-up */}
         <motion.p
           className="text-base font-light leading-[1.8] text-gray-300"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+          transition={{ duration: 0.6, delay: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
         >
-          Après plusieurs années de recherche, de prototypes inachevés et de voyages pour comprendre les réalités du terrain (de la Belgique jusqu'à Madagascar), une évidence s'est imposée. Pour sauver la biodiversité, il fallait utiliser les codes de notre génération : le{' '}
-          <motion.span
-            className="font-medium text-gray-300"
-            initial={{ color: '#9ca3af' }}
-            animate={isInView ? { color: '#ffffff' } : { color: '#9ca3af' }}
-            transition={{ duration: 0.4, delay: 0.6 }}
-          >
-            jeu
-          </motion.span>, la{' '}
-          <motion.span
-            className="font-medium text-gray-300"
-            initial={{ color: '#9ca3af' }}
-            animate={isInView ? { color: '#ffffff' } : { color: '#9ca3af' }}
-            transition={{ duration: 0.4, delay: 0.75 }}
-          >
-            technologie
-          </motion.span> et la{' '}
-          <motion.span
-            className="font-medium text-gray-300"
-            initial={{ color: '#9ca3af' }}
-            animate={isInView ? { color: '#ffffff' } : { color: '#9ca3af' }}
-            transition={{ duration: 0.4, delay: 0.9 }}
-          >
-            transparence
-          </motion.span>.
+          {paragraph2}
+        </motion.p>
+
+        {/* Paragraph 3 with fade-up */}
+        <motion.p
+          className="text-base font-light leading-[1.8] text-gray-300"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.65, ease: [0.2, 0.8, 0.2, 1] }}
+        >
+          {paragraph3}
         </motion.p>
       </div>
     </section>

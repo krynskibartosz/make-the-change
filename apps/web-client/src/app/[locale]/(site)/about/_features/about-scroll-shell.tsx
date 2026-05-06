@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronLeft } from 'lucide-react'
-import { useEffect, useRef, useState, type PropsWithChildren } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -9,9 +9,15 @@ type AboutScrollShellProps = PropsWithChildren<{
   title?: string
 }>
 
+export const AboutScrollContext = createContext<React.RefObject<HTMLDivElement | null> | null>(null)
+
+export function useAboutScrollContainer() {
+  return useContext(AboutScrollContext)
+}
+
 export function AboutScrollShell({ title = 'À propos', children }: AboutScrollShellProps) {
   const router = useRouter()
-  const containerRef = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [isElevated, setIsElevated] = useState(false)
 
   useEffect(() => {
@@ -69,7 +75,11 @@ export function AboutScrollShell({ title = 'À propos', children }: AboutScrollS
         </div>
       </header>
 
-      {children}
+      <AboutScrollContext.Provider value={containerRef}>
+        <div className="flex-1 pb-16">
+          {children}
+        </div>
+      </AboutScrollContext.Provider>
     </div>
   )
 }

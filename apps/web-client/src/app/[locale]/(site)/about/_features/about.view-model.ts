@@ -1,9 +1,9 @@
 import type { getTranslations } from 'next-intl/server'
 import type { AboutViewModel } from './about.types'
 
-export const buildAboutViewModel = async (
+export async function buildAboutViewModel(
   t: Awaited<ReturnType<typeof getTranslations>>,
-): Promise<AboutViewModel> => {
+): Promise<AboutViewModel> {
   return {
     hero: {
       overline: t('hero.overline'),
@@ -15,6 +15,7 @@ export const buildAboutViewModel = async (
       title: t('genesis.title'),
       paragraph1: t('genesis.paragraph1'),
       paragraph2: t('genesis.paragraph2'),
+      paragraph3: t('genesis.paragraph3'),
     },
     model: {
       overline: t('model.overline'),
@@ -59,6 +60,27 @@ export const buildAboutViewModel = async (
     },
     cta: {
       label: t('cta.label'),
+    },
+    fieldProof: {
+      title: t('field_proof.title'),
+      description: t('field_proof.description'),
+      projects: {
+        apiculture: t('field_proof.projects.apiculture'),
+        corals: t('field_proof.projects.corals'),
+        olives: t('field_proof.projects.olives'),
+        partners: t('field_proof.projects.partners'),
+      },
+    },
+    timeline: {
+      overline: t('timeline.overline'),
+      title: t('timeline.title'),
+      events: {
+        y2019: t('timeline.events.y2019'),
+        y2021: t('timeline.events.y2021'),
+        y2023: t('timeline.events.y2023'),
+        y2025: t('timeline.events.y2025'),
+        y2026: t('timeline.events.y2026'),
+      },
     },
   }
 }
