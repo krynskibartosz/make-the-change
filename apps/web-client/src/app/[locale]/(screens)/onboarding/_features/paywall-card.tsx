@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ArrowLeft, Crown, ShieldCheck, Shield } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { Link } from '@/i18n/navigation'
+import { cn } from '@/lib/utils'
 
 type PlanType = 'monthly' | 'annual'
 type PaywallMode = 'onboarding' | 'dashboard'
@@ -12,9 +13,10 @@ interface PaywallCardProps {
   mode?: PaywallMode
   onDismiss?: () => void
   onSubscribe?: () => void
+  isModalContent?: boolean
 }
 
-export function PaywallCard({ mode = 'dashboard', onDismiss, onSubscribe }: PaywallCardProps) {
+export function PaywallCard({ mode = 'dashboard', onDismiss, onSubscribe, isModalContent }: PaywallCardProps) {
   const router = useRouter()
   const [planType, setPlanType] = useState<PlanType>('annual')
 
@@ -58,9 +60,10 @@ export function PaywallCard({ mode = 'dashboard', onDismiss, onSubscribe }: Payw
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F15] text-white flex flex-col pb-[220px]">
+    <div className={cn("text-white flex flex-col pb-[220px]", !isModalContent && "min-h-screen bg-[#0B0F15]")}>
       {/* Header */}
-      <div className="sticky top-0 z-50 px-4 py-4 flex items-center bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/5">
+      {!isModalContent && (
+        <div className="sticky top-0 z-50 px-4 py-4 flex items-center bg-[#0B0F15]/80 backdrop-blur-md border-b border-white/5">
         {mode === 'onboarding' ? (
           <>
             <button
@@ -87,6 +90,7 @@ export function PaywallCard({ mode = 'dashboard', onDismiss, onSubscribe }: Payw
           </>
         )}
       </div>
+      )}
 
       {/* Hero with VIP Aura */}
       <div className="relative px-6 pt-12 pb-8 text-center">

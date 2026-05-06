@@ -10,6 +10,7 @@ type FullScreenSlideModalProps = PropsWithChildren<{
   title?: string
   fallbackHref?: string
   headerMode?: 'back' | 'close' | 'none' | 'dynamic'
+  headerRight?: React.ReactNode
   className?: string
   contentClassName?: string
   onClose?: () => void
@@ -20,6 +21,7 @@ export function FullScreenSlideModal({
   title,
   fallbackHref = '/community',
   headerMode = 'back',
+  headerRight,
   className,
   contentClassName,
   onClose,
@@ -138,7 +140,11 @@ export function FullScreenSlideModal({
             >
               {title}
             </p>
-            <span aria-hidden className="h-10 w-10 shrink-0" />
+            {headerRight ? (
+              <div className="shrink-0">{headerRight}</div>
+            ) : (
+              <span aria-hidden className="h-10 w-10 shrink-0" />
+            )}
           </div>
         </header>
       ) : null}

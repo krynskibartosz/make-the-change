@@ -3,7 +3,8 @@ import { defaultLocale, isLocale } from '@make-the-change/core/i18n'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArticleHeader } from '@/app/[locale]/(site)/blog/_features/blog-shell'
+import { ArticleShareButton } from '@/app/[locale]/(site)/blog/_features/blog-shell'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getBlogPostBySlug } from '@/app/[locale]/(site)/blog/_features/blog-data'
 import { RenderTipTapContent } from '@/app/[locale]/(site)/blog/_features/content/render-tiptap-content'
 import { formatDate, getLocalizedContent } from '@/lib/utils'
@@ -89,12 +90,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F15] text-white pb-24">
+    <FullScreenSlideModal
+      title={post.title}
+      fallbackHref="/blog"
+      headerMode="dynamic"
+      headerRight={<ArticleShareButton />}
+      className="bg-[#0B0F15]"
+      contentClassName="overflow-y-auto overscroll-contain text-white pb-24"
+    >
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
 
-      <ArticleHeader />
-
-      <main className="pt-[72px]">
+      <main>
         {/* Cover image */}
         <div className="w-full aspect-video bg-[#1A1F26] overflow-hidden">
           {post.coverImage ? (
@@ -171,6 +177,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </article>
       </main>
-    </div>
+    </FullScreenSlideModal>
   )
 }
