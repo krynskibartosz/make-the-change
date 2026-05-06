@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { HeroParallaxBackground } from '@/app/[locale]/(site)/(home)/_features/hero-parallax-background'
 import type { AboutHeroProps } from './about.types'
 
-const HERO_VIDEO_URL = '/videos/home-header.mp4'
-const HERO_POSTER_URL = '/images/home-header-poster.jpeg'
+const HERO_VIDEO_URL = '/videos/about-video.mp4'
+const HERO_POSTER_URL = '/videos/about-poster.png'
 
 export function AboutHeroManifest({ overline, title, subtitle, imageAlt }: AboutHeroProps) {
   return (
