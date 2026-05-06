@@ -142,11 +142,13 @@ function ProducerDetailView({
 
   return (
     <div className="bg-[#0B0F15] text-white">
+      {/* ── Hero cover ── */}
       <div className="relative h-56 w-full overflow-hidden bg-[#1A1F26]">
         <img src={coverImage} alt={producer.name_default} className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/35 to-transparent" />
       </div>
 
+      {/* ── Identity header ── */}
       <div className="relative px-5">
         <div className="absolute -top-12 left-5 z-10 h-24 w-24 rounded-[2rem] border-[4px] border-[#0B0F15] bg-[#0B0F15] p-1.5 shadow-2xl">
           <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[1.5rem] bg-white/5">
@@ -173,55 +175,58 @@ function ProducerDetailView({
         </div>
       </div>
 
+      {/* ── Stats ── */}
       <ul aria-label="Statistiques du partenaire" className="mt-8 grid grid-cols-3 gap-3 px-5 m-0 p-0 list-none">
         <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
           <Trees className="mb-2 h-5 w-5 text-emerald-400" aria-hidden="true" />
           <div className="text-2xl font-black leading-none text-white">{projects.length}</div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
-            PROJETS
-          </div>
+          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">PROJETS</div>
         </li>
         <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
           <Leaf className="mb-2 h-5 w-5 text-lime-400" aria-hidden="true" />
           <div className="text-2xl font-black leading-none text-white">{species.length}</div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
-            ESPECES
-          </div>
+          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">ESPÈCES</div>
         </li>
         <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
           <Package className="mb-2 h-5 w-5 text-sky-400" aria-hidden="true" />
           <div className="text-2xl font-black leading-none text-white">{products.length}</div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">
-            PRODUITS
-          </div>
+          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">PRODUITS</div>
         </li>
       </ul>
 
+      {/* ─────────────────────────────────────────────────────────────────────────
+          ESPÈCES — design BioDexCard borderless (cf. authenticated-profile.tsx)
+          Pas de carte autour : image directe + nom + rareté, scroll horizontal
+      ───────────────────────────────────────────────────────────────────────── */}
       {species.length > 0 ? (
         <section className="mt-10">
-          <h2 className="mb-4 px-5 text-xl font-bold tracking-tight">Especes a decouvrir</h2>
-          <ul aria-label="Espèces à découvrir" className="hide-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none">
+          <h2 className="mb-4 px-5 text-xl font-black tracking-tight text-white">
+            Espèces à découvrir
+          </h2>
+          <ul
+            aria-label="Espèces à découvrir"
+            className="flex list-none snap-x gap-6 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0"
+          >
             {species.map((entry) => (
               <li
                 key={entry.id}
-                className="group relative flex aspect-[4/5] w-40 shrink-0 snap-center flex-col overflow-hidden rounded-[2.5rem] border border-white/5 bg-white/5 p-3 transition-all active:scale-[0.98]"
+                className="relative block w-28 shrink-0 snap-center transition-transform duration-150 active:scale-[0.97]"
               >
-                <article className="w-full h-full flex flex-col">
-                <div className="mb-2 flex justify-end">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full border border-lime-400/20 bg-lime-400/20 shadow-lg">
-                    <Sparkles className="h-3.5 w-3.5 text-lime-400" aria-hidden="true" />
+                <article className="flex flex-col items-center gap-2">
+                  {/* Image borderless — aucune card autour */}
+                  <div className="w-full aspect-square relative flex items-center justify-center">
+                    <img
+                      src={entry.image}
+                      alt={entry.name}
+                      className="h-full w-full object-contain transition-all duration-700"
+                    />
                   </div>
-                </div>
-                <div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/5 bg-white/5">
-                  <img
-                    src={entry.image}
-                    alt={entry.name}
-                    className="h-full w-full scale-105 object-cover transition-all duration-700 group-hover:scale-110"
-                  />
-                </div>
-                <div className="mt-2.5 px-1">
-                  <p className="truncate text-sm font-bold leading-tight text-white">{entry.name}</p>
-                </div>
+                  <p className="text-sm font-medium text-center leading-snug text-white/90 truncate w-full px-1">
+                    {entry.name}
+                  </p>
+                  <p className={`text-[10px] font-bold uppercase tracking-widest ${entry.unlocked ? 'text-emerald-500/60' : 'text-white/30'}`}>
+                    {entry.unlocked ? 'DÉCOUVERT' : 'À DÉCOUVRIR'}
+                  </p>
                 </article>
               </li>
             ))}
@@ -229,102 +234,125 @@ function ProducerDetailView({
         </section>
       ) : null}
 
+      {/* ─────────────────────────────────────────────────────────────────────────
+          PROJETS — design big-card borderless (cf. projects-client.tsx)
+          Aspect 4/3, rounded-3xl, image plein-écran + texte sous l'image
+      ───────────────────────────────────────────────────────────────────────── */}
       {projects.length > 0 ? (
-        <section className="mt-10 w-full max-w-full overflow-hidden">
-          <h2 className="mb-4 px-5 text-xl font-bold tracking-tight text-white">
+        <section className="mt-10 px-5">
+          <h2 className="mb-5 text-xl font-black tracking-tight text-white">
             Explorez leurs projets
           </h2>
-
-          <ul aria-label="Projets du partenaire" className="ml-5 flex gap-4 overflow-x-auto overflow-y-hidden pb-4 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none">
+          <ul aria-label="Projets du partenaire" className="flex flex-col gap-8 m-0 p-0 list-none">
             {projects.map((project) => (
               <li key={project.id}>
-              <Link
-                href={project.slug ? `/projects/${project.slug}` : '/projects'}
-                className="group relative h-[160px] min-w-[240px] w-[240px] shrink-0 overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all active:scale-95 block"
-              >
-                <article className="w-full h-full">
-                {project.hero_image_url ? (
-                  <img
-                    src={project.hero_image_url}
-                    alt={project.name_default || ''}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                    <Leaf className="h-8 w-8 text-white/50" aria-hidden="true" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full p-4">
-                  <span className="mb-1.5 block text-[10px] font-black uppercase tracking-widest text-lime-400">
-                    {formatTypeLabel(project.type)}
-                  </span>
-                  <h4 className="truncate text-sm font-black leading-tight text-white">
-                    {project.name_default}
-                  </h4>
-                </div>
-                </article>
-              </Link>
+                <Link
+                  href={project.slug ? `/projects/${project.slug}` : '/projects'}
+                  className="group block text-left active:scale-[0.98] transition-transform duration-200"
+                >
+                  <article>
+                    {/* Image pleine largeur — même ratio 4/3 que la liste projets */}
+                    <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-3 bg-white/5">
+                      {project.hero_image_url ? (
+                        <img
+                          src={project.hero_image_url}
+                          alt={project.name_default || ''}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Leaf className="h-8 w-8 text-white/20" aria-hidden="true" />
+                        </div>
+                      )}
+                    </div>
+                    {/* Texte sous l'image — typo millimétrée identique à projects-client */}
+                    <div className="flex flex-col gap-0.5 px-1">
+                      <span className="text-[11px] font-black uppercase tracking-widest text-lime-400">
+                        {formatTypeLabel(project.type)}
+                      </span>
+                      <h3 className="text-[22px] font-black text-white leading-[1.1] tracking-tight text-balance">
+                        {project.name_default}
+                      </h3>
+                    </div>
+                  </article>
+                </Link>
               </li>
             ))}
           </ul>
         </section>
       ) : null}
 
+      {/* ─────────────────────────────────────────────────────────────────────────
+          PRODUITS — grille 2 colonnes, image borderless carrée + infos sous
+      ───────────────────────────────────────────────────────────────────────── */}
       {products.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="mb-4 px-5 text-xl font-bold tracking-tight text-white">Leurs produits</h2>
-          <ul aria-label="Produits du partenaire" className="ml-5 flex gap-4 overflow-x-auto pb-4 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none">
+        <section className="mt-10 px-5">
+          <h2 className="mb-5 text-xl font-black tracking-tight text-white">Leurs produits</h2>
+          <ul
+            aria-label="Produits du partenaire"
+            className="grid grid-cols-2 gap-x-4 gap-y-6 m-0 p-0 list-none"
+          >
             {products.map((product) => (
               <li key={product.id}>
-              <Link
-                href={product.slug ? `/products/${product.slug}` : '/products'}
-                className="group min-w-[150px] w-[150px] shrink-0 rounded-[2rem] border border-white/5 bg-[#1A1F26] p-3 shadow-xl transition-all active:scale-95 block"
-              >
-                <article className="w-full h-full flex flex-col">
-                <div className="mb-3 flex aspect-square w-full items-center justify-center overflow-hidden rounded-[1.5rem] bg-white/5">
-                  {product.image_url ? (
-                    <img
-                      src={product.image_url}
-                      alt={product.name_default || ''}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  ) : (
-                    <Leaf className="h-8 w-8 text-white/40" aria-hidden="true" />
-                  )}
-                </div>
-                <h4 className="mb-2 line-clamp-2 text-xs font-black leading-tight text-white">
-                  {product.name_default}
-                </h4>
-                {typeof product.price_points === 'number' ? (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-black tracking-tighter text-lime-400">
-                      {product.price_points.toLocaleString('fr-FR')}
-                    </span>
-                    <Sparkles className="h-3 w-3 text-lime-400" aria-hidden="true" />
-                  </div>
-                ) : null}
-                </article>
-              </Link>
+                <Link
+                  href={product.slug ? `/products/${product.slug}` : '/products'}
+                  className="group block active:scale-[0.97] transition-transform duration-150"
+                >
+                  <article className="flex flex-col gap-2">
+                    {/* Image carrée borderless — fond subtil pour les images transparentes */}
+                    <div className="relative aspect-square w-full overflow-hidden rounded-[1.75rem] bg-white/5">
+                      {product.image_url ? (
+                        <img
+                          src={product.image_url}
+                          alt={product.name_default || ''}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center">
+                          <Leaf className="h-8 w-8 text-white/20" aria-hidden="true" />
+                        </div>
+                      )}
+                    </div>
+                    {/* Nom + prix */}
+                    <div className="px-0.5">
+                      <h4 className="line-clamp-2 text-[13px] font-bold leading-snug text-white">
+                        {product.name_default}
+                      </h4>
+                      {typeof product.price_points === 'number' ? (
+                        <div className="mt-1 flex items-center gap-1">
+                          <Sparkles className="h-3 w-3 text-amber-400" aria-hidden="true" />
+                          <span className="text-sm font-black tracking-tighter text-amber-400">
+                            {product.price_points.toLocaleString('fr-FR')}
+                          </span>
+                          <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
+                            crédits
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+                  </article>
+                </Link>
               </li>
             ))}
           </ul>
         </section>
       ) : null}
 
+      {/* ── Description du partenaire ── */}
       <section className="mt-10 px-5">
         <h2 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 m-0">
-          L'histoire du partenaire
+          L&apos;histoire du partenaire
         </h2>
         <p className="text-[15px] font-medium leading-relaxed text-white/70 text-pretty">
           {producer.description_default}
         </p>
       </section>
 
+      {/* ── Certifications ── */}
       {producer.certifications.length > 0 ? (
         <section className="mt-8 px-5">
           <h2 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 m-0">
-            Certifications & labels
+            Certifications &amp; labels
           </h2>
           <ul aria-label="Certifications et labels" className="flex flex-wrap gap-2.5 m-0 p-0 list-none">
             {producer.certifications.map((item) => (
@@ -340,6 +368,7 @@ function ProducerDetailView({
         </section>
       ) : null}
 
+      {/* ── CTA site web ── */}
       {producer.contact_website ? (
         <div className="mt-12 border-t border-white/5 px-5 pb-12 pt-8">
           <a
