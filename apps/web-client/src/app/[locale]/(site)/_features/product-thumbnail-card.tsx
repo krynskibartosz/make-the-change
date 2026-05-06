@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react'
+import { Hexagon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -45,8 +45,8 @@ export function ProductThumbnailCard({
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-lime-500/10 via-[#1A1F26] to-[#0B0F15]">
-            <Sparkles className="w-6 h-6 text-white/20" />
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-amber-500/10 via-[#1A1F26] to-[#0B0F15]">
+            <Hexagon className="w-6 h-6 text-white/20" />
           </div>
         )}
       </div>
@@ -54,8 +54,8 @@ export function ProductThumbnailCard({
       <div className="flex flex-col px-1">
         <h3 className="text-sm font-bold text-white leading-snug line-clamp-2 mb-1">{title}</h3>
         <div className="flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-lime-400 shrink-0" />
-          <span className="text-[13px] font-black text-lime-400 tabular-nums">{formattedPrice}</span>
+          <Hexagon className="w-3 h-3 text-amber-400 shrink-0" />
+          <span className="text-[13px] font-black text-amber-400 tabular-nums">{formattedPrice} CI</span>
         </div>
       </div>
     </Link>

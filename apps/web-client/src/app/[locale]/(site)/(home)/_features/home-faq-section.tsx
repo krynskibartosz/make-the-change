@@ -12,23 +12,38 @@ type HomeFaqSectionProps = {
 
 export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
   const t = useTranslations('home_v2')
-  const [openItem, setOpenItem] = useState<string | null>('model')
+  const [openItem, setOpenItem] = useState<string | null>('money_path')
 
   const faqItems = [
     {
-      id: 'model',
-      question: t('faq.items.model.question'),
-      answer: t('faq.items.model.answer'),
+      id: 'money_path',
+      question: t('faq.items.money_path.question'),
+      answer: t('faq.items.money_path.answer'),
     },
     {
-      id: 'freedom',
-      question: t('faq.items.freedom.question'),
-      answer: t('faq.items.freedom.answer'),
+      id: 'don_vs_soutien',
+      question: t('faq.items.don_vs_soutien.question'),
+      answer: t('faq.items.don_vs_soutien.answer'),
+    },
+    {
+      id: 'graines',
+      question: t('faq.items.graines.question'),
+      answer: t('faq.items.graines.answer'),
+    },
+    {
+      id: 'credits',
+      question: t('faq.items.credits.question'),
+      answer: t('faq.items.credits.answer'),
     },
     {
       id: 'impact',
       question: t('faq.items.impact.question'),
       answer: t('faq.items.impact.answer'),
+    },
+    {
+      id: 'products',
+      question: t('faq.items.products.question'),
+      answer: t('faq.items.products.answer'),
     },
   ] as const
 

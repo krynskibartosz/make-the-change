@@ -1171,30 +1171,30 @@
   },
   "home_v2": {
     "hero": {
-      "title": "Soutenez la biodiversité, récoltez les bénéfices.",
-      "subtitle": "Soutenez des projets concrets pour la biodiversité. Votre contribution est transformée en points que vous pouvez utiliser pour obtenir des produits éthiques et responsables qui participent activement à la préservation du vivant.",
+      "title": "Soutenez le vivant, voyez votre impact grandir.",
+      "subtitle": "Chaque geste soutient un projet réel, débloque des découvertes et vous rapproche du vivant.",
       "cta": "Découvrir les projets"
     },
     "how_it_works": {
-      "title": "Cultivez votre impact en 3 étapes",
+      "title": "Agissez en 3 étapes",
       "step_1": {
         "title": "1. Choisissez un projet",
-        "description": "Sélectionnez un domaine qui vous tient à cœur (forêt, océan, apiculture...)."
+        "description": "Découvrez des initiatives liées aux abeilles, aux forêts, aux océans ou aux espèces menacées."
       },
       "step_2": {
-        "title": "2. Parrainez & Cumulez",
-        "description": "Soutenez des projets à partir de 1€. La somme engagée est instantanément convertie en points sur votre compte",
-        "check_points": "1€ = 1 point",
-        "check_secure": "Paiement sécurisé",
-        "check_verified": "Impact vérifié"
+        "title": "2. Faites un don ou soutenez un producteur",
+        "description": "Votre geste est relié à un projet concret, avec une explication claire de l'impact attendu.",
+        "check_points": "Projet documenté",
+        "check_secure": "Suivi transparent",
+        "check_verified": "Partenaire identifié"
       },
       "step_3": {
-        "title": "Utilisez vos points comme vous le souhaitez",
-        "description": "Soutenez directement des projets pour la biodiversité ou échangez-les contre des produits engagés en lien avec les projets."
+        "title": "3. Suivez votre impact",
+        "description": "Débloquez des espèces dans le BioDex, gagnez des Graines et utilisez vos Credits Impact quand votre soutien est lié à un producteur."
       }
     },
     "projects": {
-      "title": "Faites grandir vos projets",
+      "title": "Soutenez des projets concrets",
       "view_all": "Voir tous les projets",
       "support_cta": "Soutenir ce projet",
       "collected_suffix": "collectés",
@@ -1204,12 +1204,12 @@
       "title": "Récoltez les fruits de votre impact",
       "view_all": "Voir toute la boutique",
       "discover": "Découvrir",
-      "points_label": "points"
+      "points_label": "CI"
     },
     "gamification": {
-      "title": "L'écologie devient (enfin) un jeu collectif.",
-      "description": "Parce que sauver la biodiversité ne devrait pas être solitaire. Complétez votre BioDex, maintenez vos Séries et rejoignez une Tribu pour décupler votre impact.",
-      "cta": "Découvrir la communauté",
+      "title": "L'impact devient une aventure collective.",
+      "description": "Parce qu'agir pour le vivant devient plus motivant quand on avance ensemble. Complétez votre BioDex, maintenez vos Séries et rejoignez une Faction pour décupler votre impact.",
+      "cta": "Découvrir l'aventure",
       "biodex": {
         "title": "Le BioDex (Chouette Effraie)",
         "subtitle": "Collection vivante",
@@ -1217,7 +1217,7 @@
       },
       "streak": {
         "title": "Les Séries",
-        "description": "Gardez le rythme au quotidien et gagnez des points bonus."
+        "description": "Gardez le rythme au quotidien et gagnez des Graines bonus."
       },
       "tribes": {
         "title": "Les Tribus",
@@ -1226,23 +1226,35 @@
     },
     "ecosystem": {
       "title": "Ils rendent cette aventure possible.",
-      "subtitle": "ONG certifiées, producteurs locaux et marques éthiques de confiance."
+      "subtitle": "Associations, producteurs et marques sélectionnés avec soin."
     },
     "faq": {
       "title": "En toute transparence.",
       "subtitle": "Vous avez des questions ? C'est normal. Voici nos réponses.",
       "items": {
-        "model": {
-          "question": "Comment pouvez-vous m'offrir des produits contre mon soutien ?",
-          "answer": "C'est le principe du circuit vertueux. Votre contribution financière va directement soutenir le projet sur le terrain. En échange, nos producteurs et artisans partenaires mettent à disposition des produits de leurs récoltes. 1€ soutenu = 1 point à dépenser, sans frais cachés."
+        "money_path": {
+          "question": "Comment savoir où va mon argent ?",
+          "answer": "La majorité de votre contribution va directement au projet sur le terrain. Une partie permet le fonctionnement de l'application et la création des avantages liés à votre compte."
         },
-        "freedom": {
-          "question": "Suis-je obligé(e) de m'engager tous les mois ?",
-          "answer": "Absolument pas. Vous êtes totalement libre. Vous pouvez faire une action ponctuelle ou mettre en place une contribution mensuelle. Vous arrêtez quand vous voulez, en un clic."
+        "don_vs_soutien": {
+          "question": "Quelle différence entre don et soutien ?",
+          "answer": "Un don pur va intégralement au projet et vous rapporte des Graines pour votre progression. Un soutien à un producteur vous permet, en plus de l'impact, de générer des Credits Impact à utiliser dans la boutique."
+        },
+        "graines": {
+          "question": "Que sont les Graines ?",
+          "answer": "Les Graines sont la monnaie d'expérience de l'application. Elles récompensent votre régularité, débloquent des espèces dans le BioDex et vous font progresser dans l'aventure."
+        },
+        "credits": {
+          "question": "Que sont les Credits Impact ?",
+          "answer": "Les Credits Impact sont générés lorsque vous soutenez un producteur partenaire. Ils vous permettent d'obtenir des produits éthiques issus de notre écosystème."
         },
         "impact": {
           "question": "Comment être sûr que mon action a un vrai impact ?",
-          "answer": "Dans l'application, vous suivez l'avancée de vos projets via le fil d'actualité. Votre BioDex et les statistiques de votre tribu se mettent à jour avec des données terrain vérifiées."
+          "answer": "Dans l'application, vous suivez l'avancée de vos projets via le fil d'actualité. Votre BioDex et les statistiques de votre tribu se mettent à jour avec des données terrain."
+        },
+        "products": {
+          "question": "Pourquoi puis-je obtenir des produits ?",
+          "answer": "Quand vous soutenez un projet producteur, une partie de votre soutien ouvre des Credits Impact utilisables auprès de partenaires sélectionnés."
         }
       }
     },
@@ -1250,11 +1262,11 @@
       "title": "Prêt à faire la différence ?",
       "subtitle": "Rejoignez notre communauté de citoyens engagés et contribuez concrètement à la préservation de la biodiversité.",
       "cta": "Découvrir les projets",
-      "microtext": "Inscription gratuite en 30 secondes.",
+      "microtext": "Commencez gratuitement, sans engagement.",
       "reassurance": {
         "secure": "Paiement 100% sécurisé",
         "impact": "Impact vérifié et mesurable",
-        "points": "1€ engagé = 1 point boutique"
+        "points": "1€ soutenu = 1 CI"
       }
     }
   },

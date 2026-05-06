@@ -30,14 +30,14 @@ export function HomeHeroContent({ title, subtitle, cta }: HomeHeroContentProps) 
         variants={childVariants}
         className="text-[40px] leading-[1.15] font-black text-white tracking-tight mb-4"
       >
-        Soutenez la biodiversité, récoltez les bénéfices.
+        {title}
       </motion.h1>
 
       <motion.p
         variants={childVariants}
         className="text-white/80 text-[16px] leading-relaxed mb-8"
       >
-        Transformez votre soutien à des projets concrets en points. Utilisez-les pour obtenir des récompenses éthiques et responsables.
+        {subtitle}
       </motion.p>
 
       <motion.div variants={childVariants}>
@@ -45,7 +45,7 @@ export function HomeHeroContent({ title, subtitle, cta }: HomeHeroContentProps) 
           href="/projects"
           className="flex w-full items-center justify-center bg-lime-400 text-[#0B0F15] font-bold text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-lg"
         >
-          Découvrir les projets
+          {cta}
         </Link>
       </motion.div>
     </motion.div>

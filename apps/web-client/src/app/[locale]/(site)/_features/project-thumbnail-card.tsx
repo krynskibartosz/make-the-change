@@ -22,8 +22,8 @@ export function formatEcologicalImpact(
       const bees = Math.floor(currentFunding / 390) * 15000
       if (bees <= 0) return undefined
       return bees >= 1000
-        ? `${Math.round(bees / 1000)}k abeilles protégées`
-        : `${bees} abeilles protégées`
+        ? `${Math.round(bees / 1000)}k abeilles soutenues`
+        : `${bees} abeilles soutenues`
     }
     case 'olive_tree': {
       const trees = Math.floor(currentFunding / 50)
