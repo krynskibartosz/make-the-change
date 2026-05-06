@@ -182,12 +182,12 @@ export async function ProjectQuickView({
         {/* Glow ambiance haut – halo discret au-dessus du hero */}
         <div
           className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
-          style={{ backgroundColor: glowRgba(glow, 0.18) }}
+          style={{ backgroundColor: glowRgba(glow, 0.12) }}
         />
         {/* Glow de destination bas – lumière d'appel vers le CTA, position originale */}
         <div
           className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full blur-3xl"
-          style={{ backgroundColor: glowRgba(glow, 0.22) }}
+          style={{ backgroundColor: glowRgba(glow, 0.15) }}
         />
       </div>
 
