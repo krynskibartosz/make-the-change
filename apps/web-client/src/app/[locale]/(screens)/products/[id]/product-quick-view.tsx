@@ -15,8 +15,8 @@ import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { ProductWithRelations } from './product-detail-data'
 import { ProductFavoriteButton } from './product-favorite-button'
 import { ProductShareButton } from './product-share-button'
-import { ProductCheckoutView } from './product-checkout-view'
-import { ProductFiatCheckoutView } from './product-fiat-checkout-view'
+import { ProductCheckoutView } from './_features/product-checkout-view'
+import { ProductFiatCheckoutView } from './_features/product-fiat-checkout-view'
 
 type ProductQuickViewProps = {
   product: ProductWithRelations

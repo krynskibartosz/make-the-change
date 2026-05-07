@@ -1,0 +1,719 @@
+'use client'
+
+import {
+  Button,
+  Card,
+  CardContent,
+} from '@make-the-change/core/ui'
+import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { ArrowLeft, CheckCircle, CheckCircle2, Lock, Loader2 } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
+import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter } from '@/i18n/navigation'
+import { useHaptic } from '@/hooks/use-haptic'
+import { cn, formatPoints } from '@/lib/utils'
+import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-impact-calculator'
+import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
+import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
+import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
+
+type FlowStep = 'impact' | 'payment' | 'success'
+type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
+const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
+const REWARD_PREVIEW_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
+// Helpers moved to bottom
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
+
+const stripeAppearance = {
+  theme: 'stripe',
+  variables: {
+    colorPrimary: '#a3e635',
+    colorBackground: 'rgba(255,255,255,0.02)',
+    colorText: '#ffffff',
+    colorDanger: '#ef4444',
+    borderRadius: '12px',
+  },
+  rules: {
+    '.Input': {
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      border: '1px solid rgba(255,255,255,0.12)',
+      boxShadow: 'none',
+    },
+    '.Input:focus': {
+      border: '1px solid rgba(163,230,53,0.6)',
+      boxShadow: '0 0 0 1px rgba(163,230,53,0.3)',
+    },
+    '.Label': {
+      color: 'rgba(255,255,255,0.65)',
+      fontWeight: '600',
+      letterSpacing: '0.02em',
+    },
+  },
+} as const
+
+type ProjectDonateOneFlowProps = {
+  project: {
+    id: string
+    slug: string
+    name: string
+    type: string
+    coverImage?: string | null
+    currentFunding?: number | null
+    targetBudget?: number | null
+    donationOptions: DonationOption[]
+    expectedImpact?: ProjectImpact | null
+  }
+  presentation?: 'modal' | 'page'
+  isAuthenticated: boolean
+  source?: string
+  discoveredSpeciesId?: string | null
+  initialOptionId?: string | null
+}
+
+export function ProjectDonateOneFlow({
+  project,
+  presentation = 'page',
+  isAuthenticated,
+  discoveredSpeciesId = null,
+  initialOptionId = null,
+}: ProjectDonateOneFlowProps) {
+  const t = useTranslations('projects.donate_page')
+  const router = useRouter()
+  const haptic = useHaptic()
+
+  const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string; image_url?: string | null } | null>(null)
+
+  const quickAmounts = [20, 50, 100]
+  const defaultAmount = 20
+
+  // État pour le montant (comme dans le flow soutien)
+  const [amountEur, setAmountEur] = useState(() => {
+    if (initialOptionId) {
+      const option = project.donationOptions.find((opt) => opt.id === initialOptionId)
+      return option?.price || defaultAmount
+    }
+    return defaultAmount
+  })
+  const [amountInput, setAmountInput] = useState(String(amountEur))
+  const amountInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (discoveredSpeciesId) {
+      getMockSpeciesContextClient(discoveredSpeciesId).then((species) => {
+        if (species) {
+          setDiscoveredSpecies({ name_default: species.name_default, image_url: species.image_url })
+        }
+      })
+    }
+  }, [discoveredSpeciesId])
+
+  // Mettre à jour amountInput quand amountEur change
+  useEffect(() => {
+    setAmountInput(String(amountEur))
+  }, [amountEur])
+
+  const [step, setStep] = useState<FlowStep>('impact')
+  const [guestEmail, setGuestEmail] = useState('')
+  const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
+  const [claimSaved, setClaimSaved] = useState(false)
+  const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
+  const [phase, setPhase] = useState<LootPhase>('tension')
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const stepIndex = FLOW_STEPS.indexOf(step)
+
+  const seeds = useMemo(() => {
+    const option = project.donationOptions.find((opt) => opt.price === amountEur)
+    return option?.rewards.seeds || Math.max(1, Math.round(amountEur))
+  }, [amountEur, project.donationOptions])
+
+  const formattedAmount = formatAmountNumber(amountEur)
+  const donationMetrics = getProjectImpactMetrics({
+    amount: amountEur,
+    projectType: project.type,
+    isDonationProject: true,
+    donationOptions: project.donationOptions,
+    projectImpact: project.expectedImpact ?? null,
+  })
+  // Préférer l'impact déclaré sur l'option de don sélectionnée ; fallback sur le ratio par défaut.
+  const matchedOption = project.donationOptions.find((opt) => opt.price === amountEur)
+  const unitsRestored = donationMetrics.kind === 'reef'
+    ? donationMetrics.corals
+    : matchedOption?.impact.unitsRestored ?? Math.max(1, Math.round(amountEur / 30))
+
+  useEffect(() => {
+    if (step !== 'success') return
+
+    setPhase('tension')
+    haptic.mediumTap()
+
+    const flashTimerId = window.setTimeout(() => {
+      setPhase('flash')
+      haptic.trigger([30, 200, 30])
+    }, 1300)
+    const euphoriaTimerId = window.setTimeout(() => {
+      setPhase('euphoria')
+      haptic.trigger([60, 50, 80])
+    }, 1500)
+    const resolvedTimerId = window.setTimeout(() => setPhase('resolved'), 2100)
+    const boomTimerId = window.setTimeout(() => {
+      haptic.trigger([250])
+    }, 1720)
+
+    return () => {
+      window.clearTimeout(flashTimerId)
+      window.clearTimeout(euphoriaTimerId)
+      window.clearTimeout(resolvedTimerId)
+      window.clearTimeout(boomTimerId)
+    }
+  }, [haptic, step])
+
+  useEffect(() => {
+    if (step !== 'success' || phase !== 'euphoria') return
+
+    void import('canvas-confetti')
+      .then(({ default: confetti }) => {
+        confetti({
+          particleCount: 100,
+          spread: 72,
+          origin: { y: 0.6 },
+          colors: ['#a3e635', '#facc15', '#f59e0b'],
+        })
+        window.setTimeout(() => {
+          confetti({
+            particleCount: 80,
+            spread: 90,
+            origin: { y: 0.58 },
+            colors: ['#84cc16', '#eab308', '#fbbf24'],
+          })
+        }, 260)
+      })
+      .catch(() => {})
+  }, [step, phase])
+
+  useEffect(() => {
+    if (presentation !== 'modal') return
+
+    const closeButton = document.querySelector('button[aria-label="Fermer"]') as HTMLButtonElement | null
+    if (!closeButton) return
+
+    const shouldShowCloseButton = !(step === 'success' && phase !== 'resolved')
+    closeButton.style.opacity = shouldShowCloseButton ? '1' : '0'
+    closeButton.style.pointerEvents = shouldShowCloseButton ? 'auto' : 'none'
+
+    return () => {
+      closeButton.style.opacity = '1'
+      closeButton.style.pointerEvents = 'auto'
+    }
+  }, [presentation, step, phase])
+
+  const handleAmountInput = (value: string) => {
+    const digitsOnly = value.replace(/[^\d]/g, '')
+    setAmountInput(digitsOnly)
+    if (digitsOnly.length === 0) {
+      return
+    }
+
+    const parsed = Number(digitsOnly)
+    if (!Number.isFinite(parsed)) {
+      return
+    }
+
+    setAmountEur(parsed)
+  }
+
+  const handleAmountBlur = () => {
+    if (amountInput.trim().length === 0) {
+      setAmountEur(defaultAmount)
+      setAmountInput(String(defaultAmount))
+      return
+    }
+
+    setAmountInput(String(amountEur))
+  }
+
+  const goToPayment = () => {
+    haptic.heartbeat()
+    setGuestEmailError(null)
+    setStep('payment')
+  }
+
+  const goToSuccess = () => {
+    if (!isAuthenticated) {
+      if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) {
+        setGuestEmailError('Ajoutez un email valide pour continuer.')
+        return
+      }
+    }
+
+    setGuestEmailError(null)
+    setIsProcessing(true)
+    setTimeout(() => {
+      setIsProcessing(false)
+      setStep('success')
+    }, 1500)
+  }
+
+  const submitClaim = () => {
+    if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) {
+      return
+    }
+    setIsSendingMagicLink(true)
+    setTimeout(() => {
+      setIsSendingMagicLink(false)
+      setClaimSaved(true)
+      setTimeout(() => {
+        router.replace('/profile/biodex')
+      }, 2000)
+    }, 1200)
+  }
+
+  const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
+
+  return (
+    <div
+      className={cn(
+        'relative flex min-h-0 flex-col overflow-x-hidden bg-transparent',
+        presentation === 'page'
+          ? 'mx-auto w-full max-w-3xl px-4 pb-10 pt-6 md:px-6 md:pt-10'
+          : 'h-full w-full',
+      )}
+    >
+      {presentation === 'page' ? (
+        <header className="mb-4 px-1">
+          <Button
+            variant="ghost"
+            onClick={() => router.push(`/projects/${project.slug}`)}
+            className="mb-3 h-auto justify-start px-0 py-0 text-xs font-semibold uppercase tracking-widest text-muted-foreground transition-colors hover:bg-transparent hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {t('back_to_project')}
+          </Button>
+          <h1 className="text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+            {project.name}
+          </h1>
+        </header>
+      ) : null}
+
+      <div
+        className={cn(
+          'relative min-h-0 flex-1 overflow-x-hidden',
+          'pb-24',
+        )}
+      >
+        {presentation === 'modal' && step === 'payment' ? (
+          <button
+            onClick={() => setStep('impact')}
+            className="absolute top-4 left-4 z-30 p-2"
+            aria-label="Retour"
+          >
+            <ArrowLeft className="w-5 h-5 text-white/70" />
+          </button>
+        ) : null}
+
+        <div
+          className="flex h-full min-h-0 transition-transform duration-500 ease-out will-change-transform"
+          style={{ transform: `translateX(-${stepIndex * 100}%)` }}
+        >
+          {/* Étape 1 : Impact (sélection montant) */}
+          <section
+            className={cn(
+              'min-h-0 w-full shrink-0 overflow-y-auto',
+              'pb-[calc(200px+env(safe-area-inset-bottom))]',
+              presentation === 'page' ? 'pt-2' : '',
+            )}
+          >
+            <div className={cn('flex flex-col gap-8 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+              <div className="flex flex-col items-center justify-center text-center">
+                <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
+                  Choisissez votre montant
+                </p>
+                <div className="flex w-full items-baseline justify-center">
+                  <div
+                    className="flex cursor-text items-baseline justify-center gap-2 rounded-3xl bg-white/5 px-8 py-4 transition-colors hover:bg-white/10"
+                    onClick={() => amountInputRef.current?.focus()}
+                  >
+                    <input
+                      ref={amountInputRef}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      size={Math.max(amountInput.length, 2)}
+                      value={amountInput}
+                      onChange={(event) => handleAmountInput(event.target.value)}
+                      onBlur={handleAmountBlur}
+                      aria-label="Montant"
+                      className="w-auto max-w-[9ch] bg-transparent text-center text-7xl leading-none font-black tracking-tighter text-white tabular-nums caret-lime-400 outline-none ring-0 focus:outline-none focus:ring-0"
+                    />
+                    <span className="mb-2 text-4xl font-semibold text-white/60">€</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {quickAmounts.map((boundedValue) => (
+                  <button
+                    key={boundedValue}
+                    type="button"
+                    onClick={() => {
+                      setAmountEur(boundedValue)
+                      setAmountInput(String(boundedValue))
+                    }}
+                    className={cn(
+                      'rounded-full px-5 py-2 text-sm font-bold transition-all active:scale-95',
+                      amountEur === boundedValue
+                        ? 'bg-lime-400 text-black'
+                        : 'bg-white/5 text-white hover:bg-white/10',
+                    )}
+                  >
+                    {formatAmountPlain(boundedValue)}
+                  </button>
+                ))}
+              </div>
+
+              <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
+                <ProjectImpactCalculator
+                  baseAmount={defaultAmount}
+                  amount={amountEur}
+                  mode="checkout"
+                  isDonationProject={true}
+                  donationOptions={project.donationOptions}
+                  projectType={project.type}
+                  projectImpact={project.expectedImpact ?? null}
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Étape 2 : Payment */}
+          <section
+            className={cn(
+              'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(200px+env(safe-area-inset-bottom))]',
+              presentation === 'page' ? 'pt-2' : '',
+            )}
+          >
+            <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+              <div className="text-center">
+                <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
+                  Votre don au projet
+                </p>
+                <div className="mb-8 flex items-baseline justify-center gap-1.5">
+                  <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
+                    {formattedAmount}
+                  </span>
+                  <span className="text-4xl font-semibold text-white/50">€</span>
+                </div>
+
+                <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
+                  <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
+                    Donnez & Participez
+                  </h3>
+                  
+                  <p className="text-white/60 text-[14px] leading-relaxed mb-4">
+                    Votre don soutient directement ce projet et vous fait progresser dans le BioDex.
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    <div className="bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <CurrencyIcon kind="seeds" className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-bold">+{formatPoints(seeds)} graines</span>
+                    </div>
+
+                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-medium">Paiement sécurisé</span>
+                    </div>
+
+                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                      <CheckCircle className="w-3.5 h-3.5" />
+                      <span className="text-[12px] font-medium">Impact documenté</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {!isAuthenticated ? (
+                <div className="w-full">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/50">
+                    Email pour le reçu
+                  </label>
+                  <input
+                    type="email"
+                    value={guestEmail}
+                    onChange={(event) => setGuestEmail(event.target.value)}
+                    placeholder="vous@email.com"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
+                    required
+                  />
+                  {guestEmailError ? (
+                    <p className="mt-2 text-xs font-semibold text-destructive">{guestEmailError}</p>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {stripePromise && amountEur > 0 ? (
+                <Elements
+                  key={amountEur}
+                  stripe={stripePromise}
+                  options={{
+                    mode: 'payment',
+                    amount: Math.max(100, amountEur * 100),
+                    currency: 'eur',
+                    appearance: stripeAppearance,
+                  }}
+                >
+                  <div className="mt-8 flex w-full flex-col gap-4">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
+                      <ExpressCheckoutElement onConfirm={() => {}} />
+                    </div>
+
+                    <div className="my-6 flex items-center gap-4">
+                      <div className="h-px flex-1 bg-white/10" />
+                      <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
+                      <div className="h-px flex-1 bg-white/10" />
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                      <PaymentElement />
+                    </div>
+                  </div>
+                </Elements>
+              ) : (
+                <div className="mt-8 flex w-full flex-col gap-4">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
+                    Apple Pay / Google Pay indisponible (clé Stripe manquante)
+                  </div>
+                  <div className="my-6 flex items-center gap-4">
+                    <div className="h-px flex-1 bg-white/10" />
+                    <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
+                    <div className="h-px flex-1 bg-white/10" />
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
+                    Module carte bancaire Stripe
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Étape 3 : Success */}
+          <section
+            className={cn(
+              'min-h-0 w-full shrink-0 overflow-y-auto overflow-x-hidden pb-[calc(220px+env(safe-area-inset-bottom))]',
+              presentation === 'page' ? 'pt-2' : '',
+            )}
+          >
+            <div className="relative flex flex-col items-center overflow-x-hidden px-4 pt-16 pb-6 [@media(max-height:800px)]:pt-10 [@media(max-height:800px)]:pb-4">
+
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.9, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+                className="mt-6 text-center text-4xl font-black tracking-tight text-white [@media(max-height:800px)]:mt-2 [@media(max-height:800px)]:text-3xl"
+              >
+                Don confirmé !
+              </motion.h1>
+              <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
+                Votre don de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}
+                <span className="font-bold text-white tabular-nums">{unitsRestored}</span> coraux du projet.
+              </p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.4 }}
+                className="flex-1 flex flex-col items-center justify-center gap-4 my-4 w-full"
+              >
+                <div className="relative mx-auto w-64 h-64 flex items-center justify-center [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56">
+                  <div
+                    className={cn(
+                      'absolute top-1/2 left-1/2 z-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(132,204,22,0.35)_0%,rgba(132,204,22,0)_68%)] transition-all duration-700 ease-out',
+                      phase === 'euphoria' || phase === 'resolved' ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
+                    )}
+                  />
+                  <div
+                    className={cn(
+                      'absolute top-1/2 left-1/2 z-20 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0)_65%)] transition-all duration-200',
+                      phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-75',
+                    )}
+                  />
+                  <img
+                    src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
+                    alt="Espèce débloquée"
+                    className={cn(
+                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                      phase === 'tension' ? 'brightness-0 opacity-50 scale-90 animate-pulse' : '',
+                      phase === 'flash' ? 'brightness-200 opacity-100 scale-95' : '',
+                      phase === 'euphoria' || phase === 'resolved'
+                        ? 'brightness-100 opacity-100 scale-110 drop-shadow-[0_20px_50px_rgba(132,204,22,0.3)]'
+                        : '',
+                    )}
+                    onError={(event) => {
+                      event.currentTarget.style.display = 'none'
+                    }}
+                  />
+                  <div
+                    className={cn(
+                      'absolute inset-0 flex items-center justify-center z-30 transition-all duration-300 ease-in',
+                      phase === 'tension' ? 'opacity-100 scale-100' : 'opacity-0 scale-[3] blur-sm',
+                    )}
+                  >
+                    <Lock className="h-12 w-12 text-white/80 [@media(max-height:800px)]:h-10 [@media(max-height:800px)]:w-10" />
+                  </div>
+                </div>
+
+                <div className="mt-6 text-center flex flex-col items-center gap-3">
+                  <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
+                    Nouvelle espèce débloquée
+                  </span>
+                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
+                  <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.28)] [@media(max-height:800px)]:text-xl">
+                    <CurrencyAmount kind="seeds" value={seeds} showLabel className="text-2xl font-black [@media(max-height:800px)]:text-xl" />
+                  </p>
+                  <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
+                    Pour faire progresser votre aventure
+                  </p>
+                </div>
+              </motion.div>
+
+              {!isAuthenticated && !claimSaved ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.35 }}
+                  className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6"
+                >
+                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre {discoveredSpecies?.name_default || 'Chouette Effraie'} !</h3>
+                  <p className="mb-4 text-sm text-white/60">
+                    Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
+                  </p>
+                  <div className="grid gap-2">
+                    <p className="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 flex items-center text-base text-white/60 truncate">
+                      {guestEmail}
+                    </p>
+                    <Button
+                      type="button"
+                      onClick={submitClaim}
+                      className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
+                      disabled={isSendingMagicLink}
+                    >
+                      {isSendingMagicLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      Créer mon compte en 1 clic
+                    </Button>
+                  </div>
+                </motion.div>
+              ) : null}
+
+              {claimSaved && !isAuthenticated ? (
+                <motion.p 
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 inline-flex w-full items-center gap-3 rounded-xl border border-lime-400/30 bg-lime-400/10 p-4 text-left text-sm font-semibold text-lime-300 shadow-sm"
+                >
+                  <CheckCircle2 className="h-6 w-6 shrink-0" />
+                  <span>
+                    <span className="block font-black text-lime-400 mb-0.5">Vérifiez votre boîte mail !</span>
+                    Un lien magique vous y attend pour sécuriser votre espèce.
+                  </span>
+                </motion.p>
+              ) : null}
+            </div>
+          </section>
+        </div>
+      </div>
+
+      {step === 'impact' ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+            <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-emerald-300">
+              Vous allez recevoir <CurrencyAmount kind="seeds" value={seeds} showLabel className="font-black" />
+            </p>
+            <Button
+              type="button"
+              onClick={goToPayment}
+              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+            >
+              Faire un don
+            </Button>
+        </div>
+      ) : null}
+
+      {step === 'payment' ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+          <Button
+            type="button"
+            disabled={isProcessing}
+            onClick={goToSuccess}
+            className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Traitement en cours...
+              </>
+            ) : (
+              <>
+                <Lock className="h-5 w-5" />
+                {`Payer ${formattedAmount} €`}
+              </>
+            )}
+          </Button>
+        </div>
+      ) : null}
+
+      {step === 'success' && (isAuthenticated || claimSaved) ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+          <Button
+            type="button"
+            onClick={() => {
+              if (discoveredSpeciesId) {
+                router.replace(`/profile/biodex/${discoveredSpeciesId}`)
+                return
+              }
+              router.replace('/profile/biodex')
+            }}
+            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+          >
+            Admirer dans mon BioDex
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => {
+              router.replace(`/projects/${project.slug}`)
+            }}
+            className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
+          >
+            Retour au projet
+          </Button>
+        </div>
+      ) : null}
+
+      {showGuestClaimFooter ? (
+        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
+          <Button
+            type="button"
+            disabled={isSendingMagicLink}
+            onClick={submitClaim}
+            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
+          >
+            {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+            Créer mon compte en 1 clic
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function formatAmountPlain(value: number): string {
+  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
+}
+
+function formatAmountNumber(value: number): string {
+  return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
+}

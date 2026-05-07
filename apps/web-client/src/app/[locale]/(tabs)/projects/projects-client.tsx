@@ -74,7 +74,7 @@ type ClientProject = {
 }
 
 const ProjectsMapView = dynamic(
-  () => import('./components/projects-maplibre-view').then((module) => module.ProjectsMapView),
+  () => import('./_components/projects-maplibre-view').then((module) => module.ProjectsMapView),
   {
     ssr: false,
     loading: () => null,

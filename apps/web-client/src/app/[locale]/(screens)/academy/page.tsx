@@ -680,7 +680,7 @@ export default function AcademyPage() {
     <FullScreenSlideModal
       headerMode="none"
       className="relative overflow-x-hidden bg-[#05050A] font-sans text-white"
-      contentClassName="pb-[max(1rem,env(safe-area-inset-bottom))]"
+      contentClassName="overflow-y-auto overscroll-contain pb-[max(1rem,env(safe-area-inset-bottom))]"
     >
       <div
         className="pointer-events-none absolute inset-0 z-0 opacity-20"

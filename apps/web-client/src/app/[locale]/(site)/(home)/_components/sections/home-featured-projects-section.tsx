@@ -1,0 +1,27 @@
+import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
+import { FeaturedProjectsList } from '@/app/[locale]/(site)/(home)/_components/sections/featured-projects-list'
+import type { HomeFeaturedProject } from '@/app/[locale]/(site)/(home)/_types/home.types'
+
+type HomeFeaturedProjectsSectionProps = {
+  title: string
+  viewAllLabel: string
+  projects: HomeFeaturedProject[]
+  variant?: 'default' | 'muted'
+}
+
+export function HomeFeaturedProjectsSection({
+  title,
+  viewAllLabel,
+  projects,
+  variant = 'default',
+}: HomeFeaturedProjectsSectionProps) {
+  return (
+    <MarketingSection title={title} variant={variant} size="lg" className="overflow-hidden bg-[#121619] text-white">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(126,211,33,0.12),transparent_60%)]"
+        aria-hidden="true"
+      />
+      <FeaturedProjectsList projects={projects} viewAllLabel={viewAllLabel} />
+    </MarketingSection>
+  )
+}

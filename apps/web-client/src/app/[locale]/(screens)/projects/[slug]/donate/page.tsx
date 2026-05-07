@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { ProjectDonateOneFlow } from '@/app/[locale]/(tabs)/projects/_features/project-donate-one-flow'
+import { ProjectDonateOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/donate/_components/project-donate-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'

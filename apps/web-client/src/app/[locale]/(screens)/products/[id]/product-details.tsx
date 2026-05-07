@@ -22,12 +22,12 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import { buildPublicAppUrl } from '@/lib/public-url'
 import { formatCurrency, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { FloatingActionButtons } from './floating-action-buttons'
+import { FloatingActionButtons } from './_components/floating-action-buttons'
 import type { ProductWithRelations } from './product-detail-data'
-import { getProductContext } from '@/app/[locale]/(tabs)/products/_api/product-context.service'
-import { ProductImpactSection } from './components/product-impact-section'
-import { ProductSupportedProjectsSection } from './components/product-supported-projects-section'
-import { ProductLinkedSpeciesSection } from './components/product-linked-species-section'
+import { getProductContext } from './_api/product-context.service'
+import { ProductImpactSection } from './_components/product-impact-section'
+import { ProductSupportedProjectsSection } from './_components/product-supported-projects-section'
+import { ProductLinkedSpeciesSection } from './_components/product-linked-species-section'
 
 type ProductDetailsProps = {
   product: ProductWithRelations

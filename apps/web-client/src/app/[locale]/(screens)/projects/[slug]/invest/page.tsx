@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { ProjectInvestOneFlow } from '@/app/[locale]/(tabs)/projects/_features/project-invest-one-flow'
+import { ProjectInvestOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/invest/_components/project-invest-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
