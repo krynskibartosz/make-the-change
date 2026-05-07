@@ -5,6 +5,11 @@ import { Leaf } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { formatDate } from '@/lib/utils'
 import { ActivityFilter } from './activity-filter'
+import {
+  adaptNormalizedInvestmentToProducerSupport,
+  adaptNormalizedDonationToViewModel,
+  type ProducerSupportViewModel,
+} from '@/lib/mappers/producer-support-adapters'
 
 type InvestmentProject = {
   name_default: string | null
@@ -162,21 +167,20 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
           {filteredActivities.map((activity) => {
             if (activity.type === 'investment') {
               const investment = activity
-              const project = investment.project
-              const href = project?.slug ? `/projects/${project.slug}` : null
-              const isActive = investment.status === 'active'
-              const statusLabel = STATUS_LABELS[investment.status] || investment.status
+              // [R6] Adapter vers ProducerSupportViewModel pour affichage moderne
+              const support = adaptNormalizedInvestmentToProducerSupport(investment)
+              const statusLabel = support.statusLabel
 
               const content = (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.03]"
-                  onClick={() => router.push(`/transactions/${investment.id}?type=investment`)}
+                  onClick={() => router.push(`/transactions/${support.id}?type=investment`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
-                    {project?.cover_image_url ? (
+                    {support.project.coverImageUrl ? (
                       <img
-                        src={project.cover_image_url}
-                        alt={project.name_default || 'Projet'}
+                        src={support.project.coverImageUrl}
+                        alt={support.project.name}
                         className="h-12 w-12 shrink-0 rounded-xl border border-white/5 bg-[#0B0F15] object-cover"
                       />
                     ) : (
@@ -186,21 +190,21 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
                     )}
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-lime-400/80 mb-0.5">
-                        Soutien
+                        {support.contributionTypeLabel}
                       </span>
                       <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
-                        {project?.name_default || 'Projet'}
+                        {support.project.name}
                       </h3>
                       <span className="text-xs text-gray-500">
-                        {formatDate(investment.created_at)}
+                        {formatDate(support.createdAt)}
                       </span>
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5 ml-2">
                     <span className="text-sm font-black tracking-tight text-white">
-                      {formatEuros(investment.amount_eur)} €
+                      {formatEuros(support.amountEuros)} €
                     </span>
-                    <span className={getStatusBadgeClass(investment.status)}>
+                    <span className={getStatusBadgeClass(support.status)}>
                       {statusLabel}
                     </span>
                   </div>
@@ -210,19 +214,20 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
               return <div key={investment.id}>{content}</div>
             } else if (activity.type === 'donation') {
               const donation = activity
-              const project = donation.project
-              const statusLabel = STATUS_LABELS[donation.status] || donation.status
+              // [R6] Adapter vers view-model donation pour affichage moderne
+              const donationVM = adaptNormalizedDonationToViewModel(donation)
+              const statusLabel = donationVM.statusLabel
 
               const content = (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.03]"
-                  onClick={() => router.push(`/transactions/${donation.id}?type=donation`)}
+                  onClick={() => router.push(`/transactions/${donationVM.id}?type=donation`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
-                    {project?.cover_image_url ? (
+                    {donationVM.project.coverImageUrl ? (
                       <img
-                        src={project.cover_image_url}
-                        alt={project.name_default || 'Projet'}
+                        src={donationVM.project.coverImageUrl}
+                        alt={donationVM.project.name}
                         className="h-12 w-12 shrink-0 rounded-xl border border-white/5 bg-[#0B0F15] object-cover"
                       />
                     ) : (
@@ -232,21 +237,21 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
                     )}
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-lime-400/80 mb-0.5">
-                        Don
+                        {donationVM.contributionTypeLabel}
                       </span>
                       <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
-                        {project?.name_default || 'Projet'}
+                        {donationVM.project.name}
                       </h3>
                       <span className="text-xs text-gray-500">
-                        {formatDate(donation.created_at)}
+                        {formatDate(donationVM.createdAt)}
                       </span>
                     </div>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1.5 ml-2">
                     <span className="text-sm font-black tracking-tight text-white">
-                      {formatEuros(donation.amount_eur)} €
+                      {formatEuros(donationVM.amountEuros)} €
                     </span>
-                    <span className={getStatusBadgeClass(donation.status)}>
+                    <span className={getStatusBadgeClass(donationVM.status)}>
                       {statusLabel}
                     </span>
                   </div>

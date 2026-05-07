@@ -1,37 +1,61 @@
 'use client'
 
-import { X, Download, ExternalLink, Package, MapPin } from 'lucide-react'
+import { X, Download, ExternalLink, Package, MapPin, Leaf } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import {
+  adaptNormalizedInvestmentToProducerSupport,
+  adaptNormalizedDonationToViewModel,
+  type ProducerSupportViewModel,
+} from '@/lib/mappers/producer-support-adapters'
 
+// [R7] Types legacy pour les props - conservés pour compatibilité
 type TransactionReceiptProps = {
   transactionId: string
-  transactionType: 'investment' | 'order'
+  transactionType: 'investment' | 'donation' | 'order'
 }
 
 export function TransactionReceipt({ transactionId, transactionType }: TransactionReceiptProps) {
-  // Mock data for demonstration
+  // [R7] Mock data pour démonstration - à remplacer par données réelles
   const isInvestment = transactionType === 'investment'
+  const isDonation = transactionType === 'donation'
+  const isProducerSupport = isInvestment // legacy 'investment' = soutien producteur
 
-  const investmentData = {
-    name: 'Ruchers d\'apiculteurs indépendants',
-    date: '14 Avril 2026 à 14h32',
-    amount: 390,
+  // [R7] Données legacy mock avec discriminant type
+  const legacyInvestmentData = {
+    id: transactionId,
+    amount_eur: 390,
+    amount_points: 3900,
     status: 'active',
-    statusLabel: 'Projet Actif',
-    imageUrl: '/images/projects/miellerie-manakara.jpg',
-    timeline: [
-      { label: 'Fonds transférés', date: '14 Avril 2026', status: 'completed' },
-      { label: 'Construction des ruches', date: 'En cours sur le terrain', status: 'in-progress' },
-      { label: 'Première récolte', date: 'Prévu en Septembre', status: 'future' },
-    ],
-    impact: 'Votre soutien de 390€ est associé à un projet apicole et à une estimation pédagogique liée aux abeilles.',
+    created_at: '2026-04-14T14:32:00.000Z',
+    type: 'investment' as const,
+    project: {
+      name_default: 'Ruchers d\'apiculteurs indépendants',
+      slug: 'miellerie-manakara',
+      status: 'active',
+      cover_image_url: '/images/projects/miellerie-manakara.jpg',
+    }
+  }
+
+  const legacyDonationData = {
+    id: transactionId,
+    amount_eur: 50,
+    amount_points: 500, // Graines pour les dons
+    status: 'completed',
+    created_at: '2026-04-10T10:15:00.000Z',
+    type: 'donation' as const,
+    project: {
+      name_default: 'Protection des lémuriens',
+      slug: 'protection-lemuriens',
+      status: 'active',
+      cover_image_url: '/images/projects/lemuriens.jpg',
+    }
   }
 
   const orderData = {
     name: 'Miel d\'Eucalyptus',
     date: '16 Avril 2026 à 08h10',
     amount: 1150,
-    amountUnit: 'crédits',
+    amountUnit: 'Credits Impact',
     orderNumber: '#CMD-89302',
     status: 'processing',
     statusLabel: 'En cours de préparation',
@@ -50,7 +74,45 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     },
   }
 
-  const data = isInvestment ? investmentData : orderData
+  // [R7] Adapter vers view-models selon le type
+  const supportVM: ProducerSupportViewModel | null = isInvestment 
+    ? adaptNormalizedInvestmentToProducerSupport(legacyInvestmentData)
+    : null
+  
+  const donationVM = isDonation
+    ? adaptNormalizedDonationToViewModel(legacyDonationData)
+    : null
+
+  const supportTimeline = [
+    { label: 'Contribution versée', date: formatFullDate(supportVM?.createdAt || ''), status: 'completed' as const },
+    { label: 'Projet en cours', date: 'Suivi en cours', status: 'in-progress' as const },
+    { label: 'Impact à valider', date: 'À déterminer', status: 'future' as const },
+  ]
+
+  const donationTimeline = [
+    { label: 'Don reçu', date: formatFullDate(donationVM?.createdAt || ''), status: 'completed' as const },
+    { label: 'Projet soutenu', date: 'Confirmation partenaire', status: 'completed' as const },
+    { label: 'Suivi disponible', date: 'Dans votre historique', status: 'completed' as const },
+  ]
+
+  const data = isInvestment || isDonation
+    ? {
+        name: supportVM?.project.name || donationVM?.project.name || 'Projet',
+        date: formatFullDate(supportVM?.createdAt || donationVM?.createdAt || ''),
+        amount: supportVM?.amountEuros || donationVM?.amountEuros || 0,
+        creditsOrSeeds: isDonation 
+          ? (donationVM?.seedsReward || 0)
+          : (supportVM?.amountImpactCredits || 0),
+        creditsOrSeedsLabel: isDonation ? 'Graines' : 'Credits Impact',
+        status: supportVM?.status || donationVM?.status || 'pending',
+        statusLabel: supportVM?.statusLabel || donationVM?.statusLabel || 'En attente',
+        imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/default.jpg',
+        contributionTypeLabel: supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel || 'Contribution',
+        isDonation,
+        isProducerSupport: !isDonation && (isInvestment || false),
+        timeline: isDonation ? donationTimeline : supportTimeline,
+      }
+    : orderData
 
   return (
     <div className="flex flex-col min-h-full bg-[#0B0F15]">
@@ -70,21 +132,26 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
             {isInvestment ? '€' : ` ${orderData.amountUnit}`}
           </span>
         </div>
+        {(isInvestment || isDonation) && (
+          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+            {supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel}
+          </span>
+        )}
         <span
           className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider border ${
-            data.status === 'active' || data.status === 'processing'
+            (supportVM?.status === 'active' || supportVM?.status === 'completed' || donationVM?.status === 'completed')
               ? 'bg-lime-400/10 text-lime-400 border-lime-400/20'
               : 'bg-amber-400/10 text-amber-400 border-amber-400/20'
           }`}
         >
-          {data.statusLabel}
+          {supportVM?.statusLabel || donationVM?.statusLabel || orderData.statusLabel}
         </span>
       </div>
 
       {/* TIMELINE CARD */}
       <div className="mx-6 p-5 rounded-3xl bg-[#1A1F26] border border-white/5 mb-4">
         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
-          {isInvestment ? 'Suivi du projet' : 'Suivi de livraison'}
+          {isProducerSupport ? 'Suivi du projet' : isDonation ? 'Confirmation' : 'Suivi de livraison'}
         </h3>
         <div className="flex flex-col gap-4 relative">
           {/* Vertical line */}
@@ -125,15 +192,37 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
       {/* INFO CARD */}
       <div className="mx-6 p-5 rounded-3xl bg-gradient-to-br from-white/[0.05] to-transparent border border-white/[0.05] mb-8">
         <div className="flex items-start gap-3">
-          {isInvestment ? (
-            <span className="text-2xl">🐝</span>
+          {isProducerSupport ? (
+            <Leaf className="h-5 w-5 text-lime-400 mt-0.5 shrink-0" />
+          ) : isDonation ? (
+            <Leaf className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
           ) : (
             <MapPin className="h-5 w-5 text-lime-400 mt-0.5 shrink-0" />
           )}
-          {isInvestment ? (
-            <p className="text-sm text-gray-300 leading-relaxed">
-              Votre soutien de <strong className="text-white">{formatEuros(data.amount)}€</strong> est associé à un projet apicole et à une estimation pédagogique liée aux abeilles.
-            </p>
+          {isProducerSupport ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-gray-300 leading-relaxed">
+                Votre soutien de <strong className="text-white">{formatEuros(supportVM?.amountEuros || 0)}€</strong> contribue à un projet apicole.
+              </p>
+              <p className="text-xs text-gray-500">
+                Credits Impact reçus : <strong className="text-amber-300">{supportVM?.amountImpactCredits || 0}</strong>
+              </p>
+              <p className="text-xs text-gray-500 italic">
+                [HYPOTHESE] L&apos;impact réel dépend de la mise en œuvre du projet sur le terrain.
+              </p>
+            </div>
+          ) : isDonation ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-gray-300 leading-relaxed">
+                Votre don de <strong className="text-white">{formatEuros(donationVM?.amountEuros || 0)}€</strong> soutient la protection des lémuriens.
+              </p>
+              <p className="text-xs text-gray-500">
+                Graines reçues : <strong className="text-emerald-300">{donationVM?.seedsReward || 0}</strong>
+              </p>
+              <p className="text-xs text-gray-500 italic">
+                Le don pur n&apos;est pas convertible en Credits Impact.
+              </p>
+            </div>
           ) : (
             <div className="flex flex-col gap-1">
               <p className="text-sm font-medium text-white">{orderData.shippingAddress.name}</p>
@@ -150,10 +239,15 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
       {/* ACTION BUTTONS */}
       <div className="px-6 pb-8 mt-auto flex flex-col gap-3">
         <button className="w-full bg-white/10 hover:bg-white/15 text-white font-bold text-sm h-14 rounded-2xl transition-all flex items-center justify-center gap-2">
-          {isInvestment ? (
+          {isProducerSupport ? (
             <>
               <Download className="w-[18px] h-[18px]" />
-              Télécharger le reçu de contribution (PDF)
+              Télécharger le reçu de contribution
+            </>
+          ) : isDonation ? (
+            <>
+              <Download className="w-[18px] h-[18px]" />
+              Télécharger le reçu de don
             </>
           ) : (
             <>
@@ -184,4 +278,16 @@ const formatEuros = (value: number): string => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(Math.round(value))
+}
+
+const formatFullDate = (dateString: string): string => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date)
 }
