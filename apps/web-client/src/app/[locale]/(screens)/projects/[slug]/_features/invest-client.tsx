@@ -17,7 +17,7 @@ import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js'
 import { useMemo, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatImpactCredits } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-impact-calculator'
 import { createInvestmentAction } from '@/app/[locale]/(screens)/projects/[slug]/invest/_actions/create-investment.action'
 
@@ -257,7 +257,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
                   Crédits estimés
                 </p>
                 <p className="mt-2 text-2xl font-semibold text-primary tabular-nums">
-                  {calc ? formatPoints(calc.total_points) : '—'} crédits
+                  {calc ? formatImpactCredits(calc.total_points) : '—'} crédits
                 </p>
               </div>
             </div>
@@ -287,19 +287,19 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Base</p>
                 <p className="mt-2 text-lg font-semibold tabular-nums">
-                  {calc ? formatPoints(calc.base_points) : '—'} crédits
+                  {calc ? formatImpactCredits(calc.base_points) : '—'} crédits
                 </p>
               </div>
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Bonus</p>
                 <p className="mt-2 text-lg font-semibold tabular-nums text-client-emerald-600 dark:text-client-emerald-400">
-                  +{calc ? formatPoints(calc.bonus_points) : '—'} crédits
+                  +{calc ? formatImpactCredits(calc.bonus_points) : '—'} crédits
                 </p>
               </div>
               <div className="rounded-2xl border bg-muted/30 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Total</p>
                 <p className="mt-2 text-lg font-semibold tabular-nums text-primary">
-                  {calc ? formatPoints(calc.total_points) : '—'} crédits
+                  {calc ? formatImpactCredits(calc.total_points) : '—'} crédits
                 </p>
               </div>
             </div>
@@ -308,7 +308,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Votre solde</span>
                 <span className="font-semibold tabular-nums">
-                  {formatPoints(pointsBalance)} crédits
+                  {formatImpactCredits(pointsBalance)} crédits
                 </span>
               </div>
             </div>
@@ -335,7 +335,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Montant</p>
               <p className="mt-2 text-2xl font-semibold tabular-nums">{amountEur}€</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Vous recevrez {calc ? formatPoints(calc.total_points) : '—'} Credits Impact.
+                Vous recevrez {calc ? formatImpactCredits(calc.total_points) : '—'} Credits Impact.
               </p>
             </div>
 
@@ -399,7 +399,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
                   Crédits prévus
                 </p>
                 <p className="mt-2 text-lg font-semibold tabular-nums text-primary">
-                  +{formatPoints(pointsEarned)} crédits
+                  +{formatImpactCredits(pointsEarned)} crédits
                 </p>
               </div>
             ) : null}
@@ -416,7 +416,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
             </p>
           </div>
           <Badge variant="secondary" className={cn('rounded-full', clientSecret && 'opacity-60')}>
-            {calc ? `+${formatPoints(calc.total_points)} crédits` : '—'}
+            {calc ? `+${formatImpactCredits(calc.total_points)} crédits` : '—'}
           </Badge>
         </div>
       </div>

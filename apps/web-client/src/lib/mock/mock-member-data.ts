@@ -14,6 +14,18 @@ import {
   MOCK_PROJECT_MANAKARA_SLUG,
 } from '@/lib/mock/mock-ids'
 
+/**
+ * [R2] Aliases sémantiques pour P0-3
+ * Ces constantes permettent d'utiliser la nomenclature cible dans le code
+ * sans modifier les données legacy.
+ */
+
+/** Alias sémantique pour les prix en Credits Impact (legacy: price_points) */
+export const IMPACT_CREDITS_PRICE = 'price_points' as const
+
+/** Alias sémantique pour le montant en Credits Impact (legacy: amount_points) */
+export const IMPACT_CREDITS_AMOUNT = 'amount_points' as const
+
 export type MockInvestmentRecord = {
   id: string
   amount_eur_equivalent: number

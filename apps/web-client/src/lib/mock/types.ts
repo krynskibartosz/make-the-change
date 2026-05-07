@@ -46,6 +46,7 @@ export type MockNotificationPreferences = {
   product_updates: boolean
   leaderboard: boolean
   marketing: boolean
+  academy: boolean
   email: boolean
   push: boolean
   monthly_report: boolean

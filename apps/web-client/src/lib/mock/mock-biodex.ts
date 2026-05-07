@@ -1311,7 +1311,7 @@ export const getMockSpeciesContext = async (
 // Client-safe version that doesn't use server-only imports
 export const getMockSpeciesContextClient = async (
   id: string,
-): Promise<{ name_default: string } | null> => {
+): Promise<{ name_default: string; image_url?: string | null } | null> => {
   const species = MOCK_SPECIES.find((entry) => entry.id === id)
-  return species ? { name_default: species.name_default } : null
+  return species ? { name_default: species.name_default, image_url: species.image_url } : null
 }

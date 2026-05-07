@@ -53,7 +53,7 @@ import {
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { LivesCounter } from '@/app/[locale]/(lab)/_components/lives-counter'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatSeeds } from '@/lib/utils'
 
 const LOADING_STEPS = [
   { label: 'Chargement du cours...', duration: 450 },
@@ -724,11 +724,11 @@ export default function AcademyPage() {
             <Link
               href="/profile/seeds"
               prefetch={false}
-              aria-label={`Ouvrir les graines, solde ${formatPoints(progress.seedsBalance)}`}
+              aria-label={`Ouvrir les graines, solde ${formatSeeds(progress.seedsBalance)}`}
               className="flex min-h-11 items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 transition-transform touch-manipulation hover:scale-[1.02] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-300"
             >
               <Sprout className="h-3.5 w-3.5 text-lime-400" />
-              <span className="text-[11px] font-bold tabular-nums text-white">{formatPoints(progress.seedsBalance)}</span>
+              <span className="text-[11px] font-bold tabular-nums text-white">{formatSeeds(progress.seedsBalance)}</span>
             </Link>
           </div>
 

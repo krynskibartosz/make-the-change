@@ -1,3 +1,19 @@
+/**
+ * Système de design des monnaies — R2
+ *
+ * [CIBLE_VALIDEE] P0-3 : Deux monnaies distinctes
+ * - `seeds` = Graines : progression, engagement, Academy, BioDex
+ * - `impactCredits` = Credits Impact : valeur boutique issue du soutien producteur
+ *
+ * [DEPRECIE] Le terme générique `points` ne doit pas être utilisé dans les UI finales.
+ *
+ * Règles métier :
+ * - Un don pur ne génère pas de Credits Impact → utilise Graines
+ * - Un soutien producteur génère des Credits Impact
+ * - Un achat produit ne génère pas de Credits Impact
+ * - Academy/quiz génère des Graines, pas de Credits Impact
+ */
+
 export type CurrencyKind = 'seeds' | 'impactCredits'
 
 export type CurrencyIconName = 'Sprout' | 'Hexagon'
@@ -14,6 +30,14 @@ type CurrencyDesign = {
   ctaClassName: string
   glowClassName: string
   progressClassName: string
+}
+
+/**
+ * Formate une valeur monétaire avec le label de la monnaie.
+ * R2 : Helper centralisé pour éviter la confusion entre points/crédits/graines.
+ */
+export function formatCurrencyValue(value: number): string {
+  return new Intl.NumberFormat('fr-FR').format(value)
 }
 
 export const CURRENCY_DESIGN = {

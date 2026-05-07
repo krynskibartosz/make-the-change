@@ -1,4 +1,4 @@
-import { MOCK_PROJECTS } from './mock-projects'
+import { MOCK_PROJECTS } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
 import type { DonationOption } from '@/app/[locale]/(screens)/projects/_types/project'
 
 export const getDonationOptionsByProjectId = (projectId: string): DonationOption[] => {

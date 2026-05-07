@@ -15,7 +15,7 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-impact-calculator'
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
@@ -144,12 +144,12 @@ export function ProjectInvestOneFlow({
     projectType: project.type,
     projectImpact: project.expectedImpact ?? null,
   })
-  const protectedBees = supportMetrics.kind === 'bees' ? formatPoints(supportMetrics.bees) : formatPoints(0)
+  const protectedBees = supportMetrics.kind === 'bees' ? formatAmountNumber(supportMetrics.bees) : formatAmountNumber(0)
   const supportImpactLabel =
     supportMetrics.kind === 'bees'
       ? `${protectedBees} abeilles`
       : supportMetrics.kind === 'orchard'
-        ? `${formatPoints(supportMetrics.olivesSupported)} oliviers`
+        ? `${formatAmountNumber(supportMetrics.olivesSupported)} oliviers`
         : 'ce projet'
 
   useEffect(() => {

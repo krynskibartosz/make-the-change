@@ -117,10 +117,10 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
   // Determine bento labels based on filter
   const leftLabel = filter === 'order' ? 'Total Achat' : 'Total Soutiens'
   const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayInvested
-  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'crédits') : '€'
-  const rightLabel = filter === 'investment' ? 'Crédits gagnés' : 'Crédits dépensés'
+  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'Credits Impact') : '€'
+  const rightLabel = filter === 'investment' ? 'Credits Impact gagnés' : 'Credits Impact dépensés'
   const rightValue = filter === 'investment' ? userInvestments.reduce((sum, inv) => sum + inv.amount_points, 0) : displayPoints
-  const rightUnit = 'crédits'
+  const rightUnit = ''
 
   return (
     <>

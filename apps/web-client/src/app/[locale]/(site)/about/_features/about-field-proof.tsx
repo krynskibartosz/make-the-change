@@ -5,7 +5,9 @@ import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 import type { AboutFieldProofProps } from './about.types'
 
-const icons = [
+type IconComponent = typeof Flower2
+
+const icons: Array<{ icon: IconComponent; color: string; bg: string }> = [
   { icon: Flower2, color: 'text-amber-500', bg: 'bg-amber-500/10' },
   { icon: Fish, color: 'text-sky-500', bg: 'bg-sky-500/10' },
   { icon: MapPin, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
@@ -32,7 +34,7 @@ export function AboutFieldProof({ title, description, projects }: AboutFieldProo
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
           {projectList.map((item, index) => {
-            const Icon = item.icon
+            const Icon = item.icon as IconComponent
             return (
               <div key={index} className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4">
                 <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${item.bg}`}>
@@ -69,7 +71,7 @@ export function AboutFieldProof({ title, description, projects }: AboutFieldProo
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
         {projectList.map((item, index) => {
-          const Icon = item.icon
+          const Icon = item.icon as IconComponent
           return (
             <motion.div
               key={index}

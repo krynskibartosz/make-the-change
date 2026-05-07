@@ -1,7 +1,18 @@
+/**
+ * Composants de monnaie — R2
+ *
+ * [CIBLE_VALIDEE] P0-3 : Utiliser exclusivement les CurrencyKind :
+ * - 'seeds' pour Graines (progression, Academy, BioDex)
+ * - 'impactCredits' pour Credits Impact (soutien producteur, boutique)
+ *
+ * [DEPRECIE] Ne pas introduire de nouveaux usages de 'points'.
+ */
+
 import type { ComponentPropsWithoutRef } from 'react'
 import { Hexagon, Sprout, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
+  formatCurrencyValue,
   getCurrencyDesign,
   getCurrencyToneClassName,
   type CurrencyKind,
@@ -13,7 +24,11 @@ const CURRENCY_ICONS = {
   Hexagon,
 } as const satisfies Record<ReturnType<typeof getCurrencyDesign>['icon'], LucideIcon>
 
-function formatCurrencyValue(value: number, notation: 'standard' | 'compact') {
+/**
+ * Formate une valeur avec notation (standard ou compacte).
+ * @deprecated Utiliser formatCurrencyValue depuis currency-design.ts
+ */
+function formatCurrencyValueWithNotation(value: number, notation: 'standard' | 'compact') {
   return new Intl.NumberFormat('fr-FR', {
     notation,
     maximumFractionDigits: notation === 'compact' ? 1 : 0,
@@ -58,7 +73,7 @@ export function CurrencyAmount({
   ...props
 }: CurrencyAmountProps) {
   const design = getCurrencyDesign(kind)
-  const formattedValue = formatCurrencyValue(value, notation)
+  const formattedValue = formatCurrencyValueWithNotation(value, notation)
 
   return (
     <span
@@ -108,7 +123,7 @@ export function CurrencyBadge({
     >
       <CurrencyIcon kind={kind} className="h-3.5 w-3.5" />
       {value !== undefined && (
-        <span className="tabular-nums">{formatCurrencyValue(value, notation)}</span>
+        <span className="tabular-nums">{formatCurrencyValueWithNotation(value, notation)}</span>
       )}
       {label && <span>{label}</span>}
     </span>

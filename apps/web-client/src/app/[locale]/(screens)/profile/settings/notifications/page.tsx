@@ -40,6 +40,7 @@ export default async function NotificationsPage() {
           product_updates: asBoolean(prefs.product_updates, false),
           leaderboard: asBoolean(prefs.leaderboard, false),
           marketing: asBoolean(prefs.marketing, false),
+          academy: asBoolean(prefs.academy, true),
           // Channels
           email: asBoolean(prefs.email, true),
           push: asBoolean(prefs.push, false),

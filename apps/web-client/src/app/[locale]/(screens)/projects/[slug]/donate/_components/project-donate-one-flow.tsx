@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatSeeds } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-impact-calculator'
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
@@ -421,7 +421,7 @@ export function ProjectDonateOneFlow({
                   <div className="flex flex-wrap gap-2">
                     <div className="bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
                       <CurrencyIcon kind="seeds" className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-bold">+{formatPoints(seeds)} graines</span>
+                      <span className="text-[12px] font-bold">+{formatSeeds(seeds)} graines</span>
                     </div>
 
                     <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">

@@ -15,8 +15,28 @@ export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pi
   )
 }
 
+/**
+ * Formate un nombre de points legacy.
+ * @deprecated Utiliser formatImpactCredits ou formatSeeds selon le contexte.
+ */
 export function formatPoints(points: number): string {
   return new Intl.NumberFormat('fr-FR').format(points)
+}
+
+/**
+ * Formate un montant en Credits Impact.
+ * R0-3 : UI cible = "Credits Impact" (sans accent).
+ */
+export function formatImpactCredits(value: number): string {
+  return new Intl.NumberFormat('fr-FR').format(value)
+}
+
+/**
+ * Formate un montant en Graines.
+ * R0-3 : UI cible = "Graines" pour la progression/engagement.
+ */
+export function formatSeeds(value: number): string {
+  return new Intl.NumberFormat('fr-FR').format(value)
 }
 
 export function formatCurrency(amount: number, currency = 'EUR'): string {
