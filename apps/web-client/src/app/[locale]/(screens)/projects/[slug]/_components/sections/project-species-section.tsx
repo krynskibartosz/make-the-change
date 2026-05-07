@@ -13,7 +13,7 @@ export function ProjectSpeciesSection({ species }: ProjectSpeciesSectionProps) {
     <section>
       <div className="mb-6 flex items-center gap-3">
         <div className="h-10 w-1 rounded-full bg-primary" />
-        <h2 className="text-3xl font-black tracking-tight">Espèces Protégées</h2>
+        <h2 className="text-3xl font-black tracking-tight">Espèces liées au projet</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {species.map((sp) => (

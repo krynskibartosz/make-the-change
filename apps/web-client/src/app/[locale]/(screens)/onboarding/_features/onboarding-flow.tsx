@@ -94,9 +94,8 @@ export function OnboardingFlow() {
               </h1>
 
               <p className="text-white/60 text-sm max-w-sm mx-auto leading-relaxed">
-                Soutenez les projets de nos artisans locaux, protégez la
-                biodiversité et recevez leurs produits d'exception en
-                remerciement.
+                Soutenez des projets producteurs, découvrez la biodiversité
+                associée et accédez à des produits partenaires.
               </p>
 
               <div className="bg-white/5 rounded-2xl p-4 mt-8 flex justify-around items-center border border-white/10 backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.5)]">
@@ -106,7 +105,7 @@ export function OnboardingFlow() {
                     <p className="text-xl font-black">290k+</p>
                   </div>
                   <p className="text-[10px] text-white/40 uppercase tracking-wider font-bold">
-                    Abeilles protégées
+                    Abeilles associées
                   </p>
                 </div>
                 <div className="w-px h-10 bg-white/10"></div>
@@ -227,10 +226,10 @@ export function OnboardingFlow() {
                   activeColor: "border-emerald-500 bg-emerald-500/20",
                 },
                 {
-                  id: "humain",
-                  title: "Artisans Locaux",
-                  desc: "Aidez les coopératives et le commerce équitable.",
-                  icon: "🤝",
+                  id: "mers",
+                  title: "Gardiens des mers",
+                  desc: "Soutenez les océans et la biodiversité marine.",
+                  icon: "🌊",
                   color: "hover:border-blue-500/50 hover:bg-blue-500/10",
                   activeColor: "border-blue-500 bg-blue-500/20",
                 },
@@ -377,8 +376,8 @@ export function OnboardingFlow() {
               <div className="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center text-5xl z-10 relative shadow-[0_0_40px_rgba(16,185,129,0.3)] border border-emerald-500/30">
                 {selectedFaction === "faune"
                   ? "🦊"
-                  : selectedFaction === "humain"
-                    ? "🤝"
+                  : selectedFaction === "mers"
+                    ? "🌊"
                     : "🌳"}
               </div>
               <div className="absolute -top-2 -right-2 bg-[#0B0F15] rounded-full p-1 z-20">

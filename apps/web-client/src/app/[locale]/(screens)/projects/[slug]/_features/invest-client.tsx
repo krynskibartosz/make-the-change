@@ -335,7 +335,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Montant</p>
               <p className="mt-2 text-2xl font-semibold tabular-nums">{amountEur}€</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Vous recevrez {calc ? formatPoints(calc.total_points) : '—'} Crédits Impact.
+                Vous recevrez {calc ? formatPoints(calc.total_points) : '—'} Credits Impact.
               </p>
             </div>
 
@@ -368,7 +368,7 @@ export function InvestClient({ project, pointsBalance }: InvestClientProps) {
               <>
                 <p className="text-sm text-muted-foreground">
                   Votre soutien sera créé en statut{' '}
-                  <span className="font-medium">pending</span>. Les Crédits Impact seront crédités après
+                  <span className="font-medium">pending</span>. Les Credits Impact seront crédités après
                   confirmation du paiement par Stripe.
                 </p>
 

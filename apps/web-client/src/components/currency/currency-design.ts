@@ -31,8 +31,8 @@ export const CURRENCY_DESIGN = {
   },
   impactCredits: {
     icon: 'Hexagon',
-    label: 'crédits impact',
-    ariaLabel: 'Crédits Impact',
+    label: 'Credits Impact',
+    ariaLabel: 'Credits Impact',
     toneClassName: 'text-amber-300',
     softToneClassName: 'text-amber-200',
     surfaceClassName: 'border-amber-300/25 bg-amber-300/10 text-amber-300',

@@ -14,7 +14,7 @@ export function ProductLinkedSpeciesSection({ species }: ProductLinkedSpeciesSec
     <section>
       <div className="mb-6 flex items-center gap-3">
         <div className="h-10 w-1 rounded-full bg-primary" />
-        <h2 className="text-3xl font-black tracking-tight">Espèces Protégées</h2>
+        <h2 className="text-3xl font-black tracking-tight">Espèces liées au produit</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {species.map((sp) => (
@@ -41,7 +41,7 @@ function SpeciesCard({ species }: { species: LinkedSpecies }) {
         
         {species.impact && (
           <div className="mb-4 text-sm bg-muted/50 p-2 rounded-lg">
-            <span className="font-semibold">Impact: </span>
+            <span className="font-semibold">Contexte: </span>
             {species.impact}
           </div>
         )}

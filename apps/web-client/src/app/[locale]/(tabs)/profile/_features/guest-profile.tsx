@@ -50,7 +50,7 @@ export default async function GuestProfile() {
         <section className="flex flex-col items-center px-5 pb-6 pt-8">
           <h1 className="mb-4 text-center text-2xl font-black tracking-tight text-white">L&apos;Aventure vous attend</h1>
           <p className="mx-auto mt-2 max-w-[280px] text-center text-sm leading-relaxed text-white/60">
-            Choisissez votre compagnon pour débloquer votre BioDex, sauvegarder votre impact et rejoindre l'effort collectif.
+            Choisissez votre compagnon pour débloquer votre BioDex, suivre votre parcours et rejoindre l'effort collectif.
           </p>
           <FactionMascotSelector />
           <Link
@@ -63,13 +63,13 @@ export default async function GuestProfile() {
 
         <ul className="mx-5 mb-8 grid grid-cols-2 gap-3 m-0 p-0 list-none">
           <li>
-            <ImpactCard variant="locked" icon={<Bug className="h-5 w-5 text-amber-400" aria-hidden="true" />} label="ABEILLES SAUVÉES" />
+            <ImpactCard variant="locked" icon={<Bug className="h-5 w-5 text-amber-400" aria-hidden="true" />} label="ESPÈCES LIÉES" />
           </li>
           <li>
-            <ImpactCard variant="locked" icon={<Droplets className="h-5 w-5 text-orange-400" aria-hidden="true" />} label="MIEL GÉNÉRÉ" />
+            <ImpactCard variant="locked" icon={<Droplets className="h-5 w-5 text-orange-400" aria-hidden="true" />} label="RÉCOLTE ESTIMÉE" />
           </li>
           <li>
-            <ImpactCard variant="locked" icon={<Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />} label="CO2 CAPTURÉ" />
+            <ImpactCard variant="locked" icon={<Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />} label="CO₂ ASSOCIÉ" />
           </li>
           <li>
             <ImpactCard

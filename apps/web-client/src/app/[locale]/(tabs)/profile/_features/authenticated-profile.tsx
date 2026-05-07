@@ -90,7 +90,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               <ImpactCard
                 icon={<Hexagon className="h-5 w-5 text-amber-400" aria-hidden="true" />}
                 value={formatCompact(profile?.points || 2450)}
-                label="CRÉDITS IMPACT"
+                label="CREDITS IMPACT"
                 valueClassName="text-amber-400"
               />
             </li>

@@ -41,7 +41,7 @@ export function AdventureTabHeader({
         <Link
           href="/products"
           prefetch={false}
-          aria-label={`${impactPoints} crédits impact`}
+          aria-label={`${impactPoints} Credits Impact`}
           className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"
         >
           <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />

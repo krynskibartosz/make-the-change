@@ -24,7 +24,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
       { label: 'Construction des ruches', date: 'En cours sur le terrain', status: 'in-progress' },
       { label: 'Première récolte', date: 'Prévu en Septembre', status: 'future' },
     ],
-    impact: 'Votre soutien de 390€ est associé à environ 15 000 abeilles sauvages.',
+    impact: 'Votre soutien de 390€ est associé à un projet apicole et à une estimation pédagogique liée aux abeilles.',
   }
 
   const orderData = {
@@ -132,7 +132,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
           )}
           {isInvestment ? (
             <p className="text-sm text-gray-300 leading-relaxed">
-              Votre soutien de <strong className="text-white">{formatEuros(data.amount)}€</strong> est associé à environ 15 000 abeilles sauvages.
+              Votre soutien de <strong className="text-white">{formatEuros(data.amount)}€</strong> est associé à un projet apicole et à une estimation pédagogique liée aux abeilles.
             </p>
           ) : (
             <div className="flex flex-col gap-1">
@@ -153,7 +153,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
           {isInvestment ? (
             <>
               <Download className="w-[18px] h-[18px]" />
-              Télécharger le reçu fiscal (PDF)
+              Télécharger le reçu de contribution (PDF)
             </>
           ) : (
             <>

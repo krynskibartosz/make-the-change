@@ -124,14 +124,14 @@ export function ProductsClient({
 
       {/* ── DOCK FLOTTANT (Thumb Zone) — Solde élégant ───────────────────────── */}
       {/* TODO: Réactiver les filtres quand le catalogue dépassera 15 produits */}
-      <nav aria-label="Solde Crédits Impact"
+      <nav aria-label="Solde Credits Impact"
         className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 pointer-events-none mb-1"
         style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
         <Link
           href="/products/balance"
           className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-full bg-zinc-900/90 backdrop-blur-md border border-white/10 text-white transition-all active:scale-95 shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
-          aria-label="Solde Crédits Impact"
+          aria-label="Solde Credits Impact"
         >
           {isConnected ? (
             <CurrencyAmount

@@ -11,10 +11,6 @@ import { useEffect, useState } from 'react'
 type UserState = 'connected_with_points' | 'connected_zero_points' | 'not_connected'
 
 // Utility functions
-function calculateBeeEquivalence(points: number): number {
-  return Math.round(points * 1.22)
-}
-
 function formatRelativeDate(dateString: string): string {
   const dateMs = Date.parse(dateString)
   const nowMs = Date.now()
@@ -42,7 +38,7 @@ function BalanceCard({ balance }: { balance: number }) {
       <div className="absolute inset-0 bg-gradient-radial from-amber-400/5 via-transparent to-transparent opacity-50" />
       <div className="relative">
         <p className="mb-2 text-xs font-medium tracking-widest text-white/50 uppercase">
-          Crédits Impact disponibles
+          Credits Impact disponibles
         </p>
         <CurrencyAmount kind="impactCredits" value={balance} className="text-5xl font-black text-white" />
       </div>
@@ -50,13 +46,12 @@ function BalanceCard({ balance }: { balance: number }) {
   )
 }
 
-function ImpactEquivalenceBadge({ points }: { points: number }) {
-  const bees = calculateBeeEquivalence(points)
+function ImpactEquivalenceBadge() {
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-      <span className="text-lg">🐝</span>
+      <span className="text-lg">⬢</span>
       <span className="text-sm font-medium text-white/80">
-        Équivaut à ~{bees.toLocaleString('fr-FR')} abeilles sauvées
+        Solde utilisable sur des avantages partenaires, sans preuve d'impact automatique
       </span>
     </div>
   )
@@ -80,7 +75,7 @@ function GoalProgressBar() {
         />
       </div>
       <p className="text-xs text-white/60">
-        Plus que {remaining} crédits pour débloquer !
+        Plus que {remaining} Credits Impact pour atteindre l'objectif.
       </p>
     </div>
   )
@@ -136,7 +131,7 @@ function VisitorState() {
           Ton impact a de la valeur.
         </h1>
         <p className="max-w-md text-lg text-white/70">
-          Rejoins le collectif, soutiens des projets producteurs et transforme tes Crédits Impact en avantages éco-responsables.
+          Rejoins le collectif, soutiens des projets producteurs et transforme tes Credits Impact en avantages éco-responsables.
         </p>
         <div className="flex w-full max-w-sm flex-col gap-3">
           <Link href="/onboarding/step-0">
@@ -177,7 +172,7 @@ function BeginnerState() {
             Tout commence par un soutien concret.
           </h3>
           <p className="text-white/70">
-            Ton portefeuille est prêt. Soutiens ton premier projet producteur pour générer tes premiers Crédits Impact.
+            Ton portefeuille est prêt. Soutiens ton premier projet producteur pour générer tes premiers Credits Impact.
           </p>
         </div>
 
@@ -216,7 +211,7 @@ function WarriorState({ balance, transactions }: { balance: number; transactions
 
         {/* Équivalence écologique */}
         <div className="flex justify-center">
-          <ImpactEquivalenceBadge points={balance} />
+          <ImpactEquivalenceBadge />
         </div>
 
         {/* Tracker d'objectif */}

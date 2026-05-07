@@ -33,7 +33,7 @@ const BEEHIVE_IMPACT_METRICS: ImpactMetric[] = [
   { label: 'Cire', unit: 'g', fullCycleValue: 1196, decimals: 0 },
   { label: 'Pollen', unit: 'kg', fullCycleValue: 10, decimals: 2 },
   { label: 'Nectar', unit: 'kg', fullCycleValue: 24.96, decimals: 2 },
-  { label: 'CO2 capturé', unit: 'kg', fullCycleValue: 50, decimals: 2 },
+  { label: 'CO2 associé', unit: 'kg', fullCycleValue: 50, decimals: 2 },
   { label: 'Fleurs sauvages butinées', unit: 'fleurs', fullCycleValue: 1500000, decimals: 0 },
 ]
 
@@ -56,14 +56,14 @@ export function ProjectSpeciesImpactSection({
     <section>
       <div className="mb-6 flex items-center gap-3">
         <div className="h-10 w-1 rounded-full bg-primary" />
-        <h2 className="text-3xl font-black tracking-tight">Impact estimé ({speciesLabel})</h2>
+        <h2 className="text-3xl font-black tracking-tight">Indicateurs pédagogiques estimés ({speciesLabel})</h2>
       </div>
 
       <Card className="rounded-2xl border-border/50 bg-background/50">
         <CardContent className="p-6 md:p-8">
           <div className="space-y-2">
             <p className="text-sm font-semibold uppercase tracking-wide text-primary">
-              Items associés pour {REFERENCE_AMOUNT_EUR} €
+              Estimations associées pour {REFERENCE_AMOUNT_EUR} €
             </p>
             <p className="text-sm text-muted-foreground">
               Calcul proportionnel annuel basé sur une ruche de {BEEHIVE_REFERENCE_POPULATION.toLocaleString(
@@ -138,7 +138,7 @@ export function ProjectSpeciesImpactSection({
                 L&apos;apiculture naturelle privilégie l&apos;équilibre de l&apos;écosystème et la résilience locale.
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                La pollinisation soutient la biodiversité et la capture indirecte de CO2.
+                La pollinisation soutient la biodiversité et peut être associée à des bénéfices écologiques indirects.
               </p>
             </div>
           </div>

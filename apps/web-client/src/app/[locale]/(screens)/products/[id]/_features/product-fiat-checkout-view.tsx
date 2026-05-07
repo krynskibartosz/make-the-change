@@ -1,10 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import type { ProductWithRelations } from '../product-detail-data'
 import { useRouter } from '@/i18n/navigation'
-import { Check, CreditCard, Gift, Loader2, Lock, MapPin, Package, X } from 'lucide-react'
-import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
+import { Check, CreditCard, Loader2, MapPin, Package, X } from 'lucide-react'
 
 type ProductFiatCheckoutViewProps = {
   product: any
@@ -23,15 +21,14 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
   const router = useRouter()
   const unitPrice = selectedFormat.euros
   const shippingCost = 4.90
-  const creditsPerUnit = Math.round((unitPrice + shippingCost) * 10)
 
   const [quantity, setQuantity] = useState(1)
+
   const [paymentState, setPaymentState] = useState<PaymentState>('idle')
   const [activeMethod, setActiveMethod] = useState<PaymentMethod>(null)
 
   const subtotal = unitPrice * quantity
   const total = subtotal + shippingCost
-  const totalCreditsEarned = creditsPerUnit * quantity
 
   const formattedTotal = new Intl.NumberFormat('fr-FR', {
     minimumFractionDigits: 2,
@@ -62,30 +59,29 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
         </div>
 
         {/* Titre + confirmation logistique */}
-        <h2 className="text-3xl font-black text-white mb-2 text-center">Paiement validé !</h2>
+        <h2 className="text-3xl font-black text-white mb-2 text-center">Commande prototype validée</h2>
         <p className="text-white/50 text-center text-sm leading-relaxed mb-8">
           Commande n° <span className="font-mono text-white/70">#FR-84920</span><br />
-          Un reçu a été envoyé par email.
+          Aucun paiement réel n'a été débité dans ce parcours de démonstration.
         </p>
 
         {/* LE CŒUR DE LA GAMIFICATION : La carte de Cashback */}
         <div className="w-full bg-[#1A1F26] border border-amber-300/30 rounded-3xl p-6 text-center relative overflow-hidden mb-8 shadow-xl">
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-amber-300/0 via-amber-300 to-amber-300/0" />
-          <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3">Credits Impact gagnés</p>
+          <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3">Achat partenaire</p>
           <div className="flex items-center justify-center gap-3">
-            <span className="text-5xl font-black text-amber-300 tabular-nums leading-none">+{totalCreditsEarned}</span>
-            <CurrencyIcon kind="impactCredits" className="w-8 h-8" />
+            <span className="text-3xl font-black text-amber-300 tabular-nums leading-none">{formattedTotal} €</span>
           </div>
-          <p className="text-white/40 text-sm mt-3">Ces Crédits Impact ont été ajoutés à votre solde.</p>
+          <p className="text-white/40 text-sm mt-3">Cet achat produit ne crée pas automatiquement de Credits Impact.</p>
         </div>
 
         {/* CTAs — La Boucle Gamification */}
         <div className="w-full flex flex-col gap-3 mt-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           <button
             onClick={() => router.push('/projects')}
-            className={`w-full font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(252,211,77,0.18)] ${getCurrencyDesign('impactCredits').ctaClassName}`}
+            className="w-full font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(252,211,77,0.18)] bg-amber-300 text-black"
           >
-            Utiliser mes Credits Impact
+            Découvrir les projets à soutenir
           </button>
           <button
             onClick={() => router.push('/profile/investments')}
@@ -168,15 +164,11 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           <div className="h-px w-full bg-white/10 my-3" />
           <div className="flex justify-between items-center pt-1">
             <span className="text-sm text-white/50 flex items-center gap-2">
-              <Gift className="w-4 h-4 text-amber-300" /> Récompense incluse
+              <Package className="w-4 h-4 text-amber-300" /> Achat produit
             </span>
-            <CurrencyAmount
-              key={totalCreditsEarned}
-              kind="impactCredits"
-              value={totalCreditsEarned}
-              prefix="+"
-              className="rounded-lg bg-amber-300/10 px-2.5 py-1 text-sm font-bold animate-in fade-in zoom-in duration-300"
-            />
+            <span className="rounded-lg bg-amber-300/10 px-2.5 py-1 text-sm font-bold text-amber-300">
+              Pas de Credits Impact automatiques
+            </span>
           </div>
         </div>
 
@@ -199,8 +191,8 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
 
         {/* Rassurance Stripe */}
         <div className="flex justify-center items-center gap-1.5 mb-1 pointer-events-auto">
-          <Lock className="w-3 h-3 text-white/30" />
-          <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Paiement sécurisé par Stripe</span>
+          <Package className="w-3 h-3 text-white/30" />
+          <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Prototype de paiement — aucun débit réel</span>
         </div>
 
         {/* Apple Pay */}
@@ -212,14 +204,14 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           {paymentState === 'processing' && activeMethod === 'apple_pay' ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin text-black/50" />
-              <span>Paiement sécurisé en cours...</span>
+              <span>Validation prototype en cours...</span>
             </>
           ) : (
             <>
               <svg className="w-5 h-5" viewBox="0 0 384 512" fill="currentColor">
                 <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.3 48.6-.8 90.5-90.8 102.2-127.3-46.7-20-61.4-56.1-61.4-83.3zM218.4 87.3C233 69.8 242 45.4 239.3 22c-20.4 1.4-46.6 14.6-61.6 32-13.4 15.5-23.7 40.5-20.6 63.4 22.8 1.6 46.7-11.8 61.3-29.6z" />
               </svg>
-              Payer avec Apple Pay
+              Simuler avec Apple Pay
             </>
           )}
         </button>
@@ -233,12 +225,12 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           {paymentState === 'processing' && activeMethod === 'card' ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin text-white/50" />
-              <span className="text-white/70">Paiement sécurisé en cours...</span>
+              <span className="text-white/70">Validation prototype en cours...</span>
             </>
           ) : (
             <>
               <CreditCard className="w-5 h-5 text-white/50" />
-              Payer par Carte Bancaire
+              Simuler par Carte Bancaire
             </>
           )}
         </button>

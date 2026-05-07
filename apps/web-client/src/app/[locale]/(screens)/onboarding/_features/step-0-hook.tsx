@@ -52,7 +52,7 @@ export function Step0Hook() {
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
             className="text-sm text-gray-300 font-medium leading-relaxed mb-8 max-w-sm text-pretty px-2"
           >
-            Soutenez les projets de nos artisans locaux, protégez la biodiversité et recevez leurs produits d'exception en remerciement.
+            Soutenez des projets producteurs, découvrez la biodiversité associée et accédez à des produits partenaires.
           </motion.p>
         </div>
 
@@ -69,7 +69,7 @@ export function Step0Hook() {
               <span className="text-amber-400">⬢</span>
               <span className="text-xl font-black text-white">290k+</span>
             </div>
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Abeilles Protégées</span>
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Abeilles associées</span>
           </div>
           {/* Stat 2 */}
           <div className="bg-[#1A1F26]/80 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center">
