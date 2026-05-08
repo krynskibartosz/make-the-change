@@ -14,42 +14,42 @@ type ProjectStorySheetProps = {
   isDonationProject?: boolean
 }
 
-function getSupportBullets(projectType: string | null | undefined, isDonationProject: boolean): string[] {
+function getSupportChips(projectType: string | null | undefined, isDonationProject: boolean): string[] {
   const type = projectType?.toLowerCase() ?? ''
 
   if (isDonationProject || type.includes('coral') || type.includes('reef')) {
-    return [
-      "l'implantation et le suivi des fragments de corail",
-      "les équipements de plongée et de suivi sous-marin",
-      "le suivi photographique et scientifique du site",
-      "l'entretien des structures de nurserie",
-    ]
+    return ['Implantation coraux', 'Équipement plongée', 'Suivi photo', 'Entretien nurseries']
   }
 
   if (type.includes('orchard') || type.includes('olive')) {
-    return [
-      "la taille et l'entretien des oliviers",
-      "les équipements de récolte",
-      "la transformation et la valorisation de l'huile",
-      "les circuits de distribution locale",
-    ]
+    return ['Taille oliviers', 'Équipement récolte', 'Transformation huile', 'Distribution locale']
   }
 
-  return [
-    "l'entretien et le suivi des ruches",
-    "les déplacements terrain du producteur",
-    "le matériel apicole",
-    "le suivi sanitaire des colonies",
-    "la récolte et la valorisation du miel",
-  ]
+  return ['Entretien des ruches', 'Matériel apicole', 'Déplacements terrain', 'Suivi sanitaire', 'Récolte du miel']
 }
 
-function Bullet({ children }: { children: string }) {
+function getReceiveChips(isDonationProject: boolean): string[] {
+  if (isDonationProject) {
+    return ['Photos sous-marines', 'Nouvelles projet', 'Progression documentée', 'Infos partenaire']
+  }
+  return ['Photos terrain', 'Nouvelles partenaire', 'Étapes projet', 'Suivi production']
+}
+
+function Chip({ children }: { children: string }) {
   return (
-    <li className="flex items-start gap-2 text-sm text-white/65">
-      <span className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-white/25" />
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[11px] font-semibold text-white/60">
       {children}
-    </li>
+    </span>
+  )
+}
+
+function ChipCloud({ chips }: { chips: string[] }) {
+  return (
+    <div className="mt-2 flex flex-wrap gap-1.5">
+      {chips.map((chip) => (
+        <Chip key={chip}>{chip}</Chip>
+      ))}
+    </div>
   )
 }
 
@@ -66,21 +66,9 @@ export function ProjectStorySheet({
 
   if (!description && !producerName) return null
 
-  const supportVerb = isDonationProject ? 'don' : 'soutien'
-  const supportBullets = getSupportBullets(projectType, isDonationProject)
-  const receiveBullets = isDonationProject
-    ? [
-        'photos et vidéos du site sous-marin',
-        'nouvelles du projet de restauration',
-        'étapes de progression documentées',
-        'informations du partenaire terrain',
-      ]
-    : [
-        'photos et nouvelles terrain',
-        'étapes importantes du projet',
-        'informations du partenaire',
-        'mises à jour de la production',
-      ]
+  const supportChips = getSupportChips(projectType, isDonationProject)
+  const receiveChips = getReceiveChips(isDonationProject)
+  const supportLabel = isDonationProject ? 'Ce don peut aider' : 'Ce soutien peut aider'
 
   return (
     <>
@@ -94,52 +82,56 @@ export function ProjectStorySheet({
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title={title}>
-        {/* Bloc 1 — Description complète */}
+        {/* 1. Pourquoi ce projet existe */}
         {description ? (
-          <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-white/75">
-            {description}
-          </p>
-        ) : null}
-
-        {/* Bloc 2 — Partenaire */}
-        {producerName ? (
-          <div className="mt-6 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-              {producerLabel ?? 'Partenaire'}
+          <div className="mt-3">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+              Pourquoi ce projet existe
             </p>
-            <p className="text-sm font-bold text-white">{producerName}</p>
-            {producerDescription ? (
-              <p className="mt-1 text-sm leading-relaxed text-white/50">{producerDescription}</p>
-            ) : null}
+            <p className="text-sm leading-relaxed text-white/70">{description}</p>
           </div>
         ) : null}
 
-        {/* Bloc 3 — Ce que ce soutien/don peut permettre */}
-        <div className="mt-6">
-          <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-            Ce {supportVerb} peut permettre
+        {/* 2. Le partenaire */}
+        {producerName ? (
+          <div className="mt-5">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+              {producerLabel ?? 'Le partenaire'}
+            </p>
+            <div className="flex items-start gap-3 rounded-xl bg-white/[0.04] px-3 py-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-sm font-black text-white/60">
+                {producerName[0]?.toUpperCase() ?? 'P'}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-white">{producerName}</p>
+                {producerDescription ? (
+                  <p className="mt-0.5 text-xs leading-relaxed text-white/50">{producerDescription}</p>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {/* 3. Ce que le soutien peut aider */}
+        <div className="mt-5">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+            {supportLabel}
           </p>
-          <ul className="space-y-2">
-            {supportBullets.map((bullet) => (
-              <Bullet key={bullet}>{bullet}</Bullet>
-            ))}
-          </ul>
+          <ChipCloud chips={supportChips} />
         </div>
 
-        {/* Bloc 4 — Ce que vous pourrez recevoir */}
-        <div className="mt-6 pb-2">
-          <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-            Vous pourrez recevoir
+        {/* 4. Ce que vous pourrez suivre */}
+        <div className="mt-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+            Ce que vous pourrez suivre
           </p>
-          <ul className="space-y-2">
-            {receiveBullets.map((item) => (
-              <Bullet key={item}>{item}</Bullet>
-            ))}
-          </ul>
-          <p className="mt-4 text-xs leading-relaxed text-white/30">
-            Ces éléments dépendent du projet et du partenaire. Ils ne constituent pas une promesse contractuelle.
-          </p>
+          <ChipCloud chips={receiveChips} />
         </div>
+
+        {/* Note */}
+        <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
+          Ces éléments dépendent du projet et du partenaire. Ils ne constituent pas une promesse contractuelle.
+        </p>
       </MobileSheet>
     </>
   )
