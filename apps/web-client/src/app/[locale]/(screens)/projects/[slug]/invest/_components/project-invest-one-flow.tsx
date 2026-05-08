@@ -189,7 +189,7 @@ function AfterSupportBlock({
         <button
           type="button"
           onClick={onOpenRewards}
-          className="rounded-2xl border border-white/8 bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
+          className="rounded-2xl bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
         >
           <span className="flex items-center justify-between gap-2 text-[12px] font-black text-white">
             Voir pourquoi
@@ -202,7 +202,7 @@ function AfterSupportBlock({
         <button
           type="button"
           onClick={onOpenTracking}
-          className="rounded-2xl border border-white/8 bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
+          className="rounded-2xl bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
         >
           <span className="flex items-center justify-between gap-2 text-[12px] font-black text-white">
             Voir le suivi
@@ -783,10 +783,6 @@ export function ProjectInvestOneFlow({
               <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
                 <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expectedImpact ?? null} />
               </div>
-
-              {species && species.length > 0 ? (
-                <BiodexRail species={species} />
-              ) : null}
 
               <AfterSupportBlock
                 credits={points.total_points}
