@@ -855,6 +855,10 @@
       }
     },
     "hero": {
+      "overline": "HET COLLECTIEF",
+      "title": "Digitaal in dienst van het leven.",
+      "subtitle": "Make the Change is meer dan een app. Het is een burgercollectief dat digitale acties omzet in concrete daden voor de natuur. Herwin jouw deel in de verandering.",
+      "imageAlt": "Donker mistig woud",
       "badge": "Ons Verhaal",
       "cards": {
         "global": {
@@ -865,23 +869,76 @@
         "social": "Sociaal"
       }
     },
+    "genesis": {
+      "title": "Van een studentenscriptie naar een wereldwijd ecosysteem.",
+      "paragraph1": "Meer dan 5 jaar geleden ontstond het idee van Make the Change op de schoolbanken. De overtuiging was simpel: het beschermen van de natuur wekt schuldgevoelens op, terwijl het motivatie zou moeten geven.",
+      "paragraph2": "Na jaren van onderzoek, onafgewerkte prototypes en reizen om de realiteit op het terrein te begrijpen (van België tot Madagascar), drong één waarheid zich op.",
+      "paragraph3": "Om biodiversiteit te redden, moesten we de codes van onze generatie gebruiken: spel, technologie en transparantie."
+    },
+    "model": {
+      "overline": "EEN DEUGDELIJKE CIRKEL, VAN DIGITAAL NAAR REËEL",
+      "gamification": {
+        "title": "Spelen om te leren.",
+        "description": "Acties ondernemen voor de planeet mag geen karwei meer zijn. We gebruiken gamificatie om uw dagelijkse inspanningen om te zetten in een spannend avontuur."
+      },
+      "circular": {
+        "title": "De aarde steunen, haar bewakers steunen.",
+        "description": "Uw digitale betrokkenheid ondersteunt rechtstreeks biodiversiteitsprojecten op het terrein. In ruil creëren deze herstelde gronden lokale rijkdom (zoals honing of ambachtelijke producten). Deze producten worden aan ons teruggegeven en wij bieden ze u aan in ruil voor uw impactkredieten. De cirkel is rond."
+      },
+      "transparency": {
+        "title": "Traceerbare impact.",
+        "description": "Transparantie boven beloften: gedocumenteerde projecten, geïdentificeerde partners en educatieve impact. Geen greenwashing — u weet precies welke olijfboom, welke bijenkorf of welke soort u vandaag heeft geholpen."
+      }
+    },
+    "field_proof": {
+      "title": "Al verbonden met het terrein",
+      "description": "Jarenlang werkt het collectief al samen met producenten, imkers, verenigingen en lokale actoren in België, Madagascar en andere gebieden die zich inzetten voor de natuur.",
+      "projects": {
+        "apiculture": "Imkerij in Madagascar",
+        "corals": "Koraalrestauratie",
+        "olives": "Eeuwenoude olijfbomen",
+        "partners": "Geverifieerde lokale partners"
+      }
+    },
+    "timeline": {
+      "overline": "ONS VERHAAL",
+      "title": "Het lange spel",
+      "events": {
+        "y2019": "Studentenidee",
+        "y2021": "Eerste prototypes",
+        "y2023": "Veldwerk Madagascar",
+        "y2025": "V1 publieke lancering",
+        "y2026": "Europees collectief"
+      }
+    },
     "team": {
-      "title": "Het visionaire team",
-      "subtitle": "Ontmoet de mensen die ecologische ambitie omzetten in realiteit.",
+      "title": "Zij die waken over het collectief.",
+      "subtitle": "Twee gezichten, één overtuiging: actie voor biodiversiteit aantrekkelijk maken.",
       "gregory": {
+        "name": "Grégory Steisel",
         "badge": "Leiderschap",
-        "role": "CEO & Medeoprichter",
-        "quote": "\"Ecologie mag geen beperking meer zijn, maar een kans.\"",
+        "role": "INITIATOR & VISIONAIR",
+        "quote": "We willen een wereld creëren waarin het beschermen van de natuur geen beperking meer is, maar een spel waar iedereen wint: de natuur, lokale producenten en jij.",
+        "linkedinUrl": "https://www.linkedin.com/in/steisel/",
+        "linkedinLabel": "Grégory Steisel op LinkedIn",
         "bio": "Als gepassioneerde ondernemer bouwt Gregory al tien jaar bruggen tussen technologische innovatie en duurzame impact. Zijn visie: een ecosysteem waarin elke individuele actie leidt tot concrete biodiversiteitsherstel wereldwijd."
       },
       "bartosz": {
+        "name": "Bartosz Krynski",
         "badge": "Technologie",
-        "role": "CTO & Medeoprichter",
-        "quote": "\"Transparantie is geen optie, het is de basis van vertrouwen.\"",
+        "role": "ARCHITECT & BOUWER",
+        "quote": "Een idee overleeft alleen als je het een lichaam geeft. Mijn rol is de motor van dit collectief te smeden en de kortste technologische brug te bouwen tussen uw telefoon en de natuur.",
+        "linkedinUrl": "https://www.linkedin.com/in/bartosz-krynski/",
+        "linkedinLabel": "Bartosz Krynski op LinkedIn",
         "bio": "Als architect van het onzichtbare vertaalt Bartosz blockchaincomplexiteit naar een vloeiende en veilige gebruikerservaring. Hij zorgt ervoor dat elke regel code de missie ondersteunt: de integriteit en impact van elke investering garanderen."
       }
     },
+    "letter": {
+      "body": "Onze ambitie: van Make the Change een van de grootste burgercollectieven in Europa te maken, gewijd aan de levende natuur. Een ecosysteem waar elke swipe op een scherm een zaad plant, waar elke voltooide uitdaging een habitat herstelt, en waar collectieve actie een tweede natuur wordt. Het collectief wacht alleen nog op u.",
+      "signature": "— De oprichters, Grégory & Bartosz"
+    },
     "cta": {
+      "label": "Terug naar mijn Impact",
       "badge": "Sluit je aan bij de beweging",
       "title": {
         "line1": "Samen beschermen we",
@@ -889,7 +946,11 @@
       },
       "description": "Elke actie telt. Zet jouw betrokkenheid om in echte, meetbare impact voor biodiversiteit.",
       "primary": "Nu starten",
-      "secondary": "Projecten bekijken"
+      "secondary": "Projecten bekijken",
+      "not_connected": "Sluit je aan bij het collectief",
+      "no_faction": "Kies mijn factie",
+      "no_subscription": "Ontdek abonnementen",
+      "ready": "Toegang tot uitdagingen"
     }
   },
   "how_it_works": {

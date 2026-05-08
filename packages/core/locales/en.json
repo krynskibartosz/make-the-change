@@ -617,6 +617,10 @@
       }
     },
     "hero": {
+      "overline": "THE COLLECTIVE",
+      "title": "Digital in service of life.",
+      "subtitle": "Make the Change is more than an app. It's a citizen collective that turns digital actions into concrete acts for living nature. Reclaim your part in the change.",
+      "imageAlt": "Dark misty forest",
       "badge": "Our Story",
       "cards": {
         "global": {
@@ -627,23 +631,76 @@
         "social": "Social"
       }
     },
+    "genesis": {
+      "title": "From a student thesis to a global ecosystem.",
+      "paragraph1": "More than 5 years ago, the idea of Make the Change was born on school benches. The conviction was simple: protecting living nature generates guilt, when it should generate motivation.",
+      "paragraph2": "After years of research, unfinished prototypes and travels to understand field realities (from Belgium to Madagascar), one truth became clear.",
+      "paragraph3": "To save biodiversity, we had to use the codes of our generation: play, technology and transparency."
+    },
+    "model": {
+      "overline": "A VIRTUOUS CIRCLE, FROM DIGITAL TO REAL",
+      "gamification": {
+        "title": "Play to learn.",
+        "description": "Taking action for the planet should no longer be a chore. We use gamification to turn your daily efforts into an exciting adventure."
+      },
+      "circular": {
+        "title": "Support the land, support its guardians.",
+        "description": "Your digital engagement directly supports on-the-ground biodiversity projects. In return, these restored lands create local wealth (such as honey or crafts). These products are returned to us, and we offer them to you in exchange for your impact credits. The loop is closed."
+      },
+      "transparency": {
+        "title": "Traceable impact.",
+        "description": "Transparency over promises: documented projects, identified partners and educational impact. No greenwashing — you know exactly which olive tree, which hive or which species you helped support today."
+      }
+    },
+    "field_proof": {
+      "title": "Already connected to the field",
+      "description": "For several years, the collective has already been working with producers, beekeepers, associations and local actors between Belgium, Madagascar and other territories committed to living nature.",
+      "projects": {
+        "apiculture": "Beekeeping in Madagascar",
+        "corals": "Coral restoration",
+        "olives": "Centenary olive trees",
+        "partners": "Verified local partners"
+      }
+    },
+    "timeline": {
+      "overline": "OUR STORY",
+      "title": "The long game",
+      "events": {
+        "y2019": "Student idea",
+        "y2021": "First prototypes",
+        "y2023": "Madagascar fieldwork",
+        "y2025": "V1 public launch",
+        "y2026": "European collective"
+      }
+    },
     "team": {
-      "title": "The visionary team",
-      "subtitle": "Meet the minds turning ecological ambition into reality.",
+      "title": "Those who watch over the collective.",
+      "subtitle": "Two faces, one conviction: make action for biodiversity desirable.",
       "gregory": {
+        "name": "Grégory Steisel",
         "badge": "Leadership",
-        "role": "CEO & Co-Founder",
-        "quote": "\"Ecology should no longer be a constraint, but an opportunity.\"",
+        "role": "INITIATOR & VISIONARY",
+        "quote": "We want to create a world where protecting nature is no longer a constraint, but a game where everyone wins: living nature, local producers, and you.",
+        "linkedinUrl": "https://www.linkedin.com/in/steisel/",
+        "linkedinLabel": "Grégory Steisel on LinkedIn",
         "bio": "A passionate entrepreneur, Gregory has spent the last decade building bridges between technological innovation and sustainable impact. His vision: create an ecosystem where every individual action drives concrete biodiversity restoration worldwide."
       },
       "bartosz": {
+        "name": "Bartosz Krynski",
         "badge": "Technology",
-        "role": "CTO & Co-Founder",
-        "quote": "\"Transparency is not optional, it is the foundation of trust.\"",
+        "role": "ARCHITECT & BUILDER",
+        "quote": "An idea only survives if you give it a body. My role is to forge the engine of this collective, and to create the shortest technological bridge between your phone and nature.",
+        "linkedinUrl": "https://www.linkedin.com/in/bartosz-krynski/",
+        "linkedinLabel": "Bartosz Krynski on LinkedIn",
         "bio": "An architect of the invisible, Bartosz turns blockchain complexity into a seamless, secure user experience. He ensures every line of code serves the mission: protecting the integrity and impact of every investment."
       }
     },
+    "letter": {
+      "body": "Our ambition: to make Make the Change one of the largest citizen collectives in Europe dedicated to living nature. An ecosystem where every swipe on a screen plants a seed, where every challenge completed restores a habitat, and where collective action becomes second nature. The collective only awaits you.",
+      "signature": "— The founders, Grégory & Bartosz"
+    },
     "cta": {
+      "label": "Back to my Impact",
       "badge": "Join the movement",
       "title": {
         "line1": "Together, let us protect",

@@ -1843,6 +1843,11 @@
       "footer_prompt": "Vous ne trouvez pas votre réponse ?",
       "footer_cta": "Contactez notre support",
       "items": {
+        "points": {
+          "category": "Concept",
+          "question": "Comment fonctionnent les points ?",
+          "answer": "Chaque euro investi dans un projet génère des Credits Impact. Vous pouvez les utiliser dans la marketplace ou les réinvestir dans de nouveaux projets."
+        },
         "graines_credits": {
           "category": "Concept",
           "question": "Quelle différence entre Graines et Credits Impact ?",
