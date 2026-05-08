@@ -3,8 +3,17 @@
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { MobileSheet } from '../ui/mobile-sheet'
-import type { RelatedProject } from '../../project-detail-data'
 import { sanitizeImageUrl } from '@/lib/image-url'
+
+type RelatedProject = {
+  id: string
+  slug: string
+  type: string | null
+  name_default: string
+  name_i18n?: Record<string, string> | null
+  hero_image_url: string | null
+  current_funding: number | null
+}
 import { getLocalizedContent } from '@/lib/utils'
 
 type ProjectCountrySheetProps = {
