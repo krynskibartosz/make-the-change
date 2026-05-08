@@ -124,13 +124,26 @@ export async function ProjectQuickView({
       ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
       : undefined
 
-  const countryName = project.address_country_code
+  const FRENCH_COUNTRY_TO_ISO: Record<string, string> = {
+    'madagascar': 'MG', 'france': 'FR', 'belgique': 'BE', 'italie': 'IT',
+    'espagne': 'ES', 'indonésie': 'ID', 'indonesie': 'ID', 'portugal': 'PT',
+    'allemagne': 'DE', 'maroc': 'MA', 'sénégal': 'SN', 'senegal': 'SN',
+    'kenya': 'KE', 'afrique du sud': 'ZA', 'brésil': 'BR', 'bresil': 'BR',
+    'mexique': 'MX', 'inde': 'IN', 'australie': 'AU', 'canada': 'CA',
+    'royaume-uni': 'GB', 'suisse': 'CH', 'pays-bas': 'NL', 'grèce': 'GR',
+  }
+  const rawCode = project.address_country_code
+  const resolvedIso = rawCode
+    ? (/^[A-Z]{2}$/i.test(rawCode.trim()) ? rawCode.trim().toUpperCase() : (FRENCH_COUNTRY_TO_ISO[rawCode.trim().toLowerCase()] ?? null))
+    : null
+  const countryName = rawCode
     ? (() => {
-        try {
-          return new Intl.DisplayNames([locale], { type: 'region' }).of(project.address_country_code!) ?? project.address_country_code
-        } catch {
-          return project.address_country_code
+        if (resolvedIso) {
+          try {
+            return new Intl.DisplayNames([locale], { type: 'region' }).of(resolvedIso) ?? rawCode
+          } catch { /* fall through */ }
         }
+        return rawCode
       })()
     : null
   const normalizedStatus = project.status?.toLowerCase() || null
@@ -282,7 +295,7 @@ export async function ProjectQuickView({
 
             {project.address_country_code && countryName ? (
               <ProjectCountrySheet
-                countryCode={project.address_country_code}
+                countryCode={resolvedIso ?? project.address_country_code}
                 countryName={countryName}
                 city={project.address_city}
                 projectType={project.type}

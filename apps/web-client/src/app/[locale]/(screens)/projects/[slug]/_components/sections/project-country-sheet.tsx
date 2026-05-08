@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { MobileSheet } from '../ui/mobile-sheet'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { getLocalizedContent } from '@/lib/utils'
 
 type RelatedProject = {
   id: string
@@ -14,7 +15,38 @@ type RelatedProject = {
   hero_image_url: string | null
   current_funding: number | null
 }
-import { getLocalizedContent } from '@/lib/utils'
+
+const FRENCH_TO_ISO: Record<string, string> = {
+  'madagascar': 'MG',
+  'france': 'FR',
+  'belgique': 'BE',
+  'italie': 'IT',
+  'espagne': 'ES',
+  'indonésie': 'ID',
+  'indonesie': 'ID',
+  'portugal': 'PT',
+  'allemagne': 'DE',
+  'maroc': 'MA',
+  'sénégal': 'SN',
+  'senegal': 'SN',
+  'kenya': 'KE',
+  'afrique du sud': 'ZA',
+  'brésil': 'BR',
+  'bresil': 'BR',
+  'mexique': 'MX',
+  'inde': 'IN',
+  'chine': 'CN',
+  'japon': 'JP',
+  'australie': 'AU',
+  'canada': 'CA',
+  'états-unis': 'US',
+  'etats-unis': 'US',
+  'royaume-uni': 'GB',
+  'suisse': 'CH',
+  'pays-bas': 'NL',
+  'grèce': 'GR',
+  'grece': 'GR',
+}
 
 type ProjectCountrySheetProps = {
   countryCode: string
@@ -26,12 +58,17 @@ type ProjectCountrySheetProps = {
   locale: string
 }
 
+function resolveIsoCode(code: string): string | null {
+  const upper = code.trim().toUpperCase()
+  if (/^[A-Z]{2}$/.test(upper)) return upper
+  return FRENCH_TO_ISO[code.trim().toLowerCase()] ?? null
+}
+
 function countryCodeToFlag(code: string): string {
+  const iso = resolveIsoCode(code)
+  if (!iso) return ''
   const BASE = 0x1f1e6 - 65
-  return [...code.toUpperCase()]
-    .filter((c) => c >= 'A' && c <= 'Z')
-    .map((c) => String.fromCodePoint(c.charCodeAt(0) + BASE))
-    .join('')
+  return [...iso].map((c) => String.fromCodePoint(c.charCodeAt(0) + BASE)).join('')
 }
 
 function getEcosystemLabel(projectType: string | null | undefined): string {
