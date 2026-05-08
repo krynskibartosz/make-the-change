@@ -205,9 +205,9 @@ export async function ProjectQuickView({
   const fundingSubtext = isDonationProject
     ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
-  const ctaSubtext = isDonationProject
-    ? 'Don pur · Graines possibles · suivi inclus'
-    : 'Soutien producteur · Crédits Impact possibles · suivi inclus'
+  const ctaProofItems = isDonationProject
+    ? ['Don pur', 'Suivi terrain', 'Graines possibles']
+    : ['Soutien producteur', 'Suivi terrain', 'Crédits Impact inclus']
   const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (
@@ -312,70 +312,69 @@ export async function ProjectQuickView({
 
           {/* 3. Partenaire */}
           {project.producer ? (
-            <div className="mt-6 px-4 sm:px-5">
-              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+            <div className="mt-8">
+              <div className="h-px bg-white/[0.06]" />
+              <p className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/25 sm:px-5">
                 {partnerLabel}
               </p>
+              <div className="h-px bg-white/[0.06]" />
+
               {producerHref ? (
                 <a
                   href={producerHref}
-                  className="group block w-full cursor-pointer border-y border-white/5 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
+                  className="group flex w-full cursor-pointer items-center gap-4 px-4 py-4 transition-all duration-200 hover:bg-white/[0.03] active:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-lime-400/60 sm:px-5"
                 >
-                  <div className="-mx-2 flex items-center gap-4 rounded-2xl px-2 py-2 transition-all duration-200 group-hover:bg-white/5 group-active:scale-[0.99] group-active:bg-white/10">
-                    {producerImage ? (
-                      <img
-                        src={producerImage}
-                        alt={organizerName}
-                        className="h-12 w-12 shrink-0 rounded-full object-cover transition-transform group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
-                        {organizerName?.[0]?.toUpperCase() || 'M'}
-                      </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-bold text-foreground underline-offset-4 group-hover:underline">
-                        {organizerName}
-                      </p>
-                      <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
-                        {organizerDescription}
-                      </p>
+                  {producerImage ? (
+                    <img
+                      src={producerImage}
+                      alt={organizerName}
+                      className="h-12 w-12 shrink-0 rounded-full object-cover transition-transform group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+                      {organizerName?.[0]?.toUpperCase() || 'M'}
                     </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-bold text-foreground underline-offset-4 group-hover:underline">
+                      {organizerName}
+                    </p>
+                    <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
+                      {organizerDescription}
+                    </p>
                   </div>
                 </a>
               ) : (
-                <section className="flex items-center gap-4 border-y border-white/5 py-3">
-                  <div className="flex w-full items-center gap-4">
-                    {producerImage ? (
-                      <img
-                        src={producerImage}
-                        alt={organizerName}
-                        className="h-12 w-12 shrink-0 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
-                        {organizerName?.[0]?.toUpperCase() || 'M'}
-                      </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-bold text-foreground">{organizerName}</p>
-                      <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
-                        {organizerDescription}
-                      </p>
+                <div className="flex w-full items-center gap-4 px-4 py-4 sm:px-5">
+                  {producerImage ? (
+                    <img
+                      src={producerImage}
+                      alt={organizerName}
+                      className="h-12 w-12 shrink-0 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+                      {organizerName?.[0]?.toUpperCase() || 'M'}
                     </div>
-                    {websiteUrl && websiteLabel ? (
-                      <a
-                        href={websiteUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary hover:underline"
-                      >
-                        <Globe className="h-3 w-3" />
-                        {websiteLabel}
-                      </a>
-                    ) : null}
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-bold text-foreground">{organizerName}</p>
+                    <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
+                      {organizerDescription}
+                    </p>
                   </div>
-                </section>
+                  {websiteUrl && websiteLabel ? (
+                    <a
+                      href={websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                    >
+                      <Globe className="h-3 w-3" />
+                      {websiteLabel}
+                    </a>
+                  ) : null}
+                </div>
               )}
             </div>
           ) : null}
@@ -476,9 +475,14 @@ export async function ProjectQuickView({
             </Link>
           )}
           {!isFundingClosed ? (
-            <p className="mt-1.5 text-center text-[10px] font-semibold text-white/30">
-              {ctaSubtext}
-            </p>
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+              {ctaProofItems.map((item) => (
+                <span key={item} className="flex items-center gap-1 text-[10px] font-semibold text-white/35">
+                  <span className="text-white/50">✓</span>
+                  {item}
+                </span>
+              ))}
+            </div>
           ) : null}
         </BottomActionBar>
       </div>
