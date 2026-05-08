@@ -15,6 +15,7 @@ import { ProjectSpeciesTeaser } from './_components/ui/project-species-teaser'
 import { ProjectStorySheet } from './_components/sections/project-story-sheet'
 import { ProjectImpactPreview } from './_components/sections/project-impact-preview'
 import { ProjectTrackingPreview } from './_components/sections/project-tracking-preview'
+import { ProjectBiodexSheet } from './_components/sections/project-biodex-sheet'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import {
   getRelatedProjectsByType,
@@ -203,9 +204,6 @@ export async function ProjectQuickView({
   const fundingSubtext = isDonationProject
     ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
-  const biodexTitle = isDonationProject
-    ? 'Les êtres vivants liés au récif'
-    : 'Les êtres vivants liés au projet'
   const ctaSubtext = isDonationProject
     ? 'Don pur · Graines possibles · suivi inclus'
     : 'Soutien producteur · Crédits Impact possibles · suivi inclus'
@@ -424,15 +422,13 @@ export async function ProjectQuickView({
             {/* 7. BioDex */}
             {resolvedSpecies && resolvedSpecies.length > 0 ? (
               <div className="mt-10 px-4 sm:px-5">
-                <p className="mb-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-                  {biodexTitle}
-                </p>
-                <p className="mb-3 text-xs leading-relaxed text-white/35">
-                  Une trace pédagogique liée au projet, pas une preuve que l&apos;espèce est sauvée.
-                </p>
                 <ProjectSpeciesTeaser
                   species={resolvedSpecies}
                   accentColor={glowRgba(glow, 0.75)}
+                />
+                <ProjectBiodexSheet
+                  species={resolvedSpecies}
+                  isDonationProject={isDonationProject}
                 />
               </div>
             ) : null}
