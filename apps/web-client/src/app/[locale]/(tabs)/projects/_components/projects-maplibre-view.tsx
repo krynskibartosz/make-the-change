@@ -636,7 +636,7 @@ function SelectedProjectCard({
   return (
     <article>
       {/* Image — propre, sans overlay ni texte */}
-      <div className="relative h-32 overflow-hidden bg-white/10">
+      <div className="relative aspect-[16/9] overflow-hidden bg-white/10">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-full w-full object-cover" />
         ) : (
