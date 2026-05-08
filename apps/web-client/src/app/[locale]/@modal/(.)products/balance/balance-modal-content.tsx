@@ -123,9 +123,9 @@ function VisitorState() {
       
       <div className="relative z-10 flex flex-col items-center gap-6">
         <div className="relative flex h-24 items-center justify-center gap-3">
-          <img src="/melli.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
-          <img src="/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
-          <img src="/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
+          <img src="/images/mascots/melli.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
+          <img src="/images/mascots/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
+          <img src="/images/mascots/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
         </div>
         <h1 className="text-3xl font-black text-white">
           Ton impact a de la valeur.
@@ -162,7 +162,7 @@ function BeginnerState() {
         <div className="flex flex-col items-center rounded-3xl border border-white/10 bg-white/5 p-8">
           <CurrencyAmount kind="impactCredits" value={0} className="text-5xl font-black text-white" />
           <div className="mt-4">
-            <img src="/sylva.png" alt="Sylva" className="h-24 w-24 object-contain drop-shadow-2xl" />
+            <img src="/images/mascots/sylva.png" alt="Sylva" className="h-24 w-24 object-contain drop-shadow-2xl" />
           </div>
         </div>
 

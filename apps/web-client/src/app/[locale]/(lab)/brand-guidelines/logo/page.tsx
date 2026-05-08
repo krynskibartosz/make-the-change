@@ -1,4 +1,4 @@
-import { Badge, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
+﻿import { Badge, Card, CardContent, CardHeader, CardTitle } from '@make-the-change/core/ui'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import {
@@ -21,7 +21,7 @@ export default async function BrandGuidelinesLogoPage() {
   const variations = [
     {
       key: 'full',
-      src: '/images/logo-full.png',
+      src: '/images/logos/logo-full.png',
       bgClass: 'bg-background',
       imageClass: 'max-h-14 w-auto',
     },
@@ -33,13 +33,13 @@ export default async function BrandGuidelinesLogoPage() {
     },
     {
       key: 'dark',
-      src: '/images/logo-text-on-black.png',
+      src: '/images/logos/logo-text-on-black.png',
       bgClass: 'bg-client-slate-900',
       imageClass: 'max-h-14 w-auto',
     },
     {
       key: 'light',
-      src: '/images/logo-text-on-white.png',
+      src: '/images/logos/logo-text-on-white.png',
       bgClass: 'bg-client-white',
       imageClass: 'max-h-14 w-auto',
     },

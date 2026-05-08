@@ -10,9 +10,9 @@ import { ImpactCard } from '@/app/[locale]/(tabs)/profile/_components/impact-car
 
 function FactionMascotSelector() {
   const factions = [
-    { id: 'pollinisateurs', name: 'Melli', image: '/melli.png' },
-    { id: 'forets', name: 'Sylva', image: '/sylva.png' },
-    { id: 'mers', name: 'Ondine', image: '/ondine.png' },
+    { id: 'pollinisateurs', name: 'Melli', image: '/images/mascots/melli.png' },
+    { id: 'forets', name: 'Sylva', image: '/images/mascots/sylva.png' },
+    { id: 'mers', name: 'Ondine', image: '/images/mascots/ondine.png' },
   ]
 
   return (

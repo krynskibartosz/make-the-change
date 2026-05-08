@@ -86,25 +86,25 @@ const FACTION_PRESENTATION: Record<
 > = {
   neutral: {
     label: 'Melli',
-    mascotImage: '/melli.png',
+    mascotImage: '/images/mascots/melli.png',
     headline: 'Choisis ton prochain pas pour le vivant.',
     message: 'Apprends, soutiens un projet concret et fais grandir ton impact.',
   },
   pollinisateurs: {
     label: 'Melli',
-    mascotImage: '/melli.png',
+    mascotImage: '/images/mascots/melli.png',
     headline: "Melli a repéré une action utile pour aujourd'hui.",
     message: 'Fais avancer les pollinisateurs sans perdre le fil de ton impact.',
   },
   forets: {
     label: 'Sylva',
-    mascotImage: '/sylva.png',
+    mascotImage: '/images/mascots/sylva.png',
     headline: "Sylva t'ouvre un chemin court et concret.",
     message: 'Un apprentissage, un projet, une espèce: garde le vivant visible.',
   },
   mers: {
     label: 'Ondine',
-    mascotImage: '/ondine.png',
+    mascotImage: '/images/mascots/ondine.png',
     headline: 'Ondine garde le cap sur ton impact du jour.',
     message: 'Explore, comprends et soutiens les écosystèmes qui en ont besoin.',
   },
@@ -116,8 +116,8 @@ const QUEST_ICONS: Record<AdventureQuestCard['type'], LucideIcon> = {
   daily_harvest: Sparkles,
 }
 
-const ACADEMY_CARD_IMAGE = '/coral-karimunjawa.jpg'
-const BIODEX_LOCKED_IMAGE = '/images/diaromas/Cam%C3%A9l%C3%A9on%20de%20Parson.png'
+const ACADEMY_CARD_IMAGE = '/images/projects/coral-karimunjawa.jpg'
+const BIODEX_LOCKED_IMAGE = '/images/dioramas/cameleon-de-parson.png'
 
 function getProgressPercent(progress: number, max: number) {
   if (max <= 0) return 0

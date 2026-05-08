@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 interface LogoProps {
@@ -20,18 +20,18 @@ export function Logo({
   const defaultWidth = variant === 'full' ? 180 : 40
   const defaultHeight = variant === 'full' ? 50 : 40
 
-  let src = '/images/logo-full.png'
+  let src = '/images/logos/logo-full.png'
 
   if (variant === 'icon') {
     src = '/adopt.svg'
   } else {
     // Variant Full
     if (colorMode === 'dark') {
-      src = '/images/logo-text-on-black.png'
+      src = '/images/logos/logo-text-on-black.png'
     } else if (colorMode === 'light') {
-      src = '/images/logo-text-on-white.png'
+      src = '/images/logos/logo-text-on-white.png'
     } else {
-      src = '/images/logo-full.png'
+      src = '/images/logos/logo-full.png'
     }
   }
 

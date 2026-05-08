@@ -269,9 +269,9 @@ function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
 
 function getFactionImage(faction: string | undefined): string | null {
   if (!faction) return null
-  if (faction === 'Terres & Forêts') return '/sylva.png'
-  if (faction === 'Vie Sauvage') return '/melli.png'
-  if (faction === 'Gardiens des mers') return '/ondine.png'
+  if (faction === 'Terres & Forêts') return '/images/mascots/sylva.png'
+  if (faction === 'Vie Sauvage') return '/images/mascots/melli.png'
+  if (faction === 'Gardiens des mers') return '/images/mascots/ondine.png'
   return null
 }
 
@@ -577,9 +577,9 @@ export function ImpactTabClient({
                 const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
 
                 let mascotSrc = ''
-                if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/melli.png'
-                else if (contribution.themeKey === 'forets') mascotSrc = '/sylva.png'
-                else if (contribution.themeKey === 'mers') mascotSrc = '/ondine.png'
+                if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/images/mascots/melli.png'
+                else if (contribution.themeKey === 'forets') mascotSrc = '/images/mascots/sylva.png'
+                else if (contribution.themeKey === 'mers') mascotSrc = '/images/mascots/ondine.png'
 
                 const sizeClass = sizes[displayIndex] ?? 'w-20 h-20'
                 const bottomClass = bottoms[displayIndex] ?? ''

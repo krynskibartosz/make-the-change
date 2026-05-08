@@ -143,7 +143,7 @@ function MascotSpacer({
         )}
       >
         <Image
-          src={`/${mascot}.png`}
+          src={`/images/mascots/${mascot}.png`}
           alt=""
           fill
           className={cn('object-contain drop-shadow-[0_0_20px_rgba(52,211,153,0.4)]', side === 'left' && 'scale-x-[-1]')}
@@ -593,7 +593,7 @@ function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
         </span>
       </div>
       <div className="relative z-10 mb-3 h-16 w-16 drop-shadow-[0_0_15px_rgba(251,191,36,0.25)]">
-        <Image src="/melli.png" alt="" fill className="object-contain" />
+        <Image src="/images/mascots/melli.png" alt="" fill className="object-contain" />
       </div>
       <h2 className="relative z-10 mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-400">
         Chapitre {chapter.order} · {chapter.level}
@@ -889,7 +889,7 @@ export default function AcademyPage() {
                   }}
                   className="absolute bottom-2 left-1/2 z-20 h-32 w-32 -translate-x-1/2 drop-shadow-[0_0_30px_rgba(52,211,153,0.45)]"
                 >
-                  <Image src={`/${selectedUnit.mascot}.png`} alt="" fill className="object-contain" />
+                  <Image src={`/images/mascots/${selectedUnit.mascot}.png`} alt="" fill className="object-contain" />
                 </motion.div>
               </div>
               <div className="flex flex-1 flex-col items-center px-6 pb-32 pt-7 text-center">

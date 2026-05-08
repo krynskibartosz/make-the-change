@@ -25,19 +25,19 @@ const FACTION_CONFIG: Record<string, { name: string; title: string; mascot: stri
   pollinisateurs: {
     name: 'Melli',
     title: 'Gardienne des Pollinisateurs',
-    mascot: '/melli.png',
+    mascot: '/images/mascots/melli.png',
     emoji: '🐝',
   },
   forets: {
     name: 'Sylva',
     title: 'Gardienne des Forêts',
-    mascot: '/sylva.png',
+    mascot: '/images/mascots/sylva.png',
     emoji: '🌲',
   },
   mers: {
     name: 'Ondine',
     title: 'Gardienne des Mers',
-    mascot: '/ondine.png',
+    mascot: '/images/mascots/ondine.png',
     emoji: '🌊',
   },
 }

@@ -10,10 +10,10 @@ interface AnimatedMascotProps {
 export function AnimatedMascot({ themeKey, label }: AnimatedMascotProps) {
   const src =
     themeKey === 'pollinisateurs'
-      ? '/melli.png'
+      ? '/images/mascots/melli.png'
       : themeKey === 'forets'
-        ? '/sylva.png'
-        : '/ondine.png'
+        ? '/images/mascots/sylva.png'
+        : '/images/mascots/ondine.png'
 
   return (
     <motion.img

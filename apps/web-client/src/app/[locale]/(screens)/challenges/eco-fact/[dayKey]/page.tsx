@@ -20,19 +20,19 @@ import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 const FACTION_CONTENT = {
   neutral: {
     title: "Les Défis Quotidiens",
-    mascotImg: '/images/logo-icon-bee.png',
+    mascotImg: '/images/logos/logo-icon-bee.png',
   },
   pollinisateurs: {
     title: 'Quête de Melli',
-    mascotImg: '/melli.png',
+    mascotImg: '/images/mascots/melli.png',
   },
   forets: {
     title: 'Quête de Sylva',
-    mascotImg: '/sylva.png',
+    mascotImg: '/images/mascots/sylva.png',
   },
   mers: {
     title: "Quête d'Ondine",
-    mascotImg: '/ondine.png',
+    mascotImg: '/images/mascots/ondine.png',
   },
 } as const
 
@@ -398,7 +398,7 @@ function EcoFactContent() {
           <div className='pointer-events-none absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-500/20 blur-[80px]' />
           {hasFaction ? (
             <motion.img
-              src={FACTION_CONTENT[contentKey as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logo-icon-bee.png'}
+              src={FACTION_CONTENT[contentKey as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logos/logo-icon-bee.png'}
               alt={challengeLabel}
               initial={{ opacity: 0, scale: 0.85, y: 18 }}
               animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
@@ -433,19 +433,19 @@ function EcoFactContent() {
               className='relative z-10 mx-auto mt-16 flex gap-2'
             >
               <img
-                src="/melli.png"
+                src="/images/mascots/melli.png"
                 alt="Melli"
                 className='h-20 w-20 object-contain drop-shadow-2xl pointer-events-none'
                 draggable='false'
               />
               <img
-                src="/sylva.png"
+                src="/images/mascots/sylva.png"
                 alt="Sylva"
                 className='h-20 w-20 object-contain drop-shadow-2xl pointer-events-none'
                 draggable='false'
               />
               <img
-                src="/ondine.png"
+                src="/images/mascots/ondine.png"
                 alt="Ondine"
                 className='h-20 w-20 object-contain drop-shadow-2xl pointer-events-none'
                 draggable='false'

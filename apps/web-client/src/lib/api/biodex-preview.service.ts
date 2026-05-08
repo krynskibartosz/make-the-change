@@ -28,7 +28,7 @@ type FallbackSpecies = {
   image_url?: string
 }
 
-const DEFAULT_SPECIES_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
+const DEFAULT_SPECIES_IMAGE = '/images/dioramas/abeille-noire.png' // Image générique de fallback
 
 const FALLBACK_SPECIES: FallbackSpecies[] = [
   {
@@ -36,56 +36,56 @@ const FALLBACK_SPECIES: FallbackSpecies[] = [
     name_default: 'Chouette Effraie',
     conservation_status: 'LC',
     isUnlocked: true,
-    image_url: '/images/diaromas/Chouette chevêche.png',
+    image_url: '/images/dioramas/chouette-cheveche.png',
   },
   {
     id: 'species-abeille-mellifere',
     name_default: 'Abeille mellifère',
     conservation_status: 'NT',
     isUnlocked: false,
-    image_url: '/images/diaromas/Abeilles pollinisatrices.png',
+    image_url: '/images/dioramas/abeilles-pollinisatrices.png',
   },
   {
     id: 'species-abeille-noire',
     name_default: 'Abeille Noire',
     conservation_status: 'VU',
     isUnlocked: false,
-    image_url: '/images/diaromas/Eucalyptus.png',
+    image_url: '/images/dioramas/eucalyptus.png',
   },
   {
     id: 'species-coccinelle-7-points',
     name_default: 'Coccinelle à 7 points',
     conservation_status: 'LC',
     isUnlocked: false,
-    image_url: '/images/diaromas/Coccinelle.png',
+    image_url: '/images/dioramas/coccinelle.png',
   },
   {
     id: 'species-grenouille-rousse',
     name_default: 'Grenouille Rousse',
     conservation_status: 'NT',
     isUnlocked: false,
-    image_url: '/images/diaromas/Grenouille tomate.png',
+    image_url: '/images/dioramas/grenouille-tomate.png',
   },
   {
     id: 'species-heron-cendre',
     name_default: 'Héron Cendré',
     conservation_status: 'LC',
     isUnlocked: false,
-    image_url: '/images/diaromas/Martin-chasseur pygmée.png',
+    image_url: '/images/dioramas/martin-chasseur-pygmee.png',
   },
   {
     id: 'species-lavande-vraie',
     name_default: 'Lavande vraie',
     conservation_status: 'LC',
     isUnlocked: false,
-    image_url: '/images/diaromas/Olivier .png',
+    image_url: '/images/dioramas/olivier.png',
   },
   {
     id: 'species-lynx-boreal',
     name_default: 'Lynx Boréal',
     conservation_status: 'EN',
     isUnlocked: false,
-    image_url: '/images/diaromas/Hérisson européen.png',
+    image_url: '/images/dioramas/herisson-europeen.png',
   },
 ]
 

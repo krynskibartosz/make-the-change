@@ -18,19 +18,19 @@ import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 const FACTION_CONTENT = {
   neutral: {
     title: "Les Défis Quotidiens",
-    mascotImg: '/images/logo-icon-bee.png',
+    mascotImg: '/images/logos/logo-icon-bee.png',
   },
   pollinisateurs: {
     title: 'Quête de Melli',
-    mascotImg: '/melli.png',
+    mascotImg: '/images/mascots/melli.png',
   },
   forets: {
     title: 'Quête de Sylva',
-    mascotImg: '/sylva.png',
+    mascotImg: '/images/mascots/sylva.png',
   },
   mers: {
     title: "Quête d'Ondine",
-    mascotImg: '/ondine.png',
+    mascotImg: '/images/mascots/ondine.png',
   },
 } as const
 
@@ -250,7 +250,7 @@ function DailyHarvestContent() {
                 {hasFaction ? (
                   // Utilisateur connecté : afficher sa mascotte
                   <img
-                    src={FACTION_CONTENT[contentKey as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logo-icon-bee.png'}
+                    src={FACTION_CONTENT[contentKey as keyof typeof FACTION_CONTENT]?.mascotImg || '/images/logos/logo-icon-bee.png'}
                     alt='Mascotte'
                     className={cn(
                       'h-48 w-48 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
@@ -265,7 +265,7 @@ function DailyHarvestContent() {
                   // Utilisateur non connecté : afficher les 3 mascottes
                   <div className="flex gap-2">
                     <img
-                      src="/melli.png"
+                      src="/images/mascots/melli.png"
                       alt="Melli"
                       className={cn(
                         'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
@@ -277,7 +277,7 @@ function DailyHarvestContent() {
                       }}
                     />
                     <img
-                      src="/sylva.png"
+                      src="/images/mascots/sylva.png"
                       alt="Sylva"
                       className={cn(
                         'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',
@@ -289,7 +289,7 @@ function DailyHarvestContent() {
                       }}
                     />
                     <img
-                      src="/ondine.png"
+                      src="/images/mascots/ondine.png"
                       alt="Ondine"
                       className={cn(
                         'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',

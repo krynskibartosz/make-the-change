@@ -74,19 +74,19 @@ const EMPTY_MONTHLY_QUEST: MockMonthlyQuestOverview = {
 const FACTION_CONTENT = {
   neutral: {
     title: "Les Défis Quotidiens",
-    mascotImg: '/melli.png',
+    mascotImg: '/images/mascots/melli.png',
   },
   pollinisateurs: {
     title: 'Quête de Melli',
-    mascotImg: '/melli.png',
+    mascotImg: '/images/mascots/melli.png',
   },
   forets: {
     title: 'Quête de Sylva',
-    mascotImg: '/sylva.png',
+    mascotImg: '/images/mascots/sylva.png',
   },
   mers: {
     title: "Quête d'Ondine",
-    mascotImg: '/ondine.png',
+    mascotImg: '/images/mascots/ondine.png',
   },
 } as const
 
@@ -118,7 +118,7 @@ export function ChallengesTabContent({
   const accentTheme = getFactionTheme(initialFaction)
   const factionTheme = {
     title: initialFaction ? FACTION_CONTENT[contentKey].title : "Les Défis Quotidiens",
-    mascotImg: FACTION_CONTENT[contentKey].mascotImg || '/melli.png',
+    mascotImg: FACTION_CONTENT[contentKey].mascotImg || '/images/mascots/melli.png',
     accentBg: accentTheme.accentBg,
     accentText: accentTheme.accentText,
     badgeBg: accentTheme.badgeClassName,

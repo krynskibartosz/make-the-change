@@ -197,10 +197,10 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
                   <img
                     src={
                       factionContribution.themeKey === 'pollinisateurs'
-                        ? '/melli.png'
+                        ? '/images/mascots/melli.png'
                         : factionContribution.themeKey === 'forets'
-                          ? '/sylva.png'
-                          : '/ondine.png'
+                          ? '/images/mascots/sylva.png'
+                          : '/images/mascots/ondine.png'
                     }
                     alt={factionContribution.label}
                     className="h-full w-full origin-bottom scale-[1.3] object-contain"

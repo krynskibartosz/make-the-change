@@ -64,7 +64,8 @@
       "Read(//c/Users/utilisateur/AppData/Local/pnpm/**)",
       "Bash(/c/Users/utilisateur/AppData/Local/pnpm/pnpm.cmd --version)",
       "Skill(update-config)",
-      "Skill(update-config:*)"
+      "Skill(update-config:*)",
+      "PowerShell(Rename-Item \"c:\\\\Users\\\\utilisateur\\\\Downloads\\\\make-the-change-main\\\\make-the-change-main\\\\repo-propre5\\\\apps\\\\web-client\\\\public\\\\abeille-transparente.png\" \"melli.png\")"
     ],
     "deny": [],
     "ask": []

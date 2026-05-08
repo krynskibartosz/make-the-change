@@ -164,7 +164,7 @@ export default function TrainingPage() {
           animate={{ scale: 1, opacity: 1 }}
           className="mx-auto mb-6 h-28 w-28 drop-shadow-[0_0_20px_rgba(251,191,36,0.3)]"
         >
-          <Image src={`/${question.mascot}.png`} alt="" width={112} height={112} className="object-contain" />
+          <Image src={`/images/mascots/${question.mascot}.png`} alt="" width={112} height={112} className="object-contain" />
         </motion.div>
 
         {/* Question */}

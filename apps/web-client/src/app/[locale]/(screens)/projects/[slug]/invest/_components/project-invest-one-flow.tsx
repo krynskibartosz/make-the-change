@@ -27,7 +27,7 @@ type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
-const REWARD_PREVIEW_IMAGE = '/images/diaromas/abeille noire.png' // Image générique de fallback
+const REWARD_PREVIEW_IMAGE = '/images/dioramas/abeille-noire.png' // Image générique de fallback
 // Helpers moved to bottom
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import {
   closestCenter,
@@ -849,7 +849,7 @@ function QuizExercise({
     <div className="relative flex h-full w-full flex-col overflow-y-auto bg-[#05050A] p-6 pb-36 pt-32">
       <div className="mb-8 flex flex-col items-center">
         <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} className="relative mb-4 h-24 w-24">
-          <Image src={`/${mascot}.png`} alt="" fill className="object-contain" />
+          <Image src={`/images/mascots/${mascot}.png`} alt="" fill className="object-contain" />
         </motion.div>
         <h2 className="text-center text-2xl font-black text-white">{exercise.question}</h2>
         {showHint && exercise.hint && (
@@ -944,7 +944,7 @@ function FeedbackScreen({
           transition={{ duration: 0.5, ease: 'easeInOut' }}
           className={cn('relative h-14 w-14 shrink-0', !correct && 'grayscale opacity-70')}
         >
-          <Image src={`/${mascot}.png`} alt="" fill className="object-contain" />
+          <Image src={`/images/mascots/${mascot}.png`} alt="" fill className="object-contain" />
         </motion.div>
         <div>
           <p className={cn('text-lg font-black', correct ? 'text-emerald-400' : 'text-red-400')}>
@@ -1012,7 +1012,7 @@ function VictoryScreen({
         className="mb-10 flex h-56 w-56 items-center justify-center overflow-hidden rounded-full border border-emerald-500/30 bg-gradient-to-b from-emerald-500/20 to-transparent shadow-[0_0_80px_rgba(16,185,129,0.4)]"
       >
         <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
-          <Image src={`/${unit.mascot}.png`} alt="" width={140} height={140} className="object-contain drop-shadow-[0_10px_20px_rgba(16,185,129,0.5)]" />
+          <Image src={`/images/mascots/${unit.mascot}.png`} alt="" width={140} height={140} className="object-contain drop-shadow-[0_10px_20px_rgba(16,185,129,0.5)]" />
         </motion.div>
       </motion.div>
       <h2 className="mb-3 text-4xl font-black uppercase tracking-tight text-white">

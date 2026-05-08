@@ -18,7 +18,7 @@ const FACTIONS = [
     accentColor: 'bg-amber-500',
     accentText: 'text-amber-500',
     buttonText: "Rejoindre l'Essaim",
-    image: '/melli.png'
+    image: '/images/mascots/melli.png'
   },
   {
     id: 'forets',
@@ -30,7 +30,7 @@ const FACTIONS = [
     accentColor: 'bg-emerald-500',
     accentText: 'text-emerald-500',
     buttonText: 'Protéger les Forêts',
-    image: '/sylva.png'
+    image: '/images/mascots/sylva.png'
   },
   {
     id: 'mers',
@@ -42,7 +42,7 @@ const FACTIONS = [
     accentColor: 'bg-blue-500',
     accentText: 'text-blue-500',
     buttonText: 'Protéger les Océans',
-    image: '/ondine.png'
+    image: '/images/mascots/ondine.png'
   }
 ]
 

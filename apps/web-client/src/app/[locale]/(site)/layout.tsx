@@ -1,4 +1,4 @@
-import { getLocale } from 'next-intl/server'
+﻿import { getLocale } from 'next-intl/server'
 import { Suspense, type PropsWithChildren } from 'react'
 
 import { MainContent } from '@/components/layout/main-content'
@@ -15,7 +15,7 @@ function SiteScaffold({ children, user, menuData }: SiteScaffoldProps) {
     '@type': 'Organization',
     name: 'Make the Change',
     url: 'https://make-the-change-web-client.vercel.app',
-    logo: 'https://make-the-change-web-client.vercel.app/images/logo-full.png',
+    logo: 'https://make-the-change-web-client.vercel.app/images/logos/logo-full.png',
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+32-2-000-00-00',

@@ -30,9 +30,9 @@ export default async function ImpactRewardPage() {
     (p) => p.producer_id === MOCK_PRODUCER_ILANGA_ID,
   )
 
-  let mascotSrc = '/sylva.png'
-  if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/melli.png'
-  else if (activeContribution?.themeKey === 'mers') mascotSrc = '/ondine.png'
+  let mascotSrc = '/images/mascots/sylva.png'
+  if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/images/mascots/melli.png'
+  else if (activeContribution?.themeKey === 'mers') mascotSrc = '/images/mascots/ondine.png'
 
   const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
   const remainingSeeds = Math.max(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds, 0)
@@ -57,9 +57,9 @@ export default async function ImpactRewardPage() {
               </div>
             ) : (
               <div className="relative mb-4 flex h-24 items-center justify-center gap-3">
-                <img src="/melli.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
-                <img src="/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
-                <img src="/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                <img src="/images/mascots/melli.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                <img src="/images/mascots/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                <img src="/images/mascots/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
               </div>
             )}
             <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${activeTheme.accentTextSoft}`}>
