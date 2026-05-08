@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { BadgeCheck, Leaf } from 'lucide-react'
 import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
@@ -82,12 +81,10 @@ export function ClientCatalogProductCard({
         {/* ── Image avec ratio 4/5 ── */}
         <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-zinc-800">
           {imageUrl ? (
-            <Image
+            <img
               src={imageUrl}
               alt={product.name_default}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 50vw, 25vw"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full bg-white/10 flex items-center justify-center">

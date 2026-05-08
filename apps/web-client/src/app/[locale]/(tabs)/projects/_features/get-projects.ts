@@ -1,5 +1,4 @@
-// TODO: Re-enable before public launch — see getProjects cache wrapper below
-// import { unstable_cache } from 'next/cache'
+import { unstable_cache } from 'next/cache'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
@@ -228,8 +227,7 @@ function matchesStatus(project: ProjectListItem, status: string) {
   return project.status === status
 }
 
-// TODO: Re-enable unstable_cache before public launch for optimal performance (revalidate: 3600, tags: ['projects-list'])
-export const getProjects = async (options: GetProjectsOptions = {}) => {
+const _getProjects = async (options: GetProjectsOptions = {}) => {
   const { status = 'all', search } = options
   const mockProjects = getMockProjects()
     .map((project) => toMockProjectListItem(project))
@@ -286,3 +284,8 @@ export const getProjects = async (options: GetProjectsOptions = {}) => {
 
   return [...mockProjects, ...dedupedDatabaseProjects]
 }
+
+export const getProjects = unstable_cache(_getProjects, ['projects-list'], {
+  revalidate: 3600,
+  tags: ['projects-list'],
+})

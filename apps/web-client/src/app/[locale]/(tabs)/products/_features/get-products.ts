@@ -1,5 +1,4 @@
-// TODO: Re-enable before public launch — see getProducts and getProductStaticResources cache wrappers below
-// import { unstable_cache } from 'next/cache'
+import { unstable_cache } from 'next/cache'
 import {
   applyProductsFilters,
   applyProductsSort,
@@ -280,8 +279,7 @@ const resolveCategoryId = async (
   return ''
 }
 
-// TODO: Re-enable unstable_cache before public launch (revalidate: 3600, tags: ['products-list'])
-export const getProducts = async (queryState: ProductsQueryState) => {
+const _getProducts = async (queryState: ProductsQueryState) => {
     const mockProducts = getMockProducts()
     const mockCategoryId =
       mockProducts.find(
@@ -374,9 +372,13 @@ export const getProducts = async (queryState: ProductsQueryState) => {
     }
 }
 
+export const getProducts = unstable_cache(_getProducts, ['products-list'], {
+  revalidate: 3600,
+  tags: ['products-list'],
+})
+
 // Helper to fetch static lists (Categories, Producers, Tags)
-// TODO: Re-enable unstable_cache before public launch (revalidate: 86400, tags: ['products-static'])
-export const getProductStaticResources = async () => {
+const _getProductStaticResources = async () => {
     if (isMockDataSource) {
       const mockProducts = getMockProducts()
       const categories = Array.from(
@@ -450,3 +452,8 @@ export const getProductStaticResources = async () => {
       availableTags,
     }
 }
+
+export const getProductStaticResources = unstable_cache(_getProductStaticResources, ['products-static'], {
+  revalidate: 86400,
+  tags: ['products-static'],
+})

@@ -156,6 +156,9 @@ export async function ProjectQuickView({
     producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
   const resolvedProducerProducts =
     producerProducts ?? projectContext?.producer_products ?? project.producer_products ?? null
+  const resolvedSpecies =
+    project.species ?? projectContext?.species ?? null
+
   const resolvedRelatedProjects =
     relatedProjects ??
     (await getRelatedProjectsByType({
@@ -252,7 +255,7 @@ export async function ProjectQuickView({
 
             <div className="px-4 sm:px-5">
               <ProjectSpeciesTeaser
-                isDonationProject={isDonationProject}
+                species={resolvedSpecies}
                 accentColor={glowRgba(glow, 0.75)}
               />
             </div>
