@@ -17,6 +17,7 @@ import { ProjectImpactPreview } from './_components/sections/project-impact-prev
 import { ProjectTrackingPreview } from './_components/sections/project-tracking-preview'
 import { ProjectBiodexSheet } from './_components/sections/project-biodex-sheet'
 import { ProjectCountrySheet } from './_components/sections/project-country-sheet'
+import { ProjectFundingSheet } from './_components/sections/project-funding-sheet'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import {
   getRelatedProjectsByType,
@@ -446,6 +447,14 @@ export async function ProjectQuickView({
                   indicatorClassName="bg-gradient-to-r from-primary to-marketing-positive-600"
                 />
               </div>
+              <ProjectFundingSheet
+                targetBudget={targetBudget}
+                currentFunding={currentFunding}
+                fundingProgress={fundingProgress}
+                projectType={project.type}
+                isDonationProject={isDonationProject}
+                fundingTitle={fundingTitle}
+              />
             </div>
 
             {/* 7. BioDex */}
