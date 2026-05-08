@@ -125,19 +125,7 @@ export function ClientCatalogProductCard({
               <span className="text-xs font-semibold text-white/50">Gratuit</span>
             ) : null}
 
-            {/* Badges certification discrets */}
-            <div className="flex items-center gap-1 ml-auto">
-              {isBio && (
-                <span title="Produit naturel / bio">
-                  <Leaf className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-                </span>
-              )}
-              {isArtisan && (
-                <span title="Produit artisanal">
-                  <BadgeCheck className="w-3.5 h-3.5 text-sky-400" aria-hidden="true" />
-                </span>
-              )}
-            </div>
+         
           </div>
         </div>
       </Link>
