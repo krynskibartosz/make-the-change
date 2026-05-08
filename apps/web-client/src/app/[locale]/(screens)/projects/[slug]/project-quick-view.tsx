@@ -411,7 +411,11 @@ export async function ProjectQuickView({
 
             {/* 5. Suivi */}
             <div className="mt-9 px-4 sm:px-5">
-              <ProjectTrackingPreview isDonationProject={isDonationProject} projectType={project.type} />
+              <ProjectTrackingPreview
+                isDonationProject={isDonationProject}
+                projectType={project.type}
+                producerName={project.producer ? organizerName : undefined}
+              />
             </div>
 
             {/* 6. Objectif */}

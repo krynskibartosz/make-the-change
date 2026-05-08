@@ -40,9 +40,7 @@ function MiniCard({ item, accentColor }: { item: ProjectImpactItem; accentColor:
     <div className="flex flex-col items-start gap-1.5 rounded-2xl bg-white/[0.04] p-3">
       <Icon className="h-4 w-4 shrink-0" style={{ color: accentColor }} />
       {item.prefix ? (
-        <span className="text-[10px] font-bold uppercase tracking-widest text-white/35">
-          {item.prefix}
-        </span>
+        <span className="text-[10px] font-semibold text-white/30">{item.prefix}</span>
       ) : null}
       <span className="text-lg font-black leading-none tracking-tight text-white tabular-nums">
         {item.value}
@@ -50,57 +48,67 @@ function MiniCard({ item, accentColor }: { item: ProjectImpactItem; accentColor:
           <span className="ml-0.5 text-sm font-bold text-white/50">{item.unit}</span>
         ) : null}
       </span>
-      <span className="text-[10px] font-bold uppercase leading-tight tracking-[0.07em] text-white/50">
-        {item.label}
-      </span>
+      <span className="text-[10px] font-semibold leading-tight text-white/45">{item.label}</span>
     </div>
   )
 }
 
-function SheetItem({ item, accentColor }: { item: ProjectImpactItem; accentColor: string }) {
+function SheetImpactCard({
+  item,
+  accentColor,
+}: {
+  item: ProjectImpactItem
+  accentColor: string
+}) {
   const Icon = ICON_MAP[item.iconKey]
+  const isSensitive = item.iconKey === 'co2'
+
   return (
-    <div className="border-b border-white/6 py-5 last:border-0">
-      <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.05]">
-          <Icon className="h-4 w-4" style={{ color: accentColor }} />
+    <div className="rounded-2xl bg-white/[0.04] p-4">
+      {/* Header: icône + valeur + chip */}
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.06]">
+          <Icon className="h-[18px] w-[18px]" style={{ color: accentColor }} />
         </div>
-        <div>
+        <div className="min-w-0 flex-1">
           {item.prefix ? (
-            <p className="text-[10px] font-bold uppercase tracking-widest text-white/35">
-              {item.prefix}
-            </p>
+            <p className="mb-0.5 text-[10px] font-semibold text-white/30">{item.prefix}</p>
           ) : null}
-          <p className="text-xl font-black leading-none tracking-tight text-white tabular-nums">
+          <p className="text-2xl font-black leading-none tracking-tight text-white tabular-nums">
             {item.value}
             {item.unit ? (
-              <span className="ml-0.5 text-base font-bold text-white/50">{item.unit}</span>
+              <span className="ml-1 text-lg font-bold text-white/50">{item.unit}</span>
             ) : null}
           </p>
-          <p className="mt-0.5 text-xs font-bold uppercase tracking-[0.07em] text-white/50">
-            {item.label}
-          </p>
+          <p className="mt-1 text-[13px] font-semibold text-white/65">{item.label}</p>
         </div>
+        <span
+          className={`mt-0.5 shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold leading-none ${
+            isSensitive
+              ? 'bg-amber-500/10 text-amber-400/65'
+              : 'bg-white/[0.06] text-white/35'
+          }`}
+        >
+          {isSensitive ? 'Estimation sensible' : 'Estimation'}
+        </span>
       </div>
 
-      <div className="mt-4 space-y-2.5">
-        <div>
-          <p className="mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-white/30">
-            Ce que ça signifie
-          </p>
-          <p className="text-sm leading-relaxed text-white/65">{item.meaning}</p>
+      {/* Ce que ça représente */}
+      <p className="mt-3 text-[13px] leading-relaxed text-white/60">{item.meaning}</p>
+
+      {/* Méthode + Limite — compact key-value */}
+      <div className="mt-3 space-y-1.5 border-t border-white/[0.06] pt-3">
+        <div className="flex gap-2">
+          <span className="w-14 shrink-0 text-[10px] font-black uppercase tracking-[0.08em] text-white/25">
+            Méthode
+          </span>
+          <span className="text-[11px] leading-relaxed text-white/50">{item.estimate}</span>
         </div>
-        <div>
-          <p className="mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-white/30">
-            Comment c&apos;est estimé
-          </p>
-          <p className="text-sm leading-relaxed text-white/65">{item.estimate}</p>
-        </div>
-        <div>
-          <p className="mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-white/30">
-            À garder en tête
-          </p>
-          <p className="text-sm leading-relaxed text-white/65">{item.caution}</p>
+        <div className="flex gap-2">
+          <span className="w-14 shrink-0 text-[10px] font-black uppercase tracking-[0.08em] text-white/25">
+            Limite
+          </span>
+          <span className="text-[11px] leading-relaxed text-white/50">{item.caution}</span>
         </div>
       </div>
     </div>
@@ -113,16 +121,9 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
   const mainItems = items.filter((item) => item.main)
   if (mainItems.length === 0) return null
 
-  // Group all items by group for the sheet
-  const groups = items.reduce<Record<string, ProjectImpactItem[]>>((acc, item) => {
-    const list = acc[item.group] ?? []
-    list.push(item)
-    return { ...acc, [item.group]: list }
-  }, {})
-
   return (
     <section>
-      <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+      <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
         Ce que ce projet permet
       </p>
       <div className="grid grid-cols-3 gap-2.5">
@@ -138,7 +139,8 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
       >
         <span className="text-sm font-bold text-white/70">Voir tous les indicateurs</span>
         <span className="text-xs text-white/35">
-          {items.length} données expliquées avec méthode et prudence
+          {items.length} estimation{items.length > 1 ? 's' : ''} expliquée
+          {items.length > 1 ? 's' : ''} avec méthode et prudence
         </span>
       </button>
 
@@ -147,21 +149,20 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
         onClose={() => setIsOpen(false)}
         title="Indicateurs du projet"
       >
-        <p className="mb-4 text-xs leading-relaxed text-white/40">
-          Ces chiffres donnent des ordres de grandeur. Ils sont basés sur des hypothèses
-          documentées et ne garantissent pas un résultat mesuré.
+        <p className="mb-5 mt-1 text-[13px] leading-relaxed text-white/45">
+          Ces chiffres donnent des ordres de grandeur basés sur des hypothèses documentées.
         </p>
 
-        {Object.entries(groups).map(([group, groupItems]) => (
-          <div key={group}>
-            <p className="mb-1 mt-4 text-[10px] font-black uppercase tracking-[0.18em] text-white/25">
-              {group}
-            </p>
-            {groupItems.map((item) => (
-              <SheetItem key={item.id} item={item} accentColor={accentColor} />
-            ))}
-          </div>
-        ))}
+        <div className="space-y-3">
+          {items.map((item) => (
+            <SheetImpactCard key={item.id} item={item} accentColor={accentColor} />
+          ))}
+        </div>
+
+        <p className="mt-5 pb-2 text-[11px] leading-relaxed text-white/25">
+          Ces estimations ne constituent pas une mesure certifiée ni une promesse de résultat. La
+          biodiversité reste variable et dépend du terrain.
+        </p>
       </MobileSheet>
     </section>
   )
