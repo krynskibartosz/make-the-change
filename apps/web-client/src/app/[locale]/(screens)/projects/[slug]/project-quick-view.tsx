@@ -294,7 +294,15 @@ export async function ProjectQuickView({
               </p>
             ) : null}
 
-            <ProjectStorySheet description={projectDescription} title={projectName} />
+            <ProjectStorySheet
+              description={projectDescription}
+              title={projectName}
+              producerName={project.producer ? organizerName : undefined}
+              producerDescription={project.producer ? organizerDescription : undefined}
+              producerLabel={partnerLabel}
+              projectType={project.type}
+              isDonationProject={isDonationProject}
+            />
           </aside>
 
           {/* 3. Partenaire */}
@@ -380,7 +388,7 @@ export async function ProjectQuickView({
 
             {/* 5. Suivi */}
             <div className="mt-9 px-4 sm:px-5">
-              <ProjectTrackingPreview isDonationProject={isDonationProject} />
+              <ProjectTrackingPreview isDonationProject={isDonationProject} projectType={project.type} />
             </div>
 
             {/* 6. Objectif */}
