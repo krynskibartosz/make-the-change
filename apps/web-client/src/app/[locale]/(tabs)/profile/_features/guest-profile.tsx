@@ -1,4 +1,4 @@
-import { Bug, Droplets, Gift, Wind } from 'lucide-react'
+﻿import { Bug, Droplets, Gift, Wind } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 
@@ -10,7 +10,7 @@ import { ImpactCard } from '@/app/[locale]/(tabs)/profile/_components/impact-car
 
 function FactionMascotSelector() {
   const factions = [
-    { id: 'pollinisateurs', name: 'Melli', image: '/abeille-transparente.png' },
+    { id: 'pollinisateurs', name: 'Melli', image: '/melli.png' },
     { id: 'forets', name: 'Sylva', image: '/sylva.png' },
     { id: 'mers', name: 'Ondine', image: '/ondine.png' },
   ]

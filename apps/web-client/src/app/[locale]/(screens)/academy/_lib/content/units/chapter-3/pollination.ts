@@ -1,4 +1,4 @@
-import type { AcademyUnitDefinition } from '../../../schema'
+﻿import type { AcademyUnitDefinition } from '../../../schema'
 
 const FIELD_IMAGE =
   'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1000&auto=format&fit=crop'
@@ -25,7 +25,7 @@ export const pollinationUnit: AcademyUnitDefinition = {
   durationMinutes: 3,
   estimatedMinutes: '3-4 min',
   learningGoal: "Voir la pollinisation comme un mutualisme massif et fragile.",
-  mascot: 'abeille-transparente',
+  mascot: 'melli',
   rewardAmount: 30,
 
   authoredDiscovery: [

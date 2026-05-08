@@ -1,4 +1,4 @@
-import { z } from 'zod'
+﻿import { z } from 'zod'
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ export type AcademyLessonKind = z.infer<typeof lessonKindSchema>
 export const unitKindSchema = z.enum(['foundation', 'fauna', 'flora', 'training', 'project', 'boss'])
 export type AcademyUnitKind = z.infer<typeof unitKindSchema>
 
-export const mascotSchema = z.enum(['ondine', 'sylva', 'abeille-transparente'])
+export const mascotSchema = z.enum(['ondine', 'sylva', 'melli'])
 export type AcademyMascot = z.infer<typeof mascotSchema>
 
 export const cursusIdSchema = z.enum(['living-mechanics', 'nature-mysteries', 'climate-solutions'])

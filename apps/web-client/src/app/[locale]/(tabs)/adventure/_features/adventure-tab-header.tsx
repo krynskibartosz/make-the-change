@@ -1,4 +1,4 @@
-import { CurrencyIcon } from "@/components/currency";
+﻿import { CurrencyIcon } from "@/components/currency";
 import { Link } from "@/i18n/navigation";
 import { formatCompact } from "@/lib/formatters";
 import { resolveFactionThemeKey } from "@/lib/faction-theme";
@@ -16,7 +16,7 @@ export function AdventureTabHeader({
   impactPoints,
 }: AdventureTabHeaderProps) {
   const themeKey = resolveFactionThemeKey(faction);
-  const mascotImage = themeKey === 'pollinisateurs' ? '/abeille-transparente.png' : themeKey === 'forets' ? '/sylva.png' : themeKey === 'mers' ? '/ondine.png' : '/abeille-transparente.png';
+  const mascotImage = themeKey === 'pollinisateurs' ? '/melli.png' : themeKey === 'forets' ? '/sylva.png' : themeKey === 'mers' ? '/ondine.png' : '/melli.png';
 
   return (
     <div className="flex w-full items-center justify-between gap-3 relative z-50">

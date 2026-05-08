@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowRight,
   Bug,
   Droplets,
@@ -197,7 +197,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
                   <img
                     src={
                       factionContribution.themeKey === 'pollinisateurs'
-                        ? '/abeille-transparente.png'
+                        ? '/melli.png'
                         : factionContribution.themeKey === 'forets'
                           ? '/sylva.png'
                           : '/ondine.png'

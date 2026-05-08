@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { motion } from 'framer-motion'
 import { Check, Dumbbell, Heart } from 'lucide-react'
@@ -45,7 +45,7 @@ const TRAINING_QUESTIONS = [
       { text: 'Le nombre de plantes dans une forêt', correct: false },
       { text: 'La quantité d\'eau dans un écosystème', correct: false },
     ],
-    mascot: 'abeille-transparente',
+    mascot: 'melli',
   },
 ]
 

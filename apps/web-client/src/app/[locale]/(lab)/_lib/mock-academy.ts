@@ -1,4 +1,4 @@
-import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(screens)/academy/_lib/content'
+﻿import { getV2UnitsByChapter, listV2Units } from '@/app/[locale]/(screens)/academy/_lib/content'
 import { v2UnitToLegacy } from '@/app/[locale]/(screens)/academy/_lib/runtime'
 import {
   MAX_LIVES,
@@ -11,7 +11,7 @@ import {
 export const ACADEMY_PROGRESS_STORAGE_KEY = 'mtc_academy_progress_v1'
 export const MOCK_ACADEMY_VIEWER_ID = 'mock-viewer'
 
-export type AcademyMascot = 'ondine' | 'sylva' | 'abeille-transparente'
+export type AcademyMascot = 'ondine' | 'sylva' | 'melli'
 export type AcademyUnitStatus = 'completed' | 'active' | 'locked'
 export type AcademyChapterStatus = 'completed' | 'active' | 'locked'
 export type AcademyExerciseType = 'STORY' | 'SWIPE' | 'DRAG_DROP' | 'QUIZ'

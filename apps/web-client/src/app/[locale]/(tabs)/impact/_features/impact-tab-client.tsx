@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useSearchParams } from 'next/navigation'
 import { Bird, Crown, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, type LucideIcon } from 'lucide-react'
@@ -270,7 +270,7 @@ function ImpactAction({ event, text }: { event: ImpactEvent; text: string }) {
 function getFactionImage(faction: string | undefined): string | null {
   if (!faction) return null
   if (faction === 'Terres & Forêts') return '/sylva.png'
-  if (faction === 'Vie Sauvage') return '/abeille-transparente.png'
+  if (faction === 'Vie Sauvage') return '/melli.png'
   if (faction === 'Gardiens des mers') return '/ondine.png'
   return null
 }
@@ -577,7 +577,7 @@ export function ImpactTabClient({
                 const isActiveFaction = activeContribution?.themeKey === contribution.themeKey
 
                 let mascotSrc = ''
-                if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
+                if (contribution.themeKey === 'pollinisateurs') mascotSrc = '/melli.png'
                 else if (contribution.themeKey === 'forets') mascotSrc = '/sylva.png'
                 else if (contribution.themeKey === 'mers') mascotSrc = '/ondine.png'
 

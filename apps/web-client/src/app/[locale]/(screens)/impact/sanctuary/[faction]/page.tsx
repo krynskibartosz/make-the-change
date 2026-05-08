@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { connection } from 'next/server'
 import { notFound } from 'next/navigation'
 import { getFactionThemeByKey } from '@/lib/faction-theme'
@@ -25,7 +25,7 @@ const FACTION_CONFIG: Record<string, { name: string; title: string; mascot: stri
   pollinisateurs: {
     name: 'Melli',
     title: 'Gardienne des Pollinisateurs',
-    mascot: '/abeille-transparente.png',
+    mascot: '/melli.png',
     emoji: '🐝',
   },
   forets: {

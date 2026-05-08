@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, Suspense } from 'react'
@@ -22,7 +22,7 @@ const FACTION_CONTENT = {
   },
   pollinisateurs: {
     title: 'Quête de Melli',
-    mascotImg: '/abeille-transparente.png',
+    mascotImg: '/melli.png',
   },
   forets: {
     title: 'Quête de Sylva',
@@ -265,7 +265,7 @@ function DailyHarvestContent() {
                   // Utilisateur non connecté : afficher les 3 mascottes
                   <div className="flex gap-2">
                     <img
-                      src="/abeille-transparente.png"
+                      src="/melli.png"
                       alt="Melli"
                       className={cn(
                         'h-20 w-20 object-contain drop-shadow-2xl transition-all duration-100 pointer-events-none',

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Button } from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
@@ -123,7 +123,7 @@ function VisitorState() {
       
       <div className="relative z-10 flex flex-col items-center gap-6">
         <div className="relative flex h-24 items-center justify-center gap-3">
-          <img src="/abeille-transparente.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
+          <img src="/melli.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
           <img src="/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
           <img src="/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
         </div>

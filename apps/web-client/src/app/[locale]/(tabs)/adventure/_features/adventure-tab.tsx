@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react'
+﻿import type { LucideIcon } from 'lucide-react'
 import {
   BookOpen,
   CheckCircle2,
@@ -86,13 +86,13 @@ const FACTION_PRESENTATION: Record<
 > = {
   neutral: {
     label: 'Melli',
-    mascotImage: '/abeille-transparente.png',
+    mascotImage: '/melli.png',
     headline: 'Choisis ton prochain pas pour le vivant.',
     message: 'Apprends, soutiens un projet concret et fais grandir ton impact.',
   },
   pollinisateurs: {
     label: 'Melli',
-    mascotImage: '/abeille-transparente.png',
+    mascotImage: '/melli.png',
     headline: "Melli a repéré une action utile pour aujourd'hui.",
     message: 'Fais avancer les pollinisateurs sans perdre le fil de ton impact.',
   },

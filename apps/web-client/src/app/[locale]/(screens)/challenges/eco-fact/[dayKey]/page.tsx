@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, type UIEvent, Suspense } from 'react'
@@ -24,7 +24,7 @@ const FACTION_CONTENT = {
   },
   pollinisateurs: {
     title: 'Quête de Melli',
-    mascotImg: '/abeille-transparente.png',
+    mascotImg: '/melli.png',
   },
   forets: {
     title: 'Quête de Sylva',
@@ -433,7 +433,7 @@ function EcoFactContent() {
               className='relative z-10 mx-auto mt-16 flex gap-2'
             >
               <img
-                src="/abeille-transparente.png"
+                src="/melli.png"
                 alt="Melli"
                 className='h-20 w-20 object-contain drop-shadow-2xl pointer-events-none'
                 draggable='false'

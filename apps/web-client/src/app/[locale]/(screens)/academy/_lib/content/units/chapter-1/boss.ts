@@ -1,4 +1,4 @@
-import type { AcademyUnitDefinition } from '../../../schema'
+﻿import type { AcademyUnitDefinition } from '../../../schema'
 
 const FOREST_IMAGE =
   'https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000&auto=format&fit=crop'
@@ -23,7 +23,7 @@ export const bossUnit: AcademyUnitDefinition = {
   durationMinutes: 4,
   estimatedMinutes: '5 min',
   learningGoal: 'Boss du chapitre : assembler les 4 piliers en un écosystème complet.',
-  mascot: 'abeille-transparente',
+  mascot: 'melli',
   rewardAmount: 25,
 
   authoredDiscovery: [

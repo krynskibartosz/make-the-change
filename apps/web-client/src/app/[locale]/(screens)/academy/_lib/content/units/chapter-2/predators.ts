@@ -1,4 +1,4 @@
-import type { AcademyUnitDefinition } from '../../../schema'
+﻿import type { AcademyUnitDefinition } from '../../../schema'
 
 const FOREST_IMAGE =
   'https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000&auto=format&fit=crop'
@@ -25,7 +25,7 @@ export const predatorsUnit: AcademyUnitDefinition = {
   durationMinutes: 3,
   estimatedMinutes: '3-4 min',
   learningGoal: 'Voir le prédateur comme régulateur, pas comme destructeur.',
-  mascot: 'abeille-transparente',
+  mascot: 'melli',
   rewardAmount: 20,
 
   authoredDiscovery: [

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
 import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
@@ -31,7 +31,7 @@ export default async function ImpactRewardPage() {
   )
 
   let mascotSrc = '/sylva.png'
-  if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/abeille-transparente.png'
+  if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/melli.png'
   else if (activeContribution?.themeKey === 'mers') mascotSrc = '/ondine.png'
 
   const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
@@ -57,7 +57,7 @@ export default async function ImpactRewardPage() {
               </div>
             ) : (
               <div className="relative mb-4 flex h-24 items-center justify-center gap-3">
-                <img src="/abeille-transparente.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
+                <img src="/melli.png" alt="Melli" className="h-16 w-16 object-contain drop-shadow-2xl" />
                 <img src="/sylva.png" alt="Sylva" className="h-16 w-16 object-contain drop-shadow-2xl" />
                 <img src="/ondine.png" alt="Ondine" className="h-16 w-16 object-contain drop-shadow-2xl" />
               </div>

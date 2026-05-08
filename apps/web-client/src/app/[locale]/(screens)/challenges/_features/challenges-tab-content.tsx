@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
@@ -74,11 +74,11 @@ const EMPTY_MONTHLY_QUEST: MockMonthlyQuestOverview = {
 const FACTION_CONTENT = {
   neutral: {
     title: "Les Défis Quotidiens",
-    mascotImg: '/abeille-transparente.png',
+    mascotImg: '/melli.png',
   },
   pollinisateurs: {
     title: 'Quête de Melli',
-    mascotImg: '/abeille-transparente.png',
+    mascotImg: '/melli.png',
   },
   forets: {
     title: 'Quête de Sylva',
@@ -118,7 +118,7 @@ export function ChallengesTabContent({
   const accentTheme = getFactionTheme(initialFaction)
   const factionTheme = {
     title: initialFaction ? FACTION_CONTENT[contentKey].title : "Les Défis Quotidiens",
-    mascotImg: FACTION_CONTENT[contentKey].mascotImg || '/abeille-transparente.png',
+    mascotImg: FACTION_CONTENT[contentKey].mascotImg || '/melli.png',
     accentBg: accentTheme.accentBg,
     accentText: accentTheme.accentText,
     badgeBg: accentTheme.badgeClassName,

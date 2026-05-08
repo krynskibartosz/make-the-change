@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { motion, type Variants } from 'framer-motion'
 import { Bird, Flame, ArrowRight } from 'lucide-react'
@@ -156,7 +156,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                   <img src="/sylva.png" alt="Terres et Forêts" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
                 <div className="relative z-20 -ml-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0B0F15] shadow-lg ring-2 ring-[#1A1F26] transition-transform delay-75 duration-300 group-hover:-translate-y-1">
-                  <img src="/abeille-transparente.png" alt="Vie Sauvage" className="mt-1 h-[120%] w-[120%] object-contain" />
+                  <img src="/melli.png" alt="Vie Sauvage" className="mt-1 h-[120%] w-[120%] object-contain" />
                 </div>
                 <div className="relative z-10 -ml-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-[#0B0F15] shadow-lg ring-2 ring-[#1A1F26] transition-transform delay-150 duration-300 group-hover:-translate-y-1">
                   <img src="/ondine.png" alt="Gardiens des mers" className="mt-1 h-[120%] w-[120%] object-contain" />

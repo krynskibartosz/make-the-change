@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
@@ -593,7 +593,7 @@ function ChapterBanner({ chapter }: { chapter: AcademyChapterWithStatus }) {
         </span>
       </div>
       <div className="relative z-10 mb-3 h-16 w-16 drop-shadow-[0_0_15px_rgba(251,191,36,0.25)]">
-        <Image src="/abeille-transparente.png" alt="" fill className="object-contain" />
+        <Image src="/melli.png" alt="" fill className="object-contain" />
       </div>
       <h2 className="relative z-10 mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-400">
         Chapitre {chapter.order} · {chapter.level}

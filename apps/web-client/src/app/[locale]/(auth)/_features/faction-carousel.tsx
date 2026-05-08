@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
@@ -18,7 +18,7 @@ const FACTIONS = [
     accentColor: 'bg-amber-500',
     accentText: 'text-amber-500',
     buttonText: "Rejoindre l'Essaim",
-    image: '/abeille-transparente.png'
+    image: '/melli.png'
   },
   {
     id: 'forets',

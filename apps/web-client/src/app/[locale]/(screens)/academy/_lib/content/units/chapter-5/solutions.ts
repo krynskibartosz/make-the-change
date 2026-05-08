@@ -1,4 +1,4 @@
-import type { AcademyUnitDefinition } from '../../../schema'
+﻿import type { AcademyUnitDefinition } from '../../../schema'
 
 const FOREST_IMAGE =
   'https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?q=80&w=1000&auto=format&fit=crop'
@@ -25,7 +25,7 @@ export const solutionsUnit: AcademyUnitDefinition = {
   durationMinutes: 3,
   estimatedMinutes: '3-4 min',
   learningGoal: 'Identifier les solutions efficaces et leurs limites.',
-  mascot: 'abeille-transparente',
+  mascot: 'melli',
   rewardAmount: 50,
 
   authoredDiscovery: [

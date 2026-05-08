@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { motion } from 'framer-motion'
 
@@ -10,7 +10,7 @@ interface AnimatedMascotProps {
 export function AnimatedMascot({ themeKey, label }: AnimatedMascotProps) {
   const src =
     themeKey === 'pollinisateurs'
-      ? '/abeille-transparente.png'
+      ? '/melli.png'
       : themeKey === 'forets'
         ? '/sylva.png'
         : '/ondine.png'

@@ -1,4 +1,4 @@
-import type { AcademyUnitDefinition } from '../../../schema'
+﻿import type { AcademyUnitDefinition } from '../../../schema'
 
 const FIELD_IMAGE =
   'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1000&auto=format&fit=crop'
@@ -25,7 +25,7 @@ export const reflexesUnit: AcademyUnitDefinition = {
   durationMinutes: 3,
   estimatedMinutes: '3 min',
   learningGoal: 'Construire l\'automatisme : associer chaque pilier à son rôle.',
-  mascot: 'abeille-transparente',
+  mascot: 'melli',
   rewardAmount: 15,
 
   authoredDiscovery: [
