@@ -226,7 +226,7 @@ function WarriorState({ balance, transactions }: { balance: number; transactions
 
 export function BalanceModalContent() {
   const [userState, setUserState] = useState<UserState>('not_connected')
-  const [points, setPoints] = useState<number>(0)
+  const [balance, setBalance] = useState<number>(0)
   const [transactions, setTransactions] = useState<MockPointsTransactionRecord[]>([])
 
   useEffect(() => {
@@ -239,13 +239,13 @@ export function BalanceModalContent() {
         }
 
         const { getCurrentMockImpactPoints, getMockPointsTransactions } = await import('@/lib/mock/mock-member-data-server')
-        const userPoints = await getCurrentMockImpactPoints(session.viewerId, session.faction)
+        const userBalance = await getCurrentMockImpactPoints(session.viewerId, session.faction)
         const userTransactions = await getMockPointsTransactions(session.viewerId)
-        
-        setPoints(userPoints)
+
+        setBalance(userBalance)
         setTransactions(userTransactions)
 
-        if (userPoints > 0) {
+        if (userBalance > 0) {
           setUserState('connected_with_points')
         } else {
           setUserState('connected_zero_points')
@@ -259,7 +259,7 @@ export function BalanceModalContent() {
   }, [])
 
   if (userState === 'connected_with_points') {
-    return <WarriorState balance={points} transactions={transactions} />
+    return <WarriorState balance={balance} transactions={transactions} />
   }
 
   if (userState === 'connected_zero_points') {

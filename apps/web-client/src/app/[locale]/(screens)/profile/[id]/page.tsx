@@ -22,7 +22,7 @@ import { getMockPublicProfile } from '@/lib/mock/mock-viewer'
 import { createClient } from '@/lib/supabase/server'
 import { asNumber, asString, isRecord } from '@/lib/type-guards'
 import { getCurrentIsoDate } from '@/lib/date-utils'
-import { cn, formatCurrency, formatDate, formatPoints } from '@/lib/utils'
+import { cn, formatCurrency, formatDate, formatImpactCredits, formatPoints } from '@/lib/utils'
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -159,7 +159,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     : []
 
   // Calculate legitimate stats
-  const points = profile.points_balance || 0
+  const impactCreditsBalance = profile.points_balance || 0
   const projects = profile.projects_count || 0
   const invested = profile.total_invested_eur || 0
 
@@ -167,7 +167,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
 
   const levelProgress = getLevelProgress(impactScore)
   const badgeLabels = getMilestoneBadges({
-    points,
+    points: impactCreditsBalance,
     projects,
     invested,
     leaderboardRank: 0, // We don't have rank in this view yet, can improved later
@@ -351,7 +351,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                               </div>
                             </div>
                             <Badge variant="secondary">
-                              +{formatPoints(investment.amount_points || 0)} crédits
+                              +{formatImpactCredits(investment.amount_points || 0)} crédits
                             </Badge>
                           </CardContent>
                         </Card>

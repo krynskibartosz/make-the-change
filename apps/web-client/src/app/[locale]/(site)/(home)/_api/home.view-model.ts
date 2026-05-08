@@ -1,6 +1,6 @@
 import type { User } from '@supabase/supabase-js'
 import { Leaf, type LucideIcon, Sparkles, Users, Zap } from 'lucide-react'
-import { cn, formatPoints } from '@/lib/utils'
+import { cn, formatImpactCredits } from '@/lib/utils'
 import type { DataState } from '@/app/[locale]/(site)/(home)/_types/home.types'
 
 export type HomeSectionVariant = 'default' | 'muted'
@@ -125,7 +125,7 @@ export function buildHomeViewModel({
 
   if (pointsGeneratedState.status === 'ready') {
     statsItems.push({
-      value: formatPoints(pointsGeneratedState.value),
+      value: formatImpactCredits(pointsGeneratedState.value),
       label: labels.statsPointsGenerated,
       icon: Zap,
       color: 'text-primary',

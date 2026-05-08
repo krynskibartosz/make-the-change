@@ -42,7 +42,7 @@ const MOCK_SEASON_STATS: SeasonStats[] = [
   },
   {
     seasonId: 'season-1',
-    faction: 'Artisans Locaux',
+    faction: 'Gardiens des mers',
     totalSeeds: 29000,
     contributions: 240,
     goalsReached: 6,
@@ -66,7 +66,7 @@ const MOCK_SEASON_STATS: SeasonStats[] = [
   },
   {
     seasonId: 'season-0',
-    faction: 'Artisans Locaux',
+    faction: 'Gardiens des mers',
     totalSeeds: 33000,
     contributions: 290,
     goalsReached: 7,
@@ -96,10 +96,10 @@ const MOCK_PRESTIGE_REWARDS: PrestigeReward[] = [
   },
   {
     id: 'prestige-3',
-    name: 'Médaille des Artisans',
-    description: 'Badge permanent pour les membres de la faction gagnante de la Saison de Printemps',
+    name: 'Halo des Abysses',
+    description: 'Badge permanent pour les membres de la faction Gardiens des mers lors de la Saison de Démarrage',
     icon: '🏅',
-    faction: 'Artisans Locaux',
+    faction: 'Gardiens des mers',
     seasonId: 'season-0',
     isPermanent: true,
   },

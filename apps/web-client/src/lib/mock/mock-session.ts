@@ -72,8 +72,12 @@ const normalizeFactionValue = (value: unknown): MockViewerSession['faction'] => 
     return 'Terres & Forêts'
   }
 
-  if (normalized === 'artisans locaux') {
-    return 'Artisans Locaux'
+  if (
+    normalized === 'gardiens des mers' ||
+    normalized === 'gardiens mers' ||
+    normalized === 'gardiens des mers oceans'
+  ) {
+    return 'Gardiens des mers'
   }
 
   return null

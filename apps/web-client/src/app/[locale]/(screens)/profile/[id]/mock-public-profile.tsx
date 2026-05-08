@@ -119,7 +119,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
             <Sparkles className={`h-5 w-5 ${accentTheme.accentText}`} />
             <div className={`mt-2 text-2xl font-black tabular-nums ${accentTheme.accentText}`}>
-              {profile.points.toLocaleString('fr-FR')}
+              {profile.impactCreditsBalance.toLocaleString('fr-FR')}
             </div>
                 <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">CREDITS IMPACT</div>
           </div>

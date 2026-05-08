@@ -50,18 +50,18 @@ export function ProductsClient({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
-  const [userPoints, setUserPoints] = useState<number>(0)
+  const [userImpactCredits, setUserImpactCredits] = useState<number>(0)
   const [isConnected, setIsConnected] = useState<boolean>(false)
 
   useEffect(() => {
-    async function loadUserPoints() {
+    async function loadUserImpactCredits() {
       try {
         const { getMockViewerSession } = await import('@/lib/mock/mock-session-server')
         const { getCurrentMockImpactPoints } = await import('@/lib/mock/mock-member-data-server')
         const session = await getMockViewerSession()
         if (session) {
-          const points = await getCurrentMockImpactPoints(session.viewerId, session.faction)
-          setUserPoints(points)
+          const balance = await getCurrentMockImpactPoints(session.viewerId, session.faction)
+          setUserImpactCredits(balance)
           setIsConnected(true)
         }
       } catch (error) {
@@ -69,7 +69,7 @@ export function ProductsClient({
       }
     }
 
-    loadUserPoints()
+    loadUserImpactCredits()
   }, [])
 
   const updateQuery = useCallback(
@@ -115,7 +115,7 @@ export function ProductsClient({
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/60 border border-white/10 mt-2 shrink-0">
             <CurrencyAmount
               kind="impactCredits"
-              value={userPoints}
+              value={userImpactCredits}
               className="text-sm font-black tracking-tight"
             />
           </div>
@@ -136,7 +136,7 @@ export function ProductsClient({
           {isConnected ? (
             <CurrencyAmount
               kind="impactCredits"
-              value={userPoints}
+              value={userImpactCredits}
               className="text-sm font-black tracking-tight"
             />
           ) : (

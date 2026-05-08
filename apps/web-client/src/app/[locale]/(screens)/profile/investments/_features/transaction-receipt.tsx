@@ -86,7 +86,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
   const supportTimeline = [
     { label: 'Contribution versée', date: formatFullDate(supportVM?.createdAt || ''), status: 'completed' as const },
     { label: 'Projet en cours', date: 'Suivi en cours', status: 'in-progress' as const },
-    { label: 'Impact à valider', date: 'À déterminer', status: 'future' as const },
+    { label: 'Suivi terrain à venir', date: 'À déterminer', status: 'future' as const },
   ]
 
   const donationTimeline = [
@@ -208,7 +208,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
                 Credits Impact reçus : <strong className="text-amber-300">{supportVM?.amountImpactCredits || 0}</strong>
               </p>
               <p className="text-xs text-gray-500 italic">
-                [HYPOTHESE] L&apos;impact réel dépend de la mise en œuvre du projet sur le terrain.
+                L&apos;impact réel dépend de la mise en œuvre du projet sur le terrain.
               </p>
             </div>
           ) : isDonation ? (

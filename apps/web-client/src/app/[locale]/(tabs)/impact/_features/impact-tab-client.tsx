@@ -173,7 +173,7 @@ const MOCK_IMPACT_FEED: ImpactEvent[] = [
     profileId: 'chen-w',
     avatarUrl: 'https://i.pravatar.cc/80?u=chen-w',
     time: 'Il y a 3 jours',
-    action: 'A protégé 3 espèces menacées en signalant des zones sensibles.',
+    action: 'A signalé 3 zones sensibles liées à des espèces menacées.',
     icon: PawPrint,
     iconColor: 'text-cyan-400',
     actionHighlight: '3 espèces',

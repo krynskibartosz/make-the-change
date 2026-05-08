@@ -210,7 +210,7 @@ export async function completeMockSetup(formData: FormData) {
   const faction: Faction | null =
     factionValue === 'Vie Sauvage' ||
     factionValue === 'Terres & Forêts' ||
-    factionValue === 'Artisans Locaux'
+    factionValue === 'Gardiens des mers'
       ? factionValue
       : null
 

@@ -120,7 +120,6 @@ export const FACTION_TO_TRIBE_ID: Record<Faction, string> = {
   'Vie Sauvage': 'campus-biodiversity-lab',
   'Terres & Forêts': 'agroforest-pioneers',
   'Gardiens des mers': 'ocean-guardians',
-  'Artisans Locaux': 'zero-dechet',
 }
 
 export type MockTribeMeta = {

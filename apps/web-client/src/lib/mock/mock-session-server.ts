@@ -55,7 +55,7 @@ export async function getCurrentProfile(): Promise<Profile | null> {
 
   return {
     ...profile,
-    points: await getCurrentMockImpactPoints(session.viewerId, session.faction),
+    impactCreditsBalance: await getCurrentMockImpactPoints(session.viewerId, session.faction),
   }
 }
 

@@ -55,7 +55,16 @@
       "mcp__vercel__list_projects",
       "mcp__vercel__list_teams",
       "mcp__vercel__search_vercel_documentation",
-      "mcp__vercel__web_fetch_vercel_url"
+      "mcp__vercel__web_fetch_vercel_url",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\utilisateur\\\\Downloads\\\\make-the-change-main\\\\make-the-change-main\\\\repo-propre5\" -Depth 1)",
+      "Bash(Select-Object Name, FullName, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)",
+      "Read(//usr/**)",
+      "Read(//usr/local/**)",
+      "Read(//c/Users/utilisateur/AppData/Local/pnpm/**)",
+      "Bash(/c/Users/utilisateur/AppData/Local/pnpm/pnpm.cmd --version)",
+      "Skill(update-config)",
+      "Skill(update-config:*)"
     ],
     "deny": [],
     "ask": []

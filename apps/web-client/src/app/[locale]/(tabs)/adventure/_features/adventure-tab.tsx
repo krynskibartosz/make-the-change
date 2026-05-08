@@ -451,7 +451,7 @@ export function AdventureTab({
                       Défi du jour
                     </p>
                     <h3 className="text-[24px] font-black leading-[1.04] tracking-tight text-white">
-                      {primaryQuest?.title || "Aucune quête pour aujourd'hui"}
+                      {primaryQuest?.title || "Aucune mission pour aujourd'hui"}
                     </h3>
                     <p className="mt-3 line-clamp-3 text-sm font-semibold leading-relaxed text-white/58">
                       {primaryQuest?.description ||
