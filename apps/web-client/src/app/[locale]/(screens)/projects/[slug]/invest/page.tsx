@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { ProjectInvestOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/invest/_components/project-invest-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
+import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
@@ -46,7 +47,10 @@ export default async function InvestPage({ params, searchParams }: InvestPagePro
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const speciesList = await getSpeciesContextList()
+  const [speciesList, projectSpecies] = await Promise.all([
+    getSpeciesContextList(),
+    getSpeciesForProject(project.slug, project.id),
+  ])
   const unlockedSpecies = speciesList.find((species) => species.user_status?.isUnlocked)
 
   return (
@@ -66,6 +70,7 @@ export default async function InvestPage({ params, searchParams }: InvestPagePro
       source={toOptionalString(query.source)}
       initialAmount={toOptionalAmount(query.amount)}
       discoveredSpeciesId={unlockedSpecies?.id ?? null}
+      species={projectSpecies ?? undefined}
     />
   )
 }

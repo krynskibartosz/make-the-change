@@ -8,11 +8,12 @@ import {
 } from '@make-the-change/core/ui'
 import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, CheckCircle, CheckCircle2, Lock, MapPin, Gift, RefreshCw, ShieldCheck, Loader2 } from 'lucide-react'
+import { ArrowLeft, Camera, CheckCircle, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail, MapPin, Gift, RefreshCw, ShieldCheck } from 'lucide-react'
+import { MobileSheet } from '../../_components/ui/mobile-sheet'
 import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn } from '@/lib/utils'
@@ -21,7 +22,8 @@ import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
-import type { ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
+import type { ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
+import { sanitizeImageUrl } from '@/lib/image-url'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -76,6 +78,377 @@ type ProjectInvestOneFlowProps = {
   source?: string
   initialAmount?: number
   discoveredSpeciesId?: string | null
+  species?: ProjectSpecies[]
+}
+
+function CreditsIcon({ className }: { className?: string }) {
+  return <CurrencyIcon kind="impactCredits" className={className} />
+}
+
+function NextStepLine({
+  icon: Icon,
+  title,
+  body,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  body: string
+}) {
+  return (
+    <div className="flex items-start gap-3 border-b border-white/[0.06] py-3.5 last:border-0">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[13px] font-black leading-tight text-white">{title}</p>
+        <p className="mt-1 text-[11.5px] leading-snug text-white/48">{body}</p>
+      </div>
+    </div>
+  )
+}
+
+function SpeciesMiniStack({ species }: { species: ProjectSpecies[] }) {
+  const visible = species.slice(0, 3)
+  const remaining = Math.max(species.length - visible.length, 0)
+  if (species.length <= 1) return null
+
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      <div className="flex -space-x-2">
+        {visible.map((sp) => {
+          const imageUrl = sanitizeImageUrl(sp.icon)
+          return (
+            <div
+              key={sp.id}
+              className="grid h-7 w-7 place-items-center overflow-hidden rounded-full border-2 border-[#08080F] bg-white/[0.08]"
+            >
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={sp.name}
+                  className="h-full w-full object-cover opacity-30 blur-[0.5px]"
+                />
+              ) : (
+                <Lock className="h-3 w-3 text-white/40" />
+              )}
+            </div>
+          )
+        })}
+        {remaining > 0 ? (
+          <div className="grid h-7 w-7 place-items-center rounded-full border-2 border-[#08080F] bg-white/[0.08] text-[9px] font-black text-white/50">
+            +{remaining}
+          </div>
+        ) : null}
+      </div>
+      <p className="text-[11px] text-white/40">
+        {species.length} espèce{species.length > 1 ? 's' : ''} liée{species.length > 1 ? 's' : ''}
+      </p>
+    </div>
+  )
+}
+
+function AfterSupportBlock({
+  credits,
+  species,
+  onOpenRewards,
+  onOpenTracking,
+}: {
+  credits: number
+  species: ProjectSpecies[]
+  onOpenRewards: () => void
+  onOpenTracking: () => void
+}) {
+  const speciesSummary =
+    species.length === 0
+      ? null
+      : species.length === 1
+        ? `BioDex : ${species[0]?.name ?? ''}`
+        : `${species.length} espèces liées`
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
+      <div className="flex items-start gap-3">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl border border-amber-300/16 bg-amber-300/10 text-amber-300">
+          <CurrencyIcon kind="impactCredits" className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/34">
+            Après votre soutien
+          </p>
+          <p className="mt-1 text-[15px] font-black leading-tight text-white">
+            {credits} Crédits Impact{speciesSummary ? ` · ${speciesSummary}` : ''}
+          </p>
+          <p className="mt-1 text-[11.5px] leading-snug text-white/45">
+            Une trace dans l&apos;app, des avantages partenaires et un suivi du projet.
+          </p>
+          {species.length > 1 ? <SpeciesMiniStack species={species} /> : null}
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2.5">
+        <button
+          type="button"
+          onClick={onOpenRewards}
+          className="rounded-2xl border border-white/8 bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
+        >
+          <span className="flex items-center justify-between gap-2 text-[12px] font-black text-white">
+            Voir pourquoi
+            <ChevronRight className="h-3.5 w-3.5 text-white/36" />
+          </span>
+          <span className="mt-0.5 block text-[10.5px] leading-snug text-white/38">
+            Crédits, BioDex, limites
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={onOpenTracking}
+          className="rounded-2xl border border-white/8 bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
+        >
+          <span className="flex items-center justify-between gap-2 text-[12px] font-black text-white">
+            Voir le suivi
+            <ChevronRight className="h-3.5 w-3.5 text-white/36" />
+          </span>
+          <span className="mt-0.5 block text-[10.5px] leading-snug text-white/38">
+            Ce qui se passe après
+          </span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function RewardsSheet({
+  isOpen,
+  onClose,
+  credits,
+  species,
+  amount,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  credits: number
+  species: ProjectSpecies[]
+  amount: number
+}) {
+  const primary = species.find((sp) => isKeyRole(sp.role)) ?? species[0]
+
+  return (
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Pourquoi ces récompenses ?">
+      <div className="mt-3 rounded-2xl border border-lime-300/16 bg-lime-300/[0.06] p-4">
+        <p className="text-[14px] font-black leading-tight text-white">
+          Votre soutien de {amount}&nbsp;€ reste d&apos;abord rattaché à ce projet producteur.
+        </p>
+        <p className="mt-2 text-[12.5px] leading-relaxed text-white/50">
+          Les Crédits Impact et le BioDex servent à garder une trace, débloquer des avantages et prolonger la relation avec le projet.
+        </p>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-amber-300/10 text-amber-300">
+            <CurrencyIcon kind="impactCredits" className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[14px] font-black text-white">{credits} Crédits Impact</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-white/50">
+              Utilisables ensuite dans les avantages partenaires sélectionnés.
+            </p>
+          </div>
+        </div>
+
+        {species.length > 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <div className="flex items-start gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-lime-300/10 text-lime-300">
+                <Leaf className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[14px] font-black text-white">
+                  BioDex lié : {primary?.name ?? 'Espèce principale'}
+                </p>
+                <p className="mt-1 text-[12.5px] leading-relaxed text-white/50">
+                  L&apos;espèce principale est révélée maintenant. Les autres restent liées au
+                  projet et pourront être découvertes dans votre BioDex.
+                </p>
+              </div>
+            </div>
+            {species.length > 1 ? (
+              <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {species.map((sp) => {
+                  const imageUrl = sanitizeImageUrl(sp.icon)
+                  const isKey = isKeyRole(sp.role)
+                  return (
+                    <div key={sp.id} className="min-w-[88px] rounded-xl bg-black/16 p-2.5">
+                      <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-white/[0.06]">
+                        {imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt={sp.name}
+                            className="h-full w-full object-cover opacity-25 blur-[1px]"
+                          />
+                        ) : null}
+                        <div className="absolute inset-0 grid place-items-center">
+                          <Lock className="h-3 w-3 text-white/40" />
+                        </div>
+                      </div>
+                      <p className="mt-1.5 line-clamp-1 text-[11px] font-black text-white">
+                        {sp.name}
+                      </p>
+                      <p className="text-[9px] font-black uppercase tracking-[0.08em] text-white/34">
+                        {isKey ? 'Révélée' : 'Liée'}
+                      </p>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white/[0.055] text-white/60">
+            <ShieldCheck className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[14px] font-black text-white">À ne pas confondre</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-white/50">
+              Ce n&apos;est pas un cashback, pas un rendement, pas une part du projet et pas un
+              achat produit automatique.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p className="mt-4 pb-2 text-[11px] leading-relaxed text-white/25">
+        Pas de rendement financier. Pas de reçu fiscal.
+      </p>
+    </MobileSheet>
+  )
+}
+
+function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const steps = [
+    {
+      title: 'Votre soutien est enregistré',
+      body: 'Il est rattaché au projet, au montant choisi et au producteur.',
+    },
+    {
+      title: 'Le partenaire agit sur le terrain',
+      body: "Le soutien contribue à l'équipement, au suivi ou à la valorisation de la filière.",
+    },
+    {
+      title: "Vous suivez l'évolution",
+      body: 'Photos, mises à jour ou données peuvent enrichir votre trace dans le temps.',
+    },
+  ]
+
+  return (
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Suivi du soutien">
+      <p className="mt-1 text-sm text-white/50">Ce qui se passe après votre paiement.</p>
+      <div className="mt-4 space-y-4">
+        {steps.map((s, i) => {
+          const isLast = i === steps.length - 1
+          return (
+            <div key={s.title} className="relative grid grid-cols-[40px_1fr] gap-3">
+              {!isLast ? (
+                <div className="absolute left-[19px] top-10 h-[calc(100%+1rem)] w-px bg-white/10" />
+              ) : null}
+              <div className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.045] text-[14px] font-black text-white">
+                {i + 1}
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <p className="text-[14px] font-black leading-tight text-white">{s.title}</p>
+                <p className="mt-1.5 text-[12.5px] leading-relaxed text-white/54">{s.body}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+        <p className="text-[12px] font-black text-white">À garder clair</p>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-white/50">
+          Le suivi documente la relation avec le terrain, mais ne garantit pas un impact mesuré
+          immédiatement.
+        </p>
+      </div>
+      <p className="mt-3 pb-2 text-[11px] leading-relaxed text-white/25">
+        Pas de rendement financier. Pas de reçu fiscal.
+      </p>
+    </MobileSheet>
+  )
+}
+
+function isKeyRole(role: string | undefined | null): boolean {
+  const r = role?.toLowerCase() ?? ''
+  return r.includes('cle') || r.includes('clé')
+}
+
+function BiodexRail({ species }: { species: ProjectSpecies[] }) {
+  if (species.length === 0) return null
+
+  const sorted = [...species].sort(
+    (a, b) => (isKeyRole(a.role) ? 0 : 1) - (isKeyRole(b.role) ? 0 : 1),
+  )
+  const keyCount = sorted.filter((sp) => isKeyRole(sp.role)).length
+  const assocCount = sorted.length - keyCount
+
+  const subtitle =
+    keyCount === 0
+      ? `${assocCount} espèce${assocCount > 1 ? 's' : ''} liée${assocCount > 1 ? 's' : ''}`
+      : keyCount === 1
+        ? `1 espèce clé${assocCount > 0 ? ` · ${assocCount} espèce${assocCount > 1 ? 's' : ''} associée${assocCount > 1 ? 's' : ''}` : ''}`
+        : `${keyCount} espèces clés${assocCount > 0 ? ` · ${assocCount} espèce${assocCount > 1 ? 's' : ''} associée${assocCount > 1 ? 's' : ''}` : ''}`
+
+  return (
+    <div>
+      <div className="mb-3 flex items-baseline justify-between">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+          BioDex du projet
+        </p>
+        <p className="text-[11px] text-white/35">{subtitle}</p>
+      </div>
+      <div className="flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {sorted.map((sp) => {
+          const imageUrl = sanitizeImageUrl(sp.icon)
+          const isKey = isKeyRole(sp.role)
+          return (
+            <button
+              key={sp.id}
+              type="button"
+              aria-label={`Voir ${sp.name} dans le BioDex`}
+              className="flex w-[88px] shrink-0 flex-col items-center gap-1.5"
+            >
+              <div className="relative h-[72px] w-[72px] overflow-hidden rounded-2xl bg-white/[0.05]">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt={sp.name}
+                    className="h-full w-full object-cover opacity-25 blur-[1px]"
+                  />
+                ) : (
+                  <div className="h-full w-full" />
+                )}
+                <div className="absolute inset-0 grid place-items-center">
+                  <Lock className="h-4 w-4 text-white/40" />
+                </div>
+                {isKey ? (
+                  <span className="absolute left-1 top-1 rounded-full bg-lime-300 px-1.5 py-0.5 text-[8px] font-black leading-none text-black">
+                    Clé
+                  </span>
+                ) : null}
+              </div>
+              <p className="line-clamp-2 text-center text-[10px] font-semibold leading-tight text-white/60">
+                {sp.name}
+              </p>
+              <p className="text-[9px] font-black uppercase tracking-[0.06em] text-white/25">
+                À découvrir
+              </p>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 // Helpers moved to bottom
@@ -85,6 +458,7 @@ export function ProjectInvestOneFlow({
   isAuthenticated,
   initialAmount,
   discoveredSpeciesId = null,
+  species,
 }: ProjectInvestOneFlowProps) {
   const t = useTranslations('projects.invest_page')
   const router = useRouter()
@@ -127,6 +501,7 @@ export function ProjectInvestOneFlow({
   const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
   const [isProcessing, setIsProcessing] = useState(false)
+  const [sheet, setSheet] = useState<'rewards' | 'tracking' | null>(null)
   const amountInputRef = useRef<HTMLInputElement | null>(null)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
@@ -287,6 +662,14 @@ export function ProjectInvestOneFlow({
 
   const quickAmounts = QUICK_AMOUNTS
 
+  const glowColor = (() => {
+    const t = project.type?.toLowerCase() ?? ''
+    if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) return { r: 14, g: 165, b: 233 }
+    if (t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) return { r: 16, g: 185, b: 129 }
+    return { r: 245, g: 158, b: 11 }
+  })()
+  const glowRgba = (alpha: number) => `rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, ${alpha})`
+
   return (
     <div
       className={cn(
@@ -296,6 +679,16 @@ export function ProjectInvestOneFlow({
           : 'h-full w-full',
       )}
     >
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
+          style={{ backgroundColor: glowRgba(0.10) }}
+        />
+        <div
+          className="absolute -bottom-20 -left-24 h-64 w-64 rounded-full blur-3xl"
+          style={{ backgroundColor: glowRgba(0.12) }}
+        />
+      </div>
       {presentation === 'page' ? (
         <header className="mb-4 px-1">
           <Button
@@ -390,6 +783,17 @@ export function ProjectInvestOneFlow({
               <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
                 <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expectedImpact ?? null} />
               </div>
+
+              {species && species.length > 0 ? (
+                <BiodexRail species={species} />
+              ) : null}
+
+              <AfterSupportBlock
+                credits={points.total_points}
+                species={species ?? []}
+                onOpenRewards={() => setSheet('rewards')}
+                onOpenTracking={() => setSheet('tracking')}
+              />
             </div>
           </section>
 
@@ -411,41 +815,12 @@ export function ProjectInvestOneFlow({
                   <span className="text-4xl font-semibold text-white/50">€</span>
                 </div>
 
-                {/* CONTENU DE L'ÉTAPE 2 (Rollback UI + Nouveaux Tags) */}
-                <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
-                  <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
-                    Soutien producteur
-                  </h3>
-                  
-                  <p className="text-white/60 text-[14px] leading-relaxed mb-4 pr-4">
-                    Votre soutien aide ce projet et ouvre des Credits Impact utilisables auprès de partenaires sélectionnés.
-                  </p>
-
-                  {/* LES TAGS VISUELS (Alignés et aérés) */}
-                  <div className="flex flex-wrap gap-2">
-                    
-                    <div className="bg-amber-300/10 border border-amber-300/25 text-amber-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <CurrencyIcon kind="impactCredits" className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-bold">{points.total_points} Credits Impact</span>
-                    </div>
-                    {points.bonus_points > 0 ? (
-                      <div className="bg-amber-300/10 border border-amber-300/25 text-amber-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                        <span className="text-[12px] font-bold">Dont {points.bonus_points} de bonus</span>
-                      </div>
-                    ) : null}
-
-                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-medium">Paiement sécurisé</span>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <CheckCircle className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-medium">Projet documenté</span>
-                    </div>
-
-                  </div>
-                </div>
+                <AfterSupportBlock
+                  credits={points.total_points}
+                  species={species ?? []}
+                  onOpenRewards={() => setSheet('rewards')}
+                  onOpenTracking={() => setSheet('tracking')}
+                />
               </div>
 
               {!isAuthenticated ? (
@@ -584,6 +959,11 @@ export function ProjectInvestOneFlow({
                     Nouvelle espèce débloquée
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
+                  {species && species.length > 1 ? (
+                    <p className="mt-1 text-[12px] font-semibold text-white/42">
+                      + {species.length - 1} autre{species.length - 1 > 1 ? 's' : ''} espèce{species.length - 1 > 1 ? 's' : ''} liée{species.length - 1 > 1 ? 's' : ''} au projet
+                    </p>
+                  ) : null}
                   <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-amber-300 drop-shadow-[0_0_10px_rgba(252,211,77,0.28)] [@media(max-height:800px)]:text-xl">
                     <CurrencyAmount kind="impactCredits" value={points.total_points} showLabel className="text-2xl font-black [@media(max-height:800px)]:text-xl" />
                   </p>
@@ -592,6 +972,45 @@ export function ProjectInvestOneFlow({
                   </p>
                 </div>
               </motion.div>
+
+              {phase === 'euphoria' || phase === 'resolved' ? (
+                <motion.section
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15, duration: 0.4 }}
+                  className="mt-8 w-full border-t border-white/10 pt-5"
+                >
+                  <h3 className="text-[18px] font-black tracking-tight text-white">
+                    Et maintenant ?
+                  </h3>
+                  <div className="mt-3">
+                    <NextStepLine
+                      icon={Mail}
+                      title="Reçu envoyé"
+                      body={guestEmail ? `Envoyé à ${guestEmail}.` : 'Disponible dans votre profil.'}
+                    />
+                    <NextStepLine
+                      icon={CreditsIcon}
+                      title={`${points.total_points} Crédits Impact ajoutés`}
+                      body="Disponibles dans votre profil et utilisables dans les avantages partenaires."
+                    />
+                    <NextStepLine
+                      icon={Camera}
+                      title="Suivi du projet"
+                      body="Retrouvez les mises à jour du partenaire dans votre profil quand il publie des nouvelles du terrain."
+                    />
+                    <NextStepLine
+                      icon={Leaf}
+                      title="BioDex à sauvegarder"
+                      body={
+                        species && species.length > 1
+                          ? `Créez votre profil pour conserver ${discoveredSpecies?.name_default || 'votre espèce'} et les ${species.length - 1} autre${species.length - 1 > 1 ? 's' : ''} espèce${species.length - 1 > 1 ? 's' : ''} liée${species.length - 1 > 1 ? 's' : ''}.`
+                          : `Créez votre profil pour conserver ${discoveredSpecies?.name_default || 'votre espèce'} et la trace de ce soutien.`
+                      }
+                    />
+                  </div>
+                </motion.section>
+              ) : null}
 
               {!isAuthenticated && !claimSaved ? (
                 <motion.div
@@ -639,12 +1058,32 @@ export function ProjectInvestOneFlow({
         </div>
       </div>
 
+      <RewardsSheet
+        isOpen={sheet === 'rewards'}
+        onClose={() => setSheet(null)}
+        credits={points.total_points}
+        species={species ?? []}
+        amount={amountEur}
+      />
+      <TrackingSheet
+        isOpen={sheet === 'tracking'}
+        onClose={() => setSheet(null)}
+      />
+
       {(step === 'impact' || step === 'payment' || (step === 'success' && (isAuthenticated || claimSaved)) || showGuestClaimFooter) ? (
         <BottomActionBar className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none md:hidden">
           {step === 'impact' ? (
             <>
-              <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-amber-300">
-              Vous allez recevoir <CurrencyAmount kind="impactCredits" value={points.total_points} showLabel className="font-black" />
+              <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
+                Après soutien :{' '}
+                <span className="font-black text-amber-300">
+                  {points.total_points} Crédits Impact
+                </span>
+                {species && species.length > 0 ? (
+                  <span className="font-black text-lime-300">
+                    {' '}· {species.length} espèce{species.length > 1 ? 's' : ''} liée{species.length > 1 ? 's' : ''}
+                  </span>
+                ) : null}
               </p>
               <Button
                 type="button"
