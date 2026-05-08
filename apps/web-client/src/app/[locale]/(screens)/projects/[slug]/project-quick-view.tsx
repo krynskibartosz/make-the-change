@@ -125,7 +125,13 @@ export async function ProjectQuickView({
       : undefined
 
   const countryName = project.address_country_code
-    ? (new Intl.DisplayNames([locale], { type: 'region' }).of(project.address_country_code) ?? project.address_country_code)
+    ? (() => {
+        try {
+          return new Intl.DisplayNames([locale], { type: 'region' }).of(project.address_country_code!) ?? project.address_country_code
+        } catch {
+          return project.address_country_code
+        }
+      })()
     : null
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
