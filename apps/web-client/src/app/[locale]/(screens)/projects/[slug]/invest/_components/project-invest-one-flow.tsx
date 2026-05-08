@@ -8,7 +8,7 @@ import {
 } from '@make-the-change/core/ui'
 import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, Camera, CheckCircle, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail, MapPin, Gift, RefreshCw, ShieldCheck } from 'lucide-react'
+import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Grid3X3, Leaf, Loader2, Lock, Mail, TreePine, Waves } from 'lucide-react'
 import { MobileSheet } from '../../_components/ui/mobile-sheet'
 import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { motion } from 'framer-motion'
@@ -19,6 +19,8 @@ import { useHaptic } from '@/hooks/use-haptic'
 import { cn } from '@/lib/utils'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-impact-calculator'
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
+import { buildProjectImpactItems } from '@/app/[locale]/(screens)/projects/[slug]/_utils/build-project-impact-items'
+import type { ProjectImpactItem, ImpactIconKey } from '@/app/[locale]/(screens)/projects/[slug]/_utils/build-project-impact-items'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
@@ -27,6 +29,20 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
+type SheetKind = 'rewards' | 'tracking' | 'impact' | null
+
+const IMPACT_ICON_MAP: Record<ImpactIconKey, React.ComponentType<{ className?: string }>> = {
+  bees:     Bug,
+  honey:    Droplets,
+  flowers:  Flower2,
+  co2:      Cloud,
+  tree:     TreePine,
+  oil:      Droplet,
+  coral:    Waves,
+  area:     Grid3X3,
+  fish:     Fish,
+  survival: Activity,
+}
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
 const REWARD_PREVIEW_IMAGE = '/images/dioramas/abeille-noire.png' // Image générique de fallback
@@ -234,92 +250,89 @@ function RewardsSheet({
 
   return (
     <MobileSheet isOpen={isOpen} onClose={onClose} title="Pourquoi ces récompenses ?">
-      <div className="mt-3 rounded-2xl border border-lime-300/16 bg-lime-300/[0.06] p-4">
-        <p className="text-[14px] font-black leading-tight text-white">
-          Votre soutien de {amount}&nbsp;€ reste d&apos;abord rattaché à ce projet producteur.
+      <p className="mt-1 text-sm leading-relaxed text-white/50">
+        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact et le BioDex servent à garder une trace, débloquer des avantages et prolonger la relation avec le terrain.
+      </p>
+
+      {/* Crédits Impact */}
+      <div className="mt-5">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+          Crédits Impact
         </p>
-        <p className="mt-2 text-[12.5px] leading-relaxed text-white/50">
-          Les Crédits Impact et le BioDex servent à garder une trace, débloquer des avantages et prolonger la relation avec le projet.
+        <div className="mt-2 flex items-center gap-2.5">
+          <CurrencyIcon kind="impactCredits" className="h-5 w-5 text-amber-300" />
+          <p className="text-[15px] font-black text-white">{credits} Crédits</p>
+        </div>
+        <p className="mt-1 text-sm leading-relaxed text-white/50">
+          Utilisables dans les avantages partenaires sélectionnés.
         </p>
       </div>
 
-      <div className="mt-4 space-y-3">
-        <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-amber-300/10 text-amber-300">
-            <CurrencyIcon kind="impactCredits" className="h-5 w-5" />
-          </div>
+      {/* BioDex */}
+      {species.length > 0 ? (
+        <div className="mt-5">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+            BioDex lié
+          </p>
           <div>
-            <p className="text-[14px] font-black text-white">{credits} Crédits Impact</p>
-            <p className="mt-1 text-[12.5px] leading-relaxed text-white/50">
-              Utilisables ensuite dans les avantages partenaires sélectionnés.
-            </p>
-          </div>
-        </div>
-
-        {species.length > 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <div className="flex items-start gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-lime-300/10 text-lime-300">
-                <Leaf className="h-5 w-5" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[14px] font-black text-white">
-                  BioDex lié : {primary?.name ?? 'Espèce principale'}
-                </p>
-                <p className="mt-1 text-[12.5px] leading-relaxed text-white/50">
-                  L&apos;espèce principale est révélée maintenant. Les autres restent liées au
-                  projet et pourront être découvertes dans votre BioDex.
-                </p>
-              </div>
-            </div>
-            {species.length > 1 ? (
-              <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {species.map((sp) => {
-                  const imageUrl = sanitizeImageUrl(sp.icon)
-                  const isKey = isKeyRole(sp.role)
-                  return (
-                    <div key={sp.id} className="min-w-[88px] rounded-xl bg-black/16 p-2.5">
-                      <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-white/[0.06]">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={sp.name}
-                            className="h-full w-full object-cover opacity-25 blur-[1px]"
-                          />
-                        ) : null}
-                        <div className="absolute inset-0 grid place-items-center">
-                          <Lock className="h-3 w-3 text-white/40" />
-                        </div>
-                      </div>
-                      <p className="mt-1.5 line-clamp-1 text-[11px] font-black text-white">
-                        {sp.name}
-                      </p>
-                      <p className="text-[9px] font-black uppercase tracking-[0.08em] text-white/34">
-                        {isKey ? 'Révélée' : 'Liée'}
-                      </p>
+            {species.map((sp) => {
+              const imageUrl = sanitizeImageUrl(sp.icon)
+              const isKey = isKeyRole(sp.role)
+              return (
+                <div
+                  key={sp.id}
+                  className="flex items-center gap-3 border-b border-white/[0.06] py-3 last:border-0"
+                >
+                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl bg-white/[0.05]">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={sp.name}
+                        className="h-full w-full object-cover opacity-25 blur-[1px]"
+                      />
+                    ) : null}
+                    <div className="absolute inset-0 grid place-items-center">
+                      <Lock className="h-3 w-3 text-white/40" />
                     </div>
-                  )
-                })}
-              </div>
-            ) : null}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-white">{sp.name}</p>
+                    {sp.scientificName ? (
+                      <p className="mt-0.5 text-[11px] italic text-white/30">{sp.scientificName}</p>
+                    ) : null}
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wide ${
+                      isKey
+                        ? 'bg-lime-300/15 text-lime-300/80'
+                        : 'bg-white/[0.06] text-white/35'
+                    }`}
+                  >
+                    {isKey ? 'Révélée' : 'Liée'}
+                  </span>
+                </div>
+              )
+            })}
           </div>
-        ) : null}
-
-        <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white/[0.055] text-white/60">
-            <ShieldCheck className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-[14px] font-black text-white">À ne pas confondre</p>
-            <p className="mt-1 text-[12.5px] leading-relaxed text-white/50">
-              Ce n&apos;est pas un cashback, pas un rendement, pas une part du projet et pas un
-              achat produit automatique.
+          {species.length > 1 && primary ? (
+            <p className="mt-2 text-xs leading-relaxed text-white/35">
+              {primary.name} est révélée maintenant. Les autres restent liées au projet.
             </p>
-          </div>
+          ) : null}
         </div>
+      ) : null}
+
+      {/* À ne pas confondre */}
+      <div className="mt-5">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+          À ne pas confondre
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-white/50">
+          Ce n&apos;est pas un cashback, pas un rendement financier, pas une part du projet et pas un achat produit automatique.
+        </p>
       </div>
 
-      <p className="mt-4 pb-2 text-[11px] leading-relaxed text-white/25">
+      <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
         Pas de rendement financier. Pas de reçu fiscal.
       </p>
     </MobileSheet>
@@ -345,34 +358,108 @@ function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
   return (
     <MobileSheet isOpen={isOpen} onClose={onClose} title="Suivi du soutien">
       <p className="mt-1 text-sm text-white/50">Ce qui se passe après votre paiement.</p>
-      <div className="mt-4 space-y-4">
+
+      <div className="mt-4">
         {steps.map((s, i) => {
           const isLast = i === steps.length - 1
           return (
-            <div key={s.title} className="relative grid grid-cols-[40px_1fr] gap-3">
+            <div key={s.title} className="relative grid grid-cols-[32px_1fr] gap-3 py-4">
               {!isLast ? (
-                <div className="absolute left-[19px] top-10 h-[calc(100%+1rem)] w-px bg-white/10" />
+                <div className="absolute left-[15px] top-[52px] h-[calc(100%-20px)] w-px bg-white/[0.08]" />
               ) : null}
-              <div className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[0.045] text-[14px] font-black text-white">
+              <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-[11px] font-black text-white/50">
                 {i + 1}
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <p className="text-[14px] font-black leading-tight text-white">{s.title}</p>
-                <p className="mt-1.5 text-[12.5px] leading-relaxed text-white/54">{s.body}</p>
+              <div>
+                <p className="text-sm font-black text-white">{s.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-white/50">{s.body}</p>
               </div>
             </div>
           )
         })}
       </div>
-      <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-        <p className="text-[12px] font-black text-white">À garder clair</p>
-        <p className="mt-1.5 text-[12px] leading-relaxed text-white/50">
-          Le suivi documente la relation avec le terrain, mais ne garantit pas un impact mesuré
-          immédiatement.
+
+      <div className="mt-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+          À garder clair
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-white/50">
+          Le suivi documente la relation avec le terrain, mais ne garantit pas un impact mesuré immédiatement.
         </p>
       </div>
-      <p className="mt-3 pb-2 text-[11px] leading-relaxed text-white/25">
+
+      <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
         Pas de rendement financier. Pas de reçu fiscal.
+      </p>
+    </MobileSheet>
+  )
+}
+
+function ImpactSheet({
+  isOpen,
+  onClose,
+  items,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  items: ProjectImpactItem[]
+}) {
+  return (
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Données d'impact">
+      <p className="mt-1 text-sm text-white/50">
+        Des ordres de grandeur pour comprendre ce que représente le soutien.
+      </p>
+
+      <div className="mt-4">
+        {items.map((item) => {
+          const Icon = IMPACT_ICON_MAP[item.iconKey]
+          return (
+            <div key={item.id} className="border-b border-white/[0.06] py-4 last:border-0">
+              <div className="flex items-start gap-3">
+                <div
+                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
+                    item.main
+                      ? 'bg-amber-300/10 text-amber-300'
+                      : 'bg-white/[0.05] text-white/40'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-black text-white">{item.label}</p>
+                  <p className="mt-0.5 text-[11.5px] leading-snug text-white/45">{item.meaning}</p>
+                </div>
+                <div className="ml-2 shrink-0 text-right">
+                  {item.prefix ? (
+                    <p className="text-[8px] font-black uppercase tracking-[0.08em] text-white/28">
+                      {item.prefix}
+                    </p>
+                  ) : null}
+                  <p className="text-xl font-black tracking-tight text-white tabular-nums">
+                    {item.value}
+                    {item.unit ? (
+                      <span className="ml-0.5 text-[11px] text-white/42">{item.unit}</span>
+                    ) : null}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-2.5 space-y-1 pl-12 text-[11px] leading-snug text-white/35">
+                <p>
+                  <span className="font-bold text-white/50">Estimé · </span>
+                  {item.estimate}
+                </p>
+                <p>
+                  <span className="font-bold text-white/50">À garder en tête · </span>
+                  {item.caution}
+                </p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <p className="mt-4 pb-2 text-xs leading-relaxed text-white/25">
+        Ces chiffres sont des ordres de grandeur pédagogiques, pas des mesures certifiées.
       </p>
     </MobileSheet>
   )
@@ -501,7 +588,7 @@ export function ProjectInvestOneFlow({
   const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
   const [isProcessing, setIsProcessing] = useState(false)
-  const [sheet, setSheet] = useState<'rewards' | 'tracking' | null>(null)
+  const [sheet, setSheet] = useState<SheetKind>(null)
   const amountInputRef = useRef<HTMLInputElement | null>(null)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
@@ -513,6 +600,14 @@ export function ProjectInvestOneFlow({
       bonus_percentage: rules.expected_bonus,
     })
   }, [amountEur, project.type, rules.expected_bonus])
+
+  const impactItems = useMemo(() => buildProjectImpactItems({
+    amount: amountEur,
+    projectType: project.type,
+    isDonationProject: false,
+    donationOptions: null,
+    projectImpact: project.expectedImpact ?? null,
+  }), [amountEur, project.type, project.expectedImpact])
   const formattedAmount = formatAmountNumber(amountEur)
   const supportMetrics = getProjectImpactMetrics({
     amount: amountEur,
@@ -780,9 +875,25 @@ export function ProjectInvestOneFlow({
                 ))}
               </div>
 
-              <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
-                <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expectedImpact ?? null} />
-              </div>
+              <section className="-mx-4 border-y border-white/[0.08] px-4 py-5">
+                <div className="mb-4 flex items-end justify-between gap-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/35">
+                    Impact estimé
+                  </p>
+                  {impactItems.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => setSheet('impact')}
+                      className="text-[11px] font-black text-lime-300/80 active:scale-95"
+                    >
+                      Détails
+                    </button>
+                  ) : null}
+                </div>
+                <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
+                  <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expectedImpact ?? null} />
+                </div>
+              </section>
 
               <AfterSupportBlock
                 credits={points.total_points}
@@ -1054,6 +1165,11 @@ export function ProjectInvestOneFlow({
         </div>
       </div>
 
+      <ImpactSheet
+        isOpen={sheet === 'impact'}
+        onClose={() => setSheet(null)}
+        items={impactItems}
+      />
       <RewardsSheet
         isOpen={sheet === 'rewards'}
         onClose={() => setSheet(null)}

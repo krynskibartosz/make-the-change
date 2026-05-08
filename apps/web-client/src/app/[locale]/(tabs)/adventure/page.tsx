@@ -186,7 +186,7 @@ export default async function AdventurePage() {
                     imageUrl: recommendedProject.hero_image_url,
                     fundingProgress: Math.min(Math.max(projectProgress, 0), 100),
                     typeLabel:
-                      recommendedProject.type === 'donation' ? 'Don pur' : 'Soutien producteur',
+                      recommendedProject.type === 'donation' ? 'Don terrain' : 'Soutien producteur',
                     speciesName: linkedSpecies?.name_default ?? null,
                     impactValue: recommendedProjectImpact.value,
                     impactLabel: recommendedProjectImpact.label,

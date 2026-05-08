@@ -199,26 +199,15 @@ export function ProjectCountrySheet({
     .join(' · ')
 
   return (
-    <div className="mt-3 flex flex-col gap-1.5">
-      {/* Country badge — clickable */}
-      <div>
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.05] px-3 py-1 text-xs font-semibold text-white/70 transition-all hover:border-white/20 hover:bg-white/[0.09] hover:text-white/90 active:scale-[0.97]"
-        >
-          <span className="text-sm leading-none">{flag}</span>
-          {countryName}
-        </button>
-      </div>
-
-      {/* City — non-clickable */}
-      {city ? (
-        <p className="text-xs text-white/40">
-          <span className="mr-1">📍</span>
-          {city}
-        </p>
-      ) : null}
+    <div className="mt-2">
+      {/* Location line — flag + country + city, clickable */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="text-xs text-white/45 transition-colors hover:text-white/70"
+      >
+        {flag} {countryName}{city ? ` · ${city}` : ''}
+      </button>
 
       <MobileSheet
         isOpen={isOpen}

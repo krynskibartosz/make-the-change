@@ -218,15 +218,15 @@ export async function ProjectQuickView({
     projectImpact: project.expected_impact,
   })
 
-  const contributionLabel = isDonationProject ? 'Don pur' : 'Soutien producteur'
+  const contributionLabel = isDonationProject ? 'Don terrain' : 'Soutien producteur'
   const partnerLabel = isDonationProject ? 'Partenaire terrain' : 'Producteur partenaire'
   const fundingTitle = isDonationProject ? 'Objectif de don' : 'Objectif de soutien'
   const fundingSubtext = isDonationProject
     ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
-  const ctaProofItems = isDonationProject
-    ? ['Don pur', 'Suivi terrain', 'Graines possibles']
-    : ['Soutien producteur', 'Suivi terrain', 'Crédits Impact inclus']
+  const ctaProofLine = isDonationProject
+    ? 'Suivi inclus · Graines possibles · Projet documenté'
+    : 'Suivi inclus · Crédits Impact possibles · Projet documenté'
   const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (
@@ -498,14 +498,9 @@ export async function ProjectQuickView({
             </Link>
           )}
           {!isFundingClosed ? (
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-              {ctaProofItems.map((item) => (
-                <span key={item} className="flex items-center gap-1 text-[10px] font-semibold text-white/35">
-                  <span className="text-white/50">✓</span>
-                  {item}
-                </span>
-              ))}
-            </div>
+            <p className="mt-2 text-center text-[11px] text-white/35">
+              {ctaProofLine}
+            </p>
           ) : null}
         </BottomActionBar>
       </div>
