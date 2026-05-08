@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { unstable_cache } from 'next/cache'
-import { createClient } from '@/lib/supabase/server'
+import { createStaticClient } from '@/lib/supabase/static'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { asBoolean, asString, isRecord } from '@/lib/type-guards'
 import type { BlogPost, BlogPostStatus } from './blog-types'
@@ -254,7 +254,7 @@ export const getBlogPosts = unstable_cache(
     }
 
     try {
-      const supabase = await createClient()
+      const supabase = createStaticClient()
       const { data, error } = await supabase
         .schema('content')
         .from('blog_posts')
@@ -290,7 +290,7 @@ export const getBlogPostBySlug = unstable_cache(
     }
 
     try {
-      const supabase = await createClient()
+      const supabase = createStaticClient()
       const { data, error } = await supabase
         .schema('content')
         .from('blog_posts')
@@ -323,7 +323,7 @@ export const getBlogPostById = unstable_cache(
     }
 
     try {
-      const supabase = await createClient()
+      const supabase = createStaticClient()
       const { data, error } = await supabase
         .schema('content')
         .from('blog_posts')

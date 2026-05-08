@@ -1,6 +1,7 @@
+import { unstable_cache } from 'next/cache'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
-import { createClient } from '@/lib/supabase/server'
+import { createStaticClient } from '@/lib/supabase/static'
 import { asString, isRecord } from '@/lib/type-guards'
 import type { ProjectSpecies } from '../_types/project'
 
@@ -14,7 +15,7 @@ function conservationStatusToRarity(status: string): number {
   return 4
 }
 
-export async function getSpeciesForProject(
+async function _getSpeciesForProject(
   projectSlug: string,
   projectId?: string,
 ): Promise<ProjectSpecies[]> {
@@ -43,7 +44,7 @@ export async function getSpeciesForProject(
       })
   }
 
-  const supabase = await createClient()
+  const supabase = createStaticClient()
   const { data, error } = await supabase.from('v_species_context').select('*')
 
   if (error) {
@@ -85,3 +86,9 @@ export async function getSpeciesForProject(
     })
     .filter((s) => s.id && s.name)
 }
+
+export const getSpeciesForProject = unstable_cache(
+  _getSpeciesForProject,
+  ['project-species'],
+  { revalidate: 3600, tags: ['projects-list'] },
+)

@@ -1,10 +1,11 @@
+import { unstable_cache } from 'next/cache'
 import { Badge, Card, CardContent } from '@make-the-change/core/ui'
 import { ArrowRight, MapPin, Tractor } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { createClient } from '@/lib/supabase/server'
+import { createStaticClient } from '@/lib/supabase/static'
 import { asString, isRecord } from '@/lib/type-guards'
 import { getMockProducers } from './_features/mock-producers'
 
@@ -41,6 +42,29 @@ const toProducerRow = (value: unknown): ProducerRow | null => {
   }
 }
 
+const getProducers = unstable_cache(
+  async (): Promise<ProducerRow[]> => {
+    if (isMockDataSource) {
+      return getMockProducers().map((producer) => ({
+        id: producer.id,
+        slug: producer.slug,
+        name_default: producer.name_default,
+        images: producer.images,
+        address_city: producer.address_city,
+        address_country_code: producer.address_country_code,
+        type: producer.type,
+        description_default: producer.description_default,
+      }))
+    }
+
+    const supabase = createStaticClient()
+    const { data } = await supabase.from('public_producers').select('*').order('name_default')
+    return data?.map((entry) => toProducerRow(entry)).filter((entry): entry is ProducerRow => entry !== null) ?? []
+  },
+  ['producers-list'],
+  { revalidate: 3600, tags: ['producers-list'] },
+)
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'producers' })
@@ -53,21 +77,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function ProducersPage() {
   const t = await getTranslations('producers')
-
-  const producers = isMockDataSource
-    ? getMockProducers().map((producer) => ({
-        id: producer.id,
-        slug: producer.slug,
-        name_default: producer.name_default,
-        images: producer.images,
-        address_city: producer.address_city,
-        address_country_code: producer.address_country_code,
-        type: producer.type,
-        description_default: producer.description_default,
-      }))
-    : (
-        await (await createClient()).from('public_producers').select('*').order('name_default')
-      ).data?.map((entry) => toProducerRow(entry)).filter((entry): entry is ProducerRow => entry !== null) || []
+  const producers = await getProducers()
 
   return (
     <section className="pb-12 pt-0 md:pb-16 md:pt-2">
