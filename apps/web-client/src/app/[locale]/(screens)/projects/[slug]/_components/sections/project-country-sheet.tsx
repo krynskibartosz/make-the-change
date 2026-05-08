@@ -167,27 +167,21 @@ export function ProjectCountrySheet({
             : 'Un projet lié au vivant dans cette région'}
         </p>
 
-        {/* Map preview — CSS only, no library */}
-        <div
-          className="relative mt-4 h-28 overflow-hidden rounded-2xl border border-white/8"
-          style={{
-            background: '#050510',
-            backgroundImage:
-              'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
-          }}
-        >
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(ellipse at 55% 45%, rgba(14,165,233,0.12) 0%, transparent 65%)',
-            }}
-          />
+        {/* Map preview — CSS ambiance, same aesthetic as MapPreparingCanvas */}
+        <div className="relative mt-4 h-28 overflow-hidden rounded-2xl border border-white/8 bg-[#05070A]">
+          {/* Grid */}
+          <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(163,230,53,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.06)_1px,transparent_1px)] [background-size:28px_28px]" />
+          {/* Blobs */}
+          <div className="absolute left-[-10%] top-[5%] h-[55%] w-[55%] rounded-[52%] bg-[#123225]/60" />
+          <div className="absolute right-[-12%] top-[20%] h-[50%] w-[58%] rounded-[50%] bg-[#0E2A3B]/55" />
+          <div className="absolute bottom-[10%] left-[15%] h-[35%] w-[40%] rounded-[48%] bg-[#182A1D]/55" />
+          <div className="absolute inset-0 bg-[#05070A]/30" />
+          {/* Location dot */}
           <div className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-2.5 w-2.5 rounded-full bg-sky-400 shadow-[0_0_10px_4px_rgba(14,165,233,0.6)]" />
+            <div className="h-2.5 w-2.5 rounded-full bg-sky-400 shadow-[0_0_10px_4px_rgba(14,165,233,0.55)]" />
+            <div className="absolute -inset-3 animate-ping rounded-full bg-sky-400/20" style={{ animationDuration: '2.4s' }} />
           </div>
-          <p className="absolute bottom-2.5 right-3 text-[10px] font-bold text-white/30">
+          <p className="absolute bottom-2.5 right-3 text-[10px] font-bold text-white/25">
             {countryName}
           </p>
         </div>
