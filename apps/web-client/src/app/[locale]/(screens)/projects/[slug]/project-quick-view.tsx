@@ -1,5 +1,5 @@
 import { Badge, Button, Progress } from '@make-the-change/core/ui'
-import { ChevronRight, Globe, MapPin } from 'lucide-react'
+import { Globe, MapPin } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
@@ -8,17 +8,20 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import type { DonationOption, ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { ProjectImpactCalculator } from './_components/ui/project-impact-calculator'
-import { ProjectSpeciesTeaser } from './_components/ui/project-species-teaser'
 import { ProjectProducerProductsSection } from './_components/sections/project-producer-products-section'
 import { ProjectQuickViewHero } from './_components/layout/project-quick-view-hero'
 import { SimilarProjectsCarousel } from './_components/ui/similar-projects-carousel'
+import { ProjectSpeciesTeaser } from './_components/ui/project-species-teaser'
+import { ProjectStorySheet } from './_components/sections/project-story-sheet'
+import { ProjectImpactPreview } from './_components/sections/project-impact-preview'
+import { ProjectTrackingPreview } from './_components/sections/project-tracking-preview'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import {
   getRelatedProjectsByType,
   type PublicProject,
   type RelatedProject,
 } from './project-detail-data'
+import { buildProjectImpactItems } from './_utils/build-project-impact-items'
 import { formatAmountNumber } from '@/lib/formatters'
 
 type ProjectQuickViewProps = {
@@ -32,16 +35,16 @@ type ProjectQuickViewProps = {
 type ProjectGlowTone = 'yellow' | 'green' | 'blue'
 
 const PROJECT_GLOW: Record<ProjectGlowTone, { r: number; g: number; b: number }> = {
-  yellow: { r: 245, g: 158, b: 11  }, // amber-500  → beehive / pollinisateur
-  green:  { r: 16,  g: 185, b: 129 }, // emerald-500 → agroforestry / olive_tree / forêt
-  blue:   { r: 14,  g: 165, b: 233 }, // sky-500     → coral_restoration / océan
+  yellow: { r: 245, g: 158, b: 11  },
+  green:  { r: 16,  g: 185, b: 129 },
+  blue:   { r: 14,  g: 165, b: 233 },
 }
 
 function getProjectGlowTone(type: string | null | undefined): ProjectGlowTone {
   const t = type?.toLowerCase() ?? ''
   if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) return 'blue'
   if (t.includes('agroforestry') || t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) return 'green'
-  return 'yellow' // beehive par défaut
+  return 'yellow'
 }
 
 function glowRgba(tone: { r: number; g: number; b: number }, alpha: number): string {
@@ -53,19 +56,18 @@ const formatBadgeLabel = (value: string | null | undefined, locale: string): str
   if (!value) return null
   const normalized = value.replace(/[_-]+/g, ' ').trim()
   if (!normalized) return null
-  
-  // Traduction des types de projet
+
   const typeTranslations: Record<string, Record<string, string>> = {
     beehive: { fr: 'Rucher', en: 'Beehive' },
     orchard: { fr: 'Verger', en: 'Orchard' },
     reef: { fr: 'Récif', en: 'Reef' },
   }
-  
+
   const lowerValue = normalized.toLowerCase()
   if (typeTranslations[lowerValue]?.[locale]) {
     return typeTranslations[lowerValue][locale]
   }
-  
+
   return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
 }
 
@@ -76,6 +78,17 @@ const getWebsiteLabel = (url: string | null): string | null => {
   } catch {
     return url
   }
+}
+
+function getSimilarProjectsTitle(type: string | null | undefined): string {
+  const t = type?.toLowerCase() ?? ''
+  if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) {
+    return 'Autres projets liés aux océans'
+  }
+  if (t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) {
+    return 'Autres projets liés aux terres vivantes'
+  }
+  return 'Autres projets liés aux pollinisateurs'
 }
 
 export async function ProjectQuickView({
@@ -153,6 +166,7 @@ export async function ProjectQuickView({
   const investPath = isDonationProject
     ? `/projects/${project.slug}/donate?source=quick_view`
     : `/projects/${project.slug}/invest?source=quick_view`
+
   const projectContext =
     producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
   const resolvedProducerProducts =
@@ -167,12 +181,35 @@ export async function ProjectQuickView({
       excludeProjectSlug: project.slug,
       limit: 3,
     }))
+
   const galleryMedia = [
     ...(project.hero_image_url ? [project.hero_image_url] : []),
     ...(Array.isArray(project.images) ? project.images : []),
   ]
 
   const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
+
+  const impactItems = buildProjectImpactItems({
+    amount: currentFunding,
+    projectType: project.type,
+    isDonationProject,
+    donationOptions: project.donation_options,
+    projectImpact: project.expected_impact,
+  })
+
+  const contributionLabel = isDonationProject ? 'Don pur' : 'Soutien producteur'
+  const partnerLabel = isDonationProject ? 'Partenaire terrain' : 'Producteur partenaire'
+  const fundingTitle = isDonationProject ? 'Objectif de don' : 'Objectif de soutien'
+  const fundingSubtext = isDonationProject
+    ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
+    : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
+  const biodexTitle = isDonationProject
+    ? 'Les êtres vivants liés au récif'
+    : 'Les êtres vivants liés au projet'
+  const ctaSubtext = isDonationProject
+    ? 'Don pur · Graines possibles · suivi inclus'
+    : 'Soutien producteur · Crédits Impact possibles · suivi inclus'
+  const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (
     <div
@@ -182,12 +219,10 @@ export async function ProjectQuickView({
       )}
     >
       <div className="pointer-events-none absolute inset-0">
-        {/* Glow ambiance haut – halo discret au-dessus du hero */}
         <div
           className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
           style={{ backgroundColor: glowRgba(glow, 0.12) }}
         />
-        {/* Glow de destination bas – lumière d'appel vers le CTA, position originale */}
         <div
           className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full blur-3xl"
           style={{ backgroundColor: glowRgba(glow, 0.15) }}
@@ -202,12 +237,13 @@ export async function ProjectQuickView({
       >
         <div
           className={cn(
-            'flex-1 overflow-x-hidden pb-4',
+            'flex-1 overflow-x-hidden',
             isPageMode
               ? 'overflow-visible'
               : 'min-h-0 overflow-y-auto overscroll-contain overscroll-x-none touch-pan-y',
           )}
         >
+          {/* 1. Hero */}
           <ProjectQuickViewHero
             coverImage={coverImage}
             media={galleryMedia}
@@ -216,15 +252,15 @@ export async function ProjectQuickView({
             projectSlug={project.slug}
           />
 
-          <aside className="space-y-3 px-4 pt-5 sm:px-5 lg:px-6">
-            <h1
-              className="text-3xl font-black tracking-tighter text-foreground sm:text-4xl"
-              style={{ viewTransitionName: titleTransitionName }}
-            >
-              {projectName}
-            </h1>
-
+          {/* 2. Intro */}
+          <aside className="px-4 pt-5 sm:px-5">
             <div className="flex flex-wrap gap-2">
+              <Badge
+                variant="outline"
+                className="border-white/15 bg-white/8 text-white/70"
+              >
+                {contributionLabel}
+              </Badge>
               {typeLabel ? (
                 <Badge
                   variant="outline"
@@ -244,41 +280,33 @@ export async function ProjectQuickView({
                 </Badge>
               ) : null}
             </div>
-          </aside>
 
-          <div className="mt-5 space-y-8 pb-40 sm:pb-44 lg:px-6">
+            <h1
+              className="mt-3 text-3xl font-black tracking-tighter text-foreground sm:text-4xl"
+              style={{ viewTransitionName: titleTransitionName }}
+            >
+              {projectName}
+            </h1>
+
             {projectDescription ? (
-              <p className="whitespace-pre-wrap px-4 text-sm leading-relaxed text-pretty text-white/80 sm:px-5 sm:text-base">
+              <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/75 sm:text-base">
                 {projectDescription}
               </p>
             ) : null}
 
-            <div className="px-4 sm:px-5">
-              <ProjectSpeciesTeaser
-                species={resolvedSpecies}
-                accentColor={glowRgba(glow, 0.75)}
-              />
-            </div>
+            <ProjectStorySheet description={projectDescription} title={projectName} />
+          </aside>
 
-            <div className="px-4 sm:px-5">
-              <ProjectImpactCalculator
-                baseAmount={100}
-                amount={currentFunding}
-                mode="project"
-                isDonationProject={isDonationProject}
-                donationOptions={project.donation_options || undefined}
-                projectType={project.type || undefined}
-                projectImpact={project.expected_impact}
-                showSpeciesCard={false}
-                accentColor={glowRgba(glow, 1)}
-              />
-            </div>
-
-            {project.producer ? (
-              producerHref ? (
+          {/* 3. Partenaire */}
+          {project.producer ? (
+            <div className="mt-6 px-4 sm:px-5">
+              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+                {partnerLabel}
+              </p>
+              {producerHref ? (
                 <a
                   href={producerHref}
-                  className="group block w-full cursor-pointer border-y border-white/5 px-4 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] sm:px-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
+                  className="group block w-full cursor-pointer border-y border-white/5 py-3 transition-all duration-200 hover:bg-white/[0.02] active:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
                 >
                   <div className="-mx-2 flex items-center gap-4 rounded-2xl px-2 py-2 transition-all duration-200 group-hover:bg-white/5 group-active:scale-[0.99] group-active:bg-white/10">
                     {producerImage ? (
@@ -300,11 +328,10 @@ export async function ProjectQuickView({
                         {organizerDescription}
                       </p>
                     </div>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-white/35 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white/60" />
                   </div>
                 </a>
               ) : (
-                <section className="flex items-center gap-4 border-y border-white/5 px-4 py-3 sm:px-5">
+                <section className="flex items-center gap-4 border-y border-white/5 py-3">
                   <div className="flex w-full items-center gap-4">
                     {producerImage ? (
                       <img
@@ -336,10 +363,33 @@ export async function ProjectQuickView({
                     ) : null}
                   </div>
                 </section>
-              )
+              )}
+            </div>
+          ) : null}
+
+          <div className="mt-5 space-y-0 pb-40 sm:pb-44">
+            {/* 4. Impact preview */}
+            {impactItems.length > 0 ? (
+              <div className="mt-8 px-4 sm:px-5">
+                <ProjectImpactPreview
+                  items={impactItems}
+                  accentColor={glowRgba(glow, 1)}
+                />
+              </div>
             ) : null}
 
-            <div className="px-4 sm:px-5">
+            {/* 5. Suivi */}
+            <div className="mt-9 px-4 sm:px-5">
+              <ProjectTrackingPreview isDonationProject={isDonationProject} />
+            </div>
+
+            {/* 6. Objectif */}
+            <div className="mt-8 px-4 sm:px-5">
+              <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+                {fundingTitle}
+              </p>
+              <p className="mb-3 text-xs leading-relaxed text-white/40">{fundingSubtext}</p>
+
               <div>
                 <div className="mb-2 flex items-baseline justify-between">
                   <div className="flex items-baseline">
@@ -360,28 +410,45 @@ export async function ProjectQuickView({
                   className="h-2 rounded-full bg-muted"
                   indicatorClassName="bg-gradient-to-r from-primary to-marketing-positive-600"
                 />
-                <p className="mt-2 text-xs text-white/40">
-                  Cet objectif couvre l&apos;équipement, le suivi terrain et la valorisation des produits du projet.
-                </p>
               </div>
             </div>
 
+            {/* 7. BioDex */}
+            {resolvedSpecies && resolvedSpecies.length > 0 ? (
+              <div className="mt-10 px-4 sm:px-5">
+                <p className="mb-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+                  {biodexTitle}
+                </p>
+                <p className="mb-3 text-xs leading-relaxed text-white/35">
+                  Une trace pédagogique liée au projet, pas une preuve que l&apos;espèce est sauvée.
+                </p>
+                <ProjectSpeciesTeaser
+                  species={resolvedSpecies}
+                  accentColor={glowRgba(glow, 0.75)}
+                />
+              </div>
+            ) : null}
+
+            {/* 8. Produits partenaires (soutien uniquement) */}
             {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
-              <div className="px-4 sm:px-5">
+              <div className="mt-10 px-4 sm:px-5">
                 <ProjectProducerProductsSection products={resolvedProducerProducts} />
               </div>
             ) : null}
 
-            <div className="w-full max-w-full overflow-hidden px-4 sm:px-5">
+            {/* 9. Projets similaires */}
+            <div className="mt-10 w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
                 currentProjectTags={[project.type || 'beehive']}
                 locale={locale}
                 relatedProjects={resolvedRelatedProjects}
+                title={similarTitle}
               />
             </div>
           </div>
         </div>
 
+        {/* 10. CTA sticky */}
         <BottomActionBar className={isPageMode ? 'sticky bottom-0 z-20' : 'fixed bottom-0 left-0 right-0 z-40 w-full'}>
           {isFundingClosed ? (
             <Button
@@ -397,6 +464,11 @@ export async function ProjectQuickView({
               </Button>
             </Link>
           )}
+          {!isFundingClosed ? (
+            <p className="mt-1.5 text-center text-[10px] font-semibold text-white/30">
+              {ctaSubtext}
+            </p>
+          ) : null}
         </BottomActionBar>
       </div>
     </div>

@@ -13,6 +13,7 @@ type SimilarProjectsCarouselProps = {
   currentProjectTags: string[]
   locale: string
   relatedProjects?: RelatedProject[]
+  title?: string
 }
 
 type MockSimilarCard = {
@@ -160,6 +161,7 @@ export function SimilarProjectsCarousel({
   currentProjectTags,
   locale,
   relatedProjects = [],
+  title = "Explorez d'autres projets",
 }: SimilarProjectsCarouselProps) {
   const realCards = relatedProjects.slice(0, 3)
   const shouldUseFallback = realCards.length === 0
@@ -167,7 +169,7 @@ export function SimilarProjectsCarousel({
 
   return (
     <section className="w-full max-w-full overflow-hidden">
-      <h3 className="mb-4 text-xl font-bold text-white">Explorez d&apos;autres projets</h3>
+      <h3 className="mb-4 text-xl font-bold text-white">{title}</h3>
 
       <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {shouldUseFallback
