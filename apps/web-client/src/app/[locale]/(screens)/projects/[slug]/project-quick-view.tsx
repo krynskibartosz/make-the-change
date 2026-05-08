@@ -3,6 +3,7 @@ import { ChevronRight, Globe, MapPin } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
+import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import type { DonationOption, ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn, getLocalizedContent } from '@/lib/utils'
@@ -156,8 +157,7 @@ export async function ProjectQuickView({
     producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
   const resolvedProducerProducts =
     producerProducts ?? projectContext?.producer_products ?? project.producer_products ?? null
-  const resolvedSpecies =
-    project.species ?? projectContext?.species ?? null
+  const resolvedSpecies = await getSpeciesForProject(project.slug, project.id)
 
   const resolvedRelatedProjects =
     relatedProjects ??

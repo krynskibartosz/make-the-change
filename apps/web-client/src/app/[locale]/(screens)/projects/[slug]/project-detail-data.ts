@@ -1,5 +1,6 @@
+import { unstable_cache } from 'next/cache'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { createClient } from '@/lib/supabase/server'
+import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { getMockProjectBySlug, getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
@@ -60,7 +61,7 @@ export type RelatedProject = {
 }
 
 // Helpers moved to bottom
-export async function getPublicProjectBySlug(slug: string): Promise<PublicProject | null> {
+async function _getPublicProjectBySlug(slug: string): Promise<PublicProject | null> {
   const mockProject = getMockProjectBySlug(slug)
   if (mockProject) {
     return toPublicProjectFromMock(mockProject)
@@ -70,7 +71,7 @@ export async function getPublicProjectBySlug(slug: string): Promise<PublicProjec
     return null
   }
 
-  const supabase = await createClient()
+  const supabase = createStaticClient()
 
   const { data: bySlug } = await supabase
     .from('public_projects')
@@ -113,7 +114,7 @@ type GetRelatedProjectsByTypeParams = {
   limit?: number
 }
 
-export async function getRelatedProjectsByType({
+async function _getRelatedProjectsByType({
   type,
   excludeProjectId,
   excludeProjectSlug,
@@ -144,7 +145,7 @@ export async function getRelatedProjectsByType({
     return mockRelatedProjects.slice(0, limit)
   }
 
-  const supabase = await createClient()
+  const supabase = createStaticClient()
   let projectsQuery = supabase
     .from('public_projects')
     .select(
@@ -336,3 +337,14 @@ function toRelatedProject(value: unknown): RelatedProject | null {
 function isUuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
 }
+
+export const getPublicProjectBySlug = unstable_cache(_getPublicProjectBySlug, ['project-detail'], {
+  revalidate: 3600,
+  tags: ['projects-list'],
+})
+
+export const getRelatedProjectsByType = unstable_cache(
+  _getRelatedProjectsByType,
+  ['project-related'],
+  { revalidate: 3600, tags: ['projects-list'] },
+)

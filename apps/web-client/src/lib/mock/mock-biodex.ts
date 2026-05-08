@@ -78,6 +78,15 @@ export const MOCK_SPECIES: SpeciesContext[] = [
         impact: 'Renforce les pratiques agricoles favorables aux abeilles noires.',
         userParticipation: false,
       },
+      {
+        id: MOCK_PROJECT_ANTSIRABE_ID,
+        slug: MOCK_PROJECT_ANTSIRABE_SLUG,
+        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        type: 'beehive',
+        role: 'Pollinisatrice cle',
+        impact: 'Espece principale du reseau apicole de la region.',
+        userParticipation: false,
+      },
     ],
     associated_producers: [
       {
@@ -136,7 +145,17 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       'La Coccinella septempunctata est le coléoptère prédateur le plus répandu en Europe tempérée, consommant jusqu\'a 5 000 pucerons par an. Ses sept points noirs sur élytres rouges constituent un signal aposématique renforcé par la réflexe autohémorragique : la coccinelle sécrète une hémolymphe amère (coccinelline) depuis ses articulations tibiales. Elle est capable de diapause imaginale dans les litières forestières, supportant des froids jusqu\'a -20°C. L\'invasion de la coccinelle asiatique (Harmonia axyridis), introduite par les jardineries, déplace les populations locales par compétition alimentaire et pathogènes transmis.',
     conservation_status: 'LC',
     image_url: '/images/diaromas/Coccinelle.png',
-    associated_projects: [],
+    associated_projects: [
+      {
+        id: MOCK_PROJECT_HABEEBEE_ID,
+        slug: MOCK_PROJECT_HABEEBEE_SLUG,
+        name: 'Habeebee Belgique',
+        type: 'beehive',
+        role: 'Auxiliaire',
+        impact: 'Regulation naturelle des ravageurs dans les ruchers.',
+        userParticipation: false,
+      },
+    ],
     associated_producers: [],
     associated_challenges: [],
     user_status: createUserStatus(false, 1),

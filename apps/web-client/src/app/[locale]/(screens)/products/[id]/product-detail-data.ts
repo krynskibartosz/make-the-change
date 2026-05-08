@@ -1,5 +1,6 @@
+import { unstable_cache } from 'next/cache'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { createClient } from '@/lib/supabase/server'
+import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
 import { getMockProductByIdentifier, type MockProductSeed } from '@/app/[locale]/(tabs)/products/_features/mock-products'
 
@@ -191,7 +192,7 @@ const toProductWithRelationsFromMock = (product: MockProductSeed): ProductWithRe
   },
 })
 
-export async function getPublicProductById(idOrSlug: string): Promise<ProductWithRelations | null> {
+async function _getPublicProductById(idOrSlug: string): Promise<ProductWithRelations | null> {
   const mockProduct = getMockProductByIdentifier(idOrSlug)
   if (mockProduct) {
     return toProductWithRelationsFromMock(mockProduct)
@@ -201,7 +202,7 @@ export async function getPublicProductById(idOrSlug: string): Promise<ProductWit
     return null
   }
 
-  const supabase = await createClient()
+  const supabase = createStaticClient()
   const { data: productDataById, error: byIdError } = await supabase
     .from('public_products')
     .select('*')
@@ -250,3 +251,8 @@ export async function getPublicProductById(idOrSlug: string): Promise<ProductWit
     category,
   }
 }
+
+export const getPublicProductById = unstable_cache(_getPublicProductById, ['product-detail'], {
+  revalidate: 3600,
+  tags: ['products-list'],
+})
