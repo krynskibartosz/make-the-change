@@ -11,7 +11,7 @@ import {
 } from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import { cn } from '@/lib/utils'
 import { useHaptic } from '@/hooks/use-haptic'
 import { resolveFactionThemeKey } from '@/lib/faction-theme'

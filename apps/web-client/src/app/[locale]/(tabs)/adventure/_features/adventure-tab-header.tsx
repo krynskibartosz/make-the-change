@@ -2,7 +2,7 @@ import { CurrencyIcon } from "@/components/currency";
 import { Link } from "@/i18n/navigation";
 import { formatCompact } from "@/lib/formatters";
 import { resolveFactionThemeKey } from "@/lib/faction-theme";
-import type { Faction } from "@/lib/mock/types";
+import type { Faction } from '@/lib/domain/types'
 
 type AdventureTabHeaderProps = {
   faction: Faction | null;

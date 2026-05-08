@@ -1,4 +1,4 @@
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 
 export type FactionThemeKey = 'neutral' | 'pollinisateurs' | 'forets' | 'mers'
 

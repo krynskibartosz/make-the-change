@@ -10,7 +10,7 @@ import { FactionCarousel } from '@/app/[locale]/(auth)/_features/faction-carouse
 import { useRouter } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/lib/faction-theme'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import { cn } from '@/lib/utils'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 

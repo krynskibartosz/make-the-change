@@ -12,7 +12,7 @@ import { recordClientMockChallengeCompletion } from '@/lib/mock/mock-challenge-p
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { MockChallengeDetail } from '@/lib/mock/mock-challenges'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import { getCurrentIsoDate } from '@/lib/date-utils'
 import { cn } from '@/lib/utils'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'

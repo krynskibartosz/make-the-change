@@ -15,7 +15,7 @@ import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
-import type { Profile } from '@/lib/mock/types'
+import type { Profile } from '@/lib/domain/types'
 
 type MockPublicProfilePageProps = {
   profile: Profile

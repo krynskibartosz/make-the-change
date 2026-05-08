@@ -10,7 +10,7 @@ import { getFactionTheme, resolveFactionThemeKey, type FactionTheme } from '@/li
 import { recordClientMockChallengeCompletion } from '@/lib/mock/mock-challenge-progress'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { MockChallengeDetail } from '@/lib/mock/mock-challenges'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import { getCurrentIsoDate } from '@/lib/date-utils'
 import { cn } from '@/lib/utils'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'

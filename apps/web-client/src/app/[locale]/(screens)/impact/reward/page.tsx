@@ -9,7 +9,7 @@ import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import { MOCK_PRODUCER_ILANGA_ID } from '@/lib/mock/mock-ids'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

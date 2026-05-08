@@ -14,7 +14,7 @@ import {
   getCurrentMockWalletBalance,
 } from '@/lib/mock/mock-member-data-server'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import type { SpeciesContext } from '@/types/species'
 import { type AdventureQuestCard, AdventureTab } from './_features/adventure-tab'
 import { AdventureTabHeader } from './_features/adventure-tab-header'

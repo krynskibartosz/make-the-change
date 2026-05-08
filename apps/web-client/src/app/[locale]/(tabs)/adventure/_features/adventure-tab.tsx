@@ -20,7 +20,7 @@ import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
 import { formatCompact } from '@/lib/formatters'
 import { getCollectiveGoal } from '@/lib/mock/mock-factions'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import { cn } from '@/lib/utils'
 
 export type AdventureQuestCard = {

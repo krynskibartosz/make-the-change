@@ -1,4 +1,4 @@
-import type { Faction, Season, SeasonDuration, SeasonStats, SeasonStatus, PrestigeReward } from '@/lib/mock/types'
+import type { Faction, Season, SeasonDuration, SeasonStats, SeasonStatus, PrestigeReward } from '@/lib/domain/types'
 
 // Mock data for seasons
 const MOCK_SEASONS: Season[] = [

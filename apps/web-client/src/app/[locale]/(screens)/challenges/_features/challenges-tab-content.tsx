@@ -20,7 +20,7 @@ import { recordClientMockChallengeCompletion } from '@/lib/mock/mock-challenge-p
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
 import type { MockChallengeDetail, MockMonthlyQuestOverview } from '@/lib/mock/mock-challenges'
-import type { Faction } from '@/lib/mock/types'
+import type { Faction } from '@/lib/domain/types'
 import { cn } from '@/lib/utils'
 
 type DailyQuest = MockChallengeDetail
