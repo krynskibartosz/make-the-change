@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Bug, Hexagon, Cloud } from 'lucide-react'
+import { Bug, Droplet, Cloud } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 const IMPACT_LEVELS = [
@@ -48,12 +48,12 @@ export function Step3Contract() {
 
           <div className="grid grid-cols-3 gap-2 divide-x divide-white/5">
             <div className="flex flex-col items-center px-2">
-              <Bug className="text-lime-400 mb-2 h-6 w-6" />
+              <Bug className="text-amber-400 mb-2 h-6 w-6" />
               <span className="text-2xl font-black text-white mb-0.5">{currentMetrics.bees}</span>
               <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Abeilles</span>
             </div>
             <div className="flex flex-col items-center px-2">
-              <Hexagon className="text-amber-500 mb-2 h-6 w-6" />
+              <Droplet className="text-amber-400 mb-2 h-6 w-6" />
               <span className="text-2xl font-black text-white mb-0.5">{currentMetrics.honey}<span className="text-sm text-gray-400 font-bold">kg</span></span>
               <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Miel</span>
             </div>

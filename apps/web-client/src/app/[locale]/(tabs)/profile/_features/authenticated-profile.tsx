@@ -1,4 +1,4 @@
-import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Settings, Target, Wind, Sparkles } from 'lucide-react'
+import { ArrowRight, Bug, Cloud, Crown, Droplets, Flame, Gift, Settings, Target, Sparkles } from 'lucide-react'
 import { CurrencyIcon } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
@@ -81,7 +81,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
 
             <li>
               <ImpactCard
-                icon={<Wind className="h-5 w-5 text-blue-400" aria-hidden="true" />}
+                icon={<Cloud className="h-5 w-5 text-sky-400" aria-hidden="true" />}
                 value={`${formatCompact(profile?.co2CapturedKg || 3.85, true)} kg`}
                 label="CO₂ ASSOCIÉ"
               />

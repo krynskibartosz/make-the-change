@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Flame, Package, Truck, Leaf, Hexagon, Info, ShieldCheck, ChevronRight, ChevronDown, X } from 'lucide-react'
+import { Flame, Package, Truck, Leaf, Info, ShieldCheck, ChevronRight, ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
 import { useRouter } from '@/i18n/navigation'

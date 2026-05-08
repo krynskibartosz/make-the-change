@@ -1,7 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   BookOpen,
-  Bug,
   CheckCircle2,
   ChevronRight,
   Compass,
@@ -11,11 +10,10 @@ import {
   PawPrint,
   Sparkles,
   Sprout,
-  TreePine,
   Trophy,
   UsersRound,
-  Waves,
 } from 'lucide-react'
+import { getProjectTypeDesign } from '@/lib/project-type-icons'
 import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
 import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
@@ -300,11 +298,10 @@ export function AdventureTab({
             {recommendedProject && (
               <div className="mt-2.5 flex items-center gap-1.5">
                 {(() => {
-                  const Icon = getImpactIcon(recommendedProject.impactKind)
-                  const iconColor = getImpactIconColor(recommendedProject.impactKind)
+                  const design = getProjectTypeDesign(recommendedProject.impactKind)
                   return (
                     <>
-                      <Icon className={cn('h-4 w-4 shrink-0', iconColor)} />
+                      <design.icon className={cn('h-4 w-4 shrink-0', design.color)} />
                       <p className="min-w-0 truncate text-[13px] leading-none">
                         {recommendedProject.impactValue > 0 ? (
                           <>
@@ -777,14 +774,3 @@ function getRewardProduct(impactPoints: number) {
   return products.find((product) => product.price_points > impactPoints) || products[0] || null
 }
 
-function getImpactIcon(kind: AdventureProjectCard['impactKind']) {
-  if (kind === 'orchard') return TreePine
-  if (kind === 'reef') return Waves
-  return Bug
-}
-
-function getImpactIconColor(kind: AdventureProjectCard['impactKind']): string {
-  if (kind === 'orchard') return 'text-emerald-400'
-  if (kind === 'reef') return 'text-sky-400'
-  return 'text-amber-400'
-}

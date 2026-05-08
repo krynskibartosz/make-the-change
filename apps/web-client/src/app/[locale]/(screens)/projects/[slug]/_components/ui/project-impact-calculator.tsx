@@ -1,4 +1,5 @@
-import { Bug, Cloud, Droplets, Fish, Flower2, Hexagon, Lock, TreePine, Waves } from 'lucide-react'
+import { Lock } from 'lucide-react'
+import { BEEHIVE_METRICS, CORAL_METRICS, ORCHARD_METRICS } from '@/lib/project-type-icons'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn } from '@/lib/utils'
 import { formatCompact, formatDecimal, formatInteger } from '@/lib/formatters'
@@ -144,14 +145,14 @@ export function ProjectImpactCalculator({
             {metrics.kind === 'reef' ? (
               <>
                 <MetricCard
-                  icon={Waves}
+                  icon={CORAL_METRICS.corals.icon}
                   prefix="~ Environ"
                   valueWhole={formatCompact(metrics.corals)}
-                  label="Coraux associés"
+                  label={CORAL_METRICS.corals.label + ' associés'}
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Hexagon}
+                  icon={CORAL_METRICS.area.icon}
                   prefix="~ Environ"
                   valueWhole={areaParts?.whole ?? metrics.areaLabel}
                   valueFraction={areaParts?.fraction}
@@ -160,14 +161,14 @@ export function ProjectImpactCalculator({
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Fish}
+                  icon={CORAL_METRICS.refuges.icon}
                   prefix="~ Environ"
                   valueWhole={formatCompact(metrics.fishShelter)}
                   label="Refuges marins"
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Cloud}
+                  icon={CORAL_METRICS.survival.icon}
                   prefix="~ Estimé"
                   valueWhole={metrics.survivalRate ?? '60-85%'}
                   label="Survie à 12 mois"
@@ -176,9 +177,9 @@ export function ProjectImpactCalculator({
               </>
             ) : metrics.kind === 'orchard' ? (
               <>
-                <MetricCard icon={TreePine} valueWhole={formatCompact(metrics.olivesSupported)} label="Oliviers soutenus" iconColor={accentColor} />
+                <MetricCard icon={ORCHARD_METRICS.trees.icon} valueWhole={formatCompact(metrics.olivesSupported)} label="Oliviers soutenus" iconColor={accentColor} />
                 <MetricCard
-                  icon={Droplets}
+                  icon={ORCHARD_METRICS.oil.icon}
                   prefix="Jusqu'à"
                   valueWhole={oilParts.whole}
                   valueFraction={oilParts.fraction}
@@ -187,7 +188,7 @@ export function ProjectImpactCalculator({
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Cloud}
+                  icon={ORCHARD_METRICS.co2.icon}
                   prefix="~ Environ"
                   valueWhole={co2SequesteredParts.whole}
                   valueFraction={co2SequesteredParts.fraction}
@@ -200,14 +201,14 @@ export function ProjectImpactCalculator({
             ) : (
               <>
                 <MetricCard
-                  icon={Bug}
+                  icon={BEEHIVE_METRICS.bees.icon}
                   prefix="~ Environ"
                   valueWhole={formatCompact(metrics.bees)}
                   label="Abeilles associées"
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Hexagon}
+                  icon={BEEHIVE_METRICS.honey.icon}
                   prefix="Jusqu'à"
                   valueWhole={honeyParts.whole}
                   valueFraction={honeyParts.fraction}
@@ -216,14 +217,14 @@ export function ProjectImpactCalculator({
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Flower2}
+                  icon={BEEHIVE_METRICS.flowers.icon}
                   prefix="> Plus de"
                   valueWhole={formatCompact(metrics.flowers)}
                   label="Fleurs visitées"
                   iconColor={accentColor}
                 />
                 <MetricCard
-                  icon={Cloud}
+                  icon={BEEHIVE_METRICS.co2.icon}
                   prefix="~ Environ"
                   valueWhole={co2Parts.whole}
                   valueFraction={co2Parts.fraction}
@@ -240,15 +241,15 @@ export function ProjectImpactCalculator({
           {metrics.kind === 'reef' ? (
             <>
               <CheckoutMetric
-                icon={Waves}
-                iconColorClass="text-lime-400"
+                icon={CORAL_METRICS.corals.icon}
+                iconColorClass={CORAL_METRICS.corals.color}
                 prefix="~ Environ"
                 valueWhole={formatCompact(metrics.corals)}
                 label="Coraux"
               />
               <CheckoutMetric
-                icon={Hexagon}
-                iconColorClass="text-amber-500"
+                icon={CORAL_METRICS.area.icon}
+                iconColorClass={CORAL_METRICS.area.color}
                 prefix="~ Environ"
                 valueWhole={areaParts?.whole ?? metrics.areaLabel}
                 valueFraction={areaParts?.fraction}
@@ -256,8 +257,8 @@ export function ProjectImpactCalculator({
                 label="Récif"
               />
               <CheckoutMetric
-                icon={Fish}
-                iconColorClass="text-sky-400"
+                icon={CORAL_METRICS.refuges.icon}
+                iconColorClass={CORAL_METRICS.refuges.color}
                 prefix="~ Environ"
                 valueWhole={formatCompact(metrics.fishShelter)}
                 label="Refuges"
@@ -265,15 +266,15 @@ export function ProjectImpactCalculator({
             </>
           ) : metrics.kind === 'orchard' ? (
             <>
-              <CheckoutMetric icon={TreePine} iconColorClass="text-lime-400" valueWhole={formatCompact(metrics.olivesSupported)} label="Oliviers" />
-              <CheckoutMetric icon={Droplets} iconColorClass="text-amber-500" prefix="Jusqu'à" valueWhole={oilParts.whole} valueFraction={oilParts.fraction} unit="L" label="Huile" />
-              <CheckoutMetric icon={Cloud} iconColorClass="text-sky-400" prefix="~ Environ" valueWhole={co2SequesteredParts.whole} valueFraction={co2SequesteredParts.fraction} unit="kg" label="CO₂" />
+              <CheckoutMetric icon={ORCHARD_METRICS.trees.icon} iconColorClass={ORCHARD_METRICS.trees.color} valueWhole={formatCompact(metrics.olivesSupported)} label="Oliviers" />
+              <CheckoutMetric icon={ORCHARD_METRICS.oil.icon} iconColorClass={ORCHARD_METRICS.oil.color} prefix="Jusqu'à" valueWhole={oilParts.whole} valueFraction={oilParts.fraction} unit="L" label="Huile" />
+              <CheckoutMetric icon={ORCHARD_METRICS.co2.icon} iconColorClass={ORCHARD_METRICS.co2.color} prefix="~ Environ" valueWhole={co2SequesteredParts.whole} valueFraction={co2SequesteredParts.fraction} unit="kg" label="CO₂" />
             </>
           ) : (
             <>
-              <CheckoutMetric icon={Bug} iconColorClass="text-lime-400" prefix="~ Environ" valueWhole={formatCompact(metrics.bees)} label="Abeilles" />
-              <CheckoutMetric icon={Hexagon} iconColorClass="text-amber-500" prefix="Jusqu'à" valueWhole={honeyParts.whole} valueFraction={honeyParts.fraction} unit="kg" label="Miel" />
-              <CheckoutMetric icon={Flower2} iconColorClass="text-sky-400" prefix="> Plus de" valueWhole={formatCompact(metrics.flowers)} label="Fleurs" />
+              <CheckoutMetric icon={BEEHIVE_METRICS.bees.icon} iconColorClass={BEEHIVE_METRICS.bees.color} prefix="~ Environ" valueWhole={formatCompact(metrics.bees)} label="Abeilles" />
+              <CheckoutMetric icon={BEEHIVE_METRICS.honey.icon} iconColorClass={BEEHIVE_METRICS.honey.color} prefix="Jusqu'à" valueWhole={honeyParts.whole} valueFraction={honeyParts.fraction} unit="kg" label="Miel" />
+              <CheckoutMetric icon={BEEHIVE_METRICS.flowers.icon} iconColorClass={BEEHIVE_METRICS.flowers.color} prefix="> Plus de" valueWhole={formatCompact(metrics.flowers)} label="Fleurs" />
             </>
           )}
         </div>

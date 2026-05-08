@@ -19,15 +19,14 @@ Ce document sert de tableau de suivi des arbitrages. Les decisions detaillees re
 | P0-8 | Statut de `Artisans Locaux` | `[AUDITE] [CIBLE_VALIDEE]` | `Artisans Locaux` est une faction legacy depreciee ; seules factions cibles : Vie Sauvage, Terres & Forets, Gardiens des mers. | `_audit/ARTISANS-LOCAUX-STATUS-AUDIT.md` | Faction par defaut apres migration ; strategie pour utilisateurs ou mocks encore en `Artisans Locaux`. |
 | P0-9 | Statut Stripe | `[AUDITE]` | Cible : flows economiques separes ; recu de paiement/contribution, pas recu fiscal ; paiement confirme ne veut pas dire impact mesure. | `_audit/STRIPE-STATUS-AUDIT.md` | `[ACTUEL_CODE]` donation/invest creent des PaymentIntent reels ; `[ACTUEL_CODE] [SIMULE] [RISQUE]` produit est simule ; migration metadata, remboursements, harmonisation `create-intent`. |
 | P0-10 | Source de verite data a court terme | `[AUDITE] [CIBLE_VALIDEE]` | Mocks = source prototype ; Supabase = legacy a ne pas toucher ; DB V2 = plus tard apres stabilisation. | `_audit/DATA-SOURCE-TRUTH-AUDIT.md` | Stabilisation des 5 mocks critiques ; strategie doublons mock/Supabase. |
+| P0-10a | Quand figer la structure des mocks ? | `[CIBLE_VALIDEE]` (2026-05-08) | Les mocks se stabilisent flow par flow, au fur et a mesure que chaque ecran est considere prototype final. Pas de date de gel unique. | — | — |
+| P0-10b | Comment gerer les doublons mock/Supabase ? | `[CIBLE_VALIDEE]` (2026-05-08) | En cas de doublon, les mocks gagnent. Supabase legacy n'est plus une reference pour le web-client. | — | — |
+| P0-10c | Les routes API doivent-elles aussi etre hybrides ? | `[CIBLE_VALIDEE]` (2026-05-08) | Les routes API du web-client doivent progressivement respecter `isMockDataSource`. Celles qui lisent Supabase directement sont a corriger. | — | Inventaire des routes API non conformes a planifier. |
+| P0-11 | Strategie future DB V2 | `[CIBLE_VALIDEE]` (2026-05-08) | DB V2 sera construite a partir des mocks finaux et des flows valides. Approche : mock-first → prototype valide → types TypeScript stables → DB V2 Supabase. | — | Timing : apres que le prototype soit considere complet. |
 
 ## P0 a traiter
 
-| ID | Sujet | Priorite | Pourquoi c'est important | Statut |
-|---|---|---|---|---|
-| P0-10a | Quand figer la structure des mocks ? | Haute | Timing de stabilisation des mocks structurants avant migration V2. | `[A_DECIDER]` |
-| P0-10b | Comment gerer les doublons mock/Supabase ? | Haute | Certains slugs existent dans les deux sources, risque de donnees dupliquees. | `[A_DECIDER]` |
-| P0-10c | Les routes API doivent-elles aussi etre hybrides ? | Moyenne | Actuellement les routes API ignorent `isMockDataSource`. | `[A_DECIDER]` |
-| P0-11 | Strategie future DB V2 | Haute apres P0-10a | Definir comment passer des flows valides et mocks stabilises vers une base propre sans casser l'admin legacy. | `[A_DECIDER] [PLUS_TARD]` |
+Aucune question P0 ouverte a ce jour. Voir P1/P2 ci-dessous.
 
 ## P1 / P2 plus tard
 

@@ -8,7 +8,7 @@ import {
   Shield,
   CheckCircle2,
   Mail,
-  Hexagon,
+  Bug,
   Sprout,
 } from "lucide-react";
 // We don't have Apple from lucide-react (wait, is there Apple? lucide-react actually doesn't have an Apple logo we might need to fake it or check if lucide has it).
@@ -101,7 +101,7 @@ export function OnboardingFlow() {
               <div className="bg-white/5 rounded-2xl p-4 mt-8 flex justify-around items-center border border-white/10 backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.5)]">
                 <div className="text-center flex flex-col items-center">
                   <div className="flex items-center justify-center gap-1.5 text-amber-400 mb-1">
-                    <Hexagon size={14} fill="currentColor" />
+                    <Bug size={14} />
                     <p className="text-xl font-black">290k+</p>
                   </div>
                   <p className="text-[10px] text-white/40 uppercase tracking-wider font-bold">

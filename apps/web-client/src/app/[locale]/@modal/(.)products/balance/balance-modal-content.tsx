@@ -2,7 +2,7 @@
 
 import { Button } from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
-import { ArrowRight, TreeDeciduous, Droplet, Clock, Hexagon } from 'lucide-react'
+import { ArrowRight, Leaf, Droplet, Clock, ArrowLeftRight } from 'lucide-react'
 import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import type { MockPointsTransactionRecord } from '@/lib/mock/mock-member-data'
@@ -27,8 +27,8 @@ function formatRelativeDate(dateString: string): string {
 function getTransactionIcon(label: string) {
   const lowerLabel = label.toLowerCase()
   if (lowerLabel.includes('commande') || lowerLabel.includes('miel')) return Droplet
-  if (lowerLabel.includes('contribution') || lowerLabel.includes('projet')) return TreeDeciduous
-  return Hexagon
+  if (lowerLabel.includes('contribution') || lowerLabel.includes('projet')) return Leaf
+  return ArrowLeftRight
 }
 
 // Components

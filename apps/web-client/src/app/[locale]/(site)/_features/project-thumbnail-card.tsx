@@ -1,5 +1,6 @@
-import { Fish, Leaf, MapPin, TreePine } from 'lucide-react'
+import { Leaf, MapPin } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { getProjectTypeDesign } from '@/lib/project-type-icons'
 
 type ProjectThumbnailCardProps = {
   slug: string
@@ -50,16 +51,9 @@ export function ProjectThumbnailCard({
   type,
 }: ProjectThumbnailCardProps) {
   const getImpactIcon = () => {
-    switch (type) {
-      case 'beehive':
-        return <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
-      case 'coral':
-        return <Fish className="w-3 h-3 text-cyan-400 shrink-0" />
-      case 'olive_tree':
-        return <TreePine className="w-3 h-3 text-emerald-400 shrink-0" />
-      default:
-        return <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
-    }
+    if (!type) return <Leaf className="w-3 h-3 text-lime-400 shrink-0" />
+    const design = getProjectTypeDesign(type)
+    return <design.icon className={`w-3 h-3 shrink-0 ${design.color}`} />
   }
 
   return (

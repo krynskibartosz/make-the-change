@@ -219,6 +219,51 @@ Les sujets suivants ne sont pas encore des decisions validees :
 
 `[CIBLE_VALIDEE]` La future DB V2 ne doit pas etre concue maintenant. Attendre : mocks stabilises, flows valides terrain, dashboard admin refondu, schema cible documente.
 
-`[A_DECIDER]` P0-10a — Quand et comment stabiliser les mocks critiques ? (timing de gel, gestion des doublons, uniformisation API)
+## Decisions P0-10 V2 — Strategie mock-first exclusive (2026-05-08)
 
-`[A_PLANIFIER]` P0-11 — Strategie DB V2 (apres stabilisation mocks P0-10a)
+### Principe directeur
+
+`[CIBLE_VALIDEE]` Le web-client est **mock-first exclusif** jusqu'a validation complete du prototype.
+
+- Les mocks sont la seule source de verite pour le web-client.
+- Tout nouveau code doit s'appuyer sur les mocks, pas sur Supabase.
+- La migration inverse (mock → DB V2) se fera en une operation planifiee quand le prototype sera complet.
+- Supabase legacy reste connecte au dashboard admin uniquement (`[A_NE_PAS_TOUCHER]`).
+
+### P0-10a — Stabilisation des mocks
+
+`[CIBLE_VALIDEE]` Les mocks se stabilisent flow par flow, au fur et a mesure que chaque ecran est considere prototype final. Il n'y a pas de date de gel unique.
+
+`[CIBLE_VALIDEE]` Un mock est considere stable quand : le flow qui l'utilise est valide visuellement, les types TypeScript sont propres, et aucune evolution majeure n'est prevue a court terme.
+
+### P0-10b — Doublons mock / Supabase
+
+`[CIBLE_VALIDEE]` En cas de doublon entre mock et Supabase (meme slug, meme entite), **les mocks gagnent**.
+
+`[CIBLE_VALIDEE]` Supabase legacy n'est plus une reference de donnees pour le web-client. Il reste uniquement pour le dashboard admin legacy.
+
+`[CIBLE_VALIDEE]` Le code hybride existant (fusion mock + Supabase dans certains services) doit etre progressivement migre vers mock-only dans le web-client.
+
+### P0-10c — Routes API
+
+`[CIBLE_VALIDEE]` Les routes API du web-client (`/api/projects`, `/api/products`, etc.) doivent progressivement respecter `isMockDataSource`.
+
+`[RISQUE]` Les routes qui lisent directement Supabase sans verifier `isMockDataSource` sont des points de fragilite a corriger.
+
+`[A_PLANIFIER]` Inventaire des routes API non conformes a faire avant de les corriger.
+
+### P0-11 — DB V2 Supabase
+
+`[CIBLE_VALIDEE]` La DB V2 Supabase sera construite **a partir des mocks finalises**, pas l'inverse.
+
+Sequence cible :
+1. Prototyper tous les flows dans le web-client avec les mocks.
+2. Valider chaque flow visuellement et fonctionnellement.
+3. Stabiliser les types TypeScript issus des mocks.
+4. Deriver le schema DB V2 depuis ces types et ces flows valides.
+5. Construire la DB V2 Supabase a partir de ce schema.
+6. Brancher le web-client sur la DB V2 en remplacement des mocks.
+
+`[CIBLE_VALIDEE]` Ne pas concevoir la DB V2 avant que le prototype soit considere complet.
+
+`[CIBLE_VALIDEE]` Le dashboard admin sera refonde en meme temps ou apres la DB V2, pas avant.
