@@ -1,5 +1,5 @@
 import { Badge, Button, Progress } from '@make-the-change/core/ui'
-import { Globe, MapPin } from 'lucide-react'
+import { Globe } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
@@ -16,6 +16,7 @@ import { ProjectStorySheet } from './_components/sections/project-story-sheet'
 import { ProjectImpactPreview } from './_components/sections/project-impact-preview'
 import { ProjectTrackingPreview } from './_components/sections/project-tracking-preview'
 import { ProjectBiodexSheet } from './_components/sections/project-biodex-sheet'
+import { ProjectCountrySheet } from './_components/sections/project-country-sheet'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import {
   getRelatedProjectsByType,
@@ -123,9 +124,9 @@ export async function ProjectQuickView({
       ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
       : undefined
 
-  const locationLabel = [project.address_city, project.address_country_code]
-    .filter(Boolean)
-    .join(', ')
+  const countryName = project.address_country_code
+    ? (new Intl.DisplayNames([locale], { type: 'region' }).of(project.address_country_code) ?? project.address_country_code)
+    : null
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
   const typeLabel = formatBadgeLabel(project.type, locale)
@@ -271,13 +272,19 @@ export async function ProjectQuickView({
                   {typeLabel}
                 </Badge>
               ) : null}
-              {locationLabel ? (
-                <Badge variant="outline" className="border-border/60 bg-background/70">
-                  <MapPin className="mr-1 h-3.5 w-3.5" />
-                  {locationLabel}
-                </Badge>
-              ) : null}
             </div>
+
+            {project.address_country_code && countryName ? (
+              <ProjectCountrySheet
+                countryCode={project.address_country_code}
+                countryName={countryName}
+                city={project.address_city}
+                projectType={project.type}
+                speciesCount={resolvedSpecies?.length ?? 0}
+                relatedProjects={resolvedRelatedProjects}
+                locale={locale}
+              />
+            ) : null}
 
             <h1
               className="mt-3 text-3xl font-black tracking-tighter text-foreground sm:text-4xl"
