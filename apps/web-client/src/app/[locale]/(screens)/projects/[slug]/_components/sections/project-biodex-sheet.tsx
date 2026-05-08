@@ -17,7 +17,7 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   VU: { label: 'Vulnérable', color: 'text-amber-400/80' },
   NT: { label: 'Quasi menacé', color: 'text-yellow-400/70' },
   LC: { label: 'Préoccupation mineure', color: 'text-emerald-400/70' },
-  DD: { label: 'Données insuffisantes', color: 'text-white/40' },
+  DD: { label: 'Statut à documenter', color: 'text-white/35' },
   EW: { label: 'Éteint à l\'état sauvage', color: 'text-red-500/80' },
   EX: { label: 'Éteint', color: 'text-red-600/80' },
 }
@@ -34,15 +34,89 @@ function cleanRole(role: string): string {
     .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-function SpeciesSheetCard({ species }: { species: ProjectSpecies }) {
+function FeaturedSpeciesCard({
+  species,
+  isDonationProject,
+}: {
+  species: ProjectSpecies
+  isDonationProject: boolean
+}) {
   const imageUrl = sanitizeImageUrl(species.icon)
   const isKey = isKeySpecies(species.role)
   const statusInfo = STATUS_LABEL[species.status?.toUpperCase()] ?? null
   const roleLabel = cleanRole(species.role)
 
   return (
-    <div className="flex gap-4 border-b border-white/6 py-5 last:border-0">
-      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-white/[0.05]">
+    <div className="relative overflow-hidden rounded-2xl bg-white/[0.05]">
+      {imageUrl ? (
+        <div className="absolute inset-0">
+          <img src={imageUrl} alt="" className="h-full w-full object-cover opacity-20 blur-sm" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08080F]/90 via-[#08080F]/60 to-transparent" />
+        </div>
+      ) : null}
+
+      <div className="relative p-4">
+        <div className="flex items-start gap-3">
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-white/[0.08]">
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={species.name}
+                className="h-full w-full object-cover opacity-30 blur-[1px]"
+              />
+            ) : (
+              <div className="h-full w-full" />
+            )}
+            <div className="absolute inset-0 grid place-items-center">
+              <Lock className="h-3.5 w-3.5 text-white/50" />
+            </div>
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <span
+              className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wide ${
+                isKey
+                  ? 'bg-lime-300 text-black'
+                  : 'bg-white/[0.08] text-white/40'
+              }`}
+            >
+              {isKey ? 'Espèce clé' : 'Espèce liée'}
+            </span>
+            <p className="mt-1.5 text-base font-black text-white">{species.name}</p>
+            {species.scientificName ? (
+              <p className="text-xs italic text-white/35">{species.scientificName}</p>
+            ) : null}
+          </div>
+        </div>
+
+        {roleLabel ? (
+          <p className="mt-3 text-sm text-white/55">{roleLabel}</p>
+        ) : null}
+        {statusInfo ? (
+          <p className={`mt-1 text-[10px] font-bold uppercase tracking-[0.08em] ${statusInfo.color}`}>
+            {statusInfo.label}
+          </p>
+        ) : null}
+        <p className="mt-3 text-[11px] text-white/30">
+          {isDonationProject
+            ? 'Débloquable en faisant un don à ce projet'
+            : 'Débloquable en soutenant ce projet'}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function SpeciesListItem({ species }: { species: ProjectSpecies }) {
+  const imageUrl = sanitizeImageUrl(species.icon)
+  const isKey = isKeySpecies(species.role)
+  const statusInfo = STATUS_LABEL[species.status?.toUpperCase()] ?? null
+  const roleLabel = cleanRole(species.role)
+  const roleChip = !isKey && roleLabel ? roleLabel.split(' ').slice(0, 3).join(' ') : null
+
+  return (
+    <div className="flex gap-3 border-b border-white/[0.06] py-3.5 last:border-0">
+      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-white/[0.05]">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -53,28 +127,34 @@ function SpeciesSheetCard({ species }: { species: ProjectSpecies }) {
           <div className="h-full w-full" />
         )}
         <div className="absolute inset-0 grid place-items-center">
-          <Lock className="h-4 w-4 text-white/50" />
+          <Lock className="h-3 w-3 text-white/45" />
         </div>
-        {isKey && (
-          <div className="absolute left-1 top-1 rounded-full bg-lime-300 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wide text-black">
-            Clé
-          </div>
-        )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-bold text-white">{species.name}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-bold text-white">{species.name}</p>
+          {isKey ? (
+            <span className="shrink-0 rounded-full bg-lime-300/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-lime-300/80">
+              Clé
+            </span>
+          ) : null}
+        </div>
         {species.scientificName ? (
-          <p className="mt-0.5 text-xs italic text-white/35">{species.scientificName}</p>
+          <p className="mt-0.5 text-[11px] italic text-white/30">{species.scientificName}</p>
         ) : null}
-        {roleLabel ? (
-          <p className="mt-1.5 text-xs text-white/55">{roleLabel}</p>
-        ) : null}
-        {statusInfo ? (
-          <p className={`mt-1 text-[10px] font-bold uppercase tracking-[0.08em] ${statusInfo.color}`}>
-            {statusInfo.label}
-          </p>
-        ) : null}
+        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+          {roleChip ? (
+            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold text-white/40">
+              {roleChip}
+            </span>
+          ) : null}
+          {statusInfo ? (
+            <span className={`text-[10px] font-bold uppercase tracking-[0.06em] ${statusInfo.color}`}>
+              {statusInfo.label}
+            </span>
+          ) : null}
+        </div>
       </div>
     </div>
   )
@@ -84,6 +164,11 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
   const [isOpen, setIsOpen] = useState(false)
 
   if (!species || species.length === 0) return null
+
+  const featuredSpecies = species.find((sp) => isKeySpecies(sp.role)) ?? species[0]
+  const remainingSpecies = featuredSpecies
+    ? species.filter((sp) => sp.id !== featuredSpecies.id)
+    : species
 
   return (
     <>
@@ -96,46 +181,58 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="BioDex du projet">
-        {/* Bloc 1 — Concept */}
-        <div className="mt-2 space-y-3 text-sm leading-relaxed text-white/65">
-          <p>
-            Le BioDex regroupe les êtres vivants associés à ce projet. Ce n&apos;est pas une liste
-            exhaustive ni une preuve que chaque espèce est présente ou protégée.
-          </p>
-          <p>
-            C&apos;est une trace pédagogique : elle aide à comprendre quel écosystème ce projet
-            cherche à soutenir.
-          </p>
-        </div>
+        {/* Subtitle + intro court */}
+        <p className="mt-1 text-sm text-white/50">
+          {species.length === 1
+            ? '1 espèce liée à cet écosystème'
+            : `${species.length} espèces liées à cet écosystème`}
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-white/35">
+          Ces espèces aident à comprendre le vivant associé au projet. Leur présence dépend du
+          terrain et des données disponibles.
+        </p>
 
-        {/* Bloc 2 — Mécanique de déverrouillage */}
-        <div className="mt-5 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-            Comment débloquer une espèce
-          </p>
-          <p className="text-sm leading-relaxed text-white/60">
-            {isDonationProject
-              ? 'En faisant un don à ce projet, vous pouvez débloquer les espèces liées et les ajouter à votre collection BioDex.'
-              : 'En soutenant ce projet, vous pouvez débloquer les espèces liées et les ajouter à votre collection BioDex.'}
-          </p>
-        </div>
+        {/* Espèce mise en avant */}
+        {featuredSpecies ? (
+          <div className="mt-4">
+            <FeaturedSpeciesCard species={featuredSpecies} isDonationProject={isDonationProject} />
+          </div>
+        ) : null}
 
-        {/* Bloc 3 — Espèces */}
-        <div className="mt-6">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-            {species.length === 1 ? '1 espèce liée' : `${species.length} espèces liées`}
-          </p>
+        {/* Carte déverrouillage — compacte */}
+        <div className="mt-4 flex items-start gap-3 rounded-xl bg-white/[0.04] px-3 py-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime-400/10">
+            <Lock className="h-3.5 w-3.5 text-lime-400/70" />
+          </div>
           <div>
-            {species.map((sp) => (
-              <SpeciesSheetCard key={sp.id} species={sp} />
-            ))}
+            <p className="text-sm font-bold text-white/80">
+              {isDonationProject ? 'En faisant un don' : 'En soutenant ce projet'}
+            </p>
+            <p className="mt-0.5 text-xs leading-relaxed text-white/45">
+              Vous pouvez ajouter ces espèces à votre collection BioDex.
+            </p>
           </div>
         </div>
 
-        {/* Bloc 4 — Disclaimer */}
-        <p className="mt-4 pb-2 text-xs leading-relaxed text-white/30">
-          Les données de conservation sont issues de l&apos;UICN. Les liens entre espèces et projets
-          sont indicatifs. La biodiversité reste variable et dépend du terrain.
+        {/* Liste des espèces restantes */}
+        {remainingSpecies.length > 0 ? (
+          <div className="mt-5">
+            <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+              {remainingSpecies.length} autre{remainingSpecies.length > 1 ? 's' : ''} espèce
+              {remainingSpecies.length > 1 ? 's' : ''}
+            </p>
+            <div>
+              {remainingSpecies.map((sp) => (
+                <SpeciesListItem key={sp.id} species={sp} />
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {/* Disclaimer — minimal, en bas */}
+        <p className="mt-4 pb-2 text-[11px] leading-relaxed text-white/25">
+          Le BioDex n&apos;est pas une preuve de protection individuelle. Données de conservation
+          issues de l&apos;UICN.
         </p>
       </MobileSheet>
     </>
