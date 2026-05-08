@@ -194,8 +194,8 @@ Role actuel :
 | Terme | Presence | Statut |
 |---|---|---|
 | `investment` | Routes, actions, metadata Stripe, mocks | `[ACTUEL_CODE]` + `[DEPRECIE]` | Ne pas utiliser en UI finale. Metadata Stripe doivent migrer vers `producer_support`. |
-| `points` | Champs data, profils, commandes, produits | `[ACTUEL_CODE]` |
-| `Artisans Locaux` | Mocks et onboarding | `[ACTUEL_CODE]` + `[DEPRECIE]` + `[A_MIGRER_PLUS_TARD]` | Ne pas renforcer. Les seules factions cibles sont Vie Sauvage, Terres & Forets, Gardiens des mers. |
+| `points` | Supabase legacy uniquement (`points_balance`) — retire des mocks TypeScript en R8 (2026-05-08) | `[LEGACY]` + `[DEPRECIE]` | Remplace par `impactCreditsBalance` cote TypeScript/mocks. Reste dans Supabase V0 (`[A_NE_PAS_TOUCHER]`). |
+| `Artisans Locaux` | Supabase V0 uniquement — retire du TypeScript en R7 (2026-05-08) | `[PURGE_R7]` + `[LEGACY]` | Ne pas reintroduire. Factions cibles : Vie Sauvage, Terres & Forets, Gardiens des mers. |
 | Supabase V0 | Ancienne DB branchee au dashboard admin | `[ACTUEL_CODE]` + `[LEGACY]` + `[A_NE_PAS_TOUCHER]` |
 | mocks web-client | Donnees prototype pour UX et flows | `[ACTUEL_CODE]` + `[SOURCE_PROTOTYPE]` |
 

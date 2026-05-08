@@ -41,9 +41,9 @@ La documentation decrit correctement l'intention globale du produit, mais le cod
 
 | Terme | Presence code | Statut |
 |---|---|---|
-| `investment` | Routes, actions, metadata, types, mocks | `[ACTUEL_CODE]` mais `[DEPRECIE]` cote langage produit. |
-| `points` | Champs techniques `price_points`, `amount_points`, `points` | `[ACTUEL_CODE]` alias technique des Credits Impact ou solde a clarifier. |
-| `Artisans Locaux` | Mocks viewer/session/onboarding/impact | `[ACTUEL_CODE]` mais `[DEPRECIE]` si remplacé par une nouvelle faction. |
+| `investment` | Routes, actions, metadata, types, mocks | `[ACTUEL_CODE]` + `[DEPRECIE]` — migration vers `producer_support` reservee P2. |
+| `points` | Supabase V0 uniquement (`points_balance`, `amount_points`, `price_points`) — retire des mocks TypeScript en R8 (2026-05-08) | `[PARTIELLEMENT_FERME_R8]` — `impactCreditsBalance` dans les mocks TypeScript, `points` reste dans Supabase `[A_NE_PAS_TOUCHER]`. |
+| `Artisans Locaux` | Supabase V0 uniquement — retire du TypeScript en R7 (2026-05-08) | `[FERME_R7]` — purge complete des mocks, types, session, onboarding, impact TypeScript. Reste uniquement dans Supabase V0 `[A_NE_PAS_TOUCHER]`. |
 | `financement` | Utilise pour progression projets | `[A_DECIDER]` acceptable si pas promesse financiere ambiguë. |
 
 ## BioDex
@@ -70,16 +70,16 @@ La documentation decrit correctement l'intention globale du produit, mais le cod
 
 ## Top 10 ecarts prioritaires
 
-1. `[ACTUEL_CODE]` `investment` reste structurant dans le code alors que la cible produit parle de soutien producteur.
-2. `[ACTUEL_CODE]` `points` reste le nom technique dominant alors que la cible UI parle de Credits Impact.
-3. `[ACTUEL_CODE]` `Artisans Locaux` reste present alors qu'il est considere legacy/deprecie.
-4. `[ACTUEL_CODE]` Academy est en `(screens)/academy`, pas seulement en lab.
-5. `[ACTUEL_CODE]` BioDex a une exception prototype de deblocage automatique.
-6. `[ACTUEL_CODE]` Don et soutien producteur sont separes en routes, mais pas encore parfaitement separes en modele paiement.
-7. `[ACTUEL_CODE]` Stripe est present mais pas a documenter comme finalise.
-8. `[ACTUEL_CODE]` Supabase est partiel et cohabite avec les mocks.
-9. `[ACTUEL_CODE]` L'i18n est technique mais les contenus restent largement hardcodes.
-10. `[RISQUE]` Les preuves d'impact et business/RSE peuvent etre lues comme plus validees qu'elles ne le sont.
+1. `[ACTUEL_CODE]` `investment` reste structurant dans le code alors que la cible produit parle de soutien producteur. — `[OUVERT]` P2
+2. ~~`[ACTUEL_CODE]` `points` reste le nom technique dominant alors que la cible UI parle de Credits Impact.~~ `[FERME_R8]` (2026-05-08) — `points` remplace par `impactCreditsBalance` dans tous les mocks TypeScript. Reste dans Supabase V0 `[A_NE_PAS_TOUCHER]`.
+3. ~~`[ACTUEL_CODE]` `Artisans Locaux` reste present alors qu'il est considere legacy/deprecie.~~ `[FERME_R7]` (2026-05-08) — purge complete du TypeScript (types, mocks, session, onboarding, impact).
+4. `[ACTUEL_CODE]` Academy est en `(screens)/academy`, pas seulement en lab. — `[OUVERT]`
+5. `[ACTUEL_CODE]` BioDex a une exception prototype de deblocage automatique. — `[OUVERT]` P2
+6. `[ACTUEL_CODE]` Don et soutien producteur sont separes en routes, mais pas encore parfaitement separes en modele paiement. — `[OUVERT]`
+7. `[ACTUEL_CODE]` Stripe est present mais pas a documenter comme finalise. — `[OUVERT]`
+8. `[ACTUEL_CODE]` Supabase est partiel et cohabite avec les mocks. — `[OUVERT]`
+9. `[ACTUEL_CODE]` L'i18n est technique mais les contenus restent largement hardcodes. — `[OUVERT]`
+10. `[RISQUE]` Les preuves d'impact et business/RSE peuvent etre lues comme plus validees qu'elles ne le sont. — `[PARTIELLEMENT_TRAITE]` wording UI adouci en passe finale (2026-05-08).
 
 ## Regle pour la nouvelle documentation
 

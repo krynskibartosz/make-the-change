@@ -16,7 +16,7 @@
 
 export type CurrencyKind = 'seeds' | 'impactCredits'
 
-export type CurrencyIconName = 'Sprout' | 'Hexagon'
+export type CurrencyIconName = 'SeedIcon' | 'ImpactCreditIcon'
 export type CurrencyTone = 'semantic' | 'inherit'
 
 type CurrencyDesign = {
@@ -42,7 +42,7 @@ export function formatCurrencyValue(value: number): string {
 
 export const CURRENCY_DESIGN = {
   seeds: {
-    icon: 'Sprout',
+    icon: 'SeedIcon',
     label: 'graines',
     ariaLabel: 'Graines',
     toneClassName: 'text-emerald-300',
@@ -54,7 +54,7 @@ export const CURRENCY_DESIGN = {
     progressClassName: 'bg-emerald-400 shadow-[0_0_18px_rgba(52,211,153,0.36)]',
   },
   impactCredits: {
-    icon: 'Hexagon',
+    icon: 'ImpactCreditIcon',
     label: 'Credits Impact',
     ariaLabel: 'Credits Impact',
     toneClassName: 'text-amber-300',

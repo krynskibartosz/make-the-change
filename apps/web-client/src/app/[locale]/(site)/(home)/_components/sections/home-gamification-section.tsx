@@ -1,7 +1,8 @@
 'use client'
 
 import { motion, type Variants } from 'framer-motion'
-import {  Bird, Flame, ArrowRight , Sprout } from 'lucide-react'
+import { Bird, Flame, ArrowRight } from 'lucide-react'
+import { CurrencyIcon } from '@/components/currency'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
@@ -96,7 +97,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                 transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
                 className="px-1.5 py-0.5 rounded-full bg-lime-500/10 text-lime-400 text-[10px] font-bold tabular-nums whitespace-nowrap shrink-0"
               >
-                +150 <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" aria-hidden="true" />
+                +150 <CurrencyIcon kind="seeds" className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
               </motion.div>
             </div>
 

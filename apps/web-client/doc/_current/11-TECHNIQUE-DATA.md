@@ -44,7 +44,7 @@ Valeurs observees :
 - BioDex ;
 - challenges ;
 - historique ;
-- wallet/points.
+- wallet / `impactCreditsBalance` (ancien alias `points` retire en R8, 2026-05-08).
 
 `[ACTUEL_CODE]` `[SOURCE_PROTOTYPE]` Les mocks sont actuellement la meilleure base pour prototyper les ecrans, tester l'UX, stabiliser les flows et comprendre les besoins data reels.
 

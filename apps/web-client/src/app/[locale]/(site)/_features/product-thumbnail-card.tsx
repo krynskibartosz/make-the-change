@@ -1,6 +1,7 @@
 import { Hexagon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { CurrencyIcon } from '@/components/currency'
 
 type ProductThumbnailCardProps = {
   slug: string
@@ -54,7 +55,7 @@ export function ProductThumbnailCard({
       <div className="flex flex-col px-1">
         <h3 className="text-sm font-bold text-white leading-snug line-clamp-2 mb-1">{title}</h3>
         <div className="flex items-center gap-1">
-          <Hexagon className="w-3 h-3 text-amber-400 shrink-0" />
+          <CurrencyIcon kind="impactCredits" className="w-3 h-3 shrink-0" />
           <span className="text-[13px] font-black text-amber-400 tabular-nums">{formattedPrice} CI</span>
         </div>
       </div>

@@ -64,7 +64,7 @@ Le produit combine :
 ## Vocabulaire sensible
 
 - `[DEPRECIE]` `investment` ne doit pas etre utilise comme langage utilisateur final.
-- `[DEPRECIE]` `Artisans Locaux` est encore present dans le code mais ne doit pas etre renforce sans decision.
+- `[PURGE_R7]` `Artisans Locaux` a ete retire du TypeScript (R7, 2026-05-08). Ne subsiste que dans l'ancienne base Supabase V0 (`[A_NE_PAS_TOUCHER]`). Ne pas reintroduire.
 - `[DEPRECIE]` `Points biodiversite` ne doit pas etre reintegre comme nom produit.
 - `[A_DECIDER]` Le vocabulaire exact entre don, soutien producteur, contribution et financement doit etre arbitre.
 

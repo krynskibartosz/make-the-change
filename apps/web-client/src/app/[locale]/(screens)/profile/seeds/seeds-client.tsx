@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { useRouter } from '@/i18n/navigation'
 import { Sprout, Zap, BookOpen, ArrowLeft, TrendingUp, TrendingDown } from 'lucide-react'
+import { CurrencyIcon } from '@/components/currency'
 import { cn } from '@/lib/utils'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 import { useCallback, useState } from 'react'
@@ -129,7 +130,7 @@ export default function SeedsClient({
         'flex items-center gap-1.5 transition-opacity duration-300',
         titleVisible ? 'opacity-0' : 'opacity-100',
       )}>
-        <Sprout className="w-4 h-4 text-amber-400" />
+        <CurrencyIcon kind="seeds" className="w-4 h-4" />
         <span className="text-sm font-bold text-white tabular-nums">
           {balance.toLocaleString('fr-FR')}
         </span>
@@ -146,7 +147,7 @@ export default function SeedsClient({
           <div className="flex items-end justify-between mb-1">
             <h1 className="text-3xl font-bold tracking-tight text-white">Mes Graines</h1>
             <div className="flex items-center gap-1.5 pb-1">
-              <Sprout className="w-5 h-5 text-amber-400" />
+              <CurrencyIcon kind="seeds" className="w-5 h-5" />
               <span className="text-2xl font-bold text-white tabular-nums">
                 {balance.toLocaleString('fr-FR')}
               </span>
@@ -185,7 +186,7 @@ export default function SeedsClient({
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span className="text-lg font-bold text-amber-400 tabular-nums">+50</span>
-                  <Sprout className="w-4 h-4 text-amber-400" />
+                  <CurrencyIcon kind="seeds" className="w-4 h-4" />
                 </div>
               </div>
             </Link>
@@ -207,7 +208,7 @@ export default function SeedsClient({
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span className="text-lg font-bold text-amber-400 tabular-nums">+50</span>
-                  <Sprout className="w-4 h-4 text-amber-400" />
+                  <CurrencyIcon kind="seeds" className="w-4 h-4" />
                 </div>
               </div>
             </Link>
@@ -361,12 +362,9 @@ export default function SeedsClient({
                         {transaction.delta > 0 ? '+' : ''}
                         {transaction.delta.toLocaleString('fr-FR')}
                       </span>
-                      <Sprout
-                        className={cn(
-                          'h-3.5 w-3.5',
-                          transaction.delta > 0 ? 'text-amber-400' : 'text-white/30',
-                        )}
-                      />
+                      <span className={cn(transaction.delta > 0 ? 'text-amber-400' : 'text-white/30')}>
+                        <CurrencyIcon kind="seeds" tone="inherit" className="h-3.5 w-3.5" />
+                      </span>
                     </div>
                   </motion.div>
                 )

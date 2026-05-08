@@ -9,7 +9,6 @@
  */
 
 import type { ComponentPropsWithoutRef } from 'react'
-import { Hexagon, Sprout, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   formatCurrencyValue,
@@ -18,11 +17,8 @@ import {
   type CurrencyKind,
   type CurrencyTone,
 } from './currency-design'
-
-const CURRENCY_ICONS = {
-  Sprout,
-  Hexagon,
-} as const satisfies Record<ReturnType<typeof getCurrencyDesign>['icon'], LucideIcon>
+import { SeedIcon } from './seed-icon'
+import { ImpactCreditIcon } from './impact-credit-icon'
 
 /**
  * Formate une valeur avec notation (standard ou compacte).
@@ -35,22 +31,17 @@ function formatCurrencyValueWithNotation(value: number, notation: 'standard' | '
   }).format(value)
 }
 
-type CurrencyIconProps = ComponentPropsWithoutRef<'svg'> & {
+type CurrencyIconProps = {
   kind: CurrencyKind
   tone?: CurrencyTone
+  className?: string
 }
 
-export function CurrencyIcon({ kind, tone = 'semantic', className, ...props }: CurrencyIconProps) {
-  const design = getCurrencyDesign(kind)
-  const Icon = CURRENCY_ICONS[design.icon]
+export function CurrencyIcon({ kind, tone = 'semantic', className }: CurrencyIconProps) {
+  const variant = tone === 'inherit' ? 'mono' : 'color'
+  const Icon = kind === 'seeds' ? SeedIcon : ImpactCreditIcon
 
-  return (
-    <Icon
-      aria-hidden="true"
-      className={cn('shrink-0', getCurrencyToneClassName(kind, tone), className)}
-      {...props}
-    />
-  )
+  return <Icon variant={variant} size={16} className={cn('shrink-0', className)} />
 }
 
 type CurrencyAmountProps = ComponentPropsWithoutRef<'span'> & {

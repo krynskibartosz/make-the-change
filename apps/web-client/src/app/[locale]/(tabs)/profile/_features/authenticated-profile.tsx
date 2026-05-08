@@ -1,4 +1,5 @@
-import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Hexagon, Settings, Target, Wind, Sprout, Sparkles } from 'lucide-react'
+import { ArrowRight, Bug, Crown, Droplets, Flame, Gift, Settings, Target, Wind, Sparkles } from 'lucide-react'
+import { CurrencyIcon } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 import { getFactionTheme } from '@/lib/faction-theme'
@@ -88,7 +89,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
 
             <li>
               <ImpactCard
-                icon={<Hexagon className="h-5 w-5 text-amber-400" aria-hidden="true" />}
+                icon={<CurrencyIcon kind="impactCredits" className="h-5 w-5" />}
                 value={formatCompact(profile?.impactCreditsBalance ?? 2450)}
                 label="CREDITS IMPACT"
                 valueClassName="text-amber-400"
@@ -176,7 +177,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                       {factionContribution.label}
                     </h2>
                     <p className="mt-2 text-sm font-medium text-white/60">
-                      <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" aria-hidden="true" />{' '}
+                      <CurrencyIcon kind="seeds" className="inline h-[1.2em] w-[1.2em] align-text-bottom" />{' '}
                       <span className="font-black text-white">
                         {formatCompact(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds)}
                       </span>{' '}
