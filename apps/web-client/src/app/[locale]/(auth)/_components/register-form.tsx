@@ -11,6 +11,7 @@ import {
   Form,
   Input,
 } from '@make-the-change/core/ui'
+import { FormErrorAlert } from '@/app/[locale]/(auth)/_components/form-error-alert'
 import {
   ArrowLeft,
   ArrowRight,
@@ -308,11 +309,7 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
       >
         <Form action={formAction} onSubmit={handleFormSubmit} className="space-y-8">
           <input type="hidden" name="returnTo" value={returnTo} />
-          {state.error && (
-            <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
-              {state.error}
-            </div>
-          )}
+          <FormErrorAlert error={state.error} />
 
           {/* Stepper Progress */}
           <div className="relative flex items-center justify-between px-2">

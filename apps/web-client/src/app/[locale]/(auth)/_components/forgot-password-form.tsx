@@ -12,7 +12,9 @@ import {
   Form,
   Input,
 } from '@make-the-change/core/ui'
-import { ArrowLeft, ArrowRight, Mail, Sparkles } from 'lucide-react'
+import { ArrowLeft, Mail, Sparkles } from 'lucide-react'
+import { AuthSubmitButton } from '@/app/[locale]/(auth)/_components/auth-submit-button'
+import { FormErrorAlert } from '@/app/[locale]/(auth)/_components/form-error-alert'
 import { useTranslations } from 'next-intl'
 import { useActionState } from 'react'
 import { type AuthState, forgotPassword } from '@/app/[locale]/(auth)/actions'
@@ -63,11 +65,7 @@ export function ForgotPasswordForm() {
       </CardHeader>
       <CardContent className="p-8 pt-4">
         <Form action={formAction} className="space-y-6">
-          {state.error && (
-            <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
-              {state.error}
-            </div>
-          )}
+          <FormErrorAlert error={state.error} />
 
           <Field className="relative group">
             <Mail className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
@@ -83,14 +81,7 @@ export function ForgotPasswordForm() {
             />
           </Field>
 
-          <Button
-            type="submit"
-            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform"
-            loading={isPending}
-          >
-            {t('reset_password_button')}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <AuthSubmitButton loading={isPending}>{t('reset_password_button')}</AuthSubmitButton>
         </Form>
       </CardContent>
       <CardFooter className="p-8 pt-0 flex justify-center border-t border-border/50 bg-muted/20">

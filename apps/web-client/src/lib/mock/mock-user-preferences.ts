@@ -6,20 +6,11 @@ import type {
   MockSocialLinks,
   MockUserPreferences,
 } from '@/lib/mock/types'
+import { isRecord } from '@/lib/type-guards'
 
 export const MOCK_PREFERENCES_COOKIE_NAME = 'mtc_mock_preferences'
 
-const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30
-
-export const mockPreferencesCookieOptions = {
-  path: '/',
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: THIRTY_DAYS_IN_SECONDS,
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
+export { mockCookieOptions as mockPreferencesCookieOptions } from '@/lib/mock/cookie-defaults'
 
 const parseSocialLinks = (value: unknown): MockSocialLinks => {
   if (!isRecord(value)) {

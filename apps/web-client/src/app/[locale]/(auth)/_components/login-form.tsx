@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
@@ -12,7 +11,9 @@ import {
   Form,
   Input,
 } from '@make-the-change/core/ui'
-import { ArrowRight, Lock, Mail } from 'lucide-react'
+import { Lock, Mail } from 'lucide-react'
+import { AuthSubmitButton } from '@/app/[locale]/(auth)/_components/auth-submit-button'
+import { FormErrorAlert } from '@/app/[locale]/(auth)/_components/form-error-alert'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useActionState, useEffect } from 'react'
@@ -63,11 +64,7 @@ export function LoginForm({ modal = false }: LoginFormProps) {
       >
         <Form action={formAction} className="space-y-6">
           <input type="hidden" name="returnTo" value={returnTo} />
-          {state.error && (
-            <div className="rounded-2xl bg-destructive/10 p-4 text-sm text-destructive font-bold border border-destructive/20 animate-in zoom-in-95">
-              {state.error}
-            </div>
-          )}
+          <FormErrorAlert error={state.error} />
 
           <div className="space-y-4">
             <Field className="relative group">
@@ -108,14 +105,7 @@ export function LoginForm({ modal = false }: LoginFormProps) {
             </Link>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform"
-            loading={isPending}
-          >
-            {t('login_button')}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <AuthSubmitButton loading={isPending}>{t('login_button')}</AuthSubmitButton>
         </Form>
       </CardContent>
       <CardFooter

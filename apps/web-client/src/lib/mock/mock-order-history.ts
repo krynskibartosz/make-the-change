@@ -1,23 +1,15 @@
 import type { MockOrderRecord } from '@/lib/mock/mock-member-data'
+import { isRecord } from '@/lib/type-guards'
+import { mockCookieOptions } from '@/lib/mock/cookie-defaults'
 
 export const MOCK_ORDERS_COOKIE_NAME = 'mtc_mock_orders'
 
-const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30
-
-export const mockOrdersCookieOptions = {
-  path: '/',
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: THIRTY_DAYS_IN_SECONDS,
-}
+export { mockCookieOptions as mockOrdersCookieOptions }
 
 type PersistedMockOrderEntry = {
   viewerId: string
   order: MockOrderRecord
 }
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
 
 const isMockOrderRecord = (value: unknown): value is MockOrderRecord => {
   if (!isRecord(value)) {

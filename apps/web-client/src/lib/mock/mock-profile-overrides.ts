@@ -1,15 +1,10 @@
 import type { MockViewerSession, Profile } from '@/lib/mock/types'
+import { isRecord } from '@/lib/type-guards'
+import { mockCookieOptions } from '@/lib/mock/cookie-defaults'
 
 export const MOCK_PROFILE_COOKIE_NAME = 'mtc_mock_profile'
 
-const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30
-
-export const mockProfileCookieOptions = {
-  path: '/',
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: THIRTY_DAYS_IN_SECONDS,
-}
+export { mockCookieOptions as mockProfileCookieOptions }
 
 export type MockProfileOverrides = {
   viewerId: string
@@ -24,9 +19,6 @@ export type MockProfileOverrides = {
   avatarUrl: string
   coverUrl: string
 }
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
 
 const getString = (value: unknown) => (typeof value === 'string' ? value : '')
 

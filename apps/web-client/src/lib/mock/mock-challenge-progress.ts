@@ -1,15 +1,11 @@
 import type { ChallengeArchetypeId } from '@/lib/mock/types'
 import { getCurrentIsoDate } from '@/lib/date-utils'
+import { isRecord } from '@/lib/type-guards'
+import { mockCookieOptions } from '@/lib/mock/cookie-defaults'
+
 export const MOCK_CHALLENGE_PROGRESS_COOKIE_NAME = 'mtc_mock_challenge_progress'
 
-const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30
-
-export const mockChallengeProgressCookieOptions = {
-  path: '/',
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: THIRTY_DAYS_IN_SECONDS,
-}
+export { mockCookieOptions as mockChallengeProgressCookieOptions }
 
 export type PersistedMockChallengeState = {
   viewerId: string
@@ -21,9 +17,6 @@ export type PersistedMockChallengeState = {
   claimedAt: string | null
   targetIds: string[]
 }
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
 
 const getString = (value: unknown) => (typeof value === 'string' ? value : '')
 const getNumber = (value: unknown) =>

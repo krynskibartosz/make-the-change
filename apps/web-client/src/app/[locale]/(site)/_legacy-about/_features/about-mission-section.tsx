@@ -1,7 +1,20 @@
 import { Eye, Heart, Leaf, Target } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { SectionContainer } from '@/components/ui/section-container'
 import { placeholderImages } from '@/lib/placeholder-images'
 import type { AboutMissionProps } from './about.types'
+
+function MetricCard({ icon: Icon, value, label }: { icon: LucideIcon; value: string; label: string }) {
+  return (
+    <div className="group relative overflow-hidden p-6 rounded-3xl border border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:bg-background/80 hover:shadow-xl hover:-translate-y-1">
+      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        <Icon className="h-16 w-16" />
+      </div>
+      <p className="text-4xl font-black text-primary mb-1">{value}</p>
+      <p className="text-sm font-bold text-muted-foreground uppercase tracking-tight">{label}</p>
+    </div>
+  )
+}
 
 export function AboutMissionSection({
   title,
@@ -28,24 +41,8 @@ export function AboutMissionSection({
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2 pt-4">
-            <div className="group relative overflow-hidden p-6 rounded-3xl border border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:bg-background/80 hover:shadow-xl hover:-translate-y-1">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Eye className="h-16 w-16" />
-              </div>
-              <p className="text-4xl font-black text-primary mb-1">100%</p>
-              <p className="text-sm font-bold text-muted-foreground uppercase tracking-tight">
-                {metrics.transparency}
-              </p>
-            </div>
-            <div className="group relative overflow-hidden p-6 rounded-3xl border border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:bg-background/80 hover:shadow-xl hover:-translate-y-1">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Leaf className="h-16 w-16" />
-              </div>
-              <p className="text-4xl font-black text-primary mb-1">+50</p>
-              <p className="text-sm font-bold text-muted-foreground uppercase tracking-tight">
-                {metrics.activeProjects}
-              </p>
-            </div>
+            <MetricCard icon={Eye} value="100%" label={metrics.transparency} />
+            <MetricCard icon={Leaf} value="+50" label={metrics.activeProjects} />
           </div>
         </div>
 

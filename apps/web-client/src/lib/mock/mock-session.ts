@@ -1,18 +1,10 @@
 import type { ChallengeIntent, MockViewerSession } from '@/lib/mock/types'
+import { isRecord } from '@/lib/type-guards'
+import { mockCookieOptions } from '@/lib/mock/cookie-defaults'
 
 export const MOCK_AUTH_COOKIE_NAME = 'mtc_mock_auth'
 
-const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30
-
-export const mockAuthCookieOptions = {
-  path: '/',
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: THIRTY_DAYS_IN_SECONDS,
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
+export { mockCookieOptions as mockAuthCookieOptions }
 
 const stripWrappingQuotes = (value: string): string => {
   if (

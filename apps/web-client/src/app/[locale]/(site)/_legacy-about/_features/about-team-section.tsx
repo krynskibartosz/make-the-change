@@ -1,7 +1,65 @@
 import { Button } from '@make-the-change/core/ui'
 import { BarChart3, Globe, Sparkles } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { SectionContainer } from '@/components/ui/section-container'
 import type { AboutTeamProps } from './about.types'
+
+function LinkedInIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
+function GitHubIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  )
+}
+
+function SocialIconButton({
+  href,
+  label,
+  className,
+  children,
+}: {
+  href: string
+  label: string
+  className: string
+  children: ReactNode
+}) {
+  return (
+    <Button variant="outline" size="icon" className={className} asChild>
+      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+        {children}
+      </a>
+    </Button>
+  )
+}
 
 export function AboutTeamSection({ title, subtitle, gregory, bartosz }: AboutTeamProps) {
   return (
@@ -63,49 +121,20 @@ export function AboutTeamSection({ title, subtitle, gregory, bartosz }: AboutTea
             </p>
 
             <div className="flex gap-4 pt-2 lg:pt-4">
-              <Button
-                variant="outline"
-                size="icon"
+              <SocialIconButton
+                href="https://www.linkedin.com/in/steisel/"
+                label="LinkedIn de Gregory Steisel"
                 className="h-12 w-12 rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"
-                asChild
               >
-                <a
-                  href="https://www.linkedin.com/in/steisel/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn de Gregory Steisel"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
+                <LinkedInIcon />
+              </SocialIconButton>
+              <SocialIconButton
+                href="https://www.wexible.be"
+                label="Site web de Gregory Steisel"
                 className="h-12 w-12 rounded-full border-border/50 hover:bg-primary hover:text-marketing-overlay-light hover:border-primary transition-all"
-                asChild
               >
-                <a
-                  href="https://www.wexible.be"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Site web de Gregory Steisel"
-                >
-                  <Globe className="h-5 w-5" />
-                </a>
-              </Button>
+                <Globe className="h-5 w-5" />
+              </SocialIconButton>
             </div>
           </div>
         </div>
@@ -140,76 +169,27 @@ export function AboutTeamSection({ title, subtitle, gregory, bartosz }: AboutTea
             </p>
 
             <div className="flex gap-4 pt-2 lg:pt-4 lg:justify-end">
-              <Button
-                variant="outline"
-                size="icon"
+              <SocialIconButton
+                href="https://www.linkedin.com/in/bartosz-krynski/"
+                label="LinkedIn de Bartosz Krynski"
                 className="h-12 w-12 rounded-full border-border/50 hover:bg-marketing-gradient-mid-500 hover:text-marketing-overlay-light hover:border-marketing-gradient-mid-500 transition-all"
-                asChild
               >
-                <a
-                  href="https://www.linkedin.com/in/bartosz-krynski/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn de Bartosz Krynski"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
+                <LinkedInIcon />
+              </SocialIconButton>
+              <SocialIconButton
+                href="https://github.com/krynskibartosz"
+                label="GitHub de Bartosz Krynski"
                 className="h-12 w-12 rounded-full border-border/50 hover:bg-marketing-gradient-mid-500 hover:text-marketing-overlay-light hover:border-marketing-gradient-mid-500 transition-all"
-                asChild
               >
-                <a
-                  href="https://github.com/krynskibartosz"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub de Bartosz Krynski"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="16 18 22 12 16 6" />
-                    <polyline points="8 6 2 12 8 18" />
-                  </svg>
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
+                <GitHubIcon />
+              </SocialIconButton>
+              <SocialIconButton
+                href="https://bartek-portfolio.vercel.app"
+                label="Site web de Bartosz Krynski"
                 className="h-12 w-12 rounded-full border-border/50 hover:bg-marketing-gradient-mid-500 hover:text-marketing-overlay-light hover:border-marketing-gradient-mid-500 transition-all"
-                asChild
               >
-                <a
-                  href="https://bartek-portfolio.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Site web de Bartosz Krynski"
-                >
-                  <Globe className="h-5 w-5" />
-                </a>
-              </Button>
+                <Globe className="h-5 w-5" />
+              </SocialIconButton>
             </div>
           </div>
 
