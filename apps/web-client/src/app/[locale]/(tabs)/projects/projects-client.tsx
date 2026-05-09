@@ -362,8 +362,17 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                   </h2>
 
                   <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-0.5 mb-2">
-                    <MapPin className="w-3.5 h-3.5 shrink-0" />
-                    <span className="tracking-wide font-medium">{location}</span>
+                    {locationDisplay ? (
+                      <>
+                        <span className="text-[15px] leading-none">{locationDisplay.flag}</span>
+                        <span className="tracking-wide font-medium">{locationDisplay.label}</span>
+                      </>
+                    ) : (
+                      <>
+                        <MapPin className="w-3.5 h-3.5 shrink-0" />
+                        <span className="tracking-wide font-medium">Localisation mystère</span>
+                      </>
+                    )}
                   </div>
 
                   {/* Impact collectif — donnée réelle calculée comme la page détail */}

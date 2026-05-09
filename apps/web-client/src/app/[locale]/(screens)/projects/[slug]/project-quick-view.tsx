@@ -43,6 +43,14 @@ const PROJECT_GLOW: Record<ProjectGlowTone, { r: number; g: number; b: number }>
   blue:   { r: 14,  g: 165, b: 233 },
 }
 
+// Muted contextual gradients for the funding progress bar.
+// Lower saturation than CTA (lime-400) so it never competes with it.
+const PROGRESS_INDICATOR_CLASS: Record<ProjectGlowTone, string> = {
+  yellow: 'bg-gradient-to-r from-amber-500/60 to-lime-400/50',
+  blue:   'bg-gradient-to-r from-sky-500/60 to-teal-400/50',
+  green:  'bg-gradient-to-r from-emerald-600/60 to-emerald-400/50',
+}
+
 function getProjectGlowTone(type: string | null | undefined): ProjectGlowTone {
   const t = type?.toLowerCase() ?? ''
   if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) return 'blue'
@@ -432,9 +440,12 @@ export async function ProjectQuickView({
               <div>
                 <div className="mb-2 flex items-baseline justify-between">
                   <div className="flex items-baseline">
-                    <span className="text-2xl font-bold tabular-nums tracking-tight text-emerald-400">
+                    <span
+                      className="text-2xl font-bold tabular-nums tracking-tight"
+                      style={{ color: glowRgba(glow, 0.90) }}
+                    >
                       {formatAmountNumber(currentFunding)}{' '}
-                      <span className="text-lg text-emerald-400/70">EUR</span>
+                      <span style={{ color: glowRgba(glow, 0.55) }} className="text-lg">EUR</span>
                     </span>
                     <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
                       / {formatAmountNumber(targetBudget)} EUR
@@ -446,8 +457,8 @@ export async function ProjectQuickView({
                 </div>
                 <Progress
                   value={fundingProgress}
-                  className="h-2 rounded-full bg-muted"
-                  indicatorClassName="bg-gradient-to-r from-primary to-marketing-positive-600"
+                  className="h-2 rounded-full bg-[#141C26]"
+                  indicatorClassName={PROGRESS_INDICATOR_CLASS[glowTone]}
                 />
               </div>
               <ProjectFundingSheet
