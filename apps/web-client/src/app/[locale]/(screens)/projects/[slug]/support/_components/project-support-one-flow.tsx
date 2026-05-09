@@ -123,110 +123,53 @@ function NextStepLine({
   )
 }
 
-function SpeciesMiniStack({ species }: { species: ProjectSpecies[] }) {
-  const visible = species.slice(0, 3)
-  const remaining = Math.max(species.length - visible.length, 0)
-  if (species.length <= 1) return null
-
-  return (
-    <div className="mt-3 flex items-center gap-2">
-      <div className="flex -space-x-2">
-        {visible.map((sp) => {
-          const imageUrl = sanitizeImageUrl(sp.icon)
-          return (
-            <div
-              key={sp.id}
-              className="grid h-7 w-7 place-items-center overflow-hidden rounded-full border-2 border-[#08080F] bg-white/[0.08]"
-            >
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt={sp.name}
-                  className="h-full w-full object-cover opacity-30 blur-[0.5px]"
-                />
-              ) : (
-                <Lock className="h-3 w-3 text-white/40" />
-              )}
-            </div>
-          )
-        })}
-        {remaining > 0 ? (
-          <div className="grid h-7 w-7 place-items-center rounded-full border-2 border-[#08080F] bg-white/[0.08] text-[9px] font-black text-white/50">
-            +{remaining}
-          </div>
-        ) : null}
-      </div>
-      <p className="text-[11px] text-white/40">
-        {species.length} espèce{species.length > 1 ? 's' : ''} liée{species.length > 1 ? 's' : ''}
-      </p>
-    </div>
-  )
-}
 
 function AfterSupportBlock({
   credits,
-  species,
   onOpenRewards,
   onOpenTracking,
 }: {
   credits: number
-  species: ProjectSpecies[]
   onOpenRewards: () => void
   onOpenTracking: () => void
 }) {
-  const speciesSummary =
-    species.length === 0
-      ? null
-      : species.length === 1
-        ? `BioDex : ${species[0]?.name ?? ''}`
-        : `${species.length} espèces liées`
-
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
-      <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl border border-amber-300/16 bg-amber-300/10 text-amber-300">
-          <CurrencyIcon kind="impactCredits" className="h-5 w-5" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/34">
-            Après votre soutien
-          </p>
-          <p className="mt-1 text-[15px] font-black leading-tight text-white">
-            {credits} Crédits Impact{speciesSummary ? ` · ${speciesSummary}` : ''}
-          </p>
-          <p className="mt-1 text-[11.5px] leading-snug text-white/45">
-            Une trace dans l&apos;app, des avantages partenaires et un suivi du projet.
-          </p>
-          {species.length > 1 ? <SpeciesMiniStack species={species} /> : null}
-        </div>
-      </div>
-
-      <div className="mt-4 grid grid-cols-2 gap-2.5">
+    <div>
+      <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+        Après votre soutien
+      </p>
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045]">
         <button
           type="button"
           onClick={onOpenRewards}
-          className="rounded-2xl bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
+          className="flex w-full items-center gap-3 border-b border-white/[0.06] px-4 py-3.5 text-left active:bg-white/[0.03]"
         >
-          <span className="flex items-center justify-between gap-2 text-[12px] font-black text-white">
-            Voir pourquoi
-            <ChevronRight className="h-3.5 w-3.5 text-white/36" />
-          </span>
-          <span className="mt-0.5 block text-[10.5px] leading-snug text-white/38">
-            Crédits, BioDex, limites
-          </span>
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-amber-300/16 bg-amber-300/10 text-amber-300">
+            <CurrencyIcon kind="impactCredits" className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">{credits} Crédits Impact</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-white/40">
+              Utilisables dans les avantages partenaires.
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
         </button>
         <button
           type="button"
           onClick={onOpenTracking}
-          className="rounded-2xl bg-black/14 px-3 py-3 text-left active:scale-[0.99]"
+          className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
         >
-          <span className="flex items-center justify-between gap-2 text-[12px] font-black text-white">
-            Voir le suivi
-            <ChevronRight className="h-3.5 w-3.5 text-white/36" />
-          </span>
-          <span className="mt-0.5 block text-[10.5px] leading-snug text-white/38">
-            Ce qui se passe après
-          </span>
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+            <Camera className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">Suivi du projet</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-white/40">
+              Photos, étapes et évolution du terrain dans le temps.
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
         </button>
       </div>
     </div>
@@ -249,7 +192,7 @@ function RewardsSheet({
   const primary = species.find((sp) => isKeyRole(sp.role)) ?? species[0]
 
   return (
-    <MobileSheet isOpen={isOpen} onClose={onClose} title="Pourquoi ces récompenses ?">
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Crédits Impact & BioDex">
       <p className="mt-1 text-sm leading-relaxed text-white/50">
         Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact et le BioDex servent à garder une trace, débloquer des avantages et prolonger la relation avec le terrain.
       </p>
@@ -428,6 +371,9 @@ function ImpactSheet({
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-black text-white">{item.label}</p>
                   <p className="mt-0.5 text-[11.5px] leading-snug text-white/45">{item.meaning}</p>
+                  {item.estimate ? (
+                    <p className="mt-1 text-[10.5px] text-white/28">{item.estimate}</p>
+                  ) : null}
                 </div>
                 <div className="ml-2 shrink-0 text-right">
                   {item.prefix ? (
@@ -443,23 +389,13 @@ function ImpactSheet({
                   </p>
                 </div>
               </div>
-              <div className="mt-2.5 space-y-1 pl-12 text-[11px] leading-snug text-white/35">
-                <p>
-                  <span className="font-bold text-white/50">Estimé · </span>
-                  {item.estimate}
-                </p>
-                <p>
-                  <span className="font-bold text-white/50">À garder en tête · </span>
-                  {item.caution}
-                </p>
-              </div>
             </div>
           )
         })}
       </div>
 
       <p className="mt-4 pb-2 text-xs leading-relaxed text-white/25">
-        Ces chiffres sont des ordres de grandeur pédagogiques, pas des mesures certifiées.
+        Ces chiffres sont des estimations pédagogiques. Ils ne signifient pas que chaque abeille, fleur ou kg de miel est suivi individuellement.
       </p>
     </MobileSheet>
   )
@@ -829,9 +765,12 @@ export function ProjectSupportOneFlow({
           >
             <div className={cn('flex flex-col gap-8 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="flex flex-col items-center justify-center text-center">
-                <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
-                  Choisissez votre montant
-                </p>
+                <div className="mb-5 text-center">
+                  <p className="text-xl font-black text-white">Choisissez votre soutien</p>
+                  <p className="mt-1.5 text-sm text-white/50">
+                    Votre contribution aide ce producteur à faire avancer son projet.
+                  </p>
+                </div>
                 <div className="flex w-full items-baseline justify-center">
                   <div
                     className="flex cursor-text items-baseline justify-center gap-2 rounded-3xl bg-white/5 px-8 py-4 transition-colors hover:bg-white/10"
@@ -875,11 +814,21 @@ export function ProjectSupportOneFlow({
                 ))}
               </div>
 
+              <p className="text-center text-[13px] text-white/45">
+                Vous soutenez{' '}
+                <span className="font-black text-white/70">{project.name}</span>
+              </p>
+
               <section className="-mx-4 border-y border-white/[0.08] px-4 py-5">
-                <div className="mb-4 flex items-end justify-between gap-3">
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/35">
-                    Impact estimé
-                  </p>
+                <div className="mb-4 flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/35">
+                      Impact estimé
+                    </p>
+                    <p className="mt-1 text-[11px] text-white/30">
+                      Des ordres de grandeur pour comprendre ce que représente votre soutien.
+                    </p>
+                  </div>
                   {impactItems.length > 0 ? (
                     <button
                       type="button"
@@ -895,9 +844,14 @@ export function ProjectSupportOneFlow({
                 </div>
               </section>
 
+              {(species?.length ?? 0) > 0 ? (
+                <section className="-mx-4 border-b border-white/[0.08] px-4 pb-5">
+                  <BiodexRail species={species!} />
+                </section>
+              ) : null}
+
               <AfterSupportBlock
                 credits={points.total_points}
-                species={species ?? []}
                 onOpenRewards={() => setSheet('rewards')}
                 onOpenTracking={() => setSheet('tracking')}
               />
@@ -924,7 +878,6 @@ export function ProjectSupportOneFlow({
 
                 <AfterSupportBlock
                   credits={points.total_points}
-                  species={species ?? []}
                   onOpenRewards={() => setSheet('rewards')}
                   onOpenTracking={() => setSheet('tracking')}
                 />
@@ -1187,14 +1140,16 @@ export function ProjectSupportOneFlow({
           {step === 'impact' ? (
             <>
               <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
-                Après soutien :{' '}
-                <span className="font-black text-amber-300">
-                  {points.total_points} Crédits Impact
-                </span>
+                Suivi inclus
+                <span className="mx-1.5 opacity-40">·</span>
+                <span className="font-black text-amber-300">{points.total_points} Crédits Impact</span>
                 {species && species.length > 0 ? (
-                  <span className="font-black text-lime-300">
-                    {' '}· {species.length} espèce{species.length > 1 ? 's' : ''} liée{species.length > 1 ? 's' : ''}
-                  </span>
+                  <>
+                    <span className="mx-1.5 opacity-40">·</span>
+                    <span className="font-black text-lime-300">
+                      {species.length} espèce{species.length > 1 ? 's' : ''} BioDex
+                    </span>
+                  </>
                 ) : null}
               </p>
               <Button
@@ -1202,7 +1157,7 @@ export function ProjectSupportOneFlow({
                 onClick={goToPayment}
                 className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
               >
-                Soutenir ce projet
+                {`Continuer avec ${formatAmountNumber(amountEur)} €`}
               </Button>
             </>
           ) : null}
