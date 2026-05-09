@@ -1084,11 +1084,13 @@ export function ProjectSupportOneFlow({
                 className="flex-1 flex flex-col items-center justify-center gap-4 my-4 w-full"
               >
                 <div className="relative mx-auto w-64 h-64 flex items-center justify-center [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56">
+                  {/* Glow dynamique selon le type de projet */}
                   <div
                     className={cn(
-                      'absolute top-1/2 left-1/2 z-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(132,204,22,0.35)_0%,rgba(132,204,22,0)_68%)] transition-all duration-700 ease-out',
+                      'absolute top-1/2 left-1/2 z-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-700 ease-out',
                       phase === 'euphoria' || phase === 'resolved' ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
                     )}
+                    style={{ background: `radial-gradient(circle, ${glowRgba(0.35)} 0%, ${glowRgba(0)} 68%)` }}
                   />
                   <div
                     className={cn(
@@ -1096,21 +1098,34 @@ export function ProjectSupportOneFlow({
                       phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-75',
                     )}
                   />
-                  <img
-                    src={REWARD_PREVIEW_IMAGE}
-                    alt="Espèce débloquée"
+                  {/* Wrapper : scale + drop-shadow dynamique (séparé de brightness sur l'img) */}
+                  <div
                     className={cn(
-                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-                      phase === 'tension' ? 'brightness-0 opacity-50 scale-90 animate-pulse' : '',
-                      phase === 'flash' ? 'brightness-200 opacity-100 scale-95' : '',
-                      phase === 'euphoria' || phase === 'resolved'
-                        ? 'brightness-100 opacity-100 scale-110 drop-shadow-[0_20px_50px_rgba(132,204,22,0.3)]'
-                        : '',
+                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                      phase === 'tension' ? 'scale-90' : '',
+                      phase === 'flash' ? 'scale-95' : '',
+                      phase === 'euphoria' || phase === 'resolved' ? 'scale-110' : '',
                     )}
-                    onError={(event) => {
-                      event.currentTarget.style.display = 'none'
-                    }}
-                  />
+                    style={
+                      phase === 'euphoria' || phase === 'resolved'
+                        ? { filter: `drop-shadow(0 20px 50px ${glowRgba(0.3)})` }
+                        : undefined
+                    }
+                  >
+                    <img
+                      src={REWARD_PREVIEW_IMAGE}
+                      alt="Espèce débloquée"
+                      className={cn(
+                        'w-full h-full object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                        phase === 'tension' ? 'brightness-0 opacity-50 animate-pulse' : '',
+                        phase === 'flash' ? 'brightness-200 opacity-100' : '',
+                        phase === 'euphoria' || phase === 'resolved' ? 'brightness-100 opacity-100' : '',
+                      )}
+                      onError={(event) => {
+                        event.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  </div>
                   <div
                     className={cn(
                       'absolute inset-0 flex items-center justify-center z-30 transition-all duration-300 ease-in',
