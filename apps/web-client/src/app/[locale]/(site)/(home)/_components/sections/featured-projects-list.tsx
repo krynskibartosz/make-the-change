@@ -45,9 +45,11 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
         const title = (project.name_default || 'Projet').replace(' 2024', '')
         const imageUrl = sanitizeImageUrl(project.hero_image_url) ?? null
         const impactLabel = formatEcologicalImpact(project.current_funding, project.type)
-        const location = [project.address_city, project.address_country_code]
-          .filter(Boolean)
-          .join(', ') || undefined
+        const locationDisplay = resolveLocationDisplay(
+          project.address_country_code,
+          project.address_city,
+          locale,
+        ) ?? undefined
 
         return (
           <li key={project.id} className="shrink-0">
@@ -56,7 +58,7 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
               title={title}
               imageUrl={imageUrl}
               impactLabel={impactLabel}
-              location={location}
+              locationDisplay={locationDisplay}
               priority={index === 0}
               type={project.type ?? null}
             />
