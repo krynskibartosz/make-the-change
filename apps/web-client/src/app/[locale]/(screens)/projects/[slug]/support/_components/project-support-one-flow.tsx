@@ -126,13 +126,31 @@ function NextStepLine({
 
 function AfterSupportBlock({
   credits,
+  species,
   onOpenRewards,
   onOpenTracking,
 }: {
   credits: number
+  species: ProjectSpecies[]
   onOpenRewards: () => void
   onOpenTracking: () => void
 }) {
+  const keyCount = species.filter((sp) => isKeyRole(sp.role)).length
+  const assocCount = species.length - keyCount
+  const speciesSubtitle =
+    species.length === 0
+      ? null
+      : keyCount === 1 && assocCount === 0
+        ? '1 espèce clé'
+        : keyCount === 1
+          ? `1 espèce clé · ${assocCount} associée${assocCount > 1 ? 's' : ''}`
+          : keyCount > 1
+            ? `${keyCount} espèces clés${assocCount > 0 ? ` · ${assocCount} associée${assocCount > 1 ? 's' : ''}` : ''}`
+            : `${species.length} espèce${species.length > 1 ? 's' : ''} liée${species.length > 1 ? 's' : ''}`
+
+  const visibleSpecies = species.slice(0, 2)
+  const remainingSpecies = Math.max(species.length - visibleSpecies.length, 0)
+
   return (
     <div>
       <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
@@ -158,7 +176,10 @@ function AfterSupportBlock({
         <button
           type="button"
           onClick={onOpenTracking}
-          className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
+          className={cn(
+            'flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]',
+            species.length > 0 ? 'border-b border-white/[0.06]' : '',
+          )}
         >
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
             <Camera className="h-4 w-4" />
@@ -171,6 +192,50 @@ function AfterSupportBlock({
           </div>
           <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
         </button>
+        {species.length > 0 ? (
+          <button
+            type="button"
+            onClick={onOpenRewards}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
+          >
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+              <Leaf className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-black text-white">Espèces liées au projet</p>
+              {speciesSubtitle ? (
+                <p className="mt-0.5 text-[11px] leading-snug text-white/40">{speciesSubtitle}</p>
+              ) : null}
+            </div>
+            <div className="mr-1 flex shrink-0 -space-x-1.5">
+              {visibleSpecies.map((sp) => {
+                const imageUrl = sanitizeImageUrl(sp.icon)
+                return (
+                  <div
+                    key={sp.id}
+                    className="grid h-6 w-6 place-items-center overflow-hidden rounded-lg border border-[#08080F] bg-white/[0.06]"
+                  >
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={sp.name}
+                        className="h-full w-full object-cover opacity-25 blur-[0.5px]"
+                      />
+                    ) : (
+                      <Lock className="h-2.5 w-2.5 text-white/35" />
+                    )}
+                  </div>
+                )
+              })}
+              {remainingSpecies > 0 ? (
+                <div className="grid h-6 w-6 place-items-center rounded-lg border border-[#08080F] bg-white/[0.06] text-[8px] font-black text-white/40">
+                  +{remainingSpecies}
+                </div>
+              ) : null}
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
+          </button>
+        ) : null}
       </div>
     </div>
   )
@@ -905,14 +970,9 @@ export function ProjectSupportOneFlow({
                 </div>
               </section>
 
-              {(species?.length ?? 0) > 0 ? (
-                <section className="-mx-4 border-b border-white/[0.08] px-4 pb-5">
-                  <BiodexRail species={species!} />
-                </section>
-              ) : null}
-
               <AfterSupportBlock
                 credits={points.total_points}
+                species={species ?? []}
                 onOpenRewards={() => setSheet('rewards')}
                 onOpenTracking={() => setSheet('tracking')}
               />
@@ -1184,16 +1244,14 @@ export function ProjectSupportOneFlow({
             <>
               <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
                 Suivi inclus
-                <span className="mx-1.5 opacity-40">·</span>
-                <span className="font-black text-amber-300">{points.total_points} Crédits Impact</span>
                 {species && species.length > 0 ? (
                   <>
                     <span className="mx-1.5 opacity-40">·</span>
-                    <span className="font-black text-lime-300">
-                      {species.length} espèce{species.length > 1 ? 's' : ''} BioDex
-                    </span>
+                    <span className="font-black text-lime-300">BioDex lié</span>
                   </>
                 ) : null}
+                <span className="mx-1.5 opacity-40">·</span>
+                <span className="font-black text-amber-300">{points.total_points} Crédits Impact</span>
               </p>
               <Button
                 type="button"
