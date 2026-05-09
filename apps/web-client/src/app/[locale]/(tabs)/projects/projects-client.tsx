@@ -9,6 +9,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { resolveLocationDisplay } from '@/lib/location'
 import { getLocalizedContent } from '@/lib/utils'
 import type {
   ProjectListSpeciesSeed,
@@ -182,38 +183,6 @@ function ProjectSpeciesTeaser({ species }: { species: ProjectSpeciesPreview[] | 
       <p className="text-[13px] font-medium text-white/58">{label}</p>
     </div>
   )
-}
-
-const FRENCH_TO_ISO: Record<string, string> = {
-  'madagascar': 'MG', 'france': 'FR', 'belgique': 'BE', 'italie': 'IT',
-  'espagne': 'ES', 'indonésie': 'ID', 'indonesie': 'ID', 'portugal': 'PT',
-  'allemagne': 'DE', 'maroc': 'MA', 'sénégal': 'SN', 'senegal': 'SN',
-  'kenya': 'KE', 'australie': 'AU', 'canada': 'CA', 'royaume-uni': 'GB',
-  'suisse': 'CH', 'pays-bas': 'NL', 'grèce': 'GR', 'mexique': 'MX',
-  'brésil': 'BR', 'bresil': 'BR', 'inde': 'IN', 'afrique du sud': 'ZA',
-}
-
-function getCountryFlag(iso: string): string {
-  return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 - 65 + c.charCodeAt(0))).join('')
-}
-
-function resolveLocationDisplay(
-  code: string | null,
-  city: string | null,
-  locale: string,
-): { flag: string; label: string } | null {
-  if (!code) return null
-  const iso = /^[A-Z]{2}$/i.test(code.trim())
-    ? code.trim().toUpperCase()
-    : FRENCH_TO_ISO[code.trim().toLowerCase()] ?? null
-  if (!iso) return null
-  const flag = getCountryFlag(iso)
-  let countryName = iso
-  try {
-    countryName = new Intl.DisplayNames([locale], { type: 'region' }).of(iso) ?? iso
-  } catch { /* ignore */ }
-  const label = city ? `${countryName} · ${city}` : countryName
-  return { flag, label }
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────

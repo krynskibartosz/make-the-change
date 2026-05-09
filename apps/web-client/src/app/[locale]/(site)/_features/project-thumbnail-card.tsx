@@ -1,4 +1,4 @@
-import { Leaf, MapPin } from 'lucide-react'
+import { Leaf } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getProjectTypeDesign } from '@/lib/project-type-icons'
 
@@ -7,7 +7,7 @@ type ProjectThumbnailCardProps = {
   title: string
   imageUrl: string | null
   impactLabel?: string
-  location?: string
+  locationDisplay?: { flag: string; label: string }
   priority?: boolean
   type?: string | null
 }
@@ -46,7 +46,7 @@ export function ProjectThumbnailCard({
   title,
   imageUrl,
   impactLabel,
-  location,
+  locationDisplay,
   priority = false,
   type,
 }: ProjectThumbnailCardProps) {
@@ -78,11 +78,11 @@ export function ProjectThumbnailCard({
       <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/60 to-transparent" />
 
       <div className="absolute bottom-0 left-0 w-full p-5 flex flex-col items-start z-10">
-        {location ? (
+        {locationDisplay ? (
           <div className="flex items-center gap-1 mb-1.5 opacity-90">
-            <MapPin className="w-2.5 h-2.5 text-gray-400 shrink-0" />
+            <span className="text-[13px] leading-none">{locationDisplay.flag}</span>
             <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">
-              {location}
+              {locationDisplay.label}
             </span>
           </div>
         ) : null}

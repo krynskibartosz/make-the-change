@@ -1,8 +1,9 @@
 import { Badge, Button } from '@make-the-change/core/ui'
-import { Calendar, Leaf, MapPin, Sparkles } from 'lucide-react'
+import { Calendar, Leaf, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
+import { resolveLocationDisplay } from '@/lib/location'
 import { cn, formatCurrency } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { getProjectPrimaryAction } from '../../project-action'
@@ -47,6 +48,11 @@ export async function ProjectCoverHero({
   const mediaTransitionName = getEntityViewTransitionName('project', project.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
   const primaryAction = getProjectPrimaryAction(project, 'detail_hero')
+  const locationDisplay = resolveLocationDisplay(
+    project.address_country_code,
+    project.address_city,
+    locale,
+  )
 
   return (
     <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -97,12 +103,10 @@ export async function ProjectCoverHero({
         </p>
 
         <div className="flex flex-wrap gap-3 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-350">
-          {(project.address_city || project.address_country_code) && (
+          {locationDisplay && (
             <div className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/60 px-4 py-2 backdrop-blur-sm">
-              <MapPin className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">
-                {[project.address_city, project.address_country_code].filter(Boolean).join(', ')}
-              </span>
+              <span className="text-base leading-none">{locationDisplay.flag}</span>
+              <span className="text-sm font-medium">{locationDisplay.label}</span>
             </div>
           )}
           {project.launch_date && (

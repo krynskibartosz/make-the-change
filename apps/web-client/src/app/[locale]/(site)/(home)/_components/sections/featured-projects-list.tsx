@@ -1,8 +1,10 @@
 'use client'
 
 import { ArrowRight } from 'lucide-react'
+import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { resolveLocationDisplay } from '@/lib/location'
 import {
   formatEcologicalImpact,
   ProjectThumbnailCard,
@@ -27,6 +29,8 @@ type FeaturedProjectsListProps = {
 const EMPTY_FEATURED_PROJECTS_MESSAGE = 'Aucun projet en vedette pour le moment.'
 
 export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProjectsListProps) {
+  const locale = useLocale()
+
   if (projects.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-border/80 bg-muted/30 p-8 text-center">

@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
 import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { resolveCountryCode, getCountryDisplayName } from '@/lib/location'
 import type { DonationOption, ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
@@ -133,28 +134,12 @@ export async function ProjectQuickView({
       ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
       : undefined
 
-  const FRENCH_COUNTRY_TO_ISO: Record<string, string> = {
-    'madagascar': 'MG', 'france': 'FR', 'belgique': 'BE', 'italie': 'IT',
-    'espagne': 'ES', 'indonésie': 'ID', 'indonesie': 'ID', 'portugal': 'PT',
-    'allemagne': 'DE', 'maroc': 'MA', 'sénégal': 'SN', 'senegal': 'SN',
-    'kenya': 'KE', 'afrique du sud': 'ZA', 'brésil': 'BR', 'bresil': 'BR',
-    'mexique': 'MX', 'inde': 'IN', 'australie': 'AU', 'canada': 'CA',
-    'royaume-uni': 'GB', 'suisse': 'CH', 'pays-bas': 'NL', 'grèce': 'GR',
-  }
-  const rawCode = project.address_country_code
-  const resolvedIso = rawCode
-    ? (/^[A-Z]{2}$/i.test(rawCode.trim()) ? rawCode.trim().toUpperCase() : (FRENCH_COUNTRY_TO_ISO[rawCode.trim().toLowerCase()] ?? null))
+  const resolvedIso = project.address_country_code
+    ? resolveCountryCode(project.address_country_code)
     : null
-  const countryName = rawCode
-    ? (() => {
-        if (resolvedIso) {
-          try {
-            return new Intl.DisplayNames([locale], { type: 'region' }).of(resolvedIso) ?? rawCode
-          } catch { /* fall through */ }
-        }
-        return rawCode
-      })()
-    : null
+  const countryName = resolvedIso
+    ? getCountryDisplayName(resolvedIso, locale)
+    : project.address_country_code ?? null
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
   const typeLabel = formatBadgeLabel(project.type, locale)
