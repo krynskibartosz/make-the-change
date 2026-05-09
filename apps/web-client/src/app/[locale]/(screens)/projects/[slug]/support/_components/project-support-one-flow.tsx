@@ -176,6 +176,67 @@ function AfterSupportBlock({
   )
 }
 
+function IncludedSummary({
+  credits,
+  species,
+  onOpen,
+}: {
+  credits: number
+  species: ProjectSpecies[]
+  onOpen: () => void
+}) {
+  return (
+    <div>
+      <p className="mb-3.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+        Après votre soutien
+      </p>
+      <div className="space-y-3.5">
+        <div className="flex items-start gap-3">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-amber-300/16 bg-amber-300/10 text-amber-300">
+            <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">{credits} Crédits Impact</p>
+            <p className="text-[11px] leading-snug text-white/40">Utilisables dans les avantages partenaires.</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+            <Camera className="h-3.5 w-3.5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">Suivi du projet inclus</p>
+            <p className="text-[11px] leading-snug text-white/40">Photos, étapes et évolution du terrain.</p>
+          </div>
+        </div>
+        {species.length > 0 ? (
+          <div className="flex items-start gap-3">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+              <Leaf className="h-3.5 w-3.5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-black text-white">
+                {species.length === 1
+                  ? (species[0]?.name ?? 'Espèce liée')
+                  : `${species.length} espèces liées au projet`}
+              </p>
+              <p className="text-[11px] leading-snug text-white/40">BioDex débloquable après votre soutien.</p>
+            </div>
+          </div>
+        ) : null}
+      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="mt-4 flex items-center gap-1 text-[12px] font-black text-white/35 active:text-white/55"
+      >
+        Comprendre ce qui est inclus
+        <ChevronRight className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  )
+}
+
 function RewardsSheet({
   isOpen,
   onClose,
@@ -864,86 +925,68 @@ export function ProjectSupportOneFlow({
               presentation === 'page' ? 'pt-2' : '',
             )}
           >
-            <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+            <div className={cn('flex flex-col gap-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+
+              {/* Montant + contexte projet */}
               <div className="text-center">
-                <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
-                  Votre soutien au projet
+                <p className="mb-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/35">
+                  Soutien producteur
                 </p>
-                <div className="mb-8 flex items-baseline justify-center gap-1.5">
-                  <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
+                <div className="flex items-baseline justify-center gap-1.5">
+                  <span className="text-7xl font-black tracking-tighter text-white tabular-nums">
                     {formatAmountNumber(amountEur)}
                   </span>
                   <span className="text-4xl font-semibold text-white/50">€</span>
                 </div>
-
-                <AfterSupportBlock
-                  credits={points.total_points}
-                  onOpenRewards={() => setSheet('rewards')}
-                  onOpenTracking={() => setSheet('tracking')}
-                />
+                <p className="mt-2 text-[13px] text-white/45">{project.name}</p>
               </div>
 
-              {!isAuthenticated ? (
-                <div className="w-full">
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/50">
-                    Email pour le reçu
-                  </label>
-                  <input
-                    type="email"
-                    value={guestEmail}
-                    onChange={(event) => setGuestEmail(event.target.value)}
-                    placeholder="vous@email.com"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
-                    required
-                  />
-                  {guestEmailError ? (
-                    <p className="mt-2 text-xs font-semibold text-destructive">{guestEmailError}</p>
-                  ) : null}
+              {/* Ce qui est inclus — liste plate */}
+              <IncludedSummary
+                credits={points.total_points}
+                species={species ?? []}
+                onOpen={() => setSheet('rewards')}
+              />
+
+              {/* Email de confirmation */}
+              <div className="w-full">
+                <label className="mb-1.5 block text-xs font-bold text-white/60">
+                  Email de confirmation
+                </label>
+                <input
+                  type="email"
+                  value={guestEmail}
+                  onChange={(event) => setGuestEmail(event.target.value)}
+                  placeholder="vous@email.com"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
+                  required
+                />
+                <p className="mt-1.5 text-[11px] text-white/35">
+                  Reçu de contribution et suivi du projet.
+                </p>
+                {guestEmailError ? (
+                  <p className="mt-1.5 text-xs font-semibold text-destructive">{guestEmailError}</p>
+                ) : null}
+              </div>
+
+              {/* Module paiement */}
+              <div className="flex flex-col gap-3">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-5 text-center">
+                  <p className="text-xs font-black uppercase tracking-[0.14em] text-white/25">
+                    Paiement sécurisé par carte
+                  </p>
+                  <div className="mt-3 h-10 rounded-xl bg-white/[0.04]" />
+                  <div className="mt-2 h-10 rounded-xl bg-white/[0.04]" />
                 </div>
-              ) : null}
+              </div>
 
-              {stripePromise ? (
-                <Elements
-                  key={amountEur}
-                  stripe={stripePromise}
-                  options={{
-                    mode: 'payment',
-                    amount: Math.max(100, amountEur * 100),
-                    currency: 'eur',
-                    appearance: stripeAppearance,
-                  }}
-                >
-                  <div className="mt-8 flex w-full flex-col gap-4">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
-                      <ExpressCheckoutElement onConfirm={() => {}} />
-                    </div>
+              {/* Trust line */}
+              <p className="text-center text-[11px] text-white/28">
+                🔒 Paiement sécurisé{' '}
+                <span className="mx-1 opacity-50">·</span>
+                📩 Reçu envoyé par email
+              </p>
 
-                    <div className="my-6 flex items-center gap-4">
-                      <div className="h-px flex-1 bg-white/10" />
-                      <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
-                      <div className="h-px flex-1 bg-white/10" />
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                      <PaymentElement />
-                    </div>
-                  </div>
-                </Elements>
-              ) : (
-                <div className="mt-8 flex w-full flex-col gap-4">
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
-                    Apple Pay / Google Pay indisponible (clé Stripe manquante)
-                  </div>
-                  <div className="my-6 flex items-center gap-4">
-                    <div className="h-px flex-1 bg-white/10" />
-                    <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
-                    <div className="h-px flex-1 bg-white/10" />
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
-                    Module carte bancaire Stripe
-                  </div>
-                </div>
-              )}
             </div>
           </section>
 
