@@ -14,11 +14,11 @@
  * pendant la période de compatibilité.
  */
 
-import type { MockInvestmentRecord } from '@/lib/mock/mock-member-data'
+import type { MockSupportRecord } from '@/lib/mock/mock-member-data'
 
 /**
  * View-model cible pour l'affichage d'un soutien producteur.
- * Remplace progressivement l'usage direct de MockInvestmentRecord dans les UI.
+ * Remplace progressivement l'usage direct de MockSupportRecord dans les UI.
  */
 export type ProducerSupportViewModel = {
   id: string
@@ -39,17 +39,17 @@ export type ProducerSupportViewModel = {
 }
 
 /**
- * Mappe un MockInvestmentRecord legacy vers le view-model ProducerSupport.
+ * Mappe un MockSupportRecord legacy vers le view-model ProducerSupport.
  *
  * @param record - Enregistrement investment legacy
  * @returns View-model adapté pour l'affichage moderne
  *
  * @example
- * const support = mapInvestmentToProducerSupport(mockInvestment)
+ * const support = mapSupportToProducerSupport(mockInvestment)
  * // support.contributionTypeLabel === "Soutien producteur"
  */
-export function mapInvestmentToProducerSupport(
-  record: MockInvestmentRecord,
+export function mapSupportToProducerSupport(
+  record: MockSupportRecord,
 ): ProducerSupportViewModel {
   return {
     id: record.id,
@@ -72,8 +72,8 @@ export function mapInvestmentToProducerSupport(
 /**
  * Mappe un statut technique vers un label UI.
  */
-function mapStatusToLabel(status: MockInvestmentRecord['status']): string {
-  const labels: Record<MockInvestmentRecord['status'], string> = {
+function mapStatusToLabel(status: MockSupportRecord['status']): string {
+  const labels: Record<MockSupportRecord['status'], string> = {
     active: 'En cours',
     completed: 'Terminé',
     pending: 'En attente',
@@ -109,7 +109,7 @@ export const PRODUCER_SUPPORT_LABELS = {
  * Labels legacy (pour compatibilité pendant la transition).
  * [DEPRECIE] À éviter dans les nouvelles interfaces.
  */
-export const INVESTMENT_LABELS_LEGACY = {
+export const SUPPORT_LABELS_LEGACY = {
   ctaInvest: 'Investir dans ce projet',
   sectionTitle: 'Investissements',
   returnsLabel: 'Retours perçus',

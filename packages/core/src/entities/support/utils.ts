@@ -1,19 +1,19 @@
 /**
- * Investment Module Utilities
+ * Support Module Utilities
  * Points calculation, validation, formatting
  */
 
 import type {
-  Investment,
-  InvestmentType,
+  ProducerSupport,
+  SupportType,
   PointsCalculation,
   ProjectStatus,
   RiskLevel,
 } from './types'
 
-// Investment rules by type
-const INVESTMENT_RULES: Record<
-  InvestmentType,
+// Support rules by type
+const SUPPORT_RULES: Record<
+  SupportType,
   {
     min_amount: number
     max_amount: number
@@ -25,13 +25,13 @@ const INVESTMENT_RULES: Record<
   vineyard: { min_amount: 150, max_amount: 500, expected_bonus: 50 },
 }
 
-// Calculate points from investment
-export function calculateInvestmentPoints(investment: Investment): PointsCalculation {
-  if (investment.amount_eur <= 0) throw new Error('Invalid investment amount')
-  if (investment.bonus_percentage < 0) throw new Error('Invalid bonus percentage')
+// Calculate points from producer support
+export function calculateSupportPoints(support: ProducerSupport): PointsCalculation {
+  if (support.amount_eur <= 0) throw new Error('Invalid support amount')
+  if (support.bonus_percentage < 0) throw new Error('Invalid bonus percentage')
 
-  const base_points = Math.ceil(investment.amount_eur)
-  const bonus_points = Math.floor(base_points * (investment.bonus_percentage / 100))
+  const base_points = Math.ceil(support.amount_eur)
+  const bonus_points = Math.floor(base_points * (support.bonus_percentage / 100))
   const total_points = base_points + bonus_points
 
   return {
@@ -39,23 +39,23 @@ export function calculateInvestmentPoints(investment: Investment): PointsCalcula
     bonus_points,
     total_points,
     euro_value_equivalent: total_points,
-    investment_type: investment.type,
+    support_type: support.type,
     calculated_at: new Date(),
   }
 }
 
-// Validate investment against rules
-export function validateInvestmentRules(investment: Investment): boolean {
-  const rule = INVESTMENT_RULES[investment.type]
+// Validate support against rules
+export function validateSupportRules(support: ProducerSupport): boolean {
+  const rule = SUPPORT_RULES[support.type]
   if (!rule) return false
-  if (investment.amount_eur < rule.min_amount || investment.amount_eur > rule.max_amount)
+  if (support.amount_eur < rule.min_amount || support.amount_eur > rule.max_amount)
     return false
   return true
 }
 
-// Get investment rules for a type
-export function getInvestmentRules(type: InvestmentType) {
-  return INVESTMENT_RULES[type]
+// Get support rules for a type
+export function getSupportRules(type: SupportType) {
+  return SUPPORT_RULES[type]
 }
 
 // Calculate euro value from points
@@ -63,14 +63,14 @@ export function calculatePointsEuroValue(points: number): number {
   return points * 1.0
 }
 
-// Validate investment amount
-export const isValidInvestmentAmount = (
+// Validate support amount
+export const isValidSupportAmount = (
   amount: number,
-  minInvestment: number,
-  maxInvestment?: number,
+  minSupport: number,
+  maxSupport?: number,
 ): boolean => {
-  if (amount < minInvestment) return false
-  if (maxInvestment && amount > maxInvestment) return false
+  if (amount < minSupport) return false
+  if (maxSupport && amount > maxSupport) return false
   return true
 }
 

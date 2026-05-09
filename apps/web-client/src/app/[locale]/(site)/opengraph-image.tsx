@@ -12,10 +12,10 @@ export default async function Image({ params }: { params: { locale: string } }) 
   const locale = params.locale
   const subtitle =
     {
-      en: 'Invest in biodiversity',
+      en: 'Support biodiversity',
   fr: 'Soutenez la biodiversité',
-      nl: 'Investeer in biodiversiteit',
-    }[locale] || 'Invest in biodiversity'
+      nl: 'Steun de biodiversiteit',
+    }[locale] || 'Support biodiversity'
 
   return new ImageResponse(
     <div

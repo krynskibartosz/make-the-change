@@ -5,7 +5,7 @@
 
 // Domain Modules
 export * as commerce from './entities/commerce'
-export * as investment from './entities/investment'
+export * as support from './entities/support'
 export * as admin from './features/admin'
 export * as auth from './features/auth'
 // Shared Modules

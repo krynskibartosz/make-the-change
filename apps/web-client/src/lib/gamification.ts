@@ -1,7 +1,7 @@
 export type ImpactInputs = {
   points: number
   projects: number
-  invested: number
+  totalContributed: number
 }
 
 type LevelThreshold = {
@@ -19,11 +19,11 @@ const LEVEL_THRESHOLDS: LevelThreshold[] = [
 const WEIGHTS = {
   points: 1,
   projects: 250,
-  invested: 0.5,
+  totalContributed: 0.5,
 }
 
-export function calculateImpactScore({ points, projects, invested }: ImpactInputs) {
-  const score = points * WEIGHTS.points + projects * WEIGHTS.projects + invested * WEIGHTS.invested
+export function calculateImpactScore({ points, projects, totalContributed }: ImpactInputs) {
+  const score = points * WEIGHTS.points + projects * WEIGHTS.projects + totalContributed * WEIGHTS.totalContributed
   return Math.max(0, Math.round(score))
 }
 
@@ -50,7 +50,7 @@ export function getLevelProgress(score: number) {
 export function getMilestoneBadges({
   points,
   projects,
-  invested,
+  totalContributed,
   leaderboardRank,
 }: ImpactInputs & { leaderboardRank?: number }) {
   const badges: string[] = []
@@ -58,7 +58,7 @@ export function getMilestoneBadges({
   if (projects >= 1) badges.push('Premier projet')
   if (projects >= 10) badges.push('10 projets')
   if (points >= 1000) badges.push('1000 crédits')
-  if (invested >= 1000) badges.push('Soutien engagé')
+  if (totalContributed >= 1000) badges.push('Soutien engagé')
   if (leaderboardRank && leaderboardRank <= 10) badges.push('Top 10')
 
   return badges

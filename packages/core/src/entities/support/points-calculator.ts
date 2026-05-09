@@ -2,7 +2,7 @@
  * Points Calculator - Make the CHANGE (shared)
  */
 
-export type Investment = {
+export type ProducerSupport = {
   type: 'beehive' | 'olive_tree' | 'vineyard'
   amount_eur: number
   bonus_percentage: number
@@ -20,22 +20,22 @@ export type PointsCalculation = {
   bonus_points: number
   total_points: number
   euro_value_equivalent: number
-  investment_type?: string
+  support_type?: string
   calculated_at: Date
 }
 
-export function calculateInvestmentPoints(investment: Investment): PointsCalculation {
-  if (investment.amount_eur <= 0) throw new Error('Invalid investment amount')
-  if (investment.bonus_percentage < 0) throw new Error('Invalid bonus percentage')
-  const base_points = Math.ceil(investment.amount_eur)
-  const bonus_points = Math.floor(base_points * (investment.bonus_percentage / 100))
+export function calculateSupportPoints(support: ProducerSupport): PointsCalculation {
+  if (support.amount_eur <= 0) throw new Error('Invalid support amount')
+  if (support.bonus_percentage < 0) throw new Error('Invalid bonus percentage')
+  const base_points = Math.ceil(support.amount_eur)
+  const bonus_points = Math.floor(base_points * (support.bonus_percentage / 100))
   const total_points = base_points + bonus_points
   return {
     base_points,
     bonus_points,
     total_points,
     euro_value_equivalent: total_points,
-    investment_type: investment.type,
+    support_type: support.type,
     calculated_at: new Date(),
   }
 }
@@ -60,9 +60,9 @@ export function calculateSubscriptionPoints(subscription: Subscription): PointsC
   }
 }
 
-export function validateInvestmentRules(investment: Investment): boolean {
+export function validateSupportRules(support: ProducerSupport): boolean {
   const rules: Record<
-    Investment['type'],
+    ProducerSupport['type'],
     {
       min_amount: number
       max_amount: number
@@ -77,9 +77,9 @@ export function validateInvestmentRules(investment: Investment): boolean {
       expected_bonus: 50,
     },
   }
-  const rule = rules[investment.type]
+  const rule = rules[support.type]
   if (!rule) return false
-  if (investment.amount_eur < rule.min_amount || investment.amount_eur > rule.max_amount)
+  if (support.amount_eur < rule.min_amount || support.amount_eur > rule.max_amount)
     return false
   return true
 }

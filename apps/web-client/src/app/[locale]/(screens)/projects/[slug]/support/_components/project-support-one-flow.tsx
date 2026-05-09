@@ -1,6 +1,6 @@
 'use client'
 
-import { investment } from '@make-the-change/core'
+import { support } from '@make-the-change/core'
 import {
   Button,
   Card,
@@ -78,12 +78,12 @@ const stripeAppearance = {
   },
 } as const
 
-type ProjectInvestOneFlowProps = {
+type ProjectSupportOneFlowProps = {
   project: {
     id: string
     slug: string
     name: string
-    type: investment.InvestmentType
+    type: support.SupportType
     coverImage?: string | null
     currentFunding?: number | null
     targetBudget?: number | null
@@ -539,21 +539,21 @@ function BiodexRail({ species }: { species: ProjectSpecies[] }) {
 }
 
 // Helpers moved to bottom
-export function ProjectInvestOneFlow({
+export function ProjectSupportOneFlow({
   project,
   presentation = 'page',
   isAuthenticated,
   initialAmount,
   discoveredSpeciesId = null,
   species,
-}: ProjectInvestOneFlowProps) {
-  const t = useTranslations('projects.invest_page')
+}: ProjectSupportOneFlowProps) {
+  const t = useTranslations('projects.support_page')
   const router = useRouter()
   const haptic = useHaptic()
 
   const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
 
-  const rules = investment.getInvestmentRules(project.type)
+  const rules = support.getSupportRules(project.type)
 
   useEffect(() => {
     if (discoveredSpeciesId) {
@@ -594,7 +594,7 @@ export function ProjectInvestOneFlow({
   const stepIndex = FLOW_STEPS.indexOf(step)
 
   const points = useMemo(() => {
-    return investment.calculateInvestmentPoints({
+    return support.calculateSupportPoints({
       type: project.type,
       amount_eur: amountEur,
       bonus_percentage: rules.expected_bonus,

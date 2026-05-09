@@ -34,14 +34,14 @@ export const isValidAge = (dateOfBirth: Date, minAge = 18): boolean => {
   return age >= minAge
 }
 
-// Validation montant d'investissement selon vos règles
-export const isValidInvestmentAmount = (
+// Validation montant de soutien selon les règles
+export const isValidSupportAmount = (
   amount: number,
-  minInvestment: number,
-  maxInvestment?: number,
+  minSupport: number,
+  maxSupport?: number,
 ): boolean => {
-  if (amount < minInvestment) return false
-  if (maxInvestment && amount > maxInvestment) return false
+  if (amount < minSupport) return false
+  if (maxSupport && amount > maxSupport) return false
   return true
 }
 

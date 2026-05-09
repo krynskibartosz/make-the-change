@@ -26,7 +26,7 @@ export const IMPACT_CREDITS_PRICE = 'price_points' as const
 /** Alias sémantique pour le montant en Credits Impact (legacy: amount_points) */
 export const IMPACT_CREDITS_AMOUNT = 'amount_points' as const
 
-export type MockInvestmentRecord = {
+export type MockSupportRecord = {
   id: string
   amount_eur_equivalent: number
   amount_points: number
@@ -124,7 +124,7 @@ const BASE_SHIPPING_ADDRESS = {
   country: 'Belgique',
 }
 
-const EXISTING_VIEWER_INVESTMENTS: MockInvestmentRecord[] = [
+const EXISTING_VIEWER_SUPPORTS: MockSupportRecord[] = [
   {
     id: 'mock-investment-antsirabe',
     amount_eur_equivalent: 390,
@@ -522,9 +522,9 @@ const cloneOrder = (order: MockOrderRecord): MockOrderRecord => ({
   })),
 })
 
-const cloneInvestment = (investment: MockInvestmentRecord): MockInvestmentRecord => ({
-  ...investment,
-  project: { ...investment.project },
+const cloneSupport = (record: MockSupportRecord): MockSupportRecord => ({
+  ...record,
+  project: { ...record.project },
 })
 
 const cloneSubscription = (
@@ -562,12 +562,12 @@ export const getMockWalletBalance = (viewerId: string): number => {
   }, 0)
 }
 
-export const getMockInvestments = (viewerId: string): MockInvestmentRecord[] => {
+export const getMockSupports = (viewerId: string): MockSupportRecord[] => {
   if (viewerId !== MOCK_EXISTING_VIEWER_ID) {
     return []
   }
 
-  return EXISTING_VIEWER_INVESTMENTS.map(cloneInvestment)
+  return EXISTING_VIEWER_SUPPORTS.map(cloneSupport)
 }
 
 export const getMockOrders = (viewerId: string): MockOrderRecord[] => {

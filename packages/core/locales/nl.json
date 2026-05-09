@@ -39,7 +39,7 @@
     "login": "Inloggen",
     "register": "Registreren",
     "profile": "Profiel",
-    "my_investments": "Mijn investeringen",
+    "my_contributions": "Mijn bijdragen",
     "my_orders": "Mijn bestellingen",
     "my_points": "Mijn punten",
     "leaderboard": "Klassement",
@@ -611,16 +611,16 @@
         "visit_website": "Bezoek website"
       }
     },
-    "invest_page": {
+    "support_page": {
       "back_to_project": "Terug naar project",
-      "title": "Investeer in de toekomst",
+      "title": "Dit project steunen",
       "supporting": "Je steunt {project}",
       "steps": {
-        "invest": "Investeren",
+        "invest": "Steun",
         "payment": "Betaling",
         "confirm": "Bevestiging"
       },
-      "amount_label": "Hoeveel wil je investeren?",
+      "amount_label": "Hoeveel wil je bijdragen?",
       "custom_amount_placeholder": "Vrij bedrag (min. €10)",
       "impact_title": "Geschatte impact",
       "impact_description": "~{trees} bomen geplant of beschermd",
@@ -632,8 +632,8 @@
       "confirm": "Bevestigen",
       "confirm_with_amount": "Bevestig {amount}",
       "legal_prefix": "Door te bevestigen ga je akkoord met onze",
-      "legal_terms": "Algemene Investeringsvoorwaarden",
-      "legal_suffix": "Investeren houdt risico's in."
+      "legal_terms": "Algemene Steunvoorwaarden",
+      "legal_suffix": "Je steun is definitief."
     }
   },
   "products": {
@@ -767,12 +767,12 @@
     "new_password": "Nieuw wachtwoord",
     "confirm_new_password": "Bevestig nieuw wachtwoord"
   },
-  "investments": {
-    "title": "Mijn investeringen",
-    "total": "Totaal geïnvesteerd",
+  "contributions": {
+    "title": "Mijn bijdragen",
+    "total": "Totaal bijgedragen",
     "history": "Geschiedenis",
-    "empty": "U heeft nog geen investeringen",
-    "start_investing": "Begin met investeren",
+    "empty": "U heeft nog geen bijdragen",
+    "start_investing": "Projecten ontdekken",
     "status": {
       "active": "Actief",
       "completed": "Voltooid",

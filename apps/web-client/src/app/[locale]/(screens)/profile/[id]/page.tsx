@@ -78,7 +78,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   }
 
   // Fetch recent public investments
-  const { data: rawInvestments } = await supabase
+  const { data: rawSupports } = await supabase
     .from('investments')
     .select(`
       id,
@@ -102,7 +102,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     location_city: string | null
     location_country: string | null
   }
-  type InvestmentRow = {
+  type SupportRow = {
     id: string
     amount_points: number | null
     created_at: string
@@ -128,7 +128,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     }
   }
 
-  const toInvestmentRow = (value: unknown): InvestmentRow | null => {
+  const toSupportRow = (value: unknown): SupportRow | null => {
     if (!isRecord(value)) {
       return null
     }
@@ -152,16 +152,16 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     }
   }
 
-  const investments = Array.isArray(rawInvestments)
-    ? rawInvestments
-        .map((entry) => toInvestmentRow(entry))
-        .filter((entry): entry is InvestmentRow => entry !== null)
+  const supports = Array.isArray(rawSupports)
+    ? rawSupports
+        .map((entry) => toSupportRow(entry))
+        .filter((entry): entry is SupportRow => entry !== null)
     : []
 
   // Calculate legitimate stats
   const impactCreditsBalance = profile.points_balance || 0
   const projects = profile.projects_count || 0
-  const invested = profile.total_invested_eur || 0
+  const totalContributed = profile.total_invested_eur || 0
 
   const impactScore = profile.impact_score || profile.biodiversity_impact || 0
 
@@ -169,8 +169,8 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const badgeLabels = getMilestoneBadges({
     points: impactCreditsBalance,
     projects,
-    invested,
-    leaderboardRank: 0, // We don't have rank in this view yet, can improved later
+    totalContributed,
+    leaderboardRank: 0,
   })
 
 
@@ -313,15 +313,15 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
               <section>
                 <h3 className="mb-4 font-semibold">Activité Récente</h3>
                 <div className="space-y-4">
-                  {investments.length > 0 ? (
-                    investments.map((investment) => {
-                      const project = Array.isArray(investment.project)
-                        ? investment.project[0]
-                        : investment.project
+                  {supports.length > 0 ? (
+                    supports.map((supportItem) => {
+                      const project = Array.isArray(supportItem.project)
+                        ? supportItem.project[0]
+                        : supportItem.project
                       if (!project) return null
 
                       return (
-                        <Card key={investment.id}>
+                        <Card key={supportItem.id}>
                           <CardContent className="flex items-center justify-between p-4">
                             <div className="flex items-center gap-4">
                               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -337,7 +337,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                   <span>Soutien</span>
                                   <span>•</span>
-                                  <span>{formatDate(investment.created_at)}</span>
+                                  <span>{formatDate(supportItem.created_at)}</span>
                                   {project.location_city && (
                                     <>
                                       <span>•</span>
@@ -351,7 +351,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
                               </div>
                             </div>
                             <Badge variant="secondary">
-                              +{formatImpactCredits(investment.amount_points || 0)} crédits
+                              +{formatImpactCredits(supportItem.amount_points || 0)} crédits
                             </Badge>
                           </CardContent>
                         </Card>

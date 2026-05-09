@@ -1,13 +1,13 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { ProjectInvestOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/invest/_components/project-invest-one-flow'
+import { ProjectSupportOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/support/_components/project-support-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
 
-function isInvestmentType(value: unknown): value is 'beehive' | 'olive_tree' | 'vineyard' {
+function isSupportType(value: unknown): value is 'beehive' | 'olive_tree' | 'vineyard' {
   return value === 'beehive' || value === 'olive_tree' || value === 'vineyard'
 }
 
@@ -24,7 +24,7 @@ function toOptionalAmount(value: string | string[] | undefined): number | undefi
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined
 }
 
-interface InterceptedInvestPageProps {
+interface InterceptedSupportPageProps {
   params: Promise<{
     slug: string
   }>
@@ -34,17 +34,17 @@ interface InterceptedInvestPageProps {
   }>
 }
 
-export default async function InterceptedProjectInvestPage({
+export default async function InterceptedProjectSupportPage({
   params,
   searchParams,
-}: InterceptedInvestPageProps) {
+}: InterceptedSupportPageProps) {
   const { slug } = await params
   const query = await searchParams
   const locale = await getLocale()
 
   const project = await getPublicProjectBySlug(slug)
 
-  if (!project || !isInvestmentType(project.type)) {
+  if (!project || !isSupportType(project.type)) {
     notFound()
   }
 
@@ -61,7 +61,7 @@ export default async function InterceptedProjectInvestPage({
       headerMode="close"
       refreshOnClose={true}
     >
-      <ProjectInvestOneFlow
+      <ProjectSupportOneFlow
         project={{
           id: project.id,
           slug: project.slug,

@@ -1,6 +1,6 @@
 /**
- * Investment Module Types
- * Projects, Partners, Investments
+ * Support Module Types
+ * Projects, Partners, Producer Supports
  */
 
 import { z } from 'zod'
@@ -95,11 +95,11 @@ export const PartnerSchema = z.object({
 
 export type Partner = z.infer<typeof PartnerSchema>
 
-// Investment Type (for points calculation)
-export type InvestmentType = 'beehive' | 'olive_tree' | 'vineyard'
+// Support Type (for points calculation)
+export type SupportType = 'beehive' | 'olive_tree' | 'vineyard'
 
-export type Investment = {
-  type: InvestmentType
+export type ProducerSupport = {
+  type: SupportType
   amount_eur: number
   bonus_percentage: number
 }
@@ -110,6 +110,6 @@ export type PointsCalculation = {
   bonus_points: number
   total_points: number
   euro_value_equivalent: number
-  investment_type?: string
+  support_type?: string
   calculated_at: Date
 }

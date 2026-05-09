@@ -1,27 +1,27 @@
 import { requireAuth } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockInvestments, getMockOrders, type MockOrderRecord } from '@/lib/mock/mock-member-data'
+import { getMockSupports, getMockOrders, type MockOrderRecord } from '@/lib/mock/mock-member-data'
 import { getCurrentMockOrders } from '@/lib/mock/mock-order-history-server'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentIsoDate } from '@/lib/date-utils'
 import { ContributionsShell } from './_features/contributions-shell'
 import { ActivityList } from './_features/activity-list'
 
-type InvestmentProject = {
+type SupportProject = {
   name_default: string | null
   slug: string | null
   status: string | null
   cover_image_url?: string | null
 }
 
-type NormalizedInvestment = {
+type NormalizedSupport = {
   id: string
   amount_eur: number
   amount_points: number
   status: string
   created_at: string
-  project: InvestmentProject | null
-  type: 'investment'
+  project: SupportProject | null
+  type: 'support'
 }
 
 type NormalizedDonation = {
@@ -30,7 +30,7 @@ type NormalizedDonation = {
   amount_points: number
   status: string
   created_at: string
-  project: InvestmentProject | null
+  project: SupportProject | null
   type: 'donation'
 }
 
@@ -48,7 +48,7 @@ type NormalizedOrder = {
   type: 'order'
 }
 
-const normalizeProject = (raw: unknown): InvestmentProject | null => {
+const normalizeProject = (raw: unknown): SupportProject | null => {
   const source = Array.isArray(raw) ? raw[0] : raw
   if (!source || typeof source !== 'object') return null
   const record = source as Record<string, unknown>
@@ -65,10 +65,10 @@ const normalizeProject = (raw: unknown): InvestmentProject | null => {
   }
 }
 
-export default async function InvestmentsPage() {
+export default async function ContributionsPage() {
   const user = await requireAuth()
-  const rawInvestments = isMockDataSource
-    ? getMockInvestments(user.id)
+  const rawSupports = isMockDataSource
+    ? getMockSupports(user.id)
     : (
         await (await createClient())
           .from('investments')
@@ -90,14 +90,14 @@ export default async function InvestmentsPage() {
           .order('created_at', { ascending: false })
       ).data || []
 
-  const userInvestments: NormalizedInvestment[] = (rawInvestments || []).map((inv) => ({
+  const userSupports: NormalizedSupport[] = (rawSupports || []).map((inv) => ({
     id: String(inv.id),
     amount_eur: Number(inv.amount_eur_equivalent || 0),
     amount_points: Number(inv.amount_points || 0),
     status: String(inv.status || 'pending'),
     created_at: String(inv.created_at || getCurrentIsoDate()),
     project: normalizeProject(inv.project),
-    type: 'investment',
+    type: 'support',
   }))
 
   // Fetch donations
@@ -174,16 +174,16 @@ export default async function InvestmentsPage() {
     }
   })
 
-  const totalInvested = [...userInvestments, ...userDonations].reduce((sum, item) => sum + item.amount_eur, 0)
-  const totalPoints = [...userInvestments, ...userDonations, ...userOrders].reduce((sum, item) => sum + item.amount_points, 0)
+  const totalSupported = [...userSupports, ...userDonations].reduce((sum, item) => sum + item.amount_eur, 0)
+  const totalPoints = [...userSupports, ...userDonations, ...userOrders].reduce((sum, item) => sum + item.amount_points, 0)
 
   return (
     <ContributionsShell title="Historique">
       <ActivityList
-        userInvestments={userInvestments}
+        userSupports={userSupports}
         userDonations={userDonations}
         userOrders={userOrders}
-        totalInvested={totalInvested}
+        totalSupported={totalSupported}
         totalPoints={totalPoints}
       />
     </ContributionsShell>

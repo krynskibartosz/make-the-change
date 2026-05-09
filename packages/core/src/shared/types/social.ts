@@ -204,7 +204,7 @@ export interface GuildMember {
 // ============================================================================
 
 export type XpSourceType =
-  | 'investment'
+  | 'support'
   | 'comment'
   | 'share'
   | 'reaction'

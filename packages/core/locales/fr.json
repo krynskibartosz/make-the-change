@@ -39,7 +39,7 @@
     "login": "Connexion",
     "register": "S'inscrire",
     "profile": "Profil",
-    "my_investments": "Mes investissements",
+    "my_contributions": "Mes contributions",
     "my_orders": "Mes commandes",
     "my_points": "Mes points",
     "referrals": "Parrainage",
@@ -858,16 +858,16 @@
         "visit_website": "Visiter le site web"
       }
     },
-    "invest_page": {
+    "support_page": {
       "back_to_project": "Retour au projet",
-      "title": "Investir dans l'avenir",
+      "title": "Soutenir ce projet",
       "supporting": "Vous soutenez {project}",
       "steps": {
-        "invest": "Investir",
+        "invest": "Soutien",
         "payment": "Paiement",
         "confirm": "Confirmation"
       },
-      "amount_label": "Combien souhaitez-vous investir ?",
+      "amount_label": "Combien souhaitez-vous contribuer ?",
       "custom_amount_placeholder": "Montant libre (min. 10€)",
       "impact_title": "Impact estimé",
       "impact_description": "~{trees} arbres plantés ou protégés",
@@ -879,8 +879,8 @@
       "confirm": "Confirmer",
       "confirm_with_amount": "Confirmer {amount}",
       "legal_prefix": "En confirmant, vous acceptez nos",
-      "legal_terms": "Conditions Générales d'Investissement",
-      "legal_suffix": "L'investissement comporte des risques."
+      "legal_terms": "Conditions Générales de Soutien",
+      "legal_suffix": "Votre soutien est définitif."
     }
   },
   "products": {
@@ -1371,12 +1371,12 @@
     "new_password": "Nouveau mot de passe",
     "confirm_new_password": "Confirmer le nouveau mot de passe"
   },
-  "investments": {
-    "title": "Mes investissements",
-    "total": "Total investi",
+  "contributions": {
+    "title": "Mes contributions",
+    "total": "Total contribué",
     "history": "Historique",
-    "empty": "Vous n'avez pas encore d'investissement",
-    "start_investing": "Commencer à investir",
+    "empty": "Vous n'avez pas encore de contribution",
+    "start_investing": "Découvrir les projets",
     "status": {
       "active": "Actif",
       "completed": "Terminé",

@@ -39,7 +39,7 @@
     "login": "Login",
     "register": "Sign up",
     "profile": "Profile",
-    "my_investments": "My investments",
+    "my_contributions": "My contributions",
     "my_orders": "My orders",
     "my_points": "My points",
     "open_cart": "Open cart",
@@ -879,16 +879,16 @@
         "visit_website": "Visit website"
       }
     },
-    "invest_page": {
+    "support_page": {
       "back_to_project": "Back to project",
-      "title": "Invest in the future",
+      "title": "Support this project",
       "supporting": "You are supporting {project}",
       "steps": {
-        "invest": "Invest",
+        "invest": "Support",
         "payment": "Payment",
         "confirm": "Confirm"
       },
-      "amount_label": "How much would you like to invest?",
+      "amount_label": "How much would you like to contribute?",
       "custom_amount_placeholder": "Custom amount (min. €10)",
       "impact_title": "Estimated impact",
       "impact_description": "~{trees} trees planted or protected",
@@ -900,8 +900,8 @@
       "confirm": "Confirm",
       "confirm_with_amount": "Confirm {amount}",
       "legal_prefix": "By confirming, you accept our",
-      "legal_terms": "General Investment Terms",
-      "legal_suffix": "Investment carries risks."
+      "legal_terms": "General Support Terms",
+      "legal_suffix": "Your support is final."
     }
   },
   "products": {
@@ -1374,12 +1374,12 @@
     "new_password": "New password",
     "confirm_new_password": "Confirm new password"
   },
-  "investments": {
-    "title": "My investments",
-    "total": "Total invested",
+  "contributions": {
+    "title": "My contributions",
+    "total": "Total contributed",
     "history": "History",
-    "empty": "You don't have any investments yet",
-    "start_investing": "Start investing",
+    "empty": "You don't have any contributions yet",
+    "start_investing": "Discover projects",
     "status": {
       "active": "Active",
       "completed": "Completed",

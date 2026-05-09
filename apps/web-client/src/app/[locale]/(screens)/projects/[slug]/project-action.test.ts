@@ -23,7 +23,7 @@ describe('getProjectPrimaryAction', () => {
         type: 'beehive',
       }),
     ).toEqual({
-      href: '/projects/antsirabe/invest',
+      href: '/projects/antsirabe/support',
       label: 'Soutenir ce projet',
       kind: 'support',
     })

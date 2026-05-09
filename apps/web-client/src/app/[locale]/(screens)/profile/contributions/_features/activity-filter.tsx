@@ -1,8 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-
-type FilterType = 'all' | 'investment' | 'donation' | 'order'
+type FilterType = 'all' | 'support' | 'donation' | 'order'
 
 type ActivityFilterProps = {
   onFilterChange: (filter: FilterType) => void
@@ -23,9 +21,9 @@ export function ActivityFilter({ onFilterChange, currentFilter }: ActivityFilter
         Tout
       </button>
       <button
-        onClick={() => onFilterChange('investment')}
+        onClick={() => onFilterChange('support')}
         className={`flex-1 py-2 rounded-lg text-sm transition-all ${
-          currentFilter === 'investment'
+          currentFilter === 'support'
             ? 'bg-white/15 text-white font-semibold shadow-sm'
             : 'text-gray-500 hover:text-gray-300 font-medium'
         }`}

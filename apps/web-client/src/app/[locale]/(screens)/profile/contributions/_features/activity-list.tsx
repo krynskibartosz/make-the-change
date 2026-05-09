@@ -6,26 +6,26 @@ import { useRouter } from '@/i18n/navigation'
 import { formatDate } from '@/lib/utils'
 import { ActivityFilter } from './activity-filter'
 import {
-  adaptNormalizedInvestmentToProducerSupport,
+  adaptNormalizedSupportToProducerSupport,
   adaptNormalizedDonationToViewModel,
   type ProducerSupportViewModel,
 } from '@/lib/mappers/producer-support-adapters'
 
-type InvestmentProject = {
+type SupportProject = {
   name_default: string | null
   slug: string | null
   status: string | null
   cover_image_url?: string | null
 }
 
-type NormalizedInvestment = {
+type NormalizedSupport = {
   id: string
   amount_eur: number
   amount_points: number
   status: string
   created_at: string
-  project: InvestmentProject | null
-  type: 'investment'
+  project: SupportProject | null
+  type: 'support'
 }
 
 type NormalizedDonation = {
@@ -34,7 +34,7 @@ type NormalizedDonation = {
   amount_points: number
   status: string
   created_at: string
-  project: InvestmentProject | null
+  project: SupportProject | null
   type: 'donation'
 }
 
@@ -52,7 +52,7 @@ type NormalizedOrder = {
   type: 'order'
 }
 
-type UnifiedActivity = NormalizedInvestment | NormalizedDonation | NormalizedOrder
+type UnifiedActivity = NormalizedSupport | NormalizedDonation | NormalizedOrder
 
 const STATUS_LABELS: Record<string, string> = {
   active: 'Actif',
@@ -85,46 +85,46 @@ const formatEuros = (value: number): string => {
   }).format(Math.round(value))
 }
 
-type FilterType = 'all' | 'investment' | 'donation' | 'order'
+type FilterType = 'all' | 'support' | 'donation' | 'order'
 
 type ActivityListProps = {
-  userInvestments: NormalizedInvestment[]
+  userSupports: NormalizedSupport[]
   userDonations: NormalizedDonation[]
   userOrders: NormalizedOrder[]
-  totalInvested: number
+  totalSupported: number
   totalPoints: number
 }
 
-export function ActivityList({ userInvestments, userDonations, userOrders, totalInvested, totalPoints }: ActivityListProps) {
+export function ActivityList({ userSupports, userDonations, userOrders, totalSupported, totalPoints }: ActivityListProps) {
   const [filter, setFilter] = useState<FilterType>('all')
   const router = useRouter()
 
-  const allActivities: UnifiedActivity[] = [...userInvestments, ...userDonations, ...userOrders].sort(
+  const allActivities: UnifiedActivity[] = [...userSupports, ...userDonations, ...userOrders].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
   )
 
   const filteredActivities = allActivities.filter((activity) => {
     if (filter === 'all') return true
-    if (filter === 'investment') return activity.type === 'investment'
+    if (filter === 'support') return activity.type === 'support'
     if (filter === 'donation') return activity.type === 'donation'
     if (filter === 'order') return activity.type === 'order'
     return true
   })
 
   // Calculate filtered totals for bento display
-  const filteredInvestments = filter === 'all' || filter === 'investment' ? userInvestments : []
+  const filteredSupports = filter === 'all' || filter === 'support' ? userSupports : []
   const filteredDonations = filter === 'all' || filter === 'donation' ? userDonations : []
   const filteredOrders = filter === 'all' || filter === 'order' ? userOrders : []
-  const displayInvested = [...filteredInvestments, ...filteredDonations].reduce((sum, item) => sum + item.amount_eur, 0)
-  const displayPoints = [...filteredInvestments, ...filteredDonations, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
+  const displayContributed = [...filteredSupports, ...filteredDonations].reduce((sum, item) => sum + item.amount_eur, 0)
+  const displayPoints = [...filteredSupports, ...filteredDonations, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
   const displayOrderEuros = filteredOrders.reduce((sum, order) => sum + order.amount_eur, 0)
 
   // Determine bento labels based on filter
   const leftLabel = filter === 'order' ? 'Total Achat' : 'Total Soutiens'
-  const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayInvested
+  const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayContributed
   const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'Credits Impact') : '€'
-  const rightLabel = filter === 'investment' ? 'Credits Impact gagnés' : 'Credits Impact dépensés'
-  const rightValue = filter === 'investment' ? userInvestments.reduce((sum, inv) => sum + inv.amount_points, 0) : displayPoints
+  const rightLabel = filter === 'support' ? 'Credits Impact gagnés' : 'Credits Impact dépensés'
+  const rightValue = filter === 'support' ? userSupports.reduce((sum, s) => sum + s.amount_points, 0) : displayPoints
   const rightUnit = ''
 
   return (
@@ -165,16 +165,15 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
       {filteredActivities.length > 0 ? (
         <div className="relative z-10 flex flex-col gap-3 px-6">
           {filteredActivities.map((activity) => {
-            if (activity.type === 'investment') {
-              const investment = activity
-              // [R6] Adapter vers ProducerSupportViewModel pour affichage moderne
-              const support = adaptNormalizedInvestmentToProducerSupport(investment)
+            if (activity.type === 'support') {
+              const supportItem = activity
+              const support = adaptNormalizedSupportToProducerSupport(supportItem)
               const statusLabel = support.statusLabel
 
               const content = (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/5 bg-[#1A1F26] p-4 transition-colors hover:bg-white/[0.03]"
-                  onClick={() => router.push(`/transactions/${support.id}?type=investment`)}
+                  onClick={() => router.push(`/transactions/${support.id}?type=support`)}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-4">
                     {support.project.coverImageUrl ? (
@@ -211,7 +210,7 @@ export function ActivityList({ userInvestments, userDonations, userOrders, total
                 </div>
               )
 
-              return <div key={investment.id}>{content}</div>
+              return <div key={supportItem.id}>{content}</div>
             } else if (activity.type === 'donation') {
               const donation = activity
               // [R6] Adapter vers view-model donation pour affichage moderne

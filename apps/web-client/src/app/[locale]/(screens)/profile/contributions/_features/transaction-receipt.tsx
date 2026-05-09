@@ -3,7 +3,7 @@
 import { X, Download, ExternalLink, Package, MapPin, Leaf } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import {
-  adaptNormalizedInvestmentToProducerSupport,
+  adaptNormalizedSupportToProducerSupport,
   adaptNormalizedDonationToViewModel,
   type ProducerSupportViewModel,
 } from '@/lib/mappers/producer-support-adapters'
@@ -11,23 +11,23 @@ import {
 // [R7] Types legacy pour les props - conservés pour compatibilité
 type TransactionReceiptProps = {
   transactionId: string
-  transactionType: 'investment' | 'donation' | 'order'
+  transactionType: 'support' | 'donation' | 'order'
 }
 
 export function TransactionReceipt({ transactionId, transactionType }: TransactionReceiptProps) {
   // [R7] Mock data pour démonstration - à remplacer par données réelles
-  const isInvestment = transactionType === 'investment'
+  const isSupport = transactionType === 'support'
   const isDonation = transactionType === 'donation'
-  const isProducerSupport = isInvestment // legacy 'investment' = soutien producteur
+  const isProducerSupport = isSupport
 
   // [R7] Données legacy mock avec discriminant type
-  const legacyInvestmentData = {
+  const legacySupportData = {
     id: transactionId,
     amount_eur: 390,
     amount_points: 3900,
     status: 'active',
     created_at: '2026-04-14T14:32:00.000Z',
-    type: 'investment' as const,
+    type: 'support' as const,
     project: {
       name_default: 'Ruchers d\'apiculteurs indépendants',
       slug: 'miellerie-manakara',
@@ -75,8 +75,8 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
   }
 
   // [R7] Adapter vers view-models selon le type
-  const supportVM: ProducerSupportViewModel | null = isInvestment 
-    ? adaptNormalizedInvestmentToProducerSupport(legacyInvestmentData)
+  const supportVM: ProducerSupportViewModel | null = isSupport
+    ? adaptNormalizedSupportToProducerSupport(legacySupportData)
     : null
   
   const donationVM = isDonation
@@ -95,7 +95,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     { label: 'Suivi disponible', date: 'Dans votre historique', status: 'completed' as const },
   ]
 
-  const data = isInvestment || isDonation
+  const data = isSupport || isDonation
     ? {
         name: supportVM?.project.name || donationVM?.project.name || 'Projet',
         date: formatFullDate(supportVM?.createdAt || donationVM?.createdAt || ''),
@@ -109,7 +109,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/default.jpg',
         contributionTypeLabel: supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel || 'Contribution',
         isDonation,
-        isProducerSupport: !isDonation && (isInvestment || false),
+        isProducerSupport: !isDonation && (isSupport || false),
         timeline: isDonation ? donationTimeline : supportTimeline,
       }
     : orderData
@@ -125,14 +125,14 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         />
         <h2 className="text-lg font-bold text-white mb-1">{data.name}</h2>
         <span className="text-sm text-gray-400 mb-4">{data.date}</span>
-        {!isInvestment && <span className="text-xs text-gray-500 mb-2">{orderData.orderNumber}</span>}
+        {!isSupport && <span className="text-xs text-gray-500 mb-2">{orderData.orderNumber}</span>}
         <div className="text-5xl font-black text-white tracking-tighter mb-4">
           {formatEuros(data.amount)}
           <span className="text-2xl text-lime-400">
-            {isInvestment ? '€' : ` ${orderData.amountUnit}`}
+            {isSupport ? '€' : ` ${orderData.amountUnit}`}
           </span>
         </div>
-        {(isInvestment || isDonation) && (
+        {(isSupport || isDonation) && (
           <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">
             {supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel}
           </span>
@@ -257,7 +257,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
           )}
         </button>
         <button className="w-full bg-transparent text-lime-400 font-bold text-sm h-12 rounded-2xl transition-all flex items-center justify-center gap-2">
-          {isInvestment ? (
+          {isSupport ? (
             <>
               <ExternalLink className="w-[18px] h-[18px]" />
               Voir la page du projet

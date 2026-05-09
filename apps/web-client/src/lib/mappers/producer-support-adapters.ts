@@ -2,14 +2,14 @@
  * Adapters Producer Support — R5
  *
  * Ce fichier fournit des adapters pour convertir les structures legacy
- * (`NormalizedInvestment`, `MockInvestmentRecord`) vers le view-model cible
+ * (`NormalizedInvestment`, `MockSupportRecord`) vers le view-model cible
  * `ProducerSupportViewModel` sans modifier les types source.
  *
  * [CIBLE_VALIDEE] P0-1 : Soutien producteur = contribution économique sans
  * rendement ni propriété, distinct du don pur et de l'achat produit.
  *
  * [ACTUEL_CODE] + [LEGACY] Les types sources (`NormalizedInvestment`,
- * `MockInvestmentRecord`) restent inchangés pour compatibilité.
+ * `MockSupportRecord`) restent inchangés pour compatibilité.
  *
  * [ADAPTERS] Ces fonctions permettent une migration progressive vers
  * `ProducerSupportViewModel` dans les nouveaux composants UI.
@@ -25,7 +25,7 @@ import type { ProducerSupportViewModel } from './producer-support.mapper'
  * Mirroir de NormalizedInvestment depuis investments/page.tsx
  * [LEGACY_COMPAT] Type local utilisé pour normaliser les données Supabase/mock
  */
-type NormalizedInvestmentLegacy = {
+type NormalizedSupportLegacy = {
   id: string
   amount_eur: number
   amount_points: number
@@ -37,11 +37,11 @@ type NormalizedInvestmentLegacy = {
     status: string | null
     cover_image_url?: string | null
   } | null
-  type: 'investment'
+  type: 'support'
 }
 
 /**
- * Mirroir de NormalizedDonation depuis investments/page.tsx
+ * Mirroir de NormalizedDonation depuis contributions/page.tsx
  * [LEGACY_COMPAT] Type local pour les donations
  */
 type NormalizedDonationLegacy = {
@@ -60,10 +60,10 @@ type NormalizedDonationLegacy = {
 }
 
 /**
- * Mirroir de MockInvestmentRecord depuis mock-member-data.ts
+ * Mirroir de MockSupportRecord depuis mock-member-data.ts
  * [LEGACY_COMPAT] Structure mock pour les investissements
  */
-type MockInvestmentRecordLegacy = {
+type MockSupportRecordLegacy = {
   id: string
   amount_eur_equivalent: number
   amount_points: number
@@ -89,8 +89,8 @@ type MockInvestmentRecordLegacy = {
  * |-------|-------------|--------------|---------------------|
  * | `amount_points` | NormalizedInvestment | [CREDITS_IMPACT_CLAIR] | Montant en Credits Impact reçus |
  * | `amount_eur` | NormalizedInvestment | [EUR_CLAIR] | Montant en euros contribué |
- * | `amount_eur_equivalent` | MockInvestmentRecord | [EUR_CLAIR] | Montant en euros contribué |
- * | `returns_received_points` | MockInvestmentRecord | [AMBIGU_A_CLASSIFIER] | Historique "retours" - à clarifier |
+ * | `amount_eur_equivalent` | MockSupportRecord | [EUR_CLAIR] | Montant en euros contribué |
+ * | `returns_received_points` | MockSupportRecord | [AMBIGU_A_CLASSIFIER] | Historique "retours" - à clarifier |
  * | `type: 'investment'` | NormalizedInvestment | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
  * | `type: 'donation'` | NormalizedDonation | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
  * | `price_points` | Produit/Commande | [CREDITS_IMPACT_CLAIR] | Prix en Credits Impact |
@@ -114,11 +114,11 @@ type MockInvestmentRecordLegacy = {
  * @returns View-model cible pour affichage moderne
  *
  * @example
- * const support = adaptNormalizedInvestmentToProducerSupport(normalizedInv)
+ * const support = adaptNormalizedSupportToProducerSupport(normalizedInv)
  * // support.contributionTypeLabel === "Soutien producteur"
  */
-export function adaptNormalizedInvestmentToProducerSupport(
-  record: NormalizedInvestmentLegacy,
+export function adaptNormalizedSupportToProducerSupport(
+  record: NormalizedSupportLegacy,
 ): ProducerSupportViewModel {
   return {
     id: record.id,
@@ -139,7 +139,7 @@ export function adaptNormalizedInvestmentToProducerSupport(
 }
 
 /**
- * Adapte un MockInvestmentRecord legacy vers ProducerSupportViewModel.
+ * Adapte un MockSupportRecord legacy vers ProducerSupportViewModel.
  *
  * [ADAPTER_R5] Conversion depuis la structure mock.
  * Alias de mapInvestmentToProducerSupport pour cohérence API.
@@ -147,8 +147,8 @@ export function adaptNormalizedInvestmentToProducerSupport(
  * @param record - Enregistrement mock depuis mock-member-data.ts
  * @returns View-model cible pour affichage moderne
  */
-export function adaptMockInvestmentToProducerSupport(
-  record: MockInvestmentRecordLegacy,
+export function adaptMockSupportToProducerSupport(
+  record: MockSupportRecordLegacy,
 ): ProducerSupportViewModel {
   return {
     id: record.id,
@@ -253,26 +253,26 @@ function mapLegacyStatusToLabel(
 /**
  * Adapte une liste de NormalizedInvestment vers ProducerSupportViewModel[].
  */
-export function adaptNormalizedInvestmentsToProducerSupports(
-  records: NormalizedInvestmentLegacy[],
+export function adaptNormalizedSupportsToProducerSupports(
+  records: NormalizedSupportLegacy[],
 ): ProducerSupportViewModel[] {
-  return records.map(adaptNormalizedInvestmentToProducerSupport)
+  return records.map(adaptNormalizedSupportToProducerSupport)
 }
 
 /**
- * Adapte une liste de MockInvestmentRecord vers ProducerSupportViewModel[].
+ * Adapte une liste de MockSupportRecord vers ProducerSupportViewModel[].
  */
-export function adaptMockInvestmentsToProducerSupports(
-  records: MockInvestmentRecordLegacy[],
+export function adaptMockSupportsToProducerSupports(
+  records: MockSupportRecordLegacy[],
 ): ProducerSupportViewModel[] {
-  return records.map(adaptMockInvestmentToProducerSupport)
+  return records.map(adaptMockSupportToProducerSupport)
 }
 
 // ============================================================================
 // Re-export pour compatibilité
 // ============================================================================
 
-export type { NormalizedInvestmentLegacy, MockInvestmentRecordLegacy }
+export type { NormalizedSupportLegacy, MockSupportRecordLegacy }
 
 // Re-export du view-model cible depuis le mapper original
 export type { ProducerSupportViewModel } from './producer-support.mapper'

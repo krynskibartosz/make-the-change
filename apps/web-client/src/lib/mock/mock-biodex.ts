@@ -1172,7 +1172,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
 ]
 
 type MockParticipationGraph = {
-  investedProjectSlugs: Set<string>
+  supportedProjectSlugs: Set<string>
   orderedProductIds: Set<string>
   completedChallengeIds: Set<string>
   currentChallengeProgress: Map<string, number>
@@ -1184,7 +1184,7 @@ const getParticipationGraph = async (
 ): Promise<MockParticipationGraph> => {
   if (!viewerId) {
     return {
-      investedProjectSlugs: new Set<string>(),
+      supportedProjectSlugs: new Set<string>(),
       orderedProductIds: new Set<string>(),
       completedChallengeIds: new Set<string>(),
       currentChallengeProgress: new Map<string, number>(),
@@ -1193,7 +1193,7 @@ const getParticipationGraph = async (
 
   // Import server-only modules only when this function is called
   const { getCurrentMockCompletedChallengeSeriesIds, getCurrentMockDailyChallenges } = await import('@/lib/mock/mock-challenge-progress-server')
-  const { getMockInvestments } = await import('@/lib/mock/mock-member-data')
+  const { getMockSupports } = await import('@/lib/mock/mock-member-data')
   const { getCurrentMockOrders } = await import('@/lib/mock/mock-order-history-server')
 
   const [orders, completedChallengeIds, currentDailyChallenges] = await Promise.all([
@@ -1202,8 +1202,8 @@ const getParticipationGraph = async (
     getCurrentMockDailyChallenges({ viewerId, faction: faction ?? null }),
   ])
 
-  const investedProjectSlugs = new Set(
-    getMockInvestments(viewerId).map((investment) => investment.project.slug),
+  const supportedProjectSlugs = new Set(
+    getMockSupports(viewerId).map((s) => s.project.slug),
   )
   const orderedProductIds = new Set(
     orders.flatMap((order) =>
@@ -1214,7 +1214,7 @@ const getParticipationGraph = async (
   )
 
   return {
-    investedProjectSlugs,
+    supportedProjectSlugs,
     orderedProductIds,
     completedChallengeIds: new Set(completedChallengeIds),
     currentChallengeProgress: new Map(
@@ -1233,7 +1233,7 @@ const cloneSpecies = async (
   const associatedProjects =
     species.associated_projects?.map((project) => ({
       ...project,
-      userParticipation: graph.investedProjectSlugs.has(project.slug || ''),
+      userParticipation: graph.supportedProjectSlugs.has(project.slug || ''),
     })) || []
 
   const associatedChallenges =
@@ -1247,18 +1247,18 @@ const cloneSpecies = async (
 
   if (species.id === MOCK_SPECIES_BLACK_BEE_ID) {
     isUnlocked =
-      graph.investedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) &&
+      graph.supportedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) &&
       graph.completedChallengeIds.has(MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID)
     progressionLevel =
-      graph.investedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) ||
+      graph.supportedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) ||
       graph.orderedProductIds.has(MOCK_PRODUCT_MANAKARA_ID)
         ? 2
         : 1
   } else if (species.id === MOCK_SPECIES_OLIVE_TREE_ID) {
-    isUnlocked = graph.investedProjectSlugs.has(MOCK_PROJECT_SARDINIA_SLUG)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_SARDINIA_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   } else if (species.id === MOCK_SPECIES_CORAL_ID || species.id === MOCK_SPECIES_ACROPORA_ID) {
-    isUnlocked = graph.investedProjectSlugs.has(MOCK_PROJECT_CORAL_SLUG)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_CORAL_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   } else if (
     species.id === MOCK_SPECIES_BUMBLEBEE_ID ||
@@ -1269,7 +1269,7 @@ const cloneSpecies = async (
     species.id === MOCK_SPECIES_BUTTERFLY_PEACOCK_ID ||
     species.id === MOCK_SPECIES_HEDGEHOG_ID
   ) {
-    isUnlocked = graph.investedProjectSlugs.has(MOCK_PROJECT_HABEEBEE_SLUG)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_HABEEBEE_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   } else if (
     species.id === MOCK_SPECIES_INDRI_ID ||
@@ -1284,10 +1284,10 @@ const cloneSpecies = async (
     species.id === MOCK_SPECIES_GECKO_ID ||
     species.id === MOCK_SPECIES_LITTLE_OWL_ID
   ) {
-    isUnlocked = graph.investedProjectSlugs.has(MOCK_PROJECT_ANTSIRABE_SLUG)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_ANTSIRABE_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   } else if (species.id === MOCK_SPECIES_HOOPoe_ID) {
-    isUnlocked = graph.investedProjectSlugs.has(MOCK_PROJECT_SARDINIA_SLUG)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_SARDINIA_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   } else if (
     species.id === MOCK_SPECIES_CLOWNFISH_ID ||
@@ -1296,7 +1296,7 @@ const cloneSpecies = async (
     species.id === MOCK_SPECIES_SEAHORSE_ID ||
     species.id === MOCK_SPECIES_GREEN_TURTLE_ID
   ) {
-    isUnlocked = graph.investedProjectSlugs.has(MOCK_PROJECT_CORAL_SLUG)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_CORAL_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   }
 

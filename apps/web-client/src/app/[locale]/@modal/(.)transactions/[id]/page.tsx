@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { TransactionReceipt } from '@/app/[locale]/(screens)/profile/investments/_features/transaction-receipt'
+import { TransactionReceipt } from '@/app/[locale]/(screens)/profile/contributions/_features/transaction-receipt'
 
 interface InterceptedTransactionPageProps {
   params: Promise<{
@@ -8,7 +8,7 @@ interface InterceptedTransactionPageProps {
     id: string
   }>
   searchParams: Promise<{
-    type?: 'investment' | 'order'
+    type?: 'support' | 'order'
   }>
 }
 
@@ -21,7 +21,7 @@ export default async function InterceptedTransactionPage({ params, searchParams 
   }
 
   return (
-    <FullScreenSlideModal title="Détail de l'opération" fallbackHref="/profile/investments" headerMode="close">
+    <FullScreenSlideModal title="Détail de l'opération" fallbackHref="/profile/contributions" headerMode="close">
       <TransactionReceipt transactionId={id} transactionType={type} />
     </FullScreenSlideModal>
   )

@@ -178,9 +178,9 @@ export async function ProjectQuickView({
       : null
 
   const isDonationProject = !!(project.is_donation_project && project.donation_options)
-  const investPath = isDonationProject
+  const supportPath = isDonationProject
     ? `/projects/${project.slug}/donate?source=quick_view`
-    : `/projects/${project.slug}/invest?source=quick_view`
+    : `/projects/${project.slug}/support?source=quick_view`
 
   const projectContext =
     producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
@@ -320,6 +320,7 @@ export async function ProjectQuickView({
               producerName={project.producer ? organizerName : undefined}
               producerDescription={project.producer ? organizerDescription : undefined}
               producerLabel={partnerLabel}
+              producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
               projectType={project.type}
               isDonationProject={isDonationProject}
             />
@@ -500,7 +501,7 @@ export async function ProjectQuickView({
               {t('detail.funding_closed')}
             </Button>
           ) : (
-            <Link href={investPath} className="block w-full">
+            <Link href={supportPath} className="block w-full">
               <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
                 {isDonationProject ? 'Faire un don' : 'Soutenir ce projet'}
               </Button>
