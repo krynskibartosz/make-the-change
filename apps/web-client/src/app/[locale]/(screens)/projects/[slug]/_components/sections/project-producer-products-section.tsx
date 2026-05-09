@@ -14,8 +14,13 @@ export function ProjectProducerProductsSection({ products }: ProjectProducerProd
 
   return (
     <section className="w-full max-w-full overflow-hidden">
-      <h3 className="mb-1 text-xl font-bold text-white">Produits du partenaire</h3>
-      <p className="mb-4 text-xs text-white/45">Accessibles avec vos Credits Impact</p>
+      <div className="mb-4 flex items-baseline justify-between">
+        <div>
+          <h3 className="text-xl font-bold text-white">Produits du partenaire</h3>
+          <p className="mt-0.5 text-xs text-white/45">Accessibles avec vos Crédits Impact</p>
+        </div>
+        <span className="shrink-0 text-sm text-white/20">→</span>
+      </div>
 
       <div className="relative -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pl-4 sm:-mx-5 sm:pl-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {products.map((product) => (

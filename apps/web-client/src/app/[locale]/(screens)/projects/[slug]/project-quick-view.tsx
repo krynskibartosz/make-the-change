@@ -1,5 +1,5 @@
 import { Badge, Button, Progress } from '@make-the-change/core/ui'
-import { Globe } from 'lucide-react'
+import { ChevronRight, Globe } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
@@ -365,6 +365,7 @@ export async function ProjectQuickView({
                       {organizerDescription}
                     </p>
                   </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-white/20" />
                 </a>
               ) : (
                 <div className="flex w-full items-center gap-4 px-4 py-4 sm:px-5">
@@ -462,13 +463,14 @@ export async function ProjectQuickView({
             {/* 7. BioDex */}
             {resolvedSpecies && resolvedSpecies.length > 0 ? (
               <div className="mt-10 px-4 sm:px-5">
-                <ProjectSpeciesTeaser
-                  species={resolvedSpecies}
-                  accentColor={glowRgba(glow, 0.75)}
-                />
                 <ProjectBiodexSheet
                   species={resolvedSpecies}
                   isDonationProject={isDonationProject}
+                />
+                <ProjectSpeciesTeaser
+                  species={resolvedSpecies}
+                  accentColor={glowRgba(glow, 0.75)}
+                  showHeader={false}
                 />
               </div>
             ) : null}

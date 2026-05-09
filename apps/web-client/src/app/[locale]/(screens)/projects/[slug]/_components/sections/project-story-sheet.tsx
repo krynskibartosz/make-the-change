@@ -75,10 +75,10 @@ export function ProjectStorySheet({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-white/50 transition-colors hover:text-white/80"
+        className="mt-3 flex w-full items-center justify-between rounded-xl py-2.5 text-left transition-colors hover:bg-white/[0.03] active:bg-white/[0.05]"
       >
-        Lire l&apos;histoire du projet
-        <ChevronRight className="h-3.5 w-3.5" />
+        <span className="text-sm font-semibold text-white/55">Lire l&apos;histoire du projet</span>
+        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-white/25" />
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title={title}>

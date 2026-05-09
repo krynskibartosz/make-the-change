@@ -184,6 +184,38 @@ function ProjectSpeciesTeaser({ species }: { species: ProjectSpeciesPreview[] | 
   )
 }
 
+const FRENCH_TO_ISO: Record<string, string> = {
+  'madagascar': 'MG', 'france': 'FR', 'belgique': 'BE', 'italie': 'IT',
+  'espagne': 'ES', 'indonésie': 'ID', 'indonesie': 'ID', 'portugal': 'PT',
+  'allemagne': 'DE', 'maroc': 'MA', 'sénégal': 'SN', 'senegal': 'SN',
+  'kenya': 'KE', 'australie': 'AU', 'canada': 'CA', 'royaume-uni': 'GB',
+  'suisse': 'CH', 'pays-bas': 'NL', 'grèce': 'GR', 'mexique': 'MX',
+  'brésil': 'BR', 'bresil': 'BR', 'inde': 'IN', 'afrique du sud': 'ZA',
+}
+
+function getCountryFlag(iso: string): string {
+  return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 - 65 + c.charCodeAt(0))).join('')
+}
+
+function resolveLocationDisplay(
+  code: string | null,
+  city: string | null,
+  locale: string,
+): { flag: string; label: string } | null {
+  if (!code) return null
+  const iso = /^[A-Z]{2}$/i.test(code.trim())
+    ? code.trim().toUpperCase()
+    : FRENCH_TO_ISO[code.trim().toLowerCase()] ?? null
+  if (!iso) return null
+  const flag = getCountryFlag(iso)
+  let countryName = iso
+  try {
+    countryName = new Intl.DisplayNames([locale], { type: 'region' }).of(iso) ?? iso
+  } catch { /* ignore */ }
+  const label = city ? `${countryName} · ${city}` : countryName
+  return { flag, label }
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
   const locale = useLocale()
@@ -291,10 +323,11 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         <div className="flex flex-col gap-8 px-6 pb-40">
           {normalizedProjects.map((project) => {
             const imageUrl = sanitizeImageUrl(project.hero_image_url)
-            const location =
-              project.address_city && project.address_country_code
-                ? `${project.address_city}, ${project.address_country_code}`
-                : 'Localisation mystère'
+            const locationDisplay = resolveLocationDisplay(
+              project.address_country_code,
+              project.address_city,
+              locale,
+            )
 
             // Impact réel cohérent avec project-species-impact-section.tsx
             const impact = getProjectImpactDisplay(project)

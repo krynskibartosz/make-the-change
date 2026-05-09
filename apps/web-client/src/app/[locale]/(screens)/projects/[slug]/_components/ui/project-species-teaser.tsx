@@ -28,11 +28,13 @@ function isKeySpecies(role: string): boolean {
 type ProjectSpeciesTeaserProps = {
   species?: ProjectSpecies[] | null
   accentColor?: string
+  showHeader?: boolean
 }
 
 export function ProjectSpeciesTeaser({
   species,
   accentColor = 'rgba(52, 211, 153, 0.75)',
+  showHeader = true,
 }: ProjectSpeciesTeaserProps) {
   if (!species || species.length === 0) return null
 
@@ -50,17 +52,19 @@ export function ProjectSpeciesTeaser({
 
   return (
     <section aria-labelledby="project-species-title">
-      <div className="mb-3 flex items-center gap-3">
-        <div className="min-w-0 flex-1">
-          <h2
-            id="project-species-title"
-            className="text-[18px] font-black leading-none tracking-[-0.03em] text-white"
-          >
-            BioDex du projet
-          </h2>
-          <p className="mt-1 text-[12px] leading-snug text-white/50">{subtitle}</p>
+      {showHeader ? (
+        <div className="mb-3 flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <h2
+              id="project-species-title"
+              className="text-[18px] font-black leading-none tracking-[-0.03em] text-white"
+            >
+              BioDex du projet
+            </h2>
+            <p className="mt-1 text-[12px] leading-snug text-white/50">{subtitle}</p>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-5 sm:px-5">
         <div className="flex gap-3 pr-4">

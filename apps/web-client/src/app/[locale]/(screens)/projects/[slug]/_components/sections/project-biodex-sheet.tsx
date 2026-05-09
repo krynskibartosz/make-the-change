@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Lock } from 'lucide-react'
+import { ChevronRight, Lock } from 'lucide-react'
 import type { ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { MobileSheet } from '../ui/mobile-sheet'
@@ -170,14 +170,27 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
     ? species.filter((sp) => sp.id !== featuredSpecies.id)
     : species
 
+  const keySpecies = species.filter((sp) => isKeySpecies(sp.role))
+  const safePrimary = keySpecies.length > 0 ? keySpecies : species.slice(0, 1)
+  const associated = species.filter((sp) => !safePrimary.some((p) => p.id === sp.id))
+  const sectionSubtitle =
+    (safePrimary.length > 1 ? `${safePrimary.length} espèces clés` : '1 espèce clé') +
+    (associated.length > 0 ? ` · ${associated.length} associée${associated.length > 1 ? 's' : ''}` : '')
+
   return (
     <>
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="mt-3 text-xs font-semibold text-white/35 transition-colors hover:text-white/60"
+        className="mb-3 flex w-full items-center justify-between text-left transition-opacity hover:opacity-75 active:opacity-60"
       >
-        Qu&apos;est-ce que le BioDex ?
+        <div>
+          <p className="text-[18px] font-black leading-none tracking-[-0.03em] text-white">
+            BioDex du projet
+          </p>
+          <p className="mt-1 text-[12px] leading-snug text-white/50">{sectionSubtitle}</p>
+        </div>
+        <ChevronRight className="h-4 w-4 shrink-0 text-white/30" />
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="BioDex du projet">

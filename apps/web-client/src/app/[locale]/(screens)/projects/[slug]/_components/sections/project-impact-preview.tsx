@@ -4,6 +4,7 @@ import { useState } from 'react'
 import {
   Activity,
   Bug,
+  ChevronRight,
   Cloud,
   Droplet,
   Fish,
@@ -135,13 +136,16 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="mt-3 flex w-full flex-col items-start gap-0.5 rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
+        className="mt-3 flex w-full items-center gap-3 rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
       >
-        <span className="text-sm font-bold text-white/70">Voir tous les indicateurs</span>
-        <span className="text-xs text-white/35">
-          {items.length} estimation{items.length > 1 ? 's' : ''} expliquée
-          {items.length > 1 ? 's' : ''} avec méthode et prudence
-        </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-sm font-bold text-white/70">Voir tous les indicateurs</span>
+          <span className="text-xs text-white/35">
+            {items.length} estimation{items.length > 1 ? 's' : ''} expliquée
+            {items.length > 1 ? 's' : ''} avec méthode et prudence
+          </span>
+        </div>
+        <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
       </button>
 
       <MobileSheet

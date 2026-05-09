@@ -254,9 +254,9 @@ export function ProjectCountrySheet({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="text-xs text-white/45 transition-colors hover:text-white/70"
+        className="text-xs font-semibold text-white/50 transition-colors hover:text-white/75"
       >
-        {flag} {countryName}{city ? ` · ${city}` : ''}
+        {flag} {countryName}{city ? ` · ${city}` : ''} ›
       </button>
 
       <MobileSheet
