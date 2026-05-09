@@ -5,16 +5,16 @@ import {
   Card,
   CardContent,
 } from '@make-the-change/core/ui'
-import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
-import { ArrowLeft, CheckCircle, CheckCircle2, Lock, Loader2 } from 'lucide-react'
+import { ArrowLeft, Camera, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail } from 'lucide-react'
 import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { motion } from 'framer-motion'
+import { MobileSheet } from '../../_components/ui/mobile-sheet'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
 import { cn, formatSeeds } from '@/lib/utils'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-impact-calculator'
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
@@ -22,39 +22,10 @@ import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/pro
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
-const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
-const REWARD_PREVIEW_IMAGE = '/images/dioramas/abeille-noire.png' // Image générique de fallback
-// Helpers moved to bottom
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-  : null
+type SheetKind = 'seeds' | 'tracking' | null
 
-const stripeAppearance = {
-  theme: 'stripe',
-  variables: {
-    colorPrimary: '#a3e635',
-    colorBackground: 'rgba(255,255,255,0.02)',
-    colorText: '#ffffff',
-    colorDanger: '#ef4444',
-    borderRadius: '12px',
-  },
-  rules: {
-    '.Input': {
-      backgroundColor: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.12)',
-      boxShadow: 'none',
-    },
-    '.Input:focus': {
-      border: '1px solid rgba(163,230,53,0.6)',
-      boxShadow: '0 0 0 1px rgba(163,230,53,0.3)',
-    },
-    '.Label': {
-      color: 'rgba(255,255,255,0.65)',
-      fontWeight: '600',
-      letterSpacing: '0.02em',
-    },
-  },
-} as const
+const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
+const REWARD_PREVIEW_IMAGE = '/images/dioramas/abeille-noire.png'
 
 type ProjectDonateOneFlowProps = {
   project: {
@@ -75,6 +46,269 @@ type ProjectDonateOneFlowProps = {
   initialOptionId?: string | null
 }
 
+// --- Sub-components ---
+
+function NextStepLine({
+  icon: Icon,
+  title,
+  body,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  body: string
+}) {
+  return (
+    <div className="flex items-start gap-3 border-b border-white/[0.06] py-3.5 last:border-0">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[13px] font-black leading-tight text-white">{title}</p>
+        <p className="mt-1 text-[11.5px] leading-snug text-white/48">{body}</p>
+      </div>
+    </div>
+  )
+}
+
+function AfterDonateBlock({
+  seeds,
+  hasSpecies,
+  onOpenSeeds,
+  onOpenTracking,
+}: {
+  seeds: number
+  hasSpecies: boolean
+  onOpenSeeds: () => void
+  onOpenTracking: () => void
+}) {
+  return (
+    <div>
+      <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+        Après votre don
+      </p>
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045]">
+        <button
+          type="button"
+          onClick={onOpenSeeds}
+          className="flex w-full items-center gap-3 border-b border-white/[0.06] px-4 py-3.5 text-left active:bg-white/[0.03]"
+        >
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-emerald-300/16 bg-emerald-300/10 text-emerald-300">
+            <CurrencyIcon kind="seeds" className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">{formatSeeds(seeds)} Graines</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-white/40">
+              Pour faire progresser votre aventure BioDex.
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
+        </button>
+        <button
+          type="button"
+          onClick={onOpenTracking}
+          className={cn(
+            'flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]',
+            hasSpecies ? 'border-b border-white/[0.06]' : '',
+          )}
+        >
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+            <Camera className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">Suivi du projet</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-white/40">
+              Photos, étapes et évolution du terrain dans le temps.
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
+        </button>
+        {hasSpecies ? (
+          <button
+            type="button"
+            onClick={onOpenSeeds}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
+          >
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+              <Leaf className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-black text-white">Espèce liée au projet</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-white/40">BioDex débloquable après votre don.</p>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
+          </button>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+function IncludedDonateSummary({
+  seeds,
+  hasSpecies,
+  onOpen,
+}: {
+  seeds: number
+  hasSpecies: boolean
+  onOpen: () => void
+}) {
+  return (
+    <div>
+      <p className="mb-3.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+        Après votre don
+      </p>
+      <div className="space-y-3.5">
+        <div className="flex items-start gap-3">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-emerald-300/16 bg-emerald-300/10 text-emerald-300">
+            <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">{formatSeeds(seeds)} Graines</p>
+            <p className="text-[11px] leading-snug text-white/40">Pour faire progresser votre aventure BioDex.</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+            <Camera className="h-3.5 w-3.5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-black text-white">Suivi du projet inclus</p>
+            <p className="text-[11px] leading-snug text-white/40">Photos, étapes et évolution du terrain.</p>
+          </div>
+        </div>
+        {hasSpecies ? (
+          <div className="flex items-start gap-3">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+              <Leaf className="h-3.5 w-3.5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-black text-white">Espèce liée au projet</p>
+              <p className="text-[11px] leading-snug text-white/40">BioDex débloquable après votre don.</p>
+            </div>
+          </div>
+        ) : null}
+      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="mt-4 flex items-center gap-1 text-[12px] font-black text-white/35 active:text-white/55"
+      >
+        Comprendre ce qui est inclus
+        <ChevronRight className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  )
+}
+
+function SeedsSheet({
+  isOpen,
+  onClose,
+  seeds,
+  amount,
+  hasSpecies,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  seeds: number
+  amount: number
+  hasSpecies: boolean
+}) {
+  return (
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Graines & BioDex">
+      <p className="mt-1 text-sm leading-relaxed text-white/50">
+        Votre don de {amount}&nbsp;€ reste rattaché à ce projet. Les Graines et le BioDex servent à faire progresser votre aventure et à garder une trace de votre contribution.
+      </p>
+
+      <div className="mt-5">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">Graines</p>
+        <div className="mt-2 flex items-center gap-2.5">
+          <CurrencyIcon kind="seeds" className="h-5 w-5 text-emerald-300" />
+          <p className="text-[15px] font-black text-white">{formatSeeds(seeds)} Graines</p>
+        </div>
+        <p className="mt-1 text-sm leading-relaxed text-white/50">
+          Pour faire progresser votre aventure dans le BioDex.
+        </p>
+      </div>
+
+      {hasSpecies ? (
+        <div className="mt-5">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">BioDex lié</p>
+          <p className="mt-2 text-sm leading-relaxed text-white/50">
+            Une espèce liée à ce projet sera débloquable dans votre BioDex après votre don.
+          </p>
+        </div>
+      ) : null}
+
+      <div className="mt-5">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">À ne pas confondre</p>
+        <p className="mt-2 text-sm leading-relaxed text-white/50">
+          Ce n&apos;est pas un cashback, pas un rendement financier, pas une part du projet et pas un achat produit automatique.
+        </p>
+      </div>
+
+      <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
+        Pas de rendement financier. Pas de reçu fiscal.
+      </p>
+    </MobileSheet>
+  )
+}
+
+function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const steps = [
+    {
+      title: 'Votre don est enregistré',
+      body: 'Il est rattaché au projet, au montant choisi et au partenaire.',
+    },
+    {
+      title: 'Le partenaire agit sur le terrain',
+      body: 'Le don contribue à la restauration, au suivi ou à la valorisation du projet.',
+    },
+    {
+      title: "Vous suivez l'évolution",
+      body: 'Photos, mises à jour ou données peuvent enrichir votre trace dans le temps.',
+    },
+  ]
+
+  return (
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Suivi du don">
+      <p className="mt-1 text-sm text-white/50">Ce qui se passe après votre paiement.</p>
+
+      <div className="mt-4">
+        {steps.map((s, i) => {
+          const isLast = i === steps.length - 1
+          return (
+            <div key={s.title} className="relative grid grid-cols-[32px_1fr] gap-3 py-4">
+              {!isLast ? (
+                <div className="absolute left-[15px] top-[52px] h-[calc(100%-20px)] w-px bg-white/[0.08]" />
+              ) : null}
+              <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-[11px] font-black text-white/50">
+                {i + 1}
+              </div>
+              <div>
+                <p className="text-sm font-black text-white">{s.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-white/50">{s.body}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="mt-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">À garder clair</p>
+        <p className="mt-2 text-sm leading-relaxed text-white/50">
+          Le suivi documente la relation avec le terrain, mais ne garantit pas un impact mesuré immédiatement.
+        </p>
+      </div>
+
+      <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
+        Pas de rendement financier. Pas de reçu fiscal.
+      </p>
+    </MobileSheet>
+  )
+}
+
+// --- Main component ---
+
 export function ProjectDonateOneFlow({
   project,
   presentation = 'page',
@@ -91,7 +325,6 @@ export function ProjectDonateOneFlow({
   const quickAmounts = [20, 50, 100]
   const defaultAmount = 20
 
-  // État pour le montant (comme dans le flow soutien)
   const [amountEur, setAmountEur] = useState(() => {
     if (initialOptionId) {
       const option = project.donationOptions.find((opt) => opt.id === initialOptionId)
@@ -112,12 +345,12 @@ export function ProjectDonateOneFlow({
     }
   }, [discoveredSpeciesId])
 
-  // Mettre à jour amountInput quand amountEur change
   useEffect(() => {
     setAmountInput(String(amountEur))
   }, [amountEur])
 
   const [step, setStep] = useState<FlowStep>('impact')
+  const [sheet, setSheet] = useState<SheetKind>(null)
   const [guestEmail, setGuestEmail] = useState('')
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
   const [claimSaved, setClaimSaved] = useState(false)
@@ -140,11 +373,20 @@ export function ProjectDonateOneFlow({
     donationOptions: project.donationOptions,
     projectImpact: project.expectedImpact ?? null,
   })
-  // Préférer l'impact déclaré sur l'option de don sélectionnée ; fallback sur le ratio par défaut.
   const matchedOption = project.donationOptions.find((opt) => opt.price === amountEur)
   const unitsRestored = donationMetrics.kind === 'reef'
     ? donationMetrics.corals
     : matchedOption?.impact.unitsRestored ?? Math.max(1, Math.round(amountEur / 30))
+
+  const hasSpecies = Boolean(discoveredSpeciesId)
+
+  const glowColor = (() => {
+    const type = project.type?.toLowerCase() ?? ''
+    if (type.includes('coral') || type.includes('reef') || type.includes('ocean')) return { r: 14, g: 165, b: 233 }
+    if (type.includes('orchard') || type.includes('olive') || type.includes('forest') || type.includes('tree')) return { r: 16, g: 185, b: 129 }
+    return { r: 20, g: 184, b: 166 }
+  })()
+  const glowRgba = (alpha: number) => `rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, ${alpha})`
 
   useEffect(() => {
     if (step !== 'success') return
@@ -179,19 +421,25 @@ export function ProjectDonateOneFlow({
     void import('canvas-confetti')
       .then(({ default: confetti }) => {
         confetti({
-          particleCount: 100,
-          spread: 72,
-          origin: { y: 0.6 },
-          colors: ['#a3e635', '#facc15', '#f59e0b'],
+          particleCount: 40,
+          spread: 55,
+          origin: { y: 0.62 },
+          colors: ['#4ade80', '#86efac', '#a3e635', '#d9f99d', '#bbf7d0'],
+          scalar: 0.85,
+          gravity: 0.7,
+          drift: 0.4,
         })
         window.setTimeout(() => {
           confetti({
-            particleCount: 80,
-            spread: 90,
-            origin: { y: 0.58 },
-            colors: ['#84cc16', '#eab308', '#fbbf24'],
+            particleCount: 28,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#84cc16', '#16a34a', '#15803d', '#d1fae5', '#6ee7b7'],
+            scalar: 0.75,
+            gravity: 0.6,
+            drift: -0.3,
           })
-        }, 260)
+        }, 340)
       })
       .catch(() => {})
   }, [step, phase])
@@ -215,14 +463,10 @@ export function ProjectDonateOneFlow({
   const handleAmountInput = (value: string) => {
     const digitsOnly = value.replace(/[^\d]/g, '')
     setAmountInput(digitsOnly)
-    if (digitsOnly.length === 0) {
-      return
-    }
+    if (digitsOnly.length === 0) return
 
     const parsed = Number(digitsOnly)
-    if (!Number.isFinite(parsed)) {
-      return
-    }
+    if (!Number.isFinite(parsed)) return
 
     setAmountEur(parsed)
   }
@@ -233,7 +477,6 @@ export function ProjectDonateOneFlow({
       setAmountInput(String(defaultAmount))
       return
     }
-
     setAmountInput(String(amountEur))
   }
 
@@ -250,7 +493,6 @@ export function ProjectDonateOneFlow({
         return
       }
     }
-
     setGuestEmailError(null)
     setIsProcessing(true)
     setTimeout(() => {
@@ -260,9 +502,7 @@ export function ProjectDonateOneFlow({
   }
 
   const submitClaim = () => {
-    if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) {
-      return
-    }
+    if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) return
     setIsSendingMagicLink(true)
     setTimeout(() => {
       setIsSendingMagicLink(false)
@@ -284,6 +524,18 @@ export function ProjectDonateOneFlow({
           : 'h-full w-full',
       )}
     >
+      {/* Background blobs adaptés au type */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
+          style={{ backgroundColor: glowRgba(0.10) }}
+        />
+        <div
+          className="absolute -bottom-20 -left-24 h-64 w-64 rounded-full blur-3xl"
+          style={{ backgroundColor: glowRgba(0.12) }}
+        />
+      </div>
+
       {presentation === 'page' ? (
         <header className="mb-4 px-1">
           <Button
@@ -320,7 +572,7 @@ export function ProjectDonateOneFlow({
           className="flex h-full min-h-0 transition-transform duration-500 ease-out will-change-transform"
           style={{ transform: `translateX(-${stepIndex * 100}%)` }}
         >
-          {/* Étape 1 : Impact (sélection montant) */}
+          {/* Étape 1 : Choix du montant */}
           <section
             className={cn(
               'min-h-0 w-full shrink-0 overflow-y-auto',
@@ -330,9 +582,12 @@ export function ProjectDonateOneFlow({
           >
             <div className={cn('flex flex-col gap-8 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="flex flex-col items-center justify-center text-center">
-                <p className="mb-4 text-center text-sm font-medium text-muted-foreground">
-                  Choisissez votre montant
-                </p>
+                <div className="mb-5 text-center">
+                  <p className="text-xl font-black text-white">Choisissez votre don</p>
+                  <p className="mt-1.5 text-sm text-white/50">
+                    Votre contribution aide directement ce projet à avancer.
+                  </p>
+                </div>
                 <div className="flex w-full items-baseline justify-center">
                   <div
                     className="flex cursor-text items-baseline justify-center gap-2 rounded-3xl bg-white/5 px-8 py-4 transition-colors hover:bg-white/10"
@@ -356,152 +611,135 @@ export function ProjectDonateOneFlow({
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-2">
-                {quickAmounts.map((boundedValue) => (
+                {quickAmounts.map((val) => (
                   <button
-                    key={boundedValue}
+                    key={val}
                     type="button"
                     onClick={() => {
-                      setAmountEur(boundedValue)
-                      setAmountInput(String(boundedValue))
+                      setAmountEur(val)
+                      setAmountInput(String(val))
                     }}
                     className={cn(
                       'rounded-full px-5 py-2 text-sm font-bold transition-all active:scale-95',
-                      amountEur === boundedValue
+                      amountEur === val
                         ? 'bg-lime-400 text-black'
                         : 'bg-white/5 text-white hover:bg-white/10',
                     )}
                   >
-                    {formatAmountPlain(boundedValue)}
+                    {formatAmountPlain(val)}
                   </button>
                 ))}
               </div>
 
-              <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
-                <ProjectImpactCalculator
-                  baseAmount={defaultAmount}
-                  amount={amountEur}
-                  mode="checkout"
-                  isDonationProject={true}
-                  donationOptions={project.donationOptions}
-                  projectType={project.type}
-                  projectImpact={project.expectedImpact ?? null}
-                />
-              </div>
+              <p className="text-center text-[13px] text-white/45">
+                Vous donnez pour{' '}
+                <span className="font-black text-white/70">{project.name}</span>
+              </p>
+
+              <section className="-mx-4 border-y border-white/[0.08] px-4 py-5">
+                <div className="mb-4 flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/35">
+                      Impact estimé
+                    </p>
+                    <p className="mt-1 text-[11px] text-white/30">
+                      Des ordres de grandeur pour comprendre ce que représente votre don.
+                    </p>
+                  </div>
+                </div>
+                <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
+                  <ProjectImpactCalculator
+                    baseAmount={defaultAmount}
+                    amount={amountEur}
+                    mode="checkout"
+                    isDonationProject={true}
+                    donationOptions={project.donationOptions}
+                    projectType={project.type}
+                    projectImpact={project.expectedImpact ?? null}
+                  />
+                </div>
+              </section>
+
+              <AfterDonateBlock
+                seeds={seeds}
+                hasSpecies={hasSpecies}
+                onOpenSeeds={() => setSheet('seeds')}
+                onOpenTracking={() => setSheet('tracking')}
+              />
             </div>
           </section>
 
-          {/* Étape 2 : Payment */}
+          {/* Étape 2 : Paiement */}
           <section
             className={cn(
               'min-h-0 w-full shrink-0 overflow-y-auto pb-[calc(200px+env(safe-area-inset-bottom))]',
               presentation === 'page' ? 'pt-2' : '',
             )}
           >
-            <div className={cn('space-y-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+            <div className={cn('flex flex-col gap-6 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
+
+              {/* Montant + contexte projet */}
               <div className="text-center">
-                <p className="mb-2 text-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
-                  Votre don au projet
+                <p className="mb-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/35">
+                  Don au projet
                 </p>
-                <div className="mb-8 flex items-baseline justify-center gap-1.5">
-                  <span className="text-7xl font-black text-white tracking-tighter tabular-nums">
+                <div className="flex items-baseline justify-center gap-1.5">
+                  <span className="text-7xl font-black tracking-tighter text-white tabular-nums">
                     {formattedAmount}
                   </span>
                   <span className="text-4xl font-semibold text-white/50">€</span>
                 </div>
-
-                <div className="flex flex-col mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-white/5 p-5 text-left">
-                  <h3 className="text-[17px] font-bold text-white mb-1.5 tracking-tight">
-                    Donnez & Participez
-                  </h3>
-                  
-                  <p className="text-white/60 text-[14px] leading-relaxed mb-4">
-                    Votre don soutient directement ce projet et vous fait progresser dans le BioDex.
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    <div className="bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <CurrencyIcon kind="seeds" className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-bold">+{formatSeeds(seeds)} graines</span>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <Lock className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-medium">Paiement sécurisé</span>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 text-white/70 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-                      <CheckCircle className="w-3.5 h-3.5" />
-                      <span className="text-[12px] font-medium">Impact documenté</span>
-                    </div>
-                  </div>
-                </div>
+                <p className="mt-2 text-[13px] text-white/45">{project.name}</p>
               </div>
 
-              {!isAuthenticated ? (
-                <div className="w-full">
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/50">
-                    Email pour le reçu
-                  </label>
-                  <input
-                    type="email"
-                    value={guestEmail}
-                    onChange={(event) => setGuestEmail(event.target.value)}
-                    placeholder="vous@email.com"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
-                    required
-                  />
-                  {guestEmailError ? (
-                    <p className="mt-2 text-xs font-semibold text-destructive">{guestEmailError}</p>
-                  ) : null}
-                </div>
-              ) : null}
+              {/* Ce qui est inclus — liste plate */}
+              <IncludedDonateSummary
+                seeds={seeds}
+                hasSpecies={hasSpecies}
+                onOpen={() => setSheet('seeds')}
+              />
 
-              {stripePromise && amountEur > 0 ? (
-                <Elements
-                  key={amountEur}
-                  stripe={stripePromise}
-                  options={{
-                    mode: 'payment',
-                    amount: Math.max(100, amountEur * 100),
-                    currency: 'eur',
-                    appearance: stripeAppearance,
-                  }}
-                >
-                  <div className="mt-8 flex w-full flex-col gap-4">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
-                      <ExpressCheckoutElement onConfirm={() => {}} />
-                    </div>
+              {/* Email de confirmation */}
+              <div className="w-full">
+                <label className="mb-1.5 block text-xs font-bold text-white/60">
+                  Email de confirmation
+                </label>
+                <input
+                  type="email"
+                  value={guestEmail}
+                  onChange={(event) => setGuestEmail(event.target.value)}
+                  placeholder="vous@email.com"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
+                  required
+                />
+                <p className="mt-1.5 text-[11px] text-white/35">
+                  Reçu de don et suivi du projet.
+                </p>
+                {guestEmailError ? (
+                  <p className="mt-1.5 text-xs font-semibold text-destructive">{guestEmailError}</p>
+                ) : null}
+              </div>
 
-                    <div className="my-6 flex items-center gap-4">
-                      <div className="h-px flex-1 bg-white/10" />
-                      <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
-                      <div className="h-px flex-1 bg-white/10" />
-                    </div>
+              {/* Module paiement prototype */}
+              <div className="rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-5 text-center">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-white/25">
+                  Paiement sécurisé par carte
+                </p>
+                <div className="mt-3 h-10 rounded-xl bg-white/[0.04]" />
+                <div className="mt-2 h-10 rounded-xl bg-white/[0.04]" />
+              </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                      <PaymentElement />
-                    </div>
-                  </div>
-                </Elements>
-              ) : (
-                <div className="mt-8 flex w-full flex-col gap-4">
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
-                    Apple Pay / Google Pay indisponible (clé Stripe manquante)
-                  </div>
-                  <div className="my-6 flex items-center gap-4">
-                    <div className="h-px flex-1 bg-white/10" />
-                    <span className="px-4 text-[10px] text-white/30 uppercase tracking-widest">ou</span>
-                    <div className="h-px flex-1 bg-white/10" />
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-center text-sm text-white/60">
-                    Module carte bancaire Stripe
-                  </div>
-                </div>
-              )}
+              {/* Trust line */}
+              <p className="text-center text-[11px] text-white/28">
+                🔒 Paiement sécurisé{' '}
+                <span className="mx-1 opacity-50">·</span>
+                📩 Reçu envoyé par email
+              </p>
+
             </div>
           </section>
 
-          {/* Étape 3 : Success */}
+          {/* Étape 3 : Succès */}
           <section
             className={cn(
               'min-h-0 w-full shrink-0 overflow-y-auto overflow-x-hidden pb-[calc(220px+env(safe-area-inset-bottom))]',
@@ -530,11 +768,13 @@ export function ProjectDonateOneFlow({
                 className="flex-1 flex flex-col items-center justify-center gap-4 my-4 w-full"
               >
                 <div className="relative mx-auto w-64 h-64 flex items-center justify-center [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56">
+                  {/* Glow dynamique selon le type de projet */}
                   <div
                     className={cn(
-                      'absolute top-1/2 left-1/2 z-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(132,204,22,0.35)_0%,rgba(132,204,22,0)_68%)] transition-all duration-700 ease-out',
+                      'absolute top-1/2 left-1/2 z-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-700 ease-out',
                       phase === 'euphoria' || phase === 'resolved' ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
                     )}
+                    style={{ background: `radial-gradient(circle, ${glowRgba(0.35)} 0%, ${glowRgba(0)} 68%)` }}
                   />
                   <div
                     className={cn(
@@ -542,21 +782,34 @@ export function ProjectDonateOneFlow({
                       phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-75',
                     )}
                   />
-                  <img
-                    src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
-                    alt="Espèce débloquée"
+                  {/* Wrapper : scale + drop-shadow dynamique (séparé de brightness sur l'img) */}
+                  <div
                     className={cn(
-                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-                      phase === 'tension' ? 'brightness-0 opacity-50 scale-90 animate-pulse' : '',
-                      phase === 'flash' ? 'brightness-200 opacity-100 scale-95' : '',
-                      phase === 'euphoria' || phase === 'resolved'
-                        ? 'brightness-100 opacity-100 scale-110 drop-shadow-[0_20px_50px_rgba(132,204,22,0.3)]'
-                        : '',
+                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                      phase === 'tension' ? 'scale-90' : '',
+                      phase === 'flash' ? 'scale-95' : '',
+                      phase === 'euphoria' || phase === 'resolved' ? 'scale-110' : '',
                     )}
-                    onError={(event) => {
-                      event.currentTarget.style.display = 'none'
-                    }}
-                  />
+                    style={
+                      phase === 'euphoria' || phase === 'resolved'
+                        ? { filter: `drop-shadow(0 20px 50px ${glowRgba(0.3)})` }
+                        : undefined
+                    }
+                  >
+                    <img
+                      src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
+                      alt="Espèce débloquée"
+                      className={cn(
+                        'w-full h-full object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                        phase === 'tension' ? 'brightness-0 opacity-50 animate-pulse' : '',
+                        phase === 'flash' ? 'brightness-200 opacity-100' : '',
+                        phase === 'euphoria' || phase === 'resolved' ? 'brightness-100 opacity-100' : '',
+                      )}
+                      onError={(event) => {
+                        event.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  </div>
                   <div
                     className={cn(
                       'absolute inset-0 flex items-center justify-center z-30 transition-all duration-300 ease-in',
@@ -567,50 +820,91 @@ export function ProjectDonateOneFlow({
                   </div>
                 </div>
 
-                <div className="mt-6 text-center flex flex-col items-center gap-3">
+                <div className="mt-5 text-center flex flex-col items-center gap-2">
                   <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
                     Nouvelle espèce débloquée
                   </span>
-                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
-                  <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.28)] [@media(max-height:800px)]:text-xl">
-                    <CurrencyAmount kind="seeds" value={seeds} showLabel className="text-2xl font-black [@media(max-height:800px)]:text-xl" />
-                  </p>
-                  <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
-                    Pour faire progresser votre aventure
-                  </p>
+                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">
+                    {discoveredSpecies?.name_default || 'La Chouette Effraie'}
+                  </h2>
                 </div>
               </motion.div>
+
+              {/* Suivi + graines — dans le bon ordre */}
+              {phase === 'euphoria' || phase === 'resolved' ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.35 }}
+                  className="mt-3 w-full space-y-2"
+                >
+                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
+                    <Camera className="h-4 w-4 shrink-0 text-lime-300" />
+                    <p className="text-[13px] font-black text-white">Suivi du projet activé</p>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
+                    <CurrencyIcon kind="seeds" className="h-4 w-4 shrink-0 text-emerald-300" />
+                    <p className="text-[13px] font-black text-white">
+                      {formatSeeds(seeds)} Graines ajoutées
+                    </p>
+                    <p className="ml-auto text-[10.5px] text-white/35">BioDex</p>
+                  </div>
+                </motion.div>
+              ) : null}
+
+              {phase === 'euphoria' || phase === 'resolved' ? (
+                <motion.section
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                  className="mt-8 w-full border-t border-white/10 pt-5"
+                >
+                  <h3 className="text-[18px] font-black tracking-tight text-white">
+                    Et maintenant ?
+                  </h3>
+                  <div className="mt-3">
+                    <NextStepLine
+                      icon={Mail}
+                      title="Reçu envoyé"
+                      body={guestEmail ? `Envoyé à ${guestEmail}.` : 'Disponible dans votre profil.'}
+                    />
+                    <NextStepLine
+                      icon={Camera}
+                      title="Suivi du projet"
+                      body="Retrouvez les mises à jour du partenaire dans votre profil quand il publie des nouvelles du terrain."
+                    />
+                    <NextStepLine
+                      icon={Leaf}
+                      title="BioDex à explorer"
+                      body={`${discoveredSpecies?.name_default || 'Votre espèce'} est maintenant dans votre trace de don.`}
+                    />
+                  </div>
+                </motion.section>
+              ) : null}
 
               {!isAuthenticated && !claimSaved ? (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.35 }}
-                  className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6"
+                  className="mt-6 w-full border-t border-white/[0.08] pt-5"
                 >
-                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre {discoveredSpecies?.name_default || 'Chouette Effraie'} !</h3>
-                  <p className="mb-4 text-sm text-white/60">
-                    Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
+                  <p className="text-sm font-black text-white">
+                    Sauvegarder votre BioDex
                   </p>
-                  <div className="grid gap-2">
-                    <p className="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 flex items-center text-base text-white/60 truncate">
-                      {guestEmail}
-                    </p>
-                    <Button
-                      type="button"
-                      onClick={submitClaim}
-                      className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
-                      disabled={isSendingMagicLink}
-                    >
-                      {isSendingMagicLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                      Créer mon compte en 1 clic
-                    </Button>
+                  <p className="mt-1 text-[13px] leading-snug text-white/50">
+                    Créez votre profil pour conserver{' '}
+                    {discoveredSpecies?.name_default || 'votre espèce'} et suivre le projet.
+                  </p>
+                  <div className="mt-3 flex items-center gap-2 text-[13px] text-white/38">
+                    <Mail className="h-3.5 w-3.5 shrink-0" />
+                    <span className="truncate">{guestEmail}</span>
                   </div>
                 </motion.div>
               ) : null}
 
               {claimSaved && !isAuthenticated ? (
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-6 inline-flex w-full items-center gap-3 rounded-xl border border-lime-400/30 bg-lime-400/10 p-4 text-left text-sm font-semibold text-lime-300 shadow-sm"
@@ -627,84 +921,102 @@ export function ProjectDonateOneFlow({
         </div>
       </div>
 
-      {step === 'impact' ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
-            <p className="mb-3 flex items-center justify-center gap-1 text-center text-sm font-medium text-emerald-300">
-              Vous allez recevoir <CurrencyAmount kind="seeds" value={seeds} showLabel className="font-black" />
-            </p>
+      <SeedsSheet
+        isOpen={sheet === 'seeds'}
+        onClose={() => setSheet(null)}
+        seeds={seeds}
+        amount={amountEur}
+        hasSpecies={hasSpecies}
+      />
+      <TrackingSheet
+        isOpen={sheet === 'tracking'}
+        onClose={() => setSheet(null)}
+      />
+
+      {(step === 'impact' || step === 'payment' || (step === 'success' && (isAuthenticated || claimSaved)) || showGuestClaimFooter) ? (
+        <BottomActionBar className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none md:hidden">
+          {step === 'impact' ? (
+            <>
+              <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
+                Suivi inclus
+                {hasSpecies ? (
+                  <>
+                    <span className="mx-1.5 opacity-40">·</span>
+                    <span className="font-black text-lime-300">BioDex lié</span>
+                  </>
+                ) : null}
+                <span className="mx-1.5 opacity-40">·</span>
+                <span className="font-black text-emerald-300">{formatSeeds(seeds)} Graines</span>
+              </p>
+              <Button
+                type="button"
+                onClick={goToPayment}
+                className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+              >
+                {`Continuer avec ${formattedAmount} €`}
+              </Button>
+            </>
+          ) : null}
+
+          {step === 'payment' ? (
             <Button
               type="button"
-              onClick={goToPayment}
-              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+              disabled={isProcessing}
+              onClick={goToSuccess}
+              className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
             >
-              Faire un don
+              {isProcessing ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Traitement en cours...
+                </>
+              ) : (
+                <>
+                  <Lock className="h-5 w-5" />
+                  {`Payer ${formattedAmount} €`}
+                </>
+              )}
             </Button>
-        </div>
-      ) : null}
+          ) : null}
 
-      {step === 'payment' ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
-          <Button
-            type="button"
-            disabled={isProcessing}
-            onClick={goToSuccess}
-            className="w-full h-14 flex items-center justify-center gap-2 bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
-          >
-            {isProcessing ? (
-              <>
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Traitement en cours...
-              </>
-            ) : (
-              <>
-                <Lock className="h-5 w-5" />
-                {`Payer ${formattedAmount} €`}
-              </>
-            )}
-          </Button>
-        </div>
-      ) : null}
+          {step === 'success' && (isAuthenticated || claimSaved) ? (
+            <>
+              <Button
+                type="button"
+                onClick={() => {
+                  if (discoveredSpeciesId) {
+                    router.replace(`/profile/biodex/${discoveredSpeciesId}`)
+                    return
+                  }
+                  router.replace('/profile/biodex')
+                }}
+                className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
+              >
+                Admirer dans mon BioDex
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => router.replace(`/projects/${project.slug}`)}
+                className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
+              >
+                Retour au projet
+              </Button>
+            </>
+          ) : null}
 
-      {step === 'success' && (isAuthenticated || claimSaved) ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
-          <Button
-            type="button"
-            onClick={() => {
-              if (discoveredSpeciesId) {
-                router.replace(`/profile/biodex/${discoveredSpeciesId}`)
-                return
-              }
-              router.replace('/profile/biodex')
-            }}
-            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
-          >
-            Admirer dans mon BioDex
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => {
-              router.replace(`/projects/${project.slug}`)
-            }}
-            className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
-          >
-            Retour au projet
-          </Button>
-        </div>
-      ) : null}
-
-      {showGuestClaimFooter ? (
-        <div className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-none border-t border-white/10 bg-background/95 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
-          <Button
-            type="button"
-            disabled={isSendingMagicLink}
-            onClick={submitClaim}
-            className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
-          >
-            {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-            Créer mon compte en 1 clic
-          </Button>
-        </div>
+          {showGuestClaimFooter ? (
+            <Button
+              type="button"
+              disabled={isSendingMagicLink}
+              onClick={submitClaim}
+              className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform disabled:opacity-75 disabled:active:scale-100"
+            >
+              {isSendingMagicLink ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+              Créer mon compte en 1 clic
+            </Button>
+          ) : null}
+        </BottomActionBar>
       ) : null}
     </div>
   )
