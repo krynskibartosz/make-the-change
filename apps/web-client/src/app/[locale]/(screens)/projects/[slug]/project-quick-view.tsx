@@ -302,6 +302,8 @@ export async function ProjectQuickView({
                 projectType={project.type}
                 speciesCount={resolvedSpecies?.length ?? 0}
                 relatedProjects={resolvedRelatedProjects}
+                latitude={project.latitude}
+                longitude={project.longitude}
                 locale={locale}
               />
             ) : null}

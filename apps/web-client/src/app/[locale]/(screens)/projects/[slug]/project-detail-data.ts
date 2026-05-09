@@ -30,6 +30,8 @@ export type PublicProject = {
   long_description_i18n?: Record<string, string> | null
   address_city: string | null
   address_country_code: string | null
+  latitude: number | null
+  longitude: number | null
   launch_date: string | null
   maturity_date: string | null
   current_funding: number | null
@@ -254,6 +256,8 @@ function toPublicProject(value: unknown): PublicProject | null {
     long_description_i18n: toLocalizedRecord(value.long_description_i18n),
     address_city: toNullableString(value.address_city),
     address_country_code: toNullableString(value.address_country_code),
+    latitude: toNullableNumber(value.latitude),
+    longitude: toNullableNumber(value.longitude),
     launch_date: toNullableString(value.launch_date),
     maturity_date: toNullableString(value.maturity_date),
     current_funding: toNullableNumber(value.current_funding),
@@ -281,6 +285,8 @@ function toPublicProjectFromMock(
     long_description_i18n: project.long_description_i18n || null,
     address_city: project.address_city,
     address_country_code: project.address_country_code,
+    latitude: project.latitude ?? null,
+    longitude: project.longitude ?? null,
     launch_date: project.launch_date,
     maturity_date: project.maturity_date,
     current_funding: project.current_funding,

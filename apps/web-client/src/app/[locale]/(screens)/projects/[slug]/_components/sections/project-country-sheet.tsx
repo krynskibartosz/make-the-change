@@ -1,10 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { Map as MapLibreMap } from '@vis.gl/react-maplibre'
 import { Link } from '@/i18n/navigation'
 import { MobileSheet } from '../ui/mobile-sheet'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
+
+const MAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/dark'
 
 type RelatedProject = {
   id: string
@@ -55,6 +58,8 @@ type ProjectCountrySheetProps = {
   projectType?: string | null
   speciesCount: number
   relatedProjects: RelatedProject[]
+  latitude?: number | null
+  longitude?: number | null
   locale: string
 }
 
@@ -76,6 +81,49 @@ function getEcosystemLabel(projectType: string | null | undefined): string {
   if (t.includes('coral') || t.includes('reef')) return 'Récifs & océans tropicaux'
   if (t.includes('orchard') || t.includes('olive')) return 'Terres agricoles vivantes'
   return 'Pollinisateurs & forêts'
+}
+
+function LocationMap({
+  latitude,
+  longitude,
+  city,
+}: {
+  latitude: number
+  longitude: number
+  city?: string | null
+}) {
+  return (
+    <div className="relative mt-3 h-44 overflow-hidden rounded-2xl border border-white/[0.08]">
+      <MapLibreMap
+        initialViewState={{ longitude, latitude, zoom: 9 }}
+        mapStyle={MAP_STYLE_URL}
+        scrollZoom={false}
+        dragRotate={false}
+        touchZoomRotate={false}
+        attributionControl={false}
+        style={{ width: '100%', height: '100%' }}
+      />
+      {/* Project marker — overlay centré sur les coordonnées */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="relative">
+          <div className="h-3 w-3 rounded-full bg-sky-400 shadow-[0_0_12px_5px_rgba(14,165,233,0.55)]" />
+          <div
+            className="absolute -inset-3 animate-ping rounded-full bg-sky-400/20"
+            style={{ animationDuration: '2.4s' }}
+          />
+          {city ? (
+            <p className="absolute left-5 top-1/2 -translate-y-1/2 whitespace-nowrap text-[10px] font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              {city}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      {/* Attribution */}
+      <p className="pointer-events-none absolute bottom-2 right-2 text-[9px] font-medium text-white/35">
+        © OpenFreeMap © OSM
+      </p>
+    </div>
+  )
 }
 
 // Fixed pseudo-random positions for up to 5 related project dots
@@ -182,6 +230,8 @@ export function ProjectCountrySheet({
   projectType,
   speciesCount,
   relatedProjects,
+  latitude,
+  longitude,
   locale,
 }: ProjectCountrySheetProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -217,8 +267,12 @@ export function ProjectCountrySheet({
         {/* Compact stats line */}
         <p className="mt-1 text-xs text-white/40">{statsLine}</p>
 
-        {/* Map with project dots */}
-        <RegionMap city={city} countryName={countryName} relatedCount={relatedProjects.length} />
+        {/* Map */}
+        {latitude != null && longitude != null ? (
+          <LocationMap latitude={latitude} longitude={longitude} city={city} />
+        ) : (
+          <RegionMap city={city} countryName={countryName} relatedCount={relatedProjects.length} />
+        )}
 
         {/* Related projects — vertical list */}
         {relatedProjects.length > 0 ? (
