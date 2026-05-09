@@ -717,19 +717,25 @@ export function ProjectSupportOneFlow({
     void import('canvas-confetti')
       .then(({ default: confetti }) => {
         confetti({
-          particleCount: 100,
-          spread: 72,
-          origin: { y: 0.6 },
-          colors: ['#a3e635', '#facc15', '#f59e0b'],
+          particleCount: 40,
+          spread: 55,
+          origin: { y: 0.62 },
+          colors: ['#4ade80', '#86efac', '#a3e635', '#d9f99d', '#bbf7d0'],
+          scalar: 0.85,
+          gravity: 0.7,
+          drift: 0.4,
         })
         window.setTimeout(() => {
           confetti({
-            particleCount: 80,
-            spread: 90,
-            origin: { y: 0.58 },
-            colors: ['#84cc16', '#eab308', '#fbbf24'],
+            particleCount: 28,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#84cc16', '#16a34a', '#15803d', '#d1fae5', '#6ee7b7'],
+            scalar: 0.75,
+            gravity: 0.6,
+            drift: -0.3,
           })
-        }, 260)
+        }, 340)
       })
       .catch(() => {})
   }, [step, phase])
@@ -1115,32 +1121,48 @@ export function ProjectSupportOneFlow({
                   </div>
                 </div>
 
-                <div
-                  className="mt-6 text-center flex flex-col items-center gap-3"
-                >
+                <div className="mt-5 text-center flex flex-col items-center gap-2">
                   <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
                     Nouvelle espèce débloquée
                   </span>
-                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">{discoveredSpecies?.name_default || 'La Chouette Effraie'}</h2>
+                  <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">
+                    {discoveredSpecies?.name_default || 'La Chouette Effraie'}
+                  </h2>
                   {species && species.length > 1 ? (
-                    <p className="mt-1 text-[12px] font-semibold text-white/42">
+                    <p className="text-[12px] text-white/40">
                       + {species.length - 1} autre{species.length - 1 > 1 ? 's' : ''} espèce{species.length - 1 > 1 ? 's' : ''} liée{species.length - 1 > 1 ? 's' : ''} au projet
                     </p>
                   ) : null}
-                  <p className="mt-2 flex items-center justify-center gap-1.5 text-2xl font-black tabular-nums text-amber-300 drop-shadow-[0_0_10px_rgba(252,211,77,0.28)] [@media(max-height:800px)]:text-xl">
-                    <CurrencyAmount kind="impactCredits" value={points.total_points} showLabel className="text-2xl font-black [@media(max-height:800px)]:text-xl" />
-                  </p>
-                  <p className="mt-1 text-[10px] text-white/50 uppercase tracking-widest">
-                    À utiliser dans les Avantages partenaires
-                  </p>
                 </div>
               </motion.div>
+
+              {/* Suivi + crédits — apparaissent après la révélation, dans le bon ordre */}
+              {phase === 'euphoria' || phase === 'resolved' ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.35 }}
+                  className="mt-3 w-full space-y-2"
+                >
+                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
+                    <Camera className="h-4 w-4 shrink-0 text-lime-300" />
+                    <p className="text-[13px] font-black text-white">Suivi du projet activé</p>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
+                    <CurrencyIcon kind="impactCredits" className="h-4 w-4 shrink-0 text-amber-300" />
+                    <p className="text-[13px] font-black text-white">
+                      {points.total_points} Crédits Impact ajoutés
+                    </p>
+                    <p className="ml-auto text-[10.5px] text-white/35">Avantages partenaires</p>
+                  </div>
+                </motion.div>
+              ) : null}
 
               {phase === 'euphoria' || phase === 'resolved' ? (
                 <motion.section
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15, duration: 0.4 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
                   className="mt-8 w-full border-t border-white/10 pt-5"
                 >
                   <h3 className="text-[18px] font-black tracking-tight text-white">
@@ -1153,22 +1175,17 @@ export function ProjectSupportOneFlow({
                       body={guestEmail ? `Envoyé à ${guestEmail}.` : 'Disponible dans votre profil.'}
                     />
                     <NextStepLine
-                      icon={CreditsIcon}
-                      title={`${points.total_points} Crédits Impact ajoutés`}
-                      body="Disponibles dans votre profil et utilisables dans les avantages partenaires."
-                    />
-                    <NextStepLine
                       icon={Camera}
                       title="Suivi du projet"
                       body="Retrouvez les mises à jour du partenaire dans votre profil quand il publie des nouvelles du terrain."
                     />
                     <NextStepLine
                       icon={Leaf}
-                      title="BioDex à sauvegarder"
+                      title="BioDex à explorer"
                       body={
                         species && species.length > 1
-                          ? `Créez votre profil pour conserver ${discoveredSpecies?.name_default || 'votre espèce'} et les ${species.length - 1} autre${species.length - 1 > 1 ? 's' : ''} espèce${species.length - 1 > 1 ? 's' : ''} liée${species.length - 1 > 1 ? 's' : ''}.`
-                          : `Créez votre profil pour conserver ${discoveredSpecies?.name_default || 'votre espèce'} et la trace de ce soutien.`
+                          ? `${discoveredSpecies?.name_default || 'Votre espèce'} et ${species.length - 1} autre${species.length - 1 > 1 ? 's' : ''} espèce${species.length - 1 > 1 ? 's' : ''} liée${species.length - 1 > 1 ? 's' : ''} vous attendent.`
+                          : `${discoveredSpecies?.name_default || 'Votre espèce'} est maintenant dans votre trace de soutien.`
                       }
                     />
                   </div>
@@ -1180,25 +1197,18 @@ export function ProjectSupportOneFlow({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.35 }}
-                  className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6"
+                  className="mt-6 w-full border-t border-white/[0.08] pt-5"
                 >
-                  <h3 className="mb-2 font-bold text-white">Ne perdez pas votre {discoveredSpecies?.name_default || 'Chouette Effraie'} !</h3>
-                  <p className="mb-4 text-sm text-white/60">
-                    Créez votre profil en 1 clic pour la sauvegarder dans votre BioDex.
+                  <p className="text-sm font-black text-white">
+                    Sauvegarder votre BioDex
                   </p>
-                  <div className="grid gap-2">
-                    <p className="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 flex items-center text-base text-white/60 truncate">
-                      {guestEmail}
-                    </p>
-                    <Button
-                      type="button"
-                      onClick={submitClaim}
-                      className="hidden h-11 rounded-xl bg-lime-400 font-bold text-black hover:bg-lime-300 md:inline-flex"
-                      disabled={isSendingMagicLink}
-                    >
-                      {isSendingMagicLink ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                      Créer mon compte en 1 clic
-                    </Button>
+                  <p className="mt-1 text-[13px] leading-snug text-white/50">
+                    Créez votre profil pour conserver{' '}
+                    {discoveredSpecies?.name_default || 'votre espèce'} et suivre le projet.
+                  </p>
+                  <div className="mt-3 flex items-center gap-2 text-[13px] text-white/38">
+                    <Mail className="h-3.5 w-3.5 shrink-0" />
+                    <span className="truncate">{guestEmail}</span>
                   </div>
                 </motion.div>
               ) : null}
