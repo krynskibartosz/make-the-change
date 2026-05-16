@@ -39,7 +39,7 @@ import {
   FACTION_COPY,
   getEcosystemById,
   PERSPECTIVE_COPY,
-} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+} from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 
 type EcosystemSpeciesPreview = {

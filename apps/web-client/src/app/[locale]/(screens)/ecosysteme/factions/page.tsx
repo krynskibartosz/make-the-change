@@ -2,7 +2,7 @@
 
 import { Button } from '@make-the-change/core/ui'
 import { ChevronLeft } from 'lucide-react'
-import { type EcosystemFactionKey, FACTION_COPY } from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+import { type EcosystemFactionKey, FACTION_COPY } from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 
 function FactionCard({

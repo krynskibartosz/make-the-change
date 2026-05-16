@@ -20,7 +20,7 @@ import {
   type EcosystemPerspective,
   getEcosystemById,
   PERSPECTIVE_COPY,
-} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+} from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 import {
   buildPathPoints,

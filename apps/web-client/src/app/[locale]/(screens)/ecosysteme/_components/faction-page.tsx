@@ -3,7 +3,7 @@
 import { Button } from '@make-the-change/core/ui'
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { ECOSYSTEMS, type EcosystemFactionKey, FACTION_COPY } from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+import { ECOSYSTEMS, type EcosystemFactionKey, FACTION_COPY } from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 
 export function FactionPage({ factionKey }: { factionKey: EcosystemFactionKey }) {

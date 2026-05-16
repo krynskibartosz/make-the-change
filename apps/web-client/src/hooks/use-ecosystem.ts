@@ -5,7 +5,7 @@ import {
   type EcosystemDefinition,
   type EcosystemNode,
   findCascadeNodeIds,
-} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+} from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 
 export function useEcosystem(ecosystem: EcosystemDefinition, isAccessUnlocked: boolean) {
   const [nodes, setNodes] = useState<EcosystemNode[]>(() =>

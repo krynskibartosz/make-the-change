@@ -32,7 +32,7 @@ import {
   type EcosystemNodeType,
   type EcosystemRelation,
   getEcosystemById,
-} from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+} from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 import { cn } from '@/lib/utils'
 import type { SpeciesContext } from '@/types/species'
 

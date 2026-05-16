@@ -11,6 +11,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { SpeciesContext } from '@/types/species'
+import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/_components/species-card-enhanced'
 
 type LearnTabProps = {
   seeds: number
@@ -59,7 +60,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     icon: Flower2,
     iconBg: 'bg-gradient-to-br from-yellow-300/22 to-emerald-300/8',
     status: 'Lié à ton projet',
-    href: '/adventure',
+    href: '/ecosysteme/foret-manakara',
   },
   {
     id: 'coral-cutting',
@@ -70,7 +71,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     icon: Waves,
     iconBg: 'bg-gradient-to-br from-cyan-300/22 to-blue-400/8',
     status: 'Ouvert',
-    href: '/adventure',
+    href: '/ecosysteme/recif-karimunjawa',
   },
 ]
 
@@ -82,7 +83,7 @@ const LEARNING_PATHS: LearningPath[] = [
     progress: 28,
     icon: Atom,
     active: true,
-    href: '/adventure',
+    href: '/academy',
   },
   {
     id: 'pollinators',
@@ -91,7 +92,7 @@ const LEARNING_PATHS: LearningPath[] = [
     progress: 0,
     icon: Flower2,
     active: false,
-    href: '/adventure',
+    href: '/academy/chapters',
   },
   {
     id: 'oceans',
@@ -100,7 +101,7 @@ const LEARNING_PATHS: LearningPath[] = [
     progress: 0,
     icon: Waves,
     active: false,
-    href: '/adventure',
+    href: '/academy/chapters',
   },
 ]
 
@@ -112,7 +113,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     count: '7 liens',
     icon: TreePine,
     locked: false,
-    href: '/adventure',
+    href: '/ecosysteme/foret-manakara',
   },
   {
     id: 'reef',
@@ -121,7 +122,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     count: '6 liens',
     icon: Waves,
     locked: false,
-    href: '/adventure',
+    href: '/ecosysteme/recif-karimunjawa',
   },
   {
     id: 'pollinators-belgium',
@@ -130,7 +131,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     count: 'Bientôt',
     icon: Flower2,
     locked: true,
-    href: '/adventure',
+    href: '/ecosysteme/pollinisateurs-belgique',
   },
 ]
 
@@ -148,14 +149,15 @@ function getSpeciesFallbackEmoji(name: string): string {
 }
 
 export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
-  const unlockedCount = species.filter((s) => s.user_status?.isUnlocked).length
-  const totalCount = species.length
-  const progressPct = totalCount > 0 ? Math.round((unlockedCount / totalCount) * 100) : 0
-
   const sortedPreview = [
     ...species.filter((s) => s.user_status?.isUnlocked),
     ...species.filter((s) => !s.user_status?.isUnlocked),
   ].slice(0, 4)
+
+  const missionSpecies =
+    species.find((s) => s.id === 'species-abeille-noire') ??
+    species.find((s) => s.user_status?.isUnlocked) ??
+    null
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-7 md:pb-10">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-teal-400/[0.04] to-[#0B0F15]" />
@@ -169,7 +171,7 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Reprendre</p>
             <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Continuer</h2>
           </div>
-          <Link href="/adventure" className="block transition-transform active:scale-[0.99]">
+          <Link href="/academy" className="block transition-transform active:scale-[0.99]">
             <article className="overflow-hidden rounded-[2rem] border border-teal-200/14 bg-gradient-to-br from-teal-300/14 via-white/[0.055] to-emerald-300/8 p-4 shadow-2xl shadow-black/25">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full bg-teal-300/14 px-3 py-1.5 text-[11px] font-semibold text-teal-100">
@@ -248,41 +250,53 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
         </section>
 
         {/* ── 3. Mission espèce ── */}
-        <section>
-          <div className="mb-3 px-0.5">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Mission</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Mission espèce</h2>
-          </div>
-          <Link href="/adventure" className="block transition-transform active:scale-[0.99]">
-            <article className="overflow-hidden rounded-[28px] border border-yellow-200/12 bg-gradient-to-br from-yellow-300/14 via-white/[0.045] to-teal-300/8">
-              <div className="flex gap-3 p-4">
-                <div className="relative grid h-[92px] w-[92px] shrink-0 place-items-center rounded-[26px] bg-black/20">
-                  <div className="absolute inset-0 rounded-[26px] bg-[radial-gradient(circle,rgba(255,210,58,.25),transparent_55%)]" />
-                  <span className="relative text-[48px]" aria-label="Abeille">🐝</span>
-                </div>
-                <div className="min-w-0 flex-1 py-0.5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-yellow-100/70">Mission espèce</p>
-                  <h3 className="mt-1 text-[18px] font-black leading-tight tracking-[-0.035em] text-white">Comprendre l'Abeille Noire</h3>
-                  <p className="mt-0.5 truncate text-[11px] italic text-white/38">Apis mellifera unicolor</p>
-                  <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-white/52">
-                    Découvre son rôle de pollinisatrice, ses menaces et ses liens dans la forêt de Manakara.
-                  </p>
-                </div>
-              </div>
-              <div className="border-t border-white/[0.07] px-4 py-3">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[12px] font-semibold text-white/78">4 étapes · +120 Graines</p>
-                    <p className="mt-0.5 text-[11px] text-white/40">Débloque : 1 lien Toile vivante</p>
+        {missionSpecies && (
+          <section>
+            <div className="mb-3 px-0.5">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Mission</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Mission espèce</h2>
+            </div>
+            <Link href={`/profile/biodex/${missionSpecies.id}`} className="block transition-transform active:scale-[0.99]">
+              <article className="overflow-hidden rounded-[28px] border border-yellow-200/12 bg-gradient-to-br from-yellow-300/14 via-white/[0.045] to-teal-300/8">
+                <div className="flex gap-3 p-4">
+                  <div className="relative h-[92px] w-[92px] shrink-0 overflow-hidden rounded-[26px] bg-black/20">
+                    <div className="absolute inset-0 rounded-[26px] bg-[radial-gradient(circle,rgba(255,210,58,.25),transparent_55%)]" />
+                    {missionSpecies.image_url ? (
+                      <img
+                        src={missionSpecies.image_url}
+                        alt={missionSpecies.name_default}
+                        className="relative h-full w-full object-contain"
+                      />
+                    ) : (
+                      <div className="relative grid h-full w-full place-items-center">
+                        <span className="text-[48px]">{getSpeciesFallbackEmoji(missionSpecies.name_default)}</span>
+                      </div>
+                    )}
                   </div>
-                  <span className="rounded-full bg-yellow-300 px-3 py-1.5 text-[12px] font-black text-stone-950">
-                    Commencer
-                  </span>
+                  <div className="min-w-0 flex-1 py-0.5">
+                    <p className="text-[10px] font-black uppercase tracking-[0.14em] text-yellow-100/70">Mission espèce</p>
+                    <h3 className="mt-1 text-[18px] font-black leading-tight tracking-[-0.035em] text-white">{missionSpecies.name_default}</h3>
+                    <p className="mt-0.5 truncate text-[11px] italic text-white/38">{missionSpecies.scientific_name}</p>
+                    <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-white/52">
+                      {missionSpecies.description_default}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </article>
-          </Link>
-        </section>
+                <div className="border-t border-white/[0.07] px-4 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[12px] font-semibold text-white/78">4 étapes · +120 Graines</p>
+                      <p className="mt-0.5 text-[11px] text-white/40">Débloque : 1 lien Toile vivante</p>
+                    </div>
+                    <span className="rounded-full bg-yellow-300 px-3 py-1.5 text-[12px] font-black text-stone-950">
+                      Commencer
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </Link>
+          </section>
+        )}
 
         {/* ── 4. Parcours ── */}
         <section>
@@ -377,7 +391,7 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
 
         {/* ── 6. Mon BioDex ── */}
         <section>
-          <div className="mb-3 flex items-end justify-between gap-4 px-0.5">
+          <div className="mb-5 flex items-end justify-between gap-4 px-0.5">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Collection</p>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Mon BioDex</h2>
@@ -389,51 +403,10 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
               Voir tout <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-          <div className="rounded-[2rem] border border-white/7 bg-white/[0.045] p-4">
-            <div className="mb-3 flex items-start justify-between gap-3">
-              <div>
-                <p className="text-sm font-semibold text-white">{unlockedCount} / {totalCount} espèces découvertes</p>
-                <p className="mt-0.5 text-xs text-white/45">Soutiens des projets pour débloquer de nouvelles espèces.</p>
-              </div>
-            </div>
-            <div className="mb-4 h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-gradient-to-r from-teal-300 to-lime-300" style={{ width: `${progressPct}%` }} />
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {sortedPreview.map((sp) => {
-                const isLocked = !sp.user_status?.isUnlocked
-                return (
-                  <Link
-                    key={sp.id}
-                    href={`/profile/biodex/${sp.id}`}
-                    className="flex flex-col items-center gap-1"
-                  >
-                    <div className="grid aspect-square w-full place-items-center overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.05]">
-                      {sp.image_url ? (
-                        <img
-                          src={sp.image_url}
-                          alt={sp.name_default}
-                          className={cn(
-                            'h-full w-full object-contain',
-                            isLocked && 'grayscale opacity-40 blur-sm',
-                          )}
-                        />
-                      ) : (
-                        <span
-                          className={cn('text-[28px]', isLocked && 'opacity-20')}
-                          aria-label={sp.name_default}
-                        >
-                          {getSpeciesFallbackEmoji(sp.name_default)}
-                        </span>
-                      )}
-                    </div>
-                    <span className={cn('line-clamp-1 w-full text-center text-[9px]', isLocked ? 'text-white/30' : 'text-white/55')}>
-                      {sp.name_default}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
+          <div className="grid grid-cols-2 gap-6">
+            {sortedPreview.map((sp) => (
+              <SpeciesCardEnhanced key={sp.id} species={sp} showUserStatus />
+            ))}
           </div>
         </section>
 

@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { getEcosystemById } from '@/app/[locale]/(lab)/ecosysteme/_lib/graph'
+import { getEcosystemById } from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
 import { EcosystemDetail } from '../_components/ecosystem-detail'
 
 interface EcosystemDetailPageProps {
