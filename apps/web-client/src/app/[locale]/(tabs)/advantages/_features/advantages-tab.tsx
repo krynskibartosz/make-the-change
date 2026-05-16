@@ -38,7 +38,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           <div className="mb-4 flex items-end justify-between gap-4 px-1">
             <h2 className="text-xl font-black tracking-tight text-white">À utiliser maintenant</h2>
             <Link
-              href="/advantages"
+              href="/advantages/catalog"
               className="flex items-center gap-1 text-sm font-black text-lime-300 active:text-lime-200"
             >
               Voir tout

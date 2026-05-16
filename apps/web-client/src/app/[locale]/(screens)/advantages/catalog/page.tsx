@@ -2,8 +2,8 @@ import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
-import { getMockAdvantages } from './_features/mock-advantages'
-import { AdvantagesCatalogClient } from './_features/advantages-catalog-client'
+import { getMockAdvantages } from '../_features/mock-advantages'
+import { AdvantagesCatalogClient } from '../_features/advantages-catalog-client'
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: 'Catalogue des avantages | Make the Change' }
@@ -13,7 +13,7 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export default async function AdvantagesScreenPage({ searchParams }: Props) {
+export default async function AdvantagesCatalogPage({ searchParams }: Props) {
   const params = await searchParams
   const typeFilter = typeof params.type === 'string' ? params.type : 'all'
   const advantages = getMockAdvantages()

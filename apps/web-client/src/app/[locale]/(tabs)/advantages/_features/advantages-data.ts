@@ -108,19 +108,19 @@ export function getAdvantagesData(): AdvantagesData {
         id: 'harvests',
         title: 'Récoltes partenaires',
         description: 'Miels, huiles et produits sélectionnés auprès de nos partenaires.',
-        href: '/advantages?type=product',
+        href: '/advantages/catalog?type=product',
       },
       {
         id: 'partner-offers',
         title: 'Offres partenaires',
         description: 'Débloque un code, puis utilise-le directement chez le partenaire.',
-        href: '/advantages?type=partner_code',
+        href: '/advantages/catalog?type=partner_code',
       },
       {
         id: 'experiences',
         title: 'Expériences & lives',
         description: 'Lives, visites et ateliers pour découvrir les projets autrement.',
-        href: '/advantages?type=experience_live',
+        href: '/advantages/catalog?type=experience_live',
       },
     ],
     partners: [
