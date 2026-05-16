@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, ArrowRight, Check, Copy, ExternalLink, Sparkles } from 'lucide-react'
+import { ArrowLeft, Check, ChevronRight, Copy, ExternalLink, Sparkles } from 'lucide-react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { CurrencyAmount } from '@/components/currency'
 import type { Advantage } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
@@ -49,10 +49,22 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
   const isActioned = advantage.type === 'partner_code' ? unlocked : reserved
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="relative flex h-full flex-col">
+
+      {/* ── Glow ambient ── */}
+      <div className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
+          style={{ backgroundColor: 'rgba(163, 230, 53, 0.07)' }}
+        />
+        <div
+          className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full blur-3xl"
+          style={{ backgroundColor: 'rgba(163, 230, 53, 0.09)' }}
+        />
+      </div>
 
       {/* ── Zone scrollable ── */}
-      <div className="flex-1 overflow-y-auto overscroll-contain pb-4">
+      <div className="relative flex-1 overflow-y-auto overscroll-contain pb-4">
 
         {/* Bouton retour flottant (pages directes) */}
         {showFloatingBack && (
@@ -153,10 +165,29 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
           </div>
         )}
 
-        {/* Séparateur */}
-        <div className="mx-4 mt-8 border-t border-white/7" />
+        {/* ── Rangée Partenaire/Producteur (style product-quick-view) ── */}
+        {advantage.producerSlug && (
+          <Link
+            href={`/producers/${advantage.producerSlug}`}
+            className="group mt-6 flex items-center gap-3 border-y border-white/5 px-4 py-3 transition-opacity active:opacity-70"
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime-300/10 text-xs font-black text-lime-300">
+              {advantage.partner[0]?.toUpperCase() ?? 'P'}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">
+                Partenaire
+              </p>
+              <p className="truncate text-sm font-semibold text-white/80 transition-colors group-hover:text-white">
+                {advantage.partner}
+                {advantage.location ? ` · ${advantage.location}` : ''}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-white/20 transition-colors group-hover:text-white/50" aria-hidden="true" />
+          </Link>
+        )}
 
-        {/* Sections */}
+        {/* ── Sections ── */}
         <div className="flex flex-col gap-8 px-4 pt-8">
 
           {advantage.whatYouGet && (
@@ -190,19 +221,6 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
             </section>
           )}
 
-          {advantage.producerSlug && (
-            <section>
-              <h2 className="text-base font-black text-white">Partenaire</h2>
-              <Link
-                href={`/producers/${advantage.producerSlug}`}
-                className="mt-3 flex items-center justify-between rounded-2xl border border-white/7 bg-white/[0.045] px-4 py-3 transition-opacity active:opacity-70"
-              >
-                <span className="text-[15px] font-semibold text-white">{advantage.partner}</span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-white/30" aria-hidden="true" />
-              </Link>
-            </section>
-          )}
-
           {advantage.projectSlug && (
             <section>
               <h2 className="text-base font-black text-white">Projet lié</h2>
@@ -211,7 +229,7 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
                 className="mt-3 flex items-center justify-between rounded-2xl border border-white/7 bg-white/[0.045] px-4 py-3 transition-opacity active:opacity-70"
               >
                 <span className="text-[15px] font-semibold text-white">Voir le projet</span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-white/30" aria-hidden="true" />
+                <ChevronRight className="h-4 w-4 shrink-0 text-white/30" aria-hidden="true" />
               </Link>
             </section>
           )}
@@ -244,27 +262,30 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
         </div>
       </div>
 
-      {/* ── CTA sticky (flux naturel en bas du flex) ── */}
-      <div className="shrink-0 border-t border-white/5 bg-[#0B0F15]/88 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-lg">
-        {isSoon ? (
-          <div className="flex w-full cursor-not-allowed items-center justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/25">
-            Bientôt disponible
-          </div>
-        ) : isActioned ? (
-          <div className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/5 py-4 text-[15px] font-black text-lime-300">
-            <Check className="h-4 w-4" aria-hidden="true" />
-            {advantage.type === 'partner_code' ? 'Code débloqué' : 'Réservation enregistrée'}
-          </div>
-        ) : (
-          <button
-            onClick={() =>
-              advantage.type === 'partner_code' ? setUnlocked(true) : setReserved(true)
-            }
-            className="flex w-full items-center justify-center rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] transition-opacity active:opacity-80"
-          >
-            {ctaLabel}
-          </button>
-        )}
+      {/* ── CTA sticky ── */}
+      <div className="relative shrink-0">
+        <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-[#0B0F15] to-transparent" />
+        <div className="border-t border-white/5 bg-[#0B0F15]/60 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl">
+          {isSoon ? (
+            <div className="flex w-full cursor-not-allowed items-center justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/25">
+              Bientôt disponible
+            </div>
+          ) : isActioned ? (
+            <div className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/5 py-4 text-[15px] font-black text-lime-300">
+              <Check className="h-4 w-4" aria-hidden="true" />
+              {advantage.type === 'partner_code' ? 'Code débloqué' : 'Réservation enregistrée'}
+            </div>
+          ) : (
+            <button
+              onClick={() =>
+                advantage.type === 'partner_code' ? setUnlocked(true) : setReserved(true)
+              }
+              className="flex w-full items-center justify-center rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] transition-opacity active:opacity-80"
+            >
+              {ctaLabel}
+            </button>
+          )}
+        </div>
       </div>
 
     </div>
