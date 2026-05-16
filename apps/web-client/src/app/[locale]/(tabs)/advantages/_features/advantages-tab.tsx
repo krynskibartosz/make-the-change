@@ -78,47 +78,53 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </ul>
         </section>
 
-        {/* ── Section 2 — Bonus collectif ───────────────────────────────────── */}
+        {/* ── Section 2 — Prochain bonus collectif ──────────────────────────── */}
         <section>
+          <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">
+            Prochain bonus collectif
+          </h2>
           <Link
             href={data.collectiveBonus.href}
-            className="group relative block overflow-hidden rounded-[2rem] transition-transform active:scale-[0.985]"
+            className="group block overflow-hidden rounded-[2rem] border border-white/7 bg-white/[0.045] transition-transform active:scale-[0.985]"
           >
-            <img
-              src={data.collectiveBonus.imageUrl}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            {/* Gradient fort pour lisibilité garantie */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/75 to-black/20" />
-
-            <div className="relative z-10 flex min-h-[18rem] flex-col justify-end p-5">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-lime-300/15 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-lime-300">
+            {/* Image top */}
+            <div className="relative aspect-[16/9] overflow-hidden">
+              <img
+                src={data.collectiveBonus.imageUrl}
+                alt=""
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-lime-300/15 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-lime-300 backdrop-blur-sm">
                   Bonus collectif
                 </span>
                 {data.collectiveBonus.currentStep < data.collectiveBonus.totalSteps && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm">
                     <Sparkles className="h-2.5 w-2.5" aria-hidden="true" />
                     Bientôt débloqué
                   </span>
                 )}
               </div>
+            </div>
 
-              <h2 className="mt-2 text-[20px] font-black leading-tight tracking-tight text-white">
+            {/* Content below */}
+            <div className="flex flex-col gap-3 p-5">
+              <h3 className="text-[18px] font-black leading-tight tracking-tight text-white">
                 {data.collectiveBonus.title}
-              </h2>
-              <p className="mt-1.5 text-sm font-medium leading-relaxed text-white/70">
-                {data.collectiveBonus.description}
+              </h3>
+
+              <p className="text-sm font-medium leading-snug text-white/55">
+                Prochaine étape · {data.collectiveBonus.nextStepLabel}
               </p>
 
-              <div className="mt-4">
+              <div>
                 <div className="mb-2 flex items-center justify-between text-xs font-bold">
                   <span className="text-white/55">
                     Étape {data.collectiveBonus.currentStep} sur {data.collectiveBonus.totalSteps}
                   </span>
                   <span className="text-lime-300/80">
-                    Prochaine · {data.collectiveBonus.nextStepLabel}
+                    {Math.round((data.collectiveBonus.currentStep / data.collectiveBonus.totalSteps) * 100)} %
                   </span>
                 </div>
                 <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
@@ -131,7 +137,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
                 </div>
               </div>
 
-              <div className="mt-4 inline-flex items-center gap-2 text-sm font-black text-lime-300">
+              <div className="inline-flex items-center gap-2 text-sm font-black text-lime-300">
                 {data.collectiveBonus.cta}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </div>

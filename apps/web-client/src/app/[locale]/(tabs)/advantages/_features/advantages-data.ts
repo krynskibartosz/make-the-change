@@ -92,14 +92,14 @@ export function getAdvantagesData(): AdvantagesData {
       costImpactCredits: 200,
     },
     collectiveBonus: {
-      title: 'Live rucher Ilanga bientôt débloqué',
+      title: 'Live rucher Ilanga',
       partner: 'Ilanga Nature',
       description:
-        'La communauté est proche de débloquer un live depuis le rucher et un carnet de récolte terrain.',
+        'La prochaine étape donnera accès à un live terrain et à un carnet de récolte.',
       imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
       currentStep: 2,
       totalSteps: 3,
-      nextStepLabel: 'Live terrain',
+      nextStepLabel: 'Live terrain + carnet de récolte',
       href: `/projects/${MOCK_PROJECT_MIELLERIES_MOBILE_SLUG}`,
       cta: 'Voir le projet lié',
     },
@@ -134,7 +134,7 @@ export function getAdvantagesData(): AdvantagesData {
       },
       {
         id: 'habeebee',
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         description: 'Produits artisanaux, apiculture douce et expériences locales autour des abeilles.',
         location: 'Bruxelles, Belgique',
         imageUrl: '/images/products/savon-doux-habeebee.png',
