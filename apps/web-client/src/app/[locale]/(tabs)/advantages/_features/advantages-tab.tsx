@@ -11,12 +11,16 @@ type AdvantagesTabProps = {
 }
 
 export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTabProps) {
+  const bonusProgress = Math.round(
+    (data.collectiveBonus.currentStep / data.collectiveBonus.totalSteps) * 100,
+  )
+
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
 
-        {/* ── Intro ─────────────────────────────────────────────────────────── */}
+        {/* ── Intro ── */}
         <div className="px-1 pt-2">
           <h1 className="text-[26px] font-black tracking-tight text-white">
             Avantages Partenaires
@@ -26,10 +30,10 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </p>
         </div>
 
-        {/* ── Badge flottant Credits Impact — apparaît après scroll de l'intro ── */}
+        {/* Badge flottant Credits Impact */}
         {isConnected && <ImpactCreditsFloatingBadge impactCredits={impactCredits} />}
 
-        {/* ── Section 1 — À utiliser maintenant ─────────────────────────────── */}
+        {/* ── 1. À utiliser maintenant — tuiles ouvertes 2 col ── */}
         <section>
           <div className="mb-4 flex items-end justify-between gap-4 px-1">
             <h2 className="text-xl font-black tracking-tight text-white">À utiliser maintenant</h2>
@@ -66,66 +70,54 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </ul>
         </section>
 
-        {/* ── Section 2 — Prochain bonus collectif ──────────────────────────── */}
+        {/* ── 2. Prochain avantage collectif — tuile éditoriale ouverte ── */}
         <section>
           <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">
-            Prochain bonus collectif
+            Prochain avantage collectif
           </h2>
           <Link
             href={data.collectiveBonus.href}
-            className="group block overflow-hidden rounded-[2rem] border border-white/7 bg-white/[0.045] transition-transform active:scale-[0.985]"
+            className="group block transition-transform active:scale-[0.985]"
           >
-            {/* Image top */}
-            <div className="relative aspect-[16/9] overflow-hidden">
+            {/* Image with overlay */}
+            <div className="relative aspect-[16/9] overflow-hidden rounded-[1.75rem]">
               <img
                 src={data.collectiveBonus.imageUrl}
                 alt=""
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-lime-300/15 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-lime-300 backdrop-blur-sm">
-                  Bonus collectif
-                </span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
                 {data.collectiveBonus.currentStep < data.collectiveBonus.totalSteps && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm">
+                  <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-white/12 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm">
                     <Sparkles className="h-2.5 w-2.5" aria-hidden="true" />
                     Bientôt débloqué
                   </span>
                 )}
+                <h3 className="mt-1 text-[18px] font-black leading-tight tracking-tight text-white">
+                  {data.collectiveBonus.title}
+                </h3>
+                <p className="mt-1 text-[13px] font-medium leading-snug text-white/65">
+                  Prochaine étape · {data.collectiveBonus.nextStepLabel}
+                </p>
               </div>
             </div>
 
-            {/* Content below */}
-            <div className="flex flex-col gap-3 p-5">
-              <h3 className="text-[18px] font-black leading-tight tracking-tight text-white">
-                {data.collectiveBonus.title}
-              </h3>
-
-              <p className="text-sm font-medium leading-snug text-white/55">
-                Prochaine étape · {data.collectiveBonus.nextStepLabel}
-              </p>
-
-              <div>
-                <div className="mb-2 flex items-center justify-between text-xs font-bold">
-                  <span className="text-white/55">
-                    Étape {data.collectiveBonus.currentStep} sur {data.collectiveBonus.totalSteps}
-                  </span>
-                  <span className="text-lime-300/80">
-                    {Math.round((data.collectiveBonus.currentStep / data.collectiveBonus.totalSteps) * 100)} %
-                  </span>
-                </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
-                  <div
-                    className="h-full rounded-full bg-lime-300"
-                    style={{
-                      width: `${Math.round((data.collectiveBonus.currentStep / data.collectiveBonus.totalSteps) * 100)}%`,
-                    }}
-                  />
-                </div>
+            {/* Progress bar + CTA — outside image */}
+            <div className="mt-4 px-1">
+              <div className="mb-2 flex items-center justify-between text-[11px] font-bold">
+                <span className="text-white/48">
+                  Étape {data.collectiveBonus.currentStep} sur {data.collectiveBonus.totalSteps}
+                </span>
+                <span className="text-lime-300/75">{bonusProgress} %</span>
               </div>
-
-              <div className="inline-flex items-center gap-2 text-sm font-black text-lime-300">
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/12">
+                <div
+                  className="h-full rounded-full bg-lime-300"
+                  style={{ width: `${bonusProgress}%` }}
+                />
+              </div>
+              <div className="mt-3 inline-flex items-center gap-2 text-sm font-black text-lime-300">
                 {data.collectiveBonus.cta}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </div>
@@ -133,58 +125,58 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </Link>
         </section>
 
-        {/* ── Section 3 — Explorer les avantages ───────────────────────────── */}
+        {/* ── 3. Explorer les avantages — rows avec séparateurs ── */}
         <section>
-          <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">
+          <h2 className="mb-2 px-1 text-xl font-black tracking-tight text-white">
             Explorer les avantages
           </h2>
-          <ul className="m-0 flex list-none flex-col gap-3 p-0">
+          <ul className="m-0 list-none divide-y divide-white/[0.07] p-0">
             {data.categories.map((category) => (
               <li key={category.id}>
                 <Link
                   href={category.href}
-                  className="flex items-center gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.045] p-4 active:bg-white/[0.07]"
+                  className="flex items-center gap-4 py-4 transition-opacity active:opacity-60"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/[0.07] text-lime-300">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/[0.07] text-lime-300">
                     {category.id === 'harvests' && <Package className="h-5 w-5" aria-hidden="true" />}
                     {category.id === 'partner-offers' && <Handshake className="h-5 w-5" aria-hidden="true" />}
                     {category.id === 'experiences' && <CalendarDays className="h-5 w-5" aria-hidden="true" />}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-base font-black text-white">{category.title}</span>
-                    <span className="mt-1 block text-sm font-medium leading-snug text-white/48">
+                    <span className="block text-[15px] font-semibold text-white">{category.title}</span>
+                    <span className="mt-0.5 block text-[13px] font-medium leading-snug text-white/45">
                       {category.description}
                     </span>
                   </span>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-white/30" aria-hidden="true" />
+                  <ChevronRight className="h-4 w-4 shrink-0 text-white/28" aria-hidden="true" />
                 </Link>
               </li>
             ))}
           </ul>
         </section>
 
-        {/* ── Section 4 — Partenaires ───────────────────────────────────────── */}
+        {/* ── 4. Partenaires — rows avec séparateurs ── */}
         <section>
-          <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Partenaires</h2>
-          <ul className="m-0 flex list-none flex-col gap-4 p-0">
+          <h2 className="mb-2 px-1 text-xl font-black tracking-tight text-white">Partenaires</h2>
+          <ul className="m-0 list-none divide-y divide-white/[0.07] p-0">
             {data.partners.map((partner) => (
               <li key={partner.id}>
                 <Link
                   href={partner.href}
-                  className="flex gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.045] p-4 active:bg-white/[0.07]"
+                  className="flex gap-4 py-4 transition-opacity active:opacity-60"
                 >
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white/5">
                     <img src={partner.imageUrl} alt="" className="h-full w-full object-cover" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-base font-black leading-tight text-white">{partner.name}</h3>
-                      <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-white/30" aria-hidden="true" />
+                      <h3 className="text-[15px] font-semibold leading-tight text-white">{partner.name}</h3>
+                      <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-white/28" aria-hidden="true" />
                     </div>
-                    <p className="mt-0.5 text-xs font-bold uppercase tracking-wider text-white/35">
+                    <p className="mt-0.5 text-[11px] font-bold uppercase tracking-wider text-white/32">
                       {partner.location}
                     </p>
-                    <p className="mt-1.5 text-sm font-medium leading-snug text-white/55">
+                    <p className="mt-1 text-[13px] font-medium leading-snug text-white/50">
                       {partner.description}
                     </p>
                   </div>
@@ -194,14 +186,14 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </ul>
         </section>
 
-        {/* ── Section 5 — Comprendre (légère) ──────────────────────────────── */}
+        {/* ── 5. Comprendre — texte + lien, sans fond ── */}
         <section className="px-1">
           <h2 className="text-base font-black text-white">Comprendre ce que tu soutiens</h2>
           <p className="mt-1 text-sm font-medium leading-relaxed text-white/50">
             Les produits et expériences sont liés à des projets, des espèces et des partenaires de terrain.
           </p>
           <Link
-            href="/adventure"
+            href="/learn"
             className="mt-3 inline-flex items-center gap-2 text-sm font-black text-lime-300 active:text-lime-200"
           >
             Explorer dans Apprendre
@@ -209,7 +201,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </Link>
         </section>
 
-        {/* ── Mention légale ────────────────────────────────────────────────── */}
+        {/* ── Mention légale ── */}
         <p className="pb-2 text-center text-[11px] font-medium leading-relaxed text-white/25">
           Les Credits Impact donnent accès à des avantages. Ils ne constituent pas une preuve d'impact automatique.
         </p>
@@ -237,7 +229,7 @@ function AdvantageCard({
       href={href}
       className="group flex flex-col gap-2 transition-transform active:scale-[0.98]"
     >
-      <div className="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-zinc-800">
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-zinc-800">
         <img
           src={imageUrl}
           alt={title}
