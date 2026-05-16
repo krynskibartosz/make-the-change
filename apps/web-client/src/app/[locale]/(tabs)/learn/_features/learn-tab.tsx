@@ -3,13 +3,13 @@ import {
   Atom,
   ChevronRight,
   Flower2,
-  Play,
   Sprout,
   TreePine,
   Waves,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import { formatCompact } from '@/lib/formatters'
 import type { SpeciesContext } from '@/types/species'
 import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/_components/species-card-enhanced'
 
@@ -25,8 +25,7 @@ type ProjectModule = {
   detail: string
   reward: string
   icon: LucideIcon
-  iconBg: string
-  status: string
+  accentClass: string
   href: string
 }
 
@@ -46,6 +45,7 @@ type Ecosystem = {
   subtitle: string
   count: string
   icon: LucideIcon
+  accentClass: string
   locked: boolean
   href: string
 }
@@ -58,8 +58,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     detail: 'Module terrain · 5 min',
     reward: '+70 Graines',
     icon: Flower2,
-    iconBg: 'bg-gradient-to-br from-yellow-300/22 to-emerald-300/8',
-    status: 'Lié à ton projet',
+    accentClass: 'bg-gradient-to-br from-yellow-300/20 to-emerald-400/8 text-yellow-200',
     href: '/ecosysteme/foret-manakara',
   },
   {
@@ -69,8 +68,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     detail: 'Making-of · 7 min',
     reward: '+90 Graines',
     icon: Waves,
-    iconBg: 'bg-gradient-to-br from-cyan-300/22 to-blue-400/8',
-    status: 'Ouvert',
+    accentClass: 'bg-gradient-to-br from-cyan-300/20 to-blue-400/8 text-cyan-200',
     href: '/ecosysteme/recif-karimunjawa',
   },
 ]
@@ -112,6 +110,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     subtitle: 'Abeilles, sols, orchidées et canopée',
     count: '7 liens',
     icon: TreePine,
+    accentClass: 'bg-gradient-to-br from-emerald-400/20 to-teal-500/8 text-emerald-200',
     locked: false,
     href: '/ecosysteme/foret-manakara',
   },
@@ -121,6 +120,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     subtitle: 'Coraux, poissons refuges et stress thermique',
     count: '6 liens',
     icon: Waves,
+    accentClass: 'bg-gradient-to-br from-cyan-400/20 to-blue-500/8 text-cyan-200',
     locked: false,
     href: '/ecosysteme/recif-karimunjawa',
   },
@@ -130,6 +130,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     subtitle: 'Haies, bourdons, osmies et auxiliaires',
     count: 'Bientôt',
     icon: Flower2,
+    accentClass: 'bg-gradient-to-br from-amber-400/12 to-yellow-500/5 text-amber-200/50',
     locked: true,
     href: '/ecosysteme/pollinisateurs-belgique',
   },
@@ -148,7 +149,7 @@ function getSpeciesFallbackEmoji(name: string): string {
   return '🌿'
 }
 
-export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
+export function LearnTab({ seeds, species }: LearnTabProps) {
   const sortedPreview = [
     ...species.filter((s) => s.user_status?.isUnlocked),
     ...species.filter((s) => !s.user_status?.isUnlocked),
@@ -158,67 +159,75 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
     species.find((s) => s.id === 'species-abeille-noire') ??
     species.find((s) => s.user_status?.isUnlocked) ??
     null
+
   return (
-    <section className="relative isolate w-full overflow-x-hidden pb-32 pt-7 md:pb-10">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-teal-400/[0.04] to-[#0B0F15]" />
-      <div className="pointer-events-none absolute left-1/2 top-[-8rem] z-[-1] h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-teal-400/[0.08] blur-[110px]" />
+    <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
+
+      {/* ── Badge flottant Graines ── */}
+      <Link
+        href="/profile/seeds"
+        prefetch={false}
+        aria-label={`Solde : ${seeds} Graines`}
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-50 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 px-3 shadow-sm backdrop-blur-md transition-colors active:bg-white/10"
+      >
+        <Sprout className="h-3.5 w-3.5 text-teal-300" aria-hidden="true" />
+        <span className="text-[12px] font-black tabular-nums text-white">{formatCompact(seeds)}</span>
+      </Link>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
 
+        {/* ── Intro ── */}
+        <div className="px-1 pt-2">
+          <h1 className="text-[26px] font-black tracking-tight text-white">Apprendre</h1>
+          <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/58">
+            Comprends le vivant à travers des leçons, des espèces et les projets que tu soutiens.
+          </p>
+        </div>
+
         {/* ── 1. Continuer ── */}
         <section>
-          <div className="mb-3 px-0.5">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Reprendre</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Continuer</h2>
-          </div>
-          <Link href="/academy" className="block transition-transform active:scale-[0.99]">
-            <article className="overflow-hidden rounded-[2rem] border border-teal-200/14 bg-gradient-to-br from-teal-300/14 via-white/[0.055] to-emerald-300/8 p-4 shadow-2xl shadow-black/25">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full bg-teal-300/14 px-3 py-1.5 text-[11px] font-semibold text-teal-100">
-                  <Play className="h-3.5 w-3.5" aria-hidden="true" /> À continuer
-                </span>
-                <span className="rounded-full bg-white/[0.07] px-3 py-1.5 text-[11px] text-white/60">3 min</span>
-              </div>
-              <div className="flex gap-3">
-                <div className="relative grid h-[88px] w-[88px] shrink-0 place-items-center rounded-[26px] bg-black/20">
-                  <div className="absolute inset-0 rounded-[26px] bg-[radial-gradient(circle,rgba(45,255,193,.28),transparent_58%)]" />
-                  <div className="relative grid h-14 w-14 place-items-center rounded-full bg-teal-300 text-[#04110e] shadow-lg shadow-teal-300/20">
-                    <Atom className="h-7 w-7" aria-hidden="true" />
-                  </div>
-                </div>
-                <div className="min-w-0 flex-1 py-0.5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-teal-100/72">Chapitre 1 · Mécanique du vivant</p>
-                  <h3 className="mt-1 text-[22px] font-black leading-[1.05] tracking-[-0.04em] text-white">L'Alphabet Originel</h3>
-                  <p className="mt-2 line-clamp-2 text-[12px] leading-snug text-white/54">Comprends les forces invisibles qui relient l'eau, le soleil, les sols et les espèces.</p>
+          <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Continuer</h2>
+          <Link
+            href="/academy"
+            className="group block overflow-hidden rounded-[1.75rem] border border-teal-200/14 bg-gradient-to-br from-teal-300/12 via-white/[0.045] to-emerald-300/6 transition-transform active:scale-[0.985]"
+          >
+            <div className="flex gap-3 p-4">
+              <div className="relative grid h-[66px] w-[66px] shrink-0 place-items-center rounded-[22px] bg-black/20">
+                <div className="absolute inset-0 rounded-[22px] bg-[radial-gradient(circle,rgba(45,255,193,.22),transparent_58%)]" />
+                <div className="relative grid h-10 w-10 place-items-center rounded-full bg-teal-300 text-[#04110e] shadow-md shadow-teal-300/25">
+                  <Atom className="h-5 w-5" aria-hidden="true" />
                 </div>
               </div>
-              <div className="mt-4 rounded-[22px] bg-black/18 p-3">
-                <div className="mb-2 flex items-center justify-between text-[11px]">
-                  <span className="font-medium text-white/70">8 / 28 unités</span>
-                  <span className="font-black text-teal-100">28%</span>
-                </div>
-                <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                  <div className="h-full w-[28%] rounded-full bg-gradient-to-r from-teal-300 to-lime-300" />
-                </div>
+              <div className="min-w-0 flex-1 py-0.5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-teal-100/55">Chapitre 1 · Mécanique du Vivant</p>
+                <h3 className="mt-0.5 text-[17px] font-black leading-tight tracking-tight text-white">L'Alphabet Originel</h3>
+                <p className="mt-1 line-clamp-1 text-[12px] text-white/45">Comprends les forces invisibles qui relient l'eau, le soleil, les sols et les espèces.</p>
+              </div>
+            </div>
+            <div className="border-t border-white/[0.06] px-4 py-3">
+              <div className="mb-2 flex items-center justify-between text-[11px]">
+                <span className="text-white/50">8 / 28 unités</span>
+                <span className="font-black text-teal-200">28 %</span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full w-[28%] rounded-full bg-gradient-to-r from-teal-300 to-lime-300" />
               </div>
               <div className="mt-3 flex items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1.5 text-[11px] text-white/68">
-                  <Sprout className="h-3.5 w-3.5 text-teal-200" aria-hidden="true" /> +60 Graines
+                <span className="flex items-center gap-1.5 text-[11px] text-white/45">
+                  <Sprout className="h-3.5 w-3.5 text-teal-200" aria-hidden="true" />
+                  +60 Graines · 3 min
                 </span>
-                <span className="inline-flex h-10 items-center justify-center gap-1 rounded-2xl bg-teal-300 px-4 text-[13px] font-black text-[#04110e]">
-                  Continuer <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                <span className="flex h-8 items-center gap-1 rounded-xl bg-teal-300 px-3 text-[12px] font-black text-[#04110e]">
+                  Continuer <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </span>
               </div>
-            </article>
+            </div>
           </Link>
         </section>
 
         {/* ── 2. Lié à tes projets ── */}
         <section>
-          <div className="mb-3 px-0.5">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Comprendre</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Lié à tes projets</h2>
-          </div>
+          <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Lié à tes projets</h2>
           <ul className="m-0 flex list-none flex-col gap-3 p-0">
             {PROJECT_MODULES.map((module) => {
               const Icon = module.icon
@@ -226,22 +235,19 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
                 <li key={module.id}>
                   <Link
                     href={module.href}
-                    className="flex gap-3 rounded-[26px] border border-white/10 bg-white/[0.055] p-3 transition-colors active:bg-white/[0.07]"
+                    className="flex items-center gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.045] p-4 transition-colors active:bg-white/[0.07]"
                   >
-                    <div className={cn('grid h-[76px] w-[76px] shrink-0 place-items-center rounded-[22px]', module.iconBg)}>
-                      <Icon className="h-7 w-7 text-white/[0.86]" aria-hidden="true" />
-                    </div>
-                    <div className="min-w-0 flex-1 py-0.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="truncate text-[11px] text-white/42">{module.context}</p>
-                        <span className="shrink-0 rounded-full bg-white/[0.07] px-2 py-1 text-[9px] text-white/55">{module.status}</span>
-                      </div>
-                      <h3 className="mt-1 line-clamp-2 text-[14px] font-semibold leading-tight text-white">{module.title}</h3>
-                      <p className="mt-1 text-[11px] text-white/45">{module.detail}</p>
-                      <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-teal-100">
-                        <Sprout className="h-3.5 w-3.5" aria-hidden="true" /> {module.reward}
+                    <span className={cn('flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl', module.accentClass)}>
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-medium text-white/42">{module.context} · {module.detail}</p>
+                      <h3 className="mt-0.5 text-[14px] font-semibold leading-snug text-white">{module.title}</h3>
+                      <div className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-teal-100/80">
+                        <Sprout className="h-3 w-3" aria-hidden="true" /> {module.reward}
                       </div>
                     </div>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-white/25" aria-hidden="true" />
                   </Link>
                 </li>
               )
@@ -252,59 +258,54 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
         {/* ── 3. Mission espèce ── */}
         {missionSpecies && (
           <section>
-            <div className="mb-3 px-0.5">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Mission</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Mission espèce</h2>
-            </div>
-            <Link href={`/profile/biodex/${missionSpecies.id}`} className="block transition-transform active:scale-[0.99]">
-              <article className="overflow-hidden rounded-[28px] border border-yellow-200/12 bg-gradient-to-br from-yellow-300/14 via-white/[0.045] to-teal-300/8">
-                <div className="flex gap-3 p-4">
-                  <div className="relative h-[92px] w-[92px] shrink-0 overflow-hidden rounded-[26px] bg-black/20">
-                    <div className="absolute inset-0 rounded-[26px] bg-[radial-gradient(circle,rgba(255,210,58,.25),transparent_55%)]" />
-                    {missionSpecies.image_url ? (
-                      <img
-                        src={missionSpecies.image_url}
-                        alt={missionSpecies.name_default}
-                        className="relative h-full w-full object-contain"
-                      />
-                    ) : (
-                      <div className="relative grid h-full w-full place-items-center">
-                        <span className="text-[48px]">{getSpeciesFallbackEmoji(missionSpecies.name_default)}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1 py-0.5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.14em] text-yellow-100/70">Mission espèce</p>
-                    <h3 className="mt-1 text-[18px] font-black leading-tight tracking-[-0.035em] text-white">{missionSpecies.name_default}</h3>
-                    <p className="mt-0.5 truncate text-[11px] italic text-white/38">{missionSpecies.scientific_name}</p>
-                    <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-white/52">
-                      {missionSpecies.description_default}
-                    </p>
-                  </div>
-                </div>
-                <div className="border-t border-white/[0.07] px-4 py-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-[12px] font-semibold text-white/78">4 étapes · +120 Graines</p>
-                      <p className="mt-0.5 text-[11px] text-white/40">Débloque : 1 lien Toile vivante</p>
+            <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Mission espèce</h2>
+            <Link
+              href={`/profile/biodex/${missionSpecies.id}`}
+              className="group block overflow-hidden rounded-[1.75rem] border border-yellow-200/12 bg-gradient-to-br from-yellow-300/10 via-white/[0.035] to-teal-300/6 transition-transform active:scale-[0.985]"
+            >
+              <div className="flex gap-4 p-4">
+                <div className="relative h-[84px] w-[84px] shrink-0 overflow-hidden rounded-[20px] bg-black/20">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,210,58,.2),transparent_60%)]" />
+                  {missionSpecies.image_url ? (
+                    <img
+                      src={missionSpecies.image_url}
+                      alt={missionSpecies.name_default}
+                      className="relative h-full w-full object-contain"
+                    />
+                  ) : (
+                    <div className="relative grid h-full w-full place-items-center">
+                      <span className="text-[44px]">{getSpeciesFallbackEmoji(missionSpecies.name_default)}</span>
                     </div>
-                    <span className="rounded-full bg-yellow-300 px-3 py-1.5 text-[12px] font-black text-stone-950">
-                      Commencer
-                    </span>
-                  </div>
+                  )}
                 </div>
-              </article>
+                <div className="min-w-0 flex-1 py-0.5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-yellow-200/60">Mission espèce</p>
+                  <h3 className="mt-0.5 text-[17px] font-black leading-tight text-white">{missionSpecies.name_default}</h3>
+                  <p className="mt-0.5 text-[11px] italic text-white/35">{missionSpecies.scientific_name}</p>
+                  <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-white/50">
+                    {missionSpecies.description_default}
+                  </p>
+                </div>
+              </div>
+              <div className="border-t border-white/[0.06] px-4 py-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[12px] font-semibold text-white/70">4 étapes · +120 Graines</p>
+                    <p className="mt-0.5 text-[11px] text-white/38">Débloque : 1 lien Toile vivante</p>
+                  </div>
+                  <span className="rounded-full bg-yellow-300 px-3 py-1.5 text-[12px] font-black text-stone-950">
+                    Commencer
+                  </span>
+                </div>
+              </div>
             </Link>
           </section>
         )}
 
         {/* ── 4. Parcours ── */}
         <section>
-          <div className="mb-3 px-0.5">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Progression</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Parcours</h2>
-          </div>
-          <ul className="m-0 flex list-none flex-col gap-3 p-0">
+          <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Parcours</h2>
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
             {LEARNING_PATHS.map((path) => {
               const Icon = path.icon
               return (
@@ -312,30 +313,30 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
                   <Link
                     href={path.href}
                     className={cn(
-                      'flex items-center gap-3 rounded-[24px] border p-3 transition-all active:scale-[0.99]',
+                      'flex items-center gap-3 rounded-[1.25rem] border p-3.5 transition-colors active:bg-white/[0.07]',
                       path.active
-                        ? 'border-teal-200/20 bg-teal-300/10'
-                        : 'border-white/10 bg-white/[0.045]',
+                        ? 'border-teal-200/18 bg-teal-300/8'
+                        : 'border-white/7 bg-white/[0.04]',
                     )}
                   >
                     <span
                       className={cn(
-                        'grid h-11 w-11 shrink-0 place-items-center rounded-2xl',
-                        path.active ? 'bg-teal-300 text-[#04110e]' : 'bg-white/[0.06] text-white/55',
+                        'grid h-10 w-10 shrink-0 place-items-center rounded-2xl',
+                        path.active ? 'bg-teal-300 text-[#04110e]' : 'bg-white/[0.06] text-white/40',
                       )}
                     >
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-3">
-                        <h3 className="truncate text-[14px] font-semibold text-white">{path.title}</h3>
-                        <span className="shrink-0 rounded-full bg-white/[0.06] px-2.5 py-1 text-[10px] text-white/45">
-                          {path.progress}%
-                        </span>
-                      </div>
-                      <p className="mt-1 line-clamp-1 text-[12px] text-white/43">{path.subtitle}</p>
+                      <h3 className={cn('text-[14px] font-semibold', path.active ? 'text-white' : 'text-white/80')}>
+                        {path.title}
+                      </h3>
+                      <p className="mt-0.5 line-clamp-1 text-[12px] text-white/40">{path.subtitle}</p>
                     </div>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-white/28" aria-hidden="true" />
+                    <span className={cn('shrink-0 text-[12px] font-black', path.active ? 'text-teal-200' : 'text-white/35')}>
+                      {path.progress} %
+                    </span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-white/25" aria-hidden="true" />
                   </Link>
                 </li>
               )
@@ -345,12 +346,9 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
 
         {/* ── 5. Toile vivante ── */}
         <section>
-          <div className="mb-1 px-0.5">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Réseau</p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Explorer la Toile vivante</h2>
-          </div>
-          <p className="mb-4 px-0.5 text-[13px] leading-snug text-white/48">
-            Comprends comment espèces, habitats, menaces et projets sont reliés.
+          <h2 className="mb-1 px-1 text-xl font-black tracking-tight text-white">Toile vivante</h2>
+          <p className="mb-4 px-1 text-[13px] font-medium leading-snug text-white/45">
+            Explore les connexions entre espèces, habitats, menaces et projets.
           </p>
           <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {ECOSYSTEMS.map((eco) => {
@@ -359,30 +357,27 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
                 <Link
                   key={eco.id}
                   href={eco.href}
-                  className="w-[198px] shrink-0 snap-start rounded-[28px] border border-white/10 bg-white/[0.055] p-4 transition-transform active:scale-[0.98]"
+                  className={cn(
+                    'w-[192px] shrink-0 snap-start rounded-[1.5rem] border border-white/8 p-4 transition-transform active:scale-[0.97]',
+                    eco.locked ? 'bg-white/[0.03] opacity-60' : 'bg-white/[0.05]',
+                  )}
                 >
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <span className="grid h-11 w-11 place-items-center rounded-[18px] bg-teal-300/12 text-teal-100">
+                  <div className="mb-4 flex items-start justify-between gap-2">
+                    <span className={cn('flex h-10 w-10 items-center justify-center rounded-[14px]', eco.accentClass)}>
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
-                    <span
-                      className={cn(
-                        'rounded-full px-2.5 py-1 text-[10px] font-semibold',
-                        eco.locked ? 'bg-white/[0.04] text-white/30' : 'bg-white/[0.07] text-white/60',
-                      )}
-                    >
+                    <span className={cn(
+                      'mt-1 rounded-full px-2 py-0.5 text-[10px] font-semibold',
+                      eco.locked ? 'text-white/28' : 'bg-white/[0.06] text-white/55',
+                    )}>
                       {eco.count}
                     </span>
                   </div>
-                  <h3 className="line-clamp-2 text-[15px] font-semibold leading-tight text-white">{eco.title}</h3>
-                  <p className="mt-2 line-clamp-2 text-[12px] leading-relaxed text-white/48">{eco.subtitle}</p>
-                  <div className="mt-3 flex items-center gap-1 text-[12px] font-semibold text-teal-100">
-                    {eco.locked ? (
-                      'Bientôt'
-                    ) : (
-                      <>Explorer <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" /></>
-                    )}
-                  </div>
+                  <h3 className="line-clamp-2 text-[14px] font-semibold leading-tight text-white">{eco.title}</h3>
+                  <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-white/45">{eco.subtitle}</p>
+                  <p className={cn('mt-3 text-[12px] font-black', eco.locked ? 'text-white/28' : 'text-teal-200')}>
+                    {eco.locked ? 'Bientôt' : 'Explorer →'}
+                  </p>
                 </Link>
               )
             })}
@@ -391,11 +386,8 @@ export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
 
         {/* ── 6. Mon BioDex ── */}
         <section>
-          <div className="mb-5 flex items-end justify-between gap-4 px-0.5">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Collection</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Mon BioDex</h2>
-            </div>
+          <div className="mb-5 flex items-center justify-between gap-4 px-1">
+            <h2 className="text-xl font-black tracking-tight text-white">Mon BioDex</h2>
             <Link
               href="/profile/biodex"
               className="flex items-center gap-1 text-sm font-black text-teal-300 active:text-teal-200"

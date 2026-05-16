@@ -7,7 +7,6 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
 import { LearnTab } from './_features/learn-tab'
-import { LearnTabHeader } from './_features/learn-tab-header'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -35,10 +34,7 @@ export default async function LearnPage() {
   ])
 
   return (
-    <TabScreen
-      header={<LearnTabHeader seeds={seeds} />}
-      className="bg-[#0B0F15]"
-    >
+    <TabScreen className="bg-[#0B0F15]">
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>
           <LearnTab seeds={seeds} species={species} />
