@@ -18,7 +18,11 @@ export default async function AdvantageDetailModalPage({ params }: Props) {
   }
 
   return (
-    <FullScreenSlideModal fallbackHref="/advantages" headerMode="back" title={advantage.partner}>
+    <FullScreenSlideModal
+      fallbackHref="/advantages"
+      headerMode="dynamic"
+      title={advantage.title}
+    >
       <AdvantageDetail advantage={advantage} />
     </FullScreenSlideModal>
   )
