@@ -350,7 +350,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
           <p className="mb-4 px-1 text-[13px] font-medium leading-snug text-white/45">
             Explore les connexions entre espèces, habitats, menaces et projets.
           </p>
-          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className=" flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {ECOSYSTEMS.map((eco) => {
               const Icon = eco.icon
               return (
