@@ -118,9 +118,9 @@ export function getAdvantagesData(): AdvantagesData {
       },
       {
         id: 'experiences',
-        title: 'Expériences & lives',
-        description: 'Lives, visites et ateliers pour découvrir les projets autrement.',
-        href: '/advantages/catalog?type=experience_live',
+        title: 'Contenus & expériences',
+        description: 'Carnets terrain, visites et ateliers pour vivre les projets autrement.',
+        href: '/advantages/catalog?type=content',
       },
     ],
     partners: [
