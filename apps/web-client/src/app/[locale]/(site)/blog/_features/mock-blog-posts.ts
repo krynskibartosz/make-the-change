@@ -40,7 +40,7 @@ const MOCK_BLOG_POSTS: MockBlogPostSeed[] = [
       en: 'The Impact of Mobile Honey Houses on Beekeeping in Madagascar',
     },
     excerpt_default:
-      'Découvrez comment nos miellies mobiles tout-terrain révolutionnent la collecte du miel dans les régions les plus isolées de Madagascar, tout en soutenant les apiculteurs locaux.',
+      'Découvrez comment nos mielleries mobiles tout-terrain révolutionnent la collecte du miel dans les régions les plus isolées de Madagascar, tout en soutenant les apiculteurs locaux.',
     excerpt_i18n: {
       fr: 'Découvrez comment nos mielleries mobiles tout-terrain révolutionnent la collecte du miel dans les régions les plus isolées de Madagascar, tout en soutenant les apiculteurs locaux.',
       en: 'Discover how our all-terrain mobile honey houses revolutionize honey collection in the most remote regions of Madagascar, while supporting local beekeepers.',
@@ -74,7 +74,7 @@ const MOCK_BLOG_POSTS: MockBlogPostSeed[] = [
       kind: 'legacyText',
       text: "Notre projet en Sardaigne compte 10 000 oliviers issus de plusieurs variétés toscanes prestigieuses : Leccino, Frantoio et Leccio del Corno. Ces variétés sont réputées pour produire des huiles d'olive de haute qualité aux arômes complexes et équilibrés.\n\nUn moulin à huile moderne est installé directement sur le site, permettant le pressage des olives immédiatement après la récolte. Cette approche de 'ferme à bouteille' garantit une fraîcheur optimale et préserve les qualités organoleptiques de l'huile.\n\nLe projet s'inscrit dans une démarche d'agriculture durable, respectant les cycles naturels des oliviers et minimisant l'impact environnemental. Les techniques culturales privilégient la biodiversité et la santé des sols, sans utilisation de produits chimiques de synthèse.\n\nCette exploitation contribue à la préservation du paysage oléicole traditionnel sard, tout en innovant avec des méthodes modernes de production et de transformation.",
     },
-    cover_image_url: '/images/projects/miellerie-manakara.jpg',
+    cover_image_url: '/images/projects/oliveraie-sardaigne.png',
     author_name: 'Équipe Oliviers de Sardaigne',
     author_avatar_url: '/images/logos/logo-icon-bee.png',
     published_at: '2026-04-10T08:00:00.000Z',
@@ -124,7 +124,8 @@ const MOCK_BLOG_POSTS: MockBlogPostSeed[] = [
       kind: 'legacyText',
       text: "Andraina est apiculteur depuis plus de 15 ans. Il gère aujourd'hui 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d'Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l'Indri, ainsi que des caméléons, plus de 100 espèces d'oiseaux et une grande diversité d'amphibiens et de plantes endémiques.\n\n« Les abeilles sont essentielles pour la pollinisation de toutes ces plantes », explique Andraina. « Sans elles, beaucoup d'espèces ne pourraient pas survivre. C'est pourquoi je suis fier de contribuer à leur protection. »\n\nAndraina a reçu ses premières ruches de la part d'Ilanga Nature, qui soutient le développement d'une apiculture locale durable. Depuis, il a pu étendre son activité et former d'autres apiculteurs de la région.\n\n« La coopérative m'a permis d'accéder à un matériel de qualité et à une formation professionnelle », raconte-t-il. « Aujourd'hui, je peux vivre de mon activité et transmettre mon savoir à la prochaine génération. »\n\nSon miel, récolté dans les forêts d'eucalyptus environnantes, est particulièrement apprécié pour ses notes aromatiques uniques et sa texture onctueuse.",
     },
-    cover_image_url: '/images/projects/antsirabe-ruchers-2.mov',
+    // TODO [MEDIA]: antsirabe-ruchers-2.mov est une vidéo, pas une image — utiliser antsirabe-ruchers-1.jpg en attendant.
+    cover_image_url: '/images/projects/antsirabe-ruchers-1.jpg',
     author_name: 'Marie Dupont',
     author_avatar_url: '/images/logos/logo-icon-bee.png',
     published_at: '2026-03-28T08:00:00.000Z',

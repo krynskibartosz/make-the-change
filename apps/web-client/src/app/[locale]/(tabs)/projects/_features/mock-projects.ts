@@ -107,11 +107,11 @@ const antsirabeSpecies: ProjectSpecies[] = [
   {
     id: MOCK_SPECIES_BLACK_BEE_ID,
     name: 'Abeille Noire',
-    scientificName: 'Apis mellifera mellifera',
+    scientificName: 'Apis mellifera unicolor',
     icon: '/images/dioramas/abeille-noire.png',
     rarity: 7,
-    status: 'VU',
-    role: 'Pollinisatrice cle',
+    status: 'DD',
+    role: 'Pollinisatrice clé',
   },
 ]
 
@@ -119,7 +119,7 @@ const antsirabeProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_ID,
     name: 'Miel Eucalyptus 250g',
-    price: 18,
+    price: 5.5,
     price_points: 550,
     category: 'Miel',
     impactPercentage: 35,
@@ -131,7 +131,7 @@ const antsirabeProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
     name: 'Miel Eucalyptus 140g',
-    price: 12,
+    price: 3.5,
     price_points: 350,
     category: 'Miel',
     impactPercentage: 35,
@@ -145,12 +145,12 @@ const antsirabeProducts: ProducerProduct[] = [
 const manakaraSpecies: ProjectSpecies[] = [
   {
     id: MOCK_SPECIES_BLACK_BEE_ID,
-    name: 'Abeille noire',
-    scientificName: 'Apis mellifera mellifera',
+    name: 'Abeille Noire',
+    scientificName: 'Apis mellifera unicolor',
     icon: '/images/dioramas/abeille-noire.png',
     rarity: 7,
-    status: 'NT',
-    role: 'Pollinisatrice cle',
+    status: 'DD',
+    role: 'Pollinisatrice clé',
   },
 ]
 
@@ -158,7 +158,7 @@ const manakaraProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_ID,
     name: 'Miel Eucalyptus 250g',
-    price: 18,
+    price: 5.5,
     price_points: 550,
     category: 'Miel',
     impactPercentage: 35,
@@ -170,7 +170,7 @@ const manakaraProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
     name: 'Miel Eucalyptus 140g',
-    price: 12,
+    price: 3.5,
     price_points: 350,
     category: 'Miel',
     impactPercentage: 35,
@@ -184,12 +184,12 @@ const manakaraProducts: ProducerProduct[] = [
 const mielleriesMobileSpecies: ProjectSpecies[] = [
   {
     id: MOCK_SPECIES_BLACK_BEE_ID,
-    name: 'Abeille noire',
-    scientificName: 'Apis mellifera mellifera',
+    name: 'Abeille Noire',
+    scientificName: 'Apis mellifera unicolor',
     icon: '/images/dioramas/abeille-noire.png',
     rarity: 7,
-    status: 'NT',
-    role: 'Pollinisatrice cle',
+    status: 'DD',
+    role: 'Pollinisatrice clé',
   },
 ]
 
@@ -197,7 +197,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_ID,
     name: 'Miel Eucalyptus 250g',
-    price: 18,
+    price: 5.5,
     price_points: 550,
     category: 'Miel',
     impactPercentage: 35,
@@ -209,7 +209,7 @@ const mielleriesMobileProducts: ProducerProduct[] = [
   {
     id: MOCK_PRODUCT_EUCALYPTUS_140G_ID,
     name: 'Miel Eucalyptus 140g',
-    price: 12,
+    price: 3.5,
     price_points: 350,
     category: 'Miel',
     impactPercentage: 35,
@@ -309,7 +309,7 @@ const sardiniaSpecies: ProjectSpecies[] = [
     icon: '/images/dioramas/abeille-noire.png', // À remplacer par image olivier quand disponible
     rarity: 6,
     status: 'LC',
-    role: 'Arbre emblematique mediterraneen',
+    role: 'Arbre emblématique méditerranéen',
   },
 ]
 
@@ -321,7 +321,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     icon: '/images/dioramas/bourdon-terrestre.png',
     rarity: 5,
     status: 'NT',
-    role: 'Pollinisateur cle',
+    role: 'Pollinisateur clé',
   },
   {
     id: MOCK_SPECIES_OSMIA_ID,
@@ -330,7 +330,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     icon: '/images/dioramas/osmie-rousse.png',
     rarity: 5,
     status: 'NT',
-    role: 'Pollinisateur cle',
+    role: 'Pollinisateur clé',
   },
   {
     id: MOCK_SPECIES_MEGACHILE_ID,
@@ -339,7 +339,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     icon: '/images/dioramas/megachile.png',
     rarity: 5,
     status: 'NT',
-    role: 'Pollinisateur cle',
+    role: 'Pollinisateur clé',
   },
   {
     id: MOCK_SPECIES_SYRPHID_ID,
@@ -384,7 +384,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     icon: '/images/dioramas/herisson-europeen.png',
     rarity: 5,
     status: 'LC',
-    role: 'Faune associee',
+    role: 'Faune associée',
   },
 ]
 
@@ -468,7 +468,7 @@ const coralSpecies: ProjectSpecies[] = [
     icon: '/images/dioramas/acropora-corail-corne-de-cerf.png',
     rarity: 9,
     status: 'CR',
-    role: 'Fondateurs des recifs coralliens',
+    role: 'Fondateurs des récifs coralliens',
   },
 ]
 
@@ -629,15 +629,21 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     address_country_code: 'Madagascar',
     latitude: -19.8659,
     longitude: 47.0335,
+    // Localisation projet : Antsirabe (source PDF cadrage MTC — données réelles).
+    // Les espèces secondaires Biodex (Indri, Caméléon, Sifaka…) proviennent de l'écosystème Analamazoatra :
+    // elles sont utilisées comme couche biodiversité/storytelling élargie, pas comme espèces du site Antsirabe.
+    // TODO [PO]: Mettre à jour long_description pour documenter cette distinction explicitement.
     launch_date: '2026-02-10',
     maturity_date: null,
     current_funding: 7640,
-    target_budget: 17550,
+    target_budget: 17775, // 45 ruches × 395 € — source: PDF cadrage MTC
     hero_image_url: '/images/projects/antsirabe-ruchers-1.jpg',
     images: [
       '/images/projects/antsirabe-ruchers-1.jpg',
+      // TODO [MEDIA]: Ajouter antsirabe-ruchers-2 quand le fichier image (jpg/png) sera disponible.
+      // Note: antsirabe-ruchers-2.mov est un fichier vidéo — prévoir format image séparé.
     ],
-    unit_price_eur: 390,
+    unit_price_eur: 395, // réel — source: PDF cadrage MTC (Ilanga Nature)
     unit_label: 'ruche',
     updated_at: '2026-04-17T10:00:00.000Z',
     producer: {
@@ -648,9 +654,9 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et ethiques de Madagascar.',
+      description_default: 'Produits naturels et éthiques de Madagascar.',
       description_i18n: {
-        fr: 'Produits naturels et ethiques de Madagascar.',
+        fr: 'Produits naturels et éthiques de Madagascar.',
         en: 'Natural and ethical products from Madagascar.',
       },
       contact_website: 'https://ilanga.nature',
@@ -660,10 +666,10 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     challenges: [],
     producer_products: antsirabeProducts,
     expected_impact: {
-      co2Absorbed: 50,
-      biodiversityGain: 32,
+      // real — source: PDF cadrage MTC (Ilanga Nature, données terrain)
       jobsCreated: 2,
       timeline: 12,
+      // estimated — base: 60 000 abeilles/ruche ÷ 395 €/ruche (source: PDF cadrage MTC)
       beesPerEur: 152,
       honeyGramsPerEur: 7.7,
       flowersPerEur: 1154,
@@ -671,6 +677,9 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       waxGramsPerEur: 0.92,
       pollenGramsPerEur: 7.7,
       nectarGramsPerEur: 19.2,
+      // hybrid/placeholder — à valider terrain avant affichage utilisateur
+      co2Absorbed: 50,       // TODO: PDF = 38,5 gCO2/€ — unité différente (g/€ vs kg/projet), à harmoniser
+      biodiversityGain: 32,  // TODO: placeholder UX non sourcé
     },
   },
   {
@@ -717,9 +726,9 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et ethiques de Madagascar.',
+      description_default: 'Produits naturels et éthiques de Madagascar.',
       description_i18n: {
-        fr: 'Produits naturels et ethiques de Madagascar.',
+        fr: 'Produits naturels et éthiques de Madagascar.',
         en: 'Natural and ethical products from Madagascar.',
       },
       contact_website: 'https://ilanga.nature',
@@ -786,9 +795,9 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et ethiques de Madagascar.',
+      description_default: 'Produits naturels et éthiques de Madagascar.',
       description_i18n: {
-        fr: 'Produits naturels et ethiques de Madagascar.',
+        fr: 'Produits naturels et éthiques de Madagascar.',
         en: 'Natural and ethical products from Madagascar.',
       },
       contact_website: 'https://ilanga.nature',

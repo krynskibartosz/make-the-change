@@ -127,8 +127,8 @@ const BASE_SHIPPING_ADDRESS = {
 const EXISTING_VIEWER_SUPPORTS: MockSupportRecord[] = [
   {
     id: 'mock-investment-antsirabe',
-    amount_eur_equivalent: 390,
-    amount_points: 390,
+    amount_eur_equivalent: 395, // 1 ruche × 395 € — source: PDF cadrage MTC
+    amount_points: 395,
     returns_received_points: 48,
     status: 'active',
     created_at: '2026-04-14T09:20:00.000Z',
@@ -425,8 +425,8 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
   {
     id: 'mock-points-investment-antsirabe',
     label: 'Contribution projet Antsirabe',
-    delta: -390,
-    impactDelta: 390,
+    delta: -395,
+    impactDelta: 395,
     createdAt: '2026-04-14T09:20:00.000Z',
   },
   {

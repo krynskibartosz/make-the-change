@@ -81,10 +81,10 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
-        role: 'Pollinisatrice cle',
-        impact: 'Espece principale du reseau apicole de la region.',
+        role: 'Pollinisatrice clé',
+        impact: 'Espèce principale du réseau apicole de la région.',
         userParticipation: false,
       },
     ],
@@ -100,7 +100,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_challenges: [
       {
         id: MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
-        name: "L'Esprit d'Equipe",
+        name: "L'Esprit d'Équipe",
         type: 'social',
         difficulty: 'medium',
         rewards: ['100 graines'],
@@ -461,7 +461,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Les zones melliferes preservent lhabitat des lémuriens.',
@@ -509,7 +509,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Preservation des corridors forestiers.',
@@ -560,7 +560,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Protection des grandes forets continues.',
@@ -610,7 +610,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Indicateur de sante des forets.',
@@ -658,7 +658,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Indicateur de la sante des ecosystemes forestiers.',
@@ -704,7 +704,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Biodiversite des micro-habitats forestiers.',
@@ -739,7 +739,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Indicateur de qualite des eaux et forets.',
@@ -778,7 +778,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Preservation des zones humides et cours deau.',
@@ -809,7 +809,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Disperseur de graines forestieres.',
@@ -840,7 +840,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Pollinisation des plantes forestieres.',
@@ -871,7 +871,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Equilibre des ecosystemes agricoles.',
@@ -1121,7 +1121,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
         slug: MOCK_PROJECT_ANTSIRABE_SLUG,
-        name: "Ruchers d'apiculteurs independants a Antsirabe",
+        name: "Ruchers d'apiculteurs indépendants à Antsirabe",
         type: 'beehive',
         role: 'Espece secondaire',
         impact: 'Pollinisation des fleurs endémiques minuscules dans les forêts malgaches.',
