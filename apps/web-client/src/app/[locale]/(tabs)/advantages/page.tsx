@@ -27,7 +27,8 @@ export default async function AdvantagesPage() {
   const currentViewer = isMockDataSource ? await getCurrentViewer() : null
   const viewerId = currentViewer?.viewerId ?? null
   const faction = currentViewer?.faction ?? null
-  const impactCredits = viewerId ? await getCurrentMockImpactPoints(viewerId, faction) : 0
+  const isConnected = viewerId !== null
+  const impactCredits = isConnected ? await getCurrentMockImpactPoints(viewerId, faction) : 0
   const data = getAdvantagesData()
 
   return (
@@ -36,7 +37,7 @@ export default async function AdvantagesPage() {
     >
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>
-          <AdvantagesTab impactCredits={impactCredits} data={data} />
+          <AdvantagesTab impactCredits={impactCredits} isConnected={isConnected} data={data} />
         </Suspense>
       </div>
     </TabScreen>

@@ -6,27 +6,28 @@ import type { AdvantagesData } from './advantages-data'
 
 type AdvantagesTabProps = {
   impactCredits: number
+  isConnected: boolean
   data: AdvantagesData
 }
 
-export function AdvantagesTab({ impactCredits, data }: AdvantagesTabProps) {
+export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTabProps) {
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-white/[0.04] to-[#0B0F15]" />
-      <div className="pointer-events-none absolute left-1/2 top-[-8rem] z-[-1] h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-lime-400/10 blur-[110px]" />
 
-      {/* ── Badge flottant Credits Impact ──────────────────────────────────── */}
-      <Link
-        href="/advantages/balance"
-        prefetch={false}
-        aria-label={`${impactCredits} Credits Impact`}
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] right-4 z-50 flex items-center gap-1.5 rounded-full border border-white/10 bg-[#0B0F15]/85 px-3 py-2 shadow-lg backdrop-blur-md transition-transform active:scale-95"
-      >
-        <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
-        <span className="text-[12px] font-black tabular-nums text-white">
-          {formatCompact(impactCredits)}
-        </span>
-      </Link>
+      {/* ── Badge flottant Credits Impact — visible uniquement si connecté ── */}
+      {isConnected && (
+        <Link
+          href="/advantages/balance"
+          prefetch={false}
+          aria-label={`Solde : ${impactCredits} Credits Impact`}
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-50 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 px-3 shadow-sm backdrop-blur-md transition-colors active:bg-white/10"
+        >
+          <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
+          <span className="text-[12px] font-black tabular-nums text-white">
+            {formatCompact(impactCredits)}
+          </span>
+        </Link>
+      )}
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
 
@@ -37,9 +38,6 @@ export function AdvantagesTab({ impactCredits, data }: AdvantagesTabProps) {
           </h1>
           <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/60">
             Utilise tes Credits Impact pour accéder à des produits, offres et expériences liés aux partenaires du vivant.
-          </p>
-          <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-white/30">
-            Les prix sont affichés en Credits Impact.
           </p>
         </div>
 
