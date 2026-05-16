@@ -1,8 +1,8 @@
 import { ArrowRight, CalendarDays, ChevronRight, Handshake, Package, Sparkles } from 'lucide-react'
-import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
+import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
-import { formatCompact } from '@/lib/formatters'
 import type { AdvantagesData } from './advantages-data'
+import { ImpactCreditsFloatingBadge } from './impact-credits-floating-badge'
 
 type AdvantagesTabProps = {
   impactCredits: number
@@ -13,21 +13,6 @@ type AdvantagesTabProps = {
 export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTabProps) {
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
-
-      {/* ── Badge flottant Credits Impact — visible uniquement si connecté ── */}
-      {isConnected && (
-        <Link
-          href="/advantages/balance"
-          prefetch={false}
-          aria-label={`Solde : ${impactCredits} Credits Impact`}
-          className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-50 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 px-3 shadow-sm backdrop-blur-md transition-colors active:bg-white/10"
-        >
-          <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
-          <span className="text-[12px] font-black tabular-nums text-white">
-            {formatCompact(impactCredits)}
-          </span>
-        </Link>
-      )}
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
 
@@ -40,6 +25,9 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
             Utilise tes Credits Impact pour accéder à des produits, offres et expériences liés aux partenaires du vivant.
           </p>
         </div>
+
+        {/* ── Badge flottant Credits Impact — apparaît après scroll de l'intro ── */}
+        {isConnected && <ImpactCreditsFloatingBadge impactCredits={impactCredits} />}
 
         {/* ── Section 1 — À utiliser maintenant ─────────────────────────────── */}
         <section>

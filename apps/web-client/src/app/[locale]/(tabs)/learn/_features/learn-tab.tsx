@@ -288,7 +288,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[12px] font-semibold text-white/70">4 étapes · +120 Graines</p>
-                    <p className="mt-0.5 text-[11px] font-medium text-teal-200/60">Débloque 1 lien Toile vivante</p>
+                    <p className="mt-0.5 text-[11px] font-medium text-teal-200/60">Révèle un lien dans la Toile vivante</p>
                   </div>
                   <span className="rounded-full bg-teal-300 px-3 py-1.5 text-[12px] font-black text-[#04110e]">
                     Commencer
