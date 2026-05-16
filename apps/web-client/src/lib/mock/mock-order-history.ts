@@ -100,5 +100,5 @@ export const upsertClientPersistedMockOrder = (
 
   currentEntries.unshift({ viewerId, order })
 
-  document.cookie = `${MOCK_ORDERS_COOKIE_NAME}=${serializeMockOrders(currentEntries)}; path=/; max-age=${mockOrdersCookieOptions.maxAge}; samesite=${mockOrdersCookieOptions.sameSite}`
+  document.cookie = `${MOCK_ORDERS_COOKIE_NAME}=${serializeMockOrders(currentEntries)}; path=/; max-age=${mockCookieOptions.maxAge}; samesite=${mockCookieOptions.sameSite}`
 }

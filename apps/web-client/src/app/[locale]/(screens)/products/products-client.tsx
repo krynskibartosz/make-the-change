@@ -2,17 +2,17 @@
 
 import { Package } from 'lucide-react'
 import { CurrencyAmount } from '@/components/currency'
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { usePathname, useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
-import { ProductsPagination } from '@/app/[locale]/(tabs)/products/_features/products-pagination'
-import type { ProductsPaginationData } from '@/app/[locale]/(tabs)/products/_features/products-query'
+import { ProductsPagination } from '@/app/[locale]/(screens)/products/_features/products-pagination'
+import type { ProductsPaginationData } from '@/app/[locale]/(screens)/products/_features/products-query'
 import {
   buildProductsSearchParams,
   DEFAULT_PRODUCTS_QUERY_STATE,
   type ProductsQueryState,
-} from '@/app/[locale]/(tabs)/products/_features/query-state'
+} from '@/app/[locale]/(screens)/products/_features/query-state'
 import { ClientCatalogProductCard } from './_components/client-catalog-product-card'
 
 export type Product = {
@@ -122,31 +122,8 @@ export function ProductsClient({
         )}
       </header>
 
-      {/* ── DOCK FLOTTANT (Thumb Zone) — Solde élégant ───────────────────────── */}
-      {/* TODO: Réactiver les filtres quand le catalogue dépassera 15 produits */}
-      <nav aria-label="Solde Credits Impact"
-        className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 pointer-events-none mb-1"
-        style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom) + 0.5rem)' }}
-      >
-        <Link
-          href="/products/balance"
-          className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-full bg-zinc-900/90 backdrop-blur-md border border-white/10 text-white transition-all active:scale-95 shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
-          aria-label="Solde Credits Impact"
-        >
-          {isConnected ? (
-            <CurrencyAmount
-              kind="impactCredits"
-              value={userImpactCredits}
-              className="text-sm font-black tracking-tight"
-            />
-          ) : (
-            <span className="text-sm font-black tabular-nums tracking-tight text-amber-300">--</span>
-          )}
-        </Link>
-      </nav>
-
       {/* Products Area */}
-      <div className="w-full max-w-[1920px] mx-auto px-4 pt-10 pb-64">
+      <div className="w-full max-w-[1920px] mx-auto px-4 pt-10 pb-24">
         {products.length === 0 ? (
           <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 text-center">
             <Package className="mb-4 h-12 w-12 text-muted-foreground/50" aria-hidden="true" />

@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import { getMockProductByIdentifier, type MockProductSeed } from '@/app/[locale]/(tabs)/products/_features/mock-products'
+import { getMockProductByIdentifier, type MockProductSeed } from '@/app/[locale]/(screens)/products/_features/mock-products'
 
 export type ProductProducer = {
   id: string

@@ -39,7 +39,7 @@ export function AdventureTabHeader({
           </span>
         </Link>
         <Link
-          href="/products"
+          href="/advantages"
           prefetch={false}
           aria-label={`${impactPoints} Credits Impact`}
           className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"

@@ -5,7 +5,7 @@ export default function BalanceModalPage() {
   return (
     <FullScreenSlideModal
       title="Votre Portefeuille"
-      fallbackHref="/products"
+      fallbackHref="/advantages"
       headerMode="back"
     >
       <BalanceModalContent />

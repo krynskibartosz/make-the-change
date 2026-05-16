@@ -5,11 +5,11 @@ import {
   clampPage,
   getPaginationRange,
   toProductsPagination,
-} from '@/app/[locale]/(tabs)/products/_features/products-query'
+} from '@/app/[locale]/(screens)/products/_features/products-query'
 import {
   PRODUCTS_PAGE_SIZE,
   type ProductsQueryState,
-} from '@/app/[locale]/(tabs)/products/_features/query-state'
+} from '@/app/[locale]/(screens)/products/_features/query-state'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'

@@ -14,7 +14,7 @@ import {
   UsersRound,
 } from 'lucide-react'
 import { getProjectTypeDesign } from '@/lib/project-type-icons'
-import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
+import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'

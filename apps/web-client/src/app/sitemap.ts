@@ -2,7 +2,7 @@ import { locales } from '@make-the-change/core/i18n'
 import type { MetadataRoute } from 'next'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
-import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
+import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
 
 export const dynamic = 'force-static'

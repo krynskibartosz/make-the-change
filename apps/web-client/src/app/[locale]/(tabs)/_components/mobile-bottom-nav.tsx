@@ -28,7 +28,7 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const isProjects = pathname.startsWith("/projects");
   const isImpact = pathname.startsWith("/impact");
   const isProfile = pathname.startsWith("/profile");
-  const isProducts = pathname.startsWith("/products");
+  const isAdvantages = pathname.startsWith("/advantages");
 
   const navLinkClass =
     "flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors";
@@ -53,10 +53,10 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
       isActive: isImpact,
     },
     {
-      href: "/products",
+      href: "/advantages",
       icon: Gift,
       label: "Avantages",
-      isActive: isProducts,
+      isActive: isAdvantages,
     },
     {
       href: "/profile",

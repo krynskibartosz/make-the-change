@@ -1,9 +1,9 @@
-ï»¿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
 import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
-import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
+import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { getMockSubscription } from '@/lib/mock/mock-member-data'
@@ -13,7 +13,7 @@ import type { Faction } from '@/lib/domain/types'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `RÃ©compense du Mois | Make the Change`,
+    title: `Récompense du Mois | Make the Change`,
   }
 }
 
@@ -48,7 +48,7 @@ export default async function ImpactRewardPage() {
     >
       <div className="flex flex-col">
         <div className="flex flex-col gap-8 px-5 pb-28 pt-16 sm:px-6">
-          {/* En-tÃªte : Mascotte & Titre */}
+          {/* En-tête : Mascotte & Titre */}
           <div className="flex flex-col items-center text-center">
             {initialFaction ? (
               <div className="relative mb-4 flex h-24 w-24 items-center justify-center">
@@ -65,11 +65,11 @@ export default async function ImpactRewardPage() {
             <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${activeTheme.accentTextSoft}`}>
               AVANTAGE DU MOIS
             </p>
-            <h2 className="mt-1 text-2xl font-black text-white">Le DÃ©fi Ilanga Nature</h2>
+            <h2 className="mt-1 text-2xl font-black text-white">Le Défi Ilanga Nature</h2>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
-              Atteignons ensemble les 100Â % en rÃ©coltant des GrainesÂ ! En remerciement de cet effort commun, notre partenaire{' '}
+              Atteignons ensemble les 100 % en récoltant des Graines ! En remerciement de cet effort commun, notre partenaire{' '}
               <span className="font-semibold text-white">Ilanga Nature</span>{' '}
-              dÃ©bloquera des avantages exclusifs pour toute la communautÃ©.
+              débloquera des avantages exclusifs pour toute la communauté.
             </p>
           </div>
 
@@ -86,13 +86,13 @@ export default async function ImpactRewardPage() {
               />
             </div>
             <p className="mt-2 text-center text-[11px] text-white/40">
-              Plus que <CurrencyAmount kind="seeds" value={remainingSeeds} className="font-bold" /> Ã  rÃ©colter
+              Plus que <CurrencyAmount kind="seeds" value={remainingSeeds} className="font-bold" /> à récolter
             </p>
           </div>
 
           {/* Avantages (Sleek List) */}
           <div className="space-y-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Avantages Ã  dÃ©bloquer</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/60">Avantages à débloquer</p>
 
             <div className="flex items-center gap-5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
@@ -100,7 +100,7 @@ export default async function ImpactRewardPage() {
               </div>
               <div className="flex-1 border-b border-white/5 pb-4">
                 <p className="text-base font-bold text-white">-15% sur les miels Ilanga Nature</p>
-                <p className="text-sm text-white/50">DÃ©bloquÃ© pour toute la communautÃ© si l'objectif est atteint.</p>
+                <p className="text-sm text-white/50">Débloqué pour toute la communauté si l'objectif est atteint.</p>
               </div>
             </div>
 
@@ -110,7 +110,7 @@ export default async function ImpactRewardPage() {
               </div>
               <div className="flex-1 pb-2">
                 <p className="text-base font-bold text-white">Halo de victoire</p>
-                <p className="text-sm text-white/50">La faction ayant rÃ©coltÃ© le plus de Graines obtiendra un Ã©clat cosmÃ©tique exclusif.</p>
+                <p className="text-sm text-white/50">La faction ayant récolté le plus de Graines obtiendra un éclat cosmétique exclusif.</p>
               </div>
             </div>
           </div>
@@ -119,7 +119,7 @@ export default async function ImpactRewardPage() {
           {ilangaProducts.length > 0 && (
             <div className="space-y-3">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">
-                La rÃ©colte d'Ilanga Nature
+                La récolte d'Ilanga Nature
               </p>
               <div className="relative -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pl-5 sm:-mx-6 sm:pl-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {ilangaProducts.map((product) => (
@@ -152,13 +152,13 @@ export default async function ImpactRewardPage() {
                       ) : (
                         <div className="flex flex-col gap-0.5">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-white/25 line-through">{product.price_points} â¬¡</span>
+                            <span className="text-xs text-white/25 line-through">{product.price_points} ?</span>
                             <span className="flex items-center gap-1 text-sm font-black text-white/40">
-                              {Math.round(product.price_points * 0.85)} â¬¡
+                              {Math.round(product.price_points * 0.85)} ?
                               <Lock className="h-3 w-3" />
                             </span>
                           </div>
-                          <span className="text-[10px] text-white/30">DÃ©bloquÃ© si la communautÃ© atteint 100%</span>
+                          <span className="text-[10px] text-white/30">Débloqué si la communauté atteint 100%</span>
                         </div>
                       )}
                     </div>
@@ -176,10 +176,10 @@ export default async function ImpactRewardPage() {
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white/40">Comment contribuer ?</p>
             <ul className="space-y-2.5">
               {([
-                { label: "Continuer l'Academy", detail: '+25 Graines par leÃ§on' },
-                { label: 'Soutenir un projet liÃ©', detail: '+ contribution symbolique' },
+                { label: "Continuer l'Academy", detail: '+25 Graines par leçon' },
+                { label: 'Soutenir un projet lié', detail: '+ contribution symbolique' },
                 { label: 'Envoyer un Bravo', detail: '+ micro-contribution sociale' },
-                { label: 'DÃ©couvrir une espÃ¨ce BioDex', detail: 'Progression de faction' },
+                { label: 'Découvrir une espèce BioDex', detail: 'Progression de faction' },
               ] as Array<{ label: string; detail: string }>).map((item) => (
                 <li key={item.label} className="flex items-center justify-between gap-3">
                   <span className="text-sm text-white/70">{item.label}</span>
@@ -190,7 +190,7 @@ export default async function ImpactRewardPage() {
           </div>
         )}
 
-        {/* Encart abonnement contextuel si connectÃ© sans abonnement */}
+        {/* Encart abonnement contextuel si connecté sans abonnement */}
         {isConnected && initialFaction && !hasSubscription && (
           <div className="mx-5 mb-4 flex items-center gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 py-3.5 sm:mx-6">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/10">
@@ -198,13 +198,13 @@ export default async function ImpactRewardPage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-bold text-white/60">AccÃ¨s Avantages</span>
+                <span className="text-sm font-bold text-white/60">Accès Avantages</span>
                 <span className="rounded-full bg-amber-400/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-amber-400">
-                  ðŸ‘‘ Gardiens
+                  ?? Gardiens
                 </span>
               </div>
               <p className="mt-0.5 text-[11px] text-white/40">
-                DÃ©bloquez les avantages exclusifs de la saison collective.
+                Débloquez les avantages exclusifs de la saison collective.
               </p>
             </div>
             <Lock className="h-4 w-4 shrink-0 text-white/25" />
@@ -218,7 +218,7 @@ export default async function ImpactRewardPage() {
               href="/onboarding/step-0"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
-              Contribuer Ã  l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+              Contribuer à l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
             </Link>
           ) : !initialFaction ? (
             <Link
@@ -232,7 +232,7 @@ export default async function ImpactRewardPage() {
               href="/profile/subscription"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-amber-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(251,191,36,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
-              DÃ©bloquer les avantages <Crown className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+              Débloquer les avantages <Crown className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
             </Link>
           ) : isGoalReached ? (
             <Link
@@ -246,7 +246,7 @@ export default async function ImpactRewardPage() {
               href="/adventure"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
-              Contribuer Ã  l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+              Contribuer à l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
             </Link>
           )}
         </div>

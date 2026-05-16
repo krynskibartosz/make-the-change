@@ -138,7 +138,7 @@ const writeClientPersistedMockChallengeStates = (
     return
   }
 
-  document.cookie = `${MOCK_CHALLENGE_PROGRESS_COOKIE_NAME}=${serializeMockChallengeProgress(entries)}; path=/; max-age=${mockChallengeProgressCookieOptions.maxAge}; samesite=${mockChallengeProgressCookieOptions.sameSite}`
+  document.cookie = `${MOCK_CHALLENGE_PROGRESS_COOKIE_NAME}=${serializeMockChallengeProgress(entries)}; path=/; max-age=${mockCookieOptions.maxAge}; samesite=${mockCookieOptions.sameSite}`
 }
 
 export const upsertClientPersistedMockChallengeState = (

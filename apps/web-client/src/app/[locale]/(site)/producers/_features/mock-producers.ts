@@ -1,4 +1,4 @@
-import { getMockProducts } from '@/app/[locale]/(tabs)/products/_features/mock-products'
+import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
 
 export type MockProducerListProduct = {
