@@ -1,16 +1,8 @@
 'use client'
 
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { CurrencyAmount } from '@/components/currency'
-import { cn } from '@/lib/utils'
 import type { Advantage, AdvantageType } from './mock-advantages'
-
-const FILTERS = [
-  { id: 'all', label: 'Tout' },
-  { id: 'product', label: 'Produits' },
-  { id: 'partner_code', label: 'Offres' },
-  { id: 'experience_live', label: 'Expériences' },
-] as const
 
 function typeLabel(type: AdvantageType): string | null {
   if (type === 'partner_code') return 'Code partenaire'
@@ -28,60 +20,22 @@ function getHref(advantage: Advantage): string {
 
 type Props = {
   advantages: Advantage[]
-  initialType: string
 }
 
-export function AdvantagesCatalogClient({ advantages, initialType }: Props) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const active = initialType
-
-  function setFilter(filter: string) {
-    const params = filter === 'all' ? '' : `?type=${filter}`
-    router.replace(`${pathname}${params}`)
-  }
-
-  const filtered = advantages.filter((a) => {
-    if (active === 'all') return true
-    if (active === 'product') return a.type === 'product'
-    if (active === 'partner_code') return a.type === 'partner_code'
-    if (active === 'experience_live') return a.type === 'live' || a.type === 'experience'
-    return true
-  })
-
+export function AdvantagesCatalogClient({ advantages }: Props) {
   return (
     <div className="px-4 pb-24 pt-6">
-      {/* Segmented control */}
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
-        {FILTERS.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => setFilter(f.id)}
-            className={cn(
-              'shrink-0 rounded-full px-4 py-2 text-[13px] font-black transition-colors',
-              active === f.id
-                ? 'bg-lime-300 text-[#0B0F15]'
-                : 'border border-white/10 bg-white/[0.05] text-white/60 active:bg-white/10',
-            )}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
+      <p className="mb-6 text-[14px] font-medium leading-relaxed text-white/50">
+        Tous les avantages disponibles avec tes Credits Impact.
+      </p>
 
-      {filtered.length === 0 ? (
-        <div className="flex min-h-[200px] items-center justify-center text-sm font-medium text-white/30">
-          Aucun avantage disponible
-        </div>
-      ) : (
-        <ul className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-6 p-0">
-          {filtered.map((advantage) => (
-            <li key={advantage.id}>
-              <AdvantageCard advantage={advantage} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-6 p-0">
+        {advantages.map((advantage) => (
+          <li key={advantage.id}>
+            <AdvantageCard advantage={advantage} />
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

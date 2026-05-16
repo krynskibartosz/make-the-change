@@ -6,16 +6,10 @@ import { getMockAdvantages } from '../_features/mock-advantages'
 import { AdvantagesCatalogClient } from '../_features/advantages-catalog-client'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: 'Catalogue des avantages | Make the Change' }
+  return { title: 'Avantages partenaires | Make the Change' }
 }
 
-type Props = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}
-
-export default async function AdvantagesCatalogPage({ searchParams }: Props) {
-  const params = await searchParams
-  const typeFilter = typeof params.type === 'string' ? params.type : 'all'
+export default async function AdvantagesCatalogPage() {
   const advantages = getMockAdvantages()
 
   return (
@@ -29,17 +23,12 @@ export default async function AdvantagesCatalogPage({ searchParams }: Props) {
           >
             <ArrowLeft className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35">
-              Avantages
-            </p>
-            <p className="truncate text-sm font-black text-white">Catalogue complet</p>
-          </div>
+          <span className="text-sm font-black text-white">Avantages partenaires</span>
         </div>
       }
       className="bg-[#0B0F15]"
     >
-      <AdvantagesCatalogClient advantages={advantages} initialType={typeFilter} />
+      <AdvantagesCatalogClient advantages={advantages} />
     </Screen>
   )
 }

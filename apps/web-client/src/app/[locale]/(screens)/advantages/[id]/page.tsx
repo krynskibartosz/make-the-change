@@ -39,12 +39,7 @@ export default async function AdvantageDetailPage({ params }: Props) {
           >
             <ArrowLeft className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35">
-              Avantages
-            </p>
-            <p className="truncate text-sm font-black text-white">{advantage.partner}</p>
-          </div>
+          <span className="text-sm font-black text-white">{advantage.partner}</span>
         </div>
       }
       className="bg-[#0B0F15]"
