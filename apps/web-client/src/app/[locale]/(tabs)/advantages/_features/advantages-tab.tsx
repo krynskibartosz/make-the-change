@@ -17,7 +17,7 @@ type AdvantagesTabProps = {
   impactCredits: number
   data: AdvantagesData
 }
-
+// comment to push build
 export function AdvantagesTab({ impactCredits, data }: AdvantagesTabProps) {
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-7 md:pb-10">
