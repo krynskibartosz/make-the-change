@@ -15,25 +15,25 @@ export type AdvantageProduct = {
   imageUrl: string
   href: string
   priceImpactCredits: number
-  badge: string
-  stockLabel: string
 }
 
 export type PartnerOffer = {
   id: string
   title: string
   partner: string
-  description: string
+  imageUrl: string
   href: string
   costImpactCredits: number
-  badge: string
 }
 
 export type CollectiveBonus = {
   title: string
   partner: string
   description: string
-  progress: number
+  imageUrl: string
+  currentStep: number
+  totalSteps: number
+  nextStepLabel: string
   href: string
   cta: string
 }
@@ -49,8 +49,9 @@ export type AdvantagePartner = {
   id: string
   name: string
   description: string
+  location: string
+  imageUrl: string
   href: string
-  badge: string
 }
 
 export type AdvantagesData = {
@@ -69,35 +70,36 @@ const FEATURED_PRODUCT_IDS = [
 
 export function getAdvantagesData(): AdvantagesData {
   const products = getMockProducts()
-  const featuredProducts = FEATURED_PRODUCT_IDS.map((id) => products.find((product) => product.id === id))
-    .filter((product): product is NonNullable<typeof product> => Boolean(product))
-    .map((product) => ({
-      id: product.id,
-      title: product.name_default,
-      partner: product.producer.name_default || 'Partenaire du vivant',
-      imageUrl: product.image_url,
-      href: `/products/${product.slug || product.id}`,
-      priceImpactCredits: product.price_points,
-      badge: product.category.name_default || 'Produit partenaire',
-      stockLabel: product.stock_quantity > 12 ? 'Disponible' : 'Stock limité',
+  const featuredProducts = FEATURED_PRODUCT_IDS.map((id) => products.find((p) => p.id === id))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p))
+    .map((p) => ({
+      id: p.id,
+      title: p.name_default,
+      partner: p.producer.name_default || 'Partenaire du vivant',
+      imageUrl: p.image_url,
+      href: `/products/${p.slug || p.id}`,
+      priceImpactCredits: p.price_points,
     }))
 
   return {
     featuredProducts,
     partnerOffer: {
       id: 'ilanga-coffret-10',
-      title: '-10 % coffret Ilanga',
+      title: '-10 % sur le coffret découverte',
       partner: 'Ilanga Nature',
-      description: 'Débloque un code partenaire simple, puis finalise la commande directement chez le partenaire.',
+      imageUrl: '/images/projects/miellerie-manakara.jpg',
       href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
       costImpactCredits: 200,
-      badge: 'Code partenaire',
     },
     collectiveBonus: {
-      title: 'Live rucher Ilanga',
+      title: 'Live rucher Ilanga bientôt débloqué',
       partner: 'Ilanga Nature',
-      description: 'La communauté est proche de débloquer un live terrain et un carnet de récolte.',
-      progress: 83,
+      description:
+        'La communauté est proche de débloquer un live depuis le rucher et un carnet de récolte terrain.',
+      imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
+      currentStep: 2,
+      totalSteps: 3,
+      nextStepLabel: 'Live terrain',
       href: `/projects/${MOCK_PROJECT_MIELLERIES_MOBILE_SLUG}`,
       cta: 'Voir le projet lié',
     },
@@ -105,19 +107,19 @@ export function getAdvantagesData(): AdvantagesData {
       {
         id: 'harvests',
         title: 'Récoltes partenaires',
-        description: 'Miels, huiles et produits issus des partenaires suivis par Make The Change.',
+        description: 'Miels, huiles et produits sélectionnés auprès de nos partenaires.',
         href: '/products?tag=Miel',
       },
       {
         id: 'partner-offers',
         title: 'Offres partenaires',
-        description: 'Codes simples à débloquer, sans stock ni SAV géré dans l’application.',
+        description: 'Débloque un code, puis utilise-le directement chez le partenaire.',
         href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
       },
       {
         id: 'experiences',
         title: 'Expériences & lives',
-        description: 'Lives terrain, ateliers et contenus réservés pour mieux comprendre les projets.',
+        description: 'Lives, visites et ateliers pour découvrir les projets autrement.',
         href: `/projects/${MOCK_PROJECT_MIELLERIES_MOBILE_SLUG}`,
       },
     ],
@@ -126,15 +128,17 @@ export function getAdvantagesData(): AdvantagesData {
         id: 'ilanga',
         name: 'Ilanga Nature',
         description: 'Récoltes, miels et contenus terrain autour de la filière apicole à Madagascar.',
+        location: 'Manakara, Madagascar',
+        imageUrl: '/images/projects/miellerie-manakara.jpg',
         href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
-        badge: 'Récoltes & lives',
       },
       {
         id: 'habeebee',
         name: 'Habeebee Belgique',
         description: 'Produits artisanaux, apiculture douce et expériences locales autour des abeilles.',
+        location: 'Bruxelles, Belgique',
+        imageUrl: '/images/products/savon-doux-habeebee.png',
         href: `/producers/${MOCK_PRODUCER_HABEEBEE_SLUG}`,
-        badge: 'Produits & ateliers',
       },
     ],
   }

@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { BookOpen, Compass, Gift, Globe, User } from "lucide-react";
+import { BookOpen, Home, Gift, Earth, User } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -36,13 +36,13 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const navItems: BottomNavItem[] = [
     {
       href: "/adventure",
-      icon: Compass,
-      label: "Aventure",
+      icon: Home,
+      label: "Accueil",
       isActive: isAdventure,
     },
     {
       href: "/projects",
-      icon: Globe,
+      icon: Earth,
       label: "Projets",
       isActive: isProjects,
     },

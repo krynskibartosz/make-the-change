@@ -10,9 +10,11 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import type { SpeciesContext } from '@/types/species'
 
 type LearnTabProps = {
   seeds: number
+  species: SpeciesContext[]
 }
 
 type ProjectModule = {
@@ -45,13 +47,6 @@ type Ecosystem = {
   icon: LucideIcon
   locked: boolean
   href: string
-}
-
-type BiodexSpecies = {
-  id: string
-  name: string
-  emoji: string
-  unlocked: boolean
 }
 
 const PROJECT_MODULES: ProjectModule[] = [
@@ -139,14 +134,28 @@ const ECOSYSTEMS: Ecosystem[] = [
   },
 ]
 
-const BIODEX_PREVIEW: BiodexSpecies[] = [
-  { id: 'bee', name: 'Abeille Noire', emoji: '🐝', unlocked: true },
-  { id: 'chameleon', name: 'Caméléon', emoji: '🦎', unlocked: true },
-  { id: 'coral', name: 'Acropora', emoji: '🪸', unlocked: true },
-  { id: 'lemur', name: 'Vari', emoji: '🐒', unlocked: false },
-]
+function getSpeciesFallbackEmoji(name: string): string {
+  const n = name.toLowerCase()
+  if (n.includes('abeille') || n.includes('bee') || n.includes('apis')) return '🐝'
+  if (n.includes('corail') || n.includes('coral') || n.includes('acropora')) return '🪸'
+  if (n.includes('caméléon') || n.includes('chameleon')) return '🦎'
+  if (n.includes('lemur') || n.includes('vari') || n.includes('lémur')) return '🐒'
+  if (n.includes('tortue') || n.includes('turtle')) return '🐢'
+  if (n.includes('baleine') || n.includes('whale') || n.includes('dauphin')) return '🐋'
+  if (n.includes('aigle') || n.includes('eagle')) return '🦅'
+  if (n.includes('papillon') || n.includes('butterfly')) return '🦋'
+  return '🌿'
+}
 
-export function LearnTab({ seeds: _seeds }: LearnTabProps) {
+export function LearnTab({ seeds: _seeds, species }: LearnTabProps) {
+  const unlockedCount = species.filter((s) => s.user_status?.isUnlocked).length
+  const totalCount = species.length
+  const progressPct = totalCount > 0 ? Math.round((unlockedCount / totalCount) * 100) : 0
+
+  const sortedPreview = [
+    ...species.filter((s) => s.user_status?.isUnlocked),
+    ...species.filter((s) => !s.user_status?.isUnlocked),
+  ].slice(0, 4)
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-7 md:pb-10">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-teal-400/[0.04] to-[#0B0F15]" />
@@ -383,25 +392,47 @@ export function LearnTab({ seeds: _seeds }: LearnTabProps) {
           <div className="rounded-[2rem] border border-white/7 bg-white/[0.045] p-4">
             <div className="mb-3 flex items-start justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-white">12 / 31 espèces découvertes</p>
+                <p className="text-sm font-semibold text-white">{unlockedCount} / {totalCount} espèces découvertes</p>
                 <p className="mt-0.5 text-xs text-white/45">Soutiens des projets pour débloquer de nouvelles espèces.</p>
               </div>
             </div>
             <div className="mb-4 h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-gradient-to-r from-teal-300 to-lime-300" style={{ width: '39%' }} />
+              <div className="h-full rounded-full bg-gradient-to-r from-teal-300 to-lime-300" style={{ width: `${progressPct}%` }} />
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {BIODEX_PREVIEW.map((species) => (
-                <div
-                  key={species.id}
-                  className={cn('flex flex-col items-center gap-1', !species.unlocked && 'opacity-35')}
-                >
-                  <div className="grid aspect-square w-full place-items-center rounded-[18px] border border-white/10 bg-white/[0.05]">
-                    <span className="text-[28px]" aria-label={species.name}>{species.emoji}</span>
-                  </div>
-                  <span className="line-clamp-1 w-full text-center text-[9px] text-white/50">{species.name}</span>
-                </div>
-              ))}
+              {sortedPreview.map((sp) => {
+                const isLocked = !sp.user_status?.isUnlocked
+                return (
+                  <Link
+                    key={sp.id}
+                    href={`/profile/biodex/${sp.id}`}
+                    className="flex flex-col items-center gap-1"
+                  >
+                    <div className="grid aspect-square w-full place-items-center overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.05]">
+                      {sp.image_url ? (
+                        <img
+                          src={sp.image_url}
+                          alt={sp.name_default}
+                          className={cn(
+                            'h-full w-full object-contain',
+                            isLocked && 'grayscale opacity-40 blur-sm',
+                          )}
+                        />
+                      ) : (
+                        <span
+                          className={cn('text-[28px]', isLocked && 'opacity-20')}
+                          aria-label={sp.name_default}
+                        >
+                          {getSpeciesFallbackEmoji(sp.name_default)}
+                        </span>
+                      )}
+                    </div>
+                    <span className={cn('line-clamp-1 w-full text-center text-[9px]', isLocked ? 'text-white/30' : 'text-white/55')}>
+                      {sp.name_default}
+                    </span>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>
