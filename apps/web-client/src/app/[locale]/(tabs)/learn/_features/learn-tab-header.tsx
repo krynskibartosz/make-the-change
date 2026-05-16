@@ -1,11 +1,11 @@
 import { BookOpen, Sprout } from 'lucide-react'
 import { formatCompact } from '@/lib/formatters'
 
-type ApprendreTabHeaderProps = {
+type LearnTabHeaderProps = {
   seeds: number
 }
 
-export function ApprendreTabHeader({ seeds }: ApprendreTabHeaderProps) {
+export function LearnTabHeader({ seeds }: LearnTabHeaderProps) {
   return (
     <div className="relative z-50 flex w-full items-center justify-between gap-3">
       <div className="flex min-w-0 items-center gap-3">

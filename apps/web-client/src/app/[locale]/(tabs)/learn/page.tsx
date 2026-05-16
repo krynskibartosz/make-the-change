@@ -5,8 +5,8 @@ import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
-import { ApprendreTab } from './_features/apprendre-tab'
-import { ApprendreTabHeader } from './_features/apprendre-tab-header'
+import { LearnTab } from './_features/learn-tab'
+import { LearnTabHeader } from './_features/learn-tab-header'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,7 +21,7 @@ const fallbackLoader = (
   </div>
 )
 
-export default async function ApprEndrePage() {
+export default async function LearnPage() {
   await connection()
 
   const viewer = isMockDataSource ? await getCurrentViewer() : null
@@ -31,12 +31,12 @@ export default async function ApprEndrePage() {
 
   return (
     <TabScreen
-      header={<ApprendreTabHeader seeds={seeds} />}
+      header={<LearnTabHeader seeds={seeds} />}
       className="bg-[#0B0F15]"
     >
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>
-          <ApprendreTab seeds={seeds} />
+          <LearnTab seeds={seeds} />
         </Suspense>
       </div>
     </TabScreen>

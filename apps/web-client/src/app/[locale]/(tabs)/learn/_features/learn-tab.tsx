@@ -11,7 +11,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
-type ApprendreTabProps = {
+type LearnTabProps = {
   seeds: number
 }
 
@@ -146,7 +146,7 @@ const BIODEX_PREVIEW: BiodexSpecies[] = [
   { id: 'lemur', name: 'Vari', emoji: '🐒', unlocked: false },
 ]
 
-export function ApprendreTab({ seeds: _seeds }: ApprendreTabProps) {
+export function LearnTab({ seeds: _seeds }: LearnTabProps) {
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-7 md:pb-10">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-teal-400/[0.04] to-[#0B0F15]" />
