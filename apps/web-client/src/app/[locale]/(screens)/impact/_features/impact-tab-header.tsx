@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { Clock, Gift } from 'lucide-react'
-import { getCurrentSeason, getSeasonTimeRemaining } from '@/app/[locale]/(tabs)/impact/_lib/mock-seasons'
+import { getCurrentSeason, getSeasonTimeRemaining } from '@/app/[locale]/(screens)/impact/_lib/mock-seasons'
 
 export function ImpactTabHeader() {
   const currentSeason = getCurrentSeason()
@@ -25,7 +25,7 @@ export function ImpactTabHeader() {
       numeric: 'auto',
       style: 'narrow'
     })
-    
+
     const seconds = Math.floor(ms / 1000)
     const minutes = Math.floor(seconds / 60)
     const hours = Math.floor(minutes / 60)

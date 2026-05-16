@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { Compass, Gift, Globe, User, Users } from "lucide-react";
+import { BookOpen, Compass, Gift, Globe, User } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
 
   const isAdventure = pathname.startsWith("/adventure");
   const isProjects = pathname.startsWith("/projects");
-  const isImpact = pathname.startsWith("/impact");
+  const isApprendre = pathname.startsWith("/learn");
   const isProfile = pathname.startsWith("/profile");
   const isAdvantages = pathname.startsWith("/advantages");
 
@@ -47,10 +47,10 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
       isActive: isProjects,
     },
     {
-      href: "/impact",
-      icon: Users,
-      label: "Collectif",
-      isActive: isImpact,
+      href: "/learn",
+      icon: BookOpen,
+      label: "Apprendre",
+      isActive: isApprendre,
     },
     {
       href: "/advantages",

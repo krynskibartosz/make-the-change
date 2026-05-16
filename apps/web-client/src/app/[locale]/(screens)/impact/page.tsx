@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { ImpactTabHeader } from './_features/impact-tab-header'
 import { ImpactTab } from './_features/impact-tab'
 
@@ -19,12 +18,17 @@ const fallbackLoader = (
 
 export default async function ImpactPage() {
   return (
-    <TabScreen header={<ImpactTabHeader />}>
-      <div className="relative w-full">
+    <div className="fixed inset-0 z-40 bg-[#0B0F15] text-white">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/88 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-lg">
+        <div className="mx-auto flex h-12 max-w-3xl items-center">
+          <ImpactTabHeader />
+        </div>
+      </header>
+      <div className="h-[100dvh] w-full overflow-y-auto overflow-x-hidden overscroll-y-contain pt-[calc(3.5rem+max(0.75rem,env(safe-area-inset-top)))] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <Suspense fallback={fallbackLoader}>
           <ImpactTab />
         </Suspense>
       </div>
-    </TabScreen>
+    </div>
   )
 }

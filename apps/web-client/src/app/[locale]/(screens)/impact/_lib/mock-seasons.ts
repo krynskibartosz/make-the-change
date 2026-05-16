@@ -105,64 +105,48 @@ const MOCK_PRESTIGE_REWARDS: PrestigeReward[] = [
   },
 ]
 
-// Get current season
 export const getCurrentSeason = (): Season | null => {
   return MOCK_SEASONS.find((season) => season.status === 'active') || null
 }
 
-// Get season by ID
 export const getSeasonById = (id: string): Season | null => {
   return MOCK_SEASONS.find((season) => season.id === id) || null
 }
 
-// Get all seasons
 export const getAllSeasons = (): Season[] => {
   return MOCK_SEASONS
 }
 
-// Get season stats for a specific season
 export const getSeasonStats = (seasonId: string): SeasonStats[] => {
   return MOCK_SEASON_STATS.filter((stat) => stat.seasonId === seasonId)
 }
 
-// Calculate season winner based on stats
 export const calculateSeasonWinner = (seasonId: string): Faction | null => {
   const stats = getSeasonStats(seasonId)
   if (stats.length === 0) return null
 
-  // Calculate score based on total seeds, contributions, goals reached, and engagement
   const scoredStats = stats.map((stat) => ({
     ...stat,
     score: stat.totalSeeds * 0.4 + stat.contributions * 0.3 + stat.goalsReached * 100 * 0.2 + stat.engagementScore * 0.1,
   }))
 
-  // Sort by score descending
   scoredStats.sort((a, b) => b.score - a.score)
 
   return scoredStats[0]?.faction || null
 }
 
-// Get prestige rewards for a faction
 export const getPrestigeRewards = (faction: Faction): PrestigeReward[] => {
   return MOCK_PRESTIGE_REWARDS.filter((reward) => reward.faction === faction)
 }
 
-// Get all prestige rewards
 export const getAllPrestigeRewards = (): PrestigeReward[] => {
   return MOCK_PRESTIGE_REWARDS
 }
 
-// Simulate season reset (for testing purposes)
 export const resetSeasonCounters = (newSeasonId: string): void => {
-  // In a real implementation, this would:
-  // 1. Archive current season stats
-  // 2. Calculate and award prestige rewards
-  // 3. Reset all counters to zero
-  // 4. Start new season
   console.log(`Resetting counters for new season: ${newSeasonId}`)
 }
 
-// Get time remaining in current season
 export const getSeasonTimeRemaining = (): number => {
   const currentSeason = getCurrentSeason()
   if (!currentSeason) return 0
@@ -172,7 +156,6 @@ export const getSeasonTimeRemaining = (): number => {
   return Math.max(0, remaining)
 }
 
-// Get season progress percentage
 export const getSeasonProgress = (): number => {
   const currentSeason = getCurrentSeason()
   if (!currentSeason) return 0

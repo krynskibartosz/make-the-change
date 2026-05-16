@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useSearchParams } from 'next/navigation'
 import { Bird, Crown, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, type LucideIcon } from 'lucide-react'
@@ -457,8 +457,6 @@ interface ImpactTabClientProps {
   currentDayKey: string
 }
 
-
-
 export function ImpactTabClient({
   initialFaction,
   viewerId,
@@ -527,12 +525,7 @@ export function ImpactTabClient({
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 space-y-8 pb-24 duration-500">
-      {/* ═══ SCÈNE DES MASCOTTES (Edge-to-Edge) ═══ */}
       <section className="w-full px-4 pb-4 pt-6 sm:px-6">
-
-       
-
-        {/* HEADER */}
         <div className="mb-6 text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">OBJECTIF DU MOIS</p>
           <h2 className="mt-2 text-3xl font-black tracking-tight text-white">
@@ -540,7 +533,6 @@ export function ImpactTabClient({
           </h2>
         </div>
 
-        {/* JAUGE UNIQUE */}
         <div className="mb-3 h-4 overflow-hidden rounded-full bg-[#1A222C]">
           <div
             className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
@@ -551,17 +543,14 @@ export function ImpactTabClient({
           {collectiveGoal.progress}% accomplis · Encore {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> pour débloquer l'avantage collectif
         </p>
 
-
-        {/* LE PODIUM MASCOTTES */}
         {(() => {
-          // Réordonner pour l'affichage en podium : [2e, 1er, 3e]
-          const sorted = [...factionContributions] // déjà trié par effort desc
+          const sorted = [...factionContributions]
           const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean)
 
           const sizes: Record<number, string> = {
-            0: 'w-20 h-20', // 2e (gauche)
-            1: 'w-28 h-28', // 1er (centre)
-            2: 'w-16 h-16', // 3e (droite)
+            0: 'w-20 h-20',
+            1: 'w-28 h-28',
+            2: 'w-16 h-16',
           }
           const bottoms: Record<number, string> = {
             0: 'mb-2',
@@ -589,7 +578,6 @@ export function ImpactTabClient({
                     key={contribution.themeKey}
                     className={cn('relative flex flex-col items-center', bottomClass)}
                   >
-                    {/* Glow derrière la mascotte de l'utilisateur */}
                     {isActiveFaction && (
                       <div
                         className={cn(
@@ -598,8 +586,6 @@ export function ImpactTabClient({
                         )}
                       />
                     )}
-
-                    {/* Mascotte */}
                     <Link href={`/impact/sanctuary/${contribution.themeKey}`} className={cn(sizeClass, 'relative drop-shadow-2xl transition-transform hover:scale-110 active:scale-95')}>
                       <img
                         src={mascotSrc}
@@ -612,8 +598,6 @@ export function ImpactTabClient({
                         }}
                       />
                     </Link>
-
-                    {/* Floating Pill */}
                     <div className="mt-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 backdrop-blur-md">
                       <span className={cn('text-sm font-black', theme.accentText)}>
                         {contribution.contributionShare}%
