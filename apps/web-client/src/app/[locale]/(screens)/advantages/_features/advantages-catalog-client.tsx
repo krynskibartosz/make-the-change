@@ -6,7 +6,7 @@ import type { Advantage, AdvantageType } from './mock-advantages'
 
 function typeLabel(type: AdvantageType): string | null {
   if (type === 'partner_code') return 'Code partenaire'
-  if (type === 'live') return 'Live'
+  if (type === 'content') return 'Contenu terrain'
   if (type === 'experience') return 'Expérience'
   return null
 }

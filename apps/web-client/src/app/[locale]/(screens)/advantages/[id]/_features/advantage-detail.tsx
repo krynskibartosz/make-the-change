@@ -8,7 +8,7 @@ import type { Advantage } from '@/app/[locale]/(screens)/advantages/_features/mo
 
 const TYPE_LABELS: Partial<Record<string, string>> = {
   partner_code: 'Code partenaire',
-  live: 'Live en ligne',
+  content: 'Contenu terrain',
   experience: 'Expérience terrain',
 }
 
@@ -42,11 +42,12 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
 
   const ctaLabel = isSoon
     ? 'Bientôt disponible'
-    : advantage.type === 'partner_code'
+    : advantage.type === 'partner_code' || advantage.type === 'content'
       ? `Débloquer · ${advantage.priceCredits.toLocaleString('fr-FR')} Credits Impact`
       : `Réserver · ${advantage.priceCredits.toLocaleString('fr-FR')} Credits Impact`
 
-  const isActioned = advantage.type === 'partner_code' ? unlocked : reserved
+  const isActioned =
+    advantage.type === 'partner_code' || advantage.type === 'content' ? unlocked : reserved
 
   return (
     <div className="relative flex h-full flex-col">
@@ -155,7 +156,7 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
         )}
 
         {/* Réservation confirmée */}
-        {(advantage.type === 'live' || advantage.type === 'experience') && reserved && (
+        {advantage.type === 'experience' && reserved && (
           <div className="mx-4 mt-5 rounded-2xl border border-lime-300/20 bg-lime-300/[0.07] px-5 py-5 text-center">
             <Check className="mx-auto mb-2 h-6 w-6 text-lime-300" aria-hidden="true" />
             <p className="font-black text-white">Réservation enregistrée</p>
@@ -193,9 +194,11 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
           {advantage.whatYouGet && (
             <section>
               <h2 className="text-base font-black text-white">
-                {advantage.type === 'live' || advantage.type === 'experience'
+                {advantage.type === 'experience'
                   ? 'Ce que tu vas vivre'
-                  : 'Ce que tu obtiens'}
+                  : advantage.type === 'content'
+                    ? 'Ce que tu vas découvrir'
+                    : 'Ce que tu obtiens'}
               </h2>
               <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/60">
                 {advantage.whatYouGet}
@@ -278,7 +281,9 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
           ) : (
             <button
               onClick={() =>
-                advantage.type === 'partner_code' ? setUnlocked(true) : setReserved(true)
+                advantage.type === 'partner_code' || advantage.type === 'content'
+                  ? setUnlocked(true)
+                  : setReserved(true)
               }
               className="flex w-full items-center justify-center rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] transition-opacity active:opacity-80"
             >

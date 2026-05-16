@@ -92,14 +92,14 @@ export function getAdvantagesData(): AdvantagesData {
       costImpactCredits: 200,
     },
     collectiveBonus: {
-      title: 'Live rucher Ilanga',
+      title: 'Dans les ruchers Ilanga',
       partner: 'Ilanga Nature',
       description:
-        'La prochaine étape donnera accès à un live terrain et à un carnet de récolte.',
-      imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
+        'La prochaine étape débloquera le carnet terrain et la vidéo documentaire des ruchers.',
+      imageUrl: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80',
       currentStep: 2,
       totalSteps: 3,
-      nextStepLabel: 'Live terrain + carnet de récolte',
+      nextStepLabel: 'Carnet terrain + vidéo documentaire',
       href: `/projects/${MOCK_PROJECT_MIELLERIES_MOBILE_SLUG}`,
       cta: 'Voir le projet lié',
     },

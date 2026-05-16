@@ -11,7 +11,7 @@ import {
 } from '@/lib/mock/mock-ids'
 import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 
-export type AdvantageType = 'product' | 'partner_code' | 'live' | 'experience'
+export type AdvantageType = 'product' | 'partner_code' | 'content' | 'experience'
 export type AdvantageStatus = 'available' | 'soon' | 'sold_out'
 export type RedemptionMode = 'mtc_checkout' | 'partner_code' | 'reservation'
 
@@ -112,30 +112,30 @@ export function getMockAdvantages(): Advantage[] {
     },
   ]
 
-  const lives: Advantage[] = [
+  const terrainContents: Advantage[] = [
     {
-      id: 'live-rucher-ilanga',
-      type: 'live',
-      title: 'Live depuis un rucher Ilanga',
+      id: 'content-rucher-ilanga',
+      type: 'content',
+      title: 'Dans les ruchers Ilanga',
       partner: 'Ilanga Nature',
-      location: 'En ligne',
+      location: 'Madagascar',
       imageUrl: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80',
       priceCredits: 900,
       status: 'soon',
-      details: '45 min · En ligne · Places limitées',
+      details: 'Vidéo · 8 min · Madagascar',
       description:
-        "Un apiculteur Ilanga montre le rucher, la récolte et répond à tes questions en direct.",
+        "Une immersion dans le travail des apiculteurs partenaires, la récolte du miel et le rôle des mielleries mobiles.",
       whatYouGet:
-        "Un accès au live en ligne avec un apiculteur Ilanga. Tu recevras le lien de connexion 24h avant le live.",
+        "Une vidéo terrain de 8 minutes tournée dans les ruchers partenaires d'Ilanga, accompagnée d'un carnet de récolte et de photos documentaires.",
       howItWorks: [
-        'Réserve ta place avec 900 Credits Impact.',
-        'Reçois le lien de connexion 24h avant le live.',
-        "Rejoins le live et pose tes questions directement à l'apiculteur.",
+        'Débloque le contenu avec 900 Credits Impact.',
+        'Accède à la vidéo terrain et au carnet documentaire.',
+        'Retrouve les liens avec le projet et les espèces dans Apprendre.',
       ],
-      conditions: ['Places limitées', 'Non remboursable après confirmation', 'Lien envoyé par email'],
+      conditions: ['Contenu permanent, accessible à vie', 'Lié au projet Mielleries Mobiles'],
       projectSlug: MOCK_PROJECT_MIELLERIES_MOBILE_SLUG,
       producerSlug: MOCK_PRODUCER_ILANGA_SLUG,
-      redemption: 'reservation',
+      redemption: 'partner_code',
     },
   ]
 
@@ -165,7 +165,7 @@ export function getMockAdvantages(): Advantage[] {
     },
   ]
 
-  return [...productAdvantages, ...partnerCodes, ...lives, ...experiences]
+  return [...productAdvantages, ...partnerCodes, ...terrainContents, ...experiences]
 }
 
 export function getMockAdvantageById(id: string): Advantage | undefined {
