@@ -1,6 +1,7 @@
-import { ArrowRight, CalendarDays, ChevronRight, Handshake, Package } from 'lucide-react'
-import { CurrencyAmount } from '@/components/currency'
+import { ArrowRight, CalendarDays, ChevronRight, Handshake, Package, Sparkles } from 'lucide-react'
+import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
+import { formatCompact } from '@/lib/formatters'
 import type { AdvantagesData } from './advantages-data'
 
 type AdvantagesTabProps = {
@@ -8,23 +9,38 @@ type AdvantagesTabProps = {
   data: AdvantagesData
 }
 
-export function AdvantagesTab({ impactCredits: _, data }: AdvantagesTabProps) {
+export function AdvantagesTab({ impactCredits, data }: AdvantagesTabProps) {
   return (
-    <section className="relative isolate w-full overflow-x-hidden pb-32 pt-7 md:pb-10">
+    <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-gradient-to-b from-white/[0.04] to-[#0B0F15]" />
       <div className="pointer-events-none absolute left-1/2 top-[-8rem] z-[-1] h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-lime-400/10 blur-[110px]" />
+
+      {/* ── Badge flottant Credits Impact ──────────────────────────────────── */}
+      <Link
+        href="/advantages/balance"
+        prefetch={false}
+        aria-label={`${impactCredits} Credits Impact`}
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] right-4 z-50 flex items-center gap-1.5 rounded-full border border-white/10 bg-[#0B0F15]/85 px-3 py-2 shadow-lg backdrop-blur-md transition-transform active:scale-95"
+      >
+        <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
+        <span className="text-[12px] font-black tabular-nums text-white">
+          {formatCompact(impactCredits)}
+        </span>
+      </Link>
 
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
 
         {/* ── Intro ─────────────────────────────────────────────────────────── */}
         <div className="px-1 pt-2">
           <h1 className="text-[26px] font-black tracking-tight text-white">
-            Utilise tes Credits Impact
+            Avantages Partenaires
           </h1>
-          <p className="mt-1.5 text-[15px] font-medium leading-relaxed text-white/60">
-            Produits, offres et expériences liés aux partenaires du vivant.
+          <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/60">
+            Utilise tes Credits Impact pour accéder à des produits, offres et expériences liés aux partenaires du vivant.
           </p>
-          <div id="advantages-title-sentinel" aria-hidden="true" />
+          <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-white/30">
+            Les prix sont affichés en Credits Impact.
+          </p>
         </div>
 
         {/* ── Section 1 — À utiliser maintenant ─────────────────────────────── */}
@@ -75,29 +91,39 @@ export function AdvantagesTab({ impactCredits: _, data }: AdvantagesTabProps) {
               alt=""
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15]/95 via-black/40 to-black/10" />
+            {/* Gradient fort pour lisibilité garantie */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/75 to-black/20" />
 
             <div className="relative z-10 flex min-h-[18rem] flex-col justify-end p-5">
-              <span className="inline-flex w-fit items-center rounded-full bg-lime-300/15 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-lime-300">
-                Bonus collectif
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-lime-300/15 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-lime-300">
+                  Bonus collectif
+                </span>
+                {data.collectiveBonus.currentStep < data.collectiveBonus.totalSteps && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
+                    <Sparkles className="h-2.5 w-2.5" aria-hidden="true" />
+                    Bientôt débloqué
+                  </span>
+                )}
+              </div>
+
               <h2 className="mt-2 text-[20px] font-black leading-tight tracking-tight text-white">
                 {data.collectiveBonus.title}
               </h2>
-              <p className="mt-1.5 text-sm font-medium leading-relaxed text-white/65">
+              <p className="mt-1.5 text-sm font-medium leading-relaxed text-white/70">
                 {data.collectiveBonus.description}
               </p>
 
               <div className="mt-4">
                 <div className="mb-2 flex items-center justify-between text-xs font-bold">
-                  <span className="text-white/50">
+                  <span className="text-white/55">
                     Étape {data.collectiveBonus.currentStep} sur {data.collectiveBonus.totalSteps}
                   </span>
                   <span className="text-lime-300/80">
                     Prochaine · {data.collectiveBonus.nextStepLabel}
                   </span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
                   <div
                     className="h-full rounded-full bg-lime-300"
                     style={{
@@ -156,11 +182,7 @@ export function AdvantagesTab({ impactCredits: _, data }: AdvantagesTabProps) {
                   className="flex gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.045] p-4 active:bg-white/[0.07]"
                 >
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white/5">
-                    <img
-                      src={partner.imageUrl}
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
+                    <img src={partner.imageUrl} alt="" className="h-full w-full object-cover" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
@@ -180,19 +202,18 @@ export function AdvantagesTab({ impactCredits: _, data }: AdvantagesTabProps) {
           </ul>
         </section>
 
-        {/* ── Section 5 — Comprendre (compact) ─────────────────────────────── */}
-        <section className="flex items-center gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.04] p-4">
-          <div className="min-w-0 flex-1">
-            <h2 className="text-base font-black text-white">Comprendre ce que tu soutiens</h2>
-            <p className="mt-1 text-sm font-medium leading-relaxed text-white/50">
-              Les produits et expériences sont liés à des projets, des espèces et des partenaires de terrain.
-            </p>
-          </div>
+        {/* ── Section 5 — Comprendre (légère) ──────────────────────────────── */}
+        <section className="px-1">
+          <h2 className="text-base font-black text-white">Comprendre ce que tu soutiens</h2>
+          <p className="mt-1 text-sm font-medium leading-relaxed text-white/50">
+            Les produits et expériences sont liés à des projets, des espèces et des partenaires de terrain.
+          </p>
           <Link
             href="/adventure"
-            className="shrink-0 rounded-full border border-white/10 bg-white/[0.07] px-3 py-2 text-sm font-black text-white transition-colors active:bg-white/10"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-black text-lime-300 active:text-lime-200"
           >
-            Explorer
+            Explorer dans Apprendre
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </section>
 

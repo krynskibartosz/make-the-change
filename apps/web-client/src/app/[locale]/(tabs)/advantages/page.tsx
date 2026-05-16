@@ -7,7 +7,6 @@ import { getCurrentMockImpactPoints } from '@/lib/mock/mock-member-data-server'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { AdvantagesTab } from './_features/advantages-tab'
 import { getAdvantagesData } from './_features/advantages-data'
-import { AdvantagesTabHeader } from './_features/advantages-tab-header'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -33,9 +32,7 @@ export default async function AdvantagesPage() {
 
   return (
     <TabScreen
-      header={<AdvantagesTabHeader impactCredits={impactCredits} />}
       className="bg-[#0B0F15]"
-      contentClassName="scroll-pt-6"
     >
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>
