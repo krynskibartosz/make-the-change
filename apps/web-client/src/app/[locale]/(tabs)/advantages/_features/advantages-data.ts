@@ -88,7 +88,7 @@ export function getAdvantagesData(): AdvantagesData {
       title: '-10 % sur le coffret découverte',
       partner: 'Ilanga Nature',
       imageUrl: '/images/projects/miellerie-manakara.jpg',
-      href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
+      href: '/advantages/code-ilanga-coffret-10',
       costImpactCredits: 200,
     },
     collectiveBonus: {
@@ -108,19 +108,19 @@ export function getAdvantagesData(): AdvantagesData {
         id: 'harvests',
         title: 'Récoltes partenaires',
         description: 'Miels, huiles et produits sélectionnés auprès de nos partenaires.',
-        href: '/products?tag=Miel',
+        href: '/advantages?type=product',
       },
       {
         id: 'partner-offers',
         title: 'Offres partenaires',
         description: 'Débloque un code, puis utilise-le directement chez le partenaire.',
-        href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
+        href: '/advantages?type=partner_code',
       },
       {
         id: 'experiences',
         title: 'Expériences & lives',
         description: 'Lives, visites et ateliers pour découvrir les projets autrement.',
-        href: `/projects/${MOCK_PROJECT_MIELLERIES_MOBILE_SLUG}`,
+        href: '/advantages?type=experience_live',
       },
     ],
     partners: [
