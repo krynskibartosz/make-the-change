@@ -1,17 +1,9 @@
 import type { LucideIcon } from 'lucide-react'
-import {
-  Atom,
-  ChevronRight,
-  Flower2,
-  Sprout,
-  TreePine,
-  Waves,
-} from 'lucide-react'
+import { Atom, ChevronRight, Flower2, Sprout, TreePine, Waves } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { formatCompact } from '@/lib/formatters'
 import type { SpeciesContext } from '@/types/species'
-import { SpeciesCardEnhanced } from '@/app/[locale]/(screens)/profile/biodex/_components/species-card-enhanced'
+import { SeedsFloatingBadge } from './seeds-floating-badge'
 
 type LearnTabProps = {
   seeds: number
@@ -24,8 +16,7 @@ type ProjectModule = {
   context: string
   detail: string
   reward: string
-  icon: LucideIcon
-  accentClass: string
+  imageUrl: string
   href: string
 }
 
@@ -46,6 +37,7 @@ type Ecosystem = {
   count: string
   icon: LucideIcon
   accentClass: string
+  nodes: string[]
   locked: boolean
   href: string
 }
@@ -57,8 +49,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     context: 'Ilanga Nature · Manakara',
     detail: 'Module terrain · 5 min',
     reward: '+70 Graines',
-    icon: Flower2,
-    accentClass: 'bg-gradient-to-br from-yellow-300/20 to-emerald-400/8 text-yellow-200',
+    imageUrl: '/images/projects/miellerie-manakara.png',
     href: '/ecosysteme/foret-manakara',
   },
   {
@@ -67,8 +58,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     context: 'Récif · Karimunjawa',
     detail: 'Making-of · 7 min',
     reward: '+90 Graines',
-    icon: Waves,
-    accentClass: 'bg-gradient-to-br from-cyan-300/20 to-blue-400/8 text-cyan-200',
+    imageUrl: '/images/projects/coral-karimunjawa.png',
     href: '/ecosysteme/recif-karimunjawa',
   },
 ]
@@ -111,6 +101,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     count: '7 liens',
     icon: TreePine,
     accentClass: 'bg-gradient-to-br from-emerald-400/20 to-teal-500/8 text-emerald-200',
+    nodes: ['Abeille', 'Orchidées', 'Tavy'],
     locked: false,
     href: '/ecosysteme/foret-manakara',
   },
@@ -121,6 +112,7 @@ const ECOSYSTEMS: Ecosystem[] = [
     count: '6 liens',
     icon: Waves,
     accentClass: 'bg-gradient-to-br from-cyan-400/20 to-blue-500/8 text-cyan-200',
+    nodes: ['Corail', 'Poisson-clown', 'Tortue'],
     locked: false,
     href: '/ecosysteme/recif-karimunjawa',
   },
@@ -131,10 +123,26 @@ const ECOSYSTEMS: Ecosystem[] = [
     count: 'Bientôt',
     icon: Flower2,
     accentClass: 'bg-gradient-to-br from-amber-400/12 to-yellow-500/5 text-amber-200/50',
+    nodes: ['Bourdon', 'Osmie', 'Haie'],
     locked: true,
     href: '/ecosysteme/pollinisateurs-belgique',
   },
 ]
+
+function getRarityInfo(status: string | null | undefined) {
+  switch (status?.toUpperCase()) {
+    case 'EN':
+    case 'CR':
+    case 'EW':
+    case 'EX':
+      return { label: 'Légendaire', color: 'text-amber-400/75' }
+    case 'VU':
+    case 'NT':
+      return { label: 'Rare', color: 'text-blue-400/70' }
+    default:
+      return { label: 'Commun', color: 'text-emerald-500/60' }
+  }
+}
 
 function getSpeciesFallbackEmoji(name: string): string {
   const n = name.toLowerCase()
@@ -153,7 +161,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
   const sortedPreview = [
     ...species.filter((s) => s.user_status?.isUnlocked),
     ...species.filter((s) => !s.user_status?.isUnlocked),
-  ].slice(0, 4)
+  ].slice(0, 6)
 
   const missionSpecies =
     species.find((s) => s.id === 'species-abeille-noire') ??
@@ -163,26 +171,18 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
 
-      {/* ── Badge flottant Graines ── */}
-      <Link
-        href="/profile/seeds"
-        prefetch={false}
-        aria-label={`Solde : ${seeds} Graines`}
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-50 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 px-3 shadow-sm backdrop-blur-md transition-colors active:bg-white/10"
-      >
-        <Sprout className="h-3.5 w-3.5 text-teal-300" aria-hidden="true" />
-        <span className="text-[12px] font-black tabular-nums text-white">{formatCompact(seeds)}</span>
-      </Link>
-
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
 
         {/* ── Intro ── */}
         <div className="px-1 pt-2">
           <h1 className="text-[26px] font-black tracking-tight text-white">Apprendre</h1>
-          <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/58">
+          <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/55">
             Comprends le vivant à travers des leçons, des espèces et les projets que tu soutiens.
           </p>
         </div>
+
+        {/* Sentinel + badge flottant Graines — apparaît après le scroll de l'intro */}
+        <SeedsFloatingBadge seeds={seeds} />
 
         {/* ── 1. Continuer ── */}
         <section>
@@ -199,21 +199,21 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                 </div>
               </div>
               <div className="min-w-0 flex-1 py-0.5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-teal-100/55">Chapitre 1 · Mécanique du Vivant</p>
+                <p className="text-[10px] font-bold text-teal-100/50">Chapitre 1 · Mécanique du Vivant</p>
                 <h3 className="mt-0.5 text-[17px] font-black leading-tight tracking-tight text-white">L'Alphabet Originel</h3>
                 <p className="mt-1 line-clamp-1 text-[12px] text-white/45">Comprends les forces invisibles qui relient l'eau, le soleil, les sols et les espèces.</p>
               </div>
             </div>
             <div className="border-t border-white/[0.06] px-4 py-3">
               <div className="mb-2 flex items-center justify-between text-[11px]">
-                <span className="text-white/50">8 / 28 unités</span>
+                <span className="text-white/48">8 / 28 unités</span>
                 <span className="font-black text-teal-200">28 %</span>
               </div>
               <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                 <div className="h-full w-[28%] rounded-full bg-gradient-to-r from-teal-300 to-lime-300" />
               </div>
               <div className="mt-3 flex items-center justify-between gap-3">
-                <span className="flex items-center gap-1.5 text-[11px] text-white/45">
+                <span className="flex items-center gap-1.5 text-[11px] text-white/42">
                   <Sprout className="h-3.5 w-3.5 text-teal-200" aria-hidden="true" />
                   +60 Graines · 3 min
                 </span>
@@ -229,29 +229,26 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
         <section>
           <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Lié à tes projets</h2>
           <ul className="m-0 flex list-none flex-col gap-3 p-0">
-            {PROJECT_MODULES.map((module) => {
-              const Icon = module.icon
-              return (
-                <li key={module.id}>
-                  <Link
-                    href={module.href}
-                    className="flex items-center gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.045] p-4 transition-colors active:bg-white/[0.07]"
-                  >
-                    <span className={cn('flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl', module.accentClass)}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-medium text-white/42">{module.context} · {module.detail}</p>
-                      <h3 className="mt-0.5 text-[14px] font-semibold leading-snug text-white">{module.title}</h3>
-                      <div className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-teal-100/80">
-                        <Sprout className="h-3 w-3" aria-hidden="true" /> {module.reward}
-                      </div>
+            {PROJECT_MODULES.map((module) => (
+              <li key={module.id}>
+                <Link
+                  href={module.href}
+                  className="flex items-center gap-4 rounded-[1.5rem] border border-white/7 bg-white/[0.045] p-4 transition-colors active:bg-white/[0.07]"
+                >
+                  <div className="h-[60px] w-[60px] shrink-0 overflow-hidden rounded-2xl bg-white/5">
+                    <img src={module.imageUrl} alt="" className="h-full w-full object-cover" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-medium text-white/40">{module.context} · {module.detail}</p>
+                    <h3 className="mt-0.5 text-[14px] font-semibold leading-snug text-white">{module.title}</h3>
+                    <div className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-teal-200/75">
+                      <Sprout className="h-3 w-3" aria-hidden="true" /> {module.reward}
                     </div>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-white/25" aria-hidden="true" />
-                  </Link>
-                </li>
-              )
-            })}
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-white/25" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
           </ul>
         </section>
 
@@ -261,11 +258,11 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
             <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">Mission espèce</h2>
             <Link
               href={`/profile/biodex/${missionSpecies.id}`}
-              className="group block overflow-hidden rounded-[1.75rem] border border-yellow-200/12 bg-gradient-to-br from-yellow-300/10 via-white/[0.035] to-teal-300/6 transition-transform active:scale-[0.985]"
+              className="group block overflow-hidden rounded-[1.75rem] border border-teal-200/12 bg-gradient-to-br from-teal-300/10 via-white/[0.035] to-emerald-300/6 transition-transform active:scale-[0.985]"
             >
               <div className="flex gap-4 p-4">
-                <div className="relative h-[84px] w-[84px] shrink-0 overflow-hidden rounded-[20px] bg-black/20">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,210,58,.2),transparent_60%)]" />
+                <div className="relative h-[96px] w-[96px] shrink-0 overflow-hidden rounded-[22px] bg-black/20">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(45,255,193,.18),transparent_60%)]" />
                   {missionSpecies.image_url ? (
                     <img
                       src={missionSpecies.image_url}
@@ -279,11 +276,11 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                   )}
                 </div>
                 <div className="min-w-0 flex-1 py-0.5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-yellow-200/60">Mission espèce</p>
+                  <p className="text-[10px] font-bold text-teal-100/50">Mission espèce</p>
                   <h3 className="mt-0.5 text-[17px] font-black leading-tight text-white">{missionSpecies.name_default}</h3>
-                  <p className="mt-0.5 text-[11px] italic text-white/35">{missionSpecies.scientific_name}</p>
-                  <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-white/50">
-                    {missionSpecies.description_default}
+                  <p className="mt-0.5 text-[11px] italic text-white/32">{missionSpecies.scientific_name}</p>
+                  <p className="mt-1.5 line-clamp-2 text-[12px] leading-snug text-white/48">
+                    Comprends son rôle dans la pollinisation et ses liens avec la forêt de Manakara.
                   </p>
                 </div>
               </div>
@@ -291,9 +288,9 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[12px] font-semibold text-white/70">4 étapes · +120 Graines</p>
-                    <p className="mt-0.5 text-[11px] text-white/38">Débloque : 1 lien Toile vivante</p>
+                    <p className="mt-0.5 text-[11px] font-medium text-teal-200/60">Débloque 1 lien Toile vivante</p>
                   </div>
-                  <span className="rounded-full bg-yellow-300 px-3 py-1.5 text-[12px] font-black text-stone-950">
+                  <span className="rounded-full bg-teal-300 px-3 py-1.5 text-[12px] font-black text-[#04110e]">
                     Commencer
                   </span>
                 </div>
@@ -322,21 +319,21 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                     <span
                       className={cn(
                         'grid h-10 w-10 shrink-0 place-items-center rounded-2xl',
-                        path.active ? 'bg-teal-300 text-[#04110e]' : 'bg-white/[0.06] text-white/40',
+                        path.active ? 'bg-teal-300 text-[#04110e]' : 'bg-white/[0.06] text-white/38',
                       )}
                     >
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <h3 className={cn('text-[14px] font-semibold', path.active ? 'text-white' : 'text-white/80')}>
+                      <h3 className={cn('text-[14px] font-semibold', path.active ? 'text-white' : 'text-white/75')}>
                         {path.title}
                       </h3>
-                      <p className="mt-0.5 line-clamp-1 text-[12px] text-white/40">{path.subtitle}</p>
+                      <p className="mt-0.5 line-clamp-1 text-[12px] text-white/38">{path.subtitle}</p>
                     </div>
-                    <span className={cn('shrink-0 text-[12px] font-black', path.active ? 'text-teal-200' : 'text-white/35')}>
+                    <span className={cn('shrink-0 text-[12px] font-black', path.active ? 'text-teal-200' : 'text-white/30')}>
                       {path.progress} %
                     </span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-white/25" aria-hidden="true" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-white/22" aria-hidden="true" />
                   </Link>
                 </li>
               )
@@ -347,10 +344,10 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
         {/* ── 5. Toile vivante ── */}
         <section>
           <h2 className="mb-1 px-1 text-xl font-black tracking-tight text-white">Toile vivante</h2>
-          <p className="mb-4 px-1 text-[13px] font-medium leading-snug text-white/45">
+          <p className="mb-4 px-1 text-[13px] font-medium leading-snug text-white/42">
             Explore les connexions entre espèces, habitats, menaces et projets.
           </p>
-          <div className=" flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {ECOSYSTEMS.map((eco) => {
               const Icon = eco.icon
               return (
@@ -359,23 +356,32 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                   href={eco.href}
                   className={cn(
                     'w-[192px] shrink-0 snap-start rounded-[1.5rem] border border-white/8 p-4 transition-transform active:scale-[0.97]',
-                    eco.locked ? 'bg-white/[0.03] opacity-60' : 'bg-white/[0.05]',
+                    eco.locked ? 'bg-white/[0.025] opacity-55' : 'bg-white/[0.05]',
                   )}
                 >
-                  <div className="mb-4 flex items-start justify-between gap-2">
+                  <div className="mb-3 flex items-start justify-between gap-2">
                     <span className={cn('flex h-10 w-10 items-center justify-center rounded-[14px]', eco.accentClass)}>
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <span className={cn(
                       'mt-1 rounded-full px-2 py-0.5 text-[10px] font-semibold',
-                      eco.locked ? 'text-white/28' : 'bg-white/[0.06] text-white/55',
+                      eco.locked ? 'text-white/25' : 'bg-white/[0.06] text-white/52',
                     )}>
                       {eco.count}
                     </span>
                   </div>
                   <h3 className="line-clamp-2 text-[14px] font-semibold leading-tight text-white">{eco.title}</h3>
-                  <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-white/45">{eco.subtitle}</p>
-                  <p className={cn('mt-3 text-[12px] font-black', eco.locked ? 'text-white/28' : 'text-teal-200')}>
+                  <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-white/42">{eco.subtitle}</p>
+                  {!eco.locked && (
+                    <div className="mt-2.5 flex flex-wrap gap-1">
+                      {eco.nodes.map((node) => (
+                        <span key={node} className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] text-white/48">
+                          {node}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <p className={cn('mt-3 text-[12px] font-black', eco.locked ? 'text-white/25' : 'text-teal-200')}>
                     {eco.locked ? 'Bientôt' : 'Explorer →'}
                   </p>
                 </Link>
@@ -386,7 +392,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
 
         {/* ── 6. Mon BioDex ── */}
         <section>
-          <div className="mb-5 flex items-center justify-between gap-4 px-1">
+          <div className="mb-4 flex items-center justify-between gap-4 px-1">
             <h2 className="text-xl font-black tracking-tight text-white">Mon BioDex</h2>
             <Link
               href="/profile/biodex"
@@ -395,10 +401,40 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
               Voir tout <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-6">
-            {sortedPreview.map((sp) => (
-              <SpeciesCardEnhanced key={sp.id} species={sp} showUserStatus />
-            ))}
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {sortedPreview.map((sp) => {
+              const isLocked = !sp.user_status?.isUnlocked
+              const rarity = getRarityInfo(sp.conservation_status)
+              return (
+                <Link
+                  key={sp.id}
+                  href={`/profile/biodex/${sp.id}`}
+                  className="w-[128px] shrink-0 snap-start"
+                >
+                  <div className="aspect-square w-full overflow-hidden rounded-[18px] bg-white/[0.04]">
+                    {sp.image_url ? (
+                      <img
+                        src={sp.image_url}
+                        alt={sp.name_default}
+                        className={cn('h-full w-full object-contain', isLocked && 'grayscale opacity-40 blur-sm')}
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className={cn('text-[40px]', isLocked && 'opacity-20')}>
+                          {getSpeciesFallbackEmoji(sp.name_default)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <p className={cn('mt-2 line-clamp-1 text-[12px] font-semibold', isLocked ? 'text-white/28' : 'text-white/85')}>
+                    {sp.name_default}
+                  </p>
+                  <p className={cn('text-[10px] font-medium uppercase tracking-wide', isLocked ? 'text-white/15' : rarity.color)}>
+                    {rarity.label}
+                  </p>
+                </Link>
+              )
+            })}
           </div>
         </section>
 
