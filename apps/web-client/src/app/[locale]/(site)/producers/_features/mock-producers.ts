@@ -494,7 +494,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Née à Madagascar en 2017",
           body: "Fondée par Olivier Laurent, entrepreneur belge fasciné par la Grande Île. Une vocation : révéler les savoir-faire apicoles malgaches avec une approche terrain, durable et humaine.",
-          imageUrl: "/images/producteurs/illanga-nature/hero-lemures-miel-fort-dauphin.webp"
+          imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
         },
         {
           title: "Une famille, un réseau",
@@ -514,7 +514,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Collecter au plus près du terrain",
           body: "Une barge motorisée et des unités mobiles permettent de rejoindre les zones de production reculées, notamment le long du canal des Pangalanes.",
-          imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
+          imageUrl: "/images/producteurs/illanga-nature/hero-lemures-miel-fort-dauphin.webp"
         },
         {
           title: "Des filières jusqu'aux produits",

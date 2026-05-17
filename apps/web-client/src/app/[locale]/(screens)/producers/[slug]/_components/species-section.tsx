@@ -46,12 +46,12 @@ export function SpeciesSection({
             className="w-36 shrink-0 snap-start"
           >
             <article className="flex flex-col gap-2">
-              {/* Image — aspect moins haut pour réduire le vide autour de l'illustration */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-white/5">
+              {/* Image — scale-110 pour que l'illustration occupe plus de surface */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#1A1F26]">
                 <img
                   src={entry.image}
                   alt={entry.name}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-contain scale-110"
                 />
                 {/* Badge "Découverte" uniquement si débloquée dans le BioDex */}
                 {entry.unlocked && (

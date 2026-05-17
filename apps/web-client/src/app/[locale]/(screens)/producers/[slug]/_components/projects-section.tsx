@@ -53,17 +53,17 @@ export function ProjectsSection({
           {title}
         </h2>
         {subtitle && (
-          <p className="mt-1 text-[13px] text-white/50">
+          <p className="mt-1 text-[13px] text-white/55">
             {subtitle}
           </p>
         )}
 
         {/* Ligne de contexte : nombre de projets + estimation intégrée */}
         <div className="mt-2 flex flex-col gap-1">
-          <p className="text-[12px] text-white/40">{countLabel}</p>
+          <p className="text-[12px] text-white/45">{countLabel}</p>
           {impactSummary?.estimate && (
             <div className="flex items-start gap-1.5">
-              <p className="text-[12px] text-white/40">
+              <p className="text-[12px] text-white/45">
                 ≈{' '}
                 <span className="font-semibold text-amber-400/70">
                   {formatCompact(impactSummary.estimate)} {impactSummary.unit}
@@ -132,9 +132,9 @@ export function ProjectsSection({
                     {/* Impact compact — estimation prudente */}
                     {impact && impact.value > 0 && (
                       <div className="flex items-center gap-1.5">
-                        <ImpactIcon className="h-3 w-3 shrink-0 text-white/40" />
-                        <p className="text-[12px] text-white/60">
-                          <span className="text-white/40">≈</span>
+                        <ImpactIcon className="h-3 w-3 shrink-0 text-white/50" />
+                        <p className="text-[12px] text-white/65">
+                          <span className="text-white/45">≈</span>
                           {' '}
                           <span className="font-semibold text-white/80">{formatCompact(impact.value)}</span>
                           {' '}
