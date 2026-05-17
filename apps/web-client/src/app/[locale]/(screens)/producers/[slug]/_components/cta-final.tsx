@@ -45,7 +45,7 @@ export function CtaFinal({
         <ExternalLink className="h-3.5 w-3.5" />
       </a>
       <p className="mt-2 text-center text-[11px] text-white/30">
-        {hostname}
+        Site officiel · {hostname}
       </p>
     </section>
   )
