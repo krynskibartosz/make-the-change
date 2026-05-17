@@ -54,53 +54,56 @@ const iconMap: Record<string, LucideIcon> = {
   Heart,
 }
 
-// Accent coloré uniquement — fond toujours sombre
+// Accent coloré: liseré + icône uniquement, fond très légèrement teinté
 const accentStyles = {
   certification: {
-    border: 'border-l-emerald-500/50',
-    icon: 'text-emerald-400',
-    iconBg: 'bg-emerald-500/15',
-    label: 'text-emerald-400/80',
+    border: 'border-l-emerald-500/40',
+    cardBg: 'bg-emerald-950/20',
+    icon: 'text-emerald-400/90',
+    label: 'text-emerald-400/70',
   },
   field_operation: {
-    border: 'border-l-amber-400/50',
-    icon: 'text-amber-400',
-    iconBg: 'bg-amber-500/15',
-    label: 'text-amber-400/80',
+    border: 'border-l-amber-400/40',
+    cardBg: 'bg-amber-950/20',
+    icon: 'text-amber-400/90',
+    label: 'text-amber-400/70',
   },
   method: {
-    border: 'border-l-sky-400/50',
-    icon: 'text-sky-400',
-    iconBg: 'bg-sky-500/15',
-    label: 'text-sky-400/80',
+    border: 'border-l-sky-400/40',
+    cardBg: 'bg-sky-950/20',
+    icon: 'text-sky-400/90',
+    label: 'text-sky-400/70',
   },
 }
 
-// Contexte bottom sheet par repère principal
-const primaryContext: Record<string, { body: string; notes: string[] }> = {
+// Contexte bottom sheet par repère
+const primaryContext: Record<string, { body: string; notes: string[]; caution?: string }> = {
   'Certification Ecocert': {
     body: "Certains miels Ilanga Nature disposent d'une certification biologique Ecocert. Cette information permet de situer le niveau de contrôle qualité associé aux produits concernés.",
     notes: [
-      "Certification biologique Ecocert",
+      "Miels biologiques certifiés Ecocert",
       "Contrôle humidité 16\u201318\u202f%",
       "Mielleries homologuées Ministère malgache de l'\u00c9levage",
-    ]
+    ],
+    caution: "Cette certification concerne les produits documentés, pas nécessairement l'ensemble des actions terrain."
   },
   '2 mielleries mobiles': {
     body: "Ilanga utilise 2 unités mobiles pour collecter le miel au plus près des zones de production, notamment sur le canal des Pangalanes.",
     notes: [
       "2 unités mobiles de collecte",
-      "Barge motorisée sur le canal des Pangalanes",
+      "Barge motorisée, canal des Pangalanes",
       "3 mielleries fixes : Antananarivo, Manakara, Fort-Dauphin",
-    ]
+    ],
+    caution: "La proximité de collecte est une pratique opérationnelle documentée, pas une mesure d'impact environnemental."
   },
   "\u00c9cole d'apiculture": {
-    body: "Ilanga forme des apiculteurs locaux à Fort-Dauphin. Cette école s'inscrit dans une logique de transmission de savoir-faire, sans constituer une preuve d'impact mesuré.",
+    body: "Ilanga forme des apiculteurs locaux à Fort-Dauphin dans une logique de transmission de savoir-faire et de structuration de la filière.",
     notes: [
       "Formation terrain pratique",
       "Localisation : Fort-Dauphin",
-      "Accompagnement Miarakap / IIP (programme Mitsiry)",
-    ]
+      "Accompagnement Miarakap / IIP — programme Mitsiry",
+    ],
+    caution: "Cette démarche de formation ne constitue pas une preuve d'impact mesuré."
   },
 }
 
@@ -130,10 +133,12 @@ export function ProofGrid({ cards }: ProofGridProps) {
     .map((label) => cards.find((card) => card.label === label))
     .filter((card): card is ProofCard => Boolean(card))
 
-  const secondaryProofs = cards
+  const MAX_CHIPS = 5
+  const allSecondary = cards
     .filter(c => !primaryProofs.some(p => p.label === c.label))
     .filter(c => !hiddenChipLabels.includes(c.label))
-    .slice(0, 7)
+  const secondaryProofs = allSecondary.slice(0, MAX_CHIPS)
+  const hiddenCount = allSecondary.length - secondaryProofs.length
 
   const activeCard = openLabel ? primaryProofs.find(c => c.label === openLabel) : null
   const activeContext = openLabel ? primaryContext[openLabel] : null
@@ -151,7 +156,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
               Quelques éléments documentés pour situer leur travail sur le terrain.
             </p>
 
-            {/* Cards sobres — liseré gauche coloré, fond sombre */}
+            {/* Cards éditoriales — fond légèrement teinté, liseré fin */}
             <div className="space-y-2">
               {primaryProofs.map((card, index) => {
                 const Icon = iconMap[card.icon] || BadgeCheck
@@ -162,11 +167,9 @@ export function ProofGrid({ cards }: ProofGridProps) {
                     key={index}
                     type="button"
                     onClick={() => setOpenLabel(card.label)}
-                    className={`flex w-full items-center gap-3 rounded-lg border border-white/[0.07] border-l-2 ${style.border} bg-white/[0.03] px-3 py-3 text-left transition-opacity active:opacity-60`}
+                    className={`flex w-full items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${style.border} ${style.cardBg} px-3.5 py-3.5 text-left transition-opacity active:opacity-60`}
                   >
-                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${style.iconBg}`}>
-                      <Icon className={`h-4 w-4 ${style.icon}`} />
-                    </div>
+                    <Icon className={`h-[18px] w-[18px] shrink-0 ${style.icon}`} />
 
                     <div className="min-w-0 flex-1">
                       <p className="text-[13px] font-medium leading-tight text-white/85">
@@ -194,20 +197,25 @@ export function ProofGrid({ cards }: ProofGridProps) {
               Autres éléments documentés
             </h3>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {secondaryProofs.map((card, index) => {
                 const Icon = iconMap[card.icon] || BadgeCheck
 
                 return (
                   <span
                     key={index}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-white/60"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.05] px-2.5 py-1 text-[11px] font-medium text-white/65"
                   >
-                    <Icon className="h-3 w-3 text-white/40" />
+                    <Icon className="h-3 w-3 text-white/45" />
                     <span>{card.label}</span>
                   </span>
                 )
               })}
+              {hiddenCount > 0 && (
+                <span className="inline-flex items-center rounded-full border border-white/[0.06] px-2.5 py-1 text-[11px] text-white/35">
+                  +{hiddenCount} éléments
+                </span>
+              )}
             </div>
           </div>
         )}
@@ -220,28 +228,40 @@ export function ProofGrid({ cards }: ProofGridProps) {
         title={activeCard?.label}
       >
         {activeCard && activeContext && (
-          <div className="pb-2 pt-1">
-            <p className="text-[14px] leading-relaxed text-white/65">
+          <div className="pb-2">
+            {/* Badge source — en haut, ancre la lecture */}
+            <span className="mb-3 inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-white/40">
+              Information partenaire documentée
+            </span>
+
+            {/* Corps */}
+            <p className="text-[13px] leading-relaxed text-white/65">
               {activeContext.body}
             </p>
 
-            <div className="mt-5">
-              <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-white/35">
+            {/* Éléments liés */}
+            <div className="mt-4">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-white/30">
                 Éléments liés
               </p>
-              <ul className="flex flex-col gap-2">
+              <ul className="flex flex-col gap-1.5">
                 {activeContext.notes.map((note, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[13px] text-white/60">
-                    <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-white/30" />
+                  <li key={i} className="flex items-start gap-2 text-[12px] text-white/60">
+                    <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-white/25" />
                     {note}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <p className="mt-6 text-[10px] text-white/25">
-              Information partenaire documentée
-            </p>
+            {/* Note prudente */}
+            {activeContext.caution && (
+              <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+                <p className="text-[11px] leading-snug text-white/40 italic">
+                  {activeContext.caution}
+                </p>
+              </div>
+            )}
           </div>
         )}
       </MobileSheet>
