@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import { Sprout } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
 import { formatCompact } from '@/lib/formatters'
+import { cn } from '@/lib/utils'
 
 export function SeedsFloatingBadge({ seeds }: { seeds: number }) {
   const [visible, setVisible] = useState(false)
@@ -15,7 +15,11 @@ export function SeedsFloatingBadge({ seeds }: { seeds: number }) {
     if (!el) return
 
     const observer = new IntersectionObserver(
-      ([entry]) => setVisible(!entry.isIntersecting),
+      (entries) => {
+        const entry = entries[0]
+        if (!entry) return
+        setVisible(!entry.isIntersecting)
+      },
       { threshold: 0 },
     )
     observer.observe(el)
@@ -37,7 +41,9 @@ export function SeedsFloatingBadge({ seeds }: { seeds: number }) {
         )}
       >
         <Sprout className="h-3.5 w-3.5 text-teal-300" aria-hidden="true" />
-        <span className="text-[12px] font-black tabular-nums text-white">{formatCompact(seeds)}</span>
+        <span className="text-[12px] font-black tabular-nums text-white">
+          {formatCompact(seeds)}
+        </span>
       </Link>
     </>
   )

@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import { Atom, ChevronRight, Flower2, Sprout, TreePine, Waves } from 'lucide-react'
+import { ANTSIRABE_COURSE_VARIANTS } from '@/app/[locale]/(screens)/academy/project-experiences/ruchers-antsirabe/_lib/antsirabe-course-variants'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import type { SpeciesContext } from '@/types/species'
@@ -250,6 +251,44 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
               </li>
             ))}
           </ul>
+        </section>
+
+        {/* ── 2b. Variantes Antsirabe ── */}
+        <section>
+          <div className="mb-4 px-1">
+            <h2 className="text-xl font-black tracking-tight text-white">Tester le cours Antsirabe</h2>
+            <p className="mt-1 text-[13px] font-medium leading-snug text-white/42">
+              Trois angles pour comparer ce qui rend le projet vraiment spécifique.
+            </p>
+          </div>
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {ANTSIRABE_COURSE_VARIANTS.map((variant) => (
+              <Link
+                key={variant.id}
+                href={variant.href}
+                className={cn(
+                  'w-[232px] shrink-0 snap-start overflow-hidden rounded-[1.5rem] border bg-white/[0.04] transition-transform active:scale-[0.98]',
+                  variant.theme.border,
+                )}
+              >
+                <div className="relative h-[118px] overflow-hidden bg-white/[0.04]">
+                  <img src={variant.imageUrl} alt="" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#05050A] via-[#05050A]/25 to-transparent" />
+                  <div className={cn('absolute -bottom-12 left-1/2 h-28 w-28 -translate-x-1/2 rounded-full blur-2xl', variant.theme.surface)} />
+                </div>
+                <div className="p-4">
+                  <p className={cn('text-[10px] font-black uppercase tracking-[0.18em]', variant.theme.mutedText)}>
+                    {variant.shortTitle} · {variant.detail}
+                  </p>
+                  <h3 className="mt-2 text-[15px] font-black leading-tight text-white">{variant.title}</h3>
+                  <p className="mt-1.5 line-clamp-3 text-[11px] leading-relaxed text-white/45">{variant.subtitle}</p>
+                  <div className={cn('mt-3 flex items-center gap-1 text-[12px] font-black', variant.theme.text)}>
+                    Tester <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
         {/* ── 3. Mission espèce ── */}

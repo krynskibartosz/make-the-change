@@ -91,7 +91,7 @@ export function FullScreenSlideModal({
     <div
       ref={containerRef}
       className={cn(
-        'fixed inset-0 z-50 bg-background h-[100dvh] w-full flex flex-col overflow-hidden',
+        'fixed inset-0 z-[100] bg-background h-[100dvh] w-full flex flex-col overflow-hidden',
         'animate-in slide-in-from-bottom-full duration-300',
         className,
       )}
