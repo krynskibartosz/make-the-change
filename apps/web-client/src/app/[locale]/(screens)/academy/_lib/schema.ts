@@ -116,21 +116,21 @@ export type AcademySwipeExercise = z.infer<typeof swipeExerciseSchema>
 
 export const dragDropItemSchema = z.object({
   id: z.string().min(1),
-  text: z.string().min(1).max(80),
+  text: z.string().min(1),
   isDistractor: z.boolean().optional(),
 })
 export type AcademyDragDropItem = z.infer<typeof dragDropItemSchema>
 
 export const dragDropExerciseSchema = exerciseBaseSchema.extend({
   type: z.literal('DRAG_DROP'),
-  instruction: z.string().min(1).max(80),
+  instruction: z.string().min(1),
   axis: dragDropAxisSchema,
-  axisRationale: z.string().min(1).max(120),
+  axisRationale: z.string().min(1),
   slotCount: z.number().int().min(2).max(7),
   items: z.array(dragDropItemSchema).min(2).max(8),
   feedbackPerSlot: z.record(z.string(), z.string()).optional(),
-  correctFeedback: z.string().min(1).max(140),
-  incorrectFeedback: z.string().min(1).max(140),
+  correctFeedback: z.string().min(1),
+  incorrectFeedback: z.string().min(1),
   toneVariants: toneVariantsSchema,
 })
 export type AcademyDragDropExercise = z.infer<typeof dragDropExerciseSchema>
@@ -138,18 +138,18 @@ export type AcademyDragDropExercise = z.infer<typeof dragDropExerciseSchema>
 // ─── QUIZ ─────────────────────────────────────────────────────────────────────
 
 export const quizOptionSchema = z.object({
-  text: z.string().min(1).max(80),
+  text: z.string().min(1),
   isCorrect: z.boolean(),
-  feedback: z.string().min(1).max(160),
+  feedback: z.string().min(1),
   misconceptionId: z.string().optional(),
 })
 export type AcademyQuizOption = z.infer<typeof quizOptionSchema>
 
 export const quizExerciseSchema = exerciseBaseSchema.extend({
   type: z.literal('QUIZ'),
-  question: z.string().min(1).max(110),
+  question: z.string().min(1),
   options: z.array(quizOptionSchema).min(2).max(4),
-  hint: z.string().max(120).optional(),
+  hint: z.string().optional(),
   confidenceCheck: z.boolean().optional(),
   toneVariants: toneVariantsSchema,
 })
