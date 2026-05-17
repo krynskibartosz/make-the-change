@@ -533,23 +533,18 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       
       // ── Gamme partenaire (informatif — pas le catalogue app) ──
       partnerCatalogOverview: {
-        title: "Ce qu'ils produisent",
-        disclaimer: "Cette section présente la gamme documentée d'Ilanga Nature. Seuls certains produits sont sélectionnés et disponibles dans l'app Make the Change.",
+        title: "Les filières qu'ils valorisent",
+        disclaimer: "Ilanga Nature valorise plusieurs filières. Seule une partie de ces produits est disponible dans l'app.",
         families: [
           {
             label: "Miels de Madagascar",
             examples: ["Litchi", "Niaouli", "Cactus", "Jujubier (bio)", "Forêt primaire", "Forêt sèche", "Eucalyptus", "Baies roses", "Mokarana (bio)"],
-            origin: "Madagascar — Manakara, Fort-Dauphin, Antananarivo"
+            origin: "Manakara · Fort-Dauphin · Antananarivo"
           },
           {
-            label: "Vanilles",
-            examples: ["Vanille Bourbon de Manakara", "Vanille Tahiti"],
-            origin: "Madagascar (Manakara) · Polynésie Française"
-          },
-          {
-            label: "Épices",
-            examples: ["Poivre noir", "Gingembre", "Cannelle", "Curcuma"],
-            origin: "Madagascar"
+            label: "Vanilles & épices",
+            examples: ["Vanille Bourbon de Manakara", "Poivre noir", "Gingembre", "Cannelle", "Curcuma"],
+            origin: "Madagascar · Polynésie française"
           },
           {
             label: "Confitures artisanales",
