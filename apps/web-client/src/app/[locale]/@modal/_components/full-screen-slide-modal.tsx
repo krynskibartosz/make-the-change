@@ -120,7 +120,7 @@ export function FullScreenSlideModal({
           className={cn(
             'fixed inset-x-0 top-0 z-20 transition-all duration-500 ease-out',
             isHeaderElevated
-              ? 'border-b border-white/[0.06] bg-[#0B0F15]/75 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.2)]'
+              ? 'border-b border-white/[0.05] bg-[#0B0F15]/55 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)]'
               : 'border-b border-transparent bg-transparent',
           )}
         >
@@ -131,7 +131,7 @@ export function FullScreenSlideModal({
                 'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300',
                 isHeaderElevated
                   ? 'bg-white/10 backdrop-blur-md'
-                  : 'bg-black/20 backdrop-blur-sm border border-white/10',
+                  : 'bg-black/10 backdrop-blur-sm border border-white/[0.06]',
               )}
               aria-label="Retour"
             >

@@ -63,16 +63,16 @@ export function ProducerHero({
           alt={name} 
           className="h-full w-full object-cover" 
         />
-        {/* Gradient progressif: haut vivant, bas lisible */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/25 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#0B0F15] to-transparent" />
+        {/* Gradient: centre vivant, bas lisible */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/15 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#0B0F15] to-transparent" />
       </div>
 
       {/* ── Identity Header ── */}
       <div className="relative px-4">
-        {/* Portrait premium - plus grand, ombre douce, pas d'anneau noir */}
-        <div className="absolute -top-11 left-4 z-10 h-[88px] w-[88px] rounded-full border border-white/10 bg-[#0B0F15]/60 p-0.5 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
-          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/5">
+        {/* Portrait signature — plus petit, contour minimal */}
+        <div className="absolute -top-[34px] left-4 z-10 h-[68px] w-[68px] rounded-full border border-white/[0.06] bg-transparent shadow-[0_10px_32px_rgba(0,0,0,0.3)]">
+          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/[0.03]">
             <img 
               src={portraitImage} 
               alt={name} 
@@ -81,8 +81,8 @@ export function ProducerHero({
           </div>
         </div>
 
-        {/* Spacer pour portrait plus grand */}
-        <div className="h-14" />
+        {/* Spacer portrait signature */}
+        <div className="h-12" />
 
         {/* Nom et tagline compacte */}
         <div className="flex items-start justify-between gap-3">
@@ -92,10 +92,15 @@ export function ProducerHero({
             </h1>
             
             {displayTagline && (
-              <p className="mt-1.5 text-[14px] font-medium text-white/60 leading-snug">
+              <p className="mt-1 text-[13px] font-medium text-white/55 leading-snug">
                 {displayTagline}
               </p>
             )}
+
+            {/* Statement émotionnel — mémorisable */}
+            <p className="mt-2 max-w-xs text-[13px] leading-snug text-white/70 italic">
+              Entre biodiversité, producteurs et savoir-faire malgaches.
+            </p>
 
             {/* Confiance prioritaire — ancienneté + certif + pays */}
             <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1">
