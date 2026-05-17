@@ -16,10 +16,10 @@ type SpeciesSectionProps = {
   subtitle?: string
 }
 
-export function SpeciesSection({ 
+export function SpeciesSection({
   species,
-  title = "Espèces liées à leurs écosystèmes",
-  subtitle = "Ces espèces vivent dans les environnements des projets apicoles"
+  title = "Le vivant autour de leurs projets",
+  subtitle = "Pollinisateurs et espèces associées aux milieux apicoles."
 }: SpeciesSectionProps) {
   if (species.length === 0) return null
 
@@ -35,8 +35,8 @@ export function SpeciesSection({
           </p>
         )}
       </div>
-      
-      <ul 
+
+      <ul
         className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
         aria-label="Espèces liées au partenaire"
       >
@@ -46,20 +46,27 @@ export function SpeciesSection({
             className="w-36 shrink-0 snap-start"
           >
             <article className="flex flex-col gap-2">
-              {/* Image premium — grande et immersive */}
+              {/* Image — sans padding pour maximiser le visuel */}
               <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-white/5">
                 <img
                   src={entry.image}
                   alt={entry.name}
-                  className="h-full w-full object-contain p-1"
+                  className="h-full w-full object-contain"
                 />
-                {/* Subtil badge unlock */}
-                <div className={`absolute bottom-2 left-2 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide backdrop-blur-sm ${entry.unlocked ? 'bg-emerald-500/20 text-emerald-400' : 'bg-black/40 text-white/50'}`}>
-                  {entry.unlocked ? 'Découvert' : 'À découvrir'}
+                {/* Badge contextuel : "Espèce liée" en permanent, "Découverte" si débloquée */}
+                <div className="absolute bottom-2 left-2 flex flex-col items-start gap-1">
+                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/60 backdrop-blur-sm">
+                    Espèce liée
+                  </span>
+                  {entry.unlocked && (
+                    <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-emerald-400 backdrop-blur-sm">
+                      Découverte
+                    </span>
+                  )}
                 </div>
               </div>
-              
-              {/* Nom — plus visible */}
+
+              {/* Nom */}
               <p className="text-[14px] font-semibold text-white/90 leading-tight line-clamp-2">
                 {entry.name}
               </p>

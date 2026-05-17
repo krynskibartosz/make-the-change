@@ -13,16 +13,18 @@
  */
 
 import { Link } from '@/i18n/navigation'
-import { Leaf, MapPin, TreePine, Waves } from 'lucide-react'
+import { Info, Leaf, MapPin, TreePine, Waves } from 'lucide-react'
 import { resolveLocationDisplay } from '@/lib/location'
 import { getProjectImpactDisplay } from '@/lib/impact-calculator'
 import { formatCompact } from '@/lib/formatters'
 import type { ProducerProject } from '../producer-detail-data'
+import type { ImpactSummary } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 
 type ProjectsSectionProps = {
   projects: ProducerProject[]
   title?: string
   subtitle?: string
+  impactSummary?: ImpactSummary
 }
 
 const IMPACT_ICONS: Record<string, typeof Leaf> = {
@@ -31,12 +33,18 @@ const IMPACT_ICONS: Record<string, typeof Leaf> = {
   reef: Waves,
 }
 
-export function ProjectsSection({ 
-  projects, 
+export function ProjectsSection({
+  projects,
   title = "Les projets qu'ils portent",
-  subtitle = "Des actions terrain liées à l'apiculture malgache"
+  subtitle = "Des actions terrain liées à l'apiculture malgache",
+  impactSummary,
 }: ProjectsSectionProps) {
   if (projects.length === 0) return null
+
+  const projectCount = projects.length
+  const countLabel = projectCount === 1
+    ? "1 projet documenté dans l'app"
+    : `${projectCount} projets documentés dans l'app`
 
   return (
     <section className="mt-10">
@@ -49,6 +57,30 @@ export function ProjectsSection({
             {subtitle}
           </p>
         )}
+
+        {/* Ligne de contexte : nombre de projets + estimation intégrée */}
+        <div className="mt-2 flex flex-col gap-1">
+          <p className="text-[12px] text-white/40">{countLabel}</p>
+          {impactSummary?.estimate && (
+            <div className="flex items-start gap-1.5">
+              <p className="text-[12px] text-white/40">
+                ≈{' '}
+                <span className="font-semibold text-amber-400/70">
+                  {formatCompact(impactSummary.estimate)} {impactSummary.unit}
+                </span>
+                {' '}concernées par l&apos;ensemble des projets
+              </p>
+              <button
+                type="button"
+                className="shrink-0 text-white/30 hover:text-white/50 transition-colors"
+                title={impactSummary.disclaimer}
+                aria-label="Méthode d'estimation"
+              >
+                <Info className="h-3 w-3" />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       
       <ul 
@@ -97,11 +129,13 @@ export function ProjectsSection({
                       </p>
                     )}
                     
-                    {/* Impact compact */}
+                    {/* Impact compact — estimation prudente */}
                     {impact && impact.value > 0 && (
                       <div className="mt-1 flex items-center gap-1.5">
                         <ImpactIcon className="h-3 w-3 text-white/40" />
                         <p className="text-[12px] text-white/60">
+                          <span className="text-white/40">≈</span>
+                          {' '}
                           <span className="font-semibold text-white/80">{formatCompact(impact.value)}</span>
                           {' '}
                           <span>{impact.label}</span>

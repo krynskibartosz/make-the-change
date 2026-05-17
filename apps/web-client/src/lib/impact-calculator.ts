@@ -54,7 +54,7 @@ export function getProjectImpactDisplay(project: {
 
   return {
     value: Math.round(funding * BEES_PER_EUR),
-    label: 'abeilles soutenues',
+    label: 'abeilles concernées',
     kind: 'beehive',
   }
 }
@@ -92,7 +92,7 @@ export function getProducerAggregatedImpact(
   }, 0)
 
   if (beesTotal > 0) {
-    stats.push({ value: beesTotal, label: 'abeilles soutenues', kind: 'beehive' })
+    stats.push({ value: beesTotal, label: 'abeilles concernées', kind: 'beehive' })
   }
   if (oliviersTotal > 0) {
     stats.push({ value: oliviersTotal, label: 'oliviers soutenus', kind: 'orchard' })
