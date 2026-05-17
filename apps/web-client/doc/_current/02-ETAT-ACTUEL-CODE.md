@@ -32,13 +32,15 @@ Ce document decrit ce qui existe dans le code actuel de `apps/web-client`. Il ne
 
 `[ACTUEL_CODE]` Les tabs mobiles sont definies dans `src/app/[locale]/(tabs)/_components/mobile-bottom-nav.tsx`.
 
-| Label UI | Route | Notes |
-|---|---|---|
-| Aventure | `/adventure` | Hub quotidien. |
-| Projets | `/projects` | Liste projets. |
-| Collectif | `/impact` | Impact collectif. |
-| Avantages | `/products` | Produits/avantages. |
-| Profil | `/profile` | Profil et sous-pages. |
+| Label UI | Route | Dossier `(tabs)/` | Notes |
+|---|---|---|---|
+| Accueil | `/adventure` | `adventure/` | Hub quotidien. Label UI "Accueil", pas "Aventure". |
+| Projets | `/projects` | `projects/` | Liste projets. |
+| Apprendre | `/learn` | `learn/` | Module apprentissage. Remplace l'ancienne tab Collectif `/impact`. |
+| Avantages | `/advantages` | `advantages/` | Produits/avantages. Route `/products` n'existe plus sous (tabs). |
+| Profil | `/profile` | `profile/` | Profil et sous-pages. |
+
+`[LEGACY]` Les anciennes routes `/impact` (Collectif) et `/products` (Avantages) ne font plus partie des tabs principales. Elles peuvent subsister dans des routes imbriquees ou des ecrans secondaires.
 
 ## Source de donnees
 
@@ -168,6 +170,28 @@ Role actuel :
 
 `[RISQUE]` Cette exception doit rester documentee comme prototype.
 
+## Transactions et monnaies dans les mocks
+
+`[ACTUEL_CODE]` `MockPointsTransactionRecord` a deux champs monetaires :
+
+- `delta` : variation du portefeuille global (Graines gagnees/depensees ou soutien debite).
+- `impactDelta` : Credits Impact generes — **soutien producteur uniquement**. Vaut `0` pour tout autre type de transaction (defis, missions, engagement, bonus, allocations d'abonnement).
+
+`[CIBLE_VALIDEE]` Regles de remplissage validees apres R8 :
+
+| Source de transaction | `delta` | `impactDelta` |
+|---|---|---|
+| Soutien producteur | negatif (montant debite) | positif (Credits Impact) |
+| Don pur | negatif | 0 |
+| Achat produit | negatif | 0 |
+| Defi / mission complete | positif (Graines) | 0 |
+| Allocation abonnement | positif (Graines) | 0 |
+| Bonus de bienvenue / streak / parrainage | positif (Graines) | 0 |
+
+`[ACTUEL_CODE]` `MockSubscriptionRecord.monthly_seeds_allocation` represente l'allocation mensuelle de Graines liee a l'abonnement. Ce n'est pas des Credits Impact.
+
+`[ACTUEL_CODE]` `getMockImpactPoints(viewerId)` retourne le solde de Credits Impact calcule depuis `impactDelta`. Apres correction, ce solde reflète uniquement les soutiens producteurs.
+
 ## Academy
 
 `[ACTUEL_CODE]` Academy est presente dans :
@@ -194,7 +218,7 @@ Role actuel :
 | Terme | Presence | Statut |
 |---|---|---|
 | `investment` | Routes, actions, metadata Stripe, mocks | `[ACTUEL_CODE]` + `[DEPRECIE]` | Ne pas utiliser en UI finale. Metadata Stripe doivent migrer vers `producer_support`. |
-| `points` | Supabase legacy uniquement (`points_balance`) — retire des mocks TypeScript en R8 (2026-05-08) | `[LEGACY]` + `[DEPRECIE]` | Remplace par `impactCreditsBalance` cote TypeScript/mocks. Reste dans Supabase V0 (`[A_NE_PAS_TOUCHER]`). |
+| `points` | Encore present dans `mock-member-data.ts` : `MockPointsTransactionRecord`, `total_points`, `unit_price_points`, `amount_points`, `getMockPointsTransactions`. R8 a renomme `Profile.points` uniquement. | `[ACTUEL_CODE]` + `[DEPRECIE]` | `impactCreditsBalance` est la cible pour le solde Credits Impact. Les autres champs `*_points` restent en attente de migration progressive. Reste aussi dans Supabase V0 (`[A_NE_PAS_TOUCHER]`). |
 | `Artisans Locaux` | Supabase V0 uniquement — retire du TypeScript en R7 (2026-05-08) | `[PURGE_R7]` + `[LEGACY]` | Ne pas reintroduire. Factions cibles : Vie Sauvage, Terres & Forets, Gardiens des mers. |
 | Supabase V0 | Ancienne DB branchee au dashboard admin | `[ACTUEL_CODE]` + `[LEGACY]` + `[A_NE_PAS_TOUCHER]` |
 | mocks web-client | Donnees prototype pour UX et flows | `[ACTUEL_CODE]` + `[SOURCE_PROTOTYPE]` |

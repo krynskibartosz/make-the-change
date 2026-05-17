@@ -17,26 +17,25 @@ import type { StoryBlock } from '@/app/[locale]/(site)/producers/_features/mock-
 
 type StoryBlocksProps = {
   blocks?: StoryBlock[]
-  producerName: string
 }
 
-export function StoryBlocks({ blocks, producerName }: StoryBlocksProps) {
+export function StoryBlocks({ blocks }: StoryBlocksProps) {
   if (!blocks || blocks.length === 0) return null
 
   return (
-    <section className="mt-12 px-5">
-      <h2 className="mb-6 text-lg font-bold text-white/90">
-        L&apos;histoire de {producerName}
+    <section className="mt-10 px-4">
+      <h2 className="mb-4 text-[17px] font-bold text-white/80">
+        L&apos;histoire
       </h2>
       
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         {blocks.map((block, index) => (
           <article 
             key={index}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-3"
           >
-            {/* Image 16/9 */}
-            <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-[#1A1F26]">
+            {/* Image 16/9 plus compacte */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[#1A1F26]">
               <img 
                 src={block.imageUrl} 
                 alt={block.title}
@@ -44,12 +43,12 @@ export function StoryBlocks({ blocks, producerName }: StoryBlocksProps) {
               />
             </div>
             
-            {/* Texte */}
+            {/* Texte condensé */}
             <div>
-              <h3 className="text-[17px] font-bold text-white leading-snug">
+              <h3 className="text-[16px] font-bold text-white leading-tight">
                 {block.title}
               </h3>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-white/60">
+              <p className="mt-1 text-[14px] leading-snug text-white/60 line-clamp-3">
                 {block.body}
               </p>
             </div>

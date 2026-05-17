@@ -458,36 +458,36 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         }
       ],
       
-      // ── Story Blocks (6 blocs narratifs V2 premium) ──
+      // ── Story Blocks (6 blocs narratifs condensés mobile-first) ──
       storyBlocks: [
         {
-          title: "Une aventure née à Madagascar",
-          body: "Ilanga Nature est née en 2017 de la vision d'Olivier Laurent, entrepreneur belge fasciné par la Grande Île. Une vocation : révéler les richesses naturelles de Madagascar, de manière durable et respectueuse des hommes et de la terre.",
+          title: "Née à Madagascar en 2017",
+          body: "Fondée par Olivier Laurent, entrepreneur belge fasciné par la Grande Île. Une vocation : révéler les savoir-faire apicoles malgaches avec une approche terrain, durable et humaine.",
           imageUrl: "/images/producteurs/illanga-nature/hero-lemures-miel-fort-dauphin.webp"
         },
         {
-          title: "Un réseau de producteurs engagés",
-          body: "Aux côtés d'Olivier, Laura Razanajatovo dirige les opérations sur le terrain. Nathan et Naya représentent la nouvelle génération. Ensemble, ils forment un réseau d'apiculteurs partenaires unis autour d'un savoir-faire ancestral malgache.",
+          title: "Une famille, un réseau",
+          body: "Olivier, Laura, Nathan et Naya. Quatre personnes, une mission : structurer une filière apicole locale avec des apiculteurs partenaires et un savoir-faire ancestral.",
           imageUrl: "/images/producteurs/illanga-nature/portrait-famille-laurent.webp"
         },
         {
-          title: "Des mielleries au plus près du terrain",
-          body: "Trois mielleries fixes — Antananarivo, Manakara, Fort-Dauphin — et deux unités mobiles. Chaque miellerie est homologuée par le Ministère malgache de l'Élevage et certifiée Ecocert pour les miels biologiques.",
+          title: "3 mielleries, 2 unités mobiles",
+          body: "Antananarivo, Manakara, Fort-Dauphin. Chaque miellerie est homologuée par le Ministère malgache et certifiée Ecocert pour les miels biologiques.",
           imageUrl: "/images/producteurs/illanga-nature/miellerie-manakara-exterieur.webp"
         },
         {
-          title: "Une barge sur le canal des Pangalanes",
-          body: "Une barge apicole motorisée sur le canal des Pangalanes permet d'atteindre les apiculteurs dans les zones reculées de la côte est. Financée avec le soutien de Miarakap, elle illustre une logistique légère et respectueuse.",
+          title: "Logistique légère",
+          body: "Une barge motorisée sur le canal des Pangalanes et des unités mobiles permettent d'atteindre les apiculteurs dans les zones reculées de la côte est.",
           imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
         },
         {
-          title: "Former pour pérenniser",
-          body: "L'école d'apiculture 'Académie Ilanga' à Fort-Dauphin forme les producteurs aux techniques modernes. Ilanga est aussi partenaire de Hope Madagascar pour l'accompagnement des jeunes et de l'association ADAMA pour la protection des forêts.",
+          title: "Former pour durer",
+          body: "L'Académie Ilanga à Fort-Dauphin forme les producteurs. Partenaire de Hope Madagascar et de l'association ADAMA pour la protection des forêts.",
           imageUrl: "/images/producteurs/illanga-nature/ecole-apiculture-fort-dauphin.webp"
         },
         {
-          title: "Des produits tracés, du rucher à votre table",
-          body: "Douze variétés de miel certifiées biologiques, vanilles de Manakara, épices rares, confitures artisanales. Transport maritime en retour à vide pour une logistique moins polluante. Chaque produit raconte son terroir.",
+          title: "Du rucher à votre table",
+          body: "12 miels biologiques, vanilles, épices et confitures. Traçabilité complète. Transport maritime retour à vide pour limiter l'empreinte carbone.",
           imageUrl: "/images/producteurs/illanga-nature/produits-miels-trio.jpg"
         }
       ],

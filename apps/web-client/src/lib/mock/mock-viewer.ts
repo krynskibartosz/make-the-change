@@ -18,8 +18,8 @@ const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   defaultFaction: 'Vie Sauvage',
   memberSince: '2026-01-12',
   streakDays: 12,
-  impactCreditsBalance: 2450,
-  totalSeedsContributed: 2450,
+  impactCreditsBalance: 1175, // 780 (Manakara) + 395 (Antsirabe) — soutien producteur uniquement
+  totalSeedsContributed: 1280, // 250 (bienvenue) + 50+50 (défis) + 500 (parrainage) + 430 (streak)
   beesSaved: 3800,
   honeyGeneratedKg: 0.77,
   co2CapturedKg: 3.85,
@@ -153,8 +153,8 @@ const buildGenericProfile = (session: MockViewerSession): Profile => {
     faction: session.faction,
     memberSince: '2026-04-17',
     streakDays: 1,
-    impactCreditsBalance: 120,
-    totalSeedsContributed: 120,
+    impactCreditsBalance: 0, // Nouveau membre — aucun soutien producteur encore
+    totalSeedsContributed: 120, // Graines de bienvenue
     beesSaved: 240,
     honeyGeneratedKg: 0.05,
     co2CapturedKg: 0.24,

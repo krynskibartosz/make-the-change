@@ -12,13 +12,13 @@ Ce document decrit l'experience produit voulue et l'etat fonctionnel observe, sa
 
 `[ACTUEL_CODE]` La navigation mobile principale contient cinq tabs :
 
-| Tab | Route | Role |
-|---|---|---|
-| Aventure | `/adventure` | Hub quotidien, quetes, recommandation projet, BioDex, progression. |
-| Projets | `/projects` | Liste, recherche, carte/liste/grille, detail projet. |
-| Collectif | `/impact` | Progression collective, saisons, recompenses ou sanctuaires. |
-| Avantages | `/products` | Produits ou avantages lies aux Credits Impact. |
-| Profil | `/profile` | Compte, solde, BioDex, historique, abonnement, settings. |
+| Tab | Label UI | Route | Role |
+|---|---|---|---|
+| Aventure | Accueil | `/adventure` | Hub quotidien, quetes, recommandation projet, BioDex, progression. |
+| Projets | Projets | `/projects` | Liste, recherche, carte/liste/grille, detail projet. |
+| Apprendre | Apprendre | `/learn` | Module d'apprentissage (remplace l'ancienne tab Collectif `/impact`). |
+| Avantages | Avantages | `/advantages` | Produits ou avantages lies aux Credits Impact. |
+| Profil | Profil | `/profile` | Compte, solde, BioDex, historique, abonnement, settings. |
 
 ## Aventure
 
@@ -90,7 +90,7 @@ Types observes :
 
 ## Produits / Avantages
 
-`[ACTUEL_CODE]` La tab `/products` affiche un catalogue avec filtres, producteurs, categories, tags et pagination.
+`[ACTUEL_CODE]` La tab `/advantages` affiche un catalogue avec filtres, producteurs, categories, tags et pagination.
 
 `[ACTUEL_CODE]` Les produits utilisent des champs `price_points` et des equivalents euros dans les mocks.
 
@@ -100,7 +100,9 @@ Types observes :
 
 ## Collectif / Impact
 
-`[ACTUEL_CODE]` La tab `/impact` existe. Des ecrans secondaires existent pour reward et sanctuary.
+`[LEGACY]` L'ancienne tab `/impact` (Collectif) a ete remplacee par `/learn` (Apprendre) apres R8. La route `/impact` n'existe plus sous `(tabs)`.
+
+`[A_DECIDER]` Le role du Collectif (saisons, recompenses, sanctuaires) reste a repositionner dans la navigation.
 
 `[HYPOTHESE]` Le collectif peut servir a montrer une saison, une faction, un objectif commun ou une recompense partagee.
 

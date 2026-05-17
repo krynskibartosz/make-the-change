@@ -277,7 +277,7 @@ export async function getCurrentMockChallengeTransactions(
         id: `mock-challenge-${state.archetypeId}-${state.dayKey}`,
         label: `${challenge.title} (${getMockDayLabel(state.dayKey)})`,
         delta: challenge.reward,
-        impactDelta: challenge.reward,
+        impactDelta: 0, // Défis donnent des Graines — pas de Credits Impact
         createdAt: state.claimedAt,
         archetypeId: state.archetypeId,
         dayKey: state.dayKey,

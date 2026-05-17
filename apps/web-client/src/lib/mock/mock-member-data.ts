@@ -88,7 +88,7 @@ export type MockSubscriptionRecord = {
   id: string
   plan_type: string
   status: 'active' | 'paused' | 'cancelled'
-  monthly_points_allocation: number
+  monthly_seeds_allocation: number
   current_period_end: string | null
   next_billing_date: string | null
   monthly_price: number
@@ -126,7 +126,7 @@ const BASE_SHIPPING_ADDRESS = {
 
 const EXISTING_VIEWER_SUPPORTS: MockSupportRecord[] = [
   {
-    id: 'mock-investment-antsirabe',
+    id: 'mock-support-antsirabe',
     amount_eur_equivalent: 395, // 1 ruche × 395 € — source: PDF cadrage MTC
     amount_points: 395,
     returns_received_points: 48,
@@ -140,7 +140,7 @@ const EXISTING_VIEWER_SUPPORTS: MockSupportRecord[] = [
     },
   },
   {
-    id: 'mock-investment-manakara',
+    id: 'mock-support-manakara',
     amount_eur_equivalent: 780,
     amount_points: 780,
     returns_received_points: 96,
@@ -372,7 +372,7 @@ const EXISTING_VIEWER_SUBSCRIPTION: MockSubscriptionRecord = {
   id: 'mock-subscription-pollinisateur-plus',
   plan_type: 'Pollinisateur+',
   status: 'active',
-  monthly_points_allocation: 1200,
+  monthly_seeds_allocation: 1200,
   current_period_end: '2026-05-02T00:00:00.000Z',
   next_billing_date: '2026-05-03T00:00:00.000Z',
   monthly_price: 12,
@@ -384,14 +384,14 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-welcome-bonus',
     label: 'Bonus de bienvenue',
     delta: 250,
-    impactDelta: 250,
+    impactDelta: 0, // Graines — pas de Credits Impact sans soutien producteur
     createdAt: '2026-01-12T09:00:00.000Z',
   },
   {
     id: 'mock-points-allocation-february',
     label: 'Allocation mensuelle Pollinisateur+',
     delta: 1200,
-    impactDelta: 0,
+    impactDelta: 0, // Graines d'abonnement — pas de Credits Impact
     createdAt: '2026-02-03T08:00:00.000Z',
   },
   {
@@ -402,10 +402,10 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     createdAt: '2026-03-03T08:00:00.000Z',
   },
   {
-    id: 'mock-points-investment-manakara',
+    id: 'mock-points-support-manakara',
     label: 'Contribution projet Manakara',
     delta: -780,
-    impactDelta: 780,
+    impactDelta: 780, // Credits Impact — soutien producteur
     createdAt: '2026-03-28T16:45:00.000Z',
   },
   {
@@ -423,10 +423,10 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     createdAt: '2026-04-11T12:30:00.000Z',
   },
   {
-    id: 'mock-points-investment-antsirabe',
+    id: 'mock-points-support-antsirabe',
     label: 'Contribution projet Antsirabe',
     delta: -395,
-    impactDelta: 395,
+    impactDelta: 395, // Credits Impact — soutien producteur
     createdAt: '2026-04-14T09:20:00.000Z',
   },
   {
@@ -440,28 +440,28 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-eco-fact',
     label: "Eco-Fact du jour complété",
     delta: 50,
-    impactDelta: 50,
+    impactDelta: 0, // Graines — défis ne génèrent pas de Credits Impact
     createdAt: '2026-04-17T07:30:00.000Z',
   },
   {
     id: 'mock-points-daily-harvest',
     label: 'Récolte quotidienne',
     delta: 50,
-    impactDelta: 50,
+    impactDelta: 0, // Graines — défis ne génèrent pas de Credits Impact
     createdAt: '2026-04-17T07:32:00.000Z',
   },
   {
     id: 'mock-points-referral',
     label: 'Parrainage confirme',
     delta: 500,
-    impactDelta: 500,
+    impactDelta: 0, // Graines — engagement ne génère pas de Credits Impact
     createdAt: '2026-04-17T18:00:00.000Z',
   },
   {
     id: 'mock-points-streak',
     label: 'Serie de 12 jours maintenue',
     delta: 430,
-    impactDelta: 430,
+    impactDelta: 0, // Graines — streak ne génère pas de Credits Impact
     createdAt: '2026-04-18T06:45:00.000Z',
   },
 ]
@@ -507,7 +507,7 @@ const STARTER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-starter',
     label: 'Bonus de depart',
     delta: 120,
-    impactDelta: 120,
+    impactDelta: 0, // Graines de départ — pas de Credits Impact sans soutien producteur
     createdAt: '2026-04-17T10:00:00.000Z',
   },
 ]

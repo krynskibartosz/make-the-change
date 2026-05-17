@@ -24,30 +24,30 @@ export function SpeciesSection({
   if (species.length === 0) return null
 
   return (
-    <section className="mt-12">
-      <div className="px-5">
-        <h2 className="text-lg font-bold text-white/90">
+    <section className="mt-10">
+      <div className="px-4">
+        <h2 className="text-[17px] font-bold text-white/80">
           {title}
         </h2>
         {subtitle && (
-          <p className="mt-1 text-[14px] text-white/50">
+          <p className="mt-1 text-[13px] text-white/50">
             {subtitle}
           </p>
         )}
       </div>
       
       <ul 
-        className="mt-5 flex snap-x gap-5 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
+        className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
         aria-label="Espèces liées au partenaire"
       >
         {species.map((entry) => (
           <li
             key={entry.id}
-            className="w-32 shrink-0 snap-center"
+            className="w-28 shrink-0 snap-start"
           >
-            <article className="flex flex-col items-center gap-3">
-              {/* Image plus grande */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white/5 p-3">
+            <article className="flex flex-col items-center gap-2">
+              {/* Image compacte */}
+              <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white/5 p-2">
                 <img
                   src={entry.image}
                   alt={entry.name}
@@ -55,12 +55,12 @@ export function SpeciesSection({
                 />
               </div>
               
-              {/* Nom */}
+              {/* Nom compact */}
               <div className="text-center">
-                <p className="text-[14px] font-semibold text-white/90 leading-snug">
+                <p className="text-[13px] font-semibold text-white/90 leading-tight line-clamp-2">
                   {entry.name}
                 </p>
-                <p className={`mt-1 text-[10px] font-bold uppercase tracking-widest ${entry.unlocked ? 'text-emerald-500/70' : 'text-white/30'}`}>
+                <p className={`mt-0.5 text-[9px] font-medium uppercase tracking-wide ${entry.unlocked ? 'text-emerald-500/70' : 'text-white/30'}`}>
                   {entry.unlocked ? 'Découvert' : 'À découvrir'}
                 </p>
               </div>

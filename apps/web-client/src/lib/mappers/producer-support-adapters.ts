@@ -95,9 +95,9 @@ type MockSupportRecordLegacy = {
  * | `type: 'donation'` | NormalizedDonation | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
  * | `price_points` | Produit/Commande | [CREDITS_IMPACT_CLAIR] | Prix en Credits Impact |
  * | `total_points` | Commande | [CREDITS_IMPACT_CLAIR] | Total en Credits Impact |
- * | `monthly_points_allocation` | Subscription | [CREDITS_IMPACT_CLAIR] | Allocation mensuelle Credits Impact |
- * | `delta` | Transaction | [AMBIGU] | Variation (peut être Credits ou Graines) |
- * | `impactDelta` | Transaction | [CREDITS_IMPACT_CLAIR] | Impact en Credits Impact |
+ * | `monthly_seeds_allocation` | Subscription | [GRAINES_CLAIR] | Allocation mensuelle Graines (abonnement) — pas de Credits Impact |
+ * | `delta` | Transaction | [AMBIGU] | Variation du portefeuille (Graines gagnées/dépensées ou soutien débité) |
+ * | `impactDelta` | Transaction | [CREDITS_IMPACT_CLAIR] | Credits Impact générés — soutien producteur uniquement ; 0 pour défis, missions et engagement |
  */
 
 // ============================================================================

@@ -13,7 +13,6 @@
  * Mobile-first, gradient doux, rythme respirant.
  */
 
-import { MapPin } from 'lucide-react'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import type { ProducerLocation, VisualAssets, EditorialIdentity } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 
@@ -58,21 +57,21 @@ export function ProducerHero({
   return (
     <div className="relative">
       {/* ── Cover Image ── */}
-      <div className="relative h-64 w-full overflow-hidden bg-[#1A1F26]">
+      <div className="relative h-[360px] w-full overflow-hidden bg-[#1A1F26] sm:h-[420px]">
         <img 
           src={coverImage} 
           alt={name} 
           className="h-full w-full object-cover" 
         />
-        {/* Gradient plus doux, commence plus bas */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/20 to-transparent" />
+        {/* Gradient profond pour lisibilité texte */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-[#0B0F15]/10" />
       </div>
 
       {/* ── Identity Header ── */}
-      <div className="relative px-5">
-        {/* Portrait - plus grand (96px) avec bordure subtile */}
-        <div className="absolute -top-14 left-5 z-10 h-24 w-24 rounded-[2.5rem] border-[3px] border-[#0B0F15] bg-[#0B0F15] p-1 shadow-2xl">
-          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[2rem] bg-white/5">
+      <div className="relative px-4">
+        {/* Portrait - 80px plus compact */}
+        <div className="absolute -top-10 left-4 z-10 h-20 w-20 rounded-full border-2 border-[#0B0F15] bg-[#0B0F15] p-0.5 shadow-xl">
+          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/5">
             <img 
               src={portraitImage} 
               alt={name} 
@@ -81,43 +80,43 @@ export function ProducerHero({
           </div>
         </div>
 
-        {/* Spacer pour le portrait */}
-        <div className="h-14" />
+        {/* Spacer réduit */}
+        <div className="h-12" />
 
-        {/* Nom et tagline */}
-        <div className="flex items-start justify-between gap-4">
+        {/* Nom et tagline compacte */}
+        <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h1 className="text-[28px] font-black leading-none tracking-tighter text-white">
+            <h1 className="text-[26px] font-black leading-tight tracking-tight text-white">
               {name}
             </h1>
             
             {displayTagline && (
-              <p className="mt-2 text-[15px] font-medium text-white/70 leading-snug">
+              <p className="mt-1.5 text-[14px] font-medium text-white/60 leading-snug">
                 {displayTagline}
               </p>
             )}
 
-            {/* Double localisation */}
+            {/* Localisations fusionnées */}
             {(fieldLocation || europeanLocation) && (
-              <div className="mt-3 flex flex-col gap-1">
+              <div className="mt-2 flex items-center gap-2 text-xs">
                 {fieldLocation && (
-                  <p className="flex items-center gap-1.5 text-sm font-bold text-white/50">
-                    <span className="text-base">🇲🇬</span>
-                    <span className="uppercase tracking-wider">{fieldLocation}</span>
-                  </p>
+                  <span className="flex items-center gap-1 text-white/50">
+                    <span>🇲🇬</span>
+                    <span className="uppercase tracking-wide">{locations?.field}</span>
+                  </span>
                 )}
                 {europeanLocation && (
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-white/40">
-                    <span className="text-sm">🇧🇪</span>
-                    <span>Structure partenaire basée en {europeanLocation}</span>
-                  </p>
+                  <span className="flex items-center gap-1 text-white/40">
+                    <span>🇧🇪</span>
+                    <span>{locations?.european}</span>
+                  </span>
                 )}
               </div>
             )}
 
-            {/* Tag type partenaire */}
+            {/* Tag type partenaire compact */}
             {displayPartnerType && (
-              <p className="mt-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-white/60">
+              <p className="mt-2 inline-flex rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white/70">
                 {displayPartnerType}
               </p>
             )}

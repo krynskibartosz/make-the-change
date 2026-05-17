@@ -69,13 +69,12 @@ export function ProducerDetails({
       {/* 7. Histoire modulaire */}
       <StoryBlocks 
         blocks={producer.storyBlocks} 
-        producerName={producer.name_default} 
       />
 
-      {/* 8. Produits */}
+      {/* 8. Produits - séparation app vs gamme partenaire */}
       <ProductsSection 
         products={producer.products}
-        producerFieldLocation={producer.locations?.field}
+        partnerCatalog={producer.partnerCatalogOverview}
       />
 
       {/* 9. CTA */}

@@ -118,24 +118,29 @@ export function FullScreenSlideModal({
       {headerMode === 'dynamic' ? (
         <header
           className={cn(
-            'fixed inset-x-0 top-0 z-20 transition-all duration-300',
+            'fixed inset-x-0 top-0 z-20 transition-all duration-500 ease-out',
             isHeaderElevated
-              ? 'border-b border-white/10 bg-background/90 backdrop-blur-md'
-              : 'border-b border-transparent bg-transparent',
+              ? 'border-b border-white/5 bg-[#0B0F15]/80 backdrop-blur-xl'
+              : 'border-b border-transparent bg-gradient-to-b from-[#0B0F15]/60 to-transparent',
           )}
         >
-          <div className="flex items-center gap-2 px-3 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))]">
+          <div className="flex items-center gap-2 px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
             <button
               onClick={handleClose}
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black/45 backdrop-blur-sm"
+              className={cn(
+                'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300',
+                isHeaderElevated
+                  ? 'bg-white/10 backdrop-blur-md'
+                  : 'bg-black/30 backdrop-blur-sm border border-white/10',
+              )}
               aria-label="Retour"
             >
-              <ArrowLeft className="h-5 w-5 text-white" />
+              <ArrowLeft className="h-4 w-4 text-white/90" />
             </button>
             <p
               className={cn(
-                'flex-1 truncate text-center text-sm font-semibold text-white transition-opacity duration-300',
-                isHeaderElevated ? 'opacity-100' : 'opacity-0',
+                'flex-1 truncate text-center text-[13px] font-medium text-white/90 transition-all duration-300',
+                isHeaderElevated ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1',
               )}
             >
               {title}
@@ -143,7 +148,7 @@ export function FullScreenSlideModal({
             {headerRight ? (
               <div className="shrink-0">{headerRight}</div>
             ) : (
-              <span aria-hidden className="h-10 w-10 shrink-0" />
+              <span aria-hidden className="h-9 w-9 shrink-0" />
             )}
           </div>
         </header>

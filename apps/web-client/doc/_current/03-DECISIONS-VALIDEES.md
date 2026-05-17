@@ -51,9 +51,10 @@ Ce document liste uniquement les decisions considerees comme validees a ce stade
 
 ## Decisions de navigation actuellement assumees
 
-- `[ACTUEL_CODE]` Les cinq tabs actuelles sont Aventure, Projets, Collectif, Avantages, Profil.
+- `[ACTUEL_CODE]` Les cinq tabs actuelles sont (label UI / route) : Accueil `/adventure`, Projets `/projects`, Apprendre `/learn`, Avantages `/advantages`, Profil `/profile`.
+- `[LEGACY]` L'ancienne tab Collectif `/impact` a ete remplacee par Apprendre `/learn`. La route `/products` a ete remplacee par `/advantages`.
 - `[CIBLE_VALIDEE]` La documentation doit prendre ces cinq tabs comme base de travail actuelle.
-- `[A_DECIDER]` Les labels finaux exacts peuvent encore evoluer.
+- `[A_DECIDER]` Les labels finaux exacts peuvent encore evoluer. En particulier, "Apprendre" et "Accueil" sont des labels de prototypage.
 
 ## Decisions de vocabulaire
 

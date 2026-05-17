@@ -10,12 +10,18 @@ La documentation decrit correctement l'intention globale du produit, mais le cod
 
 ## Navigation et routes
 
-| Sujet | Documentation | Code observe | Statut |
+| Sujet | Documentation (avant R8) | Code actuel observe | Statut |
 |---|---|---|---|
-| Tabs principales | Aventure, Projets, Collectif/Impact, Avantages/Produits, Profil | `mobile-bottom-nav.tsx` expose `/adventure`, `/projects`, `/impact`, `/products`, `/profile` | `[ACTUEL_CODE]` |
+| Tab 1 | Aventure `/adventure` | Accueil `/adventure` — label UI "Accueil" dans `mobile-bottom-nav.tsx` | `[ACTUEL_CODE]` |
+| Tab 2 | Projets `/projects` | Projets `/projects` | `[ACTUEL_CODE]` |
+| Tab 3 | Collectif `/impact` | **Apprendre `/learn`** — dossier `(tabs)/learn/`. La route `/impact` n'existe plus. | `[ACTUEL_CODE]` — ancienne doc obsolete |
+| Tab 4 | Avantages `/products` | **Avantages `/advantages`** — dossier `(tabs)/advantages/`. La route `/products` n'existe plus sous (tabs). | `[ACTUEL_CODE]` — ancienne doc obsolete |
+| Tab 5 | Profil `/profile` | Profil `/profile` | `[ACTUEL_CODE]` |
 | Challenges | Routes secondaires liees a Aventure | `/challenges`, `/challenges/eco-fact`, `/challenges/daily-harvest` | `[ACTUEL_CODE]` |
 | Academy | Decrite comme experience d'apprentissage, parfois associee au lab | Presente surtout dans `(screens)/academy`, avec labs `kinnu` et `kinnu-v2` ailleurs | `[ACTUEL_CODE]` + `[A_VERIFIER_CODE]` |
 | BioDex | Profil/BioDex, collection d'especes | `/profile/biodex`, `/profile/biodex/[id]` | `[ACTUEL_CODE]` |
+
+`[LEGACY]` Le changement de navigation (Collectif→Apprendre, /impact→/learn, /products→/advantages) s'est produit apres R8 (2026-05-08) et n'etait pas couvert par les phases R1-R8. Voir section R9 dans CHANGELOG-REFACTO-DOC.md.
 
 ## Donnees et sources
 
@@ -71,7 +77,7 @@ La documentation decrit correctement l'intention globale du produit, mais le cod
 ## Top 10 ecarts prioritaires
 
 1. `[ACTUEL_CODE]` `investment` reste structurant dans le code alors que la cible produit parle de soutien producteur. — `[OUVERT]` P2
-2. ~~`[ACTUEL_CODE]` `points` reste le nom technique dominant alors que la cible UI parle de Credits Impact.~~ `[FERME_R8]` (2026-05-08) — `points` remplace par `impactCreditsBalance` dans tous les mocks TypeScript. Reste dans Supabase V0 `[A_NE_PAS_TOUCHER]`.
+2. `[ACTUEL_CODE]` `points` reste present dans `mock-member-data.ts` : types (`MockPointsTransactionRecord`), champs (`total_points`, `unit_price_points`, `amount_points`, `returns_received_points`), fonctions (`getMockPointsTransactions`). `[PARTIELLEMENT_TRAITE_R8]` — R8 a renomme `Profile.points` → `impactCreditsBalance` uniquement. Le reste est en attente de migration progressive. Reste aussi dans Supabase V0 `[A_NE_PAS_TOUCHER]`.
 3. ~~`[ACTUEL_CODE]` `Artisans Locaux` reste present alors qu'il est considere legacy/deprecie.~~ `[FERME_R7]` (2026-05-08) — purge complete du TypeScript (types, mocks, session, onboarding, impact).
 4. `[ACTUEL_CODE]` Academy est en `(screens)/academy`, pas seulement en lab. — `[OUVERT]`
 5. `[ACTUEL_CODE]` BioDex a une exception prototype de deblocage automatique. — `[OUVERT]` P2

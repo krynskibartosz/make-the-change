@@ -22,7 +22,7 @@ Ce document centralise les termes recommandes, sensibles, deprecies ou a decider
 | Aventure | Hub principal qui orchestre l'experience quotidienne : salutation, faction, action prioritaire, progression mensuelle, projet recommande, espece BioDex liee, progression collective, solde Graines et Credits Impact | `[CIBLE_VALIDEE]` + `[ACTUEL_CODE]` |
 | Projets | Actions terrain ou producteurs a decouvrir/soutenir | `[CIBLE_VALIDEE]` + `[ACTUEL_CODE]` |
 | Collectif | Dimension commune de l'impact ou des saisons | `[ACTUEL_CODE]` |
-| Avantages | Terme UI actuel pour `/products` | `[ACTUEL_CODE]` + `[A_DECIDER]` |
+| Avantages | Terme UI actuel pour `/advantages` (ancienne route `/products` remplacee post-R8) | `[ACTUEL_CODE]` + `[A_DECIDER]` |
 | Profil | Espace utilisateur | `[ACTUEL_CODE]` |
 | BioDex | Collection/vulgarisation d'especes, attachement et memoire du vivant | `[CIBLE_VALIDEE]` + `[ACTUEL_CODE]` |
 | Academy | Brique pedagogique importante, non obligatoire, gratuite en V1, qui apprend et comprend. Peut donner des Graines, ne debloque pas seule le BioDex, renforce la comprehension des projets, especes, ecosystemes et gestes d'impact | `[CIBLE_VALIDEE]` + `[ACTUEL_CODE]` partiel |
@@ -113,7 +113,7 @@ Ce document centralise les termes recommandes, sensibles, deprecies ou a decider
 |---|---|---|
 | Don pur | `/projects/[slug]/donate` | `/projects/[slug]/donate`, `donation`, `order_type: "donation"` |
 | Soutien producteur | `/projects/[slug]/invest`, `investment` | `/projects/[slug]/support`, `producer_support`, `order_type: "producer_support"` |
-| Achat produit | `/products` | `/products`, `product_purchase`, `order_type: "product_purchase"` |
+| Achat produit | `/advantages` (ancienne route `/products`) | `/advantages`, `product_purchase`, `order_type: "product_purchase"` |
 
 ## Paiement, Stripe et preuve
 
