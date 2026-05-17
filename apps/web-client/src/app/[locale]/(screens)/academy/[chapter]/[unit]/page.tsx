@@ -1147,7 +1147,7 @@ export default function ExerciseEngine() {
   const alreadyCompleted = unit
     ? progress.completedUnitIds.includes(unit.id) || progress.completedEventIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
     : false
-  const isLockedUnit = unit && isProgressReady && !isEvent ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
+  const isLockedUnit = unit && isProgressReady && !isEvent && unit.kind !== 'project' ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
   const prerequisiteUnit = unit && !isEvent ? getUnitPrerequisite(unit.id, progress) ?? getActiveUnit(academyRepository.getCurriculum(), progress) : null
   const prerequisiteChapter = prerequisiteUnit ? getChapterBySlug(prerequisiteUnit.chapterId) : null
 
