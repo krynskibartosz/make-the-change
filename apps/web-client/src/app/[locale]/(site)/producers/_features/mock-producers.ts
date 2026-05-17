@@ -279,8 +279,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       
       // ── Visual Assets (Phase 1) ──
       visualAssets: {
-        hero: "/images/producteurs/illanga-nature/hero-lemures-miel-fort-dauphin.webp",
-        portrait: "/images/producteurs/illanga-nature/portrait-famille-laurent.webp",
+        hero: "/images/producteurs/illanga-nature/cover.png",
+        portrait: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
         logo: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
         story: [
           {
