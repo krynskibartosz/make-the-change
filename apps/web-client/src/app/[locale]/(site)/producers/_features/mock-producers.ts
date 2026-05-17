@@ -33,6 +33,7 @@ export type MissionPillar = {
   icon: string
   title: string
   description: string
+  shortDescription?: string
 }
 
 export type ProofCard = {
@@ -347,32 +348,25 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         cta: 9
       },
       
-      // ── Mission Pillars (5 piliers enrichis) ──
+      // ── Mission Pillars (3 piliers éditoriaux condensés) ──
       missionPillars: [
         {
           icon: "Users",
-          title: "Soutien aux apiculteurs locaux",
-          description: "Formation, fourniture de ruches et approvisionnement équitable auprès des apiculteurs partenaires à Madagascar. Une école d'apiculture est en place à Fort-Dauphin."
+          title: "Apiculteurs locaux",
+          shortDescription: "Formation, ruches et accompagnement terrain. Une école à Fort-Dauphin.",
+          description: "Formation, fourniture de ruches et approvisionnement équitable auprès des apiculteurs partenaires à Madagascar."
         },
         {
           icon: "Ship",
-          title: "Mielleries mobiles & infrastructures terrain",
-          description: "2 mielleries mobiles + 3 mielleries fixes (Antananarivo, Manakara, Fort-Dauphin) + une barge motorisée sur le canal des Pangalanes pour collecter le miel en un seul passage."
+          title: "Filières malgaches",
+          shortDescription: "Miels, vanilles, épices et savoir-faire locaux préservés.",
+          description: "Miels, vanilles, épices et savoir-faire artisanaux malgaches valorisés à l'international."
         },
         {
           icon: "BadgeCheck",
-          title: "Traçabilité et certification biologique",
-          description: "Mielleries homologuées par le Ministère malgache de l'Élevage. Certification Ecocert pour les miels biologiques. Contrôle de l'humidité (16–18%) pour prévenir la fermentation."
-        },
-        {
-          icon: "Globe",
-          title: "Valorisation des filières malgaches",
-          description: "Contribution au rayonnement international de Madagascar. Préservation des savoir-faire ancestraux. Génération de revenus décents pour les communautés rurales."
-        },
-        {
-          icon: "Hand",
-          title: "Préservation des savoir-faire artisanaux",
-          description: "Collection de plus de 60 références artisanales (miels, épices, vanilles, confitures, huiles, sel, sucre). Sélection rigoureuse des matières premières avec des producteurs locaux partenaires."
+          title: "Traçabilité bio",
+          shortDescription: "Mielleries documentées et certification Ecocert.",
+          description: "Mielleries homologuées et certification biologique Ecocert. Contrôle qualité rigoureux."
         }
       ],
       
