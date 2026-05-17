@@ -68,6 +68,8 @@ type MockProjectProducer = {
   description_i18n?: Record<string, string> | null
   contact_website: string | null
   images: string[] | null
+  address_city?: string | null
+  address_country_code?: string | null
 }
 
 export type MockProjectSeed = {
@@ -726,13 +728,15 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et éthiques de Madagascar.',
+      description_default: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Bien plus qu'une marque, c'est une coopérative de petits producteurs engagés, gardiens d'un savoir-faire ancestral.\n\nDepuis Mariembourg en Belgique, ils parcourent Madagascar pour valoriser ses trésors agricoles : miels de litchi, niaouli et forêts primaires, épices rares, produits artisanaux. Chaque produit est entièrement traçable, de la ruche jusqu'au consommateur.\n\nIlanga soutient directement des apiculteurs locaux en leur fournissant ruches, formation et mielleries mobiles capables d'atteindre les zones les plus reculées. Leurs miels sont certifiés UE par le Ministère malgache de l'élevage. Fournisseurs du Ritz Paris, de Ladurée, du Shangri-La et du Marriott.",
       description_i18n: {
-        fr: 'Produits naturels et éthiques de Madagascar.',
-        en: 'Natural and ethical products from Madagascar.',
+        fr: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Bien plus qu'une marque, c'est une coopérative de petits producteurs engagés, gardiens d'un savoir-faire ancestral.\n\nDepuis Mariembourg en Belgique, ils parcourent Madagascar pour valoriser ses trésors agricoles : miels de litchi, niaouli et forêts primaires, épices rares, produits artisanaux. Chaque produit est entièrement traçable, de la ruche jusqu'au consommateur.\n\nIlanga soutient directement des apiculteurs locaux en leur fournissant ruches, formation et mielleries mobiles capables d'atteindre les zones les plus reculées. Leurs miels sont certifiés UE par le Ministère malgache de l'élevage. Fournisseurs du Ritz Paris, de Ladurée, du Shangri-La et du Marriott.",
+        en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. More than a brand, it is a cooperative of committed small producers preserving ancestral know-how.\n\nFrom Mariembourg, Belgium, they travel across Madagascar to source its agricultural treasures: litchi, niaouli and primary forest honeys, rare spices, handcrafted items. Every product is fully traceable from hive to consumer.\n\nIlanga directly supports local beekeepers by providing hives, training and all-terrain mobile honey houses that reach the most remote areas. Their honeys are EU-certified by the Malagasy Ministry of Livestock. Suppliers to the Ritz Paris, Ladurée, Shangri-La and Marriott.",
       },
-      contact_website: 'https://ilanga.nature',
-      images: ['/images/projects/miellerie-manakara.jpg'],
+      contact_website: 'https://www.ilanga-nature.com',
+      images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      address_city: 'Mariembourg',
+      address_country_code: 'Belgique',
     },
     species: antsirabeSpecies,
     challenges: [],
@@ -798,13 +802,15 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et éthiques de Madagascar.',
+      description_default: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Bien plus qu'une marque, c'est une coopérative de petits producteurs engagés, gardiens d'un savoir-faire ancestral.\n\nDepuis Mariembourg en Belgique, ils parcourent Madagascar pour valoriser ses trésors agricoles : miels de litchi, niaouli et forêts primaires, épices rares, produits artisanaux. Chaque produit est entièrement traçable, de la ruche jusqu'au consommateur.\n\nIlanga soutient directement des apiculteurs locaux en leur fournissant ruches, formation et mielleries mobiles capables d'atteindre les zones les plus reculées. Leurs miels sont certifiés UE par le Ministère malgache de l'élevage. Fournisseurs du Ritz Paris, de Ladurée, du Shangri-La et du Marriott.",
       description_i18n: {
-        fr: 'Produits naturels et éthiques de Madagascar.',
-        en: 'Natural and ethical products from Madagascar.',
+        fr: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Bien plus qu'une marque, c'est une coopérative de petits producteurs engagés, gardiens d'un savoir-faire ancestral.\n\nDepuis Mariembourg en Belgique, ils parcourent Madagascar pour valoriser ses trésors agricoles : miels de litchi, niaouli et forêts primaires, épices rares, produits artisanaux. Chaque produit est entièrement traçable, de la ruche jusqu'au consommateur.\n\nIlanga soutient directement des apiculteurs locaux en leur fournissant ruches, formation et mielleries mobiles capables d'atteindre les zones les plus reculées. Leurs miels sont certifiés UE par le Ministère malgache de l'élevage. Fournisseurs du Ritz Paris, de Ladurée, du Shangri-La et du Marriott.",
+        en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. More than a brand, it is a cooperative of committed small producers preserving ancestral know-how.\n\nFrom Mariembourg, Belgium, they travel across Madagascar to source its agricultural treasures: litchi, niaouli and primary forest honeys, rare spices, handcrafted items. Every product is fully traceable from hive to consumer.\n\nIlanga directly supports local beekeepers by providing hives, training and all-terrain mobile honey houses that reach the most remote areas. Their honeys are EU-certified by the Malagasy Ministry of Livestock. Suppliers to the Ritz Paris, Ladurée, Shangri-La and Marriott.",
       },
-      contact_website: 'https://ilanga.nature',
-      images: ['/images/projects/miellerie-manakara.png'],
+      contact_website: 'https://www.ilanga-nature.com',
+      images: ['/images/projects/miellerie-manakara.png', '/images/projects/antsirabe-ruchers-1.jpg'],
+      address_city: 'Mariembourg',
+      address_country_code: 'Belgique',
     },
     species: manakaraSpecies,
     challenges: [],
@@ -867,13 +873,15 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         fr: 'Ilanga Nature',
         en: 'Ilanga Nature',
       },
-      description_default: 'Produits naturels et éthiques de Madagascar.',
+      description_default: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Bien plus qu'une marque, c'est une coopérative de petits producteurs engagés, gardiens d'un savoir-faire ancestral.\n\nDepuis Mariembourg en Belgique, ils parcourent Madagascar pour valoriser ses trésors agricoles : miels de litchi, niaouli et forêts primaires, épices rares, produits artisanaux. Chaque produit est entièrement traçable, de la ruche jusqu'au consommateur.\n\nIlanga soutient directement des apiculteurs locaux en leur fournissant ruches, formation et mielleries mobiles capables d'atteindre les zones les plus reculées. Leurs miels sont certifiés UE par le Ministère malgache de l'élevage. Fournisseurs du Ritz Paris, de Ladurée, du Shangri-La et du Marriott.",
       description_i18n: {
-        fr: 'Produits naturels et éthiques de Madagascar.',
-        en: 'Natural and ethical products from Madagascar.',
+        fr: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Bien plus qu'une marque, c'est une coopérative de petits producteurs engagés, gardiens d'un savoir-faire ancestral.\n\nDepuis Mariembourg en Belgique, ils parcourent Madagascar pour valoriser ses trésors agricoles : miels de litchi, niaouli et forêts primaires, épices rares, produits artisanaux. Chaque produit est entièrement traçable, de la ruche jusqu'au consommateur.\n\nIlanga soutient directement des apiculteurs locaux en leur fournissant ruches, formation et mielleries mobiles capables d'atteindre les zones les plus reculées. Leurs miels sont certifiés UE par le Ministère malgache de l'élevage. Fournisseurs du Ritz Paris, de Ladurée, du Shangri-La et du Marriott.",
+        en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. More than a brand, it is a cooperative of committed small producers preserving ancestral know-how.\n\nFrom Mariembourg, Belgium, they travel across Madagascar to source its agricultural treasures: litchi, niaouli and primary forest honeys, rare spices, handcrafted items. Every product is fully traceable from hive to consumer.\n\nIlanga directly supports local beekeepers by providing hives, training and all-terrain mobile honey houses that reach the most remote areas. Their honeys are EU-certified by the Malagasy Ministry of Livestock. Suppliers to the Ritz Paris, Ladurée, Shangri-La and Marriott.",
       },
-      contact_website: 'https://ilanga.nature',
-      images: ['/images/projects/miellerie-manakara.jpg'],
+      contact_website: 'https://www.ilanga-nature.com',
+      images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      address_city: 'Mariembourg',
+      address_country_code: 'Belgique',
     },
     species: mielleriesMobileSpecies,
     challenges: [],
