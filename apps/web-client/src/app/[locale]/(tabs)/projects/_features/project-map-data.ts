@@ -13,13 +13,15 @@ export type ProjectMapSourceProject = {
   unit_label: string | null
 }
 
-export type ProjectMapImpactKind = 'beehive' | 'orchard' | 'reef'
+import {
+  getProjectImpactDisplay as getImpactFromLib,
+  type ImpactDisplay,
+  type ImpactKind,
+} from '@/lib/impact-calculator'
 
-export type ProjectMapImpactDisplay = {
-  value: number
-  label: string
-  kind: ProjectMapImpactKind
-}
+// Re-export pour compatibilité
+export type ProjectMapImpactKind = ImpactKind
+export type ProjectMapImpactDisplay = ImpactDisplay
 
 export type ProjectMapFeatureProperties = {
   id: string
@@ -56,12 +58,6 @@ export type ProjectFocusCameraOptions = {
   duration: number
 }
 
-const BEEHIVE_REFERENCE_VALUE_EUR = 1300
-const BEEHIVE_REFERENCE_POPULATION = 50000
-const BEES_PER_EUR = BEEHIVE_REFERENCE_POPULATION / BEEHIVE_REFERENCE_VALUE_EUR
-
-const OLIVE_PRICE_EUR = 150
-const CORAL_PRICE_EUR = 30
 const PROJECT_FOCUS_MIN_ZOOM = 6
 const PROJECT_FOCUS_VERTICAL_OFFSET = -200
 const PROJECT_FOCUS_DURATION_MS = 480
@@ -110,29 +106,14 @@ export function getProjectImpactDisplay(project: {
   current_funding: number | null
   type: string | null
 }): ProjectMapImpactDisplay {
+  const base = getImpactFromLib(project)
   const funding = Number.isFinite(project.current_funding) ? project.current_funding || 0 : 0
-  const projectType = project.type || 'beehive'
 
-  if (projectType === 'orchard' || projectType === 'olive_tree') {
-    return {
-      value: Math.round(funding / OLIVE_PRICE_EUR),
-      label: funding > 0 ? 'oliviers soutenus' : 'Collecte en cours de démarrage',
-      kind: 'orchard',
-    }
-  }
-
-  if (projectType === 'reef' || projectType === 'coral') {
-    return {
-      value: Math.round(funding / CORAL_PRICE_EUR),
-      label: funding > 0 ? 'coraux plantés' : 'Collecte en cours de démarrage',
-      kind: 'reef',
-    }
-  }
-
+  // Enrichir avec le fallback "Collecte en cours" quand pas de funding
   return {
-    value: Math.round(funding * BEES_PER_EUR),
-    label: funding > 0 ? 'abeilles soutenues' : 'Collecte en cours de démarrage',
-    kind: 'beehive',
+    value: base.value,
+    label: funding > 0 ? base.label : 'Collecte en cours de démarrage',
+    kind: base.kind,
   }
 }
 
