@@ -279,56 +279,56 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       
       // ── Visual Assets (Phase 1) ──
       visualAssets: {
-        hero: "/images/producteurs/illanga-nature/hero-lemurs-miel.webp",
+        hero: "/images/producteurs/illanga-nature/hero-lemures-miel-fort-dauphin.webp",
         portrait: "/images/producteurs/illanga-nature/portrait-famille-laurent.webp",
-        logo: "/images/producteurs/illanga-nature/logo-officiel.webp",
+        logo: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
         story: [
           {
             id: "story-1",
-            url: "/images/producteurs/illanga-nature/story-aventure-madagascar.webp",
+            url: "/images/producteurs/illanga-nature/portrait-famille-laurent.webp",
             role: "story",
             type: "field_photo",
-            alt: "Famille Laurent - Fondation Ilanga Nature",
+            alt: "La famille Laurent — Olivier, Nathan et Naya, fondateurs d'Ilanga Nature",
             sourceUrl: "https://www.ilanga-nature.com/notre-histoire"
           },
           {
             id: "story-2",
-            url: "/images/producteurs/illanga-nature/story-apiculteur-fort-dauphin.webp",
+            url: "/images/producteurs/illanga-nature/portrait-apiculteur-fort-dauphin.webp",
             role: "story",
             type: "field_photo",
-            alt: "Apiculteur formé à Fort-Dauphin",
+            alt: "Apiculteur au travail à Fort-Dauphin, Madagascar",
             sourceUrl: "https://www.ilanga-nature.com/notre-histoire"
           },
           {
             id: "story-3",
-            url: "/images/producteurs/illanga-nature/story-miellerie-interieur.webp",
+            url: "/images/producteurs/illanga-nature/miellerie-manakara-exterieur.webp",
             role: "field_proof",
             type: "field_photo",
-            alt: "Intérieur miellerie Madagascar",
+            alt: "Miellerie Ilanga Nature à Manakara, Madagascar",
             sourceUrl: "https://www.ilanga-nature.com/en/des-mielleries-a-madagascar"
           },
           {
             id: "story-4",
-            url: "/images/producteurs/illanga-nature/story-barge-pangalanes.webp",
+            url: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp",
             role: "field_proof",
             type: "field_photo",
-            alt: "Barge apicole sur le canal des Pangalanes",
+            alt: "Unité mobile d'extraction Ilanga Nature — substitué à la barge (photo non disponible)",
             sourceUrl: "https://miarakap.com/entrepreneur/ilanga-nature/"
           },
           {
             id: "story-5",
-            url: "/images/producteurs/illanga-nature/story-ecole-apiculture.webp",
+            url: "/images/producteurs/illanga-nature/ecole-apiculture-fort-dauphin.webp",
             role: "story",
             type: "field_photo",
-            alt: "École d'apiculture à Fort-Dauphin",
+            alt: "École de formation apicole Ilanga Academy à Fort-Dauphin",
             sourceUrl: "https://www.ilanga-nature.com/nos-valeurs"
           },
           {
             id: "story-6",
-            url: "/images/producteurs/illanga-nature/story-miels-certifies.webp",
+            url: "/images/producteurs/illanga-nature/produits-miels-trio.jpg",
             role: "field_proof",
-            type: "field_photo",
-            alt: "Miels certifiés Ecocert",
+            type: "product_studio",
+            alt: "Trois pots de miel Ilanga Nature — niaouli, cactus, baies roses",
             sourceUrl: "https://www.ilanga-nature.com/en/des-mielleries-a-madagascar"
           }
         ]
@@ -478,7 +478,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Une barge sur le canal des Pangalanes",
           body: "Une barge apicole motorisée sur le canal des Pangalanes permet d'atteindre les apiculteurs dans les zones reculées de la côte est. Financée avec le soutien de Miarakap, elle illustre une logistique légère et respectueuse.",
-          imageUrl: "/images/producteurs/illanga-nature/story-barge-pangalanes.webp"
+          imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
         },
         {
           title: "Former pour pérenniser",
