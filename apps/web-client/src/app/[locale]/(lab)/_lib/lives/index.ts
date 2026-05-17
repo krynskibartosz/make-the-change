@@ -53,6 +53,8 @@ export function formatMsCountdown(ms: number): string {
  * Whether the user has unlimited lives.
  * Mock: ≥10 000 graines simulates Ambassador status.
  */
-export function isUnlimitedLives(seedsBalance: number): boolean {
-  return seedsBalance >= AMBASSADOR_SEEDS_THRESHOLD
+export function isUnlimitedLives(_seedsBalance: number): boolean {
+  // TODO: re-enable once lives system is ready
+  // return _seedsBalance >= AMBASSADOR_SEEDS_THRESHOLD
+  return true
 }
