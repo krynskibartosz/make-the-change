@@ -12,7 +12,7 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
   title: 'Une ruche, tout un réseau vivant',
   shortTitle: 'Ruche vivante',
   pathLabel: 'Ruche',
-  subtitle: "L'abeille ne sait pas qu'elle pollinise. Pourtant, sans elle, ton café disparaît.",
+  subtitle: "L'abeille ne sait pas qu'elle pollinise. Pourtant, sans elle, fraises, amandes et avocats disparaîtraient.",
   concept: "Les ruchers d'apiculteurs indépendants comme réseau vivant de pollinisation.",
   conceptIds: ['accidental-pollination', 'waggle-dance', 'hive-as-superorganism'],
   kind: 'project',
@@ -115,7 +115,7 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
         {
           text: 'Le café',
           isCorrect: false,
-          feedback: 'Le caféier dépend largement des abeilles pour produire ses cerises.',
+          feedback: "Le caféier peut s'autopolliniser, mais les abeilles augmentent les rendements de 20 à 50 %. Sans elles, la récolte souffrirait — pas disparaîtrait.",
         },
         {
           text: 'Les fraises',
@@ -144,7 +144,7 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
       rightLabel: 'VRAI',
       correctFeedback: 'Riz, blé, maïs — les calories de base — sont pollinisés par le vent. On survivrait.',
       incorrectFeedback: "Paradoxalement vrai : riz, blé et maïs n'ont pas besoin des abeilles. On perdrait les saveurs.",
-      explanation: "On perdrait café, fraises, amandes, chocolat, avocats. Les calories (riz, blé) survivraient. C'est une catastrophe — pas une extinction.",
+      explanation: "On perdrait fraises, amandes, avocats, pommes. Le café souffrirait fortement (−20 à 50 % de rendement). Les calories de base (riz, blé) survivraient.",
     },
 
     // 6 — STORY build-up (intro danse)
@@ -278,14 +278,14 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
       axisRationale: "Tri : identifier les aliments dépendants des abeilles parmi les propositions.",
       slotCount: 3,
       items: [
-        { id: 'c5-ra-disc-11-a', text: '☕ Café' },
+        { id: 'c5-ra-disc-11-a', text: '🍎 Pommes' },
         { id: 'c5-ra-disc-11-b', text: '🍓 Fraises' },
         { id: 'c5-ra-disc-11-c', text: '🌰 Amandes' },
         { id: 'c5-ra-disc-11-d', text: '🍚 Riz', isDistractor: true },
         { id: 'c5-ra-disc-11-e', text: '🌾 Blé', isDistractor: true },
       ],
-      correctFeedback: "Exact. Café, fraises, amandes dépendent des abeilles. Riz et blé sont pollinisés par le vent.",
-      incorrectFeedback: "Riz et blé sont pollinisés par le vent — pas besoin d'abeilles. Café, fraises et amandes, si.",
+      correctFeedback: "Exact. Pommes, fraises, amandes dépendent des abeilles. Riz et blé sont pollinisés par le vent.",
+      incorrectFeedback: "Riz et blé sont pollinisés par le vent — pas besoin d'abeilles. Pommes, fraises et amandes, si.",
     },
 
     // 12 — QUIZ closure
@@ -397,7 +397,7 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
       correctDirection: 'left',
       leftLabel: 'FAUX',
       rightLabel: 'VRAI',
-      correctFeedback: "Faux. Blé, riz, maïs sont pollinisés par le vent. On survivrait — mais sans café ni fraises.",
+      correctFeedback: "Faux. Blé, riz, maïs sont pollinisés par le vent. On survivrait — mais sans fraises ni amandes.",
       incorrectFeedback: "Blé et riz n'ont pas besoin des abeilles. Ils sont pollinisés par le vent depuis des millions d'années.",
       explanation: "Les céréales (riz, blé, maïs) sont anémophiles — pollinisées par le vent. Les abeilles ne jouent aucun rôle là-dedans.",
     },
@@ -435,7 +435,7 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
       ],
     },
 
-    // pool-5 : chocolat avocat café vs maïs pain
+    // pool-5 : pommes myrtilles avocat vs maïs pain
     {
       id: 'c5-ra-pool-5',
       type: 'DRAG_DROP',
@@ -448,14 +448,14 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
       axisRationale: "Tri : identifier les aliments dépendants des abeilles parmi les propositions.",
       slotCount: 3,
       items: [
-        { id: 'c5-ra-pool-5-a', text: '🍫 Chocolat' },
+        { id: 'c5-ra-pool-5-a', text: '🍎 Pommes' },
         { id: 'c5-ra-pool-5-b', text: '🥑 Avocat' },
-        { id: 'c5-ra-pool-5-c', text: '☕ Café' },
+        { id: 'c5-ra-pool-5-c', text: '🫐 Myrtilles' },
         { id: 'c5-ra-pool-5-d', text: '🌽 Maïs', isDistractor: true },
         { id: 'c5-ra-pool-5-e', text: '🍞 Pain (blé)', isDistractor: true },
       ],
-      correctFeedback: "Exact. Chocolat (cacao), avocat, café dépendent des abeilles. Maïs et blé sont pollinisés par le vent.",
-      incorrectFeedback: "Maïs et blé sont pollinisés par le vent. Chocolat (cacao), avocat et café ont besoin des abeilles.",
+      correctFeedback: "Exact. Pommes, avocat, myrtilles dépendent des abeilles. Maïs et blé sont pollinisés par le vent.",
+      incorrectFeedback: "Maïs et blé sont pollinisés par le vent. Pommes, avocat et myrtilles ont besoin des abeilles.",
     },
 
     // pool-6 : miel = régurgité (surprise)
