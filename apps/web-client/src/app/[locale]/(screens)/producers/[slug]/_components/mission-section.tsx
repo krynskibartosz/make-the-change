@@ -44,7 +44,7 @@ export function MissionSection({ pillars }: MissionSectionProps) {
               key={index}
               type="button"
               onClick={() => setOpenIndex(index)}
-              className={`flex w-full items-center gap-3 py-3.5 text-left transition-opacity active:opacity-60 ${
+              className={`flex w-full items-center gap-3 rounded-lg px-2 py-3.5 -mx-2 text-left transition-all active:bg-white/[0.04] active:opacity-70 ${
                 index < displayPillars.length - 1 ? 'border-b border-white/[0.05]' : ''
               }`}
             >

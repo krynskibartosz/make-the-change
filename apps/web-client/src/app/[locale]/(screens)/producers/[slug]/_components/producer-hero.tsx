@@ -71,7 +71,7 @@ export function ProducerHero({
       {/* ── Identity Header ── */}
       <div className="relative px-4">
         {/* Portrait signature — plus petit, contour minimal */}
-        <div className="absolute -top-[34px] left-4 z-10 h-[68px] w-[68px] rounded-full border border-white/[0.06] bg-transparent shadow-[0_10px_32px_rgba(0,0,0,0.3)]">
+        <div className="absolute -top-[30px] left-4 z-10 h-[60px] w-[60px] rounded-full border border-white/[0.05] bg-transparent shadow-[0_6px_20px_rgba(0,0,0,0.25)]">
           <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/[0.03]">
             <img 
               src={portraitImage} 
@@ -82,7 +82,7 @@ export function ProducerHero({
         </div>
 
         {/* Spacer portrait signature */}
-        <div className="h-12" />
+        <div className="h-10" />
 
         {/* Nom et tagline compacte */}
         <div className="flex items-start justify-between gap-3">
