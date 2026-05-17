@@ -52,7 +52,7 @@ export function ProjectsSection({
       </div>
       
       <ul 
-        className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
+        className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
         aria-label="Projets du partenaire"
       >
         {projects.map((project) => {
@@ -63,7 +63,7 @@ export function ProjectsSection({
           const ImpactIcon = impact?.kind ? IMPACT_ICONS[impact.kind] || Leaf : Leaf
 
           return (
-            <li key={project.id} className="w-56 shrink-0 snap-start first:pl-0">
+            <li key={project.id} className="w-56 shrink-0 snap-start">
               <Link
                 href={project.slug ? `/projects/${project.slug}` : '/projects'}
                 className="group block text-left"

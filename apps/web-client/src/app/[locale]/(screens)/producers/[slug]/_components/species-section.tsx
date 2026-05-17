@@ -37,13 +37,13 @@ export function SpeciesSection({
       </div>
       
       <ul 
-        className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
+        className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
         aria-label="Espèces liées au partenaire"
       >
         {species.map((entry) => (
           <li
             key={entry.id}
-            className="w-36 shrink-0 snap-start first:pl-0"
+            className="w-36 shrink-0 snap-start"
           >
             <article className="flex flex-col gap-2">
               {/* Image premium — grande et immersive */}
