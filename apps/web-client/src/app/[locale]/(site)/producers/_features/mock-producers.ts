@@ -16,6 +16,9 @@ export type MockProducerListProject = {
   hero_image_url: string | null
   status: string | null
   type: string | null
+  current_funding: number | null
+  address_city: string | null
+  address_country_code: string | null
 }
 
 export type MockProducerSpeciesCard = {
@@ -108,6 +111,9 @@ export const getMockProducers = (): MockProducerSeed[] => {
       hero_image_url: project.hero_image_url,
       status: project.status,
       type: project.type,
+      current_funding: project.current_funding,
+      address_city: project.address_city,
+      address_country_code: project.address_country_code,
     }))
 
     return {

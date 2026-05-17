@@ -1,12 +1,4 @@
-import {
-  ExternalLink,
-  Leaf,
-  MapPin,
-  Package,
-  ShieldCheck,
-  Sparkles,
-  Trees,
-} from 'lucide-react'
+import { ExternalLink, Leaf, MapPin, TreePine, Waves } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
@@ -15,6 +7,9 @@ import { isMockDataSource } from '@/lib/mock/data-source'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { createClient } from '@/lib/supabase/server'
 import { asString, isRecord } from '@/lib/type-guards'
+import { formatCompact } from '@/lib/formatters'
+import { resolveLocationDisplay } from '@/lib/location'
+import { CurrencyAmount } from '@/components/currency'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import {
   getMockProducerBySlug,
@@ -51,6 +46,9 @@ type ProjectRow = {
   hero_image_url: string | null
   status: string | null
   type: string | null
+  current_funding: number | null
+  address_city: string | null
+  address_country_code: string | null
 }
 
 const normalizeStringArray = (value: unknown): string[] =>
@@ -101,14 +99,43 @@ const toProjectRow = (value: unknown): ProjectRow | null => {
     hero_image_url: asString(value.hero_image_url) || null,
     status: asString(value.status) || null,
     type: asString(value.type) || null,
+    current_funding: typeof value.current_funding === 'number' ? value.current_funding : null,
+    address_city: asString(value.address_city) || null,
+    address_country_code: asString(value.address_country_code) || null,
   }
 }
 
-const formatTypeLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Projet'
-  const normalized = value.replace(/[_-]+/g, ' ').trim()
-  if (!normalized) return 'Projet'
-  return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
+// ── Impact écologique calculé depuis le financement (cohérent avec projects-client.tsx) ──
+const BEES_PER_EUR = 50000 / 1300
+const OLIVE_PRICE_EUR = 150
+const CORAL_PRICE_EUR = 30
+
+type ImpactKind = 'beehive' | 'orchard' | 'reef'
+
+function getProjectImpact(project: { current_funding: number | null; type: string | null }) {
+  const funding = project.current_funding ?? 0
+  const type = project.type
+  if (type === 'orchard' || type === 'olive_tree') {
+    return { value: Math.round(funding / OLIVE_PRICE_EUR), label: 'oliviers soutenus', kind: 'orchard' as ImpactKind }
+  }
+  if (type === 'reef' || type === 'coral') {
+    return { value: Math.round(funding / CORAL_PRICE_EUR), label: 'coraux plantés', kind: 'reef' as ImpactKind }
+  }
+  if (type === 'beehive') {
+    return { value: Math.round(funding * BEES_PER_EUR), label: 'abeilles soutenues', kind: 'beehive' as ImpactKind }
+  }
+  return null
+}
+
+type ProducerProject = {
+  id: string
+  slug: string | null
+  name_default: string | null
+  hero_image_url: string | null
+  type: string | null
+  current_funding: number | null
+  address_city: string | null
+  address_country_code: string | null
 }
 
 type ProducerDetailViewProps = {
@@ -120,11 +147,10 @@ type ProducerDetailViewProps = {
     address_country_code: string | null
     type: string | null
     images: string[]
-    certifications: string[]
     contact_website: string | null
   }
   products: MockProducerListProduct[] | ProductRow[]
-  projects: MockProducerListProject[] | ProjectRow[]
+  projects: ProducerProject[]
   species: MockProducerSpeciesCard[]
   showFollowButton: boolean
   isFollowingProducer?: boolean
@@ -139,6 +165,24 @@ function ProducerDetailView({
   const location = [producer.address_city, producer.address_country_code].filter(Boolean).join(', ')
   const coverImage = producer.images[0] || getRandomProducerImage(producer.name_default.length || 0)
   const logoImage = producer.images[1] || producer.images[0] || coverImage
+
+  // ── Agrégation impact écologique par type ──
+  const impactStats: { value: number; label: string; kind: ImpactKind }[] = []
+  const beesTotal = projects.reduce((sum, p) => {
+    if (p.type === 'beehive') return sum + Math.round((p.current_funding ?? 0) * BEES_PER_EUR)
+    return sum
+  }, 0)
+  const oliviersTotal = projects.reduce((sum, p) => {
+    if (p.type === 'orchard' || p.type === 'olive_tree') return sum + Math.round((p.current_funding ?? 0) / OLIVE_PRICE_EUR)
+    return sum
+  }, 0)
+  const corauxTotal = projects.reduce((sum, p) => {
+    if (p.type === 'reef' || p.type === 'coral') return sum + Math.round((p.current_funding ?? 0) / CORAL_PRICE_EUR)
+    return sum
+  }, 0)
+  if (beesTotal > 0) impactStats.push({ value: beesTotal, label: 'abeilles soutenues', kind: 'beehive' })
+  if (oliviersTotal > 0) impactStats.push({ value: oliviersTotal, label: 'oliviers soutenus', kind: 'orchard' })
+  if (corauxTotal > 0) impactStats.push({ value: corauxTotal, label: 'coraux plantés', kind: 'reef' })
 
   return (
     <div className="bg-[#0B0F15] text-white">
@@ -175,28 +219,31 @@ function ProducerDetailView({
         </div>
       </div>
 
-      {/* ── Stats ── */}
-      <ul aria-label="Statistiques du partenaire" className="mt-8 grid grid-cols-3 gap-3 px-5 m-0 p-0 list-none">
-        <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-          <Trees className="mb-2 h-5 w-5 text-emerald-400" aria-hidden="true" />
-          <div className="text-2xl font-black leading-none text-white">{projects.length}</div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">PROJETS</div>
-        </li>
-        <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-          <Leaf className="mb-2 h-5 w-5 text-lime-400" aria-hidden="true" />
-          <div className="text-2xl font-black leading-none text-white">{species.length}</div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">ESPÈCES</div>
-        </li>
-        <li className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 p-4 text-center">
-          <Package className="mb-2 h-5 w-5 text-sky-400" aria-hidden="true" />
-          <div className="text-2xl font-black leading-none text-white">{products.length}</div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/40">PRODUITS</div>
-        </li>
-      </ul>
+      {/* ── Impact écologique agrégé ── */}
+      {impactStats.length > 0 ? (
+        <ul aria-label="Impact collectif du partenaire" className="mt-8 flex flex-wrap gap-3 px-5 m-0 p-0 list-none">
+          {impactStats.map((stat) => (
+            <li
+              key={stat.label}
+              className="flex flex-col items-start rounded-2xl border border-white/5 bg-white/5 px-4 py-3"
+            >
+              <span className={`text-2xl font-black tabular-nums leading-none ${
+                stat.kind === 'beehive' ? 'text-amber-400' :
+                stat.kind === 'orchard' ? 'text-emerald-400' :
+                'text-sky-400'
+              }`}>
+                {formatCompact(stat.value)}
+              </span>
+              <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                {stat.label}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {/* ─────────────────────────────────────────────────────────────────────────
-          ESPÈCES — design BioDexCard borderless (cf. authenticated-profile.tsx)
-          Pas de carte autour : image directe + nom + rareté, scroll horizontal
+          ESPÈCES — design BioDexCard borderless, scroll horizontal
       ───────────────────────────────────────────────────────────────────────── */}
       {species.length > 0 ? (
         <section className="mt-10">
@@ -213,7 +260,6 @@ function ProducerDetailView({
                 className="relative block w-28 shrink-0 snap-center transition-transform duration-150 active:scale-[0.97]"
               >
                 <article className="flex flex-col items-center gap-2">
-                  {/* Image borderless — aucune card autour */}
                   <div className="w-full aspect-square relative flex items-center justify-center">
                     <img
                       src={entry.image}
@@ -235,55 +281,88 @@ function ProducerDetailView({
       ) : null}
 
       {/* ─────────────────────────────────────────────────────────────────────────
-          PROJETS — design big-card borderless (cf. projects-client.tsx)
-          Aspect 4/3, rounded-3xl, image plein-écran + texte sous l'image
+          PROJETS — même design que projects-client.tsx, scroll horizontal
+          Image 4/3 rounded-3xl + titre + localisation + métrique d'impact
       ───────────────────────────────────────────────────────────────────────── */}
       {projects.length > 0 ? (
-        <section className="mt-10 px-5">
-          <h2 className="mb-5 text-xl font-black tracking-tight text-white">
+        <section className="mt-10">
+          <h2 className="mb-5 px-5 text-xl font-black tracking-tight text-white">
             Explorez leurs projets
           </h2>
-          <ul aria-label="Projets du partenaire" className="flex flex-col gap-8 m-0 p-0 list-none">
-            {projects.map((project) => (
-              <li key={project.id}>
-                <Link
-                  href={project.slug ? `/projects/${project.slug}` : '/projects'}
-                  className="group block text-left active:scale-[0.98] transition-transform duration-200"
-                >
-                  <article>
-                    {/* Image pleine largeur — même ratio 4/3 que la liste projets */}
-                    <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-3 bg-white/5">
-                      {project.hero_image_url ? (
-                        <img
-                          src={project.hero_image_url}
-                          alt={project.name_default || ''}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Leaf className="h-8 w-8 text-white/20" aria-hidden="true" />
-                        </div>
-                      )}
-                    </div>
-                    {/* Texte sous l'image — typo millimétrée identique à projects-client */}
-                    <div className="flex flex-col gap-0.5 px-1">
-                      <span className="text-[11px] font-black uppercase tracking-widest text-lime-400">
-                        {formatTypeLabel(project.type)}
-                      </span>
-                      <h3 className="text-[22px] font-black text-white leading-[1.1] tracking-tight text-balance">
-                        {project.name_default}
-                      </h3>
-                    </div>
-                  </article>
-                </Link>
-              </li>
-            ))}
+          <ul
+            aria-label="Projets du partenaire"
+            className="flex snap-x gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
+          >
+            {projects.map((project) => {
+              const impact = getProjectImpact(project)
+              const locationDisplay = project.address_country_code
+                ? resolveLocationDisplay(project.address_country_code, project.address_city, 'fr')
+                : null
+
+              return (
+                <li key={project.id} className="w-72 shrink-0 snap-start">
+                  <Link
+                    href={project.slug ? `/projects/${project.slug}` : '/projects'}
+                    className="group block text-left active:scale-[0.98] transition-transform duration-200"
+                  >
+                    <article>
+                      <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-4 bg-white/5">
+                        {project.hero_image_url ? (
+                          <img
+                            src={project.hero_image_url}
+                            alt={project.name_default || ''}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-white/10" />
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-1 px-1">
+                        <h3 className="text-[20px] font-black text-white leading-[1.1] tracking-tight text-balance">
+                          {project.name_default}
+                        </h3>
+                        {locationDisplay ? (
+                          <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-0.5">
+                            <span className="text-[15px] leading-none">{locationDisplay.flag}</span>
+                            <span className="tracking-wide font-medium">{locationDisplay.label}</span>
+                          </div>
+                        ) : null}
+                        {impact && impact.value > 0 ? (
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
+                              impact.kind === 'beehive' ? 'bg-amber-400/15' :
+                              impact.kind === 'orchard' ? 'bg-emerald-400/15' :
+                              'bg-sky-400/15'
+                            }`}>
+                              {impact.kind === 'orchard' ? (
+                                <TreePine className="w-3 h-3 text-emerald-300" />
+                              ) : impact.kind === 'reef' ? (
+                                <Waves className="w-3 h-3 text-sky-300" />
+                              ) : (
+                                <Leaf className="w-3 h-3 text-amber-300" />
+                              )}
+                            </div>
+                            <p className="text-[13px]">
+                              <span className="text-white/90 font-black tabular-nums tracking-tight">
+                                {formatCompact(impact.value)}
+                              </span>{' '}
+                              <span className="text-white/70 font-medium">{impact.label}</span>
+                            </p>
+                          </div>
+                        ) : null}
+                      </div>
+                    </article>
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </section>
       ) : null}
 
       {/* ─────────────────────────────────────────────────────────────────────────
-          PRODUITS — grille 2 colonnes, image borderless carrée + infos sous
+          PRODUITS — même design qu'AdvantageCard dans advantages-tab.tsx
+          Image 4/5, rounded-2xl, partenaire + titre + CurrencyAmount
       ───────────────────────────────────────────────────────────────────────── */}
       {products.length > 0 ? (
         <section className="mt-10 px-5">
@@ -296,41 +375,34 @@ function ProducerDetailView({
               <li key={product.id}>
                 <Link
                   href={product.slug ? `/products/${product.slug}` : '/products'}
-                  className="group block active:scale-[0.97] transition-transform duration-150"
+                  className="group flex flex-col gap-2 transition-transform active:scale-[0.98]"
                 >
-                  <article className="flex flex-col gap-2">
-                    {/* Image carrée borderless — fond subtil pour les images transparentes */}
-                    <div className="relative aspect-square w-full overflow-hidden rounded-[1.75rem] bg-white/5">
-                      {product.image_url ? (
-                        <img
-                          src={product.image_url}
-                          alt={product.name_default || ''}
-                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <Leaf className="h-8 w-8 text-white/20" aria-hidden="true" />
-                        </div>
-                      )}
-                    </div>
-                    {/* Nom + prix */}
-                    <div className="px-0.5">
-                      <h4 className="line-clamp-2 text-[13px] font-bold leading-snug text-white">
-                        {product.name_default}
-                      </h4>
-                      {typeof product.price_points === 'number' ? (
-                        <div className="mt-1 flex items-center gap-1">
-                          <Sparkles className="h-3 w-3 text-amber-400" aria-hidden="true" />
-                          <span className="text-sm font-black tracking-tighter text-amber-400">
-                            {product.price_points.toLocaleString('fr-FR')}
-                          </span>
-                          <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
-                            crédits
-                          </span>
-                        </div>
-                      ) : null}
-                    </div>
-                  </article>
+                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-zinc-800">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name_default || ''}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <Leaf className="h-8 w-8 text-white/20" aria-hidden="true" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-2 flex flex-col gap-0.5">
+                    <span className="text-xs uppercase tracking-wider text-zinc-400">
+                      {producer.name_default}
+                    </span>
+                    <h4 className="line-clamp-2 text-sm font-semibold text-white">
+                      {product.name_default}
+                    </h4>
+                    {typeof product.price_points === 'number' && product.price_points > 0 ? (
+                      <div className="mt-1">
+                        <CurrencyAmount kind="impactCredits" value={product.price_points} className="text-sm font-bold" />
+                      </div>
+                    ) : null}
+                  </div>
                 </Link>
               </li>
             ))}
@@ -348,26 +420,6 @@ function ProducerDetailView({
         </p>
       </section>
 
-      {/* ── Certifications ── */}
-      {producer.certifications.length > 0 ? (
-        <section className="mt-8 px-5">
-          <h2 className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 m-0">
-            Certifications &amp; labels
-          </h2>
-          <ul aria-label="Certifications et labels" className="flex flex-wrap gap-2.5 m-0 p-0 list-none">
-            {producer.certifications.map((item) => (
-              <li
-                key={item}
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-white/60"
-              >
-                <ShieldCheck className="h-3.5 w-3.5 text-lime-400" aria-hidden="true" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
       {/* ── CTA site web ── */}
       {producer.contact_website ? (
         <div className="mt-12 border-t border-white/5 px-5 pb-12 pt-8">
@@ -381,7 +433,9 @@ function ProducerDetailView({
             Visiter leur site web
           </a>
         </div>
-      ) : null}
+      ) : (
+        <div className="pb-12" />
+      )}
     </div>
   )
 }
@@ -454,7 +508,6 @@ export default async function ProducerDetailPage({
   }
 
   const images = normalizeStringArray(producer.images)
-  const certifications = normalizeStringArray(producer.certifications)
 
   const { data: productsRaw } = await supabase
     .from('public_products')
@@ -465,7 +518,7 @@ export default async function ProducerDetailPage({
 
   const { data: projectsRaw } = await supabase
     .from('public_projects')
-    .select('id, slug, name_default, hero_image_url, status, type')
+    .select('id, slug, name_default, hero_image_url, status, type, current_funding, address_city, address_country_code')
     .eq('producer_id', producer.id)
     .limit(4)
 
@@ -493,7 +546,6 @@ export default async function ProducerDetailPage({
           address_country_code: producer.address_country_code,
           type: producer.type,
           images,
-          certifications,
           contact_website: producer.contact_website,
         }}
         projects={projects}

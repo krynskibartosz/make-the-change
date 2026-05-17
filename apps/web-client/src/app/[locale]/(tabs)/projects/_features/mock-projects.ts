@@ -113,6 +113,24 @@ const antsirabeSpecies: ProjectSpecies[] = [
     status: 'DD',
     role: 'Pollinisatrice clé',
   },
+  {
+    id: MOCK_SPECIES_BUTTERFLY_CITRON_ID,
+    name: 'Papillon citron',
+    scientificName: 'Gonepteryx rhamni',
+    icon: '/images/dioramas/transparent/papillon-citron.png',
+    rarity: 4,
+    status: 'LC',
+    role: 'Pollinisateur',
+  },
+  {
+    id: MOCK_SPECIES_SYRPHID_ID,
+    name: 'Syrphe ceinturé',
+    scientificName: 'Syrphus ribesii',
+    icon: '/images/dioramas/transparent/syrphe-ceinture.png',
+    rarity: 4,
+    status: 'LC',
+    role: 'Pollinisateur',
+  },
 ]
 
 const antsirabeProducts: ProducerProduct[] = [
@@ -152,6 +170,24 @@ const manakaraSpecies: ProjectSpecies[] = [
     status: 'DD',
     role: 'Pollinisatrice clé',
   },
+  {
+    id: MOCK_SPECIES_OSMIA_ID,
+    name: 'Osmie rousse',
+    scientificName: 'Osmia rufa',
+    icon: '/images/dioramas/transparent/osmie-rousse.png',
+    rarity: 5,
+    status: 'NT',
+    role: 'Pollinisateur clé',
+  },
+  {
+    id: MOCK_SPECIES_MEGACHILE_ID,
+    name: 'Mégachile',
+    scientificName: 'Megachile sp.',
+    icon: '/images/dioramas/transparent/megachile.png',
+    rarity: 5,
+    status: 'NT',
+    role: 'Pollinisateur clé',
+  },
 ]
 
 const manakaraProducts: ProducerProduct[] = [
@@ -190,6 +226,42 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
     rarity: 7,
     status: 'DD',
     role: 'Pollinisatrice clé',
+  },
+  {
+    id: MOCK_SPECIES_BUMBLEBEE_ID,
+    name: 'Bourdon terrestre',
+    scientificName: 'Bombus terrestris',
+    icon: '/images/dioramas/transparent/bourdon-terrestre.png',
+    rarity: 5,
+    status: 'NT',
+    role: 'Pollinisateur clé',
+  },
+  {
+    id: MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
+    name: 'Paon-du-jour',
+    scientificName: 'Aglais io',
+    icon: '/images/dioramas/transparent/paon-du-jour.png',
+    rarity: 4,
+    status: 'LC',
+    role: 'Pollinisateur',
+  },
+  {
+    id: MOCK_SPECIES_LADYBUG_ID,
+    name: 'Coccinelle',
+    scientificName: 'Coccinella septempunctata',
+    icon: '/images/dioramas/transparent/coccinelle.png',
+    rarity: 3,
+    status: 'LC',
+    role: 'Auxiliaire',
+  },
+  {
+    id: MOCK_SPECIES_HEDGEHOG_ID,
+    name: 'Hérisson européen',
+    scientificName: 'Erinaceus europaeus',
+    icon: '/images/dioramas/transparent/herisson-europeen.png',
+    rarity: 5,
+    status: 'LC',
+    role: 'Faune associée',
   },
 ]
 
