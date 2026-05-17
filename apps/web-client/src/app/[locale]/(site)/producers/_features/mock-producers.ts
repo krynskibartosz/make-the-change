@@ -272,8 +272,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         founderNames: ["Olivier Laurent"],
         fieldDirector: "Laura Razanajatovo",
         nextGeneration: ["Nathan Laurent", "Naya Laurent"],
-        partnerType: "Réseau apicole partenaire",
-        tagline: "Natural & Ethic Food",
+        partnerType: "Partenaire apicole documenté",
+        tagline: "Réseau apicole & produits naturels",
         summary: "Fondée en 2017 par un entrepreneur belge installé à Madagascar, Ilanga Nature structure une filière apicole locale avec mielleries mobiles, formation des apiculteurs et certification biologique Ecocert. L'entreprise exporte des miels, vanilles, épices et confitures artisanaux issus de Madagascar, de l'île Maurice, de La Réunion et de Sardaigne."
       },
       

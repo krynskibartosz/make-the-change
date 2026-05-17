@@ -63,14 +63,15 @@ export function ProducerHero({
           alt={name} 
           className="h-full w-full object-cover" 
         />
-        {/* Gradient profond pour lisibilité texte */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-[#0B0F15]/10" />
+        {/* Gradient progressif: haut vivant, bas lisible */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/25 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#0B0F15] to-transparent" />
       </div>
 
       {/* ── Identity Header ── */}
       <div className="relative px-4">
-        {/* Portrait - 80px plus compact */}
-        <div className="absolute -top-10 left-4 z-10 h-20 w-20 rounded-full border-2 border-[#0B0F15] bg-[#0B0F15] p-0.5 shadow-xl">
+        {/* Portrait premium - plus grand, ombre douce, pas d'anneau noir */}
+        <div className="absolute -top-11 left-4 z-10 h-[88px] w-[88px] rounded-full border border-white/10 bg-[#0B0F15]/60 p-0.5 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
           <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/5">
             <img 
               src={portraitImage} 
@@ -80,8 +81,8 @@ export function ProducerHero({
           </div>
         </div>
 
-        {/* Spacer réduit */}
-        <div className="h-12" />
+        {/* Spacer pour portrait plus grand */}
+        <div className="h-14" />
 
         {/* Nom et tagline compacte */}
         <div className="flex items-start justify-between gap-3">
@@ -96,30 +97,35 @@ export function ProducerHero({
               </p>
             )}
 
-            {/* Localisations fusionnées */}
+            {/* Localisations en tags assumés */}
             {(fieldLocation || europeanLocation) && (
-              <div className="mt-2 flex items-center gap-2 text-xs">
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 {fieldLocation && (
-                  <span className="flex items-center gap-1 text-white/50">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.08] px-2 py-1 text-[11px] font-medium text-white/75">
                     <span>🇲🇬</span>
-                    <span className="uppercase tracking-wide">{locations?.field}</span>
+                    <span>Madagascar</span>
                   </span>
                 )}
                 {europeanLocation && (
-                  <span className="flex items-center gap-1 text-white/40">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-1 text-[11px] font-medium text-white/60">
                     <span>🇧🇪</span>
-                    <span>{locations?.european}</span>
+                    <span>Belgique</span>
                   </span>
                 )}
               </div>
             )}
 
-            {/* Tag type partenaire compact */}
-            {displayPartnerType && (
-              <p className="mt-2 inline-flex rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white/70">
-                {displayPartnerType}
-              </p>
-            )}
+            {/* Micro-ligne crédibilité + badge premium */}
+            <div className="mt-2.5 flex flex-wrap items-center gap-2">
+              <span className="text-[11px] text-white/50">
+                Depuis 2017 • Certification Ecocert
+              </span>
+              {displayPartnerType && (
+                <span className="inline-flex rounded-full bg-white/[0.08] px-2 py-0.5 text-[10px] font-medium text-white/70">
+                  {displayPartnerType}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
