@@ -1,18 +1,5 @@
 export type AntsirabeVariantId = 'portrait' | 'territory' | 'support'
 
-export type VariantIconId =
-  | 'banknote'
-  | 'boxes'
-  | 'check'
-  | 'compass'
-  | 'flower'
-  | 'handshake'
-  | 'map'
-  | 'route'
-  | 'shield'
-  | 'sprout'
-  | 'user'
-
 export type VariantTheme = {
   text: string
   mutedText: string
@@ -24,75 +11,66 @@ export type VariantTheme = {
   progress: string
 }
 
-export type VariantMetric = {
-  value: string
+// ── Slide types ──────────────────────────────────────────────────────────────
+
+export type StorySlide = {
+  id: string
+  kind: 'story'
   label: string
-  note: string
-}
-
-export type VariantCard = {
-  icon: VariantIconId
   title: string
   body: string
-  metric?: string
+  imageUrl?: string
+  stat?: { value: string; label: string; note: string }
 }
 
-export type VariantFlowStep = {
-  icon: VariantIconId
+export type QuizOption = {
+  id: string
+  text: string
+  correct: boolean
+  feedback: string
+}
+
+export type QuizSlide = {
+  id: string
+  kind: 'quiz'
+  label: string
+  question: string
+  options: QuizOption[]
+}
+
+export type SortColumn = {
+  id: string
+  title: string
+  colorKey: 'green' | 'amber'
+}
+
+export type SortItem = {
+  id: string
+  text: string
+  correctColumnId: string
+}
+
+export type SortSlide = {
+  id: string
+  kind: 'sort'
+  label: string
+  instruction: string
+  columns: [SortColumn, SortColumn]
+  items: SortItem[]
+  successMessage: string
+}
+
+export type FinalSlide = {
+  id: string
+  kind: 'final'
+  label: string
+  badge: string
   title: string
   body: string
+  closing: string
 }
 
-export type VariantColumn = {
-  title: string
-  items: string[]
-}
-
-export type AntsirabeVariantSlide =
-  | {
-      id: string
-      kind: 'hero'
-      label: string
-      title: string
-      body: string
-      imageUrl: string
-      metric: VariantMetric
-    }
-  | {
-      id: string
-      kind: 'cards'
-      label: string
-      title: string
-      body: string
-      prompt: string
-      cards: VariantCard[]
-    }
-  | {
-      id: string
-      kind: 'flow'
-      label: string
-      title: string
-      body: string
-      steps: VariantFlowStep[]
-    }
-  | {
-      id: string
-      kind: 'compare'
-      label: string
-      title: string
-      body: string
-      columns: VariantColumn[]
-      closing: string
-    }
-  | {
-      id: string
-      kind: 'final'
-      label: string
-      title: string
-      body: string
-      cards: VariantCard[]
-      closing: string
-    }
+export type AntsirabeVariantSlide = StorySlide | QuizSlide | SortSlide | FinalSlide
 
 export type AntsirabeCourseVariant = {
   id: AntsirabeVariantId
@@ -110,13 +88,14 @@ export type AntsirabeCourseVariant = {
 const projectHref = '/projects/ruchers-apiculteurs-independants-antsirabe'
 
 export const ANTSIRABE_COURSE_VARIANTS: AntsirabeCourseVariant[] = [
+  // ── Variant 1 : portrait — RÉCIT (lecture narrative) ──────────────────────
   {
     id: 'portrait',
     title: 'Andraina, 45 ruches',
-    shortTitle: 'Version humaine',
+    shortTitle: 'Récit',
     subtitle:
-      'Le projet raconté par le travail de terrain, pas par une leçon générale sur les abeilles.',
-    detail: 'Prototype · 3 min',
+      "Le projet raconté comme un mini-documentaire terrain — pas une leçon générale sur les abeilles.",
+    detail: 'Récit · 4 min',
     imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
     href: '/academy/project-experiences/ruchers-antsirabe/variants/portrait',
     projectHref,
@@ -133,111 +112,66 @@ export const ANTSIRABE_COURSE_VARIANTS: AntsirabeCourseVariant[] = [
     slides: [
       {
         id: 'hook',
-        kind: 'hero',
+        kind: 'story',
         label: 'Portrait',
-        title: "Ici, le sujet n'est pas seulement l'abeille.",
-        body: "C'est Andraina, son assistant, 45 ruches autour d'Antsirabe et une activité apicole locale que le projet aide à structurer.",
+        title: "Andraina gère 45 ruches autour d'Antsirabe.",
+        body: "Ce n'est pas un chiffre écologique. C'est un travail : installer, observer, récolter et transmettre. Le cours part de là.",
         imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
-        metric: {
+        stat: {
           value: '45',
           label: 'ruches suivies',
-          note: 'Une unité concrète du projet, pas une estimation écologique.',
+          note: "Une unité concrète du projet, pas une estimation.",
         },
       },
       {
         id: 'work',
-        kind: 'cards',
-        label: 'Travail',
-        title: 'Le rucher vit parce que quelqu’un le suit.',
-        body: "Une ruche n'est pas posée puis oubliée. Le cours teste ici une approche plus humaine : montrer ce qui se passe entre le soutien et le miel.",
-        prompt: 'Touche une carte pour révéler le rôle du terrain.',
-        cards: [
-          {
-            icon: 'boxes',
-            title: 'Installer',
-            body: 'Matériel, emplacement, protection et mise en place progressive des colonies.',
-            metric: '395 € / ruche',
-          },
-          {
-            icon: 'shield',
-            title: 'Suivre',
-            body: "Observer l'activité, repérer les signaux faibles et intervenir quand la colonie en a besoin.",
-          },
-          {
-            icon: 'flower',
-            title: 'Lire les floraisons',
-            body: "Le miel d'eucalyptus raconte aussi ce que les abeilles trouvent autour du rucher.",
-          },
-          {
-            icon: 'handshake',
-            title: 'Transmettre',
-            body: "Le savoir-faire peut circuler : Andraina a déjà formé d'autres apiculteurs de la région.",
-          },
-        ],
+        kind: 'story',
+        label: 'Terrain',
+        title: "Une ruche n'est pas posée puis oubliée.",
+        body: "Andraina intervient régulièrement : vérifier l'activité, repérer les signaux faibles, protéger les colonies avant les maladies et les intempéries. C'est ce suivi que le projet rend possible.",
+        imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
+        stat: {
+          value: '395 €',
+          label: 'par ruche',
+          note: "Installation, équipement et première année de suivi.",
+        },
       },
       {
-        id: 'chain',
-        kind: 'flow',
-        label: 'Chaîne',
-        title: 'Le projet relie humains, ruches et valorisation.',
-        body: "Cette version fait comprendre le projet comme une chaîne de soin et de débouchés, plutôt que comme une preuve automatique d'impact.",
-        steps: [
-          {
-            icon: 'handshake',
-            title: 'Ilanga Nature équipe',
-            body: 'Les ruches et le cadre apicole viennent soutenir une activité locale existante.',
-          },
-          {
-            icon: 'user',
-            title: 'Andraina suit',
-            body: 'Le travail terrain reste central : observation, récolte, décisions et transmission.',
-          },
-          {
-            icon: 'sprout',
-            title: 'Le paysage nourrit',
-            body: 'Les floraisons disponibles autour du rucher déterminent une partie de la récolte.',
-          },
-          {
-            icon: 'check',
-            title: 'Le miel valorise',
-            body: 'La production donne une sortie économique lisible, sans résumer tout le vivant à un pot.',
-          },
-        ],
+        id: 'harvest',
+        kind: 'story',
+        label: 'Récolte',
+        title: "Le miel d'eucalyptus raconte une saison.",
+        body: "Autour d'Antsirabe, les floraisons locales déterminent ce que les abeilles rapportent. La récolte n'est pas garantie : elle dépend du paysage, de la météo et du travail d'Andraina.",
+        imageUrl: '/images/products/miel-eucalyptus-ilanga.png',
+      },
+      {
+        id: 'transmission',
+        kind: 'story',
+        label: 'Transmission',
+        title: "Le savoir circule au-delà du rucher.",
+        body: "Andraina a déjà formé d'autres apiculteurs de la région. Ce projet structure une activité locale qui existait avant lui — et qui existera après.",
+        imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
       },
       {
         id: 'finish',
         kind: 'final',
-        label: 'Synthèse',
-        title: 'Ce que cette version fait mieux.',
-        body: 'Elle rend le cours très spécifique à Antsirabe : on retient un projet, un apiculteur, une activité et une responsabilité de terrain.',
-        cards: [
-          {
-            icon: 'user',
-            title: 'Plus incarné',
-            body: 'Le point d’entrée devient Andraina, pas une notion générique sur les abeilles.',
-          },
-          {
-            icon: 'boxes',
-            title: 'Plus concret',
-            body: 'La ruche est présentée comme une unité de projet avec un prix et un suivi.',
-          },
-          {
-            icon: 'shield',
-            title: 'Plus prudent',
-            body: 'On distingue activité soutenue et impact écologique estimé.',
-          },
-        ],
-        closing: 'Angle testé : un mini-documentaire projet, chaleureux et très identifiable.',
+        label: 'Fin',
+        badge: 'Récit · Version humaine',
+        title: "Ce que ce format change.",
+        body: "On retient un projet, un apiculteur, une activité. Pas un cours générique sur les abeilles.",
+        closing: "Le point d'entrée est Andraina — pas la pollinisation mondiale.",
       },
     ],
   },
+
+  // ── Variant 2 : territory — QUIZ (questions interactives) ─────────────────
   {
     id: 'territory',
     title: '45 ruches, un territoire vivant',
-    shortTitle: 'Version territoire',
+    shortTitle: 'Quiz',
     subtitle:
-      "Le projet raconté par l'espace, les floraisons et les limites des ordres de grandeur.",
-    detail: 'Prototype · 4 min',
+      "Le projet exploré par des questions — pour tester ce qu'on comprend vraiment du terrain et des données.",
+    detail: 'Quiz · 3 min',
     imageUrl: '/images/projects/miellerie-manakara.jpg',
     href: '/academy/project-experiences/ruchers-antsirabe/variants/territory',
     projectHref,
@@ -254,106 +188,145 @@ export const ANTSIRABE_COURSE_VARIANTS: AntsirabeCourseVariant[] = [
     slides: [
       {
         id: 'hook',
-        kind: 'hero',
-        label: 'Territoire',
-        title: 'Une ruche ne tient pas dans sa boîte.',
-        body: "Autour d'Antsirabe, le rucher aide à visualiser un réseau local : floraisons, cultures, abeilles, météo et saisons.",
+        kind: 'story',
+        label: 'Contexte',
+        title: "Une ruche ne tient pas dans sa boîte.",
+        body: "Autour d'Antsirabe, le rucher s'inscrit dans un territoire : des floraisons locales, un paysage agricole, une faune sauvage. Ce cours teste votre lecture du projet.",
         imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
-        metric: {
-          value: '≈ 28 km²',
-          label: 'zone potentielle par ruche',
-          note: 'Les zones se chevauchent : ce n’est pas une surface gagnée.',
+        stat: {
+          value: '≈ 3 km',
+          label: 'rayon de butinage',
+          note: "Un ordre de grandeur biologique, pas une garantie de surface.",
         },
       },
       {
-        id: 'layers',
-        kind: 'cards',
-        label: 'Couches',
-        title: 'Le bon sujet devient le paysage autour des ruches.',
-        body: "Cette variante garde l'émerveillement, mais elle le rattache davantage au site et aux ressources florales locales.",
-        prompt: 'Choisis une couche du territoire.',
-        cards: [
+        id: 'q1',
+        kind: 'quiz',
+        label: 'Question 1',
+        question: "Quand une abeille explore jusqu'à 3 km de son rucher, que peut-on en dire ?",
+        options: [
           {
-            icon: 'map',
-            title: 'Le site',
-            body: "Un rucher localisé autour d'Antsirabe, avec 45 ruches déclarées dans le projet.",
-            metric: 'Antsirabe',
+            id: 'a',
+            text: "Elle garantit la pollinisation de toute cette zone.",
+            correct: false,
+            feedback:
+              "Explorer n'est pas garantir. L'abeille cherche des fleurs disponibles sans couvrir le territoire de façon uniforme.",
           },
           {
-            icon: 'flower',
-            title: 'Les floraisons',
-            body: "L'eucalyptus est le miel mis en avant aujourd'hui, mais les floraisons varient selon les saisons.",
+            id: 'b',
+            text: "C'est un ordre de grandeur biologique, pas une preuve d'impact.",
+            correct: true,
+            feedback:
+              "Exact. Ce rayon aide à visualiser l'échelle du projet, mais ne prouve pas que tout le territoire est amélioré.",
           },
           {
-            icon: 'compass',
-            title: 'Le rayon',
-            body: 'Les abeilles peuvent explorer plusieurs kilomètres quand les ressources proches ne suffisent pas.',
+            id: 'c',
+            text: "La superficie couverte est exactement 28 km².",
+            correct: false,
+            feedback:
+              "28 km² vient du calcul d'un cercle à 3 km de rayon — c'est une estimation utile, pas une mesure directe du terrain.",
           },
           {
-            icon: 'shield',
-            title: 'La prudence',
-            body: 'Les chiffres aident à comprendre une échelle, pas à mesurer directement ton impact.',
+            id: 'd',
+            text: "Les ruches voisines ne se concurrencent jamais.",
+            correct: false,
+            feedback:
+              "Les zones de butinage de plusieurs ruches se chevauchent souvent — on ne peut pas additionner les surfaces.",
           },
         ],
       },
       {
-        id: 'proof',
-        kind: 'compare',
-        label: 'Preuves',
-        title: 'Tout n’a pas le même statut.',
-        body: 'Cette version peut devenir très crédible si elle apprend à lire les données sans surpromettre.',
-        columns: [
+        id: 'q2',
+        kind: 'quiz',
+        label: 'Question 2',
+        question: "Que finance concrètement le projet à Antsirabe ?",
+        options: [
           {
-            title: 'Données projet',
-            items: ['45 ruches', '395 € par ruche', 'Ilanga Nature', 'Antsirabe'],
+            id: 'a',
+            text: "La protection d'un écosystème de 28 km².",
+            correct: false,
+            feedback:
+              "C'est une extrapolation. Le projet finance des ruches et un suivi terrain — pas un territoire délimité.",
           },
           {
-            title: 'Ordres de grandeur',
-            items: [
-              'Rayon de butinage',
-              'Visites florales',
-              'Production future',
-              'Variations saisonnières',
-            ],
+            id: 'b',
+            text: "45 ruches, leur installation et le suivi d'Andraina.",
+            correct: true,
+            feedback:
+              "C'est la donnée solide. Des unités concrètes avec un apiculteur dédié et un coût vérifiable.",
+          },
+          {
+            id: 'c',
+            text: "La production garantie d'au moins une tonne de miel.",
+            correct: false,
+            feedback:
+              "La production future est une estimation — elle dépend des floraisons locales, de la météo et du travail terrain.",
+          },
+          {
+            id: 'd',
+            text: "La biodiversité de la région Vakinankaratra.",
+            correct: false,
+            feedback:
+              "Le projet agit sur une activité apicole locale. Son lien à la biodiversité régionale reste un bénéfice potentiel, pas mesuré.",
           },
         ],
-        closing:
-          'Le message devient : ce rucher rend visible une échelle vivante, pas une preuve totale.',
+      },
+      {
+        id: 'q3',
+        kind: 'quiz',
+        label: 'Question 3',
+        question: "Pourquoi distinguer données projet et ordres de grandeur ?",
+        options: [
+          {
+            id: 'a',
+            text: "Pour impressionner avec des chiffres plus grands.",
+            correct: false,
+            feedback:
+              "C'est l'opposé du but. Distinguer les deux évite de surpromettre et rend le projet plus crédible.",
+          },
+          {
+            id: 'b',
+            text: "Parce que les ordres de grandeur ne servent à rien.",
+            correct: false,
+            feedback:
+              "Les ordres de grandeur ont une vraie valeur pédagogique — ils aident à visualiser l'échelle. Mais ils ne prouvent pas l'impact.",
+          },
+          {
+            id: 'c',
+            text: "Parce que données mesurées et estimations n'ont pas le même statut de preuve.",
+            correct: true,
+            feedback:
+              "45 ruches à 395 € est vérifiable. 28 km² est une estimation utile — mais pas une mesure directe.",
+          },
+          {
+            id: 'd',
+            text: "Pour cacher les estimations imprécises aux utilisateurs.",
+            correct: false,
+            feedback:
+              "Au contraire — les montrer séparément permet de comprendre ce qu'on soutient vraiment.",
+          },
+        ],
       },
       {
         id: 'finish',
         kind: 'final',
-        label: 'Synthèse',
-        title: 'Ce que cette version fait mieux.',
-        body: "Elle évite le cours générique en posant une question très Make the Change : comment un projet local s'inscrit dans un territoire ?",
-        cards: [
-          {
-            icon: 'map',
-            title: 'Plus spatial',
-            body: 'On comprend où le projet agit et pourquoi le paysage compte.',
-          },
-          {
-            icon: 'flower',
-            title: 'Plus vivant',
-            body: 'Les floraisons deviennent le personnage principal avec les abeilles.',
-          },
-          {
-            icon: 'shield',
-            title: 'Plus crédible',
-            body: 'Les estimations sont visibles comme estimations.',
-          },
-        ],
-        closing: 'Angle testé : une carte sensible du territoire, plus écologique que biologique.',
+        label: 'Fin',
+        badge: 'Quiz · Version territoire',
+        title: "Ce que ce format change.",
+        body: "Le quiz force à distinguer ce qu'on sait de ce qu'on suppose. C'est ça, lire un projet sérieusement.",
+        closing: "Lire les données avec rigueur, c'est respecter le projet.",
       },
     ],
   },
+
+  // ── Variant 3 : support — TRI (classification interactive) ────────────────
   {
     id: 'support',
     title: 'Que finance une ruche ?',
-    shortTitle: 'Version soutien',
+    shortTitle: 'Tri',
     subtitle:
-      'Le projet raconté par le budget, les unités financées et le passage vers le terrain.',
-    detail: 'Prototype · 3 min',
+      "Le projet exploré par la classification — distinguer ce qui est financé de ce qui est estimé.",
+    detail: 'Tri interactif · 4 min',
     imageUrl: '/images/products/miel-eucalyptus-ilanga.png',
     href: '/academy/project-experiences/ruchers-antsirabe/variants/support',
     projectHref,
@@ -370,104 +343,80 @@ export const ANTSIRABE_COURSE_VARIANTS: AntsirabeCourseVariant[] = [
     slides: [
       {
         id: 'hook',
-        kind: 'hero',
-        label: 'Soutien',
-        title: "Une ruche n'est pas juste un symbole.",
-        body: 'Pour Antsirabe, la donnée la plus spécifique est simple : 45 ruches à 395 €. Cette version part de là.',
-        imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
-        metric: {
+        kind: 'story',
+        label: 'Mise en place',
+        title: "395 € finance une ruche — et c'est tout ce qu'on sait avec certitude.",
+        body: "Le reste dépend du terrain, des saisons et du suivi. Ce cours vous demande de trier : qu'est-ce qui est une donnée réelle ? Qu'est-ce qui est une estimation ?",
+        imageUrl: '/images/products/miel-eucalyptus-ilanga.png',
+        stat: {
           value: '395 €',
           label: 'par ruche',
-          note: 'Donnée projet utilisée comme unité de soutien concrète.',
+          note: "La donnée la plus concrète du projet.",
         },
       },
       {
-        id: 'budget',
-        kind: 'cards',
-        label: 'Budget',
-        title: 'Le cours devient une lecture du projet.',
-        body: 'Au lieu de demander “que font les abeilles ?”, cette variante demande “qu’est-ce qui est réellement financé ?”.',
-        prompt: 'Compare les unités du projet.',
-        cards: [
+        id: 'sort1',
+        kind: 'sort',
+        label: 'Tri 1 / 2',
+        instruction: "Chaque élément est-il une donnée réelle du projet ou une estimation ?",
+        columns: [
+          { id: 'real', title: 'Donnée réelle', colorKey: 'green' },
+          { id: 'estimate', title: 'Estimation', colorKey: 'amber' },
+        ],
+        items: [
+          { id: 's1-1', text: "45 ruches installées à Antsirabe", correctColumnId: 'real' },
+          { id: 's1-2', text: "395 € investis par ruche", correctColumnId: 'real' },
+          { id: 's1-3', text: "2 emplois liés au projet", correctColumnId: 'real' },
+          { id: 's1-4', text: "28 km² de territoire potentiel par ruche", correctColumnId: 'estimate' },
           {
-            icon: 'banknote',
-            title: '1 ruche',
-            body: 'Une unité simple à comprendre et à relier au terrain.',
-            metric: '395 €',
-          },
-          {
-            icon: 'boxes',
-            title: '45 ruches',
-            body: 'Le volume actuel du projet Antsirabe.',
-            metric: '17 775 €',
-          },
-          {
-            icon: 'user',
-            title: '2 emplois',
-            body: 'Une donnée sociale projet à garder séparée des estimations écologiques.',
-            metric: 'terrain',
-          },
-          {
-            icon: 'flower',
-            title: 'Miel',
-            body: "La récolte donne une valorisation visible, notamment autour de l'eucalyptus.",
+            id: 's1-5',
+            text: "Des millions de fleurs visitées par saison",
+            correctColumnId: 'estimate',
           },
         ],
+        successMessage:
+          "Les données réelles sont peu nombreuses mais solides. Les estimations sont utiles — à condition de les nommer clairement.",
       },
       {
-        id: 'from-support-to-field',
-        kind: 'flow',
-        label: 'Terrain',
-        title: 'Du soutien à la ruche, il y a plusieurs étapes.',
-        body: "Cette version rend l'action plus lisible sans promettre que chaque euro produit un effet écologique exact.",
-        steps: [
+        id: 'sort2',
+        kind: 'sort',
+        label: 'Tri 2 / 2',
+        instruction:
+          "Ce financement agit-il directement sur le projet ou génère-t-il un bénéfice possible ?",
+        columns: [
+          { id: 'direct', title: 'Financement direct', colorKey: 'green' },
+          { id: 'indirect', title: 'Bénéfice possible', colorKey: 'amber' },
+        ],
+        items: [
           {
-            icon: 'banknote',
-            title: 'Soutien',
-            body: 'Le projet rassemble un budget autour d’unités concrètes.',
+            id: 's2-1',
+            text: "L'équipement apicole d'Andraina",
+            correctColumnId: 'direct',
+          },
+          { id: 's2-2', text: "La récolte et la vente du miel", correctColumnId: 'direct' },
+          { id: 's2-3', text: "Le revenu d'Andraina", correctColumnId: 'direct' },
+          {
+            id: 's2-4',
+            text: "La pollinisation des cultures alentour",
+            correctColumnId: 'indirect',
           },
           {
-            icon: 'boxes',
-            title: 'Équipement',
-            body: 'La ruche devient du matériel et un cadre de production apicole.',
-          },
-          {
-            icon: 'user',
-            title: 'Suivi',
-            body: 'L’apiculteur observe, entretient et récolte au bon moment.',
-          },
-          {
-            icon: 'check',
-            title: 'Valorisation',
-            body: 'Le miel et le suivi terrain rendent le projet compréhensible et vérifiable progressivement.',
+            id: 's2-5',
+            text: "L'amélioration de la biodiversité locale",
+            correctColumnId: 'indirect',
           },
         ],
+        successMessage:
+          "Le financement direct est clair et vérifiable. Les bénéfices possibles ont de la valeur — mais ne constituent pas des promesses.",
       },
       {
         id: 'finish',
         kind: 'final',
-        label: 'Synthèse',
-        title: 'Ce que cette version fait mieux.',
-        body: "Elle aide l'utilisateur à comprendre ce qu'il soutient vraiment, sans transformer l'Academy en tableau d'impact.",
-        cards: [
-          {
-            icon: 'banknote',
-            title: 'Plus actionnable',
-            body: 'Le lien entre argent, ruche et projet devient immédiat.',
-          },
-          {
-            icon: 'check',
-            title: 'Plus transparent',
-            body: 'On sépare données réelles, estimations et suivi futur.',
-          },
-          {
-            icon: 'route',
-            title: 'Plus utile',
-            body: 'La sortie naturelle devient “voir le projet” ou “soutenir”.',
-          },
-        ],
-        closing:
-          'Angle testé : une expérience de compréhension du soutien, simple et très concrète.',
+        label: 'Fin',
+        badge: 'Tri · Version soutien',
+        title: "Ce que ce format change.",
+        body: "Le tri force à réfléchir. On ne reçoit plus le projet comme un exposé — on apprend à le lire.",
+        closing: "Comprendre ce qu'on finance, c'est soutenir avec clarté.",
       },
     ],
   },
