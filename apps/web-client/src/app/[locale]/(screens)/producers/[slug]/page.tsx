@@ -391,9 +391,6 @@ function ProducerDetailView({
                     )}
                   </div>
                   <div className="mt-2 flex flex-col gap-0.5">
-                    <span className="text-xs uppercase tracking-wider text-zinc-400">
-                      {producer.name_default}
-                    </span>
                     <h4 className="line-clamp-2 text-sm font-semibold text-white">
                       {product.name_default}
                     </h4>
