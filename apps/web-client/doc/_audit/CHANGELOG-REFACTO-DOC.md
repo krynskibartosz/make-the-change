@@ -148,7 +148,7 @@ Apres R8, la navigation a ete restructuree sans mise a jour documentaire. Cette 
 
 ### Rapport detaille
 
-Voir analyse dans la conversation du 2026-05-17.
+Voir `REFACTORING-PHASE-R9-REPORT.md`.
 
 ### R9b — Corrections complementaires (2026-05-17)
 

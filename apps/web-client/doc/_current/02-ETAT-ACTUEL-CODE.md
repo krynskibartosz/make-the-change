@@ -211,7 +211,7 @@ Role actuel :
 
 `[ACTUEL_CODE]` Beaucoup de textes restent hardcodes dans les composants.
 
-`[A_VERIFIER_CODE]` Aucun dossier `messages` n'a ete identifie dans `apps/web-client` pendant cette passe.
+`[CONFIRME_R9]` Aucun dossier `messages` n'existe dans `apps/web-client` (verifie en R9, 2026-05-17). L'i18n contenu est partiel : seule la structure de routes (`[locale]`) est en place.
 
 ## Termes legacy presents dans le code
 

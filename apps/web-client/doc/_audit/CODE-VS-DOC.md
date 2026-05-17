@@ -1,8 +1,8 @@
 # Audit code vs documentation
 
-Date : 2026-05-07
+Créé le : 2026-05-07 — Dernière mise à jour : 2026-05-17 (R9/R9b)
 
-Portee : comparaison initiale entre la documentation `apps/web-client/doc` et le code de `apps/web-client`.
+Portee : comparaison entre la documentation `apps/web-client/doc` et le code de `apps/web-client`.
 
 ## Resume executif
 
@@ -77,15 +77,17 @@ La documentation decrit correctement l'intention globale du produit, mais le cod
 ## Top 10 ecarts prioritaires
 
 1. `[ACTUEL_CODE]` `investment` reste structurant dans le code alors que la cible produit parle de soutien producteur. — `[OUVERT]` P2
-2. `[ACTUEL_CODE]` `points` reste present dans `mock-member-data.ts` : types (`MockPointsTransactionRecord`), champs (`total_points`, `unit_price_points`, `amount_points`, `returns_received_points`), fonctions (`getMockPointsTransactions`). `[PARTIELLEMENT_TRAITE_R8]` — R8 a renomme `Profile.points` → `impactCreditsBalance` uniquement. Le reste est en attente de migration progressive. Reste aussi dans Supabase V0 `[A_NE_PAS_TOUCHER]`.
+2. `[ACTUEL_CODE]` `points` reste present dans `mock-member-data.ts` : types (`MockPointsTransactionRecord`), champs (`total_points`, `unit_price_points`, `amount_points`, `returns_received_points`), fonctions (`getMockPointsTransactions`). `[PARTIELLEMENT_TRAITE_R8]` — R8 a renomme `Profile.points` → `impactCreditsBalance` uniquement. R9 a renomme `getMockImpactPoints` → `getMockImpactCreditsBalance`. Le reste est en attente de migration progressive. Reste aussi dans Supabase V0 `[A_NE_PAS_TOUCHER]`.
 3. ~~`[ACTUEL_CODE]` `Artisans Locaux` reste present alors qu'il est considere legacy/deprecie.~~ `[FERME_R7]` (2026-05-08) — purge complete du TypeScript (types, mocks, session, onboarding, impact).
 4. `[ACTUEL_CODE]` Academy est en `(screens)/academy`, pas seulement en lab. — `[OUVERT]`
 5. `[ACTUEL_CODE]` BioDex a une exception prototype de deblocage automatique. — `[OUVERT]` P2
 6. `[ACTUEL_CODE]` Don et soutien producteur sont separes en routes, mais pas encore parfaitement separes en modele paiement. — `[OUVERT]`
 7. `[ACTUEL_CODE]` Stripe est present mais pas a documenter comme finalise. — `[OUVERT]`
 8. `[ACTUEL_CODE]` Supabase est partiel et cohabite avec les mocks. — `[OUVERT]`
-9. `[ACTUEL_CODE]` L'i18n est technique mais les contenus restent largement hardcodes. — `[OUVERT]`
+9. `[ACTUEL_CODE]` L'i18n est technique mais les contenus restent largement hardcodes ; aucun dossier `messages` n'existe. — `[CONFIRME_R9]`
 10. `[RISQUE]` Les preuves d'impact et business/RSE peuvent etre lues comme plus validees qu'elles ne le sont. — `[PARTIELLEMENT_TRAITE]` wording UI adouci en passe finale (2026-05-08).
+11. `[ACTUEL_CODE]` `[HYBRIDE]` Zone hybride `profile/[id]/page.tsx` : `impactCreditsBalance` lue depuis `profile.points_balance` (Supabase legacy) pour les profils publics, et depuis `profile.impactCreditsBalance` (mock) pour les profils mock. — `[DOCUMENTE_R9b]` `[A_MIGRER_PLUS_TARD]`
+12. `[ACTUEL_CODE]` `totalSeedsContributed` calcule via `Math.round(impactCreditsBalance * 1.15)` dans `mock-viewer.ts` — les deux monnaies restent mathematiquement liees pour les profils de demonstration. — `[DOCUMENTE_R9b]` `[A_PLANIFIER]`
 
 ## Regle pour la nouvelle documentation
 

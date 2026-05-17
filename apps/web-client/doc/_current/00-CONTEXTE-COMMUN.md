@@ -39,7 +39,7 @@ Le produit combine :
 | Aventure | Orchestrer l'experience quotidienne | `/adventure` (label UI : "Accueil") | `[ACTUEL_CODE]` |
 | Projets | Presenter des actions terrain a soutenir | `/projects` | `[ACTUEL_CODE]` |
 | Apprendre | Module d'apprentissage quotidien | `/learn` | `[ACTUEL_CODE]` |
-| Avantages | Utiliser les Credits Impact ou decouvrir produits | `/advantages` | `[ACTUEL_CODE]` |
+| Avantages | Utiliser les Credits Impact ou decouvrir produits | `/advantages` | `[ACTUEL_CODE]` + `[A_DECIDER]` (terme UI final à confirmer) |
 | Profil | Regrouper compte, BioDex, solde, historique | `/profile` | `[ACTUEL_CODE]` |
 | BioDex | Collection d'especes et support pedagogique | `/profile/biodex` | `[ACTUEL_CODE]` |
 | Academy | Apprentissage immersif (ecran secondaire) | `(screens)/academy` | `[ACTUEL_CODE]` mais structure a clarifier |

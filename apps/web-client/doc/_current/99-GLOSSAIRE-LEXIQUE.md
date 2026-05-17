@@ -6,13 +6,34 @@ Ce document centralise les termes recommandes, sensibles, deprecies ou a decider
 
 ## Statuts
 
+Liste complète définie dans [../README.md](../README.md). Rappel des plus utilisés dans ce glossaire :
+
 | Statut | Usage |
 |---|---|
-| `[CIBLE_VALIDEE]` | Terme recommande. |
-| `[ACTUEL_CODE]` | Terme present dans le code. |
-| `[DEPRECIE]` | Terme a eviter cote utilisateur. |
-| `[A_DECIDER]` | Terme a arbitrer. |
-| `[RISQUE]` | Terme pouvant creer confusion ou risque. |
+| `[ACTUEL_CODE]` | Observé dans le code actuel. |
+| `[CIBLE_VALIDEE]` | Décision produit/technique assumée. |
+| `[HYPOTHESE]` | Idée plausible mais non tranchée. |
+| `[HYPOTHESE_FORTE]` | Hypothèse structurante, plausible, mais encore à tester. |
+| `[A_TESTER]` | Sujet à valider par test, terrain ou données. |
+| `[A_DECIDER]` | Arbitrage à prendre. |
+| `[A_VERIFIER_CODE]` | Point à confirmer dans le code. |
+| `[A_PLANIFIER]` | Décision ou migration à préparer avant exécution. |
+| `[A_MIGRER_PLUS_TARD]` | Migration future à ne pas faire brutalement. |
+| `[DEPRECIE]` | Ancien vocabulaire ou logique à éviter. |
+| `[RISQUE]` | Risque produit, business, technique, légal, UX ou impact. |
+| `[LEGACY]` | Héritage historique utile mais non cible. |
+| `[LEGACY_FACTION]` | Ancienne faction conservée pour compatibilité. |
+| `[A_NE_PAS_TOUCHER]` | Élément à conserver tel quel pour l'instant. |
+| `[INTERDIT]` | Règle explicitement exclue de la cible. |
+| `[SIMULE]` | Élément simulé, non réel ou non branché complètement. |
+| `[REEL]` | Élément réellement branché ou exécuté dans le code actuel. |
+| `[PARTIEL]` | Élément implémenté partiellement. |
+| `[HYBRIDE]` | État mixte : certaines parties réelles, d'autres prototype, legacy ou incomplètes. |
+| `[PROTOTYPE]` | Élément prototype, non cible finale par défaut. |
+| `[SOURCE_PROTOTYPE]` | Source utile pour prototyper sans être une source finale. |
+| `[AUDITE]` | Sujet analysé dans un audit dédié. |
+| `[VALIDEE]` | Décision ou doctrine validée dans un audit ou fichier de référence. |
+| `[PLUS_TARD]` | Sujet volontairement reporté. |
 
 ## Termes recommandes
 

@@ -4,6 +4,12 @@
 
 Ce document sert de tableau de suivi des arbitrages. Les decisions detaillees restent dans `03-DECISIONS-VALIDEES.md` et les justifications restent dans `_audit/`.
 
+## Regles de gestion du tableau
+
+- **Archivage P0** : une P0 traitee depuis plus de deux phases de refactoring (ex. R7+R8) et dont la decision est stable peut etre deplacee en section "P0 archivees" en bas de document. Elle n'est pas supprimee.
+- **Promotion P1 → P0** : une question P1 passe en P0 si elle bloque une decision produit, une migration technique ou une communication utilisateur imminente.
+- **Cloture P1/P2** : une question P1 ou P2 peut etre fermee (`[FERME]`) si une decision est prise et enregistree dans `03-DECISIONS-VALIDEES.md`.
+
 ## P0 traitees
 
 | ID | Sujet | Statut | Decision courte | Audit lie | Restes a decider |

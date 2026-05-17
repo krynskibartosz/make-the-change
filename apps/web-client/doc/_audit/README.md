@@ -50,6 +50,23 @@ Les audits sont des documents d'investigation et de justification, pas des docum
 | `MIGRATION-INVESTMENT-TO-PRODUCER-SUPPORT.md` | Migration progressive de `investment` vers `producer_support` |
 | `POINTS-TO-CREDITS-IMPACT-AUDIT.md` | Classification et migration des `points` |
 
+### Rapports de phases de refactoring
+
+| Fichier | Rôle |
+|---------|------|
+| `REFACTORING-GLOBAL-PLAN.md` | Plan global de refactoring (vue d'ensemble) |
+| `REFACTORING-PHASE-R1-REPORT.md` | Rapport phase R1 |
+| `REFACTORING-PHASE-R2-REPORT.md` | Rapport phase R2 |
+| `REFACTORING-PHASE-R3-REPORT.md` | Rapport phase R3 |
+| `REFACTORING-PHASE-R4-REPORT.md` | Rapport phase R4 |
+| `REFACTORING-PHASE-R5-REPORT.md` | Rapport phase R5 |
+| `REFACTORING-PHASE-R6-REPORT.md` | Rapport phase R6 |
+| `REFACTORING-PHASE-R7-REPORT.md` | R7 — Purge Artisans Locaux |
+| `REFACTORING-PHASE-R8-POINTS-WALLET-REPORT.md` | R8 — Profile.points → impactCreditsBalance |
+| `REFACTORING-PHASE-R9-REPORT.md` | R9 — Correction navigation post-R8, alignement sémantique monnaies, corrections R9b |
+| `REFACTORING-FINAL-CONSOLIDATION-REPORT.md` | Rapport de consolidation finale (après R8) |
+| `producer-support-classification.md` | Classification et règles du soutien producteur |
+
 ---
 
 ## Comment utiliser les audits
