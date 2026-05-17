@@ -1,10 +1,18 @@
-import { createClient } from '@/lib/supabase/server'
-import { isMockDataSource } from '@/lib/mock/data-source'
-import { getMockViewerSession } from '@/lib/mock/mock-session-server'
-import { getMockSpeciesContext, getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
-import { isRecord, asString, asNumber, asStringArray } from '@/lib/type-guards'
 import { getCurrentIsoDate } from '@/lib/date-utils'
-import type { SpeciesContext, AssociatedProject, AssociatedProducer, AssociatedChallenge, UserSpeciesStatus, SpeciesFilters } from '@/types/species'
+import { toTransparentDioramaImageUrl } from '@/lib/images/diorama-image-url'
+import { isMockDataSource } from '@/lib/mock/data-source'
+import { getMockSpeciesContext, getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
+import { createClient } from '@/lib/supabase/server'
+import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
+import type {
+  AssociatedChallenge,
+  AssociatedProducer,
+  AssociatedProject,
+  SpeciesContext,
+  SpeciesFilters,
+  UserSpeciesStatus,
+} from '@/types/species'
 
 function toNullableNumber(value: unknown): number | null {
   if (value === null || value === undefined) {
@@ -55,28 +63,21 @@ export async function getSpeciesContext(id: string): Promise<SpeciesContext | nu
   }
 
   const supabase = await createClient()
-  
-  const { data, error } = await supabase
-    .from('v_species_context')
-    .select('*')
-    .eq('id', id)
-    .single()
-  
+
+  const { data, error } = await supabase.from('v_species_context').select('*').eq('id', id).single()
+
   if (error) {
     console.error('Error fetching species context:', error)
     return null
   }
-  
+
   return mapSpeciesContext(data)
 }
 
 export async function getSpeciesContextList(filters?: SpeciesFilters): Promise<SpeciesContext[]> {
   if (isMockDataSource) {
     const session = await getMockViewerSession()
-    let speciesList = await getMockSpeciesContextList(
-      session?.viewerId,
-      session?.faction ?? null,
-    )
+    let speciesList = await getMockSpeciesContextList(session?.viewerId, session?.faction ?? null)
 
     if (filters?.status) {
       speciesList = speciesList.filter((species) => species.conservation_status === filters.status)
@@ -84,9 +85,10 @@ export async function getSpeciesContextList(filters?: SpeciesFilters): Promise<S
 
     if (filters?.search) {
       const query = filters.search.toLowerCase().trim()
-      speciesList = speciesList.filter((species) =>
-        species.name_default.toLowerCase().includes(query) ||
-        species.description_default.toLowerCase().includes(query),
+      speciesList = speciesList.filter(
+        (species) =>
+          species.name_default.toLowerCase().includes(query) ||
+          species.description_default.toLowerCase().includes(query),
       )
     }
 
@@ -94,48 +96,48 @@ export async function getSpeciesContextList(filters?: SpeciesFilters): Promise<S
   }
 
   const supabase = await createClient()
-  
+
   let query = supabase.from('v_species_context').select('*')
-  
+
   if (filters?.category) {
     // Assuming category is a field or related table filter
     // query = query.eq('category', filters.category)
   }
-  
+
   if (filters?.status) {
     query = query.eq('conservation_status', filters.status)
   }
-  
+
   if (filters?.search) {
     query = query.ilike('name_default', `%${filters.search}%`)
   }
 
   const { data, error } = await query
-  
+
   if (error) {
     console.error('Error fetching species list:', error)
     return []
   }
-  
+
   const mappedSpecies = mapArray(data, mapSpeciesContext)
   return ensurePrototypeUnlockedSpecies(mappedSpecies)
 }
 
 function mapSpeciesContext(data: unknown): SpeciesContext | null {
   if (!isRecord(data)) return null
-  
+
   const id = asString(data.id)
   const name = asString(data.name_default)
-  
+
   if (!id || !name) return null
-  
+
   return {
     id,
     name_default: name,
     scientific_name: asString(data.scientific_name),
     description_default: asString(data.description_default),
     conservation_status: asString(data.conservation_status),
-    image_url: toNullableString(data.image_url),
+    image_url: toTransparentDioramaImageUrl(toNullableString(data.image_url)),
     associated_projects: mapArray(data.associated_projects, mapAssociatedProject),
     associated_producers: mapArray(data.associated_producers, mapAssociatedProducer),
     associated_challenges: mapArray(data.associated_challenges, mapAssociatedChallenge),
@@ -145,7 +147,7 @@ function mapSpeciesContext(data: unknown): SpeciesContext | null {
     weight: toNullableString(data.weight),
     size: toNullableString(data.size),
     origin_country: toNullableString(data.origin_country),
-    diet: toNullableString(data.diet)
+    diet: toNullableString(data.diet),
   }
 }
 
@@ -156,12 +158,12 @@ function mapArray<T>(data: unknown, mapper: (item: unknown) => T | null): T[] {
 
 function mapAssociatedProject(data: unknown): AssociatedProject | null {
   if (!isRecord(data)) return null
-  
+
   const id = asString(data.id)
   const name = asString(data.name)
-  
+
   if (!id || !name) return null
-  
+
   return {
     id,
     slug: asString(data.slug) || asString(data.project_slug) || null,
@@ -169,52 +171,52 @@ function mapAssociatedProject(data: unknown): AssociatedProject | null {
     type: asString(data.type),
     role: asString(data.role),
     impact: toNullableString(data.impact),
-    userParticipation: Boolean(data.userParticipation)
+    userParticipation: Boolean(data.userParticipation),
   }
 }
 
 function mapAssociatedProducer(data: unknown): AssociatedProducer | null {
   if (!isRecord(data)) return null
-  
+
   const id = asString(data.id)
   const name = asString(data.name)
-  
+
   if (!id || !name) return null
-  
+
   return {
     id,
     name,
     location: toNullableString(data.location),
     relationship: asString(data.relationship),
-    projectsCount: asNumber(data.projectsCount)
+    projectsCount: asNumber(data.projectsCount),
   }
 }
 
 function mapAssociatedChallenge(data: unknown): AssociatedChallenge | null {
   if (!isRecord(data)) return null
-  
+
   const id = asString(data.id)
   const name = asString(data.name)
-  
+
   if (!id || !name) return null
-  
+
   return {
     id,
     name,
     type: asString(data.type),
     difficulty: asString(data.difficulty),
     rewards: Array.isArray(data.rewards) ? data.rewards : [],
-    userProgress: toNullableNumber(data.userProgress)
+    userProgress: toNullableNumber(data.userProgress),
   }
 }
 
 function mapUserSpeciesStatus(data: unknown): UserSpeciesStatus | null {
   if (!isRecord(data)) return null
-  
+
   return {
     isUnlocked: Boolean(data.isUnlocked),
     unlockedDate: toNullableString(data.unlockedDate),
     unlockSource: toNullableString(data.unlockSource),
-    progressionLevel: asNumber(data.progressionLevel)
+    progressionLevel: asNumber(data.progressionLevel),
   }
 }

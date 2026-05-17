@@ -1,4 +1,5 @@
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
+import { toTransparentDioramaImageUrl } from '@/lib/images/diorama-image-url'
 
 type BiodexPreviewSpecies = {
   id: string
@@ -100,9 +101,7 @@ function getRarityLabel(status: string | null | undefined): BiodexPreviewSpecies
   return 'Commun'
 }
 
-function sortByUnlockAndName<
-  T extends { name_default: string; isUnlocked: boolean },
->(
+function sortByUnlockAndName<T extends { name_default: string; isUnlocked: boolean }>(
   list: T[],
 ): T[] {
   return [...list].sort((a, b) => {
@@ -125,12 +124,12 @@ export async function getBiodexPreviewData(
           id: species.id,
           name_default: species.name_default,
           conservation_status: species.conservation_status,
-          image_url: species.image_url,
+          image_url: toTransparentDioramaImageUrl(species.image_url),
           isUnlocked: Boolean(species.user_status?.isUnlocked),
         }))
       : FALLBACK_SPECIES.map((species) => ({
           ...species,
-          image_url: null,
+          image_url: toTransparentDioramaImageUrl(species.image_url ?? null),
         }))
 
   const sorted = sortByUnlockAndName(normalizedSpecies)
@@ -153,4 +152,3 @@ export async function getBiodexPreviewData(
     totalCount: mapped.length,
   }
 }
-
