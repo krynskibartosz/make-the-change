@@ -13,6 +13,7 @@
 
 import type { MissionPillar } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 
+
 type MissionSectionProps = {
   pillars?: MissionPillar[]
 }
@@ -29,26 +30,35 @@ export function MissionSection({ pillars }: MissionSectionProps) {
         Pourquoi ils existent
       </h2>
       
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col">
         {displayPillars.map((pillar, index) => (
           <article 
             key={index}
-            className="group flex gap-4"
+            className={`pb-6 ${index < displayPillars.length - 1 ? 'mb-1 border-b border-white/[0.05]' : ''}`}
           >
-            {/* Index éditorial */}
-            <span className="shrink-0 pt-0.5 text-[13px] font-medium text-white/30">
+            {/* Index éditorial — compact, proche du contenu */}
+            <span className="block text-[11px] font-medium tracking-wider text-white/25 mb-1.5">
               {String(index + 1).padStart(2, '0')}
             </span>
             
-            {/* Contenu */}
-            <div className="min-w-0 flex-1 pb-4 border-b border-white/[0.06] last:border-0 last:pb-0">
-              <h3 className="text-[15px] font-semibold text-white/90 leading-tight">
-                {pillar.title}
-              </h3>
-              <p className="mt-1 text-[13px] leading-relaxed text-white/55">
-                {pillar.shortDescription || pillar.description}
+            {/* Titre — medium, pas bold */}
+            <h3 className="text-[15px] font-medium text-white/90 leading-tight">
+              {pillar.title}
+            </h3>
+
+            {/* Micro-ligne scan — amber, ultra courte */}
+            {pillar.summary && (
+              <p className="mt-1 text-[12px] font-medium text-amber-300/60 leading-snug">
+                {pillar.summary}
               </p>
-            </div>
+            )}
+
+            {/* Détail court — contextuel */}
+            {(pillar.detail || pillar.shortDescription) && (
+              <p className="mt-1 text-[12px] leading-snug text-white/40">
+                {pillar.detail || pillar.shortDescription}
+              </p>
+            )}
           </article>
         ))}
       </div>

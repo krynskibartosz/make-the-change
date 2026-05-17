@@ -34,6 +34,8 @@ export type MissionPillar = {
   title: string
   description: string
   shortDescription?: string
+  summary?: string
+  detail?: string
 }
 
 export type ProofCard = {
@@ -353,18 +355,24 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           icon: "Users",
           title: "Apiculteurs locaux",
-          shortDescription: "Formation, ruches et accompagnement terrain. Une école à Fort-Dauphin.",
+          summary: "Formation • ruches • approvisionnement équitable",
+          detail: "École d'apiculture à Fort-Dauphin.",
+          shortDescription: "Formation, ruches et accompagnement terrain.",
           description: "Formation, fourniture de ruches et approvisionnement équitable auprès des apiculteurs partenaires à Madagascar."
         },
         {
           icon: "Ship",
           title: "Filières malgaches",
+          summary: "Miels • vanilles • épices • savoir-faire locaux",
+          detail: "60+ références artisanales sélectionnées.",
           shortDescription: "Miels, vanilles, épices et savoir-faire locaux préservés.",
           description: "Miels, vanilles, épices et savoir-faire artisanaux malgaches valorisés à l'international."
         },
         {
           icon: "BadgeCheck",
           title: "Traçabilité bio",
+          summary: "Mielleries documentées • certification Ecocert",
+          detail: "Humidité contrôlée 16–18% à chaque récolte.",
           shortDescription: "Mielleries documentées et certification Ecocert.",
           description: "Mielleries homologuées et certification biologique Ecocert. Contrôle qualité rigoureux."
         }

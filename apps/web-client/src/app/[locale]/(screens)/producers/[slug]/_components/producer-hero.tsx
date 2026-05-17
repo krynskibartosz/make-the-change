@@ -97,35 +97,33 @@ export function ProducerHero({
               </p>
             )}
 
-            {/* Localisations en tags assumés */}
-            {(fieldLocation || europeanLocation) && (
-              <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                {fieldLocation && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.08] px-2 py-1 text-[11px] font-medium text-white/75">
-                    <span>🇲🇬</span>
-                    <span>Madagascar</span>
-                  </span>
-                )}
-                {europeanLocation && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-1 text-[11px] font-medium text-white/60">
-                    <span>🇧🇪</span>
-                    <span>Belgique</span>
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Micro-ligne crédibilité + badge premium */}
-            <div className="mt-2.5 flex flex-wrap items-center gap-2">
-              <span className="text-[11px] text-white/50">
-                Depuis 2017 • Certification Ecocert
-              </span>
-              {displayPartnerType && (
-                <span className="inline-flex rounded-full bg-white/[0.08] px-2 py-0.5 text-[10px] font-medium text-white/70">
-                  {displayPartnerType}
+            {/* Confiance prioritaire — ancienneté + certif + pays */}
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+              {fieldLocation && (
+                <span className="inline-flex items-center gap-1 text-[11px] text-white/60">
+                  <span>🇲🇬</span>
+                  <span>Madagascar</span>
+                </span>
+              )}
+              {europeanLocation && (
+                <span className="inline-flex items-center gap-1 text-[11px] text-white/45">
+                  <span>🇧🇪</span>
+                  <span>Belgique</span>
                 </span>
               )}
             </div>
+
+            {/* Trust line — prioritaire visuellement */}
+            <p className="mt-1.5 text-[11px] font-medium text-white/60">
+              Depuis 2017 • Certification Ecocert
+            </p>
+
+            {/* Badge partenaire — discret, secondaire */}
+            {displayPartnerType && (
+              <p className="mt-1 text-[10px] text-white/35">
+                {displayPartnerType}
+              </p>
+            )}
           </div>
         </div>
       </div>
