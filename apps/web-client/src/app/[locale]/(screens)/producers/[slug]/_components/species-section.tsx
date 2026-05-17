@@ -46,28 +46,25 @@ export function SpeciesSection({
             className="w-36 shrink-0 snap-start"
           >
             <article className="flex flex-col gap-2">
-              {/* Image — sans padding pour maximiser le visuel */}
-              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-white/5">
+              {/* Image — aspect moins haut pour réduire le vide autour de l'illustration */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-white/5">
                 <img
                   src={entry.image}
                   alt={entry.name}
                   className="h-full w-full object-contain"
                 />
-                {/* Badge contextuel : "Espèce liée" en permanent, "Découverte" si débloquée */}
-                <div className="absolute bottom-2 left-2 flex flex-col items-start gap-1">
-                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/60 backdrop-blur-sm">
-                    Espèce liée
-                  </span>
-                  {entry.unlocked && (
+                {/* Badge "Découverte" uniquement si débloquée dans le BioDex */}
+                {entry.unlocked && (
+                  <div className="absolute bottom-2 left-2">
                     <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-emerald-400 backdrop-blur-sm">
                       Découverte
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
-              {/* Nom */}
-              <p className="text-[14px] font-semibold text-white/90 leading-tight line-clamp-2">
+              {/* Nom — élément principal */}
+              <p className="text-[14px] font-bold text-white leading-tight line-clamp-2">
                 {entry.name}
               </p>
             </article>

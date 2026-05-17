@@ -116,23 +116,23 @@ export function ProjectsSection({
                     )}
                   </div>
                   
-                  {/* Contenu compact */}
-                  <div className="flex flex-col gap-0.5">
-                    <h3 className="text-[15px] font-bold text-white leading-tight line-clamp-2">
+                  {/* Contenu compact — plus d'air entre les niveaux */}
+                  <div className="flex flex-col gap-1.5">
+                    <h3 className="text-[14px] font-semibold text-white leading-tight line-clamp-2">
                       {project.name_default}
                     </h3>
-                    
+
                     {locationDisplay && (
                       <p className="flex items-center gap-1 text-[12px] text-white/50">
-                        <MapPin className="h-3 w-3" />
+                        <MapPin className="h-3 w-3 shrink-0" />
                         {locationDisplay.label}
                       </p>
                     )}
-                    
+
                     {/* Impact compact — estimation prudente */}
                     {impact && impact.value > 0 && (
-                      <div className="mt-1 flex items-center gap-1.5">
-                        <ImpactIcon className="h-3 w-3 text-white/40" />
+                      <div className="flex items-center gap-1.5">
+                        <ImpactIcon className="h-3 w-3 shrink-0 text-white/40" />
                         <p className="text-[12px] text-white/60">
                           <span className="text-white/40">≈</span>
                           {' '}

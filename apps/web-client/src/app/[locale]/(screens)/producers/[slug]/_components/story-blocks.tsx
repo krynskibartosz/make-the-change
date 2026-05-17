@@ -22,14 +22,19 @@ type StoryBlocksProps = {
 export function StoryBlocks({ blocks }: StoryBlocksProps) {
   if (!blocks || blocks.length === 0) return null
 
+  const visibleBlocks = blocks.slice(0, 4)
+
   return (
     <section className="mt-10 px-4">
-      <h2 className="mb-4 text-[17px] font-bold text-white/80">
+      <h2 className="text-[17px] font-bold text-white/80">
         L&apos;histoire
       </h2>
-      
+      <p className="mt-1 mb-4 text-[13px] text-white/50">
+        Quelques repères sur l&apos;origine et l&apos;évolution d&apos;Ilanga Nature.
+      </p>
+
       <div className="flex flex-col gap-6">
-        {blocks.map((block, index) => (
+        {visibleBlocks.map((block, index) => (
           <article 
             key={index}
             className="flex flex-col gap-3"

@@ -487,7 +487,9 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         }
       ],
       
-      // ── Story Blocks (6 blocs narratifs condensés mobile-first) ──
+      // ── Story Blocks — 4 blocs visibles (slice(0,4) dans le composant) ──
+      // Ordre : Née → Famille → Mielleries → Formation [visible]
+      //         Logistique → Produits [réservés, non affichés par défaut]
       storyBlocks: [
         {
           title: "Née à Madagascar en 2017",
@@ -505,18 +507,18 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           imageUrl: "/images/producteurs/illanga-nature/miellerie-manakara-exterieur.webp"
         },
         {
-          title: "Logistique légère",
-          body: "Une barge motorisée sur le canal des Pangalanes et des unités mobiles permettent d'atteindre les apiculteurs dans les zones reculées de la côte est.",
-          imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
-        },
-        {
           title: "Former pour durer",
-          body: "L'Académie Ilanga à Fort-Dauphin forme les producteurs. Partenaire de Hope Madagascar et de l'association ADAMA pour la protection des forêts.",
+          body: "L'Académie Ilanga à Fort-Dauphin forme des producteurs aux pratiques apicoles et participe à la transmission des savoir-faire locaux.",
           imageUrl: "/images/producteurs/illanga-nature/ecole-apiculture-fort-dauphin.webp"
         },
         {
-          title: "Du rucher à votre table",
-          body: "12 miels biologiques, vanilles, épices et confitures. Traçabilité complète. Transport maritime retour à vide pour limiter l'empreinte carbone.",
+          title: "Collecter au plus près du terrain",
+          body: "Une barge motorisée et des unités mobiles permettent de rejoindre les zones de production reculées, notamment le long du canal des Pangalanes.",
+          imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
+        },
+        {
+          title: "Des filières jusqu'aux produits",
+          body: "12 miels biologiques, vanilles, épices et confitures prolongent les filières accompagnées par Ilanga Nature, avec une traçabilité complète de la ruche au produit fini.",
           imageUrl: "/images/producteurs/illanga-nature/produits-miels-trio.jpg"
         }
       ],
