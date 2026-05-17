@@ -3,7 +3,7 @@ import { connection } from 'next/server'
 import { Suspense } from 'react'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { isMockDataSource } from '@/lib/mock/data-source'
-import { getCurrentMockImpactPoints } from '@/lib/mock/mock-member-data-server'
+import { getCurrentMockImpactCreditsBalance } from '@/lib/mock/mock-member-data-server'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import { AdvantagesTab } from './_features/advantages-tab'
 import { getAdvantagesData } from './_features/advantages-data'
@@ -28,7 +28,7 @@ export default async function AdvantagesPage() {
   const viewerId = currentViewer?.viewerId ?? null
   const faction = currentViewer?.faction ?? null
   const isConnected = viewerId !== null
-  const impactCredits = isConnected ? await getCurrentMockImpactPoints(viewerId, faction) : 0
+  const impactCredits = isConnected ? await getCurrentMockImpactCreditsBalance(viewerId, faction) : 0
   const data = getAdvantagesData()
 
   return (

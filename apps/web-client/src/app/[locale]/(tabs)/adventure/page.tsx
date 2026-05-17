@@ -10,7 +10,7 @@ import { getMockSpeciesContextList } from '@/lib/mock/mock-biodex'
 import { getCurrentMockChallengeSurface } from '@/lib/mock/mock-challenge-progress-server'
 import type { MockChallengeDetail } from '@/lib/mock/mock-challenges'
 import {
-  getCurrentMockImpactPoints,
+  getCurrentMockImpactCreditsBalance,
   getCurrentMockWalletBalance,
 } from '@/lib/mock/mock-member-data-server'
 import { getCurrentViewer } from '@/lib/mock/mock-session-server'
@@ -124,7 +124,7 @@ export default async function AdventurePage() {
     getProjects({ status: 'active' }),
     getMockSpeciesContextList(viewerId, faction),
     viewerId ? getCurrentMockWalletBalance(viewerId, faction) : Promise.resolve(0),
-    viewerId ? getCurrentMockImpactPoints(viewerId, faction) : Promise.resolve(0),
+    viewerId ? getCurrentMockImpactCreditsBalance(viewerId, faction) : Promise.resolve(0),
   ])
 
   const recommendedProject =

@@ -57,10 +57,10 @@ export function ProductsClient({
     async function loadUserImpactCredits() {
       try {
         const { getMockViewerSession } = await import('@/lib/mock/mock-session-server')
-        const { getCurrentMockImpactPoints } = await import('@/lib/mock/mock-member-data-server')
+        const { getCurrentMockImpactCreditsBalance } = await import('@/lib/mock/mock-member-data-server')
         const session = await getMockViewerSession()
         if (session) {
-          const balance = await getCurrentMockImpactPoints(session.viewerId, session.faction)
+          const balance = await getCurrentMockImpactCreditsBalance(session.viewerId, session.faction)
           setUserImpactCredits(balance)
           setIsConnected(true)
         }

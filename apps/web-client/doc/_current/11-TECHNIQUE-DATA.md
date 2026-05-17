@@ -2,118 +2,27 @@
 
 ## Role de ce document
 
-Ce document decrit la structure technique, les sources de donnees et les integrations. Pour l'etat strictement observe, voir aussi `02-ETAT-ACTUEL-CODE.md`.
+Ce document décrit les **décisions techniques, les cibles d'architecture et les règles de migration**. Il ne répète pas l'état brut du code.
 
-## Stack observee
+Pour l'état observé du code (stack, routes, fichiers, zones hybrides) : voir [02-ETAT-ACTUEL-CODE.md](02-ETAT-ACTUEL-CODE.md).
 
-`[ACTUEL_CODE]` Le web-client repose sur :
+Pour les décisions validées sur la source de vérité (P0-10/P0-11) : voir [03-DECISIONS-VALIDEES.md](03-DECISIONS-VALIDEES.md).
 
-- Next.js App Router ;
-- React ;
-- TypeScript ;
-- Tailwind CSS ;
-- next-intl ;
-- Supabase ;
-- Stripe ;
-- mocks internes ;
-- package UI interne.
+## Source de données : doctrine cible
 
-## Data source
+`[CIBLE_VALIDEE]` Le web-client est **mock-first exclusif** jusqu'à validation complète du prototype.
 
-`[ACTUEL_CODE]` `NEXT_PUBLIC_MTC_DATA_SOURCE` controle la source de donnees.
+`[CIBLE_VALIDEE]` Supabase actuel (`[LEGACY]` `[A_NE_PAS_TOUCHER]`) ne doit pas être utilisé comme modèle cible implicite. Il reste connecté au dashboard admin legacy uniquement.
 
-Valeurs observees :
+`[A_PLANIFIER]` La cible data sera redéfinie à partir des mocks stabilisés, des flows validés et des besoins produit. Voir P0-10/P0-11 dans `03-DECISIONS-VALIDEES.md`.
 
-- `mock` ;
-- `supabase`.
+## Decisions data : projets, produits, BioDex
 
-`[ACTUEL_CODE]` Le defaut est `mock`.
+`[A_DECIDER]` À quel moment les mocks cessent-ils d'être fusionnés aux données réelles pour les projets ?
 
-`[CIBLE_VALIDEE]` Supabase actuel ne doit pas etre utilise comme modele cible implicite.
+`[A_DECIDER]` Les produits mockés restent-ils des fixtures, des seeds ou des données demo ?
 
-`[A_PLANIFIER]` La cible data sera redefinie plus tard a partir des mocks, des flows valides et des besoins produit.
-
-## Mocks
-
-`[ACTUEL_CODE]` `[SOURCE_PROTOTYPE]` Les mocks restent centraux pour :
-
-- viewer/session ;
-- factions ;
-- projets ;
-- produits ;
-- BioDex ;
-- challenges ;
-- historique ;
-- wallet / `impactCreditsBalance` (ancien alias `points` retire en R8, 2026-05-08).
-
-`[ACTUEL_CODE]` `[SOURCE_PROTOTYPE]` Les mocks sont actuellement la meilleure base pour prototyper les ecrans, tester l'UX, stabiliser les flows et comprendre les besoins data reels.
-
-`[RISQUE]` Les mocks peuvent contenir du vocabulaire legacy ou des donnees non finalisees.
-
-`[RISQUE]` Les mocks ne doivent pas etre documentes comme DB finale.
-
-## Supabase
-
-`[ACTUEL_CODE]` Supabase est present via clients :
-
-- `client.ts` ;
-- `server.ts` ;
-- `static.ts` ;
-- `admin.ts`.
-
-`[ACTUEL_CODE]` Des services utilisent Supabase pour projets, produits, profils, especes et paiements selon les cas.
-
-`[ACTUEL_CODE]` `[LEGACY]` `[A_NE_PAS_TOUCHER]` La base Supabase actuelle est une ancienne base V0, issue d'une phase ou le dashboard admin a ete developpe avant le web-client.
-
-Role actuel :
-
-- garder le dashboard admin fonctionnel ;
-- conserver une trace du travail deja fait ;
-- servir de reference visuelle ou fonctionnelle partielle ;
-- aider a comprendre l'historique technique.
-
-`[RISQUE]` Supabase actuel n'est pas fiable comme modele cible du produit Make the Change actuel.
-
-`[CIBLE_VALIDEE]` Pour l'instant, il ne faut pas modifier Supabase, renommer les tables, migrer les tables existantes, casser les generated types ou adapter le client a cette ancienne DB comme si elle etait definitive.
-
-`[A_PLANIFIER]` Un futur modele data propre peut etre imagine sous forme de documentation conceptuelle, mais pas applique au code ou a la DB actuelle sans decision ulterieure.
-
-## Strategie data cible : partir des mocks et des flows valides
-
-`[A_PLANIFIER]` La future base de donnees V2 doit etre concue progressivement a partir :
-
-1. des flows valides ;
-2. des ecrans prototypes valides ;
-3. des donnees mock reellement utilisees ;
-4. des decisions produit validees ;
-5. des regles business, gamification et impact ;
-6. des besoins du futur dashboard admin refondu.
-
-`[CIBLE_VALIDEE]` Formulation a utiliser dans les prochains audits : Supabase actuel est une base legacy branchee a l'ancien dashboard admin. La cible data sera redefinie plus tard a partir des mocks, des flows valides et des besoins produit.
-
-## Projets data
-
-`[ACTUEL_CODE]` `getProjects` utilise les mocks en mode mock.
-
-`[ACTUEL_CODE]` Hors mock, il interroge `public_projects` et peut fusionner des projets Supabase avec les mocks.
-
-`[A_DECIDER]` Il faut choisir a quel moment les mocks cessent d'etre fusionnes aux donnees reelles.
-
-## Produits data
-
-`[ACTUEL_CODE]` `getProducts` utilise `mock-products` en mode mock.
-
-`[ACTUEL_CODE]` Hors mock, il interroge `public_products`, `categories`, `producers` et peut fusionner avec les mocks sur la premiere page.
-
-`[A_DECIDER]` Il faut definir si les produits mockes restent des fixtures, des seeds ou des donnees demo.
-
-## BioDex data
-
-`[ACTUEL_CODE]` `species-context.service.ts` lit les mocks ou `v_species_context`.
-
-`[ACTUEL_CODE]` Une fonction garantit un deblocage prototype si aucune espece n'est debloquee.
-
-`[A_DECIDER]` Il faut separer explicitement donnees demo, donnees scientifiques, donnees utilisateur et donnees de preuve.
+`[A_DECIDER]` Il faut séparer explicitement données demo, données scientifiques, données utilisateur et données de preuve dans le BioDex.
 
 ## Stripe
 
@@ -195,7 +104,7 @@ Exemples conceptuels non implementes :
 - `impactCreditsAmount` ;
 - `impactCreditsPrice`.
 
-`[RISQUE]` Ne pas renommer brutalement `price_points`, `amount_points`, `total_points`, `points_used`, `returns_received_points`, `monthly_points_allocation` ou `MockPointsTransactionRecord`, car ces champs couvrent plusieurs sens et peuvent etre lies a Supabase legacy, mocks, Stripe, historique ou package core.
+`[RISQUE]` Ne pas renommer brutalement `price_points`, `amount_points`, `total_points`, `points_used`, `returns_received_points` ou `MockPointsTransactionRecord`, car ces champs couvrent plusieurs sens et peuvent etre lies a Supabase legacy, mocks, Stripe, historique ou package core. Note : `monthly_points_allocation` a ete renomme en `monthly_seeds_allocation` en R9 (2026-05-17).
 
 ## Migration future : investment -> producer_support
 
@@ -228,21 +137,9 @@ Plan de migration documentaire recommande :
 5. Renommer routes et objets seulement apres validation technique.
 6. Mettre a jour les textes UI en premier, sans casser les modeles.
 
-## Authentification
+## Authentification et i18n
 
-`[ACTUEL_CODE]` Le code combine Supabase auth et session mock selon les zones.
-
-`[A_VERIFIER_CODE]` Les flows invites, magic link et claim apres action doivent etre revus avant production.
-
-## i18n
-
-`[ACTUEL_CODE]` `next-intl` est configure et les routes utilisent `[locale]`.
-
-`[ACTUEL_CODE]` De nombreux textes restent hardcodes.
-
-`[A_VERIFIER_CODE]` Aucun dossier `messages` n'a ete identifie dans `apps/web-client` pendant cette passe.
-
-`[RISQUE]` La documentation ne doit pas decrire une internationalisation complete.
+Pour l'etat observe (auth combinee mock/Supabase, flows invites, magic link, textes hardcodes, absence de dossier `messages` confirme en R9) : voir [02-ETAT-ACTUEL-CODE.md](02-ETAT-ACTUEL-CODE.md).
 
 ## Dette de vocabulaire technique
 
@@ -255,27 +152,7 @@ Plan de migration documentaire recommande :
 
 ## Doctrine source de verite court terme
 
-`[AUDITE]` P0-10 est documente dans `_audit/DATA-SOURCE-TRUTH-AUDIT.md`.
-
-### Sources de verite par contexte
-
-| Contexte | Source | Statut |
-|----------|--------|--------|
-| Decisions produit, business, impact, gamification, wording | Docs recentes (00-11, 99), surtout `03-DECISIONS-VALIDEES.md` | `[CIBLE_VALIDEE]` |
-| Etat technique reel | Code actuel observe | `[ACTUEL_CODE]` |
-| Donnees prototype, besoins UX, flows | Mocks (`src/lib/mock/`) | `[ACTUEL_CODE] [SOURCE_PROTOTYPE]` |
-| Historique backend / dashboard admin | Supabase legacy V0 uniquement comme etat legacy | `[ACTUEL_CODE] [LEGACY] [A_NE_PAS_TOUCHER]` |
-| Future DB V2 | Plus tard, apres stabilisation mocks et validation flows | `[A_PLANIFIER]` |
-
-### En cas de contradiction
-
-`[CIBLE_VALIDEE]` Signaler et classifier avant toute migration :
-
-1. Lire le code pour la realite technique (`[ACTUEL_CODE]`)
-2. Verifier la documentation pour les decisions validees (`[CIBLE_VALIDEE]`)
-3. Classer l'ecart avec les tags standards (`[A_MIGRER_PLUS_TARD]`, `[RISQUE]`, etc.)
-4. Ne pas modifier directement pour forcer l'alignement
-5. Documenter dans `_audit/CODE-VS-DOC.md` ou `_audit/DATA-SOURCE-TRUTH-AUDIT.md`
+Synthese dans [03-DECISIONS-VALIDEES.md — P0-10/P0-11](03-DECISIONS-VALIDEES.md). Audit complet dans `_audit/DATA-SOURCE-TRUTH-AUDIT.md`.
 
 ## Regles pour futures modifications code
 

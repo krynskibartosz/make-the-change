@@ -2,9 +2,9 @@
 
 /**
  * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
- * Section Espèces
+ * Section Espèces — Option A: Premium éditoriale
  * 
- * Cards plus larges, moins denses.
+ * Images beaucoup plus grandes, moins de zone vide.
  * Contexte éditorial: pourquoi ces espèces sont là.
  */
 
@@ -37,33 +37,32 @@ export function SpeciesSection({
       </div>
       
       <ul 
-        className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
+        className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 p-0 list-none"
         aria-label="Espèces liées au partenaire"
       >
         {species.map((entry) => (
           <li
             key={entry.id}
-            className="w-28 shrink-0 snap-start first:pl-0"
+            className="w-36 shrink-0 snap-start first:pl-0"
           >
-            <article className="flex flex-col items-center gap-2">
-              {/* Image compacte */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-white/5 p-2">
+            <article className="flex flex-col gap-2">
+              {/* Image premium — grande et immersive */}
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-white/5">
                 <img
                   src={entry.image}
                   alt={entry.name}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-contain p-1"
                 />
+                {/* Subtil badge unlock */}
+                <div className={`absolute bottom-2 left-2 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide backdrop-blur-sm ${entry.unlocked ? 'bg-emerald-500/20 text-emerald-400' : 'bg-black/40 text-white/50'}`}>
+                  {entry.unlocked ? 'Découvert' : 'À découvrir'}
+                </div>
               </div>
               
-              {/* Nom compact */}
-              <div className="text-center">
-                <p className="text-[13px] font-semibold text-white/90 leading-tight line-clamp-2">
-                  {entry.name}
-                </p>
-                <p className={`mt-0.5 text-[9px] font-medium uppercase tracking-wide ${entry.unlocked ? 'text-emerald-500/70' : 'text-white/30'}`}>
-                  {entry.unlocked ? 'Découvert' : 'À découvrir'}
-                </p>
-              </div>
+              {/* Nom — plus visible */}
+              <p className="text-[14px] font-semibold text-white/90 leading-tight line-clamp-2">
+                {entry.name}
+              </p>
             </article>
           </li>
         ))}
