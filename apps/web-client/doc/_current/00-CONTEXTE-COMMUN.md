@@ -34,16 +34,17 @@ Le produit combine :
 
 ## Modules principaux
 
-| Module | Role | Statut |
-|---|---|---|
-| Aventure | Orchestrer l'experience quotidienne | `[ACTUEL_CODE]` |
-| Projets | Presenter des actions terrain a soutenir | `[ACTUEL_CODE]` |
-| Collectif / Impact | Montrer la progression collective | `[ACTUEL_CODE]` |
-| Avantages / Produits | Utiliser les Credits Impact ou decouvrir produits | `[ACTUEL_CODE]` |
-| Profil | Regrouper compte, BioDex, solde, historique | `[ACTUEL_CODE]` |
-| BioDex | Collection d'especes et support pedagogique | `[ACTUEL_CODE]` |
-| Academy | Apprentissage immersif | `[ACTUEL_CODE]` mais structure a clarifier |
-| RSE | Usage entreprise/collectif | `[HYPOTHESE]` et `[A_TESTER]` |
+| Module | Role | Route actuelle | Statut |
+|---|---|---|---|
+| Aventure | Orchestrer l'experience quotidienne | `/adventure` (label UI : "Accueil") | `[ACTUEL_CODE]` |
+| Projets | Presenter des actions terrain a soutenir | `/projects` | `[ACTUEL_CODE]` |
+| Apprendre | Module d'apprentissage quotidien | `/learn` | `[ACTUEL_CODE]` |
+| Avantages | Utiliser les Credits Impact ou decouvrir produits | `/advantages` | `[ACTUEL_CODE]` |
+| Profil | Regrouper compte, BioDex, solde, historique | `/profile` | `[ACTUEL_CODE]` |
+| BioDex | Collection d'especes et support pedagogique | `/profile/biodex` | `[ACTUEL_CODE]` |
+| Academy | Apprentissage immersif (ecran secondaire) | `(screens)/academy` | `[ACTUEL_CODE]` mais structure a clarifier |
+| Collectif / Impact | Montrer la progression collective (saisons, rewards) | `[LEGACY]` ancienne route `/impact` remplacee par `/learn` | `[A_DECIDER]` repositionner |
+| RSE | Usage entreprise/collectif | — | `[HYPOTHESE]` et `[A_TESTER]` |
 
 ## Monnaies et valeur
 

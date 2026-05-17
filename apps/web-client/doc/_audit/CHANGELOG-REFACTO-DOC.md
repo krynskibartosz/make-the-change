@@ -150,6 +150,30 @@ Apres R8, la navigation a ete restructuree sans mise a jour documentaire. Cette 
 
 Voir analyse dans la conversation du 2026-05-17.
 
+### R9b — Corrections complementaires (2026-05-17)
+
+Fichiers code :
+
+- `src/lib/mock/mock-ids.ts` — `MOCK_TRIBE_DIRECTORY` : entree `ocean-guardians` ajoutee (oubli de la migration R7 qui avait ajoute la faction `Gardiens des mers` dans `FACTION_TO_TRIBE_ID` sans creer la tribu correspondante).
+- `src/lib/mock/mock-member-data.ts` — `getMockImpactPoints` renomme en `getMockImpactCreditsBalance` pour refleter sa semantique reelle (retourne uniquement les Credits Impact du soutien producteur).
+- `src/lib/mock/mock-member-data-server.ts` — `getCurrentMockImpactPoints` renomme en `getCurrentMockImpactCreditsBalance`.
+- `src/lib/mock/mock-viewer.ts` — import mis a jour.
+- `src/lib/mock/mock-session-server.ts` — import et usage mis a jour.
+- `src/app/[locale]/@modal/(.)products/balance/balance-modal-content.tsx` — import dynamique mis a jour.
+- `src/app/[locale]/(screens)/challenges/_features/challenges-tab-header.tsx` — remplace `getMockImpactPoints` par `getMockWalletBalance` : l'icone Seeds dans l'en-tete des challenges affiche le portefeuille Graines, pas les Credits Impact.
+
+Fichiers documentation :
+
+- `_current/00-CONTEXTE-COMMUN.md` — tableau modules corrige : `Collectif / Impact` marque `[LEGACY]`, `Apprendre /learn` et `Avantages /advantages` ajoutes avec routes reelles.
+- `_current/02-ETAT-ACTUEL-CODE.md` — section "Zones hybrides et legacy restantes" ajoutee : `points_balance` Supabase, profils publics `totalSeedsContributed`, `returns_received_points`.
+
+Ecarts fermes (R9b) :
+
+- Bug tribu `ocean-guardians` manquante : `[FERME_R9b]`.
+- `getMockImpactPoints` affichee comme Seeds dans l'UI challenges : `[FERME_R9b]`.
+- Module Collectif/Impact absent du tableau 00 : `[FERME_R9b]`.
+- Zones hybrides restantes documentees mais non modifiees (correctement) : `[DOCUMENTE_R9b]`.
+
 ---
 
 ## Passe finale de consolidation (2026-05-08)

@@ -45,7 +45,7 @@ export async function getCurrentMockWalletBalance(
   return transactions.reduce((sum, transaction) => sum + transaction.delta, 0)
 }
 
-export async function getCurrentMockImpactPoints(
+export async function getCurrentMockImpactCreditsBalance(
   viewerId: string,
   faction: Faction | null = null,
 ): Promise<number> {

@@ -550,7 +550,7 @@ const getWalletTransactions = (viewerId: string): MockPointsTransactionRecord[] 
   )
 }
 
-export const getMockImpactPoints = (viewerId: string): number => {
+export const getMockImpactCreditsBalance = (viewerId: string): number => {
   return getWalletTransactions(viewerId).reduce((sum, transaction) => {
     return sum + transaction.impactDelta
   }, 0)

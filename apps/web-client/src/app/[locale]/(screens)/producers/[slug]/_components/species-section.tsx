@@ -43,7 +43,7 @@ export function SpeciesSection({
         {species.map((entry) => (
           <li
             key={entry.id}
-            className="w-28 shrink-0 snap-start"
+            className="w-28 shrink-0 snap-start first:pl-0"
           >
             <article className="flex flex-col items-center gap-2">
               {/* Image compacte */}

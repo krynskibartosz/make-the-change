@@ -36,8 +36,9 @@ export function ProducerHero({
   editorialIdentity,
 }: ProducerHeroProps) {
   // ── Assets intelligents avec fallbacks (Phase 1) ──
-  const coverImage = visualAssets?.hero || images[0] || getRandomProducerImage(name.length)
-  const portraitImage = visualAssets?.portrait || images[1] || images[0] || getRandomProducerImage(name.length + 1)
+  const cacheBust = process.env.NODE_ENV === 'development' ? `?v=${Date.now()}` : ''
+  const coverImage = (visualAssets?.hero || images[0] || getRandomProducerImage(name.length)) + cacheBust
+  const portraitImage = (visualAssets?.portrait || images[1] || images[0] || getRandomProducerImage(name.length + 1)) + cacheBust
   
   // ── Tagline priorité : editorialIdentity > tagline > fallback ──
   const displayTagline = editorialIdentity?.tagline || tagline

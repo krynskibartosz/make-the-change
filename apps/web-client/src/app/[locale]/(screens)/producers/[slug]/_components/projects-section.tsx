@@ -63,7 +63,7 @@ export function ProjectsSection({
           const ImpactIcon = impact?.kind ? IMPACT_ICONS[impact.kind] || Leaf : Leaf
 
           return (
-            <li key={project.id} className="w-56 shrink-0 snap-start">
+            <li key={project.id} className="w-56 shrink-0 snap-start first:pl-0">
               <Link
                 href={project.slug ? `/projects/${project.slug}` : '/projects'}
                 className="group block text-left"

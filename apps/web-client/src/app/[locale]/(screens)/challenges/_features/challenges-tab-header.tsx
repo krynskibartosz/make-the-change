@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
-import { getMockImpactPoints } from '@/lib/mock/mock-member-data'
+import { getMockWalletBalance } from '@/lib/mock/mock-member-data'
 import { CurrencyIcon } from '@/components/currency'
 
 export function ChallengesTabHeader() {
@@ -12,7 +12,7 @@ export function ChallengesTabHeader() {
   useEffect(() => {
     const session = getClientMockViewerSession()
     if (session) {
-      setSeeds(getMockImpactPoints(session.viewerId))
+      setSeeds(getMockWalletBalance(session.viewerId))
     }
   }, [])
 

@@ -144,6 +144,13 @@ export const MOCK_TRIBE_DIRECTORY: Record<string, MockTribeMeta> = {
     coverImage:
       'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=400',
   },
+  'ocean-guardians': {
+    slug: 'ocean-guardians',
+    name: 'Ocean Guardians',
+    membersCount: 93,
+    coverImage:
+      'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?auto=format&fit=crop&q=80&w=400',
+  },
   'ocean-mangrove-circle': {
     slug: 'ocean-mangrove-circle',
     name: 'Ocean Mangrove Circle',

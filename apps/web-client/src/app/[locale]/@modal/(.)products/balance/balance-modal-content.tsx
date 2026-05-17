@@ -238,8 +238,8 @@ export function BalanceModalContent() {
           return
         }
 
-        const { getCurrentMockImpactPoints, getMockPointsTransactions } = await import('@/lib/mock/mock-member-data-server')
-        const userBalance = await getCurrentMockImpactPoints(session.viewerId, session.faction)
+        const { getCurrentMockImpactCreditsBalance, getMockPointsTransactions } = await import('@/lib/mock/mock-member-data-server')
+        const userBalance = await getCurrentMockImpactCreditsBalance(session.viewerId, session.faction)
         const userTransactions = await getMockPointsTransactions(session.viewerId)
 
         setBalance(userBalance)

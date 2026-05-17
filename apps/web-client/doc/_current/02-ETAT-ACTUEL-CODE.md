@@ -223,6 +223,32 @@ Role actuel :
 | Supabase V0 | Ancienne DB branchee au dashboard admin | `[ACTUEL_CODE]` + `[LEGACY]` + `[A_NE_PAS_TOUCHER]` |
 | mocks web-client | Donnees prototype pour UX et flows | `[ACTUEL_CODE]` + `[SOURCE_PROTOTYPE]` |
 
+## Zones hybrides et legacy restantes
+
+### `profile/[id]/page.tsx` — champ Supabase `points_balance`
+
+`[ACTUEL_CODE]` `[HYBRIDE]` Dans `src/app/[locale]/(screens)/profile/[id]/page.tsx`, la variable `impactCreditsBalance` est lue depuis `profile.points_balance` (champ Supabase legacy), pas depuis `profile.impactCreditsBalance` (champ mock). Ce chemin de code s'active pour des profils publics charges depuis Supabase.
+
+`[RISQUE]` Cette hybridation signifie que les profils publics Supabase et les profils mock n'utilisent pas la meme source pour le solde affiche.
+
+`[A_MIGRER_PLUS_TARD]` Ne pas modifier `points_balance` dans Supabase (`[A_NE_PAS_TOUCHER]`). A harmoniser lors de la DB V2.
+
+### Profils publics mock — `totalSeedsContributed` lie a `impactCreditsBalance`
+
+`[ACTUEL_CODE]` Dans `src/lib/mock/mock-viewer.ts`, pour les profils du repertoire public, `totalSeedsContributed` est calcule via `Math.round(impactCreditsBalance * 1.15)`. Les deux monnaies restent donc mathematiquement liees pour ces profils.
+
+`[RISQUE]` Cela brouille la distinction entre Graines et Credits Impact pour les profils de demonstration.
+
+`[A_PLANIFIER]` A corriger lors de la stabilisation des mocks publics : ajouter un champ `totalSeedsContributed` independant dans le repertoire public.
+
+### `returns_received_points` dans `MockSupportRecord`
+
+`[ACTUEL_CODE]` `[AMBIGU_A_CLASSIFIER]` Le champ `returns_received_points` dans `MockSupportRecord` represente un historique de "retours" lie a l'ancien modele d'investissement (rendements produits partenaires ou simulations). Sa semantique exacte n'est pas arretee.
+
+`[A_DECIDER]` Ce champ doit etre classifie et renomme lors de la migration `investment` → `producer_support` (P0-2). Options envisagees : `rewards_received_impact_credits` (si c'est des Credits Impact reçus), supprimer (si ce n'est plus pertinent dans le modele producteur cible), ou conserver en lecture seule comme donnee historique.
+
+`[A_NE_PAS_TOUCHER]` Ne pas renommer avant decision P0-2 (risque de casser les composants historique soutien).
+
 ## Ce document ne decide pas
 
 Ce document ne decide pas :

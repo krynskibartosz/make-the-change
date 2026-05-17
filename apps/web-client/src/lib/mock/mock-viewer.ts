@@ -1,4 +1,4 @@
-import { getMockImpactPoints } from '@/lib/mock/mock-member-data'
+import { getMockImpactCreditsBalance } from '@/lib/mock/mock-member-data'
 import { FACTION_TO_TRIBE_ID, MOCK_EXISTING_VIEWER_ID } from '@/lib/mock/mock-ids'
 import type { Faction, MockViewerSession, Profile, Viewer } from '@/lib/mock/types'
 
@@ -219,9 +219,9 @@ export const getMockProfile = (session: MockViewerSession): Profile => {
       lastName: names.lastName || EXISTING_VIEWER_PROFILE.lastName || null,
       email: session.email,
       avatarUrl: session.avatarUrl ?? EXISTING_VIEWER_PROFILE.avatarUrl,
-      impactCreditsBalance: getMockImpactPoints(session.viewerId),
+      impactCreditsBalance: getMockImpactCreditsBalance(session.viewerId),
       totalSeedsContributed:
-        EXISTING_VIEWER_PROFILE.totalSeedsContributed ?? getMockImpactPoints(session.viewerId),
+        EXISTING_VIEWER_PROFILE.totalSeedsContributed ?? getMockImpactCreditsBalance(session.viewerId),
       faction: activeFaction,
       tribeIds: activeFaction ? getMockTribeIdsForFaction(activeFaction) : [],
     }

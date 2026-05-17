@@ -9,7 +9,7 @@ import {
   parseMockViewerSessionValue,
   serializeMockViewerSession,
 } from '@/lib/mock/mock-session'
-import { getCurrentMockImpactPoints } from '@/lib/mock/mock-member-data-server'
+import { getCurrentMockImpactCreditsBalance } from '@/lib/mock/mock-member-data-server'
 import { getMockProfile } from '@/lib/mock/mock-viewer'
 import type { MockViewerSession, Profile, Viewer } from '@/lib/mock/types'
 
@@ -55,7 +55,7 @@ export async function getCurrentProfile(): Promise<Profile | null> {
 
   return {
     ...profile,
-    impactCreditsBalance: await getCurrentMockImpactPoints(session.viewerId, session.faction),
+    impactCreditsBalance: await getCurrentMockImpactCreditsBalance(session.viewerId, session.faction),
   }
 }
 
