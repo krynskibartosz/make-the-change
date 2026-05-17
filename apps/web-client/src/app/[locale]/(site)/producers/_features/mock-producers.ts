@@ -409,7 +409,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       proofCards: [
         {
           label: "Certification Ecocert",
-          value: "Certifié biologique",
+          value: "Certification biologique",
           icon: "BadgeCheck",
           proofType: "certification"
         },
@@ -427,7 +427,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           label: "2 mielleries mobiles",
-          value: "Collecte légère et non perturbante",
+          value: "Collecte mobile de proximité",
           icon: "Truck",
           proofType: "field_operation"
         },
@@ -439,7 +439,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           label: "École d'apiculture",
-          value: "Fort-Dauphin",
+          value: "Formation locale à Fort-Dauphin",
           icon: "GraduationCap",
           proofType: "field_operation"
         },
