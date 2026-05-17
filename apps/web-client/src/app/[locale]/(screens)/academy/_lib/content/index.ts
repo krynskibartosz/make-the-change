@@ -18,6 +18,7 @@ import { madagascarUnit } from './units/chapter-4/madagascar'
 import { seasonsUnit } from './units/chapter-4/seasons'
 import { extinctionsUnit } from './units/chapter-5/extinctions'
 import { permacultureUnit } from './units/chapter-5/permaculture'
+import { ruchersAntsirabeUnit } from './units/chapter-5/ruchers-antsirabe'
 import { solutionsUnit } from './units/chapter-5/solutions'
 
 /**
@@ -55,6 +56,7 @@ const RAW_UNITS: AcademyUnitDefinition[] = [
   extinctionsUnit,
   solutionsUnit,
   permacultureUnit,
+  ruchersAntsirabeUnit,
 ]
 
 // Validation Zod au chargement : toute unité incohérente fait crasher tôt.

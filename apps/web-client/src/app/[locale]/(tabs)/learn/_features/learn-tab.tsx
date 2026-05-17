@@ -44,13 +44,13 @@ type Ecosystem = {
 
 const PROJECT_MODULES: ProjectModule[] = [
   {
-    id: 'honey-chain',
-    title: 'De la ruche au pot de miel',
-    context: 'Ilanga Nature · Manakara',
-    detail: 'Module terrain · 5 min',
+    id: 'ruchers-antsirabe',
+    title: 'Une ruche, tout un réseau vivant',
+    context: 'Ilanga Nature · Antsirabe',
+    detail: 'Cours débloqué · 4 min',
     reward: '+70 Graines',
-    imageUrl: '/images/projects/miellerie-manakara.png',
-    href: '/ecosysteme/foret-manakara',
+    imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
+    href: '/academy/eveil-gardiens/ruchers-antsirabe',
   },
   {
     id: 'coral-cutting',
