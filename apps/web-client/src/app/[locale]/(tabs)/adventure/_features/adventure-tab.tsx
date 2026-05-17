@@ -1,4 +1,4 @@
-﻿import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import {
   BookOpen,
   CheckCircle2,
@@ -117,7 +117,7 @@ const QUEST_ICONS: Record<AdventureQuestCard['type'], LucideIcon> = {
 }
 
 const ACADEMY_CARD_IMAGE = '/images/projects/coral-karimunjawa.jpg'
-const BIODEX_LOCKED_IMAGE = '/images/dioramas/cameleon-de-parson.png'
+const BIODEX_LOCKED_IMAGE = '/images/dioramas/transparent/cameleon-de-parson.png'
 
 function getProgressPercent(progress: number, max: number) {
   if (max <= 0) return 0

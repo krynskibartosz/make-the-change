@@ -14,6 +14,7 @@
     "type-check": "tsc --noEmit",
     "type-check:exact-optional:pilot:marketing": "pnpm --filter @make-the-change/core build && tsc -p tsconfig.exact-optional.pilot.marketing.json --noEmit",
     "type-check:exact-optional:pilot": "pnpm --filter @make-the-change/web-client type-check:exact-optional:pilot:marketing",
+    "assets:dioramas:remove-bg": "node ./scripts/remove-diorama-black-bg.mjs",
     "ts:metrics": "node ./scripts/ts-metrics.mjs",
     "ts:metrics:check": "node ./scripts/ts-metrics.mjs --check"
   },
@@ -49,6 +50,7 @@
     "@types/react-dom": "^19.0.1",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vitest": "^4.0.18"

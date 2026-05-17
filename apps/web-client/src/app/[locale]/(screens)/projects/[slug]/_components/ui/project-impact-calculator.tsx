@@ -20,7 +20,7 @@ type ProjectImpactCalculatorProps = {
   accentColor?: string
 }
 
-const BIODEX_REWARD_IMAGE_URL = '/images/dioramas/abeille-noire.png'
+const BIODEX_REWARD_IMAGE_URL = '/images/dioramas/transparent/abeille-noire.png'
 
 const splitDecimalValue = (value: number): { whole: string; fraction: string | null } => {
   const [whole = '0', fraction] = formatDecimal(value).split(',')

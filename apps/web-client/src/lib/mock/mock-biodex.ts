@@ -67,7 +67,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'L\'abeille noire de Madagascar, réputée comme l\'une des plus dociles au monde, est une sous-espèce endémique d\'une homogénéité génétique exceptionnelle due à un isolement d\'un million d\'années. En tant qu\'insecte clé de voûte doté d\'un comportement hygiénique naturel unique pour se défendre des parasites, elle garantit la structure des réseaux trophiques insulaires en assurant la reproduction végétale continue. Elle présente une divergence évolutive avec les autres abeilles africaines continentales datant d\'environ 1 million d\'années, et son génome représente 99,6 % de l\'ADN échantillonné au sein des colonies sur l\'île, témoignant d\'une absence presque totale d\'introgression par des sous-espèces étrangères.',
     conservation_status: 'DD',
-    image_url: '/images/dioramas/abeilles-pollinisatrices.png',
+    image_url: '/images/dioramas/transparent/abeilles-pollinisatrices.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_MANAKARA_ID,
@@ -144,7 +144,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'La Coccinella septempunctata est le coléoptère prédateur le plus répandu en Europe tempérée, consommant jusqu\'a 5 000 pucerons par an. Ses sept points noirs sur élytres rouges constituent un signal aposématique renforcé par la réflexe autohémorragique : la coccinelle sécrète une hémolymphe amère (coccinelline) depuis ses articulations tibiales. Elle est capable de diapause imaginale dans les litières forestières, supportant des froids jusqu\'a -20°C. L\'invasion de la coccinelle asiatique (Harmonia axyridis), introduite par les jardineries, déplace les populations locales par compétition alimentaire et pathogènes transmis.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/coccinelle.png',
+    image_url: '/images/dioramas/transparent/coccinelle.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -176,7 +176,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'L\'Olea europaea est un arbre millénaire dont certains spécimens sarden atteignent 3 000 ans. Sa résilience au stress hydrique repose sur un système racinaire profond et des feuilles coriàces à épicuticule cireuse réduisant la transpiration de 70 %. En Sardaigne, la sous-variété sylvestris (oléastre) constitue un réservoir génétique unique face aux pathogènes. La bactérie Xylella fastidiosa, vectée par Philaenus spumarius, colonise le xylème et provoque le syndrome d\'assèchement rapide de l\'olivier (OQDS), menaçant un patrimoine agronomique millénaire. La sous-espèce maderensis constitue un refuge génétique insulaire pour la biodiversité de l\'espèce.',
     conservation_status: 'DD',
-    image_url: '/images/dioramas/olivier.png',
+    image_url: '/images/dioramas/transparent/olivier.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_SARDINIA_ID,
@@ -207,7 +207,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Acropora muricata est un constructeur de récifs dont les branches digitées peuvent atteindre 2 m de diamètre. Sa croissance (10–15 cm/an) dépend d\'une symbiose obligatoire avec des dinoflagellés endosymbiotes (Symbiodinium spp.) fournissant jusqu\'à 90 % de son énergie via la photosynthèse. Un stress thermique de +1°C soutenu sur 4 semaines provoque la rupture de cette symbiose et le blanchissement. Les fragments peuvent être bouturés en pépinières sous-marines pour la restauration des récifs de Karimunjawa.',
     conservation_status: 'VU',
-    image_url: '/images/dioramas/acropora-corail-corne-de-cerf.png',
+    image_url: '/images/dioramas/transparent/acropora-corail-corne-de-cerf.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -238,7 +238,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Bombus terrestris est le bourdon le plus étudié au monde et le pollinisateur commercial le plus vendu (colonies exportées dans 60 pays). Son efficacité de pollinisation par « buzz » (sonication vibratoire à 400 Hz) libère le pollen des anthères poriticides jusqu\'a 50× plus efficacement que l\'abeille domestique. Ses colonies annuelles (400–600 ouvrières) prennent des décisions collectives via des signaux chimiques. Son succès commercial constitue paradoxalement une menace pour les bourdons natifs : propagation de pathogènes et compétition alimentaire avec les espèces sauvages locales.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/bourdon-terrestre.png',
+    image_url: '/images/dioramas/transparent/bourdon-terrestre.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -269,7 +269,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Osmia bicornis est une abeille solitaire à nidification primotemporale (mars–juin) dont les femelles maçonnent des cellules avec de la boue dans des cavités préexistantes. Sa capacité de pollinisation est jusqu\'a 2 500× supérieure à celle d\'Apis mellifera par visite florale. Elle ajuste la ratio des sexes de sa progéniture selon sa taille corporelle : les femelles (plus grandes) sont placées dans les cellules du fond, les mâles à l\'avant, optimisant la survie selon le modèle de Trivers-Willard. L\'extinction de son parasitoïde naturel Cacoxenus indagator est essentielle à la réussite des hôtels à insectes.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/osmie-rousse.png',
+    image_url: '/images/dioramas/transparent/osmie-rousse.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -300,7 +300,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Megachile centuncularis découpe des disques de feuilles (rosiers, lilas) avec ses mandibules pour tapisser ses cellules de nidification. Elle transporte le pollen sur les poils scopaux de l\'abdomen, non sur les pattes, ce qui la rend très efficace pour la pollinisation des légumineuses et des rosées. Sa présence dans les hôtels à insectes est un bioindicateur de la disponibilité en végétation florale diversifiée dans un rayon de 300 m. La Mégachile sculptée (M. sculpturalis), espèce invasive nord-américaine arrivée en Europe en 2008, la concurrence directement pour les sites de nidification.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/megachile.png',
+    image_url: '/images/dioramas/transparent/megachile.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -331,7 +331,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Episyrphus balteatus est l\'un des insectes migrateurs les plus actifs d\'Europe, réalisant des mouvements de masse au-dessus des cols alpins (jusqu\'a 4 milliards d\'individus/an). Son mimétisme batésien imite les bandes jaunes et noires des guêpes. Ses larves aphidiphages consomment jusqu\'a 800 pucerons avant la nymphose. Les adultes s\'orientent par détection du flux optique pour un vol à contre-vent précis, capacité aéronautique étudiée pour la robotique des micro-drones. L\'adulte se nourrit de nectar et joue un rôle de pollinisateur généraliste essentiel dans les aérosystèmes tempérés.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/syrphe-ceinture.png',
+    image_url: '/images/dioramas/transparent/syrphe-ceinture.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -362,7 +362,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Gonepteryx rhamni détient le record de longévité imaginale chez les Lépidoptères européens : jusqu\'à 13 mois, grâce à une double diapause (étivation + hibernation). Son aile antérieure mimétique d\'une feuille (nervures en relief, pointe apicale typique) est l\'une des adaptations camouflantes les plus parfaites du règne animal. Sa production de glycérol permet la survie cellulaire jusqu\'à -20°C. Le dimorphisme sexuel est spectaculaire : le mâle est jaune citron pur, la femelle blanc-verdâtre, mimétisant respectivement les feuilles jeunes et ternies.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/papillon-citron.png',
+    image_url: '/images/dioramas/transparent/papillon-citron.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -393,7 +393,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Aglais io possède quatre faux-yeux (ocelles) reproduisant la physionomie faciale d\'un hibou. La réponse de sursaut de ces ocelles réduit les attaques de prédateurs de 60 % dans les expériences de terrain. Ses chenilles grégaires construisent des toiles protectrices sur les orties. Les adultes hibernent dans les fissures et grottes jusqu\'à 9 mois grâce à une baisse du métabolisme de 95 %, se gorgeant de nectar de saule lors des redoux hivernaux pour reconstituer leurs réserves énergétiques avant le froid définitif.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/paon-du-jour.png',
+    image_url: '/images/dioramas/transparent/paon-du-jour.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -424,7 +424,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Erinaceus europaeus possède entre 5 000 et 7 000 épines kératinées creuses, capables de se hérisser via le muscle orbicularis en moins de 100 ms. Sa résistance aux venins de serpents (facteur protéique sérique ERINACIN) et aux toxines végétales est documentée. En hibernation, sa température corporelle chute à 2°C et son rythme cardiaque de 190 à 20 bpm, réduisant le métabolisme de 93 %. Les populations britanniques ont décliné de 75 % depuis les années 1950 ; en Belgique, l\'espèce est menacée par la densification des réseaux routiers et l\'emploi massif de slug pellets au méthiocarbe.',
     conservation_status: 'NT',
-    image_url: '/images/dioramas/herisson-europeen.png',
+    image_url: '/images/dioramas/transparent/herisson-europeen.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
@@ -456,7 +456,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'L\'Indri, plus grand lémurien existant, est un folivore strict incapable de survivre en captivité en raison d\'un microbiome intestinal hautement spécialisé. Évoluant dans la canopée au sein de petits groupes familiaux à dominance matriarcale, il est célèbre pour ses sauts verticaux spectaculaires et ses chants territoriaux polyphoniques audibles à plus de 2 km. Son microbiome abrite 47 espèces de bactéries intestinales totalement inconnues, strictement spécifiques à l\'espèce, ce qui explique l\'échec de toutes les tentatives de conservation ex-situ.',
     conservation_status: 'CR',
-    image_url: '/images/dioramas/indri.png',
+    image_url: '/images/dioramas/transparent/indri.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -504,7 +504,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Le Sifaka à diadème, l\'un des plus grands et des plus colorés lémuriens arboricoles, évolue en groupes sociaux matriarcaux très soudés. Doté d\'un métabolisme de grand folivore-frugivore au régime alimentaire hautement sélectif (utilisant même son flair pour trouver des plantes parasites), il exige d\'immenses territoires aux arbres massifs non fragmentés pour exécuter ses spectaculaires bonds verticaux propulsifs. Son tractus gastro-intestinal démesurément long et son caecum élargi lui permettent de fermenter la cellulose des feuilles coriaces, mais cette adaptation impose des limites physiologiques strictes en cas de dégradation de l\'habitat.',
     conservation_status: 'CR',
-    image_url: '/images/dioramas/sifaka-diademe.png',
+    image_url: '/images/dioramas/transparent/sifaka-diademe.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -555,7 +555,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Le Vari noir et blanc est le plus grand lémurien frugivore strictement inféodé à la haute canopée malgache. Évoluant selon une structure sociale complexe de type fission-fusion organisée autour d\'une dominance matriarcale, il joue un rôle écologique absolument singulier : il est l\'un des très rares primates mondiaux à agir comme un pollinisateur majeur pour les plantes endémiques monumentales. Son museau allongé et sa langue agile, adaptations crâniennes pour la nectarivorie, lui permettent de transférer d\'immenses quantités de pollen dans son pelage.',
     conservation_status: 'CR',
-    image_url: '/images/dioramas/vari-noir-et-blanc.png',
+    image_url: '/images/dioramas/transparent/vari-noir-et-blanc.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -605,7 +605,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Le Caméléon de Parson est le caméléon le plus massif au monde, avec une croissance indéterminée et des ornements crâniens prononcés chez les mâles. En tant que prédateur supérieur de la canopée opérant par embuscade, il régule les populations d\'arthropodes arboricoles grâce à son mimétisme cryptique et son appareil hyo-lingual balistique. Sa diapause embryonnaire unique exigeant 14 à 24 mois d\'incubation et sa dépendance stricte à la stabilité thermique et hydrique des forêts primaires le rendent extrêmement vulnérable à la fragmentation forestière et au changement climatique.',
     conservation_status: 'NT',
-    image_url: '/images/dioramas/cameleon-de-parson.png',
+    image_url: '/images/dioramas/transparent/cameleon-de-parson.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -653,7 +653,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Le Caméléon panthère appartient au genre Furcifer (du latin "fourche", référence à la zygodactylie) et se distingue par une plasticité écologique exceptionnelle. Évoluant comme "spécialiste de lisière", il colonise les écotones, forêts secondaires et paysages anthropisés grâce à une tolérance thermique remarquable. Son mécanisme de coloration active repose sur des nanostructures d\'iridophores modifiant l\'interférence des longueurs d\'onde. Des études phylogéographiques (Grbic et al., 2015) révèlent l\'existence de 11 haplogroupes génétiquement distincts suggérant un complexe d\'espèces cryptiques.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/cameleon-panthere.png',
+    image_url: '/images/dioramas/transparent/cameleon-panthere.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -699,7 +699,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Trachelophorus giraffa doit son nom au cou extrêmement allongé du mâle, résultat d\'une sélection sexuelle intense pour les combats intrasexuels. La femelle, au cou bien plus court, découpe et roule méticuleusement une feuille de Dichaetanthera (arbuste malgache) en un cylindre protecteur autour d\'un unique œuf. Ce comportement de construction de nid foliaire, unique chez les coléoptères de cette complexité, est entièrement instinctif. Le mâle monte la garde durant l\'oviposition, éloignant les rivaux par des affrontements spectaculaires au coup de cou.',
     conservation_status: 'VU',
-    image_url: '/images/dioramas/charancon-girafe.png',
+    image_url: '/images/dioramas/transparent/charancon-girafe.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -734,7 +734,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'La Grenouille tomate (Dyscophus antongilii) appartient à la famille des Microhylidae, sous-famille des Dyscophinae, un clade strictement endémique de Madagascar. Amphibien terrestre fouisseur présentant un dimorphisme sexuel prononcé (femelles jusqu\'à 10,5 cm, 230g ; mâles 6-6,5 cm, 41g), elle arbore une coloration rouge vif aposématique signalant une défense chimique puissante : une sécrétion muqueuse adhésive et irritante capable d\'engluer les prédateurs et de provoquer des réactions inflammatoires des muqueuses. Sa reproduction explosive synchronisée avec les moussons (octobre-janvier) produit 1000-1500 œufs flottants éclosant en 36 heures. Les têtards filtreurs pélagiques jouent un rôle écologique crucial en prévenant l\'eutrophisation des micro-bassins. Initialement classée NT et inscrite à l\'Annexe I de la CITES en 1987 suite au braconnage massif pour le commerce terrariophile, l\'espèce a été reclassée LC en 2017 et transférée à l\'Annexe II en 2016 grâce au succès de l\'élevage en captivité ex-situ et à sa plasticité écologique remarquable.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/grenouille-tomate.png',
+    image_url: '/images/dioramas/transparent/grenouille-tomate.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -773,7 +773,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Corythornis madagascariensis est l\'un des deux martin-pêcheurs endémiques de Madagascar. Il chasse en plongeant depuis un perchoir fixe au-dessus de l\'eau, localisant ses proies grâce à une vision qui compense la réfraction optique de l\'interface air-eau. Ses nids sont forés dans les berges argileuses par les deux parents. Sa dépendance aux cours d\'eau forestiers clairs en fait un indicateur biologique fiable de la qualité des eaux douces malgaches, menacées par l\'érosion et la déforestation.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/martin-chasseur-pygmee.png',
+    image_url: '/images/dioramas/transparent/martin-chasseur-pygmee.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -804,7 +804,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Coua caerulea est un coucou terrestre endémique de Madagascar, connu pour son plumage bleu iridescent et sa capacité à se déplacer rapidement au sol. Il est un important disperseur de graines dans les forêts malgaches, contribuant ainsi à la régénération des écosystèmes forestiers. Il se nourrit d\'invertébrés, de fruits et de lézards, et est considéré comme une espèce clé pour le maintien de la biodiversité dans les forêts malgaches.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/coua-bleu.png',
+    image_url: '/images/dioramas/transparent/coua-bleu.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -835,7 +835,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Phelsuma laticauda est un gecko diurne endémique de Madagascar, connu pour son corps vert vif et sa queue écarlate. Il est un important pollinisateur pour les plantes forestières malgaches, se nourrissant de nectar et de pollen. Il est également un indicateur de la santé des écosystèmes forestiers, car il dépend de la présence de plantes à fleurs pour sa survie.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/gecko-diurne.png',
+    image_url: '/images/dioramas/transparent/gecko-diurne.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -866,7 +866,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Athene superciliaris est une chouette endémique de Madagascar aux sourcils blancs distinctifs. Rapace nocturne, elle chasse des insectes, petits vertébrés (geckos, caméléons) et rongeurs depuis un poste d\'afflút fixe. Sa nidification dans les cavités d\'arbres matures en fait un indicateur de la présence de vieux arbres creux, ressource critique pour de nombreuses espèces de la faune malgache.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/chouette-cheveche.png',
+    image_url: '/images/dioramas/transparent/chouette-cheveche.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -897,7 +897,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Upupa epops possède un bec long et courbé permettant de sonder la terre et les écorces pour extraire des larves et des vers. Les femelles produisent une sécrétion antimicrobienne via une glande uropygiale spécialisée, riche en bactéries productrices d\'antibiotiques naturels. Dans les oliveraies sardes, elle joue un rôle crucial de régulation des ravageurs (Bactrocera oleae, Prays oleae), réduisant les besoins en pesticides.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/huppe-fasciee.png',
+    image_url: '/images/dioramas/transparent/huppe-fasciee.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_SARDINIA_ID,
@@ -929,7 +929,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Acropora muricata est un constructeur de récifs dont les branches digitées atteignent 2 m de diamètre. Sa croissance (10–15 cm/an) dépend de la symbiose obligatoire avec des dinoflagellés endosymbiotes (Symbiodinium spp.) fournissant jusqu\'à 90 % de son énergie. Sous un stress thermique (+1°C sur 4 semaines), cette symbiose se rompt, provoquant le blanchissement. Les fragments de corail peuvent être bouturés pour la restauration artificielle des récifs dans l\'archipel de Karimunjawa.',
     conservation_status: 'VU',
-    image_url: '/images/dioramas/acropora-corail-corne-de-cerf.png',
+    image_url: '/images/dioramas/transparent/acropora-corail-corne-de-cerf.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -960,7 +960,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Amphiprion ocellaris vit en symbiose mutualiste avec l\'anémone de mer, qu\'il protège de ses prédateurs en échange d\'abri. Sa protection contre le venin de l\'anémone repose sur une glycoprotéine spéciale dans son mucus. C\'est une espèce hermaphrodite protéandrique : si la femelle dominante disparaît, le mâle dominant se transforme en femelle. La popularité aquariophile massive post-Nemo (2003) a provoqué une surpêche de 40 % des populations sauvages en deux ans.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/poisson-clown.png',
+    image_url: '/images/dioramas/transparent/poisson-clown.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -991,7 +991,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Chrysiptera cyanea est un poisson récifal hautement territorial qui cultive des jardins d\'algues filamenteuses sur son territoire. Son bleu électrique est produit par des nanostructures d\'iridophores réfléchissant préférentiellement à 450 nm. Sa présence en grand nombre signale des récifs à forte couverture corallienne et à faible sédimentation, en faisant un bioindicateur de la santé récifale.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/demoiselle-bleue.png',
+    image_url: '/images/dioramas/transparent/demoiselle-bleue.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -1022,7 +1022,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Chaetodon auriga se spécialise dans le raclage des polypes coralliens grâce à son museau allongé et à ses dents fine-incisives. Le faux-œil postérieur sur la nageoire dorsale constitue un leurre confondant les prédateurs sur la direction de fuite. Sa densité décline avant même que le blanchissement corallien soit visible à l\'œil nu, en faisant l\'un des premiers indicateurs de stress des récifs.',
     conservation_status: 'LC',
-    image_url: '/images/dioramas/poisson-papillon.png',
+    image_url: '/images/dioramas/transparent/poisson-papillon.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -1053,7 +1053,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Hippocampus bargibanti est le maître du camouflage récifal : ses tubercules cutanés reproduisent exactement la couleur et la texture de la gorgone hôte (Muricella plectana), avec une précision telle qu\'il a été découvert par accident en 1969. Incapable de nager sur de longues distances, il passe toute sa vie sur une seule gorgone. Comme tous les hippocampes, c\'est le mâle qui gestate les jeunes dans une poche ventrale.',
     conservation_status: 'VU',
-    image_url: '/images/dioramas/hippocampe.png',
+    image_url: '/images/dioramas/transparent/hippocampe.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -1084,7 +1084,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Chelonia mydas est le seul reptile herbivore exclusivement marin à l\'âge adulte, se nourrissant d\'herbiers et d\'algues. Ce régime contribue à maintenir les herbiers courts et productifs, un service écologique unique. Elle réalise des migrations de 2 000 km entre sites d\'alimentation et plages de nidification natales (philopatrie). L\'élévation des températures des plages de nidification féminise massivement les portées, menaçant la viabilité des populations à long terme.',
     conservation_status: 'EN',
-    image_url: '/images/dioramas/tortue-verte.png',
+    image_url: '/images/dioramas/transparent/tortue-verte.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_CORAL_ID,
@@ -1116,7 +1116,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Liotrigona bitika est l\'une des plus petites abeilles eusociales au monde (< 2 mm), appartenant au groupe des Méliponines sans dard. Sa taille microscopique lui permet d\'accéder aux fleurs tubulaires minuscules inaccessibles aux autres pollinisateurs. Les colonies nichent exclusivement dans les cavités des grands arbres matures des forêts décidues sèches de l\'ouest malgache. La disparition de ces arbres centenaires constitue la menace principale pour l\'espèce.',
     conservation_status: 'NE',
-    image_url: '/images/dioramas/abeilles-pollinisatrices.png',
+    image_url: '/images/dioramas/transparent/abeilles-pollinisatrices.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_ANTSIRABE_ID,
@@ -1147,7 +1147,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     description_scientific:
       'Apis mellifera ligustica est la sous-espèce la plus commercialisée au monde (tempérament doux, forte production de miel, faible essaimage). En Sardaigne, elle constitue un pollinisateur clé des oliveraies et du maquis méditerranéen. Cependant, son introduction massive crée une compétition alimentaire sévère avec les abeilles sauvages locales pour les ressources florales, constituant une menace indirecte pour la biodiversité.',
     conservation_status: 'NE',
-    image_url: '/images/dioramas/abeilles-pollinisatrices.png',
+    image_url: '/images/dioramas/transparent/abeilles-pollinisatrices.png',
     associated_projects: [
       {
         id: MOCK_PROJECT_SARDINIA_ID,

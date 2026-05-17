@@ -25,7 +25,7 @@ type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 type SheetKind = 'seeds' | 'tracking' | null
 
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
-const REWARD_PREVIEW_IMAGE = '/images/dioramas/abeille-noire.png'
+const REWARD_PREVIEW_IMAGE = '/images/dioramas/transparent/abeille-noire.png'
 
 type ProjectDonateOneFlowProps = {
   project: {

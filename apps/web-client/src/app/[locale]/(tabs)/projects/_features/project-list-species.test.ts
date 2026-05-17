@@ -13,7 +13,7 @@ describe('getProjectSpeciesPreviews', () => {
         {
           id: 'black-bee',
           name_default: 'Abeille Noire',
-          image_url: '/images/dioramas/abeille-noire.png',
+          image_url: '/images/dioramas/transparent/abeille-noire.png',
           user_status: { isUnlocked: false },
           associated_projects: [
             {
@@ -33,7 +33,7 @@ describe('getProjectSpeciesPreviews', () => {
       {
         id: 'black-bee',
         name: 'Abeille Noire',
-        imageUrl: '/images/dioramas/abeille-noire.png',
+        imageUrl: '/images/dioramas/transparent/abeille-noire.png',
         isUnlocked: false,
       },
     ])
@@ -48,7 +48,7 @@ describe('getProjectSpeciesPreviews', () => {
           {
             id: 'black-bee',
             name: 'Abeille Noire',
-            icon: '/images/dioramas/abeille-noire.png',
+            icon: '/images/dioramas/transparent/abeille-noire.png',
           },
         ],
       },
@@ -59,7 +59,7 @@ describe('getProjectSpeciesPreviews', () => {
       {
         id: 'black-bee',
         name: 'Abeille Noire',
-        imageUrl: '/images/dioramas/abeille-noire.png',
+        imageUrl: '/images/dioramas/transparent/abeille-noire.png',
         isUnlocked: null,
       },
     ])

@@ -51,7 +51,7 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
           <div className='relative flex aspect-square w-full items-center justify-center'>
             <div className='absolute inset-0 mx-auto h-3/4 w-3/4 rounded-full bg-emerald-500/10 blur-[100px]' />
             <img
-              src={species.image_url || '/images/dioramas/abeille-noire.png'}
+              src={species.image_url || '/images/dioramas/transparent/abeille-noire.png'}
               alt={species.name_default}
               className='z-10 h-64 w-64 object-contain drop-shadow-2xl'
             />
