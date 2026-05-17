@@ -494,7 +494,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Née à Madagascar en 2017",
           body: "Fondée par Olivier Laurent, entrepreneur belge fasciné par la Grande Île. Une vocation : révéler les savoir-faire apicoles malgaches avec une approche terrain, durable et humaine.",
-          imageUrl: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp"
+          imageUrl: "/images/producteurs/illanga-nature/aux-origines-d-Ilanga-nature.png"
         },
         {
           title: "Une famille, un réseau",
