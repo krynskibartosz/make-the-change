@@ -50,7 +50,7 @@ const PROJECT_MODULES: ProjectModule[] = [
     detail: 'Cours débloqué · 4 min',
     reward: '+70 Graines',
     imageUrl: '/images/projects/antsirabe-ruchers-1.jpg',
-    href: '/academy/eveil-gardiens/ruchers-antsirabe',
+    href: '/academy/project-experiences/ruchers-antsirabe',
   },
   {
     id: 'coral-cutting',
