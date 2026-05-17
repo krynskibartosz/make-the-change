@@ -36,6 +36,9 @@ export type MissionPillar = {
   shortDescription?: string
   summary?: string
   detail?: string
+  keyPoints?: string[]
+  whyItMatters?: string
+  sourceLabel?: string
 }
 
 export type ProofCard = {
@@ -283,7 +286,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       // ── Visual Assets (Phase 1) ──
       visualAssets: {
         hero: "/images/producteurs/illanga-nature/cover.png",
-        portrait: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
+        portrait: "/images/producteurs/illanga-nature/logo-ilanga-nature-compact.png",
         logo: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
         story: [
           {
@@ -358,7 +361,15 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           summary: "Formation • ruches • approvisionnement équitable",
           detail: "École d'apiculture à Fort-Dauphin.",
           shortDescription: "Formation, ruches et accompagnement terrain.",
-          description: "Formation, fourniture de ruches et approvisionnement équitable auprès des apiculteurs partenaires à Madagascar."
+          description: "Ilanga accompagne des apiculteurs partenaires à Madagascar en combinant formation terrain, fourniture de ruches et approvisionnement équitable.",
+          keyPoints: [
+            "Formation terrain pratique",
+            "Fourniture de ruches agréées",
+            "Approvisionnement à prix équitables",
+            "École d'apiculture à Fort-Dauphin"
+          ],
+          whyItMatters: "Un meilleur accompagnement aide à structurer une filière locale plus durable. Ces actions s'inscrivent dans une logique de soutien documenté, sans constituer une preuve d'impact mesuré.",
+          sourceLabel: "Information partenaire documentée"
         },
         {
           icon: "Ship",
@@ -366,7 +377,15 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           summary: "Miels • vanilles • épices • savoir-faire locaux",
           detail: "60+ références artisanales sélectionnées.",
           shortDescription: "Miels, vanilles, épices et savoir-faire locaux préservés.",
-          description: "Miels, vanilles, épices et savoir-faire artisanaux malgaches valorisés à l'international."
+          description: "Ilanga sélectionne et valorise des produits artisanaux malgaches à l'international : miels, vanilles, épices et confitures issus de petits producteurs locaux.",
+          keyPoints: [
+            "Miels mono-floraux et toutes fleurs",
+            "Vanilles et épices malgaches",
+            "Savoir-faire artisanaux documentés",
+            "60+ références sélectionnées"
+          ],
+          whyItMatters: "Valoriser ces filières localement aide à créer des débouchés économiques pour les producteurs. Cela reste une démarche de mise en marché éthique, pas une mesure d'impact écologique.",
+          sourceLabel: "Information partenaire documentée"
         },
         {
           icon: "BadgeCheck",
@@ -374,7 +393,15 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           summary: "Mielleries documentées • certification Ecocert",
           detail: "Humidité contrôlée 16–18% à chaque récolte.",
           shortDescription: "Mielleries documentées et certification Ecocert.",
-          description: "Mielleries homologuées et certification biologique Ecocert. Contrôle qualité rigoureux."
+          description: "Chaque production est suivie et certifiée biologiquement par Ecocert. L'humidité des miels est contrôlée entre 16 et 18% à chaque récolte.",
+          keyPoints: [
+            "Certification biologique Ecocert",
+            "Humidité contrôlée 16–18%",
+            "Mielleries homologuées",
+            "Contrôle qualité rigoureux"
+          ],
+          whyItMatters: "La certification et le suivi de qualité garantissent la cohérence du produit. Il s'agit d'une démarche de critères documentés, pas d'une garantie d'impact environnemental mesuré.",
+          sourceLabel: "Information partenaire documentée"
         }
       ],
       
