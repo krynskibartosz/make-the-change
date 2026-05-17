@@ -26,6 +26,7 @@ import {
   type EditorialIdentity,
   type VisualAssets,
   type SectionOrder,
+  type PartnerCatalogOverview,
 } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 
 // ── Types exportés ──
@@ -79,6 +80,9 @@ export type PublicProducer = {
   editorialIdentity?: EditorialIdentity
   visualAssets?: VisualAssets
   sectionOrder?: SectionOrder
+  
+  // ── Gamme partenaire (informatif — pas le catalogue app) ──
+  partnerCatalogOverview?: PartnerCatalogOverview
 }
 
 // ── Type guards ──
@@ -147,6 +151,9 @@ export async function getPublicProducerBySlug(slug: string): Promise<PublicProdu
       editorialIdentity: mockProducer.editorialIdentity,
       visualAssets: mockProducer.visualAssets,
       sectionOrder: mockProducer.sectionOrder,
+      
+      // ── Gamme partenaire (informatif — pas le catalogue app) ──
+      partnerCatalogOverview: mockProducer.partnerCatalogOverview,
     }
   }
 

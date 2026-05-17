@@ -90,6 +90,18 @@ export type VisualAssets = {
   story?: VisualAsset[]
 }
 
+export type PartnerCatalogFamily = {
+  label: string
+  examples: string[]
+  origin?: string
+}
+
+export type PartnerCatalogOverview = {
+  title: string
+  disclaimer: string
+  families: PartnerCatalogFamily[]
+}
+
 export type SectionOrder = {
   hero: number
   mission: number
@@ -130,6 +142,9 @@ export type MockProducerSeed = {
   editorialIdentity?: EditorialIdentity
   visualAssets?: VisualAssets
   sectionOrder?: SectionOrder
+  
+  // ── Gamme partenaire (informatif, pas le catalogue app) ──
+  partnerCatalogOverview?: PartnerCatalogOverview
 }
 
 const dedupeById = <T extends { id: string }>(items: T[]): T[] => {
@@ -483,6 +498,39 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         unit: "abeilles",
         wording: "Estimation : abeilles concernées par les projets liés aux ruchers",
         disclaimer: "Estimation pédagogique basée sur les hypothèses de financement des projets, pas une mesure terrain."
+      },
+      
+      // ── Gamme partenaire (informatif — pas le catalogue app) ──
+      partnerCatalogOverview: {
+        title: "Ce qu'ils produisent",
+        disclaimer: "Cette section présente la gamme documentée d'Ilanga Nature. Seuls certains produits sont sélectionnés et disponibles dans l'app Make the Change.",
+        families: [
+          {
+            label: "Miels de Madagascar",
+            examples: ["Litchi", "Niaouli", "Cactus", "Jujubier (bio)", "Forêt primaire", "Forêt sèche", "Eucalyptus", "Baies roses", "Mokarana (bio)"],
+            origin: "Madagascar — Manakara, Fort-Dauphin, Antananarivo"
+          },
+          {
+            label: "Vanilles",
+            examples: ["Vanille Bourbon de Manakara", "Vanille Tahiti"],
+            origin: "Madagascar (Manakara) · Polynésie Française"
+          },
+          {
+            label: "Épices",
+            examples: ["Poivre noir", "Gingembre", "Cannelle", "Curcuma"],
+            origin: "Madagascar"
+          },
+          {
+            label: "Confitures artisanales",
+            examples: ["Fruit de la passion", "Fruits exotiques locaux"],
+            origin: "Madagascar"
+          },
+          {
+            label: "Huile d'olive",
+            examples: ["Leccino", "Frantoio", "Variété toscane oubliée"],
+            origin: "Sardaigne, Italie"
+          }
+        ]
       },
     }
   }
