@@ -26,7 +26,7 @@ export function StoryBlocks({ blocks, producerName }: StoryBlocksProps) {
   const visibleBlocks = blocks.slice(0, 4)
 
   const storySubtitle = producerName
-    ? `Quelques repères sur l'histoire ${/^[AEIOUaeiouÀ-Ö]/i.test(producerName) ? "d'" : "de "}${producerName}.`
+    ? `Quelques repères sur l'histoire ${/^[AEIOUHaeiouÀ-Ö]/i.test(producerName) ? "d'" : "de "}${producerName}.`
     : "Quelques repères sur l'histoire de ce partenaire."
 
   return (

@@ -16,9 +16,10 @@ import type { MissionPillar } from '@/app/[locale]/(site)/producers/_features/mo
 
 type MissionSectionProps = {
   pillars?: MissionPillar[]
+  subtitle?: string
 }
 
-export function MissionSection({ pillars }: MissionSectionProps) {
+export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   if (!pillars || pillars.length === 0) return null
@@ -33,6 +34,11 @@ export function MissionSection({ pillars }: MissionSectionProps) {
         <h2 className="text-[17px] font-bold text-white/80">
           Pourquoi ils existent
         </h2>
+        {subtitle && (
+          <p className="mt-1 mb-3 text-[13px] leading-snug text-white/50">
+            {subtitle}
+          </p>
+        )}
 
         {/* Liste sommaire — scannable */}
         <div className="flex flex-col">

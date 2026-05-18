@@ -17,6 +17,13 @@ function getRarityColor(rarity: string) {
   return 'text-emerald-500/60'
 }
 
+function getRarityLabel(rarity: string) {
+  const r = rarity?.toUpperCase()
+  if (r === 'LÉGENDAIRE') return 'Espèce remarquable'
+  if (r === 'RARE') return 'Espèce liée'
+  return 'Commune'
+}
+
 type SpeciesSectionProps = {
   species: ProducerSpecies[]
   title?: string
@@ -74,9 +81,9 @@ export function SpeciesSection({
                 </p>
               )}
 
-              {/* Rareté — même logique de couleur que BioDexCard */}
+              {/* Rareté BioDex — label explicite plutôt que niveau brut */}
               <p className={`text-[10px] font-bold uppercase tracking-widest ${getRarityColor(entry.rarity)}`}>
-                {entry.rarity}
+                {getRarityLabel(entry.rarity)}
               </p>
             </article>
           </li>

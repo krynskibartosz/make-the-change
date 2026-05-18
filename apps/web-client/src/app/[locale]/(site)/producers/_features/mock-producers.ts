@@ -84,6 +84,7 @@ export type EditorialIdentity = {
   tagline: string
   summary: string
   emotionalStatement?: string
+  missionIntro?: string
 }
 
 export type VisualAsset = {
@@ -581,7 +582,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
   if (producer.slug === 'habeebee-belgique' || producer.name_default?.toLowerCase().includes('habeebee')) {
     return {
       ...producer,
-      tagline: "Savonnerie artisanale & projet d'apiculture à Bruxelles",
+      tagline: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
       locations: {
         field: "Belgique",
         fieldDetail: "Watermael-Boitsfort",
@@ -595,10 +596,11 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         founderNames: ["Alexia"],
         fieldDirector: "Alexia",
         nextGeneration: ["Léonard", "Quentin"],
-        partnerType: "Savonnerie artisanale & initiative d'apiculture documentée",
-        tagline: "Savonnerie artisanale & projet d'apiculture à Bruxelles",
+        partnerType: "Savonnerie apicole documentée",
+        tagline: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
         summary: "Habeebee est une savonnerie artisanale et un projet d'apiculture fondés en 2016 par Alexia à Bruxelles. L'entreprise fabrique à la main des savons solides et des cosmétiques bio utilisant de la cire d'abeille et de la propolis, avec une approche de saponification à froid. En 2024, Léonard et Quentin ont rejoint l'aventure comme associés pour développer le potentiel de la marque.",
-        emotionalStatement: "Entre abeilles, artisanat et solidarité locale à Bruxelles.",
+        emotionalStatement: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
+        missionIntro: "Valoriser les matières de la ruche, fabriquer localement et transmettre une apiculture familiale.",
       },
       visualAssets: {
         hero: "/images/producteurs/habeebee/cover.png",
@@ -717,8 +719,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           icon: "HeartHandshake",
-          title: "Engagement solidaire",
-          summary: "Soutien scouts • associations • réinsertion sociale",
+          title: "Soutien associatif local",
+          summary: "Scouts • associations • réinsertion • solidarité bruxelloise",
           detail: "Partenariats avec mouvements de jeunesse et structures d'insertion.",
           shortDescription: "Soutien scouts, associations non lucratives, partenariat réinsertion sociale.",
           description: "Habeebee soutient des initiatives locales à travers des partenariats solidaires. Le savon 'Scout Toujours' est proposé à prix exclusif pour les scouts, le savon 'Qui a Bon Fond' pour les associations non lucratives, et l'entreprise collabore avec des structures de réinsertion sociale.",
@@ -734,54 +736,52 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       ],
       proofCards: [
         { label: "Certification ECOGARANTIE", value: "Control Certisys", icon: "BadgeCheck", proofType: "certification" },
-        { label: "Certification Artisanat Certifié", icon: "BadgeCheck", proofType: "certification" },
-        { label: "Certification BIO", icon: "BadgeCheck", proofType: "certification" },
-        { label: "Savonnerie artisanale", value: "Watermael-Boitsfort, Bruxelles", icon: "MapPin", proofType: "location" },
-        { label: "Production locale", value: "Fabriqué en Belgique", icon: "MapPin", proofType: "location" },
+        { label: "Collecte locale à vélo", value: "Récolte de cire & propolis", icon: "Bike", proofType: "field_operation" },
         { label: "Saponification à froid", icon: "FlaskConical", proofType: "method" },
-        { label: "Fabrication artisanale", value: "100% à la main", icon: "Hand", proofType: "method" },
-        { label: "Récolte mobile de proximité", icon: "Bike", proofType: "field_operation" },
-        { label: "Soutien mouvements de jeunesse", value: "Savon Scout Toujours", icon: "Users", proofType: "partner" },
-        { label: "Soutien associations", value: "Savon Qui a Bon Fond", icon: "Users", proofType: "partner" },
-        { label: "Partenariat réinsertion", icon: "Users", proofType: "partner" },
-        { label: "Ingrédients ruche", value: "Cire d'abeille, propolis", icon: "Leaf", proofType: "method" },
-        { label: "Formulation minimaliste", value: "Less is more", icon: "Minimize2", proofType: "method" },
+        { label: "Atelier à Bruxelles", value: "Watermael-Boitsfort", icon: "MapPin", proofType: "location" },
+        { label: "Certification BIO", icon: "BadgeCheck", proofType: "certification" },
+        { label: "Cire & propolis", value: "Ingrédients de la ruche", icon: "Leaf", proofType: "method" },
+        { label: "Apiculture familiale", value: "Programme HabeebeeCulture", icon: "Hexagon", proofType: "method" },
+        { label: "Soutien scouts & associations", value: "Scout Toujours • Qui a Bon Fond", icon: "Users", proofType: "partner" },
+        { label: "Partenariat réinsertion", icon: "HeartHandshake", proofType: "partner" },
+        { label: "Certification Artisanat Certifié", icon: "Award", proofType: "certification" },
+        { label: "Fabrication 100% à la main", icon: "Hand", proofType: "method" },
       ],
       storyBlocks: [
         {
           title: "Née à Bruxelles en 2016",
-          body: "Fondée par Alexia, passionnée par les abeilles et le cosmétique naturel. Habeebee est née d'une volonté de créer des soins pour la peau en lien avec l'apiculture, tout en respectant l'environnement.",
+          body: "Alexia fonde Habeebee pour relier les abeilles, les soins naturels et l'artisanat local bruxellois.",
           imageUrl: "/images/producteurs/habeebee/portrait.jpg",
         },
         {
           title: "Une équipe en croissance",
-          body: "Alexia fondatrice, rejointe en 2024 par Léonard et Quentin. Ensemble, ils développent le potentiel de la marque en plaçant les abeilles, la nature et le plaisir au centre des valeurs.",
+          body: "En 2024, Léonard et Quentin rejoignent l'aventure pour développer la marque et son réseau local.",
           imageUrl: "/images/producteurs/habeebee/story-4-tedy-artisan.jpg",
         },
         {
           title: "Savonnerie artisanale",
-          body: "Atelier de fabrication à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec des ingrédients de qualité, principalement de la cire d'abeille et de la propolis.",
+          body: "Un atelier à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec de la cire d'abeille et de la propolis.",
           imageUrl: "/images/producteurs/habeebee/savonnerie-interieur.webp",
         },
         {
-          title: "HabeebeeCulture : l'apiculture familiale",
-          body: "Programme de formation à l'apiculture naturelle pour les familles. Cycle de proximité : de la ruche à la cire, du vélo de récolte à la fabrication artisanale de savons et baumes.",
+          title: "HabeebeeCulture",
+          body: "Transmettre l'apiculture naturelle aux familles. De la ruche à la cire, du vélo de récolte aux savons artisanaux.",
           imageUrl: "/images/producteurs/habeebee/story-1-habeebeeculture-formation.webp",
         },
         {
-          title: "Engagements solidaires",
-          body: "Soutien aux scouts avec le savon Scout Toujours, partenariat avec les associations non lucratives via Qui a Bon Fond, et collaboration avec des structures de réinsertion sociale.",
+          title: "Soutien local",
+          body: "Savon Scout Toujours pour les mouvements de jeunesse, Qui a Bon Fond pour les associations, et partenariat réinsertion.",
           imageUrl: "/images/producteurs/habeebee/story-6-scouts.jpg",
         },
         {
-          title: "Certifications reconnues",
-          body: "ECOGARANTIE (Control Certisys), Artisanat Certifié, et certification BIO pour les produits concernés. Des labels qui attestent de pratiques documentées et contrôlées.",
+          title: "Certifications documentées",
+          body: "ECOGARANTIE (Control Certisys), Artisanat Certifié, certification BIO — des labels qui attestent de pratiques contrôlées.",
           imageUrl: "/images/producteurs/habeebee/story-8-certificat-ecogarantie.png",
         },
       ],
       partnerCatalogOverview: {
-        title: "Les produits qu'ils proposent",
-        disclaimer: "Habeebee propose une gamme complète de soins cosmétiques. Seule une partie de ces produits est disponible dans l'app.",
+        title: "Leur gamme",
+        disclaimer: "Une partie de ces produits est disponible dans l'app.",
         families: [
           {
             label: "Savons solides",

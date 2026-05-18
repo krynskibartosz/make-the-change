@@ -118,6 +118,34 @@ const primaryContext: Record<string, { body: string; notes: string[]; caution?: 
     ],
     caution: "Cette démarche de formation ne constitue pas une preuve d'impact mesuré."
   },
+  // ── Habeebee ──
+  'Certification ECOGARANTIE': {
+    body: "Les produits Habeebee sont associés à une démarche de certification ECOGARANTIE, contrôlée par Certisys. Ce label concerne les ingrédients, les procédés de fabrication et les pratiques de transparence.",
+    notes: [
+      "Label ECOGARANTIE — contrôle Certisys",
+      "Exigences sur les ingrédients et la fabrication",
+      "Certification documentée sur habeebee.be",
+    ],
+    caution: "Cette certification documente une démarche qualité, pas une mesure d'impact environnemental."
+  },
+  'Collecte locale à vélo': {
+    body: "La cire d'abeille et la propolis utilisées dans les produits Habeebee sont collectées localement à Bruxelles, notamment à vélo, dans une logique de proximité ruche-atelier.",
+    notes: [
+      "Collecte à vélo — circuit court",
+      "Cire d'abeille et propolis",
+      "Ruches en milieu urbain et périurbain bruxellois",
+    ],
+    caution: "Cette pratique de collecte de proximité est documentée par le partenaire, pas une mesure d'empreinte carbone."
+  },
+  'Saponification à froid': {
+    body: "La saponification à froid est la méthode de fabrication des savons Habeebee. Elle préserve les propriétés des ingrédients naturels, notamment la cire d'abeille et la propolis.",
+    notes: [
+      "Méthode artisanale à froid",
+      "Conservation des actifs naturels",
+      "Fabrication 100% à la main à Watermael-Boitsfort",
+    ],
+    caution: "Cette méthode est une pratique de fabrication documentée, pas une certification indépendante."
+  },
 }
 
 // Sélectionne 3 repères primaires: certification > field_operation > method, puis complétion
