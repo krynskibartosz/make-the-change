@@ -926,7 +926,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Suivi des jardins sous-marins",
           body: "Le monitoring documente la survie et la croissance des coraux restaurés sur les sites de Karimunjawa.",
-          imageUrl: TRILOGY_PATHS.media.youtube7Monitoring,
+          // TODO: remplacer par trilogy-coral-monitoring-underwater.png quand disponible
+          imageUrl: TRILOGY_PATHS.media.trilogyOceanRestoration,
         },
         {
           title: "Éducation et excursions marines",
