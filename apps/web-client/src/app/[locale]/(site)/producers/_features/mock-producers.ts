@@ -603,7 +603,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         partnerType: "Savonnerie apicole documentée",
         tagline: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
         summary: "Habeebee est une savonnerie artisanale et un projet d'apiculture fondés en 2016 par Alexia à Bruxelles. L'entreprise fabrique à la main des savons solides et des cosmétiques bio utilisant de la cire d'abeille et de la propolis, avec une approche de saponification à froid. En 2024, Léonard et Quentin ont rejoint l'aventure comme associés pour développer le potentiel de la marque.",
-        emotionalStatement: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
+        emotionalStatement: "Valoriser les matières de la ruche, fabriquer localement et transmettre une apiculture familiale.",
         missionIntro: "Valoriser les matières de la ruche, fabriquer localement et transmettre une apiculture familiale.",
       },
       visualAssets: {
