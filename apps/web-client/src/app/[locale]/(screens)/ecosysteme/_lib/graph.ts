@@ -557,14 +557,14 @@ export const ECOSYSTEMS: EcosystemDefinition[] = [
     factionFocus: 'melli',
     access: 'available',
     accessHint: 'Zone accessible pour comparer avec Madagascar',
-    projectName: 'Habeebee Belgique',
+    projectName: 'Habeebee',
     projectSlug: MOCK_PROJECT_HABEEBEE_SLUG,
     focusSpeciesId: MOCK_SPECIES_BUMBLEBEE_ID,
     focusSpeciesName: 'Bourdon terrestre',
     thesis:
       'Une zone locale simple pour comprendre comment fleurs, insectes et auxiliaires se soutiennent.',
     impact: {
-      partnerName: 'Habeebee Belgique',
+      partnerName: 'Habeebee',
       metric: 'micro-habitats suivis',
       value: '7',
       ratioLabel: 'Les micro-habitats sont une estimation pedagogique pour le prototype.',

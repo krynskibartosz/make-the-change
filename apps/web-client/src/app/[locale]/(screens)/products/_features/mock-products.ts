@@ -262,9 +262,9 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
     producer: {
       id: MOCK_PRODUCER_HABEEBEE_ID,
       slug: MOCK_PRODUCER_HABEEBEE_SLUG,
-      name_default: 'Habeebee Belgique',
+      name_default: 'Habeebee',
       name_i18n: {
-        fr: 'Habeebee Belgique',
+        fr: 'Habeebee',
         en: 'Habeebee Belgium',
       },
       description_default: 'Apiculteur engagé dans la protection des abeilles en Belgique.',
@@ -322,9 +322,9 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
     producer: {
       id: MOCK_PRODUCER_HABEEBEE_ID,
       slug: MOCK_PRODUCER_HABEEBEE_SLUG,
-      name_default: 'Habeebee Belgique',
+      name_default: 'Habeebee',
       name_i18n: {
-        fr: 'Habeebee Belgique',
+        fr: 'Habeebee',
         en: 'Habeebee Belgium',
       },
       description_default: 'Apiculteur engagé dans la protection des abeilles en Belgique.',
@@ -382,9 +382,9 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
     producer: {
       id: MOCK_PRODUCER_HABEEBEE_ID,
       slug: MOCK_PRODUCER_HABEEBEE_SLUG,
-      name_default: 'Habeebee Belgique',
+      name_default: 'Habeebee',
       name_i18n: {
-        fr: 'Habeebee Belgique',
+        fr: 'Habeebee',
         en: 'Habeebee Belgium',
       },
       description_default: 'Apiculteur engagé dans la protection des abeilles en Belgique.',

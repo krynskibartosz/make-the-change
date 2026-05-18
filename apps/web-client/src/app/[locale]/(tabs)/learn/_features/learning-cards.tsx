@@ -44,7 +44,7 @@ export const PROJECT_LABEL_BY_SLUG: Record<string, string> = {
   'miellerie-manakara-ilanga-nature': 'Rucher de Manakara',
   'ruchers-apiculteurs-independants-antsirabe': 'Ruchers Antsirabe',
   'recifs-coraux-karimunjawa': 'Récif Karimunjawa',
-  'habeebee-belgique': 'Habeebee Belgique',
+  'habeebee-belgique': 'Habeebee',
   'oliviers-sardaigne': 'Oliviers de Sardaigne',
 }
 

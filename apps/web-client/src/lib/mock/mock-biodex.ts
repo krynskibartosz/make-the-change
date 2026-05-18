@@ -149,7 +149,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Auxiliaire',
         impact: 'Regulation naturelle des ravageurs dans les ruchers.',
@@ -243,7 +243,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Pollinisateur principal',
         impact: 'Projet dancrage local des pollinisateurs en Belgique.',
@@ -274,7 +274,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Pollinisateur complementaire',
         impact: 'Renforcement du reseau de pollinisateurs locaux.',
@@ -305,7 +305,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Pollinisateur specialise',
         impact: 'Diversification des espèces pollinisatrices.',
@@ -336,7 +336,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Pollinisateur auxiliaire',
         impact: 'Lutte biologique contre les pucerons et pollinisation.',
@@ -367,7 +367,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Pollinisateur esthetique',
         impact: 'Indicateur de biodiversite dans les haies et bosquets.',
@@ -398,7 +398,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Pollinisateur emblematique',
         impact: 'Symbole de la biodiversite des jardins europeens.',
@@ -429,7 +429,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
       {
         id: MOCK_PROJECT_HABEEBEE_ID,
         slug: MOCK_PROJECT_HABEEBEE_SLUG,
-        name: 'Habeebee Belgique',
+        name: 'Habeebee',
         type: 'beehive',
         role: 'Faune auxiliaire',
         impact: 'Regulation naturelle des populations dinsectes nuisibles.',
