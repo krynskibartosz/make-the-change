@@ -36,6 +36,12 @@ import {
   FlaskConical,
   Minimize2,
   Leaf,
+  Waves,
+  Sprout,
+  HandHeart,
+  Fish,
+  Smartphone,
+  Phone,
   type LucideIcon,
 } from 'lucide-react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
@@ -66,6 +72,12 @@ const iconMap: Record<string, LucideIcon> = {
   Minimize: Minimize2,
   Minimize2,
   Leaf,
+  Waves,
+  Sprout,
+  HandHeart,
+  Fish,
+  Smartphone,
+  Phone,
 }
 
 const accentStyles = {

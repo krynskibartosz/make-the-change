@@ -813,6 +813,173 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
     }
   }
 
+  // ── Trilogy Ocean Restoration enrichment ──
+  if (producer.slug === 'trilogy-ocean-restoration' || producer.name_default?.toLowerCase().includes('trilogy')) {
+    return {
+      ...producer,
+      tagline: "Jardins sous-marins • Restauration corallienne • Karimunjawa",
+      locations: {
+        field: "Indonésie",
+        fieldDetail: "Karimunjawa, Java central",
+      },
+      editorialIdentity: {
+        legalName: "Trilogy Ocean Restoration",
+        shortName: "Trilogy",
+        foundedYear: 2024,
+        founderNames: [],
+        fieldDirector: "Novri Julfiansyah & Daniel Jackson Subianto",
+        nextGeneration: ["Vincentio Joshua", "Arindiana Janidya Alifsativarini"],
+        partnerType: "Organisation à but non lucratif de restauration des écosystèmes océaniques",
+        tagline: "Jardins sous-marins • Restauration corallienne • Karimunjawa",
+        summary: "Trilogy Ocean Restoration est une organisation indonésienne fondée en 2024, basée à Karimunjawa, Java central. Elle se concentre sur la réparation et la restauration des récifs coralliens, mangroves et herbiers marins. En partenariat avec Karimunjawa Scuba Diving, Scuba School International et Seacrest Indonesia, Trilogy propose des programmes de formation, des excursions éducatives et des actions de propagation corallienne documentées sur le terrain.",
+        emotionalStatement: "Entre jardins coralliens colorés et avenir marin à Karimunjawa.",
+      },
+      visualAssets: {
+        hero: "/images/producteurs/trilogy/youtube-1-coral-garden.jpg",
+        portrait: "/images/producteurs/trilogy/profile-avatar.jpg",
+        logo: "/images/producteurs/trilogy/youtube-profile.jpg",
+        story: [
+          { id: "story-1", url: "/images/producteurs/trilogy/story-2-dive-explore-restore.jpg", role: "story" as const, type: "field_photo" as const, alt: "Dive • Explore • Restore", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
+          { id: "story-2", url: "/images/producteurs/trilogy/youtube-9-cilik-island.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Coral Restoration at Cilik Island", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
+          { id: "story-3", url: "/images/producteurs/trilogy/youtube-7-monitoring.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Effective monitoring for coral restoration", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
+          { id: "story-4", url: "/images/producteurs/trilogy/story-12-dive-edutrip.jpg", role: "story" as const, type: "field_photo" as const, alt: "Dive Edutrip Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
+          { id: "story-5", url: "/images/producteurs/trilogy/youtube-8-planting-coral.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Planting coral fragments", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
+          { id: "story-6", url: "/images/producteurs/trilogy/story-9-explore-biodiversity.jpg", role: "story" as const, type: "field_photo" as const, alt: "Exploration biodiversité Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
+        ],
+      },
+      missionPillars: [
+        {
+          icon: "Waves",
+          title: "Restauration corallienne",
+          summary: "Plantation • Suivi • Jardins sous-marins",
+          detail: "Programme de restauration des récifs coralliens à Karimunjawa.",
+          shortDescription: "Plantation de fragments de corail et suivi des jardins sous-marins à Cilik Island.",
+          description: "Trilogy Ocean Restoration implante de nouveaux fragments de corail pour recréer des zones de biodiversité marine active, documentant les sites comme Cilik Island. Chaque intervention est suivie pour mesurer la survie et la croissance des nouvelles colonies.",
+          keyPoints: [
+            "Plantation de fragments de corail sur structures",
+            "Surveillance documentée des jardins coralliens",
+            "Sites de restauration identifiés (Cilik Island)",
+          ],
+          whyItMatters: "Les coraux sont les fondements des écosystèmes tropicaux, fournissant un habitat essentiel à des milliers d'espèces marines. Ces actions de restauration sont documentées qualitativement via vidéos terrain, sans métriques d'impact quantifiées par le partenaire.",
+          sourceLabel: "Information partenaire documentée — TikTok & YouTube @TrilogyOceanRestoration",
+        },
+        {
+          icon: "GraduationCap",
+          title: "Éducation marine",
+          summary: "Formation • Excursions éducatives • Sensibilisation",
+          detail: "Programmes éducatifs sur la conservation marine et la plongée.",
+          shortDescription: "Formation de moniteurs certifiés SSI et excursions d'exploration de la biodiversité marine.",
+          description: "Trilogy propose des cours de formation de moniteurs de plongée certifiés Scuba School International, des Dive Edutrips et des programmes de sensibilisation à la biodiversité marine de Karimunjawa.",
+          keyPoints: [
+            "Formation moniteurs de plongée (SSI)",
+            "Excursions Dive Edutrip",
+            "Exploration biodiversité Karimunjawa",
+          ],
+          whyItMatters: "L'éducation est essentielle pour assurer la conservation à long terme des écosystèmes marins. Former des moniteurs locaux crée une capacité durable de transmission des savoirs.",
+          sourceLabel: "Information partenaire documentée — LinkedIn & YouTube",
+        },
+        {
+          icon: "HandHeart",
+          title: "Adoption de coraux",
+          summary: "Programme d'adoption • Engagement communautaire",
+          detail: "Programme d'adoption de coraux pour soutenir la restauration.",
+          shortDescription: "Programme permettant aux individus de soutenir financièrement la restauration corallienne.",
+          description: "Trilogy propose un programme d'adoption de coraux permettant à des individus et organisations de soutenir concrètement les efforts de restauration. Ce mécanisme d'engagement communautaire contribue à la durabilité financière du projet.",
+          keyPoints: [
+            "Coral Adoption Program",
+            "Engagement individuel et collectif",
+            "Lien direct avec la restauration terrain",
+          ],
+          whyItMatters: "L'engagement communautaire est crucial pour la durabilité des projets de conservation marine. Ce programme crée un lien direct entre soutien financier et action terrain documentée.",
+          sourceLabel: "Information partenaire documentée — Peek Holidays & réseaux sociaux",
+        },
+      ],
+      proofCards: [
+        { label: "Site de restauration", value: "Cilik Island, Karimunjawa", icon: "Waves", proofType: "field_operation" },
+        { label: "Plantation de coraux documentée", value: "Fragments implantés sur structures", icon: "Sprout", proofType: "field_operation" },
+        { label: "Programme d'adoption coraux", value: "Coral Adoption Program", icon: "HandHeart", proofType: "method" },
+        { label: "Localisation documentée", value: "Karimunjawa, Java central", icon: "MapPin", proofType: "location" },
+        { label: "Partenariat conservation", value: "Seacrest Indonesia", icon: "Handshake", proofType: "partner" },
+        { label: "Formation certifiée SSI", value: "Scuba School International", icon: "Award", proofType: "partner" },
+        { label: "Partenariat plongée", value: "Karimunjawa Scuba Diving", icon: "Users", proofType: "partner" },
+        { label: "Formation moniteurs", value: "Instructor Training Course", icon: "GraduationCap", proofType: "method" },
+        { label: "Biodiversité marine documentée", value: "Exploration Karimunjawa", icon: "Fish", proofType: "field_operation" },
+        { label: "Présence en ligne", value: "YouTube, TikTok, Instagram", icon: "Smartphone", proofType: "method" },
+        { label: "Contact documenté", value: "+62 813-5705-3490", icon: "Phone", proofType: "location" },
+      ],
+      storyBlocks: [
+        {
+          title: "Dive • Explore • Restore",
+          body: "La devise de Trilogy résume tout : plonger pour explorer, explorer pour comprendre, comprendre pour restaurer. Une approche terrain documentée à Karimunjawa depuis 2024.",
+          imageUrl: "/images/producteurs/trilogy/story-2-dive-explore-restore.jpg",
+        },
+        {
+          title: "Restauration corallienne à Cilik Island",
+          body: "Plantation de fragments de corail sur les structures de restauration. Chaque intervention est documentée et suivie pour mesurer la croissance des nouvelles colonies marines.",
+          imageUrl: "/images/producteurs/trilogy/youtube-9-cilik-island.jpg",
+        },
+        {
+          title: "Suivi des jardins sous-marins",
+          body: "Un monitoring rigoureux des jardins coralliens permet de documenter la survie et la croissance des coraux restaurés sur plusieurs sites de Karimunjawa.",
+          imageUrl: "/images/producteurs/trilogy/youtube-7-monitoring.jpg",
+        },
+        {
+          title: "Éducation et excursions marines",
+          body: "Des Dive Edutrips et programmes de formation pour transmettre les savoirs de la plongée et de la conservation marine aux générations locales et aux visiteurs.",
+          imageUrl: "/images/producteurs/trilogy/story-12-dive-edutrip.jpg",
+        },
+        {
+          title: "Plantation de coraux",
+          body: "Dépôt documenté de fragments de corail sur les structures de restauration — geste terrain photographié et partagé par l'équipe Trilogy.",
+          imageUrl: "/images/producteurs/trilogy/youtube-8-planting-coral.jpg",
+        },
+        {
+          title: "Biodiversité de Karimunjawa",
+          body: "L'exploration de la biodiversité marine de Karimunjawa est au cœur de la mission Trilogy — documenter pour mieux protéger.",
+          imageUrl: "/images/producteurs/trilogy/story-9-explore-biodiversity.jpg",
+        },
+      ],
+      sectionOrder: {
+        hero: 1,
+        mission: 2,
+        proofs: 3,
+        story: 4,
+        projects: 5,
+        species: 6,
+        products: 7,
+        impact: 8,
+        cta: 9,
+      },
+      partnerCatalogOverview: {
+        title: "Ce qu'ils proposent",
+        disclaimer: "Trilogy Ocean Restoration propose des programmes de restauration et d'éducation marine. Ces expériences ne sont pas disponibles directement dans l'app.",
+        families: [
+          {
+            label: "Adoption de coraux",
+            examples: ["Coral Adoption Program", "Parrainage de fragments coralliens"],
+            origin: "Karimunjawa, Indonésie",
+          },
+          {
+            label: "Formation de plongée",
+            examples: ["Instructor Training Course SSI", "Cours certifiés Scuba School International"],
+            origin: "Karimunjawa, Indonésie",
+          },
+          {
+            label: "Excursions éducatives",
+            examples: ["Dive Edutrip", "Exploration biodiversité Karimunjawa", "Coral Education Trip"],
+            origin: "Karimunjawa, Indonésie",
+          },
+          {
+            label: "Conservation marine",
+            examples: ["Plantation de coraux", "Monitoring récifs Cilik Island", "Restauration corallienne"],
+            origin: "Karimunjawa, Indonésie",
+          },
+        ],
+      },
+      contact_website: "https://linktr.ee/underwatergardeners",
+    }
+  }
+
   return producer
 }
 
