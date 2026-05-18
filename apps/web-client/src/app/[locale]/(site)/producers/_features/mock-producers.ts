@@ -758,19 +758,19 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           imageUrl: HABEEBEE_PATHS.media.portrait,
         },
         {
-          title: "Une équipe en croissance",
-          body: "En 2024, Léonard et Quentin rejoignent l'aventure pour développer la marque et son réseau local.",
+          title: "Une équipe qui fabrique localement",
+          body: "En 2024, l'équipe se renforce pour structurer l'atelier, organiser la production et faire grandir le réseau local.",
           imageUrl: HABEEBEE_PATHS.media.portraitV2,
         },
         {
           title: "Savonnerie artisanale",
           body: "Un atelier à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec de la cire d'abeille et de la propolis.",
-          imageUrl: HABEEBEE_PATHS.media.story1V2,
+          imageUrl: HABEEBEE_PATHS.media.story4V2,
         },
         {
           title: "HabeebeeCulture",
           body: "Transmettre l'apiculture naturelle aux familles. De la ruche à la cire, du vélo de récolte aux savons artisanaux.",
-          imageUrl: HABEEBEE_PATHS.media.story4V2,
+          imageUrl: HABEEBEE_PATHS.media.story1V2,
         },
         {
           title: "Soutien local",
