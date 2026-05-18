@@ -9,6 +9,7 @@ export const TRILOGY_PATHS = {
     profileAvatar: `${ID}/profile-avatar.jpg`,
   },
   media: {
+    story1V2: `${MD}/story-1-v2.png`,
     story1CoralDiver: `${MD}/story-1-coral-diver-karimunjawa.jpg`,
     story3Padahariini: `${MD}/story-3-padahariini.jpg`,
     story4KarimunjawaDiving: `${MD}/story-4-karimunjawa-diving.jpg`,

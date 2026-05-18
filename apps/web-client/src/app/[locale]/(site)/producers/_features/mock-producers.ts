@@ -916,7 +916,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Dive • Explore • Restore",
           body: "Plonger pour explorer, comprendre pour restaurer. Une approche terrain documentée à Karimunjawa depuis 2024.",
-          imageUrl: TRILOGY_PATHS.media.trilogyOceanRestoration,
+          imageUrl: TRILOGY_PATHS.media.story1V2,
         },
         {
           title: "Restauration à Cilik Island",
