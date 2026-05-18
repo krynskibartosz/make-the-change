@@ -1,6 +1,8 @@
 'use client'
-import { useState } from 'react'
-import { AlertTriangle } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { AlertTriangle, BookOpen, ChevronRight, GitBranch } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
+import { getCoursesForSpecies } from '@/lib/learning/selectors'
 import { cn } from '@/lib/utils'
 import type { SpeciesContext } from '@/types/species'
 import { ImpactCard } from './impact-card'
@@ -37,6 +39,10 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
   const hasDiet = !!species.diet
   const hasIUCN = !!species.conservation_status
   const hasBentoContent = hasSizeOrWeight || hasOrigin || hasDiet || hasIUCN
+  const learningCourses = useMemo(() => getCoursesForSpecies(species.id, 3), [species.id])
+  const livingWebHref = learningCourses.find((course) => course.relatedEcosystemIds.length > 0)
+  const firstEcosystemId = livingWebHref?.relatedEcosystemIds[0]
+  const firstNodeId = livingWebHref?.relatedNodeIds[0]
 
   const handleDisabledClick = () => {
     setShowToast(true)
@@ -68,6 +74,43 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
 
         {/* Impact Card */}
         <ImpactCard projects={species.associated_projects} />
+
+        {learningCourses.length > 0 && (
+          <section className='mx-5 mt-6 rounded-3xl border border-white/8 bg-white/[0.045] p-4'>
+            <div className='flex items-start justify-between gap-4'>
+              <div>
+                <div className='flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] text-teal-200/65'>
+                  <BookOpen className='h-4 w-4' aria-hidden='true' />
+                  Approfondir cette espèce
+                </div>
+                <p className='mt-1 text-sm leading-relaxed text-white/48'>
+                  Cours reliés à son rôle, son habitat ou ses liens dans la Toile vivante.
+                </p>
+              </div>
+              {firstEcosystemId && (
+                <Link
+                  href={`/ecosysteme/${firstEcosystemId}${firstNodeId ? `?node=${firstNodeId}` : ''}`}
+                  className='shrink-0 text-teal-300 active:text-teal-200'
+                  aria-label='Voir dans la Toile vivante'
+                >
+                  <GitBranch className='h-5 w-5' aria-hidden='true' />
+                </Link>
+              )}
+            </div>
+            <div className='mt-4 grid gap-2'>
+              {learningCourses.map((course) => (
+                <Link
+                  key={course.id}
+                  href={`/learn/courses/${course.id}`}
+                  className='flex items-center justify-between gap-3 rounded-2xl bg-white/[0.045] px-3 py-2.5 text-sm font-semibold text-white/75 active:bg-white/[0.07]'
+                >
+                  <span className='line-clamp-1'>{course.title}</span>
+                  <ChevronRight className='h-4 w-4 shrink-0 text-white/30' aria-hidden='true' />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Segmented Control */}
         <div className='mx-5 mt-6'>

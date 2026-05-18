@@ -13,6 +13,7 @@ import { ProjectProducerProductsSection } from './_components/sections/project-p
 import { ProjectQuickViewHero } from './_components/layout/project-quick-view-hero'
 import { SimilarProjectsCarousel } from './_components/ui/similar-projects-carousel'
 import { ProjectSpeciesTeaser } from './_components/ui/project-species-teaser'
+import { ProjectLearningLinks } from './_components/ui/project-learning-links'
 import { ProjectStorySheet } from './_components/sections/project-story-sheet'
 import { ProjectImpactPreview } from './_components/sections/project-impact-preview'
 import { ProjectTrackingPreview } from './_components/sections/project-tracking-preview'
@@ -471,6 +472,10 @@ export async function ProjectQuickView({
                 />
               </div>
             ) : null}
+
+            <div className="mt-6 px-4 sm:px-5">
+              <ProjectLearningLinks projectSlug={project.slug} />
+            </div>
 
             {/* 8. Produits partenaires (soutien uniquement) */}
             {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (

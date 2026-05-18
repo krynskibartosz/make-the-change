@@ -15,12 +15,14 @@ import {
 } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from '@/i18n/navigation'
 import { useEcosystem } from '@/hooks/use-ecosystem'
 import {
   type EcosystemPerspective,
   getEcosystemById,
   PERSPECTIVE_COPY,
 } from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
+import { getCoursesForEcosystemNode } from '@/lib/learning/selectors'
 import { cn } from '@/lib/utils'
 import {
   buildPathPoints,
@@ -60,11 +62,12 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
   const router = useRouter()
   const searchParams = useSearchParams()
   const perspectiveParam = searchParams.get('perspective') as EcosystemPerspective | null
+  const nodeParam = searchParams.get('node')
   const [perspective, setPerspective] = useState<EcosystemPerspective>(perspectiveParam || 'biome')
   const [unlockedEcosystemIds, setUnlockedEcosystemIds] = useState<Set<string>>(() => new Set())
-  const [isGuideActive, setIsGuideActive] = useState(true)
+  const [isGuideActive, setIsGuideActive] = useState(!nodeParam)
   const [guideStep, setGuideStep] = useState(INITIAL_GUIDE_STEP)
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(nodeParam)
 
   const ecosystem = useMemo(() => getEcosystemById(ecosystemId), [ecosystemId])
   const isAccessUnlocked =
@@ -117,7 +120,21 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
     () => nodes.filter((node) => node.status !== 'locked').length,
     [nodes],
   )
+  const selectedRelatedCourses = useMemo(
+    () => (selectedPoint ? getCoursesForEcosystemNode(selectedPoint.id, 3) : []),
+    [selectedPoint],
+  )
   const ThemeIcon = THEME_ICON[ecosystem.theme]
+
+  useEffect(() => {
+    if (!nodeParam || !points.some((point) => point.id === nodeParam)) {
+      return
+    }
+
+    setIsGuideActive(false)
+    setGuideStep(maxGuideStep)
+    setSelectedNodeId(nodeParam)
+  }, [maxGuideStep, nodeParam, points])
 
   useEffect(() => {
     if (!selectedNodeId || visibleNodeIds.has(selectedNodeId)) {
@@ -165,6 +182,9 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
 
   function handleSelectNode(nodeId: string) {
     setSelectedNodeId(nodeId)
+    const url = new URL(window.location.href)
+    url.searchParams.set('node', nodeId)
+    window.history.pushState({}, '', url.toString())
   }
 
   const selectedVisual = selectedPoint ? getNodeVisual(selectedPoint) : null
@@ -365,6 +385,26 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
                 <p className="mt-2 text-xs leading-relaxed text-white/55">
                   {selectedPoint.summary}
                 </p>
+
+                {!isSelectedLocked && selectedRelatedCourses.length > 0 ? (
+                  <div className="mt-3 rounded-2xl border border-white/8 bg-white/[0.035] p-2.5">
+                    <p className="mb-2 text-[0.65rem] font-black uppercase tracking-[0.16em] text-teal-200/65">
+                      À approfondir
+                    </p>
+                    <div className="grid gap-1.5">
+                      {selectedRelatedCourses.map((course) => (
+                        <Link
+                          key={course.id}
+                          href={`/learn/courses/${course.id}`}
+                          className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.045] px-2.5 py-2 text-[0.72rem] font-semibold text-white/70 active:bg-white/[0.07]"
+                        >
+                          <span className="line-clamp-1">{course.title}</span>
+                          <ChevronLeft className="h-3 w-3 rotate-180 text-white/25" aria-hidden="true" />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
 

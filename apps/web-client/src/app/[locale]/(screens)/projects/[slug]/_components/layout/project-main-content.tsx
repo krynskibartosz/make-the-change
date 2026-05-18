@@ -9,11 +9,13 @@ import { ProjectProducerProductsSection } from '@/app/[locale]/(screens)/project
 import { ProjectAssociatedProjectsSection } from '@/app/[locale]/(screens)/projects/[slug]/_components/sections/project-associated-projects-section'
 import { ProjectSpeciesImpactSection } from '@/app/[locale]/(screens)/projects/[slug]/_components/sections/project-species-impact-section'
 import { ProjectUnlockSpeciesSection } from '@/app/[locale]/(screens)/projects/[slug]/_components/sections/project-unlock-species-section'
+import { ProjectLearningLinks } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/project-learning-links'
 import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import type { RelatedProject } from '../../project-detail-data'
 
 // Helpers moved to bottom
 type ProjectMainContentProject = {
+  slug: string
   type: string | null
   name_default: string
   description_default: string | null
@@ -102,6 +104,8 @@ export async function ProjectMainContent({
         unitPriceEur={project.unit_price_eur}
         unitLabel={project.unit_label}
       />
+
+      <ProjectLearningLinks projectSlug={project.slug} variant="desktop" />
 
       {relatedProjects.length > 0 && (
         <ProjectAssociatedProjectsSection projects={relatedProjects} locale={locale} />

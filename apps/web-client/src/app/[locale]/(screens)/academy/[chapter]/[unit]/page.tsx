@@ -27,7 +27,7 @@ import {
   X,
 } from 'lucide-react'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { useRouter } from '@/i18n/navigation'
@@ -52,6 +52,12 @@ import {
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { secureShuffle } from '@/lib/crypto'
+import {
+  createDefaultLearningProgress,
+  markLearningLessonCompleted,
+  readLearningProgress,
+  writeLearningProgress,
+} from '@/lib/learning/progress'
 import { cn } from '@/lib/utils'
 
 const getParam = (value: string | string[] | undefined) =>
@@ -973,13 +979,15 @@ function VictoryScreen({
   unit,
   alreadyCompleted,
   onFinish,
+  isCourseMode = false,
 }: {
   unit: AcademyUnit
   alreadyCompleted: boolean
   onFinish: () => void
+  isCourseMode?: boolean
 }) {
   const [countedReward, setCountedReward] = useState(0)
-  const finalReward = alreadyCompleted ? 0 : unit.reward.amount
+  const finalReward = alreadyCompleted || isCourseMode ? 0 : unit.reward.amount
 
   useEffect(() => {
     confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#10B981', '#34D399', '#059669', '#FBBF24'] })
@@ -1016,15 +1024,19 @@ function VictoryScreen({
         </motion.div>
       </motion.div>
       <h2 className="mb-3 text-4xl font-black uppercase tracking-tight text-white">
-        {alreadyCompleted ? 'Révision terminée' : 'Leçon terminée !'}
+        {isCourseMode ? 'Cours terminé' : alreadyCompleted ? 'Révision terminée' : 'Leçon terminée !'}
       </h2>
       <p className="mb-6 max-w-xs text-sm font-medium leading-relaxed text-white/55">
-        {alreadyCompleted
+        {isCourseMode
+          ? 'Progression libre enregistrée. Les Graines restent réservées aux parcours Academy guidés.'
+          : alreadyCompleted
           ? 'Tu as renforcé cette notion. La récompense avait déjà été gagnée.'
           : 'Belle progression. Ta série locale et la prochaine unité sont mises à jour.'}
       </p>
       <div className="relative mb-10 flex items-center gap-3 rounded-2xl border-2 border-emerald-500/50 bg-emerald-500/20 px-6 py-3 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
-        {alreadyCompleted ? (
+        {isCourseMode ? (
+          <span className="text-base font-black text-emerald-300">Exploration libre enregistrée</span>
+        ) : alreadyCompleted ? (
           <span className="text-base font-black text-emerald-300">Récompense déjà gagnée</span>
         ) : (
           <>
@@ -1039,7 +1051,7 @@ function VictoryScreen({
         onClick={onFinish}
         className="mb-8 mt-auto w-full rounded-3xl bg-emerald-500 py-6 text-xl font-black uppercase tracking-wide text-black shadow-[0_7px_0_#065f46] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_5px_0_#065f46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200 active:translate-y-[6px] active:shadow-[0_1px_0_#065f46]"
       >
-        {alreadyCompleted ? "Retour à l'Academy" : 'Continuer le voyage'}
+        {isCourseMode ? 'Retour à Apprendre' : alreadyCompleted ? "Retour à l'Academy" : 'Continuer le voyage'}
       </button>
     </div>
   )
@@ -1128,8 +1140,13 @@ function renderExercise({
 export default function ExerciseEngine() {
   const router = useRouter()
   const params = useParams<{ chapter?: string | string[]; unit?: string | string[] }>()
+  const searchParams = useSearchParams()
   const chapterSlug = getParam(params.chapter)
   const unitSlug = getParam(params.unit)
+  const isCourseMode = searchParams.get('mode') === 'course'
+  const learningCourseId = searchParams.get('courseId') || null
+  const rawReturnTo = searchParams.get('returnTo')
+  const returnTo = rawReturnTo?.startsWith('/') ? rawReturnTo : learningCourseId ? `/learn/courses/${learningCourseId}` : '/learn/courses'
   const isEvent = chapterSlug === 'events'
   const chapter = isEvent
     ? ({ id: 'events', slug: 'events', title: 'Événements', subtitle: '' } as any)
@@ -1143,11 +1160,17 @@ export default function ExerciseEngine() {
         ? getUnitBySlug(chapterSlug, unitSlug)
         : null
   const [progress, setProgress] = useState(() => getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID))
+  const [learningProgress, setLearningProgress] = useState(() => createDefaultLearningProgress(MOCK_ACADEMY_VIEWER_ID))
   const [isProgressReady, setIsProgressReady] = useState(false)
+  const completedLearningLessonIds = learningCourseId
+    ? learningProgress.completedLessonIdsByCourse[learningCourseId] ?? []
+    : []
   const alreadyCompleted = unit
-    ? progress.completedUnitIds.includes(unit.id) || progress.completedEventIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
+    ? isCourseMode && learningCourseId
+      ? learningProgress.completedCourseIds.includes(learningCourseId)
+      : progress.completedUnitIds.includes(unit.id) || progress.completedEventIds.includes(unit.id) || isRewardAlreadyEarned(progress, unit.id)
     : false
-  const isLockedUnit = unit && isProgressReady && !isEvent && unit.kind !== 'project' ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
+  const isLockedUnit = unit && isProgressReady && !isCourseMode && !isEvent && unit.kind !== 'project' ? !alreadyCompleted && unit.id !== progress.activeUnitId : false
   const prerequisiteUnit = unit && !isEvent ? getUnitPrerequisite(unit.id, progress) ?? getActiveUnit(academyRepository.getCurriculum(), progress) : null
   const prerequisiteChapter = prerequisiteUnit ? getChapterBySlug(prerequisiteUnit.chapterId) : null
 
@@ -1159,14 +1182,18 @@ export default function ExerciseEngine() {
   const [mistakes, setMistakes] = useState(0)
   const [showComboAnimation, setShowComboAnimation] = useState<{ show: boolean; level: number } | null>(null)
   const [attempt, setAttempt] = useState(0)
-  const activeLesson: AcademyLesson | null = unit ? getNextLessonForUnit(unit, progress) : null
+  const activeLesson: AcademyLesson | null = unit
+    ? isCourseMode
+      ? unit.lessons.find((lesson) => !completedLearningLessonIds.includes(lesson.id)) ?? unit.lessons.at(-1) ?? getNextLessonForUnit(unit, progress)
+      : getNextLessonForUnit(unit, progress)
+    : null
   const [sessionExercises, setSessionExercises] = useState<AcademyExercise[]>(() => activeLesson?.exercises ?? unit?.exercises ?? [])
   const [missedConceptIds, setMissedConceptIds] = useState<string[]>([])
 
   const currentExercise = sessionExercises[currentStepIndex] ?? null
   const isFinished = Boolean(unit && currentStepIndex >= sessionExercises.length)
-  const isGameOver = lives === 0
-  const canEarnUnitReward = Boolean(unit && activeLesson && activeLesson.order === unit.lessons.length && !alreadyCompleted)
+  const isGameOver = !isCourseMode && lives === 0
+  const canEarnUnitReward = Boolean(!isCourseMode && unit && activeLesson && activeLesson.order === unit.lessons.length && !alreadyCompleted)
 
   useEffect(() => {
     if (isGameOver) {
@@ -1178,11 +1205,18 @@ export default function ExerciseEngine() {
   }, [isGameOver, router])
 
   useEffect(() => {
+    if (isCourseMode) {
+      setLearningProgress(readLearningProgress(MOCK_ACADEMY_VIEWER_ID))
+      setLives(5)
+      setIsProgressReady(true)
+      return
+    }
+
     const nextProgress = academyRepository.regenerateLives(MOCK_ACADEMY_VIEWER_ID)
     setProgress(nextProgress)
     setLives(nextProgress.lives.remaining)
     setIsProgressReady(true)
-  }, [])
+  }, [isCourseMode])
 
   useEffect(() => {
     setSessionExercises(activeLesson?.exercises ?? unit?.exercises ?? [])
@@ -1193,9 +1227,8 @@ export default function ExerciseEngine() {
 
   const handleResult = (correct: boolean, text: string) => {
     if (!correct) {
-      const unlimited = isUnlimitedLives(progress.seedsBalance)
       let nextLives = lives
-      if (!unlimited) {
+      if (!isCourseMode && !isUnlimitedLives(progress.seedsBalance)) {
         const nextProgress = academyRepository.spendLife(MOCK_ACADEMY_VIEWER_ID)
         setProgress(nextProgress)
         nextLives = nextProgress.lives.remaining
@@ -1246,21 +1279,31 @@ export default function ExerciseEngine() {
     if (unit && activeLesson) {
       const correctAnswers = Math.max(0, sessionExercises.length - mistakes)
       const score = Math.round((correctAnswers / sessionExercises.length) * 100)
-      academyRepository.completeLesson(MOCK_ACADEMY_VIEWER_ID, unit.id, activeLesson.id, {
-        score,
-        mistakes,
-        missedConceptIds,
-      })
+      if (isCourseMode && learningCourseId) {
+        const nextLearningProgress = markLearningLessonCompleted(
+          readLearningProgress(MOCK_ACADEMY_VIEWER_ID),
+          learningCourseId,
+          activeLesson.id,
+          unit.lessons.map((lesson) => lesson.id),
+        )
+        setLearningProgress(writeLearningProgress(nextLearningProgress))
+      } else {
+        academyRepository.completeLesson(MOCK_ACADEMY_VIEWER_ID, unit.id, activeLesson.id, {
+          score,
+          mistakes,
+          missedConceptIds,
+        })
+      }
     }
-    router.push('/academy')
+    router.push(isCourseMode ? returnTo : '/academy')
   }
 
   const handleQuit = () => {
-    router.push('/academy')
+    router.push(isCourseMode ? returnTo : '/academy')
   }
 
   const handleRetry = () => {
-    router.replace('/academy/out-of-lives')
+    router.replace(isCourseMode ? returnTo : '/academy/out-of-lives')
   }
 
   if (!chapter || !unit) {
@@ -1324,7 +1367,7 @@ export default function ExerciseEngine() {
   return (
     <FullScreenSlideModal headerMode="none" className="bg-[#05050A]" contentClassName="relative flex h-full flex-col overflow-hidden">
       {isFinished ? (
-        <VictoryScreen unit={unit} alreadyCompleted={!canEarnUnitReward} onFinish={handleFinish} />
+        <VictoryScreen unit={unit} alreadyCompleted={!canEarnUnitReward} onFinish={handleFinish} isCourseMode={isCourseMode} />
       ) : isGameOver ? (
         <GameOverScreen onQuit={handleQuit} onRetry={handleRetry} />
       ) : (
