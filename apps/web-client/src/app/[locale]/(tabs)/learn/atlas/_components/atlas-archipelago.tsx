@@ -21,6 +21,7 @@ import { Link } from '@/i18n/navigation'
 import { readLearningProgress } from '@/lib/learning/progress'
 import type { AtlasIslandNode, AtlasIslandView, LearningDomainId } from '@/lib/learning/schema'
 import { cn } from '@/lib/utils'
+import { learningInteractiveClassName } from '../../_features/learning-cards'
 
 const ATLAS_VIEWER_ID = 'mock-viewer'
 
@@ -100,7 +101,10 @@ function AtlasIslandButton({
       aria-pressed={selected}
       aria-label={`Ouvrir l’île ${island.domain.title}`}
       onClick={onSelect}
-      className="absolute z-10 text-left transition-transform duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-200"
+      className={cn(
+        'absolute z-10 text-left transition-transform duration-300',
+        learningInteractiveClassName,
+      )}
       style={getIslandStyle(island, selected)}
     >
       <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[13px] font-black tracking-tight text-[var(--island-label)] drop-shadow-[0_4px_10px_rgba(0,0,0,0.75)] md:text-[16px]">
@@ -213,7 +217,7 @@ function AtlasIslandPanel({
         </div>
       </div>
 
-      <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:mt-5 lg:grid-cols-1">
+      <div className="mt-3 divide-y divide-white/8 overflow-hidden rounded-[1.1rem] border border-white/8 bg-white/[0.025] sm:grid sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:mt-5 lg:block lg:divide-x-0 lg:divide-y">
         {island.nodes.slice(0, 2).map((node) => {
           const NodeIcon = getNodeIcon(node.kind)
 
@@ -221,7 +225,10 @@ function AtlasIslandPanel({
             <Link
               key={node.id}
               href={node.href}
-              className="group flex min-w-0 items-center gap-3 rounded-[1.1rem] border border-white/8 bg-white/[0.045] p-2.5 transition-colors active:bg-white/[0.07] lg:p-3"
+              className={cn(
+                'group flex min-h-[4.25rem] min-w-0 items-center gap-3 p-3 transition-colors active:bg-white/[0.07]',
+                learningInteractiveClassName,
+              )}
             >
               <span
                 className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl border border-white/10 bg-black/22 lg:h-10 lg:w-10"
@@ -249,7 +256,10 @@ function AtlasIslandPanel({
       <div className="mt-3 flex items-center gap-3 lg:mt-4">
         <Link
           href={primaryHref}
-          className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-[1.1rem] bg-white px-4 text-[14px] font-black text-[#061018] transition-transform active:scale-[0.99]"
+          className={cn(
+            'inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-[1.1rem] bg-white px-4 text-[14px] font-black text-[#061018] transition-transform active:scale-[0.99]',
+            learningInteractiveClassName,
+          )}
         >
           {primaryLabel}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -257,7 +267,10 @@ function AtlasIslandPanel({
         <Link
           href={`/learn/courses?domain=${island.domain.id}`}
           aria-label={`Chercher dans ${island.domain.title}`}
-          className="grid h-12 w-12 shrink-0 place-items-center rounded-[1.1rem] border border-white/10 bg-white/[0.055] text-white/68 active:bg-white/[0.08]"
+          className={cn(
+            'grid h-12 w-12 shrink-0 place-items-center rounded-[1.1rem] border border-white/10 bg-white/[0.055] text-white/68 active:bg-white/[0.08]',
+            learningInteractiveClassName,
+          )}
         >
           <Search className="h-5 w-5" aria-hidden="true" />
         </Link>
@@ -308,7 +321,10 @@ export function AtlasArchipelago({ islands }: { islands: AtlasIslandView[] }) {
       <header className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-4 pt-[max(1rem,env(safe-area-inset-top))]">
         <Link
           href="/learn"
-          className="pointer-events-auto grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/28 text-white/76 shadow-[0_12px_34px_rgba(0,0,0,0.26)] backdrop-blur-xl active:bg-white/[0.07]"
+          className={cn(
+            'pointer-events-auto grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/28 text-white/76 shadow-[0_12px_34px_rgba(0,0,0,0.26)] backdrop-blur-xl active:bg-white/[0.07]',
+            learningInteractiveClassName,
+          )}
           aria-label="Retour à Apprendre"
         >
           <ArrowLeft className="h-5 w-5" aria-hidden="true" />
@@ -321,7 +337,10 @@ export function AtlasArchipelago({ islands }: { islands: AtlasIslandView[] }) {
         </div>
         <Link
           href="/learn/courses"
-          className="pointer-events-auto grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/28 text-white/76 shadow-[0_12px_34px_rgba(0,0,0,0.26)] backdrop-blur-xl active:bg-white/[0.07]"
+          className={cn(
+            'pointer-events-auto grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-black/28 text-white/76 shadow-[0_12px_34px_rgba(0,0,0,0.26)] backdrop-blur-xl active:bg-white/[0.07]',
+            learningInteractiveClassName,
+          )}
           aria-label="Tous les cours"
         >
           <Search className="h-5 w-5" aria-hidden="true" />

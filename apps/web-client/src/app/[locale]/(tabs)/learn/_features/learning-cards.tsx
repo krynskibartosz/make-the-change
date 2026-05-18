@@ -12,12 +12,25 @@ import {
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
-import type { AtlasDomainWithCourses, LearningCourse, LearningDomainId, LearningPath } from '@/lib/learning/schema'
+import type {
+  AtlasDomainWithCourses,
+  LearningCourse,
+  LearningDomainId,
+  LearningPath,
+} from '@/lib/learning/schema'
 import { getLearningCoursePlayHref } from '@/lib/learning/selectors'
+import { cn } from '@/lib/utils'
+
+const interactiveFocus =
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-200'
+
+const learningSurface =
+  'border border-white/10 bg-white/[0.035] shadow-[0_18px_58px_rgba(0,0,0,0.20)]'
+
+export const learningInteractiveClassName = interactiveFocus
 
 export const LEARNING_DOMAIN_LABELS: Record<LearningDomainId, string> = {
-  'alphabet-du-vivant': "Alphabet du vivant",
+  'alphabet-du-vivant': 'Alphabet du vivant',
   'milieux-habitats': 'Milieux & habitats',
   'relations-du-vivant': 'Relations du vivant',
   menaces: 'Menaces',
@@ -59,9 +72,15 @@ export function LearningScreenIntro({
 }) {
   return (
     <header className="px-1 pt-2">
-      {eyebrow && <p className="text-[11px] font-black uppercase tracking-[0.18em] text-teal-200/65">{eyebrow}</p>}
+      {eyebrow && (
+        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-teal-200/65">
+          {eyebrow}
+        </p>
+      )}
       <h1 className="mt-1 text-[28px] font-black tracking-tight text-white">{title}</h1>
-      <p className="mt-2 max-w-2xl text-[15px] font-medium leading-relaxed text-white/55">{children}</p>
+      <p className="mt-2 max-w-2xl text-[15px] font-medium leading-relaxed text-white/55">
+        {children}
+      </p>
     </header>
   )
 }
@@ -79,7 +98,13 @@ export function LearningSectionTitle({
     <div className="mb-4 flex items-center justify-between gap-4 px-1">
       <h2 className="text-xl font-black tracking-tight text-white">{title}</h2>
       {href && (
-        <Link href={href} className="flex items-center gap-1 text-sm font-black text-teal-300 active:text-teal-200">
+        <Link
+          href={href}
+          className={cn(
+            'flex min-h-11 items-center gap-1 rounded-2xl px-2 text-sm font-black text-teal-300 active:text-teal-200',
+            interactiveFocus,
+          )}
+        >
           {action ?? 'Voir'} <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       )}
@@ -98,28 +123,45 @@ export function LearningCourseCard({
     <Link
       href={`/learn/courses/${course.id}`}
       className={cn(
-        'group block rounded-[1.35rem] border border-white/8 bg-white/[0.045] transition-colors active:bg-white/[0.07]',
+        'group block min-h-[6.25rem] rounded-[1.25rem] transition-colors active:bg-white/[0.065]',
+        learningSurface,
+        interactiveFocus,
         compact ? 'p-3.5' : 'p-4',
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={cn('rounded-full border px-2 py-0.5 text-[10px] font-black', DOMAIN_TONE[course.domain])}>
+            <span
+              className={cn(
+                'rounded-full border px-2 py-0.5 text-[10px] font-black',
+                DOMAIN_TONE[course.domain],
+              )}
+            >
               {LEARNING_DOMAIN_LABELS[course.domain]}
             </span>
             <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/30">
               {ENTRY_LABEL[course.entry.kind]}
             </span>
           </div>
-          <h3 className={cn('mt-2 font-black leading-tight text-white', compact ? 'text-[15px]' : 'text-[17px]')}>
+          <h3
+            className={cn(
+              'mt-2 font-black leading-tight text-white',
+              compact ? 'text-[15px]' : 'text-[17px]',
+            )}
+          >
             {course.title}
           </h3>
-          <p className={cn('mt-1 leading-relaxed text-white/48', compact ? 'line-clamp-2 text-[12px]' : 'text-[13px]')}>
+          <p
+            className={cn(
+              'mt-1 leading-relaxed text-white/48',
+              compact ? 'line-clamp-2 text-[12px]' : 'text-[13px]',
+            )}
+          >
             {course.subtitle}
           </p>
         </div>
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-white/[0.055] text-white/35 transition-colors group-active:text-teal-200">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white/[0.055] text-white/35 transition-colors group-active:text-teal-200">
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </span>
       </div>
@@ -128,7 +170,13 @@ export function LearningCourseCard({
           <Clock3 className="h-3.5 w-3.5" aria-hidden="true" />
           {course.durationMinutes} min
         </span>
-        <span>{course.level === 'base' ? 'Base' : course.level === 'intermediaire' ? 'Intermédiaire' : 'Avancé'}</span>
+        <span>
+          {course.level === 'base'
+            ? 'Base'
+            : course.level === 'intermediaire'
+              ? 'Intermédiaire'
+              : 'Avancé'}
+        </span>
         <span>{course.theme}</span>
       </div>
     </Link>
@@ -147,36 +195,52 @@ export function LearningPlayButton({
   return (
     <Link
       href={getLearningCoursePlayHref(course, returnTo)}
-      className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-teal-300 px-4 text-[14px] font-black text-[#04110e] shadow-lg shadow-teal-300/15 active:scale-[0.98]"
+      className={cn(
+        'inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-teal-300 px-4 text-[14px] font-black text-[#04110e] shadow-lg shadow-teal-300/15 active:scale-[0.98]',
+        interactiveFocus,
+      )}
     >
-      {course.entry.kind === 'academy_unit' ? <Play className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+      {course.entry.kind === 'academy_unit' ? (
+        <Play className="h-4 w-4" aria-hidden="true" />
+      ) : (
+        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      )}
       {label ?? (course.entry.kind === 'academy_unit' ? 'Commencer' : 'Ouvrir')}
     </Link>
   )
 }
 
 export function AtlasDomainCard({ domain }: { domain: AtlasDomainWithCourses }) {
-  const Icon = domain.id === 'relations-du-vivant'
-    ? Network
-    : domain.id === 'lire-impact'
-      ? Search
-      : domain.id === 'solutions'
-        ? Sprout
-        : Compass
+  const Icon =
+    domain.id === 'relations-du-vivant'
+      ? Network
+      : domain.id === 'lire-impact'
+        ? Search
+        : domain.id === 'solutions'
+          ? Sprout
+          : Compass
 
   return (
     <Link
       href={`/learn/atlas?domain=${domain.id}`}
-      className={cn('block rounded-[1.35rem] border p-4 transition-colors active:bg-white/[0.07]', DOMAIN_TONE[domain.id])}
+      className={cn(
+        'block rounded-[1.25rem] p-4 transition-colors active:bg-white/[0.07]',
+        DOMAIN_TONE[domain.id],
+        interactiveFocus,
+      )}
     >
       <div className="flex items-start justify-between gap-3">
         <span className="grid h-11 w-11 place-items-center rounded-2xl bg-black/18 text-current">
           <Icon className="h-5 w-5" aria-hidden="true" />
         </span>
-        <span className="rounded-full bg-black/15 px-2 py-1 text-[10px] font-black">{domain.courseCount} cours</span>
+        <span className="rounded-full bg-black/15 px-2 py-1 text-[10px] font-black">
+          {domain.courseCount} cours
+        </span>
       </div>
       <h3 className="mt-4 text-[17px] font-black leading-tight text-white">{domain.title}</h3>
-      <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-white/50">{domain.subtitle}</p>
+      <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-white/50">
+        {domain.subtitle}
+      </p>
     </Link>
   )
 }
@@ -185,7 +249,11 @@ export function LearningPathCard({ path }: { path: LearningPath }) {
   return (
     <Link
       href={`/learn/parcours/${path.id}`}
-      className="block rounded-[1.35rem] border border-white/8 bg-white/[0.045] p-4 transition-colors active:bg-white/[0.07]"
+      className={cn(
+        'block rounded-[1.25rem] p-4 transition-colors active:bg-white/[0.07]',
+        learningSurface,
+        interactiveFocus,
+      )}
     >
       <div className="flex items-start justify-between gap-3">
         <span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-300/10 text-teal-200">

@@ -1,13 +1,15 @@
-import type { Metadata } from 'next'
 import { Search } from 'lucide-react'
+import type { Metadata } from 'next'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { LEARNING_ATLAS_DOMAINS } from '@/lib/learning/catalog'
 import type { LearningDomainId, LearningLevel } from '@/lib/learning/schema'
 import { searchLearningCourses } from '@/lib/learning/selectors'
+import { cn } from '@/lib/utils'
 import {
   LearningCourseCard,
   LearningScreenIntro,
   LearningSectionTitle,
+  learningInteractiveClassName,
   PROJECT_LABEL_BY_SLUG,
 } from '../_features/learning-cards'
 
@@ -38,6 +40,9 @@ const PROJECT_OPTIONS = [
   ...Object.entries(PROJECT_LABEL_BY_SLUG).map(([value, label]) => ({ value, label })),
 ]
 
+const filterControlClassName =
+  'min-h-12 rounded-2xl border border-white/10 bg-[#101820] px-3 text-[13px] font-semibold text-white/78 outline-none'
+
 export default async function LearningCoursesPage({ searchParams }: LearningCoursesPageProps) {
   const params = await searchParams
   const maxDurationMinutes = params?.duration === '5' ? 5 : undefined
@@ -54,13 +59,17 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
     <TabScreen className="bg-[#0B0F15]">
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-28 pt-[max(1.75rem,env(safe-area-inset-top))]">
         <LearningScreenIntro eyebrow="Catalogue" title="Tous les cours">
-          Recherche précise, filtres par domaine, niveau, durée, projet et BioDex. Un même cours peut apparaître dans
-          plusieurs contextes.
+          Trouve vite un cours par thème, niveau, durée ou projet. Le catalogue reste libre, sans
+          bloquer la progression Academy.
         </LearningScreenIntro>
 
-        <form className="rounded-[1.5rem] border border-white/8 bg-white/[0.045] p-4">
-          <label className="flex min-h-12 items-center gap-3 rounded-2xl bg-black/20 px-4 text-white/70">
+        <form
+          className="rounded-[1.35rem] border border-white/8 bg-white/[0.025] p-3"
+          role="search"
+        >
+          <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-white/10 bg-black/18 px-4 text-white/70 focus-within:border-teal-200/45">
             <Search className="h-4 w-4 text-white/35" aria-hidden="true" />
+            <span className="sr-only">Rechercher un cours</span>
             <input
               name="q"
               defaultValue={params?.q ?? ''}
@@ -72,7 +81,8 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
             <select
               name="domain"
               defaultValue={params?.domain ?? 'all'}
-              className="h-11 rounded-2xl border border-white/8 bg-[#111820] px-3 text-[13px] font-semibold text-white/75 outline-none"
+              aria-label="Filtrer par domaine"
+              className={cn(filterControlClassName, learningInteractiveClassName)}
             >
               <option value="all">Tous domaines</option>
               {LEARNING_ATLAS_DOMAINS.map((domain) => (
@@ -84,7 +94,8 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
             <select
               name="level"
               defaultValue={params?.level ?? 'all'}
-              className="h-11 rounded-2xl border border-white/8 bg-[#111820] px-3 text-[13px] font-semibold text-white/75 outline-none"
+              aria-label="Filtrer par niveau"
+              className={cn(filterControlClassName, learningInteractiveClassName)}
             >
               {LEVEL_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -95,7 +106,8 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
             <select
               name="duration"
               defaultValue={params?.duration ?? 'all'}
-              className="h-11 rounded-2xl border border-white/8 bg-[#111820] px-3 text-[13px] font-semibold text-white/75 outline-none"
+              aria-label="Filtrer par durée"
+              className={cn(filterControlClassName, learningInteractiveClassName)}
             >
               <option value="all">Toute durée</option>
               <option value="5">5 min max</option>
@@ -103,7 +115,8 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
             <select
               name="project"
               defaultValue={params?.project ?? 'all'}
-              className="h-11 rounded-2xl border border-white/8 bg-[#111820] px-3 text-[13px] font-semibold text-white/75 outline-none"
+              aria-label="Filtrer par projet"
+              className={cn(filterControlClassName, learningInteractiveClassName)}
             >
               {PROJECT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -112,7 +125,13 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
               ))}
             </select>
           </div>
-          <button className="mt-3 h-11 rounded-2xl bg-teal-300 px-4 text-[14px] font-black text-[#04110e]" type="submit">
+          <button
+            className={cn(
+              'mt-3 min-h-12 rounded-2xl bg-teal-300 px-4 text-[14px] font-black text-[#04110e]',
+              learningInteractiveClassName,
+            )}
+            type="submit"
+          >
             Filtrer
           </button>
         </form>

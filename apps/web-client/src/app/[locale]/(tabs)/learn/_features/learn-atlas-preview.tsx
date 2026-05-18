@@ -12,6 +12,7 @@ import {
 import type { CSSProperties } from 'react'
 import { Link } from '@/i18n/navigation'
 import type { AtlasIslandView } from '@/lib/learning/schema'
+import { learningInteractiveClassName } from './learning-cards'
 
 const PREVIEW_LINKS = [
   ['alphabet-du-vivant', 'relations-du-vivant'],
@@ -47,7 +48,8 @@ export function LearnAtlasPreview({ islands }: { islands: AtlasIslandView[] }) {
   return (
     <Link
       href="/learn/atlas"
-      className="group relative block min-h-[22rem] overflow-hidden rounded-[2rem] border border-white/10 bg-[#061018] shadow-[0_22px_70px_rgba(0,0,0,0.36)] transition-transform active:scale-[0.99]"
+      aria-label="Ouvrir l'Atlas du vivant"
+      className={`group relative block min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#061018] shadow-[0_22px_70px_rgba(0,0,0,0.36)] transition-transform active:scale-[0.99] ${learningInteractiveClassName}`}
     >
       <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(10,34,43,0.92),rgba(3,8,13,0.96)_58%,rgba(8,20,22,0.98))]" />
       <svg
@@ -119,7 +121,7 @@ export function LearnAtlasPreview({ islands }: { islands: AtlasIslandView[] }) {
         })}
       </div>
 
-      <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-2xl border border-white/10 bg-[#071016]/80 px-3 py-2 text-[13px] font-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.28)] backdrop-blur-md">
+      <div className="absolute bottom-4 left-4 z-10 flex min-h-11 items-center gap-2 rounded-2xl border border-white/10 bg-[#071016]/80 px-3 py-2 text-[13px] font-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.28)] backdrop-blur-md">
         <Search className="h-4 w-4 text-teal-200" aria-hidden="true" />
         Explorer l’atlas
       </div>

@@ -1,11 +1,17 @@
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { Link } from '@/i18n/navigation'
 import { getLearningCourseById, getLearningPathById } from '@/lib/learning/catalog'
 import type { LearningCourse } from '@/lib/learning/schema'
-import { LearningCourseCard, LearningPlayButton, LearningScreenIntro } from '../../_features/learning-cards'
+import { cn } from '@/lib/utils'
+import {
+  LearningCourseCard,
+  LearningPlayButton,
+  LearningScreenIntro,
+  learningInteractiveClassName,
+} from '../../_features/learning-cards'
 
 type LearningPathDetailPageProps = {
   params: Promise<{
@@ -19,7 +25,9 @@ export async function generateMetadata({ params }: LearningPathDetailPageProps):
   const path = getLearningPathById(pathId)
 
   return {
-    title: path ? `${path.title} | Parcours | Make the Change` : 'Parcours non trouvé | Make the Change',
+    title: path
+      ? `${path.title} | Parcours | Make the Change`
+      : 'Parcours non trouvé | Make the Change',
   }
 }
 
@@ -43,21 +51,31 @@ export default async function LearningPathDetailPage({ params }: LearningPathDet
           {path.description}
         </LearningScreenIntro>
 
-        <section className="rounded-[1.6rem] border border-white/8 bg-white/[0.045] p-5">
+        <section className="rounded-[1.45rem] border border-white/8 bg-white/[0.025] p-5">
           <div className="flex flex-wrap items-center gap-3">
             {path.isAcademyPrimary ? (
               <Link
                 href={path.primaryHref}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-teal-300 px-4 text-[14px] font-black text-[#04110e] shadow-lg shadow-teal-300/15 active:scale-[0.98]"
+                className={cn(
+                  'inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-teal-300 px-4 text-[14px] font-black text-[#04110e] shadow-lg shadow-teal-300/15 active:scale-[0.98]',
+                  learningInteractiveClassName,
+                )}
               >
                 Ouvrir l’Academy <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             ) : firstCourse ? (
-              <LearningPlayButton course={firstCourse} returnTo={`/learn/parcours/${path.id}`} label="Commencer" />
+              <LearningPlayButton
+                course={firstCourse}
+                returnTo={`/learn/parcours/${path.id}`}
+                label="Commencer"
+              />
             ) : null}
             <Link
               href="/learn/parcours"
-              className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/10 px-4 text-[14px] font-black text-white/65 active:bg-white/[0.06]"
+              className={cn(
+                'inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/10 px-4 text-[14px] font-black text-white/65 active:bg-white/[0.06]',
+                learningInteractiveClassName,
+              )}
             >
               Tous les parcours
             </Link>
@@ -65,14 +83,20 @@ export default async function LearningPathDetailPage({ params }: LearningPathDet
           <div className="mt-4 grid gap-2 text-[12px] font-semibold text-white/45 sm:grid-cols-3">
             <span>{courses.length} étapes</span>
             <span>{path.durationMinutes} min estimées</span>
-            <span>{path.level === 'base' ? 'Niveau base' : path.level === 'intermediaire' ? 'Niveau intermédiaire' : 'Niveau avancé'}</span>
+            <span>
+              {path.level === 'base'
+                ? 'Niveau base'
+                : path.level === 'intermediaire'
+                  ? 'Niveau intermédiaire'
+                  : 'Niveau avancé'}
+            </span>
           </div>
         </section>
 
         <section className="grid gap-3">
           {courses.map((course, index) => (
             <div key={course.id} className="grid gap-3 md:grid-cols-[52px_1fr] md:items-start">
-              <div className="hidden md:grid h-11 w-11 place-items-center rounded-2xl bg-white/[0.05] text-white/35">
+              <div className="hidden h-11 w-11 place-items-center rounded-2xl bg-white/[0.05] text-white/35 md:grid">
                 {index + 1}
               </div>
               <div className="relative">

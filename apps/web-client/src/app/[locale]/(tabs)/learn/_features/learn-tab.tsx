@@ -25,6 +25,7 @@ import {
   LearningPathCard,
   LearningPlayButton,
   LearningSectionTitle,
+  learningInteractiveClassName,
   PROJECT_LABEL_BY_SLUG,
 } from './learning-cards'
 import { SeedsFloatingBadge } from './seeds-floating-badge'
@@ -59,7 +60,7 @@ function LearnRouteCard({ href, icon: Icon, title, subtitle, tone }: LearnRouteC
   return (
     <Link
       href={href}
-      className="group flex items-center gap-4 rounded-[1.45rem] border border-white/8 bg-white/[0.04] p-4 transition-colors active:bg-white/[0.07]"
+      className={`group flex min-h-[5.75rem] items-center gap-4 rounded-[1.25rem] border border-white/8 bg-white/[0.035] p-4 transition-colors active:bg-white/[0.07] ${learningInteractiveClassName}`}
     >
       <span
         className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border ${ROUTE_TONE[tone]}`}
@@ -140,7 +141,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
           <Link
             href="/profile/seeds"
             prefetch={false}
-            className="flex shrink-0 items-center gap-2 rounded-2xl border border-emerald-200/12 bg-emerald-300/8 px-3 py-2 text-emerald-100"
+            className={`flex min-h-11 shrink-0 items-center gap-2 rounded-2xl border border-emerald-200/12 bg-emerald-300/8 px-3 py-2 text-emerald-100 ${learningInteractiveClassName}`}
             aria-label={`Solde : ${seeds} Graines`}
           >
             <Sprout className="h-4 w-4" aria-hidden="true" />
@@ -161,7 +162,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
               </h2>
               <span className="text-[12px] font-bold text-white/34">Dernier fil</span>
             </div>
-            <div className="overflow-hidden rounded-[1.6rem] border border-teal-200/14 bg-gradient-to-br from-teal-300/12 via-white/[0.045] to-emerald-300/6 p-4 shadow-[0_18px_54px_rgba(0,0,0,0.22)]">
+            <div className="overflow-hidden rounded-[1.45rem] border border-teal-200/14 bg-gradient-to-br from-teal-300/12 via-white/[0.035] to-emerald-300/6 p-4 shadow-[0_18px_54px_rgba(0,0,0,0.22)]">
               <div className="flex items-start gap-4">
                 <div className="grid h-16 w-16 shrink-0 place-items-center rounded-[22px] bg-teal-300 text-[#04110e] shadow-lg shadow-teal-300/15">
                   <BookOpen className="h-7 w-7" aria-hidden="true" />
@@ -182,7 +183,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                 <LearningPlayButton course={continueCourse} returnTo="/learn" label="Continuer" />
                 <Link
                   href={`/learn/courses/${continueCourse.id}`}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-white/10 px-4 text-[14px] font-black text-white/70 active:bg-white/[0.06]"
+                  className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/10 px-4 text-[14px] font-black text-white/70 active:bg-white/[0.06] ${learningInteractiveClassName}`}
                 >
                   Voir la fiche <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
@@ -235,22 +236,19 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
 
         <section>
           <LearningSectionTitle
-            title="Suggestions compactes"
+            title="Aujourd'hui et projets"
             href="/learn/courses?duration=5"
             action="Cours courts"
           />
-          <div className="grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="grid gap-3 md:grid-cols-2">
               {home.today.slice(0, 2).map((course) => (
                 <LearningCourseCard key={course.id} course={course} compact />
               ))}
             </div>
-            <div className="grid gap-3">
+            <div className="divide-y divide-white/8 rounded-[1.25rem] border border-white/8 bg-white/[0.025]">
               {home.projectGroups.slice(0, 2).map((group) => (
-                <div
-                  key={group.projectSlug}
-                  className="rounded-[1.25rem] border border-white/8 bg-white/[0.035] p-3"
-                >
+                <div key={group.projectSlug} className="px-4 py-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.16em] text-teal-200/55">
                     {PROJECT_LABEL_BY_SLUG[group.projectSlug] ?? group.projectSlug}
                   </p>
@@ -259,7 +257,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                       <Link
                         key={course.id}
                         href={`/learn/courses/${course.id}`}
-                        className="rounded-full border border-white/8 bg-white/[0.045] px-3 py-1.5 text-[12px] font-bold text-white/66 active:bg-white/[0.07]"
+                        className={`rounded-full border border-white/8 bg-white/[0.045] px-3 py-2 text-[12px] font-bold text-white/66 active:bg-white/[0.07] ${learningInteractiveClassName}`}
                       >
                         {course.subject}
                       </Link>
@@ -273,8 +271,8 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
 
         <section>
           <LearningSectionTitle title="BioDex & Toile vivante" href="/ecosysteme" action="Toile" />
-          <div className="grid gap-3 md:grid-cols-[1fr_1fr]">
-            <div className="rounded-[1.35rem] border border-white/8 bg-white/[0.035] p-4">
+          <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.025] p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h3 className="text-[16px] font-black text-white">Espèces à approfondir</h3>
@@ -282,7 +280,10 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                     Rôles écologiques et cours liés
                   </p>
                 </div>
-                <Link href="/profile/biodex" className="text-[12px] font-black text-teal-300">
+                <Link
+                  href="/profile/biodex"
+                  className={`rounded-xl px-2 py-1 text-[12px] font-black text-teal-300 ${learningInteractiveClassName}`}
+                >
                   BioDex
                 </Link>
               </div>
@@ -292,7 +293,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                     <Link
                       key={entry.id}
                       href={`/profile/biodex/${entry.id}`}
-                      className="w-[72px] shrink-0"
+                      className={`w-[72px] shrink-0 rounded-[18px] ${learningInteractiveClassName}`}
                     >
                       <div className="grid aspect-square place-items-center overflow-hidden rounded-[18px] bg-white/[0.05]">
                         {entry.image_url ? (
@@ -324,7 +325,7 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
                 <Link
                   key={course.id}
                   href={course.entry.href}
-                  className="flex items-center gap-4 rounded-[1.35rem] border border-white/8 bg-white/[0.045] p-4 active:bg-white/[0.07]"
+                  className={`flex min-h-[5.25rem] items-center gap-4 rounded-[1.25rem] border border-white/8 bg-white/[0.035] p-4 active:bg-white/[0.07] ${learningInteractiveClassName}`}
                 >
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal-300/10 text-teal-200">
                     <GitBranch className="h-5 w-5" aria-hidden="true" />
