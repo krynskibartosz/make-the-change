@@ -756,7 +756,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Une équipe en croissance",
           body: "Alexia fondatrice, rejointe en 2024 par Léonard et Quentin. Ensemble, ils développent le potentiel de la marque en plaçant les abeilles, la nature et le plaisir au centre des valeurs.",
-          imageUrl: "/images/producteurs/habeebee/portrait.jpg",
+          imageUrl: "/images/producteurs/habeebee/story-4-tedy-artisan.jpg",
         },
         {
           title: "Savonnerie artisanale",
