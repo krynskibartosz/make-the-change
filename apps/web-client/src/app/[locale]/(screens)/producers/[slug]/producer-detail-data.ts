@@ -121,43 +121,36 @@ const toProducerProject = (value: unknown): ProducerProject | null => {
 
 // ── Data fetching ──
 
-export async function getPublicProducerBySlug(slug: string): Promise<PublicProducer | null> {
-  // [ACTUEL_CODE] [SOURCE_PROTOTYPE] : Mocks = source de vérité
-  const mockProducer = getMockProducerBySlug(slug)
-  if (mockProducer) {
-    return {
-      id: mockProducer.id,
-      slug: mockProducer.slug,
-      name_default: mockProducer.name_default,
-      description_default: mockProducer.description_default,
-      address_city: mockProducer.address_city,
-      address_country_code: mockProducer.address_country_code,
-      type: mockProducer.type,
-      images: mockProducer.images,
-      contact_website: mockProducer.contact_website,
-      products: mockProducer.products,
-      projects: mockProducer.projects,
-      species: mockProducer.species,
-      // ── Champs éditoriaux ──
-      tagline: mockProducer.tagline,
-      locations: mockProducer.locations,
-      partnerType: mockProducer.partnerType,
-      missionPillars: mockProducer.missionPillars,
-      proofCards: mockProducer.proofCards,
-      storyBlocks: mockProducer.storyBlocks,
-      impactSummary: mockProducer.impactSummary,
-      
-      // ── Champs enrichis (Phase 1) ──
-      editorialIdentity: mockProducer.editorialIdentity,
-      visualAssets: mockProducer.visualAssets,
-      sectionOrder: mockProducer.sectionOrder,
-      
-      // ── Gamme partenaire (informatif — pas le catalogue app) ──
-      partnerCatalogOverview: mockProducer.partnerCatalogOverview,
-    }
+function mapMockToPublicProducer(mockProducer: NonNullable<ReturnType<typeof getMockProducerBySlug>>): PublicProducer {
+  return {
+    id: mockProducer.id,
+    slug: mockProducer.slug,
+    name_default: mockProducer.name_default,
+    description_default: mockProducer.description_default,
+    address_city: mockProducer.address_city,
+    address_country_code: mockProducer.address_country_code,
+    type: mockProducer.type,
+    images: mockProducer.images,
+    contact_website: mockProducer.contact_website,
+    products: mockProducer.products,
+    projects: mockProducer.projects,
+    species: mockProducer.species,
+    tagline: mockProducer.tagline,
+    locations: mockProducer.locations,
+    partnerType: mockProducer.partnerType,
+    missionPillars: mockProducer.missionPillars,
+    proofCards: mockProducer.proofCards,
+    storyBlocks: mockProducer.storyBlocks,
+    impactSummary: mockProducer.impactSummary,
+    editorialIdentity: mockProducer.editorialIdentity,
+    visualAssets: mockProducer.visualAssets,
+    sectionOrder: mockProducer.sectionOrder,
+    partnerCatalogOverview: mockProducer.partnerCatalogOverview,
   }
+}
 
-  // [ACTUEL_CODE] [LEGACY] [A_NE_PAS_TOUCHER] : Fallback Supabase V0
+// [ACTUEL_CODE] [LEGACY] [A_NE_PAS_TOUCHER] : Fallback Supabase V0 — cached séparément
+async function getSupabaseProducerBySlug(slug: string): Promise<PublicProducer | null> {
   if (isMockDataSource) {
     return null
   }
@@ -225,7 +218,8 @@ export async function getPublicProducerBySlug(slug: string): Promise<PublicProdu
               id: speciesId,
               name: speciesName,
               image: asString(s.image_url) || '/images/diorama-chouette.png',
-              unlocked: true, // [TODO_V2] : Déterminer selon les contributions réelles
+              unlocked: true,
+              rarity: 'Commun' as const, // [TODO_V2] : Enrichir depuis la DB
             })
           }
         }
@@ -264,8 +258,21 @@ export async function getPublicProducerBySlug(slug: string): Promise<PublicProdu
 
 // ── Cache wrapper ──
 
-export const getCachedPublicProducerBySlug = unstable_cache(
-  getPublicProducerBySlug,
-  ['public-producer-detail'],
+// Seul le chemin Supabase est mis en cache — les mocks sont toujours frais (in-memory)
+const _cachedSupabaseProducer = unstable_cache(
+  getSupabaseProducerBySlug,
+  ['public-producer-detail', 'v2'],
   { revalidate: 3600, tags: ['producers-list', 'projects-list', 'products-list'] },
 )
+
+export async function getCachedPublicProducerBySlug(slug: string): Promise<PublicProducer | null> {
+  const mockProducer = getMockProducerBySlug(slug)
+  if (mockProducer) return mapMockToPublicProducer(mockProducer)
+  return _cachedSupabaseProducer(slug)
+}
+
+export async function getPublicProducerBySlug(slug: string): Promise<PublicProducer | null> {
+  const mockProducer = getMockProducerBySlug(slug)
+  if (mockProducer) return mapMockToPublicProducer(mockProducer)
+  return getSupabaseProducerBySlug(slug)
+}
