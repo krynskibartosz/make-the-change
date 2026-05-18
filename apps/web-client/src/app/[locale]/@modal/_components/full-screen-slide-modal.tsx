@@ -56,9 +56,9 @@ export function FullScreenSlideModal({
 
     const handleScroll = (event: Event) => {
       const target = event.target as HTMLElement | null
-      if (!target) return
+      if (!target || target !== container) return
 
-      const nextElevated = target.scrollTop > 60
+      const nextElevated = container.scrollTop > 60
       setIsHeaderElevated((previous) => (previous === nextElevated ? previous : nextElevated))
     }
 
@@ -130,8 +130,8 @@ export function FullScreenSlideModal({
               className={cn(
                 'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300',
                 isHeaderElevated
-                  ? 'bg-white/10 backdrop-blur-md'
-                  : 'bg-black/10 backdrop-blur-sm border border-white/[0.06]',
+                  ? 'bg-transparent active:bg-white/10'
+                  : 'border border-white/[0.06] bg-black/10 backdrop-blur-sm active:bg-black/20',
               )}
               aria-label="Retour"
             >

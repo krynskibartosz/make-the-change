@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "*"
-    ]
+      "Bash(*)",
+      "PowerShell(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebFetch(*)",
+      "Agent(*)",
+      "TodoWrite(*)"
+    ],
+    "defaultMode": "bypassPermissions"
   }
 }
