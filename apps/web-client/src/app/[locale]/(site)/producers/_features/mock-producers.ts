@@ -48,6 +48,9 @@ export type ProofCard = {
   value?: string
   icon: string
   proofType: 'location' | 'certification' | 'method' | 'partner' | 'field_operation' | 'other'
+  detail?: string
+  notes?: string[]
+  caution?: string
 }
 
 export type StoryBlock = {
@@ -80,6 +83,7 @@ export type EditorialIdentity = {
   partnerType: string
   tagline: string
   summary: string
+  emotionalStatement?: string
 }
 
 export type VisualAsset = {
@@ -291,7 +295,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         nextGeneration: ["Nathan Laurent", "Naya Laurent"],
         partnerType: "Partenaire apicole documenté",
         tagline: "Réseau apicole & produits naturels",
-        summary: "Fondée en 2017 par un entrepreneur belge installé à Madagascar, Ilanga Nature structure une filière apicole locale avec mielleries mobiles, formation des apiculteurs et certification biologique Ecocert. L'entreprise exporte des miels, vanilles, épices et confitures artisanaux issus de Madagascar, de l'île Maurice, de La Réunion et de Sardaigne."
+        summary: "Fondée en 2017 par un entrepreneur belge installé à Madagascar, Ilanga Nature structure une filière apicole locale avec mielleries mobiles, formation des apiculteurs et certification biologique Ecocert. L'entreprise exporte des miels, vanilles, épices et confitures artisanaux issus de Madagascar, de l'île Maurice, de La Réunion et de Sardaigne.",
+        emotionalStatement: "Entre biodiversité, producteurs et savoir-faire malgaches."
       },
       
       // ── Visual Assets (Phase 1) ──

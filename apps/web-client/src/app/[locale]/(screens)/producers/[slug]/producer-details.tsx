@@ -36,6 +36,12 @@ type ProducerDetailsProps = {
 export function ProducerDetails({
   producer,
 }: ProducerDetailsProps) {
+  const firstCertif = producer.proofCards?.find(c => c.proofType === 'certification')
+  const certifName = firstCertif?.label.replace(/^Certification\s+/i, '')
+  const trustLine = producer.editorialIdentity?.foundedYear
+    ? `Depuis ${producer.editorialIdentity.foundedYear}${certifName ? ` • ${certifName}` : ''}`
+    : undefined
+
   return (
     <div className="bg-[#0B0F15] text-white pb-8">
       {/* 1. Hero immersif */}
@@ -47,6 +53,7 @@ export function ProducerDetails({
         images={producer.images}
         visualAssets={producer.visualAssets}
         editorialIdentity={producer.editorialIdentity}
+        trustLine={trustLine}
       />
 
       {/* 2. Mission */}

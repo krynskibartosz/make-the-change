@@ -2,22 +2,21 @@
 
 /**
  * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
- * Section Repères de confiance
- * 
+ * Section Repères documentés — générique multi-partenaires.
+ *
  * Architecture:
- * - 3 repères majeurs: cards sobres, accent coloré sur icône + liseré gauche uniquement
- * - Bottom sheet par repère: contexte + nuances
- * - 7 chips secondaires max: éléments documentés lisibles
- * - Chips partenariats non vérifiés masqués
+ * - 3 repères primaires: sélection dynamique (certification > field_operation > method)
+ * - Bottom sheet par repère: primaryContext Ilanga ou card.detail/notes en fallback
+ * - Chips secondaires: éléments restants, valeur "À confirmer" masquée
  */
 
 import { useState } from 'react'
-import { 
-  Ship, 
-  BadgeCheck, 
-  Users, 
-  MapPin, 
-  Route, 
+import {
+  Ship,
+  BadgeCheck,
+  Users,
+  MapPin,
+  Route,
   Hexagon,
   Award,
   Building,
@@ -30,7 +29,14 @@ import {
   TreePine,
   Heart,
   ChevronRight,
-  type LucideIcon 
+  Hammer,
+  HeartHandshake,
+  Hand,
+  Bike,
+  FlaskConical,
+  Minimize2,
+  Leaf,
+  type LucideIcon,
 } from 'lucide-react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
 import type { ProofCard } from '@/app/[locale]/(site)/producers/_features/mock-producers'
@@ -52,9 +58,16 @@ const iconMap: Record<string, LucideIcon> = {
   Package,
   TreePine,
   Heart,
+  Hammer,
+  HeartHandshake,
+  Hand,
+  Bike,
+  FlaskConical,
+  Minimize: Minimize2,
+  Minimize2,
+  Leaf,
 }
 
-// Accent coloré: liseré + icône uniquement, fond très légèrement teinté
 const accentStyles = {
   certification: {
     border: 'border-l-emerald-500/40',
@@ -76,14 +89,14 @@ const accentStyles = {
   },
 }
 
-// Contexte bottom sheet par repère
+// Contenu enrichi des bottom sheets — Ilanga uniquement (données historiques)
 const primaryContext: Record<string, { body: string; notes: string[]; caution?: string }> = {
   'Certification Ecocert': {
     body: "Certains miels Ilanga Nature disposent d'une certification biologique Ecocert. Cette information permet de situer le niveau de contrôle qualité associé aux produits concernés.",
     notes: [
       "Miels biologiques certifiés Ecocert",
-      "Contrôle humidité 16\u201318\u202f%",
-      "Mielleries homologuées Ministère malgache de l'\u00c9levage",
+      "Contrôle humidité 16–18 %",
+      "Mielleries homologuées Ministère malgache de l'Élevage",
     ],
     caution: "Cette certification concerne les produits documentés, pas nécessairement l'ensemble des actions terrain."
   },
@@ -96,7 +109,7 @@ const primaryContext: Record<string, { body: string; notes: string[]; caution?: 
     ],
     caution: "La proximité de collecte est une pratique opérationnelle documentée, pas une mesure d'impact environnemental."
   },
-  "\u00c9cole d'apiculture": {
+  "École d'apiculture": {
     body: "Ilanga forme des apiculteurs locaux à Fort-Dauphin dans une logique de transmission de savoir-faire et de structuration de la filière.",
     notes: [
       "Formation terrain pratique",
@@ -105,6 +118,33 @@ const primaryContext: Record<string, { body: string; notes: string[]; caution?: 
     ],
     caution: "Cette démarche de formation ne constitue pas une preuve d'impact mesuré."
   },
+}
+
+// Sélectionne 3 repères primaires: certification > field_operation > method, puis complétion
+function selectPrimaryProofs(cards: ProofCard[]): ProofCard[] {
+  const PRIORITY_TYPES: ProofCard['proofType'][] = ['certification', 'field_operation', 'method']
+  const usedLabels = new Set<string>()
+  const picks: ProofCard[] = []
+
+  for (const type of PRIORITY_TYPES) {
+    if (picks.length >= 3) break
+    const found = cards.find(c => c.proofType === type && !usedLabels.has(c.label))
+    if (found) {
+      picks.push(found)
+      usedLabels.add(found.label)
+    }
+  }
+
+  // Complétion si moins de 3
+  for (const card of cards) {
+    if (picks.length >= 3) break
+    if (!usedLabels.has(card.label)) {
+      picks.push(card)
+      usedLabels.add(card.label)
+    }
+  }
+
+  return picks
 }
 
 type ProofGridProps = {
@@ -116,37 +156,22 @@ export function ProofGrid({ cards }: ProofGridProps) {
 
   if (!cards || cards.length === 0) return null
 
-  const primaryLabels = [
-    'Certification Ecocert',
-    '2 mielleries mobiles',
-    "\u00c9cole d'apiculture",
-  ]
-
-  // Chips masquées : partenariats non vérifiés
-  const hiddenChipLabels = [
-    'Partenariat USAID',
-    'Partenariat ADAMA',
-    'Partenariat Hope Madagascar',
-  ]
-
-  const primaryProofs = primaryLabels
-    .map((label) => cards.find((card) => card.label === label))
-    .filter((card): card is ProofCard => Boolean(card))
+  const primaryProofs = selectPrimaryProofs(cards)
+  const primaryLabelSet = new Set(primaryProofs.map(c => c.label))
 
   const MAX_CHIPS = 5
   const allSecondary = cards
-    .filter(c => !primaryProofs.some(p => p.label === c.label))
-    .filter(c => !hiddenChipLabels.includes(c.label))
+    .filter(c => !primaryLabelSet.has(c.label))
+    .filter(c => c.value !== 'À confirmer')
   const secondaryProofs = allSecondary.slice(0, MAX_CHIPS)
   const hiddenCount = allSecondary.length - secondaryProofs.length
 
   const activeCard = openLabel ? primaryProofs.find(c => c.label === openLabel) : null
-  const activeContext = openLabel ? primaryContext[openLabel] : null
+  const activeContext = openLabel ? primaryContext[openLabel] ?? null : null
 
   return (
     <>
       <section className="mt-8 px-4">
-        {/* En-tête */}
         {primaryProofs.length > 0 && (
           <div className="mb-4">
             <h2 className="text-[17px] font-bold text-white/80">
@@ -156,7 +181,6 @@ export function ProofGrid({ cards }: ProofGridProps) {
               Quelques éléments documentés pour situer leur travail sur le terrain.
             </p>
 
-            {/* Cards éditoriales — fond légèrement teinté, liseré fin */}
             <div className="space-y-2">
               {primaryProofs.map((card, index) => {
                 const Icon = iconMap[card.icon] || BadgeCheck
@@ -190,7 +214,6 @@ export function ProofGrid({ cards }: ProofGridProps) {
           </div>
         )}
 
-        {/* Chips secondaires */}
         {secondaryProofs.length > 0 && (
           <div>
             <h3 className="mb-2.5 text-[12px] font-medium text-white/40">
@@ -221,46 +244,82 @@ export function ProofGrid({ cards }: ProofGridProps) {
         )}
       </section>
 
-      {/* Bottom sheet — contexte repère */}
+      {/* Bottom sheet — repère détaillé */}
       <MobileSheet
         isOpen={openLabel !== null}
         onClose={() => setOpenLabel(null)}
         title={activeCard?.label}
       >
-        {activeCard && activeContext && (
+        {activeCard && (
           <div className="pb-2">
-            {/* Badge source — en haut, ancre la lecture */}
             <span className="mb-3 inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-white/40">
               Information partenaire documentée
             </span>
 
-            {/* Corps */}
-            <p className="text-[13px] leading-relaxed text-white/65">
-              {activeContext.body}
-            </p>
-
-            {/* Éléments liés */}
-            <div className="mt-4">
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-white/30">
-                Éléments liés
-              </p>
-              <ul className="flex flex-col gap-1.5">
-                {activeContext.notes.map((note, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[12px] text-white/60">
-                    <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-white/25" />
-                    {note}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Note prudente */}
-            {activeContext.caution && (
-              <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
-                <p className="text-[11px] leading-snug text-white/40 italic">
-                  {activeContext.caution}
+            {activeContext ? (
+              /* Contenu enrichi (Ilanga) */
+              <>
+                <p className="text-[13px] leading-relaxed text-white/65">
+                  {activeContext.body}
                 </p>
-              </div>
+
+                {activeContext.notes.length > 0 && (
+                  <div className="mt-4">
+                    <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-white/30">
+                      Éléments liés
+                    </p>
+                    <ul className="flex flex-col gap-1.5">
+                      {activeContext.notes.map((note, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[12px] text-white/60">
+                          <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-white/25" />
+                          {note}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {activeContext.caution && (
+                  <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+                    <p className="text-[11px] leading-snug text-white/40 italic">
+                      {activeContext.caution}
+                    </p>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Fallback: contenu depuis card.detail / card.notes / card.value */
+              <>
+                {(activeCard.detail || activeCard.value) && (
+                  <p className="text-[13px] leading-relaxed text-white/65">
+                    {activeCard.detail || activeCard.value}
+                  </p>
+                )}
+
+                {activeCard.notes && activeCard.notes.length > 0 && (
+                  <div className="mt-4">
+                    <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-white/30">
+                      Éléments liés
+                    </p>
+                    <ul className="flex flex-col gap-1.5">
+                      {activeCard.notes.map((note, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[12px] text-white/60">
+                          <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-white/25" />
+                          {note}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {activeCard.caution && (
+                  <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+                    <p className="text-[11px] leading-snug text-white/40 italic">
+                      {activeCard.caution}
+                    </p>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

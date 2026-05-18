@@ -33,9 +33,6 @@ export function MissionSection({ pillars }: MissionSectionProps) {
         <h2 className="text-[17px] font-bold text-white/80">
           Pourquoi ils existent
         </h2>
-        <p className="mt-1 mb-5 text-[12px] leading-snug text-white/40">
-          Un réseau construit autour des producteurs, du terrain et de la traçabilité.
-        </p>
 
         {/* Liste sommaire — scannable */}
         <div className="flex flex-col">
