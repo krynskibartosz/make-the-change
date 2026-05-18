@@ -68,7 +68,7 @@ export function ProjectsSection({
                 <span className="font-semibold text-amber-400/70">
                   {formatCompact(impactSummary.estimate)} {impactSummary.unit}
                 </span>
-                {' '}concernées par l&apos;ensemble des projets
+                {' '}associées aux projets documentés
               </p>
               <button
                 type="button"

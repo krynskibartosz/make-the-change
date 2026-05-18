@@ -36,10 +36,10 @@ export function ProductsSection({
         <div className="mb-10">
           <div className="px-4">
             <h2 className="text-[17px] font-bold text-white/80">
-              Sélection disponible
+              Produits partenaires disponibles
             </h2>
             <p className="mt-1 text-[13px] text-white/50">
-              Produits partenaires disponibles dans l&apos;app.
+              Achetables dans l&apos;app en Crédits Impact.
             </p>
           </div>
 
@@ -75,11 +75,14 @@ export function ProductsSection({
                       {product.name_default}
                     </h4>
                     {typeof product.price_points === 'number' && product.price_points > 0 && (
-                      <CurrencyAmount
-                        kind="impactCredits"
-                        value={product.price_points}
-                        className="text-[13px] font-bold"
-                      />
+                      <div className="flex items-baseline gap-1">
+                        <CurrencyAmount
+                          kind="impactCredits"
+                          value={product.price_points}
+                          className="text-[13px] font-bold"
+                        />
+                        <span className="text-[10px] text-white/35">Crédits Impact</span>
+                      </div>
                     )}
                   </div>
                 </Link>

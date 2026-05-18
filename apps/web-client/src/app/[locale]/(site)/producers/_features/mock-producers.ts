@@ -27,6 +27,7 @@ export type MockProducerSpeciesCard = {
   image: string
   unlocked: boolean
   rarity: 'Commun' | 'Rare' | 'Légendaire'
+  role?: string
 }
 
 // ── Nouveaux types éditoriaux ──
@@ -210,6 +211,7 @@ export const getMockProducers = (): MockProducerSeed[] => {
           image: species.icon || '/images/diorama-chouette.png',
           unlocked: true,
           rarity: getRarityFromStatus(species.status || ''),
+          role: species.role || undefined,
         })),
       ),
     )

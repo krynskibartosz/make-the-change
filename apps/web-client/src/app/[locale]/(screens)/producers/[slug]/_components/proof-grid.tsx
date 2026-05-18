@@ -150,7 +150,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
         {primaryProofs.length > 0 && (
           <div className="mb-4">
             <h2 className="text-[17px] font-bold text-white/80">
-              Repères de confiance
+              Repères documentés
             </h2>
             <p className="mt-1 mb-4 text-[12px] leading-snug text-white/40">
               Quelques éléments documentés pour situer leur travail sur le terrain.

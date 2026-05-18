@@ -76,7 +76,11 @@ export function ProducerDetails({
       />
 
       {/* 9. CTA */}
-      <CtaFinal website={producer.contact_website} />
+      <CtaFinal
+        website={producer.contact_website}
+        contextText={producer.tagline}
+        internalHref="/projects"
+      />
     </div>
   )
 }

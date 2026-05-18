@@ -3,7 +3,7 @@
 /**
  * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
  * Section Espèces — Option A: Premium éditoriale
- * 
+ *
  * Images beaucoup plus grandes, moins de zone vide.
  * Contexte éditorial: pourquoi ces espèces sont là.
  */
@@ -31,7 +31,7 @@ export function SpeciesSection({
   if (species.length === 0) return null
 
   return (
-    <section className="mt-10">
+    <section className="mt-16">
       <div className="px-4">
         <h2 className="text-[17px] font-bold text-white/80">
           {title}
@@ -66,6 +66,13 @@ export function SpeciesSection({
               <p className="text-[14px] font-bold text-white leading-tight line-clamp-2">
                 {entry.name}
               </p>
+
+              {/* Rôle écologique — contexte éditorial */}
+              {entry.role && (
+                <p className="text-[11px] text-white/45 leading-tight">
+                  {entry.role}
+                </p>
+              )}
 
               {/* Rareté — même logique de couleur que BioDexCard */}
               <p className={`text-[10px] font-bold uppercase tracking-widest ${getRarityColor(entry.rarity)}`}>
