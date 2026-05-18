@@ -94,6 +94,39 @@ export type AtlasDomainWithCourses = AtlasDomain & {
   themeGroups: AtlasThemeGroup[]
 }
 
+export type AtlasIslandNodeKind = 'chapter' | 'course' | 'toile'
+
+export type AtlasIslandNode = {
+  id: string
+  kind: AtlasIslandNodeKind
+  title: string
+  subtitle: string
+  href: string
+  x: number
+  y: number
+  size: 'large' | 'medium' | 'small'
+  courseIds: string[]
+}
+
+export type AtlasIslandVisual = {
+  shortTitle: string
+  iconKey: string
+  color: string
+  glow: string
+  labelColor: string
+  x: number
+  y: number
+  size: number
+  terrain: 'forest' | 'water' | 'network' | 'threat' | 'solution' | 'proof'
+}
+
+export type AtlasIslandView = {
+  domain: AtlasDomainWithCourses
+  visual: AtlasIslandVisual
+  nodes: AtlasIslandNode[]
+  featuredPathId: string | null
+}
+
 export type LearningHomeProjectGroup = {
   projectSlug: string
   courses: LearningCourse[]

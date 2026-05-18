@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { listV2Units } from '@/app/[locale]/(screens)/academy/_lib/content'
 import { getAllLearningCourses, LEARNING_ATLAS_DOMAINS } from './catalog'
+import { createDefaultLearningProgress, markLearningCourseCompleted } from './progress'
 import {
   getAtlasDomains,
+  getAtlasIslandViews,
   getCoursesForEcosystemNode,
   getCoursesForProject,
   getCoursesForSpecies,
   searchLearningCourses,
 } from './selectors'
-import { createDefaultLearningProgress, markLearningCourseCompleted } from './progress'
 
 describe('learning catalog', () => {
   it('maps every Academy V2 unit to one Learning course and one Atlas domain', () => {
@@ -37,6 +38,41 @@ describe('learning catalog', () => {
     expect(Boolean(alphabet)).toBe(true)
     expect((alphabet?.themeGroups.length ?? 0) > 0).toBe(true)
     expect((alphabet?.courseCount ?? 0) > 0).toBe(true)
+  })
+
+  it('builds visual Atlas islands for every domain', () => {
+    const domains = getAtlasDomains()
+    const islands = getAtlasIslandViews()
+
+    expect(islands.map((island) => island.domain.id)).toEqual(domains.map((domain) => domain.id))
+
+    for (const island of islands) {
+      expect(island.visual.shortTitle.length > 0).toBe(true)
+      expect(/^#[0-9A-F]{6}$/i.test(island.visual.color)).toBe(true)
+      expect(island.visual.glow.includes('rgba(')).toBe(true)
+      expect(island.visual.x >= 0 && island.visual.x <= 100).toBe(true)
+      expect(island.visual.y >= 0 && island.visual.y <= 100).toBe(true)
+      expect(island.nodes.length > 0).toBe(true)
+    }
+  })
+
+  it('builds Atlas nodes with valid route targets', () => {
+    const islands = getAtlasIslandViews()
+
+    for (const island of islands) {
+      for (const node of island.nodes) {
+        expect(['chapter', 'course', 'toile'].includes(node.kind)).toBe(true)
+        if (node.kind === 'chapter') {
+          expect(/^\/learn\/parcours\//.test(node.href)).toBe(true)
+        }
+        if (node.kind === 'course') {
+          expect(/^\/learn\/courses\//.test(node.href)).toBe(true)
+        }
+        if (node.kind === 'toile') {
+          expect(/^\/ecosysteme\//.test(node.href)).toBe(true)
+        }
+      }
+    }
   })
 
   it('searches and filters Learning courses', () => {

@@ -1,10 +1,13 @@
 import {
   getAllLearningCourses,
+  getAllLearningPaths,
   getLearningCourseById,
   LEARNING_ATLAS_DOMAINS,
 } from './catalog'
 import type {
   AtlasDomainWithCourses,
+  AtlasIslandNode,
+  AtlasIslandView,
   AtlasThemeGroup,
   LearningCourse,
   LearningDomainId,
@@ -28,6 +31,91 @@ export type LearningHomeInput = {
   projectSlugs?: string[]
   speciesIds?: string[]
   limit?: number
+}
+
+const ATLAS_ISLAND_VISUALS: Record<LearningDomainId, AtlasIslandView['visual']> = {
+  'alphabet-du-vivant': {
+    shortTitle: 'Alphabet',
+    iconKey: 'book-open',
+    color: '#A7F36B',
+    glow: 'rgba(167, 243, 107, 0.42)',
+    labelColor: '#DDFCC3',
+    x: 23,
+    y: 24,
+    size: 1.02,
+    terrain: 'forest',
+  },
+  'milieux-habitats': {
+    shortTitle: 'Milieux',
+    iconKey: 'droplets',
+    color: '#6AD7FF',
+    glow: 'rgba(106, 215, 255, 0.38)',
+    labelColor: '#BCEEFF',
+    x: 70,
+    y: 25,
+    size: 0.98,
+    terrain: 'water',
+  },
+  'relations-du-vivant': {
+    shortTitle: 'Relations',
+    iconKey: 'network',
+    color: '#F6C75F',
+    glow: 'rgba(246, 199, 95, 0.4)',
+    labelColor: '#FFE3A3',
+    x: 32,
+    y: 52,
+    size: 1.05,
+    terrain: 'network',
+  },
+  menaces: {
+    shortTitle: 'Menaces',
+    iconKey: 'triangle-alert',
+    color: '#FF8F7A',
+    glow: 'rgba(255, 143, 122, 0.34)',
+    labelColor: '#FFC6BA',
+    x: 73,
+    y: 53,
+    size: 0.94,
+    terrain: 'threat',
+  },
+  solutions: {
+    shortTitle: 'Solutions',
+    iconKey: 'sprout',
+    color: '#8EEB72',
+    glow: 'rgba(142, 235, 114, 0.44)',
+    labelColor: '#CFF8C2',
+    x: 41,
+    y: 78,
+    size: 1.12,
+    terrain: 'solution',
+  },
+  'lire-impact': {
+    shortTitle: 'Impact',
+    iconKey: 'bar-chart-3',
+    color: '#7DBDFF',
+    glow: 'rgba(125, 189, 255, 0.34)',
+    labelColor: '#C2DEFF',
+    x: 77,
+    y: 78,
+    size: 0.93,
+    terrain: 'proof',
+  },
+}
+
+const ATLAS_NODE_POSITIONS: Array<Pick<AtlasIslandNode, 'x' | 'y' | 'size'>> = [
+  { x: 50, y: 32, size: 'large' },
+  { x: 34, y: 48, size: 'small' },
+  { x: 63, y: 49, size: 'small' },
+  { x: 45, y: 63, size: 'medium' },
+  { x: 68, y: 68, size: 'small' },
+  { x: 27, y: 68, size: 'small' },
+  { x: 53, y: 78, size: 'small' },
+]
+
+const DEFAULT_ATLAS_NODE_POSITION: Pick<AtlasIslandNode, 'x' | 'y' | 'size'> = {
+  x: 50,
+  y: 50,
+  size: 'small',
 }
 
 const byDurationThenTitle = (a: LearningCourse, b: LearningCourse) =>
@@ -147,6 +235,110 @@ export function getAtlasDomains(): AtlasDomainWithCourses[] {
         themeGroups,
       }
     })
+}
+
+function toAtlasNode(
+  node: Omit<AtlasIslandNode, 'x' | 'y' | 'size'>,
+  index: number,
+): AtlasIslandNode {
+  const position =
+    ATLAS_NODE_POSITIONS[index % ATLAS_NODE_POSITIONS.length] ?? DEFAULT_ATLAS_NODE_POSITION
+  return {
+    ...node,
+    ...position,
+  }
+}
+
+function getRepresentativeCourse(courses: LearningCourse[]): LearningCourse | null {
+  return (
+    courses.slice().sort((a, b) => {
+      const kindScore = (course: LearningCourse) => {
+        if (course.entry.kind === 'academy_unit') return 0
+        if (course.entry.kind === 'living_web') return 2
+        return 1
+      }
+      return kindScore(a) - kindScore(b) || byDurationThenTitle(a, b)
+    })[0] ?? null
+  )
+}
+
+function getAtlasNodesForDomain(domain: AtlasDomainWithCourses): AtlasIslandNode[] {
+  const paths = getAllLearningPaths()
+    .filter((path) => path.domainIds.includes(domain.id))
+    .sort(
+      (a, b) =>
+        Number(b.isAcademyPrimary) - Number(a.isAcademyPrimary) ||
+        a.durationMinutes - b.durationMinutes,
+    )
+  const nodes: Array<Omit<AtlasIslandNode, 'x' | 'y' | 'size'>> = []
+  const usedCourseIds = new Set<string>()
+
+  const featuredPath = paths[0]
+  if (featuredPath) {
+    for (const courseId of featuredPath.courseIds) {
+      usedCourseIds.add(courseId)
+    }
+    nodes.push({
+      id: `chapter-${featuredPath.id}`,
+      kind: 'chapter',
+      title: featuredPath.title,
+      subtitle: `${featuredPath.courseIds.length} étapes guidées`,
+      href: `/learn/parcours/${featuredPath.id}`,
+      courseIds: featuredPath.courseIds,
+    })
+  }
+
+  for (const group of domain.themeGroups) {
+    const livingWebCourse = group.courses.find((course) => course.entry.kind === 'living_web')
+    if (livingWebCourse && !usedCourseIds.has(livingWebCourse.id)) {
+      usedCourseIds.add(livingWebCourse.id)
+      nodes.push({
+        id: `toile-${livingWebCourse.id}`,
+        kind: 'toile',
+        title: livingWebCourse.subject,
+        subtitle: 'Voir les liens',
+        href: livingWebCourse.entry.href,
+        courseIds: [livingWebCourse.id],
+      })
+    }
+
+    const course = getRepresentativeCourse(
+      group.courses.filter((entry) => !usedCourseIds.has(entry.id)),
+    )
+    if (course) {
+      usedCourseIds.add(course.id)
+      nodes.push({
+        id: `course-${course.id}`,
+        kind: 'course',
+        title: course.subject,
+        subtitle: course.durationMinutes <= 5 ? 'Cours court' : course.theme,
+        href: `/learn/courses/${course.id}`,
+        courseIds: [course.id],
+      })
+    }
+  }
+
+  return nodes.slice(0, ATLAS_NODE_POSITIONS.length).map(toAtlasNode)
+}
+
+export function getAtlasIslandViews(): AtlasIslandView[] {
+  return getAtlasDomains().map((domain) => {
+    const featuredPath =
+      getAllLearningPaths()
+        .filter((path) => path.domainIds.includes(domain.id))
+        .sort(
+          (a, b) =>
+            Number(b.isAcademyPrimary) - Number(a.isAcademyPrimary) ||
+            a.durationMinutes - b.durationMinutes,
+        )[0] ?? null
+
+    return {
+      domain,
+      visual: ATLAS_ISLAND_VISUALS[domain.id],
+      nodes: getAtlasNodesForDomain(domain),
+      featuredPathId: featuredPath?.id ?? null,
+    }
+  })
 }
 
 export function getRecommendedAfterCourses(course: LearningCourse): LearningCourse[] {
