@@ -1,0 +1,343 @@
+{
+  "id": "habeebee",
+  "slug": "habeebee",
+  "name_default": "Habeebee",
+  "description_default": "Savonnerie artisanale et projet d'apiculture à Bruxelles. Fabrication de savons solides et cosmétiques bio à base de cire d'abeille et propolis, avec un engagement pour l'apiculture familiale et la solidarité locale.",
+  "address_city": "Watermael-Boitsfort",
+  "address_country_code": "BE",
+  "type": "partenaire",
+  "images": [
+    "/images/producteurs/habeebee/hero.jpg",
+    "/images/producteurs/habeebee/savonnerie-interieur.webp",
+    "/images/producteurs/habeebee/portrait.jpg"
+  ],
+  "certifications": [
+    "ECOGARANTIE",
+    "Artisanat Certifié",
+    "BIO"
+  ],
+  "contact_website": "https://habeebee.be/",
+  "projects": [],
+  "products": [],
+  "species": [],
+  
+  "tagline": "Savonnerie artisanale & projet d'apiculture à Bruxelles",
+  
+  "locations": {
+    "field": "Belgique",
+    "fieldDetail": "Watermael-Boitsfort",
+    "european": "Belgique",
+    "europeanDetail": "Bruxelles"
+  },
+  
+  "partnerType": "Savonnerie artisanale & initiative d'apiculture documentée",
+  
+  "missionPillars": [
+    {
+      "icon": "Hammer",
+      "title": "Savonnerie artisanale locale",
+      "summary": "Fabrication à main • saponification à froid • production belge",
+      "detail": "Atelier artisanal à Watermael-Boitsfort.",
+      "shortDescription": "Fabrication 100% à la main, saponification à froid, production locale en Belgique.",
+      "description": "Habeebee fabrique ses savons à la main dans sa savonnerie à Bruxelles, en utilisant la méthode de saponification à froid. La production est locale et artisanale, avec une équipe dédiée qui produit chaque jour des soins pour la peau.",
+      "keyPoints": [
+        "Fabrication 100% à la main",
+        "Saponification à froid",
+        "Production locale en Belgique",
+        "Peu d'ingrédients, mais de qualité"
+      ],
+      "whyItMatters": "Une production artisanale locale permet de maîtriser les processus de fabrication et de réduire l'empreinte transport. Ces pratiques documentées s'inscrivent dans une logique de production locale, sans constituer une preuve d'impact mesuré.",
+      "sourceLabel": "Information partenaire documentée"
+    },
+    {
+      "icon": "Hexagon",
+      "title": "Apiculture familiale",
+      "summary": "Formation • collecte de cire • sensibilisation",
+      "detail": "Programme HabeebeeCulture d'apiculture familiale.",
+      "shortDescription": "Formation apiculture familiale, collecte de cire et propolis, récolte à vélo.",
+      "description": "Habeebee propose des packs et formations pour apprendre l'apiculture familiale et naturelle à Bruxelles. Le programme inclut la collecte de cire et de propolis, avec un cycle de récolte à vélo pour minimiser l'impact transport.",
+      "keyPoints": [
+        "Formation apiculture familiale",
+        "Collecte de cire et propolis",
+        "Récolte à vélo",
+        "Cycle de proximité ruche-cire-savon"
+      ],
+      "whyItMatters": "L'apiculture familiale et naturelle vise à sensibiliser au monde des abeilles et à développer des pratiques de proximité. Ces actions documentées s'inscrivent dans une logique de transmission, sans constituer une preuve d'impact mesuré.",
+      "sourceLabel": "Information partenaire documentée"
+    },
+    {
+      "icon": "HeartHandshake",
+      "title": "Engagement solidaire",
+      "summary": "Soutien scouts • associations • réinsertion sociale",
+      "detail": "Partenariats avec mouvements de jeunesse et structures d'insertion.",
+      "shortDescription": "Soutien scouts, associations non lucratives, partenariat réinsertion sociale.",
+      "description": "Habeebee soutient des initiatives locales à travers des partenariats solidaires. Le savon 'Scout Toujours' est proposé à prix exclusif pour les scouts, le savon 'Qui a Bon Fond' pour les associations non lucratives, et l'entreprise collabore avec des structures de réinsertion sociale.",
+      "keyPoints": [
+        "Savon Scout Toujours pour mouvements de jeunesse",
+        "Savon Qui a Bon Fond pour associations",
+        "Partenariat réinsertion sociale",
+        "Prix accessibles pour initiatives solidaires"
+      ],
+      "whyItMatters": "Soutenir des initiatives locales et des structures d'insertion permet de renforcer le tissu social local. Ces partenariats documentés s'inscrivent dans une logique de solidarité, sans constituer une preuve d'impact mesuré.",
+      "sourceLabel": "Information partenaire documentée"
+    }
+  ],
+  
+  "proofCards": [
+    {
+      "label": "Certification ECOGARANTIE",
+      "value": "Control Certisys",
+      "icon": "BadgeCheck",
+      "proofType": "certification"
+    },
+    {
+      "label": "Certification Artisanat Certifié",
+      "icon": "BadgeCheck",
+      "proofType": "certification"
+    },
+    {
+      "label": "Certification BIO",
+      "icon": "BadgeCheck",
+      "proofType": "certification"
+    },
+    {
+      "label": "Savonnerie artisanale",
+      "value": "Watermael-Boitsfort, Bruxelles",
+      "icon": "MapPin",
+      "proofType": "location"
+    },
+    {
+      "label": "Production locale",
+      "value": "Fabriqué en Belgique",
+      "icon": "MapPin",
+      "proofType": "location"
+    },
+    {
+      "label": "Saponification à froid",
+      "icon": "FlaskConical",
+      "proofType": "method"
+    },
+    {
+      "label": "Fabrication artisanale",
+      "value": "100% à la main",
+      "icon": "Hand",
+      "proofType": "method"
+    },
+    {
+      "label": "Récolte mobile de proximité",
+      "icon": "Bike",
+      "proofType": "field_operation"
+    },
+    {
+      "label": "Soutien mouvements de jeunesse",
+      "value": "Savon Scout Toujours",
+      "icon": "Users",
+      "proofType": "partner"
+    },
+    {
+      "label": "Soutien associations",
+      "value": "Savon Qui a Bon Fond",
+      "icon": "Users",
+      "proofType": "partner"
+    },
+    {
+      "label": "Partenariat réinsertion",
+      "icon": "Users",
+      "proofType": "partner"
+    },
+    {
+      "label": "Ingrédients ruche",
+      "value": "Cire d'abeille, propolis",
+      "icon": "Leaf",
+      "proofType": "method"
+    },
+    {
+      "label": "Formulation minimaliste",
+      "value": "Less is more",
+      "icon": "Minimize",
+      "proofType": "method"
+    }
+  ],
+  
+  "storyBlocks": [
+    {
+      "title": "Née à Bruxelles en 2016",
+      "body": "Fondée par Alexia, passionnée par les abeilles et le cosmétique naturel. Habeebee est née d'une volonté de créer des soins pour la peau en lien avec l'apiculture, tout en respectant l'environnement.",
+      "imageUrl": "/images/producteurs/habeebee/portrait.jpg"
+    },
+    {
+      "title": "Une équipe en croissance",
+      "body": "Alexia fondatrice, rejointe en 2024 par Léonard et Quentin. Ensemble, ils développent le potentiel de la marque en plaçant les abeilles, la nature et le plaisir au centre des valeurs.",
+      "imageUrl": "/images/producteurs/habeebee/portrait.jpg"
+    },
+    {
+      "title": "Savonnerie artisanale",
+      "body": "Atelier de fabrication à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec des ingrédients de qualité, principalement de la cire d'abeille et de la propolis.",
+      "imageUrl": "/images/producteurs/habeebee/savonnerie-interieur.webp"
+    },
+    {
+      "title": "HabeebeeCulture : l'apiculture familiale",
+      "body": "Programme de formation à l'apiculture naturelle pour les familles. Cycle de proximité : de la ruche à la cire, du vélo de récolte à la fabrication artisanale de savons et baumes.",
+      "imageUrl": "/images/producteurs/habeebee/story-1-habeebeeculture-formation.webp"
+    },
+    {
+      "title": "Engagements solidaires",
+      "body": "Soutien aux scouts avec le savon Scout Toujours, partenariat avec les associations non lucratives via Qui a Bon Fond, et collaboration avec des structures de réinsertion sociale.",
+      "imageUrl": "/images/producteurs/habeebee/story-6-scouts.jpg"
+    },
+    {
+      "title": "Certifications reconnues",
+      "body": "ECOGARANTIE (Control Certisys), Artisanat Certifié, et certification BIO pour les produits concernés. Des labels qui attestent de pratiques documentées et contrôlées.",
+      "imageUrl": "/images/producteurs/habeebee/story-8-certificat-ecogarantie.png"
+    }
+  ],
+  
+  "editorialIdentity": {
+    "legalName": "Habeebee",
+    "shortName": "Habeebee",
+    "foundedYear": 2016,
+    "founderNames": ["Alexia"],
+    "fieldDirector": "Alexia",
+    "nextGeneration": ["Léonard", "Quentin"],
+    "partnerType": "Savonnerie artisanale & initiative d'apiculture documentée",
+    "tagline": "Savonnerie artisanale & projet d'apiculture à Bruxelles",
+    "summary": "Habeebee est une savonnerie artisanale et un projet d'apiculture fondés en 2016 par Alexia à Bruxelles. L'entreprise fabrique à la main des savons solides et des cosmétiques bio utilisant de la cire d'abeille et de la propolis, avec une approche de saponification à froid. En 2024, Léonard et Quentin ont rejoint l'aventure comme associés pour développer le potentiel de la marque. Habeebee place les abeilles, la nature et le plaisir au centre de ses valeurs, avec une production locale et artisanale en Belgique.",
+    "emotionalStatement": "Entre abeilles, artisanat et solidarité locale à Bruxelles."
+  },
+  
+  "visualAssets": {
+    "hero": "/images/producteurs/habeebee/hero.jpg",
+    "portrait": "/images/producteurs/habeebee/logo-for-pp.png",
+    "logo": "/images/producteurs/habeebee/logo.png",
+    "story": [
+      {
+        "id": "story-1",
+        "url": "/images/producteurs/habeebee/story-1-habeebeeculture-formation.webp",
+        "role": "field_proof",
+        "type": "field_photo",
+        "alt": "Initiation à l'apiculture avec HabeebeeCulture",
+        "sourceUrl": "https://habeebee.be/pages/formation-apiculteur-bruxelles"
+      },
+      {
+        "id": "story-2",
+        "url": "/images/producteurs/habeebee/story-2-cycle-habeebeeculture.png",
+        "role": "field_proof",
+        "type": "branding_photo",
+        "alt": "Illustration du cycle HabeebeeCulture",
+        "sourceUrl": "https://habeebee.be/pages/formation-apiculteur-bruxelles"
+      },
+      {
+        "id": "story-3",
+        "url": "/images/producteurs/habeebee/story-3-ruche.jpg",
+        "role": "field_proof",
+        "type": "field_photo",
+        "alt": "Vue rapprochée d'un rayon de cire rempli d'abeilles",
+        "sourceUrl": "https://habeebee.be/pages/formation-apiculteur-bruxelles"
+      },
+      {
+        "id": "story-4",
+        "url": "/images/producteurs/habeebee/story-4-tedy-artisan.jpg",
+        "role": "story",
+        "type": "branding_photo",
+        "alt": "Tedy, artisan chez Habeebee",
+        "sourceUrl": "https://habeebee.be/pages/savonnerie-artisanale-bruxelles-cire-abeille"
+      },
+      {
+        "id": "story-5",
+        "url": "/images/producteurs/habeebee/story-5-tedy-fabrication.jpg",
+        "role": "field_proof",
+        "type": "field_photo",
+        "alt": "Tedy en pleine coupe de savons dans l'atelier",
+        "sourceUrl": "https://habeebee.be/pages/savonnerie-artisanale-bruxelles-cire-abeille"
+      },
+      {
+        "id": "story-6",
+        "url": "/images/producteurs/habeebee/story-6-scouts.jpg",
+        "role": "field_proof",
+        "type": "field_photo",
+        "alt": "Quatre jeunes scouts avec savon Scout Toujours",
+        "sourceUrl": "https://habeebee.be/pages/engagements-et-certifications"
+      },
+      {
+        "id": "story-7",
+        "url": "/images/producteurs/habeebee/story-7-insertion.jpg",
+        "role": "field_proof",
+        "type": "field_photo",
+        "alt": "Préparation d'un colis Habeebee par une personne en situation",
+        "sourceUrl": "https://habeebee.be/pages/engagements-et-certifications"
+      },
+      {
+        "id": "story-8",
+        "url": "/images/producteurs/habeebee/story-8-certificat-ecogarantie.png",
+        "role": "field_proof",
+        "type": "branding_photo",
+        "alt": "Logo de certification ECOGARANTIE",
+        "sourceUrl": "https://habeebee.be/pages/engagements-et-certifications"
+      }
+    ]
+  },
+  
+  "sectionOrder": {
+    "hero": 1,
+    "mission": 2,
+    "proofs": 3,
+    "story": 4,
+    "projects": 5,
+    "species": 6,
+    "products": 7,
+    "impact": 8,
+    "cta": 9
+  },
+  
+  "partnerCatalogOverview": {
+    "title": "Les produits qu'ils proposent",
+    "disclaimer": "Habeebee propose une gamme complète de soins cosmétiques. Seule une partie de ces produits est disponible dans l'app.",
+    "families": [
+      {
+        "label": "Savons solides",
+        "examples": [
+          "Savon Habeebee - Think Pink",
+          "Savon cire d'abeille DOUX",
+          "Savon vivifiant TONIC",
+          "Savon bébé HABABY",
+          "Savon hydratant VERTUEUX",
+          "Savon hydratant FLOWER POWER",
+          "Savon assainissant PROPRE ET LISSE",
+          "Savon biodégradable SCOUT TOUJOURS"
+        ],
+        "origin": "Bruxelles, Belgique"
+      },
+      {
+        "label": "Shampoings solides",
+        "examples": [
+          "Shampoing solide à la cire d'abeille & rhassoul - L'abeille s'en mêle"
+        ],
+        "origin": "Bruxelles, Belgique"
+      },
+      {
+        "label": "Baumes",
+        "examples": [
+          "Baumes à la cire d'abeille et propolis"
+        ],
+        "origin": "Bruxelles, Belgique"
+      },
+      {
+        "label": "Huiles & soins",
+        "examples": [
+          "Soins liquides",
+          "Huiles végétales"
+        ],
+        "origin": "Bruxelles, Belgique"
+      },
+      {
+        "label": "Coffrets cadeaux",
+        "examples": [
+          "Box cadeau SAVONS LE MONDE",
+          "Coffret 7 mini savons",
+          "Coffrets cadeaux personnalisables"
+        ],
+        "origin": "Bruxelles, Belgique"
+      }
+    ]
+  }
+}
