@@ -181,7 +181,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
-          cover_image_url: '/images/products/miel-eucalyptus.jpg',
+          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -251,7 +251,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
-          cover_image_url: '/images/products/miel-eucalyptus.jpg',
+          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -286,7 +286,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: 'Miel de Litchi',
           priceEuros: 7.5,
           pricePoints: 750,
-          cover_image_url: '/images/products/miel-litchi.jpg',
+          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
         },
         product: {
           id: MOCK_PRODUCT_LITCHI_ID,
@@ -321,7 +321,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus",
           priceEuros: 5.5,
           pricePoints: 550,
-          cover_image_url: '/images/products/miel-eucalyptus.jpg',
+          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,

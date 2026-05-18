@@ -47,7 +47,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
       name_default: 'Protection des lémuriens',
       slug: 'protection-lemuriens',
       status: 'active',
-      cover_image_url: '/images/projects/lemuriens.jpg',
+      cover_image_url: '/images/projects/antsirabe-ruchers-1.jpg',
     }
   }
 
@@ -59,7 +59,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     orderNumber: '#CMD-89302',
     status: 'processing',
     statusLabel: 'En cours de préparation',
-    imageUrl: '/images/products/miel-eucalyptus.jpg',
+    imageUrl: '/images/products/miel-eucalyptus-ilanga.png',
     timeline: [
       { label: 'Commande validée', date: '16 Avril 2026', status: 'completed' },
       { label: 'En cours de préparation', date: 'En cours', status: 'in-progress' },
@@ -106,7 +106,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         creditsOrSeedsLabel: isDonation ? 'Graines' : 'Credits Impact',
         status: supportVM?.status || donationVM?.status || 'pending',
         statusLabel: supportVM?.statusLabel || donationVM?.statusLabel || 'En attente',
-        imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/default.jpg',
+        imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/miellerie-manakara.jpg',
         contributionTypeLabel: supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel || 'Contribution',
         isDonation,
         isProducerSupport: !isDonation && (isSupport || false),
