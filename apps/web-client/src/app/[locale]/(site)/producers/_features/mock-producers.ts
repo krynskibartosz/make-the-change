@@ -601,7 +601,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         emotionalStatement: "Entre abeilles, artisanat et solidarité locale à Bruxelles.",
       },
       visualAssets: {
-        hero: "/images/producteurs/habeebee/hero.jpg",
+        hero: "/images/producteurs/habeebee/cover.png",
         portrait: "/images/producteurs/habeebee/logo-for-pp.png",
         logo: "/images/producteurs/habeebee/logo.png",
         story: [
