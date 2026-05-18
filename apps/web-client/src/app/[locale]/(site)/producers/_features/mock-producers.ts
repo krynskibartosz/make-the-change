@@ -902,8 +902,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       ],
       proofCards: [
         { label: "Site de restauration", value: "Cilik Island, Karimunjawa", icon: "Waves", proofType: "field_operation" },
-        { label: "Fragments coralliens implantés", value: "Structures de restauration documentées", icon: "Sprout", proofType: "field_operation" },
         { label: "Programme d'adoption de coraux", value: "Coral Adoption Program", icon: "HandHeart", proofType: "method" },
+        { label: "Suivi des coraux", value: "Monitoring de croissance", icon: "Camera", proofType: "method" },
         { label: "Localisation documentée", value: "Karimunjawa, Java central", icon: "MapPin", proofType: "location" },
         { label: "Partenariat conservation", value: "Seacrest Indonesia", icon: "Handshake", proofType: "partner" },
         { label: "Formation certifiée SSI", value: "Scuba Schools International", icon: "Award", proofType: "partner" },

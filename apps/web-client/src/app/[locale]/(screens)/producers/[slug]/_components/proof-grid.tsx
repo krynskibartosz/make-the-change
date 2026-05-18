@@ -36,6 +36,10 @@ import {
   FlaskConical,
   Minimize2,
   Leaf,
+  Camera,
+  Activity,
+  Waves,
+  Sprout,
   type LucideIcon,
 } from 'lucide-react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
@@ -66,26 +70,30 @@ const iconMap: Record<string, LucideIcon> = {
   Minimize: Minimize2,
   Minimize2,
   Leaf,
+  Camera,
+  Activity,
+  Waves,
+  Sprout,
 }
 
 const accentStyles = {
   certification: {
-    border: 'border-l-emerald-500/40',
-    cardBg: 'bg-emerald-950/20',
-    icon: 'text-emerald-400/90',
-    label: 'text-emerald-400/70',
+    border: 'border-l-emerald-500',
+    cardBg: 'bg-emerald-950/[8%]',
+    icon: 'text-emerald-400',
+    label: 'text-emerald-400/85',
   },
   field_operation: {
-    border: 'border-l-amber-400/40',
-    cardBg: 'bg-amber-950/20',
-    icon: 'text-amber-400/90',
-    label: 'text-amber-400/70',
+    border: 'border-l-amber-400',
+    cardBg: 'bg-amber-950/[8%]',
+    icon: 'text-amber-400',
+    label: 'text-amber-400/85',
   },
   method: {
-    border: 'border-l-sky-400/40',
-    cardBg: 'bg-sky-950/20',
-    icon: 'text-sky-400/90',
-    label: 'text-sky-400/70',
+    border: 'border-l-sky-400',
+    cardBg: 'bg-sky-950/[8%]',
+    icon: 'text-sky-400',
+    label: 'text-sky-400/85',
   },
 }
 
@@ -156,14 +164,14 @@ const primaryContext: Record<string, { body: string; notes: string[]; caution?: 
     ],
     caution: "Ce site est documenté par le partenaire via vidéos terrain. Il ne s'agit pas d'une mesure d'impact certifiée."
   },
-  'Fragments coralliens implantés': {
-    body: "Des fragments de corail sont fixés sur des structures de restauration à Cilik Island. Chaque intervention est photographiée et partagée par l'équipe Trilogy sur leurs réseaux.",
+  'Suivi des coraux': {
+    body: "Le monitoring photographique et vidéo documente la croissance des fragments coralliens fixés sur les structures de restauration à Cilik Island.",
     notes: [
-      "Structures métalliques de restauration",
-      "Fragments coralliens fixés et suivis",
-      "Documentation via photos et vidéos terrain",
+      "Suivi photographique des coraux implantés",
+      "Documentation vidéo via TikTok & YouTube",
+      "Croissance observée sur les sites de Karimunjawa",
     ],
-    caution: "Ces actions sont documentées qualitativement. Le nombre exact de fragments implantés n'est pas certifié de façon indépendante."
+    caution: "Ce suivi est documenté qualitativement par le partenaire. Il ne constitue pas un monitoring scientifique certifié de façon indépendante."
   },
   "Programme d'adoption de coraux": {
     body: "Le Coral Adoption Program de Trilogy permet à des individus et organisations de soutenir financièrement la restauration corallienne à Karimunjawa.",
@@ -273,7 +281,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
         {secondaryProofs.length > 0 && (
           <div>
             <h3 className="mb-2.5 text-[12px] font-medium text-white/40">
-              Autres éléments documentés
+              Repères complémentaires
             </h3>
 
             <div className="flex flex-wrap gap-1.5">
