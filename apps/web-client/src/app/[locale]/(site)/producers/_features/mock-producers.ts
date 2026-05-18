@@ -1,5 +1,8 @@
 import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
+import { ILANGA_PATHS } from '@/lib/media/ilanga'
+import { HABEEBEE_PATHS } from '@/lib/media/habeebee'
+import { TRILOGY_PATHS } from '@/lib/media/trilogy'
 
 export type MockProducerListProduct = {
   id: string
@@ -303,13 +306,13 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       
       // ── Visual Assets (Phase 1) ──
       visualAssets: {
-        hero: "/images/producteurs/illanga-nature/cover.png",
-        portrait: "/images/producteurs/illanga-nature/pur-logo.png",
-        logo: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
+        hero: ILANGA_PATHS.identity.cover,
+        portrait: ILANGA_PATHS.identity.portrait,
+        logo: ILANGA_PATHS.identity.logo,
         story: [
           {
             id: "story-1",
-            url: "/images/producteurs/illanga-nature/portrait-famille-laurent.webp",
+            url: ILANGA_PATHS.media.portraitFamilleLaurent,
             role: "story",
             type: "field_photo",
             alt: "La famille Laurent — Olivier, Nathan et Naya, fondateurs d'Ilanga Nature",
@@ -317,7 +320,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-2",
-            url: "/images/producteurs/illanga-nature/portrait-apiculteur-fort-dauphin.webp",
+            url: ILANGA_PATHS.media.portraitApiculteurFortDauphin,
             role: "story",
             type: "field_photo",
             alt: "Apiculteur au travail à Fort-Dauphin, Madagascar",
@@ -325,7 +328,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-3",
-            url: "/images/producteurs/illanga-nature/miellerie-manakara-exterieur.webp",
+            url: ILANGA_PATHS.media.miellerieManakaraExterieur,
             role: "field_proof",
             type: "field_photo",
             alt: "Miellerie Ilanga Nature à Manakara, Madagascar",
@@ -333,7 +336,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-4",
-            url: "/images/producteurs/illanga-nature/mielleries-mobiles-terrain.webp",
+            url: ILANGA_PATHS.media.miellieriesMobilesTerrain,
             role: "field_proof",
             type: "field_photo",
             alt: "Unité mobile d'extraction Ilanga Nature — substitué à la barge (photo non disponible)",
@@ -341,7 +344,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-5",
-            url: "/images/producteurs/illanga-nature/ecole-apiculture-fort-dauphin.webp",
+            url: ILANGA_PATHS.media.ecoleApicultureFortDauphin,
             role: "story",
             type: "field_photo",
             alt: "École de formation apicole Ilanga Academy à Fort-Dauphin",
@@ -349,7 +352,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-6",
-            url: "/images/producteurs/illanga-nature/produits-miels-trio.jpg",
+            url: ILANGA_PATHS.media.produitsMielsTrio,
             role: "field_proof",
             type: "product_studio",
             alt: "Trois pots de miel Ilanga Nature — niaouli, cactus, baies roses",
@@ -512,32 +515,32 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Née à Madagascar en 2017",
           body: "Fondée par Olivier Laurent, entrepreneur belge fasciné par la Grande Île. Une vocation : révéler les savoir-faire apicoles malgaches avec une approche terrain, durable et humaine.",
-          imageUrl: "/images/producteurs/illanga-nature/aux-origines-d-Ilanga-nature.png"
+          imageUrl: ILANGA_PATHS.media.auxOrigines
         },
         {
           title: "Une famille, un réseau",
           body: "Olivier, Laura, Nathan et Naya. Quatre personnes, une mission : structurer une filière apicole locale avec des apiculteurs partenaires et un savoir-faire ancestral.",
-          imageUrl: "/images/producteurs/illanga-nature/portrait-famille-laurent.webp"
+          imageUrl: ILANGA_PATHS.media.portraitFamilleLaurent
         },
         {
           title: "3 mielleries, 2 unités mobiles",
           body: "Antananarivo, Manakara, Fort-Dauphin. Chaque miellerie est homologuée par le Ministère malgache et certifiée Ecocert pour les miels biologiques.",
-          imageUrl: "/images/producteurs/illanga-nature/miellerie-manakara-exterieur.webp"
+          imageUrl: ILANGA_PATHS.media.miellerieManakaraExterieur
         },
         {
           title: "Former pour durer",
           body: "L'Académie Ilanga à Fort-Dauphin forme des producteurs aux pratiques apicoles et participe à la transmission des savoir-faire locaux.",
-          imageUrl: "/images/producteurs/illanga-nature/ecole-apiculture-fort-dauphin.webp"
+          imageUrl: ILANGA_PATHS.media.ecoleApicultureFortDauphin
         },
         {
           title: "Collecter au plus près du terrain",
           body: "Une barge motorisée et des unités mobiles permettent de rejoindre les zones de production reculées, notamment le long du canal des Pangalanes.",
-          imageUrl: "/images/producteurs/illanga-nature/hero-lemures-miel-fort-dauphin.webp"
+          imageUrl: ILANGA_PATHS.media.heroLemures
         },
         {
           title: "Des filières jusqu'aux produits",
           body: "12 miels biologiques, vanilles, épices et confitures prolongent les filières accompagnées par Ilanga Nature, avec une traçabilité complète de la ruche au produit fini.",
-          imageUrl: "/images/producteurs/illanga-nature/produits-miels-trio.jpg"
+          imageUrl: ILANGA_PATHS.media.produitsMielsTrio
         }
       ],
       
@@ -604,13 +607,13 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         missionIntro: "Valoriser les matières de la ruche, fabriquer localement et transmettre une apiculture familiale.",
       },
       visualAssets: {
-        hero: "/images/producteurs/habeebee/cover.png",
-        portrait: "/images/producteurs/habeebee/pur-logo.png",
-        logo: "/images/producteurs/habeebee/logo.png",
+        hero: HABEEBEE_PATHS.identity.cover,
+        portrait: HABEEBEE_PATHS.identity.portrait,
+        logo: HABEEBEE_PATHS.identity.logo,
         story: [
           {
             id: "story-1",
-            url: "/images/producteurs/habeebee/story-1-habeebeeculture-formation.webp",
+            url: HABEEBEE_PATHS.media.story1Formation,
             role: "field_proof" as const,
             type: "field_photo" as const,
             alt: "Initiation à l'apiculture avec HabeebeeCulture",
@@ -618,7 +621,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-2",
-            url: "/images/producteurs/habeebee/story-2-cycle-habeebeeculture.png",
+            url: HABEEBEE_PATHS.media.story2Cycle,
             role: "field_proof" as const,
             type: "branding_photo" as const,
             alt: "Illustration du cycle HabeebeeCulture",
@@ -626,7 +629,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-3",
-            url: "/images/producteurs/habeebee/story-3-ruche.jpg",
+            url: HABEEBEE_PATHS.media.story3Ruche,
             role: "field_proof" as const,
             type: "field_photo" as const,
             alt: "Vue rapprochée d'un rayon de cire rempli d'abeilles",
@@ -634,7 +637,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-4",
-            url: "/images/producteurs/habeebee/story-4-tedy-artisan.jpg",
+            url: HABEEBEE_PATHS.media.story4TedyArtisan,
             role: "story" as const,
             type: "branding_photo" as const,
             alt: "Tedy, artisan chez Habeebee",
@@ -642,7 +645,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-5",
-            url: "/images/producteurs/habeebee/story-5-tedy-fabrication.jpg",
+            url: HABEEBEE_PATHS.media.story5TedyFabrication,
             role: "field_proof" as const,
             type: "field_photo" as const,
             alt: "Tedy en pleine coupe de savons dans l'atelier",
@@ -650,7 +653,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-6",
-            url: "/images/producteurs/habeebee/story-6-scouts.jpg",
+            url: HABEEBEE_PATHS.media.story6Scouts,
             role: "field_proof" as const,
             type: "field_photo" as const,
             alt: "Quatre jeunes scouts avec savon Scout Toujours",
@@ -658,7 +661,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-7",
-            url: "/images/producteurs/habeebee/story-7-insertion.jpg",
+            url: HABEEBEE_PATHS.media.story7Insertion,
             role: "field_proof" as const,
             type: "field_photo" as const,
             alt: "Préparation d'un colis Habeebee par une personne en situation",
@@ -666,7 +669,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
           {
             id: "story-8",
-            url: "/images/producteurs/habeebee/story-8-certificat-ecogarantie.png",
+            url: HABEEBEE_PATHS.media.story8Certificat,
             role: "field_proof" as const,
             type: "branding_photo" as const,
             alt: "Logo de certification ECOGARANTIE",
@@ -752,32 +755,32 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Née à Bruxelles en 2016",
           body: "Alexia fonde Habeebee pour relier les abeilles, les soins naturels et l'artisanat local bruxellois.",
-          imageUrl: "/images/producteurs/habeebee/portrait.jpg",
+          imageUrl: HABEEBEE_PATHS.media.portrait,
         },
         {
           title: "Une équipe en croissance",
           body: "En 2024, Léonard et Quentin rejoignent l'aventure pour développer la marque et son réseau local.",
-          imageUrl: "/images/producteurs/habeebee/portrait-v2.png",
+          imageUrl: HABEEBEE_PATHS.media.portraitV2,
         },
         {
           title: "Savonnerie artisanale",
           body: "Un atelier à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec de la cire d'abeille et de la propolis.",
-          imageUrl: "/images/producteurs/habeebee/story-1-v2.png",
+          imageUrl: HABEEBEE_PATHS.media.story1V2,
         },
         {
           title: "HabeebeeCulture",
           body: "Transmettre l'apiculture naturelle aux familles. De la ruche à la cire, du vélo de récolte aux savons artisanaux.",
-          imageUrl: "/images/producteurs/habeebee/story-4-v2.png",
+          imageUrl: HABEEBEE_PATHS.media.story4V2,
         },
         {
           title: "Soutien local",
           body: "Savon Scout Toujours pour les mouvements de jeunesse, Qui a Bon Fond pour les associations, et partenariat réinsertion.",
-          imageUrl: "/images/producteurs/habeebee/story-6-scouts.jpg",
+          imageUrl: HABEEBEE_PATHS.media.story6Scouts,
         },
         {
           title: "Certifications documentées",
           body: "ECOGARANTIE (Control Certisys), Artisanat Certifié, certification BIO — des labels qui attestent de pratiques contrôlées.",
-          imageUrl: "/images/producteurs/habeebee/story-8-certificat-ecogarantie.png",
+          imageUrl: HABEEBEE_PATHS.media.story8Certificat,
         },
       ],
       partnerCatalogOverview: {
@@ -838,16 +841,16 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         speciesSubtitle: "Coraux, espèces récifales et habitats associés aux jardins sous-marins.",
       },
       visualAssets: {
-        hero: "/images/producteurs/trilogy/cover.png",
-        portrait: "/images/producteurs/trilogy/pur-logo.png",
-        logo: "/images/producteurs/trilogy/youtube-profile.jpg",
+        hero: TRILOGY_PATHS.identity.cover,
+        portrait: TRILOGY_PATHS.identity.portrait,
+        logo: TRILOGY_PATHS.identity.logo,
         story: [
-          { id: "story-1", url: "/images/producteurs/trilogy/story-1-coral-diver-karimunjawa.jpg", role: "story" as const, type: "field_photo" as const, alt: "Plongeur sur le récif de Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
-          { id: "story-2", url: "/images/producteurs/trilogy/youtube-9-cilik-island.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Coral Restoration at Cilik Island", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
-          { id: "story-3", url: "/images/producteurs/trilogy/youtube-7-monitoring.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Effective monitoring for coral restoration", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
-          { id: "story-4", url: "/images/producteurs/trilogy/story-12-dive-edutrip.jpg", role: "story" as const, type: "field_photo" as const, alt: "Dive Edutrip Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
-          { id: "story-5", url: "/images/producteurs/trilogy/youtube-8-planting-coral.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Planting coral fragments", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
-          { id: "story-6", url: "/images/producteurs/trilogy/story-9-explore-biodiversity.jpg", role: "story" as const, type: "field_photo" as const, alt: "Exploration biodiversité Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
+          { id: "story-1", url: TRILOGY_PATHS.media.story1CoralDiver, role: "story" as const, type: "field_photo" as const, alt: "Plongeur sur le récif de Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
+          { id: "story-2", url: TRILOGY_PATHS.media.youtube9CilikIsland, role: "field_proof" as const, type: "field_photo" as const, alt: "Coral Restoration at Cilik Island", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
+          { id: "story-3", url: TRILOGY_PATHS.media.youtube7Monitoring, role: "field_proof" as const, type: "field_photo" as const, alt: "Effective monitoring for coral restoration", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
+          { id: "story-4", url: TRILOGY_PATHS.media.story12DiveEdutrip, role: "story" as const, type: "field_photo" as const, alt: "Dive Edutrip Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
+          { id: "story-5", url: TRILOGY_PATHS.media.youtube8PlantingCoral, role: "field_proof" as const, type: "field_photo" as const, alt: "Planting coral fragments", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
+          { id: "story-6", url: TRILOGY_PATHS.media.story9ExploreBiodiversity, role: "story" as const, type: "field_photo" as const, alt: "Exploration biodiversité Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
         ],
       },
       missionPillars: [
@@ -913,23 +916,22 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Dive • Explore • Restore",
           body: "Plonger pour explorer, comprendre pour restaurer. Une approche terrain documentée à Karimunjawa depuis 2024.",
-          imageUrl: "/images/producteurs/trilogy/trilogy-ocean-restoration.png",
+          imageUrl: TRILOGY_PATHS.media.trilogyOceanRestoration,
         },
         {
           title: "Restauration à Cilik Island",
           body: "Des fragments de corail sont fixés sur des structures de restauration, puis suivis dans le temps pour mesurer leur croissance.",
-          imageUrl: "/images/producteurs/trilogy/trilogy-Ocean-Restoration-at-Cilik-Island-Karimunjawa.png",
+          imageUrl: TRILOGY_PATHS.media.trilogyCilikIsland,
         },
         {
           title: "Suivi des jardins sous-marins",
           body: "Le monitoring documente la survie et la croissance des coraux restaurés sur les sites de Karimunjawa.",
-          // TODO: remplacer par trilogy-coral-monitoring-underwater.png (plongeur + caméra waterproof) quand disponible
-          imageUrl: "/images/producteurs/trilogy/youtube-7-monitoring.jpg",
+          imageUrl: TRILOGY_PATHS.media.youtube7Monitoring,
         },
         {
           title: "Éducation et excursions marines",
           body: "Les Dive Edutrips transmettent les bases de la plongée, de la biodiversité et de la conservation marine.",
-          imageUrl: "/images/producteurs/trilogy/trilogy-ocean-restorations-marine-education-and-dive-edutrips.png",
+          imageUrl: TRILOGY_PATHS.media.trilogyMarineEducation,
         },
       ],
       sectionOrder: {

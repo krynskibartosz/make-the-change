@@ -7,6 +7,8 @@ import {
   MOCK_PROJECT_MIELLERIES_MOBILE_SLUG,
 } from '@/lib/mock/mock-ids'
 import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
+import { ILANGA_PATHS } from '@/lib/media/ilanga'
+import { HABEEBEE_PATHS } from '@/lib/media/habeebee'
 
 export type AdvantageProduct = {
   id: string
@@ -129,7 +131,7 @@ export function getAdvantagesData(): AdvantagesData {
         name: 'Ilanga Nature',
         description: 'Récoltes, miels et contenus terrain autour de la filière apicole à Madagascar.',
         location: 'Manakara, Madagascar',
-        imageUrl: '/images/producteurs/illanga-nature/pur-logo.png',
+        imageUrl: ILANGA_PATHS.identity.portrait,
         href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
       },
       {
@@ -137,7 +139,7 @@ export function getAdvantagesData(): AdvantagesData {
         name: 'Habeebee',
         description: 'Produits artisanaux, apiculture douce et expériences locales autour des abeilles.',
         location: 'Bruxelles, Belgique',
-        imageUrl: '/images/producteurs/habeebee/pur-logo.png',
+        imageUrl: HABEEBEE_PATHS.identity.portrait,
         href: `/producers/${MOCK_PRODUCER_HABEEBEE_SLUG}`,
       },
     ],

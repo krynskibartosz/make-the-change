@@ -58,6 +58,9 @@ import {
   MOCK_SPECIES_SYRPHID_ID,
 } from '@/lib/mock/mock-ids'
 import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
+import { ILANGA_PATHS } from '@/lib/media/ilanga'
+import { HABEEBEE_PATHS } from '@/lib/media/habeebee'
+import { TRILOGY_PATHS } from '@/lib/media/trilogy'
 
 type MockProjectProducer = {
   id: string
@@ -754,7 +757,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://www.ilanga-nature.com',
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
-      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
+      visualAssets: { portrait: ILANGA_PATHS.identity.portrait },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -829,7 +832,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://www.ilanga-nature.com',
       images: ['/images/projects/miellerie-manakara.png', '/images/projects/antsirabe-ruchers-1.jpg'],
-      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
+      visualAssets: { portrait: ILANGA_PATHS.identity.portrait },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -901,7 +904,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://www.ilanga-nature.com',
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
-      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
+      visualAssets: { portrait: ILANGA_PATHS.identity.portrait },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -953,8 +956,8 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     maturity_date: null,
     current_funding: 12000,
     target_budget: 25000,
-    hero_image_url: '/images/producteurs/illanga-nature/oliverai-toscane.png',
-    images: ['/images/producteurs/illanga-nature/oliverai-toscane.png'],
+    hero_image_url: ILANGA_PATHS.media.oliveraiToscane,
+    images: [ILANGA_PATHS.media.oliveraiToscane],
     unit_price_eur: 150,
     unit_label: 'olivier',
     updated_at: '2026-04-19T10:00:00.000Z',
@@ -972,8 +975,8 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
         en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. A cooperative of committed small producers showcasing honey, oils and artisanal local products.",
       },
       contact_website: 'https://www.ilanga-nature.com',
-      images: ['/images/producteurs/illanga-nature/oliverai-toscane.png'],
-      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
+      images: [ILANGA_PATHS.media.oliveraiToscane],
+      visualAssets: { portrait: ILANGA_PATHS.identity.portrait },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -1041,7 +1044,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://linktr.ee/underwatergardeners',
       images: ['/images/projects/coral-karimunjawa.png'],
-      visualAssets: { portrait: '/images/producteurs/trilogy/pur-logo.png' },
+      visualAssets: { portrait: TRILOGY_PATHS.identity.portrait },
     },
     species: coralSpecies,
     challenges: [],
@@ -1087,8 +1090,8 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     maturity_date: null,
     current_funding: 8500,
     target_budget: 20000,
-    hero_image_url: '/images/producteurs/habeebee/ruches-urbaine-pour-pollinistaeurs-locaux.png',
-    images: ['/images/producteurs/habeebee/ruches-urbaine-pour-pollinistaeurs-locaux.png'],
+    hero_image_url: HABEEBEE_PATHS.media.ruchesUrbaines,
+    images: [HABEEBEE_PATHS.media.ruchesUrbaines],
     unit_price_eur: 1300,
     unit_label: 'ruche',
     updated_at: '2026-04-22T10:00:00.000Z',
@@ -1107,7 +1110,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://habeebee.be',
       images: ['/images/projects/habeebee.png'],
-      visualAssets: { portrait: '/images/producteurs/habeebee/pur-logo.png' },
+      visualAssets: { portrait: HABEEBEE_PATHS.identity.portrait },
     },
     species: habeebeeSpecies,
     challenges: [],
