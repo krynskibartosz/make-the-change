@@ -10,6 +10,13 @@
 
 import type { ProducerSpecies } from '../producer-detail-data'
 
+function getRarityColor(rarity: string) {
+  const r = rarity?.toUpperCase()
+  if (r === 'LÉGENDAIRE') return 'text-amber-400/80'
+  if (r === 'RARE') return 'text-blue-400/70'
+  return 'text-emerald-500/60'
+}
+
 type SpeciesSectionProps = {
   species: ProducerSpecies[]
   title?: string
@@ -53,19 +60,16 @@ export function SpeciesSection({
                   alt={entry.name}
                   className="h-full w-full object-contain scale-110"
                 />
-                {/* Badge "Découverte" uniquement si débloquée dans le BioDex */}
-                {entry.unlocked && (
-                  <div className="absolute bottom-2 left-2">
-                    <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-emerald-400 backdrop-blur-sm">
-                      Découverte
-                    </span>
-                  </div>
-                )}
               </div>
 
               {/* Nom — élément principal */}
               <p className="text-[14px] font-bold text-white leading-tight line-clamp-2">
                 {entry.name}
+              </p>
+
+              {/* Rareté — même logique de couleur que BioDexCard */}
+              <p className={`text-[10px] font-bold uppercase tracking-widest ${getRarityColor(entry.rarity)}`}>
+                {entry.rarity}
               </p>
             </article>
           </li>

@@ -26,6 +26,7 @@ export type MockProducerSpeciesCard = {
   name: string
   image: string
   unlocked: boolean
+  rarity: 'Commun' | 'Rare' | 'Légendaire'
 }
 
 // ── Nouveaux types éditoriaux ──
@@ -153,6 +154,13 @@ export type MockProducerSeed = {
   partnerCatalogOverview?: PartnerCatalogOverview
 }
 
+function getRarityFromStatus(status: string): MockProducerSpeciesCard['rarity'] {
+  const s = status?.toUpperCase()
+  if (['EN', 'CR', 'EW', 'EX'].includes(s)) return 'Légendaire'
+  if (['VU', 'NT'].includes(s)) return 'Rare'
+  return 'Commun'
+}
+
 const dedupeById = <T extends { id: string }>(items: T[]): T[] => {
   const seen = new Set<string>()
 
@@ -201,6 +209,7 @@ export const getMockProducers = (): MockProducerSeed[] => {
           name: species.name,
           image: species.icon || '/images/diorama-chouette.png',
           unlocked: true,
+          rarity: getRarityFromStatus(species.status || ''),
         })),
       ),
     )
