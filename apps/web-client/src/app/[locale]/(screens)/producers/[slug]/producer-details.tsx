@@ -57,7 +57,10 @@ export function ProducerDetails({
       />
 
       {/* 2. Mission */}
-      <MissionSection pillars={producer.missionPillars} />
+      <MissionSection
+        pillars={producer.missionPillars}
+        subtitle={producer.editorialIdentity?.missionIntro}
+      />
 
       {/* 3. Preuves & crédibilité */}
       <ProofGrid cards={producer.proofCards} />
@@ -91,7 +94,11 @@ export function ProducerDetails({
       {/* 9. CTA */}
       <CtaFinal
         website={producer.contact_website}
-        contextText={producer.tagline}
+        contextText={
+          producer.editorialIdentity?.shortName
+            ? `Explorez les projets documentés liés à ${producer.editorialIdentity.shortName} dans l'app.`
+            : producer.tagline
+        }
         internalHref="/projects"
       />
     </div>

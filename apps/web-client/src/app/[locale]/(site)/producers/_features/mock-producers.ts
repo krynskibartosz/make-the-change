@@ -84,6 +84,7 @@ export type EditorialIdentity = {
   tagline: string
   summary: string
   emotionalStatement?: string
+  missionIntro?: string
 }
 
 export type VisualAsset = {
@@ -581,7 +582,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
   if (producer.slug === 'habeebee-belgique' || producer.name_default?.toLowerCase().includes('habeebee')) {
     return {
       ...producer,
-      tagline: "Savonnerie artisanale & projet d'apiculture à Bruxelles",
+      tagline: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
       locations: {
         field: "Belgique",
         fieldDetail: "Watermael-Boitsfort",
@@ -595,10 +596,11 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         founderNames: ["Alexia"],
         fieldDirector: "Alexia",
         nextGeneration: ["Léonard", "Quentin"],
-        partnerType: "Savonnerie artisanale & initiative d'apiculture documentée",
-        tagline: "Savonnerie artisanale & projet d'apiculture à Bruxelles",
+        partnerType: "Savonnerie apicole documentée",
+        tagline: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
         summary: "Habeebee est une savonnerie artisanale et un projet d'apiculture fondés en 2016 par Alexia à Bruxelles. L'entreprise fabrique à la main des savons solides et des cosmétiques bio utilisant de la cire d'abeille et de la propolis, avec une approche de saponification à froid. En 2024, Léonard et Quentin ont rejoint l'aventure comme associés pour développer le potentiel de la marque.",
-        emotionalStatement: "Entre abeilles, artisanat et solidarité locale à Bruxelles.",
+        emotionalStatement: "De la ruche à l'atelier, des soins naturels fabriqués à Bruxelles.",
+        missionIntro: "Valoriser les matières de la ruche, fabriquer localement et transmettre une apiculture familiale.",
       },
       visualAssets: {
         hero: "/images/producteurs/habeebee/cover.png",
@@ -717,8 +719,8 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           icon: "HeartHandshake",
-          title: "Engagement solidaire",
-          summary: "Soutien scouts • associations • réinsertion sociale",
+          title: "Soutien associatif local",
+          summary: "Scouts • associations • réinsertion • solidarité bruxelloise",
           detail: "Partenariats avec mouvements de jeunesse et structures d'insertion.",
           shortDescription: "Soutien scouts, associations non lucratives, partenariat réinsertion sociale.",
           description: "Habeebee soutient des initiatives locales à travers des partenariats solidaires. Le savon 'Scout Toujours' est proposé à prix exclusif pour les scouts, le savon 'Qui a Bon Fond' pour les associations non lucratives, et l'entreprise collabore avec des structures de réinsertion sociale.",
@@ -734,54 +736,52 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       ],
       proofCards: [
         { label: "Certification ECOGARANTIE", value: "Control Certisys", icon: "BadgeCheck", proofType: "certification" },
-        { label: "Certification Artisanat Certifié", icon: "BadgeCheck", proofType: "certification" },
-        { label: "Certification BIO", icon: "BadgeCheck", proofType: "certification" },
-        { label: "Savonnerie artisanale", value: "Watermael-Boitsfort, Bruxelles", icon: "MapPin", proofType: "location" },
-        { label: "Production locale", value: "Fabriqué en Belgique", icon: "MapPin", proofType: "location" },
+        { label: "Collecte locale à vélo", value: "Récolte de cire & propolis", icon: "Bike", proofType: "field_operation" },
         { label: "Saponification à froid", icon: "FlaskConical", proofType: "method" },
-        { label: "Fabrication artisanale", value: "100% à la main", icon: "Hand", proofType: "method" },
-        { label: "Récolte mobile de proximité", icon: "Bike", proofType: "field_operation" },
-        { label: "Soutien mouvements de jeunesse", value: "Savon Scout Toujours", icon: "Users", proofType: "partner" },
-        { label: "Soutien associations", value: "Savon Qui a Bon Fond", icon: "Users", proofType: "partner" },
-        { label: "Partenariat réinsertion", icon: "Users", proofType: "partner" },
-        { label: "Ingrédients ruche", value: "Cire d'abeille, propolis", icon: "Leaf", proofType: "method" },
-        { label: "Formulation minimaliste", value: "Less is more", icon: "Minimize2", proofType: "method" },
+        { label: "Atelier à Bruxelles", value: "Watermael-Boitsfort", icon: "MapPin", proofType: "location" },
+        { label: "Certification BIO", icon: "BadgeCheck", proofType: "certification" },
+        { label: "Cire & propolis", value: "Ingrédients de la ruche", icon: "Leaf", proofType: "method" },
+        { label: "Apiculture familiale", value: "Programme HabeebeeCulture", icon: "Hexagon", proofType: "method" },
+        { label: "Soutien scouts & associations", value: "Scout Toujours • Qui a Bon Fond", icon: "Users", proofType: "partner" },
+        { label: "Partenariat réinsertion", icon: "HeartHandshake", proofType: "partner" },
+        { label: "Certification Artisanat Certifié", icon: "Award", proofType: "certification" },
+        { label: "Fabrication 100% à la main", icon: "Hand", proofType: "method" },
       ],
       storyBlocks: [
         {
           title: "Née à Bruxelles en 2016",
-          body: "Fondée par Alexia, passionnée par les abeilles et le cosmétique naturel. Habeebee est née d'une volonté de créer des soins pour la peau en lien avec l'apiculture, tout en respectant l'environnement.",
+          body: "Alexia fonde Habeebee pour relier les abeilles, les soins naturels et l'artisanat local bruxellois.",
           imageUrl: "/images/producteurs/habeebee/portrait.jpg",
         },
         {
           title: "Une équipe en croissance",
-          body: "Alexia fondatrice, rejointe en 2024 par Léonard et Quentin. Ensemble, ils développent le potentiel de la marque en plaçant les abeilles, la nature et le plaisir au centre des valeurs.",
+          body: "En 2024, Léonard et Quentin rejoignent l'aventure pour développer la marque et son réseau local.",
           imageUrl: "/images/producteurs/habeebee/story-4-tedy-artisan.jpg",
         },
         {
           title: "Savonnerie artisanale",
-          body: "Atelier de fabrication à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec des ingrédients de qualité, principalement de la cire d'abeille et de la propolis.",
+          body: "Un atelier à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec de la cire d'abeille et de la propolis.",
           imageUrl: "/images/producteurs/habeebee/savonnerie-interieur.webp",
         },
         {
-          title: "HabeebeeCulture : l'apiculture familiale",
-          body: "Programme de formation à l'apiculture naturelle pour les familles. Cycle de proximité : de la ruche à la cire, du vélo de récolte à la fabrication artisanale de savons et baumes.",
+          title: "HabeebeeCulture",
+          body: "Transmettre l'apiculture naturelle aux familles. De la ruche à la cire, du vélo de récolte aux savons artisanaux.",
           imageUrl: "/images/producteurs/habeebee/story-1-habeebeeculture-formation.webp",
         },
         {
-          title: "Engagements solidaires",
-          body: "Soutien aux scouts avec le savon Scout Toujours, partenariat avec les associations non lucratives via Qui a Bon Fond, et collaboration avec des structures de réinsertion sociale.",
+          title: "Soutien local",
+          body: "Savon Scout Toujours pour les mouvements de jeunesse, Qui a Bon Fond pour les associations, et partenariat réinsertion.",
           imageUrl: "/images/producteurs/habeebee/story-6-scouts.jpg",
         },
         {
-          title: "Certifications reconnues",
-          body: "ECOGARANTIE (Control Certisys), Artisanat Certifié, et certification BIO pour les produits concernés. Des labels qui attestent de pratiques documentées et contrôlées.",
+          title: "Certifications documentées",
+          body: "ECOGARANTIE (Control Certisys), Artisanat Certifié, certification BIO — des labels qui attestent de pratiques contrôlées.",
           imageUrl: "/images/producteurs/habeebee/story-8-certificat-ecogarantie.png",
         },
       ],
       partnerCatalogOverview: {
-        title: "Les produits qu'ils proposent",
-        disclaimer: "Habeebee propose une gamme complète de soins cosmétiques. Seule une partie de ces produits est disponible dans l'app.",
+        title: "Leur gamme",
+        disclaimer: "Une partie de ces produits est disponible dans l'app.",
         families: [
           {
             label: "Savons solides",
@@ -810,173 +810,6 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
           },
         ],
       },
-    }
-  }
-
-  // ── Trilogy Ocean Restoration enrichment ──
-  if (producer.slug === 'trilogy-ocean-restoration' || producer.name_default?.toLowerCase().includes('trilogy')) {
-    return {
-      ...producer,
-      tagline: "Jardins sous-marins • Restauration corallienne • Karimunjawa",
-      locations: {
-        field: "Indonésie",
-        fieldDetail: "Karimunjawa, Java central",
-      },
-      editorialIdentity: {
-        legalName: "Trilogy Ocean Restoration",
-        shortName: "Trilogy",
-        foundedYear: 2024,
-        founderNames: [],
-        fieldDirector: "Novri Julfiansyah & Daniel Jackson Subianto",
-        nextGeneration: ["Vincentio Joshua", "Arindiana Janidya Alifsativarini"],
-        partnerType: "Organisation à but non lucratif de restauration des écosystèmes océaniques",
-        tagline: "Jardins sous-marins • Restauration corallienne • Karimunjawa",
-        summary: "Trilogy Ocean Restoration est une organisation indonésienne fondée en 2024, basée à Karimunjawa, Java central. Elle se concentre sur la réparation et la restauration des récifs coralliens, mangroves et herbiers marins. En partenariat avec Karimunjawa Scuba Diving, Scuba School International et Seacrest Indonesia, Trilogy propose des programmes de formation, des excursions éducatives et des actions de propagation corallienne documentées sur le terrain.",
-        emotionalStatement: "Entre jardins coralliens colorés et avenir marin à Karimunjawa.",
-      },
-      visualAssets: {
-        hero: "/images/producteurs/trilogy/youtube-1-coral-garden.jpg",
-        portrait: "/images/producteurs/trilogy/profile-avatar.jpg",
-        logo: "/images/producteurs/trilogy/youtube-profile.jpg",
-        story: [
-          { id: "story-1", url: "/images/producteurs/trilogy/story-2-dive-explore-restore.jpg", role: "story" as const, type: "field_photo" as const, alt: "Dive • Explore • Restore", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
-          { id: "story-2", url: "/images/producteurs/trilogy/youtube-9-cilik-island.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Coral Restoration at Cilik Island", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
-          { id: "story-3", url: "/images/producteurs/trilogy/youtube-7-monitoring.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Effective monitoring for coral restoration", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
-          { id: "story-4", url: "/images/producteurs/trilogy/story-12-dive-edutrip.jpg", role: "story" as const, type: "field_photo" as const, alt: "Dive Edutrip Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
-          { id: "story-5", url: "/images/producteurs/trilogy/youtube-8-planting-coral.jpg", role: "field_proof" as const, type: "field_photo" as const, alt: "Planting coral fragments", sourceUrl: "https://www.youtube.com/@TrilogyOceanRestoration" },
-          { id: "story-6", url: "/images/producteurs/trilogy/story-9-explore-biodiversity.jpg", role: "story" as const, type: "field_photo" as const, alt: "Exploration biodiversité Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
-        ],
-      },
-      missionPillars: [
-        {
-          icon: "Waves",
-          title: "Restauration corallienne",
-          summary: "Plantation • Suivi • Jardins sous-marins",
-          detail: "Programme de restauration des récifs coralliens à Karimunjawa.",
-          shortDescription: "Plantation de fragments de corail et suivi des jardins sous-marins à Cilik Island.",
-          description: "Trilogy Ocean Restoration implante de nouveaux fragments de corail pour recréer des zones de biodiversité marine active, documentant les sites comme Cilik Island. Chaque intervention est suivie pour mesurer la survie et la croissance des nouvelles colonies.",
-          keyPoints: [
-            "Plantation de fragments de corail sur structures",
-            "Surveillance documentée des jardins coralliens",
-            "Sites de restauration identifiés (Cilik Island)",
-          ],
-          whyItMatters: "Les coraux sont les fondements des écosystèmes tropicaux, fournissant un habitat essentiel à des milliers d'espèces marines. Ces actions de restauration sont documentées qualitativement via vidéos terrain, sans métriques d'impact quantifiées par le partenaire.",
-          sourceLabel: "Information partenaire documentée — TikTok & YouTube @TrilogyOceanRestoration",
-        },
-        {
-          icon: "GraduationCap",
-          title: "Éducation marine",
-          summary: "Formation • Excursions éducatives • Sensibilisation",
-          detail: "Programmes éducatifs sur la conservation marine et la plongée.",
-          shortDescription: "Formation de moniteurs certifiés SSI et excursions d'exploration de la biodiversité marine.",
-          description: "Trilogy propose des cours de formation de moniteurs de plongée certifiés Scuba School International, des Dive Edutrips et des programmes de sensibilisation à la biodiversité marine de Karimunjawa.",
-          keyPoints: [
-            "Formation moniteurs de plongée (SSI)",
-            "Excursions Dive Edutrip",
-            "Exploration biodiversité Karimunjawa",
-          ],
-          whyItMatters: "L'éducation est essentielle pour assurer la conservation à long terme des écosystèmes marins. Former des moniteurs locaux crée une capacité durable de transmission des savoirs.",
-          sourceLabel: "Information partenaire documentée — LinkedIn & YouTube",
-        },
-        {
-          icon: "HandHeart",
-          title: "Adoption de coraux",
-          summary: "Programme d'adoption • Engagement communautaire",
-          detail: "Programme d'adoption de coraux pour soutenir la restauration.",
-          shortDescription: "Programme permettant aux individus de soutenir financièrement la restauration corallienne.",
-          description: "Trilogy propose un programme d'adoption de coraux permettant à des individus et organisations de soutenir concrètement les efforts de restauration. Ce mécanisme d'engagement communautaire contribue à la durabilité financière du projet.",
-          keyPoints: [
-            "Coral Adoption Program",
-            "Engagement individuel et collectif",
-            "Lien direct avec la restauration terrain",
-          ],
-          whyItMatters: "L'engagement communautaire est crucial pour la durabilité des projets de conservation marine. Ce programme crée un lien direct entre soutien financier et action terrain documentée.",
-          sourceLabel: "Information partenaire documentée — Peek Holidays & réseaux sociaux",
-        },
-      ],
-      proofCards: [
-        { label: "Site de restauration", value: "Cilik Island, Karimunjawa", icon: "Waves", proofType: "field_operation" },
-        { label: "Plantation de coraux documentée", value: "Fragments implantés sur structures", icon: "Sprout", proofType: "field_operation" },
-        { label: "Programme d'adoption coraux", value: "Coral Adoption Program", icon: "HandHeart", proofType: "method" },
-        { label: "Localisation documentée", value: "Karimunjawa, Java central", icon: "MapPin", proofType: "location" },
-        { label: "Partenariat conservation", value: "Seacrest Indonesia", icon: "Handshake", proofType: "partner" },
-        { label: "Formation certifiée SSI", value: "Scuba School International", icon: "Award", proofType: "partner" },
-        { label: "Partenariat plongée", value: "Karimunjawa Scuba Diving", icon: "Users", proofType: "partner" },
-        { label: "Formation moniteurs", value: "Instructor Training Course", icon: "GraduationCap", proofType: "method" },
-        { label: "Biodiversité marine documentée", value: "Exploration Karimunjawa", icon: "Fish", proofType: "field_operation" },
-        { label: "Présence en ligne", value: "YouTube, TikTok, Instagram", icon: "Smartphone", proofType: "method" },
-        { label: "Contact documenté", value: "+62 813-5705-3490", icon: "Phone", proofType: "location" },
-      ],
-      storyBlocks: [
-        {
-          title: "Dive • Explore • Restore",
-          body: "La devise de Trilogy résume tout : plonger pour explorer, explorer pour comprendre, comprendre pour restaurer. Une approche terrain documentée à Karimunjawa depuis 2024.",
-          imageUrl: "/images/producteurs/trilogy/story-2-dive-explore-restore.jpg",
-        },
-        {
-          title: "Restauration corallienne à Cilik Island",
-          body: "Plantation de fragments de corail sur les structures de restauration. Chaque intervention est documentée et suivie pour mesurer la croissance des nouvelles colonies marines.",
-          imageUrl: "/images/producteurs/trilogy/youtube-9-cilik-island.jpg",
-        },
-        {
-          title: "Suivi des jardins sous-marins",
-          body: "Un monitoring rigoureux des jardins coralliens permet de documenter la survie et la croissance des coraux restaurés sur plusieurs sites de Karimunjawa.",
-          imageUrl: "/images/producteurs/trilogy/youtube-7-monitoring.jpg",
-        },
-        {
-          title: "Éducation et excursions marines",
-          body: "Des Dive Edutrips et programmes de formation pour transmettre les savoirs de la plongée et de la conservation marine aux générations locales et aux visiteurs.",
-          imageUrl: "/images/producteurs/trilogy/story-12-dive-edutrip.jpg",
-        },
-        {
-          title: "Plantation de coraux",
-          body: "Dépôt documenté de fragments de corail sur les structures de restauration — geste terrain photographié et partagé par l'équipe Trilogy.",
-          imageUrl: "/images/producteurs/trilogy/youtube-8-planting-coral.jpg",
-        },
-        {
-          title: "Biodiversité de Karimunjawa",
-          body: "L'exploration de la biodiversité marine de Karimunjawa est au cœur de la mission Trilogy — documenter pour mieux protéger.",
-          imageUrl: "/images/producteurs/trilogy/story-9-explore-biodiversity.jpg",
-        },
-      ],
-      sectionOrder: {
-        hero: 1,
-        mission: 2,
-        proofs: 3,
-        story: 4,
-        projects: 5,
-        species: 6,
-        products: 7,
-        impact: 8,
-        cta: 9,
-      },
-      partnerCatalogOverview: {
-        title: "Ce qu'ils proposent",
-        disclaimer: "Trilogy Ocean Restoration propose des programmes de restauration et d'éducation marine. Ces expériences ne sont pas disponibles directement dans l'app.",
-        families: [
-          {
-            label: "Adoption de coraux",
-            examples: ["Coral Adoption Program", "Parrainage de fragments coralliens"],
-            origin: "Karimunjawa, Indonésie",
-          },
-          {
-            label: "Formation de plongée",
-            examples: ["Instructor Training Course SSI", "Cours certifiés Scuba School International"],
-            origin: "Karimunjawa, Indonésie",
-          },
-          {
-            label: "Excursions éducatives",
-            examples: ["Dive Edutrip", "Exploration biodiversité Karimunjawa", "Coral Education Trip"],
-            origin: "Karimunjawa, Indonésie",
-          },
-          {
-            label: "Conservation marine",
-            examples: ["Plantation de coraux", "Monitoring récifs Cilik Island", "Restauration corallienne"],
-            origin: "Karimunjawa, Indonésie",
-          },
-        ],
-      },
-      contact_website: "https://linktr.ee/underwatergardeners",
     }
   }
 
