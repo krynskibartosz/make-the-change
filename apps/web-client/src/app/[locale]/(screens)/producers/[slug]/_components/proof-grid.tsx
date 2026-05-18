@@ -242,7 +242,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
               Repères documentés
             </h2>
             <p className="mt-1 mb-4 text-[12px] leading-snug text-white/40">
-              Quelques éléments concrets pour situer leur méthode et leur engagement.
+              Des repères concrets pour comprendre leur méthode.
             </p>
 
             <div className="space-y-2">

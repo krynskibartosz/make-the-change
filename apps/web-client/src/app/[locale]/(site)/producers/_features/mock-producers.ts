@@ -691,7 +691,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       missionPillars: [
         {
           icon: "Hammer",
-          title: "Savonnerie artisanale locale",
+          title: "Fabriquer localement",
           summary: "Fabrication à main • saponification à froid • production belge",
           detail: "Atelier artisanal à Watermael-Boitsfort.",
           shortDescription: "Fabrication 100% à la main, saponification à froid, production locale en Belgique.",
@@ -707,7 +707,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           icon: "Hexagon",
-          title: "Apiculture familiale",
+          title: "Transmettre l'apiculture",
           summary: "Formation • collecte de cire • sensibilisation",
           detail: "Programme HabeebeeCulture d'apiculture familiale.",
           shortDescription: "Formation apiculture familiale, collecte de cire et propolis, récolte à vélo.",
@@ -723,7 +723,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           icon: "HeartHandshake",
-          title: "Soutien associatif local",
+          title: "Soutenir le tissu local",
           summary: "Scouts • associations • réinsertion • solidarité bruxelloise",
           detail: "Partenariats avec mouvements de jeunesse et structures d'insertion.",
           shortDescription: "Soutien scouts, associations non lucratives, partenariat réinsertion sociale.",
@@ -856,7 +856,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       missionPillars: [
         {
           icon: "Waves",
-          title: "Restauration corallienne",
+          title: "Restaurer les récifs",
           summary: "Plantation • Suivi • Jardins sous-marins",
           detail: "Programme de restauration des récifs coralliens à Karimunjawa.",
           shortDescription: "Plantation de fragments de corail et suivi des jardins sous-marins à Cilik Island.",
@@ -871,7 +871,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           icon: "GraduationCap",
-          title: "Éducation marine",
+          title: "Transmettre les savoirs marins",
           summary: "Formation • Excursions éducatives • Sensibilisation",
           detail: "Programmes éducatifs sur la conservation marine et la plongée.",
           shortDescription: "Formation de moniteurs certifiés SSI et excursions d'exploration de la biodiversité marine.",
@@ -886,7 +886,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
         {
           icon: "HandHeart",
-          title: "Adoption de coraux",
+          title: "Impliquer les visiteurs",
           summary: "Programme d'adoption • Engagement communautaire",
           detail: "Programme d'adoption de coraux pour soutenir la restauration.",
           shortDescription: "Programme permettant aux individus de soutenir la restauration corallienne.",
