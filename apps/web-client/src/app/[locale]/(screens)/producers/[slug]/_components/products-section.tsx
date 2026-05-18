@@ -30,23 +30,26 @@ export function ProductsSection({
   if (!hasProducts && !hasCatalog) return null
 
   return (
-    <section className="mt-10 px-4">
+    <section className="mt-10">
       {/* ── Produits partenaires disponibles dans l'app ── */}
       {hasProducts && (
         <div className="mb-10">
-          <h2 className="text-[17px] font-bold text-white/80">
-            Sélection disponible
-          </h2>
-          <p className="mt-1 text-[13px] text-white/50">
-            Produits partenaires disponibles dans l&apos;app.
-          </p>
+          <div className="px-4">
+            <h2 className="text-[17px] font-bold text-white/80">
+              Sélection disponible
+            </h2>
+            <p className="mt-1 text-[13px] text-white/50">
+              Produits partenaires disponibles dans l&apos;app.
+            </p>
+          </div>
 
+          {/* Carousel horizontal — même pattern que projets et biodex */}
           <ul
-            className="mt-4 grid grid-cols-2 gap-x-3 gap-y-5 m-0 p-0 list-none"
+            className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 scroll-pl-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
             aria-label="Produits disponibles"
           >
             {products.map((product) => (
-              <li key={product.id}>
+              <li key={product.id} className="w-40 shrink-0 snap-start">
                 <Link
                   href={product.slug ? `/products/${product.slug}` : '/products'}
                   className="group flex flex-col gap-2"
@@ -67,18 +70,16 @@ export function ProductsSection({
                   </div>
 
                   {/* Info */}
-                  <div className="mt-1 flex flex-col gap-0.5">
-                    <h4 className="text-[14px] font-semibold text-white line-clamp-2">
+                  <div className="flex flex-col gap-0.5">
+                    <h4 className="text-[14px] font-semibold text-white line-clamp-2 leading-tight">
                       {product.name_default}
                     </h4>
                     {typeof product.price_points === 'number' && product.price_points > 0 && (
-                      <div className="mt-1">
-                        <CurrencyAmount
-                          kind="impactCredits"
-                          value={product.price_points}
-                          className="text-[13px] font-bold"
-                        />
-                      </div>
+                      <CurrencyAmount
+                        kind="impactCredits"
+                        value={product.price_points}
+                        className="text-[13px] font-bold"
+                      />
                     )}
                   </div>
                 </Link>
@@ -87,7 +88,7 @@ export function ProductsSection({
           </ul>
 
           {/* Reconnexion produit → filière */}
-          <p className="mt-4 text-[12px] text-white/40">
+          <p className="mt-1 px-4 text-[12px] text-white/40">
             Ces produits sont liés aux filières documentées du partenaire.
           </p>
         </div>
@@ -95,7 +96,7 @@ export function ProductsSection({
 
       {/* ── Filières documentées du partenaire ── */}
       {hasCatalog && partnerCatalog && (
-        <div>
+        <div className="px-4">
           <div className="mb-4">
             <h3 className="text-[17px] font-bold text-white/80">
               {partnerCatalog.title}
