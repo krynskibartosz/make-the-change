@@ -37,7 +37,7 @@ export function SpeciesSection({
       </div>
 
       <ul
-        className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
+        className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 scroll-pl-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
         aria-label="Espèces liées au partenaire"
       >
         {species.map((entry) => (

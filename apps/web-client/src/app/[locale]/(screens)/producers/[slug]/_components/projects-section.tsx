@@ -83,8 +83,8 @@ export function ProjectsSection({
         </div>
       </div>
       
-      <ul 
-        className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
+      <ul
+        className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 scroll-pl-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
         aria-label="Projets du partenaire"
       >
         {projects.map((project) => {
