@@ -129,11 +129,13 @@ export async function ProjectQuickView({
       : undefined)
 
   const producerImage =
-    project.producer?.images &&
-    Array.isArray(project.producer.images) &&
-    project.producer.images.length > 0
-      ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
-      : undefined
+    project.producer?.visualAssets?.portrait
+      ? sanitizeImageUrl(project.producer.visualAssets.portrait) ?? undefined
+      : project.producer?.images &&
+        Array.isArray(project.producer.images) &&
+        project.producer.images.length > 0
+        ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
+        : undefined
 
   const resolvedIso = project.address_country_code
     ? resolveCountryCode(project.address_country_code)
