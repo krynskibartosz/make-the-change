@@ -757,17 +757,17 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Une équipe en croissance",
           body: "En 2024, Léonard et Quentin rejoignent l'aventure pour développer la marque et son réseau local.",
-          imageUrl: "/images/producteurs/habeebee/story-4-tedy-artisan.jpg",
+          imageUrl: "/images/producteurs/habeebee/portrait-v2.png",
         },
         {
           title: "Savonnerie artisanale",
           body: "Un atelier à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec de la cire d'abeille et de la propolis.",
-          imageUrl: "/images/producteurs/habeebee/savonnerie-interieur.webp",
+          imageUrl: "/images/producteurs/habeebee/story-1-v2.png",
         },
         {
           title: "HabeebeeCulture",
           body: "Transmettre l'apiculture naturelle aux familles. De la ruche à la cire, du vélo de récolte aux savons artisanaux.",
-          imageUrl: "/images/producteurs/habeebee/story-1-habeebeeculture-formation.webp",
+          imageUrl: "/images/producteurs/habeebee/story-4-v2.png",
         },
         {
           title: "Soutien local",
@@ -913,22 +913,23 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Dive • Explore • Restore",
           body: "Plonger pour explorer, comprendre pour restaurer. Une approche terrain documentée à Karimunjawa depuis 2024.",
-          imageUrl: "/images/producteurs/trilogy/story-1-coral-diver-karimunjawa.jpg",
+          imageUrl: "/images/producteurs/trilogy/trilogy-ocean-restoration.png",
         },
         {
           title: "Restauration à Cilik Island",
           body: "Des fragments de corail sont fixés sur des structures de restauration, puis suivis dans le temps pour mesurer leur croissance.",
-          imageUrl: "/images/producteurs/trilogy/youtube-9-cilik-island.jpg",
+          imageUrl: "/images/producteurs/trilogy/trilogy-Ocean-Restoration-at-Cilik-Island-Karimunjawa.png",
         },
         {
           title: "Suivi des jardins sous-marins",
           body: "Le monitoring documente la survie et la croissance des coraux restaurés sur les sites de Karimunjawa.",
+          // TODO: remplacer par trilogy-coral-monitoring-underwater.png (plongeur + caméra waterproof) quand disponible
           imageUrl: "/images/producteurs/trilogy/youtube-7-monitoring.jpg",
         },
         {
           title: "Éducation et excursions marines",
           body: "Les Dive Edutrips transmettent les bases de la plongée, de la biodiversité et de la conservation marine.",
-          imageUrl: "/images/producteurs/trilogy/story-12-dive-edutrip.jpg",
+          imageUrl: "/images/producteurs/trilogy/trilogy-ocean-restorations-marine-education-and-dive-edutrips.png",
         },
       ],
       sectionOrder: {
