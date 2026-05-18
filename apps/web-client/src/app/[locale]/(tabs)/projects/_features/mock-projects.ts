@@ -29,8 +29,6 @@ import {
   MOCK_PRODUCER_HABEEBEE_SLUG,
   MOCK_PRODUCER_ILANGA_ID,
   MOCK_PRODUCER_ILANGA_SLUG,
-  MOCK_PRODUCER_SARDINIA_ID,
-  MOCK_PRODUCER_SARDINIA_SLUG,
   MOCK_PRODUCER_TRILOGY_ID,
   MOCK_PRODUCER_TRILOGY_SLUG,
   MOCK_PROJECT_ANTSIRABE_ID,
@@ -70,6 +68,7 @@ type MockProjectProducer = {
   description_i18n?: Record<string, string> | null
   contact_website: string | null
   images: string[] | null
+  visualAssets?: { portrait?: string }
   address_city?: string | null
   address_country_code?: string | null
 }
@@ -755,6 +754,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://www.ilanga-nature.com',
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -829,6 +829,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://www.ilanga-nature.com',
       images: ['/images/projects/miellerie-manakara.png', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -900,6 +901,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://www.ilanga-nature.com',
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
     },
@@ -957,20 +959,23 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     unit_label: 'olivier',
     updated_at: '2026-04-19T10:00:00.000Z',
     producer: {
-      id: MOCK_PRODUCER_SARDINIA_ID,
-      slug: MOCK_PRODUCER_SARDINIA_SLUG,
-      name_default: 'Oliviers de Sardaigne',
+      id: MOCK_PRODUCER_ILANGA_ID,
+      slug: MOCK_PRODUCER_ILANGA_SLUG,
+      name_default: 'Ilanga Nature',
       name_i18n: {
-        fr: 'Oliviers de Sardaigne',
-        en: 'Sardinia Olive Trees',
+        fr: 'Ilanga Nature',
+        en: 'Ilanga Nature',
       },
-      description_default: 'Production d\'huile d\'olive premium en Sardaigne.',
+      description_default: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Coopérative de petits producteurs engagés, valorisant miels, huiles et produits artisanaux de terroir.",
       description_i18n: {
-        fr: 'Production d\'huile d\'olive premium en Sardaigne.',
-        en: 'Premium olive oil production in Sardinia.',
+        fr: "Fondée par un voyageur passionné installé à Madagascar, Ilanga Nature est aujourd'hui conduite par ses enfants Nathan et Naya. Coopérative de petits producteurs engagés, valorisant miels, huiles et produits artisanaux de terroir.",
+        en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. A cooperative of committed small producers showcasing honey, oils and artisanal local products.",
       },
-      contact_website: 'https://oliviers-sardaigne.it',
-      images: ['/images/projects/oliveraie-sardaigne.png'],
+      contact_website: 'https://www.ilanga-nature.com',
+      images: ['/images/producteurs/illanga-nature/oliverai-toscane.png'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
+      address_city: 'Mariembourg',
+      address_country_code: 'Belgique',
     },
     species: sardiniaSpecies,
     challenges: [],
@@ -1036,6 +1041,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://linktr.ee/underwatergardeners',
       images: ['/images/projects/coral-karimunjawa.png'],
+      visualAssets: { portrait: '/images/producteurs/trilogy/pur-logo.png' },
     },
     species: coralSpecies,
     challenges: [],
@@ -1101,6 +1107,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       },
       contact_website: 'https://habeebee.be',
       images: ['/images/projects/habeebee.png'],
+      visualAssets: { portrait: '/images/producteurs/habeebee/pur-logo.png' },
     },
     species: habeebeeSpecies,
     challenges: [],

@@ -31,6 +31,7 @@ type MockProductProducer = {
   description_default: string | null
   description_i18n?: Record<string, string> | null
   images: string[] | null
+  visualAssets?: { portrait?: string }
   address_city: string | null
   address_country_code: string | null
   contact_website: string | null
@@ -152,6 +153,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. More than a brand, it is a cooperative of committed small producers preserving ancestral know-how.\n\nFrom Mariembourg, Belgium, they travel across Madagascar to source its agricultural treasures: litchi, niaouli and primary forest honeys, rare spices, handcrafted items. Every product is fully traceable from hive to consumer.\n\nIlanga directly supports local beekeepers by providing hives, training and all-terrain mobile honey houses that reach the most remote areas. Their honeys are EU-certified by the Malagasy Ministry of Livestock. Suppliers to the Ritz Paris, Ladurée, Shangri-La and Marriott.",
       },
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
       contact_website: 'https://www.ilanga-nature.com',
@@ -213,6 +215,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: "Founded by a passionate traveler who settled in Madagascar, Ilanga Nature is now led by his children Nathan and Naya. More than a brand, it is a cooperative of committed small producers preserving ancestral know-how.\n\nFrom Mariembourg, Belgium, they travel across Madagascar to source its agricultural treasures: litchi, niaouli and primary forest honeys, rare spices, handcrafted items. Every product is fully traceable from hive to consumer.\n\nIlanga directly supports local beekeepers by providing hives, training and all-terrain mobile honey houses that reach the most remote areas. Their honeys are EU-certified by the Malagasy Ministry of Livestock. Suppliers to the Ritz Paris, Ladurée, Shangri-La and Marriott.",
       },
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
       contact_website: 'https://www.ilanga-nature.com',
@@ -273,6 +276,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Beekeeper committed to protecting bees in Belgium.',
       },
       images: ['/images/projects/habeebee-belgique.jpg'],
+      visualAssets: { portrait: '/images/producteurs/habeebee/pur-logo.png' },
       address_city: 'Bruxelles',
       address_country_code: 'Belgique',
       contact_website: 'https://habeebee.be',
@@ -333,6 +337,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Beekeeper committed to protecting bees in Belgium.',
       },
       images: ['/images/projects/habeebee-belgique.jpg'],
+      visualAssets: { portrait: '/images/producteurs/habeebee/pur-logo.png' },
       address_city: 'Bruxelles',
       address_country_code: 'Belgique',
       contact_website: 'https://habeebee.be',
@@ -393,6 +398,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Beekeeper committed to protecting bees in Belgium.',
       },
       images: ['/images/projects/habeebee-belgique.jpg'],
+      visualAssets: { portrait: '/images/producteurs/habeebee/pur-logo.png' },
       address_city: 'Bruxelles',
       address_country_code: 'Belgique',
       contact_website: 'https://habeebee.be',
@@ -453,6 +459,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Producer of organic honey and artisanal Malagasy products.',
       },
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
       contact_website: 'https://www.ilanga-nature.com',
@@ -513,6 +520,7 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Producer of organic honey and artisanal Malagasy products.',
       },
       images: ['/images/projects/miellerie-manakara.jpg', '/images/projects/antsirabe-ruchers-1.jpg'],
+      visualAssets: { portrait: '/images/producteurs/illanga-nature/pur-logo.png' },
       address_city: 'Mariembourg',
       address_country_code: 'Belgique',
       contact_website: 'https://www.ilanga-nature.com',

@@ -129,7 +129,7 @@ export function getAdvantagesData(): AdvantagesData {
         name: 'Ilanga Nature',
         description: 'Récoltes, miels et contenus terrain autour de la filière apicole à Madagascar.',
         location: 'Manakara, Madagascar',
-        imageUrl: '/images/projects/miellerie-manakara.jpg',
+        imageUrl: '/images/producteurs/illanga-nature/pur-logo.png',
         href: `/producers/${MOCK_PRODUCER_ILANGA_SLUG}`,
       },
       {
@@ -137,7 +137,7 @@ export function getAdvantagesData(): AdvantagesData {
         name: 'Habeebee',
         description: 'Produits artisanaux, apiculture douce et expériences locales autour des abeilles.',
         location: 'Bruxelles, Belgique',
-        imageUrl: '/images/products/savon-doux-habeebee.png',
+        imageUrl: '/images/producteurs/habeebee/pur-logo.png',
         href: `/producers/${MOCK_PRODUCER_HABEEBEE_SLUG}`,
       },
     ],

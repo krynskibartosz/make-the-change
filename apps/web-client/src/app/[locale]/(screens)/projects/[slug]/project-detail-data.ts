@@ -14,6 +14,7 @@ export type ProjectProducer = {
   description_i18n?: Record<string, string> | null
   contact_website: string | null
   images: string[] | null
+  visualAssets?: { portrait?: string }
 }
 
 export type PublicProject = {
@@ -304,6 +305,7 @@ function toPublicProjectFromMock(
       description_i18n: project.producer.description_i18n || null,
       contact_website: project.producer.contact_website,
       images: project.producer.images || null,
+      visualAssets: project.producer.visualAssets,
     },
     species: project.species || null,
     challenges: project.challenges || null,

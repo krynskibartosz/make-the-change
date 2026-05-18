@@ -12,6 +12,7 @@ export type ProductProducer = {
   description_default: string | null
   description_i18n?: Record<string, string> | null
   images: string[] | null
+  visualAssets?: { portrait?: string }
   address_city: string | null
   address_country_code: string | null
   contact_website: string | null
@@ -111,6 +112,7 @@ const toProductProducer = (value: unknown): ProductProducer | null => {
   }
 }
 
+
 const toProductCategory = (value: unknown): ProductCategory | null => {
   if (!isRecord(value)) {
     return null
@@ -182,6 +184,7 @@ const toProductWithRelationsFromMock = (product: MockProductSeed): ProductWithRe
     description_default: product.producer.description_default,
     description_i18n: product.producer.description_i18n || null,
     images: product.producer.images,
+    visualAssets: product.producer.visualAssets,
     address_city: product.producer.address_city,
     address_country_code: product.producer.address_country_code,
     contact_website: product.producer.contact_website,

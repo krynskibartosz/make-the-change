@@ -68,10 +68,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       ? sanitizeImageUrl(product.images[0])
       : undefined)
 
-  const producerImage =
-    product.producer?.images &&
-    Array.isArray(product.producer.images) &&
-    product.producer.images.length > 0
+  const producerImage = product.producer?.visualAssets?.portrait
+    ? sanitizeImageUrl(product.producer.visualAssets.portrait)
+    : product.producer?.images &&
+      Array.isArray(product.producer.images) &&
+      product.producer.images.length > 0
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 

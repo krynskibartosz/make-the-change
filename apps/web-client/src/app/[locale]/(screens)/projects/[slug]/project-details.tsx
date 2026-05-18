@@ -44,12 +44,12 @@ export async function ProjectDetails({
     project.hero_image_url ||
     (Array.isArray(project.images) && project.images.length > 0 ? project.images[0] : null)
 
-  const producerImage =
-    project.producer?.images &&
-    Array.isArray(project.producer.images) &&
-    project.producer.images.length > 0
-      ? project.producer.images[0]
-      : null
+  const producerImage = project.producer?.visualAssets?.portrait
+    ?? (project.producer?.images &&
+      Array.isArray(project.producer.images) &&
+      project.producer.images.length > 0
+        ? project.producer.images[0]
+        : null)
   const localizedTitle = getLocalizedContent(project.name_i18n, locale, project.name_default)
   const defaultDesc = project.description_default || project.long_description_default || ''
   const localizedLongDesc = getLocalizedContent(
