@@ -559,13 +559,13 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         families: [
           {
             label: "Miels de Madagascar",
-            examples: ["Litchi", "Niaouli", "Cactus", "Jujubier (bio)", "Forêt primaire", "Forêt sèche", "Eucalyptus", "Baies roses", "Mokarana (bio)"],
+            examples: ["Litchi", "Niaouli", "Eucalyptus", "Baies roses", "+ autres"],
             origin: "Manakara · Fort-Dauphin · Antananarivo"
           },
           {
             label: "Vanilles & épices",
-            examples: ["Vanille Bourbon de Manakara", "Poivre noir", "Gingembre", "Cannelle", "Curcuma"],
-            origin: "Madagascar · Polynésie française"
+            examples: ["Vanille Bourbon", "poivre noir", "gingembre", "cannelle"],
+            origin: "Madagascar"
           },
           {
             label: "Confitures artisanales",
@@ -784,32 +784,32 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         },
       ],
       partnerCatalogOverview: {
-        title: "Leur gamme",
+        title: "Leur gamme artisanale",
         disclaimer: "Une partie de ces produits est disponible dans l'app.",
         families: [
           {
             label: "Savons solides",
-            examples: ["Think Pink", "Cire d'abeille DOUX", "TONIC", "HABABY", "VERTUEUX", "FLOWER POWER", "PROPRE ET LISSE", "Scout Toujours"],
+            examples: ["Think Pink", "Cire d'abeille DOUX", "TONIC", "+ autres"],
             origin: "Bruxelles, Belgique",
           },
           {
             label: "Shampoings solides",
-            examples: ["L'abeille s'en mêle — cire d'abeille & rhassoul"],
+            examples: ["L'abeille s'en mêle", "cire d'abeille & rhassoul"],
             origin: "Bruxelles, Belgique",
           },
           {
             label: "Baumes",
-            examples: ["Baumes cire d'abeille et propolis"],
+            examples: ["Cire d'abeille", "propolis"],
             origin: "Bruxelles, Belgique",
           },
           {
             label: "Huiles & soins",
-            examples: ["Soins liquides", "Huiles végétales"],
+            examples: ["Soins liquides", "huiles végétales"],
             origin: "Bruxelles, Belgique",
           },
           {
             label: "Coffrets cadeaux",
-            examples: ["Box SAVONS LE MONDE", "Coffret 7 mini savons", "Coffrets personnalisables"],
+            examples: ["Mini savons", "coffrets personnalisables"],
             origin: "Bruxelles, Belgique",
           },
         ],
@@ -952,22 +952,22 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         families: [
           {
             label: "Adoption de coraux",
-            examples: ["Coral Adoption Program", "Parrainage de fragments coralliens"],
+            examples: ["Parrainage de fragments coralliens"],
             origin: "Karimunjawa, Indonésie",
           },
           {
             label: "Formation de plongée",
-            examples: ["Instructor Training Course SSI", "Cours certifiés Scuba Schools International"],
+            examples: ["Cours certifiés SSI"],
             origin: "Karimunjawa, Indonésie",
           },
           {
             label: "Excursions éducatives",
-            examples: ["Dive Edutrip", "Exploration biodiversité Karimunjawa", "Coral Education Trip"],
+            examples: ["Dive Edutrip", "biodiversité marine"],
             origin: "Karimunjawa, Indonésie",
           },
           {
             label: "Conservation marine",
-            examples: ["Plantation de coraux", "Monitoring récifs Cilik Island", "Restauration corallienne"],
+            examples: ["Plantation", "monitoring", "récifs de Cilik Island"],
             origin: "Karimunjawa, Indonésie",
           },
         ],
