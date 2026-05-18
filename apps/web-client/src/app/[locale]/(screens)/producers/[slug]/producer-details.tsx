@@ -77,7 +77,10 @@ export function ProducerDetails({
       />
 
       {/* 5. Espèces */}
-      <SpeciesSection species={producer.species} />
+      <SpeciesSection
+        species={producer.species}
+        subtitle={producer.editorialIdentity?.speciesSubtitle}
+      />
 
       {/* 7. Histoire modulaire */}
       <StoryBlocks

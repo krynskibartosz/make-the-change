@@ -47,7 +47,7 @@ export function getProjectImpactDisplay(project: {
   if (projectType === 'reef' || projectType === 'coral') {
     return {
       value: Math.round(funding / CORAL_PRICE_EUR),
-      label: 'coraux plantés',
+      label: 'fragments coralliens associés',
       kind: 'reef',
     }
   }
@@ -98,7 +98,7 @@ export function getProducerAggregatedImpact(
     stats.push({ value: oliviersTotal, label: 'oliviers soutenus', kind: 'orchard' })
   }
   if (corauxTotal > 0) {
-    stats.push({ value: corauxTotal, label: 'coraux plantés', kind: 'reef' })
+    stats.push({ value: corauxTotal, label: 'fragments coralliens associés', kind: 'reef' })
   }
 
   return stats

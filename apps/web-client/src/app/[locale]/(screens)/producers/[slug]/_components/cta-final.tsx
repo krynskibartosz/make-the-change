@@ -60,7 +60,7 @@ export function CtaFinal({
             rel="noreferrer"
             className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-white/10 text-sm font-semibold text-white/60 transition-all active:scale-95"
           >
-            Site officiel
+            {website.includes('linktr.ee') ? 'Liens officiels' : 'Site officiel'}
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
           <p className="mt-1.5 text-center text-[11px] text-white/25">

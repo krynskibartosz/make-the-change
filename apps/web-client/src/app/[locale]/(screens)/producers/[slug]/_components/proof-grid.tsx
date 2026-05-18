@@ -146,6 +146,34 @@ const primaryContext: Record<string, { body: string; notes: string[]; caution?: 
     ],
     caution: "Cette méthode est une pratique de fabrication documentée, pas une certification indépendante."
   },
+  // ── Trilogy Ocean Restoration ──
+  'Site de restauration': {
+    body: "Cilik Island, dans l'archipel de Karimunjawa (Java central, Indonésie), est le site principal de restauration corallienne documenté par Trilogy Ocean Restoration.",
+    notes: [
+      "Site : Cilik Island, Karimunjawa",
+      "Localisation : Java central, Indonésie",
+      "Actions documentées via TikTok & YouTube @TrilogyOceanRestoration",
+    ],
+    caution: "Ce site est documenté par le partenaire via vidéos terrain. Il ne s'agit pas d'une mesure d'impact certifiée."
+  },
+  'Fragments coralliens implantés': {
+    body: "Des fragments de corail sont fixés sur des structures de restauration à Cilik Island. Chaque intervention est photographiée et partagée par l'équipe Trilogy sur leurs réseaux.",
+    notes: [
+      "Structures métalliques de restauration",
+      "Fragments coralliens fixés et suivis",
+      "Documentation via photos et vidéos terrain",
+    ],
+    caution: "Ces actions sont documentées qualitativement. Le nombre exact de fragments implantés n'est pas certifié de façon indépendante."
+  },
+  "Programme d'adoption de coraux": {
+    body: "Le Coral Adoption Program de Trilogy permet à des individus et organisations de soutenir financièrement la restauration corallienne à Karimunjawa.",
+    notes: [
+      "Coral Adoption Program",
+      "Soutien individuel ou collectif",
+      "Lien direct avec les actions terrain documentées",
+    ],
+    caution: "Ce programme est un mécanisme d'engagement et de financement, pas une garantie de résultat d'impact mesuré."
+  },
 }
 
 // Sélectionne 3 repères primaires: certification > field_operation > method, puis complétion
