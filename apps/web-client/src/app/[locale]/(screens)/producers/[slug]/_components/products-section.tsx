@@ -39,7 +39,7 @@ export function ProductsSection({
               Produits partenaires disponibles
             </h2>
             <p className="mt-1 text-[13px] text-white/50">
-              Achetables dans l&apos;app en Crédits Impact.
+              Accessibles avec vos Crédits Impact.
             </p>
           </div>
 

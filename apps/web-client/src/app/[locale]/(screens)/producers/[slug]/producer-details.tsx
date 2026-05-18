@@ -66,14 +66,20 @@ export function ProducerDetails({
       <ProjectsSection
         projects={producer.projects}
         impactSummary={producer.impactSummary}
+        subtitle={
+          producer.editorialIdentity?.shortName
+            ? `Des actions portées par ${producer.editorialIdentity.shortName} et documentées dans l'app.`
+            : undefined
+        }
       />
 
       {/* 5. Espèces */}
       <SpeciesSection species={producer.species} />
 
       {/* 7. Histoire modulaire */}
-      <StoryBlocks 
-        blocks={producer.storyBlocks} 
+      <StoryBlocks
+        blocks={producer.storyBlocks}
+        producerName={producer.editorialIdentity?.shortName || producer.name_default}
       />
 
       {/* 8. Produits - séparation app vs gamme partenaire */}

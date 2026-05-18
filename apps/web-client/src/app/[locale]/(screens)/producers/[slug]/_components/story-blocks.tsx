@@ -17,12 +17,17 @@ import type { StoryBlock } from '@/app/[locale]/(site)/producers/_features/mock-
 
 type StoryBlocksProps = {
   blocks?: StoryBlock[]
+  producerName?: string
 }
 
-export function StoryBlocks({ blocks }: StoryBlocksProps) {
+export function StoryBlocks({ blocks, producerName }: StoryBlocksProps) {
   if (!blocks || blocks.length === 0) return null
 
   const visibleBlocks = blocks.slice(0, 4)
+
+  const storySubtitle = producerName
+    ? `Quelques repères sur l'histoire ${/^[AEIOUaeiouÀ-Ö]/i.test(producerName) ? "d'" : "de "}${producerName}.`
+    : "Quelques repères sur l'histoire de ce partenaire."
 
   return (
     <section className="mt-10 px-4">
@@ -30,7 +35,7 @@ export function StoryBlocks({ blocks }: StoryBlocksProps) {
         L&apos;histoire
       </h2>
       <p className="mt-1 mb-4 text-[13px] text-white/50">
-        Quelques repères sur l&apos;origine et l&apos;évolution d&apos;Ilanga Nature.
+        {storySubtitle}
       </p>
 
       <div className="flex flex-col gap-6">
