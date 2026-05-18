@@ -760,12 +760,12 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
         {
           title: "Une équipe qui fabrique localement",
           body: "En 2024, l'équipe se renforce pour structurer l'atelier, organiser la production et faire grandir le réseau local.",
-          imageUrl: HABEEBEE_PATHS.media.portraitV2,
+          imageUrl: HABEEBEE_PATHS.media.story4V2,
         },
         {
           title: "Savonnerie artisanale",
           body: "Un atelier à la main à Watermael-Boitsfort. Chaque savon est saponifié à froid avec de la cire d'abeille et de la propolis.",
-          imageUrl: HABEEBEE_PATHS.media.story4V2,
+          imageUrl: HABEEBEE_PATHS.media.savonnerieInterieur,
         },
         {
           title: "HabeebeeCulture",
