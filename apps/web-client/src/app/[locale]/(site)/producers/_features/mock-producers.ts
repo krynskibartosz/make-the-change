@@ -304,7 +304,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       // ── Visual Assets (Phase 1) ──
       visualAssets: {
         hero: "/images/producteurs/illanga-nature/cover.png",
-        portrait: "/images/producteurs/illanga-nature/logo-ilanga-nature-compact.png",
+        portrait: "/images/producteurs/illanga-nature/pur-logo.png",
         logo: "/images/producteurs/illanga-nature/logo-ilanga-nature-hd.webp",
         story: [
           {
@@ -605,7 +605,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       },
       visualAssets: {
         hero: "/images/producteurs/habeebee/cover.png",
-        portrait: "/images/producteurs/habeebee/logo-for-pp.png",
+        portrait: "/images/producteurs/habeebee/pur-logo.png",
         logo: "/images/producteurs/habeebee/logo.png",
         story: [
           {
@@ -839,7 +839,7 @@ function enrichProducerWithEditorialData(producer: MockProducerSeed): MockProduc
       },
       visualAssets: {
         hero: "/images/producteurs/trilogy/cover.png",
-        portrait: "/images/producteurs/trilogy/profile-avatar.jpg",
+        portrait: "/images/producteurs/trilogy/pur-logo.png",
         logo: "/images/producteurs/trilogy/youtube-profile.jpg",
         story: [
           { id: "story-1", url: "/images/producteurs/trilogy/story-1-coral-diver-karimunjawa.jpg", role: "story" as const, type: "field_photo" as const, alt: "Plongeur sur le récif de Karimunjawa", sourceUrl: "https://www.tiktok.com/@trilogyoceanrestoration" },
