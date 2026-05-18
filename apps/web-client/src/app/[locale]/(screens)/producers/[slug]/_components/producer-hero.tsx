@@ -31,7 +31,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
 
 function getCountryFlag(countryName?: string): string {
   if (!countryName) return ''
-  const base = countryName.split(' · ')[0].split(',')[0].trim()
+  const base = (countryName.split(' · ')[0] ?? '').split(',')[0]?.trim() ?? ''
   return COUNTRY_FLAGS[base] ?? ''
 }
 
@@ -105,7 +105,7 @@ export function ProducerHero({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <h1 className="text-[26px] font-black leading-tight tracking-tight text-white">
-              {name}
+              {editorialIdentity?.shortName || name}
             </h1>
 
             {displayTagline && (

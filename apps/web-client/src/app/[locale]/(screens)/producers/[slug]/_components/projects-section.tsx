@@ -36,7 +36,7 @@ const IMPACT_ICONS: Record<string, typeof Leaf> = {
 export function ProjectsSection({
   projects,
   title = "Les projets qu'ils portent",
-  subtitle = "Des actions terrain liées à l'apiculture malgache",
+  subtitle,
   impactSummary,
 }: ProjectsSectionProps) {
   if (projects.length === 0) return null
