@@ -1,18 +1,16 @@
 'use client'
 import { useMemo, useState } from 'react'
-import { AlertTriangle, BookOpen, ChevronRight, GitBranch } from 'lucide-react'
+import { BookOpen, ChevronRight, GitBranch } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getCoursesForSpecies } from '@/lib/learning/selectors'
-import { cn } from '@/lib/utils'
 import type { SpeciesContext } from '@/types/species'
-import { ImpactCard } from './impact-card'
+import { SpeciesHero } from './species-hero'
+import { SpeciesProjectLinkCard } from './species-project-link-card'
+import { SpeciesWhyItMatters } from './species-why-it-matters'
+import { SpeciesBiodexProgression } from './species-biodex-progression'
+import { SpeciesKnowledgeSection } from './species-knowledge-section'
+import { SpeciesDocumentationSection } from './species-documentation-section'
 import { StickyEvolutionBar } from './sticky-evolution-bar'
-import { BentoGrid } from './bento-grid'
-import { SizeWeightWidget } from './bento-size-weight'
-import { OriginWidget } from './bento-origin'
-import { DietWidget } from './bento-diet'
-import { IUCNWidget } from './bento-iucn'
-import { HabitatCarousel } from './habitat-carousel'
 
 const REQUIRED_SEEDS = 500
 
@@ -22,27 +20,16 @@ interface SpeciesDetailClientProps {
 }
 
 export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetailClientProps) {
-  const [activeTab, setActiveTab] = useState<'discovery' | 'scientific'>('discovery')
-  const [showAllThreats, setShowAllThreats] = useState(false)
   const [showToast, setShowToast] = useState(false)
 
   const canEvolve = userSeedsBalance >= REQUIRED_SEEDS
   const progressionLevel = species.user_status?.progressionLevel ?? 1
   const isLevel2Unlocked = progressionLevel >= 2
 
-  const allThreats = species.threats ?? []
-  const mainThreat = allThreats[0]
-  const extraThreatsCount = allThreats.length - 1
-
-  const hasSizeOrWeight = !!(species.size || species.weight)
-  const hasOrigin = !!species.origin_country
-  const hasDiet = !!species.diet
-  const hasIUCN = !!species.conservation_status
-  const hasBentoContent = hasSizeOrWeight || hasOrigin || hasDiet || hasIUCN
   const learningCourses = useMemo(() => getCoursesForSpecies(species.id, 3), [species.id])
-  const livingWebHref = learningCourses.find((course) => course.relatedEcosystemIds.length > 0)
-  const firstEcosystemId = livingWebHref?.relatedEcosystemIds[0]
-  const firstNodeId = livingWebHref?.relatedNodeIds[0]
+  const livingWebCourse = learningCourses.find((c) => c.relatedEcosystemIds.length > 0)
+  const firstEcosystemId = livingWebCourse?.relatedEcosystemIds[0]
+  const firstNodeId = livingWebCourse?.relatedNodeIds[0]
 
   const handleDisabledClick = () => {
     setShowToast(true)
@@ -52,245 +39,74 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
   return (
     <>
       <div className='pb-28'>
-        {/* Hero image */}
-        <section className='mt-4'>
-          <div className='relative flex aspect-square w-full items-center justify-center'>
-            <div className='absolute inset-0 mx-auto h-3/4 w-3/4 rounded-full bg-emerald-500/10 blur-[100px]' />
-            <img
-              src={species.image_url || '/images/dioramas/transparent/abeille-noire.png'}
-              alt={species.name_default}
-              className='z-10 h-64 w-64 object-contain drop-shadow-2xl'
-            />
-          </div>
-        </section>
 
-        {/* Title + scientific name */}
-        <section className='mt-2 px-6 text-center'>
-          <h1 className='text-3xl font-black text-white'>{species.name_default}</h1>
-          {species.scientific_name && (
-            <p className='mt-1 text-sm italic text-white/40'>{species.scientific_name}</p>
-          )}
-        </section>
+        {/* 1. Hero naturaliste */}
+        <SpeciesHero species={species} />
 
-        {/* Impact Card */}
-        <ImpactCard projects={species.associated_projects} />
+        <div className='mt-5 space-y-5'>
 
-        {learningCourses.length > 0 && (
-          <section className='mx-5 mt-6 rounded-3xl border border-white/8 bg-white/[0.045] p-4'>
-            <div className='flex items-start justify-between gap-4'>
-              <div>
-                <div className='flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] text-teal-200/65'>
-                  <BookOpen className='h-4 w-4' aria-hidden='true' />
-                  Approfondir cette espèce
-                </div>
-                <p className='mt-1 text-sm leading-relaxed text-white/48'>
-                  Cours reliés à son rôle, son habitat ou ses liens dans la Toile vivante.
-                </p>
-              </div>
-              {firstEcosystemId && (
-                <Link
-                  href={`/ecosysteme/${firstEcosystemId}${firstNodeId ? `?node=${firstNodeId}` : ''}`}
-                  className='shrink-0 text-teal-300 active:text-teal-200'
-                  aria-label='Voir dans la Toile vivante'
-                >
-                  <GitBranch className='h-5 w-5' aria-hidden='true' />
-                </Link>
-              )}
-            </div>
-            <div className='mt-4 grid gap-2'>
-              {learningCourses.map((course) => (
-                <Link
-                  key={course.id}
-                  href={`/learn/courses/${course.id}`}
-                  className='flex items-center justify-between gap-3 rounded-2xl bg-white/[0.045] px-3 py-2.5 text-sm font-semibold text-white/75 active:bg-white/[0.07]'
-                >
-                  <span className='line-clamp-1'>{course.title}</span>
-                  <ChevronRight className='h-4 w-4 shrink-0 text-white/30' aria-hidden='true' />
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+          {/* 2. Projet lié */}
+          <SpeciesProjectLinkCard projects={species.associated_projects} />
 
-        {/* Segmented Control */}
-        <div className='mx-5 mt-6'>
-          <div className='flex gap-1 rounded-2xl bg-white/5 p-1'>
-            <button
-              type='button'
-              onClick={() => setActiveTab('discovery')}
-              className={cn(
-                'flex-1 rounded-xl py-2.5 text-sm font-bold transition-all duration-200',
-                activeTab === 'discovery'
-                  ? 'bg-white text-black shadow-sm'
-                  : 'text-white/50 hover:text-white/80',
-              )}
-            >
-              Découverte
-            </button>
-            <button
-              type='button'
-              onClick={() => setActiveTab('scientific')}
-              className={cn(
-                'flex-1 rounded-xl py-2.5 text-sm font-bold transition-all duration-200',
-                activeTab === 'scientific'
-                  ? 'bg-white text-black shadow-sm'
-                  : 'text-white/50 hover:text-white/80',
-              )}
-            >
-              Scientifique
-            </button>
-          </div>
-        </div>
+          {/* 3. Pourquoi elle compte */}
+          <SpeciesWhyItMatters species={species} />
 
-        {/* ── TAB: Découverte ── */}
-        {activeTab === 'discovery' && (
-          <div className='mt-6 space-y-6'>
-            {/* Intro */}
-            {species.description_default && (
-              <div className='px-5'>
-                <p className='text-sm leading-relaxed text-white/70'>
-                  {species.description_default}
-                </p>
-              </div>
-            )}
+          {/* 4. Fiche BioDex — progression */}
+          <SpeciesBiodexProgression
+            progressionLevel={progressionLevel}
+            currentSeeds={userSeedsBalance}
+          />
 
-            {/* Menace principale */}
-            {mainThreat && (
-              <div className='px-5'>
-                <h3 className='mb-3 text-xs font-bold uppercase tracking-wider text-white/40'>
-                  Menace principale
-                </h3>
-                <div className='rounded-2xl border border-orange-500/20 bg-orange-500/10 px-4 py-3'>
-                  <div className='flex items-center gap-3'>
-                    <AlertTriangle className='h-5 w-5 shrink-0 text-orange-400' />
-                    <p className='text-sm font-semibold text-white/90'>{mainThreat}</p>
-                  </div>
-                </div>
-                {extraThreatsCount > 0 && !showAllThreats && (
-                  <button
-                    type='button'
-                    onClick={() => setShowAllThreats(true)}
-                    className='mt-3 text-xs font-bold text-white/40 transition-colors hover:text-white/60'
-                  >
-                    Voir {extraThreatsCount} autre{extraThreatsCount > 1 ? 's' : ''} menace
-                    {extraThreatsCount > 1 ? 's' : ''} →
-                  </button>
-                )}
-                {showAllThreats && (
-                  <div className='mt-3 flex flex-wrap gap-2'>
-                    {allThreats.slice(1).map((threat, i) => (
-                      <div
-                        key={i}
-                        className='rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/70'
-                      >
-                        {threat}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+          {/* 5. Ce qu'on peut comprendre */}
+          <SpeciesKnowledgeSection species={species} isLevel2Unlocked={isLevel2Unlocked} />
 
-            {/* Niveau 2 — contenu grisé / débloqué */}
-            <div className='px-5'>
-              <div
-                className={cn(
-                  'rounded-3xl border p-5 transition-all',
-                  isLevel2Unlocked ? 'border-white/5 bg-white/5' : 'border-white/5 bg-white/[0.02]',
-                )}
-              >
-                <div className='mb-3 flex items-center justify-between'>
-                  <h3 className='text-sm font-bold text-white/80'>Anecdote</h3>
-                  {!isLevel2Unlocked && (
-                    <span className='rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/30'>
-                      Niveau 2
-                    </span>
-                  )}
-                </div>
-                {isLevel2Unlocked && species.description_scientific ? (
-                  <p className='text-sm leading-relaxed text-white/60'>
-                    {species.description_scientific}
-                  </p>
-                ) : (
-                  <div className='space-y-2'>
-                    <div className='h-2.5 w-full rounded-full bg-white/5' />
-                    <div className='h-2.5 w-4/5 rounded-full bg-white/5' />
-                    <div className='h-2.5 w-3/5 rounded-full bg-white/5' />
-                    <p className='mt-3 text-xs text-white/30'>
-                      Approfondissez la fiche pour découvrir l&apos;histoire de cette espèce.
+          {/* 6. Ce qui est documenté */}
+          <SpeciesDocumentationSection species={species} />
+
+          {/* 7. Cours liés & Toile vivante */}
+          {learningCourses.length > 0 && (
+            <section className='mx-5'>
+              <div className='rounded-3xl border border-white/8 bg-white/[0.045] p-4'>
+                <div className='flex items-start justify-between gap-4'>
+                  <div>
+                    <div className='flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] text-teal-200/65'>
+                      <BookOpen className='h-4 w-4' aria-hidden='true' />
+                      Approfondir dans Apprendre
+                    </div>
+                    <p className='mt-1 text-sm leading-relaxed text-white/48'>
+                      Cours reliés à son rôle, son habitat ou ses liens dans la Toile vivante.
                     </p>
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── TAB: Scientifique ── */}
-        {activeTab === 'scientific' && (
-          <div className='mt-6 space-y-6'>
-            {hasBentoContent && (
-              <BentoGrid>
-                {hasSizeOrWeight && (
-                  <SizeWeightWidget size={species.size} weight={species.weight} />
-                )}
-                {hasOrigin && <OriginWidget originCountry={species.origin_country} />}
-                {hasDiet && <DietWidget diet={species.diet} />}
-                {hasIUCN && <IUCNWidget conservationStatus={species.conservation_status} />}
-              </BentoGrid>
-            )}
-
-            {species.habitat && species.habitat.length > 0 && (
-              <HabitatCarousel habitats={species.habitat} />
-            )}
-
-            {allThreats.length > 0 && (
-              <div className='px-5'>
-                <h3 className='mb-3 font-bold text-white'>Les Défis de son Monde</h3>
-                <div className='flex flex-wrap gap-2'>
-                  {allThreats.map((threat, i) => (
-                    <div
-                      key={i}
-                      className='rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/80'
+                  {firstEcosystemId && (
+                    <Link
+                      href={`/ecosysteme/${firstEcosystemId}${firstNodeId ? `?node=${firstNodeId}` : ''}`}
+                      className='shrink-0 text-teal-300 active:text-teal-200'
+                      aria-label='Explorer dans la Toile vivante'
                     >
-                      {threat}
-                    </div>
+                      <GitBranch className='h-5 w-5' aria-hidden='true' />
+                    </Link>
+                  )}
+                </div>
+                <div className='mt-4 grid gap-2'>
+                  {learningCourses.map((course) => (
+                    <Link
+                      key={course.id}
+                      href={`/learn/courses/${course.id}`}
+                      className='flex items-center justify-between gap-3 rounded-2xl bg-white/[0.045] px-3 py-2.5 text-sm font-semibold text-white/75 active:bg-white/[0.07]'
+                    >
+                      <span className='line-clamp-1'>{course.title}</span>
+                      <ChevronRight className='h-4 w-4 shrink-0 text-white/30' aria-hidden='true' />
+                    </Link>
                   ))}
                 </div>
               </div>
-            )}
+            </section>
+          )}
 
-            {species.description_scientific && (
-              <div className='px-5'>
-                <h3 className='mb-3 font-bold text-white'>Description scientifique</h3>
-                <div
-                  className={cn(
-                    'text-sm leading-relaxed transition-all',
-                    isLevel2Unlocked
-                      ? 'text-white/70'
-                      : 'select-none text-white/30 blur-[3px]',
-                  )}
-                >
-                  <p>{species.description_scientific}</p>
-                </div>
-                {!isLevel2Unlocked && (
-                  <p className='mt-2 text-xs text-white/30'>
-                    Approfondissez la fiche (Niveau 2) pour lire la description complète.
-                  </p>
-                )}
-              </div>
-            )}
-
-            <div className='px-5 mt-8'>
-              <p className='text-center text-xs text-white/30'>
-                Données à vérifier / Sources scientifiques
-              </p>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
 
-      {/* Sticky Bottom Bar */}
+      {/* 8. Sticky bar d'approfondissement */}
       <StickyEvolutionBar
         currentSeeds={userSeedsBalance}
         requiredSeeds={REQUIRED_SEEDS}
@@ -302,7 +118,7 @@ export function SpeciesDetailClient({ species, userSeedsBalance }: SpeciesDetail
       {showToast && (
         <div className='pointer-events-none fixed inset-x-4 bottom-28 z-[60] flex items-center justify-center'>
           <div className='animate-in fade-in slide-in-from-bottom-2 rounded-2xl border border-white/10 bg-white/10 px-5 py-3 text-sm font-medium text-white/90 shadow-xl backdrop-blur-md duration-300'>
-            Continuez l&apos;Aventure ou l&apos;Academy pour récolter des Graines !
+            Continue l&apos;Aventure ou Apprendre pour gagner des Graines !
           </div>
         </div>
       )}
