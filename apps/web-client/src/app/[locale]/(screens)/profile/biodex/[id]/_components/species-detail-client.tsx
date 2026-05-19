@@ -5,15 +5,15 @@ import { Link } from '@/i18n/navigation'
 import { getCoursesForSpecies } from '@/lib/learning/selectors'
 import type { SpeciesContext } from '@/types/species'
 import { SpeciesHero } from './species-hero'
-import { SpeciesLinkedProjects, type LinkedProject } from './species-linked-projects'
-import { SpeciesLinkedSpecies } from './species-linked-species'
-import { SpeciesLinkedProducts, type SpeciesLinkedProducerData } from './species-linked-products'
-import { SpeciesLinkedPartners, type SpeciesLinkedPartnerData } from './species-linked-partners'
 import { SpeciesWhyItMatters } from './species-why-it-matters'
 import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
+import { SpeciesProjectsZone } from './species-projects-zone'
+import { SpeciesLinkedSpecies } from './species-linked-species'
 import { SpeciesDocumentationSection } from './species-documentation-section'
-import { SpeciesProjectStats } from './species-project-stats'
+import { SpeciesLinkedProducts, type SpeciesLinkedProducerData } from './species-linked-products'
+import type { LinkedProject } from './species-linked-projects'
+import type { SpeciesLinkedPartnerData } from './species-linked-partners'
 
 interface SpeciesDetailClientProps {
   species: SpeciesContext
@@ -34,37 +34,31 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
       {/* 1. Hero naturaliste */}
       <SpeciesHero species={species} />
 
-      <div className='mt-5 space-y-5'>
+      <div className='mt-5 space-y-8'>
 
-        {/* 2. Projet lié */}
-        <SpeciesLinkedProjects projects={linkedProjects} />
-
-        {/* 3. Pourquoi elle compte */}
+        {/* 2. Pourquoi elle compte — juste sous le hero, texte ouvert */}
         <SpeciesWhyItMatters species={species} />
 
-        {/* 4. Repères rapides */}
+        {/* 3. Repères biologiques — grille légère */}
         <SpeciesQuickStats species={species} />
 
-        {/* 5. Ce qu'on peut comprendre */}
+        {/* 4. Explorer son rôle — accordéons */}
         <SpeciesKnowledgeSection species={species} />
 
-        {/* 6. Espèces du même projet */}
+        {/* 5. Liens avec les projets — zone fusionnée */}
+        <SpeciesProjectsZone linkedProjects={linkedProjects} linkedPartners={linkedPartners} />
+
+        {/* 6. Dans le même écosystème */}
         <SpeciesLinkedSpecies linkedProjects={linkedProjects} currentSpeciesId={species.id} />
 
-        {/* 7. Ce qui est documenté */}
+        {/* 7. Ce qui est documenté — statuts visuels */}
         <SpeciesDocumentationSection species={species} />
 
-        {/* 8. Repères des projets liés */}
-        <SpeciesProjectStats
-          linkedProjects={linkedProjects}
-          partnersCount={linkedPartners.length}
-        />
-
-        {/* 6. Approfondir dans Apprendre */}
+        {/* 8. Continuer à apprendre */}
         {learningCourses.length > 0 && (
           <section className='mx-5'>
             <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-              Approfondir dans Apprendre
+              Continuer à apprendre
             </p>
             <div className='rounded-3xl border border-white/8 bg-white/[0.045] p-4'>
               <div className='flex items-start justify-between gap-4'>
@@ -112,21 +106,18 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
           </section>
         )}
 
-        {/* 8. Partenaires liés */}
-        <SpeciesLinkedPartners partners={linkedPartners} />
-
-        {/* 9. Produits du partenaire lié */}
+        {/* 9. Savoir-faire lié */}
         <SpeciesLinkedProducts producers={linkedProducers} />
 
-        {/* 9. Sources & limites */}
+        {/* 10. Sources & limites */}
         <section className='mx-5 pb-4'>
           <div className='rounded-2xl border border-white/5 bg-white/[0.025] px-4 py-4'>
             <p className='mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-white/25'>
               Sources & limites
             </p>
             <p className='text-xs leading-relaxed text-white/35'>
-              Cette fiche est une trace pédagogique. Elle ne constitue pas une preuve que
-              l&apos;espèce est protégée ou sauvée.
+              Cette fiche sert à apprendre et à relier une espèce à des projets documentés dans
+              l&apos;app. Elle ne prouve pas que l&apos;espèce est sauvée ou protégée.
             </p>
           </div>
         </section>

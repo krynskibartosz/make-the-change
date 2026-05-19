@@ -10,11 +10,9 @@ export function SpeciesWhyItMatters({ species }: SpeciesWhyItMattersProps) {
 
   return (
     <section className='mx-5'>
-      <p className='mb-2 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-        Pourquoi elle compte
-      </p>
-      <div className='rounded-2xl border border-white/8 bg-white/[0.045] px-4 py-4'>
-        <p className='text-sm leading-relaxed text-white/70'>{summary}</p>
+      <p className='mb-3 text-sm font-black text-white/55'>Pourquoi elle compte</p>
+      <div className='border-l-2 border-emerald-500/40 pl-4'>
+        <p className='text-sm leading-relaxed text-white/72'>{summary}</p>
       </div>
     </section>
   )

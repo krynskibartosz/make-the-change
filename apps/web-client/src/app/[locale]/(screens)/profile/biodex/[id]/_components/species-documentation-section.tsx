@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { Info } from 'lucide-react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
 import type { SpeciesContext } from '@/types/species'
 
@@ -12,38 +11,44 @@ const IUCN_LABELS: Record<string, string> = {
   NT: 'Quasi menacé',
   LC: 'Préoccupation mineure',
   DD: 'Données locales limitées',
-  EW: 'Éteint à l\'état sauvage',
+  EW: "Éteint à l'état sauvage",
   EX: 'Éteint',
 }
 
-interface DocCardProps {
+type StatusKind = 'documented' | 'pending' | 'unavailable'
+
+const STATUS_DOT: Record<StatusKind, string> = {
+  documented: 'bg-emerald-400',
+  pending: 'bg-amber-400/70',
+  unavailable: 'bg-white/20',
+}
+
+interface StatusRowProps {
   label: string
   value: string
+  status: StatusKind
   sheetTitle?: string
   sheetContent?: ReactNode
 }
 
-function DocCard({ label, value, sheetTitle, sheetContent }: DocCardProps) {
+function StatusRow({ label, value, status, sheetTitle, sheetContent }: StatusRowProps) {
   const [open, setOpen] = useState(false)
   const isClickable = !!sheetContent
 
   return (
     <>
-      <div
-        className={`flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/[0.04] px-4 py-3 ${
-          isClickable ? 'cursor-pointer transition-colors active:bg-white/[0.07]' : ''
-        }`}
+      <button
+        type={isClickable ? 'button' : undefined}
         onClick={isClickable ? () => setOpen(true) : undefined}
-        role={isClickable ? 'button' : undefined}
-        tabIndex={isClickable ? 0 : undefined}
-        onKeyDown={isClickable ? (e) => e.key === 'Enter' && setOpen(true) : undefined}
+        disabled={!isClickable}
+        className={`flex w-full items-center justify-between py-2.5 text-left ${isClickable ? 'transition-opacity active:opacity-60' : ''}`}
       >
-        <div>
-          <p className='text-[10px] font-black uppercase tracking-[0.14em] text-white/35'>{label}</p>
-          <p className='mt-0.5 text-sm font-semibold text-white/75'>{value}</p>
+        <p className='text-xs text-white/40'>{label}</p>
+        <div className='flex items-center gap-2'>
+          <p className='text-xs font-semibold text-white/65'>{value}</p>
+          <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[status]}`} aria-hidden='true' />
         </div>
-        {isClickable && <Info className='h-4 w-4 shrink-0 text-white/25' aria-hidden='true' />}
-      </div>
+      </button>
 
       {isClickable && sheetTitle && (
         <MobileSheet isOpen={open} onClose={() => setOpen(false)} title={sheetTitle}>
@@ -66,14 +71,14 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
 
   return (
     <section className='mx-5'>
-      <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
+      <p className='mb-1 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
         Ce qui est documenté
       </p>
-      <div className='space-y-2'>
-
-        <DocCard
+      <div className='divide-y divide-white/[0.05]'>
+        <StatusRow
           label='Image principale'
-          value='Représentation naturaliste'
+          value='Représentation pédagogique'
+          status='documented'
           sheetTitle='À propos de cette image'
           sheetContent={
             <div className='space-y-3'>
@@ -89,9 +94,10 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
           }
         />
 
-        <DocCard
+        <StatusRow
           label='Lien projet'
           value={hasProject ? 'Documenté' : 'À documenter'}
+          status={hasProject ? 'documented' : 'pending'}
           sheetTitle='Trace pédagogique'
           sheetContent={
             <div className='space-y-3'>
@@ -106,21 +112,23 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
           }
         />
 
-        <DocCard
+        <StatusRow
           label='Photo terrain'
-          value='Non disponible à ce jour'
+          value='Non disponible'
+          status='unavailable'
           sheetTitle='Photo terrain'
           sheetContent={
             <p>
               Une photo terrain documentée peut être ajoutée si un partenaire la fournit. Elle sera
-              clairement distinguée de la représentation naturaliste.
+              clairement distinguée de la représentation pédagogique.
             </p>
           }
         />
 
-        <DocCard
+        <StatusRow
           label='Statut de conservation'
           value={conservationLabel ?? 'À documenter'}
+          status={conservationLabel ? 'documented' : 'pending'}
           sheetTitle='Statut de conservation'
           sheetContent={
             <div className='space-y-3'>
@@ -128,9 +136,7 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
                 Le statut de conservation peut varier selon le périmètre évalué : espèce,
                 sous-espèce, population sauvage ou population locale.
               </p>
-              <p>
-                Les données locales liées au projet restent à documenter avec le partenaire.
-              </p>
+              <p>Les données locales liées au projet restent à documenter avec le partenaire.</p>
               <p className='text-xs text-white/40'>
                 Ce statut n&apos;est pas une validation de l&apos;impact du projet sur
                 l&apos;espèce.
@@ -139,16 +145,17 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
           }
         />
 
-        <DocCard
+        <StatusRow
           label='Données scientifiques'
-          value='À vérifier avant publication'
+          value='À vérifier'
+          status='pending'
           sheetTitle='Données scientifiques'
           sheetContent={
             <div className='space-y-3'>
               <p>
-                Certaines données scientifiques présentes dans cette fiche sont issues de recherches
-                documentaires et n&apos;ont pas encore été vérifiées par un expert terrain ou une
-                publication scientifique identifiable.
+                Certaines données présentes dans cette fiche sont issues de recherches documentaires
+                et n&apos;ont pas encore été vérifiées par un expert terrain ou une publication
+                scientifique identifiable.
               </p>
               <p className='text-xs text-white/40'>
                 Make the Change s&apos;engage à afficher les données avec leur niveau de fiabilité.
@@ -156,13 +163,7 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
             </div>
           }
         />
-
       </div>
-
-      <p className='mt-5 text-center text-xs leading-relaxed text-white/25'>
-        Cette fiche est une trace pédagogique. Elle ne constitue pas une preuve que l&apos;espèce
-        est protégée ou sauvée.
-      </p>
     </section>
   )
 }

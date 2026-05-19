@@ -27,7 +27,7 @@ export function SpeciesLinkedProducts({ producers }: SpeciesLinkedProductsProps)
   return (
     <section className='mx-5'>
       <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-        Produits du partenaire lié
+        Savoir-faire lié
       </p>
       <div className='rounded-3xl border border-white/8 bg-white/[0.045] p-4'>
         <div className='flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
@@ -72,7 +72,7 @@ export function SpeciesLinkedProducts({ producers }: SpeciesLinkedProductsProps)
           href={`/producers/${mainProducer.producerSlug}`}
           className='mt-3 flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] py-2.5 text-sm font-semibold text-white/60 active:bg-white/[0.07]'
         >
-          Voir les produits du partenaire
+          Voir le savoir-faire de {mainProducer.producerName}
         </Link>
       </div>
     </section>

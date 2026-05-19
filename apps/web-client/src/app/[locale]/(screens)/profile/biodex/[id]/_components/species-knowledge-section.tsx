@@ -78,9 +78,9 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
     <>
       <section className='mx-5'>
         <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-          Ce qu&apos;on peut comprendre
+          Explorer son rôle
         </p>
-        <div className='rounded-3xl border border-white/8 bg-white/[0.04] px-4'>
+        <div className='px-0'>
 
           {/* 01 – Habitat */}
           <AccordionItem title='Habitat' number='01' defaultOpen>

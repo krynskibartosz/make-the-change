@@ -25,7 +25,7 @@ export function SpeciesLinkedSpecies({
   return (
     <section className='mx-5'>
       <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-        Espèces du même projet
+        Dans le même écosystème
       </p>
       <div className='flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
         {otherSpecies.map((sp) => {

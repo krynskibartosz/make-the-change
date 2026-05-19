@@ -42,7 +42,7 @@ export function SpeciesHero({ species }: SpeciesHeroProps) {
             className='mt-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[11px] font-semibold text-white/55 backdrop-blur-sm transition-colors active:bg-black/50'
           >
             <Info className='h-3 w-3' aria-hidden='true' />
-            Représentation naturaliste
+            Représentation pédagogique
           </button>
         </div>
       </div>
