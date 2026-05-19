@@ -11,6 +11,7 @@ type ProjectStorySheetProps = {
   producerDescription?: string
   producerLabel?: string
   producerLocation?: string
+  producerImage?: string
   projectType?: string | null
   isDonationProject?: boolean
 }
@@ -77,6 +78,7 @@ export function ProjectStorySheet({
   producerDescription,
   producerLabel,
   producerLocation,
+  producerImage,
   projectType,
   isDonationProject = false,
 }: ProjectStorySheetProps) {
@@ -117,9 +119,17 @@ export function ProjectStorySheet({
           <div className="mt-6">
             <SectionLabel>{producerLabel ?? 'Partenaire terrain'}</SectionLabel>
             <div className="flex items-center gap-3.5 rounded-2xl bg-white/[0.04] px-4 py-3.5">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
-                {producerName[0]?.toUpperCase() || 'M'}
-              </div>
+              {producerImage ? (
+                <img
+                  src={producerImage}
+                  alt={producerName}
+                  className="h-12 w-12 shrink-0 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+                  {producerName[0]?.toUpperCase() || 'M'}
+                </div>
+              )}
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold text-white">{producerName}</p>
                 {producerDescription ? (
