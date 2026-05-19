@@ -44,7 +44,7 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
               type="button"
               onClick={() => setOpenIndex(index)}
               className={`flex w-full items-center gap-3 rounded-lg px-2 py-3.5 -mx-2 text-left transition-all active:bg-white/[0.04] active:opacity-70 ${
-                index < displayPillars.length - 1 ? 'border-b border-white/[0.05]' : ''
+                index < displayPillars.length - 1 ? 'border-b border-white/[0.10]' : ''
               }`}
             >
               {/* Numéro inline */}
@@ -101,7 +101,7 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
 
             {/* Label source — garde-fou */}
             {activePillar.sourceLabel && (
-              <p className="mt-6 text-[12px] leading-snug text-white/38">
+              <p className="mt-6 text-[12px] leading-snug text-white/50">
                 {activePillar.sourceLabel}
               </p>
             )}

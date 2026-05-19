@@ -91,6 +91,7 @@ export function ProducerDetails({ producer }: ProducerDetailsProps) {
             : producer.tagline
         }
         internalHref="/projects"
+        partnerName={producer.editorialIdentity?.shortName || producer.name_default}
       />
     </div>
   )

@@ -1,23 +1,14 @@
 'use client'
 
-/**
- * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
- * Section Projets
- *
- * Cards compactes avec:
- * - Micro-description
- * - Type de projet
- * - Localisation
- *
- * Style éditorial, pas catalogue.
- */
-
 import { Info, Leaf, MapPin, TreePine, Waves } from 'lucide-react'
+import { useState } from 'react'
+import { useLocale } from 'next-intl'
 import type { ImpactSummary } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
 import { getProjectImpactDisplay } from '@/lib/impact-calculator'
 import { resolveLocationDisplay } from '@/lib/location'
+import { MobileSheet } from '@/components/ui/mobile-sheet'
 import type { ProducerProject } from '../producer-detail-data'
 import { producerTypography as typo } from './producer-typography'
 
@@ -34,10 +25,10 @@ const IMPACT_ICONS: Record<string, typeof Leaf> = {
   reef: Waves,
 }
 
-function CarouselProjectCard({ project }: { project: ProducerProject }) {
+function CarouselProjectCard({ project, locale }: { project: ProducerProject; locale: string }) {
   const impact = getProjectImpactDisplay(project)
   const locationDisplay = project.address_country_code
-    ? resolveLocationDisplay(project.address_country_code, project.address_city, 'fr')
+    ? resolveLocationDisplay(project.address_country_code, project.address_city, locale)
     : null
   const ImpactIcon = impact?.kind ? IMPACT_ICONS[impact.kind] || Leaf : Leaf
 
@@ -91,10 +82,10 @@ function CarouselProjectCard({ project }: { project: ProducerProject }) {
   )
 }
 
-function SingleProjectCard({ project }: { project: ProducerProject }) {
+function SingleProjectCard({ project, locale }: { project: ProducerProject; locale: string }) {
   const impact = getProjectImpactDisplay(project)
   const locationDisplay = project.address_country_code
-    ? resolveLocationDisplay(project.address_country_code, project.address_city, 'fr')
+    ? resolveLocationDisplay(project.address_country_code, project.address_city, locale)
     : null
   const ImpactIcon = impact?.kind ? IMPACT_ICONS[impact.kind] || Leaf : Leaf
 
@@ -156,6 +147,9 @@ export function ProjectsSection({
   subtitle,
   impactSummary,
 }: ProjectsSectionProps) {
+  const locale = useLocale()
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false)
+
   if (projects.length === 0) return null
 
   const projectCount = projects.length
@@ -165,49 +159,64 @@ export function ProjectsSection({
       : `${projectCount} projets documentés dans l'app`
 
   return (
-    <section className="mt-10">
-      <div className="px-4">
-        <h2 className={typo.sectionTitle}>{title}</h2>
-        {subtitle && <p className={`mt-1.5 ${typo.sectionSubtitle}`}>{subtitle}</p>}
+    <>
+      <section className="mt-10">
+        <div className="px-4">
+          <h2 className={typo.sectionTitle}>{title}</h2>
+          {subtitle && <p className={`mt-1.5 ${typo.sectionSubtitle}`}>{subtitle}</p>}
 
-        {/* Ligne de contexte : nombre de projets + estimation intégrée */}
-        <div className="mt-2 flex flex-col gap-1">
-          <p className="text-[13px] font-medium text-white/55">{countLabel}</p>
-          {impactSummary?.estimate && (
-            <div className="flex items-start gap-1.5">
-              <p className="text-[13px] font-medium leading-snug text-white/55">
-                ≈{' '}
-                <span className="font-semibold text-amber-400/70">
-                  {formatCompact(impactSummary.estimate)} {impactSummary.unit}
-                </span>{' '}
-                associées
-              </p>
-              <button
-                type="button"
-                className="shrink-0 text-white/45 transition-colors hover:text-white/60"
-                title={impactSummary.disclaimer}
-                aria-label="Méthode d'estimation"
-              >
-                <Info className="h-3 w-3" />
-              </button>
-            </div>
-          )}
+          <div className="mt-2 flex flex-col gap-1">
+            <p className="text-[13px] font-medium text-white/55">{countLabel}</p>
+            {impactSummary?.estimate && (
+              <div className="flex items-start gap-1.5">
+                <p className="text-[13px] font-medium leading-snug text-white/55">
+                  ≈{' '}
+                  <span className="font-semibold text-amber-400/70">
+                    {formatCompact(impactSummary.estimate)} {impactSummary.unit}
+                  </span>{' '}
+                  associées
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setDisclaimerOpen(true)}
+                  className="shrink-0 text-white/45 transition-colors hover:text-white/60"
+                  aria-label="Méthode d'estimation"
+                >
+                  <Info className="h-3 w-3" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {projects.length === 1 && projects[0] ? (
-        /* Carte pleine largeur — projet unique */
-        <SingleProjectCard project={projects[0]} />
-      ) : (
-        <ul
-          className="mt-4 flex snap-x gap-3 overflow-x-auto px-4 scroll-pl-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
-          aria-label="Projets du partenaire"
+        {projects.length === 1 && projects[0] ? (
+          <SingleProjectCard project={projects[0]} locale={locale} />
+        ) : (
+          <div className="relative mt-4">
+            <ul
+              className="flex snap-x gap-3 overflow-x-auto px-4 scroll-pl-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
+              aria-label="Projets du partenaire"
+            >
+              {projects.map((project) => (
+                <CarouselProjectCard key={project.id} project={project} locale={locale} />
+              ))}
+            </ul>
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#0B0F15] to-transparent" />
+          </div>
+        )}
+      </section>
+
+      {impactSummary?.disclaimer && (
+        <MobileSheet
+          isOpen={disclaimerOpen}
+          onClose={() => setDisclaimerOpen(false)}
+          title="Méthode d'estimation"
         >
-          {projects.map((project) => (
-            <CarouselProjectCard key={project.id} project={project} />
-          ))}
-        </ul>
+          <div className="pb-2">
+            <p className={typo.modalBody}>{impactSummary.disclaimer}</p>
+          </div>
+        </MobileSheet>
       )}
-    </section>
+    </>
   )
 }

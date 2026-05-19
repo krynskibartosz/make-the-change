@@ -49,7 +49,7 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
                   className="group flex flex-col gap-2"
                 >
                   {/* Image */}
-                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-zinc-800">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-white/5">
                     {product.image_url ? (
                       <img
                         src={product.image_url}

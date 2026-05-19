@@ -18,6 +18,7 @@ type CtaFinalProps = {
   website?: string | null
   contextText?: string
   internalHref?: string
+  partnerName?: string
 }
 
 function extractHostname(url: string): string {
@@ -28,8 +29,9 @@ function extractHostname(url: string): string {
   }
 }
 
-export function CtaFinal({ website, contextText, internalHref = '/projects' }: CtaFinalProps) {
+export function CtaFinal({ website, contextText, internalHref = '/projects', partnerName }: CtaFinalProps) {
   const hasExternal = Boolean(website)
+  const ctaLabel = partnerName ? `Voir les projets de ${partnerName}` : 'Voir les projets liés'
 
   return (
     <section className="mt-12 border-t border-white/5 px-5 pb-12 pt-8">
@@ -40,9 +42,9 @@ export function CtaFinal({ website, contextText, internalHref = '/projects' }: C
       {/* CTA interne — primaire */}
       <Link
         href={internalHref}
-        className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] text-white/92 transition-all active:scale-95 active:bg-white/[0.10] ${typo.buttonText}`}
+        className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/[0.12] text-white/92 transition-all active:scale-95 active:bg-white/[0.16] ${typo.buttonText}`}
       >
-        Voir les projets liés
+        {ctaLabel}
         <ArrowRight className="h-3.5 w-3.5" />
       </Link>
 

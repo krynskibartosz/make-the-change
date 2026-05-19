@@ -8,6 +8,7 @@
  * Contexte éditorial: pourquoi ces espèces sont là.
  */
 
+import { Link } from '@/i18n/navigation'
 import type { ProducerSpecies } from '../producer-detail-data'
 import { producerTypography as typo } from './producer-typography'
 
@@ -51,31 +52,33 @@ export function SpeciesSection({
       >
         {species.map((entry) => (
           <li key={entry.id} className="w-36 shrink-0 snap-start">
-            <article className="flex flex-col gap-1.5">
-              {/* Image — scale-110 pour que l'illustration occupe plus de surface */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#1A1F26]">
-                <img
-                  src={entry.image}
-                  alt={entry.name}
-                  className="h-full w-full object-contain scale-110"
-                />
-              </div>
+            <Link href={`/profile/biodex/${entry.id}`} className="block">
+              <article className="flex flex-col gap-1.5">
+                {/* Image — scale-110 pour que l'illustration occupe plus de surface */}
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#1A1F26]">
+                  <img
+                    src={entry.image}
+                    alt={entry.name}
+                    className="h-full w-full object-contain scale-110"
+                  />
+                </div>
 
-              {/* Nom — élément principal */}
-              <p className={`${typo.cardTitle} line-clamp-2`}>{entry.name}</p>
+                {/* Nom — élément principal */}
+                <p className={`${typo.cardTitle} line-clamp-2`}>{entry.name}</p>
 
-              {/* Rôle écologique — contexte éditorial */}
-              {entry.role && (
-                <p className="text-[13px] font-medium leading-snug text-white/56">{entry.role}</p>
-              )}
+                {/* Rôle écologique — contexte éditorial */}
+                {entry.role && (
+                  <p className="text-[13px] font-medium leading-snug text-white/56">{entry.role}</p>
+                )}
 
-              {/* Rareté BioDex — label explicite plutôt que niveau brut */}
-              <p
-                className={`text-[11px] font-bold uppercase tracking-[0.08em] ${getRarityColor(entry.rarity)}`}
-              >
-                {getRarityLabel(entry.rarity)}
-              </p>
-            </article>
+                {/* Rareté BioDex — label explicite plutôt que niveau brut */}
+                <p
+                  className={`text-[11px] font-bold uppercase tracking-[0.08em] ${getRarityColor(entry.rarity)}`}
+                >
+                  {getRarityLabel(entry.rarity)}
+                </p>
+              </article>
+            </Link>
           </li>
         ))}
       </ul>

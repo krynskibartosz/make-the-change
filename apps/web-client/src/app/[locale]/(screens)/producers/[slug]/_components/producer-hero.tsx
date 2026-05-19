@@ -1,43 +1,19 @@
 'use client'
 
-/**
- * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
- * Hero immersif pour la page producteur — entièrement générique.
- *
- * Architecture:
- * - Cover image full-width premium
- * - Portrait partenaire avec bordure subtile
- * - Double localisation dynamique (terrain + structure, drapeaux auto)
- * - Statement émotionnel depuis editorialIdentity.emotionalStatement (optionnel)
- * - Trust line depuis prop (foundedYear + certification, calculé dans producer-details)
- *
- * Mobile-first, gradient doux, rythme respirant.
- */
-
 import type {
   EditorialIdentity,
   ProducerLocation,
   VisualAssets,
 } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
+import { getCountryFlag, resolveCountryCode } from '@/lib/location'
 import { producerTypography as typo } from './producer-typography'
 
-const COUNTRY_FLAGS: Record<string, string> = {
-  Madagascar: '🇲🇬',
-  Belgique: '🇧🇪',
-  France: '🇫🇷',
-  Italie: '🇮🇹',
-  Sardaigne: '🇮🇹',
-  'Île Maurice': '🇲🇺',
-  'La Réunion': '🇷🇪',
-  'Pays-Bas': '🇳🇱',
-  'Royaume-Uni': '🇬🇧',
-}
-
-function getCountryFlag(countryName?: string): string {
+function getLocationFlag(countryName?: string): string {
   if (!countryName) return ''
   const base = (countryName.split(' · ')[0] ?? '').split(',')[0]?.trim() ?? ''
-  return COUNTRY_FLAGS[base] ?? ''
+  const iso = resolveCountryCode(base)
+  return iso ? getCountryFlag(iso) : ''
 }
 
 type ProducerHeroProps = {
@@ -77,28 +53,38 @@ export function ProducerHero({
     ? `${locations.european} · ${locations.europeanDetail}`
     : locations?.european
 
-  // N'affiche la seconde localisation que si le pays est différent
   const showEuropean = europeanLocation && locations?.european !== locations?.field
 
   return (
     <div className="relative">
       {/* ── Cover Image ── */}
-      <div className="relative h-[360px] w-full overflow-hidden bg-[#1A1F26] sm:h-[420px]">
-        <img src={coverImage} alt={name} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/15 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#0B0F15] to-transparent" />
+      <div className="relative w-full overflow-hidden bg-[#1A1F26]" style={{ height: 'clamp(280px, 45vw, 420px)' }}>
+        <img
+          src={coverImage}
+          alt={name}
+          loading="eager"
+          className="h-full w-full object-cover"
+        />
+        {/* Gradient renforcé : lisibilité du titre sur toutes les images */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0B0F15] to-transparent" />
       </div>
 
       {/* ── Identity Header ── */}
       <div className="relative px-4">
-        {/* Portrait signature */}
-        <div className="absolute -top-[30px] left-4 z-10 h-[60px] w-[60px] rounded-full border border-white/[0.05] bg-transparent shadow-[0_6px_20px_rgba(0,0,0,0.25)]">
-          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/[0.03]">
-            <img src={portraitImage} alt={name} className="h-full w-full object-cover" />
+        {/* Portrait 72px — identification visuelle claire */}
+        <div className="absolute -top-[36px] left-4 z-10 h-[72px] w-[72px] rounded-full border border-white/[0.08] bg-transparent shadow-[0_6px_24px_rgba(0,0,0,0.35)]">
+          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/[0.04]">
+            <img
+              src={portraitImage}
+              alt={name}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
 
-        <div className="h-10" />
+        <div className="h-12" />
 
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
@@ -113,16 +99,16 @@ export function ProducerHero({
             <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1">
               {fieldLocation && (
                 <span className={`inline-flex items-center gap-1 ${typo.heroMeta}`}>
-                  {getCountryFlag(locations?.field) && (
-                    <span>{getCountryFlag(locations?.field)}</span>
+                  {getLocationFlag(locations?.field) && (
+                    <span>{getLocationFlag(locations?.field)}</span>
                   )}
                   <span>{fieldLocation}</span>
                 </span>
               )}
               {showEuropean && (
                 <span className={`inline-flex items-center gap-1 ${typo.heroMetaMuted}`}>
-                  {getCountryFlag(locations?.european) && (
-                    <span>{getCountryFlag(locations?.european)}</span>
+                  {getLocationFlag(locations?.european) && (
+                    <span>{getLocationFlag(locations?.european)}</span>
                   )}
                   <span>{europeanLocation}</span>
                 </span>
