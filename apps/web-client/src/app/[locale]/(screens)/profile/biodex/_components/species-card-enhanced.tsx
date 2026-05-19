@@ -2,76 +2,12 @@
 import type { SpeciesContext } from '@/types/species'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import { getRarity, getSpeciesEmoji, RARITY_STYLES } from '@/lib/species-utils'
 
 interface SpeciesCardEnhancedProps {
 	species: SpeciesContext
 	showUserStatus?: boolean
 	onLockedClick?: (species: SpeciesContext) => void
-}
-
-// ─── Rareté déduite du statut de conservation IUCN ───────────────────────────
-type Rarity = 'common' | 'rare' | 'legendary'
-
-function getRarity(status: string | null | undefined): Rarity {
-	switch (status?.toUpperCase()) {
-		case 'EN':
-		case 'CR':
-		case 'EW':
-		case 'EX':
-			return 'legendary'
-		case 'VU':
-		case 'NT':
-			return 'rare'
-		default:
-			return 'common'
-	}
-}
-
-// ─── Emoji silhouette basé sur le statut de conservation ─────────────────────
-function getSpeciesEmoji(
-	status: string | null | undefined,
-	name: string
-): string {
-	const s = status?.toUpperCase()
-	// Legendary / critically endangered
-	if (s === 'CR' || s === 'EW' || s === 'EX') return '🦁'
-	if (s === 'EN') return '🐺'
-	if (s === 'VU') return '🦉'
-	if (s === 'NT') return '🦊'
-	// Fallback based on name hints
-	const n = name.toLowerCase()
-	if (n.includes('abeille') || n.includes('bee') || n.includes('apis'))
-		return '🐝'
-	if (n.includes('aigle') || n.includes('eagle') || n.includes('hawk'))
-		return '🦅'
-	if (n.includes('ours') || n.includes('bear')) return '🐻'
-	if (n.includes('loup') || n.includes('wolf')) return '🐺'
-	if (n.includes('renard') || n.includes('fox')) return '🦊'
-	if (n.includes('cerf') || n.includes('deer')) return '🦌'
-	if (n.includes('lynx') || n.includes('chat') || n.includes('cat')) return '🐱'
-	if (n.includes('baleine') || n.includes('whale') || n.includes('dauphin'))
-		return '🐋'
-	if (n.includes('tortue') || n.includes('turtle')) return '🐢'
-	if (n.includes('papillon') || n.includes('butterfly')) return '🦋'
-	return '🌿'
-}
-
-const RARITY_STYLES: Record<
-	Rarity,
-	{ textColor: string; label: string }
-> = {
-	common: {
-		textColor: 'text-emerald-500/60',
-		label: 'Commun',
-	},
-	rare: {
-		textColor: 'text-blue-400/70',
-		label: 'Rare',
-	},
-	legendary: {
-		textColor: 'text-amber-400/80',
-		label: 'Légendaire',
-	},
 }
 
 export function SpeciesCardEnhanced({
