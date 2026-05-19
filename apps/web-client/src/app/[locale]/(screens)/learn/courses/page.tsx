@@ -1,17 +1,16 @@
 import { Search } from 'lucide-react'
 import type { Metadata } from 'next'
-import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
-import { LEARNING_ATLAS_DOMAINS } from '@/lib/learning/catalog'
-import type { LearningDomainId, LearningLevel } from '@/lib/learning/schema'
-import { searchLearningCourses } from '@/lib/learning/selectors'
-import { cn } from '@/lib/utils'
 import {
   LearningCourseCard,
   LearningScreenIntro,
   LearningSectionTitle,
   learningInteractiveClassName,
   PROJECT_LABEL_BY_SLUG,
-} from '../_features/learning-cards'
+} from '@/app/[locale]/(tabs)/learn/_features/learning-cards'
+import { LEARNING_ATLAS_DOMAINS } from '@/lib/learning/catalog'
+import type { LearningDomainId, LearningLevel } from '@/lib/learning/schema'
+import { searchLearningCourses } from '@/lib/learning/selectors'
+import { cn } from '@/lib/utils'
 
 type LearningCoursesPageProps = {
   searchParams?: Promise<{
@@ -56,8 +55,8 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
   })
 
   return (
-    <TabScreen className="bg-[#0B0F15]">
-      <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-28 pt-[max(1.75rem,env(safe-area-inset-top))]">
+    <main className="min-h-[100dvh] bg-[#0B0F15] text-white">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1.75rem,env(safe-area-inset-top))]">
         <LearningScreenIntro eyebrow="Catalogue" title="Tous les cours">
           Trouve vite un cours par thème, niveau, durée ou projet. Le catalogue reste libre, sans
           bloquer la progression Academy.
@@ -144,7 +143,7 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
             ))}
           </div>
         </section>
-      </main>
-    </TabScreen>
+      </div>
+    </main>
   )
 }

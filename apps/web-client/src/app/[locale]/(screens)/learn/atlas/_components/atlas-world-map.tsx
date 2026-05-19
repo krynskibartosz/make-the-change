@@ -66,6 +66,15 @@ function AtlasWorldIsland({
       type="button"
       aria-label={`Explorer l'ile ${island.domain.title}`}
       onClick={onOpen}
+      onPointerUp={(event) => {
+        if (event.pointerType === 'touch') {
+          onOpen()
+        }
+      }}
+      onTouchEnd={(event) => {
+        event.preventDefault()
+        onOpen()
+      }}
       disabled={transitioning}
       initial={false}
       animate={{

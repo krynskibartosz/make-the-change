@@ -550,7 +550,10 @@ function getAtlasDomainMapNodes(domain: AtlasDomainWithCourses): AtlasDomainMapN
             : course.durationMinutes <= 5
               ? 'Cours court'
               : course.theme,
-        href: kind === 'living_web' ? course.entry.href : `/learn/courses/${course.id}`,
+        href:
+          kind === 'living_web'
+            ? course.entry.href
+            : getLearningCoursePlayHref(course, `/learn/atlas/${domain.id}`),
         courseIds: [course.id],
         importance:
           kind === 'living_web' ? 'special' : kind === 'micro_course' ? 'micro' : 'secondary',

@@ -1,11 +1,6 @@
 import { ArrowRight, GitBranch, Link2 } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
-import { Link } from '@/i18n/navigation'
-import { getLearningCourseById } from '@/lib/learning/catalog'
-import { getRecommendedAfterCourses } from '@/lib/learning/selectors'
-import { cn } from '@/lib/utils'
 import {
   LEARNING_DOMAIN_LABELS,
   LearningCourseCard,
@@ -13,7 +8,11 @@ import {
   LearningScreenIntro,
   learningInteractiveClassName,
   PROJECT_LABEL_BY_SLUG,
-} from '../../_features/learning-cards'
+} from '@/app/[locale]/(tabs)/learn/_features/learning-cards'
+import { Link } from '@/i18n/navigation'
+import { getLearningCourseById } from '@/lib/learning/catalog'
+import { getRecommendedAfterCourses } from '@/lib/learning/selectors'
+import { cn } from '@/lib/utils'
 
 type LearningCourseDetailPageProps = {
   params: Promise<{
@@ -49,8 +48,8 @@ export default async function LearningCourseDetailPage({ params }: LearningCours
     : null
 
   return (
-    <TabScreen className="bg-[#0B0F15]">
-      <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 pb-28 pt-[max(1.75rem,env(safe-area-inset-top))]">
+    <main className="min-h-[100dvh] bg-[#0B0F15] text-white">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1.75rem,env(safe-area-inset-top))]">
         <LearningScreenIntro eyebrow={LEARNING_DOMAIN_LABELS[course.domain]} title={course.title}>
           {course.subtitle}
         </LearningScreenIntro>
@@ -140,7 +139,7 @@ export default async function LearningCourseDetailPage({ params }: LearningCours
             </div>
           </div>
         </section>
-      </main>
-    </TabScreen>
+      </div>
+    </main>
   )
 }

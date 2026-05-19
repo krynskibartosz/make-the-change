@@ -38,7 +38,7 @@ function getNodeLabel(kind: AtlasDomainMapNode['kind']) {
 function getNodeCta(kind: AtlasDomainMapNode['kind']) {
   if (kind === 'chapter') return 'Ouvrir le module'
   if (kind === 'living_web') return 'Explorer la Toile'
-  return 'Voir le cours'
+  return 'Lancer le cours'
 }
 
 function getTerrainBackground(map: AtlasDomainMapView) {
@@ -167,6 +167,15 @@ function AtlasDomainNode({
       aria-pressed={selected}
       aria-label={`${node.title}, ${getNodeLabel(node.kind)}`}
       onClick={onSelect}
+      onPointerUp={(event) => {
+        if (event.pointerType === 'touch') {
+          onSelect()
+        }
+      }}
+      onTouchEnd={(event) => {
+        event.preventDefault()
+        onSelect()
+      }}
       className={cn(
         'group absolute z-20 -translate-x-1/2 -translate-y-1/2 touch-manipulation text-center transition-[filter] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white',
         selected && 'z-30',
@@ -180,7 +189,7 @@ function AtlasDomainNode({
         className={cn(
           'relative grid place-items-center border border-white/16 bg-black/38 text-[var(--node-color)] shadow-[0_0_34px_var(--node-glow)] backdrop-blur-md',
           node.kind === 'chapter' &&
-            'h-[5.6rem] w-[7.6rem] rounded-[48%_52%_45%_55%/50%_44%_56%_50%] md:h-[6.2rem] md:w-[8.8rem]',
+            'h-[5.8rem] w-[5.8rem] rounded-full bg-gradient-to-b from-emerald-200 via-emerald-400 to-emerald-700 text-white shadow-[0_9px_0_#063f31,0_0_34px_var(--node-glow)] ring-2 ring-emerald-200/35 ring-offset-[6px] ring-offset-[#05050A] md:h-[6.4rem] md:w-[6.4rem]',
           node.kind === 'course' &&
             'h-[4.35rem] w-[4.35rem] rounded-full md:h-[4.9rem] md:w-[4.9rem]',
           node.kind === 'micro_course' && 'h-8 w-8 rounded-full md:h-9 md:w-9',
@@ -267,7 +276,11 @@ function AtlasNodeDock({
       </div>
       <Link
         href={node.href}
-        className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[1rem] bg-white px-4 text-[14px] font-black text-[#061018] transition-transform active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[1rem] px-4 text-[14px] font-black text-[#061018] shadow-[0_12px_34px_rgba(0,0,0,0.28)] transition-transform active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        style={{
+          background: `linear-gradient(135deg, ${visual.color}, rgba(255,255,255,0.94))`,
+          boxShadow: `0 14px 34px ${visual.glow}`,
+        }}
       >
         {getNodeCta(node.kind)}
         <ArrowRight className="h-4 w-4" aria-hidden="true" />

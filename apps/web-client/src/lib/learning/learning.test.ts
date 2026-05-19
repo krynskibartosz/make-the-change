@@ -80,7 +80,9 @@ describe('learning catalog', () => {
   it('builds immersive Atlas domain maps with valid educational nodes and edges', () => {
     const domains = getAtlasDomains()
     const maps = getAtlasDomainMaps()
-    const courseIds = new Set(getAllLearningCourses().map((course) => course.id))
+    const courses = getAllLearningCourses()
+    const courseIds = new Set(courses.map((course) => course.id))
+    const courseById = new Map(courses.map((course) => [course.id, course]))
     const pathIds = new Set(getAllLearningPaths().map((path) => path.id))
 
     expect(maps.map((map) => map.domain.id)).toEqual(domains.map((domain) => domain.id))
@@ -109,9 +111,19 @@ describe('learning catalog', () => {
         }
 
         if (node.kind === 'course' || node.kind === 'micro_course') {
-          expect(/^\/learn\/courses\//.test(node.href)).toBe(true)
           expect(node.courseIds.length > 0).toBe(true)
           expect(node.courseIds.every((courseId) => courseIds.has(courseId))).toBe(true)
+
+          const course = courseById.get(node.courseIds[0] ?? '')
+
+          if (course?.entry.kind === 'academy_unit') {
+            expect(/^\/academy\//.test(node.href)).toBe(true)
+            expect(node.href.includes('mode=course')).toBe(true)
+            expect(node.href.includes(`courseId=${course.id}`)).toBe(true)
+            expect(node.href.includes(`returnTo=%2Flearn%2Fatlas%2F${map.domain.id}`)).toBe(true)
+          } else {
+            expect(node.href).toBe(course?.entry.href)
+          }
         }
 
         if (node.kind === 'living_web') {
