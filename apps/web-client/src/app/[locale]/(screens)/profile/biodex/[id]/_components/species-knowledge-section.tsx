@@ -42,10 +42,9 @@ function AccordionItem({ title, number, children, defaultOpen = false }: Accordi
 
 interface SpeciesKnowledgeSectionProps {
   species: SpeciesContext
-  isLevel2Unlocked: boolean
 }
 
-export function SpeciesKnowledgeSection({ species, isLevel2Unlocked }: SpeciesKnowledgeSectionProps) {
+export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProps) {
   const hasHabitat = !!species.habitat?.length
   const hasSizeOrWeight = !!(species.size || species.weight)
   const hasOrigin = !!species.origin_country
@@ -96,17 +95,12 @@ export function SpeciesKnowledgeSection({ species, isLevel2Unlocked }: SpeciesKn
 
         {/* 03 – Relations dans le vivant */}
         <AccordionItem title='Relations dans le vivant' number='03'>
-          {isLevel2Unlocked && species.description_scientific ? (
+          {species.description_scientific ? (
             <p className='text-sm leading-relaxed text-white/60'>{species.description_scientific}</p>
           ) : (
-            <div className='space-y-2'>
-              <div className='h-2 w-full rounded-full bg-white/8' />
-              <div className='h-2 w-4/5 rounded-full bg-white/8' />
-              <div className='h-2 w-3/5 rounded-full bg-white/8' />
-              <p className='mt-3 text-xs text-white/30'>
-                Approfondissez la fiche (étape 2) pour explorer les relations.
-              </p>
-            </div>
+            <p className='text-xs text-white/35'>
+              Relations à documenter avec le partenaire et les données terrain.
+            </p>
           )}
         </AccordionItem>
 

@@ -1,15 +1,10 @@
 import { getSpeciesContext } from '@/lib/api/species-context.service'
-import { getMockViewerSession } from '@/lib/mock/mock-session-server'
-import { getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { SpeciesDetailClient } from './_components/species-detail-client'
 
 export default async function SpeciesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const [species, session] = await Promise.all([
-    getSpeciesContext(id),
-    getMockViewerSession(),
-  ])
+  const species = await getSpeciesContext(id)
 
   if (!species) {
     return (
@@ -21,10 +16,6 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
     )
   }
 
-  const userSeedsBalance = session
-    ? await getCurrentMockWalletBalance(session.viewerId, session.faction ?? null)
-    : 0
-
   return (
     <FullScreenSlideModal
       title={species.name_default}
@@ -33,7 +24,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
       contentClassName='overflow-y-auto'
     >
       <div className='mx-auto w-full max-w-2xl'>
-        <SpeciesDetailClient species={species} userSeedsBalance={userSeedsBalance} />
+        <SpeciesDetailClient species={species} />
       </div>
     </FullScreenSlideModal>
   )
