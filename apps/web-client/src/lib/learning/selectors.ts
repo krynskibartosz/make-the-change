@@ -5,6 +5,10 @@ import {
   LEARNING_ATLAS_DOMAINS,
 } from './catalog'
 import type {
+  AtlasDomainMapEdge,
+  AtlasDomainMapNode,
+  AtlasDomainMapNodeImportance,
+  AtlasDomainMapView,
   AtlasDomainWithCourses,
   AtlasIslandNode,
   AtlasIslandView,
@@ -116,6 +120,28 @@ const DEFAULT_ATLAS_NODE_POSITION: Pick<AtlasIslandNode, 'x' | 'y' | 'size'> = {
   x: 50,
   y: 50,
   size: 'small',
+}
+
+const ATLAS_DOMAIN_MAP_POSITIONS: Array<
+  Pick<AtlasDomainMapNode, 'x' | 'y'> & { importance: AtlasDomainMapNodeImportance }
+> = [
+  { x: 18, y: 70, importance: 'primary' },
+  { x: 32, y: 55, importance: 'secondary' },
+  { x: 48, y: 43, importance: 'secondary' },
+  { x: 64, y: 32, importance: 'secondary' },
+  { x: 78, y: 22, importance: 'secondary' },
+  { x: 28, y: 30, importance: 'micro' },
+  { x: 56, y: 72, importance: 'micro' },
+  { x: 76, y: 60, importance: 'micro' },
+  { x: 86, y: 45, importance: 'special' },
+]
+
+const DEFAULT_ATLAS_DOMAIN_MAP_POSITION: Pick<AtlasDomainMapNode, 'x' | 'y'> & {
+  importance: AtlasDomainMapNodeImportance
+} = {
+  x: 50,
+  y: 50,
+  importance: 'micro',
 }
 
 const byDurationThenTitle = (a: LearningCourse, b: LearningCourse) =>
@@ -321,16 +347,21 @@ function getAtlasNodesForDomain(domain: AtlasDomainWithCourses): AtlasIslandNode
   return nodes.slice(0, ATLAS_NODE_POSITIONS.length).map(toAtlasNode)
 }
 
+function getFeaturedPathForDomain(domainId: LearningDomainId) {
+  return (
+    getAllLearningPaths()
+      .filter((path) => path.domainIds.includes(domainId))
+      .sort(
+        (a, b) =>
+          Number(b.isAcademyPrimary) - Number(a.isAcademyPrimary) ||
+          a.durationMinutes - b.durationMinutes,
+      )[0] ?? null
+  )
+}
+
 export function getAtlasIslandViews(): AtlasIslandView[] {
   return getAtlasDomains().map((domain) => {
-    const featuredPath =
-      getAllLearningPaths()
-        .filter((path) => path.domainIds.includes(domain.id))
-        .sort(
-          (a, b) =>
-            Number(b.isAcademyPrimary) - Number(a.isAcademyPrimary) ||
-            a.durationMinutes - b.durationMinutes,
-        )[0] ?? null
+    const featuredPath = getFeaturedPathForDomain(domain.id)
 
     return {
       domain,
@@ -339,6 +370,227 @@ export function getAtlasIslandViews(): AtlasIslandView[] {
       featuredPathId: featuredPath?.id ?? null,
     }
   })
+}
+
+function getDomainMapPosition(index: number, importance?: AtlasDomainMapNodeImportance) {
+  if (importance === 'special') {
+    return (
+      ATLAS_DOMAIN_MAP_POSITIONS.find((position) => position.importance === 'special') ??
+      DEFAULT_ATLAS_DOMAIN_MAP_POSITION
+    )
+  }
+
+  const position =
+    ATLAS_DOMAIN_MAP_POSITIONS[index % ATLAS_DOMAIN_MAP_POSITIONS.length] ??
+    DEFAULT_ATLAS_DOMAIN_MAP_POSITION
+
+  return importance
+    ? {
+        ...position,
+        importance,
+      }
+    : position
+}
+
+function shortenLabel(value: string, maxLength = 18): string {
+  if (value.length <= maxLength) {
+    return value
+  }
+
+  return `${value.slice(0, maxLength - 1).trim()}…`
+}
+
+function getCourseStatus(course: LearningCourse): AtlasDomainMapNode['status'] {
+  return course.accessPolicy === 'recommended_after' ? 'recommended' : 'available'
+}
+
+function buildDomainMapNode(
+  node: Omit<AtlasDomainMapNode, 'x' | 'y' | 'importance' | 'status'> & {
+    importance?: AtlasDomainMapNodeImportance
+    status?: AtlasDomainMapNode['status']
+  },
+  index: number,
+): AtlasDomainMapNode {
+  const position = getDomainMapPosition(index, node.importance)
+
+  return {
+    ...node,
+    x: position.x,
+    y: position.y,
+    importance: node.importance ?? position.importance,
+    status: node.status ?? 'available',
+  }
+}
+
+function buildDomainMapEdges(nodes: AtlasDomainMapNode[]): AtlasDomainMapEdge[] {
+  const pathNodes = nodes.filter((node) => node.importance !== 'micro')
+  const edges: AtlasDomainMapEdge[] = []
+
+  for (let index = 0; index < pathNodes.length - 1; index += 1) {
+    const fromNode = pathNodes[index]
+    const toNode = pathNodes[index + 1]
+
+    if (!fromNode || !toNode) {
+      continue
+    }
+
+    edges.push({
+      id: `path-${fromNode.id}-${toNode.id}`,
+      fromNodeId: fromNode.id,
+      toNodeId: toNode.id,
+      kind: 'recommended_path',
+    })
+  }
+
+  const anchor = pathNodes[0] ?? nodes[0]
+  if (!anchor) {
+    return edges
+  }
+
+  for (const node of nodes) {
+    if (node.id === anchor.id || pathNodes.includes(node)) {
+      continue
+    }
+
+    edges.push({
+      id: `related-${anchor.id}-${node.id}`,
+      fromNodeId: anchor.id,
+      toNodeId: node.id,
+      kind: 'related_link',
+    })
+  }
+
+  if (edges.length === 0 && nodes.length > 1) {
+    const fromNode = nodes[0]
+    const toNode = nodes[1]
+
+    if (!fromNode || !toNode) {
+      return edges
+    }
+
+    edges.push({
+      id: `path-${fromNode.id}-${toNode.id}`,
+      fromNodeId: fromNode.id,
+      toNodeId: toNode.id,
+      kind: 'recommended_path',
+    })
+  }
+
+  return edges
+}
+
+function getAtlasDomainMapNodes(domain: AtlasDomainWithCourses): AtlasDomainMapNode[] {
+  const featuredPath = getFeaturedPathForDomain(domain.id)
+  const nodes: AtlasDomainMapNode[] = []
+  const usedNodeIds = new Set<string>()
+
+  if (featuredPath) {
+    const node = buildDomainMapNode(
+      {
+        id: `chapter-${featuredPath.id}`,
+        kind: 'chapter',
+        title: featuredPath.title,
+        shortLabel: shortenLabel(featuredPath.title, 17),
+        subtitle: `${featuredPath.courseIds.length} étapes guidées`,
+        href: `/learn/parcours/${featuredPath.id}`,
+        courseIds: featuredPath.courseIds,
+        importance: 'primary',
+        status: 'available',
+      },
+      nodes.length,
+    )
+
+    nodes.push(node)
+    usedNodeIds.add(node.id)
+  }
+
+  const livingWebCourses = domain.themeGroups.flatMap((group) =>
+    group.courses.filter((course) => course.entry.kind === 'living_web'),
+  )
+
+  const representativeCourses = domain.themeGroups
+    .map((group) => getRepresentativeCourse(group.courses))
+    .filter((course): course is LearningCourse => Boolean(course))
+
+  const courseCandidates = uniqueCourses([
+    ...representativeCourses,
+    ...domain.themeGroups.flatMap((group) => group.courses),
+  ])
+
+  let courseNodeCount = 0
+  for (const course of courseCandidates) {
+    const isLivingWeb = course.entry.kind === 'living_web'
+    const isSpecialLivingWeb =
+      isLivingWeb && livingWebCourses.some((livingWebCourse) => livingWebCourse.id === course.id)
+    const kind: AtlasDomainMapNode['kind'] = isSpecialLivingWeb
+      ? 'living_web'
+      : courseNodeCount < 3
+        ? 'course'
+        : 'micro_course'
+    const id =
+      kind === 'living_web'
+        ? `living-web-${course.id}`
+        : kind === 'micro_course'
+          ? `micro-${course.id}`
+          : `course-${course.id}`
+
+    if (usedNodeIds.has(id)) {
+      continue
+    }
+
+    const node = buildDomainMapNode(
+      {
+        id,
+        kind,
+        title: course.subject,
+        shortLabel: shortenLabel(course.subject, kind === 'micro_course' ? 12 : 16),
+        subtitle:
+          kind === 'living_web'
+            ? 'Toile vivante'
+            : course.durationMinutes <= 5
+              ? 'Cours court'
+              : course.theme,
+        href: kind === 'living_web' ? course.entry.href : `/learn/courses/${course.id}`,
+        courseIds: [course.id],
+        importance:
+          kind === 'living_web' ? 'special' : kind === 'micro_course' ? 'micro' : 'secondary',
+        status: getCourseStatus(course),
+      },
+      nodes.length,
+    )
+
+    nodes.push(node)
+    usedNodeIds.add(node.id)
+
+    if (kind !== 'living_web') {
+      courseNodeCount += 1
+    }
+
+    if (nodes.length >= ATLAS_DOMAIN_MAP_POSITIONS.length) {
+      break
+    }
+  }
+
+  return nodes
+}
+
+export function getAtlasDomainMaps(): AtlasDomainMapView[] {
+  return getAtlasDomains().map((domain) => {
+    const featuredPath = getFeaturedPathForDomain(domain.id)
+    const nodes = getAtlasDomainMapNodes(domain)
+
+    return {
+      domain,
+      visual: ATLAS_ISLAND_VISUALS[domain.id],
+      nodes,
+      edges: buildDomainMapEdges(nodes),
+      featuredPathId: featuredPath?.id ?? null,
+    }
+  })
+}
+
+export function getAtlasDomainMap(domainId: LearningDomainId): AtlasDomainMapView | null {
+  return getAtlasDomainMaps().find((map) => map.domain.id === domainId) ?? null
 }
 
 export function getRecommendedAfterCourses(course: LearningCourse): LearningCourse[] {

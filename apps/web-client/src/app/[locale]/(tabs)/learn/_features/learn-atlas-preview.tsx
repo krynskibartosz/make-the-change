@@ -5,7 +5,6 @@ import {
   Droplets,
   Map as MapIcon,
   Network,
-  Search,
   Sprout,
   TriangleAlert,
 } from 'lucide-react'
@@ -122,7 +121,7 @@ export function LearnAtlasPreview({ islands }: { islands: AtlasIslandView[] }) {
       </div>
 
       <div className="absolute bottom-4 left-4 z-10 flex min-h-11 items-center gap-2 rounded-2xl border border-white/10 bg-[#071016]/80 px-3 py-2 text-[13px] font-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.28)] backdrop-blur-md">
-        <Search className="h-4 w-4 text-teal-200" aria-hidden="true" />
+        <MapIcon className="h-4 w-4 text-teal-200" aria-hidden="true" />
         Explorer l’atlas
       </div>
       <div className="absolute bottom-4 right-4 grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-white/70 transition-transform group-active:translate-x-0.5">

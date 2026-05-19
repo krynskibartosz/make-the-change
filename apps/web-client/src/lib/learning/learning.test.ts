@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { listV2Units } from '@/app/[locale]/(screens)/academy/_lib/content'
-import { getAllLearningCourses, LEARNING_ATLAS_DOMAINS } from './catalog'
+import { getAllLearningCourses, getAllLearningPaths, LEARNING_ATLAS_DOMAINS } from './catalog'
 import { createDefaultLearningProgress, markLearningCourseCompleted } from './progress'
 import {
+  getAtlasDomainMap,
+  getAtlasDomainMaps,
   getAtlasDomains,
   getAtlasIslandViews,
   getCoursesForEcosystemNode,
@@ -71,6 +73,65 @@ describe('learning catalog', () => {
         if (node.kind === 'toile') {
           expect(/^\/ecosysteme\//.test(node.href)).toBe(true)
         }
+      }
+    }
+  })
+
+  it('builds immersive Atlas domain maps with valid educational nodes and edges', () => {
+    const domains = getAtlasDomains()
+    const maps = getAtlasDomainMaps()
+    const courseIds = new Set(getAllLearningCourses().map((course) => course.id))
+    const pathIds = new Set(getAllLearningPaths().map((path) => path.id))
+
+    expect(maps.map((map) => map.domain.id)).toEqual(domains.map((domain) => domain.id))
+
+    for (const map of maps) {
+      const nodeIds = new Set(map.nodes.map((node) => node.id))
+
+      expect(getAtlasDomainMap(map.domain.id)?.domain.id).toBe(map.domain.id)
+      expect(map.nodes.length > 0).toBe(true)
+      expect(map.edges.length > 0).toBe(true)
+
+      for (const node of map.nodes) {
+        expect(['chapter', 'course', 'micro_course', 'living_web'].includes(node.kind)).toBe(true)
+        expect(['primary', 'secondary', 'micro', 'special'].includes(node.importance)).toBe(true)
+        expect(['available', 'recommended', 'completed'].includes(node.status)).toBe(true)
+        expect(node.x >= 0 && node.x <= 100).toBe(true)
+        expect(node.y >= 0 && node.y <= 100).toBe(true)
+        expect(node.shortLabel.length > 0).toBe(true)
+
+        if (node.kind === 'chapter') {
+          const pathId = node.href.replace('/learn/parcours/', '')
+
+          expect(node.importance).toBe('primary')
+          expect(/^\/learn\/parcours\//.test(node.href)).toBe(true)
+          expect(pathIds.has(pathId)).toBe(true)
+        }
+
+        if (node.kind === 'course' || node.kind === 'micro_course') {
+          expect(/^\/learn\/courses\//.test(node.href)).toBe(true)
+          expect(node.courseIds.length > 0).toBe(true)
+          expect(node.courseIds.every((courseId) => courseIds.has(courseId))).toBe(true)
+        }
+
+        if (node.kind === 'living_web') {
+          expect(node.importance).toBe('special')
+          expect(/^\/ecosysteme\//.test(node.href)).toBe(true)
+          expect(
+            node.courseIds.some((courseId) => {
+              const course = getAllLearningCourses().find((entry) => entry.id === courseId)
+
+              return course?.entry.kind === 'living_web'
+            }),
+          ).toBe(true)
+        }
+      }
+
+      for (const edge of map.edges) {
+        expect(['recommended_path', 'related_link'].includes(edge.kind)).toBe(true)
+        expect(nodeIds.has(edge.fromNodeId)).toBe(true)
+        expect(nodeIds.has(edge.toNodeId)).toBe(true)
+        expect(edge.fromNodeId === edge.toNodeId).toBe(false)
       }
     }
   })

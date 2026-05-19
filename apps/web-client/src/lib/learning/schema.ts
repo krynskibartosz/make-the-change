@@ -127,6 +127,40 @@ export type AtlasIslandView = {
   featuredPathId: string | null
 }
 
+export type AtlasDomainMapNodeKind = 'chapter' | 'course' | 'micro_course' | 'living_web'
+export type AtlasDomainMapNodeImportance = 'primary' | 'secondary' | 'micro' | 'special'
+export type AtlasDomainMapNodeStatus = 'available' | 'recommended' | 'completed'
+export type AtlasDomainMapEdgeKind = 'recommended_path' | 'related_link'
+
+export type AtlasDomainMapNode = {
+  id: string
+  kind: AtlasDomainMapNodeKind
+  title: string
+  shortLabel: string
+  subtitle: string
+  href: string
+  courseIds: string[]
+  x: number
+  y: number
+  importance: AtlasDomainMapNodeImportance
+  status: AtlasDomainMapNodeStatus
+}
+
+export type AtlasDomainMapEdge = {
+  id: string
+  fromNodeId: string
+  toNodeId: string
+  kind: AtlasDomainMapEdgeKind
+}
+
+export type AtlasDomainMapView = {
+  domain: AtlasDomainWithCourses
+  visual: AtlasIslandVisual
+  nodes: AtlasDomainMapNode[]
+  edges: AtlasDomainMapEdge[]
+  featuredPathId: string | null
+}
+
 export type LearningHomeProjectGroup = {
   projectSlug: string
   courses: LearningCourse[]
