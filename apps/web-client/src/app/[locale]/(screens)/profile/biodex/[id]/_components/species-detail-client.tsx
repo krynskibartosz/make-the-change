@@ -5,7 +5,8 @@ import { Link } from '@/i18n/navigation'
 import { getCoursesForSpecies } from '@/lib/learning/selectors'
 import type { SpeciesContext } from '@/types/species'
 import { SpeciesHero } from './species-hero'
-import { SpeciesProjectLinkCard } from './species-project-link-card'
+import { SpeciesLinkedProjects, type LinkedProject } from './species-linked-projects'
+import { SpeciesLinkedSpecies } from './species-linked-species'
 import { SpeciesWhyItMatters } from './species-why-it-matters'
 import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
@@ -13,9 +14,10 @@ import { SpeciesDocumentationSection } from './species-documentation-section'
 
 interface SpeciesDetailClientProps {
   species: SpeciesContext
+  linkedProjects: LinkedProject[]
 }
 
-export function SpeciesDetailClient({ species }: SpeciesDetailClientProps) {
+export function SpeciesDetailClient({ species, linkedProjects }: SpeciesDetailClientProps) {
   const learningCourses = useMemo(() => getCoursesForSpecies(species.id, 3), [species.id])
   const livingWebCourse = learningCourses.find((c) => c.relatedEcosystemIds.length > 0)
   const firstEcosystemId = livingWebCourse?.relatedEcosystemIds[0]
@@ -30,7 +32,7 @@ export function SpeciesDetailClient({ species }: SpeciesDetailClientProps) {
       <div className='mt-5 space-y-5'>
 
         {/* 2. Projet lié */}
-        <SpeciesProjectLinkCard projects={species.associated_projects} />
+        <SpeciesLinkedProjects projects={linkedProjects} />
 
         {/* 3. Pourquoi elle compte */}
         <SpeciesWhyItMatters species={species} />
@@ -41,7 +43,10 @@ export function SpeciesDetailClient({ species }: SpeciesDetailClientProps) {
         {/* 5. Ce qu'on peut comprendre */}
         <SpeciesKnowledgeSection species={species} />
 
-        {/* 5. Ce qui est documenté */}
+        {/* 6. Espèces du même projet */}
+        <SpeciesLinkedSpecies linkedProjects={linkedProjects} currentSpeciesId={species.id} />
+
+        {/* 7. Ce qui est documenté */}
         <SpeciesDocumentationSection species={species} />
 
         {/* 6. Approfondir dans Apprendre */}
