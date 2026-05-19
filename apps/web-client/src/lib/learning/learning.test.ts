@@ -7,6 +7,7 @@ import {
   getAtlasDomainMaps,
   getAtlasDomains,
   getAtlasIslandViews,
+  getAtlasKinnuMapView,
   getCoursesForEcosystemNode,
   getCoursesForProject,
   getCoursesForSpecies,
@@ -144,6 +145,34 @@ describe('learning catalog', () => {
         expect(nodeIds.has(edge.fromNodeId)).toBe(true)
         expect(nodeIds.has(edge.toNodeId)).toBe(true)
         expect(edge.fromNodeId === edge.toNodeId).toBe(false)
+      }
+    }
+  })
+
+  it('builds the Kinnu-like Atlas map with territories, camera targets and subdomains', () => {
+    const domains = getAtlasDomains()
+    const map = getAtlasKinnuMapView()
+
+    expect(map.territories.map((territory) => territory.domain.id)).toEqual(
+      domains.map((domain) => domain.id),
+    )
+    expect(map.worldCamera.scale).toBe(1)
+
+    for (const territory of map.territories) {
+      expect(territory.label.length > 0).toBe(true)
+      expect(/^#[0-9A-F]{6}$/i.test(territory.color)).toBe(true)
+      expect(territory.cells.length >= 18).toBe(true)
+      expect(territory.textureCells.length >= 6).toBe(true)
+      expect(territory.camera.scale > 1).toBe(true)
+      expect(territory.camera.x <= 0).toBe(true)
+      expect(territory.camera.y <= 0).toBe(true)
+      expect(territory.subdomains.length >= 3).toBe(true)
+
+      for (const subdomain of territory.subdomains) {
+        expect(subdomain.label.length > 0).toBe(true)
+        expect(subdomain.cells.length >= 4).toBe(true)
+        expect(subdomain.x >= 0 && subdomain.x <= 100).toBe(true)
+        expect(subdomain.y >= 0 && subdomain.y <= 100).toBe(true)
       }
     }
   })

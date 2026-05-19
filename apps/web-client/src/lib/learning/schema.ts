@@ -161,6 +161,45 @@ export type AtlasDomainMapView = {
   featuredPathId: string | null
 }
 
+export type HexCell = {
+  q: number
+  r: number
+}
+
+export type AtlasCameraConfig = {
+  x: number
+  y: number
+  scale: number
+}
+
+export type AtlasSubdomainConfig = {
+  id: string
+  label: string
+  x: number
+  y: number
+  color: string
+  cells: HexCell[]
+}
+
+export type AtlasTerritoryConfig = {
+  domain: AtlasDomainWithCourses
+  label: string
+  color: string
+  darkColor: string
+  textColor: string
+  x: number
+  y: number
+  cells: HexCell[]
+  textureCells: HexCell[]
+  camera: AtlasCameraConfig
+  subdomains: AtlasSubdomainConfig[]
+}
+
+export type AtlasKinnuMapView = {
+  worldCamera: AtlasCameraConfig
+  territories: AtlasTerritoryConfig[]
+}
+
 export type LearningHomeProjectGroup = {
   projectSlug: string
   courses: LearningCourse[]

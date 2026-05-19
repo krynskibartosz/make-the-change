@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getAtlasIslandViews } from '@/lib/learning/selectors'
+import { getAtlasKinnuMapView } from '@/lib/learning/selectors'
 import { AtlasWorldMap } from './_components/atlas-world-map'
 
 export const metadata: Metadata = {
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 }
 
 export default function LearningAtlasPage() {
-  const islands = getAtlasIslandViews()
+  const map = getAtlasKinnuMapView()
 
-  return <AtlasWorldMap islands={islands} />
+  return <AtlasWorldMap map={map} />
 }

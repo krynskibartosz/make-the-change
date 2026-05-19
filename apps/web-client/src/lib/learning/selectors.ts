@@ -12,7 +12,10 @@ import type {
   AtlasDomainWithCourses,
   AtlasIslandNode,
   AtlasIslandView,
+  AtlasKinnuMapView,
+  AtlasTerritoryConfig,
   AtlasThemeGroup,
+  HexCell,
   LearningCourse,
   LearningDomainId,
   LearningHomeModel,
@@ -142,6 +145,323 @@ const DEFAULT_ATLAS_DOMAIN_MAP_POSITION: Pick<AtlasDomainMapNode, 'x' | 'y'> & {
   x: 50,
   y: 50,
   importance: 'micro',
+}
+
+const HEX_BLOB_CELLS: HexCell[] = [
+  { q: -2, r: 0 },
+  { q: -2, r: 1 },
+  { q: -1, r: -1 },
+  { q: -1, r: 0 },
+  { q: -1, r: 1 },
+  { q: -1, r: 2 },
+  { q: 0, r: -2 },
+  { q: 0, r: -1 },
+  { q: 0, r: 0 },
+  { q: 0, r: 1 },
+  { q: 0, r: 2 },
+  { q: 1, r: -2 },
+  { q: 1, r: -1 },
+  { q: 1, r: 0 },
+  { q: 1, r: 1 },
+  { q: 2, r: -2 },
+  { q: 2, r: -1 },
+  { q: 2, r: 0 },
+  { q: 3, r: -2 },
+]
+
+const HEX_WIDE_BLOB_CELLS: HexCell[] = [
+  ...HEX_BLOB_CELLS,
+  { q: -3, r: 1 },
+  { q: -3, r: 2 },
+  { q: 3, r: -1 },
+  { q: 3, r: 0 },
+  { q: 4, r: -2 },
+]
+
+const HEX_TEXTURE_CELLS: HexCell[] = [
+  { q: -2, r: 1 },
+  { q: -1, r: -1 },
+  { q: -1, r: 1 },
+  { q: 0, r: -2 },
+  { q: 0, r: 0 },
+  { q: 1, r: -1 },
+  { q: 1, r: 1 },
+  { q: 2, r: -2 },
+  { q: 2, r: 0 },
+]
+
+const HEX_SMALL_BLOB_CELLS: HexCell[] = [
+  { q: -1, r: 0 },
+  { q: -1, r: 1 },
+  { q: 0, r: -1 },
+  { q: 0, r: 0 },
+  { q: 0, r: 1 },
+  { q: 1, r: -1 },
+  { q: 1, r: 0 },
+]
+
+const ATLAS_KINNU_TERRITORY_CONFIG: Record<
+  LearningDomainId,
+  Omit<AtlasTerritoryConfig, 'domain' | 'cells' | 'textureCells'>
+> = {
+  'alphabet-du-vivant': {
+    label: 'Alphabet',
+    color: '#9DDB54',
+    darkColor: '#314821',
+    textColor: '#F5FFD4',
+    x: 25,
+    y: 29,
+    camera: { x: -190, y: -150, scale: 2.08 },
+    subdomains: [
+      {
+        id: 'notions',
+        label: 'Notions de base',
+        x: 23,
+        y: 24,
+        color: '#84C86F',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'questions',
+        label: 'Questions simples',
+        x: 35,
+        y: 36,
+        color: '#52B9A8',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'mini-cours',
+        label: 'Mini-cours',
+        x: 27,
+        y: 53,
+        color: '#E5B947',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'modules',
+        label: 'Modules guidés',
+        x: 43,
+        y: 56,
+        color: '#7BCF5B',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+    ],
+  },
+  'milieux-habitats': {
+    label: 'Milieux',
+    color: '#38B7E8',
+    darkColor: '#1E4C5A',
+    textColor: '#D9F7FF',
+    x: 63,
+    y: 21,
+    camera: { x: -520, y: -90, scale: 2.1 },
+    subdomains: [
+      {
+        id: 'habitats',
+        label: 'Habitats',
+        x: 59,
+        y: 18,
+        color: '#37B8DF',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'eau',
+        label: 'Eau & cycles',
+        x: 75,
+        y: 22,
+        color: '#69D7FF',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'forets',
+        label: 'Forêts',
+        x: 62,
+        y: 36,
+        color: '#62C76A',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'oceans',
+        label: 'Océans',
+        x: 78,
+        y: 38,
+        color: '#4C98F0',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+    ],
+  },
+  'relations-du-vivant': {
+    label: 'Relations',
+    color: '#EAB928',
+    darkColor: '#5A4C19',
+    textColor: '#FFF3B7',
+    x: 41,
+    y: 45,
+    camera: { x: -330, y: -430, scale: 2.05 },
+    subdomains: [
+      {
+        id: 'pollinisation',
+        label: 'Pollinisation',
+        x: 34,
+        y: 39,
+        color: '#F1C84B',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'symbiose',
+        label: 'Symbiose',
+        x: 48,
+        y: 42,
+        color: '#59BE83',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'chaines',
+        label: 'Chaînes alimentaires',
+        x: 37,
+        y: 56,
+        color: '#D58B4B',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'decomposition',
+        label: 'Décomposition',
+        x: 53,
+        y: 58,
+        color: '#A78655',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+    ],
+  },
+  menaces: {
+    label: 'Menaces',
+    color: '#E94E67',
+    darkColor: '#5A2532',
+    textColor: '#FFD4DC',
+    x: 71,
+    y: 43,
+    camera: { x: -650, y: -405, scale: 2.08 },
+    subdomains: [
+      {
+        id: 'climat',
+        label: 'Climat',
+        x: 72,
+        y: 37,
+        color: '#EF6D57',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'pollution',
+        label: 'Pollution',
+        x: 86,
+        y: 41,
+        color: '#C95BE8',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'fragmentation',
+        label: 'Fragmentation',
+        x: 72,
+        y: 55,
+        color: '#D94969',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'invasives',
+        label: 'Invasives',
+        x: 88,
+        y: 58,
+        color: '#B34D6E',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+    ],
+  },
+  solutions: {
+    label: 'Solutions',
+    color: '#6FCB2A',
+    darkColor: '#31551F',
+    textColor: '#E7FFD2',
+    x: 45,
+    y: 67,
+    camera: { x: -510, y: -710, scale: 2.08 },
+    subdomains: [
+      {
+        id: 'restaurer',
+        label: 'Restaurer',
+        x: 50,
+        y: 62,
+        color: '#6FD15D',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'suivre',
+        label: 'Suivre',
+        x: 67,
+        y: 63,
+        color: '#4AC4A0',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'produire',
+        label: 'Produire avec le vivant',
+        x: 51,
+        y: 78,
+        color: '#9DCA45',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'agir',
+        label: 'Agir localement',
+        x: 70,
+        y: 80,
+        color: '#F06D3A',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+    ],
+  },
+  'lire-impact': {
+    label: 'Impact',
+    color: '#8D9B8F',
+    darkColor: '#3F433D',
+    textColor: '#F2F1E9',
+    x: 68,
+    y: 76,
+    camera: { x: -710, y: -820, scale: 2.08 },
+    subdomains: [
+      {
+        id: 'preuves',
+        label: 'Preuves',
+        x: 77,
+        y: 70,
+        color: '#9FA9A0',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'estimer',
+        label: 'Estimer',
+        x: 91,
+        y: 74,
+        color: '#7DBDFF',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'suivi',
+        label: 'Suivi terrain',
+        x: 78,
+        y: 88,
+        color: '#5FC7A7',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+      {
+        id: 'prudence',
+        label: 'Prudence',
+        x: 93,
+        y: 91,
+        color: '#D0BA75',
+        cells: HEX_SMALL_BLOB_CELLS,
+      },
+    ],
+  },
 }
 
 const byDurationThenTitle = (a: LearningCourse, b: LearningCourse) =>
@@ -370,6 +690,25 @@ export function getAtlasIslandViews(): AtlasIslandView[] {
       featuredPathId: featuredPath?.id ?? null,
     }
   })
+}
+
+export function getAtlasKinnuMapView(): AtlasKinnuMapView {
+  return {
+    worldCamera: { x: 0, y: 0, scale: 1 },
+    territories: getAtlasDomains().map((domain) => {
+      const config = ATLAS_KINNU_TERRITORY_CONFIG[domain.id]
+
+      return {
+        ...config,
+        domain,
+        cells:
+          domain.id === 'relations-du-vivant' || domain.id === 'solutions'
+            ? HEX_WIDE_BLOB_CELLS
+            : HEX_BLOB_CELLS,
+        textureCells: HEX_TEXTURE_CELLS,
+      }
+    }),
+  }
 }
 
 function getDomainMapPosition(index: number, importance?: AtlasDomainMapNodeImportance) {
