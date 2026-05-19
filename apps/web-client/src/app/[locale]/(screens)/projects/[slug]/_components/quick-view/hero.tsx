@@ -5,8 +5,8 @@ import { ChevronLeft, ChevronRight, Images, Leaf, Play } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { cn } from '@/lib/utils'
-import { ProjectFavoriteButton } from '../../project-favorite-button'
-import { ProjectShareButton } from '../../project-share-button'
+import { ProjectFavoriteButton } from '../project-favorite-button'
+import { ProjectShareButton } from '../project-share-button'
 
 type ProjectQuickViewHeroProps = {
   coverImage?: string

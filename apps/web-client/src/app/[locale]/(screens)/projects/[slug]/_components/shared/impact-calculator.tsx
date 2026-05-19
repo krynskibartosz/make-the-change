@@ -3,7 +3,7 @@ import { BEEHIVE_METRICS, CORAL_METRICS, ORCHARD_METRICS } from '@/lib/project-t
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn } from '@/lib/utils'
 import { formatCompact, formatDecimal, formatInteger } from '@/lib/formatters'
-import { ImpactDisclaimer } from '@/app/[locale]/(screens)/projects/[slug]/_components/ui/impact-disclaimer'
+import { ImpactDisclaimer } from './impact-disclaimer'
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
 
 type ImpactMode = 'project' | 'checkout'

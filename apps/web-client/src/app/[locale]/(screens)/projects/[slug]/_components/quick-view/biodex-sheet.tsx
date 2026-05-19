@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ChevronRight, Lock } from 'lucide-react'
 import type { ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { MobileSheet } from '../ui/mobile-sheet'
+import { MobileSheet } from '../shared/mobile-sheet'
 
 type ProjectBiodexSheetProps = {
   species: ProjectSpecies[]

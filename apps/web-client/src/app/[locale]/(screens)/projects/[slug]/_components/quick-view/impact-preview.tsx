@@ -15,7 +15,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { ImpactIconKey, ProjectImpactItem } from '../../_utils/build-project-impact-items'
-import { MobileSheet } from '../ui/mobile-sheet'
+import { MobileSheet } from '../shared/mobile-sheet'
 
 const ICON_MAP: Record<ImpactIconKey, LucideIcon> = {
   bees: Bug,

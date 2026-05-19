@@ -25,7 +25,8 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
 
   if (!pillars || pillars.length === 0) return null
 
-  const displayPillars = pillars.slice(0, 3)
+  const MAX_MISSION_PILLARS = 3
+  const displayPillars = pillars.slice(0, MAX_MISSION_PILLARS)
   const activePillar = openIndex !== null ? displayPillars[openIndex] : null
 
   return (

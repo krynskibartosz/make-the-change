@@ -1,36 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { MobileSheet } from '../ui/mobile-sheet'
+import { MobileSheet } from '../shared/mobile-sheet'
+import { getSupportChips, getReceiveChips } from '../../_utils/project-labels'
 
 type ProjectTrackingPreviewProps = {
   isDonationProject: boolean
   projectType?: string | null
   producerName?: string
-}
-
-function getActionChips(
-  projectType: string | null | undefined,
-  isDonationProject: boolean,
-): string[] {
-  const type = projectType?.toLowerCase() ?? ''
-
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
-    return ['Implantation des coraux', 'Équipement plongée', 'Suivi photo', 'Entretien nurseries']
-  }
-
-  if (type.includes('orchard') || type.includes('olive')) {
-    return ['Taille des oliviers', 'Équipement récolte', 'Transformation huile', 'Valorisation locale']
-  }
-
-  return ['Entretien des ruches', 'Matériel apicole', 'Déplacements terrain', 'Récolte du miel']
-}
-
-function getReceiveChips(isDonationProject: boolean): string[] {
-  if (isDonationProject) {
-    return ['Photos sous-marines', 'Nouvelles projet', 'Progression documentée', 'Infos partenaire']
-  }
-  return ['Photos terrain', 'Nouvelles partenaire', 'Étapes projet', 'Suivi production']
 }
 
 function StepDot({ number, active }: { number: number; active?: boolean }) {
@@ -72,7 +49,7 @@ export function ProjectTrackingPreview({
 }: ProjectTrackingPreviewProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const actionChips = getActionChips(projectType, isDonationProject)
+  const actionChips = getSupportChips(projectType, isDonationProject)
   const receiveChips = getReceiveChips(isDonationProject)
 
   const sheetTitle = isDonationProject ? 'Du don au terrain' : 'Du soutien au terrain'

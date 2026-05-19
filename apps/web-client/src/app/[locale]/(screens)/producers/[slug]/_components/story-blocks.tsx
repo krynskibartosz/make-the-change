@@ -24,7 +24,8 @@ type StoryBlocksProps = {
 export function StoryBlocks({ blocks, producerName }: StoryBlocksProps) {
   if (!blocks || blocks.length === 0) return null
 
-  const visibleBlocks = blocks.slice(0, 4)
+  const MAX_STORY_BLOCKS = 4
+  const visibleBlocks = blocks.slice(0, MAX_STORY_BLOCKS)
 
   const storySubtitle = producerName
     ? `Quelques repères sur l'histoire ${/^[AEIOUHaeiouÀ-Ö]/i.test(producerName) ? "d'" : 'de '}${producerName}.`

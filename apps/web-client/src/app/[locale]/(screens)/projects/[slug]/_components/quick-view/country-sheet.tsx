@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Map as MapLibreMap } from '@vis.gl/react-maplibre'
 import { Link } from '@/i18n/navigation'
-import { MobileSheet } from '../ui/mobile-sheet'
+import { MobileSheet } from '../shared/mobile-sheet'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { resolveCountryCode, getCountryFlag } from '@/lib/location'
 import { getLocalizedContent } from '@/lib/utils'

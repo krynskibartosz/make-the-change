@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { MobileSheet } from '../ui/mobile-sheet'
+import { MobileSheet } from '../shared/mobile-sheet'
 import { formatAmountNumber } from '@/lib/formatters'
+import { getSupportChips } from '../../_utils/project-labels'
 
 type ProjectFundingSheetProps = {
   targetBudget: number
@@ -19,17 +20,6 @@ type Milestone = {
   label: string
   threshold: number
   status: MilestoneStatus
-}
-
-function getSupportChips(projectType: string | null | undefined, isDonationProject: boolean): string[] {
-  const type = projectType?.toLowerCase() ?? ''
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
-    return ['Implantation coraux', 'Équipement plongée', 'Suivi photo', 'Entretien nurseries']
-  }
-  if (type.includes('orchard') || type.includes('olive')) {
-    return ['Taille oliviers', 'Équipement récolte', 'Transformation huile', 'Distribution locale']
-  }
-  return ['Matériel apicole', 'Suivi sanitaire', 'Déplacements terrain', 'Récolte du miel', 'Extension du rucher']
 }
 
 function getMilestones(

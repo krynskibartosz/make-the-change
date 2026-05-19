@@ -13,7 +13,6 @@ type ProductFavoriteButtonProps = {
   className?: string
 }
 
-// Helpers moved to bottom
 export function ProductFavoriteButton({
   productId,
   productName,
@@ -24,7 +23,6 @@ export function ProductFavoriteButton({
   const [isFavorite, setIsFavorite] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
-  // Load initial state from local storage
   useEffect(() => {
     setIsMounted(true)
     const favorites = readFavoriteIds()
@@ -47,7 +45,7 @@ export function ProductFavoriteButton({
       toast({
         title: t('added_to_favorites'),
         description: t('added_to_favorites_desc', { name: productName }),
-        variant: 'success', // Assuming 'success' variant exists, otherwise 'default'
+        variant: 'success',
       })
     }
 

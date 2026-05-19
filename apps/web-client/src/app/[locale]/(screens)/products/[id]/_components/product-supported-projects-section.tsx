@@ -1,7 +1,7 @@
 import { Sprout } from 'lucide-react'
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import type { SupportedProject } from '@/app/[locale]/(screens)/products/[id]/_types/product'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 type ProductSupportedProjectsSectionProps = {
   projects: SupportedProject[] | null

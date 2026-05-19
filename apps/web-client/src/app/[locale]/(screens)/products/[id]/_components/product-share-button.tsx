@@ -22,7 +22,6 @@ export function ProductShareButton({
   const handleShare = async () => {
     const url = `${window.location.origin}/products/${productId}`
 
-    // 1. Try Native Share API (Mobile)
     if (navigator.share) {
       try {
         await navigator.share({
@@ -32,14 +31,12 @@ export function ProductShareButton({
         })
         return
       } catch (error) {
-        // User cancelled or share failed, fallback to copy
         if ((error as Error).name !== 'AbortError') {
           console.error('Error sharing:', error)
         }
       }
     }
 
-    // 2. Fallback to Copy to Clipboard (Desktop)
     try {
       await navigator.clipboard.writeText(url)
       setHasCopied(true)

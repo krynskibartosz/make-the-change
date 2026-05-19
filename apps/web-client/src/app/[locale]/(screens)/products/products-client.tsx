@@ -136,11 +136,7 @@ export function ProductsClient({
               <li key={product.id}>
                 <ClientCatalogProductCard
                   product={product}
-                  featuredLabel={tProducts('featured')}
                   outOfStockLabel={tProducts('card.sold_out')}
-                  lowStockLabel={tProducts('card.low_stock')}
-                  pointsLabel={tProducts('card.points')}
-                  viewLabel={tProducts('card.view_action')}
                 />
               </li>
             ))}

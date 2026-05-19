@@ -29,8 +29,6 @@ import type { PublicProducer } from './producer-detail-data'
 
 type ProducerDetailsProps = {
   producer: PublicProducer
-  showFollowButton?: boolean
-  isFollowingProducer?: boolean
 }
 
 export function ProducerDetails({ producer }: ProducerDetailsProps) {

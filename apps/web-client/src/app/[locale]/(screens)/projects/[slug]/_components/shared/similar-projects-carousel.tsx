@@ -10,60 +10,9 @@ import { getLocalizedContent } from '@/lib/utils'
 import type { RelatedProject } from '../../project-detail-data'
 
 type SimilarProjectsCarouselProps = {
-  currentProjectTags: string[]
   locale: string
   relatedProjects?: RelatedProject[]
   title?: string
-}
-
-type MockSimilarCard = {
-  id: string
-  slug: string
-  title: string
-  gradientClass: string
-  currentFunding: number | null
-  type: string | null
-}
-
-const ALL_MOCK_CARDS: MockSimilarCard[] = [
-  {
-    id: 'beehive-1',
-    slug: 'sauvons-les-abeilles-noires',
-    title: 'Sauvons les Abeilles Noires',
-    gradientClass: 'bg-gradient-to-br from-amber-400/60 via-lime-500/25 to-zinc-900',
-    currentFunding: 3510,
-    type: 'beehive',
-  },
-  {
-    id: 'beehive-2',
-    slug: 'ruches-solidaires-montagne',
-    title: 'Ruches Solidaires en Montagne',
-    gradientClass: 'bg-gradient-to-br from-lime-500/55 via-yellow-400/25 to-zinc-900',
-    currentFunding: 2600,
-    type: 'beehive',
-  },
-  {
-    id: 'olive-1',
-    slug: 'oliveraies-regeneratives-provence',
-    title: 'Oliveraies Régénératives',
-    gradientClass: 'bg-gradient-to-br from-emerald-500/45 via-zinc-700 to-zinc-950',
-    currentFunding: 450,
-    type: 'olive_tree',
-  },
-  {
-    id: 'vineyard-1',
-    slug: 'vignes-vivantes-vallee',
-    title: 'Vignes Vivantes de la Vallée',
-    gradientClass: 'bg-gradient-to-br from-fuchsia-500/35 via-purple-500/25 to-zinc-950',
-    currentFunding: null,
-    type: null,
-  },
-]
-
-const MOCK_TAG_PRIORITY: Record<string, number> = {
-  beehive: 0,
-  olive_tree: 1,
-  vineyard: 2,
 }
 
 const IMPACT_KIND_STYLES: Record<ProjectMapImpactKind, { icon: string }> = {
@@ -78,22 +27,10 @@ const IMPACT_KIND_STYLES: Record<ProjectMapImpactKind, { icon: string }> = {
   },
 }
 
-const pickMockCards = (tags: string[]): MockSimilarCard[] => {
-  const normalizedTags = tags.map((t) => t.toLowerCase())
-  const priority = normalizedTags.reduce(
-    (best, tag) => Math.min(best, MOCK_TAG_PRIORITY[tag] ?? 99),
-    99,
-  )
-  const preferred = ALL_MOCK_CARDS.filter((_, i) => i === priority)
-  const rest = ALL_MOCK_CARDS.filter((_, i) => i !== priority)
-  return [...preferred, ...rest].slice(0, 3)
-}
-
 type CompactSimilarProjectCardProps = {
   href: string
   title: string
   imageUrl: string | null
-  fallbackMediaClass?: string
   currentFunding: number | null
   type: string | null
 }
@@ -102,7 +39,6 @@ function CompactSimilarProjectCard({
   href,
   title,
   imageUrl,
-  fallbackMediaClass = 'bg-white/5',
   currentFunding,
   type,
 }: CompactSimilarProjectCardProps) {
@@ -126,7 +62,7 @@ function CompactSimilarProjectCard({
             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
           />
         ) : (
-          <div className={`h-full w-full ${fallbackMediaClass}`} aria-hidden="true" />
+          <div className="h-full w-full bg-white/5" aria-hidden="true" />
         )}
       </div>
 
@@ -158,49 +94,36 @@ function CompactSimilarProjectCard({
 }
 
 export function SimilarProjectsCarousel({
-  currentProjectTags,
   locale,
   relatedProjects = [],
   title = "Explorez d'autres projets",
 }: SimilarProjectsCarouselProps) {
-  const realCards = relatedProjects.slice(0, 3)
-  const shouldUseFallback = realCards.length === 0
-  const mockCards = pickMockCards(currentProjectTags)
+  const cards = relatedProjects.slice(0, 3)
+
+  if (cards.length === 0) return null
 
   return (
     <section className="w-full max-w-full overflow-hidden">
       <h3 className="mb-4 text-xl font-bold text-white">{title}</h3>
 
       <div className="flex w-full max-w-full gap-4 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        {shouldUseFallback
-          ? mockCards.map((card) => (
-              <CompactSimilarProjectCard
-                key={card.id}
-                href={`/projects/${card.slug}`}
-                title={card.title}
-                imageUrl={null}
-                fallbackMediaClass={card.gradientClass}
-                currentFunding={card.currentFunding}
-                type={card.type}
-              />
-            ))
-          : realCards.map((project) => {
-              const title = getLocalizedContent(project.name_i18n, locale, project.name_default)
-              const imageUrl = sanitizeImageUrl(project.hero_image_url) ?? null
+        {cards.map((project) => {
+          const cardTitle = getLocalizedContent(project.name_i18n, locale, project.name_default)
+          const imageUrl = sanitizeImageUrl(project.hero_image_url) ?? null
 
-              return (
-                <CompactSimilarProjectCard
-                  key={project.id}
-                  href={`/projects/${project.slug}`}
-                  title={title}
-                  imageUrl={imageUrl}
-                  currentFunding={
-                    typeof project.current_funding === 'number' ? project.current_funding : null
-                  }
-                  type={project.type ?? null}
-                />
-              )
-            })}
+          return (
+            <CompactSimilarProjectCard
+              key={project.id}
+              href={`/projects/${project.slug}`}
+              title={cardTitle}
+              imageUrl={imageUrl}
+              currentFunding={
+                typeof project.current_funding === 'number' ? project.current_funding : null
+              }
+              type={project.type ?? null}
+            />
+          )
+        })}
       </div>
     </section>
   )

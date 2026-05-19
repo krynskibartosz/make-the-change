@@ -1,6 +1,6 @@
 import { Badge, Button, Card, CardContent } from '@make-the-change/core/ui'
 import type { LinkedSpecies } from '@/app/[locale]/(screens)/products/[id]/_types/product'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 type ProductLinkedSpeciesSectionProps = {
   species: LinkedSpecies[] | null

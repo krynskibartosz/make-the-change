@@ -5,16 +5,6 @@ import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-/** Détecte si un tag signale la certification nature/bio */
-const BIO_TAGS = ['bio', 'nature', 'naturel', 'botanique', 'organique', 'écologique', 'ecologique']
-const ARTISAN_TAGS = ['artisanal', 'artisan', 'fait main', 'handmade', 'local']
-
-// Helpers moved to bottom
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 type ClientCatalogProduct = {
   id: string
   name_default: string
@@ -27,20 +17,13 @@ type ClientCatalogProduct = {
   image_url?: string | null
   images?: string[] | null
   tags?: string[] | null
-  /** Nom du producteur (enrichi côté serveur si besoin) */
   producer_name?: string | null
 }
 
 type ClientCatalogProductCardProps = {
   product: ClientCatalogProduct
-  featuredLabel: string
   outOfStockLabel: string
-  lowStockLabel: string
-  pointsLabel: string
-  viewLabel: string
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export function ClientCatalogProductCard({
   product,
@@ -58,8 +41,6 @@ export function ClientCatalogProductCard({
     product.stock_quantity > 0
 
   const points = product.price_points ?? 0
-  const isBio = hasBioTag(product.tags)
-  const isArtisan = hasArtisanTag(product.tags)
 
   return (
     <article itemScope itemType="https://schema.org/Product" className="h-full">
@@ -116,27 +97,16 @@ export function ClientCatalogProductCard({
             {product.name_default}
           </h3>
 
-          {/* Prix + icônes certification */}
+          {/* Prix */}
           <div className="flex items-center gap-1 mt-1">
-            {/* Prix en points */}
             {inStock && points > 0 ? (
               <CurrencyAmount kind="impactCredits" value={points} className="text-sm font-bold" />
             ) : inStock ? (
               <span className="text-xs font-semibold text-white/50">Gratuit</span>
             ) : null}
-
-         
           </div>
         </div>
       </Link>
     </article>
   )
-}
-
-function hasBioTag(tags?: string[] | null): boolean {
-  return tags?.some((t) => BIO_TAGS.some((bio) => t.toLowerCase().includes(bio))) ?? false
-}
-
-function hasArtisanTag(tags?: string[] | null): boolean {
-  return tags?.some((t) => ARTISAN_TAGS.some((a) => t.toLowerCase().includes(a))) ?? false
 }

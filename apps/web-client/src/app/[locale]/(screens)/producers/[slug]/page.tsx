@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { getCurrentViewer } from '@/lib/mock/mock-session-server'
 import {
   getCachedPublicProducerBySlug,
   type PublicProducer,
@@ -41,8 +40,6 @@ export default async function ProducerDetailPage({ params }: ProducerDetailPageP
     notFound()
   }
 
-  const viewer = await getCurrentViewer()
-
   return (
     <FullScreenSlideModal
       title={producer.name_default}
@@ -52,8 +49,6 @@ export default async function ProducerDetailPage({ params }: ProducerDetailPageP
     >
       <ProducerDetails
         producer={producer}
-        showFollowButton={Boolean(viewer)}
-        isFollowingProducer={Boolean(viewer)}
       />
     </FullScreenSlideModal>
   )

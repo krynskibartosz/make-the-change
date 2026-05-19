@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { ChevronRight, Info } from 'lucide-react'
-import { MobileSheet } from '../ui/mobile-sheet'
+import { MobileSheet } from '../shared/mobile-sheet'
+import { getTagline, getSupportChips, getReceiveChips } from '../../_utils/project-labels'
 
 type ProjectStorySheetProps = {
   description: string
@@ -14,35 +15,6 @@ type ProjectStorySheetProps = {
   producerImage?: string
   projectType?: string | null
   isDonationProject?: boolean
-}
-
-function getTagline(projectType: string | null | undefined, isDonationProject: boolean): string {
-  const type = projectType?.toLowerCase() ?? ''
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
-    return 'Soutenir la restauration des récifs coralliens et documenter leur évolution terrain.'
-  }
-  if (type.includes('orchard') || type.includes('olive')) {
-    return 'Soutenir des producteurs locaux et la valorisation de leurs terres vivantes.'
-  }
-  return 'Soutenir des ruches locales, leur suivi terrain et la valorisation du miel produit.'
-}
-
-function getSupportChips(projectType: string | null | undefined, isDonationProject: boolean): string[] {
-  const type = projectType?.toLowerCase() ?? ''
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
-    return ['Implantation coraux', 'Équipement plongée', 'Suivi photo', 'Entretien nurseries']
-  }
-  if (type.includes('orchard') || type.includes('olive')) {
-    return ['Taille oliviers', 'Équipement récolte', 'Transformation huile', 'Distribution locale']
-  }
-  return ['Entretien des ruches', 'Matériel apicole', 'Déplacements terrain', 'Suivi sanitaire', 'Récolte du miel']
-}
-
-function getReceiveChips(isDonationProject: boolean): string[] {
-  if (isDonationProject) {
-    return ['Photos sous-marines', 'Nouvelles projet', 'Progression documentée', 'Infos partenaire']
-  }
-  return ['Photos terrain', 'Nouvelles partenaire', 'Étapes projet', 'Suivi production']
 }
 
 function SectionLabel({ children }: { children: string }) {

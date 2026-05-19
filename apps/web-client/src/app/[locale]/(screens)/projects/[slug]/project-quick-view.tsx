@@ -9,17 +9,17 @@ import { resolveCountryCode, getCountryDisplayName } from '@/lib/location'
 import type { DonationOption, ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn, getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { ProjectProducerProductsSection } from './_components/sections/project-producer-products-section'
-import { ProjectQuickViewHero } from './_components/layout/project-quick-view-hero'
-import { SimilarProjectsCarousel } from './_components/ui/similar-projects-carousel'
-import { ProjectSpeciesTeaser } from './_components/ui/project-species-teaser'
-import { ProjectLearningLinks } from './_components/ui/project-learning-links'
-import { ProjectStorySheet } from './_components/sections/project-story-sheet'
-import { ProjectImpactPreview } from './_components/sections/project-impact-preview'
-import { ProjectTrackingPreview } from './_components/sections/project-tracking-preview'
-import { ProjectBiodexSheet } from './_components/sections/project-biodex-sheet'
-import { ProjectCountrySheet } from './_components/sections/project-country-sheet'
-import { ProjectFundingSheet } from './_components/sections/project-funding-sheet'
+import { ProjectProducerProductsSection } from './_components/shared/producer-products'
+import { ProjectQuickViewHero } from './_components/quick-view/hero'
+import { SimilarProjectsCarousel } from './_components/shared/similar-projects-carousel'
+import { ProjectSpeciesTeaser } from './_components/shared/species-teaser'
+import { ProjectLearningLinks } from './_components/shared/learning-links'
+import { ProjectStorySheet } from './_components/quick-view/story-sheet'
+import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
+import { ProjectTrackingPreview } from './_components/quick-view/tracking-preview'
+import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
+import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
+import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import {
   getRelatedProjectsByType,
@@ -491,7 +491,6 @@ export async function ProjectQuickView({
             {/* 9. Projets similaires */}
             <div className="mt-10 w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
-                currentProjectTags={[project.type || 'beehive']}
                 locale={locale}
                 relatedProjects={resolvedRelatedProjects}
                 title={similarTitle}
