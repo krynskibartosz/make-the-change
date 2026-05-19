@@ -6,7 +6,7 @@ Make the Change doit rendre l'impact visible sans promettre plus que ce qui est 
 
 ## Principe fondamental
 
-> Le projet réel soutenu est la source principale de la trace d'impact. Un solde, des Graines, des Crédits Impact ou un paiement ne sont jamais une preuve d'impact terrain.
+> Le projet réel soutenu est la source principale de la trace d'impact. Un solde, des Graines, des Credits Impact ou un paiement ne sont jamais une preuve d'impact terrain.
 
 ---
 
@@ -17,7 +17,7 @@ Make the Change doit rendre l'impact visible sans promettre plus que ce qui est 
 | **Fait vérifié** | Nom scientifique, localisation du projet, partenaire identifié | Peut être affirmé si la source est fiable |
 | **Estimation** | CO2 estimé, abeilles soutenues, coraux restaurés | Doit être formulée prudemment, avec hypothèse ou méthode |
 | **Narration** | Mascotte, aventure, progression dans le BioDex | Ne doit pas être confondue avec une preuve terrain |
-| **Gamification** | Graines, badges, Crédits Impact, quêtes | Soutient l'engagement, n'invente pas l'impact |
+| **Gamification** | Graines, badges, Credits Impact, missions | Soutient l'engagement, n'invente pas l'impact |
 | **Hypothèse** | Effet futur d'un projet non encore mesuré | Doit être clairement présentée comme hypothèse |
 
 ---
@@ -47,7 +47,7 @@ Make the Change doit rendre l'impact visible sans promettre plus que ce qui est 
 ## Ce qui est interdit en V1
 
 - Afficher "impact garanti" ou "impact validé" sans preuve opérationnelle ou mesurée.
-- Convertir des Graines, des Crédits Impact ou un solde en preuve d'impact ("tes points représentent X abeilles sauvées").
+- Convertir des Graines, des Credits Impact ou un solde en preuve d'impact ("tes points représentent X abeilles sauvées").
 - Présenter un paiement Stripe confirmé comme une preuve d'impact terrain.
 - Afficher "X espèces sauvées" ou "X espèces protégées grâce à toi" sans preuve de protection.
 - Proposer un reporting RSE sans méthode robuste, périmètre, source et niveau de confiance.
@@ -88,6 +88,12 @@ Le niveau de preuve requis pour une communication RSE est supérieur à celui de
 - les disclaimers, sources et responsabilités.
 
 Sans méthode robuste, l'application peut fournir un reporting narratif ou pédagogique — pas un reporting d'impact mesuré.
+
+## Apprendre et impact
+
+`[ACTUEL_CODE]` Le domaine Apprendre contient un axe "Lire l'impact" pour aider l'utilisateur à distinguer fait, estimation, proxy, preuve et greenwashing.
+
+`[CIBLE_VALIDEE]` Apprendre peut renforcer la compréhension d'un projet ou d'une espèce, mais ne transforme jamais un paiement, un solde, une mission ou un badge en preuve terrain.
 
 ---
 

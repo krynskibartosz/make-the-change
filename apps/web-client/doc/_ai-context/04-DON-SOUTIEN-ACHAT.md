@@ -10,7 +10,7 @@ Make the Change distingue trois types de gestes financiers. Les confondre crée 
 |---|---|---|
 | **Don pur** | Contribution à un projet biodiversité sans contrepartie économique directe | `donation` |
 | **Soutien producteur** | Contribution à un projet porté par un producteur, sans rendement ni propriété | `producer_support` |
-| **Achat produit** | Achat direct d'un produit ou avantage, en euros ou en Crédits Impact | `product_purchase` |
+| **Achat produit** | Achat direct d'un produit ou avantage, en euros ou en Credits Impact | `product_purchase` |
 
 ---
 
@@ -27,7 +27,7 @@ Une contribution financière à un projet biodiversité ou environnemental. L'ut
 - Un déblocage d'espèce BioDex **si et seulement si** le projet est explicitement lié à cette espèce
 
 ### Ce que le don pur ne doit jamais donner ou promettre
-- Des Crédits Impact
+- Des Credits Impact
 - Un produit ou avantage boutique
 - Un rendement ou retour financier
 - Une promesse d'impact non prouvée
@@ -48,12 +48,12 @@ Une contribution financière à un projet porté par un producteur ou un partena
 **Ce n'est pas un investissement financier :** pas de rendement, pas de part, pas de propriété, pas de remboursement garanti.
 
 ### Ce que le soutien producteur peut donner à l'utilisateur
-- Des Crédits Impact
+- Des Credits Impact
 - Un petit bonus symbolique de Graines
 - Une preuve simple du soutien
 - Une explication pédagogique de l'impact attendu
 - Un déblocage d'espèce BioDex si le projet est explicitement lié à cette espèce
-- Un accès futur à des produits partenaires via Crédits Impact
+- Un accès futur à des produits partenaires via Credits Impact
 
 ### Ce que le soutien producteur ne doit jamais donner ou promettre
 - Un rendement, un profit, une part de propriété
@@ -71,7 +71,7 @@ Une contribution financière à un projet porté par un producteur ou un partena
 ## Achat produit — règles détaillées
 
 ### Ce que c'est
-L'achat direct d'un produit ou avantage partenaire, dans la boutique ou dans les avantages. Peut se faire en euros ou en Crédits Impact.
+L'achat direct d'un produit ou avantage partenaire, dans la boutique ou dans les avantages. Peut se faire en euros ou en Credits Impact.
 
 ### Ce que l'achat produit donne à l'utilisateur
 - Le produit ou l'avantage
@@ -80,20 +80,22 @@ L'achat direct d'un produit ou avantage partenaire, dans la boutique ou dans les
 
 ### Ce que l'achat produit ne doit jamais faire
 - Être présenté comme l'action d'impact principale
-- Créer des Crédits Impact
+- Créer des Credits Impact
 - Débloquer automatiquement une espèce BioDex
 - Prétendre "sauver une espèce"
 
 ### Comment en parler
-✅ "Acheter en euros" — "Utiliser mes Crédits Impact" — "Produit partenaire" — "Avantage partenaire"
+✅ "Acheter en euros" — "Utiliser mes Credits Impact" — "Produit partenaire" — "Avantage partenaire"
 
-❌ "Sauver une espèce" — "Créer de l'impact direct" — "Générer des Crédits Impact"
+❌ "Sauver une espèce" — "Créer de l'impact direct" — "Générer des Credits Impact"
 
 ---
 
 ## Séparation dans les paiements
 
 Les trois gestes doivent utiliser des flux de paiement séparés, avec des métadonnées distinctes (`donation`, `producer_support`, `product_purchase`). Ils ne doivent pas être mélangés dans un même flux ou un même reçu.
+
+`[ACTUEL_CODE]` Le code contient encore du legacy `investment` pour une partie du soutien producteur. Ce legacy ne doit pas être renforcé dans le wording utilisateur et doit être migré progressivement.
 
 Un reçu de paiement confirme une transaction. Il ne constitue pas une preuve d'impact terrain et ne doit pas être présenté comme un reçu fiscal sans validation légale.
 

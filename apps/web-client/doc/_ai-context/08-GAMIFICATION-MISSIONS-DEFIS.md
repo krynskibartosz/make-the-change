@@ -1,10 +1,61 @@
-# 08 — Gamification : Academy, Missions, Défis et Aventure
+# 08 — Apprendre, Academy, gamification, missions et défis
 
 ## Principe central
 
-La gamification aide l'utilisateur à comprendre et à revenir. Elle ne remplace pas la preuve d'impact. Les Graines, les badges, les streaks et les niveaux ne sont jamais une preuve d'impact environnemental.
+La gamification aide l'utilisateur à comprendre et à revenir. Elle ne remplace pas la preuve d'impact. Les Graines, les badges, les streaks, les niveaux et les Credits Impact ne sont jamais une preuve d'impact environnemental.
 
 ---
+
+## Apprendre — rôle actuel
+
+`[ACTUEL_CODE]` La tab Apprendre est implémentée dans `src/app/[locale]/(tabs)/learn`.
+
+Elle relie :
+
+- Academy ;
+- Atlas du vivant ;
+- parcours guidés ;
+- catalogue de cours ;
+- projets ;
+- espèces BioDex ;
+- Toile vivante ;
+- domaines pédagogiques ;
+- progression en Graines.
+
+Apprendre sert à comprendre les projets, les espèces, les écosystèmes et les limites de l'impact. Ce n'est pas un substitut au don ou au soutien.
+
+## Architecture pédagogique actuelle
+
+`[ACTUEL_CODE]` Le catalogue pédagogique est défini principalement dans :
+
+- `src/lib/learning/catalog.ts` ;
+- `src/lib/learning/schema.ts` ;
+- `src/lib/learning/selectors.ts`.
+
+Types d'entrées actuels :
+
+| Type | Rôle |
+|---|---|
+| `academy_unit` | Cours Academy interactif |
+| `project_experience` | Expérience liée à un projet |
+| `living_web` | Exploration de la Toile vivante |
+
+Domaines actuels :
+
+- Alphabet du vivant ;
+- Milieux & habitats ;
+- Relations du vivant ;
+- Menaces ;
+- Solutions ;
+- Lire l'impact.
+
+Parcours actuels :
+
+- Les bases du vivant ;
+- Comprendre les pollinisateurs ;
+- Forêts & sols ;
+- Récifs & océans ;
+- Lire l'impact.
 
 ## Quatre modules distincts
 
@@ -31,7 +82,7 @@ L'Academy est une brique pédagogique importante, non obligatoire.
 
 **Ce que l'Academy ne fait pas (règles fermes) :**
 - L'Academy ne débloque jamais seule une espèce BioDex.
-- L'Academy ne génère pas de Crédits Impact.
+- L'Academy ne génère pas de Credits Impact.
 - L'Academy ne bloque jamais l'accès au don, au soutien ou à l'achat.
 - L'Academy de base est gratuite en V1.
 
@@ -50,7 +101,7 @@ Une Mission est une impulsion courte et guidée qui donne une direction quotidie
 
 **Ce que les Missions ne font pas :**
 - Les Missions ne créent pas d'impact terrain direct.
-- Les Missions ne génèrent pas de Crédits Impact.
+- Les Missions ne génèrent pas de Credits Impact.
 - Les Missions ne débloquent pas seules une espèce BioDex.
 
 ---
@@ -65,7 +116,7 @@ Un Défi est un objectif structuré ou détaillé, pouvant durer plusieurs jours
 
 **Ce que les Défis ne font pas :**
 - Les Défis ne créent pas d'impact terrain direct.
-- Les Défis ne génèrent pas de Crédits Impact.
+- Les Défis ne génèrent pas de Credits Impact.
 
 ---
 
@@ -102,8 +153,8 @@ La faction influence la personnalisation dans Aventure. Elle n'a pas d'impact m�
 1. Découvrir un projet producteur.
 2. Comprendre le producteur, la filière, l'impact attendu.
 3. Soutenir le projet.
-4. Recevoir des Crédits Impact, un bonus symbolique de Graines, et éventuellement une espèce BioDex si le lien est documenté.
-5. Utiliser les Crédits Impact dans les avantages ou produits partenaires.
+4. Recevoir des Credits Impact, un bonus symbolique de Graines, et éventuellement une espèce BioDex si le lien est documenté.
+5. Utiliser les Credits Impact dans les avantages ou produits partenaires.
 
 ### Boucle BioDex
 1. Débloquer une espèce (via don ou soutien lié à cette espèce).
@@ -121,3 +172,4 @@ La faction influence la personnalisation dans Aventure. Elle n'a pas d'impact m�
 - Le système final de factions (noms, mascottes, rôle mécanique).
 - Le nombre exact de Graines par action.
 - Si les Graines peuvent être dépensées ou seulement accumulées.
+- Le statut produit final des labs Kinnu / Kinnu V2.

@@ -5,10 +5,14 @@
 | Terme | Définition |
 |---|---|
 | **Make the Change** | Nom du produit/projet. |
-| **Aventure** | Hub principal qui orchestre l'expérience quotidienne : salutation, faction, mission du jour, progression, projet recommandé, espèce BioDex, solde Graines et Crédits Impact. Label UI : "Accueil". |
+| **Aventure** | Hub principal qui orchestre l'expérience quotidienne : salutation, faction, mission du jour, progression, projet recommandé, espèce BioDex, solde Graines et Credits Impact. Label UI : "Accueil". |
 | **Projets** | Actions terrain ou projets producteurs à découvrir et à soutenir. |
-| **Apprendre** | Module d'apprentissage quotidien (anciennement "Collectif"). |
-| **Avantages** | Espace pour utiliser les Crédits Impact ou découvrir des produits responsables. |
+| **Apprendre** | Tab d'apprentissage structurée autour d'Academy, Atlas du vivant, parcours guidés, catalogue de cours, BioDex et Toile vivante. |
+| **Atlas du vivant** | Vue d'ensemble pédagogique par domaines : alphabet du vivant, milieux, relations, menaces, solutions, lecture de l'impact. |
+| **Parcours guidés** | Séquences pédagogiques lorsque l'ordre compte. |
+| **Cours** | Unité d'apprentissage consultable depuis le catalogue Apprendre. |
+| **Toile vivante** | Exploration des relations entre espèces, milieux, projets et nœuds d'écosystème. |
+| **Avantages** | Espace pour utiliser les Credits Impact ou découvrir des produits responsables. |
 | **Profil** | Espace utilisateur : compte, BioDex, historique, solde, abonnement. |
 | **BioDex** | Collection d'espèces vivantes : apprentissage, attachement, mémoire du vivant, lien aux projets. |
 | **Academy** | Module pédagogique : apprendre et comprendre. Gratuit en V1, non obligatoire, ne débloque pas seul le BioDex. |
@@ -16,10 +20,10 @@
 | **Défi** (ou Challenge) | Objectif structuré sur plusieurs jours. Peut donner des Graines. Ne crée pas d'impact direct. |
 | **Action prioritaire** | Action unique recommandée dans Aventure pour éviter de surcharger l'utilisateur. |
 | **Graines** | Monnaie d'engagement et de progression. Représente l'apprentissage, les missions, la reconnaissance symbolique. |
-| **Crédits Impact** | Valeur boutique liée à un soutien producteur. Utilisable pour des avantages ou produits partenaires. |
+| **Credits Impact** | Valeur boutique liée à un soutien producteur. Utilisable pour des avantages ou produits partenaires. |
 | **Don pur** | Contribution financière à un projet biodiversité sans contrepartie économique directe. Nom technique cible : `donation`. |
 | **Soutien producteur** | Contribution financière à un projet porté par un producteur ou partenaire. Pas un investissement. Nom technique cible : `producer_support`. |
-| **Achat produit** | Achat direct d'un produit dans la boutique ou les avantages partenaires. Nom technique cible : `product_purchase`. |
+| **Achat produit** | Achat direct d'un produit dans la boutique ou les avantages partenaires, en euros ou en Credits Impact. Nom technique cible : `product_purchase`. |
 | **Factions cibles** | Vie Sauvage / Melli — Terres & Forêts / Sylva — Gardiens des mers / Ondine. |
 | **Impact estimé** | Impact formulé prudemment selon une hypothèse ou une méthode documentée. |
 | **Reçu de paiement** | Trace d'un paiement confirmé. Ne prouve pas l'impact terrain. |
@@ -33,11 +37,11 @@
 |---|---|---|
 | Investissement | Évoque un rendement financier ou juridique | Soutien, contribution, participation |
 | Financement | Peut évoquer une logique financière | Don, soutien, contribution |
-| Rendement | Promesse financière | Crédits Impact, avantage, récompense |
+| Rendement | Promesse financière | Credits Impact, avantage, récompense |
 | ROI / Profit | Incompatible avec le positionnement impact | Valeur, retour symbolique, avantage |
 | Acheter une part | Évoque propriété ou titre financier | Soutenir ce producteur |
 | Acheter de l'impact | Formulation trop transactionnelle | Contribuer à ce projet |
-| Points biodiversité | Ancien nom confus et déprécié | Graines ou Crédits Impact selon le cas |
+| Points biodiversité | Ancien nom confus et déprécié | Graines ou Credits Impact selon le cas |
 | Impact garanti | Trop fort sans preuve | Impact estimé, contribue à |
 | Sauver une espèce | Trop direct, non prouvé | Soutenir un projet lié à une espèce |
 | Abeilles sauvées | Promesse trop forte | Abeilles soutenues estimées |
@@ -53,7 +57,7 @@
 
 ## Terme sensible : `points`
 
-Le mot "points" existe encore dans le code technique mais **ne doit pas être utilisé comme nom métier final** dans les textes utilisateur. Il désigne différentes choses selon le contexte (Graines, Crédits Impact, scores, héritage technique) et crée de la confusion. Utiliser toujours "Graines" ou "Crédits Impact" selon le cas.
+Le mot "points" existe encore dans le code technique mais **ne doit pas être utilisé comme nom métier final** dans les textes utilisateur. Il désigne différentes choses selon le contexte (Graines, Credits Impact, scores, métriques, héritage Supabase ou Stripe) et crée de la confusion. Utiliser toujours "Graines" ou "Credits Impact" selon le cas.
 
 ---
 
@@ -68,9 +72,9 @@ Soutenir ce rucher.
 Soutenir cette oliveraie.
 Découvre l'espèce liée à cette action.
 Gagne des Graines en progressant chaque jour.
-Utilise tes Crédits Impact pour accéder à des avantages responsables.
+Utilise tes Credits Impact pour accéder à des avantages responsables.
 Acheter en euros.
-Utiliser mes Crédits Impact.
+Utiliser mes Credits Impact.
 Produit partenaire.
 Avantage partenaire.
 Impact estimé selon les informations disponibles.
@@ -88,7 +92,7 @@ Projet partenaire en cours de suivi.
 Ne pas utiliser ces formulations sans vérification préalable :
 
 - "Ton don a restauré X coraux."
-- "Tu as gagné X Crédits Impact." (si le flow n'est pas un soutien producteur)
+- "Tu as gagné X Credits Impact." (si le flow n'est pas un soutien producteur)
 - "Cette espèce est protégée grâce à toi."
 - "X abeilles sauvées."
 - "CO2 capturé."

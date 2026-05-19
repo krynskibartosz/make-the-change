@@ -8,8 +8,8 @@ Make the Change est une expérience mobile-first organisée en 5 tabs principale
 |---|---|---|---|
 | Aventure | Accueil | `/adventure` | Hub quotidien : missions, projet recommandé, espèce BioDex, progression, solde |
 | Projets | Projets | `/projects` | Liste des projets de terrain à découvrir et soutenir |
-| Apprendre | Apprendre | `/learn` | Module d'apprentissage quotidien |
-| Avantages | Avantages | `/advantages` | Boutique et avantages accessibles via Crédits Impact |
+| Apprendre | Apprendre | `/learn` | Hub pédagogique : reprendre, Atlas, parcours, cours, BioDex, Toile vivante |
+| Avantages | Avantages | `/advantages` | Boutique et avantages accessibles via Credits Impact |
 | Profil | Profil | `/profile` | Compte, BioDex, historique, solde, abonnement, paramètres |
 
 ---
@@ -25,7 +25,7 @@ Ce qu'Aventure peut afficher :
 - Un projet recommandé avec son impact attendu
 - L'espèce BioDex liée au projet recommandé
 - La progression collective de la saison
-- Le solde en Graines et en Crédits Impact
+- Le solde en Graines et en Credits Impact
 
 **Règle clé :** Aventure doit mettre en avant une action prioritaire unique pour ne pas surcharger l'utilisateur. C'est le hub, pas le catalogue.
 
@@ -46,15 +46,44 @@ Chaque projet peut avoir deux types d'action :
 
 ## Apprendre
 
-Module d'apprentissage quotidien. Remplace l'ancienne tab "Collectif".
+`[ACTUEL_CODE]` Apprendre n'est plus seulement un module quotidien. C'est une tab structurante qui relie apprentissage, projets, espèces, BioDex et Toile vivante.
 
-Contient des contenus éducatifs courts liés aux espèces, aux projets, aux gestes d'impact. Peut renvoyer vers l'Academy pour des sessions plus approfondies.
+Portes d'entrée actuelles :
+
+- reprendre un cours ;
+- explorer l'Atlas du vivant ;
+- ouvrir un parcours guidé ;
+- consulter tous les cours ;
+- filtrer par thème, niveau, durée, projet ou espèce ;
+- découvrir des contenus liés aux projets et aux espèces débloquées.
+
+Routes principales :
+
+| Écran | Route | Rôle |
+|---|---|---|
+| Hub Apprendre | `/learn` | Accueil pédagogique, reprise, Atlas preview, parcours, cours du jour, BioDex |
+| Atlas du vivant | `/learn/atlas` | Vue par domaines et îles pédagogiques |
+| Catalogue cours | `/learn/courses` | Recherche et filtres |
+| Détail cours | `/learn/courses/[courseId]` | Fiche cours, liens projet, tags, Toile vivante |
+| Parcours guidés | `/learn/parcours` | Liste des séquences guidées |
+| Détail parcours | `/learn/parcours/[pathId]` | Étapes ordonnées et point d'entrée |
+
+Domaines actuels de l'Atlas :
+
+- Alphabet du vivant ;
+- Milieux & habitats ;
+- Relations du vivant ;
+- Menaces ;
+- Solutions ;
+- Lire l'impact.
+
+Apprendre peut renvoyer vers l'Academy pour des sessions immersives, mais ne doit jamais devenir une condition obligatoire pour donner, soutenir ou acheter.
 
 ---
 
 ## Avantages
 
-Espace pour utiliser les Crédits Impact ou découvrir des produits et avantages partenaires. C'est un prolongement du produit, pas son cœur moral.
+Espace pour utiliser les Credits Impact ou découvrir des produits et avantages partenaires. C'est un prolongement du produit, pas son cœur moral.
 
 Les produits disponibles sont liés aux partenaires producteurs (miel, huile d'olive, etc.) ou à des avantages responsables.
 
@@ -66,7 +95,7 @@ Espace personnel de l'utilisateur :
 - Compte et paramètres
 - BioDex (collection d'espèces débloquées)
 - Historique des soutiens et dons
-- Solde Graines et Crédits Impact
+- Solde Graines et Credits Impact
 - Abonnement (si actif)
 
 ---
@@ -80,6 +109,7 @@ Espace personnel de l'utilisateur :
 | Détail projet | Depuis Projets | Présentation complète d'un projet avec action (don ou soutien) |
 | BioDex espèce | Depuis Profil / BioDex | Fiche détaillée d'une espèce |
 | Paiement | Depuis Projets (don ou soutien) | Flow de paiement |
+| Toile vivante | Depuis Apprendre / BioDex / écosystème | Relations entre espèces, milieux, projets et nœuds |
 
 ---
 
@@ -105,8 +135,9 @@ Pour qu'un utilisateur puisse vivre une expérience complète, il doit pouvoir :
 2. Choisir une action adaptée (don, soutien, apprentissage).
 3. Voir l'impact attendu avec prudence.
 4. Recevoir une progression claire (Graines, trace, BioDex si applicable).
-5. Retrouver ses traces dans son profil.
-6. Ne pas confondre engagement, don, soutien et achat.
+5. Apprendre pourquoi son geste compte.
+6. Retrouver ses traces dans son profil.
+7. Ne pas confondre engagement, apprentissage, don, soutien, achat, récompense et preuve.
 
 ---
 

@@ -8,7 +8,7 @@ L'utilisateur peut :
 - soutenir des projets de terrain portés par des producteurs ou des associations (don, soutien producteur) ;
 - apprendre à connaître des espèces et des écosystèmes (BioDex, Academy) ;
 - progresser dans une aventure quotidienne (Missions, Défis, Graines) ;
-- utiliser ses Crédits Impact pour accéder à des produits ou avantages responsables.
+- utiliser ses Credits Impact pour accéder à des produits ou avantages responsables.
 
 ## La promesse utilisateur officielle
 
@@ -47,14 +47,16 @@ Le produit est en phase prototype avancé. Certains flows sont simulés, certain
 1. L'expérience doit être mobile-first.
 2. Aventure est le hub principal et orchestre l'expérience quotidienne.
 3. Les projets de terrain sont un pilier central.
-4. Le BioDex est un pilier narratif, pédagogique et de collection.
-5. Don pur, soutien producteur et achat produit sont clairement séparés.
-6. L'utilisateur doit pouvoir distinguer engagement, soutien, don, achat et récompense.
+4. Apprendre est une tab structurante : Academy, Atlas, parcours, cours et liens au BioDex.
+5. Le BioDex est un pilier narratif, pédagogique et de collection.
+6. Don pur, soutien producteur et achat produit sont clairement séparés.
+7. L'utilisateur doit pouvoir distinguer engagement, soutien, don, achat, apprentissage et récompense.
 
 ## Ce qui est à tester (pas encore validé)
 
 - Conversion initiale don pur / soutien producteur.
-- Compréhension de la distinction Graines / Crédits Impact.
+- Compréhension de la distinction Graines / Credits Impact.
+- Place exacte d'Apprendre dans la rétention quotidienne.
 - Place exacte de la boutique sans brouiller la mission.
 - Modèle RSE / B2B.
 - Abonnement Ambassadeur comme pilier de revenus.

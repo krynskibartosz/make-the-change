@@ -43,6 +43,7 @@ Un projet peut avoir :
 - Une mission ou un défi sans action terrain réelle.
 - Une logique aléatoire.
 - Un mécanisme prototype non documenté.
+- Un solde élevé de Graines ou Credits Impact.
 
 ---
 
@@ -51,6 +52,14 @@ Un projet peut avoir :
 Les Graines peuvent **enrichir** une fiche BioDex déjà débloquée (accès à plus d'informations, niveau 2).
 
 Les Graines ne peuvent **pas débloquer** une espèce sans action terrain liée à un projet. L'enrichissement ≠ le déblocage.
+
+---
+
+## Liens avec Apprendre
+
+`[ACTUEL_CODE]` La tab Apprendre utilise les espèces débloquées pour recommander des contenus liés aux rôles écologiques, aux projets, aux écosystèmes et à la Toile vivante.
+
+`[CIBLE_VALIDEE]` Apprendre peut renforcer la compréhension d'une espèce, mais ne doit pas débloquer seul le BioDex.
 
 ---
 
@@ -81,6 +90,7 @@ Ne pas confondre les deux. Préciser quand il s'agit d'une rareté de jeu, et qu
 - "Rôle écologique de cette espèce"
 - "Projet lié à cette espèce"
 - "Tu as soutenu un projet lié à cette espèce"
+- "Découvre pourquoi cette espèce compte dans son écosystème"
 
 ---
 
@@ -90,6 +100,7 @@ Ne pas confondre les deux. Préciser quand il s'agit d'une rareté de jeu, et qu
 - "Cette espèce est sauvée" (non prouvable)
 - "Espèce sauvée" ou "Espèce restaurée" (sauf preuve opérationnelle)
 - "Ta collection prouve ton impact" (collection ≠ preuve terrain)
+- "Tu as débloqué cette espèce grâce à un quiz" (Academy seule ≠ déblocage BioDex)
 
 ---
 
