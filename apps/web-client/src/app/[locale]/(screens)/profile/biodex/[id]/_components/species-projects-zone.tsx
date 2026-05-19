@@ -29,47 +29,6 @@ function ImpactIcon({ kind, className }: { kind: ProjectMapImpactKind; className
   return <Leaf className={className} aria-hidden='true' />
 }
 
-function SingleProjectCard({ project, locale }: { project: LinkedProject; locale: string }) {
-  const impact = getProjectImpactDisplay({ current_funding: project.current_funding, type: project.type })
-  const location = resolveLocationDisplay(project.address_country_code, project.address_city, locale)
-  const imageUrl = sanitizeImageUrl(project.hero_image_url)
-  const name = getLocalizedContent(project.name_i18n, locale, project.name_default ?? 'Projet')
-
-  return (
-    <Link
-      href={`/projects/${project.slug}`}
-      className='block overflow-hidden rounded-3xl border border-white/8 bg-white/[0.045] transition-colors active:bg-white/[0.07]'
-    >
-      <div className='aspect-[16/9] w-full overflow-hidden bg-white/5'>
-        {imageUrl ? (
-          <img src={imageUrl} alt={name} className='h-full w-full object-cover' loading='lazy' />
-        ) : (
-          <div className='h-full w-full bg-white/5' aria-hidden='true' />
-        )}
-      </div>
-      <div className='px-4 py-3'>
-        {location && (
-          <p className='mb-1 text-[11px] text-white/40'>
-            {location.flag} {location.label}
-          </p>
-        )}
-        <p className='text-sm font-black leading-snug text-white/90'>{name}</p>
-        {impact.value > 0 && (
-          <div className='mt-2 flex items-center gap-1.5'>
-            <ImpactIcon
-              kind={impact.kind}
-              className={`h-3.5 w-3.5 shrink-0 ${IMPACT_ICON_COLOR[impact.kind]}`}
-            />
-            <p className='text-xs text-white/55'>
-              <span className='font-black tabular-nums text-white/85'>{formatCompact(impact.value)}</span>{' '}
-              {impact.label}
-            </p>
-          </div>
-        )}
-      </div>
-    </Link>
-  )
-}
 
 function CarouselProjectCard({ project, locale }: { project: LinkedProject; locale: string }) {
   const impact = getProjectImpactDisplay({ current_funding: project.current_funding, type: project.type })
@@ -156,7 +115,6 @@ export function SpeciesProjectsZone({ linkedProjects, linkedPartners }: SpeciesP
   )
   const hasStats = impactStats.length > 0
 
-  const firstProject = linkedProjects[0]
   const projectsLabel = linkedProjects.length === 1 ? 'Projet lié' : 'Projets liés'
   const partnersLabel = linkedPartners.length === 1 ? 'Partenaire associé' : 'Partenaires associés'
 
@@ -202,18 +160,15 @@ export function SpeciesProjectsZone({ linkedProjects, linkedPartners }: SpeciesP
       </div>
 
       {/* Project carousel */}
-      {linkedProjects.length === 1 && firstProject ? (
-        <SingleProjectCard project={firstProject} locale={locale} />
-      ) : linkedProjects.length > 1 ? (
+      {linkedProjects.length > 0 && (
         <div className='relative'>
           <div className='flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
             {linkedProjects.map((project) => (
               <CarouselProjectCard key={project.id ?? project.slug} project={project} locale={locale} />
             ))}
           </div>
-          <div className='pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#0B0F15] to-transparent' />
         </div>
-      ) : null}
+      )}
 
       {/* Partners */}
       {linkedPartners.length > 0 && (
