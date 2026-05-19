@@ -2,8 +2,15 @@
 
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Search } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@/i18n/navigation'
+import {
+  type AtlasCameraState,
+  constrainAtlasCamera,
+  getAtlasCameraAutoView,
+  zoomAtlasCameraAtPoint,
+} from '@/lib/learning/atlas-camera'
 import type {
   AtlasKinnuMapView,
   AtlasSubdomainConfig,
@@ -18,6 +25,10 @@ const ARTBOARD_HEIGHT = 1400
 const HEX_RADIUS = 27
 const SUBDOMAIN_HEX_RADIUS = 20
 const SQRT_3 = Math.sqrt(3)
+const TAP_MOVEMENT_THRESHOLD = 8
+const WORLD_AUTO_SCALE = 0.9
+const DETAIL_AUTO_SCALE = 1.48
+const DETAIL_AUTO_RADIUS = 230
 
 type CameraTransform = {
   x: number
@@ -76,6 +87,14 @@ function getMapDimensions(viewport: ViewportSize) {
   }
 }
 
+function getCameraConstraints(viewport: ViewportSize) {
+  return {
+    minScale: viewport.width < 768 ? 0.72 : 0.82,
+    maxScale: viewport.width < 768 ? 2.7 : 2.45,
+    overscroll: viewport.width < 768 ? 128 : 180,
+  }
+}
+
 function getWorldTransform(viewport: ViewportSize, mapWidth: number): CameraTransform {
   return {
     x: viewport.width / 2 - mapWidth * (viewport.width < 768 ? 0.43 : 0.5),
@@ -127,10 +146,10 @@ function AtlasHeader({
   onBackToWorld: () => void
 }) {
   const backClassName =
-    'grid h-12 w-12 place-items-center rounded-full bg-white text-[#111] shadow-[0_18px_44px_rgba(0,0,0,0.28)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
+    'grid h-11 w-11 place-items-center rounded-full bg-white/94 text-[#111] shadow-[0_16px_36px_rgba(0,0,0,0.26)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
 
   return (
-    <header className="pointer-events-none absolute inset-x-0 top-0 z-50 px-5 pt-[max(1.2rem,env(safe-area-inset-top))] md:px-10">
+    <header className="pointer-events-none absolute inset-x-0 top-0 z-50 px-4 pt-[max(1rem,env(safe-area-inset-top))] md:px-8">
       <div className="flex items-start justify-between gap-4">
         {selectedTerritory ? (
           <button
@@ -139,7 +158,7 @@ function AtlasHeader({
             onClick={onBackToWorld}
             className={cn(backClassName, 'pointer-events-auto')}
           >
-            <ArrowLeft className="h-6 w-6" aria-hidden="true" />
+            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
           </button>
         ) : (
           <Link
@@ -147,28 +166,26 @@ function AtlasHeader({
             aria-label="Retour à Apprendre"
             className={cn(backClassName, 'pointer-events-auto')}
           >
-            <ArrowLeft className="h-6 w-6" aria-hidden="true" />
+            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
           </Link>
         )}
-
-        <Link
-          href="/learn/courses"
-          aria-label="Rechercher un cours"
-          className="pointer-events-auto grid h-16 w-16 place-items-center rounded-full bg-white text-[#111] shadow-[0_18px_44px_rgba(0,0,0,0.28)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:h-[4.5rem] md:w-[4.5rem]"
-        >
-          <Search className="h-8 w-8" strokeWidth={3.5} aria-hidden="true" />
-        </Link>
-      </div>
-
-      <div className="mt-7 max-w-[21rem] md:mt-5 md:max-w-[28rem]">
-        <h1 className="text-[3.6rem] font-black leading-[0.86] tracking-normal text-white drop-shadow-[0_16px_32px_rgba(0,0,0,0.35)] md:text-[4.7rem]">
-          Atlas
-        </h1>
-        <p className="mt-2 text-[1.15rem] font-black leading-tight text-white/58 md:text-[1.35rem]">
-          du vivant
-        </p>
       </div>
     </header>
+  )
+}
+
+function AtlasSearchDock() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
+      <button
+        type="button"
+        aria-label="Recherche dans l'Atlas bientôt disponible"
+        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white px-5 font-black text-[#111] shadow-[0_18px_48px_rgba(0,0,0,0.34)] transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
+      >
+        <Search className="h-5 w-5 shrink-0" strokeWidth={3.2} aria-hidden="true" />
+        <span className="truncate text-[0.98rem]">Rechercher dans l'Atlas</span>
+      </button>
+    </div>
   )
 }
 
@@ -328,37 +345,36 @@ function SubdomainLabel({
 function AtlasCamera({
   map,
   selectedTerritoryId,
+  camera,
+  isInteracting,
   onSelectTerritory,
 }: {
   map: AtlasKinnuMapView
   selectedTerritoryId: LearningDomainId | null
+  camera: AtlasCameraState
+  isInteracting: boolean
   onSelectTerritory: (domainId: LearningDomainId) => void
 }) {
-  const viewport = useViewportSize()
   const reduceMotion = useReducedMotion()
-  const dimensions = getMapDimensions(viewport)
   const selectedTerritory =
     map.territories.find((territory) => territory.domain.id === selectedTerritoryId) ?? null
-  const transform = selectedTerritory
-    ? getDomainTransform(selectedTerritory, viewport, dimensions.width, Boolean(reduceMotion))
-    : getWorldTransform(viewport, dimensions.width)
 
   return (
     <motion.div
       className="absolute left-0 top-0"
       initial={false}
       animate={{
-        x: transform.x,
-        y: transform.y,
-        scale: transform.scale,
+        x: camera.x,
+        y: camera.y,
+        scale: camera.scale,
       }}
       transition={{
-        duration: reduceMotion ? 0.18 : 0.68,
+        duration: isInteracting ? 0 : reduceMotion ? 0.18 : 0.68,
         ease: [0.2, 0.82, 0.2, 1],
       }}
       style={{
-        width: dimensions.width,
-        height: dimensions.height,
+        width: 'var(--atlas-map-width)',
+        height: 'var(--atlas-map-height)',
         transformOrigin: '0 0',
       }}
     >
@@ -428,12 +444,298 @@ function AtlasCamera({
 }
 
 export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
+  const viewport = useViewportSize()
+  const dimensions = useMemo(() => getMapDimensions(viewport), [viewport])
+  const constraints = useMemo(() => getCameraConstraints(viewport), [viewport])
+  const mainRef = useRef<HTMLElement | null>(null)
+  const pointersRef = useRef(new Map<number, { x: number; y: number }>())
+  const autoViewPointRef = useRef<{ x: number; y: number } | null>(null)
+  const gestureRef = useRef<{
+    startCamera: AtlasCameraState
+    startPoint: { x: number; y: number }
+    startMidpoint: { x: number; y: number }
+    startDistance: number
+    moved: boolean
+  } | null>(null)
   const [selectedTerritoryId, setSelectedTerritoryId] = useState<LearningDomainId | null>(null)
+  const [camera, setCamera] = useState<AtlasCameraState>(() =>
+    getWorldTransform(
+      { width: 390, height: 844 },
+      getMapDimensions({ width: 390, height: 844 }).width,
+    ),
+  )
+  const cameraRef = useRef<AtlasCameraState>(camera)
+  const wheelIdleTimeoutRef = useRef<number | null>(null)
+  const [isInteracting, setIsInteracting] = useState(false)
   const selectedTerritory =
     map.territories.find((territory) => territory.domain.id === selectedTerritoryId) ?? null
+  const autoViewTargets = useMemo(
+    () =>
+      map.territories.map((territory) => ({
+        id: territory.domain.id,
+        ...getTerritoryPoint(territory),
+      })),
+    [map.territories],
+  )
+  const constrainCamera = useCallback(
+    (nextCamera: AtlasCameraState) =>
+      constrainAtlasCamera(nextCamera, viewport, dimensions, constraints),
+    [viewport, dimensions, constraints],
+  )
+  const moveCamera = useCallback(
+    (nextCamera: AtlasCameraState) => {
+      const constrainedCamera = constrainCamera(nextCamera)
+
+      cameraRef.current = constrainedCamera
+      setCamera(constrainedCamera)
+    },
+    [constrainCamera],
+  )
+  const getViewportPoint = useCallback((event: { clientX: number; clientY: number }) => {
+    const rect = mainRef.current?.getBoundingClientRect()
+
+    return {
+      x: event.clientX - (rect?.left ?? 0),
+      y: event.clientY - (rect?.top ?? 0),
+    }
+  }, [])
+  const setGestureFromPointers = useCallback((nextCamera: AtlasCameraState) => {
+    const pointers = Array.from(pointersRef.current.values())
+    const firstPointer = pointers[0] ?? { x: 0, y: 0 }
+    const secondPointer = pointers[1]
+    const midpoint = secondPointer
+      ? {
+          x: (firstPointer.x + secondPointer.x) / 2,
+          y: (firstPointer.y + secondPointer.y) / 2,
+        }
+      : firstPointer
+    const distance = secondPointer
+      ? Math.hypot(secondPointer.x - firstPointer.x, secondPointer.y - firstPointer.y)
+      : 0
+
+    gestureRef.current = {
+      startCamera: nextCamera,
+      startPoint: firstPointer,
+      startMidpoint: midpoint,
+      startDistance: distance,
+      moved: false,
+    }
+  }, [])
+  const snapToWorld = useCallback(() => {
+    setIsInteracting(false)
+    setSelectedTerritoryId(null)
+    moveCamera(getWorldTransform(viewport, dimensions.width))
+  }, [dimensions.width, moveCamera, viewport])
+  const snapToTerritory = useCallback(
+    (domainId: LearningDomainId) => {
+      const territory = map.territories.find((item) => item.domain.id === domainId)
+
+      if (!territory) return
+
+      setIsInteracting(false)
+      setSelectedTerritoryId(domainId)
+      moveCamera(getDomainTransform(territory, viewport, dimensions.width, false))
+    },
+    [dimensions.width, map.territories, moveCamera, viewport],
+  )
+
+  useEffect(() => {
+    moveCamera(getWorldTransform(viewport, dimensions.width))
+  }, [dimensions.width, moveCamera, viewport])
+
+  useEffect(() => {
+    cameraRef.current = camera
+  }, [camera])
+
+  const applyAutoView = useCallback(
+    (nextCamera: AtlasCameraState, options?: { snapWorld?: boolean }) => {
+      const autoView = getAtlasCameraAutoView(
+        nextCamera,
+        viewport,
+        dimensions,
+        { width: ARTBOARD_WIDTH, height: ARTBOARD_HEIGHT },
+        autoViewTargets,
+        {
+          worldScale: WORLD_AUTO_SCALE,
+          detailScale: DETAIL_AUTO_SCALE,
+          detailRadius: DETAIL_AUTO_RADIUS,
+          viewportPoint: autoViewPointRef.current ?? undefined,
+        },
+      )
+
+      if (autoView.mode === 'world') {
+        setSelectedTerritoryId(null)
+
+        if (options?.snapWorld) {
+          setIsInteracting(false)
+          moveCamera(getWorldTransform(viewport, dimensions.width))
+        }
+
+        return
+      }
+
+      if (autoView.mode === 'domain') {
+        setSelectedTerritoryId(autoView.targetId as LearningDomainId)
+      }
+    },
+    [autoViewTargets, dimensions, moveCamera, viewport],
+  )
+
+  useEffect(() => {
+    applyAutoView(camera)
+  }, [applyAutoView, camera])
+
+  useEffect(() => {
+    const element = mainRef.current
+
+    if (!element) return
+
+    const wheelElement = element
+
+    function handleNativeWheel(event: WheelEvent) {
+      event.preventDefault()
+      setIsInteracting(true)
+
+      const rect = wheelElement.getBoundingClientRect()
+      const point = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      }
+      autoViewPointRef.current = point
+      const wheelIntensity = event.ctrlKey || Math.abs(event.deltaY) < 60 ? 0.0042 : 0.0018
+      const nextScale = cameraRef.current.scale * Math.exp(-event.deltaY * wheelIntensity)
+
+      moveCamera(zoomAtlasCameraAtPoint(cameraRef.current, point, nextScale))
+
+      if (wheelIdleTimeoutRef.current) {
+        window.clearTimeout(wheelIdleTimeoutRef.current)
+      }
+
+      wheelIdleTimeoutRef.current = window.setTimeout(() => {
+        setIsInteracting(false)
+        applyAutoView(cameraRef.current, { snapWorld: true })
+      }, 80)
+    }
+
+    wheelElement.addEventListener('wheel', handleNativeWheel, { passive: false })
+
+    return () => {
+      wheelElement.removeEventListener('wheel', handleNativeWheel)
+
+      if (wheelIdleTimeoutRef.current) {
+        window.clearTimeout(wheelIdleTimeoutRef.current)
+      }
+    }
+  }, [applyAutoView, moveCamera])
+
+  function handlePointerDown(event: ReactPointerEvent<HTMLElement>) {
+    if ((event.target as HTMLElement).closest('a,button')) {
+      return
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId)
+    const pointer = getViewportPoint(event)
+
+    pointersRef.current.set(event.pointerId, pointer)
+    autoViewPointRef.current = pointer
+    setIsInteracting(true)
+    setGestureFromPointers(cameraRef.current)
+  }
+
+  function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
+    if (!pointersRef.current.has(event.pointerId) || !gestureRef.current) {
+      return
+    }
+
+    pointersRef.current.set(event.pointerId, getViewportPoint(event))
+    const pointers = Array.from(pointersRef.current.values())
+    const gesture = gestureRef.current
+
+    if (pointers.length >= 2) {
+      const firstPointer = pointers[0]
+      const secondPointer = pointers[1]
+
+      if (!firstPointer || !secondPointer) {
+        return
+      }
+
+      const midpoint = {
+        x: (firstPointer.x + secondPointer.x) / 2,
+        y: (firstPointer.y + secondPointer.y) / 2,
+      }
+      autoViewPointRef.current = midpoint
+      const distance = Math.hypot(
+        secondPointer.x - firstPointer.x,
+        secondPointer.y - firstPointer.y,
+      )
+      const nextScale =
+        gesture.startDistance > 0
+          ? gesture.startCamera.scale * (distance / gesture.startDistance)
+          : gesture.startCamera.scale
+      const anchoredCamera = zoomAtlasCameraAtPoint(
+        gesture.startCamera,
+        gesture.startMidpoint,
+        nextScale,
+      )
+
+      gesture.moved = true
+      moveCamera({
+        ...anchoredCamera,
+        x: anchoredCamera.x + midpoint.x - gesture.startMidpoint.x,
+        y: anchoredCamera.y + midpoint.y - gesture.startMidpoint.y,
+      })
+      return
+    }
+
+    const pointer = pointers[0]
+
+    if (!pointer) {
+      return
+    }
+
+    const deltaX = pointer.x - gesture.startPoint.x
+    const deltaY = pointer.y - gesture.startPoint.y
+
+    if (Math.hypot(deltaX, deltaY) > TAP_MOVEMENT_THRESHOLD) {
+      gesture.moved = true
+    }
+
+    moveCamera({
+      ...gesture.startCamera,
+      x: gesture.startCamera.x + deltaX,
+      y: gesture.startCamera.y + deltaY,
+    })
+  }
+
+  function handlePointerEnd(event: ReactPointerEvent<HTMLElement>) {
+    pointersRef.current.delete(event.pointerId)
+
+    if (pointersRef.current.size === 0) {
+      setIsInteracting(false)
+      gestureRef.current = null
+      applyAutoView(cameraRef.current, { snapWorld: true })
+      return
+    }
+
+    setGestureFromPointers(cameraRef.current)
+  }
 
   return (
-    <main className="relative h-[100dvh] min-h-[40rem] overflow-hidden bg-[#202020] text-white">
+    <main
+      ref={mainRef}
+      className="relative h-[100dvh] min-h-[40rem] touch-none overflow-hidden bg-[#202020] text-white"
+      style={
+        {
+          '--atlas-map-width': `${dimensions.width}px`,
+          '--atlas-map-height': `${dimensions.height}px`,
+        } as CSSProperties
+      }
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerCancel={handlePointerEnd}
+      onPointerUp={handlePointerEnd}
+    >
+      <h1 className="sr-only">Atlas du vivant</h1>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.055),transparent_28%),linear-gradient(180deg,#242424_0%,#202020_52%,#1f1f1f_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-72 bg-gradient-to-b from-[#202020] via-[#202020]/92 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-36 bg-gradient-to-t from-[#202020] via-[#202020]/90 to-transparent" />
@@ -441,12 +743,12 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       <AtlasCamera
         map={map}
         selectedTerritoryId={selectedTerritoryId}
-        onSelectTerritory={setSelectedTerritoryId}
+        camera={camera}
+        isInteracting={isInteracting}
+        onSelectTerritory={snapToTerritory}
       />
-      <AtlasHeader
-        selectedTerritory={selectedTerritory}
-        onBackToWorld={() => setSelectedTerritoryId(null)}
-      />
+      <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
+      <AtlasSearchDock />
       <div className="sr-only" aria-live="polite">
         {selectedTerritory
           ? `${selectedTerritory.domain.title} affiche ses sous-domaines`
