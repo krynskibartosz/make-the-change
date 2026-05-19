@@ -69,7 +69,7 @@ export function ProducerHero({
           src={coverImage}
           alt={name}
           loading="eager"
-          className="h-full w-full object-cover"
+          className="absolute inset-x-0 -top-6 h-[calc(100%+48px)] w-full object-cover"
         />
         {/* Gradient renforcé : lisibilité du titre sur toutes les images */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/40 to-transparent" />

@@ -25,7 +25,7 @@ export function SpeciesHero({ species }: SpeciesHeroProps) {
           ref={imageRef}
           src={heroImage}
           alt={species.name_default}
-          className='absolute inset-0 h-full w-full object-cover'
+          className='absolute inset-x-0 -top-6 h-[calc(100%+48px)] w-full object-cover'
         />
         {/* Dégradé sombre haut pour la nav */}
         <div className='absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent' />

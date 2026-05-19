@@ -1,16 +1,13 @@
-'use client'
-
 import { useEffect, type RefObject } from 'react'
 
 interface UseHeroParallaxOptions {
   maxOffset?: number
-  initialScale?: number
   scrollRange?: number
 }
 
 export function useHeroParallax<T extends HTMLElement>(
   imageRef: RefObject<T | null>,
-  { maxOffset = 24, initialScale = 1.04, scrollRange = 260 }: UseHeroParallaxOptions = {},
+  { maxOffset = 24, scrollRange = 260 }: UseHeroParallaxOptions = {},
 ) {
   useEffect(() => {
     const image = imageRef.current
@@ -22,8 +19,6 @@ export function useHeroParallax<T extends HTMLElement>(
     if (!scrollContainer) return
 
     image.style.willChange = 'transform'
-    image.style.transformOrigin = 'center'
-    image.style.transform = `translateY(0px) scale(${initialScale})`
 
     let rafId: number | null = null
 
@@ -32,9 +27,7 @@ export function useHeroParallax<T extends HTMLElement>(
       rafId = requestAnimationFrame(() => {
         rafId = null
         const progress = Math.min(scrollContainer.scrollTop / scrollRange, 1)
-        const translateY = -(maxOffset * progress)
-        const scale = initialScale - (initialScale - 1) * progress
-        image.style.transform = `translateY(${translateY}px) scale(${scale})`
+        image.style.transform = `translateY(${-(maxOffset * progress)}px)`
       })
     }
 
@@ -46,5 +39,5 @@ export function useHeroParallax<T extends HTMLElement>(
       image.style.willChange = ''
       image.style.transform = ''
     }
-  }, [imageRef, maxOffset, initialScale, scrollRange])
+  }, [imageRef, maxOffset, scrollRange])
 }
