@@ -80,14 +80,14 @@ describe('project map data', () => {
     expect(getProjectFocusCameraOptions([4.3517, 50.8503], 2)).toEqual({
       center: [4.3517, 50.8503],
       zoom: 3.2,
-      offset: [0, -92],
+      offset: [0, -200],
       duration: 480,
     })
 
     expect(getProjectFocusCameraOptions([4.3517, 50.8503], 5)).toEqual({
       center: [4.3517, 50.8503],
       zoom: 5,
-      offset: [0, -92],
+      offset: [0, -200],
       duration: 480,
     })
   })

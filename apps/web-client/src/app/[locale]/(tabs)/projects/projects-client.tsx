@@ -1,7 +1,7 @@
 'use client'
 
 import { LayoutGroup, motion, type Transition } from 'framer-motion'
-import { List, Map as MapIcon, MapPin, PawPrint, TreePine, Waves } from 'lucide-react'
+import { Clock, List, Map as MapIcon, MapPin, PawPrint, TreePine, Waves } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -18,7 +18,7 @@ import type {
 import { getProjectImpactDisplay, type ProjectMapImpactKind } from './_features/project-map-data'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type RawClientProject = {
+type ServerProjectPayload = {
   id: string | null
   slug: string | null
   name_default: string | null
@@ -52,7 +52,7 @@ type RawClientProject = {
 }
 
 interface ProjectsClientProps {
-  projects: RawClientProject[]
+  projects: ServerProjectPayload[]
   initialStatus: string
   initialSearch: string
   initialView: 'grid' | 'list' | 'map'
@@ -106,7 +106,7 @@ const IMPACT_KIND_STYLES: Record<ProjectMapImpactKind, { bg: string; icon: strin
 }
 
 const normalizeProject = (
-  project: RawClientProject,
+  project: ServerProjectPayload,
   index: number,
   locale: string,
 ): ClientProject => {
@@ -370,16 +370,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                       <div
                         className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          className={`w-3 h-3 ${impactTheme.icon}`}
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M12 8v4l3 3" />
-                        </svg>
+                        <Clock className={`w-3 h-3 ${impactTheme.icon}`} />
                       </div>
                       <p className="text-[13px] text-white/70">Collecte en cours de démarrage</p>
                     </div>
