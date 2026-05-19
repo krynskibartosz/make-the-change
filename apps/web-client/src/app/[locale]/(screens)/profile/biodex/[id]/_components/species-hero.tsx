@@ -1,7 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Info } from 'lucide-react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
+import { useHeroParallax } from '@/hooks/use-hero-parallax'
 import type { SpeciesContext } from '@/types/species'
 import { getSpeciesHeroImage, getSpeciesEcologicalRole } from './species-helpers'
 
@@ -11,13 +12,17 @@ interface SpeciesHeroProps {
 
 export function SpeciesHero({ species }: SpeciesHeroProps) {
   const [sheetOpen, setSheetOpen] = useState(false)
+  const imageRef = useRef<HTMLImageElement>(null)
   const heroImage = getSpeciesHeroImage(species)
   const ecologicalRole = getSpeciesEcologicalRole(species)
+
+  useHeroParallax(imageRef)
 
   return (
     <>
       <div className='relative w-full overflow-hidden' style={{ minHeight: '420px' }}>
         <img
+          ref={imageRef}
           src={heroImage}
           alt={species.name_default}
           className='absolute inset-0 h-full w-full object-cover'

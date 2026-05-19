@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import type {
   EditorialIdentity,
   ProducerLocation,
@@ -7,6 +8,7 @@ import type {
 } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 import { getRandomProducerImage } from '@/lib/placeholder-images'
 import { getCountryFlag, resolveCountryCode } from '@/lib/location'
+import { useHeroParallax } from '@/hooks/use-hero-parallax'
 import { producerTypography as typo } from './producer-typography'
 
 function getLocationFlag(countryName?: string): string {
@@ -37,6 +39,9 @@ export function ProducerHero({
   editorialIdentity,
   trustLine,
 }: ProducerHeroProps) {
+  const imageRef = useRef<HTMLImageElement>(null)
+  useHeroParallax(imageRef)
+
   const coverImage = visualAssets?.hero || images[0] || getRandomProducerImage(name.length)
   const portraitImage =
     visualAssets?.portrait || images[1] || images[0] || getRandomProducerImage(name.length + 1)
@@ -60,6 +65,7 @@ export function ProducerHero({
       {/* ── Cover Image ── */}
       <div className="relative w-full overflow-hidden bg-[#1A1F26]" style={{ height: 'clamp(280px, 45vw, 420px)' }}>
         <img
+          ref={imageRef}
           src={coverImage}
           alt={name}
           loading="eager"
