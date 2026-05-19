@@ -1,5 +1,5 @@
 'use client'
-import { Package } from 'lucide-react'
+import { Leaf } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -25,52 +25,57 @@ export function SpeciesLinkedProducts({ producers }: SpeciesLinkedProductsProps)
   if (!allProducts.length || !mainProducer) return null
 
   return (
-    <section className='mx-5'>
-      <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-        Savoir-faire lié
-      </p>
-      <div className='rounded-3xl border border-white/8 bg-white/[0.045] p-4'>
-        <div className='flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
-          {allProducts.map((product) => {
-            const imageUrl = sanitizeImageUrl(product.image_url)
-            const name = product.name_default ?? 'Produit'
-            return (
+    <section className='mt-2'>
+      <div className='px-5'>
+        <p className='text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
+          Savoir-faire lié
+        </p>
+        <p className='mt-1 text-[12px] leading-relaxed text-white/40'>
+          Proposé par {mainProducer.producerName}. Ces produits prolongent la découverte du
+          savoir-faire local, sans constituer une preuve d&apos;impact sur l&apos;espèce.
+        </p>
+      </div>
+
+      <ul
+        className='mt-3 flex snap-x gap-3 overflow-x-auto px-5 scroll-pl-5 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none'
+        aria-label='Produits du partenaire'
+      >
+        {allProducts.map((product) => {
+          const imageUrl = sanitizeImageUrl(product.image_url)
+          const name = product.name_default ?? 'Produit'
+          return (
+            <li key={product.id} className='w-36 shrink-0 snap-start'>
               <Link
-                key={product.id}
-                href={`/products/${product.id}`}
-                className='block w-[72px] shrink-0 transition-transform active:scale-[0.97]'
+                href={product.slug ? `/products/${product.slug}` : `/products/${product.id}`}
+                className='group flex flex-col gap-2'
               >
-                <div className='aspect-square w-full overflow-hidden rounded-2xl border border-white/8 bg-white/5'>
+                <div className='relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-white/5'>
                   {imageUrl ? (
                     <img
                       src={imageUrl}
                       alt={name}
-                      className='h-full w-full object-cover'
+                      className='h-full w-full object-cover transition-transform duration-500 group-active:scale-105'
                       loading='lazy'
                     />
                   ) : (
                     <div className='flex h-full items-center justify-center'>
-                      <Package className='h-5 w-5 text-white/25' aria-hidden='true' />
+                      <Leaf className='h-6 w-6 text-white/20' aria-hidden='true' />
                     </div>
                   )}
                 </div>
-                <p className='mt-2 line-clamp-2 text-[11px] font-semibold leading-tight text-white/65'>
+                <p className='line-clamp-2 text-[13px] font-semibold leading-snug text-white/75'>
                   {name}
                 </p>
               </Link>
-            )
-          })}
-        </div>
+            </li>
+          )
+        })}
+      </ul>
 
-        <p className='mt-4 text-xs leading-relaxed text-white/40'>
-          Proposés par {mainProducer.producerName}, partenaire associé au projet. Ces produits
-          prolongent la découverte du savoir-faire local, sans constituer une preuve d&apos;impact
-          sur l&apos;espèce.
-        </p>
-
+      <div className='px-5'>
         <Link
           href={`/producers/${mainProducer.producerSlug}`}
-          className='mt-3 flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] py-2.5 text-sm font-semibold text-white/60 active:bg-white/[0.07]'
+          className='mt-1 flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] py-2.5 text-sm font-semibold text-white/55 active:bg-white/[0.07]'
         >
           Voir le savoir-faire de {mainProducer.producerName}
         </Link>
