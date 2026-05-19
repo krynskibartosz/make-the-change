@@ -2,18 +2,27 @@
 
 import { motion } from 'framer-motion'
 import { HeroParallaxBackground } from '@/app/[locale]/(site)/(home)/_components/layout/hero-parallax-background'
+import { useAboutScrollContainer } from './about-scroll-shell'
 import type { AboutHeroProps } from './about.types'
 
 const HERO_VIDEO_URL = '/videos/about-video.mp4'
 const HERO_POSTER_URL = '/videos/about-poster.png'
 
 export function AboutHeroManifest({ overline, title, subtitle, imageAlt }: AboutHeroProps) {
+  const scrollContainer = useAboutScrollContainer()
+
   return (
     <section
       className="relative flex min-h-[100svh] flex-col overflow-hidden bg-black px-6 pb-16 pt-12"
       aria-label={imageAlt}
     >
-      <HeroParallaxBackground videoUrl={HERO_VIDEO_URL} posterUrl={HERO_POSTER_URL} />
+      <HeroParallaxBackground
+        videoUrl={HERO_VIDEO_URL}
+        posterUrl={HERO_POSTER_URL}
+        containerRef={scrollContainer ?? undefined}
+        inputRange={[0, 400]}
+        outputRange={['0%', '8%']}
+      />
 
       {/* Same gradient structure as home: fade to page background from bottom */}
       <motion.div

@@ -6,17 +6,23 @@ import { useRef } from 'react'
 export function HeroParallaxBackground({
   videoUrl,
   posterUrl,
+  containerRef,
+  inputRange = [0, 800],
+  outputRange = ['0%', '40%'],
 }: {
   videoUrl: string
   posterUrl: string
+  containerRef?: React.RefObject<HTMLElement | null>
+  inputRange?: [number, number]
+  outputRange?: [string, string]
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
-  // Utilisation directe du scroll global (plus robuste si le ref absolute pose souci)
-  const { scrollY } = useScroll()
+  const { scrollY } = useScroll(
+    containerRef ? { container: containerRef as React.RefObject<HTMLElement> } : undefined,
+  )
 
-  // On amplifie grandement l'effet : quand on scrolle 800px vers le bas, la vidéo descend de 40%
-  const y = useTransform(scrollY, [0, 800], ['0%', '40%'])
+  const y = useTransform(scrollY, inputRange, outputRange)
 
   return (
     <div ref={ref} className="absolute inset-0 h-full w-full overflow-hidden">
