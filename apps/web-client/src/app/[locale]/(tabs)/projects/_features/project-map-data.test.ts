@@ -52,20 +52,20 @@ describe('project map data', () => {
       slug: 'bee-sanctuary',
       unitLabel: 'bee',
       impactValue: 50000,
-      impactLabel: 'abeilles protégées',
+      impactLabel: 'abeilles associées',
     })
   })
 
   it('uses project type to compute compact map impact labels', () => {
     expect(getProjectImpactDisplay({ current_funding: 300, type: 'orchard' })).toEqual({
       value: 2,
-      label: 'oliviers protégés',
+      label: 'oliviers soutenus',
       kind: 'orchard',
     })
 
     expect(getProjectImpactDisplay({ current_funding: 90, type: 'coral' })).toEqual({
       value: 3,
-      label: 'coraux plantés',
+      label: 'fragments coralliens associés',
       kind: 'reef',
     })
 

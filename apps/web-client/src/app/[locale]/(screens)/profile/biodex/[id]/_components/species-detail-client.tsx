@@ -13,6 +13,7 @@ import { SpeciesWhyItMatters } from './species-why-it-matters'
 import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
 import { SpeciesDocumentationSection } from './species-documentation-section'
+import { SpeciesProjectStats } from './species-project-stats'
 
 interface SpeciesDetailClientProps {
   species: SpeciesContext
@@ -52,6 +53,12 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
 
         {/* 7. Ce qui est documenté */}
         <SpeciesDocumentationSection species={species} />
+
+        {/* 8. Repères des projets liés */}
+        <SpeciesProjectStats
+          linkedProjects={linkedProjects}
+          partnersCount={linkedPartners.length}
+        />
 
         {/* 6. Approfondir dans Apprendre */}
         {learningCourses.length > 0 && (
