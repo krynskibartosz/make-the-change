@@ -223,7 +223,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
   const primaryProofs = selectPrimaryProofs(cards)
   const primaryLabelSet = new Set(primaryProofs.map(c => c.label))
 
-  const MAX_CHIPS = 5
+  const MAX_CHIPS = 4
   const allSecondary = cards
     .filter(c => !primaryLabelSet.has(c.label))
     .filter(c => c.value !== 'À confirmer')
@@ -239,7 +239,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
         {primaryProofs.length > 0 && (
           <div className="mb-4">
             <h2 className="text-[17px] font-bold text-white/80">
-              Repères documentés
+              Ce qui est documenté
             </h2>
             <p className="mt-1 mb-4 text-[12px] leading-snug text-white/40">
               Des repères concrets pour comprendre leur méthode.
@@ -345,7 +345,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
 
                 {activeContext.caution && (
                   <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
-                    <p className="text-[11px] leading-snug text-white/40 italic">
+                    <p className="text-[11px] leading-snug text-white/50 italic">
                       {activeContext.caution}
                     </p>
                   </div>
@@ -378,7 +378,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
 
                 {activeCard.caution && (
                   <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
-                    <p className="text-[11px] leading-snug text-white/40 italic">
+                    <p className="text-[11px] leading-snug text-white/50 italic">
                       {activeCard.caution}
                     </p>
                   </div>

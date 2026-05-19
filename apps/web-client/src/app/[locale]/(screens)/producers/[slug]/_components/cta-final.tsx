@@ -45,7 +45,7 @@ export function CtaFinal({
       {/* CTA interne — primaire */}
       <Link
         href={internalHref}
-        className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-white text-sm font-black text-[#0B0F15] transition-all active:scale-95"
+        className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] text-sm font-bold text-white/90 transition-all active:scale-95 active:bg-white/[0.10]"
       >
         Voir les projets liés
         <ArrowRight className="h-3.5 w-3.5" />
@@ -63,7 +63,7 @@ export function CtaFinal({
             {website.includes('linktr.ee') ? 'Liens officiels' : 'Site officiel'}
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
-          <p className="mt-1.5 text-center text-[11px] text-white/25">
+          <p className="mt-1.5 text-center text-[11px] text-white/35">
             {extractHostname(website)}
           </p>
         </div>

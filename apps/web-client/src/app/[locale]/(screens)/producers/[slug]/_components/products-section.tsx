@@ -81,7 +81,7 @@ export function ProductsSection({
                           value={product.price_points}
                           className="text-[13px] font-bold"
                         />
-                        <span className="text-[10px] text-white/35">Crédits Impact</span>
+                        <span className="text-[10px] text-white/45">Credits Impact</span>
                       </div>
                     )}
                   </div>
@@ -104,7 +104,7 @@ export function ProductsSection({
             <h3 className="text-[17px] font-bold text-white/80">
               {partnerCatalog.title}
             </h3>
-            <p className="mt-1 flex items-start gap-1.5 text-[12px] leading-snug text-white/50">
+            <p className="mt-1 flex items-start gap-1.5 text-[12px] leading-snug text-white/55">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               <span>{partnerCatalog.disclaimer}</span>
             </p>

@@ -69,11 +69,6 @@ export function ProducerDetails({
       <ProjectsSection
         projects={producer.projects}
         impactSummary={producer.impactSummary}
-        subtitle={
-          producer.editorialIdentity?.shortName
-            ? `Des actions portées par ${producer.editorialIdentity.shortName} et documentées dans l'app.`
-            : undefined
-        }
       />
 
       {/* 5. Espèces */}

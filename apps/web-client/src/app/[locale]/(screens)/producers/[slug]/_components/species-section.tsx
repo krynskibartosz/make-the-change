@@ -33,7 +33,7 @@ type SpeciesSectionProps = {
 export function SpeciesSection({
   species,
   title = "Le vivant autour de leurs projets",
-  subtitle = "Pollinisateurs et espèces associées aux milieux apicoles."
+  subtitle = "Espèces et milieux associés aux projets documentés."
 }: SpeciesSectionProps) {
   if (species.length === 0) return null
 
