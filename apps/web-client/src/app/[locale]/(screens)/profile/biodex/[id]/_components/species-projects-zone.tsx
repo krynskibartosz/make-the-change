@@ -114,9 +114,9 @@ function PartnerRow({ partner, locale }: { partner: SpeciesLinkedPartnerData; lo
   return (
     <Link
       href={`/producers/${partner.slug}`}
-      className='flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.04] px-3 py-2.5 transition-colors active:bg-white/[0.07]'
+      className='flex gap-4 py-4 transition-opacity active:opacity-60'
     >
-      <div className='h-9 w-9 shrink-0 overflow-hidden rounded-xl bg-white/5'>
+      <div className='h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white/5'>
         {imageUrl ? (
           <img src={imageUrl} alt={partner.name} className='h-full w-full object-cover' loading='lazy' />
         ) : (
@@ -124,14 +124,19 @@ function PartnerRow({ partner, locale }: { partner: SpeciesLinkedPartnerData; lo
         )}
       </div>
       <div className='min-w-0 flex-1'>
-        <p className='text-sm font-black text-white/85'>{partner.name}</p>
+        <div className='flex items-start justify-between gap-2'>
+          <p className='text-[15px] font-semibold leading-tight text-white'>{partner.name}</p>
+          <ChevronRight className='mt-0.5 h-4 w-4 shrink-0 text-white/28' aria-hidden='true' />
+        </div>
         {location && (
-          <p className='text-[11px] text-white/35'>
+          <p className='mt-0.5 text-[11px] font-bold uppercase tracking-wider text-white/32'>
             {location.flag} {location.label}
           </p>
         )}
+        {partner.tagline && (
+          <p className='mt-1 text-[13px] font-medium leading-snug text-white/50'>{partner.tagline}</p>
+        )}
       </div>
-      <ChevronRight className='h-4 w-4 shrink-0 text-white/20' aria-hidden='true' />
     </Link>
   )
 }
@@ -212,11 +217,13 @@ export function SpeciesProjectsZone({ linkedProjects, linkedPartners }: SpeciesP
 
       {/* Partners */}
       {linkedPartners.length > 0 && (
-        <div className='space-y-2'>
+        <ul className='m-0 list-none divide-y divide-white/[0.07] p-0'>
           {linkedPartners.map((partner) => (
-            <PartnerRow key={partner.slug} partner={partner} locale={locale} />
+            <li key={partner.slug}>
+              <PartnerRow partner={partner} locale={locale} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </section>
   )
