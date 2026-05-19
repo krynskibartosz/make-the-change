@@ -11,7 +11,7 @@ const IUCN_LABELS: Record<string, string> = {
   VU: 'Vulnérable',
   NT: 'Quasi menacé',
   LC: 'Préoccupation mineure',
-  DD: 'Données limitées',
+  DD: 'Données locales limitées',
   EW: 'Éteint à l\'état sauvage',
   EX: 'Éteint',
 }
@@ -70,6 +70,7 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
         Ce qui est documenté
       </p>
       <div className='space-y-2'>
+
         <DocCard
           label='Image principale'
           value='Représentation naturaliste'
@@ -124,15 +125,38 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
           sheetContent={
             <div className='space-y-3'>
               <p>
-                Le statut de conservation est issu des données UICN disponibles. Il peut évoluer
-                selon les évaluations terrain.
+                Le statut de conservation peut varier selon le périmètre évalué : espèce,
+                sous-espèce, population sauvage ou population locale.
+              </p>
+              <p>
+                Les données locales liées au projet restent à documenter avec le partenaire.
               </p>
               <p className='text-xs text-white/40'>
-                Ce statut n&apos;est pas une validation de l&apos;impact du projet sur l&apos;espèce.
+                Ce statut n&apos;est pas une validation de l&apos;impact du projet sur
+                l&apos;espèce.
               </p>
             </div>
           }
         />
+
+        <DocCard
+          label='Données scientifiques'
+          value='À vérifier avant publication'
+          sheetTitle='Données scientifiques'
+          sheetContent={
+            <div className='space-y-3'>
+              <p>
+                Certaines données scientifiques présentes dans cette fiche sont issues de recherches
+                documentaires et n&apos;ont pas encore été vérifiées par un expert terrain ou une
+                publication scientifique identifiable.
+              </p>
+              <p className='text-xs text-white/40'>
+                Make the Change s&apos;engage à afficher les données avec leur niveau de fiabilité.
+              </p>
+            </div>
+          }
+        />
+
       </div>
 
       <p className='mt-5 text-center text-xs leading-relaxed text-white/25'>

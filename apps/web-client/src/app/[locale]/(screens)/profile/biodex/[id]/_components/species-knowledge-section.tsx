@@ -1,12 +1,24 @@
 'use client'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { MobileSheet } from '@/components/ui/mobile-sheet'
 import type { SpeciesContext } from '@/types/species'
-import { SizeWeightWidget } from './bento-size-weight'
-import { OriginWidget } from './bento-origin'
-import { DietWidget } from './bento-diet'
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function isSimpleHabitat(habitat: string): boolean {
+  return !habitat.includes('(Z')
+}
+
+// Strip parenthetical detail for pill display: "Varroa destructor (2010)" → "Varroa destructor"
+function simplifyThreat(threat: string): string {
+  const idx = threat.indexOf(' (')
+  return idx > 0 ? threat.slice(0, idx) : threat
+}
+
+// ── AccordionItem ────────────────────────────────────────────────────────────
 
 interface AccordionItemProps {
   title: string
@@ -40,92 +52,189 @@ function AccordionItem({ title, number, children, defaultOpen = false }: Accordi
   )
 }
 
+// ── Main component ───────────────────────────────────────────────────────────
+
 interface SpeciesKnowledgeSectionProps {
   species: SpeciesContext
 }
 
 export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProps) {
-  const hasHabitat = !!species.habitat?.length
-  const hasSizeOrWeight = !!(species.size || species.weight)
-  const hasOrigin = !!species.origin_country
-  const hasDiet = !!species.diet
-  const hasThreats = !!species.threats?.length
-  const hasBentoContent = hasSizeOrWeight || hasOrigin || hasDiet
+  const [habitatSheetOpen, setHabitatSheetOpen] = useState(false)
+  const [threatsSheetOpen, setThreatsSheetOpen] = useState(false)
+
+  const allHabitats = species.habitat ?? []
+  const simpleHabitats = allHabitats.filter(isSimpleHabitat)
+  const technicalHabitats = allHabitats.filter((h) => !isSimpleHabitat(h))
+  const hasHabitat = allHabitats.length > 0
+
+  const allThreats = species.threats ?? []
+  const hasThreats = allThreats.length > 0
+
+  const producers = species.associated_producers ?? []
+  const projects = species.associated_projects ?? []
+  const hasRelations = producers.length > 0 || projects.length > 0
 
   return (
-    <section className='mx-5'>
-      <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-        Ce qu&apos;on peut comprendre
-      </p>
-      <div className='rounded-3xl border border-white/8 bg-white/[0.04] px-4'>
+    <>
+      <section className='mx-5'>
+        <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
+          Ce qu&apos;on peut comprendre
+        </p>
+        <div className='rounded-3xl border border-white/8 bg-white/[0.04] px-4'>
 
-        {/* 01 – Habitat */}
-        <AccordionItem title='Habitat' number='01' defaultOpen>
-          {hasHabitat ? (
-            <div className='flex flex-wrap gap-2'>
-              {species.habitat!.map((h, i) => (
-                <span
-                  key={i}
-                  className='rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/70'
-                >
-                  {h}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <p className='text-xs text-white/35'>Habitat à documenter avec le partenaire.</p>
-          )}
-        </AccordionItem>
+          {/* 01 – Habitat */}
+          <AccordionItem title='Habitat' number='01' defaultOpen>
+            {hasHabitat ? (
+              <div className='space-y-3'>
+                {simpleHabitats.length > 0 && (
+                  <div className='flex flex-wrap gap-2'>
+                    {simpleHabitats.map((h, i) => (
+                      <span
+                        key={i}
+                        className='rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/70'
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {technicalHabitats.length > 0 && (
+                  <button
+                    type='button'
+                    onClick={() => setHabitatSheetOpen(true)}
+                    className='flex items-center gap-1.5 text-xs font-semibold text-white/40 transition-colors active:text-white/60'
+                  >
+                    Zones documentées
+                    <ChevronRight className='h-3 w-3' aria-hidden='true' />
+                  </button>
+                )}
+              </div>
+            ) : (
+              <p className='text-xs text-white/35'>Habitat à documenter avec le partenaire.</p>
+            )}
+          </AccordionItem>
 
-        {/* 02 – Rôle écologique */}
-        <AccordionItem title='Rôle écologique' number='02'>
-          {hasBentoContent && (
-            <div className='mb-4 grid grid-cols-2 gap-3'>
-              {hasSizeOrWeight && <SizeWeightWidget size={species.size} weight={species.weight} />}
-              {hasOrigin && <OriginWidget originCountry={species.origin_country} />}
-              {hasDiet && <DietWidget diet={species.diet} />}
-            </div>
-          )}
-          {species.description_default ? (
-            <p className='text-sm leading-relaxed text-white/60'>{species.description_default}</p>
-          ) : (
-            <p className='text-xs text-white/35'>Données à documenter.</p>
-          )}
-        </AccordionItem>
+          {/* 02 – Rôle écologique */}
+          <AccordionItem title='Rôle écologique' number='02'>
+            {species.description_default ? (
+              <p className='text-sm leading-relaxed text-white/60'>{species.description_default}</p>
+            ) : (
+              <p className='text-xs text-white/35'>Données à documenter.</p>
+            )}
+          </AccordionItem>
 
-        {/* 03 – Relations dans le vivant */}
-        <AccordionItem title='Relations dans le vivant' number='03'>
-          {species.description_scientific ? (
-            <p className='text-sm leading-relaxed text-white/60'>{species.description_scientific}</p>
-          ) : (
-            <p className='text-xs text-white/35'>
-              Relations à documenter avec le partenaire et les données terrain.
-            </p>
-          )}
-        </AccordionItem>
+          {/* 03 – Relations dans le vivant */}
+          <AccordionItem title='Relations dans le vivant' number='03'>
+            {hasRelations ? (
+              <div className='space-y-3'>
+                {producers.map((p) => (
+                  <div key={p.id}>
+                    <p className='text-sm font-semibold text-white/80'>
+                      {p.name}
+                      {p.location && (
+                        <span className='font-normal text-white/40'> · {p.location}</span>
+                      )}
+                    </p>
+                    {p.relationship && (
+                      <p className='mt-0.5 text-xs text-white/40'>{p.relationship}</p>
+                    )}
+                  </div>
+                ))}
+                {projects.map((p) => (
+                  <div key={p.id}>
+                    <p className='text-sm font-semibold text-white/80'>{p.name}</p>
+                    {p.role && <p className='mt-0.5 text-xs text-white/40'>{p.role}</p>}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className='text-xs text-white/35'>
+                Relations à documenter avec le partenaire et les données terrain.
+              </p>
+            )}
+          </AccordionItem>
 
-        {/* 04 – Menaces & fragilités */}
-        <AccordionItem title='Menaces & fragilités' number='04'>
-          {hasThreats ? (
-            <div className='flex flex-wrap gap-2'>
-              {species.threats!.map((t, i) => (
-                <div
-                  key={i}
-                  className='rounded-full border border-orange-500/20 bg-orange-500/8 px-3 py-1.5 text-xs text-white/70'
-                >
-                  {t}
+          {/* 04 – Menaces & fragilités */}
+          <AccordionItem title='Menaces & fragilités' number='04'>
+            {hasThreats ? (
+              <div className='space-y-3'>
+                <div className='flex flex-wrap gap-2'>
+                  {allThreats.map((t, i) => (
+                    <div
+                      key={i}
+                      className='rounded-full border border-orange-500/20 bg-orange-500/8 px-3 py-1.5 text-xs text-white/70'
+                    >
+                      {simplifyThreat(t)}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className='text-xs text-white/35'>
-              Certaines pressions peuvent fragiliser cette espèce. Les données locales sont à
-              documenter avec le partenaire.
-            </p>
-          )}
-        </AccordionItem>
+                <button
+                  type='button'
+                  onClick={() => setThreatsSheetOpen(true)}
+                  className='flex items-center gap-1.5 text-xs font-semibold text-white/40 transition-colors active:text-white/60'
+                >
+                  Voir les détails
+                  <ChevronRight className='h-3 w-3' aria-hidden='true' />
+                </button>
+              </div>
+            ) : (
+              <p className='text-xs text-white/35'>
+                Certaines pressions peuvent fragiliser cette espèce. Les données locales sont à
+                documenter avec le partenaire.
+              </p>
+            )}
+          </AccordionItem>
 
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {/* Bottom sheet — Zones documentées */}
+      <MobileSheet
+        isOpen={habitatSheetOpen}
+        onClose={() => setHabitatSheetOpen(false)}
+        title='Zones documentées'
+      >
+        <div className='space-y-4 pb-2 pt-1'>
+          <div className='space-y-2'>
+            {technicalHabitats.map((h, i) => (
+              <div
+                key={i}
+                className='rounded-xl border border-white/8 bg-white/[0.04] px-3 py-2.5 text-sm text-white/65'
+              >
+                {h}
+              </div>
+            ))}
+          </div>
+          <p className='text-xs leading-relaxed text-white/30'>
+            Ces zones décrivent des contextes écologiques possibles. Les données locales du projet
+            restent à documenter avec le partenaire.
+          </p>
+        </div>
+      </MobileSheet>
+
+      {/* Bottom sheet — Détails menaces */}
+      <MobileSheet
+        isOpen={threatsSheetOpen}
+        onClose={() => setThreatsSheetOpen(false)}
+        title='Menaces & fragilités'
+      >
+        <div className='space-y-4 pb-2 pt-1'>
+          <div className='space-y-2'>
+            {allThreats.map((t, i) => (
+              <div
+                key={i}
+                className='rounded-xl border border-orange-500/15 bg-orange-500/5 px-3 py-2.5 text-sm text-white/65'
+              >
+                {t}
+              </div>
+            ))}
+          </div>
+          <p className='text-xs leading-relaxed text-white/30'>
+            Les niveaux de pression locaux doivent être confirmés avec le partenaire ou une source
+            scientifique identifiable. Ces données sont indicatives.
+          </p>
+        </div>
+      </MobileSheet>
+    </>
   )
 }

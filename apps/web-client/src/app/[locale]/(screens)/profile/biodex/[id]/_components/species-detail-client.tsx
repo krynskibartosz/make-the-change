@@ -7,6 +7,7 @@ import type { SpeciesContext } from '@/types/species'
 import { SpeciesHero } from './species-hero'
 import { SpeciesProjectLinkCard } from './species-project-link-card'
 import { SpeciesWhyItMatters } from './species-why-it-matters'
+import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
 import { SpeciesDocumentationSection } from './species-documentation-section'
 
@@ -34,7 +35,10 @@ export function SpeciesDetailClient({ species }: SpeciesDetailClientProps) {
         {/* 3. Pourquoi elle compte */}
         <SpeciesWhyItMatters species={species} />
 
-        {/* 4. Ce qu'on peut comprendre */}
+        {/* 4. Repères rapides */}
+        <SpeciesQuickStats species={species} />
+
+        {/* 5. Ce qu'on peut comprendre */}
         <SpeciesKnowledgeSection species={species} />
 
         {/* 5. Ce qui est documenté */}
