@@ -117,8 +117,8 @@ export function ProjectStorySheet({
           <div className="mt-6">
             <SectionLabel>{producerLabel ?? 'Partenaire terrain'}</SectionLabel>
             <div className="flex items-center gap-3.5 rounded-2xl bg-white/[0.04] px-4 py-3.5">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-base font-black text-white/60">
-                {producerName[0]?.toUpperCase() ?? 'P'}
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
+                {producerName[0]?.toUpperCase() || 'M'}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold text-white">{producerName}</p>

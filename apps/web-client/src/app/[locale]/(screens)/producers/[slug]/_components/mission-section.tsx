@@ -3,16 +3,17 @@
 /**
  * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
  * Section Mission - "Pourquoi ils existent"
- * 
+ *
  * Pattern: progressive disclosure
  * - Page = sommaire éditorial scannable (numéro + titre + chevron)
  * - Tap = bottom sheet d'approfondissement (description + keyPoints + whyItMatters)
  */
 
-import { useState } from 'react'
 import { ChevronRight } from 'lucide-react'
-import { MobileSheet } from '@/components/ui/mobile-sheet'
+import { useState } from 'react'
 import type { MissionPillar } from '@/app/[locale]/(site)/producers/_features/mock-producers'
+import { MobileSheet } from '@/components/ui/mobile-sheet'
+import { producerTypography as typo } from './producer-typography'
 
 type MissionSectionProps = {
   pillars?: MissionPillar[]
@@ -31,14 +32,8 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
     <>
       <section className="mt-10 px-4">
         {/* En-tête section */}
-        <h2 className="text-[17px] font-bold text-white/80">
-          Pourquoi ils existent
-        </h2>
-        {subtitle && (
-          <p className="mt-1 mb-3 text-[13px] leading-snug text-white/50">
-            {subtitle}
-          </p>
-        )}
+        <h2 className={typo.sectionTitle}>Pourquoi ils existent</h2>
+        {subtitle && <p className={`mt-1.5 mb-3 ${typo.sectionSubtitle}`}>{subtitle}</p>}
 
         {/* Liste sommaire — scannable */}
         <div className="flex flex-col">
@@ -52,14 +47,12 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
               }`}
             >
               {/* Numéro inline */}
-              <span className="w-6 shrink-0 text-[11px] font-medium text-white/30">
+              <span className={`w-6 shrink-0 ${typo.listNumber}`}>
                 {String(index + 1).padStart(2, '0')}
               </span>
 
               {/* Titre */}
-              <span className="min-w-0 flex-1 text-[14px] font-medium text-white/90 leading-tight">
-                {pillar.title}
-              </span>
+              <span className={`min-w-0 flex-1 ${typo.listTitle}`}>{pillar.title}</span>
 
               {/* Chevron affordance */}
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-white/25" />
@@ -77,19 +70,18 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
         {activePillar && (
           <div className="pb-2 pt-1">
             {/* Description */}
-            <p className="text-[14px] leading-relaxed text-white/65">
-              {activePillar.description}
-            </p>
+            <p className={typo.modalBody}>{activePillar.description}</p>
 
             {/* Points clés */}
             {activePillar.keyPoints && activePillar.keyPoints.length > 0 && (
               <div className="mt-5">
-                <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-white/35">
-                  Points clés
-                </p>
+                <p className={`mb-3 ${typo.modalLabel}`}>Points clés</p>
                 <ul className="flex flex-col gap-2">
                   {activePillar.keyPoints.map((point, i) => (
-                    <li key={i} className="flex items-start gap-2 text-[13px] text-white/65">
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-[14px] leading-relaxed text-white/66"
+                    >
                       <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-amber-300/50" />
                       {point}
                     </li>
@@ -101,18 +93,14 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
             {/* Pourquoi c'est important */}
             {activePillar.whyItMatters && (
               <div className="mt-5">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-white/35">
-                  Pourquoi c'est important
-                </p>
-                <p className="text-[13px] leading-relaxed text-white/50">
-                  {activePillar.whyItMatters}
-                </p>
+                <p className={`mb-2.5 ${typo.modalLabel}`}>Pourquoi c'est important</p>
+                <p className={typo.modalBodyMuted}>{activePillar.whyItMatters}</p>
               </div>
             )}
 
             {/* Label source — garde-fou */}
             {activePillar.sourceLabel && (
-              <p className="mt-6 text-[10px] text-white/25">
+              <p className="mt-6 text-[12px] leading-snug text-white/38">
                 {activePillar.sourceLabel}
               </p>
             )}

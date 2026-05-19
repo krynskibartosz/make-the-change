@@ -65,7 +65,7 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
       </div>
 
       {/* ── Zone scrollable ── */}
-      <div className="relative flex-1 overflow-y-auto overscroll-contain pb-4">
+      <div data-modal-scroll-root className="relative flex-1 overflow-y-auto overscroll-contain pb-4">
 
         {/* Bouton retour flottant (pages directes) */}
         {showFloatingBack && (

@@ -17,15 +17,15 @@
  * Mobile-first, storytelling, preuves, rythme.
  */
 
-import type { PublicProducer } from './producer-detail-data'
-import { ProducerHero } from './_components/producer-hero'
+import { CtaFinal } from './_components/cta-final'
 import { MissionSection } from './_components/mission-section'
-import { ProofGrid } from './_components/proof-grid'
+import { ProducerHero } from './_components/producer-hero'
+import { ProductsSection } from './_components/products-section'
 import { ProjectsSection } from './_components/projects-section'
+import { ProofGrid } from './_components/proof-grid'
 import { SpeciesSection } from './_components/species-section'
 import { StoryBlocks } from './_components/story-blocks'
-import { ProductsSection } from './_components/products-section'
-import { CtaFinal } from './_components/cta-final'
+import type { PublicProducer } from './producer-detail-data'
 
 type ProducerDetailsProps = {
   producer: PublicProducer
@@ -33,10 +33,8 @@ type ProducerDetailsProps = {
   isFollowingProducer?: boolean
 }
 
-export function ProducerDetails({
-  producer,
-}: ProducerDetailsProps) {
-  const firstCertif = producer.proofCards?.find(c => c.proofType === 'certification')
+export function ProducerDetails({ producer }: ProducerDetailsProps) {
+  const firstCertif = producer.proofCards?.find((c) => c.proofType === 'certification')
   const certifName = firstCertif?.label.replace(/^Certification\s+/i, '')
   const trustLine = producer.editorialIdentity?.foundedYear
     ? `Depuis ${producer.editorialIdentity.foundedYear}${certifName ? ` • ${certifName}` : ''}`
@@ -66,10 +64,7 @@ export function ProducerDetails({
       <ProofGrid cards={producer.proofCards} />
 
       {/* 4. Projets — estimation intégrée dans le sous-titre */}
-      <ProjectsSection
-        projects={producer.projects}
-        impactSummary={producer.impactSummary}
-      />
+      <ProjectsSection projects={producer.projects} impactSummary={producer.impactSummary} />
 
       {/* 5. Espèces */}
       <SpeciesSection
@@ -84,7 +79,7 @@ export function ProducerDetails({
       />
 
       {/* 8. Produits - séparation app vs gamme partenaire */}
-      <ProductsSection 
+      <ProductsSection
         products={producer.products}
         partnerCatalog={producer.partnerCatalogOverview}
       />

@@ -251,6 +251,7 @@ export async function ProjectQuickView({
         )}
       >
         <div
+          data-modal-scroll-root
           className={cn(
             'flex-1 overflow-x-hidden',
             isPageMode

@@ -9,21 +9,19 @@
  * - Filières documentées du partenaire (éditorial, pas catalogue)
  */
 
-import { Link } from '@/i18n/navigation'
-import { Leaf, Info } from 'lucide-react'
-import { CurrencyAmount } from '@/components/currency'
-import type { ProducerProduct } from '../producer-detail-data'
+import { Info, Leaf } from 'lucide-react'
 import type { PartnerCatalogOverview } from '@/app/[locale]/(site)/producers/_features/mock-producers'
+import { CurrencyAmount } from '@/components/currency'
+import { Link } from '@/i18n/navigation'
+import type { ProducerProduct } from '../producer-detail-data'
+import { producerTypography as typo } from './producer-typography'
 
 type ProductsSectionProps = {
   products: ProducerProduct[]
   partnerCatalog?: PartnerCatalogOverview
 }
 
-export function ProductsSection({
-  products,
-  partnerCatalog,
-}: ProductsSectionProps) {
+export function ProductsSection({ products, partnerCatalog }: ProductsSectionProps) {
   const hasProducts = products.length > 0
   const hasCatalog = Boolean(partnerCatalog?.families.length)
 
@@ -35,12 +33,8 @@ export function ProductsSection({
       {hasProducts && (
         <div className="mb-10">
           <div className="px-4">
-            <h2 className="text-[17px] font-bold text-white/80">
-              Produits partenaires disponibles
-            </h2>
-            <p className="mt-1 text-[13px] text-white/50">
-              Accessibles avec vos Crédits Impact.
-            </p>
+            <h2 className={typo.sectionTitle}>Produits partenaires disponibles</h2>
+            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Accessibles avec vos Credits Impact.</p>
           </div>
 
           {/* Carousel horizontal — même pattern que projets et biodex */}
@@ -71,17 +65,17 @@ export function ProductsSection({
 
                   {/* Info */}
                   <div className="flex flex-col gap-0.5">
-                    <h4 className="text-[14px] font-semibold text-white line-clamp-2 leading-tight">
-                      {product.name_default}
-                    </h4>
+                    <h4 className={`${typo.cardTitle} line-clamp-2`}>{product.name_default}</h4>
                     {typeof product.price_points === 'number' && product.price_points > 0 && (
                       <div className="flex items-baseline gap-1">
                         <CurrencyAmount
                           kind="impactCredits"
                           value={product.price_points}
-                          className="text-[13px] font-bold"
+                          className="text-[14px] font-extrabold"
                         />
-                        <span className="text-[10px] text-white/45">Credits Impact</span>
+                        <span className="text-[12px] font-medium text-white/50">
+                          Credits Impact
+                        </span>
                       </div>
                     )}
                   </div>
@@ -91,7 +85,7 @@ export function ProductsSection({
           </ul>
 
           {/* Reconnexion produit → filière */}
-          <p className="mt-1 px-4 text-[12px] text-white/40">
+          <p className="mt-1 px-4 text-[13px] leading-relaxed text-white/55">
             Ces produits sont liés aux filières documentées du partenaire.
           </p>
         </div>
@@ -101,10 +95,8 @@ export function ProductsSection({
       {hasCatalog && partnerCatalog && (
         <div className="px-4">
           <div className="mb-4">
-            <h3 className="text-[17px] font-bold text-white/80">
-              {partnerCatalog.title}
-            </h3>
-            <p className="mt-1 flex items-start gap-1.5 text-[12px] leading-snug text-white/55">
+            <h3 className={typo.sectionTitle}>{partnerCatalog.title}</h3>
+            <p className={`mt-1.5 flex items-start gap-1.5 ${typo.sectionSubtitle}`}>
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               <span>{partnerCatalog.disclaimer}</span>
             </p>
@@ -118,16 +110,16 @@ export function ProductsSection({
                 className={`py-3.5 ${index > 0 ? 'border-t border-white/[0.06]' : ''}`}
               >
                 {/* Première famille plus prominente (filière cœur) */}
-                <h4 className={`leading-tight ${index === 0 ? 'text-[15px] font-bold text-white/90' : 'text-[14px] font-semibold text-white/80'}`}>
+                <h4
+                  className={`leading-snug ${index === 0 ? 'text-[17px] font-bold text-white/92' : 'text-[15px] font-semibold text-white/84'}`}
+                >
                   {family.label}
                 </h4>
-                <p className="mt-1 text-[12px] text-white/60 leading-relaxed">
+                <p className="mt-1 text-[14px] leading-relaxed text-white/64">
                   {family.examples.join(' · ')}
                 </p>
                 {family.origin && (
-                  <p className="mt-0.5 text-[11px] text-white/40">
-                    {family.origin}
-                  </p>
+                  <p className="mt-1 text-[12px] font-medium text-white/45">{family.origin}</p>
                 )}
               </div>
             ))}

@@ -56,9 +56,18 @@ export function FullScreenSlideModal({
 
     const handleScroll = (event: Event) => {
       const target = event.target as HTMLElement | null
-      if (!target || target !== container) return
+      if (!target) return
 
-      const nextElevated = container.scrollTop > 60
+      const scrollRoot =
+        target === container
+          ? container
+          : target.hasAttribute('data-modal-scroll-root')
+            ? target
+            : null
+
+      if (!scrollRoot) return
+
+      const nextElevated = scrollRoot.scrollTop > 60
       setIsHeaderElevated((previous) => (previous === nextElevated ? previous : nextElevated))
     }
 
@@ -154,7 +163,9 @@ export function FullScreenSlideModal({
         </header>
       ) : null}
 
-      <div className={cn('min-h-0 flex-1', contentClassName)}>{children}</div>
+      <div data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
+        {children}
+      </div>
     </div>
   )
 }

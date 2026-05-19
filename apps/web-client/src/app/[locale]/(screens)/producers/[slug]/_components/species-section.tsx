@@ -9,6 +9,7 @@
  */
 
 import type { ProducerSpecies } from '../producer-detail-data'
+import { producerTypography as typo } from './producer-typography'
 
 function getRarityColor(rarity: string) {
   const r = rarity?.toUpperCase()
@@ -32,22 +33,16 @@ type SpeciesSectionProps = {
 
 export function SpeciesSection({
   species,
-  title = "Le vivant autour de leurs projets",
-  subtitle = "Espèces et milieux associés aux projets documentés."
+  title = 'Le vivant autour de leurs projets',
+  subtitle = 'Espèces et milieux associés aux projets documentés.',
 }: SpeciesSectionProps) {
   if (species.length === 0) return null
 
   return (
     <section className="mt-16">
       <div className="px-4">
-        <h2 className="text-[17px] font-bold text-white/80">
-          {title}
-        </h2>
-        {subtitle && (
-          <p className="mt-1 text-[13px] text-white/50">
-            {subtitle}
-          </p>
-        )}
+        <h2 className={typo.sectionTitle}>{title}</h2>
+        {subtitle && <p className={`mt-1.5 ${typo.sectionSubtitle}`}>{subtitle}</p>}
       </div>
 
       <ul
@@ -55,11 +50,8 @@ export function SpeciesSection({
         aria-label="Espèces liées au partenaire"
       >
         {species.map((entry) => (
-          <li
-            key={entry.id}
-            className="w-36 shrink-0 snap-start"
-          >
-            <article className="flex flex-col gap-2">
+          <li key={entry.id} className="w-36 shrink-0 snap-start">
+            <article className="flex flex-col gap-1.5">
               {/* Image — scale-110 pour que l'illustration occupe plus de surface */}
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#1A1F26]">
                 <img
@@ -70,19 +62,17 @@ export function SpeciesSection({
               </div>
 
               {/* Nom — élément principal */}
-              <p className="text-[14px] font-bold text-white leading-tight line-clamp-2">
-                {entry.name}
-              </p>
+              <p className={`${typo.cardTitle} line-clamp-2`}>{entry.name}</p>
 
               {/* Rôle écologique — contexte éditorial */}
               {entry.role && (
-                <p className="text-[11px] text-white/45 leading-tight">
-                  {entry.role}
-                </p>
+                <p className="text-[13px] font-medium leading-snug text-white/56">{entry.role}</p>
               )}
 
               {/* Rareté BioDex — label explicite plutôt que niveau brut */}
-              <p className={`text-[10px] font-bold uppercase tracking-widest ${getRarityColor(entry.rarity)}`}>
+              <p
+                className={`text-[11px] font-bold uppercase tracking-[0.08em] ${getRarityColor(entry.rarity)}`}
+              >
                 {getRarityLabel(entry.rarity)}
               </p>
             </article>

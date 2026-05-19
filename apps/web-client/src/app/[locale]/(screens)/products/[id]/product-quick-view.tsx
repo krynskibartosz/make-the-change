@@ -158,7 +158,10 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       </div>
 
       <div className="relative flex h-full flex-col">
-        <div className="flex-1 overflow-y-auto overscroll-contain pb-4 sm:px-5 sm:pt-5 lg:px-6 lg:pt-6">
+        <div
+          data-modal-scroll-root
+          className="flex-1 overflow-y-auto overscroll-contain pb-4 sm:px-5 sm:pt-5 lg:px-6 lg:pt-6"
+        >
           <div className="grid gap-4 md:grid-cols-[1.08fr_0.92fr] lg:gap-6">
             <section>
               <div
