@@ -7,6 +7,7 @@ import type { SpeciesContext } from '@/types/species'
 import { SpeciesHero } from './species-hero'
 import { SpeciesLinkedProjects, type LinkedProject } from './species-linked-projects'
 import { SpeciesLinkedSpecies } from './species-linked-species'
+import { SpeciesLinkedProducts, type SpeciesLinkedProducerData } from './species-linked-products'
 import { SpeciesWhyItMatters } from './species-why-it-matters'
 import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
@@ -15,9 +16,10 @@ import { SpeciesDocumentationSection } from './species-documentation-section'
 interface SpeciesDetailClientProps {
   species: SpeciesContext
   linkedProjects: LinkedProject[]
+  linkedProducers: SpeciesLinkedProducerData[]
 }
 
-export function SpeciesDetailClient({ species, linkedProjects }: SpeciesDetailClientProps) {
+export function SpeciesDetailClient({ species, linkedProjects, linkedProducers }: SpeciesDetailClientProps) {
   const learningCourses = useMemo(() => getCoursesForSpecies(species.id, 3), [species.id])
   const livingWebCourse = learningCourses.find((c) => c.relatedEcosystemIds.length > 0)
   const firstEcosystemId = livingWebCourse?.relatedEcosystemIds[0]
@@ -101,7 +103,10 @@ export function SpeciesDetailClient({ species, linkedProjects }: SpeciesDetailCl
           </section>
         )}
 
-        {/* 7. Sources & limites */}
+        {/* 8. Produits du partenaire lié */}
+        <SpeciesLinkedProducts producers={linkedProducers} />
+
+        {/* 9. Sources & limites */}
         <section className='mx-5 pb-4'>
           <div className='rounded-2xl border border-white/5 bg-white/[0.025] px-4 py-4'>
             <p className='mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-white/25'>

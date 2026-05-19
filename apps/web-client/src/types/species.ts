@@ -32,6 +32,7 @@ export type AssociatedProject = {
 
 export type AssociatedProducer = {
   id: string
+  slug?: string | null
   name: string
   location: string | null
   relationship: string

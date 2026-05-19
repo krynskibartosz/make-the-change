@@ -185,6 +185,7 @@ function mapAssociatedProducer(data: unknown): AssociatedProducer | null {
 
   return {
     id,
+    slug: toNullableString(data.slug),
     name,
     location: toNullableString(data.location),
     relationship: asString(data.relationship),

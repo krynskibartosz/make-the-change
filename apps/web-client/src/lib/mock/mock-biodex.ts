@@ -5,6 +5,7 @@ import {
   MOCK_PRODUCT_EUCALYPTUS_ID,
   MOCK_PRODUCT_MANAKARA_ID,
   MOCK_PRODUCER_ILANGA_ID,
+  MOCK_PRODUCER_ILANGA_SLUG,
   MOCK_PROJECT_ANTSIRABE_ID,
   MOCK_PROJECT_ANTSIRABE_SLUG,
   MOCK_PROJECT_CORAL_ID,
@@ -91,6 +92,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     associated_producers: [
       {
         id: MOCK_PRODUCER_ILANGA_ID,
+        slug: MOCK_PRODUCER_ILANGA_SLUG,
         name: 'Ilanga Nature',
         location: 'Madagascar',
         relationship: 'Eleveur partenaire',
