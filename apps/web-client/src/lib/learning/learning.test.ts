@@ -93,6 +93,7 @@ describe('learning catalog', () => {
       expect(getAtlasDomainMap(map.domain.id)?.domain.id).toBe(map.domain.id)
       expect(map.nodes.length > 0).toBe(true)
       expect(map.edges.length > 0).toBe(true)
+      expect(map.edges.every((edge) => edge.kind === 'related_link')).toBe(true)
 
       for (const node of map.nodes) {
         expect(['chapter', 'course', 'micro_course', 'living_web'].includes(node.kind)).toBe(true)
@@ -140,7 +141,6 @@ describe('learning catalog', () => {
       }
 
       for (const edge of map.edges) {
-        expect(['recommended_path', 'related_link'].includes(edge.kind)).toBe(true)
         expect(nodeIds.has(edge.fromNodeId)).toBe(true)
         expect(nodeIds.has(edge.toNodeId)).toBe(true)
         expect(edge.fromNodeId === edge.toNodeId).toBe(false)

@@ -125,15 +125,15 @@ const DEFAULT_ATLAS_NODE_POSITION: Pick<AtlasIslandNode, 'x' | 'y' | 'size'> = {
 const ATLAS_DOMAIN_MAP_POSITIONS: Array<
   Pick<AtlasDomainMapNode, 'x' | 'y'> & { importance: AtlasDomainMapNodeImportance }
 > = [
-  { x: 18, y: 70, importance: 'primary' },
-  { x: 32, y: 55, importance: 'secondary' },
-  { x: 48, y: 43, importance: 'secondary' },
-  { x: 64, y: 32, importance: 'secondary' },
-  { x: 78, y: 22, importance: 'secondary' },
-  { x: 28, y: 30, importance: 'micro' },
-  { x: 56, y: 72, importance: 'micro' },
-  { x: 76, y: 60, importance: 'micro' },
-  { x: 86, y: 45, importance: 'special' },
+  { x: 70, y: 74, importance: 'primary' },
+  { x: 28, y: 36, importance: 'secondary' },
+  { x: 58, y: 28, importance: 'secondary' },
+  { x: 36, y: 61, importance: 'secondary' },
+  { x: 71, y: 45, importance: 'secondary' },
+  { x: 47, y: 78, importance: 'micro' },
+  { x: 19, y: 70, importance: 'micro' },
+  { x: 82, y: 30, importance: 'micro' },
+  { x: 82, y: 60, importance: 'special' },
 ]
 
 const DEFAULT_ATLAS_DOMAIN_MAP_POSITION: Pick<AtlasDomainMapNode, 'x' | 'y'> & {
@@ -423,32 +423,35 @@ function buildDomainMapNode(
 }
 
 function buildDomainMapEdges(nodes: AtlasDomainMapNode[]): AtlasDomainMapEdge[] {
-  const pathNodes = nodes.filter((node) => node.importance !== 'micro')
+  const visibleNodes = nodes.filter((node) => node.importance !== 'micro')
   const edges: AtlasDomainMapEdge[] = []
 
-  for (let index = 0; index < pathNodes.length - 1; index += 1) {
-    const fromNode = pathNodes[index]
-    const toNode = pathNodes[index + 1]
+  for (let index = 0; index < visibleNodes.length - 1; index += 1) {
+    const fromNode = visibleNodes[index]
+    const toNode = visibleNodes[index + 1]
 
     if (!fromNode || !toNode) {
       continue
     }
 
     edges.push({
-      id: `path-${fromNode.id}-${toNode.id}`,
+      id: `related-${fromNode.id}-${toNode.id}`,
       fromNodeId: fromNode.id,
       toNodeId: toNode.id,
-      kind: 'recommended_path',
+      kind: 'related_link',
     })
   }
 
-  const anchor = pathNodes[0] ?? nodes[0]
+  const anchor =
+    nodes.find((node) => node.kind === 'chapter') ??
+    nodes.find((node) => node.kind === 'course') ??
+    nodes[0]
   if (!anchor) {
     return edges
   }
 
   for (const node of nodes) {
-    if (node.id === anchor.id || pathNodes.includes(node)) {
+    if (node.id === anchor.id || visibleNodes.includes(node)) {
       continue
     }
 
@@ -469,10 +472,10 @@ function buildDomainMapEdges(nodes: AtlasDomainMapNode[]): AtlasDomainMapEdge[] 
     }
 
     edges.push({
-      id: `path-${fromNode.id}-${toNode.id}`,
+      id: `related-${fromNode.id}-${toNode.id}`,
       fromNodeId: fromNode.id,
       toNodeId: toNode.id,
-      kind: 'recommended_path',
+      kind: 'related_link',
     })
   }
 
@@ -491,7 +494,7 @@ function getAtlasDomainMapNodes(domain: AtlasDomainWithCourses): AtlasDomainMapN
         kind: 'chapter',
         title: featuredPath.title,
         shortLabel: shortenLabel(featuredPath.title, 17),
-        subtitle: `${featuredPath.courseIds.length} étapes guidées`,
+        subtitle: `${featuredPath.courseIds.length} étapes - module guidé`,
         href: `/learn/parcours/${featuredPath.id}`,
         courseIds: featuredPath.courseIds,
         importance: 'primary',
@@ -546,10 +549,12 @@ function getAtlasDomainMapNodes(domain: AtlasDomainWithCourses): AtlasDomainMapN
         shortLabel: shortenLabel(course.subject, kind === 'micro_course' ? 12 : 16),
         subtitle:
           kind === 'living_web'
-            ? 'Toile vivante'
-            : course.durationMinutes <= 5
-              ? 'Cours court'
-              : course.theme,
+            ? 'Carte de liens pédagogique'
+            : kind === 'micro_course'
+              ? `${course.durationMinutes} min - question courte`
+              : course.durationMinutes <= 5
+                ? `${course.durationMinutes} min - mini-cours`
+                : `${course.durationMinutes} min - notion`,
         href:
           kind === 'living_web'
             ? course.entry.href
