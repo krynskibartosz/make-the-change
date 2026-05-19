@@ -49,7 +49,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
         addressCountryCode: p.address_country_code,
         projectsCount: assoc?.projectsCount ?? p.projects.length,
         relationship: assoc?.relationship ?? null,
-        imageUrl: p.images[0] ?? null,
+        imageUrl: p.visualAssets?.logo ?? p.images[0] ?? null,
       }
     })
     .filter((p) => p.slug)
