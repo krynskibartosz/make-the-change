@@ -8,6 +8,7 @@ import { SpeciesHero } from './species-hero'
 import { SpeciesLinkedProjects, type LinkedProject } from './species-linked-projects'
 import { SpeciesLinkedSpecies } from './species-linked-species'
 import { SpeciesLinkedProducts, type SpeciesLinkedProducerData } from './species-linked-products'
+import { SpeciesLinkedPartners, type SpeciesLinkedPartnerData } from './species-linked-partners'
 import { SpeciesWhyItMatters } from './species-why-it-matters'
 import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
@@ -17,9 +18,10 @@ interface SpeciesDetailClientProps {
   species: SpeciesContext
   linkedProjects: LinkedProject[]
   linkedProducers: SpeciesLinkedProducerData[]
+  linkedPartners: SpeciesLinkedPartnerData[]
 }
 
-export function SpeciesDetailClient({ species, linkedProjects, linkedProducers }: SpeciesDetailClientProps) {
+export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, linkedPartners }: SpeciesDetailClientProps) {
   const learningCourses = useMemo(() => getCoursesForSpecies(species.id, 3), [species.id])
   const livingWebCourse = learningCourses.find((c) => c.relatedEcosystemIds.length > 0)
   const firstEcosystemId = livingWebCourse?.relatedEcosystemIds[0]
@@ -103,7 +105,10 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers }
           </section>
         )}
 
-        {/* 8. Produits du partenaire lié */}
+        {/* 8. Partenaires liés */}
+        <SpeciesLinkedPartners partners={linkedPartners} />
+
+        {/* 9. Produits du partenaire lié */}
         <SpeciesLinkedProducts producers={linkedProducers} />
 
         {/* 9. Sources & limites */}

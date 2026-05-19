@@ -7,6 +7,7 @@ import {
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { SpeciesDetailClient } from './_components/species-detail-client'
 import type { SpeciesLinkedProducerData } from './_components/species-linked-products'
+import type { SpeciesLinkedPartnerData } from './_components/species-linked-partners'
 
 export default async function SpeciesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -36,6 +37,23 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
     }))
     .filter((p) => p.producerSlug && p.products.length > 0)
 
+  const linkedPartners: SpeciesLinkedPartnerData[] = fetchedProducers
+    .filter((p): p is PublicProducer => p !== null)
+    .map((p) => {
+      const assoc = species?.associated_producers?.find((ap) => ap.slug === p.slug)
+      return {
+        slug: p.slug ?? '',
+        name: p.name_default,
+        tagline: p.tagline ?? null,
+        addressCity: p.address_city,
+        addressCountryCode: p.address_country_code,
+        projectsCount: assoc?.projectsCount ?? p.projects.length,
+        relationship: assoc?.relationship ?? null,
+        imageUrl: p.images[0] ?? null,
+      }
+    })
+    .filter((p) => p.slug)
+
   if (!species) {
     return (
       <FullScreenSlideModal fallbackHref='/profile/biodex' headerMode='back'>
@@ -58,6 +76,7 @@ export default async function SpeciesPage({ params }: { params: Promise<{ id: st
           species={species}
           linkedProjects={linkedProjects}
           linkedProducers={linkedProducers}
+          linkedPartners={linkedPartners}
         />
       </div>
     </FullScreenSlideModal>
