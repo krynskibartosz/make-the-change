@@ -12,7 +12,7 @@ import type {
   LearningProgress,
 } from '@/lib/learning/schema'
 import type { MapHexCell } from '@/lib/learning/hex-generation'
-import { Link, useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import {
   ARTBOARD_HEIGHT,
@@ -425,7 +425,7 @@ function CourseCellLabels({
   subdomain: AtlasSubdomainConfig
   mapCells: MapHexCell[]
   visible: boolean
-  onCellClick: (href: string) => void
+  onCellClick: () => void
 }) {
   const center = getSubdomainPoint(subdomain)
 
@@ -458,7 +458,7 @@ function CourseCellLabels({
             }}
             onClick={(e) => {
               e.stopPropagation()
-              onCellClick(mc.href)
+              onCellClick()
             }}
           >
             <span
@@ -559,7 +559,6 @@ function AtlasCamera({
   progress: LearningProgress | null
   onSelectSubdomain: (domainId: LearningDomainId, subdomainId: string) => void
   selectedSubdomainDomainId: LearningDomainId | null
-  onNavigateCourse: (href: string) => void
 }) {
   const isDeepZoom = camera.scale >= COURSE_LEVEL_SCALE
 
@@ -690,7 +689,7 @@ function AtlasCamera({
                   subdomain={subdomain}
                   mapCells={mapCells}
                   visible={isDeepZoom}
-                  onCellClick={onNavigateCourse}
+                  onCellClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
                 />
               )
             }),
@@ -703,7 +702,6 @@ function AtlasCamera({
 // ─── Root component ──────────────────────────────────────────────────────────
 
 export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
-  const router = useRouter()
   const reduceMotion = useReducedMotion() ?? false
 
   const [progress, setProgress] = useState<LearningProgress | null>(null)
@@ -742,11 +740,6 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       }
     }
     setSelectedSubdomain({ domainId, subdomainId })
-  }
-
-  const handleNavigateCourse = (href: string) => {
-    // Use Next.js client-side routing for soft navigation
-    router.push(href)
   }
 
   const subdomainContent = selectedSubdomain
@@ -796,7 +789,6 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         progress={progress}
         onSelectSubdomain={handleSelectSubdomain}
         selectedSubdomainDomainId={selectedSubdomain?.domainId ?? null}
-        onNavigateCourse={handleNavigateCourse}
       />
 
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
