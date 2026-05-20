@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, Search, BookOpen, Layers, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, Search, BookOpen, Compass, CheckCircle2 } from 'lucide-react'
 import type { LearningDomainId } from '@/lib/learning/schema'
 import type {
   AtlasKinnuMapView,
@@ -442,8 +442,12 @@ function CourseCellLabels({
         const cy = center.y + cellY
 
         const isModule = mc.kind === 'module'
-        const isCompleted = mc.status === 'completed'
-        const Icon = isModule ? Layers : BookOpen
+        const status = mc.status
+        const isCompleted = status === 'completed'
+        const isInProgress = status === 'in-progress'
+        const isNotStarted = status === 'not-started'
+        
+        const Icon = isModule ? Compass : BookOpen
 
         return (
           <motion.button
@@ -454,9 +458,11 @@ function CourseCellLabels({
             exit={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
             className={cn(
-              'pointer-events-auto absolute z-40 cursor-pointer flex items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1 ring-black/5',
+              'pointer-events-auto absolute z-40 cursor-pointer flex items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1',
               isModule ? 'bg-amber-400 text-amber-950' : 'bg-white/95 text-gray-800',
-              isCompleted && 'opacity-60 saturate-50'
+              isNotStarted ? 'opacity-50 saturate-50 ring-black/5' : '',
+              isInProgress ? 'opacity-100 ring-white/60 shadow-[0_0_12px_rgba(255,255,255,0.4)] scale-110' : '',
+              isCompleted ? 'opacity-100 ring-black/5' : ''
             )}
             style={{
               left: `${(cx / ARTBOARD_WIDTH) * 100}%`,
