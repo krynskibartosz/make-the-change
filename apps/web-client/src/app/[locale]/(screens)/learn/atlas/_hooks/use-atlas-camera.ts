@@ -38,6 +38,7 @@ export type UseAtlasCameraResult = {
   handlePointerDown: (event: React.PointerEvent<HTMLElement>) => void
   handlePointerMove: (event: React.PointerEvent<HTMLElement>) => void
   handlePointerEnd: (event: React.PointerEvent<HTMLElement>) => void
+  wasDragged: () => boolean
 }
 
 // ─── SSR fallback viewport ───────────────────────────────────────────────────
@@ -101,8 +102,14 @@ export function useAtlasCamera({ map }: { map: AtlasKinnuMapView }): UseAtlasCam
 
   // ── Delegate: pointer events + momentum ───────────────────────────────────
 
-  const { autoViewPointRef, cancelMomentum, handlePointerDown, handlePointerMove, handlePointerEnd } =
-    useAtlasPointer({ cameraRef, constraintsRef, moveCamera, setIsInteracting })
+  const {
+    autoViewPointRef,
+    cancelMomentum,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerEnd,
+    wasDragged,
+  } = useAtlasPointer({ cameraRef, constraintsRef, moveCamera, setIsInteracting })
 
   // ── Delegate: auto-view territory selection ────────────────────────────────
 
@@ -251,5 +258,6 @@ export function useAtlasCamera({ map }: { map: AtlasKinnuMapView }): UseAtlasCam
     handlePointerDown,
     handlePointerMove,
     handlePointerEnd,
+    wasDragged,
   }
 }

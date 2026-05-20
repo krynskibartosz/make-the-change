@@ -736,6 +736,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     handlePointerDown,
     handlePointerMove,
     handlePointerEnd,
+    wasDragged,
   } = useAtlasCamera({ map })
 
   // Connection lines and top gradient adjust based on whether we're in world or territory view
@@ -781,6 +782,13 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       onPointerMove={handlePointerMove}
       onPointerCancel={handlePointerEnd}
       onPointerUp={handlePointerEnd}
+      onClickCapture={(e) => {
+        // Prevent accidental clicks on domains/cells when finishing a map pan/zoom gesture
+        if (wasDragged()) {
+          e.stopPropagation()
+          e.preventDefault()
+        }
+      }}
     >
       <h1 className="sr-only">Atlas du vivant</h1>
 

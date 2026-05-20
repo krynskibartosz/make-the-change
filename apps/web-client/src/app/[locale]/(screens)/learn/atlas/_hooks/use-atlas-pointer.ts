@@ -36,6 +36,8 @@ export type UseAtlasPointerResult = {
   handlePointerDown: (event: ReactPointerEvent<HTMLElement>) => void
   handlePointerMove: (event: ReactPointerEvent<HTMLElement>) => void
   handlePointerEnd: (event: ReactPointerEvent<HTMLElement>) => void
+  /** Checks if a drag gesture just finished (useful for blocking accidental clicks) */
+  wasDragged: () => boolean
 }
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
@@ -69,6 +71,7 @@ export function useAtlasPointer({
 
   // ── Gesture state ──────────────────────────────────────────────────────────
   const lastTapRef = useRef<{ x: number; y: number; t: number } | null>(null)
+  const lastDragTimeRef = useRef<number>(0)
 
   // ── Shared focal point (written here, read by useAtlasAutoView) ───────────
   const autoViewPointRef = useRef<{ x: number; y: number } | null>(null)
@@ -226,6 +229,9 @@ export function useAtlasPointer({
     if (pointersRef.current.size === 0) {
       const gesture = gestureRef.current
       gestureRef.current = null
+      if (gesture?.moved) {
+        lastDragTimeRef.current = performance.now()
+      }
 
       // Compute release velocity from recent history
       const history = velocityHistoryRef.current
@@ -270,5 +276,6 @@ export function useAtlasPointer({
     handlePointerDown,
     handlePointerMove,
     handlePointerEnd,
+    wasDragged: () => performance.now() - lastDragTimeRef.current < 100,
   }
 }
