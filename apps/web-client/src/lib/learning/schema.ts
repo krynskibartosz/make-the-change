@@ -61,6 +61,7 @@ export const atlasDomainSchema = z.object({
   id: learningDomainIdSchema,
   title: z.string().min(1),
   subtitle: z.string().min(1),
+  shortDescription: z.string().optional(),
   description: z.string().min(1),
   iconKey: z.string().min(1),
   accentClass: z.string().min(1),

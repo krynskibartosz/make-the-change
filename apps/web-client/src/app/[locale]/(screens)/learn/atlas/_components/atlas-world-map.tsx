@@ -147,7 +147,7 @@ function HexTerritorySvg({
   const center = getTerritoryPoint(territory)
 
   return (
-    <g opacity={dimmed ? 0.28 : 1}>
+    <g opacity={dimmed ? 0.45 : 1}>
       <g>
         {territory.cells.map((cell: HexCell) => {
           const { x: cellX, y: cellY } = getHexCenter(cell, HEX_RADIUS)
@@ -248,10 +248,10 @@ function SubdomainSvg({
         let cellStrokeWidth = 1.8
 
         if (mc) {
-          // Module cells: gold/amber border to stand out as "pillars"
           if (mc.kind === 'module') {
-            cellStroke = 'rgba(255,215,0,0.7)'
-            cellStrokeWidth = 2.6
+            // "Blob" materialization for guided paths: strong border glow
+            cellStroke = 'rgba(255,215,0,0.8)' // A warm glow color
+            cellStrokeWidth = 3.5
           }
 
           // Status-based fill
@@ -457,76 +457,55 @@ function CourseCellLabels({
         const iconSize = isModule ? 14 : 10
 
         return (
-          <motion.button
+          <motion.div
             key={`cell-label-${mc.contentId}`}
-            type="button"
-            initial={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className={cn(
-              'pointer-events-auto absolute z-40 cursor-pointer flex items-center justify-center rounded-full',
-              // Modules: white background + amber icon — high contrast against amber hex tiles
-              // Courses: small translucent white pill — clearly secondary
-              isModule
-                ? 'bg-white text-amber-500 shadow-[0_2px_12px_rgba(0,0,0,0.35)] ring-2 ring-black/10'
-                : 'bg-white/80 text-gray-500 shadow-[0_1px_4px_rgba(0,0,0,0.2)] ring-1 ring-black/5',
-              isNotStarted ? 'opacity-50 saturate-50' : '',
-              isInProgress ? 'opacity-100 shadow-[0_0_14px_rgba(255,255,255,0.35)]' : '',
-              isCompleted ? 'opacity-100' : ''
-            )}
+            className="absolute z-40 pointer-events-none flex flex-col items-center"
             style={{
               left: `${(cx / ARTBOARD_WIDTH) * 100}%`,
               top: `${(cy / ARTBOARD_HEIGHT) * 100}%`,
-              width: `${buttonSize}px`,
-              height: `${buttonSize}px`,
-            }}
-            onClick={(e) => {
-              e.stopPropagation()
-              onCellClick(mc.contentId, mc.kind, territoryColor)
+              transform: 'translate(-50%, -100%)', // Anchor bottom to cell center
             }}
           >
-            {/* Apple Watch style Circular Progress Ring */}
-            {isModule && mc.progressTotal && mc.progressTotal > 1 && !isCompleted && (
-              <svg className="absolute inset-0 h-full w-full -rotate-90 pointer-events-none drop-shadow-md" viewBox="0 0 100 100">
-                {/* Track */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  fill="transparent"
-                  stroke="rgba(0,0,0,0.15)"
-                  strokeWidth="10"
-                />
-                {/* Fill */}
-                {((mc.progressCount || 0) > 0) && (
-                  <motion.circle
-                    cx="50"
-                    cy="50"
-                    r="42"
-                    fill="transparent"
-                    stroke="#FFFFFF"
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    strokeDasharray={2 * Math.PI * 42}
-                    initial={{ strokeDashoffset: 2 * Math.PI * 42 }}
-                    animate={{ strokeDashoffset: 2 * Math.PI * 42 * (1 - (mc.progressCount || 0) / mc.progressTotal!) }}
-                    transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
-                  />
+            {/* The Label/Button */}
+            <button
+              type="button"
+              className={cn(
+                'pointer-events-auto flex items-center gap-1.5 rounded-full px-2.5 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.15)] active:scale-95 transition-transform min-w-[3rem]',
+                isModule
+                  ? 'bg-white text-amber-600 font-bold ring-1 ring-black/10'
+                  : 'bg-[#1a1a1a]/80 backdrop-blur-md text-white font-medium ring-1 ring-white/10',
+                isNotStarted ? 'opacity-80' : '',
+                isInProgress ? 'ring-2 ring-white/50 shadow-[0_0_15px_rgba(255,255,255,0.2)]' : '',
+                isCompleted ? 'opacity-100' : ''
+              )}
+              onClick={(e) => {
+                e.stopPropagation()
+                onCellClick(mc.contentId, mc.kind, territoryColor)
+              }}
+            >
+              <div className="relative flex items-center justify-center shrink-0">
+                <Icon size={12} strokeWidth={2.5} />
+                {isCompleted && (
+                  <div className="absolute -bottom-1 -right-1 z-20 bg-green-500 rounded-full text-white ring-[1.5px] ring-white">
+                    <CheckCircle2 size={8} strokeWidth={3} />
+                  </div>
                 )}
-              </svg>
-            )}
-
-            <div className="relative z-10 flex items-center justify-center">
-              <Icon size={iconSize} strokeWidth={isModule ? 2.5 : 2} />
-            </div>
-            
-            {isCompleted && (
-              <div className="absolute -bottom-1 -right-1 z-20 bg-green-500 rounded-full text-white ring-[1.5px] ring-white shadow-sm">
-                <CheckCircle2 size={10} strokeWidth={3} />
               </div>
-            )}
-          </motion.button>
+              <span className="text-[0.72rem] leading-none whitespace-nowrap pt-0.5">
+                {mc.title}
+              </span>
+            </button>
+
+            {/* The Anchor Pin */}
+            <div className="flex flex-col items-center pointer-events-none">
+              <div className={cn("w-px h-3", isModule ? "bg-amber-500/70" : "bg-white/40")} />
+              <div className={cn("w-1.5 h-1.5 rounded-full shadow-sm ring-1 ring-black/20", isModule ? "bg-amber-500" : "bg-white/60")} />
+            </div>
+          </motion.div>
         )
       })}
     </>
@@ -567,10 +546,29 @@ function AtlasHeader({
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           </Link>
         )}
+
+        {/* Micro-Header for selected territory */}
+        {selectedTerritory && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex-1 text-center mt-1"
+          >
+            <h1 className="text-[1.05rem] font-black text-white/95 leading-tight tracking-tight drop-shadow-md">
+              {selectedTerritory.domain.title}
+            </h1>
+            {selectedTerritory.domain.shortDescription && (
+              <p className="mt-0.5 text-[0.75rem] font-medium text-white/70 drop-shadow-sm max-w-[200px] mx-auto leading-snug">
+                {selectedTerritory.domain.shortDescription}
+              </p>
+            )}
+          </motion.div>
+        )}
+
         <button
           type="button"
           aria-label="Rechercher"
-          className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto ml-auto')}
+          className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto', !selectedTerritory && 'ml-auto')}
         >
           <Search className="h-4 w-4" aria-hidden="true" />
         </button>
