@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Search } from 'lucide-react'
 import type { LearningDomainId } from '@/lib/learning/schema'
@@ -8,6 +9,7 @@ import type {
   AtlasSubdomainConfig,
   AtlasTerritoryConfig,
   HexCell,
+  LearningProgress,
 } from '@/lib/learning/schema'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
@@ -26,6 +28,9 @@ import {
   getTerritoryPoint,
 } from '../_utils/atlas-geometry'
 import { useAtlasCamera } from '../_hooks/use-atlas-camera'
+import { readLearningProgress } from '@/lib/learning/progress'
+import { getSubdomainContent, getSubdomainProgress } from '@/lib/learning/selectors'
+import { AtlasSubdomainSheet } from './atlas-subdomain-sheet'
 
 // ─── Framer Motion variants ──────────────────────────────────────────────────
 // Defined at module scope — not recreated on every render.
@@ -65,9 +70,11 @@ const WORLD_CONNECTION_PAIRS: Array<[LearningDomainId, LearningDomainId]> = [
 function WorldConnectionLines({
   territories,
   visible,
+  highlightedDomainId,
 }: {
   territories: AtlasTerritoryConfig[]
   visible: boolean
+  highlightedDomainId: LearningDomainId | null
 }) {
   const centerMap = new Map(territories.map((t) => [t.domain.id, getTerritoryPoint(t)]))
 
@@ -82,15 +89,36 @@ function WorldConnectionLines({
         const from = centerMap.get(fromId)
         const to = centerMap.get(toId)
         if (!from || !to) return null
+        
+        const isHighlighted = highlightedDomainId === fromId || highlightedDomainId === toId
+
         return (
-          <line
+          <motion.line
             key={`${fromId}-${toId}`}
             x1={from.x}
             y1={from.y}
             x2={to.x}
             y2={to.y}
-            stroke="rgba(255,255,255,0.07)"
-            strokeWidth="4"
+            animate={
+              isHighlighted
+                ? {
+                    stroke: ['rgba(255,255,255,0.12)', 'rgba(255,255,255,0.38)', 'rgba(255,255,255,0.12)'],
+                    strokeWidth: [4, 5.5, 4],
+                  }
+                : {
+                    stroke: 'rgba(255,255,255,0.07)',
+                    strokeWidth: 4,
+                  }
+            }
+            transition={
+              isHighlighted
+                ? {
+                    repeat: Infinity,
+                    duration: 2,
+                    ease: 'easeInOut',
+                  }
+                : { duration: 0.3 }
+            }
             strokeDasharray="10 16"
             strokeLinecap="round"
           />
@@ -104,10 +132,12 @@ function HexTerritorySvg({
   territory,
   selected,
   dimmed,
+  hasProgress,
 }: {
   territory: AtlasTerritoryConfig
   selected: boolean
   dimmed: boolean
+  hasProgress: boolean
 }) {
   const center = getTerritoryPoint(territory)
 
@@ -127,14 +157,15 @@ function HexTerritorySvg({
           )
         })}
       </g>
-      <g opacity={selected ? 0.9 : 0.62}>
+      <g opacity={selected ? 0.9 : hasProgress ? 0.82 : 0.62}>
         {territory.textureCells.map((cell: HexCell) => {
           const { x: cellX, y: cellY } = getHexCenter(cell, HEX_RADIUS)
           return (
             <path
               key={`${territory.domain.id}-texture-${cell.q}-${cell.r}`}
               d={getHexPath(center.x + cellX, center.y + cellY, HEX_RADIUS * 0.36)}
-              fill="rgba(0,0,0,0.34)"
+              fill={hasProgress ? territory.color : "rgba(0,0,0,0.34)"}
+              opacity={hasProgress ? 0.5 : 1}
               stroke="rgba(0,0,0,0.08)"
               strokeWidth="1"
             />
@@ -148,11 +179,24 @@ function HexTerritorySvg({
 function SubdomainSvg({
   subdomain,
   visible,
+  progressRatio,
+  onClick,
 }: {
   subdomain: AtlasSubdomainConfig
   visible: boolean
+  progressRatio: number
+  onClick?: () => void
 }) {
   const center = getSubdomainPoint(subdomain)
+  
+  const isCompleted = progressRatio === 1
+  const hasProgress = progressRatio > 0
+
+  const filter = isCompleted
+    ? `drop-shadow(0 0 10px ${subdomain.color})`
+    : hasProgress
+      ? `drop-shadow(0 0 5px ${subdomain.color}80)`
+      : undefined
 
   return (
     <motion.g
@@ -160,7 +204,16 @@ function SubdomainSvg({
       variants={SUBDOMAIN_SVG_VARIANTS}
       animate={visible ? 'visible' : 'hidden'}
       transition={{ duration: 0.24, ease: 'easeOut' }}
-      style={{ transformOrigin: `${center.x}px ${center.y}px` }}
+      style={{ 
+        transformOrigin: `${center.x}px ${center.y}px`,
+        filter,
+      }}
+      className={cn(visible ? "cursor-pointer" : "pointer-events-none")}
+      onClick={(e) => {
+        if (!visible) return
+        e.stopPropagation()
+        onClick?.()
+      }}
     >
       {subdomain.cells.map((cell: HexCell) => {
         const { x: cellX, y: cellY } = getHexCenter(cell, SUBDOMAIN_HEX_RADIUS)
@@ -174,6 +227,20 @@ function SubdomainSvg({
           />
         )
       })}
+
+      {isCompleted && (
+        <g transform={`translate(${center.x - 7}, ${center.y - 7})`} className="pointer-events-none">
+          <circle cx="7" cy="7" r="7.5" fill="#FFFFFF" />
+          <path
+            d="M4.2 7.2 L6.2 9.2 L9.8 4.8"
+            fill="none"
+            stroke={subdomain.color}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+      )}
     </motion.g>
   )
 }
@@ -219,25 +286,37 @@ function TerritoryLabel({
 function SubdomainLabel({
   subdomain,
   visible,
+  onClick,
 }: {
   subdomain: AtlasSubdomainConfig
   visible: boolean
+  onClick?: () => void
 }) {
   return (
-    <motion.span
+    <motion.button
+      type="button"
       initial={false}
       variants={SUBDOMAIN_LABEL_VARIANTS}
       animate={visible ? 'visible' : 'hidden'}
       transition={{ duration: 0.28, ease: 'easeOut' }}
-      className="pointer-events-none absolute z-30 max-w-[7.4rem] -translate-x-1/2 -translate-y-1/2 rounded-[0.48rem] px-2.5 py-1.5 text-center text-[0.62rem] font-black leading-tight text-white shadow-[0_7px_0_rgba(0,0,0,0.18),0_14px_28px_rgba(0,0,0,0.2)] md:max-w-[9rem] md:text-[0.72rem]"
+      className={cn(
+        "absolute z-30 max-w-[7.4rem] -translate-x-1/2 -translate-y-1/2 rounded-[0.48rem] px-2.5 py-1.5 text-center text-[0.62rem] font-black leading-tight text-white shadow-[0_7px_0_rgba(0,0,0,0.18),0_14px_28px_rgba(0,0,0,0.2)] active:scale-95 transition-transform duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:max-w-[9rem] md:text-[0.72rem]",
+        visible ? "pointer-events-auto cursor-pointer" : "pointer-events-none"
+      )}
+      disabled={!visible}
       style={{
         left: `${subdomain.x}%`,
         top: `${subdomain.y}%`,
         backgroundColor: subdomain.color,
       }}
+      onClick={(e) => {
+        if (!visible) return
+        e.stopPropagation()
+        onClick?.()
+      }}
     >
       {subdomain.label}
-    </motion.span>
+    </motion.button>
   )
 }
 
@@ -307,6 +386,9 @@ function AtlasCamera({
   isWorldView,
   reduceMotion,
   onSelectTerritory,
+  progress,
+  onSelectSubdomain,
+  selectedSubdomainDomainId,
 }: {
   map: AtlasKinnuMapView
   selectedTerritoryId: LearningDomainId | null
@@ -316,6 +398,9 @@ function AtlasCamera({
   isWorldView: boolean
   reduceMotion: boolean
   onSelectTerritory: (domainId: LearningDomainId) => void
+  progress: LearningProgress | null
+  onSelectSubdomain: (domainId: LearningDomainId, subdomainId: string) => void
+  selectedSubdomainDomainId: LearningDomainId | null
 }) {
   return (
     <motion.div
@@ -349,25 +434,40 @@ function AtlasCamera({
         <rect width={ARTBOARD_WIDTH} height={ARTBOARD_HEIGHT} fill="transparent" />
 
         {/* World view connection lines — drawn below hex territories */}
-        <WorldConnectionLines territories={map.territories} visible={isWorldView} />
+        <WorldConnectionLines 
+          territories={map.territories} 
+          visible={isWorldView} 
+          highlightedDomainId={selectedSubdomainDomainId}
+        />
 
-        {map.territories.map((territory) => (
-          <HexTerritorySvg
-            key={territory.domain.id}
-            territory={territory}
-            selected={selectedTerritoryId === territory.domain.id}
-            dimmed={Boolean(selectedTerritoryId && selectedTerritoryId !== territory.domain.id)}
-          />
-        ))}
+        {map.territories.map((territory) => {
+          const hasProgress = territory.subdomains.some(
+            (s) => getSubdomainProgress(territory.domain.id, s.id, progress) > 0
+          )
+          return (
+            <HexTerritorySvg
+              key={territory.domain.id}
+              territory={territory}
+              selected={selectedTerritoryId === territory.domain.id}
+              dimmed={Boolean(selectedTerritoryId && selectedTerritoryId !== territory.domain.id)}
+              hasProgress={hasProgress}
+            />
+          )
+        })}
 
         {map.territories.flatMap((territory) =>
-          territory.subdomains.map((subdomain) => (
-            <SubdomainSvg
-              key={`${territory.domain.id}-${subdomain.id}`}
-              subdomain={subdomain}
-              visible={camera.scale >= SUBDOMAIN_VISIBLE_SCALE}
-            />
-          )),
+          territory.subdomains.map((subdomain) => {
+            const ratio = getSubdomainProgress(territory.domain.id, subdomain.id, progress)
+            return (
+              <SubdomainSvg
+                key={`${territory.domain.id}-${subdomain.id}`}
+                subdomain={subdomain}
+                visible={camera.scale >= SUBDOMAIN_VISIBLE_SCALE}
+                progressRatio={ratio}
+                onClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
+              />
+            )
+          }),
         )}
 
         <rect width={ARTBOARD_WIDTH} height={ARTBOARD_HEIGHT} fill="url(#atlas-kinnu-vignette)" />
@@ -390,6 +490,7 @@ function AtlasCamera({
               key={`${territory.domain.id}-${subdomain.id}`}
               subdomain={subdomain}
               visible={camera.scale >= SUBDOMAIN_LABEL_SCALE}
+              onClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
             />
           )),
         )}
@@ -402,6 +503,16 @@ function AtlasCamera({
 
 export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   const reduceMotion = useReducedMotion() ?? false
+
+  const [progress, setProgress] = useState<LearningProgress | null>(null)
+  const [selectedSubdomain, setSelectedSubdomain] = useState<{
+    domainId: LearningDomainId
+    subdomainId: string
+  } | null>(null)
+
+  useEffect(() => {
+    setProgress(readLearningProgress('default'))
+  }, [])
 
   const {
     camera,
@@ -419,6 +530,21 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
 
   // Connection lines and top gradient adjust based on whether we're in world or territory view
   const isWorldView = !selectedTerritoryId
+
+  const handleSelectSubdomain = (domainId: LearningDomainId, subdomainId: string) => {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(12)
+      } catch (e) {
+        // ignore vibrate error
+      }
+    }
+    setSelectedSubdomain({ domainId, subdomainId })
+  }
+
+  const subdomainContent = selectedSubdomain
+    ? getSubdomainContent(selectedSubdomain.domainId, selectedSubdomain.subdomainId, progress)
+    : null
 
   return (
     <main
@@ -460,10 +586,22 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         isWorldView={isWorldView}
         reduceMotion={reduceMotion}
         onSelectTerritory={snapToTerritory}
+        progress={progress}
+        onSelectSubdomain={handleSelectSubdomain}
+        selectedSubdomainDomainId={selectedSubdomain?.domainId ?? null}
       />
 
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
       <AtlasSearchDock />
+
+      <AtlasSubdomainSheet
+        isOpen={selectedSubdomain !== null}
+        onClose={() => setSelectedSubdomain(null)}
+        content={subdomainContent}
+        territoryColor={subdomainContent?.territory.color ?? '#A7F36B'}
+        territoryTextColor={subdomainContent?.territory.textColor ?? '#111'}
+        progress={progress}
+      />
 
       <div className="sr-only" aria-live="polite">
         {selectedTerritory

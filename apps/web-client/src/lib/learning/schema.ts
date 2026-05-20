@@ -179,6 +179,7 @@ export type AtlasSubdomainConfig = {
   y: number
   color: string
   cells: HexCell[]
+  themeKeys: string[]
 }
 
 export type AtlasTerritoryConfig = {

@@ -13,6 +13,7 @@ import type {
   AtlasIslandNode,
   AtlasIslandView,
   AtlasKinnuMapView,
+  AtlasSubdomainConfig,
   AtlasTerritoryConfig,
   AtlasThemeGroup,
   HexCell,
@@ -20,6 +21,7 @@ import type {
   LearningDomainId,
   LearningHomeModel,
   LearningLevel,
+  LearningPath,
   LearningProgress,
 } from './schema'
 
@@ -220,6 +222,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 24,
         color: '#84C86F',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Énergie', 'Cycles', 'Sols'],
       },
       {
         id: 'questions',
@@ -228,6 +231,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 36,
         color: '#52B9A8',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Vie'],
       },
       {
         id: 'mini-cours',
@@ -236,6 +240,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 53,
         color: '#E5B947',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Réflexes'],
       },
       {
         id: 'modules',
@@ -244,6 +249,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 56,
         color: '#7BCF5B',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Synthèse'],
       },
     ],
   },
@@ -263,6 +269,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 18,
         color: '#37B8DF',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Îles & endémisme', 'Rythmes du vivant'],
       },
       {
         id: 'eau',
@@ -271,6 +278,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 22,
         color: '#69D7FF',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Cycles'],
       },
       {
         id: 'forets',
@@ -279,6 +287,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 36,
         color: '#62C76A',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
       {
         id: 'oceans',
@@ -287,6 +296,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 38,
         color: '#4C98F0',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Océans & récifs', 'Toile vivante'],
       },
     ],
   },
@@ -306,6 +316,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 39,
         color: '#F1C84B',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Pollinisation', 'Toile vivante'],
       },
       {
         id: 'symbiose',
@@ -314,6 +325,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 42,
         color: '#59BE83',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Coopérations', 'Évolution'],
       },
       {
         id: 'chaines',
@@ -322,6 +334,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 56,
         color: '#D58B4B',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Chaînes alimentaires'],
       },
       {
         id: 'decomposition',
@@ -330,6 +343,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 58,
         color: '#A78655',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
     ],
   },
@@ -349,6 +363,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 37,
         color: '#EF6D57',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Crises du vivant'],
       },
       {
         id: 'pollution',
@@ -357,6 +372,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 41,
         color: '#C95BE8',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
       {
         id: 'fragmentation',
@@ -365,6 +381,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 55,
         color: '#D94969',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
       {
         id: 'invasives',
@@ -373,6 +390,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 58,
         color: '#B34D6E',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
     ],
   },
@@ -392,6 +410,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 62,
         color: '#6FD15D',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Restaurer'],
       },
       {
         id: 'suivre',
@@ -400,6 +419,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 63,
         color: '#4AC4A0',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
       {
         id: 'produire',
@@ -408,6 +428,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 78,
         color: '#9DCA45',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Produire avec le vivant'],
       },
       {
         id: 'agir',
@@ -416,6 +437,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 80,
         color: '#F06D3A',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Projets terrain'],
       },
     ],
   },
@@ -435,6 +457,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 70,
         color: '#9FA9A0',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Métriques'],
       },
       {
         id: 'estimer',
@@ -443,6 +466,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 74,
         color: '#7DBDFF',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: ['Projets terrain'],
       },
       {
         id: 'suivi',
@@ -451,6 +475,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 88,
         color: '#5FC7A7',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
       {
         id: 'prudence',
@@ -459,6 +484,7 @@ const ATLAS_KINNU_TERRITORY_CONFIG: Record<
         y: 91,
         color: '#D0BA75',
         cells: HEX_SMALL_BLOB_CELLS,
+        themeKeys: [],
       },
     ],
   },
@@ -997,4 +1023,75 @@ export function getLearningHome(input: LearningHomeInput = {}): LearningHomeMode
     biodexCourses,
     allCourses: courses.slice().sort(byDurationThenTitle),
   }
+}
+
+export type SubdomainContent = {
+  subdomain: AtlasSubdomainConfig
+  territory: AtlasTerritoryConfig
+  modules: LearningPath[]           // Modules guidés liés à ce subdomain
+  courses: LearningCourse[]         // Cours libres
+  totalCourses: number
+  completedCount: number            // Basé sur la progress
+}
+
+export function getSubdomainContent(
+  domainId: LearningDomainId,
+  subdomainId: string,
+  progress?: LearningProgress | null,
+): SubdomainContent | null {
+  const map = getAtlasKinnuMapView()
+  const territory = map.territories.find((t) => t.domain.id === domainId)
+  if (!territory) return null
+
+  const subdomain = territory.subdomains.find((s) => s.id === subdomainId)
+  if (!subdomain) return null
+
+  const allCourses = getAllLearningCourses()
+  const subdomainCourses = allCourses.filter(
+    (course) => course.domain === domainId && subdomain.themeKeys.includes(course.theme),
+  )
+
+  const modules = getAllLearningPaths().filter((path) =>
+    path.courseIds.some((cid) => subdomainCourses.some((c) => c.id === cid)),
+  )
+
+  const moduleCourseIds = new Set(modules.flatMap((path) => path.courseIds))
+  const freeCourses = subdomainCourses.filter((course) => !moduleCourseIds.has(course.id))
+
+  const completed = new Set(progress?.completedCourseIds ?? [])
+  const completedCount = subdomainCourses.filter((c) => completed.has(c.id)).length
+
+  return {
+    subdomain,
+    territory,
+    modules,
+    courses: freeCourses,
+    totalCourses: subdomainCourses.length,
+    completedCount,
+  }
+}
+
+export function getSubdomainProgress(
+  domainId: LearningDomainId,
+  subdomainId: string,
+  progress: LearningProgress | null,
+): number {
+  const map = getAtlasKinnuMapView()
+  const territory = map.territories.find((t) => t.domain.id === domainId)
+  if (!territory) return 0
+
+  const subdomain = territory.subdomains.find((s) => s.id === subdomainId)
+  if (!subdomain) return 0
+
+  const allCourses = getAllLearningCourses()
+  const subdomainCourses = allCourses.filter(
+    (course) => course.domain === domainId && subdomain.themeKeys.includes(course.theme),
+  )
+
+  if (subdomainCourses.length === 0) return 0
+
+  const completed = new Set(progress?.completedCourseIds ?? [])
+  const completedCount = subdomainCourses.filter((c) => completed.has(c.id)).length
+
+  return completedCount / subdomainCourses.length
 }
