@@ -70,10 +70,6 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
   const allThreats = species.threats ?? []
   const hasThreats = allThreats.length > 0
 
-  const producers = species.associated_producers ?? []
-  const projects = species.associated_projects ?? []
-  const hasRelations = producers.length > 0 || projects.length > 0
-
   return (
     <>
       <section className='mx-5'>
@@ -114,48 +110,15 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
             )}
           </AccordionItem>
 
-          {/* 02 – Rôle écologique */}
-          <AccordionItem title='Rôle écologique' number='02'>
-            {species.description_default ? (
-              <p className='text-sm leading-relaxed text-white/60'>{species.description_default}</p>
-            ) : (
-              <p className='text-xs text-white/35'>Données à documenter.</p>
-            )}
+          {/* 02 – Relations dans le vivant */}
+          <AccordionItem title='Relations dans le vivant' number='02'>
+            <p className='text-xs text-white/35'>
+              Plantes mellifères, pollinisateurs associés, cultures locales, prédateurs — à documenter avec les données terrain.
+            </p>
           </AccordionItem>
 
-          {/* 03 – Relations dans le vivant */}
-          <AccordionItem title='Relations dans le vivant' number='03'>
-            {hasRelations ? (
-              <div className='space-y-3'>
-                {producers.map((p) => (
-                  <div key={p.id}>
-                    <p className='text-sm font-semibold text-white/80'>
-                      {p.name}
-                      {p.location && (
-                        <span className='font-normal text-white/40'> · {p.location}</span>
-                      )}
-                    </p>
-                    {p.relationship && (
-                      <p className='mt-0.5 text-xs text-white/40'>{p.relationship}</p>
-                    )}
-                  </div>
-                ))}
-                {projects.map((p) => (
-                  <div key={p.id}>
-                    <p className='text-sm font-semibold text-white/80'>{p.name}</p>
-                    {p.role && <p className='mt-0.5 text-xs text-white/40'>{p.role}</p>}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className='text-xs text-white/35'>
-                Relations à documenter avec le partenaire et les données terrain.
-              </p>
-            )}
-          </AccordionItem>
-
-          {/* 04 – Menaces & fragilités */}
-          <AccordionItem title='Menaces & fragilités' number='04'>
+          {/* 03 – Menaces & fragilités */}
+          <AccordionItem title='Menaces & fragilités' number='03'>
             {hasThreats ? (
               <div className='space-y-3'>
                 <div className='flex flex-wrap gap-2'>

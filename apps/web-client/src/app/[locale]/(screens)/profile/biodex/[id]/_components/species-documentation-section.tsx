@@ -4,16 +4,6 @@ import type { ReactNode } from 'react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
 import type { SpeciesContext } from '@/types/species'
 
-const IUCN_LABELS: Record<string, string> = {
-  CR: 'En danger critique',
-  EN: 'En danger',
-  VU: 'Vulnérable',
-  NT: 'Quasi menacé',
-  LC: 'Préoccupation mineure',
-  DD: 'Données locales limitées',
-  EW: "Éteint à l'état sauvage",
-  EX: 'Éteint',
-}
 
 type StatusKind = 'documented' | 'pending' | 'unavailable'
 
@@ -65,19 +55,16 @@ interface SpeciesDocumentationSectionProps {
 
 export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSectionProps) {
   const hasProject = !!species.associated_projects?.length
-  const conservationLabel = species.conservation_status
-    ? (IUCN_LABELS[species.conservation_status] ?? species.conservation_status)
-    : null
 
   return (
     <section className='mx-5'>
       <p className='mb-1 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-        Ce qui est documenté
+        Fiabilité des informations
       </p>
       <div className='divide-y divide-white/[0.05]'>
         <StatusRow
-          label='Image principale'
-          value='Représentation pédagogique'
+          label='Image pédagogique'
+          value='Représentation naturalisée'
           status='documented'
           sheetTitle='À propos de cette image'
           sheetContent={
@@ -91,6 +78,19 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
                 protection de l&apos;espèce.
               </p>
             </div>
+          }
+        />
+
+        <StatusRow
+          label='Photo terrain'
+          value='Non disponible'
+          status='unavailable'
+          sheetTitle='Photo terrain'
+          sheetContent={
+            <p>
+              Une photo terrain documentée peut être ajoutée si un partenaire la fournit. Elle sera
+              clairement distinguée de la représentation pédagogique.
+            </p>
           }
         />
 
@@ -113,39 +113,6 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
         />
 
         <StatusRow
-          label='Photo terrain'
-          value='Non disponible'
-          status='unavailable'
-          sheetTitle='Photo terrain'
-          sheetContent={
-            <p>
-              Une photo terrain documentée peut être ajoutée si un partenaire la fournit. Elle sera
-              clairement distinguée de la représentation pédagogique.
-            </p>
-          }
-        />
-
-        <StatusRow
-          label='Statut de conservation'
-          value={conservationLabel ?? 'À documenter'}
-          status={conservationLabel ? 'documented' : 'pending'}
-          sheetTitle='Statut de conservation'
-          sheetContent={
-            <div className='space-y-3'>
-              <p>
-                Le statut de conservation peut varier selon le périmètre évalué : espèce,
-                sous-espèce, population sauvage ou population locale.
-              </p>
-              <p>Les données locales liées au projet restent à documenter avec le partenaire.</p>
-              <p className='text-xs text-white/40'>
-                Ce statut n&apos;est pas une validation de l&apos;impact du projet sur
-                l&apos;espèce.
-              </p>
-            </div>
-          }
-        />
-
-        <StatusRow
           label='Données scientifiques'
           value='À vérifier'
           status='pending'
@@ -159,6 +126,25 @@ export function SpeciesDocumentationSection({ species }: SpeciesDocumentationSec
               </p>
               <p className='text-xs text-white/40'>
                 Make the Change s&apos;engage à afficher les données avec leur niveau de fiabilité.
+              </p>
+            </div>
+          }
+        />
+
+        <StatusRow
+          label='Données locales'
+          value='À documenter'
+          status='pending'
+          sheetTitle='Données locales'
+          sheetContent={
+            <div className='space-y-3'>
+              <p>
+                Les données de terrain (observations locales, comptages, comportements saisonniers)
+                n&apos;ont pas encore été recueillies avec le partenaire.
+              </p>
+              <p className='text-xs text-white/40'>
+                Ces données permettront d&apos;affiner le rôle réel de l&apos;espèce dans ce
+                contexte spécifique.
               </p>
             </div>
           }

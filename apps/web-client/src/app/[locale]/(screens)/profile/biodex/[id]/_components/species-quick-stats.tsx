@@ -1,16 +1,5 @@
 import type { SpeciesContext } from '@/types/species'
 
-const IUCN_QUICK_LABELS: Record<string, string> = {
-  CR: 'En danger critique',
-  EN: 'En danger',
-  VU: 'Vulnérable',
-  NT: 'Quasi menacé',
-  LC: 'Préoccupation mineure',
-  DD: 'Données locales limitées',
-  EW: "Éteint à l'état sauvage",
-  EX: 'Éteint',
-}
-
 function formatDiet(diet: string): string {
   const d = diet.toLowerCase()
   if (d.includes('nectarivore') && d.includes('pollinivore')) return 'Nectar & pollen'
@@ -21,18 +10,19 @@ function formatDiet(diet: string): string {
   return diet
 }
 
+function getMainHabitat(habitats: string[]): string | null {
+  const simple = habitats.find((h) => !h.includes('(Z'))
+  return simple ?? (habitats[0] ?? null)
+}
+
 interface SpeciesQuickStatsProps {
   species: SpeciesContext
 }
 
 export function SpeciesQuickStats({ species }: SpeciesQuickStatsProps) {
   const hasAny =
-    species.origin_country || species.diet || species.size || species.conservation_status
+    species.origin_country || species.diet || species.size || (species.habitat?.length ?? 0) > 0
   if (!hasAny) return null
-
-  const statusLabel = species.conservation_status
-    ? (IUCN_QUICK_LABELS[species.conservation_status] ?? 'À documenter')
-    : 'À documenter'
 
   const dietLabel = species.diet ? formatDiet(species.diet) : null
 
@@ -43,11 +33,13 @@ export function SpeciesQuickStats({ species }: SpeciesQuickStatsProps) {
     return null
   })()
 
+  const habitatLabel = getMainHabitat(species.habitat ?? [])
+
   const rows: { label: string; value: string }[] = []
   if (species.origin_country) rows.push({ label: 'Origine', value: species.origin_country })
   if (dietLabel) rows.push({ label: 'Régime', value: dietLabel })
   if (sizeLabel) rows.push({ label: 'Taille / Poids', value: sizeLabel })
-  rows.push({ label: 'Statut', value: statusLabel })
+  if (habitatLabel) rows.push({ label: 'Habitat', value: habitatLabel })
 
   return (
     <section className='mx-5'>
