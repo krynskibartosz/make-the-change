@@ -48,9 +48,9 @@ export function SpeciesQuickStats({ species }: SpeciesQuickStatsProps) {
       </p>
       <div className='divide-y divide-white/[0.06]'>
         {rows.map((row) => (
-          <div key={row.label} className='flex items-center justify-between py-2.5'>
-            <p className='text-xs text-white/40'>{row.label}</p>
-            <p className='text-sm font-semibold text-white/80'>{row.value}</p>
+          <div key={row.label} className='flex items-start justify-between gap-4 py-2.5'>
+            <p className='shrink-0 text-xs text-white/40'>{row.label}</p>
+            <p className='text-right text-sm font-semibold text-white/80'>{row.value}</p>
           </div>
         ))}
       </div>
