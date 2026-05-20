@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, Search } from 'lucide-react'
+import { ArrowLeft, Search, BookOpen, Layers, CheckCircle2 } from 'lucide-react'
 import type { LearningDomainId } from '@/lib/learning/schema'
 import type {
   AtlasKinnuMapView,
@@ -441,40 +441,41 @@ function CourseCellLabels({
         const cx = center.x + cellX
         const cy = center.y + cellY
 
-        // Shorten title to fit in the cell area
-        const shortTitle =
-          mc.title.length > 14 ? `${mc.title.slice(0, 13).trim()}…` : mc.title
+        const isModule = mc.kind === 'module'
+        const isCompleted = mc.status === 'completed'
+        const Icon = isModule ? Layers : BookOpen
 
         return (
           <motion.button
             key={`cell-label-${mc.contentId}`}
             type="button"
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.85 }}
+            exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="pointer-events-auto absolute z-40 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+            className={cn(
+              'pointer-events-auto absolute z-40 -translate-x-1/2 -translate-y-1/2 cursor-pointer flex items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1 ring-black/5',
+              isModule ? 'bg-amber-400 text-amber-950' : 'bg-white/95 text-gray-800',
+              isCompleted && 'opacity-60 saturate-50'
+            )}
             style={{
               left: `${(cx / ARTBOARD_WIDTH) * 100}%`,
               top: `${(cy / ARTBOARD_HEIGHT) * 100}%`,
-              maxWidth: `${SUBDOMAIN_HEX_RADIUS * 2.2}px`,
+              width: `${SUBDOMAIN_HEX_RADIUS * 1.3}px`,
+              height: `${SUBDOMAIN_HEX_RADIUS * 1.3}px`,
             }}
             onClick={(e) => {
               e.stopPropagation()
               onCellClick(mc.contentId, mc.kind, territoryColor)
             }}
           >
-            <span
-              className={cn(
-                'block truncate rounded-[3px] px-1 py-0.5 text-center text-[0.32rem] font-bold leading-tight',
-                mc.kind === 'module'
-                  ? 'bg-amber-400/90 text-amber-950'
-                  : 'bg-white/80 text-gray-900',
-                mc.status === 'completed' && 'opacity-50 line-through',
-              )}
-            >
-              {shortTitle}
-            </span>
+            <Icon size={isModule ? 14 : 12} strokeWidth={isModule ? 2.5 : 2} />
+            
+            {isCompleted && (
+              <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full text-white ring-[1.5px] ring-white">
+                <CheckCircle2 size={10} strokeWidth={3} />
+              </div>
+            )}
           </motion.button>
         )
       })}
