@@ -11,29 +11,22 @@ import type {
   LearningDomainId,
 } from '@/lib/learning/schema'
 import { cn } from '@/lib/utils'
+import {
+  HEX_RADIUS,
+  SUBDOMAIN_HEX_RADIUS,
+  SUBDOMAIN_LABEL_SCALE,
+  SUBDOMAIN_VISIBLE_SCALE,
+} from '../_utils/atlas-config'
+import {
+  getHexCenter,
+  getHexPath,
+  getSubdomainPoint,
+  getTerritoryPoint,
+} from '../_utils/atlas-geometry'
 import { useAtlasCamera } from '../_hooks/use-atlas-camera'
 
-// ─── Map constants ───────────────────────────────────────────────────────────
-
-const ARTBOARD_WIDTH = 1000
-const ARTBOARD_HEIGHT = 1400
-const HEX_RADIUS = 27
-const SUBDOMAIN_HEX_RADIUS = 20
-const SQRT_3 = Math.sqrt(3)
-const SUBDOMAIN_VISIBLE_SCALE = 1.1
-const SUBDOMAIN_LABEL_SCALE = 1.35
-
-// Precalculated hex angle offsets — computed once at module load,
-// not on every getHexPath call (was 6 Math.cos/sin per cell × 114 cells per render).
-const HEX_ANGLE_OFFSETS = Array.from({ length: 6 }, (_, i) => ({
-  cos: Math.cos((Math.PI / 3) * i),
-  sin: Math.sin((Math.PI / 3) * i),
-}))
-
-// ─── Framer Motion variants — defined at module scope ────────────────────────
-// Defining variants outside components prevents object recreation on every render.
-// With React Compiler active, inline animate objects are still re-created each
-// render since they're not components — module-level constants avoid this entirely.
+// ─── Framer Motion variants ──────────────────────────────────────────────────
+// Defined at module scope — not recreated on every render.
 
 const TERRITORY_LABEL_VARIANTS = {
   normal: { opacity: 1, scale: 1 },
@@ -51,89 +44,7 @@ const SUBDOMAIN_LABEL_VARIANTS = {
   hidden: { opacity: 0, y: 8, scale: 0.96 },
 } as const
 
-// ─── Pure geometry helpers ───────────────────────────────────────────────────
-
-function getHexCenter(cell: HexCell, radius: number) {
-  return {
-    x: radius * 1.5 * cell.q,
-    y: radius * SQRT_3 * (cell.r + cell.q / 2),
-  }
-}
-
-function getHexPath(cx: number, cy: number, radius: number) {
-  const points = HEX_ANGLE_OFFSETS.map(
-    ({ cos, sin }) =>
-      `${(cx + radius * cos).toFixed(2)},${(cy + radius * sin).toFixed(2)}`,
-  )
-  return `M ${points.join(' L ')} Z`
-}
-
-function getTerritoryPoint(territory: Pick<AtlasTerritoryConfig, 'x' | 'y'>) {
-  return {
-    x: (territory.x / 100) * ARTBOARD_WIDTH,
-    y: (territory.y / 100) * ARTBOARD_HEIGHT,
-  }
-}
-
-function getSubdomainPoint(subdomain: Pick<AtlasSubdomainConfig, 'x' | 'y'>) {
-  return {
-    x: (subdomain.x / 100) * ARTBOARD_WIDTH,
-    y: (subdomain.y / 100) * ARTBOARD_HEIGHT,
-  }
-}
-
-// ─── Sub-components ──────────────────────────────────────────────────────────
-
-const BACK_BUTTON_CLASS =
-  'grid h-11 w-11 place-items-center rounded-full bg-white/94 text-[#111] shadow-[0_16px_36px_rgba(0,0,0,0.26)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
-
-function AtlasHeader({
-  selectedTerritory,
-  onBackToWorld,
-}: {
-  selectedTerritory: AtlasTerritoryConfig | null
-  onBackToWorld: () => void
-}) {
-  return (
-    <header className="pointer-events-none absolute inset-x-0 top-0 z-50 px-4 pt-[max(1rem,env(safe-area-inset-top))] md:px-8">
-      <div className="flex items-start justify-between gap-4">
-        {selectedTerritory ? (
-          <button
-            type="button"
-            aria-label="Retour à la carte Atlas"
-            onClick={onBackToWorld}
-            className={cn(BACK_BUTTON_CLASS, 'pointer-events-auto')}
-          >
-            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
-          </button>
-        ) : (
-          <Link
-            href="/learn"
-            aria-label="Retour à Apprendre"
-            className={cn(BACK_BUTTON_CLASS, 'pointer-events-auto')}
-          >
-            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
-          </Link>
-        )}
-      </div>
-    </header>
-  )
-}
-
-function AtlasSearchDock() {
-  return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
-      <button
-        type="button"
-        aria-label="Recherche dans l'Atlas bientôt disponible"
-        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white px-5 font-black text-[#111] shadow-[0_18px_48px_rgba(0,0,0,0.34)] transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
-      >
-        <Search className="h-5 w-5 shrink-0" strokeWidth={3.2} aria-hidden="true" />
-        <span className="truncate text-[0.98rem]">Rechercher dans l'Atlas</span>
-      </button>
-    </div>
-  )
-}
+// ─── SVG sub-components ──────────────────────────────────────────────────────
 
 function HexTerritorySvg({
   territory,
@@ -149,15 +60,12 @@ function HexTerritorySvg({
   return (
     <g opacity={dimmed ? 0.28 : 1}>
       <g>
-        {territory.cells.map((cell) => {
-          const cellCenter = getHexCenter(cell, HEX_RADIUS)
-          const cx = center.x + cellCenter.x
-          const cy = center.y + cellCenter.y
-
+        {territory.cells.map((cell: HexCell) => {
+          const { x: cellX, y: cellY } = getHexCenter(cell, HEX_RADIUS)
           return (
             <path
               key={`${territory.domain.id}-${cell.q}-${cell.r}`}
-              d={getHexPath(cx, cy, HEX_RADIUS)}
+              d={getHexPath(center.x + cellX, center.y + cellY, HEX_RADIUS)}
               fill={territory.darkColor}
               stroke="rgba(0,0,0,0.32)"
               strokeWidth="2.4"
@@ -166,15 +74,12 @@ function HexTerritorySvg({
         })}
       </g>
       <g opacity={selected ? 0.9 : 0.62}>
-        {territory.textureCells.map((cell) => {
-          const cellCenter = getHexCenter(cell, HEX_RADIUS)
-          const cx = center.x + cellCenter.x
-          const cy = center.y + cellCenter.y
-
+        {territory.textureCells.map((cell: HexCell) => {
+          const { x: cellX, y: cellY } = getHexCenter(cell, HEX_RADIUS)
           return (
             <path
               key={`${territory.domain.id}-texture-${cell.q}-${cell.r}`}
-              d={getHexPath(cx, cy, HEX_RADIUS * 0.36)}
+              d={getHexPath(center.x + cellX, center.y + cellY, HEX_RADIUS * 0.36)}
               fill="rgba(0,0,0,0.34)"
               stroke="rgba(0,0,0,0.08)"
               strokeWidth="1"
@@ -203,15 +108,12 @@ function SubdomainSvg({
       transition={{ duration: 0.24, ease: 'easeOut' }}
       style={{ transformOrigin: `${center.x}px ${center.y}px` }}
     >
-      {subdomain.cells.map((cell) => {
-        const cellCenter = getHexCenter(cell, SUBDOMAIN_HEX_RADIUS)
-        const cx = center.x + cellCenter.x
-        const cy = center.y + cellCenter.y
-
+      {subdomain.cells.map((cell: HexCell) => {
+        const { x: cellX, y: cellY } = getHexCenter(cell, SUBDOMAIN_HEX_RADIUS)
         return (
           <path
             key={`${subdomain.id}-${cell.q}-${cell.r}`}
-            d={getHexPath(cx, cy, SUBDOMAIN_HEX_RADIUS)}
+            d={getHexPath(center.x + cellX, center.y + cellY, SUBDOMAIN_HEX_RADIUS)}
             fill={subdomain.color}
             stroke="rgba(0,0,0,0.24)"
             strokeWidth="1.8"
@@ -221,6 +123,8 @@ function SubdomainSvg({
     </motion.g>
   )
 }
+
+// ─── Label sub-components ────────────────────────────────────────────────────
 
 function TerritoryLabel({
   territory,
@@ -283,6 +187,64 @@ function SubdomainLabel({
   )
 }
 
+// ─── Header / Dock sub-components ────────────────────────────────────────────
+
+const ICON_BUTTON_CLASS =
+  'grid h-11 w-11 place-items-center rounded-full bg-white/94 text-[#111] shadow-[0_16px_36px_rgba(0,0,0,0.26)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
+
+function AtlasHeader({
+  selectedTerritory,
+  onBackToWorld,
+}: {
+  selectedTerritory: AtlasTerritoryConfig | null
+  onBackToWorld: () => void
+}) {
+  return (
+    <header className="pointer-events-none absolute inset-x-0 top-0 z-50 px-4 pt-[max(1rem,env(safe-area-inset-top))] md:px-8">
+      <div className="flex items-start justify-between gap-4">
+        {selectedTerritory ? (
+          <button
+            type="button"
+            aria-label="Retour à la carte Atlas"
+            onClick={onBackToWorld}
+            className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto')}
+          >
+            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+          </button>
+        ) : (
+          <Link
+            href="/learn"
+            aria-label="Retour à Apprendre"
+            className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto')}
+          >
+            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+          </Link>
+        )}
+      </div>
+    </header>
+  )
+}
+
+function AtlasSearchDock() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
+      <button
+        type="button"
+        aria-label="Recherche dans l'Atlas bientôt disponible"
+        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white px-5 font-black text-[#111] shadow-[0_18px_48px_rgba(0,0,0,0.34)] transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
+      >
+        <Search className="h-5 w-5 shrink-0" strokeWidth={3.2} aria-hidden="true" />
+        <span className="truncate text-[0.98rem]">Rechercher dans l'Atlas</span>
+      </button>
+    </div>
+  )
+}
+
+// ─── Camera canvas ───────────────────────────────────────────────────────────
+
+const ARTBOARD_WIDTH = 1000
+const ARTBOARD_HEIGHT = 1400
+
 function AtlasCamera({
   map,
   selectedTerritoryId,
@@ -302,11 +264,7 @@ function AtlasCamera({
     <motion.div
       className="absolute left-0 top-0"
       initial={false}
-      animate={{
-        x: camera.x,
-        y: camera.y,
-        scale: camera.scale,
-      }}
+      animate={{ x: camera.x, y: camera.y, scale: camera.scale }}
       transition={{
         duration: isInteracting ? 0 : reduceMotion ? 0.18 : 0.42,
         ease: [0.2, 0.82, 0.2, 1],
@@ -329,20 +287,18 @@ function AtlasCamera({
             <stop offset="100%" stopColor="rgba(0,0,0,0.34)" />
           </radialGradient>
         </defs>
-        <rect width={ARTBOARD_WIDTH} height={ARTBOARD_HEIGHT} fill="transparent" />
-        {map.territories.map((territory) => {
-          const selected = selectedTerritoryId === territory.domain.id
-          const dimmed = Boolean(selectedTerritoryId && !selected)
 
-          return (
-            <HexTerritorySvg
-              key={territory.domain.id}
-              territory={territory}
-              selected={selected}
-              dimmed={dimmed}
-            />
-          )
-        })}
+        <rect width={ARTBOARD_WIDTH} height={ARTBOARD_HEIGHT} fill="transparent" />
+
+        {map.territories.map((territory) => (
+          <HexTerritorySvg
+            key={territory.domain.id}
+            territory={territory}
+            selected={selectedTerritoryId === territory.domain.id}
+            dimmed={Boolean(selectedTerritoryId && selectedTerritoryId !== territory.domain.id)}
+          />
+        ))}
+
         {map.territories.flatMap((territory) =>
           territory.subdomains.map((subdomain) => (
             <SubdomainSvg
@@ -352,24 +308,21 @@ function AtlasCamera({
             />
           )),
         )}
+
         <rect width={ARTBOARD_WIDTH} height={ARTBOARD_HEIGHT} fill="url(#atlas-kinnu-vignette)" />
       </svg>
 
       <div className="absolute inset-0">
-        {map.territories.map((territory) => {
-          const selected = selectedTerritoryId === territory.domain.id
-          const dimmed = Boolean(selectedTerritoryId && !selected)
+        {map.territories.map((territory) => (
+          <TerritoryLabel
+            key={territory.domain.id}
+            territory={territory}
+            selected={selectedTerritoryId === territory.domain.id}
+            dimmed={Boolean(selectedTerritoryId && selectedTerritoryId !== territory.domain.id)}
+            onSelect={() => onSelectTerritory(territory.domain.id)}
+          />
+        ))}
 
-          return (
-            <TerritoryLabel
-              key={territory.domain.id}
-              territory={territory}
-              selected={selected}
-              dimmed={dimmed}
-              onSelect={() => onSelectTerritory(territory.domain.id)}
-            />
-          )
-        })}
         {map.territories.flatMap((territory) =>
           territory.subdomains.map((subdomain) => (
             <SubdomainLabel
@@ -384,7 +337,7 @@ function AtlasCamera({
   )
 }
 
-// ─── Main component ──────────────────────────────────────────────────────────
+// ─── Root component ──────────────────────────────────────────────────────────
 
 export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   const reduceMotion = useReducedMotion() ?? false
@@ -417,6 +370,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       onPointerUp={handlePointerEnd}
     >
       <h1 className="sr-only">Atlas du vivant</h1>
+
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.055),transparent_28%),linear-gradient(180deg,#242424_0%,#202020_52%,#1f1f1f_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-72 bg-gradient-to-b from-[#202020] via-[#202020]/92 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-36 bg-gradient-to-t from-[#202020] via-[#202020]/90 to-transparent" />
@@ -429,8 +383,10 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         reduceMotion={reduceMotion}
         onSelectTerritory={snapToTerritory}
       />
+
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
       <AtlasSearchDock />
+
       <div className="sr-only" aria-live="polite">
         {selectedTerritory
           ? `${selectedTerritory.domain.title} affiche ses sous-domaines`
