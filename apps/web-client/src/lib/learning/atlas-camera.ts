@@ -62,10 +62,14 @@ export function constrainAtlasCamera(
   const scale = clamp(camera.scale, constraints.minScale, constraints.maxScale)
   const scaledWidth = map.width * scale
   const scaledHeight = map.height * scale
-  const minX = Math.min(viewport.width - scaledWidth + overscroll, overscroll)
-  const maxX = Math.max(viewport.width - overscroll, viewport.width - scaledWidth - overscroll)
-  const minY = Math.min(viewport.height - scaledHeight + overscroll, overscroll)
-  const maxY = Math.max(viewport.height - overscroll, viewport.height - scaledHeight - overscroll)
+  const rawMinX = viewport.width - scaledWidth - overscroll
+  const rawMaxX = overscroll
+  const rawMinY = viewport.height - scaledHeight - overscroll
+  const rawMaxY = overscroll
+  const minX = Math.min(rawMinX, rawMaxX)
+  const maxX = Math.max(rawMinX, rawMaxX)
+  const minY = Math.min(rawMinY, rawMaxY)
+  const maxY = Math.max(rawMinY, rawMaxY)
 
   return {
     x: clamp(camera.x, minX, maxX),
