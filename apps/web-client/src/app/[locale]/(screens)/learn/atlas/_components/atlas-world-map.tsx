@@ -2,16 +2,18 @@
 
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Search } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
+import type { LearningDomainId } from '@/lib/learning/schema'
 import type {
   AtlasKinnuMapView,
   AtlasSubdomainConfig,
   AtlasTerritoryConfig,
   HexCell,
-  LearningDomainId,
 } from '@/lib/learning/schema'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import {
+  ARTBOARD_HEIGHT,
+  ARTBOARD_WIDTH,
   HEX_RADIUS,
   SUBDOMAIN_HEX_RADIUS,
   SUBDOMAIN_LABEL_SCALE,
@@ -44,7 +46,59 @@ const SUBDOMAIN_LABEL_VARIANTS = {
   hidden: { opacity: 0, y: 8, scale: 0.96 },
 } as const
 
+// ─── Connection graph ────────────────────────────────────────────────────────
+// Pairs of domain IDs that share a visible connection line in world view.
+// Chosen to form a fully connected graph matching the geographic layout.
+
+const WORLD_CONNECTION_PAIRS: Array<[LearningDomainId, LearningDomainId]> = [
+  ['alphabet-du-vivant', 'relations-du-vivant'],
+  ['milieux-habitats', 'relations-du-vivant'],
+  ['milieux-habitats', 'menaces'],
+  ['relations-du-vivant', 'menaces'],
+  ['relations-du-vivant', 'solutions'],
+  ['menaces', 'lire-impact'],
+  ['solutions', 'lire-impact'],
+]
+
 // ─── SVG sub-components ──────────────────────────────────────────────────────
+
+function WorldConnectionLines({
+  territories,
+  visible,
+}: {
+  territories: AtlasTerritoryConfig[]
+  visible: boolean
+}) {
+  const centerMap = new Map(territories.map((t) => [t.domain.id, getTerritoryPoint(t)]))
+
+  return (
+    <motion.g
+      initial={false}
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+      aria-hidden="true"
+    >
+      {WORLD_CONNECTION_PAIRS.map(([fromId, toId]) => {
+        const from = centerMap.get(fromId)
+        const to = centerMap.get(toId)
+        if (!from || !to) return null
+        return (
+          <line
+            key={`${fromId}-${toId}`}
+            x1={from.x}
+            y1={from.y}
+            x2={to.x}
+            y2={to.y}
+            stroke="rgba(255,255,255,0.07)"
+            strokeWidth="4"
+            strokeDasharray="10 16"
+            strokeLinecap="round"
+          />
+        )
+      })}
+    </motion.g>
+  )
+}
 
 function HexTerritorySvg({
   territory,
@@ -190,7 +244,8 @@ function SubdomainLabel({
 // ─── Header / Dock sub-components ────────────────────────────────────────────
 
 const ICON_BUTTON_CLASS =
-  'grid h-11 w-11 place-items-center rounded-full bg-white/94 text-[#111] shadow-[0_16px_36px_rgba(0,0,0,0.26)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
+  // Reduced from h-11 w-11 (44px) to h-9 w-9 (36px) — back button is secondary in world view
+  'grid h-9 w-9 place-items-center rounded-full bg-white/90 text-[#111] shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
 
 function AtlasHeader({
   selectedTerritory,
@@ -209,7 +264,7 @@ function AtlasHeader({
             onClick={onBackToWorld}
             className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto')}
           >
-            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           </button>
         ) : (
           <Link
@@ -217,7 +272,7 @@ function AtlasHeader({
             aria-label="Retour à Apprendre"
             className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto')}
           >
-            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           </Link>
         )}
       </div>
@@ -231,7 +286,9 @@ function AtlasSearchDock() {
       <button
         type="button"
         aria-label="Recherche dans l'Atlas bientôt disponible"
-        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white px-5 font-black text-[#111] shadow-[0_18px_48px_rgba(0,0,0,0.34)] transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
+        // bg-white/95: slightly transparent, less visually dominant against the dark map
+        // shadow reduced to blend more naturally
+        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white/95 px-5 font-black text-[#111] shadow-[0_12px_40px_rgba(0,0,0,0.28)] backdrop-blur-sm transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
       >
         <Search className="h-5 w-5 shrink-0" strokeWidth={3.2} aria-hidden="true" />
         <span className="truncate text-[0.98rem]">Rechercher dans l'Atlas</span>
@@ -242,14 +299,12 @@ function AtlasSearchDock() {
 
 // ─── Camera canvas ───────────────────────────────────────────────────────────
 
-const ARTBOARD_WIDTH = 1000
-const ARTBOARD_HEIGHT = 1400
-
 function AtlasCamera({
   map,
   selectedTerritoryId,
   camera,
   isInteracting,
+  isWorldView,
   reduceMotion,
   onSelectTerritory,
 }: {
@@ -257,6 +312,8 @@ function AtlasCamera({
   selectedTerritoryId: LearningDomainId | null
   camera: { x: number; y: number; scale: number }
   isInteracting: boolean
+  /** True when camera is at world zoom level — shows connection lines. */
+  isWorldView: boolean
   reduceMotion: boolean
   onSelectTerritory: (domainId: LearningDomainId) => void
 }) {
@@ -284,11 +341,15 @@ function AtlasCamera({
           <radialGradient id="atlas-kinnu-vignette" cx="50%" cy="44%" r="70%">
             <stop offset="0%" stopColor="rgba(255,255,255,0.05)" />
             <stop offset="52%" stopColor="rgba(255,255,255,0.015)" />
+            {/* Transparent at edges — avoids visible container boundary against the screen bg */}
             <stop offset="100%" stopColor="rgba(0,0,0,0)" />
           </radialGradient>
         </defs>
 
         <rect width={ARTBOARD_WIDTH} height={ARTBOARD_HEIGHT} fill="transparent" />
+
+        {/* World view connection lines — drawn below hex territories */}
+        <WorldConnectionLines territories={map.territories} visible={isWorldView} />
 
         {map.territories.map((territory) => (
           <HexTerritorySvg
@@ -356,6 +417,9 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     handlePointerEnd,
   } = useAtlasCamera({ map })
 
+  // Connection lines and top gradient adjust based on whether we're in world or territory view
+  const isWorldView = !selectedTerritoryId
+
   return (
     <main
       ref={mainRef}
@@ -371,9 +435,20 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     >
       <h1 className="sr-only">Atlas du vivant</h1>
 
+      {/* Ambient background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.055),transparent_28%),linear-gradient(180deg,#242424_0%,#202020_52%,#1f1f1f_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-72 bg-gradient-to-b from-[#202020] via-[#202020]/92 to-transparent" />
+
+      {/* Top gradient: smaller in world view (h-36) to not eat island space, taller in territory view (h-72) for header separation */}
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 top-0 z-40 bg-gradient-to-b from-[#202020] via-[#202020]/92 to-transparent"
+        animate={{ height: isWorldView ? '9rem' : '18rem' }}
+        transition={{ duration: 0.45, ease: 'easeInOut' }}
+      />
+
+      {/* Bottom gradient */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-36 bg-gradient-to-t from-[#202020] via-[#202020]/90 to-transparent" />
+
+      {/* Left / right edge gradients — prevent map boundary visibility when panning */}
       <div className="pointer-events-none absolute inset-y-0 left-0 z-40 w-16 bg-gradient-to-r from-[#202020] to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-40 w-16 bg-gradient-to-l from-[#202020] to-transparent" />
 
@@ -382,6 +457,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         selectedTerritoryId={selectedTerritoryId}
         camera={camera}
         isInteracting={isInteracting}
+        isWorldView={isWorldView}
         reduceMotion={reduceMotion}
         onSelectTerritory={snapToTerritory}
       />

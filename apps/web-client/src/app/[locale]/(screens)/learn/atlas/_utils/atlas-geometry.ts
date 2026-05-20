@@ -68,12 +68,18 @@ export function getWorldTransform(
   viewport: { width: number; height: number },
   mapWidth: number,
 ): AtlasCameraState {
+  const isMobile = viewport.width < 768
   return {
-    x: viewport.width / 2 - mapWidth * (viewport.width < 768 ? 0.43 : 0.5),
-    y: viewport.width < 768 ? -52 : -82,
-    scale: 1,
+    // Mobile: 0.41 factor shifts slightly right to center the archipelago horizontally
+    x: viewport.width / 2 - mapWidth * (isMobile ? 0.41 : 0.5),
+    // Mobile: -41 is calculated so Milieux (top island) sits just below the gradient overlay
+    // and Impact (bottom island) sits ~73px above the search bar — near-perfect vertical balance
+    y: isMobile ? -41 : -82,
+    // Mobile: 0.9 gives more breathing room around the archipelago
+    scale: isMobile ? 0.9 : 1,
   }
 }
+
 
 /** Returns the camera state that centers and zooms on a specific territory. */
 export function getDomainTransform(
