@@ -479,6 +479,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   const lastRafTimestampRef = useRef<number>(0)
   const hasInitializedRef = useRef(false)
   const lastTapRef = useRef<{ x: number; y: number; t: number } | null>(null)
+  const constraintsRef = useRef(constraints)
   const selectedTerritory =
     map.territories.find((territory) => territory.domain.id === selectedTerritoryId) ?? null
   const autoViewTargets = useMemo(
@@ -588,6 +589,10 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     rafRef.current = requestAnimationFrame(tick)
   }, [moveCamera])
 
+  useEffect(() => {
+    constraintsRef.current = constraints
+  }, [constraints])
+
   // Init world view on first real viewport; re-constrain on subsequent resize/rotation
   useEffect(() => {
     if (hasInitializedRef.current) {
@@ -668,7 +673,9 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       }
       autoViewPointRef.current = point
       const wheelIntensity = event.ctrlKey || Math.abs(event.deltaY) < 60 ? 0.0042 : 0.0018
-      const nextScale = cameraRef.current.scale * Math.exp(-event.deltaY * wheelIntensity)
+      const rawWheelScale = cameraRef.current.scale * Math.exp(-event.deltaY * wheelIntensity)
+      const { minScale, maxScale } = constraintsRef.current
+      const nextScale = Math.min(Math.max(rawWheelScale, minScale), maxScale)
 
       moveCamera(zoomAtlasCameraAtPoint(cameraRef.current, point, nextScale))
 
@@ -759,10 +766,11 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         secondPointer.x - firstPointer.x,
         secondPointer.y - firstPointer.y,
       )
-      const nextScale =
+      const rawNextScale =
         gesture.startDistance > 0
           ? gesture.startCamera.scale * (distance / gesture.startDistance)
           : gesture.startCamera.scale
+      const nextScale = Math.min(Math.max(rawNextScale, constraints.minScale), constraints.maxScale)
       const anchoredCamera = zoomAtlasCameraAtPoint(
         gesture.startCamera,
         gesture.startMidpoint,
