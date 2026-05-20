@@ -29,9 +29,9 @@ export type AtlasCameraAutoViewOptions = {
   viewportPoint?: AtlasCameraPoint
 }
 
-export type AtlasCameraAutoViewResult =
+export type AtlasCameraAutoViewResult<TId extends string = string> =
   | { mode: 'world' }
-  | { mode: 'domain'; targetId: string }
+  | { mode: 'domain'; targetId: TId }
   | { mode: 'unchanged' }
 
 function clamp(value: number, min: number, max: number) {
@@ -78,14 +78,14 @@ export function constrainAtlasCamera(
   }
 }
 
-export function getAtlasCameraAutoView(
+export function getAtlasCameraAutoView<TId extends string = string>(
   camera: AtlasCameraState,
   viewport: AtlasCameraSize,
   map: AtlasCameraSize,
   artboard: AtlasCameraSize,
-  targets: AtlasCameraAutoViewTarget[],
+  targets: (AtlasCameraAutoViewTarget & { id: TId })[],
   options: AtlasCameraAutoViewOptions,
-): AtlasCameraAutoViewResult {
+): AtlasCameraAutoViewResult<TId> {
   if (camera.scale <= options.worldScale) {
     return { mode: 'world' }
   }
