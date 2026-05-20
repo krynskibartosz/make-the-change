@@ -54,8 +54,8 @@ const SUBDOMAIN_SVG_VARIANTS = {
 } as const
 
 const SUBDOMAIN_LABEL_VARIANTS = {
-  visible: { opacity: 1, y: 0, scale: 1 },
-  hidden: { opacity: 0, y: 8, scale: 0.96 },
+  visible: { opacity: 1, x: '-50%', y: '-50%', scale: 1 },
+  hidden: { opacity: 0, x: '-50%', y: 'calc(-50% + 8px)', scale: 0.96 },
 } as const
 
 // ─── Connection graph ────────────────────────────────────────────────────────
@@ -393,7 +393,7 @@ function SubdomainLabel({
       animate={shouldShow ? 'visible' : 'hidden'}
       transition={{ duration: 0.28, ease: 'easeOut' }}
       className={cn(
-        'absolute z-30 max-w-[7.4rem] -translate-x-1/2 -translate-y-1/2 rounded-[0.48rem] px-2.5 py-1.5 text-center text-[0.62rem] font-black leading-tight text-white shadow-[0_7px_0_rgba(0,0,0,0.18),0_14px_28px_rgba(0,0,0,0.2)] active:scale-95 transition-transform duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:max-w-[9rem] md:text-[0.72rem]',
+        'absolute z-30 max-w-[7.4rem] rounded-[0.48rem] px-2.5 py-1.5 text-center text-[0.62rem] font-black leading-tight text-white shadow-[0_7px_0_rgba(0,0,0,0.18),0_14px_28px_rgba(0,0,0,0.2)] active:scale-95 transition-transform duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:max-w-[9rem] md:text-[0.72rem]',
         shouldShow ? 'pointer-events-auto cursor-pointer' : 'pointer-events-none',
       )}
       disabled={!shouldShow}
@@ -449,12 +449,12 @@ function CourseCellLabels({
           <motion.button
             key={`cell-label-${mc.contentId}`}
             type="button"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
+            initial={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
             className={cn(
-              'pointer-events-auto absolute z-40 -translate-x-1/2 -translate-y-1/2 cursor-pointer flex items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1 ring-black/5',
+              'pointer-events-auto absolute z-40 cursor-pointer flex items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1 ring-black/5',
               isModule ? 'bg-amber-400 text-amber-950' : 'bg-white/95 text-gray-800',
               isCompleted && 'opacity-60 saturate-50'
             )}
