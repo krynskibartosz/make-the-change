@@ -268,6 +268,12 @@ function SubdomainSvg({
             cellFill = subdomain.color
             cellOpacity = 1
           }
+        } else {
+          // Empty cell — visually muted to avoid confusion with content cells
+          cellFill = subdomain.color
+          cellOpacity = 0.08
+          cellStroke = 'rgba(255,255,255,0.04)'
+          cellStrokeWidth = 1
         }
 
         return (
@@ -448,6 +454,9 @@ function CourseCellLabels({
         const isNotStarted = status === 'not-started'
         
         const Icon = isModule ? Compass : BookOpen
+        // Modules are primary — full size. Courses are secondary — 75% size.
+        const buttonSize = isModule ? SUBDOMAIN_HEX_RADIUS * 1.3 : SUBDOMAIN_HEX_RADIUS * 0.95
+        const iconSize = isModule ? 14 : 10
 
         return (
           <motion.button
@@ -458,17 +467,21 @@ function CourseCellLabels({
             exit={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
             className={cn(
-              'pointer-events-auto absolute z-40 cursor-pointer flex items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1',
-              isModule ? 'bg-amber-400 text-amber-950' : 'bg-white/95 text-gray-800',
-              isNotStarted ? 'opacity-50 saturate-50 ring-black/5' : '',
-              isInProgress ? 'opacity-100 ring-white/60 shadow-[0_0_12px_rgba(255,255,255,0.4)] scale-110' : '',
-              isCompleted ? 'opacity-100 ring-black/5' : ''
+              'pointer-events-auto absolute z-40 cursor-pointer flex items-center justify-center rounded-full',
+              // Modules: white background + amber icon — high contrast against amber hex tiles
+              // Courses: small translucent white pill — clearly secondary
+              isModule
+                ? 'bg-white text-amber-500 shadow-[0_2px_12px_rgba(0,0,0,0.35)] ring-2 ring-black/10'
+                : 'bg-white/80 text-gray-500 shadow-[0_1px_4px_rgba(0,0,0,0.2)] ring-1 ring-black/5',
+              isNotStarted ? 'opacity-50 saturate-50' : '',
+              isInProgress ? 'opacity-100 shadow-[0_0_14px_rgba(255,255,255,0.35)]' : '',
+              isCompleted ? 'opacity-100' : ''
             )}
             style={{
               left: `${(cx / ARTBOARD_WIDTH) * 100}%`,
               top: `${(cy / ARTBOARD_HEIGHT) * 100}%`,
-              width: `${SUBDOMAIN_HEX_RADIUS * 1.3}px`,
-              height: `${SUBDOMAIN_HEX_RADIUS * 1.3}px`,
+              width: `${buttonSize}px`,
+              height: `${buttonSize}px`,
             }}
             onClick={(e) => {
               e.stopPropagation()
@@ -507,7 +520,7 @@ function CourseCellLabels({
             )}
 
             <div className="relative z-10 flex items-center justify-center">
-              <Icon size={isModule ? 14 : 12} strokeWidth={isModule ? 2.5 : 2} />
+              <Icon size={iconSize} strokeWidth={isModule ? 2.5 : 2} />
             </div>
             
             {isCompleted && (

@@ -32,7 +32,8 @@ export const SUBDOMAIN_VISIBLE_SCALE = 1.1
 export const SUBDOMAIN_LABEL_SCALE = 1.35
 
 /** Minimum zoom to show individual course/module labels inside subdomain cells. */
-export const COURSE_LEVEL_SCALE = 2.2
+/** Minimum zoom to show individual course/module labels inside subdomain cells. */
+export const COURSE_LEVEL_SCALE = 2.9
 
 // ─── Auto-view thresholds ────────────────────────────────────────────────────
 
