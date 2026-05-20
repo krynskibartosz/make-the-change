@@ -12,7 +12,7 @@ import type {
   LearningProgress,
 } from '@/lib/learning/schema'
 import type { MapHexCell } from '@/lib/learning/hex-generation'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import {
   ARTBOARD_HEIGHT,
@@ -703,6 +703,7 @@ function AtlasCamera({
 // ─── Root component ──────────────────────────────────────────────────────────
 
 export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
+  const router = useRouter()
   const reduceMotion = useReducedMotion() ?? false
 
   const [progress, setProgress] = useState<LearningProgress | null>(null)
@@ -744,8 +745,8 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   }
 
   const handleNavigateCourse = (href: string) => {
-    // Use standard browser navigation for course links
-    window.location.href = href
+    // Use Next.js client-side routing for soft navigation
+    router.push(href)
   }
 
   const subdomainContent = selectedSubdomain
