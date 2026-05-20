@@ -37,6 +37,7 @@ import {
   getSubdomainProgress,
 } from '@/lib/learning/selectors'
 import { AtlasSubdomainSheet } from './atlas-subdomain-sheet'
+import { AtlasCourseSheet } from './atlas-course-sheet'
 
 // ─── Framer Motion variants ──────────────────────────────────────────────────
 // Defined at module scope — not recreated on every render.
@@ -418,14 +419,16 @@ function SubdomainLabel({
  */
 function CourseCellLabels({
   subdomain,
+  territoryColor,
   mapCells,
   visible,
   onCellClick,
 }: {
   subdomain: AtlasSubdomainConfig
+  territoryColor: string
   mapCells: MapHexCell[]
   visible: boolean
-  onCellClick: () => void
+  onCellClick: (contentId: string, kind: 'module' | 'course', color: string) => void
 }) {
   const center = getSubdomainPoint(subdomain)
 
@@ -458,7 +461,7 @@ function CourseCellLabels({
             }}
             onClick={(e) => {
               e.stopPropagation()
-              onCellClick()
+              onCellClick(mc.contentId, mc.kind, territoryColor)
             }}
           >
             <span
@@ -546,7 +549,7 @@ function AtlasCamera({
   progress,
   onSelectSubdomain,
   selectedSubdomainDomainId,
-  onNavigateCourse,
+  onSelectCell,
 }: {
   map: AtlasKinnuMapView
   selectedTerritoryId: LearningDomainId | null
@@ -559,6 +562,7 @@ function AtlasCamera({
   progress: LearningProgress | null
   onSelectSubdomain: (domainId: LearningDomainId, subdomainId: string) => void
   selectedSubdomainDomainId: LearningDomainId | null
+  onSelectCell: (contentId: string, kind: 'module' | 'course', color: string) => void
 }) {
   const isDeepZoom = camera.scale >= COURSE_LEVEL_SCALE
 
@@ -687,9 +691,10 @@ function AtlasCamera({
                 <CourseCellLabels
                   key={`cells-${territory.domain.id}-${subdomain.id}`}
                   subdomain={subdomain}
+                  territoryColor={territory.color}
                   mapCells={mapCells}
                   visible={isDeepZoom}
-                  onCellClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
+                  onCellClick={onSelectCell}
                 />
               )
             }),
@@ -708,6 +713,11 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   const [selectedSubdomain, setSelectedSubdomain] = useState<{
     domainId: LearningDomainId
     subdomainId: string
+  } | null>(null)
+  const [selectedCell, setSelectedCell] = useState<{
+    contentId: string
+    kind: 'module' | 'course'
+    color: string
   } | null>(null)
 
   useEffect(() => {
@@ -739,7 +749,20 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         // ignore vibrate error
       }
     }
+    setSelectedCell(null)
     setSelectedSubdomain({ domainId, subdomainId })
+  }
+
+  const handleSelectCell = (contentId: string, kind: 'module' | 'course', color: string) => {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(12)
+      } catch (e) {
+        // ignore vibrate error
+      }
+    }
+    setSelectedSubdomain(null)
+    setSelectedCell({ contentId, kind, color })
   }
 
   const subdomainContent = selectedSubdomain
@@ -789,6 +812,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         progress={progress}
         onSelectSubdomain={handleSelectSubdomain}
         selectedSubdomainDomainId={selectedSubdomain?.domainId ?? null}
+        onSelectCell={handleSelectCell}
       />
 
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
@@ -800,6 +824,15 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         content={subdomainContent}
         territoryColor={subdomainContent?.territory.color ?? '#A7F36B'}
         territoryTextColor={subdomainContent?.territory.textColor ?? '#111'}
+        progress={progress}
+      />
+
+      <AtlasCourseSheet
+        isOpen={selectedCell !== null}
+        onClose={() => setSelectedCell(null)}
+        contentId={selectedCell?.contentId ?? null}
+        kind={selectedCell?.kind ?? null}
+        territoryColor={selectedCell?.color ?? '#A7F36B'}
         progress={progress}
       />
 
