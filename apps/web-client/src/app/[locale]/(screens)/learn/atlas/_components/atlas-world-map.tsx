@@ -249,6 +249,20 @@ function SubdomainSvg({
         onClick?.()
       }}
     >
+      {/* Radiating pulse for completed subdomains */}
+      {isCompleted && (
+        <circle
+          cx={center.x}
+          cy={center.y}
+          r={70}
+          fill={subdomain.color}
+          opacity={0.15}
+          filter="blur(24px)"
+        >
+          <animate attributeName="opacity" values="0.05;0.2;0.05" dur="4s" repeatCount="indefinite" />
+        </circle>
+      )}
+
       {subdomain.cells.map((cell: HexCell) => {
         const { x: cellX, y: cellY } = getHexCenter(cell, SUBDOMAIN_HEX_RADIUS)
         const mc = cellLookup.get(`${cell.q},${cell.r}`)
@@ -297,6 +311,22 @@ function SubdomainSvg({
               stroke={cellStroke}
               strokeWidth={cellStrokeWidth}
             />
+            {/* Draw a faint question mark on empty cells to suggest "coming soon" instead of just empty space */}
+            {!mc && isDeepZoom && (
+              <text
+                x={cx}
+                y={cy}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="#ffffff"
+                opacity={0.12}
+                fontSize={SUBDOMAIN_HEX_RADIUS * 0.7}
+                fontWeight="800"
+                className="pointer-events-none select-none font-sans"
+              >
+                ?
+              </text>
+            )}
 
             {/* Completed checkmark per cell */}
             {mc?.status === 'completed' && (
@@ -591,16 +621,28 @@ function AtlasHeader({
   )
 }
 
-function AtlasActionDock() {
+function AtlasActionDock({
+  selectedTerritory,
+  hasStartedDomain,
+}: {
+  selectedTerritory: AtlasTerritoryConfig | null
+  hasStartedDomain: boolean
+}) {
+  const label = selectedTerritory
+    ? hasStartedDomain
+      ? `Reprendre ${selectedTerritory.domain.title}`
+      : `Commencer ${selectedTerritory.domain.title}`
+    : 'Me guider dans l’Atlas'
+
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
       <button
         type="button"
-        aria-label="Me guider dans l'Atlas"
+        aria-label={label}
         className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-[#f5f0e8]/95 px-5 font-black text-[#1a1a14] shadow-[0_12px_40px_rgba(0,0,0,0.32)] backdrop-blur-sm transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
       >
         <Compass className="h-5 w-5 shrink-0 text-amber-700" strokeWidth={2.8} aria-hidden="true" />
-        <span className="truncate text-[0.98rem]">Me guider dans l’Atlas</span>
+        <span className="truncate text-[0.98rem]">{label}</span>
       </button>
     </div>
   )
@@ -839,6 +881,12 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     ? getSubdomainContent(selectedSubdomain.domainId, selectedSubdomain.subdomainId, progress)
     : null
 
+  const hasStartedDomain = selectedTerritory
+    ? selectedTerritory.subdomains.some(
+        (s) => getSubdomainProgress(selectedTerritory.domain.id, s.id, progress) > 0
+      )
+    : false
+
   return (
     <main
       ref={mainRef}
@@ -918,7 +966,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       />
 
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
-      <AtlasActionDock />
+      <AtlasActionDock selectedTerritory={selectedTerritory} hasStartedDomain={hasStartedDomain} />
 
       <AtlasSubdomainSheet
         isOpen={selectedSubdomain !== null}
