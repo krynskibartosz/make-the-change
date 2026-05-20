@@ -56,12 +56,27 @@ export function getMapDimensions(viewport: { width: number }) {
 
 /** Returns the min/max scale and overscroll bounds for the camera. */
 export function getCameraConstraints(viewport: { width: number }): AtlasCameraConstraints {
+  const isMobile = viewport.width < 768
   return {
-    minScale: viewport.width < 768 ? 0.46 : 0.55,
-    maxScale: viewport.width < 768 ? 2.7 : 2.45,
-    overscroll: viewport.width < 768 ? 40 : 60,
+    /**
+     * Mobile: minScale = 0.9 = world view scale.
+     * The user cannot zoom out beyond the world view where all islands are already visible.
+     * Zooming further out would only show empty dark canvas — no useful information.
+     *
+     * Desktop: minScale = 1.0 for the same reason.
+     */
+    minScale: isMobile ? 0.9 : 1.0,
+    maxScale: isMobile ? 2.7 : 2.45,
+    /**
+     * Overscroll = elastic bounce distance when panning beyond the map boundary.
+     * At world view scale the map canvas (684×958px) is still larger than the viewport
+     * (390×844px), so the user can pan slightly to reposition before tapping an island.
+     * A tighter overscroll (24px vs 40px) makes this feel more intentional and less loose.
+     */
+    overscroll: isMobile ? 24 : 48,
   }
 }
+
 
 /** Returns the camera state that fits the entire world map in view. */
 export function getWorldTransform(
