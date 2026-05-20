@@ -55,43 +55,49 @@ export function getMapDimensions(viewport: { width: number }) {
 }
 
 /** Returns the min/max scale and overscroll bounds for the camera. */
-export function getCameraConstraints(viewport: { width: number }): AtlasCameraConstraints {
+export function getCameraConstraints(
+  viewport: { width: number; height: number },
+  mapWidth: number,
+): AtlasCameraConstraints {
   const isMobile = viewport.width < 768
+  const mapHeight = mapWidth * (ARTBOARD_HEIGHT / ARTBOARD_WIDTH)
+  
+  // The archipelago occupies roughly 60% of the artboard's width and height.
+  // We want to calculate the exact scale needed to fit this 60% into the viewport.
+  const islandsWidth = mapWidth * 0.60
+  const islandsHeight = mapHeight * 0.58 // 58% vertically (y: 24 to 78)
+
+  // We leave some padding (using 90% of screen width, 70% of screen height due to top/bottom UI)
+  const scaleX = (viewport.width * 0.90) / islandsWidth
+  const scaleY = (viewport.height * 0.70) / islandsHeight
+  
+  // minScale should be exactly what's needed to fit the bounding box
+  const minScale = Math.min(scaleX, scaleY)
+
   return {
-    /**
-     * Mobile: minScale = 0.9 = world view scale.
-     * The user cannot zoom out beyond the world view where all islands are already visible.
-     * Zooming further out would only show empty dark canvas — no useful information.
-     *
-     * Desktop: minScale = 1.0 for the same reason.
-     */
-    minScale: isMobile ? 0.9 : 1.0,
+    minScale,
     maxScale: isMobile ? 3.5 : 3.2,
-    /**
-     * Overscroll = elastic bounce distance when panning beyond the map boundary.
-     * At world view scale the map canvas (684×958px) is still larger than the viewport
-     * (390×844px), so the user can pan slightly to reposition before tapping an island.
-     * A tighter overscroll (24px vs 40px) makes this feel more intentional and less loose.
-     */
     overscroll: isMobile ? 24 : 48,
   }
 }
-
 
 /** Returns the camera state that fits the entire world map in view. */
 export function getWorldTransform(
   viewport: { width: number; height: number },
   mapWidth: number,
 ): AtlasCameraState {
-  const isMobile = viewport.width < 768
+  const constraints = getCameraConstraints(viewport, mapWidth)
+  const scale = constraints.minScale
+  const mapHeight = mapWidth * (ARTBOARD_HEIGHT / ARTBOARD_WIDTH)
+  
+  // Center of the archipelago bounding box (X spans ~23 to ~77, Y spans ~24 to ~78)
+  const centerX = 0.50
+  const centerY = 0.51
+  
   return {
-    // Mobile: 0.41 factor shifts slightly right to center the archipelago horizontally
-    x: viewport.width / 2 - mapWidth * (isMobile ? 0.41 : 0.5),
-    // Mobile: -41 is calculated so Milieux (top island) sits just below the gradient overlay
-    // and Impact (bottom island) sits ~73px above the search bar — near-perfect vertical balance
-    y: isMobile ? -41 : -82,
-    // Mobile: 0.9 gives more breathing room around the archipelago
-    scale: isMobile ? 0.9 : 1,
+    x: viewport.width / 2 - (mapWidth * centerX) * scale,
+    y: viewport.height / 2 - (mapHeight * centerY) * scale,
+    scale,
   }
 }
 

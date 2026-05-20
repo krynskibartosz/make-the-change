@@ -62,7 +62,7 @@ export function useAtlasCamera({ map }: { map: AtlasKinnuMapView }): UseAtlasCam
   const reduceMotion = useReducedMotion() ?? false
 
   const dimensions = getMapDimensions(viewport)
-  const constraints = getCameraConstraints(viewport)
+  const constraints = getCameraConstraints(viewport, dimensions.width)
 
   // Always-current refs — prevents stale closures without adding these values to effect deps
   const viewportRef = useRef(viewport)
