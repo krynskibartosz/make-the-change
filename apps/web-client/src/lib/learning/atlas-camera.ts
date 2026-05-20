@@ -60,12 +60,15 @@ export function constrainAtlasCamera(
 ): AtlasCameraState {
   const overscroll = constraints.overscroll ?? 120
   const scale = clamp(camera.scale, constraints.minScale, constraints.maxScale)
-  const scaledWidth = map.width * scale
-  const scaledHeight = map.height * scale
-  const rawMinX = viewport.width - scaledWidth - overscroll
-  const rawMaxX = overscroll
-  const rawMinY = viewport.height - scaledHeight - overscroll
-  const rawMaxY = overscroll
+  const contentMinX = map.width * 0.18 * scale
+  const contentMaxX = map.width * 0.82 * scale
+  const contentMinY = map.height * 0.22 * scale
+  const contentMaxY = map.height * 0.82 * scale
+
+  const rawMinX = viewport.width - contentMaxX - overscroll
+  const rawMaxX = -contentMinX + overscroll
+  const rawMinY = viewport.height - contentMaxY - overscroll
+  const rawMaxY = -contentMinY + overscroll
   const minX = Math.min(rawMinX, rawMaxX)
   const maxX = Math.max(rawMinX, rawMaxX)
   const minY = Math.min(rawMinY, rawMaxY)
