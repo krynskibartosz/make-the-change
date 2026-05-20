@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, Search, BookOpen, Compass, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, Check, Lock, ChevronDown, Compass, Search } from 'lucide-react'
 import type { LearningDomainId } from '@/lib/learning/schema'
 import type {
   AtlasKinnuMapView,
@@ -100,20 +100,18 @@ function WorldConnectionLines({
         const isHighlighted = highlightedDomainId === fromId || highlightedDomainId === toId
 
         return (
-          <motion.line
+          <motion.path
             key={`${fromId}-${toId}`}
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
+            d={`M ${from.x} ${from.y} Q ${from.x + (to.x - from.x) / 2 + 50} ${from.y + (to.y - from.y) / 2 - 50} ${to.x} ${to.y}`}
+            fill="transparent"
             animate={
               isHighlighted
                 ? {
-                    stroke: ['rgba(255,255,255,0.12)', 'rgba(255,255,255,0.38)', 'rgba(255,255,255,0.12)'],
+                    stroke: ['rgba(255,255,255,0.18)', 'rgba(255,255,255,0.45)', 'rgba(255,255,255,0.18)'],
                     strokeWidth: [4, 5.5, 4],
                   }
                 : {
-                    stroke: 'rgba(255,255,255,0.07)',
+                    stroke: 'rgba(255,255,255,0.09)',
                     strokeWidth: 4,
                   }
             }
@@ -121,12 +119,12 @@ function WorldConnectionLines({
               isHighlighted
                 ? {
                     repeat: Infinity,
-                    duration: 2,
+                    duration: 3,
                     ease: 'easeInOut',
                   }
                 : { duration: 0.3 }
             }
-            strokeDasharray="10 16"
+            strokeDasharray="4 14"
             strokeLinecap="round"
           />
         )
@@ -569,23 +567,28 @@ function AtlasHeader({
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           </Link>
         )}
+        <button
+          type="button"
+          aria-label="Rechercher"
+          className={cn(ICON_BUTTON_CLASS, 'pointer-events-auto ml-auto')}
+        >
+          <Search className="h-4 w-4" aria-hidden="true" />
+        </button>
       </div>
     </header>
   )
 }
 
-function AtlasSearchDock() {
+function AtlasActionDock() {
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
       <button
         type="button"
-        aria-label="Recherche dans l'Atlas bientôt disponible"
-        // bg-white/95: slightly transparent, less visually dominant against the dark map
-        // shadow reduced to blend more naturally
+        aria-label="Me guider dans l'Atlas"
         className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white/95 px-5 font-black text-[#111] shadow-[0_12px_40px_rgba(0,0,0,0.28)] backdrop-blur-sm transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
       >
-        <Search className="h-5 w-5 shrink-0" strokeWidth={3.2} aria-hidden="true" />
-        <span className="truncate text-[0.98rem]">Rechercher dans l'Atlas</span>
+        <Compass className="h-5 w-5 shrink-0 text-amber-600" strokeWidth={2.8} aria-hidden="true" />
+        <span className="truncate text-[0.98rem]">Me guider dans l'Atlas</span>
       </button>
     </div>
   )
@@ -877,7 +880,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       />
 
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
-      <AtlasSearchDock />
+      <AtlasActionDock />
 
       <AtlasSubdomainSheet
         isOpen={selectedSubdomain !== null}
