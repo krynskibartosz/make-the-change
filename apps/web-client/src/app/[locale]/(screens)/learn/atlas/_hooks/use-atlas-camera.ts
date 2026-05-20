@@ -159,6 +159,33 @@ export function useAtlasCamera({ map }: { map: AtlasKinnuMapView }): UseAtlasCam
     moveCamera(cameraRef.current)
   }, [viewport.width, viewport.height, cancelMomentum])
 
+  // ── Snap to world view when fully dezomed ──────────────────────────────────
+  //
+  // When the user finishes a pinch-to-dezoom gesture at the minimum scale,
+  // the camera position can be anywhere (they may have been panning while
+  // pinching). We re-center to the canonical world view so ALL islands are
+  // always visible simultaneously at maximum dezoom.
+  //
+  // We read live values from refs to avoid stale closures without adding
+  // moveCamera itself to the dependency array (which would cause extra fires).
+
+  const moveCameraRef = useRef(moveCamera)
+  moveCameraRef.current = moveCamera
+
+  useEffect(() => {
+    if (!isInteracting && cameraRef.current.scale <= constraintsRef.current.minScale) {
+      const worldTransform = getWorldTransform(viewportRef.current, dimensionsRef.current.width)
+      // Only snap if meaningfully off-center (avoid jitter on normal world-view loads)
+      const dx = Math.abs(cameraRef.current.x - worldTransform.x)
+      const dy = Math.abs(cameraRef.current.y - worldTransform.y)
+      if (dx > 8 || dy > 8) {
+        moveCameraRef.current(worldTransform)
+      }
+    }
+  }, [isInteracting])
+  // isInteracting is the only reactive dep — all other values are read from
+  // stable refs (.current) so no additional subscriptions are needed.
+
   // ── Cleanup on unmount ─────────────────────────────────────────────────────
 
   useEffect(() => {
