@@ -262,7 +262,7 @@ function AtlasCamera({
 }) {
   return (
     <motion.div
-      className="absolute left-0 top-0"
+      className="absolute left-0 top-0 bg-[#202020]"
       initial={false}
       animate={{ x: camera.x, y: camera.y, scale: camera.scale }}
       transition={{
@@ -284,7 +284,7 @@ function AtlasCamera({
           <radialGradient id="atlas-kinnu-vignette" cx="50%" cy="44%" r="70%">
             <stop offset="0%" stopColor="rgba(255,255,255,0.05)" />
             <stop offset="52%" stopColor="rgba(255,255,255,0.015)" />
-            <stop offset="100%" stopColor="rgba(0,0,0,0.34)" />
+            <stop offset="100%" stopColor="rgba(0,0,0,0)" />
           </radialGradient>
         </defs>
 
@@ -374,6 +374,8 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.055),transparent_28%),linear-gradient(180deg,#242424_0%,#202020_52%,#1f1f1f_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-72 bg-gradient-to-b from-[#202020] via-[#202020]/92 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-36 bg-gradient-to-t from-[#202020] via-[#202020]/90 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-40 w-16 bg-gradient-to-r from-[#202020] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-40 w-16 bg-gradient-to-l from-[#202020] to-transparent" />
 
       <AtlasCamera
         map={map}
