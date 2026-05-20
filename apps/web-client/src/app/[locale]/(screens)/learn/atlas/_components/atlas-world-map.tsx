@@ -515,8 +515,8 @@ function CourseCellLabels({
 // ─── Header / Dock sub-components ────────────────────────────────────────────
 
 const ICON_BUTTON_CLASS =
-  // Reduced from h-11 w-11 (44px) to h-9 w-9 (36px) — back button is secondary in world view
-  'grid h-9 w-9 place-items-center rounded-full bg-white/90 text-[#111] shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
+  // Warm-tinted glass buttons that harmonize with the new forest-black background
+  'grid h-9 w-9 place-items-center rounded-full bg-[#f5f0e8]/90 text-[#1a1a14] shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-sm transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white'
 
 function AtlasHeader({
   selectedTerritory,
@@ -583,10 +583,10 @@ function AtlasActionDock() {
       <button
         type="button"
         aria-label="Me guider dans l'Atlas"
-        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-white/95 px-5 font-black text-[#111] shadow-[0_12px_40px_rgba(0,0,0,0.28)] backdrop-blur-sm transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
+        className="pointer-events-auto flex h-14 min-w-0 max-w-[25rem] flex-1 items-center justify-center gap-3 rounded-full bg-[#f5f0e8]/95 px-5 font-black text-[#1a1a14] shadow-[0_12px_40px_rgba(0,0,0,0.32)] backdrop-blur-sm transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:flex-none sm:px-9"
       >
-        <Compass className="h-5 w-5 shrink-0 text-amber-600" strokeWidth={2.8} aria-hidden="true" />
-        <span className="truncate text-[0.98rem]">Me guider dans l'Atlas</span>
+        <Compass className="h-5 w-5 shrink-0 text-amber-700" strokeWidth={2.8} aria-hidden="true" />
+        <span className="truncate text-[0.98rem]">Me guider dans l’Atlas</span>
       </button>
     </div>
   )
@@ -847,21 +847,21 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       <h1 className="sr-only">Atlas du vivant</h1>
 
       {/* Ambient background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.055),transparent_28%),linear-gradient(180deg,#242424_0%,#202020_52%,#1f1f1f_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.04),transparent_28%),linear-gradient(180deg,#191C17_0%,#161A12_52%,#141810_100%)]" />
 
       {/* Top gradient: smaller in world view (h-36) to not eat island space, taller in territory view (h-72) for header separation */}
       <motion.div
-        className="pointer-events-none absolute inset-x-0 top-0 z-40 bg-gradient-to-b from-[#202020] via-[#202020]/92 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 z-40 bg-gradient-to-b from-[#161A12] via-[#161A12]/92 to-transparent"
         animate={{ height: isWorldView ? '9rem' : '18rem' }}
         transition={{ duration: 0.45, ease: 'easeInOut' }}
       />
 
       {/* Bottom gradient */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-36 bg-gradient-to-t from-[#202020] via-[#202020]/90 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-36 bg-gradient-to-t from-[#161A12] via-[#161A12]/90 to-transparent" />
 
       {/* Left / right edge gradients — prevent map boundary visibility when panning */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-40 w-16 bg-gradient-to-r from-[#202020] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-40 w-16 bg-gradient-to-l from-[#202020] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-40 w-16 bg-gradient-to-r from-[#161A12] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-40 w-16 bg-gradient-to-l from-[#161A12] to-transparent" />
 
       <AtlasCamera
         map={map}
