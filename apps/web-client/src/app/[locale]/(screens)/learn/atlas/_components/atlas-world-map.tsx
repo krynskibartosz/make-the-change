@@ -78,10 +78,12 @@ function WorldConnectionLines({
   territories,
   visible,
   highlightedDomainId,
+  reduceMotion,
 }: {
   territories: AtlasTerritoryConfig[]
   visible: boolean
   highlightedDomainId: LearningDomainId | null
+  reduceMotion: boolean
 }) {
   const centerMap = new Map(territories.map((t) => [t.domain.id, getTerritoryPoint(t)]))
 
@@ -100,33 +102,45 @@ function WorldConnectionLines({
         const isHighlighted = highlightedDomainId === fromId || highlightedDomainId === toId
 
         return (
-          <motion.path
-            key={`${fromId}-${toId}`}
-            d={`M ${from.x} ${from.y} Q ${from.x + (to.x - from.x) / 2 + 50} ${from.y + (to.y - from.y) / 2 - 50} ${to.x} ${to.y}`}
-            fill="transparent"
-            animate={
-              isHighlighted
-                ? {
-                    stroke: ['rgba(255,255,255,0.18)', 'rgba(255,255,255,0.45)', 'rgba(255,255,255,0.18)'],
-                    strokeWidth: [4, 5.5, 4],
-                  }
-                : {
-                    stroke: 'rgba(255,255,255,0.09)',
-                    strokeWidth: 4,
-                  }
-            }
-            transition={
-              isHighlighted
-                ? {
-                    repeat: Infinity,
-                    duration: 3,
-                    ease: 'easeInOut',
-                  }
-                : { duration: 0.3 }
-            }
-            strokeDasharray="4 14"
-            strokeLinecap="round"
-          />
+          <g key={`${fromId}-${toId}`}>
+            {/* The connection path itself */}
+            <motion.path
+              d={`M ${from.x} ${from.y} Q ${from.x + (to.x - from.x) / 2 + 50} ${from.y + (to.y - from.y) / 2 - 50} ${to.x} ${to.y}`}
+              fill="transparent"
+              animate={
+                isHighlighted
+                  ? {
+                      stroke: ['rgba(255,255,255,0.18)', 'rgba(255,255,255,0.45)', 'rgba(255,255,255,0.18)'],
+                      strokeWidth: [4, 5.5, 4],
+                    }
+                  : {
+                      stroke: 'rgba(255,255,255,0.09)',
+                      strokeWidth: 4,
+                    }
+              }
+              transition={
+                isHighlighted
+                  ? {
+                      repeat: Infinity,
+                      duration: 3,
+                      ease: 'easeInOut',
+                    }
+                  : { duration: 0.3 }
+              }
+              strokeDasharray="4 14"
+              strokeLinecap="round"
+            />
+            {/* Sap pulse — a faint dot that travels along the path */}
+            {!reduceMotion && (
+              <circle r="3.5" fill="rgba(255,255,255,0.28)">
+                <animateMotion
+                  dur={`${7 + (fromId.length + toId.length) % 5}s`}
+                  repeatCount="indefinite"
+                  path={`M ${from.x} ${from.y} Q ${from.x + (to.x - from.x) / 2 + 50} ${from.y + (to.y - from.y) / 2 - 50} ${to.x} ${to.y}`}
+                />
+              </circle>
+            )}
+          </g>
         )
       })}
     </motion.g>
@@ -668,6 +682,7 @@ function AtlasCamera({
           territories={map.territories} 
           visible={isWorldView} 
           highlightedDomainId={selectedSubdomainDomainId}
+          reduceMotion={reduceMotion}
         />
 
         {map.territories.map((territory) => {
@@ -827,7 +842,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   return (
     <main
       ref={mainRef}
-      className="relative h-[100dvh] min-h-[40rem] touch-none overflow-hidden bg-[#202020] text-white"
+      className="relative h-[100dvh] min-h-[40rem] touch-none overflow-hidden bg-[#161A12] text-white"
       style={{
         '--atlas-map-width': `${dimensions.width}px`,
         '--atlas-map-height': `${dimensions.height}px`,
@@ -846,6 +861,15 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     >
       <h1 className="sr-only">Atlas du vivant</h1>
 
+      {/* Organic grain texture — SVG feTurbulence overlay */}
+      <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full opacity-[0.038]" xmlns="http://www.w3.org/2000/svg">
+        <filter id="atlas-grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#atlas-grain)" />
+      </svg>
+
       {/* Ambient background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_34%,rgba(255,255,255,0.04),transparent_28%),linear-gradient(180deg,#191C17_0%,#161A12_52%,#141810_100%)]" />
 
@@ -862,6 +886,22 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       {/* Left / right edge gradients — prevent map boundary visibility when panning */}
       <div className="pointer-events-none absolute inset-y-0 left-0 z-40 w-16 bg-gradient-to-r from-[#161A12] to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-40 w-16 bg-gradient-to-l from-[#161A12] to-transparent" />
+
+      {/* Domain vignette — semantic color identity per territory when zoomed */}
+      {selectedTerritory && (
+        <motion.div
+          key={selectedTerritory.domain.id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="pointer-events-none absolute inset-0 z-[2]"
+          style={{
+            background: `radial-gradient(ellipse at 50% 100%, ${selectedTerritory.color}18 0%, transparent 70%),
+                         radial-gradient(ellipse at 50% 0%,   ${selectedTerritory.color}10 0%, transparent 60%)`,
+          }}
+        />
+      )}
 
       <AtlasCamera
         map={map}
