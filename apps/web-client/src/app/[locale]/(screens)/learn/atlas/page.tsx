@@ -10,7 +10,12 @@ export const metadata: Metadata = {
 // In Next.js 16, params is a Promise — if locale is needed in the future:
 //   const { locale } = await params  (Server Component)
 //   const { locale } = use(params)   (Client Component)
-export default function LearningAtlasPage() {
+export default async function LearningAtlasPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
   const map = getAtlasKinnuMapView()
 
   return <AtlasWorldMap map={map} />
