@@ -66,7 +66,7 @@ export function getCameraConstraints(viewport: { width: number }): AtlasCameraCo
      * Desktop: minScale = 1.0 for the same reason.
      */
     minScale: isMobile ? 0.9 : 1.0,
-    maxScale: isMobile ? 2.7 : 2.45,
+    maxScale: isMobile ? 3.5 : 3.2,
     /**
      * Overscroll = elastic bounce distance when panning beyond the map boundary.
      * At world view scale the map canvas (684×958px) is still larger than the viewport

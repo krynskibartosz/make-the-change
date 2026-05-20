@@ -4,6 +4,12 @@ import {
   getLearningCourseById,
   LEARNING_ATLAS_DOMAINS,
 } from './catalog'
+import {
+  generateHexSpiral,
+  mapContentToHexCells,
+  type MapHexCell,
+  type HexCellStatus,
+} from './hex-generation'
 import type {
   AtlasDomainMapEdge,
   AtlasDomainMapNode,
@@ -201,6 +207,9 @@ const HEX_SMALL_BLOB_CELLS: HexCell[] = [
   { q: 1, r: -1 },
   { q: 1, r: 0 },
 ]
+
+/** Minimum number of hex cells for a subdomain to maintain visual presence. */
+const MIN_SUBDOMAIN_CELLS = 3
 
 const ATLAS_KINNU_TERRITORY_CONFIG: Record<
   LearningDomainId,
@@ -718,14 +727,39 @@ export function getAtlasIslandViews(): AtlasIslandView[] {
   })
 }
 
+/**
+ * Returns the number of courses linked to a subdomain config via its themeKeys.
+ */
+function getSubdomainCourseCount(
+  domainId: LearningDomainId,
+  subdomain: Omit<AtlasSubdomainConfig, 'cells'> & { themeKeys: string[] },
+): number {
+  if (subdomain.themeKeys.length === 0) return 0
+  const allCourses = getAllLearningCourses()
+  return allCourses.filter(
+    (c) => c.domain === domainId && subdomain.themeKeys.includes(c.theme),
+  ).length
+}
+
 export function getAtlasKinnuMapView(): AtlasKinnuMapView {
   return {
     worldCamera: { x: 0, y: 0, scale: 1 },
     territories: getAtlasDomains().map((domain) => {
       const config = ATLAS_KINNU_TERRITORY_CONFIG[domain.id]
 
+      // Generate dynamic cells for each subdomain based on course count
+      const subdomainsWithDynamicCells = config.subdomains.map((sd) => {
+        const courseCount = getSubdomainCourseCount(domain.id, sd)
+        const cellCount = Math.max(courseCount, MIN_SUBDOMAIN_CELLS)
+        return {
+          ...sd,
+          cells: generateHexSpiral(cellCount),
+        }
+      })
+
       return {
         ...config,
+        subdomains: subdomainsWithDynamicCells,
         domain,
         cells:
           domain.id === 'relations-du-vivant' || domain.id === 'solutions'
@@ -1094,4 +1128,59 @@ export function getSubdomainProgress(
   const completedCount = subdomainCourses.filter((c) => completed.has(c.id)).length
 
   return completedCount / subdomainCourses.length
+}
+
+/**
+ * Returns enriched hex cells for a subdomain, where each cell maps to
+ * a specific course or module with its completion status and navigation href.
+ * Used by the SVG renderer at deep zoom levels to show per-cell detail.
+ */
+export function getSubdomainMapCells(
+  domainId: LearningDomainId,
+  subdomainId: string,
+  progress: LearningProgress | null,
+): MapHexCell[] {
+  const content = getSubdomainContent(domainId, subdomainId, progress)
+  if (!content) return []
+
+  const completed = new Set(progress?.completedCourseIds ?? [])
+  const lessonsByCourse = progress?.completedLessonIdsByCourse ?? {}
+
+  const items: Array<{
+    id: string
+    title: string
+    kind: 'module' | 'course'
+    status: HexCellStatus
+    href: string
+  }> = []
+
+  // Add guided modules as center cells
+  for (const mod of content.modules) {
+    const moduleCompleted = mod.courseIds.every((cid) => completed.has(cid))
+    const moduleStarted = mod.courseIds.some(
+      (cid) => completed.has(cid) || (lessonsByCourse[cid]?.length ?? 0) > 0,
+    )
+    items.push({
+      id: mod.id,
+      title: mod.title,
+      kind: 'module',
+      status: moduleCompleted ? 'completed' : moduleStarted ? 'in-progress' : 'not-started',
+      href: `/learn/parcours/${mod.id}`,
+    })
+  }
+
+  // Add free courses as peripheral cells
+  for (const course of content.courses) {
+    const courseCompleted = completed.has(course.id)
+    const courseStarted = (lessonsByCourse[course.id]?.length ?? 0) > 0
+    items.push({
+      id: course.id,
+      title: course.subject,
+      kind: 'course',
+      status: courseCompleted ? 'completed' : courseStarted ? 'in-progress' : 'not-started',
+      href: `/learn/courses/${course.id}`,
+    })
+  }
+
+  return mapContentToHexCells(items)
 }

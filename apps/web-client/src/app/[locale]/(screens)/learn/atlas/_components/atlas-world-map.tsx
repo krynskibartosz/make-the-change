@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Search } from 'lucide-react'
 import type { LearningDomainId } from '@/lib/learning/schema'
@@ -11,6 +11,7 @@ import type {
   HexCell,
   LearningProgress,
 } from '@/lib/learning/schema'
+import type { MapHexCell } from '@/lib/learning/hex-generation'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -20,6 +21,7 @@ import {
   SUBDOMAIN_HEX_RADIUS,
   SUBDOMAIN_LABEL_SCALE,
   SUBDOMAIN_VISIBLE_SCALE,
+  COURSE_LEVEL_SCALE,
 } from '../_utils/atlas-config'
 import {
   getHexCenter,
@@ -29,7 +31,11 @@ import {
 } from '../_utils/atlas-geometry'
 import { useAtlasCamera } from '../_hooks/use-atlas-camera'
 import { readLearningProgress } from '@/lib/learning/progress'
-import { getSubdomainContent, getSubdomainProgress } from '@/lib/learning/selectors'
+import {
+  getSubdomainContent,
+  getSubdomainMapCells,
+  getSubdomainProgress,
+} from '@/lib/learning/selectors'
 import { AtlasSubdomainSheet } from './atlas-subdomain-sheet'
 
 // ─── Framer Motion variants ──────────────────────────────────────────────────
@@ -181,14 +187,20 @@ function SubdomainSvg({
   visible,
   progressRatio,
   onClick,
+  mapCells,
+  isDeepZoom,
 }: {
   subdomain: AtlasSubdomainConfig
   visible: boolean
   progressRatio: number
   onClick?: () => void
+  /** Enriched cells with course/module metadata (available at deep zoom). */
+  mapCells: MapHexCell[]
+  /** True when the camera is zoomed deep enough to show per-cell detail. */
+  isDeepZoom: boolean
 }) {
   const center = getSubdomainPoint(subdomain)
-  
+
   const isCompleted = progressRatio === 1
   const hasProgress = progressRatio > 0
 
@@ -198,17 +210,26 @@ function SubdomainSvg({
       ? `drop-shadow(0 0 5px ${subdomain.color}80)`
       : undefined
 
+  // Build a lookup from cell (q,r) to enriched MapHexCell for per-cell rendering
+  const cellLookup = useMemo(() => {
+    const map = new Map<string, MapHexCell>()
+    for (const mc of mapCells) {
+      map.set(`${mc.q},${mc.r}`, mc)
+    }
+    return map
+  }, [mapCells])
+
   return (
     <motion.g
       initial={false}
       variants={SUBDOMAIN_SVG_VARIANTS}
       animate={visible ? 'visible' : 'hidden'}
       transition={{ duration: 0.24, ease: 'easeOut' }}
-      style={{ 
+      style={{
         transformOrigin: `${center.x}px ${center.y}px`,
         filter,
       }}
-      className={cn(visible ? "cursor-pointer" : "pointer-events-none")}
+      className={cn(visible ? 'cursor-pointer' : 'pointer-events-none')}
       onClick={(e) => {
         if (!visible) return
         e.stopPropagation()
@@ -217,30 +238,95 @@ function SubdomainSvg({
     >
       {subdomain.cells.map((cell: HexCell) => {
         const { x: cellX, y: cellY } = getHexCenter(cell, SUBDOMAIN_HEX_RADIUS)
+        const mc = cellLookup.get(`${cell.q},${cell.r}`)
+        const cx = center.x + cellX
+        const cy = center.y + cellY
+
+        // ─── Cell fill & stroke based on type and status ───
+        let cellFill = subdomain.color
+        let cellOpacity = 1
+        let cellStroke = 'rgba(0,0,0,0.24)'
+        let cellStrokeWidth = 1.8
+
+        if (mc) {
+          // Module cells: gold/amber border to stand out as "pillars"
+          if (mc.kind === 'module') {
+            cellStroke = 'rgba(255,215,0,0.7)'
+            cellStrokeWidth = 2.6
+          }
+
+          // Status-based fill
+          if (mc.status === 'not-started') {
+            cellFill = subdomain.color
+            cellOpacity = 0.35
+          } else if (mc.status === 'in-progress') {
+            cellFill = subdomain.color
+            cellOpacity = 0.72
+          } else {
+            // completed
+            cellFill = subdomain.color
+            cellOpacity = 1
+          }
+        }
+
         return (
-          <path
-            key={`${subdomain.id}-${cell.q}-${cell.r}`}
-            d={getHexPath(center.x + cellX, center.y + cellY, SUBDOMAIN_HEX_RADIUS)}
-            fill={subdomain.color}
-            stroke="rgba(0,0,0,0.24)"
-            strokeWidth="1.8"
-          />
+          <g key={`${subdomain.id}-${cell.q}-${cell.r}`}>
+            <path
+              d={getHexPath(cx, cy, SUBDOMAIN_HEX_RADIUS)}
+              fill={cellFill}
+              opacity={cellOpacity}
+              stroke={cellStroke}
+              strokeWidth={cellStrokeWidth}
+            />
+
+            {/* Completed checkmark per cell */}
+            {mc?.status === 'completed' && (
+              <g transform={`translate(${cx - 5}, ${cy - 5})`} className="pointer-events-none">
+                <circle cx="5" cy="5" r="5.5" fill="#FFFFFF" />
+                <path
+                  d="M3 5.1 L4.5 6.6 L7 3.4"
+                  fill="none"
+                  stroke={subdomain.color}
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+            )}
+
+            {/* In-progress pulse indicator */}
+            {mc?.status === 'in-progress' && (
+              <circle
+                cx={cx}
+                cy={cy}
+                r={SUBDOMAIN_HEX_RADIUS * 0.25}
+                fill={subdomain.color}
+                opacity={0.9}
+                className="pointer-events-none"
+              >
+                <animate
+                  attributeName="opacity"
+                  values="0.9;0.4;0.9"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </circle>
+            )}
+
+            {/* Module badge icon (small diamond/star shape in center) */}
+            {mc?.kind === 'module' && mc.status !== 'completed' && isDeepZoom && (
+              <g transform={`translate(${cx}, ${cy})`} className="pointer-events-none">
+                <polygon
+                  points="0,-4 3.5,0 0,4 -3.5,0"
+                  fill="rgba(255,215,0,0.85)"
+                  stroke="rgba(0,0,0,0.2)"
+                  strokeWidth="0.6"
+                />
+              </g>
+            )}
+          </g>
         )
       })}
-
-      {isCompleted && (
-        <g transform={`translate(${center.x - 7}, ${center.y - 7})`} className="pointer-events-none">
-          <circle cx="7" cy="7" r="7.5" fill="#FFFFFF" />
-          <path
-            d="M4.2 7.2 L6.2 9.2 L9.8 4.8"
-            fill="none"
-            stroke={subdomain.color}
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </g>
-      )}
     </motion.g>
   )
 }
@@ -286,37 +372,110 @@ function TerritoryLabel({
 function SubdomainLabel({
   subdomain,
   visible,
+  isDeepZoom,
   onClick,
 }: {
   subdomain: AtlasSubdomainConfig
   visible: boolean
+  /** When true, the global label fades out to reveal per-cell labels. */
+  isDeepZoom: boolean
   onClick?: () => void
 }) {
+  // At deep zoom, fade the global label to let per-cell course labels show
+  const shouldShow = visible && !isDeepZoom
+
   return (
     <motion.button
       type="button"
       initial={false}
       variants={SUBDOMAIN_LABEL_VARIANTS}
-      animate={visible ? 'visible' : 'hidden'}
+      animate={shouldShow ? 'visible' : 'hidden'}
       transition={{ duration: 0.28, ease: 'easeOut' }}
       className={cn(
-        "absolute z-30 max-w-[7.4rem] -translate-x-1/2 -translate-y-1/2 rounded-[0.48rem] px-2.5 py-1.5 text-center text-[0.62rem] font-black leading-tight text-white shadow-[0_7px_0_rgba(0,0,0,0.18),0_14px_28px_rgba(0,0,0,0.2)] active:scale-95 transition-transform duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:max-w-[9rem] md:text-[0.72rem]",
-        visible ? "pointer-events-auto cursor-pointer" : "pointer-events-none"
+        'absolute z-30 max-w-[7.4rem] -translate-x-1/2 -translate-y-1/2 rounded-[0.48rem] px-2.5 py-1.5 text-center text-[0.62rem] font-black leading-tight text-white shadow-[0_7px_0_rgba(0,0,0,0.18),0_14px_28px_rgba(0,0,0,0.2)] active:scale-95 transition-transform duration-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:max-w-[9rem] md:text-[0.72rem]',
+        shouldShow ? 'pointer-events-auto cursor-pointer' : 'pointer-events-none',
       )}
-      disabled={!visible}
+      disabled={!shouldShow}
       style={{
         left: `${subdomain.x}%`,
         top: `${subdomain.y}%`,
         backgroundColor: subdomain.color,
       }}
       onClick={(e) => {
-        if (!visible) return
+        if (!shouldShow) return
         e.stopPropagation()
         onClick?.()
       }}
     >
       {subdomain.label}
     </motion.button>
+  )
+}
+
+/**
+ * Per-cell course/module labels rendered at deep zoom inside the subdomain.
+ * Each cell shows a short title when the user zooms close enough.
+ */
+function CourseCellLabels({
+  subdomain,
+  mapCells,
+  visible,
+  onCellClick,
+}: {
+  subdomain: AtlasSubdomainConfig
+  mapCells: MapHexCell[]
+  visible: boolean
+  onCellClick: (href: string) => void
+}) {
+  const center = getSubdomainPoint(subdomain)
+
+  if (!visible || mapCells.length === 0) return null
+
+  return (
+    <>
+      {mapCells.map((mc) => {
+        const { x: cellX, y: cellY } = getHexCenter(mc, SUBDOMAIN_HEX_RADIUS)
+        const cx = center.x + cellX
+        const cy = center.y + cellY
+
+        // Shorten title to fit in the cell area
+        const shortTitle =
+          mc.title.length > 14 ? `${mc.title.slice(0, 13).trim()}…` : mc.title
+
+        return (
+          <motion.button
+            key={`cell-label-${mc.contentId}`}
+            type="button"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="pointer-events-auto absolute z-40 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+            style={{
+              left: `${(cx / ARTBOARD_WIDTH) * 100}%`,
+              top: `${(cy / ARTBOARD_HEIGHT) * 100}%`,
+              maxWidth: `${SUBDOMAIN_HEX_RADIUS * 2.2}px`,
+            }}
+            onClick={(e) => {
+              e.stopPropagation()
+              onCellClick(mc.href)
+            }}
+          >
+            <span
+              className={cn(
+                'block truncate rounded-[3px] px-1 py-0.5 text-center text-[0.32rem] font-bold leading-tight',
+                mc.kind === 'module'
+                  ? 'bg-amber-400/90 text-amber-950'
+                  : 'bg-white/80 text-gray-900',
+                mc.status === 'completed' && 'opacity-50 line-through',
+              )}
+            >
+              {shortTitle}
+            </span>
+          </motion.button>
+        )
+      })}
+    </>
   )
 }
 
@@ -376,8 +535,6 @@ function AtlasSearchDock() {
   )
 }
 
-// ─── Camera canvas ───────────────────────────────────────────────────────────
-
 function AtlasCamera({
   map,
   selectedTerritoryId,
@@ -389,6 +546,7 @@ function AtlasCamera({
   progress,
   onSelectSubdomain,
   selectedSubdomainDomainId,
+  onNavigateCourse,
 }: {
   map: AtlasKinnuMapView
   selectedTerritoryId: LearningDomainId | null
@@ -401,7 +559,22 @@ function AtlasCamera({
   progress: LearningProgress | null
   onSelectSubdomain: (domainId: LearningDomainId, subdomainId: string) => void
   selectedSubdomainDomainId: LearningDomainId | null
+  onNavigateCourse: (href: string) => void
 }) {
+  const isDeepZoom = camera.scale >= COURSE_LEVEL_SCALE
+
+  // Compute map cells for all subdomains (memoized by progress reference)
+  const allMapCells = useMemo(() => {
+    const cells = new Map<string, MapHexCell[]>()
+    for (const territory of map.territories) {
+      for (const subdomain of territory.subdomains) {
+        const key = `${territory.domain.id}:${subdomain.id}`
+        cells.set(key, getSubdomainMapCells(territory.domain.id, subdomain.id, progress))
+      }
+    }
+    return cells
+  }, [map.territories, progress])
+
   return (
     <motion.div
       className="absolute left-0 top-0 bg-[#202020]"
@@ -458,6 +631,8 @@ function AtlasCamera({
         {map.territories.flatMap((territory) =>
           territory.subdomains.map((subdomain) => {
             const ratio = getSubdomainProgress(territory.domain.id, subdomain.id, progress)
+            const key = `${territory.domain.id}:${subdomain.id}`
+            const mapCells = allMapCells.get(key) ?? []
             return (
               <SubdomainSvg
                 key={`${territory.domain.id}-${subdomain.id}`}
@@ -465,6 +640,8 @@ function AtlasCamera({
                 visible={camera.scale >= SUBDOMAIN_VISIBLE_SCALE}
                 progressRatio={ratio}
                 onClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
+                mapCells={mapCells}
+                isDeepZoom={isDeepZoom}
               />
             )
           }),
@@ -485,15 +662,39 @@ function AtlasCamera({
         ))}
 
         {map.territories.flatMap((territory) =>
-          territory.subdomains.map((subdomain) => (
-            <SubdomainLabel
-              key={`${territory.domain.id}-${subdomain.id}`}
-              subdomain={subdomain}
-              visible={camera.scale >= SUBDOMAIN_LABEL_SCALE}
-              onClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
-            />
-          )),
+          territory.subdomains.map((subdomain) => {
+            const key = `${territory.domain.id}:${subdomain.id}`
+            const mapCells = allMapCells.get(key) ?? []
+            return (
+              <SubdomainLabel
+                key={`label-${territory.domain.id}-${subdomain.id}`}
+                subdomain={subdomain}
+                visible={camera.scale >= SUBDOMAIN_LABEL_SCALE}
+                isDeepZoom={isDeepZoom}
+                onClick={() => onSelectSubdomain(territory.domain.id, subdomain.id)}
+              />
+            )
+          }),
         )}
+
+        {/* Per-cell course labels at deep zoom */}
+        {isDeepZoom &&
+          map.territories.flatMap((territory) =>
+            territory.subdomains.map((subdomain) => {
+              const key = `${territory.domain.id}:${subdomain.id}`
+              const mapCells = allMapCells.get(key) ?? []
+              if (mapCells.length === 0) return null
+              return (
+                <CourseCellLabels
+                  key={`cells-${territory.domain.id}-${subdomain.id}`}
+                  subdomain={subdomain}
+                  mapCells={mapCells}
+                  visible={isDeepZoom}
+                  onCellClick={onNavigateCourse}
+                />
+              )
+            }),
+          )}
       </div>
     </motion.div>
   )
@@ -540,6 +741,11 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       }
     }
     setSelectedSubdomain({ domainId, subdomainId })
+  }
+
+  const handleNavigateCourse = (href: string) => {
+    // Use standard browser navigation for course links
+    window.location.href = href
   }
 
   const subdomainContent = selectedSubdomain
@@ -589,6 +795,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
         progress={progress}
         onSelectSubdomain={handleSelectSubdomain}
         selectedSubdomainDomainId={selectedSubdomain?.domainId ?? null}
+        onNavigateCourse={handleNavigateCourse}
       />
 
       <AtlasHeader selectedTerritory={selectedTerritory} onBackToWorld={snapToWorld} />
@@ -611,3 +818,4 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     </main>
   )
 }
+

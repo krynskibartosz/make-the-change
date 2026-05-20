@@ -31,6 +31,9 @@ export const SUBDOMAIN_VISIBLE_SCALE = 1.1
 /** Minimum zoom to show subdomain text labels. */
 export const SUBDOMAIN_LABEL_SCALE = 1.35
 
+/** Minimum zoom to show individual course/module labels inside subdomain cells. */
+export const COURSE_LEVEL_SCALE = 2.2
+
 // ─── Auto-view thresholds ────────────────────────────────────────────────────
 
 /** Below this scale the camera is considered "world view" (no territory selected). */
