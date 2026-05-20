@@ -482,6 +482,13 @@ function CourseCellLabels({
                 <CheckCircle2 size={10} strokeWidth={3} />
               </div>
             )}
+
+            {/* Module progress fraction below the icon */}
+            {isModule && mc.progressTotal && mc.progressTotal > 1 && !isCompleted && (
+              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-[6.5px] font-black tracking-wider text-white opacity-80 mix-blend-plus-lighter shadow-black drop-shadow-md">
+                {mc.progressCount} / {mc.progressTotal}
+              </div>
+            )}
           </motion.button>
         )
       })}

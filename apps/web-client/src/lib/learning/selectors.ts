@@ -1152,6 +1152,8 @@ export function getSubdomainMapCells(
     kind: 'module' | 'course'
     status: HexCellStatus
     href: string
+    progressCount?: number
+    progressTotal?: number
   }> = []
 
   // Add guided modules as center cells
@@ -1166,6 +1168,8 @@ export function getSubdomainMapCells(
       kind: 'module',
       status: moduleCompleted ? 'completed' : moduleStarted ? 'in-progress' : 'not-started',
       href: `/learn/parcours/${mod.id}`,
+      progressCount: mod.courseIds.filter((cid) => completed.has(cid)).length,
+      progressTotal: mod.courseIds.length,
     })
   }
 

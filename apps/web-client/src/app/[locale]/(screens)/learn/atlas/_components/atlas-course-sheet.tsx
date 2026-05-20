@@ -71,10 +71,11 @@ export function AtlasCourseSheet({
           <div className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-3 text-center">
             <div className="text-[10px] font-medium uppercase tracking-wider text-white/40">Progression</div>
             <div
-              className="mt-1 text-lg font-bold text-white"
-              style={{ color: moduleCompletedPercent > 0 ? territoryColor : '#fff' }}
+              className="mt-1 flex items-baseline justify-center gap-1 font-bold text-white"
+              style={{ color: moduleCompletedCount > 0 ? territoryColor : '#fff' }}
             >
-              {moduleCompletedPercent}%
+              <span className="text-lg">{moduleCompletedCount}</span>
+              <span className="text-[11px] opacity-50">/ {moduleContent.courseIds.length} étapes</span>
             </div>
           </div>
           <div className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-3 text-center">

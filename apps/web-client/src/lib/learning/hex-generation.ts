@@ -76,6 +76,10 @@ export type MapHexCell = HexCell & {
   status: HexCellStatus
   /** Navigation href when clicked. */
   href: string
+  /** For modules: number of completed steps. */
+  progressCount?: number
+  /** For modules: total number of steps. */
+  progressTotal?: number
 }
 
 /**
@@ -90,6 +94,8 @@ export function mapContentToHexCells(
     kind: HexCellKind
     status: HexCellStatus
     href: string
+    progressCount?: number
+    progressTotal?: number
   }>,
 ): MapHexCell[] {
   if (items.length === 0) return []
@@ -113,6 +119,8 @@ export function mapContentToHexCells(
       kind: item.kind,
       status: item.status,
       href: item.href,
+      progressCount: item.progressCount,
+      progressTotal: item.progressTotal,
     }
   })
 }
