@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { AtlasSubdomainConfig, HexCell } from '@/lib/learning/schema'
 import type { MapHexCell } from '@/lib/learning/hex-generation'
-import { SUBDOMAIN_HEX_RADIUS } from '../_utils/atlas-config'
-import { getHexCenter, getHexPath, getSubdomainPoint } from '../_utils/atlas-geometry'
+import { SUBDOMAIN_HEX_RADIUS } from '../../_utils/atlas-config'
+import { getHexCenter, getHexPath, getSubdomainPoint } from '../../_utils/atlas-geometry'
 
 const SUBDOMAIN_SVG_VARIANTS = {
   visible: { opacity: 1, scale: 1 },

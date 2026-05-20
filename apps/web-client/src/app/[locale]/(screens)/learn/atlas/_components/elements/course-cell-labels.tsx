@@ -3,8 +3,8 @@ import { Compass, BookOpen, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { AtlasSubdomainConfig } from '@/lib/learning/schema'
 import type { MapHexCell } from '@/lib/learning/hex-generation'
-import { ARTBOARD_HEIGHT, ARTBOARD_WIDTH, SUBDOMAIN_HEX_RADIUS } from '../_utils/atlas-config'
-import { getHexCenter, getSubdomainPoint } from '../_utils/atlas-geometry'
+import { ARTBOARD_HEIGHT, ARTBOARD_WIDTH, SUBDOMAIN_HEX_RADIUS } from '../../_utils/atlas-config'
+import { getHexCenter, getSubdomainPoint } from '../../_utils/atlas-geometry'
 
 /**
  * Per-cell course/module labels rendered at deep zoom inside the subdomain.

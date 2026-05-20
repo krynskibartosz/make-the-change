@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { AtlasTerritoryConfig, LearningDomainId } from '@/lib/learning/schema'
-import { getTerritoryPoint } from '../_utils/atlas-geometry'
+import { getTerritoryPoint } from '../../_utils/atlas-geometry'
 
 // ─── Connection graph ────────────────────────────────────────────────────────
 // Pairs of domain IDs that share a visible connection line in world view.

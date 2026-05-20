@@ -1,6 +1,6 @@
 import type { AtlasTerritoryConfig, HexCell } from '@/lib/learning/schema'
-import { HEX_RADIUS } from '../_utils/atlas-config'
-import { getHexCenter, getHexPath, getTerritoryPoint } from '../_utils/atlas-geometry'
+import { HEX_RADIUS } from '../../_utils/atlas-config'
+import { getHexCenter, getHexPath, getTerritoryPoint } from '../../_utils/atlas-geometry'
 
 export function HexTerritorySvg({
   territory,
