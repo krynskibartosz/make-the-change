@@ -62,10 +62,11 @@ export function getCameraConstraints(
   const isMobile = viewport.width < 768
   const mapHeight = mapWidth * (ARTBOARD_HEIGHT / ARTBOARD_WIDTH)
   
-  // The archipelago occupies roughly 60% of the artboard's width and height.
-  // We want to calculate the exact scale needed to fit this 60% into the viewport.
-  const islandsWidth = mapWidth * 0.60
-  const islandsHeight = mapHeight * 0.58 // 58% vertically (y: 24 to 78)
+  // The procedurally generated hex islands have a large radius (up to ~15% of map width).
+  // With centers from X=23% to 77%, the edges span roughly X=8% to 92% (width 84%).
+  // Y centers from 24% to 78%, edges span roughly Y=11% to 91% (height 80%).
+  const islandsWidth = mapWidth * 0.84
+  const islandsHeight = mapHeight * 0.80 // 80% vertically
 
   // We leave some padding (using 90% of screen width, 70% of screen height due to top/bottom UI)
   const scaleX = (viewport.width * 0.90) / islandsWidth

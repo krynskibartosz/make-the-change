@@ -60,19 +60,37 @@ export function constrainAtlasCamera(
 ): AtlasCameraState {
   const overscroll = constraints.overscroll ?? 120
   const scale = clamp(camera.scale, constraints.minScale, constraints.maxScale)
-  const contentMinX = map.width * 0.18 * scale
-  const contentMaxX = map.width * 0.82 * scale
-  const contentMinY = map.height * 0.22 * scale
-  const contentMaxY = map.height * 0.82 * scale
+  const contentMinX = map.width * 0.08 * scale
+  const contentMaxX = map.width * 0.92 * scale
+  const contentMinY = map.height * 0.10 * scale
+  const contentMaxY = map.height * 0.90 * scale
 
-  const rawMinX = viewport.width - contentMaxX - overscroll
-  const rawMaxX = -contentMinX + overscroll
-  const rawMinY = viewport.height - contentMaxY - overscroll
-  const rawMaxY = -contentMinY + overscroll
-  const minX = Math.min(rawMinX, rawMaxX)
-  const maxX = Math.max(rawMinX, rawMaxX)
-  const minY = Math.min(rawMinY, rawMaxY)
-  const maxY = Math.max(rawMinY, rawMaxY)
+  let minX: number
+  let maxX: number
+  let minY: number
+  let maxY: number
+
+  if (contentMaxX - contentMinX < viewport.width) {
+    const centerX = viewport.width / 2 - (contentMaxX + contentMinX) / 2
+    minX = centerX
+    maxX = centerX
+  } else {
+    const rawMinX = viewport.width - contentMaxX - overscroll
+    const rawMaxX = -contentMinX + overscroll
+    minX = Math.min(rawMinX, rawMaxX)
+    maxX = Math.max(rawMinX, rawMaxX)
+  }
+
+  if (contentMaxY - contentMinY < viewport.height) {
+    const centerY = viewport.height / 2 - (contentMaxY + contentMinY) / 2
+    minY = centerY
+    maxY = centerY
+  } else {
+    const rawMinY = viewport.height - contentMaxY - overscroll
+    const rawMaxY = -contentMinY + overscroll
+    minY = Math.min(rawMinY, rawMaxY)
+    maxY = Math.max(rawMinY, rawMaxY)
+  }
 
   return {
     x: clamp(camera.x, minX, maxX),
