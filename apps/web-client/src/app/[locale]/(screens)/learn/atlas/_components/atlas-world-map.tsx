@@ -475,18 +475,44 @@ function CourseCellLabels({
               onCellClick(mc.contentId, mc.kind, territoryColor)
             }}
           >
-            <Icon size={isModule ? 14 : 12} strokeWidth={isModule ? 2.5 : 2} />
-            
-            {isCompleted && (
-              <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full text-white ring-[1.5px] ring-white">
-                <CheckCircle2 size={10} strokeWidth={3} />
-              </div>
+            {/* Apple Watch style Circular Progress Ring */}
+            {isModule && mc.progressTotal && mc.progressTotal > 1 && !isCompleted && (
+              <svg className="absolute inset-0 h-full w-full -rotate-90 pointer-events-none drop-shadow-md" viewBox="0 0 100 100">
+                {/* Track */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  fill="transparent"
+                  stroke="rgba(0,0,0,0.15)"
+                  strokeWidth="10"
+                />
+                {/* Fill */}
+                {((mc.progressCount || 0) > 0) && (
+                  <motion.circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="transparent"
+                    stroke="#FFFFFF"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    strokeDasharray={2 * Math.PI * 42}
+                    initial={{ strokeDashoffset: 2 * Math.PI * 42 }}
+                    animate={{ strokeDashoffset: 2 * Math.PI * 42 * (1 - (mc.progressCount || 0) / mc.progressTotal!) }}
+                    transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
+                  />
+                )}
+              </svg>
             )}
 
-            {/* Module progress fraction below the icon */}
-            {isModule && mc.progressTotal && mc.progressTotal > 1 && !isCompleted && (
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-[6.5px] font-black tracking-wider text-white opacity-80 mix-blend-plus-lighter shadow-black drop-shadow-md">
-                {mc.progressCount} / {mc.progressTotal}
+            <div className="relative z-10 flex items-center justify-center">
+              <Icon size={isModule ? 14 : 12} strokeWidth={isModule ? 2.5 : 2} />
+            </div>
+            
+            {isCompleted && (
+              <div className="absolute -bottom-1 -right-1 z-20 bg-green-500 rounded-full text-white ring-[1.5px] ring-white shadow-sm">
+                <CheckCircle2 size={10} strokeWidth={3} />
               </div>
             )}
           </motion.button>
