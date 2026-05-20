@@ -31,7 +31,7 @@ const DETAIL_AUTO_SCALE = 1.48
 const DETAIL_AUTO_RADIUS = 230
 const SUBDOMAIN_VISIBLE_SCALE = 1.1
 const SUBDOMAIN_LABEL_SCALE = 1.35
-const MOMENTUM_DECAY = 0.94
+const MOMENTUM_DECAY = 0.965
 const MOMENTUM_MIN_PX_PER_FRAME = 0.5
 const WHEEL_IDLE_MS = 150
 
@@ -96,7 +96,7 @@ function getCameraConstraints(viewport: ViewportSize) {
   return {
     minScale: viewport.width < 768 ? 0.46 : 0.55,
     maxScale: viewport.width < 768 ? 2.7 : 2.45,
-    overscroll: viewport.width < 768 ? 128 : 180,
+    overscroll: viewport.width < 768 ? 40 : 60,
   }
 }
 
@@ -372,7 +372,7 @@ function AtlasCamera({
         scale: camera.scale,
       }}
       transition={{
-        duration: isInteracting ? 0 : reduceMotion ? 0.18 : 0.68,
+        duration: isInteracting ? 0 : reduceMotion ? 0.18 : 0.42,
         ease: [0.2, 0.82, 0.2, 1],
       }}
       style={{
@@ -478,6 +478,7 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
   const velocityHistoryRef = useRef<Array<{ x: number; y: number; t: number }>>([])
   const lastRafTimestampRef = useRef<number>(0)
   const hasInitializedRef = useRef(false)
+  const lastTapRef = useRef<{ x: number; y: number; t: number } | null>(null)
   const selectedTerritory =
     map.territories.find((territory) => territory.domain.id === selectedTerritoryId) ?? null
   const autoViewTargets = useMemo(
@@ -696,6 +697,28 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       return
     }
 
+    const pointer = getViewportPoint(event)
+    const now = performance.now()
+    const lastTap = lastTapRef.current
+
+    if (
+      lastTap &&
+      now - lastTap.t < 300 &&
+      Math.hypot(pointer.x - lastTap.x, pointer.y - lastTap.y) < 44
+    ) {
+      lastTapRef.current = null
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+      velocityRef.current = { x: 0, y: 0 }
+      velocityHistoryRef.current = []
+      setIsInteracting(false)
+      const nextScale = Math.min(cameraRef.current.scale * 1.6, constraints.maxScale)
+      moveCamera(zoomAtlasCameraAtPoint(cameraRef.current, pointer, nextScale))
+      return
+    }
+
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current)
       rafRef.current = null
@@ -704,8 +727,6 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
     velocityHistoryRef.current = []
 
     event.currentTarget.setPointerCapture(event.pointerId)
-    const pointer = getViewportPoint(event)
-
     pointersRef.current.set(event.pointerId, pointer)
     autoViewPointRef.current = pointer
     setIsInteracting(true)
@@ -806,6 +827,9 @@ export function AtlasWorldMap({ map }: { map: AtlasKinnuMapView }) {
       if (gesture?.moved && speed >= MOMENTUM_MIN_PX_PER_FRAME) {
         startMomentum()
       } else {
+        if (gesture && !gesture.moved) {
+          lastTapRef.current = { x: gesture.startPoint.x, y: gesture.startPoint.y, t: performance.now() }
+        }
         setIsInteracting(false)
       }
       return
