@@ -178,8 +178,8 @@ export async function ProjectQuickView({
     ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
   const ctaProofLine = isDonationProject
-    ? 'Suivi inclus · Graines possibles · Projet documenté'
-    : 'Suivi inclus · Crédits Impact possibles · Projet documenté'
+    ? 'Suivi inclus · Graines possibles · Nouvelles régulières'
+    : 'Suivi inclus · Crédits Impact possibles · Nouvelles régulières'
   const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (
