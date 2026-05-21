@@ -79,7 +79,7 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
         <div className='px-0'>
 
           {/* 01 – Habitat */}
-          <AccordionItem title='Habitat' number='01' defaultOpen>
+          <AccordionItem title='Où elle vit' number='01' defaultOpen>
             {hasHabitat ? (
               <div className='space-y-3'>
                 {simpleHabitats.length > 0 && (
@@ -111,14 +111,14 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
           </AccordionItem>
 
           {/* 02 – Relations dans le vivant */}
-          <AccordionItem title='Relations dans le vivant' number='02'>
+          <AccordionItem title='Avec qui elle interagit' number='02'>
             <p className='text-xs text-white/35'>
               Plantes mellifères, pollinisateurs associés, cultures locales, prédateurs — à documenter avec les données terrain.
             </p>
           </AccordionItem>
 
           {/* 03 – Menaces & fragilités */}
-          <AccordionItem title='Menaces & fragilités' number='03'>
+          <AccordionItem title='Ce qui la fragilise' number='03'>
             {hasThreats ? (
               <div className='space-y-3'>
                 <div className='flex flex-wrap gap-2'>
@@ -179,7 +179,7 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
       <MobileSheet
         isOpen={threatsSheetOpen}
         onClose={() => setThreatsSheetOpen(false)}
-        title='Menaces & fragilités'
+        title='Ce qui la fragilise'
       >
         <div className='space-y-4 pb-2 pt-1'>
           <div className='space-y-2'>

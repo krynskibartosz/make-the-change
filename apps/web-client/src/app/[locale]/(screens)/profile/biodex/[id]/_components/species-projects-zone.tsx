@@ -128,9 +128,9 @@ export function SpeciesProjectsZone({ linkedProjects, linkedPartners }: SpeciesP
       <div>
         <p className='text-[12px] leading-relaxed text-white/40'>
           {linkedProjects.length === 1
-            ? "Cette espèce apparaît dans 1 projet documenté dans l'app."
-            : `Cette espèce apparaît dans ${linkedProjects.length} projets documentés dans l'app.`}
-          {hasStats && " Les estimations ci-dessous sont liées aux projets, pas une preuve que l'espèce est protégée."}
+            ? "Cette espèce est liée à 1 projet documenté dans l'app."
+            : `Cette espèce est liée à ${linkedProjects.length} projets documentés dans l'app.`}
+          {hasStats && " Les chiffres associés aident à comprendre l'écosystème du projet, sans constituer une preuve de protection de l'espèce."}
         </p>
 
         {hasStats && (

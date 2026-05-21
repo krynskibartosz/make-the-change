@@ -28,11 +28,11 @@ export function SpeciesLinkedProducts({ producers }: SpeciesLinkedProductsProps)
     <section className='mt-2'>
       <div className='px-5'>
         <p className='text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
-          Savoir-faire lié
+          Savoir-faire partenaire
         </p>
         <p className='mt-1 text-[12px] leading-relaxed text-white/40'>
-          Proposé par {mainProducer.producerName}. Ces produits prolongent la découverte du
-          savoir-faire local, sans constituer une preuve d&apos;impact sur l&apos;espèce.
+          Proposé par {mainProducer.producerName}. Ces produits permettent de découvrir le
+          partenaire lié aux projets. Ils ne prouvent pas un impact sur l&apos;espèce.
         </p>
       </div>
 

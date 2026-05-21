@@ -1,6 +1,6 @@
 'use client'
 import { useMemo } from 'react'
-import { ChevronRight, GitBranch } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getCoursesForSpecies } from '@/lib/learning/selectors'
 import type { SpeciesContext } from '@/types/species'
@@ -24,9 +24,6 @@ interface SpeciesDetailClientProps {
 
 export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, linkedPartners }: SpeciesDetailClientProps) {
   const learningCourses = useMemo(() => getCoursesForSpecies(species.id, 3), [species.id])
-  const livingWebCourse = learningCourses.find((c) => c.relatedEcosystemIds.length > 0)
-  const firstEcosystemId = livingWebCourse?.relatedEcosystemIds[0]
-  const firstNodeId = livingWebCourse?.relatedNodeIds[0]
 
   return (
     <div className='pb-12'>
@@ -42,7 +39,10 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
         {/* 3. Repères biologiques — grille légère */}
         <SpeciesQuickStats species={species} />
 
-        {/* 4. Explorer son rôle — accordéons */}
+        {/* 4. Fiabilité — couche de confiance discrète */}
+        <SpeciesDocumentationSection species={species} />
+
+        {/* 5. Explorer son rôle — accordéons */}
         <SpeciesKnowledgeSection species={species} />
 
         {/* 5. Liens avec les projets — zone fusionnée */}
@@ -51,10 +51,7 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
         {/* 6. Dans le même écosystème */}
         <SpeciesLinkedSpecies linkedProjects={linkedProjects} currentSpeciesId={species.id} />
 
-        {/* 7. Ce qui est documenté — statuts visuels */}
-        <SpeciesDocumentationSection species={species} />
-
-        {/* 8. Continuer à apprendre */}
+        {/* 7. Continuer à apprendre */}
         {learningCourses.length > 0 && (
           <section className='mx-5'>
             <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
@@ -76,15 +73,6 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
                 </li>
               ))}
             </ul>
-            {firstEcosystemId && (
-              <Link
-                href={`/ecosysteme/${firstEcosystemId}${firstNodeId ? `?node=${firstNodeId}` : ''}`}
-                className='mt-4 flex items-center justify-center gap-2 rounded-2xl border border-teal-500/20 bg-teal-500/8 py-2.5 text-sm font-semibold text-teal-300 active:bg-teal-500/15'
-              >
-                <GitBranch className='h-4 w-4' aria-hidden='true' />
-                Explorer dans la Toile vivante
-              </Link>
-            )}
           </section>
         )}
 
