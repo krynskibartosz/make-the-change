@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Flame, Package, Truck, Leaf, Info, ShieldCheck, ChevronRight, ChevronDown, X } from 'lucide-react'
+import { Flame, Package, Truck, Info, ChevronRight, ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
 import { useRouter } from '@/i18n/navigation'
@@ -100,9 +100,10 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
   const [selectedFormat, setSelectedFormat] = useState<ProductFormat>(defaultFormat);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const [isFiatCheckoutOpen, setIsFiatCheckoutOpen] = useState(false)
-  const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false);
+  const [isNutritionModalOpen, setIsNutritionModalOpen] = useState(false)
   const [isCompositionOpen, setIsCompositionOpen] = useState(false)
   const [isConservationOpen, setIsConservationOpen] = useState(false)
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   const displayPoints = selectedFormat.points
   const displayPrice = selectedFormat.euros
@@ -179,7 +180,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           <div>
             <section>
               <div
-                className="relative aspect-square max-h-[60vh] w-full overflow-hidden rounded-none border-b border-white/10 bg-white/5"
+                className="relative aspect-[4/5] max-h-[420px] min-h-[340px] w-full overflow-hidden rounded-none border-b border-white/10 bg-white/5"
                 style={{ viewTransitionName: mediaTransitionName }}
               >
                 {coverImage ? (
@@ -200,12 +201,12 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                     <ProductShareButton
                       productName={productName}
                       productId={product.id}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition-all hover:bg-black/60 active:scale-95"
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md border border-white/15 transition-all hover:bg-black/55 active:scale-95"
                     />
                     <ProductFavoriteButton
                       productName={productName}
                       productId={product.id}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition-all hover:bg-black/60 active:scale-95"
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md border border-white/15 transition-all hover:bg-black/55 active:scale-95"
                     />
                   </div>
                 </div>
@@ -220,25 +221,13 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </section>
 
             <aside className="space-y-4 px-4 pt-4">
-              <div className="space-y-2">
+              <div>
                 <h1
                   className="text-3xl font-black leading-tight tracking-tight text-white"
                   style={{ viewTransitionName: titleTransitionName }}
                 >
                   {productName}
                 </h1>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {product.tags && product.tags[0] && (
-                    <span className="bg-lime-400/10 border border-lime-400/20 text-lime-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                      <Leaf className="w-3 h-3" /> {product.tags[0]}
-                    </span>
-                  )}
-                  {product.featured && (
-                    <span className="bg-amber-400/10 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                      👑 Accès anticipé · Gardiens des mers
-                    </span>
-                  )}
-                </div>
               </div>
             </aside>
           </div>
@@ -307,9 +296,17 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             {/* ── DESCRIPTION (Séduction) ── */}
             <section className="px-1 pt-4 mb-4">
               <h3 className="text-sm font-bold text-white mb-2">À propos de ce produit</h3>
-              <p className="text-white/70 leading-relaxed text-[14px]">
+              <p className={`text-white/70 leading-relaxed text-[14px] ${isDescriptionExpanded ? '' : 'line-clamp-3'}`}>
                 {productDescription || 'Découvrez ce produit partenaire soigneusement sélectionné parmi nos producteurs engagés.'}
               </p>
+              {productDescription && productDescription.length > 180 && (
+                <button
+                  onClick={() => setIsDescriptionExpanded(v => !v)}
+                  className="mt-1.5 text-[13px] font-semibold text-white/40 hover:text-white/70 transition-colors"
+                >
+                  {isDescriptionExpanded ? 'Lire moins' : 'Lire plus'}
+                </button>
+              )}
             </section>
 
             {/* ── PROFIL GUSTATIF + LIVRAISON (Séduction suite) ── */}
@@ -346,7 +343,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   href={`/${locale}/projects`}
                   className="text-sm font-semibold text-white/60 hover:text-white transition-colors flex items-center gap-1"
                 >
-                  Voir les projets soutenus →
+                  Voir les projets liés →
                 </a>
               </div>
             )}
@@ -354,7 +351,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             {product.certifications && product.certifications.filter(c => !/^Origine\b/i.test(c)).length > 0 && (
               <section className="px-1 pb-6">
                 <h2 className="mb-2 text-[11px] font-bold uppercase tracking-widest text-white/40">
-                  {t('detail.certifications')}
+                  Repères produit
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {product.certifications
@@ -446,7 +443,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                       <Info className="w-4 h-4 text-white/70" />
                     </div>
                     <div className="text-left">
-                      <span className="block text-sm font-bold text-white tracking-wide">Valeurs Nutritionnelles</span>
+                      <span className="block text-sm font-bold text-white tracking-wide">Valeurs nutritionnelles</span>
                       <span className="block text-[11px] text-white/40 mt-0.5">
                         Pour 100g : {product.nutrition.energy_kcal} kcal, {product.nutrition.carbs_g}g glucides...
                       </span>
@@ -465,18 +462,23 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
             {/* Boutons d'Achat Dynamiques */}
+            {formats.length > 1 && (
+              <p className="text-center text-[11px] text-white/35 -mb-1">
+                {selectedFormat.label} sélectionné
+              </p>
+            )}
             {userBalance >= displayPoints ? (
               <>
-                <button 
+                <button
                   key={`exchange-${selectedFormat.points}`}
                   onClick={() => setIsCheckoutOpen(true)}
                   className={`flex w-full h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
                 >
                   Utiliser mes crédits <CurrencyAmount kind="impactCredits" value={displayPoints} tone="inherit" className="text-[17px] font-black" />
                 </button>
-                
+
                 {displayPrice > 0 && (
-                  <button 
+                  <button
                     onClick={() => setIsFiatCheckoutOpen(true)}
                     className="flex w-full mt-2 items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50"
                   >
@@ -490,7 +492,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               </>
             ) : (
               <>
-                <button 
+                <button
                   key={`buy-${selectedFormat.euros}`}
                   onClick={() => setIsFiatCheckoutOpen(true)}
                   className="flex w-full h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(52,211,153,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 hover:bg-emerald-300"
@@ -544,8 +546,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
           {/* HEADER FIXE */}
           <div className="sticky top-0 z-20 bg-[#0B0F15]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-white/5 pt-[max(1.5rem,env(safe-area-inset-top))]">
             <div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Valeurs Nutritionnelles</h3>
-              <p className="text-sm text-white/50">Pour 100g de produit</p>
+              <h3 className="text-xl font-bold text-white tracking-tight">Valeurs nutritionnelles</h3>
+              <p className="text-sm text-white/50">Pour 100 g de produit</p>
             </div>
             <button
               onClick={(event) => {
@@ -563,38 +565,38 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             <div className="flex flex-col text-[15px]">
 
               <div className="flex justify-between py-4 border-b border-white/5">
-                <span className="text-white/70 tracking-wide">Énergie (Kj/KCal)</span>
-                <span className="text-white font-black tabular-nums">{product.nutrition.energy_kj} / {product.nutrition.energy_kcal}</span>
+                <span className="text-white/70 tracking-wide">Énergie</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.energy_kj} kJ / {product.nutrition.energy_kcal} kcal</span>
               </div>
 
               <div className="flex justify-between py-4 border-b border-white/5">
-                <span className="text-white/70 tracking-wide">Matières Grasses <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">{product.nutrition.fat_g}</span>
+                <span className="text-white/70 tracking-wide">Matières grasses</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.fat_g} g</span>
               </div>
 
               <div className="flex justify-between py-4 border-b border-white/5">
-                <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont d'acides gras saturés <span className="text-white/20 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white/80 font-bold text-sm tabular-nums">{product.nutrition.saturated_fat_g}</span>
+                <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">dont acides gras saturés</span>
+                <span className="text-white/80 font-bold text-sm tabular-nums">{product.nutrition.saturated_fat_g} g</span>
               </div>
 
               <div className="flex justify-between py-4 border-b border-white/5">
-                <span className="text-white/70 tracking-wide">Glucides <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">{product.nutrition.carbs_g}</span>
+                <span className="text-white/70 tracking-wide">Glucides</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.carbs_g} g</span>
               </div>
 
               <div className="flex justify-between py-4 border-b border-white/5">
-                <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont Sucres <span className="text-white/20 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white/80 font-bold text-sm tabular-nums">{product.nutrition.sugars_g}</span>
+                <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">dont sucres</span>
+                <span className="text-white/80 font-bold text-sm tabular-nums">{product.nutrition.sugars_g} g</span>
               </div>
 
               <div className="flex justify-between py-4 border-b border-white/5">
-                <span className="text-white/70 tracking-wide">Protéines <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">{product.nutrition.protein_g}</span>
+                <span className="text-white/70 tracking-wide">Protéines</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.protein_g} g</span>
               </div>
 
               <div className="flex justify-between py-4">
-                <span className="text-white/70 tracking-wide">Sel <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">{product.nutrition.salt_g}</span>
+                <span className="text-white/70 tracking-wide">Sel</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.salt_g} g</span>
               </div>
 
             </div>
