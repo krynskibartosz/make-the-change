@@ -10,7 +10,6 @@ import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { ProjectProducerProductsSection } from './_components/shared/producer-products'
 import { ProjectQuickViewHero } from './_components/quick-view/hero'
 import { SimilarProjectsCarousel } from './_components/shared/similar-projects-carousel'
-import { ProjectSpeciesTeaser } from './_components/shared/species-teaser'
 import { ProjectLearningLinks } from './_components/shared/learning-links'
 import { ProjectStorySheet } from './_components/quick-view/story-sheet'
 import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
@@ -387,11 +386,6 @@ export async function ProjectQuickView({
                 <ProjectBiodexSheet
                   species={species}
                   isDonationProject={isDonationProject}
-                />
-                <ProjectSpeciesTeaser
-                  species={species}
-                  accentColor={glowRgba(glow, 0.75)}
-                  showHeader={false}
                 />
               </div>
             ) : null}
