@@ -322,10 +322,7 @@ export async function ProjectQuickView({
               description={projectDescription}
               title={projectName}
               producerName={project.producer ? organizerName : undefined}
-              producerDescription={project.producer ? organizerDescription : undefined}
-              producerLabel={partnerLabel}
               producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
-              producerImage={producerImage}
               projectType={project.type}
               isDonationProject={isDonationProject}
             />
