@@ -75,19 +75,20 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           <p className="text-white/40 text-sm mt-3">Cet achat produit ne crée pas automatiquement de Credits Impact.</p>
         </div>
 
-        {/* CTAs — La Boucle Gamification */}
         <div className="w-full flex flex-col gap-3 mt-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          <button
-            onClick={() => router.push('/projects')}
-            className="w-full font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(252,211,77,0.18)] bg-amber-300 text-black"
-          >
-            Découvrir les projets à soutenir
-          </button>
+          {/* Bouton Primaire — réassurance */}
           <button
             onClick={() => router.push('/profile/contributions')}
+            className="w-full font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(52,211,153,0.18)] bg-emerald-400 text-[#0B0F15] hover:bg-emerald-300"
+          >
+            Suivre ma commande
+          </button>
+          {/* Bouton Secondaire — conversion suivante */}
+          <button
+            onClick={() => router.push('/projects')}
             className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
           >
-            Suivre ma commande →
+            Découvrir les projets à soutenir
           </button>
         </div>
 

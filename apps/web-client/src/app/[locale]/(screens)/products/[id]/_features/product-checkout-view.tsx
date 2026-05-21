@@ -11,6 +11,7 @@ type ProductCheckoutViewProps = {
   product: any
   selectedFormat: {
     id: string
+    label: string
     points: number
     euros: number
   }
@@ -40,7 +41,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
   // -------------------------------------------------------------
   if (step === 1) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col bg-[#0B0F15] animate-in fade-in slide-in-from-bottom-[5%] duration-300">
+      <div className="fixed inset-0 z-[200] flex flex-col bg-[#0B0F15] animate-in fade-in slide-in-from-bottom-[5%] duration-300">
         <div className="flex items-center justify-between p-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-2">
           <h2 className="text-xl font-bold text-white">Votre échange</h2>
           <button 
@@ -61,7 +62,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
               </div>
               <div className="flex-1">
                 <h3 className="text-white font-bold text-lg leading-tight">{product.name_default}</h3>
-                <p className="text-white/50 text-sm mt-0.5">Format : {selectedFormat.id}</p>
+                <p className="text-white/50 text-sm mt-0.5">Format : {selectedFormat.label}</p>
               </div>
             </div>
             
@@ -158,7 +159,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
             }}
             className={`w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-lg font-black shadow-[0_0_30px_rgba(252,211,77,0.14)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100 ${getCurrencyDesign('impactCredits').ctaClassName}`}
           >
-            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'utilisation")}
+            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'échange")}
           </button>
         </div>
       </div>
@@ -205,7 +206,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
             }}
             className="w-full rounded-2xl bg-white py-4 text-lg font-black text-[#0B0F15] transition-transform active:scale-95"
           >
-            Utiliser cette adresse
+            Valider l'adresse
           </button>
         </div>
       </div>
@@ -252,20 +253,20 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          {/* Bouton Primaire (La Boucle) */}
-          <button
-            onClick={() => router.push('/projects')}
-            className="w-full bg-emerald-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-emerald-300 shadow-[0_0_30px_rgba(52,211,153,0.18)]"
-          >
-            Soutenir un projet
-          </button>
-          
-          {/* Bouton Secondaire (Utilitaires) */}
+          {/* Bouton Primaire — réassurance */}
           <button
             onClick={() => router.push('/profile/contributions')}
-            className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
+            className="w-full bg-emerald-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-emerald-300 shadow-[0_0_30px_rgba(52,211,153,0.18)]"
           >
             Suivre ma commande
+          </button>
+
+          {/* Bouton Secondaire — conversion suivante */}
+          <button
+            onClick={() => router.push('/projects')}
+            className="w-full h-12 text-sm font-bold text-white/50 hover:text-white transition-colors"
+          >
+            Soutenir un projet
           </button>
         </div>
       </div>

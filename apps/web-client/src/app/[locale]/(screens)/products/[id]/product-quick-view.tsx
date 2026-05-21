@@ -425,7 +425,7 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
                   onClick={() => setIsCheckoutOpen(true)}
                   className={`flex w-full h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
                 >
-                  Utiliser mes crédits <CurrencyAmount kind="impactCredits" value={displayPoints} tone="inherit" className="text-[17px] font-black" />
+                  Échanger · <CurrencyAmount kind="impactCredits" value={displayPoints} tone="inherit" className="text-[17px] font-black" />
                 </button>
 
                 {displayPrice > 0 && (
