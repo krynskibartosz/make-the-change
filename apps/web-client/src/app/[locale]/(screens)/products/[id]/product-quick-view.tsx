@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { Badge } from '@make-the-change/core/ui'
 import { Flame, Package, Truck, Info, ChevronRight, ChevronUp, ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
@@ -298,27 +297,6 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
               </div>
             </div>
 
-
-            {product.certifications && product.certifications.filter(c => !/^Origine\b/i.test(c)).length > 0 && (
-              <section className="px-1 pb-6">
-                <h2 className="mb-2 text-[11px] font-bold uppercase tracking-widest text-white/40">
-                  Repères produit
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {product.certifications
-                    .filter(c => !/^Origine\b/i.test(c))
-                    .map((certification, index) => (
-                      <Badge
-                        key={`${certification}-${index}`}
-                        variant="outline"
-                        className="border-white/10 bg-white/5 text-emerald-400"
-                      >
-                        {certification}
-                      </Badge>
-                    ))}
-                </div>
-              </section>
-            )}
 
             {/* BLOC COMPOSITION ET CONSERVATION */}
             <div className="px-1 mt-8">
