@@ -2,12 +2,10 @@ import { Badge, Button, Progress } from '@make-the-change/core/ui'
 import { ChevronRight, Globe } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
-import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { resolveCountryCode, getCountryDisplayName } from '@/lib/location'
-import type { DonationOption, ProducerProduct } from '@/app/[locale]/(screens)/projects/_types/project'
-import { cn, getLocalizedContent } from '@/lib/utils'
+import type { ProducerProduct, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
+import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { ProjectProducerProductsSection } from './_components/shared/producer-products'
 import { ProjectQuickViewHero } from './_components/quick-view/hero'
@@ -21,19 +19,15 @@ import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
 import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
 import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
-import {
-  getRelatedProjectsByType,
-  type PublicProject,
-  type RelatedProject,
-} from './project-detail-data'
+import type { PublicProject, RelatedProject } from './project-detail-data'
 import { buildProjectImpactItems } from './_utils/build-project-impact-items'
 import { formatAmountNumber } from '@/lib/formatters'
 
 type ProjectQuickViewProps = {
   project: PublicProject
-  mode?: 'modal' | 'page'
-  producerProducts?: ProducerProduct[] | null
-  relatedProjects?: RelatedProject[]
+  species: ProjectSpecies[] | null
+  producerProducts: ProducerProduct[] | null
+  relatedProjects: RelatedProject[]
 }
 
 // ─── Glow contextuel par type de projet ────────────────────────────────────
@@ -45,8 +39,6 @@ const PROJECT_GLOW: Record<ProjectGlowTone, { r: number; g: number; b: number }>
   blue:   { r: 14,  g: 165, b: 233 },
 }
 
-// Muted contextual gradients for the funding progress bar.
-// Lower saturation than CTA (lime-400) so it never competes with it.
 const PROGRESS_INDICATOR_CLASS: Record<ProjectGlowTone, string> = {
   yellow: 'bg-gradient-to-r from-amber-500/60 to-lime-400/50',
   blue:   'bg-gradient-to-r from-sky-500/60 to-teal-400/50',
@@ -106,13 +98,12 @@ function getSimilarProjectsTitle(type: string | null | undefined): string {
 
 export async function ProjectQuickView({
   project,
-  mode = 'modal',
+  species,
   producerProducts,
   relatedProjects,
 }: ProjectQuickViewProps) {
   const t = await getTranslations('projects')
   const locale = await getLocale()
-  const isPageMode = mode === 'page'
 
   const glowTone = getProjectGlowTone(project.type)
   const glow = PROJECT_GLOW[glowTone]
@@ -185,21 +176,6 @@ export async function ProjectQuickView({
     ? `/projects/${project.slug}/donate?source=quick_view`
     : `/projects/${project.slug}/support?source=quick_view`
 
-  const projectContext =
-    producerProducts === undefined && !project.is_mock ? await getProjectContext(project.slug) : null
-  const resolvedProducerProducts =
-    producerProducts ?? projectContext?.producer_products ?? project.producer_products ?? null
-  const resolvedSpecies = await getSpeciesForProject(project.slug, project.id)
-
-  const resolvedRelatedProjects =
-    relatedProjects ??
-    (await getRelatedProjectsByType({
-      type: project.type,
-      excludeProjectId: project.id,
-      excludeProjectSlug: project.slug,
-      limit: 3,
-    }))
-
   const galleryMedia = [
     ...(project.hero_image_url ? [project.hero_image_url] : []),
     ...(Array.isArray(project.images) ? project.images : []),
@@ -227,12 +203,7 @@ export async function ProjectQuickView({
   const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (
-    <div
-      className={cn(
-        'relative flex flex-col overflow-x-hidden',
-        isPageMode ? 'min-h-screen bg-background' : 'h-full min-h-full bg-transparent',
-      )}
-    >
+    <div className="relative flex h-full flex-col overflow-x-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
@@ -244,20 +215,10 @@ export async function ProjectQuickView({
         />
       </div>
 
-      <div
-        className={cn(
-          'relative flex min-h-0 flex-1 flex-col overflow-x-hidden',
-          !isPageMode && 'h-full',
-        )}
-      >
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-x-hidden h-full">
         <div
           data-modal-scroll-root
-          className={cn(
-            'flex-1 overflow-x-hidden',
-            isPageMode
-              ? 'overflow-visible'
-              : 'min-h-0 overflow-y-auto overscroll-contain overscroll-x-none touch-pan-y',
-          )}
+          className="flex-1 min-h-0 overflow-y-auto overscroll-contain overscroll-x-none touch-pan-y"
         >
           {/* 1. Hero */}
           <ProjectQuickViewHero
@@ -297,8 +258,8 @@ export async function ProjectQuickView({
                 countryName={countryName}
                 city={project.address_city}
                 projectType={project.type}
-                speciesCount={resolvedSpecies?.length ?? 0}
-                relatedProjects={resolvedRelatedProjects}
+                speciesCount={species?.length ?? 0}
+                relatedProjects={relatedProjects}
                 latitude={project.latitude}
                 longitude={project.longitude}
                 locale={locale}
@@ -460,14 +421,14 @@ export async function ProjectQuickView({
             </div>
 
             {/* 7. Espèces liées */}
-            {resolvedSpecies && resolvedSpecies.length > 0 ? (
+            {species && species.length > 0 ? (
               <div className="mt-16 px-4 sm:px-5">
                 <ProjectBiodexSheet
-                  species={resolvedSpecies}
+                  species={species}
                   isDonationProject={isDonationProject}
                 />
                 <ProjectSpeciesTeaser
-                  species={resolvedSpecies}
+                  species={species}
                   accentColor={glowRgba(glow, 0.75)}
                   showHeader={false}
                 />
@@ -479,9 +440,9 @@ export async function ProjectQuickView({
             </div>
 
             {/* 8. Produits partenaires (soutien uniquement) */}
-            {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
+            {!isDonationProject && producerProducts && producerProducts.length > 0 ? (
               <div className="mt-16 px-4 sm:px-5">
-                <ProjectProducerProductsSection products={resolvedProducerProducts} />
+                <ProjectProducerProductsSection products={producerProducts} />
               </div>
             ) : null}
 
@@ -489,7 +450,7 @@ export async function ProjectQuickView({
             <div className="mt-16 w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
                 locale={locale}
-                relatedProjects={resolvedRelatedProjects}
+                relatedProjects={relatedProjects}
                 title={similarTitle}
               />
             </div>
@@ -497,7 +458,7 @@ export async function ProjectQuickView({
         </div>
 
         {/* 10. CTA sticky */}
-        <BottomActionBar className={isPageMode ? 'sticky bottom-0 z-20' : 'fixed bottom-0 left-0 right-0 z-40 w-full'}>
+        <BottomActionBar className="fixed bottom-0 left-0 right-0 z-40 w-full">
           {isFundingClosed ? (
             <Button
               className="h-14 w-full justify-center gap-0 rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 [&_svg]:hidden"

@@ -15,6 +15,8 @@ type FullScreenSlideModalProps = PropsWithChildren<{
   contentClassName?: string
   onClose?: () => void
   refreshOnClose?: boolean
+  /** Rend le modal comme une page normale (pas d'overlay fixed, pas de scroll lock, pas d'animation). */
+  asPage?: boolean
 }>
 
 export function FullScreenSlideModal({
@@ -26,6 +28,7 @@ export function FullScreenSlideModal({
   contentClassName,
   onClose,
   refreshOnClose,
+  asPage = false,
   children,
 }: FullScreenSlideModalProps) {
   const router = useRouter()
@@ -33,6 +36,8 @@ export function FullScreenSlideModal({
   const [isHeaderElevated, setIsHeaderElevated] = useState(false)
 
   useEffect(() => {
+    if (asPage) return
+
     const html = document.documentElement
     const body = document.body
 
@@ -43,7 +48,7 @@ export function FullScreenSlideModal({
       html.classList.remove('overflow-hidden')
       body.classList.remove('overflow-hidden')
     }
-  }, [])
+  }, [asPage])
 
   useEffect(() => {
     if (headerMode !== 'dynamic') {
@@ -100,8 +105,9 @@ export function FullScreenSlideModal({
     <div
       ref={containerRef}
       className={cn(
-        'fixed inset-0 z-[100] bg-background h-[100dvh] w-full flex flex-col overflow-hidden',
-        'animate-in slide-in-from-bottom-full duration-300',
+        asPage
+          ? 'relative h-[100dvh] w-full flex flex-col bg-background overflow-hidden'
+          : 'fixed inset-0 z-[100] bg-background h-[100dvh] w-full flex flex-col overflow-hidden animate-in slide-in-from-bottom-full duration-300',
         className,
       )}
     >
