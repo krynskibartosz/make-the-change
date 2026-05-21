@@ -82,6 +82,19 @@ export type MockProductSeed = {
   producer: MockProductProducer
   category: MockProductCategory
   variants?: ProductVariant[] | null
+  composition?: { ingredients: string; origin: string } | null
+  conservation?: string | null
+  taste_profile?: string[] | null
+  nutrition?: {
+    energy_kj: number
+    energy_kcal: number
+    fat_g: number
+    saturated_fat_g: number
+    carbs_g: number
+    sugars_g: number
+    protein_g: number
+    salt_g: number
+  } | null
 }
 
 const MOCK_PRODUCTS: MockProductSeed[] = [
@@ -168,6 +181,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Honey',
       },
     },
+    composition: { ingredients: "100% miel d'Eucalyptus", origin: 'Madagascar' },
+    conservation: "À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).",
+    taste_profile: ['Ambré', 'Boisé', 'Frais'],
+    nutrition: { energy_kj: 1374, energy_kcal: 328, fat_g: 0.22, saturated_fat_g: 0, carbs_g: 81, sugars_g: 74, protein_g: 0.8, salt_g: 0 },
   },
   {
     id: MOCK_PRODUCT_MANAKARA_ID,
@@ -230,6 +247,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Honey',
       },
     },
+    composition: { ingredients: '100% miel de Manakara', origin: 'Madagascar' },
+    conservation: "À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).",
+    taste_profile: ['Floral', 'Doux', 'Délicat'],
+    nutrition: { energy_kj: 1374, energy_kcal: 328, fat_g: 0.22, saturated_fat_g: 0, carbs_g: 81, sugars_g: 74, protein_g: 0.8, salt_g: 0 },
   },
   {
     id: MOCK_PRODUCT_SAVON_DOUX_ID,
@@ -291,6 +312,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Soap',
       },
     },
+    composition: { ingredients: "Huile d'olive, huile de coco, cire d'abeille, eau distillée", origin: 'Belgique' },
+    conservation: "Conserver dans un endroit frais et sec. Ne pas laisser dans l'eau pour prolonger la durée de vie.",
+    taste_profile: null,
+    nutrition: null,
   },
   {
     id: MOCK_PRODUCT_HUILE_VISAGE_ID,
@@ -352,6 +377,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Oil',
       },
     },
+    composition: { ingredients: "Huile de jojoba, huile d'argan, cire d'abeille, vitamine E", origin: 'Belgique' },
+    conservation: "Conserver à l'abri de la lumière directe et de la chaleur.",
+    taste_profile: null,
+    nutrition: null,
   },
   {
     id: MOCK_PRODUCT_SHAMPOING_ID,
@@ -413,6 +442,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Shampoo',
       },
     },
+    composition: { ingredients: "Sodium cocoate, miel, huile d'olive, extrait de calendula", origin: 'Belgique' },
+    conservation: "Conserver dans un endroit frais et sec. Utiliser un porte-savon perforé pour prolonger la durée de vie.",
+    taste_profile: null,
+    nutrition: null,
   },
   {
     id: MOCK_PRODUCT_HUILE_LECCINO_ID,
@@ -474,6 +507,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Olive Oil',
       },
     },
+    composition: { ingredients: "100% huile d'olive extra vierge, variété Leccino", origin: 'Sardaigne, Italie' },
+    conservation: "Conserver à l'abri de la lumière et de la chaleur. Consommer de préférence avant 18 mois après production.",
+    taste_profile: ['Fruité', 'Délicat', 'Amandes'],
+    nutrition: { energy_kj: 3389, energy_kcal: 824, fat_g: 91.4, saturated_fat_g: 13.2, carbs_g: 0, sugars_g: 0, protein_g: 0, salt_g: 0 },
   },
   {
     id: MOCK_PRODUCT_HUILE_FRANTOIO_ID,
@@ -535,6 +572,10 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
         en: 'Olive Oil',
       },
     },
+    composition: { ingredients: "100% huile d'olive extra vierge, variété Frantoio", origin: 'Sardaigne, Italie' },
+    conservation: "Conserver à l'abri de la lumière et de la chaleur. Consommer de préférence avant 18 mois après production.",
+    taste_profile: ['Intense', 'Poivré', 'Amer'],
+    nutrition: { energy_kj: 3389, energy_kcal: 824, fat_g: 91.4, saturated_fat_g: 13.2, carbs_g: 0, sugars_g: 0, protein_g: 0, salt_g: 0 },
   },
 ]
 

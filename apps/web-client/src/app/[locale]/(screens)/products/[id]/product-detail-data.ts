@@ -2,7 +2,25 @@ import { unstable_cache } from 'next/cache'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
 import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import { getMockProductByIdentifier, type MockProductSeed } from '@/app/[locale]/(screens)/products/_features/mock-products'
+import { getMockProductByIdentifier, type MockProductSeed, type ProductVariant } from '@/app/[locale]/(screens)/products/_features/mock-products'
+
+export type { ProductVariant }
+
+export type ProductComposition = {
+  ingredients: string
+  origin: string
+}
+
+export type ProductNutrition = {
+  energy_kj: number
+  energy_kcal: number
+  fat_g: number
+  saturated_fat_g: number
+  carbs_g: number
+  sugars_g: number
+  protein_g: number
+  salt_g: number
+}
 
 export type ProductProducer = {
   id: string
@@ -47,6 +65,11 @@ export type PublicProduct = {
 export type ProductWithRelations = PublicProduct & {
   producer: ProductProducer | null
   category: ProductCategory | null
+  variants: ProductVariant[] | null
+  composition: ProductComposition | null
+  conservation: string | null
+  taste_profile: string[] | null
+  nutrition: ProductNutrition | null
 }
 
 const toLocalizedRecord = (value: unknown): Record<string, string> | null => {
@@ -193,6 +216,11 @@ const toProductWithRelationsFromMock = (product: MockProductSeed): ProductWithRe
     name_default: product.category.name_default,
     name_i18n: product.category.name_i18n || null,
   },
+  variants: product.variants ?? null,
+  composition: product.composition ?? null,
+  conservation: product.conservation ?? null,
+  taste_profile: product.taste_profile ?? null,
+  nutrition: product.nutrition ?? null,
 })
 
 async function _getPublicProductById(idOrSlug: string): Promise<ProductWithRelations | null> {
@@ -252,6 +280,11 @@ async function _getPublicProductById(idOrSlug: string): Promise<ProductWithRelat
     ...product,
     producer,
     category,
+    variants: null,
+    composition: null,
+    conservation: null,
+    taste_profile: null,
+    nutrition: null,
   }
 }
 

@@ -24,6 +24,7 @@ type ProductQuickViewProps = {
 
 type ProductFormat = {
   id: string
+  label: string
   points: number
   euros: number
   stock: number
@@ -76,12 +77,25 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
-  const userBalance = 2450;
-  const formats: ProductFormat[] = [
-    { id: "140g", points: 350, euros: 3.50, stock: 12 },
-    { id: "250g", points: 650, euros: 6.50, stock: 45 },
-    { id: "500g", points: 1200, euros: 12.00, stock: 3 }
-  ];
+  const userBalance = 2450
+  const formats: ProductFormat[] =
+    product.variants && product.variants.length > 0
+      ? product.variants.map((v) => ({
+          id: v.id,
+          label: v.format_label,
+          points: v.price_points,
+          euros: v.price_eur_equivalent,
+          stock: v.stock_quantity,
+        }))
+      : [
+          {
+            id: product.id,
+            label: product.name_default,
+            points: product.price_points ?? 0,
+            euros: product.price_eur_equivalent ?? 0,
+            stock: product.stock_quantity ?? 0,
+          },
+        ]
   const defaultFormat = formats[0]!
   const [selectedFormat, setSelectedFormat] = useState<ProductFormat>(defaultFormat);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
@@ -284,7 +298,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                         : 'bg-white/5 border border-white/20 text-white/90 font-semibold hover:bg-white/10 hover:border-white/30'
                     }`}
                   >
-                    {format.id}
+                    {format.label}
                   </button>
                 ))}
               </div>
@@ -301,14 +315,18 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             {/* ── PROFIL GUSTATIF + LIVRAISON (Séduction suite) ── */}
             <div className="px-1 flex gap-8 pt-2 pb-6">
               {/* PROFIL GUSTATIF */}
-              <div className="flex flex-col gap-2">
-                <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Profil Gustatif</span>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="bg-orange-500/20 text-orange-400 border border-orange-500/20 px-2 py-1 rounded-md text-[10px] font-bold">Ambré</span>
-                  <span className="bg-amber-500/20 text-amber-400 border border-amber-500/20 px-2 py-1 rounded-md text-[10px] font-bold">Boisé</span>
-                  <span className="bg-green-500/20 text-green-400 border border-green-500/20 px-2 py-1 rounded-md text-[10px] font-bold">Frais</span>
+              {product.taste_profile && product.taste_profile.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <span className="text-[11px] text-white/50 uppercase tracking-wider font-bold">Profil Gustatif</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {product.taste_profile.map((tag) => (
+                      <span key={tag} className="bg-white/10 text-white/70 border border-white/10 px-2 py-1 rounded-md text-[10px] font-bold">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* LIVRAISON */}
               <div className="flex flex-col gap-2">
@@ -378,11 +396,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                     <div className="py-4 border-b border-white/5 grid grid-cols-2 gap-4">
                       <div>
                         <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Ingrédients</span>
-                        <p className="text-sm font-medium text-white">100% miel d'Eucalyptus</p>
+                        <p className="text-sm font-medium text-white">{product.composition?.ingredients ?? '—'}</p>
                       </div>
                       <div>
                         <span className="block text-[10px] text-white/40 uppercase tracking-widest font-bold mb-1">Origine</span>
-                        <p className="text-sm font-medium text-white">Madagascar</p>
+                        <p className="text-sm font-medium text-white">{product.composition?.origin ?? '—'}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -408,7 +426,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                   >
                     <div className="py-4">
                       <p className="text-[13px] text-white/70 leading-relaxed">
-                        À conserver à l'abri de l'humidité et de la chaleur, dans une pièce à température ambiante (environ 20 °C).
+                        {product.conservation ?? 'Conserver dans un endroit frais et sec.'}
                       </p>
                     </div>
                   </motion.div>
@@ -417,23 +435,27 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </div>
 
             {/* BOUTON DÉCLENCHEUR NUTRITION */}
-            <div className="px-1 mt-4 mb-32">
-              <button  
-                onClick={() => setIsNutritionModalOpen(true)}
-                className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/10 transition-colors rounded-2xl p-4 flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                    <Info className="w-4 h-4 text-white/70" /> 
+            {product.nutrition && (
+              <div className="px-1 mt-4 mb-32">
+                <button
+                  onClick={() => setIsNutritionModalOpen(true)}
+                  className="w-full bg-[#1A1F26] border border-white/5 hover:bg-white/10 transition-colors rounded-2xl p-4 flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                      <Info className="w-4 h-4 text-white/70" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block text-sm font-bold text-white tracking-wide">Valeurs Nutritionnelles</span>
+                      <span className="block text-[11px] text-white/40 mt-0.5">
+                        Pour 100g : {product.nutrition.energy_kcal} kcal, {product.nutrition.carbs_g}g glucides...
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <span className="block text-sm font-bold text-white tracking-wide">Valeurs Nutritionnelles</span>
-                    <span className="block text-[11px] text-white/40 mt-0.5">Pour 100g : 328 kcal, 81g glucides...</span>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+                  <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -510,7 +532,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
 
       {/* MODALE BOTTOM SHEET (NUTRITION) - STYLE ECO-FACT */}
       <AnimatePresence>
-      {isNutritionModalOpen && (
+      {isNutritionModalOpen && product.nutrition && (
         <motion.div
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
@@ -525,7 +547,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               <h3 className="text-xl font-bold text-white tracking-tight">Valeurs Nutritionnelles</h3>
               <p className="text-sm text-white/50">Pour 100g de produit</p>
             </div>
-            <button 
+            <button
               onClick={(event) => {
                 event.stopPropagation()
                 setIsNutritionModalOpen(false)
@@ -537,43 +559,42 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </button>
           </div>
 
-          {/* DONNÉES EXACTES EXTRAITES DU DOCUMENT */}
           <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] mt-6">
             <div className="flex flex-col text-[15px]">
-              
+
               <div className="flex justify-between py-4 border-b border-white/5">
                 <span className="text-white/70 tracking-wide">Énergie (Kj/KCal)</span>
-                <span className="text-white font-black tabular-nums">1374 / 328</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.energy_kj} / {product.nutrition.energy_kcal}</span>
               </div>
-              
+
               <div className="flex justify-between py-4 border-b border-white/5">
                 <span className="text-white/70 tracking-wide">Matières Grasses <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">0.22</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.fat_g}</span>
               </div>
-              
+
               <div className="flex justify-between py-4 border-b border-white/5">
                 <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont d'acides gras saturés <span className="text-white/20 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white/80 font-bold text-sm tabular-nums">0</span>
+                <span className="text-white/80 font-bold text-sm tabular-nums">{product.nutrition.saturated_fat_g}</span>
               </div>
-              
+
               <div className="flex justify-between py-4 border-b border-white/5">
                 <span className="text-white/70 tracking-wide">Glucides <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">81</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.carbs_g}</span>
               </div>
-              
+
               <div className="flex justify-between py-4 border-b border-white/5">
                 <span className="text-white/40 pl-6 text-sm relative before:content-[''] before:absolute before:left-2 before:top-1/2 before:w-2 before:h-[1px] before:bg-white/20">Dont Sucres <span className="text-white/20 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white/80 font-bold text-sm tabular-nums">74</span>
+                <span className="text-white/80 font-bold text-sm tabular-nums">{product.nutrition.sugars_g}</span>
               </div>
-              
+
               <div className="flex justify-between py-4 border-b border-white/5">
                 <span className="text-white/70 tracking-wide">Protéines <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">0.8</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.protein_g}</span>
               </div>
-              
+
               <div className="flex justify-between py-4">
                 <span className="text-white/70 tracking-wide">Sel <span className="text-white/30 text-xs ml-1 font-medium">(Gr)</span></span>
-                <span className="text-white font-black tabular-nums">0</span>
+                <span className="text-white font-black tabular-nums">{product.nutrition.salt_g}</span>
               </div>
 
             </div>
