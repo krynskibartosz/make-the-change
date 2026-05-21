@@ -1,29 +1,31 @@
 'use client'
 
-/**
- * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
- * Section Espèces — Option A: Premium éditoriale
- *
- * Images beaucoup plus grandes, moins de zone vide.
- * Contexte éditorial: pourquoi ces espèces sont là.
- */
-
-import { Link } from '@/i18n/navigation'
+import { Leaf } from 'lucide-react'
 import type { ProducerSpecies } from '../producer-detail-data'
 import { producerTypography as typo } from './producer-typography'
 
-function getRarityColor(rarity: string) {
-  const r = rarity?.toUpperCase()
-  if (r === 'LÉGENDAIRE') return 'text-amber-400/80'
-  if (r === 'RARE') return 'text-blue-400/70'
-  return 'text-emerald-500/60'
+const SPECIES_THUMBNAILS: Record<string, string> = {
+  'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
+  'species-indri': '/images/species-thumbnails/indri.png',
+  'species-sifaka-diademe': '/images/species-thumbnails/sifaka-diademe.png',
+  'species-vari-noir-blanc': '/images/species-thumbnails/vari-noir-blanc.png',
+  'species-cameleon-parson': '/images/species-thumbnails/cameleon-parson.png',
+  'species-cameleon-panthere': '/images/species-thumbnails/cameleon-panthere.png',
+  'species-charancon-girafe': '/images/species-thumbnails/charancon-girafe.png',
+  'species-grenouille-tomate': '/images/species-thumbnails/grenouille-tomate.png',
+  'species-martin-chasseur-pygme': '/images/species-thumbnails/martin-chasseur-pygmee.png',
+  'species-coua-bleu': '/images/species-thumbnails/coua-bleu.png',
+  'species-gecko-diurne': '/images/species-thumbnails/gecko-diurne.png',
+  'species-chouette-cheveche': '/images/species-thumbnails/chouette-cheveche.png',
+  'species-liotrigona-bitika': '/images/species-thumbnails/liotrigona-bitika.png',
 }
 
-function getRarityLabel(rarity: string) {
-  const r = rarity?.toUpperCase()
-  if (r === 'LÉGENDAIRE') return 'Espèce remarquable'
-  if (r === 'RARE') return 'Espèce liée'
-  return 'Commune'
+function getSpeciesImage(entry: ProducerSpecies): string {
+  return SPECIES_THUMBNAILS[entry.id] ?? entry.image
+}
+
+function isKeySpecies(rarity: string): boolean {
+  return rarity?.toUpperCase() === 'LÉGENDAIRE'
 }
 
 type SpeciesSectionProps = {
@@ -34,54 +36,86 @@ type SpeciesSectionProps = {
 
 export function SpeciesSection({
   species,
-  title = 'Le vivant autour de leurs projets',
-  subtitle = 'Espèces et milieux associés aux projets documentés.',
+  title = 'Espèces liées au projet',
+  subtitle,
 }: SpeciesSectionProps) {
   if (species.length === 0) return null
+
+  const sectionSubtitle =
+    subtitle ??
+    (species.length === 1
+      ? "1 espèce pour comprendre l'écosystème du projet"
+      : `${species.length} espèces pour comprendre l'écosystème du projet`)
+
+  const keySpecies = species.find((s) => isKeySpecies(s.rarity)) ?? null
+  const otherSpecies = keySpecies ? species.filter((s) => s.id !== keySpecies.id) : species
 
   return (
     <section>
       <div className="px-4">
         <h2 className={typo.sectionTitle}>{title}</h2>
-        {subtitle && <p className={`mt-1.5 ${typo.sectionSubtitle}`}>{subtitle}</p>}
+        <p className={`mt-1 ${typo.sectionSubtitle}`}>{sectionSubtitle}</p>
       </div>
 
-      <ul
-        className="mt-4 flex snap-x gap-4 overflow-x-auto px-4 scroll-pl-4 pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
-        aria-label="Espèces liées au partenaire"
-      >
-        {species.map((entry) => (
-          <li key={entry.id} className="w-36 shrink-0 snap-start">
-            <Link href={`/profile/biodex/${entry.id}`} className="block">
-              <article className="flex flex-col gap-1.5">
-                {/* Image — scale-110 pour que l'illustration occupe plus de surface */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#1A1F26]">
-                  <img
-                    src={entry.image}
-                    alt={entry.name}
-                    className="h-full w-full object-contain scale-110"
-                  />
-                </div>
+      {/* Carte espèce clé */}
+      {keySpecies ? (
+        <div className="mt-4 px-4">
+          <div className="flex items-center gap-3 rounded-2xl border border-lime-400/20 bg-white/[0.04] p-3">
+            <div className="h-[88px] w-[88px] shrink-0 overflow-hidden rounded-xl bg-white/[0.06]">
+              <img
+                src={getSpeciesImage(keySpecies)}
+                alt={`${keySpecies.name}, espèce clé liée au projet`}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-black leading-tight text-white">{keySpecies.name}</p>
+              {keySpecies.role ? (
+                <p className="mt-0.5 text-[13px] text-lime-400/80">{keySpecies.role}</p>
+              ) : null}
+              <span className="mt-2 inline-flex rounded-full bg-lime-300/15 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wide text-lime-300">
+                ESPÈCE CLÉ
+              </span>
+              <div className="mt-2 flex items-center gap-1">
+                <Leaf className="h-3 w-3 shrink-0 text-white/30" />
+                <p className="text-[11px] text-white/35">Espèce liée au projet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
-                {/* Nom — élément principal */}
-                <p className={`${typo.cardTitle} line-clamp-2`}>{entry.name}</p>
-
-                {/* Rôle écologique — contexte éditorial */}
-                {entry.role && (
-                  <p className="text-[13px] font-medium leading-snug text-white/56">{entry.role}</p>
-                )}
-
-                {/* Rareté BioDex — label explicite plutôt que niveau brut */}
-                <p
-                  className={`text-[11px] font-bold uppercase tracking-[0.08em] ${getRarityColor(entry.rarity)}`}
-                >
-                  {getRarityLabel(entry.rarity)}
-                </p>
-              </article>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {/* Autres espèces */}
+      {otherSpecies.length > 0 ? (
+        <div className="mt-4">
+          {keySpecies ? (
+            <p className="mb-3 px-4 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
+              Autres espèces associées
+            </p>
+          ) : null}
+          <ul
+            className="flex snap-x gap-3 overflow-x-auto px-4 scroll-pl-4 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden m-0 list-none"
+            aria-label="Espèces associées au partenaire"
+          >
+            {otherSpecies.map((entry) => (
+              <li key={entry.id} className="w-[80px] shrink-0 snap-start">
+                <article className="flex flex-col">
+                  <div className="h-[80px] w-[80px] overflow-hidden rounded-xl bg-white/[0.04]">
+                    <img
+                      src={getSpeciesImage(entry)}
+                      alt={`${entry.name}, espèce associée`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <p className="mt-1.5 line-clamp-2 text-center text-[11px] font-semibold leading-snug text-white/55">
+                    {entry.name}
+                  </p>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </section>
   )
 }

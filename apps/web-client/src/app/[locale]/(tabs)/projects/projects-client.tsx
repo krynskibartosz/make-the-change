@@ -136,6 +136,22 @@ const normalizeProject = (
   }
 }
 
+const SPECIES_THUMBNAILS: Record<string, string> = {
+  'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
+  'species-indri': '/images/species-thumbnails/indri.png',
+  'species-sifaka-diademe': '/images/species-thumbnails/sifaka-diademe.png',
+  'species-vari-noir-blanc': '/images/species-thumbnails/vari-noir-blanc.png',
+  'species-cameleon-parson': '/images/species-thumbnails/cameleon-parson.png',
+  'species-cameleon-panthere': '/images/species-thumbnails/cameleon-panthere.png',
+  'species-charancon-girafe': '/images/species-thumbnails/charancon-girafe.png',
+  'species-grenouille-tomate': '/images/species-thumbnails/grenouille-tomate.png',
+  'species-martin-chasseur-pygme': '/images/species-thumbnails/martin-chasseur-pygmee.png',
+  'species-coua-bleu': '/images/species-thumbnails/coua-bleu.png',
+  'species-gecko-diurne': '/images/species-thumbnails/gecko-diurne.png',
+  'species-chouette-cheveche': '/images/species-thumbnails/chouette-cheveche.png',
+  'species-liotrigona-bitika': '/images/species-thumbnails/liotrigona-bitika.png',
+}
+
 // Silhouette SVG d'abeille (inline, pas de dépendance externe)
 function BeeSilhouette({ className = 'w-5 h-5 opacity-30 text-white' }: { className?: string }) {
   return (
@@ -146,41 +162,41 @@ function BeeSilhouette({ className = 'w-5 h-5 opacity-30 text-white' }: { classN
 }
 
 function ProjectSpeciesTeaser({ species }: { species: ProjectSpeciesPreview[] | null }) {
-  if (!species || species.length === 0) {
-    return null
-  }
-
+  if (!species || species.length === 0) return null
   const firstSpecies = species[0]
-  if (!firstSpecies) {
-    return null
-  }
+  if (!firstSpecies) return null
 
-  const unlockedSpecies = species.find((entry) => entry.isUnlocked)
-  const isLocked = !unlockedSpecies
-  const mainSpecies = unlockedSpecies || firstSpecies
-
+  const visibleThumbs = species.slice(0, 3)
+  const hiddenCount = Math.max(0, species.length - 3)
   const label =
-    species.length === 1
-      ? isLocked
-        ? `BioDex : ${mainSpecies.name} à débloquer`
-        : `Espèce liée : ${mainSpecies.name}`
-      : `${mainSpecies.name} · +${species.length - 1} espèces liées`
+    hiddenCount > 0
+      ? `${firstSpecies.name} · +${hiddenCount} espèces`
+      : species.length > 1
+        ? `${firstSpecies.name} · ${species.length - 1} espèce${species.length > 2 ? 's' : ''} associée${species.length > 2 ? 's' : ''}`
+        : firstSpecies.name
 
   return (
     <div className="mt-2 flex items-center gap-2">
-      <div className="relative flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/[0.06]">
-        {firstSpecies.imageUrl ? (
-          <img
-            src={firstSpecies.imageUrl}
-            alt=""
-            className={`h-full w-full object-cover ${isLocked ? 'scale-110 grayscale blur-[1.5px] opacity-45' : 'opacity-85'}`}
-          />
-        ) : (
-          <PawPrint className={`h-3.5 w-3.5 ${isLocked ? 'text-white/30' : 'text-white/60'}`} />
-        )}
-        {isLocked ? <div className="absolute inset-0 bg-black/20" aria-hidden /> : null}
+      <div className="flex -space-x-1.5">
+        {visibleThumbs.map((sp) => {
+          const imgUrl = SPECIES_THUMBNAILS[sp.id] ?? sp.imageUrl
+          return (
+            <div
+              key={sp.id}
+              className="h-6 w-6 overflow-hidden rounded-lg border-2 border-[#0B0F15] bg-white/[0.06]"
+            >
+              {imgUrl ? (
+                <img src={imgUrl} alt={sp.name} className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <PawPrint className="h-3 w-3 text-white/30" />
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
-      <p className="text-[13px] font-medium text-white/58">{label}</p>
+      <p className="truncate text-[13px] font-medium text-white/55">{label}</p>
     </div>
   )
 }
