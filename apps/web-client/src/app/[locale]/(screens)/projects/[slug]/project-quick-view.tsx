@@ -140,16 +140,18 @@ export async function ProjectQuickView({
 
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
 
-  const defaultDesc = project.description_default || project.long_description_default || ''
-  const localizedLongDesc = getLocalizedContent(
-    project.long_description_i18n,
-    locale,
-    project.long_description_default || '',
-  )
+  // Short description for the hero (1–2 sentences, decisive)
   const projectDescription = getLocalizedContent(
     project.description_i18n,
     locale,
-    localizedLongDesc || defaultDesc,
+    project.description_default || '',
+  )
+
+  // Narrative description for the story sheet (long_description preferred, falls back to short)
+  const narrativeDescription = getLocalizedContent(
+    project.long_description_i18n,
+    locale,
+    project.long_description_default || projectDescription,
   )
 
   const producerName = project.producer
@@ -280,7 +282,7 @@ export async function ProjectQuickView({
             </div>
 
             <ProjectStorySheet
-              description={projectDescription}
+              description={narrativeDescription}
               title={projectName}
               producerName={project.producer ? organizerName : undefined}
               producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}

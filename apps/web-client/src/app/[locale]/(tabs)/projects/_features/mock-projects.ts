@@ -733,12 +733,13 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       "Ce projet soutient des colonies d’abeilles gérées par des apiculteurs locaux, avec un suivi terrain et une valorisation du miel produit.",
     description_i18n: {
       fr: "Ce projet soutient des colonies d’abeilles gérées par des apiculteurs locaux, avec un suivi terrain et une valorisation du miel produit.",
-      en: 'This project supports bee colonies managed by local beekeepers, with field monitoring and valuation of the honey produced.',
+      en: "This project supports bee colonies managed by local beekeepers, with field monitoring and valuation of the honey produced.",
     },
     long_description_default:
-      "Andraina et son assistant gerent 45 ruches reparties sur un site situe derriere son habitation, a quelques metres de la reserve speciale d'Analamazoatra.\n\nCette foret tropicale est un hotspot de biodiversite, abritant de nombreuses especes de lemuriens, dont l'Indri, ainsi que des cameleons, plus de 100 especes d'oiseaux et une grande diversite d'amphibiens et de plantes endemiques.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le developpement d'une apiculture locale durable.",
+      "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri, ainsi que des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nLes ruches leur sont fournies par Ilanga Nature, qui accompagne le développement d’une apiculture locale durable en apportant matériel, formation et accès aux circuits de valorisation.",
     long_description_i18n: {
-      fr: "Andraina et son assistant gerent 45 ruches reparties sur un site situe derriere son habitation, a quelques metres de la reserve speciale d'Analamazoatra.\n\nCette foret tropicale est un hotspot de biodiversite, abritant de nombreuses especes de lemuriens, dont l'Indri, ainsi que des cameleons, plus de 100 especes d'oiseaux et une grande diversite d'amphibiens et de plantes endemiques.\n\nLes ruches sont fournies par Ilanga Nature, qui soutient le developpement d'une apiculture locale durable.",
+      fr: "Andraina et son assistant gèrent 45 ruches réparties sur un site situé derrière son habitation, à quelques mètres de la réserve spéciale d’Analamazoatra.\n\nCette forêt tropicale est un hotspot de biodiversité, abritant de nombreuses espèces de lémuriens, dont l’Indri, ainsi que des caméléons, plus de 100 espèces d’oiseaux et une grande diversité d’amphibiens et de plantes endémiques.\n\nLes ruches leur sont fournies par Ilanga Nature, qui accompagne le développement d’une apiculture locale durable en apportant matériel, formation et accès aux circuits de valorisation.",
+      en: "Andraina and his assistant manage 45 hives spread across a site behind his home, a few meters from the Analamazoatra Special Reserve.\n\nThis tropical forest is a biodiversity hotspot, home to many lemur species including the Indri, as well as chameleons, over 100 bird species, and a wide diversity of endemic amphibians and plants.\n\nThe hives are supplied by Ilanga Nature, which supports sustainable local beekeeping by providing equipment, training, and access to honey processing and distribution networks.",
     },
     address_city: 'Antsirabe',
     address_country_code: 'Madagascar',
@@ -797,16 +798,16 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
       en: 'Ilanga Nature Honey House',
     },
     description_default:
-      "Projet Ilanga Nature a Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
+      "Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
     description_i18n: {
-      fr: "Projet Ilanga Nature a Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
-      en: 'Ilanga Nature project in Madagascar to scale a sustainable local honey house around black bees.',
+      fr: "Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
+      en: 'Ilanga Nature project in Madagascar to build a sustainable local honey house around black bees.',
     },
     long_description_default:
-      "La miellerie de Manakara est portee par Ilanga Nature a Madagascar. Ce projet vise a renforcer la chaine locale de production et de valorisation du miel en s'appuyant sur une apiculture durable.\n\nLes donnees terrain detaillees sont progressivement consolidees a partir du referentiel operationnel.",
+      "La miellerie de Manakara est au cœur de la filière apicole d'Ilanga Nature à Madagascar. Implantée sur la côte est malgache, elle collecte et transforme le miel récolté par les apiculteurs partenaires de la région.\n\nSans infrastructure de transformation accessible, de nombreux apiculteurs locaux peinent à valoriser leur production : les miels sont souvent vendus sans traitement, à bas prix, et ne peuvent pas répondre aux normes d'export. La miellerie répond à ce manque structurel.\n\nElle offre un point de collecte, d'extraction et de conditionnement qui permet aux apiculteurs de livrer leur récolte dans de bonnes conditions. Le miel est ensuite contrôlé, mis en pot et distribué dans le cadre d'une filière traçable.",
     long_description_i18n: {
-      fr: "La miellerie de Manakara est portee par Ilanga Nature a Madagascar. Ce projet vise a renforcer la chaine locale de production et de valorisation du miel en s'appuyant sur une apiculture durable.\n\nLes donnees terrain detaillees sont progressivement consolidees a partir du referentiel operationnel.",
-      en: 'The Manakara honey house is led by Ilanga Nature in Madagascar. The project strengthens local honey production and value chain through sustainable beekeeping.',
+      fr: "La miellerie de Manakara est au cœur de la filière apicole d'Ilanga Nature à Madagascar. Implantée sur la côte est malgache, elle collecte et transforme le miel récolté par les apiculteurs partenaires de la région.\n\nSans infrastructure de transformation accessible, de nombreux apiculteurs locaux peinent à valoriser leur production : les miels sont souvent vendus sans traitement, à bas prix, et ne peuvent pas répondre aux normes d'export. La miellerie répond à ce manque structurel.\n\nElle offre un point de collecte, d'extraction et de conditionnement qui permet aux apiculteurs de livrer leur récolte dans de bonnes conditions. Le miel est ensuite contrôlé, mis en pot et distribué dans le cadre d'une filière traçable.",
+      en: "The Manakara honey house is at the heart of Ilanga Nature's beekeeping supply chain in Madagascar. Located on the eastern coast, it collects and processes honey harvested by partner beekeepers across the region.\n\nWithout accessible processing infrastructure, many local beekeepers struggle to add value to their production: honey is often sold unprocessed at low prices and cannot meet export standards. The honey house addresses this structural gap.\n\nIt provides a collection, extraction, and bottling point that allows beekeepers to deliver their harvest under proper conditions. Honey is then inspected, bottled, and distributed through a traceable supply chain.",
     },
     address_city: 'Manakara',
     address_country_code: 'Madagascar',
