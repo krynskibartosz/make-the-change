@@ -17,6 +17,7 @@ type ProjectsSectionProps = {
   title?: string
   subtitle?: string
   impactSummary?: ImpactSummary
+  producerName?: string
 }
 
 const IMPACT_ICONS: Record<string, typeof Leaf> = {
@@ -146,6 +147,7 @@ export function ProjectsSection({
   title = "Les projets qu'ils portent",
   subtitle,
   impactSummary,
+  producerName,
 }: ProjectsSectionProps) {
   const locale = useLocale()
   const [disclaimerOpen, setDisclaimerOpen] = useState(false)
@@ -153,10 +155,9 @@ export function ProjectsSection({
   if (projects.length === 0) return null
 
   const projectCount = projects.length
-  const countLabel =
-    projectCount === 1
-      ? "1 projet documenté dans l'app"
-      : `${projectCount} projets documentés dans l'app`
+  const countLabel = producerName
+    ? `${projectCount} ${projectCount === 1 ? 'projet porté' : 'projets portés'} par ${producerName}`
+    : `${projectCount} ${projectCount === 1 ? 'projet lié' : 'projets liés'} à ce partenaire`
 
   return (
     <>

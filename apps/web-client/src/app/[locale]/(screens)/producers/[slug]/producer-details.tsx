@@ -66,14 +66,21 @@ export function ProducerDetails({ producer }: ProducerDetailsProps) {
 
         {/* 4. Projets — estimation intégrée dans le sous-titre */}
         <div className="mt-16">
-          <ProjectsSection projects={producer.projects} impactSummary={producer.impactSummary} />
+          <ProjectsSection
+            projects={producer.projects}
+            impactSummary={producer.impactSummary}
+            producerName={producer.editorialIdentity?.shortName || producer.name_default}
+          />
         </div>
 
         {/* 5. Espèces */}
         <div className="mt-16">
           <SpeciesSection
             species={producer.species}
-            subtitle={producer.editorialIdentity?.speciesSubtitle}
+            subtitle={
+              producer.editorialIdentity?.speciesSubtitle ??
+              `Espèces et milieux associés aux projets portés par ${producer.editorialIdentity?.shortName || producer.name_default}.`
+            }
           />
         </div>
 
