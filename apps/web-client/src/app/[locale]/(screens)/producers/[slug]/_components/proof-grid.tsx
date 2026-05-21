@@ -68,50 +68,11 @@ const iconMap: Record<string, LucideIcon> = {
   Sprout,
 }
 
-const accentStyles: Record<string, { border: string; cardBg: string; icon: string; label: string }> = {
-  certification: {
-    border: 'border-l-emerald-500',
-    cardBg: 'bg-emerald-950/[8%]',
-    icon: 'text-emerald-400',
-    label: 'text-emerald-400/85',
-  },
-  field_operation: {
-    border: 'border-l-amber-400',
-    cardBg: 'bg-amber-950/[8%]',
-    icon: 'text-amber-400',
-    label: 'text-amber-400/85',
-  },
-  method: {
-    border: 'border-l-sky-400',
-    cardBg: 'bg-sky-950/[8%]',
-    icon: 'text-sky-400',
-    label: 'text-sky-400/85',
-  },
-  location: {
-    border: 'border-l-violet-400',
-    cardBg: 'bg-violet-950/[8%]',
-    icon: 'text-violet-400',
-    label: 'text-violet-400/85',
-  },
-  partner: {
-    border: 'border-l-rose-400',
-    cardBg: 'bg-rose-950/[8%]',
-    icon: 'text-rose-400',
-    label: 'text-rose-400/85',
-  },
-  other: {
-    border: 'border-l-white/20',
-    cardBg: 'bg-white/[3%]',
-    icon: 'text-white/45',
-    label: 'text-white/55',
-  },
-}
-
-const defaultAccent: { border: string; cardBg: string; icon: string; label: string } = {
-  border: 'border-l-white/20',
+const cardStyle = {
+  border: 'border-l-white/15',
   cardBg: 'bg-white/[3%]',
-  icon: 'text-white/45',
-  label: 'text-white/55',
+  icon: 'text-teal-400/60',
+  label: 'text-white/50',
 }
 
 const GROUP_LABELS: Record<string, string> = {
@@ -206,21 +167,20 @@ export function ProofGrid({ cards }: ProofGridProps) {
             <div className="space-y-2">
               {primaryProofs.map((card, index) => {
                 const Icon = iconMap[card.icon] || BadgeCheck
-                const style = accentStyles[card.proofType] ?? defaultAccent
 
                 return (
                   <button
                     key={index}
                     type="button"
                     onClick={() => setOpenLabel(card.label)}
-                    className={`flex w-full items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${style.border} ${style.cardBg} px-3.5 py-3.5 text-left transition-opacity active:opacity-60`}
+                    className={`flex w-full items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${cardStyle.border} ${cardStyle.cardBg} px-3.5 py-3.5 text-left transition-opacity active:opacity-60`}
                   >
-                    <Icon className={`h-[18px] w-[18px] shrink-0 ${style.icon}`} />
+                    <Icon className={`h-[18px] w-[18px] shrink-0 ${cardStyle.icon}`} />
 
                     <div className="min-w-0 flex-1">
                       <p className={typo.cardTitle}>{card.label}</p>
                       {card.value && (
-                        <p className={`mt-1 text-[13px] font-semibold leading-snug ${style.label}`}>
+                        <p className={`mt-1 text-[13px] font-semibold leading-snug ${cardStyle.label}`}>
                           {card.value}
                         </p>
                       )}
