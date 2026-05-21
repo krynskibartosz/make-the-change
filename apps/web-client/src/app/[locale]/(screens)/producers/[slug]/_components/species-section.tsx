@@ -40,7 +40,7 @@ export function SpeciesSection({
   if (species.length === 0) return null
 
   return (
-    <section className="mt-16">
+    <section>
       <div className="px-4">
         <h2 className={typo.sectionTitle}>{title}</h2>
         {subtitle && <p className={`mt-1.5 ${typo.sectionSubtitle}`}>{subtitle}</p>}

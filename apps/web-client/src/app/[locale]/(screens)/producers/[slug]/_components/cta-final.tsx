@@ -34,7 +34,7 @@ export function CtaFinal({ website, contextText, internalHref = '/projects', par
   const ctaLabel = partnerName ? `Voir les projets de ${partnerName}` : 'Voir les projets liés'
 
   return (
-    <section className="mt-12 border-t border-white/5 px-5 pb-12 pt-8">
+    <section className="border-t border-white/5 px-5 pb-12 pt-8">
       {contextText && (
         <p className="mb-5 text-center text-[14px] leading-relaxed text-white/58">{contextText}</p>
       )}

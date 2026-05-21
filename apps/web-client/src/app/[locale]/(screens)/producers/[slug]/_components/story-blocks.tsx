@@ -33,7 +33,7 @@ export function StoryBlocks({ blocks, producerName }: StoryBlocksProps) {
   }
 
   return (
-    <section className="mt-10 px-4">
+    <section className="px-4">
       <h2 className={typo.sectionTitle}>L&apos;histoire</h2>
       <p className={`mt-1.5 mb-4 ${typo.sectionSubtitle}`}>{storySubtitle}</p>
 

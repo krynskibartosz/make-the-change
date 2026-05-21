@@ -28,13 +28,49 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
   if (!hasProducts && !hasCatalog) return null
 
   return (
-    <section className="mt-10">
+    <section>
+      {/* ── Filières documentées du partenaire ── */}
+      {hasCatalog && partnerCatalog && (
+        <div className="px-4">
+          <div className="mb-4">
+            <h3 className={typo.sectionTitle}>{partnerCatalog.title}</h3>
+            <p className={`mt-1.5 flex items-start gap-1.5 ${typo.sectionSubtitle}`}>
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              <span>{partnerCatalog.disclaimer}</span>
+            </p>
+          </div>
+
+          {/* Layout éditorial avec séparateurs — pas des cards */}
+          <div className="flex flex-col">
+            {partnerCatalog.families.map((family, index) => (
+              <div
+                key={index}
+                className={`py-3.5 ${index > 0 ? 'border-t border-white/[0.06]' : ''}`}
+              >
+                {/* Première famille plus prominente (filière cœur) */}
+                <h4
+                  className={`leading-snug ${index === 0 ? 'text-[17px] font-bold text-white/92' : 'text-[15px] font-semibold text-white/84'}`}
+                >
+                  {family.label}
+                </h4>
+                <p className="mt-1 text-[14px] leading-relaxed text-white/64">
+                  {family.examples.join(' · ')}
+                </p>
+                {family.origin && (
+                  <p className="mt-1 text-[12px] font-medium text-white/45">{family.origin}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── Produits partenaires disponibles dans l'app ── */}
       {hasProducts && (
-        <div className="mb-10">
+        <div className={hasCatalog ? 'mt-10' : ''}>
           <div className="px-4">
-            <h2 className={typo.sectionTitle}>Produits partenaires disponibles</h2>
-            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Accessibles avec vos Credits Impact.</p>
+            <h2 className={typo.sectionTitle}>Produits accessibles</h2>
+            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Disponibles avec vos Credits Impact.</p>
           </div>
 
           {/* Carousel horizontal — même pattern que projets et biodex */}
@@ -83,47 +119,6 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
               </li>
             ))}
           </ul>
-
-          {/* Reconnexion produit → filière */}
-          <p className="mt-1 px-4 text-[13px] leading-relaxed text-white/55">
-            Ces produits sont liés aux filières documentées du partenaire.
-          </p>
-        </div>
-      )}
-
-      {/* ── Filières documentées du partenaire ── */}
-      {hasCatalog && partnerCatalog && (
-        <div className="px-4">
-          <div className="mb-4">
-            <h3 className={typo.sectionTitle}>{partnerCatalog.title}</h3>
-            <p className={`mt-1.5 flex items-start gap-1.5 ${typo.sectionSubtitle}`}>
-              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-              <span>{partnerCatalog.disclaimer}</span>
-            </p>
-          </div>
-
-          {/* Layout éditorial avec séparateurs — pas des cards */}
-          <div className="flex flex-col">
-            {partnerCatalog.families.map((family, index) => (
-              <div
-                key={index}
-                className={`py-3.5 ${index > 0 ? 'border-t border-white/[0.06]' : ''}`}
-              >
-                {/* Première famille plus prominente (filière cœur) */}
-                <h4
-                  className={`leading-snug ${index === 0 ? 'text-[17px] font-bold text-white/92' : 'text-[15px] font-semibold text-white/84'}`}
-                >
-                  {family.label}
-                </h4>
-                <p className="mt-1 text-[14px] leading-relaxed text-white/64">
-                  {family.examples.join(' · ')}
-                </p>
-                {family.origin && (
-                  <p className="mt-1 text-[12px] font-medium text-white/45">{family.origin}</p>
-                )}
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </section>

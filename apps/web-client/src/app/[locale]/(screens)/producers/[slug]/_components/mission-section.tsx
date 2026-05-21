@@ -31,7 +31,7 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
 
   return (
     <>
-      <section className="mt-10 px-4">
+      <section className="px-4">
         {/* En-tête section */}
         <h2 className={typo.sectionTitle}>Pourquoi ils existent</h2>
         {subtitle && <p className={`mt-1.5 mb-3 ${typo.sectionSubtitle}`}>{subtitle}</p>}
@@ -48,15 +48,22 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
               }`}
             >
               {/* Numéro inline */}
-              <span className={`w-6 shrink-0 ${typo.listNumber}`}>
+              <span className={`w-6 shrink-0 self-start pt-0.5 ${typo.listNumber}`}>
                 {String(index + 1).padStart(2, '0')}
               </span>
 
-              {/* Titre */}
-              <span className={`min-w-0 flex-1 ${typo.listTitle}`}>{pillar.title}</span>
+              {/* Titre + description preview */}
+              <div className="min-w-0 flex-1">
+                <p className={typo.listTitle}>{pillar.title}</p>
+                {pillar.description && (
+                  <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-white/45">
+                    {pillar.description}
+                  </p>
+                )}
+              </div>
 
               {/* Chevron affordance */}
-              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-white/25" />
+              <ChevronRight className="h-3.5 w-3.5 shrink-0 self-start mt-0.5 text-white/25" />
             </button>
           ))}
         </div>

@@ -52,47 +52,61 @@ export function ProducerDetails({ producer }: ProducerDetailsProps) {
         trustLine={trustLine}
       />
 
-      {/* 2. Mission */}
-      <MissionSection
-        pillars={producer.missionPillars}
-        subtitle={producer.editorialIdentity?.missionIntro}
-      />
+      <div className="mt-6">
+        {/* 2. Mission */}
+        <MissionSection
+          pillars={producer.missionPillars}
+          subtitle={producer.editorialIdentity?.missionIntro}
+        />
 
-      {/* 3. Preuves & crédibilité */}
-      <ProofGrid cards={producer.proofCards} />
+        {/* 3. Preuves & crédibilité */}
+        <div className="mt-10">
+          <ProofGrid cards={producer.proofCards} />
+        </div>
 
-      {/* 4. Projets — estimation intégrée dans le sous-titre */}
-      <ProjectsSection projects={producer.projects} impactSummary={producer.impactSummary} />
+        {/* 4. Projets — estimation intégrée dans le sous-titre */}
+        <div className="mt-16">
+          <ProjectsSection projects={producer.projects} impactSummary={producer.impactSummary} />
+        </div>
 
-      {/* 5. Espèces */}
-      <SpeciesSection
-        species={producer.species}
-        subtitle={producer.editorialIdentity?.speciesSubtitle}
-      />
+        {/* 5. Espèces */}
+        <div className="mt-16">
+          <SpeciesSection
+            species={producer.species}
+            subtitle={producer.editorialIdentity?.speciesSubtitle}
+          />
+        </div>
 
-      {/* 7. Histoire modulaire */}
-      <StoryBlocks
-        blocks={producer.storyBlocks}
-        producerName={producer.editorialIdentity?.shortName || producer.name_default}
-      />
+        {/* 6. Histoire modulaire */}
+        <div className="mt-20">
+          <StoryBlocks
+            blocks={producer.storyBlocks}
+            producerName={producer.editorialIdentity?.shortName || producer.name_default}
+          />
+        </div>
 
-      {/* 8. Produits - séparation app vs gamme partenaire */}
-      <ProductsSection
-        products={producer.products}
-        partnerCatalog={producer.partnerCatalogOverview}
-      />
+        {/* 7. Produits - filières puis produits app */}
+        <div className="mt-20">
+          <ProductsSection
+            products={producer.products}
+            partnerCatalog={producer.partnerCatalogOverview}
+          />
+        </div>
 
-      {/* 9. CTA */}
-      <CtaFinal
-        website={producer.contact_website}
-        contextText={
-          producer.editorialIdentity?.shortName
-            ? `Explorez les projets documentés liés à ${producer.editorialIdentity.shortName} dans l'app.`
-            : producer.tagline
-        }
-        internalHref="/projects"
-        partnerName={producer.editorialIdentity?.shortName || producer.name_default}
-      />
+        {/* 8. CTA */}
+        <div className="mt-20">
+          <CtaFinal
+            website={producer.contact_website}
+            contextText={
+              producer.editorialIdentity?.shortName
+                ? `Explorez les projets documentés liés à ${producer.editorialIdentity.shortName} dans l'app.`
+                : producer.tagline
+            }
+            internalHref="/projects"
+            partnerName={producer.editorialIdentity?.shortName || producer.name_default}
+          />
+        </div>
+      </div>
     </div>
   )
 }

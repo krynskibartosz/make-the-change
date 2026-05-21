@@ -173,12 +173,12 @@ export function ProofGrid({ cards }: ProofGridProps) {
 
   return (
     <>
-      <section className="mt-8 px-4">
+      <section className="px-4">
         {primaryProofs.length > 0 && (
           <div className="mb-4">
             <h2 className={typo.sectionTitle}>Ce qui est documenté</h2>
             <p className={`mt-1.5 mb-4 ${typo.sectionSubtitle}`}>
-              Des repères concrets pour comprendre leur méthode.
+              Des repères concrets pour comprendre ce qui est suivi ou documenté.
             </p>
 
             <div className="space-y-2">

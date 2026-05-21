@@ -160,7 +160,7 @@ export function ProjectsSection({
 
   return (
     <>
-      <section className="mt-10">
+      <section>
         <div className="px-4">
           <h2 className={typo.sectionTitle}>{title}</h2>
           {subtitle && <p className={`mt-1.5 ${typo.sectionSubtitle}`}>{subtitle}</p>}
@@ -174,7 +174,7 @@ export function ProjectsSection({
                   <span className="font-semibold text-amber-400/70">
                     {formatCompact(impactSummary.estimate)} {impactSummary.unit}
                   </span>{' '}
-                  associées
+                  associées aux projets
                 </p>
                 <button
                   type="button"
