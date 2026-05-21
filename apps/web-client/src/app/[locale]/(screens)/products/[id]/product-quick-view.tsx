@@ -174,12 +174,12 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       <div className="relative flex h-full flex-col">
         <div
           data-modal-scroll-root
-          className="flex-1 overflow-y-auto overscroll-contain pb-4 sm:px-5 sm:pt-5 lg:px-6 lg:pt-6"
+          className="flex-1 overflow-y-auto overscroll-contain pb-4"
         >
-          <div className="grid gap-4 md:grid-cols-[1.08fr_0.92fr] lg:gap-6">
+          <div>
             <section>
               <div
-                className="relative aspect-square md:aspect-[4/3] max-h-[60vh] w-full overflow-hidden rounded-none border-b border-white/10 bg-white/5 sm:rounded-3xl sm:border"
+                className="relative aspect-square max-h-[60vh] w-full overflow-hidden rounded-none border-b border-white/10 bg-white/5"
                 style={{ viewTransitionName: mediaTransitionName }}
               >
                 {coverImage ? (
@@ -219,10 +219,10 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
               </div>
             </section>
 
-            <aside className="space-y-4 px-4 sm:px-0">
+            <aside className="space-y-4 px-4 pt-4">
               <div className="space-y-2">
                 <h1
-                  className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl"
+                  className="text-3xl font-black leading-tight tracking-tight text-white"
                   style={{ viewTransitionName: titleTransitionName }}
                 >
                   {productName}
@@ -265,7 +265,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
             </a>
           )}
 
-          <div className="mt-4 space-y-4 px-4 pb-36 sm:px-0 sm:pb-40">
+          <div className="mt-4 space-y-4 px-4 pb-36">
             {/* ── Scarcity Indicator ── */}
             <div className="flex items-center gap-1.5 px-1 min-h-[20px]">
               {inStock && selectedFormat.stock < 20 && (

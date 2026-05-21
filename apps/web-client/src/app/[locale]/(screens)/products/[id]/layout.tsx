@@ -11,8 +11,6 @@ export default async function ProductDetailLayout({ children }: PropsWithChildre
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <MainContent>{children}</MainContent>
-      
-      {/* MobileBottomNav is intentionally excluded here - replaced by FloatingActionButtons */}
     </div>
   )
 }
