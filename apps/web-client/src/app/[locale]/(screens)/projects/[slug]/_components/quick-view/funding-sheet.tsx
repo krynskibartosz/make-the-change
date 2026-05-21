@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ChevronUp } from 'lucide-react'
 import { MobileSheet } from '../shared/mobile-sheet'
 import { formatAmountNumber } from '@/lib/formatters'
 import { getSupportChips } from '../../_utils/project-labels'
@@ -105,7 +106,7 @@ export function ProjectFundingSheet({
         className="mt-3 flex w-full items-center justify-between rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
       >
         <span className="text-sm font-bold text-white/70">Comprendre cet objectif</span>
-        <span className="text-xs text-white/30">Usage · étapes · limites →</span>
+        <ChevronUp className="h-4 w-4 shrink-0 text-white/25" />
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title={fundingTitle}>

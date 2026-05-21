@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronRight, Lock } from 'lucide-react'
+import { ChevronUp, Lock } from 'lucide-react'
 import type { ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { MobileSheet } from '../shared/mobile-sheet'
@@ -188,7 +188,7 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
           </p>
           <p className="mt-1 text-[12px] leading-snug text-white/50">{sectionSubtitle}</p>
         </div>
-        <ChevronRight className="h-4 w-4 shrink-0 text-white/30" />
+        <ChevronUp className="h-4 w-4 shrink-0 text-white/30" />
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="Espèces liées au projet">

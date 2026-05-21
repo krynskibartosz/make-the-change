@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronRight, Info } from 'lucide-react'
+import { ChevronUp, Info } from 'lucide-react'
 import { MobileSheet } from '../shared/mobile-sheet'
 import { getTagline, getSupportChips, getReceiveChips } from '../../_utils/project-labels'
 
@@ -65,7 +65,7 @@ export function ProjectStorySheet({
         className="mt-3 flex w-full items-center justify-between rounded-xl py-2.5 text-left transition-colors hover:bg-white/[0.03] active:bg-white/[0.05]"
       >
         <span className="text-sm font-semibold text-white/55">Lire l&apos;histoire du projet</span>
-        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-white/25" />
+        <ChevronUp className="h-3.5 w-3.5 shrink-0 text-white/25" />
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title={title}>

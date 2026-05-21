@@ -4,7 +4,7 @@ import { useState } from 'react'
 import {
   Activity,
   Bug,
-  ChevronRight,
+  ChevronUp,
   Cloud,
   Droplet,
   Fish,
@@ -145,7 +145,7 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
             {items.length > 1 ? 's' : ''} avec méthode et prudence
           </span>
         </div>
-        <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
+        <ChevronUp className="h-4 w-4 shrink-0 text-white/25" />
       </button>
 
       <MobileSheet
