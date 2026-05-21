@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { ReactNode } from 'react'
@@ -12,7 +14,15 @@ type MobileSheetProps = {
 }
 
 export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetProps) {
-  return (
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -21,7 +31,7 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-[1.5px]"
+            className="fixed inset-0 z-[200] bg-black/30 backdrop-blur-[1.5px]"
             onClick={onClose}
           />
 
@@ -31,7 +41,7 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-0 bottom-0 z-[70] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/[0.08] bg-background/85 shadow-[0_-12px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+            className="fixed inset-x-0 bottom-0 z-[210] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/[0.08] bg-background/85 shadow-[0_-12px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl"
           >
             <div className="flex items-center justify-between px-5 pb-2 pt-4">
               {title ? (
@@ -55,6 +65,7 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
           </motion.aside>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }
