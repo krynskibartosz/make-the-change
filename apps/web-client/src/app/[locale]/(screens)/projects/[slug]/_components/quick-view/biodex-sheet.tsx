@@ -80,7 +80,7 @@ function FeaturedSpeciesCard({
                   : 'bg-white/[0.08] text-white/40'
               }`}
             >
-              {isKey ? 'Espèce clé' : 'Espèce liée'}
+              {isKey ? 'Espèce clé' : 'Espèce associée'}
             </span>
             <p className="mt-1.5 text-base font-black text-white">{species.name}</p>
             {species.scientificName ? (
@@ -170,12 +170,10 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
     ? species.filter((sp) => sp.id !== featuredSpecies.id)
     : species
 
-  const keySpecies = species.filter((sp) => isKeySpecies(sp.role))
-  const safePrimary = keySpecies.length > 0 ? keySpecies : species.slice(0, 1)
-  const associated = species.filter((sp) => !safePrimary.some((p) => p.id === sp.id))
   const sectionSubtitle =
-    (safePrimary.length > 1 ? `${safePrimary.length} espèces clés` : '1 espèce clé') +
-    (associated.length > 0 ? ` · ${associated.length} associée${associated.length > 1 ? 's' : ''}` : '')
+    species.length === 1
+      ? '1 espèce pour comprendre l\'écosystème du projet'
+      : `${species.length} espèces pour comprendre l'écosystème du projet`
 
   return (
     <>
@@ -194,15 +192,14 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="Espèces liées au projet">
-        {/* Subtitle + intro court */}
+        {/* Subtitle + intro */}
         <p className="mt-1 text-sm text-white/50">
           {species.length === 1
-            ? '1 espèce liée à cet écosystème'
-            : `${species.length} espèces liées à cet écosystème`}
+            ? '1 espèce pour comprendre l\'écosystème associé à ce projet.'
+            : `${species.length} espèces pour comprendre l'écosystème associé à ce projet.`}
         </p>
         <p className="mt-1 text-xs leading-relaxed text-white/35">
-          Ces espèces aident à comprendre le vivant associé au projet. Leur présence dépend du
-          terrain et des données disponibles.
+          Leur présence dépend du terrain, des données disponibles et du niveau de documentation.
         </p>
 
         {/* Espèce mise en avant */}
@@ -211,21 +208,6 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
             <FeaturedSpeciesCard species={featuredSpecies} isDonationProject={isDonationProject} />
           </div>
         ) : null}
-
-        {/* Carte déverrouillage — compacte */}
-        <div className="mt-4 flex items-start gap-3 rounded-xl bg-white/[0.04] px-3 py-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime-400/10">
-            <Lock className="h-3.5 w-3.5 text-lime-400/70" />
-          </div>
-          <div>
-            <p className="text-sm font-bold text-white/80">
-              {isDonationProject ? 'En faisant un don' : 'En soutenant ce projet'}
-            </p>
-            <p className="mt-0.5 text-xs leading-relaxed text-white/45">
-              Vous pouvez ajouter ces espèces à votre collection BioDex.
-            </p>
-          </div>
-        </div>
 
         {/* Liste des espèces restantes */}
         {remainingSpecies.length > 0 ? (
@@ -242,10 +224,17 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
           </div>
         ) : null}
 
-        {/* Disclaimer — minimal, en bas */}
-        <p className="mt-4 pb-2 text-[11px] leading-relaxed text-white/25">
-          Ces espèces ne constituent pas une preuve de protection individuelle. Données de conservation
-          issues de l&apos;UICN.
+        {/* BioDex — secondaire, en bas */}
+        <p className="mt-6 text-[11px] leading-relaxed text-white/30">
+          {isDonationProject
+            ? 'En faisant un don, certaines espèces peuvent être ajoutées à votre collection BioDex.'
+            : 'En soutenant ce projet, certaines espèces peuvent être ajoutées à votre collection BioDex.'}
+        </p>
+
+        {/* Note finale */}
+        <p className="mt-3 pb-2 text-[11px] leading-relaxed text-white/25">
+          Ces espèces aident à comprendre l&apos;écosystème associé au projet. Elles ne constituent
+          pas une preuve de protection individuelle. Statuts de conservation : UICN.
         </p>
       </MobileSheet>
     </>
