@@ -7,7 +7,6 @@ import { Badge } from '@make-the-change/core/ui'
 import { Flame, Package, Truck, Info, ChevronRight, ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
-import { useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
@@ -58,10 +57,8 @@ function productGlowRgba(tone: { r: number; g: number; b: number }, alpha: numbe
 export function ProductQuickView({ product }: ProductQuickViewProps) {
   const t = useTranslations('products')
   const locale = useLocale()
-  const router = useRouter()
 
-  const glowTone = getProductGlowTone(product.category_id)
-  const glow = PRODUCT_GLOW[glowTone]
+  const glow = PRODUCT_GLOW[getProductGlowTone(product.category_id)]
 
   const coverImage =
     sanitizeImageUrl(product.image_url) ||
@@ -109,14 +106,6 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
   const displayPrice = selectedFormat.euros
 
   const inStock = (product.stock_quantity || 0) > 0
-  const LOW_STOCK_THRESHOLD = 10
-  const isLowStock = (product.stock_quantity || 0) <= LOW_STOCK_THRESHOLD
-
-  const stockStatus = inStock
-    ? isLowStock
-      ? t('detail_page.stock_available', { count: product.stock_quantity || 0 })
-      : t('card.in_stock')
-    : t('card.out_of_stock')
 
   const productName = getLocalizedContent(
     product.name_i18n,
@@ -137,25 +126,8 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
     locale,
     product.producer?.name_default || 'Producer',
   )
-  const producerDescription = getLocalizedContent(
-    product.producer?.description_i18n,
-    locale,
-    product.producer?.description_default || '',
-  )
-  const categoryName = getLocalizedContent(
-    product.category?.name_i18n,
-    locale,
-    product.category?.name_default || '',
-  )
-
   const mediaTransitionName = getEntityViewTransitionName('product', product.id, 'media')
   const titleTransitionName = getEntityViewTransitionName('product', product.id, 'title')
-
-  const parsedPriceEuros =
-    product.price_eur_equivalent === null || product.price_eur_equivalent === undefined
-      ? Number.NaN
-      : Number(product.price_eur_equivalent)
-  const priceEuros = Number.isFinite(parsedPriceEuros) ? parsedPriceEuros : null
 
   return (
     <div className="relative flex h-full min-h-full flex-col bg-transparent">
@@ -457,7 +429,7 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
         </div>
 
         {/* ── Sticky Bottom Bar ── */}
-        <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20 sm:px-6">
+        <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20">
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
           
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
