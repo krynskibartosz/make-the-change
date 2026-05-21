@@ -363,56 +363,41 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
         <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20">
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
           
-          <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
-            {/* Format selector — native select stylé en chip, positionné à gauche */}
-            {formats.length > 1 && (
-              <div className="relative self-start">
-                <select
-                  value={selectedFormat.id}
-                  onChange={(e) => {
-                    const found = formats.find((f) => f.id === e.target.value)
-                    if (found) setSelectedFormat(found)
-                  }}
-                  className="appearance-none cursor-pointer rounded-xl border border-white/10 bg-white/5 py-2 pl-4 pr-8 text-sm font-bold text-white transition-all active:scale-95"
-                >
-                  {formats.map((format) => (
-                    <option key={format.id} value={format.id}>
-                      {format.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
-              </div>
-            )}
-            {userBalance >= displayPoints ? (
-              <>
+          <div className="flex flex-col gap-2 max-w-md mx-auto w-full">
+            {/* Ligne principale : chip format à gauche + bouton CTA à droite */}
+            <div className="flex items-center gap-2">
+              {formats.length > 1 && (
+                <div className="relative shrink-0">
+                  <select
+                    value={selectedFormat.id}
+                    onChange={(e) => {
+                      const found = formats.find((f) => f.id === e.target.value)
+                      if (found) setSelectedFormat(found)
+                    }}
+                    className="appearance-none cursor-pointer rounded-xl border border-white/10 bg-white/5 py-2 pl-4 pr-8 text-sm font-bold text-white transition-all active:scale-95 h-14"
+                  >
+                    {formats.map((format) => (
+                      <option key={format.id} value={format.id}>
+                        {format.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
+                </div>
+              )}
+              {userBalance >= displayPoints ? (
                 <button
                   key={`exchange-${selectedFormat.points}`}
                   onClick={() => setIsCheckoutOpen(true)}
-                  className={`flex w-full h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
+                  className={`flex flex-1 h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
                 >
                   Échanger · <CurrencyAmount kind="impactCredits" value={displayPoints} tone="inherit" className="text-[17px] font-black" />
                 </button>
-
-                {displayPrice > 0 && (
-                  <button
-                    onClick={() => setIsFiatCheckoutOpen(true)}
-                    className="flex w-full mt-2 items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50"
-                  >
-                    Ou acheter pour {new Intl.NumberFormat('fr-FR', {
-                      style: 'currency',
-                      currency: 'EUR',
-                      maximumFractionDigits: 2,
-                    }).format(displayPrice)}
-                  </button>
-                )}
-              </>
-            ) : (
-              <>
+              ) : (
                 <button
                   key={`buy-${selectedFormat.euros}`}
                   onClick={() => setIsFiatCheckoutOpen(true)}
-                  className="flex w-full h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(52,211,153,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 hover:bg-emerald-300"
+                  className="flex flex-1 h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(52,211,153,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 hover:bg-emerald-300"
                 >
                   Acheter pour {new Intl.NumberFormat('fr-FR', {
                     style: 'currency',
@@ -420,11 +405,27 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
                     maximumFractionDigits: 2,
                   }).format(displayPrice)}
                 </button>
-                <div className="mt-2 text-center text-xs text-white/60">
-                  Il vous manque <CurrencyAmount kind="impactCredits" value={displayPoints - userBalance} className="font-bold" /> pour l'obtenir gratuitement.{' '}
-                  <a href={`/${locale}/projects`} className="text-white underline decoration-white/30 hover:decoration-white transition-all">Soutenir un projet</a>
-                </div>
-              </>
+              )}
+            </div>
+
+            {/* Actions secondaires */}
+            {userBalance >= displayPoints && displayPrice > 0 && (
+              <button
+                onClick={() => setIsFiatCheckoutOpen(true)}
+                className="flex w-full items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50"
+              >
+                Ou acheter pour {new Intl.NumberFormat('fr-FR', {
+                  style: 'currency',
+                  currency: 'EUR',
+                  maximumFractionDigits: 2,
+                }).format(displayPrice)}
+              </button>
+            )}
+            {userBalance < displayPoints && (
+              <div className="text-center text-xs text-white/60">
+                Il vous manque <CurrencyAmount kind="impactCredits" value={displayPoints - userBalance} className="font-bold" /> pour l'obtenir gratuitement.{' '}
+                <a href={`/${locale}/projects`} className="text-white underline decoration-white/30 hover:decoration-white transition-all">Soutenir un projet</a>
+              </div>
             )}
           </div>
         </BottomActionBar>
