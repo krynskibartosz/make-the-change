@@ -186,14 +186,14 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
       >
         <div>
           <p className="text-[18px] font-black leading-none tracking-[-0.03em] text-white">
-            BioDex du projet
+            Espèces liées au projet
           </p>
           <p className="mt-1 text-[12px] leading-snug text-white/50">{sectionSubtitle}</p>
         </div>
         <ChevronRight className="h-4 w-4 shrink-0 text-white/30" />
       </button>
 
-      <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="BioDex du projet">
+      <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="Espèces liées au projet">
         {/* Subtitle + intro court */}
         <p className="mt-1 text-sm text-white/50">
           {species.length === 1
@@ -244,7 +244,7 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
 
         {/* Disclaimer — minimal, en bas */}
         <p className="mt-4 pb-2 text-[11px] leading-relaxed text-white/25">
-          Le BioDex n&apos;est pas une preuve de protection individuelle. Données de conservation
+          Ces espèces ne constituent pas une preuve de protection individuelle. Données de conservation
           issues de l&apos;UICN.
         </p>
       </MobileSheet>

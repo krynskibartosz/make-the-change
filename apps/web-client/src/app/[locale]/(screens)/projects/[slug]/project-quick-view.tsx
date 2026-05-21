@@ -333,7 +333,7 @@ export async function ProjectQuickView({
 
           {/* 3. Partenaire */}
           {project.producer ? (
-            <div className="mt-8">
+            <div className="mt-10">
               <div className="h-px bg-white/[0.06]" />
               <p className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/25 sm:px-5">
                 {partnerLabel}
@@ -401,10 +401,10 @@ export async function ProjectQuickView({
             </div>
           ) : null}
 
-          <div className="mt-5 space-y-0 pb-40 sm:pb-44">
+          <div className="pb-40 sm:pb-44">
             {/* 4. Impact preview */}
             {impactItems.length > 0 ? (
-              <div className="mt-8 px-4 sm:px-5">
+              <div className="mt-14 px-4 sm:px-5">
                 <ProjectImpactPreview
                   items={impactItems}
                   accentColor={glowRgba(glow, 1)}
@@ -413,7 +413,7 @@ export async function ProjectQuickView({
             ) : null}
 
             {/* 5. Suivi */}
-            <div className="mt-9 px-4 sm:px-5">
+            <div className="mt-12 px-4 sm:px-5">
               <ProjectTrackingPreview
                 isDonationProject={isDonationProject}
                 projectType={project.type}
@@ -422,7 +422,7 @@ export async function ProjectQuickView({
             </div>
 
             {/* 6. Objectif */}
-            <div className="mt-8 px-4 sm:px-5">
+            <div className="mt-14 px-4 sm:px-5">
               <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
                 {fundingTitle}
               </p>
@@ -462,9 +462,9 @@ export async function ProjectQuickView({
               />
             </div>
 
-            {/* 7. BioDex */}
+            {/* 7. Espèces liées */}
             {resolvedSpecies && resolvedSpecies.length > 0 ? (
-              <div className="mt-10 px-4 sm:px-5">
+              <div className="mt-16 px-4 sm:px-5">
                 <ProjectBiodexSheet
                   species={resolvedSpecies}
                   isDonationProject={isDonationProject}
@@ -477,19 +477,19 @@ export async function ProjectQuickView({
               </div>
             ) : null}
 
-            <div className="mt-6 px-4 sm:px-5">
+            <div className="mt-14 px-4 sm:px-5">
               <ProjectLearningLinks projectSlug={project.slug} />
             </div>
 
             {/* 8. Produits partenaires (soutien uniquement) */}
             {!isDonationProject && resolvedProducerProducts && resolvedProducerProducts.length > 0 ? (
-              <div className="mt-10 px-4 sm:px-5">
+              <div className="mt-16 px-4 sm:px-5">
                 <ProjectProducerProductsSection products={resolvedProducerProducts} />
               </div>
             ) : null}
 
             {/* 9. Projets similaires */}
-            <div className="mt-10 w-full max-w-full overflow-hidden px-4 sm:px-5">
+            <div className="mt-16 w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
                 locale={locale}
                 relatedProjects={resolvedRelatedProjects}

@@ -100,10 +100,10 @@ export function ProjectFundingSheet({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-white/35 transition-colors hover:text-white/60"
+        className="mt-3 flex w-full items-center justify-between rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
       >
-        Comprendre cet objectif
-        <span className="text-white/25">→</span>
+        <span className="text-sm font-bold text-white/70">Comprendre cet objectif</span>
+        <span className="text-xs text-white/30">Usage · étapes · limites →</span>
       </button>
 
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title={fundingTitle}>
