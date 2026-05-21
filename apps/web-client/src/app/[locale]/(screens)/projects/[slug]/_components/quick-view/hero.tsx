@@ -98,7 +98,6 @@ export function ProjectQuickViewHero({
               <ProjectShareButton
                 projectName={projectName}
                 projectSlug={projectSlug}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white backdrop-blur-md transition-all active:scale-95 hover:bg-black/55"
               />
             </div>
           </div>

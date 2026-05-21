@@ -171,7 +171,6 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
                   <ProductShareButton
                     productName={productName}
                     productId={product.id}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md border border-white/15 transition-all hover:bg-black/55 active:scale-95"
                   />
                 </div>
 
