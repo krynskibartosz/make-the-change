@@ -57,25 +57,6 @@ function glowRgba(tone: { r: number; g: number; b: number }, alpha: number): str
 }
 // ────────────────────────────────────────────────────────────────────────────
 
-const formatBadgeLabel = (value: string | null | undefined, locale: string): string | null => {
-  if (!value) return null
-  const normalized = value.replace(/[_-]+/g, ' ').trim()
-  if (!normalized) return null
-
-  const typeTranslations: Record<string, Record<string, string>> = {
-    beehive: { fr: 'Rucher', en: 'Beehive' },
-    orchard: { fr: 'Verger', en: 'Orchard' },
-    reef: { fr: 'Récif', en: 'Reef' },
-  }
-
-  const lowerValue = normalized.toLowerCase()
-  if (typeTranslations[lowerValue]?.[locale]) {
-    return typeTranslations[lowerValue][locale]
-  }
-
-  return normalized.replace(/\b\w/g, (match) => match.toUpperCase())
-}
-
 const getWebsiteLabel = (url: string | null): string | null => {
   if (!url) return null
   try {
@@ -136,8 +117,6 @@ export async function ProjectQuickView({
     : project.address_country_code ?? null
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
-  const typeLabel = formatBadgeLabel(project.type, locale)
-
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
 
   // Short description for the hero (1–2 sentences, decisive)
@@ -193,7 +172,6 @@ export async function ProjectQuickView({
     projectImpact: project.expected_impact,
   })
 
-  const contributionLabel = isDonationProject ? 'Action terrain' : 'Soutien producteur'
   const partnerLabel = isDonationProject ? 'Partenaire terrain' : 'Producteur partenaire'
   const fundingTitle = isDonationProject ? 'Objectif de don' : 'Objectif de soutien'
   const fundingSubtext = isDonationProject
@@ -260,26 +238,6 @@ export async function ProjectQuickView({
               </p>
             ) : null}
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Badge
-                variant="outline"
-                className="border-white/15 bg-white/8 text-white/70"
-              >
-                {contributionLabel}
-              </Badge>
-              {typeLabel ? (
-                <Badge
-                  variant="outline"
-                  style={{
-                    borderColor: glowRgba(glow, 0.30),
-                    backgroundColor: glowRgba(glow, 0.08),
-                    color: glowRgba(glow, 0.90),
-                  }}
-                >
-                  {typeLabel}
-                </Badge>
-              ) : null}
-            </div>
 
             <ProjectStorySheet
               description={narrativeDescription}
