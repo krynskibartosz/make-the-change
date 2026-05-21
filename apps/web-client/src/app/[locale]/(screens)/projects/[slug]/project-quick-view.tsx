@@ -193,7 +193,7 @@ export async function ProjectQuickView({
     projectImpact: project.expected_impact,
   })
 
-  const contributionLabel = isDonationProject ? 'Don terrain' : 'Soutien producteur'
+  const contributionLabel = isDonationProject ? 'Action terrain' : 'Soutien producteur'
   const partnerLabel = isDonationProject ? 'Partenaire terrain' : 'Producteur partenaire'
   const fundingTitle = isDonationProject ? 'Objectif de don' : 'Objectif de soutien'
   const fundingSubtext = isDonationProject
