@@ -99,7 +99,6 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
   const [isCompositionOpen, setIsCompositionOpen] = useState(false)
   const [isConservationOpen, setIsConservationOpen] = useState(false)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
-  const [isFormatPickerOpen, setIsFormatPickerOpen] = useState(false)
 
   const displayPoints = selectedFormat.points
   const displayPrice = selectedFormat.euros
@@ -365,15 +364,25 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
           
           <div className="flex flex-col gap-3 max-w-md mx-auto w-full">
-            {/* Format chip */}
+            {/* Format selector — native select stylé en chip, positionné à gauche */}
             {formats.length > 1 && (
-              <button
-                onClick={() => setIsFormatPickerOpen(true)}
-                className="flex items-center justify-center gap-1.5 self-center px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all"
-              >
-                <span className="text-sm font-bold text-white">{selectedFormat.label}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-white/40" />
-              </button>
+              <div className="relative self-start">
+                <select
+                  value={selectedFormat.id}
+                  onChange={(e) => {
+                    const found = formats.find((f) => f.id === e.target.value)
+                    if (found) setSelectedFormat(found)
+                  }}
+                  className="appearance-none cursor-pointer rounded-xl border border-white/10 bg-white/5 py-2 pl-4 pr-8 text-sm font-bold text-white transition-all active:scale-95"
+                >
+                  {formats.map((format) => (
+                    <option key={format.id} value={format.id}>
+                      {format.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
+              </div>
             )}
             {userBalance >= displayPoints ? (
               <>
@@ -440,75 +449,6 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
           onClose={() => setIsFiatCheckoutOpen(false)} 
         />
       )}
-
-      {/* ── FORMAT PICKER BOTTOM SHEET ── */}
-      <AnimatePresence>
-        {isFormatPickerOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[150] bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsFormatPickerOpen(false)}
-            />
-            <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed bottom-0 left-0 right-0 z-[160] rounded-t-3xl bg-[#1A1F26] border-t border-white/10 px-5 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
-            >
-              <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-white/20" />
-
-              <div className="mb-5 flex items-center justify-between">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-white/40">Format</h3>
-                <div className="flex items-center gap-1.5 rounded-lg bg-amber-300/10 px-2.5 py-1">
-                  <span className="text-[11px] font-medium text-white/50">Solde :</span>
-                  <CurrencyAmount kind="impactCredits" value={userBalance} className="text-xs font-bold" />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2.5">
-                {formats.map((format) => {
-                  const isSelected = selectedFormat.id === format.id
-                  const canAfford = userBalance >= format.points
-                  return (
-                    <button
-                      key={format.id}
-                      onClick={() => {
-                        setSelectedFormat(format)
-                        setIsFormatPickerOpen(false)
-                      }}
-                      className={`flex items-center justify-between rounded-2xl border p-4 transition-all active:scale-[0.98] ${
-                        isSelected
-                          ? 'border-amber-300/40 bg-amber-300/10'
-                          : 'border-white/10 bg-white/5 hover:bg-white/8'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${isSelected ? 'border-amber-300' : 'border-white/20'}`}>
-                          {isSelected && <div className="h-2.5 w-2.5 rounded-full bg-amber-300" />}
-                        </div>
-                        <span className={`text-base font-bold ${isSelected ? 'text-amber-300' : 'text-white'}`}>
-                          {format.label}
-                        </span>
-                      </div>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <CurrencyAmount kind="impactCredits" value={format.points} className="text-sm font-bold" />
-                        {!canAfford && (
-                          <span className="text-[10px] text-white/30">Solde insuffisant</span>
-                        )}
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* MODALE BOTTOM SHEET (NUTRITION) - STYLE ECO-FACT */}
       <AnimatePresence>
