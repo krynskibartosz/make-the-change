@@ -407,7 +407,7 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
       <g clipPath="url(#l3-blob-clip)" style={{ isolation: 'isolate' }}>
         <rect x="0" y="0" width="380" height="540" fill="#0a0d10" />
         <image
-          href="/lab/atlas-prototype/assets/tex_relations.png"
+          href="/lab/atlas-prototype/assets/tex_relations.webp"
           x="-10"
           y="-10"
           width="400"
@@ -416,7 +416,7 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
           opacity="0.78"
         />
         <image
-          href="/lab/atlas-prototype/assets/tex_relations.png"
+          href="/lab/atlas-prototype/assets/tex_relations.webp"
           x="-10"
           y="-10"
           width="400"
@@ -429,7 +429,7 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
         <rect x="0" y="0" width="380" height="540" fill="#000" opacity="0.22" />
         {/* Subtle organic vines as decoration in lower area */}
         <image
-          href="/lab/atlas-prototype/assets/tex_solutions.png"
+          href="/lab/atlas-prototype/assets/tex_solutions.webp"
           x="-30"
           y="380"
           width="440"
@@ -1256,7 +1256,7 @@ export function Level3Screen({ onBack, subdomain = { name: 'Pollinisation' } }) 
               meta="28 min · Débutant"
               dotColor="#4d8be0"
               gradient={['#3a1f4a', '#1a0a26']}
-              imageTexture="/lab/atlas-prototype/assets/tex_alphabet.png"
+              imageTexture="/lab/atlas-prototype/assets/tex_alphabet.webp"
               onClick={() => setPreview({ type: 'course', title: ['Plantes mellifères'] })}
             />
             <RecoCard
@@ -1266,7 +1266,7 @@ export function Level3Screen({ onBack, subdomain = { name: 'Pollinisation' } }) 
               meta="45 min · Intermédiaire"
               dotColor="#7ab84a"
               gradient={['#1f3a14', '#0a1a08']}
-              imageTexture="/lab/atlas-prototype/assets/tex_solutions.png"
+              imageTexture="/lab/atlas-prototype/assets/tex_solutions.webp"
               onClick={() => setPreview({ type: 'project', title: ['Rucher partenaire'] })}
             />
           </div>

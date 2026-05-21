@@ -35,7 +35,7 @@ export const SUBDOMAINS = [
     progress: [4, 12],
     color: '#7ab84a',
     dark: '#19260c',
-    texture: '/lab/atlas-prototype/assets/tex_solutions.png',
+    texture: '/lab/atlas-prototype/assets/tex_solutions.webp',
     textureOpacity: 0.78,
     tintOpacity: 0.26,
     darken: 0.16,
@@ -53,7 +53,7 @@ export const SUBDOMAINS = [
     progress: [2, 10],
     color: '#4ebaa9',
     dark: '#0a2a28',
-    texture: '/lab/atlas-prototype/assets/tex_alphabet.png',
+    texture: '/lab/atlas-prototype/assets/tex_alphabet.webp',
     textureOpacity: 0.72,
     tintOpacity: 0.3,
     darken: 0.22,
@@ -71,7 +71,7 @@ export const SUBDOMAINS = [
     progress: [0, 9],
     color: '#9b6dd4',
     dark: '#1a0e2a',
-    texture: '/lab/atlas-prototype/assets/atlas_bg.png',
+    texture: '/lab/atlas-prototype/assets/atlas_bg.webp',
     textureOpacity: 0.55,
     tintOpacity: 0.55,
     darken: 0.22,
@@ -89,7 +89,7 @@ export const SUBDOMAINS = [
     progress: [2, 7],
     color: '#7a8aa8',
     dark: '#15192a',
-    texture: '/lab/atlas-prototype/assets/tex_impact.png',
+    texture: '/lab/atlas-prototype/assets/tex_impact.webp',
     textureOpacity: 0.85,
     tintOpacity: 0.2,
     darken: 0.14,
@@ -107,7 +107,7 @@ export const SUBDOMAINS = [
     progress: [3, 11],
     color: '#d97a3a',
     dark: '#2c1408',
-    texture: '/lab/atlas-prototype/assets/tex_menaces.png',
+    texture: '/lab/atlas-prototype/assets/tex_menaces.webp',
     textureOpacity: 0.62,
     tintOpacity: 0.34,
     darken: 0.22,
@@ -125,7 +125,7 @@ export const SUBDOMAINS = [
     progress: [1, 8],
     color: '#4d8be0',
     dark: '#091a32',
-    texture: '/lab/atlas-prototype/assets/tex_milieux.png',
+    texture: '/lab/atlas-prototype/assets/tex_milieux.webp',
     textureOpacity: 0.82,
     tintOpacity: 0.28,
     darken: 0.14,
@@ -144,7 +144,7 @@ export const SUBDOMAINS = [
     progress: [5, 14],
     color: '#e6ad44',
     dark: '#2d1f08',
-    texture: '/lab/atlas-prototype/assets/tex_relations.png',
+    texture: '/lab/atlas-prototype/assets/tex_relations.webp',
     textureOpacity: 0.78,
     tintOpacity: 0.22,
     darken: 0.24,
@@ -666,7 +666,7 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
 }
 
 // ── Full screen ──────────────────────────────────────────────
-export function Level2Screen({ onBack, onPickSubdomain }) {
+export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
   return (
     <div
       style={{
@@ -788,7 +788,7 @@ export function Level2Screen({ onBack, onPickSubdomain }) {
               display: 'flex',
             }}
           >
-            <SubdomainCarte onPick={onPickSubdomain} />
+            <SubdomainCarte onPick={onPickSubdomain} animate={animateNodes} />
           </div>
         </div>
       </div>

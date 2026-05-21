@@ -23,7 +23,7 @@ export function AtlasBackground({ dust = 0.28, vignette = 0.55 }) {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'url("/lab/atlas-prototype/assets/atlas_bg.png")',
+          backgroundImage: 'url("/lab/atlas-prototype/assets/atlas_bg.webp")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -35,7 +35,7 @@ export function AtlasBackground({ dust = 0.28, vignette = 0.55 }) {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'url("/lab/atlas-prototype/assets/golden_dust.png")',
+          backgroundImage: 'url("/lab/atlas-prototype/assets/golden_dust.webp")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

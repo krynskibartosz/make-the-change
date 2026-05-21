@@ -4,16 +4,45 @@
 
 import * as React from 'react'
 import { AtlasBackground } from './atlas-background'
-import { Level2Screen } from './atlas-level2'
-import { Level3Screen } from './atlas-level3'
-import { GuideOverlay, SearchPanel, Toast } from './atlas-sheets'
 import { VoronoiAtlas } from './atlas-territories'
+
+const loadLevel2Screen = () => import('./atlas-level2')
+const loadLevel3Screen = () => import('./atlas-level3')
+const loadAtlasSheets = () => import('./atlas-sheets')
+
+const Level2Screen = React.lazy(() =>
+  loadLevel2Screen().then((mod) => ({ default: mod.Level2Screen })),
+)
+const Level3Screen = React.lazy(() =>
+  loadLevel3Screen().then((mod) => ({ default: mod.Level3Screen })),
+)
+const SearchPanel = React.lazy(() =>
+  loadAtlasSheets().then((mod) => ({ default: mod.SearchPanel })),
+)
+const GuideOverlay = React.lazy(() =>
+  loadAtlasSheets().then((mod) => ({ default: mod.GuideOverlay })),
+)
 
 const CONFIG = {
   glow: 1.0,
   dust: 0.26,
   vignette: 0.55,
   animateNodes: true,
+}
+
+function useAtlasMotionEnabled() {
+  const [enabled, setEnabled] = React.useState(true)
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setEnabled(!mediaQuery.matches)
+
+    update()
+    mediaQuery.addEventListener('change', update)
+    return () => mediaQuery.removeEventListener('change', update)
+  }, [])
+
+  return enabled
 }
 
 function CircleButton({ onClick, children, ariaLabel }) {
@@ -43,16 +72,71 @@ function CircleButton({ onClick, children, ariaLabel }) {
 }
 
 // L1 screen — global Atlas with 6 territories.
-function Level1Screen({ onPickTerritory, focusedId, transitioningOut }) {
+function LazyScreenFallback() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        display: 'grid',
+        placeItems: 'center',
+        background: '#04060a',
+      }}
+    >
+      <div
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          border: '2px solid rgba(244,216,137,0.9)',
+          borderTopColor: 'transparent',
+          animation: 'atlasSpin 680ms linear infinite',
+        }}
+      />
+    </div>
+  )
+}
+
+function Toast({ text }) {
+  if (!text) return null
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: 80,
+        transform: 'translateX(-50%)',
+        background: 'rgba(20,22,24,0.92)',
+        color: '#eae3d2',
+        padding: '10px 16px',
+        borderRadius: 9999,
+        fontSize: 13,
+        border: '1px solid rgba(255,255,255,0.08)',
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
+        zIndex: 50,
+        animation: 'toastIn 240ms ease both',
+        pointerEvents: 'none',
+      }}
+    >
+      {text}
+    </div>
+  )
+}
+
+function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnabled }) {
   const [search, setSearch] = React.useState(false)
   const [guide, setGuide] = React.useState(false)
   const [toast, setToast] = React.useState('')
+  const toastTimerRef = React.useRef()
 
   const showToast = (msg) => {
     setToast(msg)
-    clearTimeout(showToast._t)
-    showToast._t = setTimeout(() => setToast(''), 1800)
+    window.clearTimeout(toastTimerRef.current)
+    toastTimerRef.current = window.setTimeout(() => setToast(''), 1800)
   }
+
+  React.useEffect(() => () => window.clearTimeout(toastTimerRef.current), [])
 
   // When a territory is focused, dim everything else and pulse the chosen cell.
   const styleScope = React.useMemo(() => {
@@ -174,7 +258,13 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut }) {
                 Explorer · Comprendre · Agir
               </div>
             </div>
-            <CircleButton ariaLabel="Rechercher" onClick={() => setSearch(true)}>
+            <CircleButton
+              ariaLabel="Rechercher"
+              onClick={() => {
+                void loadAtlasSheets()
+                setSearch(true)
+              }}
+            >
               <svg
                 width="20"
                 height="20"
@@ -216,7 +306,7 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut }) {
             <VoronoiAtlas
               onPick={onPickTerritory}
               glow={CONFIG.glow}
-              animate={CONFIG.animateNodes}
+              animate={motionEnabled && CONFIG.animateNodes}
             />
           </div>
         </div>
@@ -224,7 +314,10 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut }) {
         {/* CTA */}
         <div style={{ flex: '0 0 auto', padding: '10px 20px 18px' }}>
           <button
-            onClick={() => setGuide(true)}
+            onClick={() => {
+              void loadAtlasSheets()
+              setGuide(true)
+            }}
             style={{
               width: '100%',
               padding: '18px 22px',
@@ -271,15 +364,23 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut }) {
         </div>
       </div>
 
-      <SearchPanel
-        open={search}
-        onClose={() => setSearch(false)}
-        onPickQuery={(s) => {
-          setSearch(false)
-          showToast('Recherche : « ' + s.label + ' »')
-        }}
-      />
-      <GuideOverlay open={guide} onClose={() => setGuide(false)} />
+      {search && (
+        <React.Suspense fallback={null}>
+          <SearchPanel
+            open={search}
+            onClose={() => setSearch(false)}
+            onPickQuery={(s) => {
+              setSearch(false)
+              showToast('Recherche : « ' + s.label + ' »')
+            }}
+          />
+        </React.Suspense>
+      )}
+      {guide && (
+        <React.Suspense fallback={null}>
+          <GuideOverlay open={guide} onClose={() => setGuide(false)} />
+        </React.Suspense>
+      )}
       <Toast text={toast} />
     </div>
   )
@@ -287,32 +388,50 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut }) {
 
 // ── Root with view switcher ──
 function AtlasScreen() {
+  const motionEnabled = useAtlasMotionEnabled()
   const [view, setView] = React.useState('L1') // 'L1' | 'L2' | 'L3'
   const [focusedId, setFocusedId] = React.useState(null)
   const [transitioning, setTransitioning] = React.useState(false)
   const [toast, setToast] = React.useState('')
   const [activeSubdomain, setActiveSubdomain] = React.useState(null)
+  const toastTimerRef = React.useRef()
+  const transitionTimersRef = React.useRef([])
 
   const showToast = (msg) => {
     setToast(msg)
-    clearTimeout(showToast._t)
-    showToast._t = setTimeout(() => setToast(''), 1800)
+    window.clearTimeout(toastTimerRef.current)
+    toastTimerRef.current = window.setTimeout(() => setToast(''), 1800)
   }
+
+  React.useEffect(
+    () => () => {
+      window.clearTimeout(toastTimerRef.current)
+      transitionTimersRef.current.forEach((timer) => window.clearTimeout(timer))
+    },
+    [],
+  )
 
   const pickTerritory = (t) => {
     if (t.id !== 'relations') {
       showToast(`« ${t.label} » : bientôt disponible`)
       return
     }
+    transitionTimersRef.current.forEach((timer) => window.clearTimeout(timer))
+    transitionTimersRef.current = []
+    void loadLevel2Screen()
     setFocusedId(t.id)
-    setTimeout(() => setTransitioning(true), 220)
-    setTimeout(() => {
-      setView('L2')
-    }, 620)
-    setTimeout(() => {
-      setTransitioning(false)
-      setFocusedId(null)
-    }, 700)
+    transitionTimersRef.current.push(window.setTimeout(() => setTransitioning(true), 220))
+    transitionTimersRef.current.push(
+      window.setTimeout(() => {
+        setView('L2')
+      }, 620),
+    )
+    transitionTimersRef.current.push(
+      window.setTimeout(() => {
+        setTransitioning(false)
+        setFocusedId(null)
+      }, 700),
+    )
   }
 
   const pickSubdomain = (c) => {
@@ -320,6 +439,7 @@ function AtlasScreen() {
       showToast(`« ${c.name + (c.name2 ? ' ' + c.name2 : '')} » : bientôt disponible`)
       return
     }
+    void loadLevel3Screen()
     setActiveSubdomain(c)
     setView('L3')
   }
@@ -331,6 +451,7 @@ function AtlasScreen() {
           onPickTerritory={pickTerritory}
           focusedId={focusedId}
           transitioningOut={transitioning}
+          motionEnabled={motionEnabled}
         />
       )}
       {view === 'L2' && (
@@ -338,10 +459,16 @@ function AtlasScreen() {
           style={{
             position: 'absolute',
             inset: 0,
-            animation: 'l2enter 520ms cubic-bezier(.2,.7,.2,1) both',
+            animation: motionEnabled ? 'l2enter 520ms cubic-bezier(.2,.7,.2,1) both' : 'none',
           }}
         >
-          <Level2Screen onBack={() => setView('L1')} onPickSubdomain={pickSubdomain} />
+          <React.Suspense fallback={<LazyScreenFallback />}>
+            <Level2Screen
+              onBack={() => setView('L1')}
+              onPickSubdomain={pickSubdomain}
+              animateNodes={motionEnabled}
+            />
+          </React.Suspense>
         </div>
       )}
       {view === 'L3' && (
@@ -349,13 +476,15 @@ function AtlasScreen() {
           style={{
             position: 'absolute',
             inset: 0,
-            animation: 'l3enter 520ms cubic-bezier(.2,.7,.2,1) both',
+            animation: motionEnabled ? 'l3enter 520ms cubic-bezier(.2,.7,.2,1) both' : 'none',
           }}
         >
-          <Level3Screen
-            onBack={() => setView('L2')}
-            subdomain={activeSubdomain || { name: 'Pollinisation' }}
-          />
+          <React.Suspense fallback={<LazyScreenFallback />}>
+            <Level3Screen
+              onBack={() => setView('L2')}
+              subdomain={activeSubdomain || { name: 'Pollinisation' }}
+            />
+          </React.Suspense>
         </div>
       )}
       <Toast text={toast} />
@@ -369,6 +498,9 @@ function AtlasPrototypeStyles() {
       @keyframes toastIn {
         from { opacity: 0; transform: translate(-50%, -8px); }
         to { opacity: 1; transform: translate(-50%, 0); }
+      }
+      @keyframes atlasSpin {
+        to { transform: rotate(360deg); }
       }
       @keyframes l2enter {
         from { opacity: 0; transform: scale(0.88); }
