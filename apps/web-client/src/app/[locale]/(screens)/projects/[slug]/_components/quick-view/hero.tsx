@@ -38,10 +38,10 @@ export function ProjectQuickViewHero({
   const hasMultipleMedia = mediaItems.length > 1
   const galleryLabel =
     mediaItems.length > 1
-      ? `${mediaItems.length} medias`
+      ? `${mediaItems.length} photos`
       : mediaItems[0]?.kind === 'video'
-        ? 'Voir la video'
-        : 'Voir l image'
+        ? 'Voir la vidéo'
+        : 'Voir la photo'
 
   const openGalleryAt = (index: number) => {
     if (!mediaItems.length) return
@@ -60,7 +60,7 @@ export function ProjectQuickViewHero({
   return (
     <>
       <section>
-        <div className="relative h-48 overflow-hidden bg-muted/40 sm:h-56">
+        <div className="relative aspect-[4/3] max-h-[320px] overflow-hidden bg-muted/40">
           <button
             type="button"
             onClick={() => openGalleryAt(0)}
@@ -84,7 +84,7 @@ export function ProjectQuickViewHero({
                 <Leaf className="h-16 w-16 text-primary/50" />
               </div>
             )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent" />
           </button>
 
           {hasGallery ? (
@@ -99,14 +99,14 @@ export function ProjectQuickViewHero({
               <ProjectShareButton
                 projectName={projectName}
                 projectSlug={projectSlug}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white shadow-lg backdrop-blur-md transition-all active:scale-95 hover:bg-black/70"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white backdrop-blur-md transition-all active:scale-95 hover:bg-black/55"
               />
             </div>
             <div onClick={(event) => event.stopPropagation()}>
               <ProjectFavoriteButton
                 projectName={projectName}
                 projectId={projectId}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white shadow-lg backdrop-blur-md transition-all active:scale-95 hover:bg-black/70"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white backdrop-blur-md transition-all active:scale-95 hover:bg-black/55"
               />
             </div>
           </div>

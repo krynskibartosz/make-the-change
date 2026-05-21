@@ -231,27 +231,6 @@ export async function ProjectQuickView({
 
           {/* 2. Intro */}
           <aside className="px-4 pt-5 sm:px-5">
-            <div className="flex flex-wrap gap-2">
-              <Badge
-                variant="outline"
-                className="border-white/15 bg-white/8 text-white/70"
-              >
-                {contributionLabel}
-              </Badge>
-              {typeLabel ? (
-                <Badge
-                  variant="outline"
-                  style={{
-                    borderColor: glowRgba(glow, 0.30),
-                    backgroundColor: glowRgba(glow, 0.08),
-                    color: glowRgba(glow, 0.90),
-                  }}
-                >
-                  {typeLabel}
-                </Badge>
-              ) : null}
-            </div>
-
             {project.address_country_code && countryName ? (
               <ProjectCountrySheet
                 countryCode={resolvedIso ?? project.address_country_code}
@@ -278,6 +257,27 @@ export async function ProjectQuickView({
                 {projectDescription}
               </p>
             ) : null}
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Badge
+                variant="outline"
+                className="border-white/15 bg-white/8 text-white/70"
+              >
+                {contributionLabel}
+              </Badge>
+              {typeLabel ? (
+                <Badge
+                  variant="outline"
+                  style={{
+                    borderColor: glowRgba(glow, 0.30),
+                    backgroundColor: glowRgba(glow, 0.08),
+                    color: glowRgba(glow, 0.90),
+                  }}
+                >
+                  {typeLabel}
+                </Badge>
+              ) : null}
+            </div>
 
             <ProjectStorySheet
               description={projectDescription}
