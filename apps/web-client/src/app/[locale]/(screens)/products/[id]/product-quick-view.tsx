@@ -12,7 +12,6 @@ import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { ProductWithRelations } from './product-detail-data'
-import { ProductFavoriteButton } from './_components/product-favorite-button'
 import { ProductShareButton } from './_components/product-share-button'
 import { ProductCheckoutView } from './_features/product-checkout-view'
 import { ProductFiatCheckoutView } from './_features/product-fiat-checkout-view'
@@ -169,18 +168,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
                 
                 {/* ── Top Actions (Aligned to top-right) ── */}
                 <div className="absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-30 flex justify-end">
-                  <div className="flex gap-2">
-                    <ProductShareButton
-                      productName={productName}
-                      productId={product.id}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md border border-white/15 transition-all hover:bg-black/55 active:scale-95"
-                    />
-                    <ProductFavoriteButton
-                      productName={productName}
-                      productId={product.id}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md border border-white/15 transition-all hover:bg-black/55 active:scale-95"
-                    />
-                  </div>
+                  <ProductShareButton
+                    productName={productName}
+                    productId={product.id}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md border border-white/15 transition-all hover:bg-black/55 active:scale-95"
+                  />
                 </div>
 
                 {/* Dots pagination */}
