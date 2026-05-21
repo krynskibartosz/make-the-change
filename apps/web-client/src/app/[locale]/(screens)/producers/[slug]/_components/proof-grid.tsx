@@ -186,9 +186,9 @@ export function ProofGrid({ cards }: ProofGridProps) {
 
   const PREVIEW_COUNT = 4
   const previewLabels = allSecondary.slice(0, PREVIEW_COUNT).map((c) => c.label)
-  const hasMorePreview = allSecondary.length > PREVIEW_COUNT
+  const remainingCount = allSecondary.length - PREVIEW_COUNT
 
-  const groupedAll = groupAllProofs(cards)
+  const groupedSecondary = groupAllProofs(allSecondary)
 
   const activeCard = openLabel ? primaryProofs.find((c) => c.label === openLabel) : null
   const activeContext = openLabel ? (primaryContext[openLabel] ?? null) : null
@@ -242,7 +242,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
             {previewLabels.length > 0 && (
               <p className="mb-3 text-[12px] leading-relaxed text-white/38">
                 {previewLabels.join(' · ')}
-                {hasMorePreview && '…'}
+                {remainingCount > 0 && ` · +${remainingCount} autres`}
               </p>
             )}
             <button
@@ -330,32 +330,31 @@ export function ProofGrid({ cards }: ProofGridProps) {
         )}
       </MobileSheet>
 
-      {/* Bottom sheet — tous les repères groupés par catégorie */}
+      {/* Bottom sheet — repères complémentaires groupés par catégorie */}
       <MobileSheet
         isOpen={allProofsOpen}
         onClose={() => setAllProofsOpen(false)}
-        title="Tous les repères documentés"
+        title="Repères complémentaires"
       >
         <div className="pb-2">
           <div className="space-y-6">
-            {groupedAll.map((group) => (
+            {groupedSecondary.map((group) => (
               <div key={group.type}>
                 <p className="mb-2.5 text-[11px] font-black uppercase tracking-[0.14em] text-white/35">
                   {group.label}
                 </p>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {group.items.map((card, i) => {
                     const Icon = iconMap[card.icon] || BadgeCheck
-                    const style = accentStyles[card.proofType] ?? defaultAccent
                     return (
-                      <li key={i} className="flex items-center gap-2.5">
-                        <Icon className={`h-3.5 w-3.5 shrink-0 ${style.icon}`} />
-                        <span className="flex-1 text-[13px] text-white/72">{card.label}</span>
-                        {card.value && card.value !== 'À confirmer' && (
-                          <span className={`shrink-0 text-[12px] font-semibold ${style.label}`}>
-                            {card.value}
-                          </span>
-                        )}
+                      <li key={i} className="flex items-start gap-2.5">
+                        <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/30" />
+                        <div>
+                          <p className="text-[13px] text-white/72">{card.label}</p>
+                          {card.value && card.value !== 'À confirmer' && (
+                            <p className="mt-0.5 text-[12px] text-white/40">{card.value}</p>
+                          )}
+                        </div>
                       </li>
                     )
                   })}
