@@ -377,6 +377,7 @@ export async function ProjectQuickView({
                 projectType={project.type}
                 isDonationProject={isDonationProject}
                 fundingTitle={fundingTitle}
+                indicatorClassName={PROGRESS_INDICATOR_CLASS[glowTone]}
               />
             </div>
 

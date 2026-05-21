@@ -12,6 +12,7 @@ type ProjectFundingSheetProps = {
   projectType?: string | null
   isDonationProject?: boolean
   fundingTitle: string
+  indicatorClassName?: string
 }
 
 type MilestoneStatus = 'done' | 'active' | 'pending'
@@ -88,6 +89,7 @@ export function ProjectFundingSheet({
   projectType,
   isDonationProject = false,
   fundingTitle,
+  indicatorClassName,
 }: ProjectFundingSheetProps) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -116,7 +118,7 @@ export function ProjectFundingSheet({
         {/* Progress bar */}
         <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
+            className={`h-full rounded-full ${indicatorClassName ?? 'bg-gradient-to-r from-amber-500/60 to-lime-400/50'}`}
             style={{ width: `${progress}%` }}
           />
         </div>
