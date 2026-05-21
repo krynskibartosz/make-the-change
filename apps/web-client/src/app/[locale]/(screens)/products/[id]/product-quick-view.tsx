@@ -360,10 +360,10 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
         </div>
 
         {/* ── Sticky Bottom Bar ── */}
-        <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20">
+        <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20 pt-2">
           <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
-          
-          <div className="flex flex-col gap-2 max-w-md mx-auto w-full">
+
+          <div className="flex flex-col gap-1.5 max-w-md mx-auto w-full">
             {/* Ligne principale : chip format à gauche + bouton CTA à droite */}
             <div className="flex items-center gap-2">
               {formats.length > 1 && (
@@ -387,17 +387,15 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
               )}
               {userBalance >= displayPoints ? (
                 <button
-                  key={`exchange-${selectedFormat.points}`}
                   onClick={() => setIsCheckoutOpen(true)}
-                  className={`flex flex-1 h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 ${getCurrencyDesign('impactCredits').ctaClassName}`}
+                  className={`flex flex-1 h-14 items-center justify-center gap-2 rounded-2xl text-[17px] font-black shadow-[0_0_30px_rgba(252,211,77,0.18)] active:scale-[0.98] transition-all ${getCurrencyDesign('impactCredits').ctaClassName}`}
                 >
                   Échanger · <CurrencyAmount kind="impactCredits" value={displayPoints} tone="inherit" className="text-[17px] font-black" />
                 </button>
               ) : (
                 <button
-                  key={`buy-${selectedFormat.euros}`}
                   onClick={() => setIsFiatCheckoutOpen(true)}
-                  className="flex flex-1 h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(52,211,153,0.18)] active:scale-[0.98] transition-all animate-in fade-in zoom-in duration-300 hover:bg-emerald-300"
+                  className="flex flex-1 h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-400 text-[17px] font-black text-[#0B0F15] shadow-[0_0_30px_rgba(52,211,153,0.18)] active:scale-[0.98] transition-all hover:bg-emerald-300"
                 >
                   Acheter pour {new Intl.NumberFormat('fr-FR', {
                     style: 'currency',
@@ -408,11 +406,11 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
               )}
             </div>
 
-            {/* Actions secondaires */}
+            {/* Actions secondaires — texte compact sans padding bouton */}
             {userBalance >= displayPoints && displayPrice > 0 && (
               <button
                 onClick={() => setIsFiatCheckoutOpen(true)}
-                className="flex w-full items-center justify-center rounded-2xl px-4 py-1.5 text-xs font-medium text-white/40 hover:text-white transition-colors active:scale-[0.98] active:opacity-50"
+                className="w-full text-center text-[11px] text-white/35 hover:text-white/60 transition-colors active:opacity-50 leading-none py-0.5"
               >
                 Ou acheter pour {new Intl.NumberFormat('fr-FR', {
                   style: 'currency',
@@ -422,10 +420,10 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
               </button>
             )}
             {userBalance < displayPoints && (
-              <div className="text-center text-xs text-white/60">
+              <p className="text-center text-[11px] text-white/50 leading-snug">
                 Il vous manque <CurrencyAmount kind="impactCredits" value={displayPoints - userBalance} className="font-bold" /> pour l'obtenir gratuitement.{' '}
-                <a href={`/${locale}/projects`} className="text-white underline decoration-white/30 hover:decoration-white transition-all">Soutenir un projet</a>
-              </div>
+                <a href={`/${locale}/projects`} className="text-white/70 underline decoration-white/20 hover:decoration-white transition-all">Soutenir un projet</a>
+              </p>
             )}
           </div>
         </BottomActionBar>
