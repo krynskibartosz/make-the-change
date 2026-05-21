@@ -123,7 +123,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
   const leftLabel = filter === 'order' ? 'Total Achat' : 'Total Soutiens'
   const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayContributed
   const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'Credits Impact') : '€'
-  const rightLabel = filter === 'support' ? 'Credits Impact gagnés' : 'Credits Impact dépensés'
+  const rightLabel = filter === 'support' ? 'Crédits reçus' : 'Crédits échangés'
   const rightValue = filter === 'support' ? userSupports.reduce((sum, s) => sum + s.amount_points, 0) : displayPoints
   const rightUnit = ''
 
@@ -132,10 +132,10 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
       {/* 1. HERO - Titre de la page */}
       <div className="relative z-10 px-6 pt-24 pb-6">
         <h1 className="mb-2 text-4xl font-bold tracking-tight text-white hyphens-none text-balance leading-[1.1]">
-          Mes Contributions
+          Historique
         </h1>
         <p className="text-sm text-gray-400 text-pretty leading-[1.6]">
-          L&apos;historique de votre impact et de vos achats.
+          Vos soutiens, dons et échanges de crédits.
         </p>
       </div>
 
@@ -283,7 +283,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
                     )}
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-0.5">
-                        Achat Récompenses
+                        Échange de crédits
                       </span>
                       <h3 className="text-sm font-bold text-white truncate leading-snug mb-0.5">
                         {product?.name_default || 'Produit'}
@@ -315,7 +315,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
           </div>
           <p className="mb-2 text-base font-bold text-white">Aucune contribution pour l&apos;instant</p>
           <p className="mb-6 text-sm text-gray-400 text-pretty">
-            Soutenez un projet ou achetez un produit pour commencer à bâtir votre héritage d&apos;impact.
+            Soutenez un projet ou échangez vos crédits contre un produit pour retrouver votre historique ici.
           </p>
           <button
             onClick={() => router.push('/projects')}

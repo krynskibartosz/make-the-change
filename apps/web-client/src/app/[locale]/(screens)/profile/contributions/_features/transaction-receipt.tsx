@@ -126,11 +126,14 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         <h2 className="text-lg font-bold text-white mb-1">{data.name}</h2>
         <span className="text-sm text-gray-400 mb-4">{data.date}</span>
         {!isSupport && <span className="text-xs text-gray-500 mb-2">{orderData.orderNumber}</span>}
-        <div className="text-5xl font-black text-white tracking-tighter mb-4">
-          {formatEuros(data.amount)}
-          <span className="text-2xl text-lime-400">
-            {isSupport ? '€' : ` ${orderData.amountUnit}`}
-          </span>
+        <div className="flex flex-col items-center mb-4">
+          <div className="text-5xl font-black text-white tracking-tighter leading-none">
+            {formatEuros(data.amount)}
+            {isSupport && <span className="text-2xl text-lime-400"> €</span>}
+          </div>
+          {!isSupport && !isDonation && (
+            <span className="mt-1.5 text-sm font-medium text-white/45">crédits échangés</span>
+          )}
         </div>
         {(isSupport || isDonation) && (
           <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">

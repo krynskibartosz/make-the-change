@@ -28,7 +28,7 @@ export function ActivityFilter({ onFilterChange, currentFilter }: ActivityFilter
             : 'text-gray-500 hover:text-gray-300 font-medium'
         }`}
       >
-        Impact
+        Soutiens
       </button>
       <button
         onClick={() => onFilterChange('donation')}
@@ -48,7 +48,7 @@ export function ActivityFilter({ onFilterChange, currentFilter }: ActivityFilter
             : 'text-gray-500 hover:text-gray-300 font-medium'
         }`}
       >
-        Récompenses
+        Échanges
       </button>
     </div>
   )
