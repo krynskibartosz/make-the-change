@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Badge } from '@make-the-change/core/ui'
-import { Flame, Package, Truck, Info, ChevronRight, ChevronDown, X } from 'lucide-react'
+import { Flame, Package, Truck, Info, ChevronRight, ChevronUp, ChevronDown, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CurrencyAmount, getCurrencyDesign } from '@/components/currency'
 import { sanitizeImageUrl } from '@/lib/image-url'
@@ -412,7 +412,7 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
                       </span>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-white/30 group-hover:translate-x-1 transition-transform" />
+                  <ChevronUp className="w-5 h-5 text-white/30 transition-transform" />
                 </button>
               </div>
             )}

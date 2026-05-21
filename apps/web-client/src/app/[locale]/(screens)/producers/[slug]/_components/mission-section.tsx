@@ -9,7 +9,7 @@
  * - Tap = bottom sheet d'approfondissement (description + keyPoints + whyItMatters)
  */
 
-import { ChevronRight } from 'lucide-react'
+import { ChevronUp } from 'lucide-react'
 import { useState } from 'react'
 import type { MissionPillar } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
@@ -63,7 +63,7 @@ export function MissionSection({ pillars, subtitle }: MissionSectionProps) {
               </div>
 
               {/* Chevron affordance */}
-              <ChevronRight className="h-3.5 w-3.5 shrink-0 self-start mt-0.5 text-white/25" />
+              <ChevronUp className="h-3.5 w-3.5 shrink-0 self-start mt-0.5 text-white/25" />
             </button>
           ))}
         </div>

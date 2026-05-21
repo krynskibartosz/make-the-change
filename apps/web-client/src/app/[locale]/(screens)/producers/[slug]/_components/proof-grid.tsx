@@ -7,7 +7,7 @@ import {
   Bike,
   Building,
   Camera,
-  ChevronRight,
+  ChevronUp,
   Droplet,
   FlaskConical,
   GraduationCap,
@@ -186,7 +186,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
                       )}
                     </div>
 
-                    <ChevronRight className="h-3.5 w-3.5 shrink-0 text-white/20" />
+                    <ChevronUp className="h-3.5 w-3.5 shrink-0 text-white/20" />
                   </button>
                 )
               })}
@@ -211,7 +211,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
               className="flex items-center gap-1 text-[13px] font-semibold text-white/55 transition-opacity active:opacity-60"
             >
               Voir tous les repères
-              <ChevronRight className="h-3.5 w-3.5" />
+              <ChevronUp className="h-3.5 w-3.5" />
             </button>
           </div>
         )}

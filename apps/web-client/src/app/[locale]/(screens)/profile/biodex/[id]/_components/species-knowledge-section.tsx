@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { ChevronRight } from 'lucide-react'
+import { ChevronUp } from 'lucide-react'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
 import type { SpeciesContext } from '@/types/species'
 
@@ -54,7 +54,7 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
                   className='flex items-center gap-1 text-xs font-semibold text-white/40 transition-colors active:text-white/60'
                 >
                   Zones documentées
-                  <ChevronRight className='h-3 w-3' aria-hidden='true' />
+                  <ChevronUp className='h-3 w-3' aria-hidden='true' />
                 </button>
               )}
             </>
@@ -95,7 +95,7 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
                 className='flex items-center gap-1 text-xs font-semibold text-white/40 transition-colors active:text-white/60'
               >
                 Voir les fragilités
-                <ChevronRight className='h-3 w-3' aria-hidden='true' />
+                <ChevronUp className='h-3 w-3' aria-hidden='true' />
               </button>
             </>
           ) : (
