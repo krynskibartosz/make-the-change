@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { ProductWithRelations } from '../product-detail-data'
 import { useRouter } from '@/i18n/navigation'
-import { ArrowLeft, MapPin, Plus, X, Loader2 } from 'lucide-react'
+import { ArrowLeft, MapPin, X, Loader2 } from 'lucide-react'
 import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
@@ -113,7 +113,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
             
             {/* Rassurance Solde */}
             <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-              <span className="text-white/40 text-xs">Nouveau solde estimé</span>
+              <span className="text-white/40 text-xs">Solde après échange</span>
               <CurrencyAmount kind="impactCredits" value={newBalance} className="text-sm font-bold" />
             </div>
           </div>
@@ -130,12 +130,15 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
               <button onClick={() => setStep(2)} className="text-xs font-bold text-white/50 hover:text-white">Modifier</button>
             </div>
           ) : (
-            <button 
-              onClick={() => setStep(2)}
-              className="mx-6 mt-6 flex w-[calc(100%-3rem)] items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 p-4 text-white/70 transition-colors hover:bg-white/5 hover:text-white"
-            >
-              <Plus className="h-4 w-4" /> Ajouter une adresse de livraison
-            </button>
+            <div className="mx-6 mt-6 flex items-center justify-between rounded-2xl border border-white/10 p-4">
+              <div className="flex items-center gap-3">
+                <MapPin className="h-5 w-5 text-white/20" />
+                <div className="text-sm">
+                  <p className="font-medium text-white/60">Adresse de livraison</p>
+                  <p className="text-white/35">Aucune adresse renseignée</p>
+                </div>
+              </div>
+            </div>
           )}
         </div>
 
@@ -159,7 +162,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
             }}
             className={`w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-lg font-black shadow-[0_0_30px_rgba(252,211,77,0.14)] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-75 disabled:active:scale-100 ${getCurrencyDesign('impactCredits').ctaClassName}`}
           >
-            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse de livraison" : "Confirmer l'échange")}
+            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (!hasAddress ? "Ajouter une adresse" : "Confirmer l'échange")}
           </button>
         </div>
       </div>
@@ -258,7 +261,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
             onClick={() => router.push('/profile/contributions')}
             className="w-full bg-emerald-400 text-[#0B0F15] font-black text-[17px] h-14 rounded-2xl active:scale-[0.98] transition-transform hover:bg-emerald-300 shadow-[0_0_30px_rgba(52,211,153,0.18)]"
           >
-            Suivre ma commande
+            Suivre la livraison
           </button>
 
           {/* Bouton Secondaire — conversion suivante */}

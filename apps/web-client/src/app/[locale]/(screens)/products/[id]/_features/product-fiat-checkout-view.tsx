@@ -81,7 +81,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
             onClick={() => router.push('/profile/contributions')}
             className="w-full font-black text-[17px] h-14 rounded-2xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(52,211,153,0.18)] bg-emerald-400 text-[#0B0F15] hover:bg-emerald-300"
           >
-            Suivre ma commande
+            Suivre la livraison
           </button>
           {/* Bouton Secondaire — conversion suivante */}
           <button
