@@ -298,18 +298,6 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
               </div>
             </div>
 
-            {/* LIEN VERS LES PROJETS ASSOCIÉS */}
-            {product.producer && (
-              <div className="px-1 pt-4 pb-2 border-t border-white/5">
-                <p className="text-[10px] text-white/30 uppercase tracking-widest font-bold mb-1.5">Projet associé</p>
-                <a
-                  href={`/${locale}/projects`}
-                  className="text-sm font-semibold text-white/60 hover:text-white transition-colors flex items-center gap-1"
-                >
-                  Voir les projets liés →
-                </a>
-              </div>
-            )}
 
             {product.certifications && product.certifications.filter(c => !/^Origine\b/i.test(c)).length > 0 && (
               <section className="px-1 pb-6">
