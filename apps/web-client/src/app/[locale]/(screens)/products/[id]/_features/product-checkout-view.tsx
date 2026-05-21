@@ -14,16 +14,17 @@ type ProductCheckoutViewProps = {
     points: number
     euros: number
   }
+  initialBalance: number
   onClose: () => void
 }
 
-export function ProductCheckoutView({ product, selectedFormat, onClose }: ProductCheckoutViewProps) {
+export function ProductCheckoutView({ product, selectedFormat, initialBalance, onClose }: ProductCheckoutViewProps) {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [hasAddress, setHasAddress] = useState(false) // Faux état pour la démo
   const [quantity, setQuantity] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
-  const [userBalance, setUserBalance] = useState(2450)
+  const [userBalance, setUserBalance] = useState(initialBalance)
 
   const imageUrl =
     sanitizeImageUrl(product.image_url) ||

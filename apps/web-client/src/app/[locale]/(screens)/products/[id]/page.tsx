@@ -4,6 +4,7 @@ import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getLocalizedContent } from '@/lib/utils'
 import { buildPublicAppUrl } from '@/lib/public-url'
+import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 import { getPublicProductById } from './product-detail-data'
 import { ProductQuickView } from './product-quick-view'
 
@@ -35,11 +36,13 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { id } = await params
   const locale = await getLocale()
-  const product = await getPublicProductById(id)
+  const [product, profile] = await Promise.all([getPublicProductById(id), getCurrentProfile()])
 
   if (!product) {
     notFound()
   }
+
+  const userBalance = profile?.impactCreditsBalance ?? 0
 
   const productName = getLocalizedContent(product.name_i18n, locale, product.name_default || '')
 
@@ -72,7 +75,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         headerMode="dynamic"
         asPage
       >
-        <ProductQuickView product={product} />
+        <ProductQuickView product={product} userBalance={userBalance} />
       </FullScreenSlideModal>
       <script type="application/ld+json">{structuredDataJson}</script>
     </>

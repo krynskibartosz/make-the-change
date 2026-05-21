@@ -18,6 +18,7 @@ import { ProductFiatCheckoutView } from './_features/product-fiat-checkout-view'
 
 type ProductQuickViewProps = {
   product: ProductWithRelations
+  userBalance: number
 }
 
 type ProductFormat = {
@@ -53,7 +54,7 @@ function productGlowRgba(tone: { r: number; g: number; b: number }, alpha: numbe
 }
 // ────────────────────────────────────────────────────────────────────────────
 
-export function ProductQuickView({ product }: ProductQuickViewProps) {
+export function ProductQuickView({ product, userBalance }: ProductQuickViewProps) {
   const t = useTranslations('products')
   const locale = useLocale()
 
@@ -73,7 +74,6 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
       ? sanitizeImageUrl(product.producer.images[0])
       : undefined
 
-  const userBalance = 2450
   const formats: ProductFormat[] =
     product.variants && product.variants.length > 0
       ? product.variants.map((v) => ({
@@ -479,10 +479,11 @@ export function ProductQuickView({ product }: ProductQuickViewProps) {
 
       {/* ── Checkout Modal Interceptée ── */}
       {isCheckoutOpen && (
-        <ProductCheckoutView 
-          product={product} 
-          selectedFormat={selectedFormat} 
-          onClose={() => setIsCheckoutOpen(false)} 
+        <ProductCheckoutView
+          product={product}
+          selectedFormat={selectedFormat}
+          initialBalance={userBalance}
+          onClose={() => setIsCheckoutOpen(false)}
         />
       )}
 
