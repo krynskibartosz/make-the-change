@@ -3,6 +3,7 @@ import {
   ArrowRight,
   BookOpen,
   Compass,
+  FlaskConical,
   GitBranch,
   Route,
   Search,
@@ -46,7 +47,7 @@ type LearnRouteCardProps = {
   icon: LucideIcon
   title: string
   subtitle: string
-  tone: 'atlas' | 'path' | 'project' | 'catalog'
+  tone: 'atlas' | 'path' | 'project' | 'catalog' | 'lab'
 }
 
 const ROUTE_TONE: Record<LearnRouteCardProps['tone'], string> = {
@@ -54,6 +55,7 @@ const ROUTE_TONE: Record<LearnRouteCardProps['tone'], string> = {
   path: 'border-cyan-200/15 bg-cyan-300/8 text-cyan-100',
   project: 'border-amber-200/15 bg-amber-300/8 text-amber-100',
   catalog: 'border-sky-200/15 bg-sky-300/8 text-sky-100',
+  lab: 'border-lime-200/15 bg-lime-300/8 text-lime-100',
 }
 
 function LearnRouteCard({ href, icon: Icon, title, subtitle, tone }: LearnRouteCardProps) {
@@ -222,6 +224,13 @@ export function LearnTab({ seeds, species }: LearnTabProps) {
             title="Tous les cours"
             subtitle="Recherche et filtres"
             tone="catalog"
+          />
+          <LearnRouteCard
+            href="/lab/atlas-prototype"
+            icon={FlaskConical}
+            title="Prototype Atlas"
+            subtitle="Tester l’écran mobile"
+            tone="lab"
           />
         </section>
 
