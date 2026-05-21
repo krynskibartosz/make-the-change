@@ -45,11 +45,11 @@ export function ProjectShareButton({ projectName, projectSlug }: ProjectShareBut
       aria-label={t('share')}
       className="flex h-11 w-11 items-center justify-center rounded-full"
     >
-      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white backdrop-blur-md transition-all active:scale-95 hover:bg-black/55">
+      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white backdrop-blur-md transition-all active:scale-95 hover:bg-black/55">
         {hasCopied ? (
-          <Check className="h-4 w-4 scale-110 text-marketing-positive-500 transition-all duration-300" />
+          <Check className="h-[18px] w-[18px] scale-110 text-marketing-positive-500 transition-all duration-300" />
         ) : (
-          <Share2 className="h-4 w-4 transition-transform duration-300" />
+          <Share2 className="h-[18px] w-[18px] transition-transform duration-300" />
         )}
       </span>
     </button>

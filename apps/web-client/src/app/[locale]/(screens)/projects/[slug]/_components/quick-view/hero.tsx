@@ -93,7 +93,7 @@ export function ProjectQuickViewHero({
             </div>
           ) : null}
 
-          <div className="absolute bottom-4 right-4 z-20 flex gap-2">
+          <div className="absolute bottom-4 right-4 z-10 flex gap-2">
             <div onClick={(event) => event.stopPropagation()}>
               <ProjectShareButton
                 projectName={projectName}
