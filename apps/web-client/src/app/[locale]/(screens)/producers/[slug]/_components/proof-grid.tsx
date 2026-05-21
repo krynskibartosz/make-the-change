@@ -159,9 +159,9 @@ export function ProofGrid({ cards }: ProofGridProps) {
       <section className="px-4">
         {primaryProofs.length > 0 && (
           <div className={allSecondary.length > 0 ? 'mb-5' : ''}>
-            <h2 className={typo.sectionTitle}>Ce qui est documenté</h2>
+            <h2 className={typo.sectionTitle}>Comment ils travaillent</h2>
             <p className={`mt-1.5 mb-4 ${typo.sectionSubtitle}`}>
-              Des repères concrets pour comprendre ce qui est suivi ou documenté.
+              Certifications, présence terrain et savoir-faire.
             </p>
 
             <div className="space-y-2">
@@ -173,9 +173,9 @@ export function ProofGrid({ cards }: ProofGridProps) {
                     key={index}
                     type="button"
                     onClick={() => setOpenLabel(card.label)}
-                    className={`flex w-full items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${cardStyle.border} ${cardStyle.cardBg} px-3.5 py-3.5 text-left transition-opacity active:opacity-60`}
+                    className={`flex w-full items-center gap-3 rounded-xl border border-white/[0.06] border-l-[3px] ${cardStyle.border} ${cardStyle.cardBg} px-3 py-3 text-left transition-opacity active:opacity-60`}
                   >
-                    <Icon className={`h-[18px] w-[18px] shrink-0 ${cardStyle.icon}`} />
+                    <Icon className={`h-4 w-4 shrink-0 ${cardStyle.icon}`} />
 
                     <div className="min-w-0 flex-1">
                       <p className={typo.cardTitle}>{card.label}</p>
@@ -197,7 +197,7 @@ export function ProofGrid({ cards }: ProofGridProps) {
         {allSecondary.length > 0 && (
           <div>
             <h3 className="mb-2 text-[13px] font-semibold text-white/50">
-              Autres repères documentés
+              Autres repères
             </h3>
             {previewLabels.length > 0 && (
               <p className="mb-3 text-[12px] leading-relaxed text-white/38">
