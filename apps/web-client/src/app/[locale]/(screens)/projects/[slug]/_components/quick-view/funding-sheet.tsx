@@ -75,10 +75,10 @@ function Chip({ children }: { children: string }) {
   )
 }
 
-const STATUS_ICON: Record<MilestoneStatus, { symbol: string; color: string }> = {
-  done:    { symbol: '✓', color: 'text-emerald-400' },
-  active:  { symbol: '~', color: 'text-amber-300' },
-  pending: { symbol: '○', color: 'text-white/25' },
+const STATUS_LABEL: Record<MilestoneStatus, { label: string; color: string }> = {
+  done:    { label: 'Engagé',          color: 'text-emerald-400/80' },
+  active:  { label: 'En cours',        color: 'text-amber-300/80' },
+  pending: { label: 'Étape suivante',  color: 'text-white/25' },
 }
 
 export function ProjectFundingSheet({
@@ -109,8 +109,8 @@ export function ProjectFundingSheet({
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title={fundingTitle}>
         {/* Stats */}
         <p className="mt-1 text-sm text-white/50">
-          {formatAmountNumber(currentFunding)} EUR collectés · {progress}% de l&apos;objectif de{' '}
-          {formatAmountNumber(targetBudget)} EUR.
+          {formatAmountNumber(currentFunding)} EUR collectés · {progress}%{' '}
+          de l&apos;objectif de {formatAmountNumber(targetBudget)} EUR.
         </p>
 
         {/* Progress bar */}
@@ -121,10 +121,15 @@ export function ProjectFundingSheet({
           />
         </div>
 
+        {/* Intro */}
+        <p className="mt-4 text-sm leading-relaxed text-white/55">
+          Cet objectif aide à financer les besoins du projet et à accompagner son développement sur le terrain.
+        </p>
+
         {/* Peut aider */}
-        <div className="mt-5">
+        <div className="mt-6">
           <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
-            Le soutien peut aider
+            Le soutien peut aider à
           </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {chips.map((chip) => (
@@ -133,22 +138,19 @@ export function ProjectFundingSheet({
           </div>
         </div>
 
-        {/* Objectifs */}
-        <div className="mt-5">
+        {/* Étapes */}
+        <div className="mt-8">
           <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
-            Objectifs du projet
+            Ce que l&apos;objectif peut accompagner
           </p>
           <div className="mt-2">
             {milestones.map((m) => {
-              const { symbol, color } = STATUS_ICON[m.status]
+              const { label: statusLabel, color } = STATUS_LABEL[m.status]
               return (
                 <div
                   key={m.label}
-                  className="flex items-center gap-3 border-b border-white/[0.06] py-3 last:border-0"
+                  className="flex items-center justify-between gap-3 border-b border-white/[0.06] py-3 last:border-0"
                 >
-                  <span className={`w-4 shrink-0 text-center text-[13px] font-black ${color}`}>
-                    {symbol}
-                  </span>
                   <p
                     className={`flex-1 text-sm ${
                       m.status === 'pending' ? 'text-white/35' : 'text-white/70'
@@ -156,22 +158,27 @@ export function ProjectFundingSheet({
                   >
                     {m.label}
                   </p>
-                  {m.status === 'active' ? (
-                    <span className="shrink-0 text-[10px] font-bold text-amber-300/70">
-                      En cours
-                    </span>
-                  ) : null}
+                  <span className={`shrink-0 text-[11px] font-semibold ${color}`}>
+                    {statusLabel}
+                  </span>
                 </div>
               )
             })}
           </div>
-          <p className="mt-2 text-[11px] leading-relaxed text-white/25">
-            Ces étapes sont indicatives. Elles ne constituent pas un reporting certifié.
+        </div>
+
+        {/* Notes */}
+        <div className="mt-8 rounded-xl bg-white/[0.03] px-4 py-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/25">
+            À garder en tête
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-white/40">
+            Ces étapes sont indicatives et dépendent du terrain, du partenaire et des informations
+            disponibles.
           </p>
         </div>
 
-        {/* Disclaimer */}
-        <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
+        <p className="mt-3 pb-2 text-xs leading-relaxed text-white/30">
           Ce montant est un objectif estimatif du projet. Il ne garantit pas un résultat précis ni
           un impact mesuré.
         </p>
