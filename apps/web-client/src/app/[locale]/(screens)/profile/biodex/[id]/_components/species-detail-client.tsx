@@ -10,7 +10,6 @@ import { SpeciesQuickStats } from './species-quick-stats'
 import { SpeciesKnowledgeSection } from './species-knowledge-section'
 import { SpeciesProjectsZone } from './species-projects-zone'
 import { SpeciesLinkedSpecies } from './species-linked-species'
-import { SpeciesDocumentationSection } from './species-documentation-section'
 import { SpeciesLinkedProducts, type SpeciesLinkedProducerData } from './species-linked-products'
 import type { LinkedProject } from './species-linked-projects'
 import type { SpeciesLinkedPartnerData } from './species-linked-partners'
@@ -39,10 +38,7 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
         {/* 3. Repères biologiques — grille légère */}
         <SpeciesQuickStats species={species} />
 
-        {/* 4. Fiabilité — couche de confiance discrète */}
-        <SpeciesDocumentationSection species={species} />
-
-        {/* 5. Explorer son rôle — accordéons */}
+        {/* 4. Explorer son rôle — accordéons */}
         <SpeciesKnowledgeSection species={species} />
 
         {/* 5. Liens avec les projets — zone fusionnée */}
@@ -85,8 +81,8 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
             Sources & limites
           </p>
           <p className='text-xs leading-relaxed text-white/35'>
-            Cette fiche sert à apprendre et à relier une espèce à des projets documentés dans
-            l&apos;app. Elle ne prouve pas que l&apos;espèce est sauvée ou protégée.
+            Cette fiche aide à comprendre une espèce et ses liens avec des projets documentés dans
+            l&apos;app. Elle ne constitue pas une preuve de protection de l&apos;espèce.
           </p>
         </section>
 
