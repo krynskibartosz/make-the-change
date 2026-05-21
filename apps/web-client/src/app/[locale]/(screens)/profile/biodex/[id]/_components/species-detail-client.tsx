@@ -30,26 +30,34 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
       {/* 1. Hero naturaliste */}
       <SpeciesHero species={species} />
 
-      <div className='mt-5 space-y-8'>
+      <div className='mt-6'>
 
-        {/* 2. Pourquoi elle compte — juste sous le hero, texte ouvert */}
+        {/* 2. Rôle dans le vivant */}
         <SpeciesWhyItMatters species={species} />
 
-        {/* 3. Repères biologiques — grille légère */}
-        <SpeciesQuickStats species={species} />
+        {/* 3. Repères biologiques */}
+        <div className='mt-10'>
+          <SpeciesQuickStats species={species} />
+        </div>
 
-        {/* 4. Explorer son rôle — accordéons */}
-        <SpeciesKnowledgeSection species={species} />
+        {/* 4. Explorer son rôle */}
+        <div className='mt-12'>
+          <SpeciesKnowledgeSection species={species} />
+        </div>
 
-        {/* 5. Liens avec les projets — zone fusionnée */}
-        <SpeciesProjectsZone linkedProjects={linkedProjects} linkedPartners={linkedPartners} />
+        {/* 5. Liens avec les projets */}
+        <div className='mt-14'>
+          <SpeciesProjectsZone linkedProjects={linkedProjects} linkedPartners={linkedPartners} />
+        </div>
 
         {/* 6. Dans le même écosystème */}
-        <SpeciesLinkedSpecies linkedProjects={linkedProjects} currentSpeciesId={species.id} />
+        <div className='mt-14'>
+          <SpeciesLinkedSpecies linkedProjects={linkedProjects} currentSpeciesId={species.id} />
+        </div>
 
         {/* 7. Continuer à apprendre */}
         {learningCourses.length > 0 && (
-          <section className='mx-5'>
+          <section className='mx-5 mt-14'>
             <p className='mb-3 text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
               Continuer à apprendre
             </p>
@@ -72,11 +80,13 @@ export function SpeciesDetailClient({ species, linkedProjects, linkedProducers, 
           </section>
         )}
 
-        {/* 9. Savoir-faire lié */}
-        <SpeciesLinkedProducts producers={linkedProducers} />
+        {/* 8. Savoir-faire partenaire */}
+        <div className='mt-16'>
+          <SpeciesLinkedProducts producers={linkedProducers} />
+        </div>
 
-        {/* 10. Sources & limites */}
-        <section className='border-t border-white/5 px-5 pb-8 pt-6'>
+        {/* 9. Sources & limites */}
+        <section className='mt-16 border-t border-white/5 px-5 pb-8 pt-6'>
           <p className='mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-white/25'>
             Sources & limites
           </p>

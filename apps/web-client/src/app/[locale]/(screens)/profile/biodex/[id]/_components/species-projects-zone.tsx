@@ -128,8 +128,8 @@ export function SpeciesProjectsZone({ linkedProjects, linkedPartners }: SpeciesP
       <div>
         <p className='text-[12px] leading-relaxed text-white/40'>
           {linkedProjects.length === 1
-            ? "Cette espèce est liée à 1 projet dans l'app."
-            : `Cette espèce est liée à ${linkedProjects.length} projets dans l'app.`}
+            ? 'Cette espèce est liée à 1 projet Make the Change.'
+            : `Cette espèce est liée à ${linkedProjects.length} projets Make the Change.`}
           {hasStats && " Ces liens aident à comprendre son rôle dans l'écosystème, sans constituer une preuve de protection."}
         </p>
 

@@ -33,19 +33,19 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
 
   return (
     <>
-      <section className='mx-5 space-y-6'>
+      <section className='mx-5 space-y-8'>
         <p className='text-[11px] font-black uppercase tracking-[0.16em] text-white/35'>
           Explorer son rôle
         </p>
 
         {/* Où elle vit */}
-        <div className='space-y-2'>
+        <div className='space-y-3'>
           <p className='text-sm font-bold text-white/80'>Où elle vit</p>
           {mainHabitat ? (
             <>
               <p className='text-sm leading-relaxed text-white/60'>{mainHabitat}</p>
               {secondaryHabitats.length > 0 && (
-                <p className='text-xs text-white/35'>{secondaryHabitats.join(' · ')}</p>
+                <p className='text-xs text-white/30'>{secondaryHabitats.join(' · ')}</p>
               )}
               {technicalHabitats.length > 0 && (
                 <button
@@ -66,23 +66,26 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
         <div className='h-px bg-white/[0.06]' />
 
         {/* Avec qui elle interagit */}
-        <div className='space-y-2'>
+        <div className='space-y-3'>
           <p className='text-sm font-bold text-white/80'>Avec qui elle interagit</p>
           <p className='text-sm leading-relaxed text-white/60'>
-            Elle visite des plantes à fleurs pour le nectar et le pollen. Ses interactions avec
-            d&apos;autres pollinisateurs, cultures locales et prédateurs restent à documenter avec
-            les données terrain.
+            Elle visite des plantes à fleurs pour le nectar et le pollen. Ses liens avec d&apos;autres
+            pollinisateurs, cultures locales et prédateurs restent à documenter.
           </p>
         </div>
 
         <div className='h-px bg-white/[0.06]' />
 
         {/* Ce qui la fragilise */}
-        <div className='space-y-2'>
+        <div className='space-y-3'>
           <p className='text-sm font-bold text-white/80'>Ce qui la fragilise</p>
           {allThreats.length > 0 ? (
             <>
-              <p className='text-xs text-white/45'>
+              <p className='text-sm leading-relaxed text-white/60'>
+                Son équilibre dépend de la qualité de son habitat et des ressources disponibles dans
+                son milieu.
+              </p>
+              <p className='text-xs text-white/35'>
                 {visibleThreats.join(' · ')}
                 {hasMoreThreats && '…'}
               </p>
