@@ -55,27 +55,26 @@ export function ProjectTrackingPreview({
   const sheetTitle = isDonationProject ? 'Du don au terrain' : 'Du soutien au terrain'
 
   const step1Title = isDonationProject ? 'Vous faites un don' : 'Vous soutenez ce projet'
-  const step1Body = producerName
-    ? isDonationProject
-      ? `Votre don est lié à ${producerName} et à ce projet de restauration.`
-      : `Votre contribution est liée à ${producerName} et à cette filière.`
-    : isDonationProject
-      ? 'Votre contribution est rattachée à ce projet de restauration, sans contrepartie économique.'
-      : 'Votre contribution est rattachée à ce projet, ce partenaire et cette filière.'
-  const step1Detail = isDonationProject
-    ? "Pas de Crédits Impact, pas de produit, pas de rendement. Il s'agit d'un don pur."
-    : "Ce n'est pas un achat produit, ni un investissement financier, ni une promesse de rendement."
+  const step1Body = isDonationProject
+    ? "Votre don est rattaché à ce projet et à l'équipe qui le porte."
+    : 'Votre contribution est rattachée à ce projet et au partenaire qui le porte.'
+  const step1Disclaimer = isDonationProject
+    ? "Ce don n'est pas un achat produit ni une promesse de rendement. Il ne donne pas droit à des Crédits Impact."
+    : "Ce soutien n'est pas un achat produit, un investissement financier ou une promesse de rendement."
 
   const step2Title = isDonationProject
     ? "L'équipe agit sur le terrain"
     : 'Le partenaire agit sur le terrain'
-  const step2Intro = isDonationProject ? 'Le don peut aider :' : 'Le soutien peut aider :'
+  const step2Intro = isDonationProject
+    ? 'Le don peut aider à financer ou accompagner certaines actions concrètes :'
+    : 'Le soutien peut aider à financer ou accompagner certaines actions concrètes :'
 
   const step3Title = isDonationProject ? "Vous suivez l'évolution" : 'Vous recevez des nouvelles'
 
   const previewSteps = [
-    { number: 1, title: step1Title },
-    { number: 2, title: step2Title },
+    { number: 1, title: step1Title, active: true },
+    { number: 2, title: step2Title, active: true },
+    { number: 3, title: step3Title, active: false },
   ]
 
   return (
@@ -89,23 +88,18 @@ export function ProjectTrackingPreview({
         {previewSteps.map((step, i) => (
           <div key={step.number} className="flex gap-3">
             <div className="flex flex-col items-center">
-              <StepDot number={step.number} active />
+              <StepDot number={step.number} active={step.active} />
               {i < previewSteps.length - 1 && (
                 <div className="mt-1 h-full w-px bg-white/8" />
               )}
             </div>
             <div className="pb-4 pt-0.5">
-              <p className="text-sm font-bold text-white">{step.title}</p>
+              <p className={`text-sm font-bold ${step.active ? 'text-white' : 'text-white/35'}`}>
+                {step.title}
+              </p>
             </div>
           </div>
         ))}
-
-        <div className="flex gap-3">
-          <StepDot number={3} />
-          <div className="pt-0.5">
-            <p className="text-sm font-semibold text-white/30">…</p>
-          </div>
-        </div>
       </div>
 
       <button
@@ -127,12 +121,9 @@ export function ProjectTrackingPreview({
               </div>
               <div className="mt-1.5 h-full w-px bg-white/8" />
             </div>
-            <div className="pb-6 pt-0.5">
+            <div className="pb-8 pt-0.5">
               <p className="text-base font-bold text-white">{step1Title}</p>
               <p className="mt-1 text-sm leading-relaxed text-white/60">{step1Body}</p>
-              <p className="mt-2 rounded-lg bg-white/[0.04] px-3 py-2 text-xs leading-relaxed text-white/40">
-                {step1Detail}
-              </p>
             </div>
           </div>
 
@@ -144,9 +135,9 @@ export function ProjectTrackingPreview({
               </div>
               <div className="mt-1.5 h-full w-px bg-white/8" />
             </div>
-            <div className="pb-6 pt-0.5">
+            <div className="pb-8 pt-0.5">
               <p className="text-base font-bold text-white">{step2Title}</p>
-              <p className="mt-1 text-sm text-white/50">{step2Intro}</p>
+              <p className="mt-1 text-sm leading-relaxed text-white/50">{step2Intro}</p>
               <ChipCloud chips={actionChips} />
             </div>
           </div>
@@ -160,26 +151,27 @@ export function ProjectTrackingPreview({
             </div>
             <div className="pb-4 pt-0.5">
               <p className="text-base font-bold text-white">{step3Title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-white/50">
+                Selon les informations transmises par le partenaire, vous pouvez suivre :
+              </p>
               <ChipCloud chips={receiveChips} />
             </div>
           </div>
         </div>
 
         {/* Note de prudence */}
-        <div className="mt-5 rounded-xl bg-white/[0.03] px-4 py-3">
+        <div className="mt-10 rounded-xl bg-white/[0.03] px-4 py-3">
           <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/25">
             Note de prudence
           </p>
           <p className="mt-1 text-xs leading-relaxed text-white/40">
-            Le suivi dépend des informations transmises par le partenaire. Ces éléments ne
-            constituent pas une promesse contractuelle.
+            Le suivi dépend des informations disponibles et transmises par le partenaire. Il
+            documente l&apos;avancement du projet, sans garantir un résultat précis.
           </p>
         </div>
 
         <p className="mt-3 pb-2 text-[10px] leading-relaxed text-white/20">
-          {isDonationProject
-            ? 'Pas de reçu fiscal. Pas de rendement. Pas de Crédits Impact.'
-            : 'Pas de rendement financier. Pas de reçu fiscal.'}
+          {step1Disclaimer}
         </p>
       </MobileSheet>
     </section>
