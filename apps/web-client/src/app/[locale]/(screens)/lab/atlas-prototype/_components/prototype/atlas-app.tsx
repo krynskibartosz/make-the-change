@@ -150,19 +150,6 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
     )
   }, [focusedId])
 
-  // Tag focused cell with data-focus="1" via a side effect on each render.
-  React.useEffect(() => {
-    const groups = document.querySelectorAll('svg [role="button"][aria-label]')
-    groups.forEach((g) => {
-      const label = g.getAttribute('aria-label')
-      if (focusedId === 'relations' && label && label.startsWith('Relations')) {
-        g.setAttribute('data-focus', '1')
-      } else {
-        g.removeAttribute('data-focus')
-      }
-    })
-  }, [focusedId, transitioningOut])
-
   return (
     <div
       style={{
@@ -307,6 +294,7 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
               onPick={onPickTerritory}
               glow={CONFIG.glow}
               animate={motionEnabled && CONFIG.animateNodes}
+              focusedId={focusedId}
             />
           </div>
         </div>
@@ -483,6 +471,7 @@ function AtlasScreen() {
             <Level3Screen
               onBack={() => setView('L2')}
               subdomain={activeSubdomain || { name: 'Pollinisation' }}
+              animateNodes={motionEnabled}
             />
           </React.Suspense>
         </div>
@@ -509,6 +498,10 @@ function AtlasPrototypeStyles() {
       @keyframes l3enter {
         from { opacity: 0; transform: scale(0.92); }
         to   { opacity: 1; transform: scale(1); }
+      }
+      svg [role="button"]:focus-visible {
+        outline: 2px solid rgba(244,216,137,0.95);
+        outline-offset: 4px;
       }
     `}</style>
   )

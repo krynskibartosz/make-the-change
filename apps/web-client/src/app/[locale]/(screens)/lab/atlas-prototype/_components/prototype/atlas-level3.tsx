@@ -1,6 +1,7 @@
 // @ts-nocheck
 // biome-ignore-all lint: Isolated Claude Design prototype kept close to the handoff for mobile lab testing.
 import * as React from 'react'
+import { getSvgButtonProps, useDialogFocus } from './atlas-a11y'
 import { AtlasBackground } from './atlas-background'
 
 // Atlas Niveau 3 — Pollinisation
@@ -350,7 +351,7 @@ function L3Icon({ kind, size = 18, color = '#f4ecd8' }) {
 }
 
 // ── Big organic cell ────────────────────────────────────────────
-function PollinisationCarte({ onTapItem, onTapCenter }) {
+function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
   const blobPath = React.useMemo(() => {
     const sub = _perturbedBlob(L3_BLOB_VERTICES, 47, 8, 8)
     return _smoothClosed(sub)
@@ -395,12 +396,14 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
 
       {/* Outer ambient halo */}
       <path d={blobPath} fill="#e6ad44" opacity="0.10" filter="url(#l3-glow)">
-        <animate
-          attributeName="opacity"
-          values="0.08;0.13;0.08"
-          dur="6s"
-          repeatCount="indefinite"
-        />
+        {animate && (
+          <animate
+            attributeName="opacity"
+            values="0.08;0.13;0.08"
+            dur="6s"
+            repeatCount="indefinite"
+          />
+        )}
       </path>
 
       {/* Blob material */}
@@ -468,14 +471,9 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
       {L3_CONTENT.items.map((it) => {
         const [ix, iy] = it.iconXY
         const [tx, ty] = it.titleXY
+        const buttonProps = getSvgButtonProps(it.title.join(' '), () => onTapItem && onTapItem(it))
         return (
-          <g
-            key={it.id}
-            role="button"
-            aria-label={it.title.join(' ')}
-            style={{ cursor: 'pointer' }}
-            onClick={() => onTapItem && onTapItem(it)}
-          >
+          <g key={it.id} {...buttonProps} style={{ cursor: 'pointer' }}>
             {/* invisible enlarged tap target */}
             <rect x={ix - 50} y={iy - 28} width="100" height="100" fill="transparent" />
             {/* icon backplate */}
@@ -533,12 +531,11 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
 
       {/* ─── BioDex (right side) ─── */}
       <g
-        role="button"
-        aria-label="Espèces BioDex liées"
+        {...getSvgButtonProps(
+          'Espèces BioDex liées',
+          () => onTapItem && onTapItem({ id: 'biodex', type: 'biodex', title: ['Espèces BioDex'] }),
+        )}
         style={{ cursor: 'pointer' }}
-        onClick={() =>
-          onTapItem && onTapItem({ id: 'biodex', type: 'biodex', title: ['Espèces BioDex'] })
-        }
       >
         <text
           x={L3_CONTENT.biodex.labelXY[0]}
@@ -629,13 +626,17 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
         {L3_CONTENT.toile.nodes.map((node, i) => (
           <g
             key={node.id}
-            role="button"
-            aria-label={`Nœud ${node.name}`}
+            {...getSvgButtonProps(
+              `Nœud ${node.name}`,
+              () =>
+                onTapItem &&
+                onTapItem({
+                  id: 'toile-' + node.id,
+                  type: 'toile',
+                  title: [`Nœud "${node.name}"`],
+                }),
+            )}
             style={{ cursor: 'pointer' }}
-            onClick={() =>
-              onTapItem &&
-              onTapItem({ id: 'toile-' + node.id, type: 'toile', title: [`Nœud "${node.name}"`] })
-            }
           >
             <circle
               cx={node.x}
@@ -698,10 +699,11 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
 
       {/* ─── Central Parcours Guidé (last, on top) ─── */}
       <g
-        role="button"
-        aria-label="Parcours guidé : Le rôle des pollinisateurs"
+        {...getSvgButtonProps(
+          'Parcours guidé : Le rôle des pollinisateurs',
+          () => onTapCenter && onTapCenter(),
+        )}
         style={{ cursor: 'pointer' }}
-        onClick={() => onTapCenter && onTapCenter()}
       >
         {/* halo */}
         <circle
@@ -712,12 +714,14 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
           opacity="0.18"
           filter="url(#l3-strong-glow)"
         >
-          <animate
-            attributeName="opacity"
-            values="0.16;0.28;0.16"
-            dur="4s"
-            repeatCount="indefinite"
-          />
+          {animate && (
+            <animate
+              attributeName="opacity"
+              values="0.16;0.28;0.16"
+              dur="4s"
+              repeatCount="indefinite"
+            />
+          )}
         </circle>
         {/* hex badge */}
         <g transform="translate(190 252)">
@@ -779,6 +783,7 @@ function PollinisationCarte({ onTapItem, onTapCenter }) {
 // ── Small "preview" sheet ───────────────────────────────────────
 function PreviewSheet({ item, onClose }) {
   const open = !!item
+  const dialogRef = useDialogFocus(open, onClose)
   const [last, setLast] = React.useState(item)
   React.useEffect(() => {
     if (item) setLast(item)
@@ -812,6 +817,12 @@ function PreviewSheet({ item, onClose }) {
         }}
       />
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!open}
+        aria-labelledby="atlas-preview-title"
+        tabIndex={-1}
         style={{
           position: 'absolute',
           left: 0,
@@ -856,6 +867,7 @@ function PreviewSheet({ item, onClose }) {
               {meta.label}
             </div>
             <div
+              id="atlas-preview-title"
               style={{
                 fontFamily: 'var(--atlas-prototype-serif), serif',
                 fontSize: 24,
@@ -912,7 +924,11 @@ function PreviewSheet({ item, onClose }) {
 }
 
 // ── Level 3 screen ──────────────────────────────────────────────
-export function Level3Screen({ onBack, subdomain = { name: 'Pollinisation' } }) {
+export function Level3Screen({
+  onBack,
+  subdomain = { name: 'Pollinisation' },
+  animateNodes = true,
+}) {
   const [preview, setPreview] = React.useState(null)
 
   const startGuide = () =>
@@ -1111,7 +1127,11 @@ export function Level3Screen({ onBack, subdomain = { name: 'Pollinisation' } }) 
         {/* Big organic cell */}
         <div style={{ padding: '4px 8px 0', width: '100%' }}>
           <div style={{ width: '100%', aspectRatio: '380 / 540' }}>
-            <PollinisationCarte onTapItem={(it) => setPreview(it)} onTapCenter={startGuide} />
+            <PollinisationCarte
+              onTapItem={(it) => setPreview(it)}
+              onTapCenter={startGuide}
+              animate={animateNodes}
+            />
           </div>
         </div>
 

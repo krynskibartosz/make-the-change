@@ -6,6 +6,7 @@ import { MobileSheet } from '@/components/ui/mobile-sheet'
 import { Link } from '@/i18n/navigation'
 import { getLearningCourseById, getLearningPathById } from '@/lib/learning/catalog'
 import type { LearningProgress } from '@/lib/learning/schema'
+import { getLearningCoursePlayHref } from '@/lib/learning/selectors'
 import { cn } from '@/lib/utils'
 
 type AtlasCourseSheetProps = {
@@ -41,11 +42,8 @@ export function AtlasCourseSheet({
     )
     const isModuleCompleted = moduleCompletedCount === moduleContent.courseIds.length
 
-    // Find first uncompleted course to continue
-    const firstUncompletedId = moduleContent.courseIds.find((id) => !completedCourseIds.has(id))
-    const ctaHref = firstUncompletedId
-      ? `/learn/courses/${firstUncompletedId}`
-      : `/learn/courses/${moduleContent.courseIds[0] || ''}`
+    // The CTA for the entire module points directly to the Duolingo Academy map view
+    const ctaHref = '/academy'
     const ctaText = isModuleCompleted
       ? 'Revoir le module'
       : moduleCompletedCount > 0
@@ -96,10 +94,14 @@ export function AtlasCourseSheet({
               const isCompleted = completedCourseIds.has(courseId)
               const resolvedCourse = getLearningCourseById(courseId)
               const courseTitle = resolvedCourse?.title || courseId.replace('academy-', '').replace(/-/g, ' ')
+              const targetHref = resolvedCourse 
+                ? getLearningCoursePlayHref(resolvedCourse, '/learn/atlas') 
+                : `/learn/courses/${courseId}`
+              
               return (
                 <Link
                   key={courseId}
-                  href={`/learn/courses/${courseId}`}
+                  href={targetHref}
                   onClick={onClose}
                   className="group flex items-center justify-between py-2.5 text-xs text-white/60 transition-colors hover:text-white"
                 >
@@ -183,7 +185,7 @@ export function AtlasCourseSheet({
 
       <div className="mt-8 pb-4">
         <Link
-          href={`/learn/courses/${courseContent.id}`}
+          href={getLearningCoursePlayHref(courseContent, '/learn/atlas')}
           onClick={onClose}
           className="flex w-full items-center justify-center gap-2 rounded-full py-4 text-[0.92rem] font-bold text-[#111] shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-transform active:scale-95"
           style={{ backgroundColor: territoryColor }}

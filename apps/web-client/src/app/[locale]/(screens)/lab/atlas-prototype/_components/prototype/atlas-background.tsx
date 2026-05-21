@@ -1,11 +1,12 @@
-// @ts-nocheck
-// biome-ignore-all lint: Isolated Claude Design prototype kept close to the handoff for mobile lab testing.
-import * as React from 'react'
-
 // Image-based atlas backdrop. Full-bleed organic scene + golden dust overlay,
 // masked so the title area at top stays calm and the dust only blooms below.
 
-export function AtlasBackground({ dust = 0.28, vignette = 0.55 }) {
+type AtlasBackgroundProps = {
+  dust?: number
+  vignette?: number
+}
+
+export function AtlasBackground({ dust = 0.28, vignette = 0.55 }: AtlasBackgroundProps) {
   // Push the dust to start much lower so the title area breathes
   const dustMask =
     'linear-gradient(to bottom, transparent 0%, transparent 26%, rgba(0,0,0,0.4) 38%, black 50%, black 88%, rgba(0,0,0,0.7) 100%)'

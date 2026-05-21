@@ -1,6 +1,7 @@
 // @ts-nocheck
 // biome-ignore-all lint: Isolated Claude Design prototype kept close to the handoff for mobile lab testing.
 import * as React from 'react'
+import { getSvgButtonProps } from './atlas-a11y'
 import { AtlasBackground } from './atlas-background'
 
 // Atlas Niveau 2 — Relations du vivant
@@ -445,11 +446,14 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
         const [px, py] = c.progXY
         const [done, total] = c.progress
         const ratio = total ? done / total : 0
+        const buttonProps = getSvgButtonProps(
+          c.name + (c.name2 ? ' ' + c.name2 : ''),
+          () => onPick && onPick(c),
+        )
         return (
           <g
             key={c.id}
-            role="button"
-            aria-label={c.name + (c.name2 ? ' ' + c.name2 : '')}
+            {...buttonProps}
             style={{
               cursor: 'pointer',
               transition: 'transform 220ms cubic-bezier(.2,.7,.2,1)',
@@ -459,7 +463,6 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
             onPointerDown={() => setPressed(c.id)}
             onPointerUp={() => setPressed(null)}
             onPointerLeave={() => setPressed(null)}
-            onClick={() => onPick && onPick(c)}
           >
             {/* outer halo */}
             <path d={d} fill={c.color} opacity={0.1 * glow} filter="url(#l2CellGlow)">

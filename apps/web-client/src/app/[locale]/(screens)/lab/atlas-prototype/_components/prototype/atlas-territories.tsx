@@ -1,6 +1,7 @@
 // @ts-nocheck
 // biome-ignore-all lint: Isolated Claude Design prototype kept close to the handoff for mobile lab testing.
 import * as React from 'react'
+import { getSvgButtonProps } from './atlas-a11y'
 
 // Voronoi-style 6 territories with SHARED vertices and SHARED edges.
 // Two adjacent cells reuse the same perturbed edge so there are no gaps.
@@ -416,7 +417,7 @@ export function TerritoryIcon({ kind, size = 28, color = '#f4ecd8' }) {
 }
 
 // ── Main carte ─────────────────────────────────────────────────
-export function VoronoiAtlas({ onPick, glow = 1, animate = true }) {
+export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = null }) {
   const [pressed, setPressed] = React.useState(null)
 
   const { cellPaths, cellPts, envelopePath } = React.useMemo(() => {
@@ -482,11 +483,12 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true }) {
         const rw = bbox.w + pad * 2,
           rh = bbox.h + pad * 2
         const isPressed = pressed === t.id
+        const buttonProps = getSvgButtonProps(t.label, () => onPick && onPick(t))
         return (
           <g
             key={t.id}
-            role="button"
-            aria-label={t.label}
+            {...buttonProps}
+            data-focus={focusedId === t.id ? '1' : undefined}
             style={{
               cursor: 'pointer',
               transition: 'transform 240ms cubic-bezier(.2,.7,.2,1)',
@@ -496,7 +498,6 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true }) {
             onPointerDown={() => setPressed(t.id)}
             onPointerUp={() => setPressed(null)}
             onPointerLeave={() => setPressed(null)}
-            onClick={() => onPick && onPick(t)}
           >
             {/* Outer ambient halo */}
             <path d={d} fill={t.color} opacity={0.1 * glow} filter="url(#cellGlow)">
