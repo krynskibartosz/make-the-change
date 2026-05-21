@@ -137,10 +137,10 @@ export function FullScreenSlideModal({
             <button
               onClick={handleClose}
               className={cn(
-                'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300',
+                'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300',
                 isHeaderElevated
-                  ? 'bg-transparent active:bg-white/10'
-                  : 'border border-white/[0.06] bg-black/10 backdrop-blur-sm active:bg-black/20',
+                  ? 'border-transparent bg-transparent active:bg-white/10'
+                  : 'border-white/[0.06] bg-black/10 backdrop-blur-sm active:bg-black/20',
               )}
               aria-label="Retour"
             >
