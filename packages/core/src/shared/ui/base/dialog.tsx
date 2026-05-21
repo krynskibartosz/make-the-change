@@ -12,7 +12,7 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const baseOverlay =
-  'fixed inset-0 z-50 bg-black/20 backdrop-blur-sm transition-all duration-300 ' +
+  'fixed inset-0 z-[150] bg-black/20 backdrop-blur-sm transition-all duration-300 ' +
   'dark:bg-black/60 data-[open]:animate-in data-[closed]:animate-out ' +
   'data-[closed]:fade-out-0 data-[open]:fade-in-0'
 
@@ -65,7 +65,7 @@ const DialogContent = forwardRef<
     return (
       <DialogPortal>
         <DialogOverlay />
-        <Dialog.Viewport className="fixed inset-0 z-50">
+        <Dialog.Viewport className="fixed inset-0 z-[150]">
           <Dialog.Popup
             ref={ref}
             className={cn(baseContent, sizeClasses[size], className)}
