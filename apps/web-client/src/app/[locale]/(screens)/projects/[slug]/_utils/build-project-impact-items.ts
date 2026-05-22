@@ -2,6 +2,7 @@ import { formatCompact, formatDecimal } from '@/lib/formatters'
 import { getProjectImpactMetrics, type ProjectImpactMetricsInput } from './project-impact-metrics'
 
 export type ImpactIconKey =
+  | 'hives'
   | 'bees'
   | 'honey'
   | 'flowers'
@@ -33,16 +34,28 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
   if (metrics.kind === 'bees') {
     const items: ProjectImpactItem[] = []
 
+    items.push({
+      id: 'hives',
+      label: 'Ruches accompagnées',
+      value: String(metrics.hivesSupported),
+      group: 'Soutien terrain',
+      iconKey: 'hives',
+      main: true,
+      meaning: "Nombre de ruches directement soutenues par les contributions reçues.",
+      estimate: "Calculé selon un coût de suivi estimé à 1 250 € par ruche accompagnée.",
+      caution: "Ce nombre est une estimation. Le suivi réel dépend du terrain et des pratiques apicoles.",
+    })
+
     if (metrics.bees > 0) {
       items.push({
         id: 'bees',
-        label: 'Abeilles associées',
+        label: 'Abeilles liées aux ruches',
         value: formatCompact(metrics.bees),
-        prefix: '~ Environ',
+        prefix: 'Environ',
         group: 'Biodiversité',
         iconKey: 'bees',
         main: true,
-        meaning: "Nombre d'abeilles dont le territoire de butinage est lié à ce rucher.",
+        meaning: "Estimation du nombre d'abeilles rattachées aux ruches soutenues, selon une hypothèse moyenne par euro contribué.",
         estimate: 'Calculé à raison de 152 abeilles par euro engagé dans le projet.',
         caution:
           "Ce chiffre donne un ordre de grandeur. Il ne signifie pas que chaque abeille est individuellement suivie.",
@@ -52,8 +65,8 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
     if (metrics.honeyKg > 0) {
       items.push({
         id: 'honey',
-        label: 'Récolte potentielle',
-        value: formatDecimal(metrics.honeyKg),
+        label: 'Miel potentiel',
+        value: String(Math.round(metrics.honeyKg)),
         unit: 'kg',
         prefix: "Jusqu'à",
         group: 'Production',
@@ -71,10 +84,10 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         id: 'flowers',
         label: 'Fleurs visitées',
         value: formatCompact(metrics.flowers),
-        prefix: '> Plus de',
+        prefix: 'Plus de',
         group: 'Pollinisation',
         iconKey: 'flowers',
-        main: true,
+        main: false,
         meaning: "Nombre de fleurs visitées estimé, selon le rayon d'action moyen des abeilles.",
         estimate: 'Calculé à 1 154 fleurs par euro engagé.',
         caution:
@@ -88,7 +101,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         label: 'CO₂ associé (est.)',
         value: formatDecimal(metrics.co2Kg),
         unit: 'kg',
-        prefix: '~ Environ',
+        prefix: 'Environ',
         group: 'Environnement',
         iconKey: 'co2',
         main: false,
@@ -110,7 +123,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         id: 'coral',
         label: 'Coraux associés',
         value: formatCompact(metrics.corals),
-        prefix: '~ Environ',
+        prefix: 'Environ',
         group: 'Restauration',
         iconKey: 'coral',
         main: true,
@@ -127,7 +140,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         label: 'Surface récifale',
         value: formatDecimal(metrics.areaM2),
         unit: 'm²',
-        prefix: '~ Environ',
+        prefix: 'Environ',
         group: 'Restauration',
         iconKey: 'area',
         main: true,
@@ -142,7 +155,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         id: 'fish',
         label: 'Refuges marins',
         value: formatCompact(metrics.fishShelter),
-        prefix: '~ Environ',
+        prefix: 'Environ',
         group: 'Biodiversité marine',
         iconKey: 'fish',
         main: true,
@@ -158,7 +171,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         id: 'survival',
         label: 'Survie à 12 mois',
         value: metrics.survivalRate,
-        prefix: '~ Estimé',
+        prefix: 'Estimé',
         group: 'Suivi',
         iconKey: 'survival',
         main: false,
@@ -184,8 +197,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
       iconKey: 'tree',
       main: true,
       meaning: "Nombre d'oliviers dont l'entretien ou le suivi est soutenu par ce projet.",
-      estimate:
-        "Calculé selon la contribution rapportée au coût de suivi par arbre.",
+      estimate: "Calculé selon la contribution rapportée au coût de suivi par arbre.",
       caution:
         "Ce n'est pas un achat d'oliviers. Le soutien couvre l'entretien et la valorisation.",
     })
@@ -214,12 +226,11 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
       label: 'CO₂ séquestré (est.)',
       value: formatDecimal(metrics.co2SequesteredKg),
       unit: 'kg',
-      prefix: '~ Environ',
+      prefix: 'Environ',
       group: 'Environnement',
       iconKey: 'co2',
       main: false,
-      meaning:
-        'CO₂ potentiellement séquestré par ces oliviers sur leur cycle de croissance.',
+      meaning: 'CO₂ potentiellement séquestré par ces oliviers sur leur cycle de croissance.',
       estimate: 'Calculé à 10 kg de CO₂ par olivier soutenu.',
       caution:
         "Ce n'est pas une compensation carbone certifiée. La biodiversité reste variable et dépend du terrain.",

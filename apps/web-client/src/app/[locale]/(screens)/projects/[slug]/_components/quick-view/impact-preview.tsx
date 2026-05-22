@@ -12,12 +12,15 @@ import {
   Grid2x2,
   TreePine,
   Waves,
-  type LucideIcon,
 } from 'lucide-react'
 import type { ImpactIconKey, ProjectImpactItem } from '../../_utils/build-project-impact-items'
+import { HiveSilhouette } from '@/lib/impact-icons'
 import { MobileSheet } from '../shared/mobile-sheet'
 
-const ICON_MAP: Record<ImpactIconKey, LucideIcon> = {
+type IconComponent = React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+
+const ICON_MAP: Record<ImpactIconKey, IconComponent> = {
+  hives: HiveSilhouette,
   bees: Bug,
   honey: Droplet,
   flowers: Flower2,

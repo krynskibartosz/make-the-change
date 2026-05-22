@@ -10,6 +10,7 @@ export type ProjectImpactMetricsInput = {
 
 type BeesImpactMetrics = {
   kind: 'bees'
+  hivesSupported: number
   bees: number
   honeyKg: number
   co2Kg: number
@@ -85,6 +86,7 @@ export function getProjectImpactMetrics({
 
   return {
     kind: 'bees',
+    hivesSupported: Math.max(1, Math.round((projectImpact?.hivesPerEur || 0.0008) * displayAmount)),
     bees: smartRound((projectImpact?.beesPerEur || 152) * displayAmount),
     honeyKg: honeyGrams / 1000,
     co2Kg: co2Grams / 1000,

@@ -7,9 +7,9 @@ export const IMPACT_KIND_COLOR: Record<string, string> = {
   equipment: 'text-amber-300',
 }
 
-export function HiveSilhouette({ className = '' }: { className?: string }) {
+export function HiveSilhouette({ className = '', style }: { className?: string; style?: React.CSSProperties }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} style={style}>
       <path d="M12 2C8.5 2 5.5 5 5.5 9.5H18.5C18.5 5 15.5 2 12 2ZM5 11H19V13.5H5ZM6.5 14.5H17.5V17H6.5ZM8 18H16V20.5H8Z" />
     </svg>
   )

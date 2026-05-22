@@ -39,6 +39,7 @@ export type ProjectImpact = {
   honeyGramsPerEur?: number
   co2GramsPerEur?: number
   flowersPerEur?: number
+  hivesPerEur?: number
   propolisGramsPerEur?: number
   waxGramsPerEur?: number
   pollenGramsPerEur?: number
