@@ -321,7 +321,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         </div>
 
         {/* ── SECTIONS ÉDITORIALES ─────────────────────────────────────────── */}
-        <div className="flex flex-col pb-40">
+        <div className="flex flex-col">
           {normalizedProjects.length === 0 ? (
             <div className="px-6 py-12 text-center text-white/50">
               Aucun projet trouvé pour le moment.
