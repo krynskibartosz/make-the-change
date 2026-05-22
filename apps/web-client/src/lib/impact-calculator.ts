@@ -10,7 +10,7 @@
  * Legacy : Supabase (à remplacer par mocks à terme)
  */
 
-export type ImpactKind = 'beehive' | 'orchard' | 'reef'
+export type ImpactKind = 'beehive' | 'orchard' | 'reef' | 'equipment'
 
 export type ImpactDisplay = {
   value: number
@@ -40,7 +40,7 @@ export function getProjectImpactDisplay(project: {
     return {
       value: 0,
       label: 'Collecte mobile en zone reculée',
-      kind: 'beehive',
+      kind: 'equipment',
     }
   }
 

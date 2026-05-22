@@ -1,5 +1,5 @@
 'use client'
-import { ChevronRight, Leaf, TreePine, Waves } from 'lucide-react'
+import { ChevronRight, TreeDeciduous, Truck, Waves } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
@@ -21,12 +21,22 @@ const IMPACT_ICON_COLOR: Record<ImpactKind, string> = {
   beehive: 'text-amber-300',
   orchard: 'text-emerald-300',
   reef: 'text-sky-300',
+  equipment: 'text-amber-300',
+}
+
+function HiveSilhouette({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 2C8.5 2 5.5 5 5.5 9.5H18.5C18.5 5 15.5 2 12 2ZM5 11H19V13.5H5ZM6.5 14.5H17.5V17H6.5ZM8 18H16V20.5H8Z" />
+    </svg>
+  )
 }
 
 function ImpactIcon({ kind, className }: { kind: ProjectMapImpactKind; className?: string }) {
-  if (kind === 'orchard') return <TreePine className={className} aria-hidden='true' />
+  if (kind === 'orchard') return <TreeDeciduous className={className} aria-hidden='true' />
   if (kind === 'reef') return <Waves className={className} aria-hidden='true' />
-  return <Leaf className={className} aria-hidden='true' />
+  if (kind === 'equipment') return <Truck className={className} aria-hidden='true' />
+  return <HiveSilhouette className={className} />
 }
 
 

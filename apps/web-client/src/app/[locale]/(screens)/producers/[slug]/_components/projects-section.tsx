@@ -1,6 +1,6 @@
 'use client'
 
-import { Info, Leaf, MapPin, TreePine, Waves } from 'lucide-react'
+import { Info, Leaf, MapPin, TreeDeciduous, Truck, Waves } from 'lucide-react'
 import { useState } from 'react'
 import { useLocale } from 'next-intl'
 import type { ImpactSummary } from '@/app/[locale]/(site)/producers/_features/mock-producers'
@@ -20,10 +20,19 @@ type ProjectsSectionProps = {
   producerName?: string
 }
 
-const IMPACT_ICONS: Record<string, typeof Leaf> = {
-  beehive: Leaf,
-  orchard: TreePine,
-  reef: Waves,
+function HiveSilhouette({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 2C8.5 2 5.5 5 5.5 9.5H18.5C18.5 5 15.5 2 12 2ZM5 11H19V13.5H5ZM6.5 14.5H17.5V17H6.5ZM8 18H16V20.5H8Z" />
+    </svg>
+  )
+}
+
+function ImpactKindIcon({ kind, className }: { kind: string; className?: string }) {
+  if (kind === 'orchard') return <TreeDeciduous className={className} />
+  if (kind === 'reef') return <Waves className={className} />
+  if (kind === 'equipment') return <Truck className={className} />
+  return <HiveSilhouette className={className} />
 }
 
 function CarouselProjectCard({ project, locale }: { project: ProducerProject; locale: string }) {
@@ -31,7 +40,6 @@ function CarouselProjectCard({ project, locale }: { project: ProducerProject; lo
   const locationDisplay = project.address_country_code
     ? resolveLocationDisplay(project.address_country_code, project.address_city, locale)
     : null
-  const ImpactIcon = impact?.kind ? IMPACT_ICONS[impact.kind] || Leaf : Leaf
 
   return (
     <li className="w-56 shrink-0 snap-start">
@@ -66,7 +74,7 @@ function CarouselProjectCard({ project, locale }: { project: ProducerProject; lo
 
             {impact && impact.value > 0 && (
               <div className="flex items-center gap-1.5">
-                <ImpactIcon className="h-3 w-3 shrink-0 text-white/50" />
+                <ImpactKindIcon kind={impact.kind} className="h-3 w-3 shrink-0 text-white/50" />
                 <p className="text-[13px] font-medium leading-snug text-white/66">
                   <span className="text-white/45">≈</span>{' '}
                   <span className="font-semibold text-white/80">
@@ -88,7 +96,6 @@ function SingleProjectCard({ project, locale }: { project: ProducerProject; loca
   const locationDisplay = project.address_country_code
     ? resolveLocationDisplay(project.address_country_code, project.address_city, locale)
     : null
-  const ImpactIcon = impact?.kind ? IMPACT_ICONS[impact.kind] || Leaf : Leaf
 
   return (
     <div className="mt-4 px-4">
@@ -124,7 +131,7 @@ function SingleProjectCard({ project, locale }: { project: ProducerProject; loca
 
               {impact && impact.value > 0 && (
                 <div className="flex items-center gap-1.5">
-                  <ImpactIcon className="h-3 w-3 shrink-0 text-white/50" />
+                  <ImpactKindIcon kind={impact.kind} className="h-3 w-3 shrink-0 text-white/50" />
                   <p className="text-[13px] font-medium leading-snug text-white/66">
                     <span className="text-white/45">≈</span>{' '}
                     <span className="font-semibold text-white/80">
