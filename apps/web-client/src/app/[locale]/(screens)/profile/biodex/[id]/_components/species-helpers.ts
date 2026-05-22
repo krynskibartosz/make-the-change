@@ -1,7 +1,34 @@
 import type { SpeciesContext } from '@/types/species'
 
-export function getSpeciesHeroImage(_species: SpeciesContext): string {
-  return '/images/biodex/hero-apis-mellifera-unicolor.png'
+const DEFAULT_SPECIES_HERO_IMAGE = '/images/biodex/hero-apis-mellifera-unicolor.png'
+
+const SPECIES_HERO_IMAGES_BY_SCIENTIFIC_NAME: Record<string, string> = {
+  'apis mellifera unicolor': DEFAULT_SPECIES_HERO_IMAGE,
+  'calumma parsonii': '/images/biodex/hero-calumma-parsonii.png',
+  'chaetodon auriga': '/images/biodex/hero-chaetodon-auriga.png',
+  'chelonia mydas': '/images/biodex/hero-chelonia-mydas.png',
+  'chrysiptera cyanea': '/images/biodex/hero-chrysiptera-cyanea.png',
+  'coccinella septempunctata': '/images/biodex/hero-coccinella-septempunctata.png',
+  'corythornis madagascariensis': '/images/biodex/hero-corythornis-madagascariensis.png',
+  'coua caerulea': '/images/biodex/hero-coua-caerulea.png',
+  'dyscophus antongilii': '/images/biodex/hero-dyscophus-antongilii.png',
+  'episyrphus balteatus': '/images/biodex/hero-episyrphus-balteatus.png',
+  'erinaceus europaeus': '/images/biodex/hero-erinaceus-europaeus.png',
+  'furcifer pardalis': '/images/biodex/hero-furcifer-pardalis.png',
+  'hippocampus bargibanti': '/images/biodex/hero-hippocampus-bargibanti.png',
+  'olea europaea': '/images/biodex/hero-olea-europaea.png',
+  'osmia bicornis': '/images/biodex/hero-osmia-bicornis.png',
+  'phelsuma laticauda': '/images/biodex/hero-phelsuma-laticauda.png',
+  'upupa epops': '/images/biodex/hero-upupa-epops.png',
+  'varecia variegata': '/images/biodex/hero-varecia-variegata.png',
+}
+
+export function getSpeciesHeroImage(species: SpeciesContext): string {
+  const scientificName = species.scientific_name?.trim().toLowerCase()
+
+  if (!scientificName) return DEFAULT_SPECIES_HERO_IMAGE
+
+  return SPECIES_HERO_IMAGES_BY_SCIENTIFIC_NAME[scientificName] ?? DEFAULT_SPECIES_HERO_IMAGE
 }
 
 export function getSpeciesEcologicalRole(species: SpeciesContext): string {
