@@ -130,7 +130,7 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
       <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
         Indicateurs du projet
       </p>
-      <div className="grid grid-cols-3 gap-2.5">
+      <div className={`grid gap-2.5 ${mainItems.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
         {mainItems.map((item) => (
           <MiniCard key={item.id} item={item} accentColor={accentColor} />
         ))}

@@ -121,13 +121,13 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
     if (metrics.corals > 0) {
       items.push({
         id: 'coral',
-        label: 'Coraux associés',
+        label: 'Coraux transplantés',
         value: formatCompact(metrics.corals),
         prefix: 'Environ',
         group: 'Restauration',
         iconKey: 'coral',
         main: true,
-        meaning: "Nombre de fragments de corail associés à l'opération de restauration.",
+        meaning: "Nombre de fragments de corail physiquement transplantés dans le cadre de l'opération de restauration.",
         estimate: "Calculé selon les options de don ou au ratio d'un fragment pour 30 €.",
         caution:
           "Ce n'est pas une promesse de survie. La survie à 12 mois est estimée entre 60 et 85 %.",
@@ -150,22 +150,6 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
       })
     }
 
-    if (metrics.fishShelter > 0) {
-      items.push({
-        id: 'fish',
-        label: 'Refuges marins',
-        value: formatCompact(metrics.fishShelter),
-        prefix: 'Environ',
-        group: 'Biodiversité marine',
-        iconKey: 'fish',
-        main: true,
-        meaning: 'Nombre de refuges potentiels créés pour la faune marine locale.',
-        estimate: "Estimé selon le nombre de fragments et la capacité habituelle d'hébergement.",
-        caution:
-          'La biodiversité marine est variable. Ce chiffre est une estimation pédagogique.',
-      })
-    }
-
     if (metrics.survivalRate) {
       items.push({
         id: 'survival',
@@ -174,11 +158,27 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         prefix: 'Estimé',
         group: 'Suivi',
         iconKey: 'survival',
-        main: false,
+        main: true,
         meaning: "Taux de survie des fragments observé sur les projets de restauration similaires.",
         estimate: "Basé sur les données terrain de l'opérateur.",
         caution:
           "Ce taux peut varier selon les conditions océaniques. Il ne constitue pas une garantie.",
+      })
+    }
+
+    if (metrics.fishShelter > 0) {
+      items.push({
+        id: 'fish',
+        label: 'Refuges marins',
+        value: formatCompact(metrics.fishShelter),
+        prefix: 'Environ',
+        group: 'Biodiversité marine',
+        iconKey: 'fish',
+        main: false,
+        meaning: 'Nombre de refuges potentiels créés pour la faune marine locale.',
+        estimate: "Estimé selon le nombre de fragments et la capacité habituelle d'hébergement.",
+        caution:
+          'La biodiversité marine est variable. Ce chiffre est une estimation pédagogique.',
       })
     }
 
@@ -207,7 +207,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
     items.push({
       id: 'oil',
       label: 'Huile estimée',
-      value: formatDecimal(metrics.oilGeneratedLiters),
+      value: String(Math.round(metrics.oilGeneratedLiters)),
       unit: 'L',
       prefix: "Jusqu'à",
       group: 'Production',
