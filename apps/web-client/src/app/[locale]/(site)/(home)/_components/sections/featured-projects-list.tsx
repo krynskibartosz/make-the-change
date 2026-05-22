@@ -5,10 +5,8 @@ import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { resolveLocationDisplay } from '@/lib/location'
-import {
-  formatEcologicalImpact,
-  ProjectThumbnailCard,
-} from '@/app/[locale]/(site)/_features/project-thumbnail-card'
+import { getProjectImpactDisplay } from '@/lib/impact-calculator'
+import { ProjectThumbnailCard } from '@/app/[locale]/(site)/_features/project-thumbnail-card'
 
 type FeaturedProject = {
   id: string
@@ -44,7 +42,8 @@ export function FeaturedProjectsList({ projects, viewAllLabel }: FeaturedProject
       {projects.map((project, index) => {
         const title = (project.name_default || 'Projet').replace(' 2024', '')
         const imageUrl = sanitizeImageUrl(project.hero_image_url) ?? null
-        const impactLabel = formatEcologicalImpact(project.current_funding, project.type)
+        const impact = getProjectImpactDisplay({ current_funding: project.current_funding, type: project.type ?? null })
+        const impactLabel = impact.value > 0 ? impact.label : undefined
         const locationDisplay = resolveLocationDisplay(
           project.address_country_code,
           project.address_city,

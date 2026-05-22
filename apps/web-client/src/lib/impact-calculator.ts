@@ -36,6 +36,14 @@ export function getProjectImpactDisplay(project: {
   const funding = Number.isFinite(project.current_funding) ? project.current_funding || 0 : 0
   const projectType = project.type || 'beehive'
 
+  if (projectType === 'equipment') {
+    return {
+      value: 0,
+      label: 'Collecte mobile en zone reculée',
+      kind: 'beehive',
+    }
+  }
+
   if (projectType === 'orchard' || projectType === 'olive_tree') {
     return {
       value: Math.round(funding / OLIVE_PRICE_EUR),
@@ -72,8 +80,8 @@ export function getProducerAggregatedImpact(
 ): AggregatedImpactStat[] {
   const stats: AggregatedImpactStat[] = []
 
-  const beesTotal = projects.reduce((sum, p) => {
-    if (p.type === 'beehive') return sum + Math.round((p.current_funding ?? 0) * BEES_PER_EUR)
+  const hivesTotal = projects.reduce((sum, p) => {
+    if (p.type === 'beehive') return sum + Math.round((p.current_funding ?? 0) / BEEHIVE_REFERENCE_VALUE_EUR)
     return sum
   }, 0)
 
@@ -91,14 +99,14 @@ export function getProducerAggregatedImpact(
     return sum
   }, 0)
 
-  if (beesTotal > 0) {
-    stats.push({ value: beesTotal, label: 'abeilles associées', kind: 'beehive' })
+  if (hivesTotal > 0) {
+    stats.push({ value: hivesTotal, label: 'ruches accompagnées', kind: 'beehive' })
   }
   if (oliviersTotal > 0) {
-    stats.push({ value: oliviersTotal, label: 'oliviers soutenus', kind: 'orchard' })
+    stats.push({ value: oliviersTotal, label: 'oliviers accompagnés', kind: 'orchard' })
   }
   if (corauxTotal > 0) {
-    stats.push({ value: corauxTotal, label: 'fragments coralliens associés', kind: 'reef' })
+    stats.push({ value: corauxTotal, label: 'fragments coralliens implantés', kind: 'reef' })
   }
 
   return stats

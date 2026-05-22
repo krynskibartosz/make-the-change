@@ -51,21 +51,21 @@ describe('project map data', () => {
       projectType: 'beehive',
       slug: 'bee-sanctuary',
       unitLabel: 'bee',
-      impactValue: 50000,
-      impactLabel: 'abeilles associées',
+      impactValue: 1,
+      impactLabel: 'ruches accompagnées',
     })
   })
 
   it('uses project type to compute compact map impact labels', () => {
     expect(getProjectImpactDisplay({ current_funding: 300, type: 'orchard' })).toEqual({
       value: 2,
-      label: 'oliviers soutenus',
+      label: 'oliviers accompagnés',
       kind: 'orchard',
     })
 
     expect(getProjectImpactDisplay({ current_funding: 90, type: 'coral' })).toEqual({
       value: 3,
-      label: 'fragments coralliens associés',
+      label: 'fragments coralliens implantés',
       kind: 'reef',
     })
 

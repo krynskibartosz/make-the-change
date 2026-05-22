@@ -106,22 +106,15 @@ export function getProjectImpactDisplay(project: {
   current_funding: number | null
   type: string | null
 }): ProjectMapImpactDisplay {
-  if (project.type === 'equipment') {
-    return {
-      value: 0,
-      label: 'Collecte mobile en zone reculée',
-      kind: 'beehive',
-    }
-  }
-
   const base = getImpactFromLib(project)
   const funding = Number.isFinite(project.current_funding) ? project.current_funding || 0 : 0
 
-  return {
-    value: base.value,
-    label: funding > 0 ? base.label : 'Collecte en cours de démarrage',
-    kind: base.kind,
+  // Equipment and zero-funding projects get a qualitative label, no number
+  if (base.value === 0 && project.type !== 'equipment') {
+    return { value: 0, label: 'Collecte en cours de démarrage', kind: base.kind }
   }
+
+  return { value: base.value, label: base.label, kind: base.kind }
 }
 
 export function getProjectLocation(project: {

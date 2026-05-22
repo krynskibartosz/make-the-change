@@ -12,35 +12,6 @@ type ProjectThumbnailCardProps = {
   type?: string | null
 }
 
-export function formatEcologicalImpact(
-  currentFunding: number | null,
-  type: string | null,
-): string | undefined {
-  if (!currentFunding || currentFunding <= 0 || !type) return undefined
-
-  switch (type) {
-    case 'beehive': {
-      const bees = Math.floor(currentFunding / 390) * 15000
-      if (bees <= 0) return undefined
-      return bees >= 1000
-        ? `${Math.round(bees / 1000)}k abeilles soutenues`
-        : `${bees} abeilles soutenues`
-    }
-    case 'olive_tree': {
-      const trees = Math.floor(currentFunding / 50)
-      if (trees <= 0) return undefined
-      return `${trees} oliviers soutenus`
-    }
-    case 'coral': {
-      const corals = Math.floor(currentFunding / 18)
-      if (corals <= 0) return undefined
-      return `${corals} coraux plantés`
-    }
-    default:
-      return undefined
-  }
-}
-
 export function ProjectThumbnailCard({
   slug,
   title,
