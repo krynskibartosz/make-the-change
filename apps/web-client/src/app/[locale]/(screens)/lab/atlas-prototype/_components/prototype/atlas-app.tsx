@@ -4,6 +4,7 @@
 
 import * as React from 'react'
 import { AtlasBackground } from './atlas-background'
+import { useAtlasViewportProfile } from './atlas-responsive'
 import { VoronoiAtlas } from './atlas-territories'
 
 const loadLevel2Screen = () => import('./atlas-level2')
@@ -125,6 +126,7 @@ function Toast({ text }) {
 }
 
 function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnabled }) {
+  const viewport = useAtlasViewportProfile()
   const [search, setSearch] = React.useState(false)
   const [guide, setGuide] = React.useState(false)
   const [toast, setToast] = React.useState('')
@@ -174,7 +176,9 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
           zIndex: 1,
           display: 'flex',
           flexDirection: 'column',
-          padding: '58px 0 34px',
+          padding: viewport.isShort
+            ? 'calc(env(safe-area-inset-top, 0px) + 30px) 0 calc(env(safe-area-inset-bottom, 0px) + 14px)'
+            : 'calc(env(safe-area-inset-top, 0px) + 52px) 0 calc(env(safe-area-inset-bottom, 0px) + 24px)',
         }}
       >
         {/* Header */}
@@ -224,7 +228,7 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
                   margin: '2px 0 0',
                   fontFamily: 'var(--atlas-prototype-serif), serif',
                   fontWeight: 500,
-                  fontSize: 36,
+                  fontSize: viewport.isNarrow ? 32 : 36,
                   lineHeight: 1.05,
                   color: '#f6efdc',
                   letterSpacing: '-0.3px',
@@ -235,9 +239,11 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
               </h1>
               <div
                 style={{
-                  marginTop: 4,
-                  fontSize: 12,
-                  letterSpacing: 2.4,
+                  margin: '4px auto 0',
+                  maxWidth: viewport.isNarrow ? 220 : 280,
+                  fontSize: viewport.isNarrow ? 10.5 : 12,
+                  lineHeight: 1.55,
+                  letterSpacing: viewport.isNarrow ? 1.8 : 2.4,
                   textTransform: 'uppercase',
                   color: '#a89c7c',
                 }}
@@ -276,7 +282,7 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '0 2px',
+            padding: viewport.isShort ? '2px 8px 0' : '0 4px',
             minHeight: 0,
             overflow: 'hidden',
           }}
@@ -285,7 +291,7 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
             style={{
               aspectRatio: '380 / 600',
               width: '100%',
-              maxWidth: 402,
+              maxWidth: viewport.isShort ? 368 : 402,
               maxHeight: '100%',
               display: 'flex',
             }}
@@ -300,7 +306,12 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
         </div>
 
         {/* CTA */}
-        <div style={{ flex: '0 0 auto', padding: '10px 20px 18px' }}>
+        <div
+          style={{
+            flex: '0 0 auto',
+            padding: viewport.isShort ? '8px 18px 10px' : '10px 20px 14px',
+          }}
+        >
           <button
             onClick={() => {
               void loadAtlasSheets()
@@ -308,13 +319,14 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
             }}
             style={{
               width: '100%',
-              padding: '18px 22px',
+              minHeight: 56,
+              padding: viewport.isNarrow ? '14px 18px' : '16px 22px',
               borderRadius: 9999,
               border: '1px solid rgba(0,0,0,0.06)',
               background: 'linear-gradient(180deg, #f6eedb 0%, #e6dcb9 100%)',
               color: '#1c1a14',
               fontWeight: 600,
-              fontSize: 18,
+              fontSize: viewport.isNarrow ? 16 : 18,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -326,8 +338,8 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
           >
             <span
               style={{
-                width: 30,
-                height: 30,
+                width: viewport.isNarrow ? 28 : 30,
+                height: viewport.isNarrow ? 28 : 30,
                 borderRadius: '50%',
                 border: '1.5px solid #1c1a14',
                 display: 'grid',

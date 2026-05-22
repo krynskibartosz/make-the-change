@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { getSvgButtonProps, useDialogFocus } from './atlas-a11y'
 import { AtlasBackground } from './atlas-background'
+import { useAtlasViewportProfile } from './atlas-responsive'
 
 // Atlas Niveau 3 — Pollinisation
 // Single large organic cell containing the parcours guidé + cours libres + projet
@@ -105,8 +106,8 @@ const L3_CONTENT = {
       icon: 'moon',
       iconColor: '#c9a4ff',
       title: ['La pollinisation', 'de nuit'],
-      iconXY: [85, 235],
-      titleXY: [85, 295],
+      iconXY: [78, 235],
+      titleXY: [72, 294],
     },
     {
       id: 'course-bees',
@@ -116,8 +117,8 @@ const L3_CONTENT = {
       icon: 'bee',
       iconColor: '#6ad9c5',
       title: ['Abeilles sauvages', 'vs domestiques'],
-      iconXY: [298, 235],
-      titleXY: [298, 295],
+      iconXY: [304, 235],
+      titleXY: [308, 294],
     },
     {
       id: 'project',
@@ -133,16 +134,16 @@ const L3_CONTENT = {
   ],
   biodex: {
     label: 'ESPÈCES BIODEX LIÉES',
-    labelXY: [298, 348],
+    labelXY: [300, 356],
     species: [
       { id: 'bee', name: 'Abeille', color: '#e6ad44', dark: '#3a2a08' },
       { id: 'bumble', name: 'Bourdon', color: '#d97a3a', dark: '#3a1f08' },
       { id: 'butterfly', name: 'Papillon', color: '#4ebaa9', dark: '#0e3a36' },
     ],
-    speciesY: 378,
-    speciesXs: [258, 298, 338],
-    nameY: 410,
-    moreXY: [298, 432],
+    speciesY: 388,
+    speciesXs: [260, 300, 340],
+    nameY: 418,
+    moreXY: [300, 438],
   },
   toile: {
     label: 'TOILE VIVANTE',
@@ -502,7 +503,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
               textAnchor="middle"
               fill={it.labelColor}
               fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-              fontSize="9.5"
+              fontSize="9"
               fontWeight="700"
               letterSpacing="1.6"
               style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.2px' }}
@@ -518,7 +519,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
                 textAnchor="middle"
                 fill="#f6efdc"
                 fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-                fontSize="12.5"
+                fontSize={it.id === 'course-flowers' ? '12.5' : '11.6'}
                 fontWeight="500"
                 style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.6px' }}
               >
@@ -543,7 +544,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#e6ad44"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="9.5"
+          fontSize="9"
           fontWeight="700"
           letterSpacing="1.6"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.2px' }}
@@ -579,28 +580,28 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
                   />
                 </div>
               </foreignObject>
-              <text
-                x={cx}
-                y={L3_CONTENT.biodex.nameY}
-                textAnchor="middle"
-                fill="#dbd2bb"
-                fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-                fontSize="11"
-                fontWeight="500"
-                style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.4px' }}
-              >
-                {sp.name}
-              </text>
             </g>
           )
         })}
+        <text
+          x={L3_CONTENT.biodex.labelXY[0]}
+          y={L3_CONTENT.biodex.nameY}
+          textAnchor="middle"
+          fill="#dbd2bb"
+          fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
+          fontSize="9.8"
+          fontWeight="500"
+          style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.4px' }}
+        >
+          Abeille · Bourdon · Papillon
+        </text>
         <text
           x={L3_CONTENT.biodex.moreXY[0]}
           y={L3_CONTENT.biodex.moreXY[1]}
           textAnchor="middle"
           fill="#f0c460"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="10.5"
+          fontSize="10"
           fontWeight="600"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.4px' }}
         >
@@ -743,7 +744,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#f0c460"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="10"
+          fontSize="9.2"
           fontWeight="700"
           letterSpacing="2"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.4px' }}
@@ -757,7 +758,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#f6efdc"
           fontFamily="'Cormorant Garamond', serif"
-          fontSize="20"
+          fontSize="18.5"
           fontWeight="500"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '3px' }}
         >
@@ -769,7 +770,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#f6efdc"
           fontFamily="'Cormorant Garamond', serif"
-          fontSize="20"
+          fontSize="18.5"
           fontWeight="500"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '3px' }}
         >
@@ -929,7 +930,10 @@ export function Level3Screen({
   subdomain = { name: 'Pollinisation' },
   animateNodes = true,
 }) {
+  const viewport = useAtlasViewportProfile()
   const [preview, setPreview] = React.useState(null)
+  const navButtonSize = viewport.isNarrow ? 38 : 42
+  const progressRingSize = viewport.isCompact ? 34 : 42
 
   const startGuide = () =>
     setPreview({
@@ -957,8 +961,10 @@ export function Level3Screen({
           zIndex: 1,
           overflowY: 'auto',
           overflowX: 'hidden',
-          paddingTop: 46,
-          paddingBottom: 28,
+          paddingTop: viewport.isShort
+            ? 'calc(env(safe-area-inset-top, 0px) + 26px)'
+            : 'calc(env(safe-area-inset-top, 0px) + 40px)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 28px)',
           WebkitOverflowScrolling: 'touch',
         }}
       >
@@ -969,8 +975,8 @@ export function Level3Screen({
               onClick={onBack}
               aria-label="Retour"
               style={{
-                width: 42,
-                height: 42,
+                width: navButtonSize,
+                height: navButtonSize,
                 borderRadius: '50%',
                 background: 'rgba(20,22,24,0.55)',
                 border: '1px solid rgba(255,255,255,0.12)',
@@ -1000,8 +1006,8 @@ export function Level3Screen({
             <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px' }}>
               <div
                 style={{
-                  fontSize: 10.5,
-                  letterSpacing: 2.6,
+                  fontSize: viewport.isNarrow ? 9.5 : 10.5,
+                  letterSpacing: viewport.isNarrow ? 2 : 2.6,
                   textTransform: 'uppercase',
                   color: '#e6ad44',
                   fontWeight: 500,
@@ -1014,7 +1020,7 @@ export function Level3Screen({
                   margin: '1px 0 0',
                   fontFamily: 'var(--atlas-prototype-serif), serif',
                   fontWeight: 500,
-                  fontSize: 30,
+                  fontSize: viewport.isNarrow ? 27 : 30,
                   lineHeight: 1.05,
                   color: '#f6efdc',
                   letterSpacing: '-0.3px',
@@ -1026,8 +1032,8 @@ export function Level3Screen({
               <div
                 style={{
                   margin: '4px auto 0',
-                  maxWidth: 300,
-                  fontSize: 11.5,
+                  maxWidth: viewport.isNarrow ? 250 : 300,
+                  fontSize: viewport.isNarrow ? 11 : 11.5,
                   lineHeight: 1.4,
                   color: '#b9b09a',
                 }}
@@ -1039,8 +1045,8 @@ export function Level3Screen({
               aria-label="Informations"
               onClick={() => setPreview({ type: 'course', title: ['À propos de ce thème'] })}
               style={{
-                width: 42,
-                height: 42,
+                width: navButtonSize,
+                height: navButtonSize,
                 borderRadius: '50%',
                 background: 'rgba(20,22,24,0.55)',
                 border: '1px solid rgba(255,255,255,0.12)',
@@ -1060,21 +1066,28 @@ export function Level3Screen({
         </div>
 
         {/* Progress card — small, floating left under header */}
-        <div style={{ padding: '10px 16px 0' }}>
+        <div
+          style={{
+            padding: viewport.isCompact ? '8px 16px 0' : '10px 16px 0',
+            textAlign: viewport.isCompact ? 'center' : 'left',
+          }}
+        >
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 10,
+              gap: viewport.isCompact ? 8 : 10,
               background: 'rgba(10,12,14,0.72)',
               border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: 16,
-              padding: '8px 14px 8px 8px',
+              borderRadius: viewport.isCompact ? 9999 : 16,
+              padding: viewport.isCompact ? '6px 12px 6px 7px' : '8px 14px 8px 8px',
               boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
             }}
           >
-            <div style={{ position: 'relative', width: 42, height: 42 }}>
-              <svg width="42" height="42" viewBox="0 0 42 42">
+            <div
+              style={{ position: 'relative', width: progressRingSize, height: progressRingSize }}
+            >
+              <svg width={progressRingSize} height={progressRingSize} viewBox="0 0 42 42">
                 <circle
                   cx="21"
                   cy="21"
@@ -1101,19 +1114,33 @@ export function Level3Screen({
                   inset: 0,
                   display: 'grid',
                   placeItems: 'center',
-                  fontSize: 10,
+                  fontSize: viewport.isCompact ? 8.5 : 10,
                   fontWeight: 600,
                   color: '#f6efdc',
                 }}
               >
                 <div style={{ lineHeight: 1 }}>6/18</div>
-                <div style={{ fontSize: 7.5, color: '#9a937f', letterSpacing: 0.3, marginTop: 1 }}>
+                <div
+                  style={{
+                    display: viewport.isCompact ? 'none' : undefined,
+                    fontSize: 7.5,
+                    color: '#9a937f',
+                    letterSpacing: 0.3,
+                    marginTop: 1,
+                  }}
+                >
                   contenus
                 </div>
               </div>
             </div>
-            <div>
-              <div style={{ fontSize: 10.5, color: '#9a937f', lineHeight: 1.2 }}>
+            <div style={{ textAlign: 'left' }}>
+              <div
+                style={{
+                  fontSize: viewport.isCompact ? 10 : 10.5,
+                  color: '#9a937f',
+                  lineHeight: 1.2,
+                }}
+              >
                 Progression de
               </div>
               <div style={{ fontSize: 11.5, color: '#eae3d2', lineHeight: 1.2 }}>ce thème</div>
@@ -1125,8 +1152,16 @@ export function Level3Screen({
         </div>
 
         {/* Big organic cell */}
-        <div style={{ padding: '4px 8px 0', width: '100%' }}>
-          <div style={{ width: '100%', aspectRatio: '380 / 540' }}>
+        <div style={{ padding: viewport.isCompact ? '8px 8px 0' : '4px 8px 0', width: '100%' }}>
+          <div
+            style={{
+              width: '100%',
+              maxWidth: viewport.isCompact ? 400 : 430,
+              height: viewport.isShort ? 'min(calc(100svh - 224px), 500px)' : undefined,
+              aspectRatio: '380 / 540',
+              margin: '0 auto',
+            }}
+          >
             <PollinisationCarte
               onTapItem={(it) => setPreview(it)}
               onTapCenter={startGuide}
@@ -1138,12 +1173,12 @@ export function Level3Screen({
         {/* Legend chips */}
         <div
           style={{
-            padding: '0 12px',
+            padding: viewport.isCompact ? '8px 12px 0' : '0 12px',
             display: 'flex',
             gap: 6,
             flexWrap: 'wrap',
             justifyContent: 'center',
-            fontSize: 10.5,
+            fontSize: viewport.isNarrow ? 10 : 10.5,
           }}
         >
           {[
@@ -1159,7 +1194,7 @@ export function Level3Screen({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
-                padding: '6px 10px',
+                padding: viewport.isNarrow ? '6px 9px' : '6px 10px',
                 border: '1px solid rgba(255,255,255,0.10)',
                 borderRadius: 9999,
                 background: 'rgba(10,12,14,0.55)',
@@ -1173,12 +1208,13 @@ export function Level3Screen({
         </div>
 
         {/* CTA */}
-        <div style={{ padding: '16px 16px 0' }}>
+        <div style={{ padding: viewport.isCompact ? '14px 16px 0' : '16px 16px 0' }}>
           <button
             onClick={startGuide}
             style={{
               width: '100%',
-              padding: '14px 16px',
+              minHeight: 72,
+              padding: viewport.isNarrow ? '12px 14px' : '14px 16px',
               borderRadius: 18,
               border: '1px solid rgba(240,196,96,0.55)',
               background: 'linear-gradient(180deg, rgba(60,42,8,0.55) 0%, rgba(28,18,4,0.55) 100%)',
@@ -1206,10 +1242,24 @@ export function Level3Screen({
               <L3Icon kind="hex" size={22} color="#f0c460" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.2, color: '#f6efdc' }}>
+              <div
+                style={{
+                  fontSize: viewport.isNarrow ? 15 : 16,
+                  fontWeight: 600,
+                  lineHeight: 1.2,
+                  color: '#f6efdc',
+                }}
+              >
                 Commencer le parcours guidé
               </div>
-              <div style={{ fontSize: 12.5, color: '#f0c460', marginTop: 3, lineHeight: 1.2 }}>
+              <div
+                style={{
+                  fontSize: viewport.isNarrow ? 12 : 12.5,
+                  color: '#f0c460',
+                  marginTop: 3,
+                  lineHeight: 1.2,
+                }}
+              >
                 Le rôle des pollinisateurs
               </div>
             </div>
@@ -1231,7 +1281,7 @@ export function Level3Screen({
         </div>
 
         {/* Recommandé */}
-        <div style={{ padding: '18px 16px 4px' }}>
+        <div style={{ padding: viewport.isCompact ? '18px 16px 8px' : '18px 16px 4px' }}>
           <div
             style={{
               display: 'flex',
@@ -1243,7 +1293,7 @@ export function Level3Screen({
             <div
               style={{
                 fontFamily: 'var(--atlas-prototype-serif), serif',
-                fontSize: 20,
+                fontSize: viewport.isNarrow ? 18 : 20,
                 fontWeight: 500,
                 color: '#f6efdc',
               }}
@@ -1268,7 +1318,13 @@ export function Level3Screen({
               <L3Icon kind="chevron" size={12} color="#9a937f" />
             </button>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: viewport.isCompact ? '1fr' : '1fr 1fr',
+              gap: 10,
+            }}
+          >
             <RecoCard
               type="COURS LIBRE"
               typeColor="#4d8be0"

@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { getSvgButtonProps } from './atlas-a11y'
 import { AtlasBackground } from './atlas-background'
+import { useAtlasViewportProfile } from './atlas-responsive'
 
 // Atlas Niveau 2 — Relations du vivant
 // 7 sous-domaines : 6 en hex-flower autour de Chaînes alimentaires.
@@ -670,6 +671,9 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
 
 // ── Full screen ──────────────────────────────────────────────
 export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
+  const viewport = useAtlasViewportProfile()
+  const navButtonSize = viewport.isNarrow ? 38 : 42
+
   return (
     <div
       style={{
@@ -689,7 +693,9 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
           zIndex: 1,
           display: 'flex',
           flexDirection: 'column',
-          padding: '46px 0 14px',
+          padding: viewport.isShort
+            ? 'calc(env(safe-area-inset-top, 0px) + 28px) 0 calc(env(safe-area-inset-bottom, 0px) + 8px)'
+            : 'calc(env(safe-area-inset-top, 0px) + 42px) 0 calc(env(safe-area-inset-bottom, 0px) + 12px)',
         }}
       >
         {/* Header */}
@@ -699,8 +705,8 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
               onClick={onBack}
               aria-label="Retour à l'Atlas"
               style={{
-                width: 42,
-                height: 42,
+                width: navButtonSize,
+                height: navButtonSize,
                 borderRadius: '50%',
                 background: 'rgba(20,22,24,0.55)',
                 border: '1px solid rgba(255,255,255,0.12)',
@@ -731,8 +737,8 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
             <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px 0' }}>
               <div
                 style={{
-                  fontSize: 10.5,
-                  letterSpacing: 2.6,
+                  fontSize: viewport.isNarrow ? 9.5 : 10.5,
+                  letterSpacing: viewport.isNarrow ? 2 : 2.6,
                   textTransform: 'uppercase',
                   color: '#e6ad44',
                   fontWeight: 500,
@@ -745,7 +751,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
                   margin: '1px 0 0',
                   fontFamily: 'var(--atlas-prototype-serif), serif',
                   fontWeight: 500,
-                  fontSize: 26,
+                  fontSize: viewport.isNarrow ? 24 : 26,
                   lineHeight: 1.05,
                   color: '#f6efdc',
                   letterSpacing: '-0.3px',
@@ -757,8 +763,8 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
               <div
                 style={{
                   margin: '2px auto 0',
-                  maxWidth: 290,
-                  fontSize: 11.5,
+                  maxWidth: viewport.isNarrow ? 250 : 290,
+                  fontSize: viewport.isNarrow ? 11 : 11.5,
                   lineHeight: 1.35,
                   color: '#b9b09a',
                 }}
@@ -766,7 +772,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
                 Explore les liens qui unissent les espèces entre elles.
               </div>
             </div>
-            <div style={{ width: 42, height: 42, flex: '0 0 auto' }} />
+            <div style={{ width: navButtonSize, height: navButtonSize, flex: '0 0 auto' }} />
           </div>
         </div>
 
@@ -777,7 +783,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '4px 2px 0',
+            padding: viewport.isShort ? '0 8px' : '4px 4px 0',
             minHeight: 0,
             overflow: 'hidden',
           }}
@@ -786,7 +792,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
             style={{
               aspectRatio: '380 / 570',
               width: '100%',
-              maxWidth: 412,
+              maxWidth: viewport.isShort ? 386 : 412,
               maxHeight: '100%',
               display: 'flex',
             }}
