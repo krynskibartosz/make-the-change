@@ -217,7 +217,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
       prefix: '~ Environ',
       group: 'Environnement',
       iconKey: 'co2',
-      main: true,
+      main: false,
       meaning:
         'CO₂ potentiellement séquestré par ces oliviers sur leur cycle de croissance.',
       estimate: 'Calculé à 10 kg de CO₂ par olivier soutenu.',

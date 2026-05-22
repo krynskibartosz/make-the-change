@@ -33,7 +33,7 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   VU: { label: 'Vulnérable', color: 'text-amber-400/80' },
   NT: { label: 'Quasi menacé', color: 'text-yellow-400/70' },
   LC: { label: 'Préoccupation mineure', color: 'text-emerald-400/70' },
-  DD: { label: 'Statut à documenter', color: 'text-white/35' },
+  DD: { label: 'Données insuffisantes', color: 'text-white/35' },
   EW: { label: 'Éteint à l\'état sauvage', color: 'text-red-500/80' },
   EX: { label: 'Éteint', color: 'text-red-600/80' },
 }
@@ -49,16 +49,17 @@ function isKeySpecies(role: string): boolean {
 
 function cleanRole(role: string): string {
   if (!role) return ''
-  return role
+  const corrected = role
+    .replace(/\bespece\b/gi, 'espèce')
     .replace(/\bcle\b/gi, 'clé')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .toLowerCase()
+  return corrected.charAt(0).toUpperCase() + corrected.slice(1)
 }
 
 function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
   const imageUrl = getSpeciesImageUrl(species)
   const isKey = isKeySpecies(species.role)
   const statusInfo = STATUS_LABEL[species.status?.toUpperCase()] ?? null
-  const roleLabel = cleanRole(species.role)
 
   return (
     <div className="flex gap-3 border-b border-white/[0.06] py-3.5 last:border-0">
@@ -87,9 +88,9 @@ function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
           <p className="mt-0.5 text-[11px] italic text-white/30">{species.scientificName}</p>
         ) : null}
         <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-          {roleLabel && !isKey ? (
+          {!isKey ? (
             <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold text-white/40">
-              {roleLabel.split(' ').slice(0, 3).join(' ')}
+              Espèce associée
             </span>
           ) : null}
           {statusInfo ? (

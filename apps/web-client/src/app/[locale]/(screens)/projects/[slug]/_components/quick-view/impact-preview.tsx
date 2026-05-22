@@ -125,7 +125,7 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
   return (
     <section>
       <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-        Ce que ce projet permet
+        Indicateurs du projet
       </p>
       <div className="grid grid-cols-3 gap-2.5">
         {mainItems.map((item) => (

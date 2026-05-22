@@ -134,7 +134,7 @@ export function ProjectImpactCalculator({
         <>
           <ImpactDisclaimer>
             <div>
-              <h3 className="text-xl font-bold text-white">Ce que ce projet permet de réaliser</h3>
+              <h3 className="text-xl font-bold text-white">Indicateurs du projet</h3>
               <p className="mt-1 text-xs text-white/40">
                 Ces chiffres donnent un ordre de grandeur de l’impact potentiel du projet. Ils sont basés sur des hypothèses documentées et ne garantissent pas un résultat mesuré.
               </p>
