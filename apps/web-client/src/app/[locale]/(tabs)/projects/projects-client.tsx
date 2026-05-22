@@ -155,7 +155,7 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
       href={`/projects/${project.slug}`}
       className="group block text-left active:scale-[0.98] transition-transform duration-200"
     >
-      <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-4 bg-white/5">
+      <div className="relative w-full aspect-[4/3] max-h-[260px] rounded-3xl overflow-hidden mb-3 bg-white/5">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -167,12 +167,12 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
         )}
       </div>
 
-      <div className="flex flex-col gap-1 px-1">
+      <div className="flex flex-col px-1">
         <h3 className="text-[22px] font-black text-white leading-[1.1] tracking-tight text-balance">
           {project.name_default}
         </h3>
 
-        <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-0.5 mb-2">
+        <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-2">
           {locationDisplay ? (
             <>
               <span className="text-[15px] leading-none">{locationDisplay.flag}</span>
@@ -186,7 +186,7 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
           )}
         </div>
 
-        <div className="flex items-center gap-2 mt-1">
+        <div className="flex items-center gap-2 mt-5">
           <div
             className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
           >
@@ -306,18 +306,15 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
       )}
 
       <div
-        className={`w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-40 transition-opacity duration-300 ${isMapView ? 'pointer-events-none opacity-0' : 'opacity-100'
+        className={`w-full min-h-screen bg-[#0B0F15] overflow-x-hidden relative pb-[calc(11rem+env(safe-area-inset-bottom))] transition-opacity duration-300 ${isMapView ? 'pointer-events-none opacity-0' : 'opacity-100'
           }`}
         aria-hidden={isMapView}
       >
-        {/* ── TITRE & DESCRIPTION (scroll avec le contenu) ─────────────────── */}
-        <div className="px-6 pt-8 pb-4">
+        {/* ── TITRE (scroll avec le contenu) ──────────────────────────────── */}
+        <div className="px-6 pt-6 pb-3">
           <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">
             Nos projets
           </h1>
-          <p className="text-white/60 text-[15px] mt-3 font-medium">
-            Choisissez comment agir pour le vivant.
-          </p>
         </div>
 
         {/* ── SECTIONS ÉDITORIALES ─────────────────────────────────────────── */}
@@ -330,7 +327,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
             <>
               {donationProjects.length > 0 && (
                 <section className="px-6">
-                  <div className="mb-6">
+                  <div className="mb-8">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
                       Faire un don
                     </h2>
@@ -338,7 +335,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                       Contribuez directement à une action de terrain. Sans contrepartie — avec un suivi clair du projet.
                     </p>
                   </div>
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-14">
                     {donationProjects.map((project) => (
                       <ProjectCard key={project.id} project={project} locale={locale} />
                     ))}
@@ -347,8 +344,8 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
               )}
 
               {supportProjects.length > 0 && (
-                <section className={`px-6${donationProjects.length > 0 ? ' mt-12' : ''}`}>
-                  <div className="mb-6">
+                <section className={`px-6${donationProjects.length > 0 ? ' mt-20' : ''}`}>
+                  <div className="mb-8">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
                       Soutenir un producteur
                     </h2>
@@ -356,7 +353,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                       Accompagnez un partenaire engagé et sa filière. Votre soutien crée de la valeur sur le terrain.
                     </p>
                   </div>
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-14">
                     {supportProjects.map((project) => (
                       <ProjectCard key={project.id} project={project} locale={locale} />
                     ))}
