@@ -56,6 +56,12 @@ function cleanRole(role: string): string {
   return corrected.charAt(0).toUpperCase() + corrected.slice(1)
 }
 
+function formatCommonName(name: string): string {
+  if (!name) return ''
+  const lower = name.toLowerCase()
+  return lower.charAt(0).toUpperCase() + lower.slice(1)
+}
+
 function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
   const imageUrl = getSpeciesImageUrl(species)
   const isKey = isKeySpecies(species.role)
@@ -67,7 +73,7 @@ function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={`${species.name}, ${isKey ? 'espèce clé liée au projet' : 'espèce associée'}`}
+            alt={`${formatCommonName(species.name)}, ${isKey ? 'espèce clé liée au projet' : 'espèce associée à l\'écosystème'}`}
             className="h-full w-full object-cover"
           />
         ) : (
@@ -77,7 +83,7 @@ function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-bold text-white">{species.name}</p>
+          <p className="text-sm font-bold text-white">{formatCommonName(species.name)}</p>
           {isKey ? (
             <span className="shrink-0 rounded-full bg-lime-300/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-lime-300/80">
               Clé
@@ -87,18 +93,21 @@ function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
         {species.scientificName ? (
           <p className="mt-0.5 text-[11px] italic text-white/30">{species.scientificName}</p>
         ) : null}
-        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-          {!isKey ? (
+        {!isKey ? (
+          <div className="mt-1.5">
             <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold text-white/40">
-              Espèce associée
+              Espèce associée à l&apos;écosystème
             </span>
-          ) : null}
-          {statusInfo ? (
-            <span className={`text-[10px] font-bold uppercase tracking-[0.06em] ${statusInfo.color}`}>
+          </div>
+        ) : null}
+        {statusInfo ? (
+          <p className="mt-1 text-[10px]">
+            <span className="font-medium text-white/25">Statut UICN · </span>
+            <span className={`font-bold uppercase tracking-[0.05em] ${statusInfo.color}`}>
               {statusInfo.label}
             </span>
-          ) : null}
-        </div>
+          </p>
+        ) : null}
       </div>
     </div>
   )
@@ -119,8 +128,8 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
 
   const sectionSubtitle =
     species.length === 1
-      ? "1 espèce pour comprendre l'écosystème du projet"
-      : `${species.length} espèces pour comprendre l'écosystème du projet`
+      ? '1 espèce pour comprendre le vivant associé'
+      : `${species.length} espèces pour comprendre le vivant associé`
 
   const featuredImageUrl = featuredSpecies ? getSpeciesImageUrl(featuredSpecies) : null
   const featuredRole = featuredSpecies ? cleanRole(featuredSpecies.role) : ''
@@ -142,13 +151,13 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
             {featuredImageUrl ? (
               <img
                 src={featuredImageUrl}
-                alt={`${featuredSpecies.name}, espèce clé liée au projet`}
+                alt={`${formatCommonName(featuredSpecies.name)}, espèce clé liée au projet`}
                 className="h-full w-full object-cover"
               />
             ) : null}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-black leading-tight text-white">{featuredSpecies.name}</p>
+            <p className="text-[15px] font-black leading-tight text-white">{formatCommonName(featuredSpecies.name)}</p>
             {featuredRole ? (
               <p className="mt-0.5 text-[13px] text-lime-400/80">{featuredRole}</p>
             ) : null}
@@ -179,7 +188,7 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
                       {imgUrl ? (
                         <img
                           src={imgUrl}
-                          alt={`${sp.name}, espèce associée`}
+                          alt={`${formatCommonName(sp.name)}, espèce associée`}
                           className="h-full w-full object-cover"
                         />
                       ) : (
@@ -187,7 +196,7 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
                       )}
                     </div>
                     <p className="mt-1.5 line-clamp-2 text-center text-[11px] font-semibold leading-snug text-white/55">
-                      {sp.name}
+                      {formatCommonName(sp.name)}
                     </p>
                   </div>
                 )
@@ -216,11 +225,12 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="Espèces liées au projet">
         <p className="mt-1 text-sm text-white/50">
           {species.length === 1
-            ? "1 espèce pour comprendre l'écosystème associé à ce projet."
-            : `${species.length} espèces pour comprendre l'écosystème associé à ce projet.`}
+            ? "1 espèce pour comprendre le vivant associé à ce projet."
+            : `${species.length} espèces pour comprendre le vivant associé à ce projet.`}
         </p>
         <p className="mt-1 text-xs leading-relaxed text-white/35">
-          Leur présence dépend du terrain, des données disponibles et du niveau de documentation.
+          Certaines sont directement liées au projet, d&apos;autres décrivent son écosystème élargi.
+          Elles ne constituent pas une preuve de protection individuelle.
         </p>
 
         <div className="mt-4">
@@ -229,15 +239,15 @@ export function ProjectBiodexSheet({ species, isDonationProject = false }: Proje
           ))}
         </div>
 
-        <p className="mt-6 text-[11px] leading-relaxed text-white/30">
+        <p className="mt-5 pb-1 text-[11px] leading-relaxed text-white/25">
+          Ces espèces aident à comprendre l&apos;écosystème du projet. Leur présence dépend des
+          données disponibles et du périmètre écologique retenu. Statuts de conservation : UICN.
+        </p>
+
+        <p className="mt-2 pb-2 text-[10px] leading-relaxed text-white/20">
           {isDonationProject
             ? 'En faisant un don, certaines espèces peuvent être ajoutées à votre collection BioDex.'
             : 'En soutenant ce projet, certaines espèces peuvent être ajoutées à votre collection BioDex.'}
-        </p>
-
-        <p className="mt-3 pb-2 text-[11px] leading-relaxed text-white/25">
-          Ces espèces aident à comprendre l&apos;écosystème associé au projet. Elles ne constituent
-          pas une preuve de protection individuelle. Statuts de conservation : UICN.
         </p>
       </MobileSheet>
     </>
