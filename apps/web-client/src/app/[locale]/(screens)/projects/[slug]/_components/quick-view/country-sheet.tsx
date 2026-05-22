@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ChevronUp } from 'lucide-react'
 import { Map as MapLibreMap } from '@vis.gl/react-maplibre'
 import { Link } from '@/i18n/navigation'
 import { MobileSheet } from '../shared/mobile-sheet'
@@ -211,9 +212,10 @@ export function ProjectCountrySheet({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="text-xs font-semibold text-white/50 transition-colors hover:text-white/75"
+        className="flex items-center gap-1.5 text-xs font-semibold text-white/50 transition-colors hover:text-white/75"
       >
-        {flag} {countryName}{city ? ` · ${city}` : ''} ›
+        <span>{flag} {countryName}{city ? ` · ${city}` : ''}</span>
+        <ChevronUp className="h-3.5 w-3.5 shrink-0" />
       </button>
 
       <MobileSheet

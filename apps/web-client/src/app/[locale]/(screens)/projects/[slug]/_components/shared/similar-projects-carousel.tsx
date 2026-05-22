@@ -1,10 +1,7 @@
-import { Leaf, TreePine, Waves } from 'lucide-react'
-import {
-  getProjectImpactDisplay,
-  type ProjectMapImpactKind,
-} from '@/app/[locale]/(tabs)/projects/_features/project-map-data'
+import { getProjectImpactDisplay } from '@/app/[locale]/(tabs)/projects/_features/project-map-data'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
+import { ImpactKindIcon, IMPACT_KIND_COLOR } from '@/lib/impact-icons'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
 import type { RelatedProject } from '../../project-detail-data'
@@ -13,18 +10,6 @@ type SimilarProjectsCarouselProps = {
   locale: string
   relatedProjects?: RelatedProject[]
   title?: string
-}
-
-const IMPACT_KIND_STYLES: Record<ProjectMapImpactKind, { icon: string }> = {
-  beehive: {
-    icon: 'text-amber-300',
-  },
-  orchard: {
-    icon: 'text-emerald-300',
-  },
-  reef: {
-    icon: 'text-sky-300',
-  },
 }
 
 type CompactSimilarProjectCardProps = {
@@ -46,7 +31,6 @@ function CompactSimilarProjectCard({
     current_funding: currentFunding,
     type,
   })
-  const impactTheme = IMPACT_KIND_STYLES[impact.kind]
 
   return (
     <Link
@@ -73,13 +57,10 @@ function CompactSimilarProjectCard({
 
         {impact.value > 0 ? (
           <div className="mt-2 flex items-center gap-1.5">
-            {impact.kind === 'orchard' ? (
-              <TreePine className={`h-3.5 w-3.5 shrink-0 ${impactTheme.icon}`} />
-            ) : impact.kind === 'reef' ? (
-              <Waves className={`h-3.5 w-3.5 shrink-0 ${impactTheme.icon}`} />
-            ) : (
-              <Leaf className={`h-3.5 w-3.5 shrink-0 ${impactTheme.icon}`} />
-            )}
+            <ImpactKindIcon
+              kind={impact.kind}
+              className={`h-3.5 w-3.5 shrink-0 ${IMPACT_KIND_COLOR[impact.kind] ?? 'text-amber-300'}`}
+            />
             <p className="truncate text-[12px] font-medium text-white/66">
               <span className="font-black text-white/88 tabular-nums">
                 {formatCompact(impact.value)}
