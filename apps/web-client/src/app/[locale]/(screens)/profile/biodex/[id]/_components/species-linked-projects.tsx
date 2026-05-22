@@ -1,11 +1,8 @@
 'use client'
-import { TreeDeciduous, Truck, Waves } from 'lucide-react'
+import { ImpactKindIcon, IMPACT_KIND_COLOR } from '@/lib/impact-icons'
 import { useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
-import {
-  getProjectImpactDisplay,
-  type ProjectMapImpactKind,
-} from '@/app/[locale]/(tabs)/projects/_features/project-map-data'
+import { getProjectImpactDisplay } from '@/app/[locale]/(tabs)/projects/_features/project-map-data'
 import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { resolveLocationDisplay } from '@/lib/location'
@@ -24,27 +21,6 @@ export type LinkedProject = {
   species: { id: string; name: string; icon: string | null }[] | null
 }
 
-const IMPACT_ICON_COLOR: Record<ProjectMapImpactKind, string> = {
-  beehive: 'text-amber-300',
-  orchard: 'text-emerald-300',
-  reef: 'text-sky-300',
-  equipment: 'text-amber-300',
-}
-
-function HiveSilhouette({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 2C8.5 2 5.5 5 5.5 9.5H18.5C18.5 5 15.5 2 12 2ZM5 11H19V13.5H5ZM6.5 14.5H17.5V17H6.5ZM8 18H16V20.5H8Z" />
-    </svg>
-  )
-}
-
-function ImpactIcon({ kind, className }: { kind: ProjectMapImpactKind; className?: string }) {
-  if (kind === 'orchard') return <TreeDeciduous className={className} aria-hidden='true' />
-  if (kind === 'reef') return <Waves className={className} aria-hidden='true' />
-  if (kind === 'equipment') return <Truck className={className} aria-hidden='true' />
-  return <HiveSilhouette className={className} />
-}
 
 interface SpeciesLinkedProjectsProps {
   projects: LinkedProject[]
@@ -104,9 +80,9 @@ function SingleProjectCard({ project, locale }: { project: LinkedProject; locale
         )}
         <p className='text-sm font-black leading-snug text-white/90'>{name}</p>
         <div className='mt-2 flex items-center gap-1.5'>
-          <ImpactIcon
+          <ImpactKindIcon
             kind={impact.kind}
-            className={`h-3.5 w-3.5 shrink-0 ${IMPACT_ICON_COLOR[impact.kind]}`}
+            className={`h-3.5 w-3.5 shrink-0 ${IMPACT_KIND_COLOR[impact.kind]}`}
           />
           {impact.value > 0 ? (
             <p className='text-xs text-white/60'>
@@ -162,9 +138,9 @@ function ProjectCarousel({ projects, locale }: { projects: LinkedProject[]; loca
               </p>
               {impact.value > 0 ? (
                 <div className='mt-1.5 flex items-center gap-1.5'>
-                  <ImpactIcon
+                  <ImpactKindIcon
                     kind={impact.kind}
-                    className={`h-3 w-3 shrink-0 ${IMPACT_ICON_COLOR[impact.kind]}`}
+                    className={`h-3 w-3 shrink-0 ${IMPACT_KIND_COLOR[impact.kind]}`}
                   />
                   <p className='truncate text-[11px] text-white/55'>
                     <span className='font-black tabular-nums'>{formatCompact(impact.value)}</span>{' '}

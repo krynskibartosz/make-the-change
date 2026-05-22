@@ -1,11 +1,12 @@
 'use client'
 
-import { Info, Leaf, MapPin, TreeDeciduous, Truck, Waves } from 'lucide-react'
+import { Info, Leaf, MapPin } from 'lucide-react'
 import { useState } from 'react'
 import { useLocale } from 'next-intl'
 import type { ImpactSummary } from '@/app/[locale]/(site)/producers/_features/mock-producers'
 import { Link } from '@/i18n/navigation'
 import { formatCompact } from '@/lib/formatters'
+import { ImpactKindIcon } from '@/lib/impact-icons'
 import { getProjectImpactDisplay } from '@/lib/impact-calculator'
 import { resolveLocationDisplay } from '@/lib/location'
 import { MobileSheet } from '@/components/ui/mobile-sheet'
@@ -20,20 +21,6 @@ type ProjectsSectionProps = {
   producerName?: string
 }
 
-function HiveSilhouette({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 2C8.5 2 5.5 5 5.5 9.5H18.5C18.5 5 15.5 2 12 2ZM5 11H19V13.5H5ZM6.5 14.5H17.5V17H6.5ZM8 18H16V20.5H8Z" />
-    </svg>
-  )
-}
-
-function ImpactKindIcon({ kind, className }: { kind: string; className?: string }) {
-  if (kind === 'orchard') return <TreeDeciduous className={className} />
-  if (kind === 'reef') return <Waves className={className} />
-  if (kind === 'equipment') return <Truck className={className} />
-  return <HiveSilhouette className={className} />
-}
 
 function CarouselProjectCard({ project, locale }: { project: ProducerProject; locale: string }) {
   const impact = getProjectImpactDisplay(project)

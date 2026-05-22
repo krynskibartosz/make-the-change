@@ -1,7 +1,7 @@
 'use client'
 
 import { LayoutGroup, motion, type Transition } from 'framer-motion'
-import { List, Map as MapIcon, MapPin, TreeDeciduous, Truck, Waves } from 'lucide-react'
+import { List, Map as MapIcon, MapPin } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -15,6 +15,7 @@ import type {
   ProjectListSpeciesSeed,
   ProjectSpeciesPreview,
 } from './_features/project-list-species'
+import { ImpactKindIcon } from '@/lib/impact-icons'
 import { getProjectImpactDisplay, type ProjectMapImpactKind } from './_features/project-map-data'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -138,13 +139,6 @@ const normalizeProject = (
   }
 }
 
-function HiveSilhouette({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 2C8.5 2 5.5 5 5.5 9.5H18.5C18.5 5 15.5 2 12 2ZM5 11H19V13.5H5ZM6.5 14.5H17.5V17H6.5ZM8 18H16V20.5H8Z" />
-    </svg>
-  )
-}
 
 function ProjectCard({ project, locale }: { project: ClientProject; locale: string }) {
   const imageUrl = sanitizeImageUrl(project.hero_image_url)
@@ -196,15 +190,7 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
           <div
             className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
           >
-            {impact.kind === 'orchard' ? (
-              <TreeDeciduous className={`w-3 h-3 ${impactTheme.icon}`} />
-            ) : impact.kind === 'reef' ? (
-              <Waves className={`w-3 h-3 ${impactTheme.icon}`} />
-            ) : impact.kind === 'equipment' ? (
-              <Truck className={`w-3 h-3 ${impactTheme.icon}`} />
-            ) : (
-              <HiveSilhouette className={`w-3 h-3 ${impactTheme.icon}`} />
-            )}
+            <ImpactKindIcon kind={impact.kind} className={`w-3 h-3 ${impactTheme.icon}`} />
           </div>
           {impact.value > 0 ? (
             <p className="text-[13px]">
