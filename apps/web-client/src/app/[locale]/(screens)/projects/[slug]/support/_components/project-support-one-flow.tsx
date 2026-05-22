@@ -27,6 +27,22 @@ import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
 import type { ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
+const SPECIES_THUMBNAILS: Record<string, string> = {
+  'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
+  'species-indri': '/images/species-thumbnails/indri.png',
+  'species-sifaka-diademe': '/images/species-thumbnails/sifaka-diademe.png',
+  'species-vari-noir-blanc': '/images/species-thumbnails/vari-noir-blanc.png',
+  'species-cameleon-parson': '/images/species-thumbnails/cameleon-parson.png',
+  'species-cameleon-panthere': '/images/species-thumbnails/cameleon-panthere.png',
+  'species-charancon-girafe': '/images/species-thumbnails/charancon-girafe.png',
+  'species-grenouille-tomate': '/images/species-thumbnails/grenouille-tomate.png',
+  'species-martin-chasseur-pygme': '/images/species-thumbnails/martin-chasseur-pygmee.png',
+  'species-coua-bleu': '/images/species-thumbnails/coua-bleu.png',
+  'species-gecko-diurne': '/images/species-thumbnails/gecko-diurne.png',
+  'species-chouette-cheveche': '/images/species-thumbnails/chouette-cheveche.png',
+  'species-liotrigona-bitika': '/images/species-thumbnails/liotrigona-bitika.png',
+}
+
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 type SheetKind = 'rewards' | 'tracking' | 'impact' | null
@@ -209,20 +225,20 @@ function AfterSupportBlock({
             </div>
             <div className="mr-1 flex shrink-0 -space-x-1.5">
               {visibleSpecies.map((sp) => {
-                const imageUrl = sanitizeImageUrl(sp.icon)
+                const imageUrl = SPECIES_THUMBNAILS[sp.id] ?? sanitizeImageUrl(sp.icon)
                 return (
                   <div
                     key={sp.id}
-                    className="grid h-6 w-6 place-items-center overflow-hidden rounded-lg border border-[#08080F] bg-white/[0.06]"
+                    className="h-6 w-6 overflow-hidden rounded-lg border-2 border-[#0B0F15] bg-white/[0.06]"
                   >
                     {imageUrl ? (
                       <img
                         src={imageUrl}
                         alt={sp.name}
-                        className="h-full w-full object-cover opacity-25 blur-[0.5px]"
+                        className="h-full w-full object-cover"
                       />
                     ) : (
-                      <Lock className="h-2.5 w-2.5 text-white/35" />
+                      <div className="h-full w-full" />
                     )}
                   </div>
                 )
@@ -345,24 +361,23 @@ function RewardsSheet({
           </p>
           <div>
             {species.map((sp) => {
-              const imageUrl = sanitizeImageUrl(sp.icon)
+              const imageUrl = SPECIES_THUMBNAILS[sp.id] ?? sanitizeImageUrl(sp.icon)
               const isKey = isKeyRole(sp.role)
               return (
                 <div
                   key={sp.id}
                   className="flex items-center gap-3 border-b border-white/[0.06] py-3 last:border-0"
                 >
-                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl bg-white/[0.05]">
+                  <div className="h-9 w-9 shrink-0 overflow-hidden rounded-xl bg-white/[0.05]">
                     {imageUrl ? (
                       <img
                         src={imageUrl}
                         alt={sp.name}
-                        className="h-full w-full object-cover opacity-25 blur-[1px]"
+                        className="h-full w-full object-cover"
                       />
-                    ) : null}
-                    <div className="absolute inset-0 grid place-items-center">
-                      <Lock className="h-3 w-3 text-white/40" />
-                    </div>
+                    ) : (
+                      <div className="h-full w-full" />
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold text-white">{sp.name}</p>
@@ -530,74 +545,6 @@ function ImpactSheet({
 function isKeyRole(role: string | undefined | null): boolean {
   const r = role?.toLowerCase() ?? ''
   return r.includes('cle') || r.includes('clé')
-}
-
-function BiodexRail({ species }: { species: ProjectSpecies[] }) {
-  if (species.length === 0) return null
-
-  const sorted = [...species].sort(
-    (a, b) => (isKeyRole(a.role) ? 0 : 1) - (isKeyRole(b.role) ? 0 : 1),
-  )
-  const keyCount = sorted.filter((sp) => isKeyRole(sp.role)).length
-  const assocCount = sorted.length - keyCount
-
-  const subtitle =
-    keyCount === 0
-      ? `${assocCount} espèce${assocCount > 1 ? 's' : ''} liée${assocCount > 1 ? 's' : ''}`
-      : keyCount === 1
-        ? `1 espèce clé${assocCount > 0 ? ` · ${assocCount} espèce${assocCount > 1 ? 's' : ''} associée${assocCount > 1 ? 's' : ''}` : ''}`
-        : `${keyCount} espèces clés${assocCount > 0 ? ` · ${assocCount} espèce${assocCount > 1 ? 's' : ''} associée${assocCount > 1 ? 's' : ''}` : ''}`
-
-  return (
-    <div>
-      <div className="mb-3 flex items-baseline justify-between">
-        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-          BioDex du projet
-        </p>
-        <p className="text-[11px] text-white/35">{subtitle}</p>
-      </div>
-      <div className="flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {sorted.map((sp) => {
-          const imageUrl = sanitizeImageUrl(sp.icon)
-          const isKey = isKeyRole(sp.role)
-          return (
-            <button
-              key={sp.id}
-              type="button"
-              aria-label={`Voir ${sp.name} dans le BioDex`}
-              className="flex w-[88px] shrink-0 flex-col items-center gap-1.5"
-            >
-              <div className="relative h-[72px] w-[72px] overflow-hidden rounded-2xl bg-white/[0.05]">
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt={sp.name}
-                    className="h-full w-full object-cover opacity-25 blur-[1px]"
-                  />
-                ) : (
-                  <div className="h-full w-full" />
-                )}
-                <div className="absolute inset-0 grid place-items-center">
-                  <Lock className="h-4 w-4 text-white/40" />
-                </div>
-                {isKey ? (
-                  <span className="absolute left-1 top-1 rounded-full bg-lime-300 px-1.5 py-0.5 text-[8px] font-black leading-none text-black">
-                    Clé
-                  </span>
-                ) : null}
-              </div>
-              <p className="line-clamp-2 text-center text-[10px] font-semibold leading-tight text-white/60">
-                {sp.name}
-              </p>
-              <p className="text-[9px] font-black uppercase tracking-[0.06em] text-white/25">
-                À découvrir
-              </p>
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
 }
 
 // Helpers moved to bottom
