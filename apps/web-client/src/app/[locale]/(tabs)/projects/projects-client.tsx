@@ -1,7 +1,7 @@
 'use client'
 
 import { LayoutGroup, motion, type Transition } from 'framer-motion'
-import { Clock, List, Map as MapIcon, MapPin, PawPrint, TreePine, Waves } from 'lucide-react'
+import { Clock, List, Map as MapIcon, MapPin, TreePine, Waves } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
@@ -71,7 +71,6 @@ type ClientProject = {
   current_funding: number | null
   type: string | null
   unit_label: string | null
-  linked_species: ProjectSpeciesPreview[] | null
 }
 
 const ProjectsMapView = dynamic(
@@ -132,24 +131,7 @@ const normalizeProject = (
     current_funding: project.current_funding,
     type: project.type,
     unit_label: project.unit_label,
-    linked_species: project.linked_species || null,
   }
-}
-
-const SPECIES_THUMBNAILS: Record<string, string> = {
-  'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
-  'species-indri': '/images/species-thumbnails/indri.png',
-  'species-sifaka-diademe': '/images/species-thumbnails/sifaka-diademe.png',
-  'species-vari-noir-blanc': '/images/species-thumbnails/vari-noir-blanc.png',
-  'species-cameleon-parson': '/images/species-thumbnails/cameleon-parson.png',
-  'species-cameleon-panthere': '/images/species-thumbnails/cameleon-panthere.png',
-  'species-charancon-girafe': '/images/species-thumbnails/charancon-girafe.png',
-  'species-grenouille-tomate': '/images/species-thumbnails/grenouille-tomate.png',
-  'species-martin-chasseur-pygme': '/images/species-thumbnails/martin-chasseur-pygmee.png',
-  'species-coua-bleu': '/images/species-thumbnails/coua-bleu.png',
-  'species-gecko-diurne': '/images/species-thumbnails/gecko-diurne.png',
-  'species-chouette-cheveche': '/images/species-thumbnails/chouette-cheveche.png',
-  'species-liotrigona-bitika': '/images/species-thumbnails/liotrigona-bitika.png',
 }
 
 // Silhouette SVG d'abeille (inline, pas de dépendance externe)
@@ -161,43 +143,84 @@ function BeeSilhouette({ className = 'w-5 h-5 opacity-30 text-white' }: { classN
   )
 }
 
-function ProjectSpeciesTeaser({ species }: { species: ProjectSpeciesPreview[] | null }) {
-  if (!species || species.length === 0) return null
-  const firstSpecies = species[0]
-  if (!firstSpecies) return null
-
-  const visibleThumbs = species.slice(0, 3)
-  const hiddenCount = Math.max(0, species.length - 3)
-  const label =
-    hiddenCount > 0
-      ? `${firstSpecies.name} · +${hiddenCount} espèces`
-      : species.length > 1
-        ? `${firstSpecies.name} · ${species.length - 1} espèce${species.length > 2 ? 's' : ''} associée${species.length > 2 ? 's' : ''}`
-        : firstSpecies.name
+function ProjectCard({ project, locale }: { project: ClientProject; locale: string }) {
+  const imageUrl = sanitizeImageUrl(project.hero_image_url)
+  const locationDisplay = resolveLocationDisplay(
+    project.address_country_code,
+    project.address_city,
+    locale,
+  )
+  const impact = getProjectImpactDisplay(project)
+  const impactTheme = IMPACT_KIND_STYLES[impact.kind]
 
   return (
-    <div className="mt-2 flex items-center gap-2">
-      <div className="flex -space-x-1.5">
-        {visibleThumbs.map((sp) => {
-          const imgUrl = SPECIES_THUMBNAILS[sp.id] ?? sp.imageUrl
-          return (
+    <Link
+      href={`/projects/${project.slug}`}
+      className="group block text-left active:scale-[0.98] transition-transform duration-200"
+    >
+      <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-4 bg-white/5">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={project.name_default}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-white/10" />
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1 px-1">
+        <h3 className="text-[22px] font-black text-white leading-[1.1] tracking-tight text-balance">
+          {project.name_default}
+        </h3>
+
+        <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-0.5 mb-2">
+          {locationDisplay ? (
+            <>
+              <span className="text-[15px] leading-none">{locationDisplay.flag}</span>
+              <span className="tracking-wide font-medium">{locationDisplay.label}</span>
+            </>
+          ) : (
+            <>
+              <MapPin className="w-3.5 h-3.5 shrink-0" />
+              <span className="tracking-wide font-medium">Localisation mystère</span>
+            </>
+          )}
+        </div>
+
+        {impact.value > 0 ? (
+          <div className="flex items-center gap-2 mt-1">
             <div
-              key={sp.id}
-              className="h-6 w-6 overflow-hidden rounded-lg border-2 border-[#0B0F15] bg-white/[0.06]"
+              className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
             >
-              {imgUrl ? (
-                <img src={imgUrl} alt={sp.name} className="h-full w-full object-cover" />
+              {impact.kind === 'orchard' ? (
+                <TreePine className={`w-3 h-3 ${impactTheme.icon}`} />
+              ) : impact.kind === 'reef' ? (
+                <Waves className={`w-3 h-3 ${impactTheme.icon}`} />
               ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <PawPrint className="h-3 w-3 text-white/30" />
-                </div>
+                <BeeSilhouette className={`w-3 h-3 ${impactTheme.icon}`} />
               )}
             </div>
-          )
-        })}
+            <p className="text-[13px]">
+              <span className="text-white/90 font-black tabular-nums tracking-tight">
+                {formatCompact(impact.value)}
+              </span>{' '}
+              <span className="text-white/70 font-medium">{impact.label}</span>
+            </p>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 mt-1">
+            <div
+              className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
+            >
+              <Clock className={`w-3 h-3 ${impactTheme.icon}`} />
+            </div>
+            <p className="text-[13px] text-white/70">Collecte en cours de démarrage</p>
+          </div>
+        )}
       </div>
-      <p className="truncate text-[13px] font-medium text-white/55">{label}</p>
-    </div>
+    </Link>
   )
 }
 
@@ -267,6 +290,15 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
     setIsMapShellReady(true)
   }, [])
 
+  const donationProjects = useMemo(
+    () => normalizedProjects.filter((p) => p.type === 'reef'),
+    [normalizedProjects],
+  )
+  const supportProjects = useMemo(
+    () => normalizedProjects.filter((p) => p.type !== 'reef'),
+    [normalizedProjects],
+  )
+
   return (
     <LayoutGroup id="projects-view-layout">
       {showMapBootPlaceholder && (
@@ -300,107 +332,54 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
             Nos projets
           </h1>
           <p className="text-white/60 text-[15px] mt-3 font-medium">
-            Découvrez et soutenez des projets de terrain sélectionnés.
+            Choisissez comment agir pour le vivant.
           </p>
         </div>
 
-        {/* ── LISTE DES CARTES ────────────────────────────────────────────────── */}
-        <div className="flex flex-col gap-8 px-6 pb-40">
-          {normalizedProjects.map((project) => {
-            const imageUrl = sanitizeImageUrl(project.hero_image_url)
-            const locationDisplay = resolveLocationDisplay(
-              project.address_country_code,
-              project.address_city,
-              locale,
-            )
-
-            // Impact réel cohérent avec project-species-impact-section.tsx
-            const impact = getProjectImpactDisplay(project)
-            const impactValue = impact.value
-            const impactLabel = impact.label
-            const projectType = impact.kind
-            const impactTheme = IMPACT_KIND_STYLES[projectType]
-
-            return (
-              <Link
-                key={project.id}
-                href={`/projects/${project.slug}`}
-                className="group block text-left active:scale-[0.98] transition-transform duration-200"
-              >
-                {/* A. Image */}
-                <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden mb-4 bg-white/5">
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt={project.name_default}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-white/10" />
-                  )}
-                </div>
-
-                {/* B. Contenu textuel — typo millimétrée */}
-                <div className="flex flex-col gap-1 px-1">
-                  <h2 className="text-[22px] font-black text-white leading-[1.1] tracking-tight text-balance">
-                    {project.name_default}
-                  </h2>
-
-                  <div className="flex items-center gap-1.5 text-white/50 text-[13px] mt-0.5 mb-2">
-                    {locationDisplay ? (
-                      <>
-                        <span className="text-[15px] leading-none">{locationDisplay.flag}</span>
-                        <span className="tracking-wide font-medium">{locationDisplay.label}</span>
-                      </>
-                    ) : (
-                      <>
-                        <MapPin className="w-3.5 h-3.5 shrink-0" />
-                        <span className="tracking-wide font-medium">Localisation mystère</span>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Impact collectif — donnée réelle calculée comme la page détail */}
-                  {impactValue > 0 ? (
-                    <div className="flex items-center gap-2 mt-1">
-                      <div
-                        className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
-                      >
-                        {projectType === 'orchard' ? (
-                          <TreePine className={`w-3 h-3 ${impactTheme.icon}`} />
-                        ) : projectType === 'reef' ? (
-                          <Waves className={`w-3 h-3 ${impactTheme.icon}`} />
-                        ) : (
-                          <BeeSilhouette className={`w-3 h-3 ${impactTheme.icon}`} />
-                        )}
-                      </div>
-                      <p className="text-[13px]">
-                        <span className="text-white/90 font-black tabular-nums tracking-tight">
-                          {formatCompact(impactValue)}
-                        </span>{' '}
-                        <span className="text-white/70 font-medium">{impactLabel}</span>
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 mt-1">
-                      <div
-                        className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
-                      >
-                        <Clock className={`w-3 h-3 ${impactTheme.icon}`} />
-                      </div>
-                      <p className="text-[13px] text-white/70">Collecte en cours de démarrage</p>
-                    </div>
-                  )}
-                  <ProjectSpeciesTeaser species={project.linked_species} />
-                </div>
-              </Link>
-            )
-          })}
-
-          {normalizedProjects.length === 0 && (
-            <div className="text-center text-white/50 py-12">
+        {/* ── SECTIONS ÉDITORIALES ─────────────────────────────────────────── */}
+        <div className="flex flex-col pb-40">
+          {normalizedProjects.length === 0 ? (
+            <div className="px-6 py-12 text-center text-white/50">
               Aucun projet trouvé pour le moment.
             </div>
+          ) : (
+            <>
+              {donationProjects.length > 0 && (
+                <section className="px-6">
+                  <div className="mb-6">
+                    <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
+                      Faire un don
+                    </h2>
+                    <p className="mt-1 text-[13px] font-medium leading-snug text-white/50">
+                      Contribuez directement à une action de terrain. Sans contrepartie — avec un suivi clair du projet.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-8">
+                    {donationProjects.map((project) => (
+                      <ProjectCard key={project.id} project={project} locale={locale} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {supportProjects.length > 0 && (
+                <section className={`px-6${donationProjects.length > 0 ? ' mt-12' : ''}`}>
+                  <div className="mb-6">
+                    <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
+                      Soutenir un producteur
+                    </h2>
+                    <p className="mt-1 text-[13px] font-medium leading-snug text-white/50">
+                      Accompagnez un partenaire engagé et sa filière. Votre soutien crée de la valeur sur le terrain.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-8">
+                    {supportProjects.map((project) => (
+                      <ProjectCard key={project.id} project={project} locale={locale} />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </>
           )}
         </div>
 
