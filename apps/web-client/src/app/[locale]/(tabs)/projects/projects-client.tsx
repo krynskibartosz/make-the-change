@@ -216,7 +216,7 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
             >
               <Clock className={`w-3 h-3 ${impactTheme.icon}`} />
             </div>
-            <p className="text-[13px] text-white/70">Collecte en cours de démarrage</p>
+            <p className="text-[13px] text-white/70">{impact.label}</p>
           </div>
         )}
       </div>

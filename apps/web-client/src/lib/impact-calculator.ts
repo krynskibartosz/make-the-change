@@ -39,7 +39,7 @@ export function getProjectImpactDisplay(project: {
   if (projectType === 'orchard' || projectType === 'olive_tree') {
     return {
       value: Math.round(funding / OLIVE_PRICE_EUR),
-      label: 'oliviers soutenus',
+      label: 'oliviers accompagnés',
       kind: 'orchard',
     }
   }
@@ -47,14 +47,14 @@ export function getProjectImpactDisplay(project: {
   if (projectType === 'reef' || projectType === 'coral') {
     return {
       value: Math.round(funding / CORAL_PRICE_EUR),
-      label: 'fragments coralliens associés',
+      label: 'fragments coralliens implantés',
       kind: 'reef',
     }
   }
 
   return {
-    value: Math.round(funding * BEES_PER_EUR),
-    label: 'abeilles associées',
+    value: Math.round(funding / BEEHIVE_REFERENCE_VALUE_EUR),
+    label: 'ruches accompagnées',
     kind: 'beehive',
   }
 }

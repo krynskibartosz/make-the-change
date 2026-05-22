@@ -106,10 +106,17 @@ export function getProjectImpactDisplay(project: {
   current_funding: number | null
   type: string | null
 }): ProjectMapImpactDisplay {
+  if (project.type === 'equipment') {
+    return {
+      value: 0,
+      label: 'Collecte mobile en zone reculée',
+      kind: 'beehive',
+    }
+  }
+
   const base = getImpactFromLib(project)
   const funding = Number.isFinite(project.current_funding) ? project.current_funding || 0 : 0
 
-  // Enrichir avec le fallback "Collecte en cours" quand pas de funding
   return {
     value: base.value,
     label: funding > 0 ? base.label : 'Collecte en cours de démarrage',
