@@ -385,6 +385,7 @@ export async function ProjectQuickView({
               <ProjectBiodexSheet
                 species={species ?? []}
                 projectType={project.type}
+                projectSlug={project.slug}
                 isDonationProject={isDonationProject}
               />
             </div>

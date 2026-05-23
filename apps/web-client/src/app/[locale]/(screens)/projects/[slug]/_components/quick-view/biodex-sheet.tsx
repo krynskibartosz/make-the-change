@@ -9,6 +9,7 @@ import { MobileSheet } from '../shared/mobile-sheet'
 type ProjectBiodexSheetProps = {
   species: ProjectSpecies[]
   projectType?: string | null
+  projectSlug?: string | null
   isDonationProject?: boolean
 }
 
@@ -41,83 +42,210 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
 
 type CycleStep = { label: string; description: string }
 
+type KeyElementOverride = {
+  name: string
+  role: string
+  imageUrl?: string
+}
+
 type ProjectCycle = {
   subtitle: string
   narrative: string
   steps: [CycleStep, CycleStep, CycleStep, CycleStep]
+  keyElementOverride?: KeyElementOverride
 }
 
-function getProjectCycle(projectType: string | null | undefined): ProjectCycle {
-  const t = projectType?.toLowerCase() ?? ''
+function getProjectCycle(
+  projectType: string | null | undefined,
+  projectSlug: string | null | undefined,
+): ProjectCycle {
+  const slug = projectSlug ?? ''
+  const type = projectType?.toLowerCase() ?? ''
 
-  if (t.includes('reef') || t.includes('coral') || t.includes('ocean')) {
+  // ── Slug-based matching (beehive subtypes) ──────────────────────────────
+
+  if (slug === 'miellerie-manakara-ilanga-nature') {
     return {
-      subtitle: 'Des fragments aux récifs, découvrez ce que votre soutien rend possible.',
+      subtitle: 'Comment votre soutien structure une filière de transformation locale.',
       narrative:
-        "Votre soutien finance la transplantation de fragments de corail sur des récifs dégradés. Ces fragments, soigneusement préparés, relancent une zone vivante et offrent progressivement abri et nourriture à la faune marine.",
+        "La miellerie de Manakara est le maillon manquant entre les ruchers isolés et les marchés. Elle offre aux apiculteurs partenaires un point de collecte, de contrôle et de conditionnement qui valorise leur travail à un prix juste.",
       steps: [
         {
-          label: 'Fragments préparés',
+          label: 'Miel récolté',
           description:
-            'Des fragments de corail sont sélectionnés et fixés sur des structures adaptées.',
+            "Les apiculteurs livrent le miel issu de leurs ruches dans des conditions maîtrisées.",
         },
         {
-          label: 'Coraux implantés',
-          description: 'Les fragments sont installés sur le récif pour relancer une zone vivante.',
+          label: 'Qualité contrôlée',
+          description:
+            "Le miel est analysé pour vérifier son origine, sa pureté et sa conformité aux normes d'export.",
         },
         {
-          label: 'Habitat recréé',
+          label: 'Miel conditionné',
           description:
-            'Les coraux offrent progressivement abri et support à de nombreuses espèces marines.',
+            "Le miel est filtré, mis en pot et préparé pour la distribution dans une chaîne traçable.",
         },
         {
-          label: 'Récif suivi',
+          label: 'Valeur redistribuée',
           description:
-            "L'équipe observe la croissance, la survie et l'évolution de la zone restaurée.",
+            "La filière permet aux apiculteurs de percevoir un meilleur prix pour leur production.",
         },
       ],
     }
   }
 
-  if (t.includes('orchard') || t.includes('olive')) {
+  if (slug === 'habeebee-belgique') {
     return {
-      subtitle: 'Des arbres aux huiles, découvrez ce que votre soutien rend possible.',
+      subtitle: 'Comment votre soutien renforce les pollinisateurs en milieu urbain.',
       narrative:
-        "Votre soutien accompagne des oliviers cultivés par des producteurs locaux. Les arbres sont entretenus pour préserver leur vitalité, leurs olives récoltées au bon moment et leur huile valorisée pour soutenir une filière durable.",
+        "Installer des ruches en ville, c'est créer des points d'observation, sensibiliser les habitants et démontrer que les pollinisateurs peuvent cohabiter avec les espaces urbains — bien au-delà de la production de miel.",
       steps: [
         {
-          label: 'Oliviers accompagnés',
+          label: 'Ruches installées',
           description:
-            'Les arbres sont entretenus pour préserver leur vitalité et leur production.',
+            "Des ruches sont placées dans des environnements urbains adaptés, suivis par des apiculteurs formés.",
         },
         {
-          label: 'Sols vivants',
+          label: 'Colonies observées',
           description:
-            "Le travail du terrain soutient l'équilibre entre racines, eau et biodiversité locale.",
+            "Les colonies sont surveillées régulièrement pour garantir leur équilibre et prévenir les problèmes sanitaires.",
         },
         {
-          label: 'Olives récoltées',
-          description: 'Les fruits sont cueillis au bon moment pour préserver leur qualité.',
+          label: 'Ressources florales butinées',
+          description:
+            "Les abeilles utilisent les espaces verts et jardins locaux, contribuant à la pollinisation du territoire urbain.",
         },
         {
-          label: 'Huile valorisée',
-          description: 'La production est transformée et vendue pour soutenir le producteur.',
+          label: 'Habitants sensibilisés',
+          description:
+            "Le projet rend visible le rôle des pollinisateurs et recrée un lien entre la ville et le vivant.",
         },
       ],
     }
   }
 
+  // ── Type-based matching ─────────────────────────────────────────────────
+
+  if (type === 'equipment') {
+    return {
+      subtitle: 'Comment votre soutien apporte la transformation directement sur le terrain.',
+      narrative:
+        "Sans infrastructure fixe accessible, de nombreux apiculteurs isolés peinent à valoriser leur miel. Les mielleries mobiles vont directement à eux — réduisant les pertes, améliorant la qualité et renforçant la filière là où elle est la plus fragile.",
+      keyElementOverride: {
+        name: 'Miellerie mobile',
+        role: 'Collecte et transformation de proximité',
+        imageUrl: '/images/projects/miellerie-mobile.png',
+      },
+      steps: [
+        {
+          label: 'Zones reculées rejointes',
+          description:
+            "La miellerie mobile se rapproche des apiculteurs éloignés des infrastructures fixes.",
+        },
+        {
+          label: 'Miel collecté sur place',
+          description:
+            "Le miel est récupéré près des ruchers, dans de meilleures conditions sanitaires et logistiques.",
+        },
+        {
+          label: 'Transformation facilitée',
+          description:
+            "Le matériel embarqué permet de filtrer, contrôler et préparer le miel directement sur le terrain.",
+        },
+        {
+          label: 'Filière renforcée',
+          description:
+            "Les apiculteurs gagnent en accès, en qualité et en valeur pour leur production.",
+        },
+      ],
+    }
+  }
+
+  if (type.includes('reef') || type.includes('coral') || type.includes('ocean')) {
+    return {
+      subtitle: 'Comment votre soutien relance un récif dégradé, étape par étape.',
+      narrative:
+        "Restaurer un récif, c'est d'abord choisir le bon site, cultiver des fragments en nurserie, puis les transplanter avec soin. Le vrai travail commence après : suivi terrain, implication des communautés locales et protection dans la durée.",
+      steps: [
+        {
+          label: 'Site identifié et préparé',
+          description:
+            "Une zone dégradée est évaluée par l'équipe terrain avant toute intervention.",
+        },
+        {
+          label: 'Nurserie marine',
+          description:
+            'Les fragments de corail sont cultivés en milieu contrôlé avant leur transplantation.',
+        },
+        {
+          label: 'Récif revitalisé',
+          description:
+            "Les coraux implantés stabilisent progressivement la zone et créent un habitat pour la faune locale.",
+        },
+        {
+          label: 'Communauté impliquée',
+          description:
+            "Des équipes locales assurent le suivi à long terme et sensibilisent à la protection du récif.",
+        },
+      ],
+    }
+  }
+
+  if (type.includes('orchard') || type.includes('olive')) {
+    return {
+      subtitle: 'Comment votre soutien préserve un verger et une filière locale.',
+      narrative:
+        "Derrière chaque bouteille d'huile se trouve un oléiculteur qui entretient des arbres souvent centenaires. Ce projet soutient ce travail discret mais essentiel : entretien des sols, récolte au bon moment et valorisation équitable.",
+      steps: [
+        {
+          label: 'Producteurs accompagnés',
+          description:
+            "Des oléiculteurs locaux reçoivent un soutien pour entretenir et valoriser leur verger.",
+        },
+        {
+          label: 'Arbres centenaires préservés',
+          description:
+            "L'entretien évite l'abandon d'oliviers qui peuvent vivre plusieurs siècles et fixer durablement les sols.",
+        },
+        {
+          label: 'Biodiversité du sol',
+          description:
+            "Les pratiques agroécologiques maintiennent l'équilibre entre racines, faune du sol et couvert végétal.",
+        },
+        {
+          label: 'Filière tracée et juste',
+          description:
+            "La récolte est transformée et commercialisée dans des conditions qui rémunèrent équitablement les producteurs.",
+        },
+      ],
+    }
+  }
+
+  // default: ruchers d'apiculteurs
   return {
-    subtitle: 'Des ruches aux fleurs, découvrez ce que votre soutien rend possible.',
+    subtitle: 'Comment votre soutien accompagne des apiculteurs et leur territoire.',
     narrative:
-      "Votre soutien accompagne des ruches gérées par des apiculteurs locaux. Les abeilles y trouvent un habitat suivi, butinent les fleurs du territoire et permettent la production d'un miel ensuite valorisé par le partenaire.",
+      "Au-delà des chiffres, ce projet soutient des familles d'apiculteurs qui travaillent en milieu souvent isolé. Un suivi régulier maintient les colonies en bonne santé, protège la pollinisation locale et permet de valoriser le miel à un prix juste.",
     steps: [
-      { label: 'Ruches accompagnées', description: 'Un habitat suivi pour les colonies.' },
-      { label: 'Abeilles actives', description: 'Elles butinent autour du rucher.' },
-      { label: 'Fleurs mellifères', description: 'Elles fournissent nectar et pollen.' },
       {
-        label: 'Miel valorisé',
-        description: 'La production soutient les apiculteurs locaux.',
+        label: 'Apiculteurs accompagnés',
+        description:
+          "Des familles d'apiculteurs locaux reçoivent un soutien technique et financier pour maintenir leurs colonies.",
+      },
+      {
+        label: 'Colonies en bonne santé',
+        description:
+          'Un suivi régulier protège les ruches face aux parasites, aux maladies et aux aléas climatiques.',
+      },
+      {
+        label: 'Pollinisation du territoire',
+        description:
+          "Les abeilles jouent un rôle clé dans la reproduction des plantes locales — un impact qui dépasse largement la production de miel.",
+      },
+      {
+        label: 'Filière locale valorisée',
+        description:
+          'Le miel est commercialisé à un prix juste, créant un revenu durable pour les producteurs du territoire.',
       },
     ],
   }
@@ -145,6 +273,44 @@ function formatCommonName(name: string): string {
   if (!name) return ''
   const lower = name.toLowerCase()
   return lower.charAt(0).toUpperCase() + lower.slice(1)
+}
+
+function KeyElementCard({
+  name,
+  role,
+  imageUrl,
+  size = 'lg',
+}: {
+  name: string
+  role: string
+  imageUrl: string | null | undefined
+  size?: 'lg' | 'sm'
+}) {
+  const imgSize = size === 'lg' ? 'h-[88px] w-[88px]' : 'h-[64px] w-[64px]'
+  const nameSize = size === 'lg' ? 'text-[15px]' : 'text-[14px]'
+  const roleSize = size === 'lg' ? 'text-[13px]' : 'text-[12px]'
+  const badgeSize = size === 'lg' ? 'px-2.5 py-0.5 text-[10px]' : 'px-2 py-0.5 text-[9px]'
+
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-lime-400/20 bg-white/[0.04] p-3">
+      <div className={`${imgSize} shrink-0 overflow-hidden rounded-xl bg-white/[0.06]`}>
+        {imageUrl ? (
+          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
+        ) : null}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className={`${nameSize} font-black leading-tight text-white`}>{name}</p>
+        {role ? (
+          <p className={`mt-0.5 ${roleSize} text-lime-400/80`}>{role}</p>
+        ) : null}
+        <span
+          className={`mt-2 inline-flex rounded-full bg-lime-300/15 ${badgeSize} font-black uppercase tracking-wide text-lime-300`}
+        >
+          Au cœur du projet
+        </span>
+      </div>
+    </div>
+  )
 }
 
 function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
@@ -182,25 +348,72 @@ function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
   )
 }
 
+function CycleSteps({
+  steps,
+  compact = false,
+}: {
+  steps: ProjectCycle['steps']
+  compact?: boolean
+}) {
+  return (
+    <div>
+      {steps.map((step, index) => (
+        <div key={step.label} className={`flex gap-3 ${compact ? 'py-2' : 'py-2.5'}`}>
+          <div className="flex flex-col items-center">
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-black text-lime-400/80">
+              {index + 1}
+            </div>
+            {index < steps.length - 1 ? (
+              <div
+                className="mt-1 w-px flex-1 bg-white/[0.06]"
+                style={{ minHeight: compact ? '14px' : '16px' }}
+              />
+            ) : null}
+          </div>
+          <div className={`min-w-0 ${compact ? 'pb-1.5' : 'pb-2'}`}>
+            <p className="text-[13px] font-bold text-white">{step.label}</p>
+            <p className={`mt-0.5 text-[12px] leading-relaxed ${compact ? 'text-white/45' : 'text-white/50'}`}>
+              {step.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function ProjectBiodexSheet({
   species,
   projectType,
+  projectSlug,
   isDonationProject = false,
 }: ProjectBiodexSheetProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const cycle = getProjectCycle(projectType)
+  const cycle = getProjectCycle(projectType, projectSlug)
 
-  const keySpecies = species?.find((sp) => isKeySpecies(sp.role)) ?? species?.[0] ?? null
-  const biodexSpecies = keySpecies
-    ? (species ?? []).filter((sp) => sp.id !== keySpecies.id)
+  const keySpeciesFromData = species?.find((sp) => isKeySpecies(sp.role)) ?? species?.[0] ?? null
+  const biodexSpecies = keySpeciesFromData
+    ? (species ?? []).filter((sp) => sp.id !== keySpeciesFromData.id)
     : (species ?? [])
 
   const visibleBiodex = biodexSpecies.slice(0, 3)
   const hiddenCount = biodexSpecies.length - visibleBiodex.length
 
-  const keyImageUrl = keySpecies ? getSpeciesImageUrl(keySpecies) : null
-  const keyRole = keySpecies ? cleanRole(keySpecies.role) : ''
+  // Key element: override from cycle definition, or first key species
+  const keyElement = cycle.keyElementOverride
+    ? {
+        name: cycle.keyElementOverride.name,
+        role: cycle.keyElementOverride.role,
+        imageUrl: cycle.keyElementOverride.imageUrl ?? null,
+      }
+    : keySpeciesFromData
+      ? {
+          name: formatCommonName(keySpeciesFromData.name),
+          role: cleanRole(keySpeciesFromData.role),
+          imageUrl: getSpeciesImageUrl(keySpeciesFromData),
+        }
+      : null
 
   return (
     <>
@@ -213,29 +426,13 @@ export function ProjectBiodexSheet({
       </div>
 
       {/* ── Élément clé ── */}
-      {keySpecies ? (
-        <div className="flex items-center gap-3 rounded-2xl border border-lime-400/20 bg-white/[0.04] p-3">
-          <div className="h-[88px] w-[88px] shrink-0 overflow-hidden rounded-xl bg-white/[0.06]">
-            {keyImageUrl ? (
-              <img
-                src={keyImageUrl}
-                alt={formatCommonName(keySpecies.name)}
-                className="h-full w-full object-cover"
-              />
-            ) : null}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-black leading-tight text-white">
-              {formatCommonName(keySpecies.name)}
-            </p>
-            {keyRole ? (
-              <p className="mt-0.5 text-[13px] text-lime-400/80">{keyRole}</p>
-            ) : null}
-            <span className="mt-2 inline-flex rounded-full bg-lime-300/15 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wide text-lime-300">
-              Au cœur du projet
-            </span>
-          </div>
-        </div>
+      {keyElement ? (
+        <KeyElementCard
+          name={keyElement.name}
+          role={keyElement.role}
+          imageUrl={keyElement.imageUrl}
+          size="lg"
+        />
       ) : null}
 
       {/* ── Cycle du projet ── */}
@@ -243,26 +440,7 @@ export function ProjectBiodexSheet({
         <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
           Le cycle du projet
         </p>
-        <div>
-          {cycle.steps.map((step, index) => (
-            <div key={step.label} className="flex gap-3 py-2">
-              <div className="flex flex-col items-center">
-                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-black text-lime-400/80">
-                  {index + 1}
-                </div>
-                {index < cycle.steps.length - 1 ? (
-                  <div className="mt-1 w-px flex-1 bg-white/[0.06]" style={{ minHeight: '14px' }} />
-                ) : null}
-              </div>
-              <div className="min-w-0 pb-1.5">
-                <p className="text-[13px] font-bold text-white">{step.label}</p>
-                <p className="mt-0.5 text-[12px] leading-relaxed text-white/45">
-                  {step.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CycleSteps steps={cycle.steps} compact />
       </div>
 
       {/* ── BioDex (espèces contextuelles) ── */}
@@ -336,63 +514,24 @@ export function ProjectBiodexSheet({
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="Comprendre ce projet">
         <p className="mt-1 text-[13px] leading-relaxed text-white/50">{cycle.narrative}</p>
 
-        {/* Élément clé dans la sheet */}
-        {keySpecies ? (
-          <div className="mt-4 flex items-center gap-3 rounded-2xl border border-lime-400/20 bg-white/[0.04] p-3">
-            <div className="h-[64px] w-[64px] shrink-0 overflow-hidden rounded-xl bg-white/[0.06]">
-              {keyImageUrl ? (
-                <img
-                  src={keyImageUrl}
-                  alt={formatCommonName(keySpecies.name)}
-                  className="h-full w-full object-cover"
-                />
-              ) : null}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[14px] font-black leading-tight text-white">
-                {formatCommonName(keySpecies.name)}
-              </p>
-              {keyRole ? (
-                <p className="mt-0.5 text-[12px] text-lime-400/70">{keyRole}</p>
-              ) : null}
-              <span className="mt-1.5 inline-flex rounded-full bg-lime-300/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-lime-300/80">
-                Au cœur du projet
-              </span>
-            </div>
+        {keyElement ? (
+          <div className="mt-4">
+            <KeyElementCard
+              name={keyElement.name}
+              role={keyElement.role}
+              imageUrl={keyElement.imageUrl}
+              size="sm"
+            />
           </div>
         ) : null}
 
-        {/* Cycle dans la sheet */}
         <div className="mt-5">
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
             Le cycle du projet
           </p>
-          <div>
-            {cycle.steps.map((step, index) => (
-              <div key={step.label} className="flex gap-3 py-2.5">
-                <div className="flex flex-col items-center">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-black text-lime-400/80">
-                    {index + 1}
-                  </div>
-                  {index < cycle.steps.length - 1 ? (
-                    <div
-                      className="mt-1 w-px flex-1 bg-white/[0.06]"
-                      style={{ minHeight: '16px' }}
-                    />
-                  ) : null}
-                </div>
-                <div className="min-w-0 pb-2">
-                  <p className="text-[13px] font-bold text-white">{step.label}</p>
-                  <p className="mt-0.5 text-[12px] leading-relaxed text-white/50">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <CycleSteps steps={cycle.steps} />
         </div>
 
-        {/* BioDex dans la sheet */}
         {species && species.length > 0 ? (
           <div className="mt-5">
             <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
@@ -403,7 +542,10 @@ export function ProjectBiodexSheet({
               directement liées au mécanisme du projet.
             </p>
             <div>
-              {[keySpecies, ...biodexSpecies].filter(Boolean).map((sp) => (
+              {(cycle.keyElementOverride
+                ? species
+                : [keySpeciesFromData, ...biodexSpecies].filter(Boolean)
+              ).map((sp) => (
                 <SheetSpeciesRow key={sp!.id} species={sp!} />
               ))}
             </div>
