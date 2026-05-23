@@ -137,6 +137,7 @@ const antsirabeSpecies: ProjectSpecies[] = [
     rarity: 7,
     status: 'DD',
     role: 'Pollinisatrice clé',
+    contextSentence: 'Elle produit le miel valorisé par ce projet, dans des ruchers suivis par des apiculteurs locaux.',
   },
   {
     id: MOCK_SPECIES_BUTTERFLY_CITRON_ID,
@@ -146,6 +147,7 @@ const antsirabeSpecies: ProjectSpecies[] = [
     rarity: 4,
     status: 'LC',
     role: 'Pollinisateur',
+    contextSentence: 'Butine les mêmes fleurs que les abeilles des ruchers, contribuant à la pollinisation du territoire.',
   },
   {
     id: MOCK_SPECIES_SYRPHID_ID,
@@ -155,6 +157,7 @@ const antsirabeSpecies: ProjectSpecies[] = [
     rarity: 4,
     status: 'LC',
     role: 'Pollinisateur',
+    contextSentence: 'Pollinisateur sauvage présent dans les zones agricoles entourant les ruchers d\'Antsirabe.',
   },
 ]
 
@@ -194,6 +197,7 @@ const manakaraSpecies: ProjectSpecies[] = [
     rarity: 7,
     status: 'DD',
     role: 'Pollinisatrice clé',
+    contextSentence: 'C\'est son miel que la miellerie collecte, contrôle et met en pot pour la filière locale.',
   },
   {
     id: MOCK_SPECIES_OSMIA_ID,
@@ -203,6 +207,7 @@ const manakaraSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'NT',
     role: 'Pollinisateur clé',
+    contextSentence: 'Pollinisatrice sauvage active dans les zones agricoles de la côte est malgache.',
   },
   {
     id: MOCK_SPECIES_MEGACHILE_ID,
@@ -212,6 +217,7 @@ const manakaraSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'NT',
     role: 'Pollinisateur clé',
+    contextSentence: 'Pollinisatrice solitaire qui complète le travail des abeilles domestiques dans la région de Manakara.',
   },
 ]
 
@@ -251,6 +257,7 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
     rarity: 7,
     status: 'DD',
     role: 'Pollinisatrice clé',
+    contextSentence: 'Les mielleries mobiles permettent de récolter son miel dans les zones les plus reculées de Madagascar.',
   },
   {
     id: MOCK_SPECIES_BUMBLEBEE_ID,
@@ -260,6 +267,7 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'NT',
     role: 'Pollinisateur clé',
+    contextSentence: 'Pollinisateur sauvage des zones agricoles traversées par les itinéraires des mielleries.',
   },
   {
     id: MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
@@ -269,6 +277,7 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
     rarity: 4,
     status: 'LC',
     role: 'Pollinisateur',
+    contextSentence: 'Butine les fleurs des territoires desservis par les mielleries mobiles.',
   },
   {
     id: MOCK_SPECIES_LADYBUG_ID,
@@ -278,6 +287,7 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
     rarity: 3,
     status: 'LC',
     role: 'Auxiliaire',
+    contextSentence: 'Présente dans les zones de cultures proches des ruchers desservis.',
   },
   {
     id: MOCK_SPECIES_HEDGEHOG_ID,
@@ -287,6 +297,7 @@ const mielleriesMobileSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'LC',
     role: 'Faune associée',
+    contextSentence: 'Hôte des haies et lisières entourant les ruchers accompagnés par le projet.',
   },
 ]
 
@@ -407,6 +418,7 @@ const sardiniaSpecies: ProjectSpecies[] = [
     rarity: 6,
     status: 'LC',
     role: 'Arbre emblématique méditerranéen',
+    contextSentence: 'L\'arbre au cœur du projet — ses fruits sont récoltés et pressés en huile sur place, selon des pratiques durables.',
   },
 ]
 
@@ -419,6 +431,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'NT',
     role: 'Pollinisateur clé',
+    contextSentence: 'Il pollinise les jardins et espaces verts bruxellois aux côtés des ruches installées par Habeebee.',
   },
   {
     id: MOCK_SPECIES_OSMIA_ID,
@@ -428,6 +441,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'NT',
     role: 'Pollinisateur clé',
+    contextSentence: 'Abeille solitaire qui niche dans les espaces verts urbains autour des ruches Habeebee.',
   },
   {
     id: MOCK_SPECIES_MEGACHILE_ID,
@@ -437,6 +451,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'NT',
     role: 'Pollinisateur clé',
+    contextSentence: 'Pollinisatrice solitaire qui complète l\'action des abeilles domestiques dans les parcs de Bruxelles.',
   },
   {
     id: MOCK_SPECIES_SYRPHID_ID,
@@ -446,6 +461,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 4,
     status: 'LC',
     role: 'Pollinisateur',
+    contextSentence: 'Visible dans les jardins de Bruxelles, il participe à la pollinisation locale.',
   },
   {
     id: MOCK_SPECIES_BUTTERFLY_CITRON_ID,
@@ -455,6 +471,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 4,
     status: 'LC',
     role: 'Pollinisateur',
+    contextSentence: 'Butine les fleurs sauvages dans les espaces verts autour des ruches urbaines.',
   },
   {
     id: MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
@@ -464,6 +481,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 4,
     status: 'LC',
     role: 'Pollinisateur',
+    contextSentence: 'Indicateur de la santé des espaces verts où les ruches Habeebee sont installées.',
   },
   {
     id: MOCK_SPECIES_LADYBUG_ID,
@@ -473,6 +491,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 3,
     status: 'LC',
     role: 'Auxiliaire',
+    contextSentence: 'Présente dans les jardins et potagers bénéficiant de la pollinisation des ruches.',
   },
   {
     id: MOCK_SPECIES_HEDGEHOG_ID,
@@ -482,6 +501,7 @@ const habeebeeSpecies: ProjectSpecies[] = [
     rarity: 5,
     status: 'LC',
     role: 'Faune associée',
+    contextSentence: 'Hôte des jardins urbains bruxellois où les ruches Habeebee sont installées.',
   },
 ]
 
@@ -566,6 +586,7 @@ const coralSpecies: ProjectSpecies[] = [
     rarity: 9,
     status: 'CR',
     role: 'Fondateurs des récifs coralliens',
+    contextSentence: 'Ce projet les cultive en nurserie marine avant de les implanter pour reconstruire les récifs dégradés de Karimunjawa.',
   },
   {
     id: MOCK_SPECIES_CLOWNFISH_ID,
@@ -575,6 +596,7 @@ const coralSpecies: ProjectSpecies[] = [
     rarity: 6,
     status: 'VU',
     role: 'Résident des coraux et des anémones',
+    contextSentence: 'Il revient habiter les coraux restaurés — sa présence témoigne de la santé retrouvée du récif.',
   },
   {
     id: MOCK_SPECIES_GREEN_TURTLE_ID,
@@ -584,6 +606,7 @@ const coralSpecies: ProjectSpecies[] = [
     rarity: 8,
     status: 'EN',
     role: 'Hôte des herbiers et récifs de Karimunjawa',
+    contextSentence: 'Elle se nourrit dans les herbiers marins que les récifs restaurés protègent et maintiennent.',
   },
 ]
 

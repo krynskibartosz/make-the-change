@@ -6,6 +6,7 @@ export type ProjectSpecies = {
   rarity: number
   status: string
   role: string
+  contextSentence?: string
 }
 
 export type ProjectChallenge = {
