@@ -3,9 +3,6 @@ import { connection } from 'next/server'
 import { Suspense } from 'react'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { isMockDataSource } from '@/lib/mock/data-source'
-import { getCurrentViewer } from '@/lib/mock/mock-session-server'
-import { getCurrentMockWalletBalance } from '@/lib/mock/mock-member-data-server'
 import { LearnTab } from './_features/learn-tab'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,20 +21,13 @@ const fallbackLoader = (
 export default async function LearnPage() {
   await connection()
 
-  const viewer = isMockDataSource ? await getCurrentViewer() : null
-  const viewerId = viewer?.viewerId ?? null
-  const faction = viewer?.faction ?? null
-
-  const [seeds, species] = await Promise.all([
-    viewerId ? getCurrentMockWalletBalance(viewerId, faction) : Promise.resolve(0),
-    getSpeciesContextList(),
-  ])
+  const species = await getSpeciesContextList()
 
   return (
     <TabScreen className="bg-[#0B0F15]">
       <div className="relative w-full">
         <Suspense fallback={fallbackLoader}>
-          <LearnTab seeds={seeds} species={species} />
+          <LearnTab species={species} />
         </Suspense>
       </div>
     </TabScreen>

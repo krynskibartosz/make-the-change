@@ -1,22 +1,15 @@
 /**
- * Système de design des monnaies — R2
+ * Système de design des monnaies — Vision A
  *
- * [CIBLE_VALIDEE] P0-3 : Deux monnaies distinctes
- * - `seeds` = Graines : progression, engagement, Academy, BioDex
- * - `impactCredits` = Credits Impact : valeur boutique issue du soutien producteur
- *
- * [DEPRECIE] Le terme générique `points` ne doit pas être utilisé dans les UI finales.
- *
- * Règles métier :
- * - Un don pur ne génère pas de Credits Impact → utilise Graines
- * - Un soutien producteur génère des Credits Impact
- * - Un achat produit ne génère pas de Credits Impact
- * - Academy/quiz génère des Graines, pas de Credits Impact
+ * Une seule monnaie : `impactCredits` (Credits Impact).
+ * Les Graines (`seeds`) ont été supprimées (Phase 4 du refactor stratégique).
+ * Le kind 'seeds' reste accepté en type pour compat ascendante mais est traité
+ * comme impactCredits côté rendu.
  */
 
 export type CurrencyKind = 'seeds' | 'impactCredits'
 
-export type CurrencyIconName = 'SeedIcon' | 'ImpactCreditIcon'
+export type CurrencyIconName = 'ImpactCreditIcon'
 export type CurrencyTone = 'semantic' | 'inherit'
 
 type CurrencyDesign = {
@@ -32,52 +25,39 @@ type CurrencyDesign = {
   progressClassName: string
 }
 
-/**
- * Formate une valeur monétaire avec le label de la monnaie.
- * R2 : Helper centralisé pour éviter la confusion entre points/crédits/graines.
- */
 export function formatCurrencyValue(value: number): string {
   return new Intl.NumberFormat('fr-FR').format(value)
 }
 
-export const CURRENCY_DESIGN = {
-  seeds: {
-    icon: 'SeedIcon',
-    label: 'graines',
-    ariaLabel: 'Graines',
-    toneClassName: 'text-emerald-300',
-    softToneClassName: 'text-emerald-200',
-    surfaceClassName: 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300',
-    strongSurfaceClassName: 'border-emerald-400/35 bg-emerald-400/15 text-emerald-200',
-    ctaClassName: 'bg-emerald-400 text-[#06110e] hover:bg-emerald-300',
-    glowClassName: 'shadow-[0_0_18px_rgba(52,211,153,0.28)]',
-    progressClassName: 'bg-emerald-400 shadow-[0_0_18px_rgba(52,211,153,0.36)]',
-  },
-  impactCredits: {
-    icon: 'ImpactCreditIcon',
-    label: 'Credits Impact',
-    ariaLabel: 'Credits Impact',
-    toneClassName: 'text-amber-300',
-    softToneClassName: 'text-amber-200',
-    surfaceClassName: 'border-amber-300/25 bg-amber-300/10 text-amber-300',
-    strongSurfaceClassName: 'border-amber-300/35 bg-amber-300/15 text-amber-200',
-    ctaClassName: 'bg-amber-300 text-[#120d04] hover:bg-amber-200',
-    glowClassName: 'shadow-[0_0_18px_rgba(252,211,77,0.24)]',
-    progressClassName: 'bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.32)]',
-  },
-} as const satisfies Record<CurrencyKind, CurrencyDesign>
+const IMPACT_CREDITS_DESIGN: CurrencyDesign = {
+  icon: 'ImpactCreditIcon',
+  label: 'Credits Impact',
+  ariaLabel: 'Credits Impact',
+  toneClassName: 'text-amber-300',
+  softToneClassName: 'text-amber-200',
+  surfaceClassName: 'border-amber-300/25 bg-amber-300/10 text-amber-300',
+  strongSurfaceClassName: 'border-amber-300/35 bg-amber-300/15 text-amber-200',
+  ctaClassName: 'bg-amber-300 text-[#120d04] hover:bg-amber-200',
+  glowClassName: 'shadow-[0_0_18px_rgba(252,211,77,0.24)]',
+  progressClassName: 'bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.32)]',
+}
 
-export function getCurrencyDesign(kind: CurrencyKind): CurrencyDesign {
-  return CURRENCY_DESIGN[kind]
+export const CURRENCY_DESIGN: Record<CurrencyKind, CurrencyDesign> = {
+  seeds: IMPACT_CREDITS_DESIGN,
+  impactCredits: IMPACT_CREDITS_DESIGN,
+}
+
+export function getCurrencyDesign(_kind: CurrencyKind): CurrencyDesign {
+  return IMPACT_CREDITS_DESIGN
 }
 
 export function getCurrencyToneClassName(
-  kind: CurrencyKind,
+  _kind: CurrencyKind,
   tone: CurrencyTone = 'semantic',
 ): string | undefined {
   if (tone === 'inherit') {
     return undefined
   }
 
-  return getCurrencyDesign(kind).toneClassName
+  return IMPACT_CREDITS_DESIGN.toneClassName
 }

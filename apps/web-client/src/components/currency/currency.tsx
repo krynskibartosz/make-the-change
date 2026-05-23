@@ -1,29 +1,20 @@
 /**
- * Composants de monnaie — R2
+ * Composants de monnaie — Vision A
  *
- * [CIBLE_VALIDEE] P0-3 : Utiliser exclusivement les CurrencyKind :
- * - 'seeds' pour Graines (progression, Academy, BioDex)
- * - 'impactCredits' pour Credits Impact (soutien producteur, boutique)
- *
- * [DEPRECIE] Ne pas introduire de nouveaux usages de 'points'.
+ * Une seule monnaie restante : 'impactCredits' (Credits Impact).
+ * Les Graines ont été supprimées dans Phase 4 du refactor stratégique.
  */
 
 import type { ComponentPropsWithoutRef } from 'react'
 import { cn } from '@/lib/utils'
 import {
-  formatCurrencyValue,
   getCurrencyDesign,
   getCurrencyToneClassName,
   type CurrencyKind,
   type CurrencyTone,
 } from './currency-design'
-import { SeedIcon } from './seed-icon'
 import { ImpactCreditIcon } from './impact-credit-icon'
 
-/**
- * Formate une valeur avec notation (standard ou compacte).
- * @deprecated Utiliser formatCurrencyValue depuis currency-design.ts
- */
 function formatCurrencyValueWithNotation(value: number, notation: 'standard' | 'compact') {
   return new Intl.NumberFormat('fr-FR', {
     notation,
@@ -32,16 +23,15 @@ function formatCurrencyValueWithNotation(value: number, notation: 'standard' | '
 }
 
 type CurrencyIconProps = {
-  kind: CurrencyKind
+  kind?: CurrencyKind
   tone?: CurrencyTone
   className?: string
 }
 
-export function CurrencyIcon({ kind, tone = 'semantic', className }: CurrencyIconProps) {
+export function CurrencyIcon({ tone = 'semantic', className }: CurrencyIconProps) {
   const variant = tone === 'inherit' ? 'mono' : 'color'
-  const Icon = kind === 'seeds' ? SeedIcon : ImpactCreditIcon
 
-  return <Icon variant={variant} size={16} className={cn('shrink-0', className)} />
+  return <ImpactCreditIcon variant={variant} size={16} className={cn('shrink-0', className)} />
 }
 
 type CurrencyAmountProps = ComponentPropsWithoutRef<'span'> & {
