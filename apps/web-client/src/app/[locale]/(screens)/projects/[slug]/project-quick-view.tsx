@@ -380,15 +380,14 @@ export async function ProjectQuickView({
               />
             </div>
 
-            {/* 7. Espèces liées */}
-            {species && species.length > 0 ? (
-              <div className="mt-16 px-4 sm:px-5">
-                <ProjectBiodexSheet
-                  species={species}
-                  isDonationProject={isDonationProject}
-                />
-              </div>
-            ) : null}
+            {/* 7. Comprendre ce projet */}
+            <div className="mt-16 px-4 sm:px-5">
+              <ProjectBiodexSheet
+                species={species ?? []}
+                projectType={project.type}
+                isDonationProject={isDonationProject}
+              />
+            </div>
 
             <div className="mt-14 px-4 sm:px-5">
               <ProjectLearningLinks projectSlug={project.slug} />
