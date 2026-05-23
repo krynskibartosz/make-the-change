@@ -99,10 +99,6 @@ export const MOCK_SPECIES_BUTTERFLYFISH_ID = 'species-poisson-papillon'
 export const MOCK_SPECIES_SEAHORSE_ID = 'species-hippocampe'
 export const MOCK_SPECIES_GREEN_TURTLE_ID = 'species-tortue-verte'
 
-export const MOCK_CHALLENGE_ECO_FACT_ID = 'eco-fact'
-export const MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID = 'collective-bravo'
-export const MOCK_CHALLENGE_DAILY_HARVEST_ID = 'daily-harvest'
-
 export const MOCK_BLOG_POST_1_ID = 'mock-blog-post-mielleries-mobiles'
 export const MOCK_BLOG_POST_1_SLUG = 'mielleries-mobiles-apiculture-durable-madagascar'
 export const MOCK_BLOG_POST_2_ID = 'mock-blog-post-oliviers-sardaigne'

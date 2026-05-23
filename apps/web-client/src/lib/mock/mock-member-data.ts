@@ -1,8 +1,6 @@
 import type { SpeciesContext } from '@/types/species'
 import { getCurrentIsoDate } from '@/lib/date-utils'
 import {
-  MOCK_CHALLENGE_DAILY_HARVEST_ID,
-  MOCK_CHALLENGE_ECO_FACT_ID,
   MOCK_EXISTING_VIEWER_ID,
   MOCK_PRODUCT_EUCALYPTUS_ID,
   MOCK_PRODUCT_EUCALYPTUS_SLUG,
@@ -663,14 +661,6 @@ export const getMockSentMessages = (viewerId: string): MockProducerMessageRecord
   }
 
   return EXISTING_VIEWER_MESSAGES.map(cloneMessage)
-}
-
-export const getMockCompletedChallengeIds = (viewerId: string): string[] => {
-  if (viewerId !== MOCK_EXISTING_VIEWER_ID) {
-    return []
-  }
-
-  return [MOCK_CHALLENGE_ECO_FACT_ID, MOCK_CHALLENGE_DAILY_HARVEST_ID]
 }
 
 export const getMockSpeciesUnlockPoints = (viewerId: string): SpeciesContext['user_status'] => {

@@ -66,7 +66,7 @@ export function AboutStickyCta({ label }: AboutCtaProps) {
       return
     }
 
-    router.push('/challenges')
+    router.push('/accueil')
   }, [router, userState])
 
   return (

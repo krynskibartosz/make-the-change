@@ -2,37 +2,17 @@ import {
   getMockPointsTransactions,
   type MockPointsTransactionRecord,
 } from '@/lib/mock/mock-member-data'
-
-export { getMockPointsTransactions }
-import { getCurrentMockChallengeTransactions } from '@/lib/mock/mock-challenge-progress-server'
 import type { Faction } from '@/lib/mock/types'
 
-const LEGACY_CHALLENGE_TRANSACTION_IDS = new Set([
-  'mock-points-eco-fact',
-  'mock-points-daily-harvest',
-])
+export { getMockPointsTransactions }
 
 export async function getCurrentMockPointsTransactions(
   viewerId: string,
-  faction: Faction | null = null,
+  _faction: Faction | null = null,
 ): Promise<MockPointsTransactionRecord[]> {
-  const baseTransactions = getMockPointsTransactions(viewerId).filter(
-    (transaction) => !LEGACY_CHALLENGE_TRANSACTION_IDS.has(transaction.id),
-  )
-  const challengeTransactions = await getCurrentMockChallengeTransactions(viewerId, faction)
+  const baseTransactions = getMockPointsTransactions(viewerId)
 
-  const combinedTransactions: MockPointsTransactionRecord[] = [
-    ...challengeTransactions.map((transaction) => ({
-      id: transaction.id,
-      label: transaction.label,
-      delta: transaction.delta,
-      impactDelta: transaction.impactDelta,
-      createdAt: transaction.createdAt,
-    })),
-    ...baseTransactions,
-  ]
-
-  return combinedTransactions.sort((first, second) =>
+  return [...baseTransactions].sort((first, second) =>
     second.createdAt.localeCompare(first.createdAt),
   )
 }

@@ -5,10 +5,6 @@ import { Bird, Crown, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, S
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
-import {
-  getClientPersistedMockChallengeStates,
-  recordClientMockCollectiveBravo,
-} from '@/lib/mock/mock-challenge-progress'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
 import type { Faction } from '@/lib/domain/types'
@@ -282,7 +278,6 @@ function ImpactCard({
   onBravoPersisted,
   shouldAutoBravo = false,
   onAutoBravoConsumed,
-  currentDayKey,
   viewerId,
 }: {
   event: ImpactEvent
@@ -291,7 +286,6 @@ function ImpactCard({
   onBravoPersisted: (eventId: string) => void
   shouldAutoBravo?: boolean
   onAutoBravoConsumed?: () => void
-  currentDayKey: string
   viewerId?: string | null
 }) {
   const haptic = useHaptic()
@@ -307,14 +301,9 @@ function ImpactCard({
     const session = getClientMockViewerSession()
     const effectiveViewerId = session?.viewerId ?? viewerId ?? null
     if (effectiveViewerId) {
-      recordClientMockCollectiveBravo({
-        viewerId: effectiveViewerId,
-        dayKey: currentDayKey,
-        targetId: event.id,
-      })
       onBravoPersisted(event.id)
     }
-  }, [currentDayKey, event.id, haptic, isBravoed, onAutoBravoConsumed, onBravoPersisted, viewerId])
+  }, [event.id, haptic, isBravoed, onAutoBravoConsumed, onBravoPersisted, viewerId])
 
   useEffect(() => {
     if (!shouldAutoBravo) {
@@ -454,13 +443,11 @@ function ImpactCard({
 interface ImpactTabClientProps {
   initialFaction: Faction | null
   viewerId: string | null
-  currentDayKey: string
 }
 
 export function ImpactTabClient({
   initialFaction,
   viewerId,
-  currentDayKey,
 }: ImpactTabClientProps) {
   const searchParams = useSearchParams()
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
@@ -470,24 +457,6 @@ export function ImpactTabClient({
   const collectiveGoal = getCollectiveGoal()
   const factionContributions = getFactionContributions()
   const activeContribution = getFactionContribution(initialFaction)
-
-  useEffect(() => {
-    const effectiveViewerId = getClientMockViewerSession()?.viewerId ?? viewerId ?? null
-
-    if (!effectiveViewerId) {
-      setPersistedBravoIds([])
-      return
-    }
-
-    const collectiveEntry = getClientPersistedMockChallengeStates().find(
-      (entry) =>
-        entry.viewerId === effectiveViewerId &&
-        entry.dayKey === currentDayKey &&
-        entry.archetypeId === 'collective-bravo',
-    )
-
-    setPersistedBravoIds(collectiveEntry?.targetIds ?? [])
-  }, [currentDayKey, viewerId])
 
   useEffect(() => {
     if (searchParams.get('intent') !== 'give-bravo') {
@@ -543,7 +512,7 @@ export function ImpactTabClient({
           {collectiveGoal.progress}% accomplis · Encore {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> pour débloquer l'avantage collectif
         </p>
 
-        {(() => {
+        {factionContributions.length > 0 && (() => {
           const sorted = [...factionContributions]
           const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean)
 
@@ -653,7 +622,6 @@ export function ImpactTabClient({
               event={event}
               isBravoed={persistedBravoIds.includes(event.id)}
               onBravoPersisted={handleBravoPersisted}
-              currentDayKey={currentDayKey}
               viewerId={viewerId}
               onAttemptBravo={handleAttemptBravo}
               shouldAutoBravo={replayBravoId === event.id}

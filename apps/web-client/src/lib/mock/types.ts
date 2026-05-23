@@ -4,9 +4,6 @@ import type { Faction } from '@/lib/domain/types'
 
 export type { Faction } from '@/lib/domain/types'
 export type {
-  Challenge,
-  ChallengeArchetypeId,
-  ChallengeIntent,
   CollectivePost,
   PrestigeReward,
   ProductCard,

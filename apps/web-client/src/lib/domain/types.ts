@@ -26,20 +26,6 @@ export type Profile = {
   tribeIds: string[]
 }
 
-export type ChallengeIntent = 'eco-fact' | 'daily-harvest' | 'give-bravo'
-export type ChallengeArchetypeId = 'eco-fact' | 'collective-bravo' | 'daily-harvest'
-
-export type Challenge = {
-  id: string
-  type: 'education' | 'social' | 'daily_harvest'
-  title: string
-  description: string
-  progress: number
-  max: number
-  reward: number
-  href?: string
-}
-
 export type CollectivePost = {
   id: string
   profileId?: string

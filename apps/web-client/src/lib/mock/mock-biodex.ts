@@ -1,7 +1,4 @@
 import {
-  MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
-  MOCK_CHALLENGE_DAILY_HARVEST_ID,
-  MOCK_CHALLENGE_ECO_FACT_ID,
   MOCK_PRODUCT_EUCALYPTUS_ID,
   MOCK_PRODUCT_MANAKARA_ID,
   MOCK_PRODUCER_ILANGA_ID,
@@ -99,16 +96,7 @@ export const MOCK_SPECIES: SpeciesContext[] = [
         projectsCount: 2,
       },
     ],
-    associated_challenges: [
-      {
-        id: MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID,
-        name: "L'Esprit d'Équipe",
-        type: 'social',
-        difficulty: 'medium',
-        rewards: ['100 graines'],
-        userProgress: 0,
-      },
-    ],
+    associated_challenges: [],
     user_status: createUserStatus(false, 1),
     weight: '0.1 g',
     size: '12 mm',
@@ -1176,33 +1164,24 @@ export const MOCK_SPECIES: SpeciesContext[] = [
 type MockParticipationGraph = {
   supportedProjectSlugs: Set<string>
   orderedProductIds: Set<string>
-  completedChallengeIds: Set<string>
-  currentChallengeProgress: Map<string, number>
 }
 
 const getParticipationGraph = async (
   viewerId?: string | null,
-  faction?: Faction | null,
+  _faction?: Faction | null,
 ): Promise<MockParticipationGraph> => {
   if (!viewerId) {
     return {
       supportedProjectSlugs: new Set<string>(),
       orderedProductIds: new Set<string>(),
-      completedChallengeIds: new Set<string>(),
-      currentChallengeProgress: new Map<string, number>(),
     }
   }
 
   // Import server-only modules only when this function is called
-  const { getCurrentMockCompletedChallengeSeriesIds, getCurrentMockDailyChallenges } = await import('@/lib/mock/mock-challenge-progress-server')
   const { getMockSupports } = await import('@/lib/mock/mock-member-data')
   const { getCurrentMockOrders } = await import('@/lib/mock/mock-order-history-server')
 
-  const [orders, completedChallengeIds, currentDailyChallenges] = await Promise.all([
-    getCurrentMockOrders(viewerId),
-    getCurrentMockCompletedChallengeSeriesIds(viewerId),
-    getCurrentMockDailyChallenges({ viewerId, faction: faction ?? null }),
-  ])
+  const orders = await getCurrentMockOrders(viewerId)
 
   const supportedProjectSlugs = new Set(
     getMockSupports(viewerId).map((s) => s.project.slug),
@@ -1218,10 +1197,6 @@ const getParticipationGraph = async (
   return {
     supportedProjectSlugs,
     orderedProductIds,
-    completedChallengeIds: new Set(completedChallengeIds),
-    currentChallengeProgress: new Map(
-      currentDailyChallenges.map((challenge) => [challenge.seriesId, challenge.progress]),
-    ),
   }
 }
 
@@ -1241,16 +1216,14 @@ const cloneSpecies = async (
   const associatedChallenges =
     species.associated_challenges?.map((challenge) => ({
       ...challenge,
-      userProgress: graph.currentChallengeProgress.get(challenge.id) ?? null,
+      userProgress: null,
     })) || []
 
   let isUnlocked = false
   let progressionLevel = 1
 
   if (species.id === MOCK_SPECIES_BLACK_BEE_ID) {
-    isUnlocked =
-      graph.supportedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) &&
-      graph.completedChallengeIds.has(MOCK_CHALLENGE_COLLECTIVE_BRAVO_ID)
+    isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG)
     progressionLevel =
       graph.supportedProjectSlugs.has(MOCK_PROJECT_MANAKARA_SLUG) ||
       graph.orderedProductIds.has(MOCK_PRODUCT_MANAKARA_ID)
