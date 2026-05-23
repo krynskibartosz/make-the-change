@@ -65,17 +65,6 @@ export function SpeciesKnowledgeSection({ species }: SpeciesKnowledgeSectionProp
 
         <div className='h-px bg-white/[0.06]' />
 
-        {/* Avec qui elle interagit */}
-        <div className='space-y-3'>
-          <p className='text-sm font-bold text-white/80'>Avec qui elle interagit</p>
-          <p className='text-sm leading-relaxed text-white/60'>
-            Elle visite des plantes à fleurs pour le nectar et le pollen. Ses liens avec d&apos;autres
-            pollinisateurs, cultures locales et prédateurs restent à documenter.
-          </p>
-        </div>
-
-        <div className='h-px bg-white/[0.06]' />
-
         {/* Ce qui la fragilise */}
         <div className='space-y-3'>
           <p className='text-sm font-bold text-white/80'>Ce qui la fragilise</p>

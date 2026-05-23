@@ -124,7 +124,7 @@ export function BiodexClient({ species }: BiodexClientProps) {
           titleVisible ? 'opacity-100' : 'opacity-0',
         )}
       >
-        Mon BioDex
+        Espèces rencontrées
       </span>
       <span aria-hidden className='h-9 w-9 shrink-0' />
     </div>
@@ -135,19 +135,10 @@ export function BiodexClient({ species }: BiodexClientProps) {
 
       {/* Inline Header */}
       <div className='w-full px-6 pt-6 pb-5'>
-        <h1 className='text-3xl font-bold tracking-tight text-white mb-1'>Mon BioDex</h1>
-        <p className='text-sm text-white/50 mb-4'>{unlockedCount} / {totalCount} espèces découvertes</p>
-        <div className='flex items-center gap-3'>
-          <div className='flex-1 relative h-0.5 rounded-full bg-white/10 overflow-hidden'>
-            <div
-              className={cn(
-                'absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out',
-                accentTheme.accentBg,
-              )}
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-        </div>
+        <h1 className='text-3xl font-bold tracking-tight text-white mb-1'>Espèces rencontrées</h1>
+        <p className='text-sm text-white/50'>
+          Les espèces que tu as croisées via les projets que tu soutiens.
+        </p>
       </div>
 
       {/* Grid */}

@@ -17,19 +17,19 @@ export function getRarity(status: string | null | undefined): Rarity {
 
 export const RARITY_STYLES: Record<Rarity, { textColor: string; label: string; borderColor: string }> = {
   common: {
-    textColor: 'text-emerald-500/60',
-    label: 'Commun',
+    textColor: 'text-white/40',
+    label: 'Préoccupation mineure',
     borderColor: 'border-white/5',
   },
   rare: {
-    textColor: 'text-blue-400/70',
-    label: 'Rare',
-    borderColor: 'border-blue-400/20',
+    textColor: 'text-amber-400/70',
+    label: 'Menacée',
+    borderColor: 'border-amber-400/20',
   },
   legendary: {
-    textColor: 'text-amber-400/80',
-    label: 'Légendaire',
-    borderColor: 'border-amber-400/25',
+    textColor: 'text-orange-400/80',
+    label: 'En danger',
+    borderColor: 'border-orange-400/25',
   },
 }
 

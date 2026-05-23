@@ -2,7 +2,7 @@
 import type { SpeciesContext } from '@/types/species'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { getRarity, getSpeciesEmoji, RARITY_STYLES } from '@/lib/species-utils'
+import { getSpeciesEmoji } from '@/lib/species-utils'
 
 interface SpeciesCardEnhancedProps {
 	species: SpeciesContext
@@ -16,8 +16,6 @@ export function SpeciesCardEnhanced({
 	onLockedClick,
 }: SpeciesCardEnhancedProps) {
 	const isLocked = showUserStatus && !species.user_status?.isUnlocked
-	const rarity = getRarity(species.conservation_status)
-	const rarityStyle = RARITY_STYLES[rarity]
 	const silhouetteEmoji = getSpeciesEmoji(
 		species.conservation_status,
 		species.name_default
@@ -51,16 +49,6 @@ export function SpeciesCardEnhanced({
 				)}
 			>
 				{species.name_default}
-			</p>
-
-			{/* Rarity — subtle typographic indicator */}
-			<p
-				className={cn(
-					'text-[10px] uppercase tracking-wider font-medium',
-					isLocked ? 'text-white/20' : rarityStyle.textColor
-				)}
-			>
-				{rarityStyle.label}
 			</p>
 		</div>
 	)
