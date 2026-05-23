@@ -80,3 +80,19 @@ export type DonationOption = {
   rewards: DonationReward
   impact: DonationImpact
 }
+
+/**
+ * Flux terrain — nouvelles d'un projet, postées par le producteur/partenaire.
+ * C'est le mécanisme principal de rétention : "votre rucher a produit X kg ce mois"
+ * avec photo et contexte. Apparaît sur la page projet et en teaser sur l'Accueil.
+ */
+export type ProjectUpdate = {
+  id: string
+  projectSlug: string
+  postedAt: string // ISO date
+  title: string
+  body: string
+  imageUrl?: string
+  authorName?: string // ex: "Hary, apiculteur à Antsirabe"
+  milestone?: 'funding' | 'production' | 'delivery' | 'reporting'
+}

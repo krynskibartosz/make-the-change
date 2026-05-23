@@ -15,6 +15,8 @@ import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
 import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
 import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
 import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
+import { ProjectUpdatesFeed } from './_components/project-updates-feed'
+import { getMockProjectUpdates } from '@/lib/mock/mock-project-updates'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { PublicProject, RelatedProject } from './project-detail-data'
 import { buildProjectImpactItems } from './_utils/build-project-impact-items'
@@ -320,6 +322,11 @@ export async function ProjectQuickView({
                 producerName={project.producer ? organizerName : undefined}
                 producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
               />
+            </div>
+
+            {/* Nouvelles du terrain (flux terrain) */}
+            <div className="mt-14 px-4 sm:px-5">
+              <ProjectUpdatesFeed updates={getMockProjectUpdates(project.slug)} />
             </div>
 
             {/* 5. Ce que le projet permet */}
