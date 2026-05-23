@@ -1,4 +1,3 @@
-import { resolveFactionThemeKey } from '@/lib/faction-theme'
 import type { FactionThemeKey } from '@/lib/faction-theme'
 import type { Faction } from '@/lib/mock/types'
 
@@ -42,111 +41,46 @@ export type RankedFactionContribution = FactionContribution & {
 
 const COLLECTIVE_GOAL: CollectiveGoal = {
   title: 'La Grande Récolte de Printemps',
-    summary: "Ce mois-ci, les 3 factions réunissent leurs graines pour soutenir un nouveau rucher Ilanga Nature à Madagascar.",
+  summary:
+    "Ce mois-ci, la communauté soutient un nouveau rucher Ilanga Nature à Madagascar.",
   projectName: 'Rucher de Manakara',
   currentSeeds: 38240,
   targetSeeds: 50000,
   progress: 76,
-  commonRewardTitle: 'Badge Batisseur de Rucher',
-  commonRewardSummary: "500 graines et un badge commun pour tous les membres actifs si l'objectif est atteint.",
-  prestigeRewardTitle: 'Glow de faction',
-  prestigeRewardSummary: 'La faction en tête obtient un halo cosmétique exclusif pour le mois suivant.',
+  commonRewardTitle: 'Badge Bâtisseur de Rucher',
+  commonRewardSummary:
+    "Un badge commun pour tous les membres actifs si l'objectif est atteint.",
+  prestigeRewardTitle: '',
+  prestigeRewardSummary: '',
   isGoalReached: false,
-  degradedRewardTitle: 'Badge Batisseur de Rucher (Dégradé)',
-  degradedRewardSummary: "250 graines et un badge commun pour tous les membres actifs (récompense dégradée car l'objectif n'a pas été atteint).",
 }
-
-const FACTION_CONTRIBUTIONS: Record<LiveFactionThemeKey, FactionContribution> = {
-  pollinisateurs: {
-    themeKey: 'pollinisateurs',
-    label: 'Melli',
-    shortLabel: 'Melli',
-    tagline: 'Les protecteurs des pollinisateurs et de la faune locale.',
-    members: 482,
-    contributionSeeds: 17210,
-    contributionShare: 45,
-    impactValue: '1.2M',
-    impactLabel: 'abeilles associées',
-    rallyLabel: "Chaque défi renforce l'Essaim et fait avancer le rucher commun.",
-    prestigeTitle: 'Halo nectar',
-    prestigeSummary: "Un halo doré autour de Melli si la faction reste devant jusqu'à la fin du mois.",
-  },
-  forets: {
-    themeKey: 'forets',
-    label: 'Sylva',
-    shortLabel: 'Sylva',
-    tagline: 'Les régénérateurs de sols, haies et forêts nourricières.',
-    members: 436,
-    contributionSeeds: 13380,
-    contributionShare: 35,
-    impactValue: '5 400',
-    impactLabel: 'arbres plantés',
-    rallyLabel: 'Chaque mission terrain aide la canéopée et rapproche tout le collectif du but.',
-    prestigeTitle: 'Couronne canéopée',
-    prestigeSummary: "Un glow végétal autour de Sylva pour souligner la faction meneuse.",
-  },
-  mers: {
-    themeKey: 'mers',
-    label: 'Ondine',
-    shortLabel: 'Ondine',
-    tagline: "Les protecteurs des océans et de la biodiversité marine.",
-    members: 391,
-    contributionSeeds: 7650,
-    contributionShare: 20,
-    impactValue: '80',
-    impactLabel: 'km² de récifs soutenus',
-    rallyLabel: "Chaque action renforce la protection des océans et rapproche tout le collectif du but.",
-    prestigeTitle: 'Halo abyssal',
-    prestigeSummary: "Un accessoire prestige discret autour de Ondine pour célébrer la première place.",
-  },
-}
-
-const FACTION_ORDER: LiveFactionThemeKey[] = ['pollinisateurs', 'forets', 'mers']
 
 export const getCollectiveGoal = (): CollectiveGoal => {
   const goalReached = COLLECTIVE_GOAL.progress >= 100
 
-  // Calcul de la récompense dégradée basée sur le pourcentage atteint
-  const degradedSeeds = Math.floor((COLLECTIVE_GOAL.currentSeeds / COLLECTIVE_GOAL.targetSeeds) * 500)
-
   return {
     ...COLLECTIVE_GOAL,
     isGoalReached: goalReached,
-    degradedRewardTitle: goalReached ? undefined : 'Badge Batisseur de Rucher (Dégradé)',
-    degradedRewardSummary: goalReached
-      ? undefined
-      : `${degradedSeeds} graines et un badge commun pour tous les membres actifs (récompense dégradée car l'objectif n'a pas été atteint).`,
   }
 }
 
+// Les fonctions ci-dessous existent pour compatibilité avec le code consommateur
+// mais ne retournent plus de données compétitives entre factions. La compétition
+// entre Melli / Sylva / Ondine a été retirée — les mascottes sont désormais des
+// guides visuels, pas des équipes en concurrence.
+
 export const getFactionContributions = (): RankedFactionContribution[] => {
-  return FACTION_ORDER.map((themeKey) => FACTION_CONTRIBUTIONS[themeKey])
-    .sort((first, second) => second.contributionSeeds - first.contributionSeeds)
-    .map((entry, index) => ({
-      ...entry,
-      rank: index + 1,
-      isLeader: index === 0,
-    }))
+  return []
 }
 
 export const getFactionContribution = (
-  faction: Faction | null | undefined,
+  _faction: Faction | null | undefined,
 ): RankedFactionContribution | null => {
-  const themeKey = resolveFactionThemeKey(faction)
-  if (themeKey === 'neutral') {
-    return null
-  }
-
-  return getFactionContributions().find((entry) => entry.themeKey === themeKey) || null
+  return null
 }
 
 export const getFactionContributionByKey = (
-  themeKey: LiveFactionThemeKey,
-): RankedFactionContribution => {
-  const entry = getFactionContributions().find((campaign) => campaign.themeKey === themeKey)
-  if (!entry) {
-    throw new Error(`Unknown faction contribution: ${themeKey}`)
-  }
-
-  return entry
+  _themeKey: LiveFactionThemeKey,
+): RankedFactionContribution | null => {
+  return null
 }

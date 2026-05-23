@@ -2,18 +2,26 @@ import { ArrowRight, Bug, Cloud, Crown, Droplets, Flame, Gift, Settings, Target,
 import { CurrencyIcon } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
-import { getFactionTheme } from '@/lib/faction-theme'
-import { getFactionContribution } from '@/lib/mock/mock-factions'
+import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
 import { AnimatedMascot } from '@/app/[locale]/(tabs)/profile/_components/animated-mascot'
 import { TabScreen } from '@/app/[locale]/(tabs)/_components/tab-screen'
 import { ProfileSettingsHeader } from '@/app/[locale]/(tabs)/profile/_components/profile-settings-header'
 import { BioDexCard } from '@/app/[locale]/(tabs)/_components/biodex-card'
 import { ImpactCard } from '@/app/[locale]/(tabs)/profile/_components/impact-card'
 import { formatCompact } from '@/lib/formatters'
+import type { Faction } from '@/lib/domain/types'
+
+const FACTION_LABEL: Record<Faction, string> = {
+  'Vie Sauvage': 'Melli',
+  'Terres & Forêts': 'Sylva',
+  'Gardiens des mers': 'Ondine',
+}
 
 export default async function AuthenticatedProfile({ profile }: { profile: NonNullable<Awaited<ReturnType<typeof import('@/lib/mock/mock-session-server').getCurrentProfile>>> }) {
-  const accentTheme = getFactionTheme(profile?.faction ?? null)
-  const factionContribution = getFactionContribution(profile?.faction ?? null)
+  const userFaction: Faction | null = profile?.faction ?? null
+  const accentTheme = getFactionTheme(userFaction)
+  const factionLabel = userFaction ? FACTION_LABEL[userFaction] : null
+  const factionThemeKey = resolveFactionThemeKey(userFaction)
   const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
     unlockedLimit: 2,
     lockedLimit: 2,
@@ -44,9 +52,9 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               {profile?.displayName || 'Bartosz Krynski'}
             </h1>
 
-            {factionContribution && (
+            {factionLabel && (
               <p className={`mt-1 text-center text-xs font-bold tracking-wide ${accentTheme.accentText}`}>
-                {factionContribution.label}
+                {factionLabel}
               </p>
             )}
 
@@ -153,7 +161,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
             </Link>
           </section>
 
-          {factionContribution ? (
+          {factionLabel ? (
             <section className="mt-8">
               {/* IDENTITY POD */}
               <div className={`relative rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
@@ -165,45 +173,30 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
                 {/* LAYOUT HAUT : Mascotte + Infos */}
                 <div className="relative z-10 flex flex-row items-center justify-between">
                   <div className="relative -mt-12 h-32 w-[35%] shrink-0 drop-shadow-2xl z-20">
-                    <AnimatedMascot themeKey={factionContribution.themeKey} label={factionContribution.label} />
+                    <AnimatedMascot themeKey={factionThemeKey === 'neutral' ? 'forets' : factionThemeKey} label={factionLabel} />
                   </div>
 
                   {/* Infos faction */}
                   <div className="min-w-0 w-[70%] pl-2 text-left pt-2 flex-1">
                     <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-                      Ma Faction
+                      Ma mascotte
                     </p>
                     <h2 className={`mt-0.5 text-xl font-black tracking-tight ${accentTheme.accentText}`}>
-                      {factionContribution.label}
+                      {factionLabel}
                     </h2>
                     <p className="mt-2 text-sm font-medium text-white/60">
-                      <CurrencyIcon kind="seeds" className="inline h-[1.2em] w-[1.2em] align-text-bottom" />{' '}
-                      <span className="font-black text-white">
-                        {formatCompact(profile?.totalSeedsContributed ?? factionContribution.contributionSeeds)}
-                      </span>{' '}
-                      graines apportées
+                      Ton guide à travers les écosystèmes que tu soutiens.
                     </p>
                   </div>
                 </div>
 
-                {/* PONT : Teasing + CTA */}
+                {/* PONT : CTA */}
                 <div className="relative z-10 mt-6 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Flame className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} aria-hidden="true" />
-                    <p className="text-xs font-semibold text-white/80">
-                      Ta faction porte{' '}
-                      <span className={`font-black ${accentTheme.accentText}`}>
-                        {factionContribution.contributionShare}%
-                      </span>{' '}
-                      de l&apos;effort collectif ce mois-ci.
-                    </p>
-                  </div>
-
                   <Link
-                    href="/impact"
+                    href="/collectif"
                     className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                   >
-                    Rejoindre la quête du mois
+                    Voir le collectif
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </Link>
                 </div>

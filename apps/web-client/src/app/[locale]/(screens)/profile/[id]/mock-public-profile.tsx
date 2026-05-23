@@ -13,19 +13,30 @@
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
-import { getFactionTheme } from '@/lib/faction-theme'
-import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
-import type { Profile } from '@/lib/domain/types'
+import { getFactionTheme, resolveFactionThemeKey } from '@/lib/faction-theme'
+import type { Faction, Profile } from '@/lib/domain/types'
 
 type MockPublicProfilePageProps = {
   profile: Profile
   isOwnProfile: boolean
 }
 
+const FACTION_LABEL: Record<Faction, string> = {
+  'Vie Sauvage': 'Melli',
+  'Terres & Forêts': 'Sylva',
+  'Gardiens des mers': 'Ondine',
+}
+
+const FACTION_MASCOT_SRC: Record<Faction, string> = {
+  'Vie Sauvage': '/images/mascots/melli.png',
+  'Terres & Forêts': '/images/mascots/sylva.png',
+  'Gardiens des mers': '/images/mascots/ondine.png',
+}
+
 export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPublicProfilePageProps) {
   const accentTheme = getFactionTheme(profile.faction)
-  const collectiveGoal = getCollectiveGoal()
-  const factionContribution = getFactionContribution(profile.faction)
+  const factionLabel = profile.faction ? FACTION_LABEL[profile.faction] : null
+  const factionMascot = profile.faction ? FACTION_MASCOT_SRC[profile.faction] : null
   const { unlockedSpecies, lockedSpecies, unlockedCount, totalCount } = await getBiodexPreviewData({
     unlockedLimit: 2,
     lockedLimit: 2,
@@ -185,7 +196,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
         </section>
 
         {/* Faction Pod */}
-        {factionContribution ? (
+        {factionLabel && factionMascot ? (
           <section className="mt-8">
             <div className={`relative rounded-3xl border p-5 ${accentTheme.accentBorder} ${accentTheme.accentBgSoft}`}>
               <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl pointer-events-none">
@@ -195,14 +206,8 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
               <div className="relative z-10 flex flex-row items-center justify-between">
                 <div className="relative -mt-10 h-28 w-[30%] shrink-0 drop-shadow-2xl">
                   <img
-                    src={
-                      factionContribution.themeKey === 'pollinisateurs'
-                        ? '/images/mascots/melli.png'
-                        : factionContribution.themeKey === 'forets'
-                          ? '/images/mascots/sylva.png'
-                          : '/images/mascots/ondine.png'
-                    }
-                    alt={factionContribution.label}
+                    src={factionMascot}
+                    alt={factionLabel}
                     className="h-full w-full origin-bottom scale-[1.3] object-contain"
                     style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.5))' }}
                   />
@@ -210,38 +215,23 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
 
                 <div className="min-w-0 w-[70%] pl-2 text-left pt-2 flex-1">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-                    {isOwnProfile ? 'Ma Faction' : 'Sa Faction'}
+                    {isOwnProfile ? 'Ma mascotte' : 'Sa mascotte'}
                   </p>
                   <h2 className={`mt-0.5 text-xl font-black tracking-tight ${accentTheme.accentText}`}>
-                    {factionContribution.label}
+                    {factionLabel}
                   </h2>
                   <p className="mt-2 text-sm font-medium text-white/60">
-                    <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" />{' '}
-                    <span className="font-black text-white">
-                      {(profile.totalSeedsContributed ?? factionContribution.contributionSeeds).toLocaleString('fr-FR')}
-                    </span>{' '}
-                    graines apportées
+                    {isOwnProfile ? 'Ton guide à travers les écosystèmes que tu soutiens.' : 'Sa mascotte guide à travers les écosystèmes.'}
                   </p>
                 </div>
               </div>
 
               <div className="relative z-10 mt-6 space-y-4">
-                <div className="flex items-center gap-2">
-                  <Flame className={`h-4 w-4 shrink-0 ${accentTheme.accentText}`} />
-                  <p className="text-xs font-semibold text-white/80">
-                    Cette faction génère{' '}
-                    <span className={`font-black ${accentTheme.accentText}`}>
-                      {factionContribution.contributionShare}%
-                    </span>{' '}
-                    de l&apos;effort collectif ce mois-ci
-                  </p>
-                </div>
-
                 <Link
-                  href="/impact"
+                  href="/collectif"
                   className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-transform active:scale-[0.98] ${accentTheme.badgeClassName} ${accentTheme.accentText}`}
                 >
-                  Rejoindre la quête du mois
+                  Voir le collectif
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Sprout, Droplets, Sparkles, Lock, Crown } from 'lucide-react'
 import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
-import { getCollectiveGoal, getFactionContribution } from '@/lib/mock/mock-factions'
+import { getCollectiveGoal } from '@/lib/mock/mock-factions'
 import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { getFactionThemeByKey } from '@/lib/faction-theme'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
@@ -25,16 +25,15 @@ export default async function ImpactRewardPage() {
   const isConnected = !!session
 
   const collectiveGoal = getCollectiveGoal()
-  const activeContribution = getFactionContribution(initialFaction)
   const ilangaProducts = getMockProducts().filter(
     (p) => p.producer_id === MOCK_PRODUCER_ILANGA_ID,
   )
 
   let mascotSrc = '/images/mascots/sylva.png'
-  if (activeContribution?.themeKey === 'pollinisateurs') mascotSrc = '/images/mascots/melli.png'
-  else if (activeContribution?.themeKey === 'mers') mascotSrc = '/images/mascots/ondine.png'
+  if (initialFaction === 'Vie Sauvage') mascotSrc = '/images/mascots/melli.png'
+  else if (initialFaction === 'Gardiens des mers') mascotSrc = '/images/mascots/ondine.png'
 
-  const activeTheme = getFactionThemeByKey(activeContribution?.themeKey ?? 'forets')
+  const activeTheme = getFactionThemeByKey('neutral')
   const remainingSeeds = Math.max(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds, 0)
   const isGoalReached = collectiveGoal.progress >= 100
 
@@ -243,7 +242,7 @@ export default async function ImpactRewardPage() {
             </Link>
           ) : (
             <Link
-              href="/adventure"
+              href="/accueil"
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-400 text-sm font-bold text-black shadow-[0_0_25px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95"
             >
               Contribuer � l'objectif <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
