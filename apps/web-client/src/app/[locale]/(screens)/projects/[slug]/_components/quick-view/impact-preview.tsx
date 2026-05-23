@@ -128,7 +128,7 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
   return (
     <section>
       <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-        Indicateurs du projet
+        Ce que le projet permet
       </p>
       <div className={`grid gap-2.5 ${mainItems.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
         {mainItems.map((item) => (
@@ -154,7 +154,7 @@ export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPrevie
       <MobileSheet
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        title="Indicateurs du projet"
+        title="Ce que le projet permet"
       >
         <p className="mb-5 mt-1 text-[13px] leading-relaxed text-white/45">
           Ces chiffres donnent des ordres de grandeur basés sur des hypothèses documentées.

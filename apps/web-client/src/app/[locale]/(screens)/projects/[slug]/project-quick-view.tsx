@@ -11,9 +11,7 @@ import { ProjectProducerProductsSection } from './_components/shared/producer-pr
 import { ProjectQuickViewHero } from './_components/quick-view/hero'
 import { SimilarProjectsCarousel } from './_components/shared/similar-projects-carousel'
 import { ProjectLearningLinks } from './_components/shared/learning-links'
-import { ProjectStorySheet } from './_components/quick-view/story-sheet'
 import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
-import { ProjectTrackingPreview } from './_components/quick-view/tracking-preview'
 import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
 import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
 import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
@@ -238,14 +236,6 @@ export async function ProjectQuickView({
             ) : null}
 
 
-            <ProjectStorySheet
-              description={narrativeDescription}
-              title={projectName}
-              producerName={project.producer ? organizerName : undefined}
-              producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
-              projectType={project.type}
-              isDonationProject={isDonationProject}
-            />
           </aside>
 
           {/* 3. Partenaire */}
@@ -329,16 +319,7 @@ export async function ProjectQuickView({
               </div>
             ) : null}
 
-            {/* 5. Suivi */}
-            <div className="mt-12 px-4 sm:px-5">
-              <ProjectTrackingPreview
-                isDonationProject={isDonationProject}
-                projectType={project.type}
-                producerName={project.producer ? organizerName : undefined}
-              />
-            </div>
-
-            {/* 6. Objectif */}
+            {/* 5. Objectif */}
             <div className="mt-14 px-4 sm:px-5">
               <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
                 {fundingTitle}
@@ -380,13 +361,16 @@ export async function ProjectQuickView({
               />
             </div>
 
-            {/* 7. Comprendre ce projet */}
+            {/* 6. Comprendre ce projet */}
             <div className="mt-16 px-4 sm:px-5">
               <ProjectBiodexSheet
                 species={species ?? []}
                 projectType={project.type}
                 projectSlug={project.slug}
                 isDonationProject={isDonationProject}
+                description={narrativeDescription}
+                producerName={project.producer ? organizerName : undefined}
+                producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
               />
             </div>
 
@@ -394,14 +378,14 @@ export async function ProjectQuickView({
               <ProjectLearningLinks projectSlug={project.slug} />
             </div>
 
-            {/* 8. Produits partenaires (soutien uniquement) */}
+            {/* 7. Produits partenaires (soutien uniquement) */}
             {!isDonationProject && producerProducts && producerProducts.length > 0 ? (
               <div className="mt-16 px-4 sm:px-5">
                 <ProjectProducerProductsSection products={producerProducts} />
               </div>
             ) : null}
 
-            {/* 9. Projets similaires */}
+            {/* 8. Projets similaires */}
             <div className="mt-16 w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
                 locale={locale}
@@ -412,7 +396,7 @@ export async function ProjectQuickView({
           </div>
         </div>
 
-        {/* 10. CTA sticky */}
+        {/* 9. CTA sticky */}
         <BottomActionBar className="fixed bottom-0 left-0 right-0 z-40 w-full">
           {isFundingClosed ? (
             <Button

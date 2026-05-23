@@ -1,16 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp } from 'lucide-react'
+import { ChevronUp, Info } from 'lucide-react'
 import type { ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { MobileSheet } from '../shared/mobile-sheet'
+import { getTagline, getSupportChips, getReceiveChips } from '../../_utils/project-labels'
 
 type ProjectBiodexSheetProps = {
   species: ProjectSpecies[]
   projectType?: string | null
   projectSlug?: string | null
   isDonationProject?: boolean
+  description?: string
+  producerName?: string
+  producerLocation?: string
 }
 
 const SPECIES_THUMBNAILS: Record<string, string> = {
@@ -275,6 +279,32 @@ function formatCommonName(name: string): string {
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <p className="mb-2.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+      {children}
+    </p>
+  )
+}
+
+function Chip({ children }: { children: string }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold text-white/50">
+      {children}
+    </span>
+  )
+}
+
+function ChipCloud({ chips }: { chips: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {chips.map((chip) => (
+        <Chip key={chip}>{chip}</Chip>
+      ))}
+    </div>
+  )
+}
+
 function KeyElementCard({
   name,
   role,
@@ -382,15 +412,72 @@ function CycleSteps({
   )
 }
 
+function TrackingStep({
+  number,
+  title,
+  body,
+  chips,
+  isLast,
+}: {
+  number: number
+  title: string
+  body?: string
+  chips?: string[]
+  isLast?: boolean
+}) {
+  return (
+    <div className="flex gap-4">
+      <div className="flex flex-col items-center">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/[0.15] bg-white/[0.08] text-xs font-black text-white">
+          {number}
+        </div>
+        {!isLast && <div className="mt-1.5 h-full min-h-[24px] w-px bg-white/[0.08]" />}
+      </div>
+      <div className={`min-w-0 ${isLast ? 'pb-0' : 'pb-7'} pt-0.5`}>
+        <p className="text-base font-bold text-white">{title}</p>
+        {body ? (
+          <p className="mt-1 text-sm leading-relaxed text-white/60">{body}</p>
+        ) : null}
+        {chips && chips.length > 0 ? (
+          <div className="mt-2">
+            <ChipCloud chips={chips} />
+          </div>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
 export function ProjectBiodexSheet({
   species,
   projectType,
   projectSlug,
   isDonationProject = false,
+  description,
+  producerName,
+  producerLocation,
 }: ProjectBiodexSheetProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const cycle = getProjectCycle(projectType, projectSlug)
+  const tagline = getTagline(projectType, isDonationProject)
+  const actionChips = getSupportChips(projectType, isDonationProject)
+  const receiveChips = getReceiveChips(isDonationProject)
+
+  const step1Title = isDonationProject ? 'Vous faites un don' : 'Vous soutenez ce projet'
+  const step1Body = isDonationProject
+    ? "Votre don est rattaché à ce projet et à l'équipe qui le porte."
+    : 'Votre contribution est rattachée à ce projet et au partenaire qui le porte.'
+  const step1Disclaimer = isDonationProject
+    ? "Ce don n'est pas un achat produit ni une promesse de rendement. Il ne donne pas droit à des Crédits Impact."
+    : "Ce soutien n'est pas un achat produit, un investissement financier ou une promesse de rendement."
+
+  const step2Title = isDonationProject ? "L'équipe agit sur le terrain" : 'Le partenaire agit sur le terrain'
+  const step2Intro = isDonationProject
+    ? 'Le don peut aider à financer ou accompagner certaines actions concrètes :'
+    : 'Le soutien peut aider à financer ou accompagner certaines actions concrètes :'
+
+  const step3Title = isDonationProject ? "Vous suivez l'évolution" : 'Vous recevez des nouvelles'
 
   const keySpeciesFromData = species?.find((sp) => isKeySpecies(sp.role)) ?? species?.[0] ?? null
   const biodexSpecies = keySpeciesFromData
@@ -400,7 +487,6 @@ export function ProjectBiodexSheet({
   const visibleBiodex = biodexSpecies.slice(0, 3)
   const hiddenCount = biodexSpecies.length - visibleBiodex.length
 
-  // Key element: override from cycle definition, or first key species
   const keyElement = cycle.keyElementOverride
     ? {
         name: cycle.keyElementOverride.name,
@@ -414,6 +500,10 @@ export function ProjectBiodexSheet({
           imageUrl: getSpeciesImageUrl(keySpeciesFromData),
         }
       : null
+
+  const buttonSubtitle = biodexSpecies.length > 0
+    ? 'Histoire, cycle, suivi terrain et espèces BioDex'
+    : 'Histoire du projet, cycle et suivi terrain'
 
   return (
     <>
@@ -501,42 +591,85 @@ export function ProjectBiodexSheet({
       >
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="text-sm font-bold text-white/70">En savoir plus</span>
-          <span className="text-xs text-white/35">
-            {biodexSpecies.length > 0
-              ? 'Cycle complet et espèces BioDex associées'
-              : 'Détail du cycle et mécanisme du projet'}
-          </span>
+          <span className="text-xs text-white/35">{buttonSubtitle}</span>
         </div>
         <ChevronUp className="h-4 w-4 shrink-0 text-white/25" />
       </button>
 
       {/* ── Sheet de détail ── */}
       <MobileSheet isOpen={isOpen} onClose={() => setIsOpen(false)} title="Comprendre ce projet">
-        <p className="mt-1 text-[13px] leading-relaxed text-white/50">{cycle.narrative}</p>
 
-        {keyElement ? (
-          <div className="mt-4">
-            <KeyElementCard
-              name={keyElement.name}
-              role={keyElement.role}
-              imageUrl={keyElement.imageUrl}
-              size="sm"
-            />
+        {/* 1. Histoire du projet */}
+        {description ? (
+          <div className="mt-2">
+            <p className="text-[13px] italic leading-relaxed text-white/40">{tagline}</p>
+            <div className="mt-5">
+              <SectionLabel>Pourquoi ce projet existe</SectionLabel>
+              <p className="text-sm leading-relaxed text-white/70">{description}</p>
+              {producerName ? (
+                <p className="mt-2 text-[12px] text-white/35">
+                  {[`Porté par ${producerName}`, producerLocation].filter(Boolean).join(' · ')}
+                </p>
+              ) : null}
+            </div>
           </div>
         ) : null}
 
-        <div className="mt-5">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
-            Le cycle du projet
-          </p>
-          <CycleSteps steps={cycle.steps} />
+        {/* 2. Mécanisme */}
+        <div className={description ? 'mt-8' : 'mt-2'}>
+          {keyElement ? (
+            <>
+              <SectionLabel>Au cœur du projet</SectionLabel>
+              <KeyElementCard
+                name={keyElement.name}
+                role={keyElement.role}
+                imageUrl={keyElement.imageUrl}
+                size="sm"
+              />
+              <div className="mt-5">
+                <SectionLabel>Le cycle du projet</SectionLabel>
+                <CycleSteps steps={cycle.steps} />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="mb-1 text-[13px] leading-relaxed text-white/50">{cycle.narrative}</p>
+              <div className="mt-5">
+                <SectionLabel>Le cycle du projet</SectionLabel>
+                <CycleSteps steps={cycle.steps} />
+              </div>
+            </>
+          )}
         </div>
 
+        {/* 3. Du soutien au terrain */}
+        <div className="mt-8">
+          <SectionLabel>Du soutien au terrain</SectionLabel>
+          <div className="space-y-0">
+            <TrackingStep
+              number={1}
+              title={step1Title}
+              body={step1Body}
+            />
+            <TrackingStep
+              number={2}
+              title={step2Title}
+              body={step2Intro}
+              chips={actionChips}
+            />
+            <TrackingStep
+              number={3}
+              title={step3Title}
+              chips={receiveChips}
+              isLast
+            />
+          </div>
+        </div>
+
+        {/* 4. BioDex */}
         {species && species.length > 0 ? (
-          <div className="mt-5">
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
-              BioDex · Espèces associées
-            </p>
+          <div className="mt-8">
+            <SectionLabel>BioDex · Espèces associées</SectionLabel>
             <p className="mb-3 text-[11px] leading-relaxed text-white/25">
               Ces espèces enrichissent votre parcours de découverte. Elles ne sont pas toutes
               directement liées au mécanisme du projet.
@@ -552,14 +685,24 @@ export function ProjectBiodexSheet({
           </div>
         ) : null}
 
-        <p className="mt-5 pb-1 text-[11px] leading-relaxed text-white/25">
+        {/* Footer */}
+        <div className="mt-10 rounded-xl bg-white/[0.03] px-4 py-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/25">
+            Note de prudence
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-white/40">
+            Le suivi dépend des informations disponibles et transmises par le partenaire. Il
+            documente l&apos;avancement du projet, sans garantir un résultat précis.
+          </p>
+        </div>
+
+        <p className="mt-3 text-[11px] leading-relaxed text-white/25">
           Le cycle présenté est une représentation pédagogique du mécanisme du projet. Les données
           terrain peuvent varier selon les conditions locales.
         </p>
+
         <p className="mt-2 pb-2 text-[10px] leading-relaxed text-white/20">
-          {isDonationProject
-            ? 'En faisant un don, certaines espèces peuvent être ajoutées à votre collection BioDex.'
-            : 'En soutenant ce projet, certaines espèces peuvent être ajoutées à votre collection BioDex.'}
+          {step1Disclaimer}
         </p>
       </MobileSheet>
     </>
