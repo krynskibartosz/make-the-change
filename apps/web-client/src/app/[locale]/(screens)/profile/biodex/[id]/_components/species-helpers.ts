@@ -3,7 +3,13 @@ import type { SpeciesContext } from '@/types/species'
 const DEFAULT_SPECIES_HERO_IMAGE = '/images/biodex/hero-apis-mellifera-unicolor.png'
 
 const SPECIES_HERO_IMAGES_BY_SCIENTIFIC_NAME: Record<string, string> = {
+  'acropora muricata': '/images/biodex/hero-acropora-muricata.png',
+  'aglais io': '/images/biodex/hero-aglais-io.png',
+  'amphiprion ocellaris': '/images/biodex/hero-amphiprion-ocellaris.png',
+  'apis mellifera ligustica': '/images/biodex/hero-apis-mellifera-ligustica.png',
   'apis mellifera unicolor': DEFAULT_SPECIES_HERO_IMAGE,
+  'athene superciliaris': '/images/biodex/hero-athene-superciliaris.png',
+  'bombus terrestris': '/images/biodex/hero-bombus-terrestris.png',
   'calumma parsonii': '/images/biodex/hero-calumma-parsonii.png',
   'chaetodon auriga': '/images/biodex/hero-chaetodon-auriga.png',
   'chelonia mydas': '/images/biodex/hero-chelonia-mydas.png',
@@ -15,10 +21,14 @@ const SPECIES_HERO_IMAGES_BY_SCIENTIFIC_NAME: Record<string, string> = {
   'episyrphus balteatus': '/images/biodex/hero-episyrphus-balteatus.png',
   'erinaceus europaeus': '/images/biodex/hero-erinaceus-europaeus.png',
   'furcifer pardalis': '/images/biodex/hero-furcifer-pardalis.png',
+  'gonepteryx rhamni': '/images/biodex/hero-gonepteryx-rhamni.png',
   'hippocampus bargibanti': '/images/biodex/hero-hippocampus-bargibanti.png',
+  'liotrigona bitika': '/images/biodex/hero-liotrigona-bitika.png',
+  'megachile centuncularis': '/images/biodex/hero-megachile-centuncularis.png',
   'olea europaea': '/images/biodex/hero-olea-europaea.png',
   'osmia bicornis': '/images/biodex/hero-osmia-bicornis.png',
   'phelsuma laticauda': '/images/biodex/hero-phelsuma-laticauda.png',
+  'trachelophorus giraffa': '/images/biodex/hero-trachelophorus-giraffa.png',
   'upupa epops': '/images/biodex/hero-upupa-epops.png',
   'varecia variegata': '/images/biodex/hero-varecia-variegata.png',
 }

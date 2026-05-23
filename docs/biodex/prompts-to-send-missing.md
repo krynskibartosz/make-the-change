@@ -4,100 +4,9 @@ Generated on 2026-05-23 from the current local files.
 
 This file contains only prompts that still need to be sent to ChatGPT image generation. It excludes assets that already exist in apps/web-client/public or in a local generated-images folder.
 
-Do not resend these already generated but not-yet-public assets:
-
-- Cover: hero-acropora-muricata.png
-- Cover: hero-athene-superciliaris.png
-- Thumbnail: acropora-corail-cerf.png
-
 ## Covers Still To Generate
 
-Count: 10
-
-### hero-aglais-io.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-aglais-io.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Paon-du-jour, Aglais io.
-Scene: a European peacock butterfly resting on a nettle, thistle, or buddleia flower in a natural garden/meadow edge. The butterfly must be the only main subject, with red-brown wings and clear blue-purple eyespots. The wings should be open or mostly open so the eyespots are immediately readable.
-
-Composition: vertical mobile-first wildlife macro cover, butterfly sharp in central or upper-middle area, soft green/purple bokeh, lower third calm and not visually busy, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, monarch butterfly, generic red butterfly, missing eyespots, extra eyespots, duplicate butterflies, second main insect, human hand, text, logo, watermark, cropped wings, blurry subject, harsh flash, oversaturated colors.
-```
-
-### hero-amphiprion-ocellaris.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-amphiprion-ocellaris.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic underwater wildlife photography, vertical portrait, shallow depth of field, natural blue filtered light, subject sharp, ecological context, lower third calm for app text overlays.
-
-Species: Poisson clown, Amphiprion ocellaris.
-Scene: a single ocellaris clownfish among the soft tentacles of a natural sea anemone in an Indonesian reef. The clownfish must be the only main subject, with orange body, three white bands edged in black, realistic fins, and natural behavior. The anemone is allowed as ecological context but must not overpower the fish.
-
-Composition: vertical mobile-first underwater wildlife cover, clownfish sharp in central or upper-middle area, anemone and blue reef bokeh behind, calmer darker lower third, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, Nemo cartoon style, aquarium glass, neon saturation, multiple clownfish as equal subjects, crowded reef, diver, human object, text, logo, watermark, cropped face, blurry eye, deformed fins, oversaturated orange.
-```
-
-### hero-apis-mellifera-ligustica.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-apis-mellifera-ligustica.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Abeille mellifere italienne, Apis mellifera ligustica.
-Scene: an Italian honey bee foraging on a Mediterranean wildflower near an olive grove in Sardinia. The bee must be the only main subject, with golden/yellow abdominal bands, realistic honey bee anatomy, translucent wings, and natural pollen/flower interaction. The warm Mediterranean setting should be visible through soft olive leaves and dry golden background bokeh.
-
-Composition: vertical mobile-first macro wildlife cover, bee sharp in central or upper-middle area, flower and olive grove bokeh, calm darker lower third, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, black bee, wasp, bumblebee, duplicate bees, swarm, second main insect, human hand, beehive box, text, logo, watermark, cropped bee, blurry subject, harsh flash, oversaturated yellow.
-```
-
-### hero-bombus-terrestris.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-bombus-terrestris.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Bourdon terrestre, Bombus terrestris.
-Scene: a buff-tailed bumblebee foraging on a clover or lavender flower in a Belgian meadow. The bumblebee must be the only main subject, large and fuzzy, with black body, yellow bands, and a pale buff-white tail. The flower context should clearly support the pollinator role without becoming the main subject.
-
-Composition: vertical mobile-first macro wildlife cover, bumblebee in the central or upper-middle area, warm natural light, soft meadow greens and purples, lower third visually calm and slightly darker, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, honeybee body shape, wasp-like abdomen, missing fuzz, wrong stripes, duplicate bees, second main insect, human hand, beehive box, studio backdrop, text, logo, watermark, cropped head, blurry subject, harsh flash, oversaturated colors.
-```
-
-### hero-gonepteryx-rhamni.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-gonepteryx-rhamni.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Papillon citron, Gonepteryx rhamni.
-Scene: a brimstone butterfly on a wildflower or leaf at a European woodland edge. The butterfly must be the only main subject, with pale yellow-green leaf-shaped wings and realistic delicate veins. Keep the pose natural and legible, preferably side-on or slightly open enough to recognize the species.
-
-Composition: vertical mobile-first wildlife macro cover, butterfly sharp in the central or upper-middle area, soft green woodland bokeh, warm but gentle light, lower third calm, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, monarch butterfly, generic yellow butterfly, oversaturated neon yellow, damaged wings, duplicate butterflies, second main insect, human hand, text, logo, watermark, cropped wings, blurry subject, cluttered flowers.
-```
+Count: 2
 
 ### hero-indri-indri.png
 
@@ -116,40 +25,6 @@ Composition: vertical mobile-first wildlife portrait, Indri face and upper body 
 Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, ring-tailed lemur, long striped tail, generic monkey, human-like smile, zoo enclosure, cage, duplicate lemurs, second main animal, text, logo, watermark, cropped face, blurry eyes, deformed hands, oversaturated green.
 ```
 
-### hero-liotrigona-bitika.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-liotrigona-bitika.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife macro photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Abeille pollinisatrice, Liotrigona bitika.
-Scene: a tiny dark stingless bee on a small Madagascar wildflower in humid highland vegetation. The bee must be the only main subject, very small but clearly visible, dark-bodied, delicate, with realistic tiny bee anatomy. Use the flower and leaf scale to communicate that this is a micro-bee, not a standard honey bee.
-
-Composition: vertical mobile-first macro cover, tiny bee sharp in central or upper-middle area, flower and soft green background, lower third calm and darker, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, large honeybee, wasp, bumblebee, oversized insect, duplicate bees, swarm, second main insect, human hand, beehive box, text, logo, watermark, cropped bee, blurry subject, harsh flash, oversaturated colors.
-```
-
-### hero-megachile-centuncularis.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-megachile-centuncularis.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Megachile, Megachile centuncularis.
-Scene: a leafcutter bee on a leaf or wildflower in a European garden, with a subtle cut leaf edge nearby as ecological context. The bee must be the only main subject, compact and dark-bodied with pale hairs and a realistic leafcutter bee appearance. If pollen is visible, place it naturally on the underside of the abdomen, not as an exaggerated effect.
-
-Composition: vertical mobile-first macro wildlife cover, bee sharp in the central or upper-middle area, soft green background, calm lower third, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, honeybee stripes, wasp body, bumblebee body, oversized cut leaf, duplicate bees, second main insect, human hand, text, logo, watermark, cropped body, blurry subject, cluttered vegetation, harsh flash.
-```
-
 ### hero-propithecus-diadema.png
 
 Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-propithecus-diadema.md
@@ -165,23 +40,6 @@ Scene: a diademed sifaka clinging vertically to a tree in a humid Madagascar rai
 Composition: vertical mobile-first wildlife portrait, sifaka face and torso sharp in central or upper-middle area, lower third calm with blurred trunk/foliage, no text.
 
 Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, ring-tailed lemur, Indri-like black-and-white body, generic monkey, human-like expression, zoo enclosure, cage, duplicate lemurs, second main animal, text, logo, watermark, cropped face, blurry eyes, deformed limbs, oversaturated colors.
-```
-
-### hero-trachelophorus-giraffa.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-trachelophorus-giraffa.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Charancon girafe, Trachelophorus giraffa.
-Scene: a male giraffe weevil on a fresh green leaf in Madagascar rainforest vegetation. The weevil must be the only main subject, with a very long black neck, black body, red wing covers, small head, and realistic beetle anatomy. The leaf can show a subtle rolled/cut detail as ecological context, but must not distract.
-
-Composition: vertical mobile-first macro wildlife cover, weevil sharp in central or upper-middle area, soft green rainforest bokeh, calm lower third with blurred leaf surface, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, generic beetle, ladybird, ant, incorrect short neck, missing red elytra, duplicate insects, second main insect, human hand, text, logo, watermark, cropped neck, blurry subject, deformed legs, harsh flash.
 ```
 
 ## Thumbnails Still To Generate
