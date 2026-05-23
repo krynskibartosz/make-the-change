@@ -309,7 +309,20 @@ export async function ProjectQuickView({
           ) : null}
 
           <div className="pb-40 sm:pb-44">
-            {/* 4. Impact preview */}
+            {/* 4. Comprendre ce projet */}
+            <div className="mt-14 px-4 sm:px-5">
+              <ProjectBiodexSheet
+                species={species ?? []}
+                projectType={project.type}
+                projectSlug={project.slug}
+                isDonationProject={isDonationProject}
+                description={narrativeDescription}
+                producerName={project.producer ? organizerName : undefined}
+                producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
+              />
+            </div>
+
+            {/* 5. Ce que le projet permet */}
             {impactItems.length > 0 ? (
               <div className="mt-14 px-4 sm:px-5">
                 <ProjectImpactPreview
@@ -319,7 +332,7 @@ export async function ProjectQuickView({
               </div>
             ) : null}
 
-            {/* 5. Objectif */}
+            {/* 6. Objectif */}
             <div className="mt-14 px-4 sm:px-5">
               <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
                 {fundingTitle}
@@ -358,19 +371,6 @@ export async function ProjectQuickView({
                 isDonationProject={isDonationProject}
                 fundingTitle={fundingTitle}
                 indicatorClassName={PROGRESS_INDICATOR_CLASS[glowTone]}
-              />
-            </div>
-
-            {/* 6. Comprendre ce projet */}
-            <div className="mt-16 px-4 sm:px-5">
-              <ProjectBiodexSheet
-                species={species ?? []}
-                projectType={project.type}
-                projectSlug={project.slug}
-                isDonationProject={isDonationProject}
-                description={narrativeDescription}
-                producerName={project.producer ? organizerName : undefined}
-                producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
               />
             </div>
 
