@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp, Info } from 'lucide-react'
+import { ChevronUp } from 'lucide-react'
 import type { ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { MobileSheet } from '../shared/mobile-sheet'
@@ -31,17 +31,6 @@ const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-gecko-diurne': '/images/species-thumbnails/gecko-diurne.png',
   'species-chouette-cheveche': '/images/species-thumbnails/chouette-cheveche.png',
   'species-liotrigona-bitika': '/images/species-thumbnails/liotrigona-bitika.png',
-}
-
-const STATUS_LABEL: Record<string, { label: string; color: string }> = {
-  CR: { label: 'En danger critique', color: 'text-red-400/80' },
-  EN: { label: 'En danger', color: 'text-orange-400/80' },
-  VU: { label: 'Vulnérable', color: 'text-amber-400/80' },
-  NT: { label: 'Quasi menacé', color: 'text-yellow-400/70' },
-  LC: { label: 'Préoccupation mineure', color: 'text-emerald-400/70' },
-  DD: { label: 'Données insuffisantes', color: 'text-white/35' },
-  EW: { label: "Éteint à l'état sauvage", color: 'text-red-500/80' },
-  EX: { label: 'Éteint', color: 'text-red-600/80' },
 }
 
 type CycleStep = { label: string; description: string }
@@ -343,68 +332,37 @@ function KeyElementCard({
   )
 }
 
-function SheetSpeciesRow({ species }: { species: ProjectSpecies }) {
-  const imageUrl = getSpeciesImageUrl(species)
-  const statusInfo = STATUS_LABEL[species.status?.toUpperCase()] ?? null
-
+function CycleLabels({ steps }: { steps: ProjectCycle['steps'] }) {
   return (
-    <div className="flex gap-3 border-b border-white/[0.06] py-3.5 last:border-0">
-      <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-white/[0.05]">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={formatCommonName(species.name)}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <div className="h-full w-full" />
-        )}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-bold text-white">{formatCommonName(species.name)}</p>
-        {species.scientificName ? (
-          <p className="mt-0.5 text-[11px] italic text-white/30">{species.scientificName}</p>
-        ) : null}
-        {statusInfo ? (
-          <p className="mt-1 text-[10px]">
-            <span className="font-medium text-white/25">Statut UICN · </span>
-            <span className={`font-bold uppercase tracking-[0.05em] ${statusInfo.color}`}>
-              {statusInfo.label}
-            </span>
-          </p>
-        ) : null}
-      </div>
+    <div className="space-y-2">
+      {steps.map((step, index) => (
+        <div key={step.label} className="flex items-center gap-3">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-black text-lime-400/80">
+            {index + 1}
+          </div>
+          <p className="text-[13px] font-bold text-white">{step.label}</p>
+        </div>
+      ))}
     </div>
   )
 }
 
-function CycleSteps({
-  steps,
-  compact = false,
-}: {
-  steps: ProjectCycle['steps']
-  compact?: boolean
-}) {
+function CycleSteps({ steps }: { steps: ProjectCycle['steps'] }) {
   return (
     <div>
       {steps.map((step, index) => (
-        <div key={step.label} className={`flex gap-3 ${compact ? 'py-2' : 'py-2.5'}`}>
+        <div key={step.label} className="flex gap-3 py-2.5">
           <div className="flex flex-col items-center">
             <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-black text-lime-400/80">
               {index + 1}
             </div>
             {index < steps.length - 1 ? (
-              <div
-                className="mt-1 w-px flex-1 bg-white/[0.06]"
-                style={{ minHeight: compact ? '14px' : '16px' }}
-              />
+              <div className="mt-1 w-px flex-1 bg-white/[0.06]" style={{ minHeight: '16px' }} />
             ) : null}
           </div>
-          <div className={`min-w-0 ${compact ? 'pb-1.5' : 'pb-2'}`}>
+          <div className="min-w-0 pb-2">
             <p className="text-[13px] font-bold text-white">{step.label}</p>
-            <p className={`mt-0.5 text-[12px] leading-relaxed ${compact ? 'text-white/45' : 'text-white/50'}`}>
-              {step.description}
-            </p>
+            <p className="mt-0.5 text-[12px] leading-relaxed text-white/50">{step.description}</p>
           </div>
         </div>
       ))}
@@ -480,12 +438,6 @@ export function ProjectBiodexSheet({
   const step3Title = isDonationProject ? "Vous suivez l'évolution" : 'Vous recevez des nouvelles'
 
   const keySpeciesFromData = species?.find((sp) => isKeySpecies(sp.role)) ?? species?.[0] ?? null
-  const biodexSpecies = keySpeciesFromData
-    ? (species ?? []).filter((sp) => sp.id !== keySpeciesFromData.id)
-    : (species ?? [])
-
-  const visibleBiodex = biodexSpecies.slice(0, 3)
-  const hiddenCount = biodexSpecies.length - visibleBiodex.length
 
   const keyElement = cycle.keyElementOverride
     ? {
@@ -500,10 +452,6 @@ export function ProjectBiodexSheet({
           imageUrl: getSpeciesImageUrl(keySpeciesFromData),
         }
       : null
-
-  const buttonSubtitle = biodexSpecies.length > 0
-    ? 'Histoire, cycle, suivi terrain et espèces BioDex'
-    : 'Histoire du projet, cycle et suivi terrain'
 
   return (
     <>
@@ -525,73 +473,23 @@ export function ProjectBiodexSheet({
         />
       ) : null}
 
-      {/* ── Cycle du projet ── */}
+      {/* ── Cycle : labels seulement ── */}
       <div className="mt-5">
         <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
           Le cycle du projet
         </p>
-        <CycleSteps steps={cycle.steps} compact />
+        <CycleLabels steps={cycle.steps} />
       </div>
 
-      {/* ── BioDex (espèces contextuelles) ── */}
-      {biodexSpecies.length > 0 ? (
-        <div className="mt-5">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
-            À découvrir dans le BioDex
-          </p>
-          <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-5 sm:px-5">
-            <div className="flex gap-3 pr-4">
-              {visibleBiodex.map((sp) => {
-                const imgUrl = getSpeciesImageUrl(sp)
-                return (
-                  <div key={sp.id} className="flex w-[68px] shrink-0 flex-col">
-                    <div className="h-[68px] w-[68px] overflow-hidden rounded-xl bg-white/[0.04]">
-                      {imgUrl ? (
-                        <img
-                          src={imgUrl}
-                          alt={formatCommonName(sp.name)}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="h-full w-full" />
-                      )}
-                    </div>
-                    <p className="mt-1.5 line-clamp-2 text-center text-[10px] font-semibold leading-snug text-white/40">
-                      {formatCommonName(sp.name)}
-                    </p>
-                  </div>
-                )
-              })}
-
-              {hiddenCount > 0 ? (
-                <button
-                  type="button"
-                  onClick={() => setIsOpen(true)}
-                  className="flex w-[68px] shrink-0 flex-col items-center"
-                  aria-label={`Voir les ${hiddenCount} autres espèces du BioDex`}
-                >
-                  <div className="flex h-[68px] w-[68px] flex-col items-center justify-center gap-1 rounded-xl border border-white/[0.07] bg-white/[0.03] transition-colors hover:bg-white/[0.06] active:bg-white/[0.08]">
-                    <span className="text-[13px] font-black leading-none text-white/50">
-                      +{hiddenCount}
-                    </span>
-                    <span className="text-[9px] text-white/30">espèces</span>
-                  </div>
-                </button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {/* ── Bouton "En savoir plus" → sheet ── */}
+      {/* ── Bouton "Voir le détail complet" ── */}
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="mt-4 flex w-full items-center gap-3 rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
+        className="mt-5 flex w-full items-center gap-3 rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="text-sm font-bold text-white/70">En savoir plus</span>
-          <span className="text-xs text-white/35">{buttonSubtitle}</span>
+          <span className="text-sm font-bold text-white/70">Voir le détail complet</span>
+          <span className="text-xs text-white/35">Histoire, cycle détaillé et suivi terrain</span>
         </div>
         <ChevronUp className="h-4 w-4 shrink-0 text-white/25" />
       </button>
@@ -646,44 +544,11 @@ export function ProjectBiodexSheet({
         <div className="mt-8">
           <SectionLabel>Du soutien au terrain</SectionLabel>
           <div className="space-y-0">
-            <TrackingStep
-              number={1}
-              title={step1Title}
-              body={step1Body}
-            />
-            <TrackingStep
-              number={2}
-              title={step2Title}
-              body={step2Intro}
-              chips={actionChips}
-            />
-            <TrackingStep
-              number={3}
-              title={step3Title}
-              chips={receiveChips}
-              isLast
-            />
+            <TrackingStep number={1} title={step1Title} body={step1Body} />
+            <TrackingStep number={2} title={step2Title} body={step2Intro} chips={actionChips} />
+            <TrackingStep number={3} title={step3Title} chips={receiveChips} isLast />
           </div>
         </div>
-
-        {/* 4. BioDex */}
-        {species && species.length > 0 ? (
-          <div className="mt-8">
-            <SectionLabel>BioDex · Espèces associées</SectionLabel>
-            <p className="mb-3 text-[11px] leading-relaxed text-white/25">
-              Ces espèces enrichissent votre parcours de découverte. Elles ne sont pas toutes
-              directement liées au mécanisme du projet.
-            </p>
-            <div>
-              {(cycle.keyElementOverride
-                ? species
-                : [keySpeciesFromData, ...biodexSpecies].filter(Boolean)
-              ).map((sp) => (
-                <SheetSpeciesRow key={sp!.id} species={sp!} />
-              ))}
-            </div>
-          </div>
-        ) : null}
 
         {/* Footer */}
         <div className="mt-10 rounded-xl bg-white/[0.03] px-4 py-3">
@@ -696,12 +561,7 @@ export function ProjectBiodexSheet({
           </p>
         </div>
 
-        <p className="mt-3 text-[11px] leading-relaxed text-white/25">
-          Le cycle présenté est une représentation pédagogique du mécanisme du projet. Les données
-          terrain peuvent varier selon les conditions locales.
-        </p>
-
-        <p className="mt-2 pb-2 text-[10px] leading-relaxed text-white/20">
+        <p className="mt-3 pb-2 text-[10px] leading-relaxed text-white/20">
           {step1Disclaimer}
         </p>
       </MobileSheet>
