@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { BookOpen, Home, Gift, Earth, User } from "lucide-react";
+import { BookOpen, Home, Users, Earth, User } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -24,21 +24,21 @@ type BottomNavItem = {
 export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
   const pathname = usePathname();
 
-  const isAdventure = pathname.startsWith("/adventure");
+  const isAccueil = pathname.startsWith("/accueil");
   const isProjects = pathname.startsWith("/projects");
   const isApprendre = pathname.startsWith("/learn");
+  const isCollectif = pathname.startsWith("/collectif") || pathname.startsWith("/impact");
   const isProfile = pathname.startsWith("/profile");
-  const isAdvantages = pathname.startsWith("/advantages");
 
   const navLinkClass =
     "flex h-full min-h-[48px] w-full flex-1 flex-col items-center justify-center gap-1 px-1 pt-2 text-center transition-colors";
 
   const navItems: BottomNavItem[] = [
     {
-      href: "/adventure",
+      href: "/accueil",
       icon: Home,
       label: "Accueil",
-      isActive: isAdventure,
+      isActive: isAccueil,
     },
     {
       href: "/projects",
@@ -53,10 +53,10 @@ export function MobileBottomNav({ user: _user }: MobileBottomNavProps) {
       isActive: isApprendre,
     },
     {
-      href: "/advantages",
-      icon: Gift,
-      label: "Avantages",
-      isActive: isAdvantages,
+      href: "/collectif",
+      icon: Users,
+      label: "Collectif",
+      isActive: isCollectif,
     },
     {
       href: "/profile",

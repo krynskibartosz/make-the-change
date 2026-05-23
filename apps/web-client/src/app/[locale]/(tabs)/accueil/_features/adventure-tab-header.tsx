@@ -1,4 +1,4 @@
-﻿import { CurrencyIcon } from "@/components/currency";
+import { CurrencyIcon } from "@/components/currency";
 import { Link } from "@/i18n/navigation";
 import { formatCompact } from "@/lib/formatters";
 import { resolveFactionThemeKey } from "@/lib/faction-theme";
@@ -12,7 +12,6 @@ type AdventureTabHeaderProps = {
 
 export function AdventureTabHeader({
   faction,
-  seeds,
   impactPoints,
 }: AdventureTabHeaderProps) {
   const themeKey = resolveFactionThemeKey(faction);
@@ -28,18 +27,7 @@ export function AdventureTabHeader({
 
       <div className="flex shrink-0 items-center gap-2">
         <Link
-          href="/profile/seeds"
-          prefetch={false}
-          aria-label={`${seeds} graines`}
-          className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"
-        >
-          <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
-          <span className="text-[12px] font-black tabular-nums text-white">
-            {formatCompact(seeds)}
-          </span>
-        </Link>
-        <Link
-          href="/advantages"
+          href="/profile"
           prefetch={false}
           aria-label={`${impactPoints} Credits Impact`}
           className="flex h-9 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 backdrop-blur-md px-3 transition-colors active:bg-white/10 shadow-sm"
