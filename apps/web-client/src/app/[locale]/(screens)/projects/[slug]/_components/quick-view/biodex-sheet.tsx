@@ -362,16 +362,16 @@ export function ProjectBiodexSheet({
   const actionChips = getSupportChips(projectType, isDonationProject)
   const receiveChips = getReceiveChips(isDonationProject)
 
-  const step1Title = isDonationProject ? 'Vous faites un don' : 'Vous soutenez ce projet'
+  const step1Title = isDonationProject ? 'Vous contribuez à ce projet' : 'Vous soutenez ce projet'
   const step1Body = isDonationProject
-    ? "Votre don est rattaché à ce projet et à l'équipe qui le porte."
+    ? "Votre contribution est rattachée à ce projet et à l'équipe qui le porte."
     : 'Votre contribution est rattachée à ce projet et au partenaire qui le porte.'
   const step1Disclaimer = isDonationProject
-    ? "Ce don n'est pas un achat produit ni une promesse de rendement. Il ne donne pas droit à des Crédits Impact."
+    ? "Cette contribution n'est pas un achat produit ni une promesse de rendement. Elle ne donne pas droit à des Crédits Impact."
     : "Ce soutien n'est pas un achat produit, un investissement financier ou une promesse de rendement."
   const step2Title = isDonationProject ? "L'équipe agit sur le terrain" : 'Le partenaire agit sur le terrain'
   const step2Intro = isDonationProject
-    ? 'Le don peut aider à financer ou accompagner certaines actions concrètes :'
+    ? 'La contribution peut aider à financer ou accompagner certaines actions concrètes :'
     : 'Le soutien peut aider à financer ou accompagner certaines actions concrètes :'
   const step3Title = isDonationProject ? "Vous suivez l'évolution" : 'Vous recevez des nouvelles'
 

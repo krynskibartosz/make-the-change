@@ -155,7 +155,7 @@ export function v2UnitToLegacy(
     reward: {
       type: 'seeds',
       amount: unit.rewardAmount,
-      label: `${unit.rewardAmount} Graines`,
+      label: `${unit.rewardAmount} XP Academy`,
     },
     lessons,
     questionPool,

@@ -314,10 +314,10 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                 <section className="px-4">
                   <div className="mb-10">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
-                      Faire un don
+                      Contribuer à un projet
                     </h2>
                     <p className="mt-1 text-[13px] font-medium leading-snug text-white/50">
-                      Contribuez directement à une action de terrain. Sans contrepartie — avec un suivi clair du projet.
+                      Soutenez directement une action de terrain. Les frais sont affichés clairement. Suivi du projet inclus.
                     </p>
                   </div>
                   <div className="flex flex-col gap-14">
@@ -335,7 +335,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
                       Soutenir un producteur
                     </h2>
                     <p className="mt-1 text-[13px] font-medium leading-snug text-white/50">
-                      Accompagnez un partenaire engagé et sa filière. Votre soutien crée de la valeur sur le terrain.
+                      Accompagnez un partenaire engagé et sa filière. Vous recevez des Crédits Impact utilisables dans les avantages partenaires.
                     </p>
                   </div>
                   <div className="flex flex-col gap-14">

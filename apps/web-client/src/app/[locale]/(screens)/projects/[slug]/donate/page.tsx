@@ -2,8 +2,6 @@ import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { ProjectDonateOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/donate/_components/project-donate-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
-import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
 import { isDonationType, toOptionalString } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
@@ -21,19 +19,7 @@ export default async function DonatePage({ params, searchParams }: DonatePagePro
     notFound()
   }
 
-  const supabase = await createClient()
   const locale = await getLocale()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const speciesList = await getSpeciesContextList()
-  const unlockedSpecies = user
-    ? speciesList.find(
-        (species) =>
-          species.user_status?.isUnlocked && species.user_status.unlockSource === 'donation',
-      )
-    : null
 
   return (
     <ProjectDonateOneFlow
@@ -49,8 +35,8 @@ export default async function DonatePage({ params, searchParams }: DonatePagePro
         expectedImpact: project.expected_impact,
       }}
       presentation="page"
-      isAuthenticated={Boolean(user)}
-      discoveredSpeciesId={unlockedSpecies?.id ?? null}
+      isAuthenticated={false}
+      discoveredSpeciesId={null}
       initialOptionId={toOptionalString(query.option)}
     />
   )

@@ -3,16 +3,11 @@ import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { ProjectSupportOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/support/_components/project-support-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
-import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { createClient } from '@/lib/supabase/server'
+import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
 import { getLocalizedContent } from '@/lib/utils'
 
 function isSupportType(value: unknown): value is 'beehive' | 'olive_tree' | 'vineyard' {
   return value === 'beehive' || value === 'olive_tree' || value === 'vineyard'
-}
-
-function toOptionalString(value: string | string[] | undefined): string | undefined {
-  return typeof value === 'string' && value.trim() ? value : undefined
 }
 
 function toOptionalAmount(value: string | string[] | undefined): number | undefined {
@@ -48,12 +43,7 @@ export default async function InterceptedProjectSupportPage({
     notFound()
   }
 
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const speciesList = await getSpeciesContextList()
-  const unlockedSpecies = speciesList.find((species) => species.user_status?.isUnlocked)
+  const projectSpecies = await getSpeciesForProject(project.slug, project.id)
 
   return (
     <FullScreenSlideModal
@@ -73,10 +63,10 @@ export default async function InterceptedProjectSupportPage({
           expectedImpact: project.expected_impact,
         }}
         presentation="modal"
-        isAuthenticated={Boolean(user)}
-        source={toOptionalString(query.source)}
+        isAuthenticated={false}
         initialAmount={toOptionalAmount(query.amount)}
-        discoveredSpeciesId={unlockedSpecies?.id ?? null}
+        discoveredSpeciesId={projectSpecies[0]?.id ?? null}
+        species={projectSpecies}
       />
     </FullScreenSlideModal>
   )

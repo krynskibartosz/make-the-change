@@ -152,9 +152,9 @@ export async function ProjectQuickView({
   })
 
   const partnerLabel = isDonationProject ? 'Partenaire terrain' : 'Producteur partenaire'
-  const fundingTitle = isDonationProject ? 'Objectif de don' : 'Objectif de soutien'
+  const fundingTitle = isDonationProject ? 'Objectif de contribution' : 'Objectif de soutien'
   const fundingSubtext = isDonationProject
-    ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
+    ? 'Restauration, suivi terrain et matériel. Les frais sont affichés clairement avant paiement.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
   const projectContextLabel = (() => {
     if (isDonationProject) return 'Projet biodiversité'
@@ -164,8 +164,8 @@ export async function ProjectQuickView({
     return 'Filière locale'
   })()
   const ctaProofLine = isDonationProject
-    ? `Suivi terrain · Don sans contrepartie · ${projectContextLabel}`
-    : `Suivi terrain · Crédits Impact possibles · ${projectContextLabel}`
+    ? `Suivi terrain · Trace BioDex incluse · ${projectContextLabel}`
+    : `Suivi terrain · Crédits Impact inclus · ${projectContextLabel}`
   const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (
@@ -402,7 +402,7 @@ export async function ProjectQuickView({
           ) : (
             <Link href={supportPath} className="block w-full">
               <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
-                {isDonationProject ? 'Faire un don' : 'Soutenir ce projet'}
+                {isDonationProject ? 'Contribuer à ce projet' : 'Soutenir ce projet'}
               </Button>
             </Link>
           )}

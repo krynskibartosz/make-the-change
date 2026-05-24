@@ -14,6 +14,23 @@ PSP possibles :
 * Mollie Connect ;
 * Adyen for Platforms plus tard si volume important.
 
+## Décision renforcée après revue
+
+[RECOMMANDÉ] La V1 doit être pensée comme une architecture de plateforme, même si le volume est faible au départ.
+
+Décision opérationnelle :
+
+```text
+PSP = source technique des paiements
+Ledger MTC = source métier de vérité
+Comptabilité = source légale et fiscale
+Dashboard = vue de pilotage
+```
+
+Le PSP ne doit pas être la seule source de vérité : il ne connaît pas toujours le sens métier d’un paiement, le niveau de preuve d’un projet, la règle Credits Impact, la réserve avantages, ni la distinction exacte entre contribution, soutien producteur et achat produit.
+
+[RECOMMANDÉ] Chaque paiement doit créer des événements immuables dans le ledger. Les corrections se font par écritures d’ajustement, pas par modification silencieuse d’une transaction passée.
+
 ---
 
 ## 1. Principe de base
@@ -137,11 +154,33 @@ Recommandation pratique :
 
 > Designer l’architecture comme si Stripe Connect était la cible long terme, même si Mollie est testé en V1.
 
+## Décision PSP à documenter avant intégration
+
+[RECOMMANDÉ] Avant de coder le paiement réel, choisir explicitement le modèle de flux et de responsabilité.
+
+| Question | Stripe Connect | Mollie Connect | Décision MTC recommandée |
+| --- | --- | --- | --- |
+| Partenaires multiples | Très adapté | Adapté selon modèle Platforms / Marketplaces | Concevoir une abstraction interne. |
+| Frais plateforme | Application fee / solde plateforme selon type de charge | Application fees / split payments selon modèle | Ne pas coder la commission directement dans la logique produit. |
+| Remboursements | Responsabilité différente selon direct / destination / separate charges | Responsabilité différente selon Platforms / Marketplaces | Documenter qui supporte refund, chargeback et solde négatif. |
+| Multi-pays | Fort pour ambition Europe | Bon pour V1 européenne simple | Stripe cible long terme, Mollie test possible. |
+| Bancontact | Disponible selon configuration | Très naturel en Belgique | Critère important pour V1 belge. |
+| Ledger interne | Obligatoire | Obligatoire | Indépendant du PSP choisi. |
+
+Points à décider avec le PSP :
+
+* qui est merchant of record selon chaque flux ;
+* quel compte porte le risque de remboursement et chargeback ;
+* peut-on retarder les payouts produit ;
+* comment gérer remboursement partiel + annulation partielle des Credits Impact ;
+* comment exporter les frais PSP, commissions, payouts et litiges ;
+* comment migrer si MTC change de PSP plus tard.
+
 ---
 
 ## 5. Les trois flux financiers principaux
 
-## A. Don pur
+### A. Don pur
 
 [VALIDÉ] Un don pur ne donne pas de Credits Impact.
 
@@ -169,7 +208,7 @@ Wording recommandé :
 
 ---
 
-## B. Soutien producteur
+### B. Soutien producteur
 
 [VALIDÉ] Les Credits Impact viennent uniquement du soutien producteur.
 
@@ -201,7 +240,7 @@ Décision recommandée :
 
 ---
 
-## C. Achat produit
+### C. Achat produit
 
 [VALIDÉ] Un achat produit ne crée pas de Credits Impact.
 
@@ -243,6 +282,18 @@ Wording recommandé :
 * expiration recommandée : 24 mois ;
 * annulation des CI en cas de remboursement du soutien ;
 * financement des avantages via une réserve interne ou accord partenaire.
+
+[RECOMMANDÉ] Les Credits Impact doivent être traités comme un ledger séparé du solde financier, avec des événements propres :
+
+* émission ;
+* utilisation ;
+* expiration ;
+* annulation ;
+* ajustement manuel justifié ;
+* blocage temporaire en cas de litige ;
+* solde négatif exceptionnel en cas de remboursement après utilisation.
+
+[RECOMMANDÉ] Attribution V1 : émettre les Credits Impact seulement après paiement capturé et confirmé par webhook PSP. Pour les montants élevés ou comportements suspects, prévoir un statut “en attente” avant utilisation.
 
 À ne pas dire :
 
@@ -311,6 +362,23 @@ Exemple de champs transaction :
 | transfer_status       | pending          |
 | created_at            | 2026-05-24       |
 
+Champs complémentaires recommandés :
+
+| Champ | Pourquoi |
+| --- | --- |
+| seller_of_record | Identifie le vendeur officiel ou bénéficiaire réel. |
+| merchant_of_record | Clarifie qui porte le paiement côté PSP. |
+| vat_treatment_status | Marque “à valider”, “TVA belge”, “intracom”, “hors champ”, etc. |
+| receipt_type | Contribution, confirmation de soutien, facture partenaire, reçu fiscal validé. |
+| refund_policy_snapshot | Version des conditions acceptées au moment du paiement. |
+| evidence_level_at_payment | Niveau de preuve affiché au moment de la contribution. |
+| terms_version | Version CGU / CGV acceptée. |
+| psp_charge_id | Référence PSP. |
+| psp_transfer_id | Référence payout / transfert si disponible. |
+| ledger_version | Version du modèle ledger utilisé. |
+
+[RECOMMANDÉ] Les dashboards doivent lire le ledger MTC, pas recalculer les montants depuis l’interface PSP à la volée.
+
 ---
 
 ## 9. Dashboard admin minimal
@@ -369,6 +437,28 @@ Questions à décider :
 * CI déjà utilisés = solde négatif ou remboursement partiel ajusté ;
 * produit non livré = responsabilité vendeur partenaire en V1 ;
 * Make the Change doit prévoir une réserve litiges.
+
+## Politique de remboursement V1 proposée
+
+[RECOMMANDÉ] Décider ces règles avant le premier paiement réel :
+
+| Flux | Règle V1 proposée | Point à valider |
+| --- | --- | --- |
+| Contribution au projet | Non remboursable par défaut après affectation, sauf erreur, fraude ou annulation projet | Validation juridique et wording public. |
+| Soutien producteur | Remboursable selon fenêtre courte définie, puis au cas par cas | Annulation totale ou partielle des Credits Impact. |
+| Achat produit | Droit de rétractation consommateur si applicable | Exceptions : périssable, personnalisé, hygiène, contenu numérique. |
+| Avantage CI | Annulation de l’avantage si commande remboursée | Traitement du solde CI déjà consommé. |
+
+Workflow recommandé :
+
+1. Demande utilisateur créée.
+2. Statut ledger : refund_requested.
+3. Vérification du flux, vendeur, délai, conditions applicables.
+4. Validation admin ou partenaire selon responsabilité.
+5. Remboursement PSP.
+6. Écriture ledger de remboursement.
+7. Écriture Credits Impact si nécessaire.
+8. Notification utilisateur et partenaire.
 
 ---
 

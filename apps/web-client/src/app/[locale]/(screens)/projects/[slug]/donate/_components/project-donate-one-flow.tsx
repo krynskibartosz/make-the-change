@@ -6,25 +6,26 @@ import {
   CardContent,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Camera, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail } from 'lucide-react'
-import { CurrencyIcon } from '@/components/currency'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
 import { motion } from 'framer-motion'
 import { MobileSheet } from '../../_components/shared/mobile-sheet'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { useHaptic } from '@/hooks/use-haptic'
-import { cn, formatSeeds } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug]/_components/shared/impact-calculator'
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import { makeProjectGlowRgba } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-glow'
+import { PaymentBreakdown } from '@/app/[locale]/(screens)/projects/[slug]/_components/shared/payment-breakdown'
+import { claimGuestSupport } from '@/app/[locale]/(screens)/projects/_actions/claim'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
-type SheetKind = 'seeds' | 'tracking' | null
+type SheetKind = 'biodex' | 'tracking' | null
 
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
@@ -75,34 +76,32 @@ function NextStepLine({
 }
 
 function AfterDonateBlock({
-  seeds,
   hasSpecies,
-  onOpenSeeds,
+  onOpenBioDex,
   onOpenTracking,
 }: {
-  seeds: number
   hasSpecies: boolean
-  onOpenSeeds: () => void
+  onOpenBioDex: () => void
   onOpenTracking: () => void
 }) {
   return (
     <div>
       <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-        Après votre don
+        Après votre contribution
       </p>
       <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045]">
         <button
           type="button"
-          onClick={onOpenSeeds}
+          onClick={onOpenBioDex}
           className="flex w-full items-center gap-3 border-b border-white/[0.06] px-4 py-3.5 text-left active:bg-white/[0.03]"
         >
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-emerald-300/16 bg-emerald-300/10 text-emerald-300">
-            <CurrencyIcon kind="seeds" className="h-4 w-4" />
+            <Leaf className="h-4 w-4" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-black text-white">{formatSeeds(seeds)} Graines</p>
+            <p className="text-[13px] font-black text-white">Trace BioDex</p>
             <p className="mt-0.5 text-[11px] leading-snug text-white/40">
-              Pour faire progresser votre aventure BioDex.
+              Une trace de votre contribution dans votre parcours.
             </p>
           </div>
           <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
@@ -129,7 +128,7 @@ function AfterDonateBlock({
         {hasSpecies ? (
           <button
             type="button"
-            onClick={onOpenSeeds}
+            onClick={onOpenBioDex}
             className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
           >
             <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
@@ -137,7 +136,7 @@ function AfterDonateBlock({
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[13px] font-black text-white">Espèce liée au projet</p>
-              <p className="mt-0.5 text-[11px] leading-snug text-white/40">BioDex débloquable après votre don.</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-white/40">BioDex débloquable après votre contribution.</p>
             </div>
             <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
           </button>
@@ -148,27 +147,25 @@ function AfterDonateBlock({
 }
 
 function IncludedDonateSummary({
-  seeds,
   hasSpecies,
   onOpen,
 }: {
-  seeds: number
   hasSpecies: boolean
   onOpen: () => void
 }) {
   return (
     <div>
       <p className="mb-3.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-        Après votre don
+        Après votre contribution
       </p>
       <div className="space-y-3.5">
         <div className="flex items-start gap-3">
           <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-emerald-300/16 bg-emerald-300/10 text-emerald-300">
-            <CurrencyIcon kind="seeds" className="h-3.5 w-3.5" />
+            <Leaf className="h-3.5 w-3.5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-black text-white">{formatSeeds(seeds)} Graines</p>
-            <p className="text-[11px] leading-snug text-white/40">Pour faire progresser votre aventure BioDex.</p>
+            <p className="text-[13px] font-black text-white">Trace BioDex</p>
+            <p className="text-[11px] leading-snug text-white/40">Pour garder une trace simple de votre contribution.</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
@@ -187,7 +184,7 @@ function IncludedDonateSummary({
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[13px] font-black text-white">Espèce liée au projet</p>
-              <p className="text-[11px] leading-snug text-white/40">BioDex débloquable après votre don.</p>
+              <p className="text-[11px] leading-snug text-white/40">BioDex débloquable après votre contribution.</p>
             </div>
           </div>
         ) : null}
@@ -204,33 +201,31 @@ function IncludedDonateSummary({
   )
 }
 
-function SeedsSheet({
+function BioDexSheet({
   isOpen,
   onClose,
-  seeds,
   amount,
   hasSpecies,
 }: {
   isOpen: boolean
   onClose: () => void
-  seeds: number
   amount: number
   hasSpecies: boolean
 }) {
   return (
-    <MobileSheet isOpen={isOpen} onClose={onClose} title="Graines & BioDex">
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Trace BioDex">
       <p className="mt-1 text-sm leading-relaxed text-white/50">
-        Votre don de {amount}&nbsp;€ reste rattaché à ce projet. Les Graines et le BioDex servent à faire progresser votre aventure et à garder une trace de votre contribution.
+        Votre contribution de {amount}&nbsp;€ reste rattachée à ce projet. Le BioDex sert à garder une trace claire de votre contribution et des espèces liées.
       </p>
 
       <div className="mt-5">
-        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">Graines</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">Trace de contribution</p>
         <div className="mt-2 flex items-center gap-2.5">
-          <CurrencyIcon kind="seeds" className="h-5 w-5 text-emerald-300" />
-          <p className="text-[15px] font-black text-white">{formatSeeds(seeds)} Graines</p>
+          <Leaf className="h-5 w-5 text-emerald-300" />
+          <p className="text-[15px] font-black text-white">Trace enregistrée</p>
         </div>
         <p className="mt-1 text-sm leading-relaxed text-white/50">
-          Pour faire progresser votre aventure dans le BioDex.
+          Votre contribution est documentée et conservée dans votre profil avec le projet, le montant et la date.
         </p>
       </div>
 
@@ -238,7 +233,7 @@ function SeedsSheet({
         <div className="mt-5">
           <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">BioDex lié</p>
           <p className="mt-2 text-sm leading-relaxed text-white/50">
-            Une espèce liée à ce projet sera débloquable dans votre BioDex après votre don.
+            Une espèce liée à ce projet sera débloquable dans votre BioDex après votre contribution.
           </p>
         </div>
       ) : null}
@@ -251,7 +246,7 @@ function SeedsSheet({
       </div>
 
       <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
-        Pas de rendement financier. Pas de reçu fiscal.
+        Pas de rendement financier. Ce reçu de contribution n&apos;est pas un reçu fiscal déductible.
       </p>
     </MobileSheet>
   )
@@ -260,12 +255,12 @@ function SeedsSheet({
 function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const steps = [
     {
-      title: 'Votre don est enregistré',
-      body: 'Il est rattaché au projet, au montant choisi et au partenaire.',
+      title: 'Votre contribution est enregistrée',
+      body: 'Elle est rattachée au projet, au montant choisi et au partenaire.',
     },
     {
       title: 'Le partenaire agit sur le terrain',
-      body: 'Le don contribue à la restauration, au suivi ou à la valorisation du projet.',
+      body: 'La contribution contribue à la restauration, au suivi ou à la valorisation du projet.',
     },
     {
       title: "Vous suivez l'évolution",
@@ -274,7 +269,7 @@ function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
   ]
 
   return (
-    <MobileSheet isOpen={isOpen} onClose={onClose} title="Suivi du don">
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Suivi de la contribution">
       <p className="mt-1 text-sm text-white/50">Ce qui se passe après votre paiement.</p>
 
       <div className="mt-4">
@@ -298,14 +293,14 @@ function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
       </div>
 
       <div className="mt-3">
-        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">À garder clair</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">Niveau de preuve</p>
         <p className="mt-2 text-sm leading-relaxed text-white/50">
-          Le suivi documente la relation avec le terrain, mais ne garantit pas un impact mesuré immédiatement.
+          Le suivi documente la relation avec le terrain — photos, nouvelles partenaires, étapes. Il ne constitue pas une preuve d&apos;impact mesuré. Les données vérifiées sont affichées avec leur source et niveau de confiance.
         </p>
       </div>
 
       <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
-        Pas de rendement financier. Pas de reçu fiscal.
+        Pas de rendement financier. Ce reçu de contribution n&apos;est pas un reçu fiscal déductible.
       </p>
     </MobileSheet>
   )
@@ -362,11 +357,6 @@ export function ProjectDonateOneFlow({
   const [isProcessing, setIsProcessing] = useState(false)
 
   const stepIndex = FLOW_STEPS.indexOf(step)
-
-  const seeds = useMemo(() => {
-    const option = project.donationOptions.find((opt) => opt.price === amountEur)
-    return option?.rewards.seeds || Math.max(1, Math.round(amountEur))
-  }, [amountEur, project.donationOptions])
 
   const formattedAmount = formatAmountNumber(amountEur)
   const donationMetrics = getProjectImpactMetrics({
@@ -499,16 +489,24 @@ export function ProjectDonateOneFlow({
     }, 1500)
   }
 
-  const submitClaim = () => {
+  const submitClaim = async () => {
     if (!isValidEmail(guestEmail)) return
     setIsSendingMagicLink(true)
-    setTimeout(() => {
+    try {
+      const res = await claimGuestSupport(guestEmail)
+      if (res.success) {
+        setClaimSaved(true)
+        setTimeout(() => {
+          router.replace('/profile/biodex')
+        }, 2000)
+      } else {
+        setGuestEmailError(res.error || "Erreur lors de l'enregistrement.")
+      }
+    } catch (e) {
+      setGuestEmailError("Une erreur est survenue.")
+    } finally {
       setIsSendingMagicLink(false)
-      setClaimSaved(true)
-      setTimeout(() => {
-        router.replace('/profile/biodex')
-      }, 2000)
-    }, 1200)
+    }
   }
 
   const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
@@ -582,9 +580,9 @@ export function ProjectDonateOneFlow({
             <div className={cn('flex flex-col gap-8 py-4 px-4', presentation === 'modal' ? 'pt-16' : 'pt-10')}>
               <div className="flex flex-col items-center justify-center text-center">
                 <div className="mb-5 text-center">
-                  <p className="text-xl font-black text-white">Choisissez votre don</p>
+                  <p className="text-xl font-black text-white">Choisissez votre contribution</p>
                   <p className="mt-1.5 text-sm text-white/50">
-                    Votre contribution aide directement ce projet à avancer.
+                    Votre contribution soutient directement ce projet de terrain.
                   </p>
                 </div>
                 <div className="flex w-full items-baseline justify-center">
@@ -631,7 +629,7 @@ export function ProjectDonateOneFlow({
               </div>
 
               <p className="text-center text-[13px] text-white/45">
-                Vous donnez pour{' '}
+                Vous contribuez à{' '}
                 <span className="font-black text-white/70">{project.name}</span>
               </p>
 
@@ -642,7 +640,7 @@ export function ProjectDonateOneFlow({
                       Impact estimé
                     </p>
                     <p className="mt-1 text-[11px] text-white/30">
-                      Des ordres de grandeur pour comprendre ce que représente votre don.
+                      Des ordres de grandeur pour comprendre ce que représente votre contribution. Ces estimations nécessitent une validation par le partenaire.
                     </p>
                   </div>
                 </div>
@@ -660,9 +658,8 @@ export function ProjectDonateOneFlow({
               </section>
 
               <AfterDonateBlock
-                seeds={seeds}
                 hasSpecies={hasSpecies}
-                onOpenSeeds={() => setSheet('seeds')}
+                onOpenBioDex={() => setSheet('biodex')}
                 onOpenTracking={() => setSheet('tracking')}
               />
             </div>
@@ -680,7 +677,7 @@ export function ProjectDonateOneFlow({
               {/* Montant + contexte projet */}
               <div className="text-center">
                 <p className="mb-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/35">
-                  Don au projet
+                  Contribution au projet
                 </p>
                 <div className="flex items-baseline justify-center gap-1.5">
                   <span className="text-7xl font-black tracking-tighter text-white tabular-nums">
@@ -693,10 +690,12 @@ export function ProjectDonateOneFlow({
 
               {/* Ce qui est inclus — liste plate */}
               <IncludedDonateSummary
-                seeds={seeds}
                 hasSpecies={hasSpecies}
-                onOpen={() => setSheet('seeds')}
+                onOpen={() => setSheet('biodex')}
               />
+
+              {/* Répartition financière transparente */}
+              <PaymentBreakdown amount={amountEur} mode="donation" />
 
               {/* Email de confirmation */}
               <div className="w-full">
@@ -712,7 +711,7 @@ export function ProjectDonateOneFlow({
                   required
                 />
                 <p className="mt-1.5 text-[11px] text-white/35">
-                  Reçu de don et suivi du projet.
+                  Reçu de contribution et suivi du projet. Ce reçu n&apos;est pas un reçu fiscal déductible.
                 </p>
                 {guestEmailError ? (
                   <p className="mt-1.5 text-xs font-semibold text-destructive">{guestEmailError}</p>
@@ -732,7 +731,9 @@ export function ProjectDonateOneFlow({
               <p className="text-center text-[11px] text-white/28">
                 🔒 Paiement sécurisé{' '}
                 <span className="mx-1 opacity-50">·</span>
-                📩 Reçu envoyé par email
+                📩 Reçu de contribution envoyé
+                <span className="mx-1 opacity-50">·</span>
+                Pas un reçu fiscal
               </p>
 
             </div>
@@ -753,10 +754,10 @@ export function ProjectDonateOneFlow({
                 transition={{ duration: 0.45, ease: 'easeOut' }}
                 className="mt-6 text-center text-4xl font-black tracking-tight text-white [@media(max-height:800px)]:mt-2 [@media(max-height:800px)]:text-3xl"
               >
-                Don confirmé !
+                Contribution confirmée !
               </motion.h1>
               <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
-                Votre don de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}
+                Votre contribution de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associée à environ{' '}
                 <span className="font-bold text-white tabular-nums">{unitsRestored}</span> {unitLabel} du projet.
               </p>
 
@@ -829,7 +830,7 @@ export function ProjectDonateOneFlow({
                 </div>
               </motion.div>
 
-              {/* Suivi + graines — dans le bon ordre */}
+              {/* Suivi + BioDex — dans le bon ordre */}
               {phase === 'euphoria' || phase === 'resolved' ? (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
@@ -842,9 +843,9 @@ export function ProjectDonateOneFlow({
                     <p className="text-[13px] font-black text-white">Suivi du projet activé</p>
                   </div>
                   <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
-                    <CurrencyIcon kind="seeds" className="h-4 w-4 shrink-0 text-emerald-300" />
+                    <Leaf className="h-4 w-4 shrink-0 text-emerald-300" />
                     <p className="text-[13px] font-black text-white">
-                      {formatSeeds(seeds)} Graines ajoutées
+                      Trace BioDex enregistrée
                     </p>
                     <p className="ml-auto text-[10.5px] text-white/35">BioDex</p>
                   </div>
@@ -920,10 +921,9 @@ export function ProjectDonateOneFlow({
         </div>
       </div>
 
-      <SeedsSheet
-        isOpen={sheet === 'seeds'}
+      <BioDexSheet
+        isOpen={sheet === 'biodex'}
         onClose={() => setSheet(null)}
-        seeds={seeds}
         amount={amountEur}
         hasSpecies={hasSpecies}
       />

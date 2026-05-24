@@ -66,7 +66,7 @@ export default async function ImpactRewardPage() {
             </p>
             <h2 className="mt-1 text-2xl font-black text-white">Le D�fi Ilanga Nature</h2>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
-              Atteignons ensemble les 100�% en r�coltant des Graines�! En remerciement de cet effort commun, notre partenaire{' '}
+              Atteignons ensemble les 100�% en cumulant des contributions�! En remerciement de cet effort commun, notre partenaire{' '}
               <span className="font-semibold text-white">Ilanga Nature</span>{' '}
               d�bloquera des avantages exclusifs pour toute la communaut�.
             </p>
@@ -109,7 +109,7 @@ export default async function ImpactRewardPage() {
               </div>
               <div className="flex-1 pb-2">
                 <p className="text-base font-bold text-white">Halo de victoire</p>
-                <p className="text-sm text-white/50">La faction ayant r�colt� le plus de Graines obtiendra un �clat cosm�tique exclusif.</p>
+                <p className="text-sm text-white/50">La faction ayant le plus progress� obtiendra un �clat cosm�tique exclusif.</p>
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default async function ImpactRewardPage() {
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white/40">Comment contribuer ?</p>
             <ul className="space-y-2.5">
               {([
-                { label: "Continuer l'Academy", detail: '+25 Graines par le�on' },
+                { label: "Continuer l'Academy", detail: '+25 XP par le�on' },
                 { label: 'Soutenir un projet li�', detail: '+ contribution symbolique' },
                 { label: 'Envoyer un Bravo', detail: '+ micro-contribution sociale' },
                 { label: 'D�couvrir une esp�ce BioDex', detail: 'Progression de faction' },

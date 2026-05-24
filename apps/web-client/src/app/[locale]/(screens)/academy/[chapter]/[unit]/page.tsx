@@ -23,7 +23,6 @@ import {
   HeartCrack,
   Lock,
   RefreshCcw,
-  Sprout,
   X,
 } from 'lucide-react'
 import Image from 'next/image'
@@ -1029,7 +1028,7 @@ function VictoryScreen({
       </h2>
       <p className="mb-6 max-w-xs text-sm font-medium leading-relaxed text-white/55">
         {isCourseMode
-          ? 'Progression libre enregistrée. Les Graines restent réservées aux parcours Academy guidés.'
+          ? 'Progression libre enregistrée. Les récompenses restent réservées aux parcours Academy guidés.'
           : alreadyCompleted
           ? 'Tu as renforcé cette notion. La récompense avait déjà été gagnée.'
           : 'Belle progression. Ta série locale et la prochaine unité sont mises à jour.'}
@@ -1041,9 +1040,9 @@ function VictoryScreen({
           <span className="text-base font-black text-emerald-300">Récompense déjà gagnée</span>
         ) : (
           <>
-            <Sprout className="h-5 w-5 text-emerald-300" />
+            <Check className="h-5 w-5 text-emerald-300" />
             <span className="text-2xl font-black text-emerald-400">+{countedReward}</span>
-            <span className="text-lg font-bold capitalize text-emerald-400">Graines</span>
+            <span className="text-lg font-bold capitalize text-emerald-400">XP</span>
           </>
         )}
       </div>

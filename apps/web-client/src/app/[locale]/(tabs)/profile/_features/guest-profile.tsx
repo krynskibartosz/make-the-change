@@ -1,4 +1,5 @@
-﻿import { Bug, Droplets, Gift, Wind } from 'lucide-react'
+import { Bug, Droplets, Gift, Wind } from 'lucide-react'
+import { CurrencyIcon } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import { getBiodexPreviewData } from '@/lib/api/biodex-preview.service'
 
@@ -74,9 +75,9 @@ export default async function GuestProfile() {
           <li>
             <ImpactCard
               variant="locked"
-              icon={<Gift className="h-5 w-5 text-lime-400" aria-hidden="true" />}
+              icon={<CurrencyIcon kind="impactCredits" className="h-5 w-5 text-amber-400" />}
               value="—"
-              label="GRAINES"
+              label="CRÉDITS IMPACT"
             />
           </li>
         </ul>

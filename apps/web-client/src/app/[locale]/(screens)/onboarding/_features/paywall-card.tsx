@@ -153,8 +153,8 @@ export function PaywallCard({ mode = 'dashboard', onDismiss, onSubscribe, isModa
           <Shield className="h-8 w-8 mb-2 text-lime-400" />
           <h3 className="text-lg font-bold text-white leading-tight">Moteur de l'Essaim</h3>
           <p className="text-xs text-gray-400 leading-relaxed">
-            Vos quêtes rapportent{' '}
-            <strong className="text-lime-400">2x plus de graines</strong> pour votre Sanctuaire
+            Vos quêtes font progresser{' '}
+            <strong className="text-lime-400">2x plus vite</strong> votre Sanctuaire
             et propulsent la progression collective de votre Faction deux fois plus vite dans le classement.
           </p>
         </div>

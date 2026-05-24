@@ -74,14 +74,20 @@ export function ProjectQuickViewHero({
   }
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
+    const touch = e.touches[0]
+    if (!touch) return
+
+    touchStartX.current = touch.clientX
+    touchStartY.current = touch.clientY
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return
-    const diffX = touchStartX.current - e.changedTouches[0].clientX
-    const diffY = touchStartY.current - e.changedTouches[0].clientY
+    const touch = e.changedTouches[0]
+    if (!touch) return
+
+    const diffX = touchStartX.current - touch.clientX
+    const diffY = touchStartY.current - touch.clientY
 
     if (Math.abs(diffX) < 10 && Math.abs(diffY) < 10) {
       setControlsVisible((v) => !v)

@@ -719,7 +719,7 @@ export const predatorsUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise du rôle des prédateurs.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 20, label: '20 Graines' },
+      reward: { type: 'seeds', amount: 20, label: '20 XP Academy' },
     },
   ],
 }

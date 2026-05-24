@@ -716,7 +716,7 @@ export const bossUnit: AcademyUnitDefinition = {
       learningGoal: 'Boss du chapitre : maîtriser l\'alphabet du vivant.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 25, label: '25 Graines' },
+      reward: { type: 'seeds', amount: 25, label: '25 XP Academy' },
     },
   ],
 }

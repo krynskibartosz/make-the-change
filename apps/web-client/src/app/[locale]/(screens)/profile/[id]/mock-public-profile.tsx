@@ -291,7 +291,7 @@ export async function MockPublicProfilePage({ profile, isOwnProfile }: MockPubli
               <h3 className="mt-3 text-lg font-black text-white">Invitez vos amis</h3>
               <p className="mb-4 mt-2 text-balance text-sm text-white/70">
                 Faites grandir le mouvement. Gagnez{' '}
-                <span className={`font-bold ${accentTheme.accentText}`}>500 graines</span>{' '}
+                <span className={`font-bold ${accentTheme.accentText}`}>une trace BioDex</span>{' '}
                 chacun pour chaque ami parrainé.
               </p>
               <button

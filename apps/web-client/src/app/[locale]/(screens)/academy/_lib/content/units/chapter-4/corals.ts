@@ -711,7 +711,7 @@ export const coralsUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 40, label: '40 Graines' },
+      reward: { type: 'seeds', amount: 40, label: '40 XP Academy' },
     },
   ],
 }

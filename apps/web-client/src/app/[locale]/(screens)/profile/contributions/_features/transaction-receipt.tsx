@@ -39,7 +39,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
   const legacyDonationData = {
     id: transactionId,
     amount_eur: 50,
-    amount_points: 500, // Graines pour les dons
+    amount_points: 500, // Trace BioDex pour les dons
     status: 'completed',
     created_at: '2026-04-10T10:15:00.000Z',
     type: 'donation' as const,
@@ -103,7 +103,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         creditsOrSeeds: isDonation 
           ? (donationVM?.seedsReward || 0)
           : (supportVM?.amountImpactCredits || 0),
-        creditsOrSeedsLabel: isDonation ? 'Graines' : 'Credits Impact',
+        creditsOrSeedsLabel: isDonation ? 'Trace BioDex' : 'Credits Impact',
         status: supportVM?.status || donationVM?.status || 'pending',
         statusLabel: supportVM?.statusLabel || donationVM?.statusLabel || 'En attente',
         imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/miellerie-manakara.jpg',
@@ -220,7 +220,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
                 Votre don de <strong className="text-white">{formatEuros(donationVM?.amountEuros || 0)}€</strong> soutient la protection des lémuriens.
               </p>
               <p className="text-xs text-gray-500">
-                Graines reçues : <strong className="text-emerald-300">{donationVM?.seedsReward || 0}</strong>
+                Trace BioDex enregistrée
               </p>
               <p className="text-xs text-gray-500 italic">
                 Le don pur n&apos;est pas convertible en Credits Impact.

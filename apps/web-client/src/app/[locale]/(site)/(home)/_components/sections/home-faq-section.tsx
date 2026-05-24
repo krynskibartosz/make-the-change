@@ -26,9 +26,9 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
       answer: t('faq.items.don_vs_soutien.answer'),
     },
     {
-      id: 'graines',
-      question: t('faq.items.graines.question'),
-      answer: t('faq.items.graines.answer'),
+      id: 'progression',
+      question: t('faq.items.progression.question'),
+      answer: t('faq.items.progression.answer'),
     },
     {
       id: 'credits',
@@ -115,4 +115,3 @@ export function HomeFaqSection({ variant = 'default' }: HomeFaqSectionProps) {
     </section>
   )
 }
-

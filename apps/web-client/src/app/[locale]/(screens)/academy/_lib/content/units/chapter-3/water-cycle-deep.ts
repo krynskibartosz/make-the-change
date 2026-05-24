@@ -714,7 +714,7 @@ export const waterCycleDeepUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise du cycle planétaire.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 30, label: '30 Graines' },
+      reward: { type: 'seeds', amount: 30, label: '30 XP Academy' },
     },
   ],
 }

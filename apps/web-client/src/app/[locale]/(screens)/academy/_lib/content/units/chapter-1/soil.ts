@@ -713,7 +713,7 @@ export const soilUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise du sol vivant.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 10, label: '10 Graines' },
+      reward: { type: 'seeds', amount: 10, label: '10 XP Academy' },
     },
   ],
 }

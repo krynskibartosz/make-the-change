@@ -21,6 +21,30 @@ Ce document complète les canevas existants avec les blocs qui manquaient encore
 
 Ce document ne remplace pas un avis juridique ou comptable. Il sert de cadre produit/business pour préparer les discussions avec un comptable, un juriste, un PSP et les partenaires.
 
+## Doctrine V1 consolidée après revue
+
+[RECOMMANDÉ] Si aucune validation externe ne contredit ces choix, la V1 doit suivre cette doctrine :
+
+1. Make the Change démarre comme SRL avec mission d’impact claire.
+2. Le mot public par défaut est “contribution”, pas “don fiscal”.
+3. Les flux sont strictement séparés : contribution au projet, soutien producteur, achat produit, avantage Credits Impact.
+4. Le soutien producteur est le seul flux qui génère des Credits Impact.
+5. Les Credits Impact sont une valeur d’usage interne, jamais une monnaie ni une créance utilisateur.
+6. Le partenaire est vendeur officiel des produits en V1.
+7. Make the Change ne gère pas de stock et ne devient pas vendeur officiel en V1.
+8. Le PSP route les paiements, mais le ledger MTC reste la source métier de vérité.
+9. Chaque claim d’impact doit être sourcé, daté, qualifié et relié à un niveau de preuve.
+10. Aucun reçu fiscal n’est promis sans bénéficiaire agréé, document validé et processus fiscal conforme.
+
+## Niveau de certitude des documents
+
+| Marqueur | Signification | Action |
+| --- | --- | --- |
+| [VALIDÉ] | Décision produit ou règle interne déjà acceptée | À appliquer dans UX, data model et CGU. |
+| [HYPOTHESE] | Recommandation stratégique non validée par expert externe | À confirmer ou transformer en décision. |
+| [RECOMMANDÉ] | Ajout après revue, considéré comme choix par défaut robuste | À intégrer dans le backlog de validation. |
+| [POINT DE VIGILANCE] | Risque juridique, fiscal, comptable ou opérationnel | À traiter avant flux réel. |
+
 ---
 
 # 1. Commission par typologie : décision affinée
@@ -120,12 +144,16 @@ Chaque type peut avoir un traitement TVA différent.
 [HYPOTHESE] Pour la V1 :
 
 * Make the Change facture une commission ou un service de plateforme aux partenaires ;
-* cette commission est probablement soumise à TVA belge si Make the Change est assujettie ;
+* cette commission est probablement soumise à TVA belge si Make the Change est assujettie, à valider selon la nature exacte du service ;
 * le partenaire reste vendeur officiel pour les produits ;
 * le partenaire gère sa TVA produit ;
 * Make the Change ne devient pas vendeur officiel en V1 ;
 * les dons purs doivent être séparés des ventes et commissions ;
 * toute promesse de reçu fiscal est interdite sans validation.
+
+[POINT DE VIGILANCE] Le taux standard belge de TVA est 21 %, mais cela ne suffit pas à conclure que chaque flux MTC est soumis à 21 %. Le traitement dépend de la nature du flux, du statut TVA de MTC, du pays du partenaire, du pays de l’utilisateur, de la qualité B2B/B2C, et du fait que MTC soit ou non vendeur officiel.
+
+[RECOMMANDÉ] Ajouter dans le ledger un statut `vat_treatment_status` pour éviter de mélanger les flux validés et les flux encore en hypothèse.
 
 ---
 
@@ -150,6 +178,10 @@ Chaque type peut avoir un traitement TVA différent.
 9. Les frais de livraison sont-ils facturés par le partenaire ou Make the Change ?
 
 10. Les Credits Impact créent-ils une obligation comptable ou TVA au moment de leur émission ou seulement à l’utilisation ?
+
+11. Si MTC retient des frais sur une contribution, ces frais sont-ils un service taxable distinct ?
+
+12. Si un partenaire est vendeur officiel mais MTC influence fortement le checkout, les prix ou les conditions, y a-t-il un risque que MTC soit considérée comme intervenant dans la vente ?
 
 ---
 
@@ -396,6 +428,21 @@ Le KYC PSP vérifie souvent l’identité et la conformité paiement. Make the C
 * documenter les durées de conservation ;
 * prévoir un registre de traitements simplifié.
 
+## Matrice RGPD minimale à produire
+
+[RECOMMANDÉ] Avant bêta publique, créer une matrice avec une ligne par traitement.
+
+| Traitement | Données | Base légale probable | Durée | Accès partenaire |
+| --- | --- | --- | --- | --- |
+| Compte utilisateur | email, identifiant, préférences | contrat ou intérêt légitime selon usage | durée du compte + archive limitée | non |
+| Paiement | identifiants transaction, montant, statut PSP | contrat + obligation comptable | durée comptable à valider | données agrégées ou nécessaires |
+| Contribution / soutien | projet, partenaire, montant, date | contrat / intérêt légitime | durée comptable + historique utilisateur | selon anonymat choisi |
+| Credits Impact | émissions, utilisations, expirations | contrat | durée du compte + archive litige | non |
+| Marketing | email, consentements, préférences | consentement | jusqu’au retrait | non |
+| Analytics | événements d’usage minimisés | consentement ou intérêt légitime selon outil | courte et documentée | non |
+
+[POINT DE VIGILANCE] Si des attestations fiscales deviennent possibles plus tard, la collecte du numéro national est un traitement très sensible qui doit être limité à cet objectif et validé juridiquement.
+
 ---
 
 ## Questions à valider
@@ -487,6 +534,27 @@ La règle principale :
 
 Si ces éléments manquent, afficher une formulation narrative ou estimée, pas vérifiée.
 
+## Registre des claims impact
+
+[RECOMMANDÉ] Créer un registre interne pour tout chiffre ou claim affiché publiquement.
+
+| Champ | Exemple |
+| --- | --- |
+| claim_id | CLAIM-2026-0001 |
+| projet | rucher_01 |
+| texte_affiché | “Suivi documenté par le partenaire le 24/05/2026.” |
+| niveau_preuve | documenté |
+| source | photo partenaire + rapport terrain |
+| date_source | 2026-05-24 |
+| méthode | description courte |
+| périmètre | projet, période, zone concernée |
+| limites | donnée déclarative partenaire, non auditée |
+| responsable_validation | admin MTC |
+| date_publication | 2026-05-24 |
+| date_revision | 2026-08-24 |
+
+[POINT DE VIGILANCE] Les nouvelles terrain ne doivent pas devenir automatiquement des preuves d’impact. Une photo, un texte ou une visite partenaire peut être une preuve d’activité, pas forcément une preuve de résultat écologique.
+
 ---
 
 # 8. DSA / marketplace / obligations plateforme
@@ -509,6 +577,15 @@ Si ces éléments manquent, afficher une formulation narrative ou estimée, pas 
 8. Clarifier qui livre et qui rembourse.
 9. Prévoir un canal support.
 10. Éviter les avis ou badges trompeurs.
+
+[RECOMMANDÉ] Même en petite V1, prévoir ces éléments dans le produit :
+
+* page partenaire avec identité, pays, statut et contact utile ;
+* bouton “signaler un problème” sur projet, produit et partenaire ;
+* statut interne de modération : actif, en revue, suspendu ;
+* historique des validations partenaire ;
+* trace de la version des informations affichées au moment du paiement ;
+* procédure de suspension si contenu, produit ou claim devient douteux.
 
 ---
 
@@ -574,6 +651,18 @@ Même si Make the Change n’est pas Amazon, il faut prévoir :
 * payout partenaire après délai de sécurité ou avec réserve ;
 * politique de retour standardisée ;
 * aucun produit complexe en V1 si la politique retour n’est pas claire.
+
+[RECOMMANDÉ] Le checkout produit doit afficher avant paiement :
+
+* vendeur officiel ;
+* pays du vendeur ;
+* prix total ;
+* frais de livraison ;
+* délai de livraison estimé ;
+* politique de retour ;
+* exceptions éventuelles au droit de rétractation ;
+* contact support ;
+* rôle exact de Make the Change.
 
 ---
 
@@ -703,6 +792,19 @@ Si un flux coûte plus qu’il ne rapporte, ajuster :
 * nombre de projets ;
 * niveau de service ;
 * avantages CI.
+
+## Seuils d’alerte V1
+
+[RECOMMANDÉ] Suivre ces seuils dès les premiers paiements :
+
+| Indicateur | Seuil d’alerte proposé | Action |
+| --- | --- | --- |
+| Marge nette soutien producteur | inférieure à 5 % après frais directs | revoir commission ou coût de service |
+| Taux de remboursement produit | supérieur à 5 % | revoir partenaire, fiche produit ou livraison |
+| Taux de litige | supérieur à 1 % | audit process paiement / produit |
+| Nouvelles terrain en retard | plus de 30 jours après échéance | relance puis suspension visibilité |
+| Utilisation Credits Impact | supérieure au budget réserve | réduire avantages ou renégocier financement |
+| Coût onboarding partenaire | supérieur à la commission attendue sur 3 mois | limiter nouveaux partenaires |
 
 ---
 
@@ -882,3 +984,29 @@ Si un flux coûte plus qu’il ne rapporte, ajuster :
 > Make the Change doit être conçu comme une plateforme de confiance : chaque euro, chaque avantage, chaque produit, chaque nouvelle terrain et chaque claim d’impact doit avoir une source, un responsable, une règle et une trace.
 
 C’est cette discipline qui permettra de grandir de la Belgique vers l’Europe sans perdre la confiance utilisateur.
+
+---
+
+# 17. Références officielles à utiliser pour validation
+
+[RECOMMANDÉ] Ces sources ne remplacent pas un avis expert, mais elles cadrent les validations à demander.
+
+* SPF Finances Belgique : taux TVA belges, dont taux standard 21 %, taux intermédiaire 12 % et taux réduit 6 %.
+* SPF Finances Belgique : attestations fiscales pour dons uniquement par institutions agréées et sous conditions.
+* Commission européenne : Digital Services Act, transparence marketplace, identification des vendeurs et mécanismes de signalement.
+* Your Europe / Commission européenne : droit de rétractation de 14 jours pour contrats à distance, avec exceptions.
+* Commission européenne : règles anti-greenwashing et interdiction des claims environnementaux vagues non démontrés à partir de l’application nationale des nouvelles règles.
+* EDPB : principes RGPD de minimisation, limitation des finalités, sécurité, information et droits des personnes.
+* Documentation Stripe Connect : direct charges, destination charges, separate charges and transfers, remboursements et responsabilité selon le modèle choisi.
+* Documentation Mollie Connect : distinction Platforms / Marketplaces, onboarding, application fees, split payments et responsabilité selon modèle.
+
+Liens de travail :
+
+* [SPF Finances - taux TVA](https://finance.belgium.be/en/node/12035)
+* [SPF Finances - attestations pour dons](https://finance.belgium.be/en/node/1459)
+* [Commission européenne - Digital Services Act](https://digital-strategy.ec.europa.eu/en/policies/digital-services-act)
+* [Your Europe - returns and right of withdrawal](https://europa.eu/youreurope/citizens/consumers/shopping/returns/indexamp_en.htm)
+* [Commission européenne - green transition / greenwashing](https://energy.ec.europa.eu/news/new-eu-rules-empower-consumers-green-transition-enter-force-2024-03-27_en)
+* [EDPB - data protection basics](https://www.edpb.europa.eu/sme-data-protection-guide/data-protection-basics_en)
+* [Stripe Connect - charges](https://docs.stripe.com/connect/charges)
+* [Mollie Connect - overview](https://docs.mollie.com/docs/connect-overview)

@@ -718,7 +718,7 @@ export const mutationsUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise de l\'évolution.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 25, label: '25 Graines' },
+      reward: { type: 'seeds', amount: 25, label: '25 XP Academy' },
     },
   ],
 }

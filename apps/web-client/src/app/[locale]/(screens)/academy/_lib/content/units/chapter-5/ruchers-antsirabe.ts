@@ -790,7 +790,7 @@ export const ruchersAntsirabeUnit: AcademyUnitDefinition = {
       learningGoal: "Synthétiser : nature sans intention, intelligence distribuée, biodiversité comme effet de bord.",
       generation: 'authored-legendary',
       rules: { exerciseCount: 8 },
-      reward: { type: 'seeds', amount: 70, label: '70 Graines' },
+      reward: { type: 'seeds', amount: 70, label: '70 XP Academy' },
     },
   ],
 }

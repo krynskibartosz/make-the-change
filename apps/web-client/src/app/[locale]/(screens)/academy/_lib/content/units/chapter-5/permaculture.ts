@@ -718,7 +718,7 @@ export const permacultureUnit: AcademyUnitDefinition = {
       learningGoal: 'Boss final : maîtriser l\'avenir cultivable.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 100, label: '100 Graines' },
+      reward: { type: 'seeds', amount: 100, label: '100 XP Academy' },
     },
   ],
 }

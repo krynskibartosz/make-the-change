@@ -74,7 +74,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
           <div className="flex items-center justify-center gap-3">
             <span className="text-3xl font-black text-amber-300 tabular-nums leading-none">{formattedTotal} €</span>
           </div>
-          <p className="text-white/40 text-sm mt-3">Cet achat produit ne crée pas automatiquement de Credits Impact.</p>
+          <p className="text-white/40 text-sm mt-3">Cet achat direct ne génère pas de Crédits Impact.</p>
         </div>
 
         <div className="w-full flex flex-col gap-3 mt-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
@@ -170,7 +170,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
               <Package className="w-4 h-4 text-amber-300" /> Achat produit
             </span>
             <span className="rounded-lg bg-amber-300/10 px-2.5 py-1 text-sm font-bold text-amber-300">
-              Pas de Credits Impact automatiques
+              Ne génère pas de Crédits Impact
             </span>
           </div>
         </div>

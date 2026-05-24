@@ -16,6 +16,25 @@ Puis, si les dons purs deviennent centraux :
 
 > Étudier une coopérative ou une reconnaissance liée à l’économie sociale.
 
+## Décision renforcée après revue
+
+[RECOMMANDÉ] Le chemin le plus robuste pour la V1 est :
+
+```text
+SRL Make the Change
++ mission d’impact explicite
++ conventions partenaires
++ PSP plateforme
++ ledger interne
++ transparence des frais
++ partenaire vendeur officiel pour les produits
++ aucun reçu fiscal promis sans validation
+```
+
+La raison principale n’est pas seulement juridique : c’est une question de lisibilité. Make the Change veut facturer des commissions, animer une app, gérer des partenaires, créer des avantages et préparer une expansion européenne. Une SRL est plus naturelle pour ce socle opérationnel.
+
+[POINT DE VIGILANCE] Une ASBL sœur reste pertinente plus tard, mais seulement si les contributions associatives, la pédagogie ou les campagnes non commerciales deviennent suffisamment importantes pour justifier une deuxième structure, une deuxième comptabilité et des conventions entre entités.
+
 ---
 
 ## 1. Options étudiées
@@ -106,6 +125,16 @@ Options possibles :
 Positionnement :
 
 > Société à mission d’impact / plateforme responsable / app européenne pour soutenir des projets biodiversité concrets.
+
+Points à prévoir dès la constitution :
+
+* plan financier réaliste sur 24 mois ;
+* hypothèses de chiffre d’affaires par flux : soutien producteur, commission produit, frais plateforme, B2B futur ;
+* budget de développement, maintenance, support, assurance, juridique et comptabilité ;
+* politique de réserve pour remboursements, litiges et avantages Credits Impact ;
+* gouvernance claire : qui signe, qui valide les remboursements, qui suspend un partenaire, qui engage les dépenses.
+
+[RECOMMANDÉ] La mission d’impact doit être inscrite dans les documents fondateurs ou documents internes de gouvernance, mais sans promettre un impact garanti. La formulation doit rester orientée contribution, transparence et suivi.
 
 ---
 
@@ -215,7 +244,7 @@ Make the Change ASBL
 
 ## 7. Recommandation par phase
 
-## Phase 1 — Prototype / pré-lancement
+### Phase 1 — Prototype / pré-lancement
 
 [HYPOTHESE] Le projet peut être porté temporairement par une structure existante pour :
 
@@ -227,7 +256,7 @@ Make the Change ASBL
 
 Mais il vaut mieux éviter les vrais flux financiers utilisateurs complexes à ce stade.
 
-## Phase 2 — Lancement V1
+### Phase 2 — Lancement V1
 
 [HYPOTHESE] Créer une SRL Make the Change.
 
@@ -243,7 +272,7 @@ La SRL gère :
 * éventuels produits partenaires ;
 * offres B2B futures.
 
-## Phase 3 — Croissance impact
+### Phase 3 — Croissance impact
 
 [HYPOTHESE] Créer une ASBL sœur si :
 
@@ -252,7 +281,7 @@ La SRL gère :
 * des partenaires associatifs veulent un cadre plus adapté ;
 * des subsides ou soutiens publics sont recherchés.
 
-## Phase 4 — Écosystème européen
+### Phase 4 — Écosystème européen
 
 [HYPOTHESE] Étudier une coopérative ou une structure d’économie sociale si Make the Change devient un réseau européen de producteurs, citoyens, partenaires et entreprises.
 
@@ -278,27 +307,43 @@ Utilisateur → compte bancaire Make the Change → virements manuels aux parten
 
 ## 9. Qui est responsable ?
 
-## Don pur
+### Don pur
 
 [HYPOTHESE]
 
 * Le partenaire/projet est responsable de l’usage terrain.
 * Make the Change est responsable de la plateforme, de la présentation, du paiement et de la transparence.
 
-## Soutien producteur
+### Soutien producteur
 
 [HYPOTHESE]
 
 * Le producteur est responsable de son activité.
 * Make the Change est responsable de l’expérience plateforme, du paiement, des Credits Impact et de la transparence des frais.
 
-## Achat produit
+### Achat produit
 
 [HYPOTHESE]
 
 * En V1, le partenaire est vendeur officiel.
 * Le partenaire est responsable du produit, de la livraison, du SAV et des retours.
 * Make the Change est facilitateur.
+
+## Matrice de responsabilité V1
+
+[RECOMMANDÉ] Cette matrice doit être reprise dans les CGU, les pages de paiement, les reçus et la convention partenaire.
+
+| Sujet | Responsable principal | Responsabilité Make the Change |
+| --- | --- | --- |
+| Présentation du projet | Partenaire + MTC | Vérifier la cohérence, afficher le niveau de preuve, corriger ou suspendre si nécessaire. |
+| Usage terrain des contributions | Partenaire / porteur de projet | Exiger des nouvelles terrain et ne pas surpromettre l’impact. |
+| Paiement | PSP + MTC | Intégrer correctement le PSP, tracer les transactions et gérer les statuts. |
+| Commission MTC | MTC | Facturer et déclarer correctement selon validation comptable. |
+| Produit physique | Partenaire vendeur | Identifier clairement le vendeur et afficher les conditions produit. |
+| Livraison / retour / SAV | Partenaire vendeur | Faciliter le support et documenter le litige dans le ledger. |
+| Credits Impact | MTC | Émettre, annuler, expirer et tracer les Credits Impact selon les règles publiées. |
+| Claims d’impact | Partenaire + MTC | Ne publier que des claims sourcés, datés et qualifiés par niveau de preuve. |
+| Don fiscal | Institution agréée si applicable | Ne jamais promettre de reçu fiscal sans validation spécifique. |
 
 ---
 
@@ -313,6 +358,8 @@ Recommandation :
 * utiliser “reçu de contribution” ;
 * si un partenaire agréé peut émettre une attestation fiscale, le partenaire devrait probablement le faire ;
 * ne pas mélanger don et soutien producteur.
+
+[RECOMMANDÉ] En V1, le mot public par défaut devrait être “contribution”. Le mot “don” peut rester dans les documents internes comme catégorie d’analyse, mais il ne doit pas créer d’attente de déduction fiscale, de reçu fiscal ou de statut associatif.
 
 À ne pas faire :
 

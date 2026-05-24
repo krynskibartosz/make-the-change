@@ -197,9 +197,9 @@ export function SanctuaryContent({
         
         <div className="flex gap-6">
           {[
-            { name: 'Thomas M.', impact: '4500 graines', avatar: 'https://i.pravatar.cc/80?u=thomas-m' },
-            { name: 'Sarah L.', impact: '4200 graines', avatar: 'https://i.pravatar.cc/80?u=sarah-l' },
-            { name: 'Lucas D.', impact: '3800 graines', avatar: 'https://i.pravatar.cc/80?u=lucas-d' },
+            { name: 'Thomas M.', impact: '4500 points', avatar: 'https://i.pravatar.cc/80?u=thomas-m' },
+            { name: 'Sarah L.', impact: '4200 points', avatar: 'https://i.pravatar.cc/80?u=sarah-l' },
+            { name: 'Lucas D.', impact: '3800 points', avatar: 'https://i.pravatar.cc/80?u=lucas-d' },
           ].map((hero, i) => {
             // Define halo colors for ranks
             const haloColors = [

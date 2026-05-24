@@ -702,7 +702,7 @@ export const reflexesUnit: AcademyUnitDefinition = {
       learningGoal: 'Boss : maîtriser la grammaire complète.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 15, label: '15 Graines' },
+      reward: { type: 'seeds', amount: 15, label: '15 XP Academy' },
     },
   ],
 }

@@ -16,6 +16,48 @@ La meilleure direction recommandée est :
 * retirer ou repousser les Graines si elles brouillent la compréhension ;
 * garder les Credits Impact uniquement liés au soutien producteur.
 
+## Décisions V1 à figer avant développement
+
+[RECOMMANDÉ] Pour éviter que le produit parte dans plusieurs directions à la fois, les décisions suivantes doivent être considérées comme la doctrine V1 tant qu’un comptable, un juriste ou un PSP ne les invalide pas explicitement.
+
+| Sujet | Décision V1 recommandée | Pourquoi c’est important |
+| --- | --- | --- |
+| Structure | SRL Make the Change pour la V1 | Plus adaptée aux commissions, services partenaires, paiements et ambition européenne. |
+| Don / contribution | Utiliser “contribution au projet” par défaut | Réduit le risque de confusion avec un don fiscalement déductible. |
+| Soutien producteur | Cœur économique V1 | C’est le flux le plus lisible pour générer revenus MTC + Credits Impact. |
+| Produits | Partenaire vendeur officiel | Limite TVA, responsabilité produit, retours, stock et SAV côté MTC. |
+| Credits Impact | Valeur d’usage interne uniquement | Évite de créer une monnaie, un avoir financier ou une promesse de remboursement. |
+| Graines | Retirer de la V1 publique | Simplifie la compréhension utilisateur et évite la confusion avec les Credits Impact. |
+| Preuve d’impact | Ne jamais assimiler paiement et impact mesuré | Protège la confiance et réduit le risque de greenwashing. |
+| Paiements | PSP plateforme + ledger interne | Rend chaque euro traçable et sépare revenus MTC / argent partenaire. |
+
+## Lexique public V1
+
+[RECOMMANDÉ] Le vocabulaire public doit être verrouillé tôt dans le produit, les reçus, les emails, les dashboards et les CGU.
+
+À privilégier :
+
+* contribution au projet ;
+* soutien producteur ;
+* avantage partenaire ;
+* suivi terrain ;
+* nouvelle partenaire ;
+* impact estimé ;
+* donnée documentée ;
+* Credits Impact utilisables dans Make the Change.
+
+À éviter :
+
+* investissement ;
+* rendement ;
+* retour financier ;
+* part de projet ;
+* don fiscal sauf validation spécifique ;
+* impact garanti ;
+* compensation ;
+* monnaie ;
+* crédit remboursable.
+
 ---
 
 ## 1. Ce qui est déjà validé
@@ -117,10 +159,12 @@ Objectif : prouver la confiance avant de scaler.
 
 * ne pas prendre de marge cachée ;
 * afficher les frais clairement ;
-* parler de contribution ou don au projet ;
+* parler de contribution au projet par défaut ;
 * émettre un reçu de contribution, pas un reçu fiscal sauf validation légale ;
 * ne pas donner de Credits Impact ;
 * éventuellement donner une trace, une nouvelle terrain, une progression narrative ou un lien BioDex si documenté.
+
+[RECOMMANDÉ] Le terme “don” ne devrait être utilisé publiquement que si le bénéficiaire, le document émis et l’éventuel traitement fiscal sont validés. En V1, “contribution” est plus sûr, surtout si Make the Change est une SRL ou si le bénéficiaire n’est pas une institution agréée.
 
 Formulation recommandée :
 
@@ -182,6 +226,8 @@ Recommandation :
 
 > 1 € de soutien producteur = 1 Credit Impact reçu.
 
+[RECOMMANDÉ] Cette règle doit rester une règle d’attribution interne, pas une valeur monétaire publique. Le produit peut afficher le nombre de Credits Impact reçus, mais ne doit pas afficher “1 CI = 1 €”.
+
 Mais :
 
 * ne pas afficher que 1 CI = 1 € ;
@@ -195,6 +241,15 @@ Mais :
 Formulation recommandée :
 
 > Les Credits Impact sont des crédits d’usage internes liés à votre soutien producteur. Ils permettent d’accéder à des avantages partenaires dans Make the Change. Ils ne sont pas échangeables contre de l’argent.
+
+Points à valider avant paiement réel :
+
+* moment exact d’attribution : paiement autorisé, capturé ou définitivement confirmé ;
+* délai anti-fraude avant utilisation ;
+* traitement en cas de remboursement total ou partiel ;
+* traitement si les Credits Impact ont déjà été utilisés ;
+* impact comptable / TVA éventuel lors de l’émission, de l’utilisation et de l’expiration ;
+* financement des avantages : réserve MTC, accord partenaire ou combinaison des deux.
 
 ---
 
@@ -214,6 +269,8 @@ Alternative recommandée :
 Décision proposée :
 
 > V1 sans Graines, ou Graines invisibles côté utilisateur. Les Credits Impact restent la seule valeur d’usage liée à un soutien producteur.
+
+[RECOMMANDÉ] Décision produit nette : V1 publique sans Graines. Les apprentissages, badges et espèces BioDex peuvent exister sans créer une seconde unité de valeur. Les Graines pourront revenir en V2 uniquement si elles ont une fonction non monétaire et immédiatement compréhensible.
 
 ---
 

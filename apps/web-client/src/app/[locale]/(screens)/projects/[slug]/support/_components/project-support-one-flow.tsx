@@ -25,6 +25,8 @@ import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
 import type { ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { makeProjectGlowRgba } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-glow'
+import { PaymentBreakdown } from '@/app/[locale]/(screens)/projects/[slug]/_components/shared/payment-breakdown'
+import { claimGuestSupport } from '@/app/[locale]/(screens)/projects/_actions/claim'
 
 const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
@@ -321,7 +323,7 @@ function RewardsSheet({
   return (
     <MobileSheet isOpen={isOpen} onClose={onClose} title="Crédits Impact & BioDex">
       <p className="mt-1 text-sm leading-relaxed text-white/50">
-        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact et le BioDex servent à garder une trace, débloquer des avantages et prolonger la relation avec le terrain.
+        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact servent à débloquer des avantages partenaires. Le BioDex documente votre lien avec le terrain.
       </p>
 
       {/* Crédits Impact */}
@@ -334,7 +336,7 @@ function RewardsSheet({
           <p className="text-[15px] font-black text-white">{credits} Crédits</p>
         </div>
         <p className="mt-1 text-sm leading-relaxed text-white/50">
-          Utilisables dans les avantages partenaires sélectionnés.
+          Crédits d&apos;usage interne, utilisables dans les avantages partenaires sélectionnés. Non échangeables contre de l&apos;argent, non transférables.
         </p>
       </div>
 
@@ -397,12 +399,12 @@ function RewardsSheet({
           À ne pas confondre
         </p>
         <p className="mt-2 text-sm leading-relaxed text-white/50">
-          Ce n&apos;est pas un cashback, pas un rendement financier, pas une part du projet et pas un achat produit automatique.
+          Les Crédits Impact ne sont pas un cashback, pas un rendement financier, pas une part de projet et pas un achat produit automatique. Ils n&apos;ont pas de valeur monétaire publique.
         </p>
       </div>
 
       <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
-        Pas de rendement financier. Pas de reçu fiscal.
+        Pas de rendement financier. Ce reçu de contribution n&apos;est pas un reçu fiscal déductible.
       </p>
     </MobileSheet>
   )
@@ -450,15 +452,15 @@ function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
 
       <div className="mt-3">
         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
-          À garder clair
+          Niveau de preuve
         </p>
         <p className="mt-2 text-sm leading-relaxed text-white/50">
-          Le suivi documente la relation avec le terrain, mais ne garantit pas un impact mesuré immédiatement.
+          Le suivi documente la relation avec le terrain — photos, étapes, nouvelles partenaires. Il ne constitue pas une preuve d&apos;impact mesuré. Les données vérifiées sont affichées avec leur source et niveau de confiance.
         </p>
       </div>
 
       <p className="mt-5 pb-2 text-xs leading-relaxed text-white/30">
-        Pas de rendement financier. Pas de reçu fiscal.
+        Pas de rendement financier. Ce reçu de contribution n&apos;est pas un reçu fiscal déductible.
       </p>
     </MobileSheet>
   )
@@ -739,18 +741,26 @@ export function ProjectSupportOneFlow({
     }, 1500)
   }
 
-  const submitClaim = () => {
+  const submitClaim = async () => {
     if (!isValidEmail(guestEmail)) {
       return
     }
     setIsSendingMagicLink(true)
-    setTimeout(() => {
+    try {
+      const res = await claimGuestSupport(guestEmail)
+      if (res.success) {
+        setClaimSaved(true)
+        setTimeout(() => {
+          router.replace('/profile/biodex')
+        }, 2000)
+      } else {
+        setGuestEmailError(res.error || "Erreur lors de l'enregistrement.")
+      }
+    } catch (e) {
+      setGuestEmailError("Une erreur est survenue.")
+    } finally {
       setIsSendingMagicLink(false)
-      setClaimSaved(true)
-      setTimeout(() => {
-        router.replace('/profile/biodex')
-      }, 2000)
-    }, 1200)
+    }
   }
 
   const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
@@ -940,6 +950,9 @@ export function ProjectSupportOneFlow({
                 onOpen={() => setSheet('rewards')}
               />
 
+              {/* Répartition financière transparente */}
+              <PaymentBreakdown amount={amountEur} mode="support" />
+
               {/* Email de confirmation */}
               <div className="w-full">
                 <label className="mb-1.5 block text-xs font-bold text-white/60">
@@ -954,7 +967,7 @@ export function ProjectSupportOneFlow({
                   required
                 />
                 <p className="mt-1.5 text-[11px] text-white/35">
-                  Reçu de contribution et suivi du projet.
+                  Reçu de contribution et suivi du projet. Ce reçu n&apos;est pas un reçu fiscal déductible.
                 </p>
                 {guestEmailError ? (
                   <p className="mt-1.5 text-xs font-semibold text-destructive">{guestEmailError}</p>
@@ -976,7 +989,9 @@ export function ProjectSupportOneFlow({
               <p className="text-center text-[11px] text-white/28">
                 🔒 Paiement sécurisé{' '}
                 <span className="mx-1 opacity-50">·</span>
-                📩 Reçu envoyé par email
+                📩 Reçu de contribution envoyé
+                <span className="mx-1 opacity-50">·</span>
+                Pas un reçu fiscal
               </p>
 
             </div>
@@ -1112,8 +1127,8 @@ export function ProjectSupportOneFlow({
                   <div className="mt-3">
                     <NextStepLine
                       icon={Mail}
-                      title="Reçu envoyé"
-                      body={guestEmail ? `Envoyé à ${guestEmail}.` : 'Disponible dans votre profil.'}
+                      title="Reçu de contribution envoyé"
+                      body={guestEmail ? `Envoyé à ${guestEmail}. Ce reçu n&apos;est pas un reçu fiscal déductible.` : 'Disponible dans votre profil. Ce reçu n\'est pas un reçu fiscal déductible.'}
                     />
                     <NextStepLine
                       icon={Camera}
@@ -1141,11 +1156,11 @@ export function ProjectSupportOneFlow({
                   className="mt-6 w-full border-t border-white/[0.08] pt-5"
                 >
                   <p className="text-sm font-black text-white">
-                    Sauvegarder votre BioDex
+                    Sauvegardez votre soutien
                   </p>
                   <p className="mt-1 text-[13px] leading-snug text-white/50">
-                    Créez votre profil pour conserver{' '}
-                    {discoveredSpecies?.name_default || 'votre espèce'} et suivre le projet.
+                    Créez votre profil pour retrouver{' '}
+                    {discoveredSpecies?.name_default || 'votre espèce'}, suivre les nouvelles du terrain et utiliser vos Crédits Impact.
                   </p>
                   <div className="mt-3 flex items-center gap-2 text-[13px] text-white/38">
                     <Mail className="h-3.5 w-3.5 shrink-0" />

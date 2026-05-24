@@ -3,8 +3,6 @@ import { getLocale } from 'next-intl/server'
 import { ProjectSupportOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/support/_components/project-support-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
-import { getSpeciesContextList } from '@/lib/api/species-context.service'
-import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
 import { isSupportType } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
@@ -38,15 +36,7 @@ export default async function SupportPage({ params, searchParams }: SupportPageP
     notFound()
   }
 
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const [speciesList, projectSpecies] = await Promise.all([
-    getSpeciesContextList(),
-    getSpeciesForProject(project.slug, project.id),
-  ])
-  const unlockedSpecies = speciesList.find((species) => species.user_status?.isUnlocked)
+  const projectSpecies = await getSpeciesForProject(project.slug, project.id)
 
   return (
     <ProjectSupportOneFlow
@@ -61,9 +51,9 @@ export default async function SupportPage({ params, searchParams }: SupportPageP
         expectedImpact: project.expected_impact,
       }}
       presentation="page"
-      isAuthenticated={Boolean(user)}
+      isAuthenticated={false}
       initialAmount={toOptionalAmount(query.amount)}
-      discoveredSpeciesId={unlockedSpecies?.id ?? null}
+      discoveredSpeciesId={projectSpecies[0]?.id ?? null}
       species={projectSpecies ?? undefined}
     />
   )

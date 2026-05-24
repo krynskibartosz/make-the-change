@@ -2,7 +2,6 @@
 
 import { motion, type Variants } from 'framer-motion'
 import { Bird, Flame, ArrowRight } from 'lucide-react'
-import { CurrencyIcon } from '@/components/currency'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
@@ -97,7 +96,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
                 transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.8 }}
                 className="px-1.5 py-0.5 rounded-full bg-lime-500/10 text-lime-400 text-[10px] font-bold tabular-nums whitespace-nowrap shrink-0"
               >
-                +150 <CurrencyIcon kind="seeds" className="inline h-[1.2em] w-[1.2em] align-text-bottom" />
+                +150 XP
               </motion.div>
             </div>
 
@@ -136,7 +135,7 @@ export function HomeGamificationSection({ variant = 'default' }: HomeGamificatio
 
             <div className="min-w-0">
               <p className="mt-1 min-w-0 text-[11px] leading-tight text-muted-foreground line-clamp-3 overflow-hidden text-ellipsis">
-                Gardez le rythme au quotidien et gagnez des Graines bonus.
+                Gardez le rythme au quotidien et faites progresser votre parcours.
               </p>
             </div>
           </motion.article>

@@ -428,7 +428,7 @@
   },
   "metadata": {
     "title": "Make the CHANGE - Plateforme Écologique",
-    "description": "Investissez dans des projets écologiques et découvrez des produits durables"
+    "description": "Soutenez des projets de terrain, suivez votre impact et découvrez les avantages partenaires"
   },
   "footer": {
     "tagline": "Investissez dans la biodiversité, récoltez des récompenses tangibles.",
@@ -680,7 +680,7 @@
       }
     },
     "letter": {
-      "body": "Notre ambition : faire de Make the Change l'un des plus grands collectifs citoyens européens dédiés au vivant. Un écosystème où chaque swipe sur un écran plante une graine, où chaque défi relevé restaure un habitat, et où l'action commune devient une seconde nature. Le collectif n'attend plus que vous.",
+      "body": "Notre ambition : faire de Make the Change l'un des plus grands collectifs citoyens europ?ens d?di?s au vivant. Un ?cosyst?me o? chaque geste sur un ?cran d?clenche une action concr?te, o? chaque d?fi relev? restaure un habitat, et o? l'action commune devient une seconde nature. Le collectif n'attend plus que vous.",
       "signature": "— Les fondateurs, Grégory & Bartosz"
     },
     "cta": {
@@ -779,7 +779,7 @@
   },
   "projects": {
     "title": "Nos projets",
-    "subtitle": "Découvrez et soutenez des projets de biodiversité vérifiés",
+    "subtitle": "Soutenez des projets de biodiversité documentés avec suivi terrain et transparence sur les frais",
     "biodex_levels": "Biodex - Niveaux de Contenu",
     "filter": {
       "all": "Tous",
@@ -880,7 +880,7 @@
       "confirm_with_amount": "Confirmer {amount}",
       "legal_prefix": "En confirmant, vous acceptez nos",
       "legal_terms": "Conditions Générales de Soutien",
-      "legal_suffix": "Votre soutien est définitif."
+      "legal_suffix": "Votre soutien est définitif. Ce reçu n'est pas un reçu fiscal déductible."
     }
   },
   "products": {
@@ -1204,15 +1204,15 @@
         "description": "Découvrez des initiatives liées aux abeilles, aux forêts, aux océans ou aux espèces menacées."
       },
       "step_2": {
-        "title": "2. Faites un don ou soutenez un producteur",
-        "description": "Votre geste est relié à un projet concret, avec une explication claire de l'impact attendu.",
+        "title": "2. Contribuez ou soutenez un producteur",
+        "description": "Votre geste est relié à un projet concret, avec une explication claire de l'impact attendu et les frais affichés.",
         "check_points": "Projet documenté",
         "check_secure": "Suivi transparent",
         "check_verified": "Partenaire identifié"
       },
       "step_3": {
         "title": "3. Suivez votre impact",
-        "description": "Débloquez des espèces dans le BioDex, gagnez des Graines et utilisez vos Credits Impact quand votre soutien est lié à un producteur."
+        "description": "Débloquez des espèces dans le BioDex, gardez une trace de vos contributions et utilisez vos Crédits Impact quand votre soutien est lié à un producteur."
       }
     },
     "projects": {
@@ -1239,7 +1239,7 @@
       },
       "streak": {
         "title": "Les Séries",
-        "description": "Gardez le rythme au quotidien et gagnez des Graines bonus."
+        "description": "Gardez le rythme au quotidien et faites progresser votre parcours."
       },
       "tribes": {
         "title": "Les Tribus",
@@ -1260,11 +1260,7 @@
         },
         "don_vs_soutien": {
           "question": "Quelle différence entre don et soutien ?",
-          "answer": "Un don pur va intégralement au projet et vous rapporte des Graines pour votre progression. Un soutien à un producteur vous permet, en plus de l'impact, de générer des Credits Impact à utiliser dans la boutique."
-        },
-        "graines": {
-          "question": "Que sont les Graines ?",
-          "answer": "Les Graines sont la monnaie d'expérience de l'application. Elles récompensent votre régularité, débloquent des espèces dans le BioDex et vous font progresser dans l'aventure."
+          "answer": "Un don pur va int?gralement au projet et ajoute une trace BioDex ? votre parcours. Un soutien ? un producteur vous permet, en plus de l'impact, de g?n?rer des Credits Impact ? utiliser dans la boutique."
         },
         "credits": {
           "question": "Que sont les Credits Impact ?",
@@ -1277,6 +1273,10 @@
         "products": {
           "question": "Pourquoi puis-je obtenir des produits ?",
           "answer": "Quand vous soutenez un projet producteur, une partie de votre soutien ouvre des Credits Impact utilisables auprès de partenaires sélectionnés."
+        },
+        "progression": {
+          "question": "Comment fonctionne la progression ?",
+          "answer": "La progression regroupe votre r?gularit?, vos missions, vos le?ons Academy et vos traces BioDex. Elle n'est pas une monnaie et ne prouve pas ? elle seule un impact terrain."
         }
       }
     },
@@ -1835,7 +1835,7 @@
       },
       "badge": "CENTRE D'AIDE",
       "title": "Questions fréquentes",
-      "description": "Tout ce que vous devez savoir sur Make the Change, vos soutiens, vos Graines et vos Credits Impact.",
+      "description": "Tout ce que vous devez savoir sur Make the Change, vos soutiens, vos dons et vos Credits Impact.",
       "search_placeholder": "Rechercher...",
       "learn_more": "En savoir plus",
       "empty_title": "Aucun résultat",
@@ -1848,15 +1848,10 @@
           "question": "Comment fonctionnent les points ?",
           "answer": "Chaque euro investi dans un projet génère des Credits Impact. Vous pouvez les utiliser dans la marketplace ou les réinvestir dans de nouveaux projets."
         },
-        "graines_credits": {
-          "category": "Concept",
-          "question": "Quelle différence entre Graines et Credits Impact ?",
-          "answer": "Les Graines accompagnent votre progression : Academy, missions, BioDex et dons. Les Credits Impact sont utilisables dans les Avantages partenaires lorsqu'ils proviennent d'un soutien producteur."
-        },
         "don_soutien": {
           "category": "Concept",
           "question": "Quelle différence entre un don et un soutien ?",
-          "answer": "Un don soutient un projet sans produit associé direct et peut donner des Graines. Un soutien producteur aide un projet lié à un partenaire et peut ouvrir des Credits Impact utilisables auprès des partenaires sélectionnés."
+          "answer": "Un don soutient un projet sans produit associ? direct et ajoute une trace BioDex. Un soutien producteur aide un projet li? ? un partenaire et peut ouvrir des Credits Impact utilisables aupr?s des partenaires s?lectionn?s."
         },
         "tracking": {
           "category": "Transparence",
@@ -1872,6 +1867,11 @@
           "category": "Compte",
           "question": "À quoi servent les badges du profil ?",
           "answer": "Les badges valorisent votre engagement. Vous pouvez rendre votre profil public pour partager votre progression."
+        },
+        "progression_credits": {
+          "category": "Concept",
+          "question": "Quelle diff?rence entre progression et Credits Impact ?",
+          "answer": "La progression accompagne votre parcours : Academy, missions, BioDex et dons. Les Credits Impact sont utilisables dans les Avantages partenaires lorsqu'ils proviennent d'un soutien producteur."
         }
       }
     },
@@ -2049,9 +2049,9 @@
       "login_required_title": "Connexion requise",
       "login_required_description": "Vous devez être connecté pour aimer une publication.",
       "super_like_success_title": "Super !",
-      "super_like_success_description": "Vous avez planté une graine sur ce post.",
+      "super_like_success_description": "Vous avez envoy? un signal de soutien sur ce post.",
       "super_like_error_title": "Action impossible",
-      "super_like_error_default": "Vous n'avez pas assez de graines (inventaire insuffisant)",
+      "super_like_error_default": "Vous n'avez pas assez de points de progression",
       "write_login_prompt": "Connectez-vous pour publier, réagir et commenter dans la communauté."
     },
     "thread": {
@@ -2064,9 +2064,9 @@
       "login_required_title": "Connexion requise",
       "login_required_description": "Vous devez être connecté pour aimer une publication.",
       "super_like_success_title": "Super !",
-      "super_like_success_description": "Vous avez planté une graine sur ce post.",
+      "super_like_success_description": "Vous avez envoy? un signal de soutien sur ce post.",
       "super_like_error_title": "Action impossible",
-      "super_like_error_default": "Vous n'avez pas assez de graines",
+      "super_like_error_default": "Vous n'avez pas assez de points de progression",
       "comment_error_title": "Erreur",
       "comment_error_description": "Impossible d'ajouter le commentaire. Vérifiez votre connexion.",
       "you_label": "Vous",
@@ -2084,7 +2084,7 @@
       "image_alt": "Image de publication de {name}",
       "action_like": "Aimer cette publication",
       "action_bookmark": "Enregistrer cette publication",
-      "action_super_like": "Planter une graine",
+      "action_super_like": "Envoyer un signal",
       "action_comment": "Ouvrir les commentaires",
       "action_share": "Partager cette publication",
       "action_more": "Plus d’actions"

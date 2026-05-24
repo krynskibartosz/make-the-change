@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, HelpCircle, Lightbulb, Sprout, Trophy, X } from 'lucide-react'
+import { CheckCircle2, HelpCircle, Lightbulb, Trophy, X } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
 export function Step1Quiz() {
@@ -20,7 +20,7 @@ export function Step1Quiz() {
         </Link>
         <div className="w-14 h-14 rounded-full bg-lime-400/10 border border-lime-400/20 shadow-[0_0_15px_rgba(132,204,22,0.15)] flex items-center justify-center relative group">
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-lime-400/5 to-transparent"></div>
-          <Sprout size={32} className="text-lime-400 relative z-10 group-hover:scale-105 transition-transform duration-500" />
+          <Trophy size={32} className="text-lime-400 relative z-10 group-hover:scale-105 transition-transform duration-500" />
         </div>
         <div className="w-10"></div>
       </div>
@@ -95,7 +95,7 @@ export function Step1Quiz() {
               <div className="flex flex-col pt-0.5">
                 <span className="text-sm font-black text-emerald-400 mb-0.5">C'est exact !</span>
                 <p className="text-xs text-gray-300 leading-relaxed">
-                  Pour faire 1kg de miel, une abeille parcourt l'équivalent de <span className="text-white font-bold">4 fois le tour de la Terre</span>. Leur travail est titanesque, mais elles sont menacées. Voici <span className="text-lime-400 font-bold">500 Graines</span> pour vous remercier de vous y intéresser.
+                  Pour faire 1kg de miel, une abeille parcourt l'équivalent de <span className="text-white font-bold">4 fois le tour de la Terre</span>. Leur travail est titanesque, mais elles sont menacées. Votre parcours BioDex commence maintenant.
                 </p>
               </div>
             </div>
@@ -109,7 +109,7 @@ export function Step1Quiz() {
               <div className="flex flex-col pt-0.5">
                 <span className="text-sm font-black text-white mb-0.5">Presque !</span>
                 <p className="text-xs text-gray-300 leading-relaxed">
-                  Il en faut en réalité 4 millions ! Mais on récompense l'effort : voici <span className="text-lime-400 font-bold">500 Graines</span> pour commencer.
+                  Il en faut en réalité 4 millions ! L'effort compte aussi : votre parcours BioDex commence maintenant.
                 </p>
               </div>
             </div>

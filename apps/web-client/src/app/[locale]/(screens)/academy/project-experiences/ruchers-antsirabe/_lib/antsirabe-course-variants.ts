@@ -365,7 +365,7 @@ export const ANTSIRABE_COURSE_VARIANTS: AntsirabeCourseVariant[] = [
         ],
         items: [
           { id: 's1-1', text: "45 ruches installées à Antsirabe", correctColumnId: 'real' },
-          { id: 's1-2', text: "395 € investis par ruche", correctColumnId: 'real' },
+          { id: 's1-2', text: '395 € de soutien par ruche', correctColumnId: 'real' },
           { id: 's1-3', text: "2 emplois liés au projet", correctColumnId: 'real' },
           { id: 's1-4', text: "28 km² de territoire potentiel par ruche", correctColumnId: 'estimate' },
           {

@@ -720,7 +720,7 @@ export const carbonUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise du carbone.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 35, label: '35 Graines' },
+      reward: { type: 'seeds', amount: 35, label: '35 XP Academy' },
     },
   ],
 }

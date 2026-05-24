@@ -713,7 +713,7 @@ export const solutionsUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 50, label: '50 Graines' },
+      reward: { type: 'seeds', amount: 50, label: '50 XP Academy' },
     },
   ],
 }

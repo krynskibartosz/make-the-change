@@ -66,10 +66,11 @@ export default async function AccueilPage() {
       (project) =>
         project.featured &&
         project.status === 'active' &&
+        project.slug &&
         !supportedSlugs.has(project.slug),
     ) ??
     projects.find(
-      (project) => project.status === 'active' && !supportedSlugs.has(project.slug),
+      (project) => project.status === 'active' && project.slug && !supportedSlugs.has(project.slug),
     ) ??
     projects[0] ??
     null

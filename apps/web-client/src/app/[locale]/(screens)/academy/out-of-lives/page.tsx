@@ -1,7 +1,7 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Clock, Crown, Dumbbell, Heart, HeartCrack, Infinity, Sprout } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Clock, Crown, Dumbbell, Heart, HeartCrack, Infinity } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { useRouter } from '@/i18n/navigation'
@@ -12,7 +12,6 @@ import {
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import {
   MAX_LIVES,
-  SEEDS_COST,
   formatMsCountdown,
   isUnlimitedLives,
   msUntilNextRegen,
@@ -49,9 +48,6 @@ export default function OutOfLivesPage() {
   const [progress, setProgress] = useState(() =>
     getDefaultAcademyProgress(MOCK_ACADEMY_VIEWER_ID),
   )
-  const [spending, setSpending] = useState(false)
-  const [spendError, setSpendError] = useState(false)
-
   useEffect(() => {
     const latest = academyRepository.regenerateLives(MOCK_ACADEMY_VIEWER_ID)
     setProgress(latest)
@@ -61,20 +57,6 @@ export default function OutOfLivesPage() {
   }, [router])
 
   const unlimited = isUnlimitedLives(progress.seedsBalance)
-  const canAffordSeeds = progress.seedsBalance >= SEEDS_COST
-
-  const handleSpendSeeds = useCallback(() => {
-    setSpending(true)
-    setSpendError(false)
-    const result = academyRepository.spendSeedsForLives(MOCK_ACADEMY_VIEWER_ID)
-    if (result) {
-      setProgress(result)
-      setTimeout(() => router.replace('/academy'), 800)
-    } else {
-      setSpendError(true)
-      setSpending(false)
-    }
-  }, [router])
 
   const handleTraining = useCallback(() => {
     router.push('/academy/training')
@@ -168,63 +150,7 @@ export default function OutOfLivesPage() {
           </button>
         </motion.div>
 
-        {/* Door 2: Spend seeds */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
-          className={cn(
-            'rounded-3xl border p-5',
-            canAffordSeeds
-              ? 'border-emerald-500/30 bg-emerald-500/5'
-              : 'border-white/8 bg-white/[0.02] opacity-60',
-          )}
-        >
-          <div className="mb-3 flex items-center gap-3">
-            <div className={cn(
-              'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border',
-              canAffordSeeds ? 'border-emerald-500/25 bg-emerald-500/10' : 'border-white/10 bg-white/5',
-            )}>
-              <Sprout className={cn('h-5 w-5', canAffordSeeds ? 'text-emerald-400' : 'text-white/30')} />
-            </div>
-            <div>
-              <p className="text-sm font-black text-white">Utiliser des graines</p>
-              <p className="text-xs text-white/45">−{SEEDS_COST} graines → {MAX_LIVES} vies</p>
-            </div>
-            <div className="ml-auto shrink-0 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1">
-              <span className="text-xs font-black tabular-nums text-emerald-300">
-                {progress.seedsBalance} 🌱
-              </span>
-            </div>
-          </div>
-          <AnimatePresence>
-            {spendError && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mb-3 rounded-xl bg-red-500/10 px-3 py-2 text-xs font-bold text-red-400"
-              >
-                Graines insuffisantes. Gagne-en en terminant des leçons !
-              </motion.p>
-            )}
-          </AnimatePresence>
-          <button
-            type="button"
-            disabled={!canAffordSeeds || spending}
-            onClick={handleSpendSeeds}
-            className={cn(
-              'w-full rounded-2xl py-3.5 text-sm font-black transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-200',
-              canAffordSeeds && !spending
-                ? 'bg-emerald-500 text-black shadow-[0_4px_0_#065f46] hover:translate-y-0.5 hover:shadow-[0_2px_0_#065f46] active:translate-y-[3px] active:shadow-none'
-                : 'cursor-not-allowed bg-white/10 text-white/30',
-            )}
-          >
-            {spending ? '✓ Rechargé !' : `Utiliser ${SEEDS_COST} graines`}
-          </button>
-        </motion.div>
-
-        {/* Door 3: Training */}
+        {/* Door 2: Training */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -276,7 +202,7 @@ export default function OutOfLivesPage() {
           </p>
           <button
             type="button"
-            onClick={() => router.push('/profile/seeds')}
+            onClick={() => router.push('/profile/subscription')}
             className="relative flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-400/30 bg-violet-500/15 py-3.5 text-sm font-black text-violet-200 transition-all hover:bg-violet-500/20 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300"
           >
             Découvrir l'abonnement

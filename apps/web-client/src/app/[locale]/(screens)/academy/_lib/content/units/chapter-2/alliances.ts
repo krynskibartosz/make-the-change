@@ -711,7 +711,7 @@ export const alliancesUnit: AcademyUnitDefinition = {
       learningGoal: 'Prouver la maîtrise des symbioses.',
       generation: 'authored-legendary',
       rules: { exerciseCount: 14 },
-      reward: { type: 'seeds', amount: 20, label: '20 Graines' },
+      reward: { type: 'seeds', amount: 20, label: '20 XP Academy' },
     },
   ],
 }

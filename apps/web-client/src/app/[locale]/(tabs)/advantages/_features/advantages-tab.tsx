@@ -26,7 +26,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
             Avantages Partenaires
           </h1>
           <p className="mt-2 text-[15px] font-medium leading-relaxed text-white/60">
-            Utilise tes Credits Impact pour accéder à des produits, offres et expériences liés aux partenaires du vivant.
+            Utilise tes Crédits Impact pour accéder à des produits, offres et expériences liés aux partenaires du vivant, en remerciement de ton soutien.
           </p>
         </div>
 
@@ -203,7 +203,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
 
         {/* ── Mention légale ── */}
         <p className="pb-2 text-center text-[11px] font-medium leading-relaxed text-white/25">
-          Les Credits Impact donnent accès à des avantages. Ils ne constituent pas une preuve d'impact automatique.
+          Les Crédits Impact sont des points à usage strictement interne, non échangeables et sans valeur financière. Ils ne constituent pas un reçu fiscal ni une preuve d'impact certifiée.
         </p>
 
       </div>

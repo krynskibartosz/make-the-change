@@ -3,6 +3,7 @@ import type { Locale } from '@make-the-change/core/i18n'
 import type { Faction } from '@/lib/domain/types'
 
 export type { Faction } from '@/lib/domain/types'
+export type ChallengeIntent = 'give-bravo'
 export type {
   CollectivePost,
   PrestigeReward,

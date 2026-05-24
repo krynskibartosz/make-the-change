@@ -76,7 +76,7 @@ export default async function SanctuaryPage({ params }: SanctuaryPageProps) {
 
   const factionMessage = isLeading
     ? `Votre énergie porte la communauté ce mois-ci. Ensemble, vous faites avancer ${factionProjectLabel}.`
-    : `La nature a besoin d'un coup de pouce. Semons ensemble de nouvelles graines aujourd'hui.`
+    : `La nature a besoin d'un coup de pouce. Lançons ensemble de nouvelles actions aujourd'hui.`
 
   return (
     <FullScreenSlideModal

@@ -99,7 +99,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               <ImpactCard
                 icon={<CurrencyIcon kind="impactCredits" className="h-5 w-5" />}
                 value={formatCompact(profile?.impactCreditsBalance ?? 2450)}
-                label="CREDITS IMPACT"
+                label="CRÉDITS IMPACT"
                 valueClassName="text-amber-400"
               />
             </li>
@@ -266,7 +266,7 @@ export default async function AuthenticatedProfile({ profile }: { profile: NonNu
               <h3 className="mt-3 text-lg font-black text-white">Invitez vos amis</h3>
               <p className="mb-4 mt-2 text-balance text-sm text-white/70">
                 Faites grandir le mouvement. Vous recevez chacun{' '}
-                <span className={`font-bold ${accentTheme.accentText}`}>500 Graines</span>{' '}
+                <span className={`font-bold ${accentTheme.accentText}`}>une trace BioDex</span>{' '}
                 lorsque votre ami rejoint l&apos;aventure et réalise sa première action.
               </p>
               <button
