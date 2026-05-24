@@ -11,10 +11,6 @@ import { formatCompact } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { resolveLocationDisplay } from '@/lib/location'
 import { getLocalizedContent } from '@/lib/utils'
-import type {
-  ProjectListSpeciesSeed,
-  ProjectSpeciesPreview,
-} from './_features/project-list-species'
 import { ImpactKindIcon } from '@/lib/impact-icons'
 import { getProjectImpactDisplay, type ProjectMapImpactKind } from './_features/project-map-data'
 
@@ -26,37 +22,20 @@ type ServerProjectPayload = {
   name_i18n?: Record<string, string> | null
   description_default: string | null
   description_i18n?: Record<string, string> | null
-  target_budget: number | null
   current_funding: number | null
   funding_progress: number | null
   address_city: string | null
   address_country_code: string | null
   latitude: number | null
   longitude: number | null
-  featured: boolean | null
-  launch_date: string | null
-  status: string | null
   hero_image_url: string | null
   type: string | null
   unit_label: string | null
-  species?: ProjectListSpeciesSeed[] | null
-  linked_species?: ProjectSpeciesPreview[] | null
-  producer?:
-  | {
-    name_default?: string | null
-    name_i18n?: Record<string, string> | null
-    description_default?: string | null
-    description_i18n?: Record<string, string> | null
-  }
-  | Record<string, unknown>
-  | null
 }
 
 interface ProjectsClientProps {
   projects: ServerProjectPayload[]
-  initialStatus: string
-  initialSearch: string
-  initialView: 'grid' | 'list' | 'map'
+  initialView: 'grid' | 'map'
 }
 
 type ClientProject = {
@@ -162,6 +141,7 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
           <img
             src={imageUrl}
             alt={project.name_default}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
@@ -211,6 +191,9 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
+const byProgressDesc = (a: ClientProject, b: ClientProject) =>
+  (b.funding_progress ?? 0) - (a.funding_progress ?? 0)
+
 export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
   const locale = useLocale()
   const router = useRouter()
@@ -275,9 +258,6 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
   const handleMapShellReady = useCallback(() => {
     setIsMapShellReady(true)
   }, [])
-
-  const byProgressDesc = (a: ClientProject, b: ClientProject) =>
-    (b.funding_progress ?? 0) - (a.funding_progress ?? 0)
 
   const donationProjects = useMemo(
     () => normalizedProjects.filter((p) => p.type === 'reef').sort(byProgressDesc),
@@ -373,7 +353,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         {/* bottom = hauteur nav (4.5rem) + safe-area-bottom + gap 8px */}
         {!isMapView && (
           <div
-            className="fixed  left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
+            className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none px-4"
             style={{ bottom: VIEW_SWITCHER_BOTTOM }}
           >
             <motion.div
