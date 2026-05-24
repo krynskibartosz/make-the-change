@@ -176,9 +176,16 @@ export async function ProjectQuickView({
   const fundingSubtext = isDonationProject
     ? 'Restauration, suivi terrain, matériel et mises à jour du projet.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
+  const projectContextLabel = (() => {
+    if (isDonationProject) return 'Projet biodiversité'
+    if (project.type === 'beehive') return 'Apiculteurs accompagnés'
+    if (project.type === 'coral' || project.type === 'reef') return 'Restauration marine'
+    if (project.type === 'orchard') return 'Producteurs accompagnés'
+    return 'Filière locale'
+  })()
   const ctaProofLine = isDonationProject
-    ? 'Suivi inclus · Graines possibles · Nouvelles régulières'
-    : 'Suivi inclus · Crédits Impact possibles · Nouvelles régulières'
+    ? `Suivi terrain · Don sans contrepartie · ${projectContextLabel}`
+    : `Suivi terrain · Crédits Impact possibles · ${projectContextLabel}`
   const similarTitle = getSimilarProjectsTitle(project.type)
 
   return (

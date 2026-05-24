@@ -1215,7 +1215,7 @@ export function ProjectSupportOneFlow({
           {step === 'impact' ? (
             <>
               <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
-                Suivi inclus
+                Suivi terrain
                 {species && species.length > 0 ? (
                   <>
                     <span className="mx-1.5 opacity-40">·</span>

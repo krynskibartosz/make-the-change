@@ -938,15 +938,13 @@ export function ProjectDonateOneFlow({
           {step === 'impact' ? (
             <>
               <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
-                Suivi inclus
+                Suivi terrain
                 {hasSpecies ? (
                   <>
                     <span className="mx-1.5 opacity-40">·</span>
                     <span className="font-black text-lime-300">BioDex lié</span>
                   </>
                 ) : null}
-                <span className="mx-1.5 opacity-40">·</span>
-                <span className="font-black text-emerald-300">{formatSeeds(seeds)} Graines</span>
               </p>
               <Button
                 type="button"
