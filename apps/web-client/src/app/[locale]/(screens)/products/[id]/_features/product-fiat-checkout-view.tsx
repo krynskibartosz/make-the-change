@@ -15,10 +15,12 @@ type ProductFiatCheckoutViewProps = {
 type PaymentState = 'idle' | 'processing' | 'success'
 type PaymentMethod = 'apple_pay' | 'card' | null
 
+const SHIPPING_COST = 4.90
+
 export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: ProductFiatCheckoutViewProps) {
   const router = useRouter()
   const unitPrice = selectedFormat.euros
-  const shippingCost = 4.90
+  const shippingCost = SHIPPING_COST
 
   const [quantity, setQuantity] = useState(1)
 
@@ -32,9 +34,11 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(total)
-  const [totalEuros, totalCents] = formattedTotal.split(',')
+  const totalParts = formattedTotal.split(',')
+  const totalEuros = totalParts[0] ?? '0'
+  const totalCents = totalParts[1] ?? '00'
 
-  const handlePayment = (method: PaymentMethod) => {
+  const handlePayment = (method: 'apple_pay' | 'card') => {
     setActiveMethod(method)
     setPaymentState('processing')
     // Simule le temps de réponse Stripe / Apple Pay

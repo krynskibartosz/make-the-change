@@ -24,9 +24,9 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
   const [userBalance, setUserBalance] = useState(initialBalance)
 
   const imageUrl =
-    sanitizeImageUrl(product.image_url) ||
+    sanitizeImageUrl(product.image_url) ??
     (Array.isArray(product.images) && product.images.length > 0
-      ? sanitizeImageUrl(product.images[0])
+      ? sanitizeImageUrl(product.images[0]) ?? undefined
       : undefined)
 
   const totalCost = selectedFormat.points * quantity
@@ -144,7 +144,6 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
           <button 
             disabled={isProcessing || newBalance < 0}
             onClick={() => {
-              if (newBalance < 0) return
               if (!hasAddress) {
                 setStep(2)
                 return
