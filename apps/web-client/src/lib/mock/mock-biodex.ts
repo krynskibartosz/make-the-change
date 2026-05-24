@@ -1,4 +1,4 @@
-import {
+﻿import {
   MOCK_PRODUCT_EUCALYPTUS_ID,
   MOCK_PRODUCT_MANAKARA_ID,
   MOCK_PRODUCER_ILANGA_ID,
@@ -23,7 +23,6 @@ import {
   MOCK_SPECIES_CHAMELEON_ID,
   MOCK_SPECIES_PANTHER_CHAMELEON_ID,
   MOCK_SPECIES_CLOWNFISH_ID,
-  MOCK_SPECIES_CORAL_ID,
   MOCK_SPECIES_COUA_ID,
   MOCK_SPECIES_GECKO_ID,
   MOCK_SPECIES_GREEN_TURTLE_ID,
@@ -60,6 +59,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_BLACK_BEE_ID,
     name_default: 'Abeille Noire',
     scientific_name: 'Apis mellifera unicolor',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'apiculture', 'agroécologie', 'madagascar'],
     description_default:
       'L\'abeille noire de Madagascar est une sous-espèce endémique essentielle à l\'équilibre de l\'écosystème malgache. Elle pollinise une grande partie des plantes locales et soutient les économies apicoles traditionnelles. Cette abeille est réputée pour sa docilité et son adaptabilité aux différents climats de l\'île.',
     description_scientific:
@@ -129,6 +130,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_LADYBUG_ID,
     name_default: 'Coccinelle a 7 points',
     scientific_name: 'Coccinella septempunctata',
+    faction: 'melli',
+    ecosystem_tags: ['auxiliaire agricole', 'lutte biologique', 'agroécologie'],
     description_default:
       'Coléoptère prédateur iconique au corps rouge vif. C\'est l\'un des piliers naturels de la lutte biologique dans les systèmes agricoles tempérés.',
     description_scientific:
@@ -161,6 +164,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_OLIVE_TREE_ID,
     name_default: 'Olivier',
     scientific_name: 'Olea europaea',
+    faction: 'sylva',
+    ecosystem_tags: ['agroforesterie', 'maquis méditerranéen', 'sardaigne', 'patrimoine génétique'],
     description_default:
       'Arbre fondateur du maquis dont la variété sauvage (oléastre) recèle un riche patrimoine génétique. Il souffre massivement d\'infections racinaires à Phytophthora en Sardaigne.',
     description_scientific:
@@ -189,40 +194,11 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     threats: ['Bactérie Xylella fastidiosa', 'Phytophthora (clades 2, 6, 8)', 'Changement climatique', 'Abandon des terrains agricoles'],
   },
   {
-    id: MOCK_SPECIES_CORAL_ID,
-    name_default: 'Acropora corne de cerf',
-    scientific_name: 'Acropora muricata',
-    description_default:
-      'Espèce de corail scléractiniaire arborescent qui construit la topographie complexe du récif. Il est fortement menacé par le blanchissement thermique et le Syndrome Blanc.',
-    description_scientific:
-      'Acropora muricata est un constructeur de récifs dont les branches digitées peuvent atteindre 2 m de diamètre. Sa croissance (10–15 cm/an) dépend d\'une symbiose obligatoire avec des dinoflagellés endosymbiotes (Symbiodinium spp.) fournissant jusqu\'à 90 % de son énergie via la photosynthèse. Un stress thermique de +1°C soutenu sur 4 semaines provoque la rupture de cette symbiose et le blanchissement. Les fragments peuvent être bouturés en pépinières sous-marines pour la restauration des récifs de Karimunjawa.',
-    conservation_status: 'VU',
-    image_url: '/images/dioramas/transparent/acropora-corail-corne-de-cerf.png',
-    associated_projects: [
-      {
-        id: MOCK_PROJECT_CORAL_ID,
-        slug: MOCK_PROJECT_CORAL_SLUG,
-        name: 'Restauration des recifs Karimunjawa',
-        type: 'coral_restoration',
-        role: 'Espece principale',
-        impact: 'Restauration prioritaire pour reconstruction du recif.',
-        userParticipation: false,
-      },
-    ],
-    associated_producers: [],
-    associated_challenges: [],
-    user_status: createUserStatus(false, 1),
-    weight: null,
-    size: 'jusqu\'a 2 m',
-    diet: 'Zooxanthelles (photosynthèse)',
-    origin_country: 'Indonésie',
-    habitat: ['Récifs coralliens peu profonds', 'Lagons', 'Pentés récifales externes', 'Zones de forte luminosité'],
-    threats: ['Blanchissement thermique', 'Syndrome Blanc des Acroporidés', 'Acidification des océans', 'Destructuration des récifs'],
-  },
-  {
     id: MOCK_SPECIES_BUMBLEBEE_ID,
     name_default: 'Bourdon terrestre',
     scientific_name: 'Bombus terrestris',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'eusocial', 'sonication', 'agroécologie'],
     description_default:
       'Grand pollinisateur eusocial à l\'efficacité redoutable, souvent commercialisé. Ses ouvrières sont capables d\'apprendre les couleurs des fleurs pour optimiser le butinage.',
     description_scientific:
@@ -254,6 +230,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_OSMIA_ID,
     name_default: 'Osmie rousse',
     scientific_name: 'Osmia bicornis',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur solitaire', 'agroécologie', 'vergers', 'hôtel insectes'],
     description_default:
       'Abeille maçonne solitaire recouverte de poils roux denses. Elle gère intelligemment la répartition des sexes de sa progéniture en fonction de sa propre taille corporelle.',
     description_scientific:
@@ -285,6 +263,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_MEGACHILE_ID,
     name_default: 'Mégachile',
     scientific_name: 'Megachile centuncularis',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur solitaire', 'légumineuses', 'agroécologie'],
     description_default:
       'Abeille solitaire coupeuse de feuilles qui maçonne ses nids au-dessus du sol. Elle subit une forte compétition de la part d\'espèces invasives dans les hôtels à insectes.',
     description_scientific:
@@ -316,6 +296,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_SYRPHID_ID,
     name_default: 'Syrphe ceinturé',
     scientific_name: 'Episyrphus balteatus',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'auxiliaire agricole', 'lutte biologique', 'migrateur'],
     description_default:
       'Mouche déguisée en guêpe (mimétisme batésien) et excellent migrateur. Elle présente une écologie duelle fascinante entre son stade larvaire et adulte.',
     description_scientific:
@@ -347,6 +329,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_BUTTERFLY_CITRON_ID,
     name_default: 'Papillon citron',
     scientific_name: 'Gonepteryx rhamni',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'lépidoptère', 'indicateur de biodiversité'],
     description_default:
       'Lépidoptère robuste aux ailes mimétiques de feuilles, capable d\'hiverner à l\'état adulte. Il apparaît aux premiers jours chauds de l\'année.',
     description_scientific:
@@ -378,6 +362,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_BUTTERFLY_PEACOCK_ID,
     name_default: 'Paon-du-jour',
     scientific_name: 'Aglais io',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'lépidoptère', 'indicateur de biodiversité'],
     description_default:
       'Papillon vif orné d\'ocelles dissuasives. Ses chenilles dépendent quasi exclusivement de la présence d\'orties dioïques pour leur développement.',
     description_scientific:
@@ -409,6 +395,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_HEDGEHOG_ID,
     name_default: 'Hérisson européen',
     scientific_name: 'Erinaceus europaeus',
+    faction: 'sylva',
+    ecosystem_tags: ['faune terrestre', 'auxiliaire agricole', 'haies', 'belgique'],
     description_default:
       'Petit mammifère omnivore récemment reclassé à cause de graves déclins démographiques (jusqu\'à 50% dans certaines régions). Il est hautement vulnérable à la fragmentation de son territoire.',
     description_scientific:
@@ -441,6 +429,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_INDRI_ID,
     name_default: 'Indri',
     scientific_name: 'Indri indri',
+    faction: 'sylva',
+    ecosystem_tags: ['lémurien', 'forêt tropicale', 'madagascar', 'corridor écologique'],
     description_default:
       'L\'Indri est le plus grand lémurien vivant, célèbre pour ses puissants chants territoriaux audibles à plusieurs kilomètres. En tant que folivore strict, sa survie est intimement liée à l\'intégrité de la forêt primaire. Il évolue en petits groupes familiaux et effectue des sauts spectaculaires d\'arbre en arbre.',
     description_scientific:
@@ -489,6 +479,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_SIFAKA_ID,
     name_default: 'Sifaka diadème',
     scientific_name: 'Propithecus diadema',
+    faction: 'sylva',
+    ecosystem_tags: ['lémurien', 'forêt primaire', 'madagascar', 'corridor écologique'],
     description_default:
       'Le Sifaka à diadème est l\'un des plus grands et des plus colorés lémuriens arboricoles de Madagascar. Il évolue en groupes sociaux très soudés et effectue des bonds spectaculaires d\'arbre en arbre. Son régime alimentaire très sélectif exige de vastes territoires avec des arbres massifs non fragmentés.',
     description_scientific:
@@ -540,6 +532,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_VARI_ID,
     name_default: 'Vari noir et blanc',
     scientific_name: 'Varecia variegata',
+    faction: 'sylva',
+    ecosystem_tags: ['lémurien', 'forêt tropicale', 'madagascar', 'disperseur de graines'],
     description_default:
       'Le Vari noir et blanc est le plus grand lémurien frugivore de Madagascar, vivant exclusivement dans la haute canopée des forêts primaires. Il évolue en groupes sociaux complexes et joue un rôle écologique unique en tant que pollinisateur majeur des plantes endémiques monumentales comme l\'Arbre du voyageur.',
     description_scientific:
@@ -590,6 +584,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_CHAMELEON_ID,
     name_default: 'Caméléon de Parson',
     scientific_name: 'Calumma parsonii',
+    faction: 'sylva',
+    ecosystem_tags: ['reptile', 'forêt primaire', 'madagascar', 'indicateur de santé forestière'],
     description_default:
       'Le Caméléon de Parson est l\'un des plus grands caméléons au monde, pouvant atteindre 70 cm et peser jusqu\'à 700 grammes. Ce prédateur en embuscade régule les populations d\'insectes arboricoles dans les forêts primaires de l\'est de Madagascar. Sa survie dépend entièrement des forêts anciennes et non fragmentées.',
     description_scientific:
@@ -638,6 +634,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_PANTHER_CHAMELEON_ID,
     name_default: 'Caméléon panthère',
     scientific_name: 'Furcifer pardalis',
+    faction: 'sylva',
+    ecosystem_tags: ['reptile', 'forêt', 'madagascar', 'espèces cryptiques'],
     description_default:
       'Le Caméléon panthère est célèbre pour son dimorphisme sexuel spectaculaire et sa coloration variable selon l\'origine géographique. Ce prédateur d\'insectes hautement spécialisé possède une langue balistique et une vision à 360° qui lui permettent de prospérer dans une grande variété d\'habitats, des forêts secondaires aux zones anthropisées.',
     description_scientific:
@@ -684,6 +682,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_WEEVIL_ID,
     name_default: 'Charançon girafe',
     scientific_name: 'Trachelophorus giraffa',
+    faction: 'sylva',
+    ecosystem_tags: ['coléoptère', 'forêt humide', 'madagascar', 'micro-habitat'],
     description_default:
       'Coléoptère unique au long cou et au comportement de roulement défensif. Les femelles construisent des nids complexes pour leurs larves sur des feuilles de plantes hôtes.',
     description_scientific:
@@ -715,6 +715,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_TOMATO_FROG_ID,
     name_default: 'Grenouille tomate',
     scientific_name: 'Dyscophus antongilii',
+    faction: 'sylva',
+    ecosystem_tags: ['amphibien', 'zones humides', 'madagascar', 'aposématisme'],
     description_default:
       'La Grenouille tomate de Madagascar est un amphibien terrestre massif et fouisseur, célèbre pour sa coloration rouge vif aposématique qui avertit les prédateurs de sa toxine adhésive. Sa reproduction est explosive et liée aux pluies torrentielles, ses têtards jouant un rôle vital de purification biologique dans les eaux stagnantes.',
     weight: '40–230 g',
@@ -758,6 +760,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_KINGFISHER_ID,
     name_default: 'Martin-chasseur pygmée',
     scientific_name: 'Corythornis madagascariensis',
+    faction: 'sylva',
+    ecosystem_tags: ['oiseau', 'zones humides', 'madagascar', 'indicateur qualité eau'],
     description_default:
       'Petit martin-pêcheur endémique au plumage écarlate et bleu profond. Il dépend des rivières et zones humides intactes pour se nourrir de poissons et d\'amphibiens.',
     description_scientific:
@@ -789,6 +793,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_COUA_ID,
     name_default: 'Coua bleu',
     scientific_name: 'Coua caerulea',
+    faction: 'sylva',
+    ecosystem_tags: ['oiseau', 'forêt', 'madagascar', 'disperseur de graines'],
     description_default:
       'Coucou terrestre endémique au plumage bleu iridescent, capable de se déplacer rapidement au sol. Il est un important disperseur de graines dans les forêts malgaches.',
     description_scientific:
@@ -820,6 +826,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_GECKO_ID,
     name_default: 'Gecko diurne',
     scientific_name: 'Phelsuma laticauda',
+    faction: 'sylva',
+    ecosystem_tags: ['reptile', 'forêt', 'madagascar', 'pollinisateur'],
     description_default:
       'Gecko diurne au corps vert vif et à la queue écarlate, capable de se nourrir de nectar et de pollen. Il est un pollinisateur important pour les plantes forestières malgaches.',
     description_scientific:
@@ -851,6 +859,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_LITTLE_OWL_ID,
     name_default: 'Chouette chevêche',
     scientific_name: 'Athene superciliaris',
+    faction: 'sylva',
+    ecosystem_tags: ['rapace nocturne', 'vieux arbres', 'madagascar', 'régulateur'],
     description_default:
       'Chouette endémique de Madagascar au plumage brun strié et aux yeux jaunes. Elle dépend des arbres creux et des zones ouvertes pour chasser les petits mammifères et insectes.',
     description_scientific:
@@ -882,6 +892,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_HOOPoe_ID,
     name_default: 'Huppe fasciée',
     scientific_name: 'Upupa epops',
+    faction: 'sylva',
+    ecosystem_tags: ['oiseau', 'agroforesterie', 'sardaigne', 'lutte biologique'],
     description_default:
       'Oiseau au plumage brun orangé et à la huppe spectaculaire. Il est un insectivore important des zones agricoles et des vergers, se nourrissant de larves et d\'insectes du sol.',
     description_scientific:
@@ -914,6 +926,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_ACROPORA_ID,
     name_default: 'Acropora corne de cerf',
     scientific_name: 'Acropora muricata',
+    faction: 'ondine',
+    ecosystem_tags: ['corail', 'récif', 'karimunjawa', 'restauration récifale'],
     description_default:
       'Espèce de corail scléractiniaire arborescent qui construit la topographie complexe du récif. Il est fortement menacé par le blanchissement thermique et le Syndrome Blanc.',
     description_scientific:
@@ -945,6 +959,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_CLOWNFISH_ID,
     name_default: 'Poisson clown',
     scientific_name: 'Amphiprion ocellaris',
+    faction: 'ondine',
+    ecosystem_tags: ['récif', 'symbiose', 'indonésie', 'anémone'],
     description_default:
       'Poisson emblématique en symbiose obligatoire avec les anémones. Il est essentiel à l\'équilibre du récif et dépend entièrement de la santé des coraux hôtes.',
     description_scientific:
@@ -976,6 +992,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_BLUE_DEMOISELLE_ID,
     name_default: 'Demoiselle bleue',
     scientific_name: 'Chrysiptera cyanea',
+    faction: 'ondine',
+    ecosystem_tags: ['récif', 'poisson récifal', 'indonésie', 'bioindicateur'],
     description_default:
       'Poisson récifal au bleu électrique vif, territorial et agressif. Il est un indicateur sensible de la santé du récif corallien et de la qualité de l\'eau.',
     description_scientific:
@@ -1007,6 +1025,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_BUTTERFLYFISH_ID,
     name_default: 'Poisson-papillon',
     scientific_name: 'Chaetodon auriga',
+    faction: 'ondine',
+    ecosystem_tags: ['récif', 'corallivore', 'indonésie', 'bioindicateur'],
     description_default:
       'Poisson aux motifs spectaculaires et spécialiste des coraux pour l\'alimentation. Il dépend fortement de la santé des coraux branchus pour sa survie.',
     description_scientific:
@@ -1038,6 +1058,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_SEAHORSE_ID,
     name_default: 'Hippocampe',
     scientific_name: 'Hippocampus bargibanti',
+    faction: 'ondine',
+    ecosystem_tags: ['récif', 'gorgone', 'indonésie', 'espèce rare'],
     description_default:
       'Hippocampe pygmée endémique des gorgones des récifs tropicaux. Il est extrêmement spécialisé et dépend entièrement de la présence de gorgones saines pour sa survie.',
     description_scientific:
@@ -1069,6 +1091,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_GREEN_TURTLE_ID,
     name_default: 'Tortue verte',
     scientific_name: 'Chelonia mydas',
+    faction: 'ondine',
+    ecosystem_tags: ['récif', 'herbier marin', 'indonésie', 'espèce migratrice'],
     description_default:
       'Tortue marine herbivore majestueuse, essentielle à l\'équilibre des herbiers et récifs. Elle parcourt des milliers de kilomètres entre ses sites de reproduction et d\'alimentation.',
     description_scientific:
@@ -1101,6 +1125,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_LIOTRIGONA_ID,
     name_default: 'Abeille pollinisatrice',
     scientific_name: 'Liotrigona bitika',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'méliponine', 'madagascar', 'forêt tropicale'],
     description_default:
       'Considérée comme la plus petite abeille sans dard du monde, plus petite qu\'une drosophile. Sa taille microscopique lui permet de polliniser des fleurs endémiques minuscules, inaccessibles aux autres insectes pollinisateurs.',
     description_scientific:
@@ -1132,6 +1158,8 @@ export const MOCK_SPECIES: SpeciesContext[] = [
     id: MOCK_SPECIES_APIS_LIGUSTICA_ID,
     name_default: 'Abeille mellifère italienne',
     scientific_name: 'Apis mellifera ligustica',
+    faction: 'melli',
+    ecosystem_tags: ['pollinisateur', 'apiculture', 'maquis méditerranéen', 'sardaigne'],
     description_default:
       'Sous-espèce apicole extrêmement populaire originaire de la péninsule italienne. Elle soutient le rendement commercial et la résilience florale des paysages secs.',
     description_scientific:
@@ -1232,7 +1260,7 @@ const cloneSpecies = async (
   } else if (species.id === MOCK_SPECIES_OLIVE_TREE_ID) {
     isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_SARDINIA_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
-  } else if (species.id === MOCK_SPECIES_CORAL_ID || species.id === MOCK_SPECIES_ACROPORA_ID) {
+  } else if (species.id === MOCK_SPECIES_ACROPORA_ID) {
     isUnlocked = graph.supportedProjectSlugs.has(MOCK_PROJECT_CORAL_SLUG)
     progressionLevel = isUnlocked ? 2 : 1
   } else if (

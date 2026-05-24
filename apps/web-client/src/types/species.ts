@@ -1,3 +1,5 @@
+export type SpeciesFaction = 'melli' | 'sylva' | 'ondine'
+
 // Species Context Types
 export type SpeciesContext = {
   id: string
@@ -7,6 +9,8 @@ export type SpeciesContext = {
   description_scientific?: string | null
   conservation_status: string
   image_url: string | null
+  faction: SpeciesFaction
+  ecosystem_tags?: string[]
   associated_projects: AssociatedProject[] | null
   associated_producers: AssociatedProducer[] | null
   associated_challenges: AssociatedChallenge[] | null

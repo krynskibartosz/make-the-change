@@ -362,7 +362,6 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
 
         {/* ── Sticky Bottom Bar ── */}
         <BottomActionBar className="absolute bottom-0 left-0 right-0 z-20 pt-2">
-          <div className="pointer-events-none absolute inset-x-0 -top-10 h-10 bg-gradient-to-t from-background to-transparent" />
 
           <div className="flex flex-col gap-1.5 max-w-md mx-auto w-full">
             {/* Ligne principale : chip format à gauche + bouton CTA à droite */}
