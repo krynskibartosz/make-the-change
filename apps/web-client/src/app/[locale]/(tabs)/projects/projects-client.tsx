@@ -186,7 +186,7 @@ function ProjectCard({ project, locale }: { project: ClientProject; locale: stri
           )}
         </div>
 
-        <div className="flex items-center gap-2 mt-5">
+        <div className="flex items-center gap-2 mt-2">
           <div
             className={`w-6 h-6 rounded-full ${impactTheme.bg} flex items-center justify-center shrink-0`}
           >
