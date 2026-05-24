@@ -16,6 +16,23 @@ const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-gecko-diurne': '/images/species-thumbnails/gecko-diurne.png',
   'species-chouette-cheveche': '/images/species-thumbnails/chouette-cheveche.png',
   'species-liotrigona-bitika': '/images/species-thumbnails/liotrigona-bitika.png',
+  'species-coccinelle-7-points': '/images/species-thumbnails/coccinelle-a-7-points.png',
+  'species-olivier': '/images/species-thumbnails/olivier.png',
+  'species-bourdon-terrestre': '/images/species-thumbnails/bourdon-terrestre.png',
+  'species-osmie-rousse': '/images/species-thumbnails/osmie-rousse.png',
+  'species-megachile': '/images/species-thumbnails/megachile.png',
+  'species-syrphe-ceinture': '/images/species-thumbnails/syrphe-ceinture.png',
+  'species-papillon-citron': '/images/species-thumbnails/papillon-citron.png',
+  'species-paon-du-jour': '/images/species-thumbnails/paon-du-jour.png',
+  'species-herisson-europeen': '/images/species-thumbnails/herisson-europeen.png',
+  'species-huppe-fascie': '/images/species-thumbnails/huppe-fasciee.png',
+  'species-apis-ligustica': '/images/species-thumbnails/abeille-mellifere-italienne.png',
+  'species-acropora-corail-cerf': '/images/species-thumbnails/acropora-corail-cerf.png',
+  'species-poisson-clown': '/images/species-thumbnails/poisson-clown.png',
+  'species-demoiselle-bleue': '/images/species-thumbnails/demoiselle-bleue.png',
+  'species-poisson-papillon': '/images/species-thumbnails/poisson-papillon.png',
+  'species-hippocampe': '/images/species-thumbnails/hippocampe.png',
+  'species-tortue-verte': '/images/species-thumbnails/tortue-verte.png',
 }
 
 interface SpeciesLinkedSpeciesProps {
