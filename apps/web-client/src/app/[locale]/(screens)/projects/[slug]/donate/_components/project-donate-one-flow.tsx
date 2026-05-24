@@ -20,6 +20,7 @@ import { ProjectImpactCalculator } from '@/app/[locale]/(screens)/projects/[slug
 import { getProjectImpactMetrics } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-impact-metrics'
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
+import { makeProjectGlowRgba } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-glow'
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
@@ -383,13 +384,7 @@ export function ProjectDonateOneFlow({
 
   const hasSpecies = Boolean(discoveredSpeciesId)
 
-  const glowColor = (() => {
-    const type = project.type?.toLowerCase() ?? ''
-    if (type.includes('coral') || type.includes('reef') || type.includes('ocean')) return { r: 14, g: 165, b: 233 }
-    if (type.includes('orchard') || type.includes('olive') || type.includes('forest') || type.includes('tree')) return { r: 16, g: 185, b: 129 }
-    return { r: 20, g: 184, b: 166 }
-  })()
-  const glowRgba = (alpha: number) => `rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, ${alpha})`
+  const glowRgba = makeProjectGlowRgba(project.type)
 
   useEffect(() => {
     if (step !== 'success') return

@@ -37,6 +37,7 @@ export type PublicProject = {
   maturity_date: string | null
   current_funding: number | null
   target_budget: number | null
+  funding_progress?: number | null
   unit_price_eur?: number | null
   unit_label?: string | null
   hero_image_url: string | null

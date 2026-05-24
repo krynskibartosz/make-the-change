@@ -5,14 +5,7 @@ import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
-
-function isDonationType(value: unknown): value is 'reef' | 'coral' {
-  return value === 'reef' || value === 'coral'
-}
-
-function toOptionalString(value: string | string[] | undefined): string | undefined {
-  return typeof value === 'string' && value.trim() ? value : undefined
-}
+import { isDonationType, toOptionalString } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
 type DonatePageProps = {
   params: Promise<{ slug: string }>
@@ -57,7 +50,6 @@ export default async function DonatePage({ params, searchParams }: DonatePagePro
       }}
       presentation="page"
       isAuthenticated={Boolean(user)}
-      source={toOptionalString(query.source)}
       discoveredSpeciesId={unlockedSpecies?.id ?? null}
       initialOptionId={toOptionalString(query.option)}
     />

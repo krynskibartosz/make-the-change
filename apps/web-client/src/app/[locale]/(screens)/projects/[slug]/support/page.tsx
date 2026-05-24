@@ -6,12 +6,7 @@ import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/pro
 import { getSpeciesContextList } from '@/lib/api/species-context.service'
 import { createClient } from '@/lib/supabase/server'
 import { getLocalizedContent } from '@/lib/utils'
-
-const isSupportType = (value: unknown): value is 'beehive' | 'olive_tree' | 'vineyard' =>
-  value === 'beehive' || value === 'olive_tree' || value === 'vineyard'
-
-const toOptionalString = (value: string | string[] | undefined): string | undefined =>
-  typeof value === 'string' && value.trim() ? value : undefined
+import { isSupportType } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
 const toOptionalAmount = (value: string | string[] | undefined): number | undefined => {
   if (typeof value !== 'string') {
@@ -67,7 +62,6 @@ export default async function SupportPage({ params, searchParams }: SupportPageP
       }}
       presentation="page"
       isAuthenticated={Boolean(user)}
-      source={toOptionalString(query.source)}
       initialAmount={toOptionalAmount(query.amount)}
       discoveredSpeciesId={unlockedSpecies?.id ?? null}
       species={projectSpecies ?? undefined}

@@ -20,6 +20,7 @@ import { getMockProjectUpdates } from '@/lib/mock/mock-project-updates'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { PublicProject, RelatedProject } from './project-detail-data'
 import { buildProjectImpactItems } from './_utils/build-project-impact-items'
+import { type ProjectGlowTone, getProjectGlowTone, makeProjectGlowRgba } from './_utils/project-glow'
 import { formatAmountNumber } from '@/lib/formatters'
 
 type ProjectQuickViewProps = {
@@ -29,32 +30,11 @@ type ProjectQuickViewProps = {
   relatedProjects: RelatedProject[]
 }
 
-// ─── Glow contextuel par type de projet ────────────────────────────────────
-type ProjectGlowTone = 'yellow' | 'green' | 'blue'
-
-const PROJECT_GLOW: Record<ProjectGlowTone, { r: number; g: number; b: number }> = {
-  yellow: { r: 245, g: 158, b: 11  },
-  green:  { r: 16,  g: 185, b: 129 },
-  blue:   { r: 14,  g: 165, b: 233 },
-}
-
 const PROGRESS_INDICATOR_CLASS: Record<ProjectGlowTone, string> = {
   yellow: 'bg-gradient-to-r from-amber-500/60 to-lime-400/50',
   blue:   'bg-gradient-to-r from-sky-500/60 to-teal-400/50',
   green:  'bg-gradient-to-r from-emerald-600/60 to-emerald-400/50',
 }
-
-function getProjectGlowTone(type: string | null | undefined): ProjectGlowTone {
-  const t = type?.toLowerCase() ?? ''
-  if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) return 'blue'
-  if (t.includes('agroforestry') || t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) return 'green'
-  return 'yellow'
-}
-
-function glowRgba(tone: { r: number; g: number; b: number }, alpha: number): string {
-  return `rgba(${tone.r}, ${tone.g}, ${tone.b}, ${alpha})`
-}
-// ────────────────────────────────────────────────────────────────────────────
 
 const getWebsiteLabel = (url: string | null): string | null => {
   if (!url) return null
@@ -85,7 +65,7 @@ export async function ProjectQuickView({
   const [t, locale] = await Promise.all([getTranslations('projects'), getLocale()])
 
   const glowTone = getProjectGlowTone(project.type)
-  const glow = PROJECT_GLOW[glowTone]
+  const glowRgba = makeProjectGlowRgba(project.type)
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
@@ -193,11 +173,11 @@ export async function ProjectQuickView({
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute -right-20 -top-24 h-72 w-72 rounded-full blur-3xl"
-          style={{ backgroundColor: glowRgba(glow, 0.12) }}
+          style={{ backgroundColor: glowRgba(0.12) }}
         />
         <div
           className="absolute -bottom-20 -left-24 h-72 w-72 rounded-full blur-3xl"
-          style={{ backgroundColor: glowRgba(glow, 0.15) }}
+          style={{ backgroundColor: glowRgba(0.15) }}
         />
       </div>
 
@@ -341,7 +321,7 @@ export async function ProjectQuickView({
               <div className="mt-14 px-4 sm:px-5">
                 <ProjectImpactPreview
                   items={impactItems}
-                  accentColor={glowRgba(glow, 1)}
+                  accentColor={glowRgba(1)}
                 />
               </div>
             ) : null}
@@ -358,10 +338,10 @@ export async function ProjectQuickView({
                   <div className="flex items-baseline">
                     <span
                       className="text-2xl font-bold tabular-nums tracking-tight"
-                      style={{ color: glowRgba(glow, 0.90) }}
+                      style={{ color: glowRgba(0.90) }}
                     >
                       {formatAmountNumber(currentFunding)}{' '}
-                      <span style={{ color: glowRgba(glow, 0.55) }} className="text-lg">EUR</span>
+                      <span style={{ color: glowRgba(0.55) }} className="text-lg">EUR</span>
                     </span>
                     <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
                       / {formatAmountNumber(targetBudget)} EUR

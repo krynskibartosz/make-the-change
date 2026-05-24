@@ -26,6 +26,7 @@ import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
 import type { ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
+import { makeProjectGlowRgba } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-glow'
 
 const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
@@ -770,13 +771,7 @@ export function ProjectSupportOneFlow({
   const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
 
 
-  const glowColor = (() => {
-    const t = project.type?.toLowerCase() ?? ''
-    if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) return { r: 14, g: 165, b: 233 }
-    if (t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) return { r: 16, g: 185, b: 129 }
-    return { r: 245, g: 158, b: 11 }
-  })()
-  const glowRgba = (alpha: number) => `rgba(${glowColor.r}, ${glowColor.g}, ${glowColor.b}, ${alpha})`
+  const glowRgba = makeProjectGlowRgba(project.type)
 
   return (
     <div

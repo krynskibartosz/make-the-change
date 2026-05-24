@@ -9,13 +9,22 @@ export type ProjectSpecies = {
   contextSentence?: string
 }
 
+export type ProjectType =
+  | 'beehive'
+  | 'equipment'
+  | 'orchard'
+  | 'reef'
+  | 'coral'
+  | 'olive_tree'
+  | 'vineyard'
+
 export type ProjectChallenge = {
   id: string
   name: string
   type: string
   difficulty: string
   userParticipation: boolean
-  rewards: any[]
+  rewards: unknown[]
 }
 
 export type ProducerProduct = {
