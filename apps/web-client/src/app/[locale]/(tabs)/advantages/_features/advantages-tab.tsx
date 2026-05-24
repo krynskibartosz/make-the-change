@@ -64,7 +64,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
                 imageUrl={data.partnerOffer.imageUrl}
                 partner={data.partnerOffer.partner}
                 title={data.partnerOffer.title}
-                priceCredits={data.partnerOffer.costImpactCredits}
+                priceCredits={data.partnerOffer.priceImpactCredits}
               />
             </li>
           </ul>

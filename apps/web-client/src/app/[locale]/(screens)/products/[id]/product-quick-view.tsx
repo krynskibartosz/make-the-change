@@ -10,6 +10,7 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
+import { Link } from '@/i18n/navigation'
 import type { ProductWithRelations } from './product-detail-data'
 import { ProductShareButton } from './_components/product-share-button'
 import { ProductCheckoutView } from './_features/product-checkout-view'
@@ -20,7 +21,7 @@ type ProductQuickViewProps = {
   userBalance: number
 }
 
-type ProductFormat = {
+export type ProductFormat = {
   id: string
   label: string
   points: number
@@ -60,9 +61,9 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
   const glow = PRODUCT_GLOW[getProductGlowTone(product.category_id)]
 
   const coverImage =
-    sanitizeImageUrl(product.image_url) ||
+    sanitizeImageUrl(product.image_url) ??
     (Array.isArray(product.images) && product.images.length > 0
-      ? sanitizeImageUrl(product.images[0])
+      ? sanitizeImageUrl(product.images[0]) ?? undefined
       : undefined)
 
   const producerImage = product.producer?.visualAssets?.portrait
@@ -195,8 +196,8 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
           </div>
 
           {product.producer && (
-            <a
-              href={`/${locale}/producers/${product.producer.slug || product.producer.id}`}
+            <Link
+              href={`/producers/${product.producer.slug || product.producer.id}`}
               className="flex items-center gap-3 px-4 py-3 border-y border-white/5 group mt-4"
             >
               {producerImage ? (
@@ -213,7 +214,7 @@ export function ProductQuickView({ product, userBalance }: ProductQuickViewProps
                 </p>
               </div>
               <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors shrink-0" />
-            </a>
+            </Link>
           )}
 
           <div className="mt-4 space-y-4 px-4 pb-36">

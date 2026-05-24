@@ -2,19 +2,15 @@
 
 import { useState } from 'react'
 import type { ProductWithRelations } from '../product-detail-data'
+import type { ProductFormat } from '../product-quick-view'
 import { useRouter } from '@/i18n/navigation'
 import { ArrowLeft, MapPin, X, Loader2 } from 'lucide-react'
 import { CurrencyAmount, CurrencyIcon, getCurrencyDesign } from '@/components/currency'
 import { sanitizeImageUrl } from '@/lib/image-url'
 
 type ProductCheckoutViewProps = {
-  product: any
-  selectedFormat: {
-    id: string
-    label: string
-    points: number
-    euros: number
-  }
+  product: ProductWithRelations
+  selectedFormat: ProductFormat
   initialBalance: number
   onClose: () => void
 }

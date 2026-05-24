@@ -25,7 +25,7 @@ export type PartnerOffer = {
   partner: string
   imageUrl: string
   href: string
-  costImpactCredits: number
+  priceImpactCredits: number
 }
 
 export type CollectiveBonus = {
@@ -78,7 +78,7 @@ export function getAdvantagesData(): AdvantagesData {
       id: p.id,
       title: p.name_default,
       partner: p.producer.name_default || 'Partenaire du vivant',
-      imageUrl: p.image_url,
+      imageUrl: p.image_url ?? '',
       href: `/products/${p.slug || p.id}`,
       priceImpactCredits: p.price_points,
     }))
@@ -91,7 +91,7 @@ export function getAdvantagesData(): AdvantagesData {
       partner: 'Ilanga Nature',
       imageUrl: '/images/projects/miellerie-manakara.jpg',
       href: '/advantages/code-ilanga-coffret-10',
-      costImpactCredits: 200,
+      priceImpactCredits: 200,
     },
     collectiveBonus: {
       title: 'Dans les ruchers Ilanga',

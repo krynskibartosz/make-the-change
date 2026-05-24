@@ -52,7 +52,7 @@ export type PublicProduct = {
   category_id: string | null
   featured: boolean | null
   is_hero_product: boolean | null
-  tags: (string | null)[] | null
+  tags: string[] | null
   stock_quantity: number | null
   price_points: number | null
   price_eur_equivalent: number | null

@@ -1,16 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import type { ProductWithRelations } from '../product-detail-data'
+import type { ProductFormat } from '../product-quick-view'
 import { useRouter } from '@/i18n/navigation'
 import { Check, CreditCard, Loader2, MapPin, Package, X } from 'lucide-react'
 
 type ProductFiatCheckoutViewProps = {
-  product: any
-  selectedFormat: {
-    id: string
-    points: number
-    euros: number
-  }
+  product: ProductWithRelations
+  selectedFormat: ProductFormat
   onClose: () => void
 }
 
@@ -132,7 +130,7 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
             </div>
             <div>
               <h3 className="text-white font-bold text-sm leading-tight">
-                {product.name_default} <span className="text-white/30 text-xs ml-1 font-normal">({selectedFormat.id})</span>
+                {product.name_default} <span className="text-white/30 text-xs ml-1 font-normal">({selectedFormat.label})</span>
               </h3>
               <p className="text-white/50 text-xs mt-0.5">{unitPrice.toFixed(2).replace('.', ',')} € / unité</p>
             </div>
