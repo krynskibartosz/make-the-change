@@ -400,10 +400,11 @@ export async function ProjectQuickView({
               {t('detail.funding_closed')}
             </Button>
           ) : (
-            <Link href={supportPath} className="block w-full">
-              <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
-                {isContributionProject ? 'Contribuer à ce projet' : 'Soutenir ce projet'}
-              </Button>
+            <Link
+              href={supportPath}
+              className="flex h-14 w-full items-center justify-center rounded-2xl bg-lime-400 px-4 text-center text-lg font-black text-black shadow-sm transition-transform active:scale-95"
+            >
+              {isContributionProject ? 'Contribuer à ce projet' : 'Soutenir ce projet'}
             </Link>
           )}
           {!isFundingClosed ? (

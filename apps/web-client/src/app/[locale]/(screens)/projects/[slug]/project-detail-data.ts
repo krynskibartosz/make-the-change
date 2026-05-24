@@ -1,9 +1,15 @@
 import { unstable_cache } from 'next/cache'
-import { isMockDataSource } from '@/lib/mock/data-source'
-import { createStaticClient } from '@/lib/supabase/static'
-import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
-import { getMockProjectBySlug, getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
+import type {
+  DonationOption,
+  ProducerProduct,
+  ProjectChallenge,
+  ProjectImpact,
+  ProjectSpecies,
+} from '@/app/[locale]/(screens)/projects/_types/project'
+import {
+  getMockProjectBySlug,
+  getMockProjects,
+} from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
 
 export type ProjectProducer = {
   id: string
@@ -64,51 +70,9 @@ export type RelatedProject = {
   target_budget: number | null
 }
 
-// Helpers moved to bottom
 async function _getPublicProjectBySlug(slug: string): Promise<PublicProject | null> {
   const mockProject = getMockProjectBySlug(slug)
-  if (mockProject) {
-    return toPublicProjectFromMock(mockProject)
-  }
-
-  if (isMockDataSource) {
-    return null
-  }
-
-  const supabase = createStaticClient()
-
-  const { data: bySlug } = await supabase
-    .from('public_projects')
-    .select(
-      `
-      *,
-      producer:public_producers!producer_id(*)
-    `,
-    )
-    .eq('slug', slug)
-    .maybeSingle()
-
-  if (bySlug) {
-    return toPublicProject(bySlug)
-  }
-
-  // Fallback: allow opening project detail with project id in URL when slug is unavailable.
-  if (isUuid(slug)) {
-    const { data: byId } = await supabase
-      .from('public_projects')
-      .select(
-        `
-        *,
-        producer:public_producers!producer_id(*)
-      `,
-      )
-      .eq('id', slug)
-      .maybeSingle()
-
-    return toPublicProject(byId)
-  }
-
-  return null
+  return mockProject ? toPublicProjectFromMock(mockProject) : null
 }
 
 type GetRelatedProjectsByTypeParams = {
@@ -128,7 +92,7 @@ async function _getRelatedProjectsByType({
     return []
   }
 
-  const mockRelatedProjects = getMockProjects()
+  return getMockProjects()
     .filter((project) => project.type === type)
     .filter((project) => project.id !== excludeProjectId)
     .filter((project) => project.slug !== excludeProjectSlug)
@@ -144,130 +108,7 @@ async function _getRelatedProjectsByType({
       current_funding: project.current_funding,
       target_budget: project.target_budget,
     }))
-
-  if (isMockDataSource) {
-    return mockRelatedProjects.slice(0, limit)
-  }
-
-  const supabase = createStaticClient()
-  let projectsQuery = supabase
-    .from('public_projects')
-    .select(
-      'id, slug, type, name_default, name_i18n, description_default, description_i18n, hero_image_url, current_funding, target_budget',
-    )
-    .eq('type', type)
-    .in('status', ['active', 'funded', 'completed'])
-    .order('featured', { ascending: false })
-    .order('created_at', { ascending: false })
-
-  if (isUuid(excludeProjectId)) {
-    projectsQuery = projectsQuery.neq('id', excludeProjectId)
-  }
-
-  const { data, error } = await projectsQuery.limit(limit)
-
-  if (error) {
-    console.error('[project-detail] failed to fetch related projects', error)
-    return mockRelatedProjects.slice(0, limit)
-  }
-
-  const databaseProjects = Array.isArray(data)
-    ? data
-        .map((entry) => toRelatedProject(entry))
-        .filter((entry): entry is RelatedProject => entry !== null)
-    : []
-
-  const mockSlugs = new Set(mockRelatedProjects.map((project) => project.slug))
-  const dedupedDatabaseProjects = databaseProjects.filter((project) => !mockSlugs.has(project.slug))
-
-  return [...mockRelatedProjects, ...dedupedDatabaseProjects].slice(0, limit)
-}
-
-function toLocalizedRecord(value: unknown): Record<string, string> | null {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  return Object.fromEntries(
-    Object.entries(value).filter(
-      (entry): entry is [string, string] => typeof entry[1] === 'string',
-    ),
-  )
-}
-
-function toNullableString(value: unknown): string | null {
-  const parsed = asString(value)
-  return parsed || null
-}
-
-function toNullableNumber(value: unknown): number | null {
-  if (value === null || value === undefined) {
-    return null
-  }
-
-  const parsed = asNumber(value, Number.NaN)
-  return Number.isFinite(parsed) ? parsed : null
-}
-
-function toProducer(value: unknown): ProjectProducer | null {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  const id = asString(value.id)
-  const nameDefault = asString(value.name_default)
-  if (!id || !nameDefault) {
-    return null
-  }
-
-  return {
-    id,
-    slug: toNullableString(value.slug),
-    name_default: nameDefault,
-    name_i18n: toLocalizedRecord(value.name_i18n),
-    description_default: toNullableString(value.description_default),
-    description_i18n: toLocalizedRecord(value.description_i18n),
-    contact_website: toNullableString(value.contact_website),
-    images: asStringArray(value.images),
-  }
-}
-
-function toPublicProject(value: unknown): PublicProject | null {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  const id = asString(value.id)
-  const slug = asString(value.slug)
-  const nameDefault = asString(value.name_default)
-  if (!id || !slug || !nameDefault) {
-    return null
-  }
-
-  return {
-    id,
-    slug,
-    is_mock: false,
-    status: toNullableString(value.status),
-    type: toNullableString(value.type),
-    name_default: nameDefault,
-    name_i18n: toLocalizedRecord(value.name_i18n),
-    description_default: toNullableString(value.description_default),
-    description_i18n: toLocalizedRecord(value.description_i18n),
-    long_description_default: toNullableString(value.long_description_default),
-    long_description_i18n: toLocalizedRecord(value.long_description_i18n),
-    address_city: toNullableString(value.address_city),
-    address_country_code: toNullableString(value.address_country_code),
-    latitude: toNullableNumber(value.latitude),
-    longitude: toNullableNumber(value.longitude),
-    launch_date: toNullableString(value.launch_date),
-    maturity_date: toNullableString(value.maturity_date),
-    current_funding: toNullableNumber(value.current_funding),
-    target_budget: toNullableNumber(value.target_budget),
-    hero_image_url: toNullableString(value.hero_image_url),
-    images: asStringArray(value.images),
-    producer: toProducer(value.producer),
-  }
+    .slice(0, limit)
 }
 
 function toPublicProjectFromMock(
@@ -317,43 +158,14 @@ function toPublicProjectFromMock(
   }
 }
 
-function toRelatedProject(value: unknown): RelatedProject | null {
-  if (!isRecord(value)) {
-    return null
-  }
-
-  const id = asString(value.id)
-  const slug = asString(value.slug)
-  const nameDefault = asString(value.name_default)
-  if (!id || !slug || !nameDefault) {
-    return null
-  }
-
-  return {
-    id,
-    slug,
-    type: toNullableString(value.type),
-    name_default: nameDefault,
-    name_i18n: toLocalizedRecord(value.name_i18n),
-    description_default: toNullableString(value.description_default),
-    description_i18n: toLocalizedRecord(value.description_i18n),
-    hero_image_url: toNullableString(value.hero_image_url),
-    current_funding: toNullableNumber(value.current_funding),
-    target_budget: toNullableNumber(value.target_budget),
-  }
-}
-
-function isUuid(value: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
-}
-
-export const getPublicProjectBySlug = unstable_cache(_getPublicProjectBySlug, ['project-detail'], {
-  revalidate: 3600,
-  tags: ['projects-list'],
-})
+export const getPublicProjectBySlug = unstable_cache(
+  _getPublicProjectBySlug,
+  ['project-detail'],
+  { revalidate: 3600, tags: ['projects-list'] },
+)
 
 export const getRelatedProjectsByType = unstable_cache(
   _getRelatedProjectsByType,
-  ['project-related'],
+  ['related-projects'],
   { revalidate: 3600, tags: ['projects-list'] },
 )

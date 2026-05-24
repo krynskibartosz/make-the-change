@@ -216,27 +216,6 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
     }
   }, [isMapView])
 
-  useEffect(() => {
-    if (shouldMountMap || normalizedProjects.length === 0) {
-      return
-    }
-
-    const idleWindow = window as Window & {
-      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number
-      cancelIdleCallback?: (handle: number) => void
-    }
-
-    if (idleWindow.requestIdleCallback) {
-      const idleHandle = idleWindow.requestIdleCallback(() => setShouldMountMap(true), {
-        timeout: 2500,
-      })
-      return () => idleWindow.cancelIdleCallback?.(idleHandle)
-    }
-
-    const timeoutId = window.setTimeout(() => setShouldMountMap(true), 1600)
-    return () => window.clearTimeout(timeoutId)
-  }, [normalizedProjects.length, shouldMountMap])
-
   const updateViewMode = useCallback(
     (nextView: 'grid' | 'map') => {
       const params = new URLSearchParams(searchParams.toString())

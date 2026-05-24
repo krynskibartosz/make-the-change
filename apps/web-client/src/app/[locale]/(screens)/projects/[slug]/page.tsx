@@ -4,7 +4,6 @@ import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getLocalizedContent } from '@/lib/utils'
 import { buildPublicAppUrl } from '@/lib/public-url'
-import { getProjectContext } from '../_api/project-context.service'
 import { getSpeciesForProject } from '../_api/project-species.service'
 import { getPublicProjectBySlug, getRelatedProjectsByType } from './project-detail-data'
 import { ProjectQuickView } from './project-quick-view'
@@ -57,8 +56,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     notFound()
   }
 
-  const [projectContext, species, relatedProjects] = await Promise.all([
-    project.is_mock ? null : getProjectContext(project.slug),
+  const [species, relatedProjects] = await Promise.all([
     getSpeciesForProject(project.slug, project.id),
     getRelatedProjectsByType({
       type: project.type,
@@ -68,7 +66,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     }),
   ])
 
-  const producerProducts = projectContext?.producer_products ?? project.producer_products ?? null
+  const producerProducts = project.producer_products ?? null
 
   const localizedTitle = getLocalizedContent(project.name_i18n, locale, project.name_default)
 

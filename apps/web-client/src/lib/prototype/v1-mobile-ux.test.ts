@@ -99,4 +99,62 @@ describe('V1 mobile prototype UX guardrails', () => {
     )
     expectNoMatches(supportFlow, [/@stripe\//g, /loadStripe/g, /PaymentElement/g], 'support flow')
   })
+
+  it('keeps checkout wording and contribution rewards coherent in the mobile prototype', () => {
+    const supportFlow = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/support/_components/project-support-one-flow.tsx',
+    )
+    expectNoMatches(
+      supportFlow,
+      [/Votre contribution aide ce producteur/g],
+      'support checkout body wording',
+    )
+
+    const contributeFlow = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow.tsx',
+    )
+    expectNoMatches(
+      contributeFlow,
+      [/projects\.donate_page/g, /La Chouette Effraie/g],
+      'contribution checkout i18n and species fallback',
+    )
+  })
+
+  it('keeps project discovery mock-only and loads the map only after user intent', () => {
+    const projectsDataSource = readSource('src/app/[locale]/(tabs)/projects/_features/get-projects.ts')
+    expectNoMatches(projectsDataSource, [/createStaticClient/g, /from\('public_projects'\)/g], 'projects data source')
+
+    const projectsClient = readSource('src/app/[locale]/(tabs)/projects/projects-client.tsx')
+    expectNoMatches(
+      projectsClient,
+      [/requestIdleCallback/g, /setTimeout\(\(\) => setShouldMountMap\(true\)/g],
+      'projects map preload',
+    )
+  })
+
+  it('keeps project detail mock-only and avoids nested interactive CTA markup', () => {
+    const detailPage = readSource('src/app/[locale]/(screens)/projects/[slug]/page.tsx')
+    expectNoMatches(detailPage, [/getProjectContext/g], 'project detail page')
+
+    const detailData = readSource('src/app/[locale]/(screens)/projects/[slug]/project-detail-data.ts')
+    expectNoMatches(
+      detailData,
+      [/isMockDataSource/g, /createStaticClient/g, /from\('public_projects'\)/g],
+      'project detail data source',
+    )
+
+    const speciesData = readSource('src/app/[locale]/(screens)/projects/_api/project-species.service.ts')
+    expectNoMatches(
+      speciesData,
+      [/isMockDataSource/g, /createStaticClient/g, /from\('v_species_context'\)/g],
+      'project species data source',
+    )
+
+    const quickView = readSource('src/app/[locale]/(screens)/projects/[slug]/project-quick-view.tsx')
+    expectNoMatches(
+      quickView,
+      [/<Link href=\{supportPath\}[\s\S]{0,240}<Button/g],
+      'project detail primary CTA',
+    )
+  })
 })

@@ -315,7 +315,7 @@ export function ProjectContributeOneFlow({
   discoveredSpeciesId = null,
   initialOptionId = null,
 }: ProjectContributeOneFlowProps) {
-  const t = useTranslations('projects.donate_page')
+  const t = useTranslations('projects.support_page')
   const router = useRouter()
   const haptic = useHaptic()
 
@@ -796,19 +796,32 @@ export function ProjectContributeOneFlow({
                         : undefined
                     }
                   >
-                    <img
-                      src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
-                      alt="Espèce débloquée"
-                      className={cn(
-                        'w-full h-full object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-                        phase === 'tension' ? 'brightness-0 opacity-50 animate-pulse' : '',
-                        phase === 'flash' ? 'brightness-200 opacity-100' : '',
-                        phase === 'euphoria' || phase === 'resolved' ? 'brightness-100 opacity-100' : '',
-                      )}
-                      onError={(event) => {
-                        event.currentTarget.style.display = 'none'
-                      }}
-                    />
+                    {hasSpecies ? (
+                      <img
+                        src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
+                        alt="Espèce débloquée"
+                        className={cn(
+                          'w-full h-full object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                          phase === 'tension' ? 'brightness-0 opacity-50 animate-pulse' : '',
+                          phase === 'flash' ? 'brightness-200 opacity-100' : '',
+                          phase === 'euphoria' || phase === 'resolved' ? 'brightness-100 opacity-100' : '',
+                        )}
+                        onError={(event) => {
+                          event.currentTarget.style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <div
+                        className={cn(
+                          'grid h-full w-full place-items-center rounded-full border border-lime-300/20 bg-lime-300/10 text-lime-300 transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                          phase === 'tension' ? 'scale-90 opacity-50' : '',
+                          phase === 'flash' ? 'scale-100 opacity-100 brightness-150' : '',
+                          phase === 'euphoria' || phase === 'resolved' ? 'scale-105 opacity-100' : '',
+                        )}
+                      >
+                        <CheckCircle2 className="h-24 w-24 [@media(max-height:800px)]:h-20 [@media(max-height:800px)]:w-20" />
+                      </div>
+                    )}
                   </div>
                   <div
                     className={cn(
@@ -822,10 +835,10 @@ export function ProjectContributeOneFlow({
 
                 <div className="mt-5 text-center flex flex-col items-center gap-2">
                   <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
-                    Nouvelle espèce débloquée
+                    {hasSpecies ? 'Nouvelle espèce débloquée' : 'Contribution enregistrée'}
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">
-                    {discoveredSpecies?.name_default || 'La Chouette Effraie'}
+                    {hasSpecies ? (discoveredSpecies?.name_default ?? 'Espèce liée au projet') : 'Suivi du projet activé'}
                   </h2>
                 </div>
               </motion.div>
@@ -842,13 +855,15 @@ export function ProjectContributeOneFlow({
                     <Camera className="h-4 w-4 shrink-0 text-lime-300" />
                     <p className="text-[13px] font-black text-white">Suivi du projet activé</p>
                   </div>
-                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
-                    <Leaf className="h-4 w-4 shrink-0 text-emerald-300" />
-                    <p className="text-[13px] font-black text-white">
-                      Trace BioDex enregistrée
-                    </p>
-                    <p className="ml-auto text-[10.5px] text-white/35">BioDex</p>
-                  </div>
+                  {hasSpecies ? (
+                    <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
+                      <Leaf className="h-4 w-4 shrink-0 text-emerald-300" />
+                      <p className="text-[13px] font-black text-white">
+                        Trace BioDex enregistrée
+                      </p>
+                      <p className="ml-auto text-[10.5px] text-white/35">BioDex</p>
+                    </div>
+                  ) : null}
                 </motion.div>
               ) : null}
 
@@ -873,11 +888,13 @@ export function ProjectContributeOneFlow({
                       title="Suivi du projet"
                       body="Les prochaines nouvelles du terrain apparaîtront sur la page du projet dès que le partenaire les publiera."
                     />
-                    <NextStepLine
-                      icon={Leaf}
-                      title="BioDex à explorer"
-                      body={`${discoveredSpecies?.name_default || 'Votre espèce'} est maintenant dans votre trace de don.`}
-                    />
+                    {hasSpecies ? (
+                      <NextStepLine
+                        icon={Leaf}
+                        title="BioDex à explorer"
+                        body={`${discoveredSpecies?.name_default ?? 'Votre espèce'} est maintenant dans votre trace de don.`}
+                      />
+                    ) : null}
                   </div>
                 </motion.section>
               ) : null}
@@ -890,11 +907,12 @@ export function ProjectContributeOneFlow({
                   className="mt-6 w-full border-t border-white/[0.08] pt-5"
                 >
                   <p className="text-sm font-black text-white">
-                    Sauvegarder votre BioDex
+                    {hasSpecies ? 'Sauvegarder votre BioDex' : 'Sauvegarder votre contribution'}
                   </p>
                   <p className="mt-1 text-[13px] leading-snug text-white/50">
-                    Créez votre profil pour conserver{' '}
-                    {discoveredSpecies?.name_default || 'votre espèce'} et suivre le projet.
+                    {hasSpecies
+                      ? `Créez votre profil pour conserver ${discoveredSpecies?.name_default ?? 'votre espèce'} et suivre le projet.`
+                      : 'Créez votre profil pour retrouver votre contribution et suivre le projet.'}
                   </p>
                   <div className="mt-3 flex items-center gap-2 text-[13px] text-white/38">
                     <Mail className="h-3.5 w-3.5 shrink-0" />
@@ -912,7 +930,9 @@ export function ProjectContributeOneFlow({
                   <CheckCircle2 className="h-6 w-6 shrink-0" />
                   <span>
                     <span className="block font-black text-lime-400 mb-0.5">Vérifiez votre boîte mail !</span>
-                    Un lien magique vous y attend pour sécuriser votre espèce.
+                    {hasSpecies
+                      ? 'Un lien magique vous y attend pour sécuriser votre espèce.'
+                      : 'Un lien magique vous y attend pour sauvegarder votre contribution.'}
                   </span>
                 </motion.p>
               ) : null}
@@ -985,11 +1005,11 @@ export function ProjectContributeOneFlow({
                     router.replace(`/profile/biodex/${discoveredSpeciesId}`)
                     return
                   }
-                  router.replace('/profile/biodex')
+                  router.replace(`/projects/${project.slug}`)
                 }}
                 className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
               >
-                Admirer dans mon BioDex
+                {hasSpecies ? 'Admirer dans mon BioDex' : 'Retour au projet'}
               </Button>
               <Button
                 type="button"

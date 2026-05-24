@@ -836,7 +836,7 @@ export function ProjectSupportOneFlow({
                 <div className="mb-5 text-center">
                   <p className="text-xl font-black text-white">Choisissez votre soutien</p>
                   <p className="mt-1.5 text-sm text-white/50">
-                    Votre contribution aide ce producteur à faire avancer son projet.
+                    Votre soutien aide ce producteur à faire avancer son projet.
                   </p>
                 </div>
                 <div className="flex w-full items-baseline justify-center">
