@@ -33,7 +33,7 @@ const REWARD_PREVIEW_IMAGE = '/images/dioramas/transparent/abeille-noire.png'
 const MIN_DONATION_EUR = 1
 const MAX_DONATION_EUR = 10_000
 
-type ProjectDonateOneFlowProps = {
+type ProjectContributeOneFlowProps = {
   project: {
     id: string
     slug: string
@@ -75,7 +75,7 @@ function NextStepLine({
   )
 }
 
-function AfterDonateBlock({
+function AfterContributeBlock({
   hasSpecies,
   onOpenBioDex,
   onOpenTracking,
@@ -146,7 +146,7 @@ function AfterDonateBlock({
   )
 }
 
-function IncludedDonateSummary({
+function IncludedContributeSummary({
   hasSpecies,
   onOpen,
 }: {
@@ -308,13 +308,13 @@ function TrackingSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
 
 // --- Main component ---
 
-export function ProjectDonateOneFlow({
+export function ProjectContributeOneFlow({
   project,
   presentation = 'page',
   isAuthenticated,
   discoveredSpeciesId = null,
   initialOptionId = null,
-}: ProjectDonateOneFlowProps) {
+}: ProjectContributeOneFlowProps) {
   const t = useTranslations('projects.donate_page')
   const router = useRouter()
   const haptic = useHaptic()
@@ -362,7 +362,7 @@ export function ProjectDonateOneFlow({
   const donationMetrics = getProjectImpactMetrics({
     amount: amountEur,
     projectType: project.type,
-    isDonationProject: true,
+    isContributionProject: true,
     donationOptions: project.donationOptions,
     projectImpact: project.expectedImpact ?? null,
   })
@@ -649,7 +649,7 @@ export function ProjectDonateOneFlow({
                     baseAmount={defaultAmount}
                     amount={amountEur}
                     mode="checkout"
-                    isDonationProject={true}
+                    isContributionProject={true}
                     donationOptions={project.donationOptions}
                     projectType={project.type}
                     projectImpact={project.expectedImpact ?? null}
@@ -657,7 +657,7 @@ export function ProjectDonateOneFlow({
                 </div>
               </section>
 
-              <AfterDonateBlock
+              <AfterContributeBlock
                 hasSpecies={hasSpecies}
                 onOpenBioDex={() => setSheet('biodex')}
                 onOpenTracking={() => setSheet('tracking')}
@@ -689,7 +689,7 @@ export function ProjectDonateOneFlow({
               </div>
 
               {/* Ce qui est inclus — liste plate */}
-              <IncludedDonateSummary
+              <IncludedContributeSummary
                 hasSpecies={hasSpecies}
                 onOpen={() => setSheet('biodex')}
               />

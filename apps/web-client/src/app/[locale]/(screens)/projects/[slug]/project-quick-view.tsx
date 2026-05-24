@@ -129,9 +129,9 @@ export async function ProjectQuickView({
       ? `/producers/${project.producer.slug || project.producer.id}`
       : null
 
-  const isDonationProject = !!(project.is_donation_project && project.donation_options)
-  const supportPath = isDonationProject
-    ? `/projects/${project.slug}/donate?source=quick_view`
+  const isContributionProject = !!(project.is_donation_project && project.donation_options)
+  const supportPath = isContributionProject
+    ? `/projects/${project.slug}/contribute?source=quick_view`
     : `/projects/${project.slug}/support?source=quick_view`
 
   const galleryMedia = [
@@ -146,24 +146,24 @@ export async function ProjectQuickView({
   const impactItems = buildProjectImpactItems({
     amount: currentFunding,
     projectType: project.type,
-    isDonationProject,
+    isContributionProject,
     donationOptions: project.donation_options,
     projectImpact: project.expected_impact,
   })
 
-  const partnerLabel = isDonationProject ? 'Partenaire terrain' : 'Producteur partenaire'
-  const fundingTitle = isDonationProject ? 'Objectif de contribution' : 'Objectif de soutien'
-  const fundingSubtext = isDonationProject
+  const partnerLabel = isContributionProject ? 'Partenaire terrain' : 'Producteur partenaire'
+  const fundingTitle = isContributionProject ? 'Objectif de contribution' : 'Objectif de soutien'
+  const fundingSubtext = isContributionProject
     ? 'Restauration, suivi terrain et matériel. Les frais sont affichés clairement avant paiement.'
     : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
   const projectContextLabel = (() => {
-    if (isDonationProject) return 'Projet biodiversité'
+    if (isContributionProject) return 'Projet biodiversité'
     if (project.type === 'beehive') return 'Apiculteurs accompagnés'
     if (project.type === 'coral' || project.type === 'reef') return 'Restauration marine'
     if (project.type === 'orchard') return 'Producteurs accompagnés'
     return 'Filière locale'
   })()
-  const ctaProofLine = isDonationProject
+  const ctaProofLine = isContributionProject
     ? `Suivi terrain · Trace BioDex incluse · ${projectContextLabel}`
     : `Suivi terrain · Crédits Impact inclus · ${projectContextLabel}`
   const similarTitle = getSimilarProjectsTitle(project.type)
@@ -304,7 +304,7 @@ export async function ProjectQuickView({
                 species={species ?? []}
                 projectType={project.type}
                 projectSlug={project.slug}
-                isDonationProject={isDonationProject}
+                isContributionProject={isContributionProject}
                 description={narrativeDescription}
                 producerName={project.producer ? producerName : undefined}
                 producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
@@ -362,7 +362,7 @@ export async function ProjectQuickView({
                 currentFunding={currentFunding}
                 fundingProgress={fundingProgress}
                 projectType={project.type}
-                isDonationProject={isDonationProject}
+                isContributionProject={isContributionProject}
                 fundingTitle={fundingTitle}
                 indicatorClassName={PROGRESS_INDICATOR_CLASS[glowTone]}
               />
@@ -373,7 +373,7 @@ export async function ProjectQuickView({
             </div>
 
             {/* 7. Produits partenaires (soutien uniquement) */}
-            {!isDonationProject && producerProducts && producerProducts.length > 0 ? (
+            {!isContributionProject && producerProducts && producerProducts.length > 0 ? (
               <div className="mt-16 px-4 sm:px-5">
                 <ProjectProducerProductsSection products={producerProducts} />
               </div>
@@ -402,7 +402,7 @@ export async function ProjectQuickView({
           ) : (
             <Link href={supportPath} className="block w-full">
               <Button className="h-14 w-full items-center justify-center rounded-2xl bg-lime-400 text-lg font-black text-black transition-transform active:scale-95 [&_svg]:hidden">
-                {isDonationProject ? 'Contribuer à ce projet' : 'Soutenir ce projet'}
+                {isContributionProject ? 'Contribuer à ce projet' : 'Soutenir ce projet'}
               </Button>
             </Link>
           )}

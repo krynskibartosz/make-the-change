@@ -41,10 +41,10 @@ type NormalizedSupportLegacy = {
 }
 
 /**
- * Mirroir de NormalizedDonation depuis contributions/page.tsx
+ * Mirroir de NormalizedContribution depuis contributions/page.tsx
  * [LEGACY_COMPAT] Type local pour les donations
  */
-type NormalizedDonationLegacy = {
+type NormalizedContributionLegacy = {
   id: string
   amount_eur: number
   amount_points: number
@@ -56,7 +56,7 @@ type NormalizedDonationLegacy = {
     status: string | null
     cover_image_url?: string | null
   } | null
-  type: 'donation'
+  type: 'contribution'
 }
 
 /**
@@ -92,7 +92,7 @@ type MockSupportRecordLegacy = {
  * | `amount_eur_equivalent` | MockSupportRecord | [EUR_CLAIR] | Montant en euros contribué |
  * | `returns_received_points` | MockSupportRecord | [AMBIGU_A_CLASSIFIER] | Historique "retours" - à clarifier |
  * | `type: 'investment'` | NormalizedInvestment | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
- * | `type: 'donation'` | NormalizedDonation | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
+ * | `type: 'contribution'` | NormalizedContribution | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
  * | `price_points` | Produit/Commande | [CREDITS_IMPACT_CLAIR] | Prix en Crédits Impact |
  * | `total_points` | Commande | [CREDITS_IMPACT_CLAIR] | Total en Crédits Impact |
  * | `monthly_seeds_allocation` | Subscription | [GRAINES_CLAIR] | Allocation mensuelle Graines (abonnement) — pas de Crédits Impact |
@@ -169,7 +169,7 @@ export function adaptMockSupportToProducerSupport(
 }
 
 /**
- * Adapte une NormalizedDonation legacy vers un view-model de don.
+ * Adapte une NormalizedContribution legacy vers un view-model de don.
  *
  * [ADAPTER_R5] Le don pur n'est PAS un producer_support selon P0-1.
  * Cet adapter crée un view-model spécifique pour les donations.
@@ -177,8 +177,8 @@ export function adaptMockSupportToProducerSupport(
  * @param record - Enregistrement de donation normalisé
  * @returns View-model pour affichage de don
  */
-export function adaptNormalizedDonationToViewModel(
-  record: NormalizedDonationLegacy,
+export function adaptNormalizedContributionToViewModel(
+  record: NormalizedContributionLegacy,
 ): {
   id: string
   amountEuros: number

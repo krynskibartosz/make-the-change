@@ -10,7 +10,7 @@ describe('getProjectPrimaryAction', () => {
         donation_options: [{ id: 'donation-1' }],
       }),
     ).toEqual({
-      href: '/projects/coraux-karimunjawa/donate',
+      href: '/projects/coraux-karimunjawa/contribute',
       label: 'Faire un don',
       kind: 'donation',
     })

@@ -11,7 +11,7 @@ type ProjectFundingSheetProps = {
   currentFunding: number
   fundingProgress: number
   projectType?: string | null
-  isDonationProject?: boolean
+  isContributionProject?: boolean
   fundingTitle: string
   indicatorClassName?: string
 }
@@ -26,14 +26,14 @@ type Milestone = {
 
 function getMilestones(
   projectType: string | null | undefined,
-  isDonationProject: boolean,
+  isContributionProject: boolean,
   progress: number,
 ): Milestone[] {
   const type = projectType?.toLowerCase() ?? ''
 
   let definitions: { label: string; threshold: number }[]
 
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
+  if (isContributionProject || type.includes('coral') || type.includes('reef')) {
     definitions = [
       { label: 'Équipement de base sécurisé', threshold: 20 },
       { label: 'Premières implantations engagées', threshold: 45 },
@@ -88,14 +88,14 @@ export function ProjectFundingSheet({
   currentFunding,
   fundingProgress,
   projectType,
-  isDonationProject = false,
+  isContributionProject = false,
   fundingTitle,
   indicatorClassName,
 }: ProjectFundingSheetProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const chips = getSupportChips(projectType, isDonationProject)
-  const milestones = getMilestones(projectType, isDonationProject, fundingProgress)
+  const chips = getSupportChips(projectType, isContributionProject)
+  const milestones = getMilestones(projectType, isContributionProject, fundingProgress)
   const progress = Math.min(Math.round(fundingProgress), 100)
 
   return (

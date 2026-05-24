@@ -7,7 +7,7 @@ import { formatDate } from '@/lib/utils'
 import { ActivityFilter } from './activity-filter'
 import {
   adaptNormalizedSupportToProducerSupport,
-  adaptNormalizedDonationToViewModel,
+  adaptNormalizedContributionToViewModel,
   type ProducerSupportViewModel,
 } from '@/lib/mappers/producer-support-adapters'
 
@@ -28,14 +28,14 @@ type NormalizedSupport = {
   type: 'support'
 }
 
-type NormalizedDonation = {
+type NormalizedContribution = {
   id: string
   amount_eur: number
   amount_points: number
   status: string
   created_at: string
   project: SupportProject | null
-  type: 'donation'
+  type: 'contribution'
 }
 
 type NormalizedOrder = {
@@ -52,7 +52,7 @@ type NormalizedOrder = {
   type: 'order'
 }
 
-type UnifiedActivity = NormalizedSupport | NormalizedDonation | NormalizedOrder
+type UnifiedActivity = NormalizedSupport | NormalizedContribution | NormalizedOrder
 
 const STATUS_LABELS: Record<string, string> = {
   active: 'Actif',
@@ -89,7 +89,7 @@ type FilterType = 'all' | 'support' | 'donation' | 'order'
 
 type ActivityListProps = {
   userSupports: NormalizedSupport[]
-  userDonations: NormalizedDonation[]
+  userDonations: NormalizedContribution[]
   userOrders: NormalizedOrder[]
   totalSupported: number
   totalPoints: number
@@ -113,10 +113,10 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
 
   // Calculate filtered totals for bento display
   const filteredSupports = filter === 'all' || filter === 'support' ? userSupports : []
-  const filteredDonations = filter === 'all' || filter === 'donation' ? userDonations : []
+  const filteredContributions = filter === 'all' || filter === 'donation' ? userDonations : []
   const filteredOrders = filter === 'all' || filter === 'order' ? userOrders : []
-  const displayContributed = [...filteredSupports, ...filteredDonations].reduce((sum, item) => sum + item.amount_eur, 0)
-  const displayPoints = [...filteredSupports, ...filteredDonations, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
+  const displayContributed = [...filteredSupports, ...filteredContributions].reduce((sum, item) => sum + item.amount_eur, 0)
+  const displayPoints = [...filteredSupports, ...filteredContributions, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
   const displayOrderEuros = filteredOrders.reduce((sum, order) => sum + order.amount_eur, 0)
 
   // Determine bento labels based on filter
@@ -214,7 +214,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
             } else if (activity.type === 'donation') {
               const donation = activity
               // [R6] Adapter vers view-model donation pour affichage moderne
-              const donationVM = adaptNormalizedDonationToViewModel(donation)
+              const donationVM = adaptNormalizedContributionToViewModel(donation)
               const statusLabel = donationVM.statusLabel
 
               const content = (

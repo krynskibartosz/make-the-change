@@ -6,7 +6,7 @@ describe('getProjectImpactMetrics', () => {
     const metrics = getProjectImpactMetrics({
       amount: 180,
       projectType: 'reef',
-      isDonationProject: true,
+      isContributionProject: true,
       donationOptions: [
         {
           id: 'coral-12',

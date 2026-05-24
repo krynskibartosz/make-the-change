@@ -12,7 +12,7 @@ type ProjectImpactCalculatorProps = {
   baseAmount: number
   amount: number
   mode?: ImpactMode
-  isDonationProject?: boolean
+  isContributionProject?: boolean
   donationOptions?: DonationOption[] | null
   projectType?: string
   projectImpact?: ProjectImpact | null
@@ -125,7 +125,7 @@ export function ProjectImpactCalculator({
   baseAmount,
   amount,
   mode = 'project',
-  isDonationProject = false,
+  isContributionProject = false,
   donationOptions = null,
   projectType = 'beehive',
   projectImpact = null,
@@ -136,7 +136,7 @@ export function ProjectImpactCalculator({
   const metrics = getProjectImpactMetrics({
     amount: displayAmount,
     projectType,
-    isDonationProject,
+    isContributionProject,
     donationOptions,
     projectImpact,
   })
@@ -306,7 +306,7 @@ export function ProjectImpactCalculator({
           <div className="relative ml-3 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-black/50">
             <img
               src={BIODEX_REWARD_IMAGE_URL}
-              alt={isDonationProject ? "Silhouette d'une espèce marine" : "Silhouette de l'Abeille Noire"}
+              alt={isContributionProject ? "Silhouette d'une espèce marine" : "Silhouette de l'Abeille Noire"}
               className="h-full w-full object-cover brightness-0 opacity-50"
             />
             <Lock className="absolute bottom-1 right-1 h-4 w-4 text-white/45" />
@@ -317,14 +317,14 @@ export function ProjectImpactCalculator({
               {isCheckoutMode ? 'ESPÈCE À DÉBLOQUER' : 'ESPÈCE ASSOCIÉE À CE PROJET'}
             </p>
             <p className="text-sm font-bold text-white">
-              {isDonationProject ? 'Espèce marine' : "L'Abeille Noire"}
+              {isContributionProject ? 'Espèce marine' : "L'Abeille Noire"}
             </p>
             <p className="mt-0.5 text-sm text-white/70">
               {isCheckoutMode
-                ? isDonationProject
+                ? isContributionProject
                   ? "Faites un don pour l'ajouter à votre collection."
                   : "Soutenez ce projet pour l'ajouter à votre collection."
-                : isDonationProject
+                : isContributionProject
                   ? 'Faune marine associée à ce projet.'
                   : 'Faune locale associée à ce projet.'}
             </p>

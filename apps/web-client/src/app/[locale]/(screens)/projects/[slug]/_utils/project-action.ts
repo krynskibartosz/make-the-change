@@ -18,13 +18,13 @@ export function getProjectPrimaryAction(
   source?: string,
 ): ProjectPrimaryAction {
   const hasDonationOptions = Array.isArray(project.donation_options) && project.donation_options.length > 0
-  const isDonation = Boolean(project.is_donation_project || hasDonationOptions || project.type === 'reef' || project.type === 'coral')
-  const baseHref = `/projects/${project.slug}/${isDonation ? 'donate' : 'support'}`
+  const isContribution = Boolean(project.is_donation_project || hasDonationOptions || project.type === 'reef' || project.type === 'coral')
+  const baseHref = `/projects/${project.slug}/${isContribution ? 'donate' : 'support'}`
   const href = source ? `${baseHref}?source=${encodeURIComponent(source)}` : baseHref
 
   return {
     href,
-    label: isDonation ? 'Faire un don' : 'Soutenir ce projet',
-    kind: isDonation ? 'donation' : 'support',
+    label: isContribution ? 'Faire un don' : 'Soutenir ce projet',
+    kind: isContribution ? 'donation' : 'support',
   }
 }

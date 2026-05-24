@@ -3,7 +3,7 @@ import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/pro
 export type ProjectImpactMetricsInput = {
   amount: number
   projectType?: string | null
-  isDonationProject?: boolean
+  isContributionProject?: boolean
   donationOptions?: DonationOption[] | null
   projectImpact?: ProjectImpact | null
 }
@@ -44,12 +44,12 @@ const DEFAULT_CORAL_EUR = 30
 export function getProjectImpactMetrics({
   amount,
   projectType = 'beehive',
-  isDonationProject = false,
+  isContributionProject = false,
   donationOptions = null,
   projectImpact = null,
 }: ProjectImpactMetricsInput): ProjectImpactMetrics {
   const displayAmount = Number.isFinite(amount) ? Math.max(amount, 0) : 0
-  const isReef = projectType === 'reef' || projectType === 'coral' || isDonationProject
+  const isReef = projectType === 'reef' || projectType === 'coral' || isContributionProject
 
   if (isReef) {
     const selectedOption = donationOptions?.find((option) => option.price === displayAmount) ?? null

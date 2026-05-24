@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { ProjectDonateOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/donate/_components/project-donate-one-flow'
+import { ProjectContributeOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getLocalizedContent } from '@/lib/utils'
 
-function isDonationType(value: unknown): value is 'reef' | 'coral' {
+function isContributionType(value: unknown): value is 'reef' | 'coral' {
   return value === 'reef' || value === 'coral'
 }
 
@@ -13,21 +13,21 @@ function toOptionalString(value: string | string[] | undefined): string | undefi
   return typeof value === 'string' && value.trim() ? value : undefined
 }
 
-type InterceptedDonatePageProps = {
+type InterceptedContributePageProps = {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ source?: string | string[]; option?: string | string[] }>
 }
 
-export default async function InterceptedProjectDonatePage({
+export default async function InterceptedProjectContributePage({
   params,
   searchParams,
-}: InterceptedDonatePageProps) {
+}: InterceptedContributePageProps) {
   const { slug } = await params
   const query = await searchParams
 
   const project = await getPublicProjectBySlug(slug)
 
-  if (!project || !isDonationType(project.type) || !project.donation_options) {
+  if (!project || !isContributionType(project.type) || !project.donation_options) {
     notFound()
   }
 
@@ -41,7 +41,7 @@ export default async function InterceptedProjectDonatePage({
       headerMode="close"
       refreshOnClose={true}
     >
-      <ProjectDonateOneFlow
+      <ProjectContributeOneFlow
         project={{
           id: project.id,
           slug: project.slug,

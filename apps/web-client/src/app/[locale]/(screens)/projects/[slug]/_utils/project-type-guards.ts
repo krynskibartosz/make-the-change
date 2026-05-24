@@ -2,7 +2,7 @@ export function isSupportType(value: unknown): value is 'beehive' | 'olive_tree'
   return value === 'beehive' || value === 'olive_tree' || value === 'vineyard'
 }
 
-export function isDonationType(value: unknown): value is 'reef' | 'coral' {
+export function isContributionType(value: unknown): value is 'reef' | 'coral' {
   return value === 'reef' || value === 'coral'
 }
 

@@ -4,7 +4,7 @@ import { X, Download, ExternalLink, Package, MapPin, Leaf } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import {
   adaptNormalizedSupportToProducerSupport,
-  adaptNormalizedDonationToViewModel,
+  adaptNormalizedContributionToViewModel,
   type ProducerSupportViewModel,
 } from '@/lib/mappers/producer-support-adapters'
 
@@ -17,7 +17,7 @@ type TransactionReceiptProps = {
 export function TransactionReceipt({ transactionId, transactionType }: TransactionReceiptProps) {
   // [R7] Mock data pour démonstration - à remplacer par données réelles
   const isSupport = transactionType === 'support'
-  const isDonation = transactionType === 'donation'
+  const isContribution = transactionType === 'donation'
   const isProducerSupport = isSupport
 
   // [R7] Données legacy mock avec discriminant type
@@ -42,7 +42,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     amount_points: 500, // Trace BioDex pour les dons
     status: 'completed',
     created_at: '2026-04-10T10:15:00.000Z',
-    type: 'donation' as const,
+    type: 'contribution' as const,
     project: {
       name_default: 'Protection des lémuriens',
       slug: 'protection-lemuriens',
@@ -79,8 +79,8 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     ? adaptNormalizedSupportToProducerSupport(legacySupportData)
     : null
   
-  const donationVM = isDonation
-    ? adaptNormalizedDonationToViewModel(legacyDonationData)
+  const donationVM = isContribution
+    ? adaptNormalizedContributionToViewModel(legacyDonationData)
     : null
 
   const supportTimeline = [
@@ -95,22 +95,22 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     { label: 'Suivi disponible', date: 'Dans votre historique', status: 'completed' as const },
   ]
 
-  const data = isSupport || isDonation
+  const data = isSupport || isContribution
     ? {
         name: supportVM?.project.name || donationVM?.project.name || 'Projet',
         date: formatFullDate(supportVM?.createdAt || donationVM?.createdAt || ''),
         amount: supportVM?.amountEuros || donationVM?.amountEuros || 0,
-        creditsOrSeeds: isDonation 
+        creditsOrSeeds: isContribution 
           ? (donationVM?.seedsReward || 0)
           : (supportVM?.amountImpactCredits || 0),
-        creditsOrSeedsLabel: isDonation ? 'Trace BioDex' : 'Crédits Impact',
+        creditsOrSeedsLabel: isContribution ? 'Trace BioDex' : 'Crédits Impact',
         status: supportVM?.status || donationVM?.status || 'pending',
         statusLabel: supportVM?.statusLabel || donationVM?.statusLabel || 'En attente',
         imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/miellerie-manakara.jpg',
         contributionTypeLabel: supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel || 'Contribution',
-        isDonation,
-        isProducerSupport: !isDonation && (isSupport || false),
-        timeline: isDonation ? donationTimeline : supportTimeline,
+        isContribution,
+        isProducerSupport: !isContribution && (isSupport || false),
+        timeline: isContribution ? donationTimeline : supportTimeline,
       }
     : orderData
 
@@ -131,11 +131,11 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
             {formatEuros(data.amount)}
             {isSupport && <span className="text-2xl text-lime-400"> €</span>}
           </div>
-          {!isSupport && !isDonation && (
+          {!isSupport && !isContribution && (
             <span className="mt-1.5 text-sm font-medium text-white/45">crédits échangés</span>
           )}
         </div>
-        {(isSupport || isDonation) && (
+        {(isSupport || isContribution) && (
           <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">
             {supportVM?.contributionTypeLabel || donationVM?.contributionTypeLabel}
           </span>
@@ -154,7 +154,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
       {/* TIMELINE CARD */}
       <div className="mx-6 p-5 rounded-3xl bg-[#1A1F26] border border-white/5 mb-4">
         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
-          {isProducerSupport ? 'Suivi du projet' : isDonation ? 'Confirmation' : 'Suivi de livraison'}
+          {isProducerSupport ? 'Suivi du projet' : isContribution ? 'Confirmation' : 'Suivi de livraison'}
         </h3>
         <div className="flex flex-col gap-4 relative">
           {/* Vertical line */}
@@ -197,7 +197,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         <div className="flex items-start gap-3">
           {isProducerSupport ? (
             <Leaf className="h-5 w-5 text-lime-400 mt-0.5 shrink-0" />
-          ) : isDonation ? (
+          ) : isContribution ? (
             <Leaf className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
           ) : (
             <MapPin className="h-5 w-5 text-lime-400 mt-0.5 shrink-0" />
@@ -214,7 +214,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
                 L&apos;impact réel dépend de la mise en œuvre du projet sur le terrain.
               </p>
             </div>
-          ) : isDonation ? (
+          ) : isContribution ? (
             <div className="flex flex-col gap-2">
               <p className="text-sm text-gray-300 leading-relaxed">
                 Votre contribution de <strong className="text-white">{formatEuros(donationVM?.amountEuros || 0)}€</strong> soutient la protection des lémuriens.
@@ -247,7 +247,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
               <Download className="w-[18px] h-[18px]" />
               Télécharger le reçu de contribution
             </>
-          ) : isDonation ? (
+          ) : isContribution ? (
             <>
               <Download className="w-[18px] h-[18px]" />
               Télécharger le reçu de contribution

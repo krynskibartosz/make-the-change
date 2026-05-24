@@ -11,7 +11,7 @@ type ProjectBiodexSheetProps = {
   species: ProjectSpecies[]
   projectType?: string | null
   projectSlug?: string | null
-  isDonationProject?: boolean
+  isContributionProject?: boolean
   description?: string
   producerName?: string
   producerLocation?: string
@@ -350,7 +350,7 @@ export function ProjectBiodexSheet({
   species,
   projectType,
   projectSlug,
-  isDonationProject = false,
+  isContributionProject = false,
   description,
   producerName,
   producerLocation,
@@ -358,22 +358,22 @@ export function ProjectBiodexSheet({
   const [isOpen, setIsOpen] = useState(false)
 
   const cycle = getProjectCycle(projectType, projectSlug)
-  const tagline = getTagline(projectType, isDonationProject)
-  const actionChips = getSupportChips(projectType, isDonationProject)
-  const receiveChips = getReceiveChips(isDonationProject)
+  const tagline = getTagline(projectType, isContributionProject)
+  const actionChips = getSupportChips(projectType, isContributionProject)
+  const receiveChips = getReceiveChips(isContributionProject)
 
-  const step1Title = isDonationProject ? 'Vous contribuez à ce projet' : 'Vous soutenez ce projet'
-  const step1Body = isDonationProject
+  const step1Title = isContributionProject ? 'Vous contribuez à ce projet' : 'Vous soutenez ce projet'
+  const step1Body = isContributionProject
     ? "Votre contribution est rattachée à ce projet et à l'équipe qui le porte."
     : 'Votre contribution est rattachée à ce projet et au partenaire qui le porte.'
-  const step1Disclaimer = isDonationProject
+  const step1Disclaimer = isContributionProject
     ? "Cette contribution n'est pas un achat produit ni une promesse de rendement. Elle ne donne pas droit à des Crédits Impact."
     : "Ce soutien n'est pas un achat produit, un investissement financier ou une promesse de rendement."
-  const step2Title = isDonationProject ? "L'équipe agit sur le terrain" : 'Le partenaire agit sur le terrain'
-  const step2Intro = isDonationProject
+  const step2Title = isContributionProject ? "L'équipe agit sur le terrain" : 'Le partenaire agit sur le terrain'
+  const step2Intro = isContributionProject
     ? 'La contribution peut aider à financer ou accompagner certaines actions concrètes :'
     : 'Le soutien peut aider à financer ou accompagner certaines actions concrètes :'
-  const step3Title = isDonationProject ? "Vous suivez l'évolution" : 'Vous recevez des nouvelles'
+  const step3Title = isContributionProject ? "Vous suivez l'évolution" : 'Vous recevez des nouvelles'
 
   // Max 2 species on main page — only those with a context sentence
   const speciesWithContext = (species ?? []).filter((sp) => sp.contextSentence)

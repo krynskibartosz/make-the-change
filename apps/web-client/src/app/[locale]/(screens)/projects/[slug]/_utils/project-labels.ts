@@ -1,9 +1,9 @@
 export function getTagline(
   projectType: string | null | undefined,
-  isDonationProject: boolean,
+  isContributionProject: boolean,
 ): string {
   const type = projectType?.toLowerCase() ?? ''
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
+  if (isContributionProject || type.includes('coral') || type.includes('reef')) {
     return 'Soutenir la restauration des récifs coralliens et documenter leur évolution terrain.'
   }
   if (type.includes('orchard') || type.includes('olive')) {
@@ -14,10 +14,10 @@ export function getTagline(
 
 export function getSupportChips(
   projectType: string | null | undefined,
-  isDonationProject: boolean,
+  isContributionProject: boolean,
 ): string[] {
   const type = projectType?.toLowerCase() ?? ''
-  if (isDonationProject || type.includes('coral') || type.includes('reef')) {
+  if (isContributionProject || type.includes('coral') || type.includes('reef')) {
     return ['Implantation coraux', 'Équipement plongée', 'Suivi photo', 'Entretien nurseries']
   }
   if (type.includes('orchard') || type.includes('olive')) {
@@ -26,8 +26,8 @@ export function getSupportChips(
   return ['Entretien des ruches', 'Matériel apicole', 'Déplacements terrain', 'Suivi sanitaire', 'Récolte du miel']
 }
 
-export function getReceiveChips(isDonationProject: boolean): string[] {
-  if (isDonationProject) {
+export function getReceiveChips(isContributionProject: boolean): string[] {
+  if (isContributionProject) {
     return ['Photos sous-marines', 'Nouvelles projet', 'Progression documentée', 'Infos partenaire']
   }
   return ['Photos terrain', 'Nouvelles partenaire', 'Étapes projet', 'Suivi production']

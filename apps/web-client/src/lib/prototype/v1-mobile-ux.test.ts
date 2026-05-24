@@ -29,7 +29,7 @@ describe('V1 mobile prototype UX guardrails', () => {
       'src/app/[locale]/(screens)/academy/[chapter]/[unit]/page.tsx',
       'src/app/[locale]/(screens)/onboarding/_features/step-1-quiz.tsx',
       'src/app/[locale]/(screens)/onboarding/_features/paywall-card.tsx',
-      'src/app/[locale]/(screens)/projects/[slug]/donate/_components/project-donate-one-flow.tsx',
+      'src/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow.tsx',
       'src/app/[locale]/(tabs)/profile/_features/authenticated-profile.tsx',
       'src/app/[locale]/(screens)/profile/[id]/mock-public-profile.tsx',
       'src/app/[locale]/(screens)/profile/contributions/_features/transaction-receipt.tsx',
@@ -84,9 +84,9 @@ describe('V1 mobile prototype UX guardrails', () => {
 
   it('keeps checkout flows mock-first without Supabase or Stripe in the rendered path', () => {
     const checkoutServerPages = [
-      'src/app/[locale]/(screens)/projects/[slug]/donate/page.tsx',
+      'src/app/[locale]/(screens)/projects/[slug]/contribute/page.tsx',
       'src/app/[locale]/(screens)/projects/[slug]/support/page.tsx',
-      'src/app/[locale]/@modal/(.)projects/[slug]/donate/page.tsx',
+      'src/app/[locale]/@modal/(.)projects/[slug]/contribute/page.tsx',
       'src/app/[locale]/@modal/(.)projects/[slug]/support/page.tsx',
     ]
 

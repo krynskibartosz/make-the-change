@@ -1,28 +1,28 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { ProjectDonateOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/donate/_components/project-donate-one-flow'
+import { ProjectContributeOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getLocalizedContent } from '@/lib/utils'
-import { isDonationType, toOptionalString } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
+import { isContributionType, toOptionalString } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
-type DonatePageProps = {
+type ContributePageProps = {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ source?: string | string[]; option?: string | string[] }>
 }
 
-export default async function DonatePage({ params, searchParams }: DonatePageProps) {
+export default async function ContributePage({ params, searchParams }: ContributePageProps) {
   const { slug } = await params
   const query = await searchParams
   const project = await getPublicProjectBySlug(slug)
 
-  if (!project || !isDonationType(project.type) || !project.donation_options) {
+  if (!project || !isContributionType(project.type) || !project.donation_options) {
     notFound()
   }
 
   const locale = await getLocale()
 
   return (
-    <ProjectDonateOneFlow
+    <ProjectContributeOneFlow
       project={{
         id: project.id,
         slug: project.slug,

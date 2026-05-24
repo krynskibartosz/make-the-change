@@ -600,7 +600,7 @@ export function ProjectSupportOneFlow({
   const impactItems = useMemo(() => buildProjectImpactItems({
     amount: amountEur,
     projectType: project.type,
-    isDonationProject: false,
+    isContributionProject: false,
     donationOptions: null,
     projectImpact: project.expectedImpact ?? null,
   }), [amountEur, project.type, project.expectedImpact])

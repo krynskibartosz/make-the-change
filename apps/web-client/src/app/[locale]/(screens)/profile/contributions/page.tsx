@@ -24,14 +24,14 @@ type NormalizedSupport = {
   type: 'support'
 }
 
-type NormalizedDonation = {
+type NormalizedContribution = {
   id: string
   amount_eur: number
   amount_points: number
   status: string
   created_at: string
   project: SupportProject | null
-  type: 'donation'
+  type: 'contribution'
 }
 
 type NormalizedOrder = {
@@ -123,14 +123,14 @@ export default async function ContributionsPage() {
           .order('created_at', { ascending: false })
       ).data || []
 
-  const userDonations: NormalizedDonation[] = (rawDonations || []).map((don) => ({
+  const userDonations: NormalizedContribution[] = (rawDonations || []).map((don) => ({
     id: String(don.id),
     amount_eur: Number(don.amount_eur_equivalent || 0),
     amount_points: Number(don.amount_points || 0),
     status: String(don.status || 'pending'),
     created_at: String(don.created_at || getCurrentIsoDate()),
     project: normalizeProject(don.project),
-    type: 'donation',
+    type: 'contribution',
   }))
 
   // Fetch orders
