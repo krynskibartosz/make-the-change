@@ -61,6 +61,15 @@ const LEARNING_MODE_LINKS = [
   },
 ]
 
+const LAB_ENTRIES = [
+  {
+    href: '/lab/atlas-prototype',
+    title: 'Atlas du vivant — Prototype',
+    description: 'Interface immersive en cours de conception, avec carte Voronoï et navigation par territoires.',
+    icon: FlaskConical,
+  },
+]
+
 export function LearnTab({ species }: LearnTabProps) {
   const unlockedSpeciesIds = species
     .filter((entry) => entry.user_status?.isUnlocked)
@@ -128,6 +137,42 @@ export function LearnTab({ species }: LearnTabProps) {
                     </span>
                     <span className="mt-1 line-clamp-2 text-[12px] font-semibold leading-relaxed text-white/45">
                       {mode.description}
+                    </span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-white/30 transition-transform group-active:translate-x-0.5" />
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+
+        <section aria-labelledby="learn-lab-title">
+          <div className="mb-4 flex items-center gap-3 px-1">
+            <h2 className="text-xl font-black tracking-tight text-white">Lab</h2>
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/25 bg-amber-300/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.12em] text-amber-200">
+              <FlaskConical className="h-3 w-3" aria-hidden="true" />
+              Expérimental
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {LAB_ENTRIES.map((entry) => {
+              const Icon = entry.icon
+
+              return (
+                <Link
+                  key={entry.href}
+                  href={entry.href}
+                  className={`group flex items-center gap-3 rounded-[1.15rem] border border-amber-300/[0.10] bg-amber-300/[0.04] px-3.5 py-3.5 transition-colors active:bg-amber-300/[0.08] ${learningInteractiveClassName}`}
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[0.95rem] border border-amber-200/18 bg-amber-300/10 text-amber-200">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[15px] font-black text-white">
+                      {entry.title}
+                    </span>
+                    <span className="mt-1 line-clamp-2 text-[12px] font-semibold leading-relaxed text-white/45">
+                      {entry.description}
                     </span>
                   </span>
                   <ArrowRight className="h-4 w-4 shrink-0 text-white/30 transition-transform group-active:translate-x-0.5" />
