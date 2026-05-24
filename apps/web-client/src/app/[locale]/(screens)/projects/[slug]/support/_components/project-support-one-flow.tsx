@@ -321,9 +321,9 @@ function RewardsSheet({
   const primary = species.find((sp) => isKeyRole(sp.role)) ?? species[0]
 
   return (
-    <MobileSheet isOpen={isOpen} onClose={onClose} title="Crédits Impact & BioDex">
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Crédits Impact">
       <p className="mt-1 text-sm leading-relaxed text-white/50">
-        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact servent à débloquer des avantages partenaires. Le BioDex documente votre lien avec le terrain.
+        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact servent à débloquer des avantages partenaires.
       </p>
 
       {/* Crédits Impact */}
@@ -546,10 +546,9 @@ export function ProjectSupportOneFlow({
   const t = useTranslations('projects.support_page')
   const router = useRouter()
   const haptic = useHaptic()
+  const rules = support.getSupportRules(project.type)
 
   const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string; image_url?: string | null } | null>(null)
-
-  const rules = support.getSupportRules(project.type)
 
   useEffect(() => {
     if (discoveredSpeciesId) {
@@ -593,9 +592,10 @@ export function ProjectSupportOneFlow({
     return support.calculateSupportPoints({
       type: project.type,
       amount_eur: amountEur,
-      bonus_percentage: rules.expected_bonus,
+      bonus_percentage: 0,
     })
-  }, [amountEur, project.type, rules.expected_bonus])
+  }, [amountEur, project.type])
+  const checkoutSpecies: ProjectSpecies[] = []
 
   const impactItems = useMemo(() => buildProjectImpactItems({
     amount: amountEur,
@@ -908,13 +908,20 @@ export function ProjectSupportOneFlow({
                   ) : null}
                 </div>
                 <div className="[&_div.tabular-nums]:transition-all [&_div.tabular-nums]:duration-300 [&_div.tabular-nums]:ease-out">
-                  <ProjectImpactCalculator baseAmount={100} amount={amountEur} mode="checkout" projectType={project.type} projectImpact={project.expectedImpact ?? null} />
+                  <ProjectImpactCalculator
+                    baseAmount={100}
+                    amount={amountEur}
+                    mode="checkout"
+                    projectType={project.type}
+                    projectImpact={project.expectedImpact ?? null}
+                    showSpeciesCard={false}
+                  />
                 </div>
               </section>
 
               <AfterSupportBlock
                 credits={points.total_points}
-                species={species ?? []}
+                species={checkoutSpecies}
                 onOpenRewards={() => setSheet('rewards')}
                 onOpenTracking={() => setSheet('tracking')}
               />
@@ -946,7 +953,7 @@ export function ProjectSupportOneFlow({
               {/* Ce qui est inclus — liste plate */}
               <IncludedSummary
                 credits={points.total_points}
-                species={species ?? []}
+                species={checkoutSpecies}
                 onOpen={() => setSheet('rewards')}
               />
 
@@ -1039,13 +1046,13 @@ export function ProjectSupportOneFlow({
                       phase === 'flash' ? 'opacity-100 scale-110' : 'opacity-0 scale-75',
                     )}
                   />
-                  {/* Wrapper : scale + drop-shadow dynamique (séparé de brightness sur l'img) */}
+                  {/* Confirmation visuelle du soutien */}
                   <div
                     className={cn(
-                      'relative z-10 w-64 h-64 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-                      phase === 'tension' ? 'scale-90' : '',
-                      phase === 'flash' ? 'scale-95' : '',
-                      phase === 'euphoria' || phase === 'resolved' ? 'scale-110' : '',
+                      'relative z-10 grid w-64 h-64 place-items-center rounded-full border border-lime-300/20 bg-lime-300/10 text-lime-300 [@media(max-height:800px)]:w-56 [@media(max-height:800px)]:h-56 transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                      phase === 'tension' ? 'scale-90 opacity-50' : '',
+                      phase === 'flash' ? 'scale-100 opacity-100 brightness-150' : '',
+                      phase === 'euphoria' || phase === 'resolved' ? 'scale-105 opacity-100' : '',
                     )}
                     style={
                       phase === 'euphoria' || phase === 'resolved'
@@ -1053,19 +1060,7 @@ export function ProjectSupportOneFlow({
                         : undefined
                     }
                   >
-                    <img
-                      src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
-                      alt="Espèce d��bloquée"
-                      className={cn(
-                        'w-full h-full object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-                        phase === 'tension' ? 'brightness-0 opacity-50 animate-pulse' : '',
-                        phase === 'flash' ? 'brightness-200 opacity-100' : '',
-                        phase === 'euphoria' || phase === 'resolved' ? 'brightness-100 opacity-100' : '',
-                      )}
-                      onError={(event) => {
-                        event.currentTarget.style.display = 'none'
-                      }}
-                    />
+                    <CheckCircle2 className="h-24 w-24 [@media(max-height:800px)]:h-20 [@media(max-height:800px)]:w-20" />
                   </div>
                   <div
                     className={cn(
@@ -1079,16 +1074,11 @@ export function ProjectSupportOneFlow({
 
                 <div className="mt-5 text-center flex flex-col items-center gap-2">
                   <span className="inline-block mx-auto px-4 py-1.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-black uppercase tracking-widest border border-lime-500/30">
-                    Nouvelle espèce débloquée
+                    Soutien enregistré
                   </span>
                   <h2 className="text-3xl font-black tracking-tight text-white [@media(max-height:800px)]:text-2xl">
-                    {discoveredSpecies?.name_default || 'La Chouette Effraie'}
+                    Suivi du projet activé
                   </h2>
-                  {species && species.length > 1 ? (
-                    <p className="text-[12px] text-white/40">
-                      + {species.length - 1} autre{species.length - 1 > 1 ? 's' : ''} espèce{species.length - 1 > 1 ? 's' : ''} liée{species.length - 1 > 1 ? 's' : ''} au projet
-                    </p>
-                  ) : null}
                 </div>
               </motion.div>
 
@@ -1135,15 +1125,6 @@ export function ProjectSupportOneFlow({
                       title="Suivi du projet"
                       body="Les prochaines nouvelles du terrain apparaîtront sur la page du projet dès que le partenaire les publiera."
                     />
-                    <NextStepLine
-                      icon={Leaf}
-                      title="BioDex à explorer"
-                      body={
-                        species && species.length > 1
-                          ? `${discoveredSpecies?.name_default || 'Votre espèce'} et ${species.length - 1} autre${species.length - 1 > 1 ? 's' : ''} espèce${species.length - 1 > 1 ? 's' : ''} liée${species.length - 1 > 1 ? 's' : ''} vous attendent.`
-                          : `${discoveredSpecies?.name_default || 'Votre espèce'} est maintenant dans votre trace de soutien.`
-                      }
-                    />
                   </div>
                 </motion.section>
               ) : null}
@@ -1159,8 +1140,7 @@ export function ProjectSupportOneFlow({
                     Sauvegardez votre soutien
                   </p>
                   <p className="mt-1 text-[13px] leading-snug text-white/50">
-                    Créez votre profil pour retrouver{' '}
-                    {discoveredSpecies?.name_default || 'votre espèce'}, suivre les nouvelles du terrain et utiliser vos Crédits Impact.
+                    Créez votre profil pour retrouver votre soutien, suivre les nouvelles du terrain et utiliser vos Crédits Impact.
                   </p>
                   <div className="mt-3 flex items-center gap-2 text-[13px] text-white/38">
                     <Mail className="h-3.5 w-3.5 shrink-0" />
@@ -1178,7 +1158,7 @@ export function ProjectSupportOneFlow({
                   <CheckCircle2 className="h-6 w-6 shrink-0" />
                   <span>
                     <span className="block font-black text-lime-400 mb-0.5">Vérifiez votre boîte mail !</span>
-                    Un lien magique vous y attend pour sécuriser votre espèce.
+                    Un lien magique vous y attend pour sauvegarder votre soutien.
                   </span>
                 </motion.p>
               ) : null}
@@ -1196,7 +1176,7 @@ export function ProjectSupportOneFlow({
         isOpen={sheet === 'rewards'}
         onClose={() => setSheet(null)}
         credits={points.total_points}
-        species={species ?? []}
+        species={checkoutSpecies}
         amount={amountEur}
       />
       <TrackingSheet
@@ -1210,12 +1190,6 @@ export function ProjectSupportOneFlow({
             <>
               <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
                 Suivi terrain
-                {species && species.length > 0 ? (
-                  <>
-                    <span className="mx-1.5 opacity-40">·</span>
-                    <span className="font-black text-lime-300">BioDex lié</span>
-                  </>
-                ) : null}
                 <span className="mx-1.5 opacity-40">·</span>
                 <span className="font-black text-amber-300">{points.total_points} Crédits Impact</span>
               </p>
@@ -1254,26 +1228,18 @@ export function ProjectSupportOneFlow({
             <>
               <Button
                 type="button"
-                onClick={() => {
-                  if (discoveredSpeciesId) {
-                    router.replace(`/profile/biodex/${discoveredSpeciesId}`)
-                    return
-                  }
-                  router.replace('/profile/biodex')
-                }}
+                onClick={() => router.replace('/products')}
                 className="w-full h-14 flex items-center justify-center bg-lime-400 text-black font-black text-lg rounded-2xl active:scale-95 transition-transform"
               >
-                Admirer dans mon BioDex
+                Voir mes avantages partenaires
               </Button>
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => {
-                  router.replace('/products')
-                }}
+                onClick={() => router.replace(`/projects/${project.slug}`)}
                 className="mt-2 w-full py-4 text-sm font-bold text-white/60 hover:text-white transition-colors"
               >
-                Visiter les Avantages partenaires
+                Retour au projet
               </Button>
             </>
           ) : null}

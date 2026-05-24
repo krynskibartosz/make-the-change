@@ -120,6 +120,33 @@ describe('V1 mobile prototype UX guardrails', () => {
     )
   })
 
+  it('applies the documented V1 checkout rules before real payments are enabled', () => {
+    const supportFlow = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/support/_components/project-support-one-flow.tsx',
+    )
+    expect(supportFlow.includes('bonus_percentage: 0')).toBe(true)
+    expect(supportFlow.includes('showSpeciesCard={false}')).toBe(true)
+    expect(supportFlow.includes('const checkoutSpecies: ProjectSpecies[] = []')).toBe(true)
+    expectNoMatches(supportFlow, [/bonus_percentage: rules\.expected_bonus/g], 'support credits rule')
+
+    const contributeFlow = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow.tsx',
+    )
+    expect(contributeFlow.includes('showSpeciesCard={false}')).toBe(true)
+    expect(contributeFlow.includes('const hasSpecies = false')).toBe(true)
+
+    const paymentBreakdown = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/_components/shared/payment-breakdown.tsx',
+    )
+    expect(paymentBreakdown.includes('const DEFAULT_SUPPORT_PLATFORM_FEE_RATE = 0.12')).toBe(true)
+    expect(paymentBreakdown.includes('Conditions et remboursements')).toBe(true)
+    expectNoMatches(
+      paymentBreakdown,
+      [/seller-of-record/g, /marchand de référence/g],
+      'unvalidated payment responsibility wording',
+    )
+  })
+
   it('keeps project discovery mock-only and loads the map only after user intent', () => {
     const projectsDataSource = readSource('src/app/[locale]/(tabs)/projects/_features/get-projects.ts')
     expectNoMatches(projectsDataSource, [/createStaticClient/g, /from\('public_projects'\)/g], 'projects data source')

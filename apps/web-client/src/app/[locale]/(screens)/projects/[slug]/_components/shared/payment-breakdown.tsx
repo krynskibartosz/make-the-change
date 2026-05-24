@@ -4,9 +4,8 @@ import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// ─── Constantes de frais (prototype — seront configurables côté serveur) ──────
-// MTC est seller-of-record. La commission inclut gestion, suivi et infrastructure.
-const PLATFORM_FEE_RATE = 0.15     // 15 % frais plateforme (MTC)
+// Valeurs prototype : la commission pourra être configurée par catégorie documentée.
+const DEFAULT_SUPPORT_PLATFORM_FEE_RATE = 0.12
 const PAYMENT_FEE_RATE  = 0.015   // ~1,5 % frais bancaires Stripe (approximatif)
 const PAYMENT_FEE_FIXED = 0.25    // + 0,25 € fixe Stripe (approximatif)
 
@@ -15,6 +14,7 @@ export type BreakdownMode = 'support' | 'donation'
 interface PaymentBreakdownProps {
   amount: number
   mode: BreakdownMode
+  supportFeeRate?: number
   className?: string
 }
 
@@ -30,7 +30,11 @@ function formatEur(value: number): string {
  * - support : commission plateforme + frais bancaires → reste pour le partenaire
  * - donation : frais bancaires uniquement → reste pour le projet (pas de commission MTC sur les dons)
  */
-function computeBreakdown(amount: number, mode: BreakdownMode) {
+function computeBreakdown(
+  amount: number,
+  mode: BreakdownMode,
+  supportFeeRate = DEFAULT_SUPPORT_PLATFORM_FEE_RATE,
+) {
   const bankFee = Math.round((amount * PAYMENT_FEE_RATE + PAYMENT_FEE_FIXED) * 100) / 100
   if (mode === 'donation') {
     const toProject = Math.round((amount - bankFee) * 100) / 100
@@ -41,7 +45,7 @@ function computeBreakdown(amount: number, mode: BreakdownMode) {
       partnerLabel: 'Transmis au projet',
     }
   }
-  const platformFee = Math.round(amount * PLATFORM_FEE_RATE * 100) / 100
+  const platformFee = Math.round(amount * supportFeeRate * 100) / 100
   const toPartner = Math.round((amount - platformFee - bankFee) * 100) / 100
   return {
     toPartner,
@@ -51,9 +55,15 @@ function computeBreakdown(amount: number, mode: BreakdownMode) {
   }
 }
 
-export function PaymentBreakdown({ amount, mode, className }: PaymentBreakdownProps) {
+export function PaymentBreakdown({
+  amount,
+  mode,
+  supportFeeRate = DEFAULT_SUPPORT_PLATFORM_FEE_RATE,
+  className,
+}: PaymentBreakdownProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const { toPartner, platformFee, bankFee, partnerLabel } = computeBreakdown(amount, mode)
+  const [areTermsOpen, setAreTermsOpen] = useState(false)
+  const { toPartner, platformFee, bankFee, partnerLabel } = computeBreakdown(amount, mode, supportFeeRate)
 
   return (
     <div className={cn('rounded-2xl border border-white/[0.08] bg-white/[0.025]', className)}>
@@ -130,16 +140,52 @@ export function PaymentBreakdown({ amount, mode, className }: PaymentBreakdownPr
             </div>
           </div>
 
-          {/* Note seller-of-record */}
           <p className="mt-3 text-[10px] leading-relaxed text-white/28">
-            Make the Change est le marchand de référence (seller-of-record) pour ce paiement.
-            {mode === 'support'
-              ? ' Les fonds sont reversés au partenaire déduction faite de la commission.'
-              : ' Les fonds sont intégralement reversés au projet déduction faite des frais bancaires.'
-            }
+            Estimation prototype selon Stripe Connect. Les montants définitifs et la responsabilité de paiement seront confirmés avant activation des paiements réels.
           </p>
         </div>
       )}
+
+      <div className="border-t border-white/[0.06]">
+        <button
+          type="button"
+          onClick={() => setAreTermsOpen((value) => !value)}
+          className="flex w-full items-center justify-between px-4 py-3.5 text-left"
+          aria-expanded={areTermsOpen}
+        >
+          <span className="text-[12px] font-black text-white/60">Conditions et remboursements</span>
+          {areTermsOpen
+            ? <ChevronUp className="h-3.5 w-3.5 shrink-0 text-white/30" />
+            : <ChevronDown className="h-3.5 w-3.5 shrink-0 text-white/30" />
+          }
+        </button>
+        {areTermsOpen ? (
+          <div className="space-y-2 border-t border-white/[0.06] px-4 pb-4 pt-3 text-[11px] leading-relaxed text-white/45">
+            {mode === 'donation' ? (
+              <>
+                <p>
+                  Cette contribution au projet donne lieu à un reçu de contribution, pas à un reçu fiscal.
+                </p>
+                <p>
+                  Elle est non remboursable par défaut après affectation, sauf erreur, fraude ou annulation du projet.
+                </p>
+              </>
+            ) : (
+              <>
+                <p>
+                  Ce soutien producteur ne constitue pas un investissement et ne garantit ni rendement ni remboursement.
+                </p>
+                <p>
+                  En cas de remboursement accepté, les Crédits Impact associés sont annulés ou ajustés.
+                </p>
+              </>
+            )}
+            <p className="text-white/30">
+              Prototype : les conditions définitives seront validées avant l&apos;activation des paiements réels.
+            </p>
+          </div>
+        ) : null}
+      </div>
     </div>
   )
 }

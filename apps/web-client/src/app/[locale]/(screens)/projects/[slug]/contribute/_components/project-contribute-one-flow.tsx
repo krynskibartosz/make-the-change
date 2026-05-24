@@ -25,7 +25,7 @@ import { claimGuestSupport } from '@/app/[locale]/(screens)/projects/_actions/cl
 
 type FlowStep = 'impact' | 'payment' | 'success'
 type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
-type SheetKind = 'biodex' | 'tracking' | null
+type SheetKind = 'tracking' | null
 
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
@@ -76,12 +76,8 @@ function NextStepLine({
 }
 
 function AfterContributeBlock({
-  hasSpecies,
-  onOpenBioDex,
   onOpenTracking,
 }: {
-  hasSpecies: boolean
-  onOpenBioDex: () => void
   onOpenTracking: () => void
 }) {
   return (
@@ -92,27 +88,8 @@ function AfterContributeBlock({
       <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045]">
         <button
           type="button"
-          onClick={onOpenBioDex}
-          className="flex w-full items-center gap-3 border-b border-white/[0.06] px-4 py-3.5 text-left active:bg-white/[0.03]"
-        >
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-emerald-300/16 bg-emerald-300/10 text-emerald-300">
-            <Leaf className="h-4 w-4" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-black text-white">Trace BioDex</p>
-            <p className="mt-0.5 text-[11px] leading-snug text-white/40">
-              Une trace de votre contribution dans votre parcours.
-            </p>
-          </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
-        </button>
-        <button
-          type="button"
           onClick={onOpenTracking}
-          className={cn(
-            'flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]',
-            hasSpecies ? 'border-b border-white/[0.06]' : '',
-          )}
+          className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
         >
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
             <Camera className="h-4 w-4" />
@@ -125,33 +102,15 @@ function AfterContributeBlock({
           </div>
           <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
         </button>
-        {hasSpecies ? (
-          <button
-            type="button"
-            onClick={onOpenBioDex}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-white/[0.03]"
-          >
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
-              <Leaf className="h-4 w-4" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-black text-white">Espèce liée au projet</p>
-              <p className="mt-0.5 text-[11px] leading-snug text-white/40">BioDex débloquable après votre contribution.</p>
-            </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
-          </button>
-        ) : null}
       </div>
     </div>
   )
 }
 
 function IncludedContributeSummary({
-  hasSpecies,
-  onOpen,
+  onOpenTracking,
 }: {
-  hasSpecies: boolean
-  onOpen: () => void
+  onOpenTracking: () => void
 }) {
   return (
     <div>
@@ -159,15 +118,6 @@ function IncludedContributeSummary({
         Après votre contribution
       </p>
       <div className="space-y-3.5">
-        <div className="flex items-start gap-3">
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-emerald-300/16 bg-emerald-300/10 text-emerald-300">
-            <Leaf className="h-3.5 w-3.5" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-black text-white">Trace BioDex</p>
-            <p className="text-[11px] leading-snug text-white/40">Pour garder une trace simple de votre contribution.</p>
-          </div>
-        </div>
         <div className="flex items-start gap-3">
           <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
             <Camera className="h-3.5 w-3.5" />
@@ -177,21 +127,10 @@ function IncludedContributeSummary({
             <p className="text-[11px] leading-snug text-white/40">Photos, étapes et évolution du terrain.</p>
           </div>
         </div>
-        {hasSpecies ? (
-          <div className="flex items-start gap-3">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
-              <Leaf className="h-3.5 w-3.5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-black text-white">Espèce liée au projet</p>
-              <p className="text-[11px] leading-snug text-white/40">BioDex débloquable après votre contribution.</p>
-            </div>
-          </div>
-        ) : null}
       </div>
       <button
         type="button"
-        onClick={onOpen}
+        onClick={onOpenTracking}
         className="mt-4 flex items-center gap-1 text-[12px] font-black text-white/35 active:text-white/55"
       >
         Comprendre ce qui est inclus
@@ -372,7 +311,7 @@ export function ProjectContributeOneFlow({
     : matchedOption?.impact.unitsRestored ?? Math.max(1, Math.round(amountEur / 30))
   const unitLabel = donationMetrics.kind === 'reef' ? 'coraux' : 'unités restaurées'
 
-  const hasSpecies = Boolean(discoveredSpeciesId)
+  const hasSpecies = false
 
   const glowRgba = makeProjectGlowRgba(project.type)
 
@@ -653,13 +592,12 @@ export function ProjectContributeOneFlow({
                     donationOptions={project.donationOptions}
                     projectType={project.type}
                     projectImpact={project.expectedImpact ?? null}
+                    showSpeciesCard={false}
                   />
                 </div>
               </section>
 
               <AfterContributeBlock
-                hasSpecies={hasSpecies}
-                onOpenBioDex={() => setSheet('biodex')}
                 onOpenTracking={() => setSheet('tracking')}
               />
             </div>
@@ -689,10 +627,7 @@ export function ProjectContributeOneFlow({
               </div>
 
               {/* Ce qui est inclus — liste plate */}
-              <IncludedContributeSummary
-                hasSpecies={hasSpecies}
-                onOpen={() => setSheet('biodex')}
-              />
+              <IncludedContributeSummary onOpenTracking={() => setSheet('tracking')} />
 
               {/* Répartition financière transparente */}
               <PaymentBreakdown amount={amountEur} mode="donation" />
@@ -941,12 +876,6 @@ export function ProjectContributeOneFlow({
         </div>
       </div>
 
-      <BioDexSheet
-        isOpen={sheet === 'biodex'}
-        onClose={() => setSheet(null)}
-        amount={amountEur}
-        hasSpecies={hasSpecies}
-      />
       <TrackingSheet
         isOpen={sheet === 'tracking'}
         onClose={() => setSheet(null)}
