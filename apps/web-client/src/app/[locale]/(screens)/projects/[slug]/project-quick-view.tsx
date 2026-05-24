@@ -1,4 +1,4 @@
-import { Badge, Button, Progress } from '@make-the-change/core/ui'
+import { Button, Progress } from '@make-the-change/core/ui'
 import { ChevronRight, Globe } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
@@ -82,16 +82,16 @@ export async function ProjectQuickView({
   producerProducts,
   relatedProjects,
 }: ProjectQuickViewProps) {
-  const t = await getTranslations('projects')
-  const locale = await getLocale()
+  const [t, locale] = await Promise.all([getTranslations('projects'), getLocale()])
 
   const glowTone = getProjectGlowTone(project.type)
   const glow = PROJECT_GLOW[glowTone]
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
-  const fundingProgress =
+  const fundingProgress = project.funding_progress ?? (
     targetBudget > 0 ? Math.min((currentFunding / targetBudget) * 100, 100) : 0
+  )
 
   const coverImage =
     sanitizeImageUrl(project.hero_image_url) ??
@@ -135,7 +135,6 @@ export async function ProjectQuickView({
   const producerName = project.producer
     ? getLocalizedContent(project.producer.name_i18n, locale, project.producer.name_default)
     : 'Make the Change'
-  const organizerName = producerName
   const producerDescription = project.producer
     ? getLocalizedContent(
         project.producer.description_i18n,
@@ -143,12 +142,11 @@ export async function ProjectQuickView({
         project.producer.description_default || '',
       )
     : t('subtitle')
-  const organizerDescription = producerDescription || t('subtitle')
   const websiteUrl = project.producer?.contact_website || null
   const websiteLabel = getWebsiteLabel(websiteUrl)
   const producerHref =
     project.producer && (project.producer.slug || project.producer.id)
-      ? `/${locale}/producers/${project.producer.slug || project.producer.id}`
+      ? `/producers/${project.producer.slug || project.producer.id}`
       : null
 
   const isDonationProject = !!(project.is_donation_project && project.donation_options)
@@ -157,8 +155,10 @@ export async function ProjectQuickView({
     : `/projects/${project.slug}/support?source=quick_view`
 
   const galleryMedia = [
-    ...(project.hero_image_url ? [project.hero_image_url] : []),
-    ...(Array.isArray(project.images) ? project.images : []),
+    ...new Set([
+      ...(project.hero_image_url ? [project.hero_image_url] : []),
+      ...(Array.isArray(project.images) ? project.images : []),
+    ]),
   ]
 
   const titleTransitionName = getEntityViewTransitionName('project', project.id, 'title')
@@ -216,7 +216,7 @@ export async function ProjectQuickView({
           />
 
           {/* 2. Intro */}
-          <aside className="px-4 pt-5 sm:px-5">
+          <div className="px-4 pt-5 sm:px-5">
             {project.address_country_code && countryName ? (
               <ProjectCountrySheet
                 countryCode={resolvedIso ?? project.address_country_code}
@@ -245,7 +245,7 @@ export async function ProjectQuickView({
             ) : null}
 
 
-          </aside>
+          </div>
 
           {/* 3. Partenaire */}
           {project.producer ? (
@@ -257,48 +257,48 @@ export async function ProjectQuickView({
               <div className="h-px bg-white/[0.06]" />
 
               {producerHref ? (
-                <a
+                <Link
                   href={producerHref}
                   className="group flex w-full cursor-pointer items-center gap-4 px-4 py-4 transition-all duration-200 hover:bg-white/[0.03] active:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-lime-400/60 sm:px-5"
                 >
                   {producerImage ? (
                     <img
                       src={producerImage}
-                      alt={organizerName}
+                      alt={producerName}
                       className="h-12 w-12 shrink-0 rounded-full object-cover transition-transform group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
-                      {organizerName?.[0]?.toUpperCase() || 'M'}
+                      {producerName?.[0]?.toUpperCase() || 'M'}
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-bold text-foreground underline-offset-4 group-hover:underline">
-                      {organizerName}
+                      {producerName}
                     </p>
                     <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
-                      {organizerDescription}
+                      {producerDescription}
                     </p>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-white/20" />
-                </a>
+                </Link>
               ) : (
                 <div className="flex w-full items-center gap-4 px-4 py-4 sm:px-5">
                   {producerImage ? (
                     <img
                       src={producerImage}
-                      alt={organizerName}
+                      alt={producerName}
                       className="h-12 w-12 shrink-0 rounded-full object-cover"
                     />
                   ) : (
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-base font-bold text-primary">
-                      {organizerName?.[0]?.toUpperCase() || 'M'}
+                      {producerName?.[0]?.toUpperCase() || 'M'}
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-foreground">{organizerName}</p>
+                    <p className="truncate text-sm font-bold text-foreground">{producerName}</p>
                     <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
-                      {organizerDescription}
+                      {producerDescription}
                     </p>
                   </div>
                   {websiteUrl && websiteLabel ? (
@@ -326,7 +326,7 @@ export async function ProjectQuickView({
                 projectSlug={project.slug}
                 isDonationProject={isDonationProject}
                 description={narrativeDescription}
-                producerName={project.producer ? organizerName : undefined}
+                producerName={project.producer ? producerName : undefined}
                 producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
               />
             </div>
