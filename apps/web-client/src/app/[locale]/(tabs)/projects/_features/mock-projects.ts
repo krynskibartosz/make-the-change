@@ -815,16 +815,16 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     status: 'active',
     type: 'beehive',
     featured: true,
-    name_default: 'Miellerie Ilanga Nature',
+    name_default: 'Miellerie de Manakara',
     name_i18n: {
-      fr: 'Miellerie Ilanga Nature',
-      en: 'Ilanga Nature Honey House',
+      fr: 'Miellerie de Manakara',
+      en: 'Manakara Honey House',
     },
     description_default:
-      "Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
+      "Structurer une miellerie locale durable à Manakara, autour de l'abeille noire malgache.",
     description_i18n: {
-      fr: "Projet Ilanga Nature à Madagascar pour structurer une miellerie locale durable autour de l'abeille noire.",
-      en: 'Ilanga Nature project in Madagascar to build a sustainable local honey house around black bees.',
+      fr: "Structurer une miellerie locale durable à Manakara, autour de l'abeille noire malgache.",
+      en: 'Building a sustainable local honey house in Manakara, centred on the Malagasy black bee.',
     },
     long_description_default:
       "La miellerie de Manakara est au cœur de la filière apicole d'Ilanga Nature à Madagascar. Implantée sur la côte est malgache, elle collecte et transforme le miel récolté par les apiculteurs partenaires de la région.\n\nSans infrastructure de transformation accessible, de nombreux apiculteurs locaux peinent à valoriser leur production : les miels sont souvent vendus sans traitement, à bas prix, et ne peuvent pas répondre aux normes d'export. La miellerie répond à ce manque structurel.\n\nElle offre un point de collecte, d'extraction et de conditionnement qui permet aux apiculteurs de livrer leur récolte dans de bonnes conditions. Le miel est ensuite contrôlé, mis en pot et distribué dans le cadre d'une filière traçable.",
