@@ -55,7 +55,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
     name: 'Miel d\'Eucalyptus',
     date: '16 Avril 2026 à 08h10',
     amount: 1150,
-    amountUnit: 'Credits Impact',
+    amountUnit: 'Crédits Impact',
     orderNumber: '#CMD-89302',
     status: 'processing',
     statusLabel: 'En cours de préparation',
@@ -90,7 +90,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
   ]
 
   const donationTimeline = [
-    { label: 'Don reçu', date: formatFullDate(donationVM?.createdAt || ''), status: 'completed' as const },
+    { label: 'Contribution reçue', date: formatFullDate(donationVM?.createdAt || ''), status: 'completed' as const },
     { label: 'Projet soutenu', date: 'Confirmation partenaire', status: 'completed' as const },
     { label: 'Suivi disponible', date: 'Dans votre historique', status: 'completed' as const },
   ]
@@ -103,7 +103,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
         creditsOrSeeds: isDonation 
           ? (donationVM?.seedsReward || 0)
           : (supportVM?.amountImpactCredits || 0),
-        creditsOrSeedsLabel: isDonation ? 'Trace BioDex' : 'Credits Impact',
+        creditsOrSeedsLabel: isDonation ? 'Trace BioDex' : 'Crédits Impact',
         status: supportVM?.status || donationVM?.status || 'pending',
         statusLabel: supportVM?.statusLabel || donationVM?.statusLabel || 'En attente',
         imageUrl: supportVM?.project.coverImageUrl || donationVM?.project.coverImageUrl || '/images/projects/miellerie-manakara.jpg',
@@ -208,7 +208,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
                 Votre soutien de <strong className="text-white">{formatEuros(supportVM?.amountEuros || 0)}€</strong> contribue à un projet apicole.
               </p>
               <p className="text-xs text-gray-500">
-                Credits Impact reçus : <strong className="text-amber-300">{supportVM?.amountImpactCredits || 0}</strong>
+                Crédits Impact reçus : <strong className="text-amber-300">{supportVM?.amountImpactCredits || 0}</strong>
               </p>
               <p className="text-xs text-gray-500 italic">
                 L&apos;impact réel dépend de la mise en œuvre du projet sur le terrain.
@@ -217,13 +217,13 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
           ) : isDonation ? (
             <div className="flex flex-col gap-2">
               <p className="text-sm text-gray-300 leading-relaxed">
-                Votre don de <strong className="text-white">{formatEuros(donationVM?.amountEuros || 0)}€</strong> soutient la protection des lémuriens.
+                Votre contribution de <strong className="text-white">{formatEuros(donationVM?.amountEuros || 0)}€</strong> soutient la protection des lémuriens.
               </p>
               <p className="text-xs text-gray-500">
                 Trace BioDex enregistrée
               </p>
               <p className="text-xs text-gray-500 italic">
-                Le don pur n&apos;est pas convertible en Credits Impact.
+                Cette contribution n&apos;est pas convertible en Crédits Impact.
               </p>
             </div>
           ) : (
@@ -250,7 +250,7 @@ export function TransactionReceipt({ transactionId, transactionType }: Transacti
           ) : isDonation ? (
             <>
               <Download className="w-[18px] h-[18px]" />
-              Télécharger le reçu de don
+              Télécharger le reçu de contribution
             </>
           ) : (
             <>

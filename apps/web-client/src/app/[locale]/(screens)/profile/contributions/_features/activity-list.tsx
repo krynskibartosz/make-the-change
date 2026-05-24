@@ -122,7 +122,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
   // Determine bento labels based on filter
   const leftLabel = filter === 'order' ? 'Total Achat' : 'Total Soutiens'
   const leftValue = filter === 'order' ? (displayOrderEuros > 0 ? displayOrderEuros : displayPoints) : displayContributed
-  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'Credits Impact') : '€'
+  const leftUnit = filter === 'order' ? (displayOrderEuros > 0 ? '€' : 'Crédits Impact') : '€'
   const rightLabel = filter === 'support' ? 'Crédits reçus' : 'Crédits échangés'
   const rightValue = filter === 'support' ? userSupports.reduce((sum, s) => sum + s.amount_points, 0) : displayPoints
   const rightUnit = ''
@@ -135,7 +135,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
           Historique
         </h1>
         <p className="text-sm text-gray-400 text-pretty leading-[1.6]">
-          Vos soutiens, dons et échanges de crédits.
+          Vos soutiens, contributions et échanges de crédits.
         </p>
       </div>
 
