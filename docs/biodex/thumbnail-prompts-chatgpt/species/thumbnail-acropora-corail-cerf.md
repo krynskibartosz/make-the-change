@@ -11,7 +11,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater nature photography: square crop, main subject sharp and large in frame, simple natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater nature photography, square crop, main subject sharp and large in frame, simple natural background, readable at small size, premium but natural.
 
 Species: Acropora corne de cerf, Acropora muricata.
 Scene: a healthy staghorn coral colony in a natural Indonesian reef. The branching antler-like Acropora structure must be the main subject and fill most of the square frame. Use realistic blue underwater light and restrained natural coral colors.

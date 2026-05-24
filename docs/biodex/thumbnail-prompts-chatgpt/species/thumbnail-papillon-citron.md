@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Papillon citron, Gonepteryx rhamni.
 Scene: a single brimstone butterfly on a leaf or small wildflower. The butterfly must be the only main subject, with pale yellow-green leaf-shaped wings and delicate realistic veins. Use a simple woodland-edge green bokeh.

@@ -28,8 +28,10 @@ describe('getSpeciesHeroImage', () => {
       ['Bombus terrestris', '/images/biodex/hero-bombus-terrestris.png'],
       ['Coccinella septempunctata', '/images/biodex/hero-coccinella-septempunctata.png'],
       ['Gonepteryx rhamni', '/images/biodex/hero-gonepteryx-rhamni.png'],
+      ['Indri indri', '/images/biodex/hero-indri-indri.png'],
       ['Liotrigona bitika', '/images/biodex/hero-liotrigona-bitika.png'],
       ['Megachile centuncularis', '/images/biodex/hero-megachile-centuncularis.png'],
+      ['Propithecus diadema', '/images/biodex/hero-propithecus-diadema.png'],
       ['Trachelophorus giraffa', '/images/biodex/hero-trachelophorus-giraffa.png'],
     ] as const
 

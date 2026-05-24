@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Poisson-papillon, Chaetodon auriga.
 Scene: a single threadfin butterflyfish near simple coral in a natural Indonesian reef. The fish must be the only main subject, with white body, diagonal dark stripes, black eye band, yellow posterior area, and thin trailing dorsal filament.

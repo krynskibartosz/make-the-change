@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic nature photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic nature photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Olivier, Olea europaea.
 Scene: a close olive tree branch with silver-green leaves and several realistic olives in warm Mediterranean light. The branch must be the only main subject, not a broad landscape. Show enough leaves and fruit to identify the olive tree instantly.

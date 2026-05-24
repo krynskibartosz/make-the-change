@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Syrphe ceinture, Episyrphus balteatus.
 Scene: a single marmalade hoverfly resting on a small white flower. The hoverfly must be the only main subject, large fly eyes, one visible pair of transparent wings, slim orange-yellow abdomen with dark bands, realistic fly anatomy.

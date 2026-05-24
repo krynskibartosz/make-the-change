@@ -6,41 +6,7 @@ This file contains only prompts that still need to be sent to ChatGPT image gene
 
 ## Covers Still To Generate
 
-Count: 2
-
-### hero-indri-indri.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-indri-indri.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Indri, Indri indri.
-Scene: an Indri lemur perched on a mossy tree trunk in a humid Madagascar rainforest. The Indri must be the only main subject, with black-and-white fur, rounded ears, expressive pale eyes, a short/no visible tail, and natural alert posture. Use filtered canopy light, deep green foliage, moss, and humid forest atmosphere.
-
-Composition: vertical mobile-first wildlife portrait, Indri face and upper body sharp in the central or upper-middle area, darker calmer lower third with blurred trunk/foliage, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, ring-tailed lemur, long striped tail, generic monkey, human-like smile, zoo enclosure, cage, duplicate lemurs, second main animal, text, logo, watermark, cropped face, blurry eyes, deformed hands, oversaturated green.
-```
-
-### hero-propithecus-diadema.png
-
-Source prompt file: docs/biodex/cover-prompts-chatgpt/species/hero-propithecus-diadema.md
-
-```txt
-Create one vertical mobile-first BioDex cover image.
-
-Reference style: premium ultra-realistic wildlife photography, vertical portrait, shallow depth of field, soft natural bokeh, subject sharp, natural ecological context, lower third calm for app text overlays.
-
-Species: Sifaka diademe, Propithecus diadema.
-Scene: a diademed sifaka clinging vertically to a tree in a humid Madagascar rainforest. The sifaka must be the only main subject, with long silky fur, pale golden/orange limbs, white and grey body tones, darker face, and natural arboreal posture. Use filtered green canopy light, mossy bark, and soft rainforest bokeh.
-
-Composition: vertical mobile-first wildlife portrait, sifaka face and torso sharp in central or upper-middle area, lower third calm with blurred trunk/foliage, no text.
-
-Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, ring-tailed lemur, Indri-like black-and-white body, generic monkey, human-like expression, zoo enclosure, cage, duplicate lemurs, second main animal, text, logo, watermark, cropped face, blurry eyes, deformed limbs, oversaturated colors.
-```
+Count: 0
 
 ## Thumbnails Still To Generate
 
@@ -55,7 +21,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Abeille mellifere italienne, Apis mellifera ligustica.
 Scene: a single Italian honey bee on a Mediterranean wildflower. The bee must be the only main subject, with golden/yellow abdominal bands, realistic honey bee anatomy, translucent wings, and natural pollen/flower interaction. Use warm soft Mediterranean bokeh.
@@ -74,7 +40,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Bourdon terrestre, Bombus terrestris.
 Scene: a single buff-tailed bumblebee on a clover, lavender, or wildflower in a Belgian meadow. The bumblebee must be the only main subject, large and fuzzy, black body with yellow bands and a pale buff-white tail, realistic wings and legs.
@@ -93,7 +59,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Coccinelle a 7 points, Coccinella septempunctata.
 Scene: a single seven-spotted ladybird on a fresh green leaf with soft natural meadow or garden bokeh. The beetle must be the only main subject, large in the square frame, with bright red elytra and exactly seven clear black spots, black pronotum with pale markings, realistic legs and antennae.
@@ -112,7 +78,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Demoiselle bleue, Chrysiptera cyanea.
 Scene: a single blue damselfish near simple branching coral in a natural Indonesian reef. The fish must be the only main subject, small but large in the crop, vivid blue but realistic, clear eye and fin shape.
@@ -131,7 +97,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife portrait photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife portrait photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Herisson europeen, Erinaceus europaeus.
 Scene: a single European hedgehog in leaf litter or a quiet garden edge. The hedgehog must be the only main subject, with realistic spines, small dark eyes, pointed snout, and natural low posture. Keep the environment simple.
@@ -150,7 +116,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater macro wildlife photography: square crop, subject sharp and large enough to identify at small size, simple natural background, premium but natural.
+Style target: ultra-realistic underwater macro wildlife photography, square crop, subject sharp and large enough to identify at small size, simple natural background, premium but natural.
 
 Species: Hippocampe pygmee, Hippocampus bargibanti.
 Scene: a single Bargibant's pygmy seahorse on a gorgonian coral in an Indonesian reef. The seahorse must be the only main subject, small but clearly visible, with curved body, curled tail gripping coral, and realistic camouflaged pink/yellow or pale texture. The coral must not hide the seahorse.
@@ -169,7 +135,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife portrait photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife portrait photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Huppe fasciee, Upupa epops.
 Scene: a single hoopoe perched on a simple Mediterranean branch. The bird must be the only main subject, with buff-orange body, raised crest, long curved bill, and black-and-white barred wings. Use warm soft olive grove bokeh.
@@ -188,7 +154,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Megachile, Megachile centuncularis.
 Scene: a single leafcutter bee on a green leaf or simple wildflower. The bee must be the only main subject, compact dark bee body with pale hairs, realistic wings and legs. A subtle cut leaf edge can appear as light context, but the bee must dominate the square crop.
@@ -207,7 +173,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic nature photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic nature photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Olivier, Olea europaea.
 Scene: a close olive tree branch with silver-green leaves and several realistic olives in warm Mediterranean light. The branch must be the only main subject, not a broad landscape. Show enough leaves and fruit to identify the olive tree instantly.
@@ -226,7 +192,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Osmie rousse, Osmia bicornis.
 Scene: a single red mason bee on an orchard blossom or small wildflower. The bee must be the only main subject, compact solitary bee body, rusty orange-brown hairs, darker head, realistic translucent wings and legs.
@@ -245,7 +211,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Paon-du-jour, Aglais io.
 Scene: a single European peacock butterfly with wings open on a simple flower or leaf. The butterfly must be the only main subject, red-brown wings with clear blue-purple eyespots, realistic scales and wing edges.
@@ -264,7 +230,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Papillon citron, Gonepteryx rhamni.
 Scene: a single brimstone butterfly on a leaf or small wildflower. The butterfly must be the only main subject, with pale yellow-green leaf-shaped wings and delicate realistic veins. Use a simple woodland-edge green bokeh.
@@ -283,7 +249,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Poisson clown, Amphiprion ocellaris.
 Scene: a single ocellaris clownfish near soft sea anemone tentacles in a natural Indonesian reef. The clownfish must be the only main subject, orange body with three white bands edged in black, realistic fins and eye detail. The anemone is soft context only.
@@ -302,7 +268,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Poisson-papillon, Chaetodon auriga.
 Scene: a single threadfin butterflyfish near simple coral in a natural Indonesian reef. The fish must be the only main subject, with white body, diagonal dark stripes, black eye band, yellow posterior area, and thin trailing dorsal filament.
@@ -321,7 +287,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Syrphe ceinture, Episyrphus balteatus.
 Scene: a single marmalade hoverfly resting on a small white flower. The hoverfly must be the only main subject, large fly eyes, one visible pair of transparent wings, slim orange-yellow abdomen with dark bands, realistic fly anatomy.
@@ -340,7 +306,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple natural background, readable at small size, premium but natural.
 
 Species: Tortue verte, Chelonia mydas.
 Scene: a single green sea turtle swimming calmly in a natural Indonesian reef or seagrass area. The turtle must be the only main subject, with realistic shell pattern, head shape, flippers, and calm gliding posture.
@@ -349,4 +315,3 @@ Composition: square 1:1 underwater thumbnail, turtle head/shell fills 70-85% of 
 
 Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, aquarium look, diver, human hand, plastic, boat, multiple turtles, second animal, text, logo, watermark, cropped head beyond recognition, blurry eye, deformed shell, harsh flash, oversaturated cyan.
 ```
-

@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple natural background, readable at small size, premium but natural.
 
 Species: Tortue verte, Chelonia mydas.
 Scene: a single green sea turtle swimming calmly in a natural Indonesian reef or seagrass area. The turtle must be the only main subject, with realistic shell pattern, head shape, flippers, and calm gliding posture.
@@ -24,4 +24,3 @@ Avoid cartoon, illustration, painting, 3D render, CGI, fantasy, aquarium look, d
 - Turtle identity is obvious at 80x80 px.
 - No diver or human object.
 - Underwater scene is natural.
-

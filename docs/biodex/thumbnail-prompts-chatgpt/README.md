@@ -1,4 +1,4 @@
-# BioDex Thumbnail Prompts for ChatGPT
+﻿# BioDex Thumbnail Prompts for ChatGPT
 
 This folder is a copy-paste kit for generating only the missing BioDex species thumbnails in ChatGPT.
 
@@ -22,7 +22,7 @@ Recommended workflow:
 
 1. Create or reuse the ChatGPT project/folder named `BioDex Thumbnails`.
 2. Paste `00-project-instructions.md` as the project-level instruction/context.
-3. Add or upload the reference thumbnail `apps/web-client/public/images/species-thumbnails/abeille-noire.png`.
+3. Do not attach a reference file unless you explicitly want to; the prompts are self-contained.
 4. Use one file from `species/` per chat.
 5. Generate one square image at a time.
 6. Save approved images into `apps/web-client/public/images/species-thumbnails/` with the exact target filename.

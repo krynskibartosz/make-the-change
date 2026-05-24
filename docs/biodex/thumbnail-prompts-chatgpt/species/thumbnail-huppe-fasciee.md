@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife portrait photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife portrait photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Huppe fasciee, Upupa epops.
 Scene: a single hoopoe perched on a simple Mediterranean branch. The bird must be the only main subject, with buff-orange body, raised crest, long curved bill, and black-and-white barred wings. Use warm soft olive grove bokeh.

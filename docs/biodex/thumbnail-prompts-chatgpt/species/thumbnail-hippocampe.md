@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater macro wildlife photography: square crop, subject sharp and large enough to identify at small size, simple natural background, premium but natural.
+Style target: ultra-realistic underwater macro wildlife photography, square crop, subject sharp and large enough to identify at small size, simple natural background, premium but natural.
 
 Species: Hippocampe pygmee, Hippocampus bargibanti.
 Scene: a single Bargibant's pygmy seahorse on a gorgonian coral in an Indonesian reef. The seahorse must be the only main subject, small but clearly visible, with curved body, curled tail gripping coral, and realistic camouflaged pink/yellow or pale texture. The coral must not hide the seahorse.

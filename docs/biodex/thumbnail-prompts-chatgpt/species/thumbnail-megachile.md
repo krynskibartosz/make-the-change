@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Megachile, Megachile centuncularis.
 Scene: a single leafcutter bee on a green leaf or simple wildflower. The bee must be the only main subject, compact dark bee body with pale hairs, realistic wings and legs. A subtle cut leaf edge can appear as light context, but the bee must dominate the square crop.

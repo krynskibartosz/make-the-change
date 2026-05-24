@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic underwater wildlife photography: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic underwater wildlife photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Poisson clown, Amphiprion ocellaris.
 Scene: a single ocellaris clownfish near soft sea anemone tentacles in a natural Indonesian reef. The clownfish must be the only main subject, orange body with three white bands edged in black, realistic fins and eye detail. The anemone is soft context only.

@@ -1,8 +1,8 @@
-# ChatGPT Project Instructions
+﻿# ChatGPT Project Instructions
 
 You are generating BioDex species thumbnails for the Make the Change app.
 
-The images must form a coherent square thumbnail family. The reference style is `abeille-noire.png`: ultra-realistic wildlife macro/portrait, square crop, species clear at a glance, simple soft natural background, high subject readability, no UI text.
+The images must form a coherent square thumbnail family: ultra-realistic wildlife macro/portrait, square crop, species clear at a glance, simple soft natural background, high subject readability, no UI text.
 
 Hard rule:
 

@@ -9,7 +9,7 @@ Create one square BioDex species thumbnail.
 
 This is not a cover or hero image. It must be a tiny square thumbnail/avatar: close-up, subject-dominant, readable at 80x80 px, with no vertical composition and no lower-third text space.
 
-Reference style: ultra-realistic wildlife macro photography like the existing `abeille-noire.png` thumbnail: square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
+Style target: ultra-realistic wildlife macro photography, square crop, subject very sharp and large in frame, simple soft natural background, readable at small size, premium but natural.
 
 Species: Paon-du-jour, Aglais io.
 Scene: a single European peacock butterfly with wings open on a simple flower or leaf. The butterfly must be the only main subject, red-brown wings with clear blue-purple eyespots, realistic scales and wing edges.
