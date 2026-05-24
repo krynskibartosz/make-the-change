@@ -70,6 +70,7 @@ type ClientProject = {
   longitude: number | null
   hero_image_url: string | null
   current_funding: number | null
+  funding_progress: number | null
   type: string | null
   unit_label: string | null
 }
@@ -134,6 +135,7 @@ const normalizeProject = (
     longitude: project.longitude,
     hero_image_url: project.hero_image_url,
     current_funding: project.current_funding,
+    funding_progress: project.funding_progress,
     type: project.type,
     unit_label: project.unit_label,
   }
@@ -274,12 +276,15 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
     setIsMapShellReady(true)
   }, [])
 
+  const byProgressDesc = (a: ClientProject, b: ClientProject) =>
+    (b.funding_progress ?? 0) - (a.funding_progress ?? 0)
+
   const donationProjects = useMemo(
-    () => normalizedProjects.filter((p) => p.type === 'reef'),
+    () => normalizedProjects.filter((p) => p.type === 'reef').sort(byProgressDesc),
     [normalizedProjects],
   )
   const supportProjects = useMemo(
-    () => normalizedProjects.filter((p) => p.type !== 'reef'),
+    () => normalizedProjects.filter((p) => p.type !== 'reef').sort(byProgressDesc),
     [normalizedProjects],
   )
 
