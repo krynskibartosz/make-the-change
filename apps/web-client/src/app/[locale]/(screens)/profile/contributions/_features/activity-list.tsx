@@ -130,7 +130,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
   return (
     <>
       {/* 1. HERO - Titre de la page */}
-      <div className="relative z-10 px-6 pt-24 pb-6">
+      <div className="relative z-10 px-4 pt-24 pb-6">
         <h1 className="mb-2 text-4xl font-bold tracking-tight text-white hyphens-none text-balance leading-[1.1]">
           Historique
         </h1>
@@ -140,7 +140,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
       </div>
 
       {/* 2. DASHBOARD GLOBAL - Carte Hero Unifiée */}
-      <div className="relative z-10 mx-6 mb-6 overflow-x-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center flex-shrink-0 w-full">
+      <div className="relative z-10 mx-4 mb-6 overflow-x-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-[#1A1F26] to-[#0B0F15] p-6 shadow-lg flex justify-between items-center flex-shrink-0 w-full">
         <div className="flex flex-col gap-1 min-w-0">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{leftLabel}</span>
           <div className="flex items-baseline gap-1.5">
@@ -163,7 +163,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
 
       {/* 4. LISTE DES ACTIVITÉS UNIFIÉES */}
       {filteredActivities.length > 0 ? (
-        <div className="relative z-10 flex flex-col gap-3 px-6">
+        <div className="relative z-10 flex flex-col gap-3 px-4">
           {filteredActivities.map((activity) => {
             if (activity.type === 'support') {
               const supportItem = activity

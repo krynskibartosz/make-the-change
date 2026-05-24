@@ -298,7 +298,7 @@ export function GuidedPathExperience({ path, courses }: GuidedPathExperienceProp
       <div className="pointer-events-none fixed inset-x-0 top-0 z-10 h-64 bg-gradient-to-b from-emerald-500/8 to-transparent" />
       <PathHeader path={path} completedCount={completedCount} totalCount={courses.length} />
 
-      <div className="relative z-10 mx-auto w-full max-w-4xl px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[calc(5.4rem+env(safe-area-inset-top))]">
+      <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[calc(5.4rem+env(safe-area-inset-top))]">
         <PathHero path={path} completedCount={completedCount} totalCount={courses.length} />
 
         <div className="mt-8 flex flex-col items-center pb-12">

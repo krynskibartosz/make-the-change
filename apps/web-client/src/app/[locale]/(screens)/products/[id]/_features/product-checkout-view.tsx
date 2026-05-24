@@ -180,7 +180,7 @@ export function ProductCheckoutView({ product, selectedFormat, initialBalance, o
           <h2 className="text-xl font-bold text-white">Où livrer ?</h2>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 pb-32 space-y-4">
+        <div className="flex-1 overflow-y-auto px-4 pb-32 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <input type="text" placeholder="Prénom" autoComplete="given-name" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />
             <input type="text" placeholder="Nom" autoComplete="family-name" spellCheck={false} className="h-14 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-white placeholder-white/30 transition-colors focus:border-lime-400 focus:bg-lime-400/5 focus:outline-none shadow-[0_0_0_100px_#0B0F15_inset] [-webkit-text-fill-color:white]" />

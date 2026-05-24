@@ -41,7 +41,7 @@ export default function StreakPage() {
       fallbackHref="/academy"
       className="bg-[#05050A] text-white"
     >
-      <div className="mx-auto flex max-w-xl flex-col gap-8 px-5 pb-32 pt-6">
+      <div className="mx-auto flex max-w-xl flex-col gap-8 px-4 pb-32 pt-6">
         <div className="mt-4 flex items-center justify-between px-2">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col">
             <span className="text-8xl font-black tracking-tighter text-orange-500 drop-shadow-[0_0_20px_rgba(249,115,22,0.3)]">

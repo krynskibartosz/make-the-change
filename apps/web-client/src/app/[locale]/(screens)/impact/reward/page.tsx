@@ -46,7 +46,7 @@ export default async function ImpactRewardPage() {
       contentClassName="overflow-y-auto overscroll-contain"
     >
       <div className="flex flex-col">
-        <div className="flex flex-col gap-8 px-5 pb-28 pt-16 sm:px-6">
+        <div className="flex flex-col gap-8 px-4 pb-28 pt-16 sm:px-5">
           {/* En-t�te : Mascotte & Titre */}
           <div className="flex flex-col items-center text-center">
             {initialFaction ? (

@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen } from 'lucide-react'
+import { ArrowRight, BookOpen, FlaskConical, Map as MapIcon, Route, Sprout } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getAtlasIslandViews, getLearningHome } from '@/lib/learning/selectors'
 import {
@@ -9,8 +9,9 @@ import {
 import type { SpeciesContext } from '@/types/species'
 import { LearnAtlasPreview } from './learn-atlas-preview'
 import {
-  LearningCourseCard,
+  LEARNING_DOMAIN_LABELS,
   LearningPlayButton,
+  LearningSectionTitle,
   learningInteractiveClassName,
   PROJECT_LABEL_BY_SLUG,
 } from './learning-cards'
@@ -23,6 +24,41 @@ const DEFAULT_PROJECT_SLUGS = [
   MOCK_PROJECT_MANAKARA_SLUG,
   MOCK_PROJECT_CORAL_SLUG,
   MOCK_PROJECT_HABEEBEE_SLUG,
+]
+
+const LEARNING_MODE_LINKS = [
+  {
+    href: '/academy',
+    title: 'Mode Duolingo',
+    description: 'Le parcours Academy avec vies, série et niveaux.',
+    meta: 'Principal',
+    icon: Route,
+    tone: 'border-emerald-200/18 bg-emerald-300/10 text-emerald-200',
+  },
+  {
+    href: '/kinnu-v2',
+    title: 'Mode test',
+    description: 'La nouvelle carte hexagonale pour tester les pathways.',
+    meta: 'V2 lab',
+    icon: FlaskConical,
+    tone: 'border-amber-200/18 bg-amber-300/10 text-amber-200',
+  },
+  {
+    href: '/learn/atlas',
+    title: 'Atlas du vivant',
+    description: 'Explorer les grands territoires du vivant.',
+    meta: 'Carte',
+    icon: MapIcon,
+    tone: 'border-cyan-200/18 bg-cyan-300/10 text-cyan-200',
+  },
+  {
+    href: '/kinnu',
+    title: 'Prototype exploration',
+    description: 'Ancienne version non linéaire pour comparer.',
+    meta: 'V1 lab',
+    icon: Sprout,
+    tone: 'border-lime-200/18 bg-lime-300/10 text-lime-200',
+  },
 ]
 
 export function LearnTab({ species }: LearnTabProps) {
@@ -56,29 +92,58 @@ export function LearnTab({ species }: LearnTabProps) {
   return (
     <section className="relative isolate w-full overflow-x-hidden pb-32 pt-[max(1.75rem,env(safe-area-inset-top))] md:pb-10">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[-2] h-[24rem] bg-[linear-gradient(180deg,rgba(22,68,62,0.20),rgba(11,15,21,0))]" />
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4">
         <header className="px-1 pt-2">
-          <h1 className="text-[31px] font-black tracking-tight text-white">Apprendre</h1>
-          <p className="mt-1 max-w-[28rem] text-[14px] font-medium leading-relaxed text-white/52">
-            Comprends les écosystèmes que tu soutiens, à ton rythme.
+          <h1 className="text-[28px] font-black tracking-tight text-white">Apprendre</h1>
+          <p className="mt-1 max-w-[28rem] text-[15px] font-medium leading-relaxed text-white/55">
+            Choisis ton entrée: parcours guidé, atlas ou versions test.
           </p>
         </header>
 
+        <section aria-labelledby="learn-modes-title">
+          <LearningSectionTitle title="Versions disponibles" />
+          <div className="grid gap-2 md:grid-cols-2">
+            {LEARNING_MODE_LINKS.map((mode) => {
+              const Icon = mode.icon
+
+              return (
+                <Link
+                  key={mode.href}
+                  href={mode.href}
+                  className={`group flex min-h-[5.5rem] items-center gap-3 rounded-[1.15rem] border border-white/[0.08] bg-white/[0.025] px-3.5 py-3 transition-colors active:bg-white/[0.06] ${learningInteractiveClassName}`}
+                >
+                  <span
+                    className={`grid h-11 w-11 shrink-0 place-items-center rounded-[0.95rem] border ${mode.tone}`}
+                  >
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center justify-between gap-3">
+                      <span className="truncate text-[15px] font-black text-white">
+                        {mode.title}
+                      </span>
+                      <span className="shrink-0 text-[10px] font-black uppercase tracking-[0.12em] text-white/30">
+                        {mode.meta}
+                      </span>
+                    </span>
+                    <span className="mt-1 line-clamp-2 text-[12px] font-semibold leading-relaxed text-white/45">
+                      {mode.description}
+                    </span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-white/30 transition-transform group-active:translate-x-0.5" />
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+
         {continueCourse && (
           <section aria-labelledby="learn-continue-title">
-            <div className="mb-3 flex items-center justify-between px-1">
-              <h2
-                id="learn-continue-title"
-                className="text-[18px] font-black tracking-tight text-white"
-              >
-                Reprendre
-              </h2>
-              <span className="text-[12px] font-bold text-white/34">Dernier fil</span>
-            </div>
-            <div className="overflow-hidden rounded-[1.45rem] border border-teal-200/14 bg-gradient-to-br from-teal-300/12 via-white/[0.035] to-emerald-300/6 p-4 shadow-[0_18px_54px_rgba(0,0,0,0.22)]">
+            <LearningSectionTitle title="Reprendre" />
+            <div className="border-y border-white/[0.08] py-4">
               <div className="flex items-start gap-4">
-                <div className="grid h-16 w-16 shrink-0 place-items-center rounded-[22px] bg-teal-300 text-[#04110e] shadow-lg shadow-teal-300/15">
-                  <BookOpen className="h-7 w-7" aria-hidden="true" />
+                <div className="grid h-14 w-14 shrink-0 place-items-center rounded-[1.05rem] border border-teal-200/18 bg-teal-300/12 text-teal-100">
+                  <BookOpen className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[11px] font-black uppercase tracking-[0.16em] text-teal-100/55">
@@ -108,29 +173,30 @@ export function LearnTab({ species }: LearnTabProps) {
         {/* Section 1 — Cours liés à tes projets */}
         {projectLinkedCourses.length > 0 && (
           <section aria-labelledby="learn-projects-title">
-            <div className="mb-3 flex items-center justify-between px-1">
-              <h2
-                id="learn-projects-title"
-                className="text-[18px] font-black tracking-tight text-white"
-              >
-                Cours liés à tes projets
-              </h2>
-              <Link
-                href="/learn/courses?project=all"
-                className="inline-flex items-center gap-1 text-[12px] font-semibold text-white/45 hover:text-white/65"
-              >
-                Voir tous
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
+            <LearningSectionTitle title="Cours liés à tes projets" href="/learn/courses?project=all" action="Voir tous" />
+            <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
               {projectLinkedCourses.map(({ course, projectLabel }) => (
-                <div key={course.id} className="relative">
-                  <p className="mb-1.5 px-1 text-[10px] font-black uppercase tracking-[0.16em] text-teal-200/55">
-                    {projectLabel}
-                  </p>
-                  <LearningCourseCard course={course} compact />
-                </div>
+                <Link
+                  key={course.id}
+                  href={`/learn/courses/${course.id}`}
+                  className={`group flex items-center gap-3 py-3.5 transition-colors active:bg-white/[0.04] ${learningInteractiveClassName}`}
+                >
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[0.9rem] border border-white/10 bg-white/[0.035] text-teal-200">
+                    <BookOpen className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[10px] font-black uppercase tracking-[0.15em] text-teal-200/45">
+                      {projectLabel} · {LEARNING_DOMAIN_LABELS[course.domain]}
+                    </span>
+                    <span className="mt-1 block truncate text-[15px] font-black text-white">
+                      {course.title}
+                    </span>
+                    <span className="mt-0.5 block truncate text-[12px] font-semibold text-white/38">
+                      {course.durationMinutes} min · {course.theme}
+                    </span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-white/28 transition-transform group-active:translate-x-0.5" />
+                </Link>
               ))}
             </div>
           </section>

@@ -64,7 +64,7 @@ function CursusModal({
       onClose={onClose}
       className="z-[90] bg-[#05050A] text-white"
     >
-      <div className="mx-auto flex min-h-full max-w-xl flex-col px-5 pb-12 pt-28">
+      <div className="mx-auto flex min-h-full max-w-xl flex-col px-4 pb-12 pt-28">
         <div className="mb-8">
           <p className="mb-3 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-300">
             Angle d'apprentissage
@@ -142,7 +142,7 @@ export default function ChaptersPage() {
       fallbackHref="/academy"
       className="bg-[#05050A] text-white"
     >
-      <div className="mx-auto max-w-xl px-5 pb-32 pt-28">
+      <div className="mx-auto max-w-xl px-4 pb-32 pt-28">
         <CursusSummary selectedId={progress.selectedCursusId} onOpen={() => setShowCursusModal(true)} />
 
         <div className="flex flex-col gap-5">

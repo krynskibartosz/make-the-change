@@ -296,7 +296,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         aria-hidden={isMapView}
       >
         {/* ── TITRE (scroll avec le contenu) ──────────────────────────────── */}
-        <div className="px-6 pt-6 pb-3">
+        <div className="px-4 pt-6 pb-3">
           <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">
             Nos projets
           </h1>
@@ -305,13 +305,13 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         {/* ── SECTIONS ÉDITORIALES ─────────────────────────────────────────── */}
         <div className="flex flex-col">
           {normalizedProjects.length === 0 ? (
-            <div className="px-6 py-12 text-center text-white/50">
+            <div className="px-4 py-12 text-center text-white/50">
               Aucun projet trouvé pour le moment.
             </div>
           ) : (
             <>
               {donationProjects.length > 0 && (
-                <section className="px-6">
+                <section className="px-4">
                   <div className="mb-8">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
                       Faire un don
@@ -329,7 +329,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
               )}
 
               {supportProjects.length > 0 && (
-                <section className={`px-6${donationProjects.length > 0 ? ' mt-20' : ''}`}>
+                <section className={`px-4${donationProjects.length > 0 ? ' mt-20' : ''}`}>
                   <div className="mb-8">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
                       Soutenir un producteur
