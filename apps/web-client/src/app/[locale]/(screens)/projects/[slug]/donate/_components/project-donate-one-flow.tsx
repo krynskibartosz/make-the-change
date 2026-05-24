@@ -871,7 +871,7 @@ export function ProjectDonateOneFlow({
                     <NextStepLine
                       icon={Camera}
                       title="Suivi du projet"
-                      body="Retrouvez les mises à jour du partenaire dans votre profil quand il publie des nouvelles du terrain."
+                      body="Les prochaines nouvelles du terrain apparaîtront sur la page du projet dès que le partenaire les publiera."
                     />
                     <NextStepLine
                       icon={Leaf}
