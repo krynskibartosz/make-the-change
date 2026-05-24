@@ -147,6 +147,39 @@ describe('V1 mobile prototype UX guardrails', () => {
     )
   })
 
+  it('protects partner advantage redemption with a visible mock Credits Impact debit', () => {
+    const detailPage = readSource('src/app/[locale]/(screens)/advantages/[id]/page.tsx')
+    const modalPage = readSource('src/app/[locale]/@modal/(.)advantages/[id]/page.tsx')
+    const detail = readSource(
+      'src/app/[locale]/(screens)/advantages/[id]/_features/advantage-detail.tsx',
+    )
+
+    expect(detailPage.includes('getCurrentProfile')).toBe(true)
+    expect(detailPage.includes('initialImpactCredits')).toBe(true)
+    expect(modalPage.includes('getCurrentProfile')).toBe(true)
+    expect(detail.includes('isConnected')).toBe(true)
+    expect(
+      detail.includes('const hasEnoughImpactCredits = impactCreditsBalance >= advantage.priceCredits'),
+    ).toBe(true)
+    expect(detail.includes('!hasEnoughImpactCredits')).toBe(true)
+    expect(detail.includes('Confirmer l’utilisation')).toBe(true)
+    expect(
+      detail.includes('setImpactCreditsBalance((balance) => balance - advantage.priceCredits)'),
+    ).toBe(true)
+    expect(detail.includes('returnTo=')).toBe(true)
+  })
+
+  it('shows seller responsibility and product conditions before prototype payment', () => {
+    const productPayment = readSource(
+      'src/app/[locale]/(screens)/products/[id]/_features/product-fiat-checkout-view.tsx',
+    )
+
+    expect(productPayment.includes('Vendeur et expéditeur')).toBe(true)
+    expect(productPayment.includes('Conditions, retours et SAV')).toBe(true)
+    expect(productPayment.includes('droit de rétractation')).toBe(true)
+    expect(productPayment.includes('paiements réels')).toBe(true)
+  })
+
   it('keeps project discovery mock-only and loads the map only after user intent', () => {
     const projectsDataSource = readSource('src/app/[locale]/(tabs)/projects/_features/get-projects.ts')
     expectNoMatches(projectsDataSource, [/createStaticClient/g, /from\('public_projects'\)/g], 'projects data source')

@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getMockAdvantageById } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
 import { AdvantageDetail } from '@/app/[locale]/(screens)/advantages/[id]/_features/advantage-detail'
+import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -17,13 +18,19 @@ export default async function AdvantageDetailModalPage({ params }: Props) {
     redirect(`/products/${advantage.productSlug}`)
   }
 
+  const profile = await getCurrentProfile()
+
   return (
     <FullScreenSlideModal
       fallbackHref="/advantages"
       headerMode="dynamic"
       title={advantage.title}
     >
-      <AdvantageDetail advantage={advantage} />
+      <AdvantageDetail
+        advantage={advantage}
+        isConnected={Boolean(profile)}
+        initialImpactCredits={profile?.impactCreditsBalance ?? 0}
+      />
     </FullScreenSlideModal>
   )
 }

@@ -21,13 +21,22 @@ type Props = {
   advantage: Advantage
   /** Affiche un bouton retour flottant sur l'image — pour les pages directes sans header */
   showFloatingBack?: boolean
+  isConnected: boolean
+  initialImpactCredits: number
 }
 
-export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
+export function AdvantageDetail({
+  advantage,
+  showFloatingBack,
+  isConnected,
+  initialImpactCredits,
+}: Props) {
   const router = useRouter()
   const [unlocked, setUnlocked] = useState(false)
   const [reserved, setReserved] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isConfirmingRedemption, setIsConfirmingRedemption] = useState(false)
+  const [impactCreditsBalance, setImpactCreditsBalance] = useState(initialImpactCredits)
 
   const typeLabel = TYPE_LABELS[advantage.type] ?? null
   const mockCode = MOCK_CODES[advantage.id]
@@ -48,6 +57,22 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
 
   const isActioned =
     advantage.type === 'partner_code' || advantage.type === 'content' ? unlocked : reserved
+  const hasEnoughImpactCredits = impactCreditsBalance >= advantage.priceCredits
+  const missingImpactCredits = Math.max(advantage.priceCredits - impactCreditsBalance, 0)
+
+  function confirmRedemption() {
+    if (!isConnected || !hasEnoughImpactCredits || isSoon || isActioned) return
+
+    setImpactCreditsBalance((balance) => balance - advantage.priceCredits)
+    setIsConfirmingRedemption(false)
+
+    if (advantage.type === 'partner_code' || advantage.type === 'content') {
+      setUnlocked(true)
+      return
+    }
+
+    setReserved(true)
+  }
 
   return (
     <div className="relative flex h-full flex-col">
@@ -118,6 +143,11 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
               className="text-[18px] font-black"
             />
           </div>
+          {isConnected && (
+            <p className="mt-2 text-[12px] font-medium text-white/45">
+              Solde disponible : {impactCreditsBalance.toLocaleString('fr-FR')} Crédits Impact
+            </p>
+          )}
         </div>
 
         {/* Bannière bientôt */}
@@ -132,27 +162,41 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
 
         {/* Code débloqué */}
         {advantage.type === 'partner_code' && unlocked && (
-          <div className="mx-4 mt-5 flex items-center justify-between rounded-2xl border border-lime-300/20 bg-lime-300/[0.07] px-5 py-4">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-lime-300/60">
-                Code débloqué
+          <>
+            <div className="mx-4 mt-5 rounded-2xl border border-amber-300/15 bg-amber-300/[0.06] px-4 py-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-amber-300/70">
+                Utilisation enregistrée - prototype
               </p>
-              <p className="mt-0.5 font-mono text-xl font-black tracking-wider text-white">
-                {mockCode}
+              <div className="mt-2 flex items-center justify-between text-[13px] font-bold">
+                <span className="text-white/55">Avantage partenaire</span>
+                <span className="text-amber-300">-{advantage.priceCredits.toLocaleString('fr-FR')} CI</span>
+              </div>
+              <p className="mt-1 text-[12px] font-medium text-white/40">
+                Nouveau solde : {impactCreditsBalance.toLocaleString('fr-FR')} Crédits Impact
               </p>
             </div>
-            <button
-              onClick={handleCopy}
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors active:bg-white/10"
-              aria-label="Copier le code"
-            >
-              {copied ? (
-                <Check className="h-4 w-4 text-lime-300" aria-hidden="true" />
-              ) : (
-                <Copy className="h-4 w-4" aria-hidden="true" />
-              )}
-            </button>
-          </div>
+            <div className="mx-4 mt-3 flex items-center justify-between rounded-2xl border border-lime-300/20 bg-lime-300/[0.07] px-5 py-4">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-lime-300/60">
+                  Code débloqué
+                </p>
+                <p className="mt-0.5 font-mono text-xl font-black tracking-wider text-white">
+                  {mockCode}
+                </p>
+              </div>
+              <button
+                onClick={handleCopy}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors active:bg-white/10"
+                aria-label="Copier le code"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-lime-300" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-4 w-4" aria-hidden="true" />
+                )}
+              </button>
+            </div>
+          </>
         )}
 
         {/* Réservation confirmée */}
@@ -273,18 +317,54 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
             <div className="flex w-full cursor-not-allowed items-center justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/25">
               Bientôt disponible
             </div>
+          ) : !isConnected ? (
+            <Link
+              href={`/login?returnTo=${encodeURIComponent(`/advantages/${advantage.id}`)}`}
+              className="flex w-full items-center justify-center rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] transition-opacity active:opacity-80"
+            >
+              Se connecter pour débloquer
+            </Link>
+          ) : !hasEnoughImpactCredits ? (
+            <div className="flex flex-col gap-2">
+              <div className="flex w-full items-center justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/45">
+                Solde insuffisant · {missingImpactCredits.toLocaleString('fr-FR')} CI manquants
+              </div>
+              <Link href="/projects" className="text-center text-[13px] font-bold text-lime-300">
+                Soutenir un projet
+              </Link>
+            </div>
           ) : isActioned ? (
             <div className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/5 py-4 text-[15px] font-black text-lime-300">
               <Check className="h-4 w-4" aria-hidden="true" />
               {advantage.type === 'partner_code' ? 'Code débloqué' : 'Réservation enregistrée'}
             </div>
+          ) : isConfirmingRedemption ? (
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+              <p className="text-center text-[13px] font-black text-white">Confirmer l’utilisation</p>
+              <p className="mt-1 text-center text-[12px] font-medium text-white/50">
+                -{advantage.priceCredits.toLocaleString('fr-FR')} CI · solde après utilisation :{' '}
+                {(impactCreditsBalance - advantage.priceCredits).toLocaleString('fr-FR')} CI
+              </p>
+              <div className="mt-3 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsConfirmingRedemption(false)}
+                  className="flex-1 rounded-xl border border-white/10 py-3 text-[13px] font-bold text-white/60"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmRedemption}
+                  className="flex-1 rounded-xl bg-lime-300 py-3 text-[13px] font-black text-[#0B0F15]"
+                >
+                  Confirmer
+                </button>
+              </div>
+            </div>
           ) : (
             <button
-              onClick={() =>
-                advantage.type === 'partner_code' || advantage.type === 'content'
-                  ? setUnlocked(true)
-                  : setReserved(true)
-              }
+              onClick={() => setIsConfirmingRedemption(true)}
               className="flex w-full items-center justify-center rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] transition-opacity active:opacity-80"
             >
               {ctaLabel}

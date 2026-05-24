@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { ProductWithRelations } from '../product-detail-data'
 import type { ProductFormat } from '../product-quick-view'
 import { useRouter } from '@/i18n/navigation'
-import { Check, CreditCard, Loader2, MapPin, Package, X } from 'lucide-react'
+import { Check, ChevronDown, CreditCard, Loader2, MapPin, Package, X } from 'lucide-react'
 
 type ProductFiatCheckoutViewProps = {
   product: ProductWithRelations
@@ -23,9 +23,11 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
   const shippingCost = SHIPPING_COST
 
   const [quantity, setQuantity] = useState(1)
+  const [areConditionsOpen, setAreConditionsOpen] = useState(false)
 
   const [paymentState, setPaymentState] = useState<PaymentState>('idle')
   const [activeMethod, setActiveMethod] = useState<PaymentMethod>(null)
+  const sellerName = product.producer?.name_default || 'Le partenaire'
 
   const subtotal = unitPrice * quantity
   const total = subtotal + shippingCost
@@ -152,6 +154,43 @@ export function ProductFiatCheckoutView({ product, selectedFormat, onClose }: Pr
               className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-white/70 active:scale-95 transition-all disabled:opacity-30"
             >+</button>
           </div>
+        </div>
+
+        <div className="mx-6 mb-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+          <div className="px-4 py-4">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-white/40">
+              Vendeur et expéditeur
+            </p>
+            <p className="mt-2 text-[13px] font-medium leading-relaxed text-white/65">
+              {sellerName} vend et expédie ce produit. Make the Change facilite l&apos;expérience
+              et le suivi.
+            </p>
+          </div>
+          <button
+            type="button"
+            aria-expanded={areConditionsOpen}
+            onClick={() => setAreConditionsOpen((open) => !open)}
+            className="flex w-full items-center justify-between border-t border-white/5 px-4 py-4 text-left"
+          >
+            <span className="text-[13px] font-bold text-white/75">Conditions, retours et SAV</span>
+            <ChevronDown
+              className={`h-4 w-4 text-white/35 transition-transform ${areConditionsOpen ? 'rotate-180' : ''}`}
+              aria-hidden="true"
+            />
+          </button>
+          {areConditionsOpen && (
+            <div className="border-t border-white/5 px-4 pb-4 pt-3 text-[12px] font-medium leading-relaxed text-white/50">
+              <p>
+                Le droit de rétractation s&apos;applique lorsque prévu par la réglementation,
+                avec exceptions possibles notamment pour certains produits périssables ou
+                d&apos;hygiène.
+              </p>
+              <p className="mt-2">
+                Livraison, retours et SAV relèvent du partenaire vendeur. Les conditions
+                définitives seront validées avant l&apos;activation des paiements réels.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* TICKET DE CAISSE */}

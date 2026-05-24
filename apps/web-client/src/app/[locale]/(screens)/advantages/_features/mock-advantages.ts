@@ -168,6 +168,23 @@ export function getMockAdvantages(): Advantage[] {
   return [...productAdvantages, ...partnerCodes, ...terrainContents, ...experiences]
 }
 
+export function filterAdvantagesByType(
+  advantages: Advantage[],
+  type: string | undefined,
+): Advantage[] {
+  if (type === 'product' || type === 'partner_code') {
+    return advantages.filter((advantage) => advantage.type === type)
+  }
+
+  if (type === 'content') {
+    return advantages.filter(
+      (advantage) => advantage.type === 'content' || advantage.type === 'experience',
+    )
+  }
+
+  return advantages
+}
+
 export function getMockAdvantageById(id: string): Advantage | undefined {
   return getMockAdvantages().find((a) => a.id === id)
 }
