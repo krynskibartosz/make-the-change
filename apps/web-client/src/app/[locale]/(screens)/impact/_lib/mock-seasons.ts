@@ -143,9 +143,7 @@ export const getAllPrestigeRewards = (): PrestigeReward[] => {
   return MOCK_PRESTIGE_REWARDS
 }
 
-export const resetSeasonCounters = (newSeasonId: string): void => {
-  console.log(`Resetting counters for new season: ${newSeasonId}`)
-}
+export const resetSeasonCounters = (_newSeasonId: string): void => {}
 
 export const getSeasonTimeRemaining = (): number => {
   const currentSeason = getCurrentSeason()

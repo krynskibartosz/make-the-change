@@ -1,4 +1,4 @@
-import { Lock } from 'lucide-react'
+import { Lock, type LucideIcon } from 'lucide-react'
 import { BEEHIVE_METRICS, CORAL_METRICS, ORCHARD_METRICS } from '@/lib/project-type-icons'
 import type { DonationOption, ProjectImpact } from '@/app/[locale]/(screens)/projects/_types/project'
 import { cn } from '@/lib/utils'
@@ -27,6 +27,17 @@ const splitDecimalValue = (value: number): { whole: string; fraction: string | n
   return { whole, fraction: fraction ?? null }
 }
 
+type MetricCardProps = {
+  icon: LucideIcon
+  prefix?: string
+  valueWhole: string
+  valueFraction?: string | null
+  unit?: string
+  label: string
+  colSpan?: boolean
+  iconColor?: string
+}
+
 function MetricCard({
   icon: Icon,
   prefix,
@@ -35,8 +46,8 @@ function MetricCard({
   unit,
   label,
   colSpan = false,
-  iconColor = '#a3e635', // lime-400 par défaut
-}: any) {
+  iconColor = '#a3e635',
+}: MetricCardProps) {
   return (
     <article className={cn('w-full rounded-2xl bg-white/4 p-5 sm:p-6', colSpan && 'col-span-2')}>
       <div className="mb-3 inline-flex rounded-full bg-white/5 p-2">
@@ -65,6 +76,16 @@ function MetricCard({
   )
 }
 
+type CheckoutMetricProps = {
+  icon: LucideIcon
+  prefix?: string
+  valueWhole: string
+  valueFraction?: string | null
+  unit?: string
+  label: string
+  iconColorClass?: string
+}
+
 function CheckoutMetric({
   icon: Icon,
   prefix,
@@ -73,7 +94,7 @@ function CheckoutMetric({
   unit,
   label,
   iconColorClass = 'text-lime-400',
-}: any) {
+}: CheckoutMetricProps) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center">
       <Icon className={cn('mb-1 h-6 w-6 drop-shadow-sm', iconColorClass)} />

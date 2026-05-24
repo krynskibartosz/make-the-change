@@ -42,6 +42,7 @@ import {
   getUnitBySlug,
   getEventUnitBySlug,
   isRewardAlreadyEarned,
+  type AcademyChapter,
   type AcademyDragDropExercise,
   type AcademyExercise,
   type AcademyLesson,
@@ -1149,7 +1150,7 @@ export default function ExerciseEngine() {
   const returnTo = rawReturnTo?.startsWith('/') ? rawReturnTo : learningCourseId ? `/learn/courses/${learningCourseId}` : '/learn/courses'
   const isEvent = chapterSlug === 'events'
   const chapter = isEvent
-    ? ({ id: 'events', slug: 'events', title: 'Événements', subtitle: '' } as any)
+    ? ({ id: 'events', slug: 'events', title: 'Événements', subtitle: '', level: '', order: 0, durationMinutes: 0, difficulty: 'debutant', units: [] } as AcademyChapter)
     : chapterSlug
       ? getChapterBySlug(chapterSlug)
       : null

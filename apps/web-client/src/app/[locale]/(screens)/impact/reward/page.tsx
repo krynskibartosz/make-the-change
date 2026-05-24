@@ -47,7 +47,7 @@ export default async function ImpactRewardPage() {
     >
       <div className="flex flex-col">
         <div className="flex flex-col gap-8 px-4 pb-28 pt-16 sm:px-5">
-          {/* En-t�te : Mascotte & Titre */}
+          {/* En-tête : Mascotte & Titre */}
           <div className="flex flex-col items-center text-center">
             {initialFaction ? (
               <div className="relative mb-4 flex h-24 w-24 items-center justify-center">

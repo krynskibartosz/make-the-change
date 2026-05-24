@@ -155,7 +155,7 @@ export default async function ContributionsPage() {
   const userOrders: NormalizedOrder[] = (rawOrders || []).map((order) => {
     const firstItem = Array.isArray(order.items) ? order.items[0] : null
     const productSnapshot = firstItem?.product_snapshot
-    const totalEuros = typeof (order as any).total_euros === 'number' ? (order as any).total_euros : 0
+    const totalEuros = typeof (order as Record<string, unknown>).total_euros === 'number' ? (order as Record<string, unknown>).total_euros as number : 0
     return {
       id: String(order.id),
       amount_eur: totalEuros,

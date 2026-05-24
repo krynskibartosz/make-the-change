@@ -10,7 +10,7 @@ interface BioDexCardProps {
     rarity?: string
   }
   variant?: 'unlocked' | 'locked'
-  href?: string
+  href?: Parameters<typeof Link>[0]['href']
   className?: string
 }
 
@@ -55,7 +55,7 @@ export function BioDexCard({ species, variant = 'unlocked', href, className }: B
   )
 
   if (href) {
-    return <Link href={href as any} className={wrapperClassName}>{content}</Link>
+    return <Link href={href} className={wrapperClassName}>{content}</Link>
   }
 
   return <button type="button" className={wrapperClassName}>{content}</button>
