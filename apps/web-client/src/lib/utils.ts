@@ -24,8 +24,8 @@ export function formatPoints(points: number): string {
 }
 
 /**
- * Formate un montant en Credits Impact.
- * R0-3 : UI cible = "Credits Impact" (sans accent).
+ * Formate un montant en Crédits Impact.
+ * R0-3 : UI cible = "Crédits Impact" (sans accent).
  */
 export function formatImpactCredits(value: number): string {
   return new Intl.NumberFormat('fr-FR').format(value)

@@ -87,17 +87,17 @@ type MockSupportRecordLegacy = {
  *
  * | Champ | Type source | Classification | Signification cible |
  * |-------|-------------|--------------|---------------------|
- * | `amount_points` | NormalizedInvestment | [CREDITS_IMPACT_CLAIR] | Montant en Credits Impact reçus |
+ * | `amount_points` | NormalizedInvestment | [CREDITS_IMPACT_CLAIR] | Montant en Crédits Impact reçus |
  * | `amount_eur` | NormalizedInvestment | [EUR_CLAIR] | Montant en euros contribué |
  * | `amount_eur_equivalent` | MockSupportRecord | [EUR_CLAIR] | Montant en euros contribué |
  * | `returns_received_points` | MockSupportRecord | [AMBIGU_A_CLASSIFIER] | Historique "retours" - à clarifier |
  * | `type: 'investment'` | NormalizedInvestment | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
  * | `type: 'donation'` | NormalizedDonation | [LEGACY_COMPAT] | Identifier legacy, ne pas afficher |
- * | `price_points` | Produit/Commande | [CREDITS_IMPACT_CLAIR] | Prix en Credits Impact |
- * | `total_points` | Commande | [CREDITS_IMPACT_CLAIR] | Total en Credits Impact |
- * | `monthly_seeds_allocation` | Subscription | [GRAINES_CLAIR] | Allocation mensuelle Graines (abonnement) — pas de Credits Impact |
+ * | `price_points` | Produit/Commande | [CREDITS_IMPACT_CLAIR] | Prix en Crédits Impact |
+ * | `total_points` | Commande | [CREDITS_IMPACT_CLAIR] | Total en Crédits Impact |
+ * | `monthly_seeds_allocation` | Subscription | [GRAINES_CLAIR] | Allocation mensuelle Graines (abonnement) — pas de Crédits Impact |
  * | `delta` | Transaction | [AMBIGU] | Variation du portefeuille (Graines gagnées/dépensées ou soutien débité) |
- * | `impactDelta` | Transaction | [CREDITS_IMPACT_CLAIR] | Credits Impact générés — soutien producteur uniquement ; 0 pour défis, missions et engagement |
+ * | `impactDelta` | Transaction | [CREDITS_IMPACT_CLAIR] | Crédits Impact générés — soutien producteur uniquement ; 0 pour défis, missions et engagement |
  */
 
 // ============================================================================
@@ -123,7 +123,7 @@ export function adaptNormalizedSupportToProducerSupport(
   return {
     id: record.id,
     amountEuros: record.amount_eur,
-    // P0-3 : amount_points → amountImpactCredits (Credits Impact)
+    // P0-3 : amount_points → amountImpactCredits (Crédits Impact)
     amountImpactCredits: record.amount_points,
     status: normalizeStatus(record.status),
     createdAt: record.created_at,
@@ -153,7 +153,7 @@ export function adaptMockSupportToProducerSupport(
   return {
     id: record.id,
     amountEuros: record.amount_eur_equivalent,
-    // P0-3 : amount_points → amountImpactCredits (Credits Impact)
+    // P0-3 : amount_points → amountImpactCredits (Crédits Impact)
     amountImpactCredits: record.amount_points,
     status: record.status,
     createdAt: record.created_at,
@@ -197,7 +197,7 @@ export function adaptNormalizedDonationToViewModel(
   return {
     id: record.id,
     amountEuros: record.amount_eur,
-    // P0-1 : Don pur → Graines (pas Credits Impact)
+    // P0-1 : Don pur → Graines (pas Crédits Impact)
     seedsReward: record.amount_points,
     status: normalizeStatus(record.status),
     createdAt: record.created_at,

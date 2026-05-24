@@ -79,7 +79,7 @@ export function getMockAdvantages(): Advantage[] {
       whatYouGet:
         'Un code de réduction unique, à utiliser directement sur le site Ilanga Nature lors de ta commande du coffret découverte.',
       howItWorks: [
-        'Utilise 200 Credits Impact pour débloquer le code.',
+        'Utilise 200 Crédits Impact pour débloquer le code.',
         "Reçois ton code partenaire unique affiché à l'écran.",
         'Copie le code et termine ta commande sur le site Ilanga Nature.',
       ],
@@ -101,7 +101,7 @@ export function getMockAdvantages(): Advantage[] {
       whatYouGet:
         "Un code de livraison gratuite, valable sur la boutique Habeebee dès 30 € d'achat.",
       howItWorks: [
-        'Utilise 150 Credits Impact pour débloquer le code.',
+        'Utilise 150 Crédits Impact pour débloquer le code.',
         'Reçois ton code partenaire unique.',
         'Applique-le au moment de ta commande sur la boutique Habeebee.',
       ],
@@ -128,7 +128,7 @@ export function getMockAdvantages(): Advantage[] {
       whatYouGet:
         "Une vidéo terrain de 8 minutes tournée dans les ruchers partenaires d'Ilanga, accompagnée d'un carnet de récolte et de photos documentaires.",
       howItWorks: [
-        'Débloque le contenu avec 900 Credits Impact.',
+        'Débloque le contenu avec 900 Crédits Impact.',
         'Accède à la vidéo terrain et au carnet documentaire.',
         'Retrouve les liens avec le projet et les espèces dans Apprendre.',
       ],
@@ -155,7 +155,7 @@ export function getMockAdvantages(): Advantage[] {
       whatYouGet:
         "Une place pour une visite guidée de 2h avec l'équipe Habeebee. Dégustation de miels incluse.",
       howItWorks: [
-        'Réserve ta place avec 1 200 Credits Impact.',
+        'Réserve ta place avec 1 200 Crédits Impact.',
         "L'équipe Habeebee te contacte pour choisir une date.",
         "Présente-toi au rucher à l'heure convenue.",
       ],

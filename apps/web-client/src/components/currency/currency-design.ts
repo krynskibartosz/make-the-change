@@ -1,7 +1,7 @@
 /**
  * Système de design des monnaies — Vision A
  *
- * Une seule monnaie : `impactCredits` (Credits Impact).
+ * Une seule monnaie : `impactCredits` (Crédits Impact).
  * Les Graines (`seeds`) ont été supprimées (Phase 4 du refactor stratégique).
  * Le kind 'seeds' reste accepté en type pour compat ascendante mais est traité
  * comme impactCredits côté rendu.
@@ -31,8 +31,8 @@ export function formatCurrencyValue(value: number): string {
 
 const IMPACT_CREDITS_DESIGN: CurrencyDesign = {
   icon: 'ImpactCreditIcon',
-  label: 'Credits Impact',
-  ariaLabel: 'Credits Impact',
+  label: 'Crédits Impact',
+  ariaLabel: 'Crédits Impact',
   toneClassName: 'text-amber-300',
   softToneClassName: 'text-amber-200',
   surfaceClassName: 'border-amber-300/25 bg-amber-300/10 text-amber-300',

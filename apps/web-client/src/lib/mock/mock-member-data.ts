@@ -18,10 +18,10 @@ import {
  * sans modifier les données legacy.
  */
 
-/** Alias sémantique pour les prix en Credits Impact (legacy: price_points) */
+/** Alias sémantique pour les prix en Crédits Impact (legacy: price_points) */
 export const IMPACT_CREDITS_PRICE = 'price_points' as const
 
-/** Alias sémantique pour le montant en Credits Impact (legacy: amount_points) */
+/** Alias sémantique pour le montant en Crédits Impact (legacy: amount_points) */
 export const IMPACT_CREDITS_AMOUNT = 'amount_points' as const
 
 export type MockSupportRecord = {
@@ -382,14 +382,14 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-welcome-bonus',
     label: 'Bonus de bienvenue',
     delta: 250,
-    impactDelta: 0, // Graines — pas de Credits Impact sans soutien producteur
+    impactDelta: 0, // Graines — pas de Crédits Impact sans soutien producteur
     createdAt: '2026-01-12T09:00:00.000Z',
   },
   {
     id: 'mock-points-allocation-february',
     label: 'Allocation mensuelle Pollinisateur+',
     delta: 1200,
-    impactDelta: 0, // Graines d'abonnement — pas de Credits Impact
+    impactDelta: 0, // Graines d'abonnement — pas de Crédits Impact
     createdAt: '2026-02-03T08:00:00.000Z',
   },
   {
@@ -403,7 +403,7 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-support-manakara',
     label: 'Contribution projet Manakara',
     delta: -780,
-    impactDelta: 780, // Credits Impact — soutien producteur
+    impactDelta: 780, // Crédits Impact — soutien producteur
     createdAt: '2026-03-28T16:45:00.000Z',
   },
   {
@@ -424,7 +424,7 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-support-antsirabe',
     label: 'Contribution projet Antsirabe',
     delta: -395,
-    impactDelta: 395, // Credits Impact — soutien producteur
+    impactDelta: 395, // Crédits Impact — soutien producteur
     createdAt: '2026-04-14T09:20:00.000Z',
   },
   {
@@ -438,28 +438,28 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-eco-fact',
     label: "Eco-Fact du jour complété",
     delta: 50,
-    impactDelta: 0, // Graines — défis ne génèrent pas de Credits Impact
+    impactDelta: 0, // Graines — défis ne génèrent pas de Crédits Impact
     createdAt: '2026-04-17T07:30:00.000Z',
   },
   {
     id: 'mock-points-daily-harvest',
     label: 'Récolte quotidienne',
     delta: 50,
-    impactDelta: 0, // Graines — défis ne génèrent pas de Credits Impact
+    impactDelta: 0, // Graines — défis ne génèrent pas de Crédits Impact
     createdAt: '2026-04-17T07:32:00.000Z',
   },
   {
     id: 'mock-points-referral',
     label: 'Parrainage confirme',
     delta: 500,
-    impactDelta: 0, // Graines — engagement ne génère pas de Credits Impact
+    impactDelta: 0, // Graines — engagement ne génère pas de Crédits Impact
     createdAt: '2026-04-17T18:00:00.000Z',
   },
   {
     id: 'mock-points-streak',
     label: 'Serie de 12 jours maintenue',
     delta: 430,
-    impactDelta: 0, // Graines — streak ne génère pas de Credits Impact
+    impactDelta: 0, // Graines — streak ne génère pas de Crédits Impact
     createdAt: '2026-04-18T06:45:00.000Z',
   },
 ]
@@ -505,7 +505,7 @@ const STARTER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     id: 'mock-points-starter',
     label: 'Bonus de depart',
     delta: 120,
-    impactDelta: 0, // Graines de départ — pas de Credits Impact sans soutien producteur
+    impactDelta: 0, // Graines de départ — pas de Crédits Impact sans soutien producteur
     createdAt: '2026-04-17T10:00:00.000Z',
   },
 ]

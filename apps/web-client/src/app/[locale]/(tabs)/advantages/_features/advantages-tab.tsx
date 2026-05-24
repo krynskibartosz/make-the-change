@@ -30,7 +30,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           </p>
         </div>
 
-        {/* Badge flottant Credits Impact */}
+        {/* Badge flottant Crédits Impact */}
         {isConnected && <ImpactCreditsFloatingBadge impactCredits={impactCredits} />}
 
         {/* ── 1. À utiliser maintenant — tuiles ouvertes 2 col ── */}

@@ -38,7 +38,7 @@ function BalanceCard({ balance }: { balance: number }) {
       <div className="absolute inset-0 bg-gradient-radial from-amber-400/5 via-transparent to-transparent opacity-50" />
       <div className="relative">
         <p className="mb-2 text-xs font-medium tracking-widest text-white/50 uppercase">
-          Credits Impact disponibles
+          Crédits Impact disponibles
         </p>
         <CurrencyAmount kind="impactCredits" value={balance} className="text-5xl font-black text-white" />
       </div>
@@ -75,7 +75,7 @@ function GoalProgressBar() {
         />
       </div>
       <p className="text-xs text-white/60">
-        Plus que {remaining} Credits Impact pour atteindre l'objectif.
+        Plus que {remaining} Crédits Impact pour atteindre l'objectif.
       </p>
     </div>
   )
@@ -131,7 +131,7 @@ function VisitorState() {
           Ton impact a de la valeur.
         </h1>
         <p className="max-w-md text-lg text-white/70">
-          Rejoins le collectif, soutiens des projets producteurs et transforme tes Credits Impact en avantages éco-responsables.
+          Rejoins le collectif, soutiens des projets producteurs et transforme tes Crédits Impact en avantages éco-responsables.
         </p>
         <div className="flex w-full max-w-sm flex-col gap-3">
           <Link href="/onboarding/step-0">
@@ -172,7 +172,7 @@ function BeginnerState() {
             Tout commence par un soutien concret.
           </h3>
           <p className="text-white/70">
-            Ton portefeuille est prêt. Soutiens ton premier projet producteur pour générer tes premiers Credits Impact.
+            Ton portefeuille est prêt. Soutiens ton premier projet producteur pour générer tes premiers Crédits Impact.
           </p>
         </div>
 

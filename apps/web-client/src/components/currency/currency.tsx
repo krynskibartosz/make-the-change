@@ -1,7 +1,7 @@
 /**
  * Composants de monnaie — Vision A
  *
- * Une seule monnaie restante : 'impactCredits' (Credits Impact).
+ * Une seule monnaie restante : 'impactCredits' (Crédits Impact).
  * Les Graines ont été supprimées dans Phase 4 du refactor stratégique.
  */
 

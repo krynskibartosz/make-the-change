@@ -30,7 +30,7 @@ export function ImpactCreditsFloatingBadge({ impactCredits }: { impactCredits: n
       <Link
         href="/advantages/balance"
         prefetch={false}
-        aria-label={`Solde : ${impactCredits} Credits Impact`}
+        aria-label={`Solde : ${impactCredits} Crédits Impact`}
         className={cn(
           'fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-50 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/5 bg-black/50 px-3 shadow-sm backdrop-blur-md transition-all duration-300 active:bg-white/10',
           visible ? 'opacity-100' : 'pointer-events-none opacity-0',

@@ -49,7 +49,7 @@ export function AdvantagesTabHeader({ impactCredits }: AdvantagesTabHeaderProps)
       <Link
         href="/advantages/balance"
         prefetch={false}
-        aria-label={`${impactCredits} Credits Impact`}
+        aria-label={`${impactCredits} Crédits Impact`}
         className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/5 bg-black/40 px-3 shadow-sm backdrop-blur-md transition-colors active:bg-white/10"
       >
         <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />

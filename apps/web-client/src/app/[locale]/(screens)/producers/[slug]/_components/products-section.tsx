@@ -70,7 +70,7 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
         <div className={hasCatalog ? 'mt-10' : ''}>
           <div className="px-4">
             <h2 className={typo.sectionTitle}>Produits accessibles</h2>
-            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Disponibles avec vos Credits Impact.</p>
+            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Disponibles avec vos Crédits Impact.</p>
           </div>
 
           {/* Carousel horizontal — même pattern que projets et biodex */}
@@ -110,7 +110,7 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
                           className="text-[14px] font-extrabold"
                         />
                         <span className="text-[12px] font-medium text-white/50">
-                          Credits Impact
+                          Crédits Impact
                         </span>
                       </div>
                     )}

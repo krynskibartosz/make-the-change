@@ -182,7 +182,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     if (label.includes('projet')) {
       icon = Leaf
       color = 'text-primary'
-    } else if (label.includes('Soutien') || label.includes('Investisseur')) {
+    } else if (label.includes('Soutien') || label.includes('Contributeur')) {
       icon = Wallet
       color = 'text-primary'
     } else if (label.includes('Top')) {

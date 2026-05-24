@@ -43,8 +43,8 @@ export function AdvantageDetail({ advantage, showFloatingBack }: Props) {
   const ctaLabel = isSoon
     ? 'Bientôt disponible'
     : advantage.type === 'partner_code' || advantage.type === 'content'
-      ? `Débloquer · ${advantage.priceCredits.toLocaleString('fr-FR')} Credits Impact`
-      : `Réserver · ${advantage.priceCredits.toLocaleString('fr-FR')} Credits Impact`
+      ? `Débloquer · ${advantage.priceCredits.toLocaleString('fr-FR')} Crédits Impact`
+      : `Réserver · ${advantage.priceCredits.toLocaleString('fr-FR')} Crédits Impact`
 
   const isActioned =
     advantage.type === 'partner_code' || advantage.type === 'content' ? unlocked : reserved

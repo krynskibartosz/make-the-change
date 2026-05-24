@@ -54,7 +54,7 @@ export function mapSupportToProducerSupport(
   return {
     id: record.id,
     amountEuros: record.amount_eur_equivalent,
-    // R0-3 : amount_points → amountImpactCredits (Credits Impact)
+    // R0-3 : amount_points → amountImpactCredits (Crédits Impact)
     amountImpactCredits: record.amount_points,
     status: record.status,
     createdAt: record.created_at,
@@ -100,7 +100,7 @@ export const PRODUCER_SUPPORT_LABELS = {
   /** Montant contribué */
   contributedAmount: 'Montant contribué',
   /** Crédits reçus */
-  creditsReceived: 'Credits Impact reçus',
+  creditsReceived: 'Crédits Impact reçus',
   /** Reçu de contribution */
   receiptLabel: 'Reçu de contribution',
 } as const

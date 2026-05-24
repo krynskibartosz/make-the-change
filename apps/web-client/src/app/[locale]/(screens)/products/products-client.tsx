@@ -108,7 +108,7 @@ export function ProductsClient({
           <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">{tProducts('title')}</h1>
           <p className="text-white/60 text-[15px] mt-3 font-medium">{tProducts('subtitle')}</p>
           <p className="text-white/35 text-[11px] mt-1.5 font-medium uppercase tracking-wider">
-            Les prix sont affichés en Credits Impact
+            Les prix sont affichés en Crédits Impact
           </p>
         </div>
         {isConnected && (

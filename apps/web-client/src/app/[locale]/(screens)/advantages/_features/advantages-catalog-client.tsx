@@ -26,7 +26,7 @@ export function AdvantagesCatalogClient({ advantages }: Props) {
   return (
     <div className="px-4 pb-24 pt-6">
       <p className="mb-6 text-[14px] font-medium leading-relaxed text-white/50">
-        Tous les avantages disponibles avec tes Credits Impact.
+        Tous les avantages disponibles avec tes Crédits Impact.
       </p>
 
       <ul className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-6 p-0">
