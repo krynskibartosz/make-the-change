@@ -85,7 +85,7 @@ const formatEuros = (value: number): string => {
   }).format(Math.round(value))
 }
 
-type FilterType = 'all' | 'support' | 'donation' | 'order'
+type FilterType = 'all' | 'support' | 'contribution' | 'order'
 
 type ActivityListProps = {
   userSupports: NormalizedSupport[]
@@ -106,14 +106,14 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
   const filteredActivities = allActivities.filter((activity) => {
     if (filter === 'all') return true
     if (filter === 'support') return activity.type === 'support'
-    if (filter === 'donation') return activity.type === 'donation'
+    if (filter === 'contribution') return activity.type === 'contribution'
     if (filter === 'order') return activity.type === 'order'
     return true
   })
 
   // Calculate filtered totals for bento display
   const filteredSupports = filter === 'all' || filter === 'support' ? userSupports : []
-  const filteredContributions = filter === 'all' || filter === 'donation' ? userDonations : []
+  const filteredContributions = filter === 'all' || filter === 'contribution' ? userDonations : []
   const filteredOrders = filter === 'all' || filter === 'order' ? userOrders : []
   const displayContributed = [...filteredSupports, ...filteredContributions].reduce((sum, item) => sum + item.amount_eur, 0)
   const displayPoints = [...filteredSupports, ...filteredContributions, ...filteredOrders].reduce((sum, item) => sum + item.amount_points, 0)
@@ -211,7 +211,7 @@ export function ActivityList({ userSupports, userDonations, userOrders, totalSup
               )
 
               return <div key={supportItem.id}>{content}</div>
-            } else if (activity.type === 'donation') {
+            } else if (activity.type === 'contribution') {
               const donation = activity
               // [R6] Adapter vers view-model donation pour affichage moderne
               const donationVM = adaptNormalizedContributionToViewModel(donation)

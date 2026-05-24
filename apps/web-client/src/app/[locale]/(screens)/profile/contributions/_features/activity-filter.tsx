@@ -1,6 +1,6 @@
 'use client'
 
-type FilterType = 'all' | 'support' | 'donation' | 'order'
+type FilterType = 'all' | 'support' | 'contribution' | 'order'
 
 type ActivityFilterProps = {
   onFilterChange: (filter: FilterType) => void
@@ -31,14 +31,14 @@ export function ActivityFilter({ onFilterChange, currentFilter }: ActivityFilter
         Soutiens
       </button>
       <button
-        onClick={() => onFilterChange('donation')}
+        onClick={() => onFilterChange('contribution')}
         className={`flex-1 py-2 rounded-lg text-sm transition-all ${
-          currentFilter === 'donation'
+          currentFilter === 'contribution'
             ? 'bg-white/15 text-white font-semibold shadow-sm'
             : 'text-gray-500 hover:text-gray-300 font-medium'
         }`}
       >
-        Dons
+        Contributions
       </button>
       <button
         onClick={() => onFilterChange('order')}
