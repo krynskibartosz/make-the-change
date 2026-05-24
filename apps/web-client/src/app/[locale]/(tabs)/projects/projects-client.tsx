@@ -296,7 +296,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
         aria-hidden={isMapView}
       >
         {/* ── TITRE (scroll avec le contenu) ──────────────────────────────── */}
-        <div className="px-4 pt-6 pb-3">
+        <div className="px-4 pt-6 pb-8">
           <h1 className="text-4xl font-black text-white tracking-tighter leading-tight">
             Nos projets
           </h1>
@@ -312,7 +312,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
             <>
               {donationProjects.length > 0 && (
                 <section className="px-4">
-                  <div className="mb-8">
+                  <div className="mb-10">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
                       Faire un don
                     </h2>
@@ -330,7 +330,7 @@ export function ProjectsClient({ projects, initialView }: ProjectsClientProps) {
 
               {supportProjects.length > 0 && (
                 <section className={`px-4${donationProjects.length > 0 ? ' mt-20' : ''}`}>
-                  <div className="mb-8">
+                  <div className="mb-10">
                     <h2 className="text-[20px] font-black leading-tight tracking-tight text-white">
                       Soutenir un producteur
                     </h2>
