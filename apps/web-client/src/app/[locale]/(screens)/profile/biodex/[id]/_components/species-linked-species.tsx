@@ -33,6 +33,7 @@ const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-poisson-papillon': '/images/species-thumbnails/poisson-papillon.png',
   'species-hippocampe': '/images/species-thumbnails/hippocampe.png',
   'species-tortue-verte': '/images/species-thumbnails/tortue-verte.png',
+  'species-coraux-tropicaux': '/images/species-thumbnails/coraux-tropicaux.png',
 }
 
 interface SpeciesLinkedSpeciesProps {

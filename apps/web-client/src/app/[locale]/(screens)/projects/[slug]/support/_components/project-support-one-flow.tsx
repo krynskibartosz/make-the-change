@@ -6,8 +6,6 @@ import {
   Card,
   CardContent,
 } from '@make-the-change/core/ui'
-import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
 import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Grid3X3, Leaf, Loader2, Lock, Mail, TreePine, Waves } from 'lucide-react'
 import { MobileSheet } from '../../_components/shared/mobile-sheet'
 import { CurrencyIcon } from '@/components/currency'
@@ -59,6 +57,7 @@ const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-poisson-papillon': '/images/species-thumbnails/poisson-papillon.png',
   'species-hippocampe': '/images/species-thumbnails/hippocampe.png',
   'species-tortue-verte': '/images/species-thumbnails/tortue-verte.png',
+  'species-coraux-tropicaux': '/images/species-thumbnails/coraux-tropicaux.png',
 }
 
 type FlowStep = 'impact' | 'payment' | 'success'
@@ -76,42 +75,11 @@ const IMPACT_ICON_MAP: Record<ImpactIconKey, React.ComponentType<{ className?: s
   area:     Grid3X3,
   fish:     Fish,
   survival: Activity,
+  hives:    Bug,
 }
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
 const REWARD_PREVIEW_IMAGE = '/images/dioramas/transparent/abeille-noire.png' // Image générique de fallback
-// Helpers moved to bottom
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-  : null
-
-const stripeAppearance = {
-  theme: 'stripe',
-  variables: {
-    colorPrimary: '#a3e635',
-    colorBackground: 'rgba(255,255,255,0.02)',
-    colorText: '#ffffff',
-    colorDanger: '#ef4444',
-    borderRadius: '12px',
-  },
-  rules: {
-    '.Input': {
-      backgroundColor: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.12)',
-      boxShadow: 'none',
-    },
-    '.Input:focus': {
-      border: '1px solid rgba(163,230,53,0.6)',
-      boxShadow: '0 0 0 1px rgba(163,230,53,0.3)',
-    },
-    '.Label': {
-      color: 'rgba(255,255,255,0.65)',
-      fontWeight: '600',
-      letterSpacing: '0.02em',
-    },
-  },
-} as const
-
 type ProjectSupportOneFlowProps = {
   project: {
     id: string
