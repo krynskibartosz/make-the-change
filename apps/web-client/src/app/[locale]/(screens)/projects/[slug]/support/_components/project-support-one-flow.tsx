@@ -10,7 +10,7 @@ import { Elements, ExpressCheckoutElement, PaymentElement } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js'
 import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Grid3X3, Leaf, Loader2, Lock, Mail, TreePine, Waves } from 'lucide-react'
 import { MobileSheet } from '../../_components/shared/mobile-sheet'
-import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
+import { CurrencyIcon } from '@/components/currency'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -107,7 +107,6 @@ type ProjectSupportOneFlowProps = {
   }
   presentation?: 'modal' | 'page'
   isAuthenticated: boolean
-  source?: string
   initialAmount?: number
   discoveredSpeciesId?: string | null
   species?: ProjectSpecies[]
@@ -554,13 +553,13 @@ export function ProjectSupportOneFlow({
   isAuthenticated,
   initialAmount,
   discoveredSpeciesId = null,
-  species,
+  species = [],
 }: ProjectSupportOneFlowProps) {
   const t = useTranslations('projects.support_page')
   const router = useRouter()
   const haptic = useHaptic()
 
-  const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string } | null>(null)
+  const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string; image_url?: string | null } | null>(null)
 
   const rules = support.getSupportRules(project.type)
 
@@ -568,7 +567,7 @@ export function ProjectSupportOneFlow({
     if (discoveredSpeciesId) {
       getMockSpeciesContextClient(discoveredSpeciesId).then((species) => {
         if (species) {
-          setDiscoveredSpecies({ name_default: species.name_default })
+          setDiscoveredSpecies({ name_default: species.name_default, image_url: species.image_url })
         }
       })
     }
@@ -770,7 +769,6 @@ export function ProjectSupportOneFlow({
 
   const showGuestClaimFooter = step === 'success' && !isAuthenticated && !claimSaved
 
-  const quickAmounts = QUICK_AMOUNTS
 
   const glowColor = (() => {
     const t = project.type?.toLowerCase() ?? ''
@@ -823,6 +821,7 @@ export function ProjectSupportOneFlow({
       >
         {presentation === 'modal' && step === 'payment' ? (
           <button
+            type="button"
             onClick={() => setStep('impact')}
             className="absolute top-4 left-4 z-30 p-2"
             aria-label="Retour"
@@ -873,7 +872,7 @@ export function ProjectSupportOneFlow({
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-2">
-                {quickAmounts.map((boundedValue) => (
+                {QUICK_AMOUNTS.map((boundedValue) => (
                   <button
                     key={boundedValue}
                     type="button"
@@ -1060,8 +1059,8 @@ export function ProjectSupportOneFlow({
                     }
                   >
                     <img
-                      src={REWARD_PREVIEW_IMAGE}
-                      alt="Espèce débloquée"
+                      src={discoveredSpecies?.image_url ?? REWARD_PREVIEW_IMAGE}
+                      alt="Espèce d��bloquée"
                       className={cn(
                         'w-full h-full object-contain transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
                         phase === 'tension' ? 'brightness-0 opacity-50 animate-pulse' : '',

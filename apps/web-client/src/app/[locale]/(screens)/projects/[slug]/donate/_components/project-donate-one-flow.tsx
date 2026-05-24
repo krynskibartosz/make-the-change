@@ -6,7 +6,8 @@ import {
   CardContent,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Camera, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail } from 'lucide-react'
-import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
+import { CurrencyIcon } from '@/components/currency'
+import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
 import { motion } from 'framer-motion'
 import { MobileSheet } from '../../_components/shared/mobile-sheet'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -25,7 +26,10 @@ type LootPhase = 'tension' | 'flash' | 'euphoria' | 'resolved'
 type SheetKind = 'seeds' | 'tracking' | null
 
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
+const QUICK_AMOUNTS = [20, 50, 100]
 const REWARD_PREVIEW_IMAGE = '/images/dioramas/transparent/abeille-noire.png'
+const MIN_DONATION_EUR = 1
+const MAX_DONATION_EUR = 10_000
 
 type ProjectDonateOneFlowProps = {
   project: {
@@ -41,7 +45,6 @@ type ProjectDonateOneFlowProps = {
   }
   presentation?: 'modal' | 'page'
   isAuthenticated: boolean
-  source?: string
   discoveredSpeciesId?: string | null
   initialOptionId?: string | null
 }
@@ -322,7 +325,6 @@ export function ProjectDonateOneFlow({
 
   const [discoveredSpecies, setDiscoveredSpecies] = useState<{ name_default: string; image_url?: string | null } | null>(null)
 
-  const quickAmounts = [20, 50, 100]
   const defaultAmount = 20
 
   const [amountEur, setAmountEur] = useState(() => {
@@ -377,6 +379,7 @@ export function ProjectDonateOneFlow({
   const unitsRestored = donationMetrics.kind === 'reef'
     ? donationMetrics.corals
     : matchedOption?.impact.unitsRestored ?? Math.max(1, Math.round(amountEur / 30))
+  const unitLabel = donationMetrics.kind === 'reef' ? 'coraux' : 'unités restaurées'
 
   const hasSpecies = Boolean(discoveredSpeciesId)
 
@@ -468,7 +471,7 @@ export function ProjectDonateOneFlow({
     const parsed = Number(digitsOnly)
     if (!Number.isFinite(parsed)) return
 
-    setAmountEur(parsed)
+    setAmountEur(Math.min(Math.max(Math.round(parsed), MIN_DONATION_EUR), MAX_DONATION_EUR))
   }
 
   const handleAmountBlur = () => {
@@ -488,7 +491,7 @@ export function ProjectDonateOneFlow({
 
   const goToSuccess = () => {
     if (!isAuthenticated) {
-      if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) {
+      if (!isValidEmail(guestEmail)) {
         setGuestEmailError('Ajoutez un email valide pour continuer.')
         return
       }
@@ -502,7 +505,7 @@ export function ProjectDonateOneFlow({
   }
 
   const submitClaim = () => {
-    if (!guestEmail || !/.+@.+\..+/.test(guestEmail)) return
+    if (!isValidEmail(guestEmail)) return
     setIsSendingMagicLink(true)
     setTimeout(() => {
       setIsSendingMagicLink(false)
@@ -560,6 +563,7 @@ export function ProjectDonateOneFlow({
       >
         {presentation === 'modal' && step === 'payment' ? (
           <button
+            type="button"
             onClick={() => setStep('impact')}
             className="absolute top-4 left-4 z-30 p-2"
             aria-label="Retour"
@@ -611,7 +615,7 @@ export function ProjectDonateOneFlow({
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-2">
-                {quickAmounts.map((val) => (
+                {QUICK_AMOUNTS.map((val) => (
                   <button
                     key={val}
                     type="button"
@@ -758,7 +762,7 @@ export function ProjectDonateOneFlow({
               </motion.h1>
               <p className="mt-3 mb-10 max-w-xs mx-auto text-balance text-center text-lg text-white/60 [@media(max-height:800px)]:mb-6 [@media(max-height:800px)]:text-base">
                 Votre don de <span className="font-bold text-white tabular-nums">{formattedAmount} €</span> est associé à environ{' '}
-                <span className="font-bold text-white tabular-nums">{unitsRestored}</span> coraux du projet.
+                <span className="font-bold text-white tabular-nums">{unitsRestored}</span> {unitLabel} du projet.
               </p>
 
               <motion.div
@@ -1020,10 +1024,6 @@ export function ProjectDonateOneFlow({
   )
 }
 
-function formatAmountPlain(value: number): string {
-  return `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)} €`
-}
-
-function formatAmountNumber(value: number): string {
-  return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value)
+function isValidEmail(value: string): boolean {
+  return /.+@.+\..+/.test(value)
 }
