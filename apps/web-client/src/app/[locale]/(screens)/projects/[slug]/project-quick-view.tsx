@@ -331,8 +331,8 @@ export async function ProjectQuickView({
               />
             </div>
 
-            {/* Nouvelles du terrain (flux terrain) */}
-            <div className="mt-14 px-4 sm:px-5">
+            {/* Nouvelles du terrain (point d'accès compact → bottom sheet) */}
+            <div className="mt-8 px-4 sm:px-5">
               <ProjectUpdatesFeed updates={getMockProjectUpdates(project.slug)} />
             </div>
 

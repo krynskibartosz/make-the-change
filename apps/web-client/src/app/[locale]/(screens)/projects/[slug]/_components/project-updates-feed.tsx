@@ -9,8 +9,6 @@ type ProjectUpdatesFeedProps = {
   updates: ProjectUpdate[]
 }
 
-const VISIBLE_LIMIT = 3
-
 const MILESTONE_LABEL: Record<NonNullable<ProjectUpdate['milestone']>, string> = {
   funding: 'Financement',
   production: 'Production',
@@ -49,7 +47,7 @@ function formatRelativeDate(iso: string): string {
   }
 }
 
-function UpdateRow({ update, dense = false }: { update: ProjectUpdate; dense?: boolean }) {
+function UpdateRow({ update }: { update: ProjectUpdate }) {
   const Icon = update.milestone ? MILESTONE_ICON[update.milestone] : null
   const milestoneLabel = update.milestone ? MILESTONE_LABEL[update.milestone] : null
 
@@ -69,15 +67,11 @@ function UpdateRow({ update, dense = false }: { update: ProjectUpdate; dense?: b
         <img
           src={update.imageUrl}
           alt={update.title}
-          className={`mt-3 w-full rounded-2xl object-cover ${dense ? 'aspect-[16/7]' : 'aspect-[16/8]'}`}
+          className="mt-3 aspect-[16/8] w-full rounded-2xl object-cover"
         />
       ) : null}
 
-      <p
-        className={`mt-3 text-[13px] leading-relaxed text-white/60 ${dense ? 'line-clamp-2' : ''}`}
-      >
-        {update.body}
-      </p>
+      <p className="mt-3 text-[13px] leading-relaxed text-white/60">{update.body}</p>
 
       {update.authorName ? (
         <p className="mt-2 text-[12px] font-medium text-white/40">— {update.authorName}</p>
@@ -89,58 +83,32 @@ function UpdateRow({ update, dense = false }: { update: ProjectUpdate; dense?: b
 export function ProjectUpdatesFeed({ updates }: ProjectUpdatesFeedProps) {
   const [isOpen, setIsOpen] = useState(false)
 
+  // Pas d'updates → on ne montre rien sur la page projet.
+  // Le suivi ne doit pas occuper d'espace tant qu'il n'a rien à dire.
   if (updates.length === 0) {
-    return (
-      <section>
-        <p className="mb-3 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-          Nouvelles du terrain
-        </p>
-        <p className="text-sm leading-relaxed text-white/45">
-          Pas encore de nouvelles publiées par le partenaire. Les prochaines informations
-          apparaîtront ici dès qu&apos;elles seront disponibles.
-        </p>
-      </section>
-    )
+    return null
   }
 
-  const visible = updates.slice(0, VISIBLE_LIMIT)
-  const hasMore = updates.length > VISIBLE_LIMIT
-  const hiddenCount = updates.length - visible.length
+  const latest = updates[0]
 
   return (
     <>
-      <section>
-        <div className="mb-3 flex items-end justify-between px-1">
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
-            Nouvelles du terrain
-          </p>
-          <span className="text-[11px] font-semibold text-white/35">
-            {updates.length} update{updates.length > 1 ? 's' : ''}
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="flex w-full items-center gap-3 rounded-xl bg-white/[0.025] px-4 py-3 text-left transition-colors hover:bg-white/[0.04]"
+      >
+        <Camera className="h-4 w-4 shrink-0 text-white/45" aria-hidden="true" />
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-sm font-bold text-white/70">
+            {updates.length} nouvelle{updates.length > 1 ? 's' : ''} du terrain
+          </span>
+          <span className="line-clamp-1 text-xs text-white/35">
+            {latest?.title} · {latest ? formatRelativeDate(latest.postedAt) : ''}
           </span>
         </div>
-
-        <ul className="m-0 list-none divide-y divide-white/[0.06] p-0">
-          {visible.map((update) => (
-            <UpdateRow key={update.id} update={update} dense />
-          ))}
-        </ul>
-
-        {hasMore ? (
-          <button
-            type="button"
-            onClick={() => setIsOpen(true)}
-            className="mt-4 flex w-full items-center justify-between rounded-2xl bg-white/[0.04] px-4 py-3 text-left transition-colors active:bg-white/[0.08]"
-          >
-            <span className="text-sm font-semibold text-white/75">
-              Voir toutes les nouvelles
-            </span>
-            <span className="inline-flex items-center gap-2 text-[12px] font-semibold text-white/45">
-              +{hiddenCount}
-              <ChevronUp className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </button>
-        ) : null}
-      </section>
+        <ChevronUp className="h-4 w-4 shrink-0 text-white/25" />
+      </button>
 
       <MobileSheet
         isOpen={isOpen}
@@ -148,7 +116,7 @@ export function ProjectUpdatesFeed({ updates }: ProjectUpdatesFeedProps) {
         title="Nouvelles du terrain"
       >
         <p className="mb-5 mt-1 text-[13px] leading-relaxed text-white/45">
-          Toutes les publications du partenaire sur le terrain.
+          Publications du partenaire sur le terrain.
         </p>
         <ul className="m-0 list-none divide-y divide-white/[0.06] p-0">
           {updates.map((update) => (
