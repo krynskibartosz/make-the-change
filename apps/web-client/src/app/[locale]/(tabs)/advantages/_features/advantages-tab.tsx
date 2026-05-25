@@ -114,6 +114,11 @@ function AdvantageCard({ advantage }: { advantage: Advantage }) {
           alt={advantage.title}
           className="h-full w-full object-cover"
         />
+        {advantage.imageBadge && (
+          <span className="absolute left-2 top-2 rounded-full bg-lime-300 px-2.5 py-1 text-[11px] font-black text-[#0B0F15] shadow-sm">
+            {advantage.imageBadge}
+          </span>
+        )}
         {advantage.status === 'coming_soon' && (
           <span className="absolute bottom-2 left-2 rounded-full bg-black/55 px-2 py-1 text-[10px] font-bold uppercase text-white/75">
             Bientôt

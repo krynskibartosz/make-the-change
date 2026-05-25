@@ -21,4 +21,9 @@ describe('V1 euro product catalogue', () => {
     ])
     expect(products.every((product) => !('price_points' in product))).toBe(true)
   })
+
+  it('uses optimized provisional visuals for each current product offer', () => {
+    expect(products.every((product) => product.image_url.endsWith('.webp'))).toBe(true)
+    expect(products.every((product) => product.isTemporaryVisual)).toBe(true)
+  })
 })

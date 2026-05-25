@@ -1,5 +1,6 @@
 const ID = '/images/producteurs/habeebee/identity'
 const MD = '/images/producteurs/habeebee/media'
+const SHOP = '/new-product-img-to-integrate'
 
 export const HABEEBEE_PATHS = {
   identity: {
@@ -12,7 +13,7 @@ export const HABEEBEE_PATHS = {
     hero: `${MD}/hero.jpg`,
     portrait: `${MD}/portrait.jpg`,
     portraitV2: `${MD}/portrait-v2.png`,
-    ruchesUrbaines: `${MD}/ruches-urbaine-pour-pollinistaeurs-locaux.png`,
+    ruchesUrbaines: `${MD}/ruches-urbaine-pour-pollinistaeurs-locaux.webp`,
     savonnerieInterieur: `${MD}/savonnerie-interieur.webp`,
     story1Formation: `${MD}/story-1-habeebeeculture-formation.webp`,
     story1V2: `${MD}/story-1-v2.png`,
@@ -24,5 +25,9 @@ export const HABEEBEE_PATHS = {
     story6Scouts: `${MD}/story-6-scouts.jpg`,
     story7Insertion: `${MD}/story-7-insertion.jpg`,
     story8Certificat: `${MD}/story-8-certificat-ecogarantie.png`,
+    shopBeeSurprised: `${SHOP}/habeebee-bee-surprised.webp`,
+    shopSavonDoux: `${SHOP}/habeebee-savon-doux.webp`,
+    shopShampoingSolide: `${SHOP}/habeebee-shampoing-solide.webp`,
+    advantageVisiteRucherUrbain: `${SHOP}/visite-rucher-urbain.webp`,
   },
 } as const

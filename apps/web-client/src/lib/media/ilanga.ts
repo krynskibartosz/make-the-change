@@ -1,5 +1,6 @@
 const ID = '/images/producteurs/illanga-nature/identity'
 const MD = '/images/producteurs/illanga-nature/media'
+const SHOP = '/new-product-img-to-integrate'
 
 export const ILANGA_PATHS = {
   identity: {
@@ -24,5 +25,9 @@ export const ILANGA_PATHS = {
     oliveraiToscane: `${MD}/oliverai-toscane.png`,
     produitsVanillesCollection: `${MD}/produits-vanilles-collection.jpg`,
     vanilleTerrainManakara: `${MD}/vanille-terrain-manakara.webp`,
+    shopCollection3Miels: `${SHOP}/ilanga-collection-3-miels.webp`,
+    shopMielEucalyptus: `${SHOP}/ilanga-miel-eucalyptus.webp`,
+    shopMielLitchi: `${SHOP}/ilanga-miel-litchi.webp`,
+    advantageCollection3MielsReduction: `${SHOP}/ilanga-collection-3-miels-reduction.webp`,
   },
 } as const

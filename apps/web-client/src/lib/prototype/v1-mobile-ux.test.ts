@@ -173,6 +173,34 @@ describe('V1 mobile prototype UX guardrails', () => {
     expect(detail.includes('returnTo=')).toBe(true)
   })
 
+  it('uses an image badge rather than discount wording in the advantage title', () => {
+    const advantages = readSource(
+      'src/app/[locale]/(screens)/advantages/_features/mock-advantages.ts',
+    )
+    const tab = readSource('src/app/[locale]/(tabs)/advantages/_features/advantages-tab.tsx')
+    const catalog = readSource(
+      'src/app/[locale]/(screens)/advantages/_features/advantages-catalog-client.tsx',
+    )
+    const detail = readSource(
+      'src/app/[locale]/(screens)/advantages/[id]/_features/advantage-detail.tsx',
+    )
+
+    expect(advantages.includes("imageBadge: '-10 %'")).toBe(true)
+    expectNoMatches(advantages, [/title: '-10 %/g], 'discount advantage title')
+    expect(tab.includes('advantage.imageBadge')).toBe(true)
+    expect(catalog.includes('advantage.imageBadge')).toBe(true)
+    expect(detail.includes('advantage.imageBadge')).toBe(true)
+  })
+
+  it('renders the full advantages catalogue during intercepted mobile navigation', () => {
+    const catalogModal = readSource('src/app/[locale]/@modal/(.)advantages/catalog/page.tsx')
+
+    expect(catalogModal.includes('FullScreenSlideModal')).toBe(true)
+    expect(catalogModal.includes('AdvantagesCatalogClient')).toBe(true)
+    expect(catalogModal.includes('getMockAdvantages')).toBe(true)
+    expectNoMatches(catalogModal, [/return null/g], 'intercepted advantages catalogue')
+  })
+
   it('shows seller responsibility and product conditions before prototype payment', () => {
     const productPayment = readSource(
       'src/app/[locale]/(screens)/products/cart/product-cart-client.tsx',

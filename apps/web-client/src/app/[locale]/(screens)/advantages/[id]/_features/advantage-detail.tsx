@@ -70,7 +70,7 @@ export function AdvantageDetail({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F15] via-[#0B0F15]/20 to-transparent" />
           <span className="absolute bottom-4 left-4 rounded-full bg-lime-300/15 px-3 py-1 text-[10px] font-black uppercase text-lime-300">
-            {advantage.type === 'discount' ? 'Réduction partenaire' : 'Expérience'}
+            {advantage.imageBadge ? `${advantage.imageBadge} · Réduction partenaire` : 'Expérience'}
           </span>
         </div>
 

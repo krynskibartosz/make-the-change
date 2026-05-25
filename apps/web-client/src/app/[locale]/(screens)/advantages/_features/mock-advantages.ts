@@ -1,3 +1,5 @@
+import { HABEEBEE_PATHS } from '@/lib/media/habeebee'
+import { ILANGA_PATHS } from '@/lib/media/ilanga'
 import {
   MOCK_PRODUCER_HABEEBEE_SLUG,
   MOCK_PRODUCER_ILANGA_SLUG,
@@ -15,6 +17,7 @@ export type Advantage = {
   partner: string
   location: string
   imageUrl: string
+  imageBadge?: string
   isTemporaryVisual: boolean
   priceCredits: number
   status: AdvantageStatus
@@ -32,10 +35,11 @@ const ADVANTAGES: Advantage[] = [
   {
     id: 'code-ilanga-coffret-10',
     type: 'discount',
-    title: '-10 % sur la Collection de 3 Miels Ilanga',
+    title: 'Collection de 3 Miels Ilanga',
     partner: 'Ilanga Nature',
     location: 'Mariembourg, Belgique',
-    imageUrl: '/images/producteurs/illanga-nature/media/produits-miels-trio.jpg',
+    imageUrl: ILANGA_PATHS.media.advantageCollection3MielsReduction,
+    imageBadge: '-10 %',
     isTemporaryVisual: true,
     priceCredits: 200,
     status: 'available',
@@ -59,7 +63,7 @@ const ADVANTAGES: Advantage[] = [
     title: 'Visite de rucher urbain Habeebee',
     partner: 'Habeebee',
     location: 'Bruxelles, Belgique',
-    imageUrl: '/images/producteurs/habeebee/media/ruches-urbaine-pour-pollinistaeurs-locaux.png',
+    imageUrl: HABEEBEE_PATHS.media.advantageVisiteRucherUrbain,
     isTemporaryVisual: true,
     priceCredits: 1200,
     status: 'coming_soon',

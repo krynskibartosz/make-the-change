@@ -1,4 +1,5 @@
 import { getCurrentIsoDate } from '@/lib/date-utils'
+import { ILANGA_PATHS } from '@/lib/media/ilanga'
 import {
   MOCK_EXISTING_VIEWER_ID,
   MOCK_PRODUCER_ILANGA_SLUG,
@@ -179,7 +180,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus 250g",
           priceEuros: 7,
           pricePoints: 0,
-          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
+          cover_image_url: ILANGA_PATHS.media.shopMielEucalyptus,
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -214,7 +215,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: 'Collection de 3 Miels 250g',
           priceEuros: 26.5,
           pricePoints: 0,
-          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
+          cover_image_url: ILANGA_PATHS.media.shopCollection3Miels,
         },
         product: {
           id: MOCK_PRODUCT_ILANGA_COLLECTION_ID,
@@ -249,7 +250,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus 250g",
           priceEuros: 7,
           pricePoints: 0,
-          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
+          cover_image_url: ILANGA_PATHS.media.shopMielEucalyptus,
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -284,7 +285,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: 'Miel de Litchi 250g',
           priceEuros: 7,
           pricePoints: 0,
-          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
+          cover_image_url: ILANGA_PATHS.media.shopMielLitchi,
         },
         product: {
           id: MOCK_PRODUCT_LITCHI_ID,
@@ -319,7 +320,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: "Miel d'Eucalyptus 250g",
           priceEuros: 7,
           pricePoints: 0,
-          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
+          cover_image_url: ILANGA_PATHS.media.shopMielEucalyptus,
         },
         product: {
           id: MOCK_PRODUCT_EUCALYPTUS_ID,
@@ -354,7 +355,7 @@ const EXISTING_VIEWER_ORDERS: MockOrderRecord[] = [
           name: 'Collection de 3 Miels 250g',
           priceEuros: 26.5,
           pricePoints: 0,
-          cover_image_url: '/images/products/miel-eucalyptus-ilanga.png',
+          cover_image_url: ILANGA_PATHS.media.shopCollection3Miels,
         },
         product: {
           id: MOCK_PRODUCT_ILANGA_COLLECTION_ID,
