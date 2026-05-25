@@ -1,39 +1,49 @@
 import { Button, Progress } from '@make-the-change/core/ui'
 import { ChevronRight, Globe } from 'lucide-react'
 import { getLocale, getTranslations } from 'next-intl/server'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
+import type { Advantage } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
+import type {
+  ProducerProduct,
+  ProjectSpecies,
+} from '@/app/[locale]/(screens)/projects/_types/project'
 import { Link } from '@/i18n/navigation'
+import { formatAmountNumber } from '@/lib/formatters'
 import { sanitizeImageUrl } from '@/lib/image-url'
-import { resolveCountryCode, getCountryDisplayName } from '@/lib/location'
-import type { ProducerProduct, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
+import { getCountryDisplayName, resolveCountryCode } from '@/lib/location'
 import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { ProjectProducerProductsSection } from './_components/shared/producer-products'
-import { ProjectQuickViewHero } from './_components/quick-view/hero'
-import { SimilarProjectsCarousel } from './_components/shared/similar-projects-carousel'
-import { ProjectLearningLinks } from './_components/shared/learning-links'
-import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
+import { ProjectUpdatesFeed } from './_components/project-updates-feed'
 import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
 import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
 import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
-import { ProjectUpdatesFeed } from './_components/project-updates-feed'
-import { getProjectUpdates } from './project-detail-data'
-import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
-import type { PublicProject, RelatedProject } from './project-detail-data'
+import { ProjectQuickViewHero } from './_components/quick-view/hero'
+import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
+import { ProjectLearningLinks } from './_components/shared/learning-links'
+import { ProjectPartnerAdvantagesSection } from './_components/shared/partner-advantages'
+import { ProjectProducerProductsSection } from './_components/shared/producer-products'
+import { SimilarProjectsCarousel } from './_components/shared/similar-projects-carousel'
 import { buildProjectImpactItems } from './_utils/build-project-impact-items'
-import { type ProjectGlowTone, getProjectGlowTone, makeProjectGlowRgba } from './_utils/project-glow'
-import { formatAmountNumber } from '@/lib/formatters'
+import {
+  getProjectGlowTone,
+  makeProjectGlowRgba,
+  type ProjectGlowTone,
+} from './_utils/project-glow'
+import type { PublicProject, RelatedProject } from './project-detail-data'
+import { getProjectUpdates } from './project-detail-data'
 
 type ProjectQuickViewProps = {
   project: PublicProject
   species: ProjectSpecies[] | null
   producerProducts: ProducerProduct[] | null
+  producerAdvantages: Advantage[]
   relatedProjects: RelatedProject[]
 }
 
 const PROGRESS_INDICATOR_CLASS: Record<ProjectGlowTone, string> = {
   yellow: 'bg-gradient-to-r from-amber-500/60 to-lime-400/50',
-  blue:   'bg-gradient-to-r from-sky-500/60 to-teal-400/50',
-  green:  'bg-gradient-to-r from-emerald-600/60 to-emerald-400/50',
+  blue: 'bg-gradient-to-r from-sky-500/60 to-teal-400/50',
+  green: 'bg-gradient-to-r from-emerald-600/60 to-emerald-400/50',
 }
 
 const getWebsiteLabel = (url: string | null): string | null => {
@@ -45,7 +55,9 @@ const getWebsiteLabel = (url: string | null): string | null => {
   }
 }
 
-function getSimilarProjectsTitleKey(type: string | null | undefined): 'detail.similar_ocean' | 'detail.similar_land' | 'detail.similar_pollinators' {
+function getSimilarProjectsTitleKey(
+  type: string | null | undefined,
+): 'detail.similar_ocean' | 'detail.similar_land' | 'detail.similar_pollinators' {
   const t = type?.toLowerCase() ?? ''
   if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) {
     return 'detail.similar_ocean'
@@ -60,6 +72,7 @@ export async function ProjectQuickView({
   project,
   species,
   producerProducts,
+  producerAdvantages,
   relatedProjects,
 }: ProjectQuickViewProps) {
   const [t, locale] = await Promise.all([getTranslations('projects'), getLocale()])
@@ -69,31 +82,30 @@ export async function ProjectQuickView({
 
   const currentFunding = project.current_funding || 0
   const targetBudget = project.target_budget || 0
-  const fundingProgress = project.funding_progress ?? (
-    targetBudget > 0 ? Math.min((currentFunding / targetBudget) * 100, 100) : 0
-  )
+  const fundingProgress =
+    project.funding_progress ??
+    (targetBudget > 0 ? Math.min((currentFunding / targetBudget) * 100, 100) : 0)
 
   const coverImage =
     sanitizeImageUrl(project.hero_image_url) ??
     (Array.isArray(project.images) && project.images.length > 0
-      ? sanitizeImageUrl(project.images[0]) ?? undefined
+      ? (sanitizeImageUrl(project.images[0]) ?? undefined)
       : undefined)
 
-  const producerImage =
-    project.producer?.visualAssets?.portrait
-      ? sanitizeImageUrl(project.producer.visualAssets.portrait) ?? undefined
-      : project.producer?.images &&
+  const producerImage = project.producer?.visualAssets?.portrait
+    ? (sanitizeImageUrl(project.producer.visualAssets.portrait) ?? undefined)
+    : project.producer?.images &&
         Array.isArray(project.producer.images) &&
         project.producer.images.length > 0
-        ? sanitizeImageUrl(project.producer.images[0]) ?? undefined
-        : undefined
+      ? (sanitizeImageUrl(project.producer.images[0]) ?? undefined)
+      : undefined
 
   const resolvedIso = project.address_country_code
     ? resolveCountryCode(project.address_country_code)
     : null
   const countryName = resolvedIso
     ? getCountryDisplayName(resolvedIso, locale)
-    : project.address_country_code ?? null
+    : (project.address_country_code ?? null)
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
@@ -151,8 +163,12 @@ export async function ProjectQuickView({
     projectImpact: project.expected_impact,
   })
 
-  const partnerLabel = isContributionProject ? t('detail.partner_label_contribution') : t('detail.partner_label_support')
-  const fundingTitle = isContributionProject ? t('detail.funding_title_contribution') : t('detail.funding_title_support')
+  const partnerLabel = isContributionProject
+    ? t('detail.partner_label_contribution')
+    : t('detail.partner_label_support')
+  const fundingTitle = isContributionProject
+    ? t('detail.funding_title_contribution')
+    : t('detail.funding_title_support')
   const fundingSubtext = isContributionProject
     ? t('detail.funding_subtext_contribution')
     : t('detail.funding_subtext_support')
@@ -223,8 +239,6 @@ export async function ProjectQuickView({
                 {projectDescription}
               </p>
             ) : null}
-
-
           </div>
 
           {/* 3. Partenaire */}
@@ -307,7 +321,9 @@ export async function ProjectQuickView({
                 isContributionProject={isContributionProject}
                 description={narrativeDescription}
                 producerName={project.producer ? producerName : undefined}
-                producerLocation={[project.address_city, countryName].filter(Boolean).join(' · ') || undefined}
+                producerLocation={
+                  [project.address_city, countryName].filter(Boolean).join(' · ') || undefined
+                }
               />
             </div>
 
@@ -319,10 +335,7 @@ export async function ProjectQuickView({
             {/* 5. Ce que le projet permet */}
             {impactItems.length > 0 ? (
               <div className="mt-14 px-4 sm:px-5">
-                <ProjectImpactPreview
-                  items={impactItems}
-                  accentColor={glowRgba(1)}
-                />
+                <ProjectImpactPreview items={impactItems} accentColor={glowRgba(1)} />
               </div>
             ) : null}
 
@@ -338,10 +351,12 @@ export async function ProjectQuickView({
                   <div className="flex items-baseline">
                     <span
                       className="text-2xl font-bold tabular-nums tracking-tight"
-                      style={{ color: glowRgba(0.90) }}
+                      style={{ color: glowRgba(0.9) }}
                     >
                       {formatAmountNumber(currentFunding)}{' '}
-                      <span style={{ color: glowRgba(0.55) }} className="text-lg">EUR</span>
+                      <span style={{ color: glowRgba(0.55) }} className="text-lg">
+                        EUR
+                      </span>
                     </span>
                     <span className="ml-2 text-sm font-medium tabular-nums text-white/50">
                       / {formatAmountNumber(targetBudget)} EUR
@@ -372,14 +387,24 @@ export async function ProjectQuickView({
               <ProjectLearningLinks projectSlug={project.slug} />
             </div>
 
-            {/* 7. Produits partenaires (soutien uniquement) */}
+            {/* 7. Avantages proposés par le partenaire */}
+            {producerAdvantages.length > 0 ? (
+              <div className="mt-16 px-4 sm:px-5">
+                <ProjectPartnerAdvantagesSection
+                  advantages={producerAdvantages}
+                  producerName={producerName}
+                />
+              </div>
+            ) : null}
+
+            {/* 8. Produits partenaires (soutien uniquement) */}
             {!isContributionProject && producerProducts && producerProducts.length > 0 ? (
               <div className="mt-16 px-4 sm:px-5">
                 <ProjectProducerProductsSection products={producerProducts} />
               </div>
             ) : null}
 
-            {/* 8. Projets similaires */}
+            {/* 9. Projets similaires */}
             <div className="mt-16 w-full max-w-full overflow-hidden px-4 sm:px-5">
               <SimilarProjectsCarousel
                 locale={locale}
@@ -390,7 +415,7 @@ export async function ProjectQuickView({
           </div>
         </div>
 
-        {/* 9. CTA sticky */}
+        {/* 10. CTA sticky */}
         <BottomActionBar className="fixed bottom-0 left-0 right-0 z-40 w-full">
           {isFundingClosed ? (
             <Button
@@ -408,9 +433,7 @@ export async function ProjectQuickView({
             </Link>
           )}
           {!isFundingClosed ? (
-            <p className="mt-2 text-center text-[11px] text-white/35">
-              {ctaProofLine}
-            </p>
+            <p className="mt-2 text-center text-[11px] text-white/35">{ctaProofLine}</p>
           ) : null}
         </BottomActionBar>
       </div>

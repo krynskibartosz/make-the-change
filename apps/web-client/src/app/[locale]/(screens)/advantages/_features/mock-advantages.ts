@@ -97,6 +97,14 @@ export function filterAdvantagesByType(
   return advantages
 }
 
+export function filterAdvantagesByProducerSlug(
+  advantages: Advantage[],
+  producerSlug: string | null | undefined,
+): Advantage[] {
+  if (!producerSlug) return []
+  return advantages.filter((advantage) => advantage.producerSlug === producerSlug)
+}
+
 export function getMockAdvantageById(id: string): Advantage | undefined {
   return ADVANTAGES.find((advantage) => advantage.id === id)
 }

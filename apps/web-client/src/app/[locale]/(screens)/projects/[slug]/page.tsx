@@ -2,8 +2,13 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
-import { getLocalizedContent } from '@/lib/utils'
+import { DARK_APP_MODAL_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
+import {
+  filterAdvantagesByProducerSlug,
+  getMockAdvantages,
+} from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
 import { buildPublicAppUrl } from '@/lib/public-url'
+import { getLocalizedContent } from '@/lib/utils'
 import { getSpeciesForProject } from '../_api/project-species.service'
 import { getPublicProjectBySlug, getRelatedProjectsByType } from './project-detail-data'
 import { ProjectQuickView } from './project-quick-view'
@@ -67,6 +72,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   ])
 
   const producerProducts = project.producer_products ?? null
+  const producerAdvantages = filterAdvantagesByProducerSlug(
+    getMockAdvantages(),
+    project.producer?.slug,
+  )
 
   const localizedTitle = getLocalizedContent(project.name_i18n, locale, project.name_default)
 
@@ -140,11 +149,13 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         fallbackHref="/projects"
         headerMode="dynamic"
         asPage
+        className={DARK_APP_MODAL_CLASSNAME}
       >
         <ProjectQuickView
           project={project}
           species={species}
           producerProducts={producerProducts}
+          producerAdvantages={producerAdvantages}
           relatedProjects={relatedProjects}
         />
       </FullScreenSlideModal>

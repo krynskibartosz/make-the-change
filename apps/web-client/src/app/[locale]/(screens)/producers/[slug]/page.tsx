@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import {
-  getCachedPublicProducerBySlug,
-  type PublicProducer,
-} from './producer-detail-data'
+  filterAdvantagesByProducerSlug,
+  getMockAdvantages,
+} from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
+import { getCachedPublicProducerBySlug } from './producer-detail-data'
 import { ProducerDetails } from './producer-details'
 
 interface ProducerDetailPageProps {
@@ -12,7 +13,7 @@ interface ProducerDetailPageProps {
 }
 
 export async function generateMetadata({ params }: ProducerDetailPageProps): Promise<Metadata> {
-  const { slug, locale } = await params
+  const { slug } = await params
   const producer = await getCachedPublicProducerBySlug(slug)
 
   if (!producer) {
@@ -39,6 +40,7 @@ export default async function ProducerDetailPage({ params }: ProducerDetailPageP
   if (!producer) {
     notFound()
   }
+  const producerAdvantages = filterAdvantagesByProducerSlug(getMockAdvantages(), producer.slug)
 
   return (
     <FullScreenSlideModal
@@ -47,9 +49,7 @@ export default async function ProducerDetailPage({ params }: ProducerDetailPageP
       headerMode="dynamic"
       contentClassName="overflow-y-auto"
     >
-      <ProducerDetails
-        producer={producer}
-      />
+      <ProducerDetails producer={producer} producerAdvantages={producerAdvantages} />
     </FullScreenSlideModal>
   )
 }

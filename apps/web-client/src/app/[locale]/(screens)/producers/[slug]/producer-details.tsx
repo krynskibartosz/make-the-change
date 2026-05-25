@@ -11,14 +11,17 @@
  * 4. Projets (actions terrain) — estimation intégrée ici
  * 5. Espèces (lien biodiversité)
  * 6. Histoire (modulaire)
- * 7. Produits (conséquence naturelle)
- * 8. CTA (engagement)
+ * 7. Avantages Make the Change
+ * 8. Produits (conséquence naturelle)
+ * 9. CTA (engagement)
  *
  * Mobile-first, storytelling, preuves, rythme.
  */
 
+import type { Advantage } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
 import { CtaFinal } from './_components/cta-final'
 import { MissionSection } from './_components/mission-section'
+import { ProducerAdvantagesSection } from './_components/producer-advantages-section'
 import { ProducerHero } from './_components/producer-hero'
 import { ProductsSection } from './_components/products-section'
 import { ProjectsSection } from './_components/projects-section'
@@ -29,9 +32,10 @@ import type { PublicProducer } from './producer-detail-data'
 
 type ProducerDetailsProps = {
   producer: PublicProducer
+  producerAdvantages: Advantage[]
 }
 
-export function ProducerDetails({ producer }: ProducerDetailsProps) {
+export function ProducerDetails({ producer, producerAdvantages }: ProducerDetailsProps) {
   const firstCertif = producer.proofCards?.find((c) => c.proofType === 'certification')
   const certifName = firstCertif?.label.replace(/^Certification\s+/i, '')
   const trustLine = producer.editorialIdentity?.foundedYear
@@ -92,7 +96,17 @@ export function ProducerDetails({ producer }: ProducerDetailsProps) {
           />
         </div>
 
-        {/* 7. Produits - filières puis produits app */}
+        {/* 7. Avantages Make the Change */}
+        {producerAdvantages.length > 0 ? (
+          <div className="mt-20">
+            <ProducerAdvantagesSection
+              advantages={producerAdvantages}
+              producerName={producer.editorialIdentity?.shortName || producer.name_default}
+            />
+          </div>
+        ) : null}
+
+        {/* 8. Produits - filières puis produits app */}
         <div className="mt-20">
           <ProductsSection
             products={producer.products}
@@ -100,7 +114,7 @@ export function ProducerDetails({ producer }: ProducerDetailsProps) {
           />
         </div>
 
-        {/* 8. CTA */}
+        {/* 9. CTA */}
         <div className="mt-20">
           <CtaFinal
             website={producer.contact_website}

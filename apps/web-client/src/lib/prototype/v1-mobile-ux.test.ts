@@ -192,6 +192,48 @@ describe('V1 mobile prototype UX guardrails', () => {
     expect(detail.includes('advantage.imageBadge')).toBe(true)
   })
 
+  it('shows partner advantages on producer and project details without mixing them with support', () => {
+    const projectPage = readSource('src/app/[locale]/(screens)/projects/[slug]/page.tsx')
+    const projectModal = readSource('src/app/[locale]/@modal/(.)projects/[slug]/page.tsx')
+    const projectView = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/project-quick-view.tsx',
+    )
+    const projectAdvantages = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/_components/shared/partner-advantages.tsx',
+    )
+    const producerPage = readSource('src/app/[locale]/(screens)/producers/[slug]/page.tsx')
+    const producerView = readSource(
+      'src/app/[locale]/(screens)/producers/[slug]/producer-details.tsx',
+    )
+
+    expect(projectPage.includes('producerAdvantages')).toBe(true)
+    expect(projectModal.includes('producerAdvantages')).toBe(true)
+    expect(projectView.includes('ProjectPartnerAdvantagesSection')).toBe(true)
+    expect(projectAdvantages.includes('reste distinct de ton soutien à ce projet')).toBe(true)
+    expect(producerPage.includes('producerAdvantages')).toBe(true)
+    expect(producerView.includes('ProducerAdvantagesSection')).toBe(true)
+  })
+
+  it('forces project details into the dark prototype surface', () => {
+    const detailPage = readSource('src/app/[locale]/(screens)/projects/[slug]/page.tsx')
+    const modalPage = readSource('src/app/[locale]/@modal/(.)projects/[slug]/page.tsx')
+
+    expect(detailPage.includes('DARK_APP_MODAL_CLASSNAME')).toBe(true)
+    expect(modalPage.includes('DARK_APP_MODAL_CLASSNAME')).toBe(true)
+  })
+
+  it('keeps producer details mock-only while the V1 partner UX is being designed', () => {
+    const producerData = readSource(
+      'src/app/[locale]/(screens)/producers/[slug]/producer-detail-data.ts',
+    )
+
+    expectNoMatches(
+      producerData,
+      [/createStaticClient/g, /isMockDataSource/g, /from\('public_producers'\)/g],
+      'producer detail data source',
+    )
+  })
+
   it('renders the full advantages catalogue during intercepted mobile navigation', () => {
     const catalogModal = readSource('src/app/[locale]/@modal/(.)advantages/catalog/page.tsx')
 

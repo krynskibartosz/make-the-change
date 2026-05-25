@@ -1,14 +1,19 @@
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
+import { DARK_APP_MODAL_CLASSNAME } from '@/app/[locale]/@modal/_components/modal-content-presets'
+import {
+  filterAdvantagesByProducerSlug,
+  getMockAdvantages,
+} from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
 import { getProjectContext } from '@/app/[locale]/(screens)/projects/_api/project-context.service'
 import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
-import { getLocalizedContent } from '@/lib/utils'
 import {
   getPublicProjectBySlug,
   getRelatedProjectsByType,
 } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { ProjectQuickView } from '@/app/[locale]/(screens)/projects/[slug]/project-quick-view'
+import { getLocalizedContent } from '@/lib/utils'
 
 interface InterceptedProjectPageProps {
   params: Promise<{
@@ -38,17 +43,23 @@ export default async function InterceptedProjectPage({ params }: InterceptedProj
   ])
 
   const producerProducts = projectContext?.producer_products ?? project.producer_products ?? null
+  const producerAdvantages = filterAdvantagesByProducerSlug(
+    getMockAdvantages(),
+    project.producer?.slug,
+  )
 
   return (
     <FullScreenSlideModal
       title={getLocalizedContent(project.name_i18n, locale, project.name_default)}
       fallbackHref={`/projects/${project.slug}`}
       headerMode="dynamic"
+      className={DARK_APP_MODAL_CLASSNAME}
     >
       <ProjectQuickView
         project={project}
         species={species}
         producerProducts={producerProducts}
+        producerAdvantages={producerAdvantages}
         relatedProjects={relatedProjects}
       />
     </FullScreenSlideModal>

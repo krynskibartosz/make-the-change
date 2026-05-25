@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { filterAdvantagesByType, getMockAdvantages } from './mock-advantages'
+import {
+  filterAdvantagesByProducerSlug,
+  filterAdvantagesByType,
+  getMockAdvantages,
+} from './mock-advantages'
 
 describe('filterAdvantagesByType', () => {
   const advantages = getMockAdvantages()
@@ -34,5 +38,17 @@ describe('filterAdvantagesByType', () => {
     expect(filtered.every((advantage) => advantage.type === 'experience')).toBe(true)
     expect(filtered[0]?.imageUrl.includes('visite-rucher-urbain.webp')).toBe(true)
     expect(filtered[0]?.isTemporaryVisual).toBe(true)
+  })
+
+  it('returns only advantages offered by the requested partner', () => {
+    expect(
+      filterAdvantagesByProducerSlug(advantages, 'ilanga-nature').map((advantage) => advantage.id),
+    ).toEqual(['code-ilanga-coffret-10'])
+    expect(
+      filterAdvantagesByProducerSlug(advantages, 'habeebee-belgique').map(
+        (advantage) => advantage.id,
+      ),
+    ).toEqual(['experience-visite-habeebee'])
+    expect(filterAdvantagesByProducerSlug(advantages, 'trilogy-ocean-restoration')).toEqual([])
   })
 })
