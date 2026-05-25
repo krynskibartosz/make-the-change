@@ -1,9 +1,10 @@
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { parseProductsQueryState } from '@/app/[locale]/(screens)/products/_features/query-state'
+import { getLocale } from 'next-intl/server'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
+import { parseProductsQueryState } from '@/app/[locale]/(screens)/products/_features/query-state'
 import { Link } from '@/i18n/navigation'
+import { getCurrentMockCart } from '@/lib/mock/mock-commerce-server'
 import { getLocalizedContent } from '@/lib/utils'
 import { getProducts } from './_features/get-products'
 import { type Product, ProductsClient } from './products-client'
@@ -13,22 +14,23 @@ type ProductsPageProps = {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('products')
   return {
-    title: t('title'),
+    title: 'Boutique partenaire',
     openGraph: {
-      title: t('title'),
+      title: 'Boutique partenaire',
     },
   }
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const _t = await getTranslations('products')
   const locale = await getLocale()
   const params = await searchParams
   const queryState = parseProductsQueryState(params)
 
-  const { products: productsList, pagination, resolvedCategory } = await getProducts(queryState)
+  const [{ products: productsList, pagination, resolvedCategory }, cart] = await Promise.all([
+    getProducts(queryState),
+    getCurrentMockCart(),
+  ])
 
   const products: Product[] = productsList.map((product) => ({
     ...product,
@@ -43,8 +45,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       locale,
       product.description_default || '',
     ),
-    price: product.price ?? (product.price_points ? product.price_points / 100 : 0),
-    price_points: product.price_points ?? 0,
+    price: product.price,
   }))
 
   return (
@@ -60,13 +61,14 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </Link>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35">
-              Avantages
+              Boutique
             </p>
-            <p className="truncate text-sm font-black text-white">Catalogue complet</p>
+            <p className="truncate text-sm font-black text-white">Produits partenaires</p>
           </div>
         </div>
       }
       className="bg-[#0B0F15]"
+      headerClassName="bg-[#0B0F15]/90"
     >
       <section className="pb-12 pt-0 md:pb-16 md:pt-2">
         <ProductsClient
@@ -77,6 +79,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             category: resolvedCategory,
             page: pagination.currentPage,
           }}
+          cartCount={cart.lines.reduce((sum, line) => sum + line.quantity, 0)}
         />
       </section>
     </Screen>

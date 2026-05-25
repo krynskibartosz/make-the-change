@@ -1,20 +1,16 @@
 'use client'
 
-import { Link } from '@/i18n/navigation'
 import { CurrencyAmount } from '@/components/currency'
+import { Link } from '@/i18n/navigation'
 import type { Advantage, AdvantageType } from './mock-advantages'
 
 function typeLabel(type: AdvantageType): string | null {
-  if (type === 'partner_code') return 'Code partenaire'
-  if (type === 'content') return 'Contenu terrain'
+  if (type === 'discount') return 'Réduction'
   if (type === 'experience') return 'Expérience'
   return null
 }
 
 function getHref(advantage: Advantage): string {
-  if (advantage.type === 'product' && advantage.productSlug) {
-    return `/products/${advantage.productSlug}`
-  }
   return `/advantages/${advantage.id}`
 }
 
@@ -45,24 +41,20 @@ function AdvantageCard({ advantage }: { advantage: Advantage }) {
   const label = typeLabel(advantage.type)
 
   return (
-    <Link href={href} className="group flex flex-col gap-2 transition-transform active:scale-[0.98]">
+    <Link
+      href={href}
+      className="group flex flex-col gap-2 transition-transform active:scale-[0.98]"
+    >
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-zinc-800">
         <img
           src={advantage.imageUrl}
           alt={advantage.title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {advantage.status === 'soon' && (
+        {advantage.status === 'coming_soon' && (
           <div className="absolute bottom-2 left-2">
             <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/70 backdrop-blur-sm">
               Bientôt
-            </span>
-          </div>
-        )}
-        {advantage.status === 'sold_out' && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <span className="rounded-full bg-black/60 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-red-400">
-              Épuisé
             </span>
           </div>
         )}
@@ -73,7 +65,9 @@ function AdvantageCard({ advantage }: { advantage: Advantage }) {
             {label} · {advantage.partner}
           </span>
         ) : (
-          <span className="text-xs uppercase tracking-wider text-zinc-400">{advantage.partner}</span>
+          <span className="text-xs uppercase tracking-wider text-zinc-400">
+            {advantage.partner}
+          </span>
         )}
         <h3 className="line-clamp-2 text-sm font-semibold text-white">{advantage.title}</h3>
         <div className="mt-1">

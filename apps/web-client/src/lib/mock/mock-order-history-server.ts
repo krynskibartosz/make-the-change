@@ -1,8 +1,10 @@
+import { getMockOrderById, getMockOrders, type MockOrderRecord } from '@/lib/mock/mock-member-data'
 import {
   MOCK_ORDERS_COOKIE_NAME,
+  mockOrdersCookieOptions,
   parseMockOrdersCookieValue,
+  serializeMockOrders,
 } from '@/lib/mock/mock-order-history'
-import { getMockOrderById, getMockOrders, type MockOrderRecord } from '@/lib/mock/mock-member-data'
 
 const clonePersistedOrder = (order: MockOrderRecord): MockOrderRecord => ({
   ...order,
@@ -37,4 +39,20 @@ export async function getCurrentMockOrderById(
 ): Promise<MockOrderRecord | null> {
   const currentOrders = await getCurrentMockOrders(viewerId)
   return currentOrders.find((order) => order.id === orderId) || getMockOrderById(viewerId, orderId)
+}
+
+export async function persistCurrentMockOrder(
+  viewerId: string,
+  order: MockOrderRecord,
+): Promise<void> {
+  const { cookies } = await import('next/headers')
+  const cookieStore = await cookies()
+  const existing = parseMockOrdersCookieValue(
+    cookieStore.get(MOCK_ORDERS_COOKIE_NAME)?.value,
+  ).filter((entry) => !(entry.viewerId === viewerId && entry.order.id === order.id))
+  cookieStore.set(
+    MOCK_ORDERS_COOKIE_NAME,
+    serializeMockOrders([{ viewerId, order }, ...existing]),
+    mockOrdersCookieOptions,
+  )
 }

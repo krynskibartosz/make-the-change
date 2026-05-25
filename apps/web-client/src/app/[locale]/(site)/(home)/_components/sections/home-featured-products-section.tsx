@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react'
+import type { ProductCardProduct } from '@/app/[locale]/(screens)/products/_features/product-card'
 import { MarketingSection } from '@/app/[locale]/(site)/_features/marketing-section'
 import { ProductThumbnailCard } from '@/app/[locale]/(site)/_features/product-thumbnail-card'
-import type { ProductCardProduct } from '@/app/[locale]/(screens)/products/_features/product-card'
 import { Link } from '@/i18n/navigation'
 
 type HomeFeaturedProductsSectionProps = {
@@ -32,7 +32,7 @@ export function HomeFeaturedProductsSection({
                 slug={slug}
                 title={productTitle}
                 imageUrl={imageUrl}
-                pricePoints={product.price_points || 0}
+                priceEur={product.price_eur_equivalent}
                 isFeatured={!!product.featured}
                 priority={index === 0}
               />
@@ -46,7 +46,11 @@ export function HomeFeaturedProductsSection({
             className="w-36 shrink-0 snap-start group flex flex-col gap-2.5 active:scale-[0.98] transition-transform block"
           >
             <div className="w-full aspect-[4/5] rounded-2xl border border-lime-500/30 bg-lime-900/10 flex items-center justify-center">
-              <ArrowRight size={20} className="text-lime-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              <ArrowRight
+                size={20}
+                className="text-lime-400 transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
             </div>
             <div className="px-1">
               <span className="text-sm font-bold text-lime-400 leading-snug">{viewAllLabel}</span>
@@ -57,4 +61,3 @@ export function HomeFeaturedProductsSection({
     </MarketingSection>
   )
 }
-

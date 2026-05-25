@@ -11,7 +11,6 @@
 
 import { Info, Leaf } from 'lucide-react'
 import type { PartnerCatalogOverview } from '@/app/[locale]/(site)/producers/_features/mock-producers'
-import { CurrencyAmount } from '@/components/currency'
 import { Link } from '@/i18n/navigation'
 import type { ProducerProduct } from '../producer-detail-data'
 import { producerTypography as typo } from './producer-typography'
@@ -70,7 +69,7 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
         <div className={hasCatalog ? 'mt-10' : ''}>
           <div className="px-4">
             <h2 className={typo.sectionTitle}>Produits accessibles</h2>
-            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Disponibles avec vos Crédits Impact.</p>
+            <p className={`mt-1.5 ${typo.sectionSubtitle}`}>Vendus en euros par le partenaire.</p>
           </div>
 
           {/* Carousel horizontal — même pattern que projets et biodex */}
@@ -102,18 +101,15 @@ export function ProductsSection({ products, partnerCatalog }: ProductsSectionPro
                   {/* Info */}
                   <div className="flex flex-col gap-0.5">
                     <h4 className={`${typo.cardTitle} line-clamp-2`}>{product.name_default}</h4>
-                    {typeof product.price_points === 'number' && product.price_points > 0 && (
-                      <div className="flex items-baseline gap-1">
-                        <CurrencyAmount
-                          kind="impactCredits"
-                          value={product.price_points}
-                          className="text-[14px] font-extrabold"
-                        />
-                        <span className="text-[12px] font-medium text-white/50">
-                          Crédits Impact
-                        </span>
-                      </div>
-                    )}
+                    {typeof product.price_eur_equivalent === 'number' &&
+                      product.price_eur_equivalent > 0 && (
+                        <p className="text-[14px] font-extrabold text-white">
+                          {new Intl.NumberFormat('fr-BE', {
+                            style: 'currency',
+                            currency: 'EUR',
+                          }).format(product.price_eur_equivalent)}
+                        </p>
+                      )}
                   </div>
                 </Link>
               </li>

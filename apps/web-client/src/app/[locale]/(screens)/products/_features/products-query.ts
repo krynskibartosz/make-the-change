@@ -93,11 +93,11 @@ export const applyProductsSort = <TQuery extends QueryLike<TQuery>>(
       return query.order('name_default', { ascending: false })
     case 'price_asc':
       return query
-        .order('price_points', { ascending: true })
+        .order('price_eur_equivalent', { ascending: true })
         .order('name_default', { ascending: true })
     case 'price_desc':
       return query
-        .order('price_points', { ascending: false })
+        .order('price_eur_equivalent', { ascending: false })
         .order('name_default', { ascending: true })
     default:
       return query.order('featured', { ascending: false }).order('created_at', { ascending: false })

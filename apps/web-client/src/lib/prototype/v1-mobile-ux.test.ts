@@ -127,7 +127,11 @@ describe('V1 mobile prototype UX guardrails', () => {
     expect(supportFlow.includes('bonus_percentage: 0')).toBe(true)
     expect(supportFlow.includes('showSpeciesCard={false}')).toBe(true)
     expect(supportFlow.includes('const checkoutSpecies: ProjectSpecies[] = []')).toBe(true)
-    expectNoMatches(supportFlow, [/bonus_percentage: rules\.expected_bonus/g], 'support credits rule')
+    expectNoMatches(
+      supportFlow,
+      [/bonus_percentage: rules\.expected_bonus/g],
+      'support credits rule',
+    )
 
     const contributeFlow = readSource(
       'src/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow.tsx',
@@ -159,30 +163,79 @@ describe('V1 mobile prototype UX guardrails', () => {
     expect(modalPage.includes('getCurrentProfile')).toBe(true)
     expect(detail.includes('isConnected')).toBe(true)
     expect(
-      detail.includes('const hasEnoughImpactCredits = impactCreditsBalance >= advantage.priceCredits'),
+      detail.includes('const hasEnoughImpactCredits = balance >= advantage.priceCredits'),
     ).toBe(true)
     expect(detail.includes('!hasEnoughImpactCredits')).toBe(true)
     expect(detail.includes('Confirmer l’utilisation')).toBe(true)
-    expect(
-      detail.includes('setImpactCreditsBalance((balance) => balance - advantage.priceCredits)'),
-    ).toBe(true)
+    expect(detail.includes('redeemAdvantageAction(advantage.id)')).toBe(true)
+    expect(detail.includes('Avantage débloqué')).toBe(true)
+    expectNoMatches(detail, [/Code débloqué/g, /Ouvrir le site partenaire/g], 'discount redemption')
     expect(detail.includes('returnTo=')).toBe(true)
   })
 
   it('shows seller responsibility and product conditions before prototype payment', () => {
     const productPayment = readSource(
-      'src/app/[locale]/(screens)/products/[id]/_features/product-fiat-checkout-view.tsx',
+      'src/app/[locale]/(screens)/products/cart/product-cart-client.tsx',
     )
 
     expect(productPayment.includes('Vendeur et expéditeur')).toBe(true)
+    expect(productPayment.includes('Articles')).toBe(true)
     expect(productPayment.includes('Conditions, retours et SAV')).toBe(true)
     expect(productPayment.includes('droit de rétractation')).toBe(true)
-    expect(productPayment.includes('paiements réels')).toBe(true)
+    expect(productPayment.includes('Aucun paiement réel')).toBe(true)
+    expect(productPayment.includes('Commande liée à ton espace MTC')).toBe(true)
+    expect(productPayment.includes('Achat invité')).toBe(true)
+  })
+
+  it('keeps the product shop euro-only and mock-only', () => {
+    const productsDataSource = readSource(
+      'src/app/[locale]/(screens)/products/_features/get-products.ts',
+    )
+    const productDetailData = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-detail-data.ts',
+    )
+    const productDetail = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-quick-view.tsx',
+    )
+
+    expectNoMatches(
+      productsDataSource,
+      [/createStaticClient/g, /from\('public_products'\)/g],
+      'products data source',
+    )
+    expectNoMatches(
+      productDetailData,
+      [/createStaticClient/g, /from\('public_products'\)/g],
+      'product detail data source',
+    )
+    expectNoMatches(
+      productDetail,
+      [/ProductCheckoutView/g, /displayPoints/g, /Crédits Impact/g],
+      'product detail checkout',
+    )
+
+    const projectProducts = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/_components/shared/producer-products.tsx',
+    )
+    expectNoMatches(
+      projectProducts,
+      [/CurrencyAmount/g, /Crédits Impact/g, /price_points/g],
+      'project products',
+    )
+
+    const homeProducts = readSource('src/app/[locale]/(site)/(home)/_api/home.server-data.ts')
+    expectNoMatches(homeProducts, [/featuredProductsQuery/g, /price_points/g], 'home products')
   })
 
   it('keeps project discovery mock-only and loads the map only after user intent', () => {
-    const projectsDataSource = readSource('src/app/[locale]/(tabs)/projects/_features/get-projects.ts')
-    expectNoMatches(projectsDataSource, [/createStaticClient/g, /from\('public_projects'\)/g], 'projects data source')
+    const projectsDataSource = readSource(
+      'src/app/[locale]/(tabs)/projects/_features/get-projects.ts',
+    )
+    expectNoMatches(
+      projectsDataSource,
+      [/createStaticClient/g, /from\('public_projects'\)/g],
+      'projects data source',
+    )
 
     const projectsClient = readSource('src/app/[locale]/(tabs)/projects/projects-client.tsx')
     expectNoMatches(
@@ -196,21 +249,27 @@ describe('V1 mobile prototype UX guardrails', () => {
     const detailPage = readSource('src/app/[locale]/(screens)/projects/[slug]/page.tsx')
     expectNoMatches(detailPage, [/getProjectContext/g], 'project detail page')
 
-    const detailData = readSource('src/app/[locale]/(screens)/projects/[slug]/project-detail-data.ts')
+    const detailData = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/project-detail-data.ts',
+    )
     expectNoMatches(
       detailData,
       [/isMockDataSource/g, /createStaticClient/g, /from\('public_projects'\)/g],
       'project detail data source',
     )
 
-    const speciesData = readSource('src/app/[locale]/(screens)/projects/_api/project-species.service.ts')
+    const speciesData = readSource(
+      'src/app/[locale]/(screens)/projects/_api/project-species.service.ts',
+    )
     expectNoMatches(
       speciesData,
       [/isMockDataSource/g, /createStaticClient/g, /from\('v_species_context'\)/g],
       'project species data source',
     )
 
-    const quickView = readSource('src/app/[locale]/(screens)/projects/[slug]/project-quick-view.tsx')
+    const quickView = readSource(
+      'src/app/[locale]/(screens)/projects/[slug]/project-quick-view.tsx',
+    )
     expectNoMatches(
       quickView,
       [/<Link href=\{supportPath\}[\s\S]{0,240}<Button/g],

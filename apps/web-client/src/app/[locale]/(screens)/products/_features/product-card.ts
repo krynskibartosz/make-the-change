@@ -5,8 +5,7 @@ export type ProductCardProduct = {
   name_i18n?: Record<string, string> | null
   short_description_default?: string | null
   short_description_i18n?: Record<string, string> | null
-  price_points: number
-  price_eur_equivalent?: number | null
+  price_eur_equivalent: number
   stock_quantity?: number | null
   featured?: boolean | null
   fulfillment_method?: string | null

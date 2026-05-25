@@ -6,12 +6,14 @@ import { cn } from '@/lib/utils'
 
 type InterceptedRouteDialogProps = PropsWithChildren<{
   title: string
+  className?: string
   contentClassName?: string
   fallbackHref?: string
 }>
 
 export function InterceptedRouteDialog({
   title,
+  className,
   contentClassName,
   fallbackHref = '/community',
   children,
@@ -20,6 +22,7 @@ export function InterceptedRouteDialog({
     <FullScreenSlideModal
       title={title}
       fallbackHref={fallbackHref}
+      className={className}
       contentClassName={cn('w-full mx-auto', contentClassName)}
     >
       {children}

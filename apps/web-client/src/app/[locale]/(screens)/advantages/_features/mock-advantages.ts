@@ -1,190 +1,98 @@
 import {
-  MOCK_PRODUCT_EUCALYPTUS_SLUG,
-  MOCK_PRODUCT_MANAKARA_SLUG,
-  MOCK_PRODUCT_SAVON_DOUX_SLUG,
-  MOCK_PRODUCT_HUILE_VISAGE_SLUG,
-  MOCK_PRODUCT_SHAMPOING_SLUG,
-  MOCK_PRODUCT_HUILE_LECCINO_SLUG,
-  MOCK_PRODUCER_ILANGA_SLUG,
   MOCK_PRODUCER_HABEEBEE_SLUG,
-  MOCK_PROJECT_MIELLERIES_MOBILE_SLUG,
+  MOCK_PRODUCER_ILANGA_SLUG,
+  MOCK_PRODUCT_ILANGA_COLLECTION_SLUG,
 } from '@/lib/mock/mock-ids'
-import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 
-export type AdvantageType = 'product' | 'partner_code' | 'content' | 'experience'
-export type AdvantageStatus = 'available' | 'soon' | 'sold_out'
-export type RedemptionMode = 'mtc_checkout' | 'partner_code' | 'reservation'
+export type AdvantageType = 'discount' | 'experience'
+export type AdvantageStatus = 'available' | 'coming_soon'
+export type RedemptionMode = 'mtc_checkout_discount' | 'reservation_request'
 
 export type Advantage = {
   id: string
   type: AdvantageType
   title: string
   partner: string
-  location?: string
+  location: string
   imageUrl: string
+  isTemporaryVisual: boolean
   priceCredits: number
   status: AdvantageStatus
   productSlug?: string
-  description?: string
-  whatYouGet?: string
-  howItWorks?: string[]
-  conditions?: string[]
+  description: string
+  whatYouGet: string
+  howItWorks: string[]
+  conditions: string[]
   details?: string
-  externalUrl?: string
-  projectSlug?: string
-  producerSlug?: string
+  producerSlug: string
   redemption: RedemptionMode
 }
 
-const PRODUCT_SLUGS = [
-  MOCK_PRODUCT_EUCALYPTUS_SLUG,
-  MOCK_PRODUCT_MANAKARA_SLUG,
-  MOCK_PRODUCT_SAVON_DOUX_SLUG,
-  MOCK_PRODUCT_HUILE_VISAGE_SLUG,
-  MOCK_PRODUCT_SHAMPOING_SLUG,
-  MOCK_PRODUCT_HUILE_LECCINO_SLUG,
+const ADVANTAGES: Advantage[] = [
+  {
+    id: 'code-ilanga-coffret-10',
+    type: 'discount',
+    title: '-10 % sur la Collection de 3 Miels Ilanga',
+    partner: 'Ilanga Nature',
+    location: 'Mariembourg, Belgique',
+    imageUrl: '/images/producteurs/illanga-nature/media/produits-miels-trio.jpg',
+    isTemporaryVisual: true,
+    priceCredits: 200,
+    status: 'available',
+    productSlug: MOCK_PRODUCT_ILANGA_COLLECTION_SLUG,
+    description:
+      'Débloque une réduction partenaire utilisable directement dans le checkout Make the Change.',
+    whatYouGet:
+      'Une réduction de 10 % appliquée automatiquement au coffret Ilanga éligible dans ton panier.',
+    howItWorks: [
+      'Confirme l’utilisation de 200 Crédits Impact.',
+      'Ajoute la Collection de 3 Miels Ilanga à ton panier.',
+      'La réduction est appliquée avant la validation de la commande.',
+    ],
+    conditions: ['Valable une fois', 'Sur le coffret éligible uniquement', 'Non cumulable'],
+    producerSlug: MOCK_PRODUCER_ILANGA_SLUG,
+    redemption: 'mtc_checkout_discount',
+  },
+  {
+    id: 'experience-visite-habeebee',
+    type: 'experience',
+    title: 'Visite de rucher urbain Habeebee',
+    partner: 'Habeebee',
+    location: 'Bruxelles, Belgique',
+    imageUrl: '/images/producteurs/habeebee/media/ruches-urbaine-pour-pollinistaeurs-locaux.png',
+    isTemporaryVisual: true,
+    priceCredits: 1200,
+    status: 'coming_soon',
+    details: '2h · Bruxelles · Disponibilités à confirmer',
+    description: 'Une future visite guidée du rucher urbain Habeebee avec l’équipe partenaire.',
+    whatYouGet:
+      'Une demande de réservation, activée ultérieurement lorsque les créneaux seront confirmés.',
+    howItWorks: [
+      'Les dates seront publiées avant toute réservation.',
+      'Aucun Crédit Impact ne sera débité sans créneau confirmé.',
+    ],
+    conditions: [
+      'Bientôt disponible',
+      'Selon disponibilités partenaire',
+      'Aucun débit actuellement',
+    ],
+    producerSlug: MOCK_PRODUCER_HABEEBEE_SLUG,
+    redemption: 'reservation_request',
+  },
 ]
 
-export function getMockAdvantages(): Advantage[] {
-  const products = getMockProducts()
-
-  const productAdvantages: Advantage[] = PRODUCT_SLUGS.map((slug) =>
-    products.find((p) => p.slug === slug),
-  )
-    .filter((p): p is NonNullable<typeof p> => Boolean(p))
-    .map((p) => ({
-      id: `product-${p.slug || p.id}`,
-      type: 'product' as const,
-      title: p.name_default,
-      partner: p.producer.name_default || 'Partenaire du vivant',
-      imageUrl: p.image_url,
-      priceCredits: p.price_points,
-      status: p.stock_quantity > 0 ? ('available' as const) : ('sold_out' as const),
-      productSlug: p.slug || p.id,
-      redemption: 'mtc_checkout' as const,
-    }))
-
-  const partnerCodes: Advantage[] = [
-    {
-      id: 'code-ilanga-coffret-10',
-      type: 'partner_code',
-      title: '-10 % sur le coffret découverte',
-      partner: 'Ilanga Nature',
-      location: 'Manakara, Madagascar',
-      imageUrl: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800&q=80',
-      priceCredits: 200,
-      status: 'available',
-      description:
-        'Un code de réduction de -10 % valable sur le coffret découverte Ilanga Nature, disponible sur leur site.',
-      whatYouGet:
-        'Un code de réduction unique, à utiliser directement sur le site Ilanga Nature lors de ta commande du coffret découverte.',
-      howItWorks: [
-        'Utilise 200 Crédits Impact pour débloquer le code.',
-        "Reçois ton code partenaire unique affiché à l'écran.",
-        'Copie le code et termine ta commande sur le site Ilanga Nature.',
-      ],
-      conditions: ['Valable une fois', 'Non cumulable', 'Selon disponibilité partenaire'],
-      externalUrl: 'https://ilanga-nature.com',
-      producerSlug: MOCK_PRODUCER_ILANGA_SLUG,
-      redemption: 'partner_code',
-    },
-    {
-      id: 'code-habeebee-livraison',
-      type: 'partner_code',
-      title: 'Livraison offerte dès 30 €',
-      partner: 'Habeebee',
-      location: 'Bruxelles, Belgique',
-      imageUrl: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=800&q=80',
-      priceCredits: 150,
-      status: 'available',
-      description: 'La livraison offerte sur toute commande de 30 € ou plus sur la boutique Habeebee.',
-      whatYouGet:
-        "Un code de livraison gratuite, valable sur la boutique Habeebee dès 30 € d'achat.",
-      howItWorks: [
-        'Utilise 150 Crédits Impact pour débloquer le code.',
-        'Reçois ton code partenaire unique.',
-        'Applique-le au moment de ta commande sur la boutique Habeebee.',
-      ],
-      conditions: ['Valable une fois', 'Commande minimum 30 €', 'Non cumulable'],
-      externalUrl: 'https://habeebee.be',
-      producerSlug: MOCK_PRODUCER_HABEEBEE_SLUG,
-      redemption: 'partner_code',
-    },
-  ]
-
-  const terrainContents: Advantage[] = [
-    {
-      id: 'content-rucher-ilanga',
-      type: 'content',
-      title: 'Dans les ruchers Ilanga',
-      partner: 'Ilanga Nature',
-      location: 'Madagascar',
-      imageUrl: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80',
-      priceCredits: 900,
-      status: 'soon',
-      details: 'Vidéo · 8 min · Madagascar',
-      description:
-        "Une immersion dans le travail des apiculteurs partenaires, la récolte du miel et le rôle des mielleries mobiles.",
-      whatYouGet:
-        "Une vidéo terrain de 8 minutes tournée dans les ruchers partenaires d'Ilanga, accompagnée d'un carnet de récolte et de photos documentaires.",
-      howItWorks: [
-        'Débloque le contenu avec 900 Crédits Impact.',
-        'Accède à la vidéo terrain et au carnet documentaire.',
-        'Retrouve les liens avec le projet et les espèces dans Apprendre.',
-      ],
-      conditions: ['Contenu permanent, accessible à vie', 'Lié au projet Mielleries Mobiles'],
-      projectSlug: MOCK_PROJECT_MIELLERIES_MOBILE_SLUG,
-      producerSlug: MOCK_PRODUCER_ILANGA_SLUG,
-      redemption: 'partner_code',
-    },
-  ]
-
-  const experiences: Advantage[] = [
-    {
-      id: 'experience-visite-habeebee',
-      type: 'experience',
-      title: 'Visite de rucher urbain Habeebee',
-      partner: 'Habeebee',
-      location: 'Bruxelles, Belgique',
-      imageUrl: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=800&q=80',
-      priceCredits: 1200,
-      status: 'soon',
-      details: '2h · Bruxelles, Belgique · Groupe de 8 max',
-      description:
-        'Une visite guidée du rucher urbain Habeebee au cœur de Bruxelles, avec dégustation de miels.',
-      whatYouGet:
-        "Une place pour une visite guidée de 2h avec l'équipe Habeebee. Dégustation de miels incluse.",
-      howItWorks: [
-        'Réserve ta place avec 1 200 Crédits Impact.',
-        "L'équipe Habeebee te contacte pour choisir une date.",
-        "Présente-toi au rucher à l'heure convenue.",
-      ],
-      conditions: ['Groupe de 8 max', 'Non remboursable', 'Selon disponibilité', 'Bruxelles uniquement'],
-      producerSlug: MOCK_PRODUCER_HABEEBEE_SLUG,
-      redemption: 'reservation',
-    },
-  ]
-
-  return [...productAdvantages, ...partnerCodes, ...terrainContents, ...experiences]
-}
+export const getMockAdvantages = (): Advantage[] => ADVANTAGES
 
 export function filterAdvantagesByType(
   advantages: Advantage[],
   type: string | undefined,
 ): Advantage[] {
-  if (type === 'product' || type === 'partner_code') {
+  if (type === 'discount' || type === 'experience') {
     return advantages.filter((advantage) => advantage.type === type)
   }
-
-  if (type === 'content') {
-    return advantages.filter(
-      (advantage) => advantage.type === 'content' || advantage.type === 'experience',
-    )
-  }
-
   return advantages
 }
 
 export function getMockAdvantageById(id: string): Advantage | undefined {
-  return getMockAdvantages().find((a) => a.id === id)
+  return ADVANTAGES.find((advantage) => advantage.id === id)
 }

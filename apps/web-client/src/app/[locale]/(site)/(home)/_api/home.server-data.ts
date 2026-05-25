@@ -1,23 +1,27 @@
 import 'server-only'
 import type { QueryData, User } from '@supabase/supabase-js'
+import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
+import type { ProductCardProduct } from '@/app/[locale]/(screens)/products/_features/product-card'
+import type {
+  DataState,
+  HomeFeaturedProject,
+  HomePartnerProducer,
+} from '@/app/[locale]/(site)/(home)/_types/home.types'
 import { getBlogPosts } from '@/app/[locale]/(site)/blog/_features/blog-data'
 import type { BlogPost } from '@/app/[locale]/(site)/blog/_features/blog-types'
-import type { ProductCardProduct } from '@/app/[locale]/(screens)/products/_features/product-card'
 import { getMockProjects } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
-import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 // import { getPageContent } from '@/app/[locale]/admin/cms/_features/cms.service' // CMS deleted
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createClient } from '@/lib/supabase/server'
 import { isRecord } from '@/lib/type-guards'
-import type { DataState, HomeFeaturedProject, HomePartnerProducer } from '@/app/[locale]/(site)/(home)/_types/home.types'
 
 type AsyncResult<T> = {
   data: T | null
   error: unknown
 }
 
-type HomeContent = any // CMS deleted - using fallback content
+type HomeContent = Record<string, unknown> // CMS deleted - using fallback content
 
 export type HomeServerData = {
   user: User | null
@@ -118,50 +122,6 @@ function toLocalizedRecord(value: unknown): Record<string, string> | null {
   )
 }
 
-const HOME_B2C_DEFAULT_KEYWORDS = [
-  'miel',
-  'honey',
-  'cosmet',
-  'soap',
-  'savon',
-  'baume',
-  'gift',
-  'cadeau',
-  'gourmand',
-  'food',
-  'artisan',
-  'bio',
-]
-
-const HOME_B2C_KEYWORDS = (
-  process.env.HOME_B2C_KEYWORDS ||
-  process.env.NEXT_PUBLIC_HOME_B2C_KEYWORDS ||
-  HOME_B2C_DEFAULT_KEYWORDS.join(',')
-)
-  .split(',')
-  .map((keyword) => keyword.trim().toLowerCase())
-  .filter((keyword) => keyword.length > 0)
-
-const HOME_B2C_STRICT = process.env.HOME_B2C_STRICT === 'true'
-
-function isB2CDesirableProduct(product: ProductCardProduct): boolean {
-  const haystack = [
-    product.name_default || '',
-    product.short_description_default || '',
-    ...(product.tags || []),
-  ]
-    .join(' ')
-    .toLowerCase()
-
-  return HOME_B2C_KEYWORDS.some((keyword) => haystack.includes(keyword))
-}
-
-function filterHomeProducts(products: ProductCardProduct[]): ProductCardProduct[] {
-  const matches = products.filter(isB2CDesirableProduct)
-  if (matches.length > 0) return matches
-  return HOME_B2C_STRICT ? [] : products
-}
-
 export async function getHomeServerData(): Promise<HomeServerData> {
   const supabase = await createClient()
 
@@ -189,18 +149,6 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     .limit(3)
     .order('created_at', { ascending: false })
 
-  const featuredProductsQuery = supabase
-    .schema('commerce')
-    .from('products')
-    .select(
-      'id,slug,name_default,name_i18n,short_description_default,short_description_i18n,price_points,price_eur_equivalent,stock_quantity,featured,fulfillment_method,metadata,images,tags,is_active',
-    )
-    .eq('featured', true)
-    .eq('is_active', true)
-    .gt('stock_quantity', 0)
-    .limit(4)
-    .order('created_at', { ascending: false })
-
   const activeProducersQuery = supabase
     .schema('investment')
     .from('producers')
@@ -217,14 +165,14 @@ export async function getHomeServerData(): Promise<HomeServerData> {
           title: 'Make the Change',
           subtitle: 'Building a sustainable future together',
           cta_primary: 'Get Started',
-          cta_secondary: 'Learn More'
+          cta_secondary: 'Learn More',
         },
         stats: {
           projects: 'Active Projects',
           members: 'Community Members',
           global_impact: 'Global Impact',
           points_generated: 'Points Generated',
-          points_label: 'Points'
+          points_label: 'Points',
         },
         universe: {
           title: 'Our Universe',
@@ -233,35 +181,35 @@ export async function getHomeServerData(): Promise<HomeServerData> {
             projects: {
               title: 'Projects',
               description: 'Support impactful initiatives',
-              cta: 'Explore Projects'
+              cta: 'Explore Projects',
             },
             products: {
               title: 'Products',
               description: 'Ethical and sustainable choices',
-              cta: 'Shop Products'
+              cta: 'Shop Products',
             },
             community: {
               title: 'Community',
               description: 'Join like-minded changemakers',
-              cta: 'Join Community'
-            }
-          }
+              cta: 'Join Community',
+            },
+          },
         },
         features: {
           title: 'Features',
           invest: {
             title: 'Invest',
-            description: 'Put your money where it matters'
+            description: 'Put your money where it matters',
           },
           earn: {
             title: 'Earn',
-            description: 'Get rewarded for your impact'
+            description: 'Get rewarded for your impact',
           },
           redeem: {
             title: 'Redeem',
-            description: 'Turn points into real rewards'
+            description: 'Turn points into real rewards',
           },
-          explore: 'Explore Opportunities'
+          explore: 'Explore Opportunities',
         },
         cta: {
           title: 'Ready to Make a Difference?',
@@ -270,17 +218,16 @@ export async function getHomeServerData(): Promise<HomeServerData> {
           stats: {
             engagement: 'Engaged Community',
             transparency: 'Full Transparency',
-            community: 'Growing Community'
-          }
-        }
+            community: 'Growing Community',
+          },
+        },
       }
-    })()
+    })(),
   )
   const pointsGeneratedQuery = supabase.rpc('get_total_points_generated')
   const latestPostsPromise = toAsyncResult(getBlogPosts())
 
   type FeaturedProjectRow = QueryData<typeof featuredProjectsQuery>[number]
-  type FeaturedProductRow = QueryData<typeof featuredProductsQuery>[number]
   type ActiveProducerRow = QueryData<typeof activeProducersQuery>[number]
 
   const [
@@ -289,7 +236,6 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     activeProductsResult,
     membersCountResult,
     featuredProjectsResult,
-    featuredProductsResult,
     activeProducersResult,
     homeContent,
     pointsResult,
@@ -300,7 +246,6 @@ export async function getHomeServerData(): Promise<HomeServerData> {
     activeProductsCountQuery,
     membersCountQuery,
     featuredProjectsQuery,
-    featuredProductsQuery,
     activeProducersQuery,
     homeContentPromise,
     pointsGeneratedQuery,
@@ -362,9 +307,8 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       const dedupedDb = dbState.value.filter((p) => !mockSlugs.has(p.slug))
       featuredProjectsState = toArrayState([...mockFeaturedProjects, ...dedupedDb], null)
     } else {
-      featuredProjectsState = mockFeaturedProjects.length > 0
-        ? toArrayState(mockFeaturedProjects, null)
-        : dbState
+      featuredProjectsState =
+        mockFeaturedProjects.length > 0 ? toArrayState(mockFeaturedProjects, null) : dbState
     }
   }
 
@@ -378,7 +322,6 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       name_i18n: p.name_i18n ?? null,
       short_description_default: p.short_description_default ?? null,
       short_description_i18n: p.short_description_i18n ?? null,
-      price_points: p.price_points,
       price_eur_equivalent: p.price_eur_equivalent,
       stock_quantity: p.stock_quantity,
       featured: p.featured,
@@ -388,45 +331,7 @@ export async function getHomeServerData(): Promise<HomeServerData> {
       tags: p.tags,
     }))
 
-  let featuredProductsState: DataState<ProductCardProduct[]>
-
-  if (isMockDataSource) {
-    featuredProductsState = toArrayState(mockFeaturedProducts, null)
-  } else {
-    const dbProductState = mapReadyState(
-      toArrayState<FeaturedProductRow>(featuredProductsResult.data, featuredProductsResult.error),
-      (product): ProductCardProduct => ({
-        id: product.id,
-        slug: product.slug,
-        name_default: product.name_default,
-        name_i18n: toLocalizedRecord(product.name_i18n),
-        short_description_default: product.short_description_default,
-        short_description_i18n: toLocalizedRecord(product.short_description_i18n),
-        price_points: product.price_points,
-        price_eur_equivalent: product.price_eur_equivalent,
-        stock_quantity: product.stock_quantity,
-        featured: product.featured,
-        fulfillment_method: product.fulfillment_method,
-        metadata: product.metadata,
-        images: product.images ?? [],
-        tags: product.tags ?? [],
-      }),
-    )
-
-    if (dbProductState.status === 'ready') {
-      const mockSlugs = new Set(
-        mockFeaturedProducts
-          .map((p) => p.slug)
-          .filter((s): s is string => typeof s === 'string' && s.length > 0),
-      )
-      const dedupedDb = dbProductState.value.filter((p) => !p.slug || !mockSlugs.has(p.slug))
-      featuredProductsState = toArrayState([...mockFeaturedProducts, ...dedupedDb], null)
-    } else {
-      featuredProductsState = mockFeaturedProducts.length > 0
-        ? toArrayState(mockFeaturedProducts, null)
-        : dbProductState
-    }
-  }
+  const featuredProductsState = toArrayState(mockFeaturedProducts, null)
 
   const activeProducersState = mapReadyState(
     toArrayState<ActiveProducerRow>(activeProducersResult.data, activeProducersResult.error),

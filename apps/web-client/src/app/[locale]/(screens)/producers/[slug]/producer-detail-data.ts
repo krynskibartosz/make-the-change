@@ -1,33 +1,31 @@
 /**
  * [ACTUEL_CODE] [SOURCE_PROTOTYPE]
  * Data layer pour la page détail producteur.
- * 
+ *
  * Pattern : thin page (metadata + data fetch) + UI component pure
  * Source : mocks (getMockProducerBySlug) = source de vérité
  * Legacy : Supabase (public_producers, public_products, public_projects) = fallback
- * 
+ *
  * À terme : remplacer Supabase par les mocks structurés en DB V2
  */
 
 import { unstable_cache } from 'next/cache'
+import {
+  type EditorialIdentity,
+  getMockProducerBySlug,
+  type ImpactSummary,
+  type MissionPillar,
+  type MockProducerSpeciesCard,
+  type PartnerCatalogOverview,
+  type ProducerLocation,
+  type ProofCard,
+  type SectionOrder,
+  type StoryBlock,
+  type VisualAssets,
+} from '@/app/[locale]/(site)/producers/_features/mock-producers'
 import { isMockDataSource } from '@/lib/mock/data-source'
 import { createStaticClient } from '@/lib/supabase/static'
-import { asNumber, asString, asStringArray, isRecord } from '@/lib/type-guards'
-import {
-  getMockProducerBySlug,
-  type MockProducerListProduct,
-  type MockProducerListProject,
-  type MockProducerSpeciesCard,
-  type MissionPillar,
-  type ProofCard,
-  type StoryBlock,
-  type ImpactSummary,
-  type ProducerLocation,
-  type EditorialIdentity,
-  type VisualAssets,
-  type SectionOrder,
-  type PartnerCatalogOverview,
-} from '@/app/[locale]/(site)/producers/_features/mock-producers'
+import { asString, asStringArray, isRecord } from '@/lib/type-guards'
 
 // ── Types exportés ──
 
@@ -36,7 +34,7 @@ export type ProducerProduct = {
   slug: string | null
   name_default: string | null
   image_url: string | null
-  price_points: number | null
+  price_eur_equivalent: number | null
 }
 
 export type ProducerProject = {
@@ -66,7 +64,7 @@ export type PublicProducer = {
   products: ProducerProduct[]
   projects: ProducerProject[]
   species: ProducerSpecies[]
-  
+
   // ── Champs éditoriaux ──
   tagline?: string
   locations?: ProducerLocation
@@ -75,12 +73,12 @@ export type PublicProducer = {
   proofCards?: ProofCard[]
   storyBlocks?: StoryBlock[]
   impactSummary?: ImpactSummary
-  
+
   // ── Champs enrichis (Phase 1) ──
   editorialIdentity?: EditorialIdentity
   visualAssets?: VisualAssets
   sectionOrder?: SectionOrder
-  
+
   // ── Gamme partenaire (informatif — pas le catalogue app) ──
   partnerCatalogOverview?: PartnerCatalogOverview
 }
@@ -97,7 +95,8 @@ const toProducerProduct = (value: unknown): ProducerProduct | null => {
     slug: asString(value.slug) || null,
     name_default: asString(value.name_default) || null,
     image_url: asString(value.image_url) || null,
-    price_points: typeof value.price_points === 'number' ? value.price_points : null,
+    price_eur_equivalent:
+      typeof value.price_eur_equivalent === 'number' ? value.price_eur_equivalent : null,
   }
 }
 
@@ -121,7 +120,9 @@ const toProducerProject = (value: unknown): ProducerProject | null => {
 
 // ── Data fetching ──
 
-function mapMockToPublicProducer(mockProducer: NonNullable<ReturnType<typeof getMockProducerBySlug>>): PublicProducer {
+function mapMockToPublicProducer(
+  mockProducer: NonNullable<ReturnType<typeof getMockProducerBySlug>>,
+): PublicProducer {
   return {
     id: mockProducer.id,
     slug: mockProducer.slug,
@@ -181,7 +182,7 @@ async function getSupabaseProducerBySlug(slug: string): Promise<PublicProducer |
   // Récupération des produits liés
   const { data: productsRaw } = await supabase
     .from('public_products')
-    .select('id, slug, name_default, image_url, price_points')
+    .select('id, slug, name_default, image_url, price_eur_equivalent')
     .eq('producer_id', producerId)
     .order('featured', { ascending: false })
     .limit(6)
@@ -189,7 +190,9 @@ async function getSupabaseProducerBySlug(slug: string): Promise<PublicProducer |
   // Récupération des projets liés
   const { data: projectsRaw } = await supabase
     .from('public_projects')
-    .select('id, slug, name_default, hero_image_url, status, type, current_funding, address_city, address_country_code')
+    .select(
+      'id, slug, name_default, hero_image_url, status, type, current_funding, address_city, address_country_code',
+    )
     .eq('producer_id', producerId)
     .limit(4)
 
