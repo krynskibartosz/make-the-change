@@ -10,6 +10,9 @@ import {
   getMockProjectBySlug,
   getMockProjects,
 } from '@/app/[locale]/(tabs)/projects/_features/mock-projects'
+import { isContributionType } from './_utils/project-type-guards'
+import { getMockProjectUpdates } from '@/lib/mock/mock-project-updates'
+import type { ProjectUpdate } from '@/types/project'
 
 export type ProjectProducer = {
   id: string
@@ -153,7 +156,7 @@ function toPublicProjectFromMock(
     challenges: project.challenges || null,
     producer_products: project.producer_products || null,
     donation_options: project.donation_options || null,
-    is_donation_project: Boolean(project.donation_options?.length),
+    is_donation_project: isContributionType(project.type),
     expected_impact: project.expected_impact || null,
   }
 }
@@ -169,3 +172,7 @@ export const getRelatedProjectsByType = unstable_cache(
   ['related-projects'],
   { revalidate: 3600, tags: ['projects-list'] },
 )
+
+export function getProjectUpdates(slug: string): ProjectUpdate[] {
+  return getMockProjectUpdates(slug)
+}

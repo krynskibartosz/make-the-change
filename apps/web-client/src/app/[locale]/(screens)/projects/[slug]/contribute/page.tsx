@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { ProjectContributeOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
+import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
+import { getUser } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getLocalizedContent } from '@/lib/utils'
 import { isContributionType, toOptionalString } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
@@ -19,7 +21,11 @@ export default async function ContributePage({ params, searchParams }: Contribut
     notFound()
   }
 
-  const locale = await getLocale()
+  const [locale, projectSpecies, user] = await Promise.all([
+    getLocale(),
+    getSpeciesForProject(project.slug, project.id),
+    getUser(),
+  ])
 
   return (
     <ProjectContributeOneFlow
@@ -35,8 +41,8 @@ export default async function ContributePage({ params, searchParams }: Contribut
         expectedImpact: project.expected_impact,
       }}
       presentation="page"
-      isAuthenticated={false}
-      discoveredSpeciesId={null}
+      isAuthenticated={user !== null}
+      discoveredSpeciesId={projectSpecies[0]?.id ?? null}
       initialOptionId={toOptionalString(query.option)}
     />
   )

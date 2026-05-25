@@ -16,7 +16,7 @@ import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
 import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
 import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
 import { ProjectUpdatesFeed } from './_components/project-updates-feed'
-import { getMockProjectUpdates } from '@/lib/mock/mock-project-updates'
+import { getProjectUpdates } from './project-detail-data'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { PublicProject, RelatedProject } from './project-detail-data'
 import { buildProjectImpactItems } from './_utils/build-project-impact-items'
@@ -45,15 +45,15 @@ const getWebsiteLabel = (url: string | null): string | null => {
   }
 }
 
-function getSimilarProjectsTitle(type: string | null | undefined): string {
+function getSimilarProjectsTitleKey(type: string | null | undefined): 'detail.similar_ocean' | 'detail.similar_land' | 'detail.similar_pollinators' {
   const t = type?.toLowerCase() ?? ''
   if (t.includes('coral') || t.includes('reef') || t.includes('ocean')) {
-    return 'Autres projets liés aux océans'
+    return 'detail.similar_ocean'
   }
   if (t.includes('orchard') || t.includes('olive') || t.includes('forest') || t.includes('tree')) {
-    return 'Autres projets liés aux terres vivantes'
+    return 'detail.similar_land'
   }
-  return 'Autres projets liés aux pollinisateurs'
+  return 'detail.similar_pollinators'
 }
 
 export async function ProjectQuickView({
@@ -151,22 +151,22 @@ export async function ProjectQuickView({
     projectImpact: project.expected_impact,
   })
 
-  const partnerLabel = isContributionProject ? 'Partenaire terrain' : 'Producteur partenaire'
-  const fundingTitle = isContributionProject ? 'Objectif de contribution' : 'Objectif de soutien'
+  const partnerLabel = isContributionProject ? t('detail.partner_label_contribution') : t('detail.partner_label_support')
+  const fundingTitle = isContributionProject ? t('detail.funding_title_contribution') : t('detail.funding_title_support')
   const fundingSubtext = isContributionProject
-    ? 'Restauration, suivi terrain et matériel. Les frais sont affichés clairement avant paiement.'
-    : 'Équipement, suivi terrain, structuration de la filière et valorisation des produits du partenaire.'
+    ? t('detail.funding_subtext_contribution')
+    : t('detail.funding_subtext_support')
   const projectContextLabel = (() => {
-    if (isContributionProject) return 'Projet biodiversité'
-    if (project.type === 'beehive') return 'Apiculteurs accompagnés'
-    if (project.type === 'coral' || project.type === 'reef') return 'Restauration marine'
-    if (project.type === 'orchard') return 'Producteurs accompagnés'
-    return 'Filière locale'
+    if (isContributionProject) return t('detail.context_biodiversity')
+    if (project.type === 'beehive') return t('detail.context_beehive')
+    if (project.type === 'coral' || project.type === 'reef') return t('detail.context_marine')
+    if (project.type === 'orchard') return t('detail.context_orchard')
+    return t('detail.context_other')
   })()
   const ctaProofLine = isContributionProject
-    ? `Suivi terrain · Trace BioDex incluse · ${projectContextLabel}`
-    : `Suivi terrain · Crédits Impact inclus · ${projectContextLabel}`
-  const similarTitle = getSimilarProjectsTitle(project.type)
+    ? `${t('detail.proof_monitoring')} · ${t('detail.proof_biodex')} · ${projectContextLabel}`
+    : `${t('detail.proof_monitoring')} · ${t('detail.proof_credits')} · ${projectContextLabel}`
+  const similarTitle = t(getSimilarProjectsTitleKey(project.type))
 
   return (
     <div className="relative flex h-full flex-col overflow-x-hidden">
@@ -313,7 +313,7 @@ export async function ProjectQuickView({
 
             {/* Nouvelles du terrain (point d'accès compact → bottom sheet) */}
             <div className="mt-8 px-4 sm:px-5">
-              <ProjectUpdatesFeed updates={getMockProjectUpdates(project.slug)} />
+              <ProjectUpdatesFeed updates={getProjectUpdates(project.slug)} />
             </div>
 
             {/* 5. Ce que le projet permet */}
@@ -404,7 +404,7 @@ export async function ProjectQuickView({
               href={supportPath}
               className="flex h-14 w-full items-center justify-center rounded-2xl bg-lime-400 px-4 text-center text-lg font-black text-black shadow-sm transition-transform active:scale-95"
             >
-              {isContributionProject ? 'Contribuer à ce projet' : 'Soutenir ce projet'}
+              {isContributionProject ? t('detail.cta_contribute') : t('detail.cta_support')}
             </Link>
           )}
           {!isFundingClosed ? (

@@ -3,6 +3,7 @@ import { getLocale } from 'next-intl/server'
 import { ProjectSupportOneFlow } from '@/app/[locale]/(screens)/projects/[slug]/support/_components/project-support-one-flow'
 import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]/project-detail-data'
 import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
+import { getUser } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getLocalizedContent } from '@/lib/utils'
 import { isSupportType } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
@@ -36,7 +37,10 @@ export default async function SupportPage({ params, searchParams }: SupportPageP
     notFound()
   }
 
-  const projectSpecies = await getSpeciesForProject(project.slug, project.id)
+  const [projectSpecies, user] = await Promise.all([
+    getSpeciesForProject(project.slug, project.id),
+    getUser(),
+  ])
 
   return (
     <ProjectSupportOneFlow
@@ -51,7 +55,7 @@ export default async function SupportPage({ params, searchParams }: SupportPageP
         expectedImpact: project.expected_impact,
       }}
       presentation="page"
-      isAuthenticated={false}
+      isAuthenticated={user !== null}
       initialAmount={toOptionalAmount(query.amount)}
       discoveredSpeciesId={projectSpecies[0]?.id ?? null}
       species={projectSpecies ?? undefined}
