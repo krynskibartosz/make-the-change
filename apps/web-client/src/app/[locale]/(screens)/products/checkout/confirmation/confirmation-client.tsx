@@ -22,11 +22,9 @@ export function ConfirmationClient({ completedOrder, isConnected, locale }: Prop
         <Check className="h-10 w-10 text-[#0B0F15]" aria-hidden="true" />
       </div>
 
-      <h1 className="mt-6 text-3xl font-black text-white">Commande prototype validée</h1>
+      <h1 className="mt-6 text-3xl font-black text-white">Commande confirmée</h1>
       <p className="mt-3 text-sm font-medium leading-relaxed text-white/55">
         Commande n° <span className="font-mono text-white/80">{orderId}</span>
-        <br />
-        Aucun paiement réel n'a été débité.
       </p>
 
       <div className="mt-8 w-full rounded-2xl border border-white/10 bg-white/[0.04] p-5">

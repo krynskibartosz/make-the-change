@@ -105,7 +105,16 @@ export function PaiementClient({ cart, summary, customer, isConnected, locale }:
 
       {/* Adresse de livraison */}
       <div className="mt-4 rounded-xl border border-white/8 bg-white/[0.03] p-4">
-        <p className="text-[11px] font-bold uppercase text-white/45">Livraison à</p>
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] font-bold uppercase text-white/45">Livraison à</p>
+          <button
+            type="button"
+            onClick={() => router.push(`/${locale}/products/checkout/infos`)}
+            className="text-[11px] font-bold text-white/45 hover:text-white/70"
+          >
+            Modifier
+          </button>
+        </div>
         <p className="mt-2 text-sm font-bold text-white">{customer.name}</p>
         <p className="mt-1 text-[12px] font-medium text-white/55">
           {customer.street}, {customer.postalCode} {customer.city}, Belgique
@@ -128,11 +137,6 @@ export function PaiementClient({ cart, summary, customer, isConnected, locale }:
             </p>
           ))}
         </div>
-        {sellerGroups.some((g) => g.shipping?.feeStatus === 'prototype_estimate') && (
-          <p className="mt-3 text-[12px] font-medium text-amber-200/75">
-            Frais estimés pour le prototype, à confirmer par le partenaire.
-          </p>
-        )}
       </div>
 
       {/* Total */}
@@ -180,14 +184,14 @@ export function PaiementClient({ cart, summary, customer, isConnected, locale }:
           type="button"
           disabled={isPending}
           onClick={handlePay}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-70"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-70"
         >
           {isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
           ) : (
             <CreditCard className="h-4 w-4" aria-hidden="true" />
           )}
-          {isPending ? 'Validation en cours...' : `Simuler le paiement · ${formatEuro(summary.totalEur)}`}
+          {isPending ? 'Validation en cours...' : `Valider ma commande · ${formatEuro(summary.totalEur)}`}
         </button>
       </div>
     </div>
