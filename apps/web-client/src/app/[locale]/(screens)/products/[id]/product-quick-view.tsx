@@ -253,7 +253,7 @@ export function ProductQuickView({
           </section>
         </div>
 
-        <ProductReviews />
+        <ProductReviews productId={product.id} />
 
         <ProductRelated products={relatedProducts} producerName={producerName} />
       </div>
