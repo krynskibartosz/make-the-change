@@ -128,7 +128,6 @@ function Toast({ text }) {
 function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnabled }) {
   const viewport = useAtlasViewportProfile()
   const [search, setSearch] = React.useState(false)
-  const [guide, setGuide] = React.useState(false)
   const [toast, setToast] = React.useState('')
   const toastTimerRef = React.useRef()
 
@@ -301,72 +300,6 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
         </div>
       </div>
 
-      {/* CTA — flotte en bas de la carte avec un dégradé */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 2,
-          paddingTop: 52,
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${viewport.isShort ? 14 : 24}px)`,
-          background:
-            'linear-gradient(0deg, rgba(4,6,10,0.94) 0%, rgba(4,6,10,0.68) 55%, transparent 100%)',
-        }}
-      >
-        <button
-          onClick={() => {
-            void loadAtlasSheets()
-            setGuide(true)
-          }}
-          style={{
-            width: '100%',
-            minHeight: 56,
-            padding: viewport.isNarrow ? '14px 18px' : '16px 22px',
-            borderRadius: 9999,
-            border: '1px solid rgba(0,0,0,0.06)',
-            background: 'linear-gradient(180deg, #f6eedb 0%, #e6dcb9 100%)',
-            color: '#1c1a14',
-            fontWeight: 600,
-            fontSize: viewport.isNarrow ? 16 : 18,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 14,
-            cursor: 'pointer',
-            boxShadow:
-              '0 10px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.15) inset, 0 1px 0 rgba(255,255,255,0.6) inset, 0 0 38px rgba(244,216,137,0.18)',
-          }}
-        >
-          <span
-            style={{
-              width: viewport.isNarrow ? 28 : 30,
-              height: viewport.isNarrow ? 28 : 30,
-              borderRadius: '50%',
-              border: '1.5px solid #1c1a14',
-              display: 'grid',
-              placeItems: 'center',
-            }}
-          >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#1c1a14"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="15.5 8.5 13 13 8.5 15.5 11 11" />
-            </svg>
-          </span>
-          Me guider dans l'Atlas
-        </button>
-      </div>
 
       {search && (
         <React.Suspense fallback={null}>
@@ -378,11 +311,6 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
               showToast('Recherche : « ' + s.label + ' »')
             }}
           />
-        </React.Suspense>
-      )}
-      {guide && (
-        <React.Suspense fallback={null}>
-          <GuideOverlay open={guide} onClose={() => setGuide(false)} />
         </React.Suspense>
       )}
       <Toast text={toast} />
