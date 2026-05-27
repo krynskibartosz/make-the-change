@@ -974,326 +974,193 @@ export function Level3Screen({
     >
       <AtlasBackground dust={0.18} vignette={0.55} />
 
-      {/* Scrollable content */}
+      {/* Map layer (full screen overlay) */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 1,
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          paddingTop: viewport.isShort
-            ? 'calc(env(safe-area-inset-top, 0px) + 26px)'
-            : 'calc(env(safe-area-inset-top, 0px) + 40px)',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 28px)',
-          WebkitOverflowScrolling: 'touch',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingBottom: viewport.isShort ? 130 : 160,
+          paddingTop: 80,
         }}
       >
-        {/* Header */}
-        <div style={{ position: 'relative', padding: '2px 16px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-            <button
-              onClick={onBack}
-              aria-label="Retour"
-              style={{
-                width: navButtonSize,
-                height: navButtonSize,
-                borderRadius: '50%',
-                background: 'rgba(20,22,24,0.55)',
-                border: '1px solid rgba(255,255,255,0.12)',
-                backdropFilter: 'blur(10px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-                display: 'grid',
-                placeItems: 'center',
-                cursor: 'pointer',
-                color: '#eae3d2',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
-                flex: '0 0 auto',
-              }}
-            >
-              <svg
-                width="19"
-                height="19"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-            <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px' }}>
-              <div
-                style={{
-                  fontSize: viewport.isNarrow ? 9.5 : 10.5,
-                  letterSpacing: viewport.isNarrow ? 2 : 2.6,
-                  textTransform: 'uppercase',
-                  color: '#e6ad44',
-                  fontWeight: 500,
-                }}
-              >
-                Relations du vivant
-              </div>
-              <h1
-                style={{
-                  margin: '1px 0 0',
-                  fontFamily: 'var(--atlas-prototype-serif), serif',
-                  fontWeight: 500,
-                  fontSize: viewport.isNarrow ? 27 : 30,
-                  lineHeight: 1.05,
-                  color: '#f6efdc',
-                  letterSpacing: '-0.3px',
-                  textShadow: '0 2px 16px rgba(0,0,0,0.7)',
-                }}
-              >
-                {subdomain.name}
-              </h1>
-              <div
-                style={{
-                  margin: '4px auto 0',
-                  maxWidth: viewport.isNarrow ? 250 : 300,
-                  fontSize: viewport.isNarrow ? 11 : 11.5,
-                  lineHeight: 1.4,
-                  color: '#b9b09a',
-                }}
-              >
-                Comprendre comment fleurs, insectes et milieux dépendent les uns des autres.
-              </div>
-            </div>
-            <button
-              aria-label="Informations"
-              onClick={() => setPreview({ type: 'course', title: ['À propos de ce thème'] })}
-              style={{
-                width: navButtonSize,
-                height: navButtonSize,
-                borderRadius: '50%',
-                background: 'rgba(20,22,24,0.55)',
-                border: '1px solid rgba(255,255,255,0.12)',
-                backdropFilter: 'blur(10px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-                display: 'grid',
-                placeItems: 'center',
-                cursor: 'pointer',
-                color: '#eae3d2',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
-                flex: '0 0 auto',
-              }}
-            >
-              <L3Icon kind="info" size={18} color="#eae3d2" />
-            </button>
-          </div>
-        </div>
-
-        {/* Progress card — small, floating left under header */}
         <div
           style={{
-            padding: viewport.isCompact ? '8px 16px 0' : '10px 16px 0',
-            textAlign: viewport.isCompact ? 'center' : 'left',
+            width: '100%',
+            maxWidth: 420,
+            aspectRatio: '380 / 540',
           }}
         >
-          <div
+          <PollinisationCarte
+            onTapItem={(it) => setPreview(it)}
+            onTapCenter={startGuide}
+            animate={animateNodes}
+          />
+        </div>
+      </div>
+
+      {/* Top overlay (Header + Progress) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 10,
+          pointerEvents: 'none',
+          paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)',
+          background: 'linear-gradient(180deg, rgba(4,6,10,0.85) 0%, rgba(4,6,10,0) 100%)',
+        }}
+      >
+        <div style={{ padding: '0 16px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <button
+            onClick={onBack}
+            aria-label="Retour"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: viewport.isCompact ? 8 : 10,
-              background: 'rgba(10,12,14,0.72)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: viewport.isCompact ? 9999 : 16,
-              padding: viewport.isCompact ? '6px 12px 6px 7px' : '8px 14px 8px 8px',
-              boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+              width: navButtonSize,
+              height: navButtonSize,
+              borderRadius: '50%',
+              background: 'rgba(20,22,24,0.55)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(10px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+              display: 'grid',
+              placeItems: 'center',
+              cursor: 'pointer',
+              color: '#eae3d2',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+              flex: '0 0 auto',
+              pointerEvents: 'auto',
             }}
           >
-            <div
-              style={{ position: 'relative', width: progressRingSize, height: progressRingSize }}
-            >
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          
+          <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px' }}>
+            <div style={{ fontSize: viewport.isNarrow ? 9.5 : 10.5, letterSpacing: viewport.isNarrow ? 2 : 2.6, textTransform: 'uppercase', color: '#e6ad44', fontWeight: 500, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+              Relations du vivant
+            </div>
+            <h1 style={{ margin: '1px 0 0', fontFamily: 'var(--atlas-prototype-serif), serif', fontWeight: 500, fontSize: viewport.isNarrow ? 27 : 30, lineHeight: 1.05, color: '#f6efdc', letterSpacing: '-0.3px', textShadow: '0 2px 16px rgba(0,0,0,0.7)' }}>
+              {subdomain.name}
+            </h1>
+          </div>
+
+          <button
+            aria-label="Informations"
+            onClick={() => setPreview({ type: 'course', title: ['À propos de ce thème'] })}
+            style={{
+              width: navButtonSize,
+              height: navButtonSize,
+              borderRadius: '50%',
+              background: 'rgba(20,22,24,0.55)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(10px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+              display: 'grid',
+              placeItems: 'center',
+              cursor: 'pointer',
+              color: '#eae3d2',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+              flex: '0 0 auto',
+              pointerEvents: 'auto',
+            }}
+          >
+            <L3Icon kind="info" size={18} color="#eae3d2" />
+          </button>
+        </div>
+
+        <div style={{ padding: '16px 16px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(10,12,14,0.72)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 9999, padding: '6px 14px 6px 6px', boxShadow: '0 6px 20px rgba(0,0,0,0.4)', pointerEvents: 'auto' }}>
+            <div style={{ position: 'relative', width: progressRingSize, height: progressRingSize }}>
               <svg width={progressRingSize} height={progressRingSize} viewBox="0 0 42 42">
-                <circle
-                  cx="21"
-                  cy="21"
-                  r="17"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.12)"
-                  strokeWidth="3"
-                />
-                <circle
-                  cx="21"
-                  cy="21"
-                  r="17"
-                  fill="none"
-                  stroke="#f0c460"
-                  strokeWidth="3"
-                  strokeDasharray={`${2 * Math.PI * 17 * 0.33} ${2 * Math.PI * 17}`}
-                  strokeLinecap="round"
-                  transform="rotate(-90 21 21)"
-                />
+                <circle cx="21" cy="21" r="17" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="3" />
+                <circle cx="21" cy="21" r="17" fill="none" stroke="#f0c460" strokeWidth="3" strokeDasharray={`${2 * Math.PI * 17 * 0.33} ${2 * Math.PI * 17}`} strokeLinecap="round" transform="rotate(-90 21 21)" />
               </svg>
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'grid',
-                  placeItems: 'center',
-                  fontSize: viewport.isCompact ? 8.5 : 10,
-                  fontWeight: 600,
-                  color: '#f6efdc',
-                }}
-              >
+              <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 600, color: '#f6efdc' }}>
                 <div style={{ lineHeight: 1 }}>6/18</div>
-                <div
-                  style={{
-                    display: viewport.isCompact ? 'none' : undefined,
-                    fontSize: 7.5,
-                    color: '#9a937f',
-                    letterSpacing: 0.3,
-                    marginTop: 1,
-                  }}
-                >
-                  contenus
-                </div>
               </div>
             </div>
             <div style={{ textAlign: 'left' }}>
-              <div
-                style={{
-                  fontSize: viewport.isCompact ? 10 : 10.5,
-                  color: '#9a937f',
-                  lineHeight: 1.2,
-                }}
-              >
-                Progression de
-              </div>
-              <div style={{ fontSize: 11.5, color: '#eae3d2', lineHeight: 1.2 }}>ce thème</div>
-              <div style={{ fontSize: 13, color: '#f0c460', fontWeight: 700, marginTop: 1 }}>
-                33 %
-              </div>
+              <div style={{ fontSize: 10, color: '#9a937f', lineHeight: 1.2 }}>Progression</div>
+              <div style={{ fontSize: 12.5, color: '#f0c460', fontWeight: 700, marginTop: 1 }}>33 %</div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Recommandé */}
-        <div style={{ padding: viewport.isCompact ? '18px 16px 8px' : '18px 16px 4px' }}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'baseline',
-              marginBottom: 10,
-            }}
-          >
-            <div
-              style={{
-                fontFamily: 'var(--atlas-prototype-serif), serif',
-                fontSize: viewport.isNarrow ? 18 : 20,
-                fontWeight: 500,
-                color: '#f6efdc',
-              }}
-            >
-              Recommandé pour toi
-            </div>
-            <button
-              onClick={() => setPreview({ type: 'reco', title: ['Tous les recommandés'] })}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#9a937f',
-                fontSize: 12,
-                fontWeight: 500,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4,
-              }}
-            >
-              Voir tout
-              <L3Icon kind="chevron" size={12} color="#9a937f" />
-            </button>
+      {/* Bottom overlay (Recommandé) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 10,
+          pointerEvents: 'none',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+          paddingTop: 40,
+          background: 'linear-gradient(0deg, rgba(4,6,10,0.95) 0%, rgba(4,6,10,0.6) 60%, rgba(4,6,10,0) 100%)',
+        }}
+      >
+        <div style={{ padding: '0 16px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div style={{ fontFamily: 'var(--atlas-prototype-serif), serif', fontSize: 18, fontWeight: 500, color: '#f6efdc', textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
+            Recommandé pour toi
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: viewport.isCompact ? '1fr' : '1fr 1fr',
-              gap: 10,
-            }}
+          <button
+            onClick={() => setPreview({ type: 'reco', title: ['Tous les recommandés'] })}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#b9b09a', fontSize: 11, fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 4, pointerEvents: 'auto' }}
           >
+            Voir tout <L3Icon kind="chevron" size={10} color="#b9b09a" />
+          </button>
+        </div>
+        
+        {/* Horizontal scroll list */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 12,
+            padding: '0 16px',
+            overflowX: 'auto',
+            pointerEvents: 'auto',
+            scrollSnapType: 'x mandatory',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+          }}
+        >
+          <style>{`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+          <div style={{ scrollSnapAlign: 'start' }}>
             <RecoCard
               type="COURS LIBRE"
               typeColor="#4d8be0"
-              title={'Plantes mellifères : les alliées des pollinisateurs'}
-              meta="28 min · Débutant"
+              title="Plantes mellifères : les alliées des pollinisateurs"
+              meta="28 min"
               dotColor="#4d8be0"
               gradient={['#3a1f4a', '#1a0a26']}
               imageTexture="/lab/atlas-prototype/assets/tex_alphabet.webp"
               onClick={() => setPreview({ type: 'course', title: ['Plantes mellifères'] })}
             />
+          </div>
+          <div style={{ scrollSnapAlign: 'start', paddingRight: 16 }}>
             <RecoCard
               type="PROJET LIÉ"
               typeColor="#7ab84a"
-              title={'Rucher partenaire : comprendre, agir, protéger'}
-              meta="45 min · Intermédiaire"
+              title="Rucher partenaire : comprendre, agir, protéger"
+              meta="45 min"
               dotColor="#7ab84a"
               gradient={['#1f3a14', '#0a1a08']}
               imageTexture="/lab/atlas-prototype/assets/tex_solutions.webp"
               onClick={() => setPreview({ type: 'project', title: ['Rucher partenaire'] })}
             />
           </div>
-        </div>
-
-        {/* Big organic cell */}
-        <div style={{ padding: viewport.isCompact ? '8px 8px 0' : '4px 8px 0', width: '100%' }}>
-          <div
-            style={{
-              width: '100%',
-              maxWidth: viewport.isCompact ? 400 : 430,
-              height: viewport.isShort ? 'min(calc(100svh - 224px), 500px)' : undefined,
-              aspectRatio: '380 / 540',
-              margin: '0 auto',
-            }}
-          >
-            <PollinisationCarte
-              onTapItem={(it) => setPreview(it)}
-              onTapCenter={startGuide}
-              animate={animateNodes}
-            />
-          </div>
-        </div>
-
-        {/* Legend chips */}
-        <div
-          style={{
-            padding: viewport.isCompact ? '8px 12px 0' : '0 12px',
-            display: 'flex',
-            gap: 6,
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            fontSize: viewport.isNarrow ? 10 : 10.5,
-          }}
-        >
-          {[
-            { l: 'Parcours guidé', c: '#f0c460', i: 'hex' },
-            { l: 'Cours libre', c: '#4d8be0', i: 'book' },
-            { l: 'Projet lié', c: '#7ab84a', i: 'sprout' },
-            { l: 'Espèce BioDex', c: '#e6ad44', i: 'paw' },
-            { l: 'Toile vivante', c: '#a05fb3', i: 'web' },
-          ].map((chip) => (
-            <div
-              key={chip.l}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: viewport.isNarrow ? '6px 9px' : '6px 10px',
-                border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 9999,
-                background: 'rgba(10,12,14,0.55)',
-                color: '#cfc8b5',
-              }}
-            >
-              <L3Icon kind={chip.i} size={12} color={chip.c} />
-              {chip.l}
-            </div>
-          ))}
         </div>
       </div>
 
@@ -1307,21 +1174,23 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
     <button
       onClick={onClick}
       style={{
-        background: 'rgba(10,12,14,0.72)',
+        width: 156,
+        flex: '0 0 auto',
+        background: 'rgba(10,12,14,0.85)',
         border: '1px solid rgba(255,255,255,0.07)',
-        borderRadius: 16,
+        borderRadius: 14,
         padding: 0,
         cursor: 'pointer',
         textAlign: 'left',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        boxShadow: '0 6px 18px rgba(0,0,0,0.45)',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
       }}
     >
       <div
         style={{
-          height: 90,
+          height: 60,
           background: `linear-gradient(180deg, ${gradient[0]}, ${gradient[1]})`,
           position: 'relative',
         }}
@@ -1338,11 +1207,11 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
           }}
         />
       </div>
-      <div style={{ padding: '10px 12px 12px' }}>
+      <div style={{ padding: '8px 10px 12px' }}>
         <div
           style={{
-            fontSize: 9.5,
-            letterSpacing: 1.6,
+            fontSize: 8.5,
+            letterSpacing: 1.2,
             fontWeight: 700,
             color: typeColor,
             marginBottom: 4,
@@ -1352,34 +1221,21 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
         </div>
         <div
           style={{
-            fontSize: 12.5,
+            fontSize: 11.5,
             lineHeight: 1.25,
             color: '#eae3d2',
             fontWeight: 500,
-            minHeight: 46,
+            minHeight: 28,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden'
           }}
         >
           {title}
         </div>
-        <div
-          style={{
-            marginTop: 8,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: 10.5,
-            color: '#9a937f',
-          }}
-        >
-          <span
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: '50%',
-              background: dotColor,
-              display: 'inline-block',
-            }}
-          />
+        <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 5, fontSize: 9.5, color: '#9a937f' }}>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: dotColor }} />
           {meta}
         </div>
       </div>
