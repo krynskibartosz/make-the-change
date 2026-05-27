@@ -1,5 +1,6 @@
 import { Button, Progress } from '@make-the-change/core/ui'
 import { ChevronRight, Globe } from 'lucide-react'
+import Image from 'next/image'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import type { Advantage } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
@@ -55,6 +56,12 @@ const getWebsiteLabel = (url: string | null): string | null => {
   }
 }
 
+function resolveProducerPath(producer: { slug: string | null; id: string } | null): string | null {
+  if (!producer) return null
+  const identifier = producer.slug || producer.id
+  return identifier ? `/producers/${identifier}` : null
+}
+
 function getSimilarProjectsTitleKey(
   type: string | null | undefined,
 ): 'detail.similar_ocean' | 'detail.similar_land' | 'detail.similar_pollinators' {
@@ -107,7 +114,7 @@ export async function ProjectQuickView({
     ? getCountryDisplayName(resolvedIso, locale)
     : (project.address_country_code ?? null)
   const launchDateFormatted = project.launch_date
-    ? new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(
+    ? new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
         new Date(project.launch_date),
       )
     : null
@@ -142,12 +149,9 @@ export async function ProjectQuickView({
     : t('subtitle')
   const websiteUrl = project.producer?.contact_website || null
   const websiteLabel = getWebsiteLabel(websiteUrl)
-  const producerHref =
-    project.producer && (project.producer.slug || project.producer.id)
-      ? `/producers/${project.producer.slug || project.producer.id}`
-      : null
+  const producerHref = resolveProducerPath(project.producer)
 
-  const isContributionProject = !!(project.is_donation_project && project.donation_options)
+  const isContributionProject = !!(project.is_donation_project && project.donation_options?.length)
   const supportPath = isContributionProject
     ? `/projects/${project.slug}/contribute?source=quick_view`
     : `/projects/${project.slug}/support?source=quick_view`
@@ -275,9 +279,11 @@ export async function ProjectQuickView({
                   className="group flex w-full cursor-pointer items-center gap-4 px-4 py-4 transition-all duration-200 hover:bg-white/[0.03] active:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-lime-400/60 sm:px-5"
                 >
                   {producerImage ? (
-                    <img
+                    <Image
                       src={producerImage}
                       alt={producerName}
+                      width={48}
+                      height={48}
                       className="h-12 w-12 shrink-0 rounded-full object-cover transition-transform group-hover:scale-105"
                     />
                   ) : (
@@ -298,9 +304,11 @@ export async function ProjectQuickView({
               ) : (
                 <div className="flex w-full items-center gap-4 px-4 py-4 sm:px-5">
                   {producerImage ? (
-                    <img
+                    <Image
                       src={producerImage}
                       alt={producerName}
+                      width={48}
+                      height={48}
                       className="h-12 w-12 shrink-0 rounded-full object-cover"
                     />
                   ) : (
@@ -330,7 +338,7 @@ export async function ProjectQuickView({
             </div>
           ) : null}
 
-          <div className="pb-40 sm:pb-44">
+          <div className="pb-44 sm:pb-48">
             {/* 4. Comprendre ce projet */}
             <div className="mt-14 px-4 sm:px-5">
               <ProjectBiodexSheet
