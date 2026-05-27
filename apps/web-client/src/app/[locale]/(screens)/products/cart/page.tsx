@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
 import { getCurrentMockCart, getCurrentUnlockedAdvantageIds } from '@/lib/mock/mock-commerce-server'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
@@ -22,7 +22,7 @@ export default async function ProductCartPage({ params }: Props) {
       header={
         <div className="flex w-full items-center gap-3">
           <Link
-            href={`/${locale}/products`}
+            href="/products"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white"
             aria-label="Retour à la boutique"
           >

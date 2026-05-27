@@ -29,7 +29,7 @@ export default async function InterceptedProductPage({ params }: InterceptedProd
   return (
     <FullScreenSlideModal
       title={productName}
-      fallbackHref={`/products/${product.id}`}
+      fallbackHref="/products"
       headerMode="dynamic"
     >
       <ProductQuickView product={product} />

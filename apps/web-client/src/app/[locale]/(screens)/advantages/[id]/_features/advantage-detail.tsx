@@ -54,7 +54,9 @@ export function AdvantageDetail({
       >
         {showFloatingBack && (
           <button
-            onClick={() => router.back()}
+            onClick={() =>
+              window.history.length > 1 ? router.back() : router.push('/advantages')
+            }
             className="fixed left-4 top-[max(1rem,env(safe-area-inset-top))] z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/45 backdrop-blur-sm"
             aria-label="Retour"
           >
