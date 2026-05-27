@@ -50,7 +50,7 @@ export function AdvantageDetail({
     <div className="relative flex h-full flex-col bg-[#0B0F15]">
       <div
         data-modal-scroll-root
-        className="relative flex-1 overflow-y-auto overscroll-contain pb-8"
+        className="relative flex-1 overflow-y-auto overscroll-contain pb-28"
       >
         {showFloatingBack && (
           <button
@@ -168,7 +168,7 @@ export function AdvantageDetail({
         </div>
       </div>
 
-      <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/80 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-lg">
+      <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/5 bg-[#0B0F15]/80 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-lg">
         {isSoon ? (
           <div className="flex w-full justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/30">
             Bientôt disponible
