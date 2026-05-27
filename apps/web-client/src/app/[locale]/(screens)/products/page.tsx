@@ -63,7 +63,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35">
               Boutique
             </p>
-            <p className="truncate text-sm font-black text-white">Produits partenaires</p>
+            <h1 className="truncate text-sm font-black text-white">Produits partenaires</h1>
           </div>
         </div>
       }
