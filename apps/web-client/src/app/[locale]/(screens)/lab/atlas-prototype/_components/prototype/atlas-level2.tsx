@@ -686,119 +686,109 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
     >
       <AtlasBackground dust={0.2} vignette={0.55} />
 
+      {/* Carte — plein écran, occupe tout le viewport */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 1,
           display: 'flex',
-          flexDirection: 'column',
-          padding: viewport.isShort
-            ? 'calc(env(safe-area-inset-top, 0px) + 28px) 0 calc(env(safe-area-inset-bottom, 0px) + 8px)'
-            : 'calc(env(safe-area-inset-top, 0px) + 42px) 0 calc(env(safe-area-inset-bottom, 0px) + 12px)',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {/* Header */}
-        <div style={{ position: 'relative', padding: '2px 16px 0', flex: '0 0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-            <button
-              onClick={onBack}
-              aria-label="Retour à l'Atlas"
-              style={{
-                width: navButtonSize,
-                height: navButtonSize,
-                borderRadius: '50%',
-                background: 'rgba(20,22,24,0.55)',
-                border: '1px solid rgba(255,255,255,0.12)',
-                backdropFilter: 'blur(10px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-                display: 'grid',
-                placeItems: 'center',
-                cursor: 'pointer',
-                color: '#eae3d2',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
-                flex: '0 0 auto',
-              }}
-            >
-              <svg
-                width="19"
-                height="19"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 12H5" />
-                <polyline points="12 19 5 12 12 5" />
-              </svg>
-            </button>
-            <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px 0' }}>
-              <div
-                style={{
-                  fontSize: viewport.isNarrow ? 9.5 : 10.5,
-                  letterSpacing: viewport.isNarrow ? 2 : 2.6,
-                  textTransform: 'uppercase',
-                  color: '#e6ad44',
-                  fontWeight: 500,
-                }}
-              >
-                Relations du vivant
-              </div>
-              <h1
-                style={{
-                  margin: '1px 0 0',
-                  fontFamily: 'var(--atlas-prototype-serif), serif',
-                  fontWeight: 500,
-                  fontSize: viewport.isNarrow ? 24 : 26,
-                  lineHeight: 1.05,
-                  color: '#f6efdc',
-                  letterSpacing: '-0.3px',
-                  textShadow: '0 2px 16px rgba(0,0,0,0.7)',
-                }}
-              >
-                Sous-domaines
-              </h1>
-              <div
-                style={{
-                  margin: '2px auto 0',
-                  maxWidth: viewport.isNarrow ? 250 : 290,
-                  fontSize: viewport.isNarrow ? 11 : 11.5,
-                  lineHeight: 1.35,
-                  color: '#b9b09a',
-                }}
-              >
-                Explore les liens qui unissent les espèces entre elles.
-              </div>
-            </div>
-            <div style={{ width: navButtonSize, height: navButtonSize, flex: '0 0 auto' }} />
-          </div>
-        </div>
+        <SubdomainCarte onPick={onPickSubdomain} animate={animateNodes} />
+      </div>
 
-        {/* Carte — dominant element */}
-        <div
-          style={{
-            flex: '1 1 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: viewport.isShort ? '0 8px' : '4px 4px 0',
-            minHeight: 0,
-            overflow: 'hidden',
-          }}
-        >
-          <div
+      {/* Header — flotte au-dessus de la carte avec un dégradé */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          paddingTop: `calc(env(safe-area-inset-top, 0px) + ${viewport.isShort ? 20 : 36}px)`,
+          paddingLeft: 16,
+          paddingRight: 16,
+          paddingBottom: 52,
+          background:
+            'linear-gradient(180deg, rgba(4,6,10,0.92) 0%, rgba(4,6,10,0.62) 55%, transparent 100%)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <button
+            onClick={onBack}
+            aria-label="Retour à l'Atlas"
             style={{
-              aspectRatio: '380 / 570',
-              width: '100%',
-              maxWidth: viewport.isShort ? 386 : 412,
-              maxHeight: '100%',
-              display: 'flex',
+              width: navButtonSize,
+              height: navButtonSize,
+              borderRadius: '50%',
+              background: 'rgba(20,22,24,0.55)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(10px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+              display: 'grid',
+              placeItems: 'center',
+              cursor: 'pointer',
+              color: '#eae3d2',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+              flex: '0 0 auto',
             }}
           >
-            <SubdomainCarte onPick={onPickSubdomain} animate={animateNodes} />
+            <svg
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M19 12H5" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+          </button>
+          <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px 0' }}>
+            <div
+              style={{
+                fontSize: viewport.isNarrow ? 9.5 : 10.5,
+                letterSpacing: viewport.isNarrow ? 2 : 2.6,
+                textTransform: 'uppercase',
+                color: '#e6ad44',
+                fontWeight: 500,
+              }}
+            >
+              Relations du vivant
+            </div>
+            <h1
+              style={{
+                margin: '1px 0 0',
+                fontFamily: 'var(--atlas-prototype-serif), serif',
+                fontWeight: 500,
+                fontSize: viewport.isNarrow ? 24 : 26,
+                lineHeight: 1.05,
+                color: '#f6efdc',
+                letterSpacing: '-0.3px',
+                textShadow: '0 2px 16px rgba(0,0,0,0.7)',
+              }}
+            >
+              Sous-domaines
+            </h1>
+            <div
+              style={{
+                margin: '2px auto 0',
+                maxWidth: viewport.isNarrow ? 250 : 290,
+                fontSize: viewport.isNarrow ? 11 : 11.5,
+                lineHeight: 1.35,
+                color: '#b9b09a',
+              }}
+            >
+              Explore les liens qui unissent les espèces entre elles.
+            </div>
           </div>
+          <div style={{ width: navButtonSize, height: navButtonSize, flex: '0 0 auto' }} />
         </div>
       </div>
     </div>

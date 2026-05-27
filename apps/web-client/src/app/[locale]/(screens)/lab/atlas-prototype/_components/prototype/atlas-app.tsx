@@ -169,28 +169,51 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
       {styleScope}
       <AtlasBackground dust={CONFIG.dust} vignette={CONFIG.vignette} />
 
+      {/* Carte — plein écran, occupe tout le viewport */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 1,
           display: 'flex',
-          flexDirection: 'column',
-          padding: viewport.isShort
-            ? 'calc(env(safe-area-inset-top, 0px) + 30px) 0 calc(env(safe-area-inset-bottom, 0px) + 14px)'
-            : 'calc(env(safe-area-inset-top, 0px) + 52px) 0 calc(env(safe-area-inset-bottom, 0px) + 24px)',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {/* Header */}
-        <div style={{ position: 'relative', padding: '2px 16px 0', flex: '0 0 auto' }}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              gap: 10,
-            }}
-          >
+        <VoronoiAtlas
+          onPick={onPickTerritory}
+          glow={CONFIG.glow}
+          animate={motionEnabled && CONFIG.animateNodes}
+          focusedId={focusedId}
+        />
+      </div>
+
+      {/* Header — flotte au-dessus de la carte avec un dégradé */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          paddingTop: `calc(env(safe-area-inset-top, 0px) + ${viewport.isShort ? 22 : 38}px)`,
+          paddingLeft: 16,
+          paddingRight: 16,
+          paddingBottom: 52,
+          background:
+            'linear-gradient(180deg, rgba(4,6,10,0.92) 0%, rgba(4,6,10,0.62) 55%, transparent 100%)',
+          pointerEvents: 'none',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 10,
+          }}
+        >
+          <div style={{ pointerEvents: 'auto' }}>
             <CircleButton ariaLabel="Retour" onClick={() => showToast('Retour à l’accueil')}>
               <svg
                 width="20"
@@ -206,51 +229,53 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
                 <polyline points="12 19 5 12 12 5" />
               </svg>
             </CircleButton>
-            <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 0 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path
-                    d="M5 19 C 5 11, 11 5, 19 5 C 19 13, 13 19, 5 19 Z"
-                    fill="#9ac06e"
-                    opacity="0.95"
-                  />
-                  <path
-                    d="M5.5 18.5 L 14 10"
-                    stroke="#1d3010"
-                    strokeWidth="1.4"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-              <h1
-                style={{
-                  margin: '2px 0 0',
-                  fontFamily: 'var(--atlas-prototype-serif), serif',
-                  fontWeight: 500,
-                  fontSize: viewport.isNarrow ? 32 : 36,
-                  lineHeight: 1.05,
-                  color: '#f6efdc',
-                  letterSpacing: '-0.3px',
-                  textShadow: '0 2px 18px rgba(0,0,0,0.7)',
-                }}
-              >
-                Atlas du vivant
-              </h1>
-              <div
-                style={{
-                  margin: '4px auto 0',
-                  maxWidth: viewport.isNarrow ? 220 : 280,
-                  fontSize: viewport.isNarrow ? 10.5 : 12,
-                  lineHeight: 1.55,
-                  letterSpacing: viewport.isNarrow ? 1.8 : 2.4,
-                  textTransform: 'uppercase',
-                  color: '#a89c7c',
-                }}
-              >
-                Explorer · Comprendre · Agir
-              </div>
+          </div>
+          <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 0 }}>
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path
+                  d="M5 19 C 5 11, 11 5, 19 5 C 19 13, 13 19, 5 19 Z"
+                  fill="#9ac06e"
+                  opacity="0.95"
+                />
+                <path
+                  d="M5.5 18.5 L 14 10"
+                  stroke="#1d3010"
+                  strokeWidth="1.4"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
+            <h1
+              style={{
+                margin: '2px 0 0',
+                fontFamily: 'var(--atlas-prototype-serif), serif',
+                fontWeight: 500,
+                fontSize: viewport.isNarrow ? 32 : 36,
+                lineHeight: 1.05,
+                color: '#f6efdc',
+                letterSpacing: '-0.3px',
+                textShadow: '0 2px 18px rgba(0,0,0,0.7)',
+              }}
+            >
+              Atlas du vivant
+            </h1>
+            <div
+              style={{
+                margin: '4px auto 0',
+                maxWidth: viewport.isNarrow ? 220 : 280,
+                fontSize: viewport.isNarrow ? 10.5 : 12,
+                lineHeight: 1.55,
+                letterSpacing: viewport.isNarrow ? 1.8 : 2.4,
+                textTransform: 'uppercase',
+                color: '#a89c7c',
+              }}
+            >
+              Explorer · Comprendre · Agir
+            </div>
+          </div>
+          <div style={{ pointerEvents: 'auto' }}>
             <CircleButton
               ariaLabel="Rechercher"
               onClick={() => {
@@ -274,94 +299,73 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
             </CircleButton>
           </div>
         </div>
+      </div>
 
-        {/* Carte */}
-        <div
+      {/* CTA — flotte en bas de la carte avec un dégradé */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          paddingTop: 52,
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${viewport.isShort ? 14 : 24}px)`,
+          background:
+            'linear-gradient(0deg, rgba(4,6,10,0.94) 0%, rgba(4,6,10,0.68) 55%, transparent 100%)',
+        }}
+      >
+        <button
+          onClick={() => {
+            void loadAtlasSheets()
+            setGuide(true)
+          }}
           style={{
-            flex: '1 1 auto',
+            width: '100%',
+            minHeight: 56,
+            padding: viewport.isNarrow ? '14px 18px' : '16px 22px',
+            borderRadius: 9999,
+            border: '1px solid rgba(0,0,0,0.06)',
+            background: 'linear-gradient(180deg, #f6eedb 0%, #e6dcb9 100%)',
+            color: '#1c1a14',
+            fontWeight: 600,
+            fontSize: viewport.isNarrow ? 16 : 18,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: viewport.isShort ? '2px 8px 0' : '0 4px',
-            minHeight: 0,
-            overflow: 'hidden',
+            gap: 14,
+            cursor: 'pointer',
+            boxShadow:
+              '0 10px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.15) inset, 0 1px 0 rgba(255,255,255,0.6) inset, 0 0 38px rgba(244,216,137,0.18)',
           }}
         >
-          <div
+          <span
             style={{
-              aspectRatio: '380 / 600',
-              width: '100%',
-              maxWidth: viewport.isShort ? 368 : 402,
-              maxHeight: '100%',
-              display: 'flex',
+              width: viewport.isNarrow ? 28 : 30,
+              height: viewport.isNarrow ? 28 : 30,
+              borderRadius: '50%',
+              border: '1.5px solid #1c1a14',
+              display: 'grid',
+              placeItems: 'center',
             }}
           >
-            <VoronoiAtlas
-              onPick={onPickTerritory}
-              glow={CONFIG.glow}
-              animate={motionEnabled && CONFIG.animateNodes}
-              focusedId={focusedId}
-            />
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div
-          style={{
-            flex: '0 0 auto',
-            padding: viewport.isShort ? '8px 18px 10px' : '10px 20px 14px',
-          }}
-        >
-          <button
-            onClick={() => {
-              void loadAtlasSheets()
-              setGuide(true)
-            }}
-            style={{
-              width: '100%',
-              minHeight: 56,
-              padding: viewport.isNarrow ? '14px 18px' : '16px 22px',
-              borderRadius: 9999,
-              border: '1px solid rgba(0,0,0,0.06)',
-              background: 'linear-gradient(180deg, #f6eedb 0%, #e6dcb9 100%)',
-              color: '#1c1a14',
-              fontWeight: 600,
-              fontSize: viewport.isNarrow ? 16 : 18,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 14,
-              cursor: 'pointer',
-              boxShadow:
-                '0 10px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.15) inset, 0 1px 0 rgba(255,255,255,0.6) inset, 0 0 38px rgba(244,216,137,0.18)',
-            }}
-          >
-            <span
-              style={{
-                width: viewport.isNarrow ? 28 : 30,
-                height: viewport.isNarrow ? 28 : 30,
-                borderRadius: '50%',
-                border: '1.5px solid #1c1a14',
-                display: 'grid',
-                placeItems: 'center',
-              }}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#1c1a14"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#1c1a14"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polygon points="15.5 8.5 13 13 8.5 15.5 11 11" />
-              </svg>
-            </span>
-            Me guider dans l’Atlas
-          </button>
-        </div>
+              <polygon points="15.5 8.5 13 13 8.5 15.5 11 11" />
+            </svg>
+          </span>
+          Me guider dans l'Atlas
+        </button>
       </div>
 
       {search && (
