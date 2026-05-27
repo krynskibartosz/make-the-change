@@ -168,7 +168,7 @@ export function AdvantageDetail({
         </div>
       </div>
 
-      <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/90 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl">
+      <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/80 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-lg">
         {isSoon ? (
           <div className="flex w-full justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/30">
             Bientôt disponible

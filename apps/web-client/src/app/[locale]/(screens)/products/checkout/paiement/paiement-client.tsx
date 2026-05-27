@@ -170,7 +170,7 @@ export function PaiementClient({ cart, summary, customer, isConnected, locale }:
         </p>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/80 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg">
         {error && (
           <p role="alert" aria-live="polite" className="mb-3 text-center text-sm font-medium text-red-400">
             {error}

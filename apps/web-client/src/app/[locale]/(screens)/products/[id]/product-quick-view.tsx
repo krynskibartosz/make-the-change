@@ -289,7 +289,7 @@ export function ProductQuickView({
         </div>
       )}
 
-      <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
+      <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/80 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-lg">
         <div className="mb-2 flex items-end justify-between px-1">
           <p className="text-[11px] font-semibold text-white/48">{selectedFormat.label}</p>
           <p className="text-lg font-black text-white">{formatEuro(selectedFormat.euros)}</p>
