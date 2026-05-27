@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, ShoppingBag, Sparkles, Truck } from 'lucide-react'
+import { ChevronRight, ShoppingBag, Truck } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { useMemo, useState, useTransition } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
@@ -25,7 +25,6 @@ export type ProductFormat = {
 const formatEuro = (value: number) =>
   new Intl.NumberFormat('fr-BE', { style: 'currency', currency: 'EUR' }).format(value)
 
-const CREDITS_PER_EUR = 10
 
 export function ProductQuickView({
   product,
@@ -100,7 +99,6 @@ export function ProductQuickView({
     ? sanitizeImageUrl(product.producer.visualAssets.portrait)
     : null
 
-  const creditsImpact = Math.round(selectedFormat.euros * CREDITS_PER_EUR)
 
   function addToCart(confirmSeparateShipment = false) {
     startTransition(async () => {
@@ -140,7 +138,7 @@ export function ProductQuickView({
           </p>
           {isConfirmationRequired ? (
             <p className="mt-1 text-[11px] font-semibold text-white/45">
-              Prix partenaire observé le 27 mai 2026
+              Prix indicatif partenaire, à confirmer avant paiement
             </p>
           ) : null}
           {isConfirmationRequired ? (
@@ -200,7 +198,7 @@ export function ProductQuickView({
             <div className="px-3">
               <p className="text-[10px] font-bold uppercase text-white/40">Retours et SAV</p>
               <p className="mt-1 text-[11px] font-semibold leading-snug text-white/80">
-                Avant paiement
+                Via le partenaire
               </p>
             </div>
           </div>
@@ -223,24 +221,6 @@ export function ProductQuickView({
           </div>
           <ChevronRight className="h-4 w-4 text-white/25" aria-hidden="true" />
         </Link>
-
-        <div className="mx-4 mt-4 rounded-xl border border-lime-300/20 bg-lime-300/[0.04] p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-lime-300" aria-hidden="true" />
-              <p className="text-[13px] font-black text-lime-300">
-                + {creditsImpact} Credits Impact
-              </p>
-            </div>
-            <button type="button" className="text-[11px] font-semibold text-white/35">
-              Comment ça marche →
-            </button>
-          </div>
-          <p className="mt-2 text-[12px] font-medium leading-relaxed text-white/55">
-            Chaque achat génère des crédits que tu peux réinvestir dans de nouveaux projets de
-            terrain.
-          </p>
-        </div>
 
         <div className="space-y-7 px-4 pt-6">
           <section>
@@ -311,9 +291,7 @@ export function ProductQuickView({
 
       <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
         <div className="mb-2 flex items-end justify-between px-1">
-          <p className="text-[11px] font-semibold text-white/48">
-            {isConfirmationRequired ? 'Simulation panier' : selectedFormat.label}
-          </p>
+          <p className="text-[11px] font-semibold text-white/48">{selectedFormat.label}</p>
           <p className="text-lg font-black text-white">{formatEuro(selectedFormat.euros)}</p>
         </div>
         <button
