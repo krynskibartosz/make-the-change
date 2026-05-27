@@ -4,6 +4,7 @@ import { getLocale } from 'next-intl/server'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { buildPublicAppUrl } from '@/lib/public-url'
 import { getLocalizedContent } from '@/lib/utils'
+import { getMockProducts } from '../_features/mock-products'
 import { getPublicProductById } from './product-detail-data'
 import { ProductQuickView } from './product-quick-view'
 
@@ -41,6 +42,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     notFound()
   }
 
+  const relatedProducts = getMockProducts()
+    .filter((p) => p.producer_id === product.producer_id && p.id !== product.id)
+    .slice(0, 4)
+
   const productName = getLocalizedContent(product.name_i18n, locale, product.name_default || '')
 
   const structuredData = {
@@ -76,7 +81,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         headerMode="dynamic"
         asPage
       >
-        <ProductQuickView product={product} />
+        <ProductQuickView product={product} relatedProducts={relatedProducts} />
       </FullScreenSlideModal>
       <script type="application/ld+json">{structuredDataJson}</script>
     </>
