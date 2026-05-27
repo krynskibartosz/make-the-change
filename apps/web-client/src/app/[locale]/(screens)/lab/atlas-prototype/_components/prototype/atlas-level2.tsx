@@ -375,7 +375,7 @@ function SubdomainIcon({ kind, size = 22, color = '#f4ecd8' }) {
 }
 
 // ── Carte ────────────────────────────────────────────────────
-function SubdomainCarte({ onPick, glow = 1, animate = true }) {
+function SubdomainCarte({ onPick, glow = 1, animate = true, activeId = 'pollinisation' }) {
   const [pressed, setPressed] = React.useState(null)
 
   const { cellPaths, cellPts, envelopePath } = React.useMemo(() => {
@@ -446,22 +446,29 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
         const [lx, ly] = c.labelXY
         const [px, py] = c.progXY
         const [done, total] = c.progress
-        const ratio = total ? done / total : 0
-        const buttonProps = getSvgButtonProps(
-          c.name + (c.name2 ? ' ' + c.name2 : ''),
-          () => onPick && onPick(c),
-        )
+        const isActive = c.id === activeId
+        const isCentral = !!c.central
+        const isLocked = !isActive && !isCentral
+        // Central cell is informational only — not tappable
+        const buttonProps = isCentral
+          ? {}
+          : getSvgButtonProps(
+              c.name + (c.name2 ? ' ' + c.name2 : ''),
+              () => onPick && onPick(c),
+            )
         return (
           <g
             key={c.id}
             {...buttonProps}
             style={{
-              cursor: 'pointer',
-              transition: 'transform 220ms cubic-bezier(.2,.7,.2,1)',
+              cursor: isCentral ? 'default' : 'pointer',
+              transition: 'transform 220ms cubic-bezier(.2,.7,.2,1), opacity 300ms ease, filter 300ms ease',
               transformOrigin: `${lx}px ${iy}px`,
               transform: isPressed ? 'scale(0.97)' : 'scale(1)',
+              opacity: isLocked ? 0.42 : 1,
+              filter: isLocked ? 'saturate(0.55)' : 'none',
             }}
-            onPointerDown={() => setPressed(c.id)}
+            onPointerDown={() => !isCentral && setPressed(c.id)}
             onPointerUp={() => setPressed(null)}
             onPointerLeave={() => setPressed(null)}
           >
@@ -593,12 +600,12 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
                 </text>
               )}
 
-              {/* Progress chip — uniform size for all cells */}
+              {/* Progress chip — with unit label */}
               <g>
                 <rect
-                  x={px - 24}
+                  x={px - 36}
                   y={py - 11}
-                  width="48"
+                  width="72"
                   height="21"
                   rx="10.5"
                   fill="rgba(8,10,12,0.82)"
@@ -612,13 +619,44 @@ function SubdomainCarte({ onPick, glow = 1, animate = true }) {
                   textAnchor="middle"
                   fill="#eae3d2"
                   fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-                  fontSize="11.5"
+                  fontSize="10"
                   fontWeight="600"
-                  letterSpacing="0.3"
+                  letterSpacing="0.2"
                 >
-                  {done} / {total}
+                  {done} / {total}{' '}récits
                 </text>
               </g>
+
+              {/* Pulsing golden ring on the active cell */}
+              {isActive && (
+                <circle
+                  cx={ix}
+                  cy={iy}
+                  r="26"
+                  fill="none"
+                  stroke="#f4d889"
+                  strokeWidth="1.8"
+                  opacity="0.75"
+                  style={{ pointerEvents: 'none' }}
+                >
+                  {animate && (
+                    <>
+                      <animate
+                        attributeName="r"
+                        values="22;30;22"
+                        dur="2.8s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.75;0.15;0.75"
+                        dur="2.8s"
+                        repeatCount="indefinite"
+                      />
+                    </>
+                  )}
+                </circle>
+              )}
             </g>
           </g>
         )
@@ -697,7 +735,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
           justifyContent: 'center',
         }}
       >
-        <SubdomainCarte onPick={onPickSubdomain} animate={animateNodes} />
+        <SubdomainCarte onPick={onPickSubdomain} animate={animateNodes} activeId="pollinisation" />
       </div>
 
       {/* Header — flotte au-dessus de la carte avec un dégradé */}
@@ -711,7 +749,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
           paddingTop: `calc(env(safe-area-inset-top, 0px) + ${viewport.isShort ? 20 : 36}px)`,
           paddingLeft: 16,
           paddingRight: 16,
-          paddingBottom: 52,
+          paddingBottom: 28,
           background:
             'linear-gradient(180deg, rgba(4,6,10,0.92) 0%, rgba(4,6,10,0.62) 55%, transparent 100%)',
         }}
@@ -788,7 +826,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
               Explore les liens qui unissent les espèces entre elles.
             </div>
           </div>
-          <div style={{ width: navButtonSize, height: navButtonSize, flex: '0 0 auto' }} />
+
         </div>
       </div>
     </div>
