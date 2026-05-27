@@ -50,7 +50,7 @@ const PRODUCT_REVIEWS: Record<string, Review[]> = {
       date: 'Mars 2026',
       rating: 5,
       text: 'Ce savon naturel, sans parfum que celui de la cire d’abeille et de l’huile d’olive, est mon préféré : il laisse la peau fraîche et douce, sans la désécher.',
-      source: 'Sebio',
+      source: 'Habeebee',
     },
   ],
   [MOCK_PRODUCT_SHAMPOING_ID]: [
@@ -60,7 +60,7 @@ const PRODUCT_REVIEWS: Record<string, Review[]> = {
       date: 'Octobre 2025',
       rating: 5,
       text: 'Le meilleur shampoing solide parmi tous ceux que j’ai essayé : mousse abondante, cheveux superbes après usage, très économique.',
-      source: 'Sebio',
+      source: 'Habeebee',
     },
     {
       id: '2',
@@ -68,7 +68,7 @@ const PRODUCT_REVIEWS: Record<string, Review[]> = {
       date: 'Juin 2025',
       rating: 5,
       text: 'J’ai eu beaucoup de mal à trouver un shampoing solide qui convienne à toute la famille. Le shampoing Habeebee est désormais notre chouchou. Il mousse très facilement et le cheveu est propre et doux en un seul shampoing.',
-      source: 'Sebio',
+      source: 'Habeebee',
     },
     {
       id: '3',
@@ -76,7 +76,7 @@ const PRODUCT_REVIEWS: Record<string, Review[]> = {
       date: 'Février 2026',
       rating: 5,
       text: 'Ce shampoing solide est parfait. Il mousse vraiment bien (ce qui est rare pour du naturel), ne laisse aucun dépôt sur le cheveu et dure très longtemps. C’est un vrai geste pour la planète sans sacrifier le plaisir d’un bon lavage.',
-      source: 'Sebio',
+      source: 'Habeebee',
     },
   ],
   [MOCK_PRODUCT_LITCHI_ID]: LITCHI_REVIEWS,
