@@ -983,15 +983,16 @@ export function Level3Screen({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingBottom: viewport.isShort ? 130 : 160,
+          paddingBottom: viewport.isShort ? 100 : 120,
           paddingTop: 80,
         }}
       >
         <div
           style={{
             width: '100%',
-            maxWidth: 420,
+            maxWidth: 480,
             aspectRatio: '380 / 540',
+            transform: 'scale(1.05)',
           }}
         >
           <PollinisationCarte
@@ -1102,7 +1103,7 @@ export function Level3Screen({
           right: 0,
           zIndex: 10,
           pointerEvents: 'none',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 32px)',
           paddingTop: 40,
           background: 'linear-gradient(0deg, rgba(4,6,10,0.95) 0%, rgba(4,6,10,0.6) 60%, rgba(4,6,10,0) 100%)',
         }}
