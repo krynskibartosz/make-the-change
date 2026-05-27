@@ -25,9 +25,9 @@ describe('mock partner commerce rules', () => {
       'mock-producer-ilanga-nature',
       'mock-producer-habeebee-belgique',
     ])
-    expect(summary.subtotalEur).toBe(55.5)
+    expect(summary.subtotalEur).toBe(58.05)
     expect(summary.shippingEur).toBe(13)
-    expect(summary.totalEur).toBe(68.5)
+    expect(summary.totalEur).toBe(71.05)
   })
 
   it('applies the Ilanga discount only to its eligible collection', () => {
@@ -41,10 +41,10 @@ describe('mock partner commerce rules', () => {
       { unlockedAdvantageIds: ['code-ilanga-coffret-10'] },
     )
 
-    expect(summary.subtotalEur).toBe(33.5)
-    expect(summary.discountEur).toBe(2.65)
+    expect(summary.subtotalEur).toBe(36.05)
+    expect(summary.discountEur).toBe(2.91)
     expect(summary.shippingEur).toBe(6.5)
-    expect(summary.totalEur).toBe(37.35)
+    expect(summary.totalEur).toBe(39.64)
   })
 
   it('evaluates free shipping after the applied discount', () => {
@@ -55,7 +55,7 @@ describe('mock partner commerce rules', () => {
       { unlockedAdvantageIds: ['code-ilanga-coffret-10'] },
     )
 
-    expect(summary.discountedSubtotalEur).toBe(71.55)
+    expect(summary.discountedSubtotalEur).toBe(78.43)
     expect(summary.shippingEur).toBe(0)
     expect(getSellerShippingProfile('mock-producer-ilanga-nature')?.feeStatus).toBe(
       'prototype_estimate',

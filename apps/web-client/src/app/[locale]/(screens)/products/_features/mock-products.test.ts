@@ -6,7 +6,7 @@ describe('V1 euro product catalogue', () => {
 
   it('publishes the six verified partner offers only', () => {
     expect(products.map((product) => product.name_default)).toEqual([
-      'Collection de 3 Miels 250g',
+      'Collection de 3 Miels',
       'BEE SURPRISED',
       'Miel d’Eucalyptus 250g',
       'Miel de Litchi 250g',
@@ -17,7 +17,7 @@ describe('V1 euro product catalogue', () => {
 
   it('prices physical products only in euros', () => {
     expect(products.map((product) => product.price_eur_equivalent)).toEqual([
-      26.5, 29, 7, 7, 7.1, 11,
+      29.05, 29, 7, 7, 7.1, 11,
     ])
     expect(products.every((product) => !('price_points' in product))).toBe(true)
   })
@@ -29,12 +29,22 @@ describe('V1 euro product catalogue', () => {
 
   it('stores sourced product information for each selected partner offer', () => {
     expect(
-      products.every(
-        (product) =>
-          product.productInformation?.sourceUrl.startsWith('https://') &&
-          product.productInformation.verifiedAt === '2026-05-26',
-      ),
+      products.every((product) => product.productInformation?.sourceUrl.startsWith('https://')),
     ).toBe(true)
+
+    const collection = products.find((product) => product.slug === 'collection-3-miels-ilanga')
+    expect(collection?.availabilityStatus).toBe('confirmation_required')
+    expect(collection?.price_eur_equivalent).toBe(29.05)
+    expect(collection?.productInformation.verifiedAt).toBe('2026-05-27')
+    expect(collection?.productInformation.formatLabel).toBe('Format du coffret à confirmer')
+    expect(collection?.productInformation.origin).toBe('Madagascar')
+    expect(collection?.productInformation.certification).toBe('BIO · Certification MG-BIO-154')
+    expect(collection?.productInformation.contents).toEqual([
+      'Miel d’Eucalyptus',
+      'Miel de Niaouli',
+      'Miel de Litchi',
+    ])
+    expect(collection?.images.length).toBe(2)
 
     const eucalyptus = products.find((product) => product.slug === 'miel-eucalyptus-ilanga')
     expect(eucalyptus?.productInformation.formatLabel).toBe('250 g')

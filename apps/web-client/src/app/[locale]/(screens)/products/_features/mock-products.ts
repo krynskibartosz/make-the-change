@@ -102,6 +102,8 @@ export type MockProductSeed = {
   image_url: string
   images: string[]
   isTemporaryVisual: boolean
+  availabilityStatus?: 'available' | 'confirmation_required'
+  availabilityNotice?: string
   eligibleDiscountIds?: string[]
   certifications: string[]
   created_at: string
@@ -162,21 +164,26 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
     id: MOCK_PRODUCT_ILANGA_COLLECTION_ID,
     slug: MOCK_PRODUCT_ILANGA_COLLECTION_SLUG,
     kind: 'bundle',
-    name_default: 'Collection de 3 Miels 250g',
-    name_i18n: { fr: 'Collection de 3 Miels 250g', en: 'Collection of 3 Honeys 250g' },
-    short_description_default: 'Trois miels Ilanga dans un coffret cadeau sélectionné.',
+    name_default: 'Collection de 3 Miels',
+    name_i18n: { fr: 'Collection de 3 Miels', en: 'Collection of 3 Honeys' },
+    short_description_default: 'Trois miels biologiques Ilanga dans un coffret cadeau.',
     description_default:
-      'Un coffret Ilanga réunissant trois pots de miel de 250 g pour découvrir plusieurs nuances aromatiques de Madagascar ou offrir une sélection prête à partager.',
+      'Un coffret Ilanga réunissant trois miels biologiques de Madagascar : Eucalyptus, Niaouli et Litchi. Une sélection à offrir ou à découvrir, dont le format commercial reste à confirmer avec le partenaire.',
     producer_id: ILANGA.id,
     category_id: CATEGORIES.bundle.id,
     featured: true,
     is_hero_product: true,
     tags: ['Coffret', 'Miel', 'Ilanga'],
     stock_quantity: 30,
-    price_eur_equivalent: 26.5,
+    price_eur_equivalent: 29.05,
     image_url: ILANGA_PATHS.media.shopCollection3Miels,
-    images: [ILANGA_PATHS.media.shopCollection3Miels],
+    images: [
+      ILANGA_PATHS.media.shopCollection3Miels,
+      ILANGA_PATHS.media.shopCollection3MielsAmbience,
+    ],
     isTemporaryVisual: true,
+    availabilityStatus: 'confirmation_required',
+    availabilityNotice: 'Format commercial et disponibilité à valider avec Ilanga.',
     eligibleDiscountIds: ['code-ilanga-coffret-10'],
     producer: ILANGA,
     category: CATEGORIES.bundle,
@@ -184,10 +191,14 @@ const MOCK_PRODUCTS: MockProductSeed[] = [
       sourceUrl:
         'https://www.ilanga-nature.com/en/shop/5903902-the-3-honeys-collection-250g-organic-1511',
       sourceLabel: 'Ilanga Nature',
-      verifiedAt: '2026-05-26',
-      formatLabel: '3 pots de 250 g',
+      verifiedAt: '2026-05-27',
+      formatLabel: 'Format du coffret à confirmer',
+      ingredients: '3 miels biologiques : Eucalyptus, Niaouli et Litchi',
       origin: 'Madagascar',
-      contents: ['Trois miels Ilanga en pots de 250 g'],
+      packaging: 'Coffret Vintage Kraft',
+      certification: 'BIO · Certification MG-BIO-154',
+      conservation: 'À conserver à l’abri de la lumière, de la chaleur et de l’humidité.',
+      contents: ['Miel d’Eucalyptus', 'Miel de Niaouli', 'Miel de Litchi'],
     },
   },
   {

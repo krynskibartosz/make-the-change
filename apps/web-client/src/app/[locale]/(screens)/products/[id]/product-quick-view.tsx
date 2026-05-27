@@ -43,9 +43,11 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
   const [selectedFormat, setSelectedFormat] = useState<ProductFormat>(
     () => formats.find((format) => format.id === product.id) ?? formats[0]!,
   )
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
   const [separateShipmentConfirmation, setSeparateShipmentConfirmation] = useState(false)
   const [isPending, startTransition] = useTransition()
   const shipping = getSellerShippingProfile(product.producer_id)
+  const isConfirmationRequired = product.availabilityStatus === 'confirmation_required'
   const baseProductName = getLocalizedContent(product.name_i18n, locale, product.name_default)
   const productName =
     formats.length > 1
@@ -57,11 +59,13 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
     product.description_default,
   )
   const producerName = product.producer.name_default
-  const coverImage = sanitizeImageUrl(selectedFormat.imageUrl)
   const productInformation = {
     ...product.productInformation,
     formatLabel: selectedFormat.label,
   }
+  const galleryImages =
+    formats.length === 1 && product.images.length > 0 ? product.images : [selectedFormat.imageUrl]
+  const coverImage = sanitizeImageUrl(galleryImages[selectedMediaIndex] ?? selectedFormat.imageUrl)
   const producerPortrait = product.producer.visualAssets?.portrait
     ? sanitizeImageUrl(product.producer.visualAssets.portrait)
     : null
@@ -81,8 +85,8 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
 
   return (
     <div className="relative flex h-full flex-col bg-[#0B0F15]">
-      <div data-modal-scroll-root className="flex-1 overflow-y-auto overscroll-contain pb-28">
-        <div className="relative aspect-[4/5] max-h-[440px] w-full overflow-hidden border-b border-white/10 bg-white/5">
+      <div data-modal-scroll-root className="flex-1 overflow-y-auto overscroll-contain pb-36">
+        <div className="relative aspect-[4/3] max-h-[360px] w-full overflow-hidden border-b border-white/10 bg-white/5">
           {coverImage ? (
             <img src={coverImage} alt={productName} className="h-full w-full object-cover" />
           ) : (
@@ -94,16 +98,77 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
           <div className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))]">
             <ProductShareButton productName={productName} productId={product.id} />
           </div>
+          {selectedMediaIndex > 0 ? (
+            <span className="absolute left-4 top-[max(1rem,env(safe-area-inset-top))] rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-bold text-white/80">
+              Image d’ambiance
+            </span>
+          ) : null}
+          {galleryImages.length > 1 ? (
+            <div
+              className="absolute bottom-3 left-4 flex gap-2"
+              aria-label="Photos du produit"
+              role="group"
+            >
+              {galleryImages.map((imageUrl, index) => {
+                const thumbnail = sanitizeImageUrl(imageUrl)
+                return (
+                  <button
+                    key={imageUrl}
+                    type="button"
+                    aria-label={index === 0 ? 'Voir le coffret' : 'Voir une image d’ambiance'}
+                    onClick={() => setSelectedMediaIndex(index)}
+                    className={`h-12 w-12 overflow-hidden rounded-lg border-2 bg-[#0B0F15] ${
+                      index === selectedMediaIndex ? 'border-lime-300' : 'border-white/30'
+                    }`}
+                  >
+                    {thumbnail ? (
+                      <img src={thumbnail} alt="" className="h-full w-full object-cover" />
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+          ) : null}
         </div>
 
         <div className="px-4 pt-5">
-          <p className="text-[11px] font-black uppercase tracking-[0.16em] text-lime-300/75">
-            {product.kind === 'bundle' ? 'Coffret partenaire' : product.category.name_default}
-          </p>
-          <h1 className="mt-2 text-[28px] font-black leading-tight text-white">{productName}</h1>
+          <h1 className="text-[28px] font-black leading-tight text-white">{productName}</h1>
           <p className="mt-3 text-[24px] font-black text-white">
             {formatEuro(selectedFormat.euros)}
           </p>
+          {isConfirmationRequired ? (
+            <p className="mt-1 text-[11px] font-semibold text-white/45">
+              Prix partenaire observé le 27 mai 2026
+            </p>
+          ) : null}
+          {isConfirmationRequired ? (
+            <div className="mt-4 rounded-xl border border-amber-200/20 bg-amber-200/[0.06] px-3 py-2.5">
+              <p className="text-[12px] font-bold text-amber-100">Disponibilité à confirmer</p>
+              <p className="mt-1 text-[11px] font-medium leading-relaxed text-amber-100/70">
+                {product.availabilityNotice} Ajout au panier simulé.
+              </p>
+            </div>
+          ) : null}
+          <div className="mt-4 grid grid-cols-3 divide-x divide-white/[0.08] rounded-xl border border-white/[0.08] bg-white/[0.03] py-3">
+            <div className="px-3">
+              <p className="text-[10px] font-bold uppercase text-white/40">Vendu par</p>
+              <p className="mt-1 text-[11px] font-semibold leading-snug text-white/80">
+                {producerName}
+              </p>
+            </div>
+            <div className="px-3">
+              <p className="text-[10px] font-bold uppercase text-white/40">Livraison BE</p>
+              <p className="mt-1 text-[11px] font-semibold leading-snug text-white/80">
+                {shipping?.deliveryLabel ?? 'À confirmer'}
+              </p>
+            </div>
+            <div className="px-3">
+              <p className="text-[10px] font-bold uppercase text-white/40">Retours et SAV</p>
+              <p className="mt-1 text-[11px] font-semibold leading-snug text-white/80">
+                Avant paiement
+              </p>
+            </div>
+          </div>
         </div>
 
         <Link
@@ -181,13 +246,19 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
               onClick={() => addToCart(true)}
               className="flex-1 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15]"
             >
-              Ajouter au panier
+              {isConfirmationRequired ? 'Simuler l’ajout' : 'Ajouter au panier'}
             </button>
           </div>
         </div>
       )}
 
       <footer className="shrink-0 border-t border-white/5 bg-[#0B0F15]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
+        <div className="mb-2 flex items-end justify-between px-1">
+          <p className="text-[11px] font-semibold text-white/48">
+            {isConfirmationRequired ? 'Simulation panier' : selectedFormat.label}
+          </p>
+          <p className="text-lg font-black text-white">{formatEuro(selectedFormat.euros)}</p>
+        </div>
         <div className="flex items-stretch gap-2">
           {formats.length > 1 ? (
             <label className="relative shrink-0">
@@ -197,7 +268,10 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
                 value={selectedFormat.id}
                 onChange={(event) => {
                   const nextFormat = formats.find((format) => format.id === event.target.value)
-                  if (nextFormat) setSelectedFormat(nextFormat)
+                  if (nextFormat) {
+                    setSelectedFormat(nextFormat)
+                    setSelectedMediaIndex(0)
+                  }
                 }}
                 className="h-full min-h-14 appearance-none rounded-2xl border border-white/10 bg-white/[0.05] py-3 pl-4 pr-9 text-sm font-bold text-white"
               >
@@ -220,7 +294,11 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
             className="flex min-h-14 flex-1 items-center justify-center gap-2 rounded-2xl bg-lime-300 px-3 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-60"
           >
             <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-            {isPending ? 'Ajout en cours...' : 'Ajouter au panier'}
+            {isPending
+              ? 'Ajout en cours...'
+              : isConfirmationRequired
+                ? 'Simuler l’ajout'
+                : 'Ajouter au panier'}
           </button>
         </div>
       </footer>

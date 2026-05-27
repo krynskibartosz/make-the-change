@@ -102,10 +102,14 @@ const _getProducts = async (queryState: ProductsQueryState) => {
   }
 }
 
-export const getProducts = unstable_cache(_getProducts, ['v1-mock-products-list'], {
-  revalidate: 3600,
-  tags: ['products-list'],
-})
+export const getProducts = unstable_cache(
+  _getProducts,
+  ['v1-mock-products-list-official-20260527-v2'],
+  {
+    revalidate: 3600,
+    tags: ['products-list'],
+  },
+)
 
 const _getProductStaticResources = async () => {
   const products = getMockProducts()

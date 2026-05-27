@@ -26,6 +26,8 @@ export const ILANGA_PATHS = {
     produitsVanillesCollection: `${MD}/produits-vanilles-collection.jpg`,
     vanilleTerrainManakara: `${MD}/vanille-terrain-manakara.webp`,
     shopCollection3Miels: `${SHOP}/ilanga-collection-3-miels.webp`,
+    shopCollection3MielsAmbience:
+      'https://images.unsplash.com/photo-1668510468038-3607aae3f03c?auto=format&fit=crop&q=80&w=1200',
     shopMielEucalyptus: `${SHOP}/ilanga-miel-eucalyptus.webp`,
     shopMielLitchi: `${SHOP}/ilanga-miel-litchi.webp`,
     advantageCollection3MielsReduction: `${SHOP}/ilanga-collection-3-miels-reduction.webp`,

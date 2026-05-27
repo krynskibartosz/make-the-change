@@ -50,17 +50,21 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     description: product.description_default,
     image: product.image_url ? [product.image_url] : [],
     sku: product.id,
-    offers: {
-      '@type': 'Offer',
-      url: buildPublicAppUrl(`/products/${product.id}`),
-      priceCurrency: 'EUR',
-      price: product.price_eur_equivalent ?? 0,
-      availability:
-        (product.stock_quantity ?? 0) > 0
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
-      itemCondition: 'https://schema.org/NewCondition',
-    },
+    ...(product.availabilityStatus === 'confirmation_required'
+      ? {}
+      : {
+          offers: {
+            '@type': 'Offer',
+            url: buildPublicAppUrl(`/products/${product.id}`),
+            priceCurrency: 'EUR',
+            price: product.price_eur_equivalent ?? 0,
+            availability:
+              (product.stock_quantity ?? 0) > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+            itemCondition: 'https://schema.org/NewCondition',
+          },
+        }),
   }
   const structuredDataJson = JSON.stringify(structuredData).replace(/</g, '\\u003c')
 

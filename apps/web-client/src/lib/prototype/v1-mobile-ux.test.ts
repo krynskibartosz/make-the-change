@@ -372,13 +372,26 @@ describe('V1 mobile prototype UX guardrails', () => {
     const productDetailData = readSource(
       'src/app/[locale]/(screens)/products/[id]/product-detail-data.ts',
     )
+    const productPage = readSource('src/app/[locale]/(screens)/products/[id]/page.tsx')
     const informationSections = readSource(
       'src/app/[locale]/(screens)/products/[id]/_components/product-information-sections.tsx',
     )
 
     expect(productDetail.includes('ProductInformationSections')).toBe(true)
     expect(productDetail.includes('portrait')).toBe(true)
-    expect(productDetailData.includes('v1-mock-product-detail-format-selection')).toBe(true)
+    expect(productDetail.includes('product.images')).toBe(true)
+    expect(productDetail.includes('Prix partenaire observé')).toBe(true)
+    expect(productDetail.includes('Disponibilité à confirmer')).toBe(true)
+    expect(productDetail.includes('Vendu par')).toBe(true)
+    expect(productDetail.includes('Livraison BE')).toBe(true)
+    expect(productDetail.includes('Retours et SAV')).toBe(true)
+    expect(productDetail.includes('formatEuro(selectedFormat.euros)')).toBe(true)
+    expect(productPage.includes("product.availabilityStatus === 'confirmation_required'")).toBe(
+      true,
+    )
+    expect(productDetailData.includes('v1-mock-product-detail-ilanga-official-20260527-v2')).toBe(
+      true,
+    )
     expect(informationSections.includes('Informations produit')).toBe(true)
     expect(informationSections.includes('Notes aromatiques')).toBe(true)
     expect(informationSections.includes('Valeurs nutritionnelles')).toBe(true)

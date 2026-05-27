@@ -102,7 +102,7 @@ const SHIPPING_PROFILES: Record<string, SellerShippingProfile> = {
     territory: 'BE',
     standardFeeEur: 6.5,
     freeThresholdEur: 60,
-    deliveryLabel: '5 jours ouvrés',
+    deliveryLabel: '2 à 3 jours ouvrés',
     carrierLabel: 'Bpost / UPS',
     feeStatus: 'prototype_estimate',
     sourceUrl: 'https://www.ilanga-nature.com/en/livraison',
