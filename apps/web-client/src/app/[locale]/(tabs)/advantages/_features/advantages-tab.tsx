@@ -56,9 +56,9 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
 
         <Link
           href="/products"
-          className="-mt-6 flex items-center gap-4 border-y border-white/[0.07] pb-5 pt-3 transition-opacity active:opacity-70"
+          className="flex items-center gap-4 rounded-2xl bg-white/[0.04] px-4 py-4 transition-opacity active:opacity-70"
         >
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/[0.06] text-lime-300">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/[0.08] text-lime-300">
             <ShoppingBag className="h-5 w-5" aria-hidden="true" />
           </span>
           <span className="min-w-0 flex-1">
@@ -89,7 +89,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
         )}
 
         <p className="pb-2 text-center text-[11px] font-medium leading-relaxed text-white/25">
-          Les Crédits Impact sont des points internes, non échangeables et sans valeur financière.
+          Les Crédits Impact sont internes à Make the Change, non échangeables et sans valeur financière.
         </p>
       </div>
     </section>
@@ -114,11 +114,11 @@ function AvailableAdvantageCard({ advantage }: { advantage: Advantage }) {
           </span>
         )}
       </div>
-      <span className="mt-4 block px-1">
+      <span className="mt-5 block px-1">
         <span className="text-[11px] font-bold uppercase text-lime-300/75">
           {advantage.partner}
         </span>
-        <span className="mt-2 block text-lg font-bold leading-snug text-white">
+        <span className="mt-1.5 block text-lg font-bold leading-snug text-white">
           {advantage.title}
         </span>
         <span className="mt-4 flex flex-wrap items-center gap-1.5 text-sm font-black text-lime-300">
