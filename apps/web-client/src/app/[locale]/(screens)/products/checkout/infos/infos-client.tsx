@@ -62,7 +62,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
             placeholder="votre@email.com"
             type="email"
             autoComplete="email"
-            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25"
+            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
           />
         </div>
 
@@ -77,7 +77,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
             onChange={(e) => setCustomer((v) => ({ ...v, name: e.target.value }))}
             placeholder="Prénom Nom"
             autoComplete="name"
-            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25"
+            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
           />
         </div>
 
@@ -92,7 +92,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
             onChange={(e) => setCustomer((v) => ({ ...v, street: e.target.value }))}
             placeholder="Rue de la Paix 10"
             autoComplete="street-address"
-            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25"
+            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
           />
         </div>
 
@@ -107,7 +107,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
               placeholder="1000"
               inputMode="numeric"
               autoComplete="postal-code"
-              className="h-13 w-[38%] rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25"
+              className="h-13 w-[38%] rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
             />
             <input
               id="checkout-city"
@@ -116,7 +116,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
               onChange={(e) => setCustomer((v) => ({ ...v, city: e.target.value }))}
               placeholder="Bruxelles"
               autoComplete="address-level2"
-              className="h-13 flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25"
+              className="h-13 flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
             />
           </div>
         </div>
