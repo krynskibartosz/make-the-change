@@ -106,6 +106,12 @@ export async function ProjectQuickView({
   const countryName = resolvedIso
     ? getCountryDisplayName(resolvedIso, locale)
     : (project.address_country_code ?? null)
+  const launchDateFormatted = project.launch_date
+    ? new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(
+        new Date(project.launch_date),
+      )
+    : null
+
   const normalizedStatus = project.status?.toLowerCase() || null
   const isFundingClosed = normalizedStatus === 'completed' || normalizedStatus === 'funded'
   const projectName = getLocalizedContent(project.name_i18n, locale, project.name_default)
@@ -239,6 +245,19 @@ export async function ProjectQuickView({
                 {projectDescription}
               </p>
             ) : null}
+
+            {launchDateFormatted ? (
+              <p className="mt-2 text-[11px] text-white/30">
+                {t('detail_page.cover.launched_on', { date: launchDateFormatted })}
+              </p>
+            ) : null}
+
+            <div className="mt-3 rounded-xl bg-white/[0.04] px-3 py-2.5">
+              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/30">
+                {t('detail.support_finances')}
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-white/55">{fundingSubtext}</p>
+            </div>
           </div>
 
           {/* 3. Partenaire */}
@@ -433,7 +452,16 @@ export async function ProjectQuickView({
             </Link>
           )}
           {!isFundingClosed ? (
-            <p className="mt-2 text-center text-[11px] text-white/35">{ctaProofLine}</p>
+            <div className="mt-2 flex items-center justify-center gap-2 text-[11px] text-white/35">
+              <span>{ctaProofLine}</span>
+              <span aria-hidden>·</span>
+              <Link
+                href={`/projects/${project.slug}`}
+                className="shrink-0 text-white/45 underline underline-offset-2"
+              >
+                {t('detail.cta_details')}
+              </Link>
+            </div>
           ) : null}
         </BottomActionBar>
       </div>
