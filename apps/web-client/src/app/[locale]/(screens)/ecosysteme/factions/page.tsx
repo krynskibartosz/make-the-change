@@ -50,7 +50,7 @@ export default function FactionsPage() {
               aria-label="Retour à la liste des écosystèmes"
               icon={<ChevronLeft className="h-4 w-4" />}
               shimmer={false}
-              onClick={() => window.history.back()}
+              onClick={() => router.back()}
             />
 
             <div className="min-w-0">
