@@ -63,8 +63,7 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
     ...product.productInformation,
     formatLabel: selectedFormat.label,
   }
-  const galleryImages =
-    formats.length === 1 && product.images.length > 0 ? product.images : [selectedFormat.imageUrl]
+  const galleryImages = product.images.length > 1 ? product.images : [selectedFormat.imageUrl]
   const coverImage = sanitizeImageUrl(galleryImages[selectedMediaIndex] ?? selectedFormat.imageUrl)
   const producerPortrait = product.producer.visualAssets?.portrait
     ? sanitizeImageUrl(product.producer.visualAssets.portrait)
