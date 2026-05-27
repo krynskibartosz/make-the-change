@@ -1,3 +1,1 @@
-export default function InterceptedCartPage() {
-  return null
-}
+export { default } from '@/app/[locale]/(screens)/products/cart/page'
