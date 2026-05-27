@@ -145,7 +145,7 @@ export function ProductQuickView({
             <div className="mt-4 rounded-xl border border-amber-200/20 bg-amber-200/[0.06] px-3 py-2.5">
               <p className="text-[12px] font-bold text-amber-100">Disponibilité à confirmer</p>
               <p className="mt-1 text-[11px] font-medium leading-relaxed text-amber-100/70">
-                {product.availabilityNotice} Ajout au panier simulé.
+                {product.availabilityNotice}
               </p>
             </div>
           ) : null}
@@ -241,11 +241,6 @@ export function ProductQuickView({
               <p className="mt-3 text-sm font-medium text-white/65">
                 {shipping.deliveryLabel} · offerte dès {formatEuro(shipping.freeThresholdEur)}
               </p>
-              {shipping.feeStatus === 'prototype_estimate' && (
-                <p className="mt-2 text-[12px] font-medium text-amber-200/75">
-                  Frais sous seuil estimés pour le prototype, à confirmer par Ilanga.
-                </p>
-              )}
             </section>
           )}
 
@@ -253,7 +248,7 @@ export function ProductQuickView({
             <h2 className="text-base font-black text-white">Conditions et retours</h2>
             <p className="mt-2 text-[13px] font-medium leading-relaxed text-white/55">
               Le partenaire vendeur assure l&apos;expédition, le SAV et les retours. Les conditions
-              détaillées sont accessibles avant le paiement simulé.
+              détaillées sont accessibles avant la confirmation de commande.
             </p>
           </section>
         </div>
@@ -283,7 +278,7 @@ export function ProductQuickView({
               onClick={() => addToCart(true)}
               className="flex-1 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15]"
             >
-              {isConfirmationRequired ? `Simuler l'ajout` : 'Ajouter au panier'}
+              {isConfirmationRequired ? 'Ajouter au panier' : 'Ajouter au panier'}
             </button>
           </div>
         </div>
@@ -304,7 +299,7 @@ export function ProductQuickView({
           {isPending
             ? 'Ajout en cours...'
             : isConfirmationRequired
-              ? `Simuler l'ajout`
+              ? 'Ajouter au panier'
               : 'Ajouter au panier'}
         </button>
       </footer>
