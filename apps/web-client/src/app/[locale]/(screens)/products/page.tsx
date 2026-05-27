@@ -51,7 +51,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   return (
     <Screen
       header={
-        <div className="flex w-full items-center justify-between gap-3">
+        <div className="flex w-full items-center gap-3">
           <Link
             href="/advantages"
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors active:bg-white/10"
@@ -59,12 +59,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           >
             <ArrowLeft className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/35">
-              Boutique
-            </p>
-            <h1 className="truncate text-sm font-black text-white">Produits partenaires</h1>
-          </div>
+          <h1 className="truncate text-sm font-black text-white">Produits partenaires</h1>
         </div>
       }
       className="bg-[#0B0F15]"
