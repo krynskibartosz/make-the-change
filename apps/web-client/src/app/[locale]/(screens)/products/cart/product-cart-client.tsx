@@ -1,6 +1,6 @@
 'use client'
 
-import { Plus, ShoppingBag, Trash2, Truck } from 'lucide-react'
+import { Plus, ShoppingBag, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
@@ -147,12 +147,20 @@ export function ProductCartClient({
         )}
       </div>
 
-      <p className="mt-2 text-sm font-medium text-white/50">
-        {sellerGroups.length} partenaire{sellerGroups.length > 1 ? 's' : ''}{' '}
-        {sellerGroups.length > 1
-          ? `· ${sellerGroups.length} expéditions séparées`
-          : '· 1 expédition partenaire'}
-      </p>
+      <div className="mt-2 flex items-center justify-between">
+        <p className="text-sm font-medium text-white/50">
+          {sellerGroups.length} partenaire{sellerGroups.length > 1 ? 's' : ''}{' '}
+          {sellerGroups.length > 1
+            ? `· ${sellerGroups.length} expéditions séparées`
+            : '· 1 expédition partenaire'}
+        </p>
+        <Link
+          href={`/${locale}/products`}
+          className="text-xs font-bold text-white/45 hover:text-white/70"
+        >
+          + Ajouter des articles
+        </Link>
+      </div>
 
       <div className="mt-6 space-y-7">
         {sellerGroups.map((group) => (
@@ -191,8 +199,15 @@ export function ProductCartClient({
                     {product.name_default}
                   </Link>
                   <p className="mt-1 text-sm font-black text-white">
-                    {formatEuro(product.price_eur_equivalent)}
+                    {quantity > 1
+                      ? `${formatEuro(product.price_eur_equivalent * quantity)}`
+                      : formatEuro(product.price_eur_equivalent)}
                   </p>
+                  {quantity > 1 && (
+                    <p className="text-[11px] font-medium text-white/40">
+                      {quantity} × {formatEuro(product.price_eur_equivalent)}
+                    </p>
+                  )}
                 </div>
                 <div className="flex h-9 items-center rounded-lg border border-white/10">
                   {quantity === 1 ? (
@@ -242,7 +257,7 @@ export function ProductCartClient({
 
       {suggestedProducts.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-lg font-black text-white">Compléter votre commande</h2>
+          <h2 className="text-lg font-black text-white">Compléter ta commande</h2>
           <div className="mt-4 space-y-3">
             {suggestedProducts.map((product) => (
               <div
@@ -307,27 +322,6 @@ export function ProductCartClient({
           <span>Total TTC</span>
           <span>{formatEuro(summary.totalEur)}</span>
         </div>
-      </div>
-
-      <div className="mt-4 rounded-xl border border-white/8 p-4">
-        <div className="flex items-center gap-2 text-sm font-bold text-white">
-          <Truck className="h-4 w-4 text-lime-300" aria-hidden="true" />
-          {sellerGroups.length > 1
-            ? `${sellerGroups.length} expéditions séparées`
-            : 'Expédition partenaire'}
-        </div>
-        <div className="mt-3 space-y-2">
-          {sellerGroups.map((group) => (
-            <p key={group.sellerId} className="text-[12px] font-medium text-white/55">
-              {group.sellerName} · {group.shipping?.deliveryLabel}
-            </p>
-          ))}
-        </div>
-        {sellerGroups.some((group) => group.shipping?.feeStatus === 'prototype_estimate') && (
-          <p className="mt-3 text-[12px] font-medium text-amber-200/75">
-            Frais Ilanga estimés pour le prototype, à confirmer par le partenaire.
-          </p>
-        )}
       </div>
 
       <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
