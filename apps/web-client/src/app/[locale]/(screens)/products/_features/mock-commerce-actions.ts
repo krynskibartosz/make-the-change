@@ -22,6 +22,7 @@ import {
 import type { MockOrderRecord } from '@/lib/mock/mock-member-data'
 import { getCurrentMockImpactCreditsBalance } from '@/lib/mock/mock-member-data-server'
 import { persistCurrentMockOrder } from '@/lib/mock/mock-order-history-server'
+import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 
 export async function addProductToCartAction(
@@ -91,13 +92,6 @@ export async function redeemAdvantageAction(
     ...existing,
   ])
   return { ok: true, balance: balance - advantage.priceCredits }
-}
-
-type MockCheckoutCustomer = {
-  name: string
-  street: string
-  postalCode: string
-  city: string
 }
 
 export async function completeMockCheckoutAction(customer: MockCheckoutCustomer): Promise<
@@ -175,6 +169,7 @@ export async function completeMockCheckoutAction(customer: MockCheckoutCustomer)
           postalCode: customer.postalCode,
           city: customer.city,
           country: 'Belgique',
+          email: customer.email,
         },
         items: cart.lines.flatMap((line) => {
           const product = getMockProductById(line.productId)

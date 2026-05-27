@@ -79,6 +79,7 @@ export type MockOrderRecord = {
     postalCode: string
     city: string
     country: string
+    email?: string
   }
   items: MockOrderItemRecord[]
 }
