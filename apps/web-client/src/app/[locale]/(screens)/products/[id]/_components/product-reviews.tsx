@@ -12,7 +12,6 @@ type Review = {
   date: string
   rating: number
   text: string
-  source: string
 }
 
 const LITCHI_REVIEWS: Review[] = [
@@ -22,7 +21,6 @@ const LITCHI_REVIEWS: Review[] = [
     date: 'Mars 2024',
     rating: 5,
     text: 'Je me suis lancée dans cette découverte et… une merveille ! Parfum les infusions, ou tout simplement à la cuillère. Différent des miels habituels.',
-    source: 'Amazon',
   },
   {
     id: '2',
@@ -30,7 +28,6 @@ const LITCHI_REVIEWS: Review[] = [
     date: 'Février 2025',
     rating: 5,
     text: 'Je l’utilise dans le cadre de soins du visage et du corps au naturel avec de l’arôme au litchi et il est juste parfait ! Mes clientes adorent.',
-    source: 'Amazon',
   },
   {
     id: '3',
@@ -38,7 +35,6 @@ const LITCHI_REVIEWS: Review[] = [
     date: 'Septembre 2023',
     rating: 5,
     text: 'Au petit déjeuner, c’est juste merveilleux !',
-    source: 'Amazon',
   },
 ]
 
@@ -50,8 +46,7 @@ const PRODUCT_REVIEWS: Record<string, Review[]> = {
       date: 'Mars 2026',
       rating: 5,
       text: 'Ce savon naturel, sans parfum que celui de la cire d’abeille et de l’huile d’olive, est mon préféré : il laisse la peau fraîche et douce, sans la désécher.',
-      source: 'Habeebee',
-    },
+      },
   ],
   [MOCK_PRODUCT_SHAMPOING_ID]: [
     {
@@ -60,24 +55,21 @@ const PRODUCT_REVIEWS: Record<string, Review[]> = {
       date: 'Octobre 2025',
       rating: 5,
       text: 'Le meilleur shampoing solide parmi tous ceux que j’ai essayé : mousse abondante, cheveux superbes après usage, très économique.',
-      source: 'Habeebee',
-    },
+      },
     {
       id: '2',
       author: 'Laurence L.',
       date: 'Juin 2025',
       rating: 5,
       text: 'J’ai eu beaucoup de mal à trouver un shampoing solide qui convienne à toute la famille. Le shampoing Habeebee est désormais notre chouchou. Il mousse très facilement et le cheveu est propre et doux en un seul shampoing.',
-      source: 'Habeebee',
-    },
+      },
     {
       id: '3',
       author: 'Anonyme',
       date: 'Février 2026',
       rating: 5,
       text: 'Ce shampoing solide est parfait. Il mousse vraiment bien (ce qui est rare pour du naturel), ne laisse aucun dépôt sur le cheveu et dure très longtemps. C’est un vrai geste pour la planète sans sacrifier le plaisir d’un bon lavage.',
-      source: 'Habeebee',
-    },
+      },
   ],
   [MOCK_PRODUCT_LITCHI_ID]: LITCHI_REVIEWS,
   [MOCK_PRODUCT_LITCHI_140G_ID]: LITCHI_REVIEWS,
@@ -109,9 +101,7 @@ export function ProductReviews({ productId }: { productId: string }) {
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[12px] font-bold text-white/80">{review.author}</p>
-                <p className="mt-0.5 text-[11px] text-white/35">
-                  {review.date} · {review.source}
-                </p>
+                <p className="mt-0.5 text-[11px] text-white/35">{review.date}</p>
               </div>
               <span
                 className="flex shrink-0 items-center gap-0.5"
