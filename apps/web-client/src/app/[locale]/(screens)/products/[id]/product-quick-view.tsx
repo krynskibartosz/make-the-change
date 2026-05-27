@@ -3,7 +3,7 @@
 import { ChevronRight, ShoppingBag, Sparkles, Truck } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { useMemo, useState, useTransition } from 'react'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { getSellerShippingProfile } from '@/lib/mock/mock-commerce'
 import { getLocalizedContent } from '@/lib/utils'
@@ -35,6 +35,7 @@ export function ProductQuickView({
   relatedProducts?: ProductWithRelations[]
 }) {
   const locale = useLocale()
+  const router = useRouter()
 
   const formats = useMemo<ProductFormat[]>(
     () =>
@@ -105,7 +106,7 @@ export function ProductQuickView({
     startTransition(async () => {
       const result = await addProductToCartAction(selectedFormat.id, confirmSeparateShipment)
       if (result.ok) {
-        window.location.assign(`/${locale}/products/cart`)
+        router.push('/products/cart')
         return
       }
       if (result.reason === 'separate_shipping_confirmation') {

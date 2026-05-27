@@ -3,6 +3,7 @@
 import { Button } from '@make-the-change/core/ui'
 import { ChevronLeft } from 'lucide-react'
 import { type EcosystemFactionKey, FACTION_COPY } from '@/app/[locale]/(screens)/ecosysteme/_lib/graph'
+import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
 function FactionCard({
@@ -33,6 +34,7 @@ function FactionCard({
 }
 
 export default function FactionsPage() {
+  const router = useRouter()
   const factionKeys = Object.keys(FACTION_COPY) as EcosystemFactionKey[]
 
   return (
@@ -70,9 +72,7 @@ export default function FactionsPage() {
             <FactionCard
               key={factionKey}
               factionKey={factionKey}
-              onSelect={(key) => {
-                window.location.href = `/ecosysteme/faction/${key}`
-              }}
+              onSelect={(key) => router.push(`/ecosysteme/faction/${key}`)}
             />
           ))}
         </div>

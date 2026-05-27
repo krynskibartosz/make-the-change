@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { Bird, Crown, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
@@ -450,6 +450,7 @@ export function ImpactTabClient({
   viewerId,
 }: ImpactTabClientProps) {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [replayBravoId, setReplayBravoId] = useState<string | null>(null)
   const [persistedBravoIds, setPersistedBravoIds] = useState<string[]>([])
   const [feedFilter, setFeedFilter] = useState<'faction' | 'global'>(initialFaction ? 'faction' : 'global')
@@ -479,13 +480,13 @@ export function ImpactTabClient({
       const effectiveViewerId = session?.viewerId ?? viewerId ?? null
 
       if (!effectiveViewerId) {
-        window.location.href = '/onboarding/step-0'
+        router.push('/onboarding/step-0')
         return
       }
 
       action()
     },
-    [viewerId],
+    [viewerId, router],
   )
 
   const handleBravoPersisted = useCallback((eventId: string) => {
