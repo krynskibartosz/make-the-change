@@ -149,13 +149,7 @@ export function ProductQuickView({ product }: { product: ProductWithRelations })
               </p>
             </div>
           ) : null}
-          <div className="mt-4 grid grid-cols-3 divide-x divide-white/[0.08] rounded-xl border border-white/[0.08] bg-white/[0.03] py-3">
-            <div className="px-3">
-              <p className="text-[10px] font-bold uppercase text-white/40">Vendu par</p>
-              <p className="mt-1 text-[11px] font-semibold leading-snug text-white/80">
-                {producerName}
-              </p>
-            </div>
+          <div className="mt-4 grid grid-cols-2 divide-x divide-white/[0.08] rounded-xl border border-white/[0.08] bg-white/[0.03] py-3">
             <div className="px-3">
               <p className="text-[10px] font-bold uppercase text-white/40">Livraison BE</p>
               <p className="mt-1 text-[11px] font-semibold leading-snug text-white/80">
