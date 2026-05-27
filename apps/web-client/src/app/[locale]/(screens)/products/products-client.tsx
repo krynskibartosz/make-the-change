@@ -44,7 +44,7 @@ const CATEGORIES = [
   { id: 'soins', label: 'Soins' },
 ]
 
-const CART_DOCK_BOTTOM = 'calc(env(safe-area-inset-bottom) + 1rem)'
+const CART_DOCK_BOTTOM = 'calc(env(safe-area-inset-bottom) + 0.5rem)'
 
 export function ProductsClient({ products, pagination, initialQueryState, cartCount }: Props) {
   const tProducts = useTranslations('products')
