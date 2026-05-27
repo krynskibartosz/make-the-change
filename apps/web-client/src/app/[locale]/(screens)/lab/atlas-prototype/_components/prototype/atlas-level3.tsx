@@ -457,16 +457,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
       />
       <path d={blobPath} fill="none" stroke="#ffe7a3" strokeOpacity="0.4" strokeWidth="0.5" />
 
-      {/* Dashed connection lines from center to each item */}
-      <g stroke="#f0c460" strokeOpacity="0.55" strokeWidth="0.8" strokeDasharray="4 5" fill="none">
-        {L3_CONTENT.items.map((it, i) => (
-          <path
-            key={i}
-            d={`M 190 280 Q ${(190 + it.iconXY[0]) / 2} ${(280 + it.iconXY[1]) / 2 - 18} ${it.iconXY[0]} ${it.iconXY[1] + 18}`}
-          />
-        ))}
-        <path d="M 190 280 Q 244 320 298 348" />
-      </g>
+
 
       {/* ─── Surrounding items ─── */}
       {L3_CONTENT.items.map((it) => {
@@ -538,9 +529,19 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
         )}
         style={{ cursor: 'pointer' }}
       >
+        <rect
+          x={L3_CONTENT.biodex.labelXY[0] - 70}
+          y={L3_CONTENT.biodex.labelXY[1] - 12}
+          width="140"
+          height="18"
+          rx="9"
+          fill="rgba(10,12,14,0.6)"
+          stroke="#e6ad44"
+          strokeOpacity="0.4"
+        />
         <text
           x={L3_CONTENT.biodex.labelXY[0]}
-          y={L3_CONTENT.biodex.labelXY[1]}
+          y={L3_CONTENT.biodex.labelXY[1] + 1.5}
           textAnchor="middle"
           fill="#e6ad44"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
@@ -595,13 +596,23 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
         >
           Abeille · Bourdon · Papillon
         </text>
+        <rect
+          x={L3_CONTENT.biodex.moreXY[0] - 55}
+          y={L3_CONTENT.biodex.moreXY[1] - 13}
+          width="110"
+          height="22"
+          rx="11"
+          fill="rgba(240,196,96,0.12)"
+          stroke="#f0c460"
+          strokeOpacity="0.3"
+        />
         <text
           x={L3_CONTENT.biodex.moreXY[0]}
-          y={L3_CONTENT.biodex.moreXY[1]}
+          y={L3_CONTENT.biodex.moreXY[1] + 2}
           textAnchor="middle"
           fill="#f0c460"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="10"
+          fontSize="10.5"
           fontWeight="600"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.4px' }}
         >
@@ -611,9 +622,19 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
 
       {/* ─── Toile vivante (bottom) ─── */}
       <g>
+        <rect
+          x={L3_CONTENT.toile.labelXY[0] - 60}
+          y={L3_CONTENT.toile.labelXY[1] - 12}
+          width="120"
+          height="18"
+          rx="9"
+          fill="rgba(10,12,14,0.6)"
+          stroke="#f0c460"
+          strokeOpacity="0.4"
+        />
         <text
           x={L3_CONTENT.toile.labelXY[0]}
-          y={L3_CONTENT.toile.labelXY[1]}
+          y={L3_CONTENT.toile.labelXY[1] + 2}
           textAnchor="middle"
           fill="#f0c460"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
@@ -792,12 +813,12 @@ function PreviewSheet({ item, onClose }) {
   const c = item || last
 
   const TYPE_META = {
-    course: { label: 'COURS LIBRE', color: '#4d8be0', cta: 'Ouvrir le cours' },
-    project: { label: 'PROJET LIÉ', color: '#7ab84a', cta: 'Voir le projet' },
-    biodex: { label: 'ESPÈCES BIODEX', color: '#e6ad44', cta: 'Parcourir les espèces' },
-    toile: { label: 'TOILE VIVANTE', color: '#a05fb3', cta: 'Explorer ce nœud' },
-    parcours: { label: 'PARCOURS GUIDÉ', color: '#f0c460', cta: 'Commencer le parcours' },
-    reco: { label: 'RECOMMANDÉ', color: '#f0c460', cta: 'Ouvrir' },
+    course: { label: 'COURS LIBRE', color: '#4d8be0', cta: 'Ouvrir (bientôt)' },
+    project: { label: 'PROJET LIÉ', color: '#7ab84a', cta: 'Voir (bientôt)' },
+    biodex: { label: 'ESPÈCES BIODEX', color: '#e6ad44', cta: 'Parcourir (bientôt)' },
+    toile: { label: 'TOILE VIVANTE', color: '#a05fb3', cta: 'Explorer (bientôt)' },
+    parcours: { label: 'PARCOURS GUIDÉ', color: '#f0c460', cta: 'Commencer (bientôt)' },
+    reco: { label: 'RECOMMANDÉ', color: '#f0c460', cta: 'Ouvrir (bientôt)' },
   }
   const meta = c ? TYPE_META[c.type] || TYPE_META.course : TYPE_META.course
 
@@ -1151,135 +1172,6 @@ export function Level3Screen({
           </div>
         </div>
 
-        {/* Big organic cell */}
-        <div style={{ padding: viewport.isCompact ? '8px 8px 0' : '4px 8px 0', width: '100%' }}>
-          <div
-            style={{
-              width: '100%',
-              maxWidth: viewport.isCompact ? 400 : 430,
-              height: viewport.isShort ? 'min(calc(100svh - 224px), 500px)' : undefined,
-              aspectRatio: '380 / 540',
-              margin: '0 auto',
-            }}
-          >
-            <PollinisationCarte
-              onTapItem={(it) => setPreview(it)}
-              onTapCenter={startGuide}
-              animate={animateNodes}
-            />
-          </div>
-        </div>
-
-        {/* Legend chips */}
-        <div
-          style={{
-            padding: viewport.isCompact ? '8px 12px 0' : '0 12px',
-            display: 'flex',
-            gap: 6,
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            fontSize: viewport.isNarrow ? 10 : 10.5,
-          }}
-        >
-          {[
-            { l: 'Parcours guidé', c: '#f0c460', i: 'hex' },
-            { l: 'Cours libre', c: '#4d8be0', i: 'book' },
-            { l: 'Projet lié', c: '#7ab84a', i: 'sprout' },
-            { l: 'Espèce BioDex', c: '#e6ad44', i: 'paw' },
-            { l: 'Toile vivante', c: '#a05fb3', i: 'web' },
-          ].map((chip) => (
-            <div
-              key={chip.l}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: viewport.isNarrow ? '6px 9px' : '6px 10px',
-                border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 9999,
-                background: 'rgba(10,12,14,0.55)',
-                color: '#cfc8b5',
-              }}
-            >
-              <L3Icon kind={chip.i} size={12} color={chip.c} />
-              {chip.l}
-            </div>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <div style={{ padding: viewport.isCompact ? '14px 16px 0' : '16px 16px 0' }}>
-          <button
-            onClick={startGuide}
-            style={{
-              width: '100%',
-              minHeight: 72,
-              padding: viewport.isNarrow ? '12px 14px' : '14px 16px',
-              borderRadius: 18,
-              border: '1px solid rgba(240,196,96,0.55)',
-              background: 'linear-gradient(180deg, rgba(60,42,8,0.55) 0%, rgba(28,18,4,0.55) 100%)',
-              color: '#f6efdc',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-              cursor: 'pointer',
-              boxShadow: '0 10px 28px rgba(0,0,0,0.5), 0 0 24px rgba(240,196,96,0.18)',
-              textAlign: 'left',
-            }}
-          >
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                flex: '0 0 auto',
-                display: 'grid',
-                placeItems: 'center',
-                borderRadius: 12,
-                background: 'rgba(240,196,96,0.12)',
-                border: '1px solid rgba(240,196,96,0.45)',
-              }}
-            >
-              <L3Icon kind="hex" size={22} color="#f0c460" />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  fontSize: viewport.isNarrow ? 15 : 16,
-                  fontWeight: 600,
-                  lineHeight: 1.2,
-                  color: '#f6efdc',
-                }}
-              >
-                Commencer le parcours guidé
-              </div>
-              <div
-                style={{
-                  fontSize: viewport.isNarrow ? 12 : 12.5,
-                  color: '#f0c460',
-                  marginTop: 3,
-                  lineHeight: 1.2,
-                }}
-              >
-                Le rôle des pollinisateurs
-              </div>
-            </div>
-            <div
-              style={{
-                width: 34,
-                height: 34,
-                flex: '0 0 auto',
-                display: 'grid',
-                placeItems: 'center',
-                borderRadius: '50%',
-                background: 'rgba(240,196,96,0.10)',
-                border: '1px solid rgba(240,196,96,0.4)',
-              }}
-            >
-              <L3Icon kind="chevron" size={14} color="#f0c460" />
-            </div>
-          </button>
-        </div>
-
         {/* Recommandé */}
         <div style={{ padding: viewport.isCompact ? '18px 16px 8px' : '18px 16px 4px' }}>
           <div
@@ -1346,6 +1238,62 @@ export function Level3Screen({
               onClick={() => setPreview({ type: 'project', title: ['Rucher partenaire'] })}
             />
           </div>
+        </div>
+
+        {/* Big organic cell */}
+        <div style={{ padding: viewport.isCompact ? '8px 8px 0' : '4px 8px 0', width: '100%' }}>
+          <div
+            style={{
+              width: '100%',
+              maxWidth: viewport.isCompact ? 400 : 430,
+              height: viewport.isShort ? 'min(calc(100svh - 224px), 500px)' : undefined,
+              aspectRatio: '380 / 540',
+              margin: '0 auto',
+            }}
+          >
+            <PollinisationCarte
+              onTapItem={(it) => setPreview(it)}
+              onTapCenter={startGuide}
+              animate={animateNodes}
+            />
+          </div>
+        </div>
+
+        {/* Legend chips */}
+        <div
+          style={{
+            padding: viewport.isCompact ? '8px 12px 0' : '0 12px',
+            display: 'flex',
+            gap: 6,
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            fontSize: viewport.isNarrow ? 10 : 10.5,
+          }}
+        >
+          {[
+            { l: 'Parcours guidé', c: '#f0c460', i: 'hex' },
+            { l: 'Cours libre', c: '#4d8be0', i: 'book' },
+            { l: 'Projet lié', c: '#7ab84a', i: 'sprout' },
+            { l: 'Espèce BioDex', c: '#e6ad44', i: 'paw' },
+            { l: 'Toile vivante', c: '#a05fb3', i: 'web' },
+          ].map((chip) => (
+            <div
+              key={chip.l}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: viewport.isNarrow ? '6px 9px' : '6px 10px',
+                border: '1px solid rgba(255,255,255,0.10)',
+                borderRadius: 9999,
+                background: 'rgba(10,12,14,0.55)',
+                color: '#cfc8b5',
+              }}
+            >
+              <L3Icon kind={chip.i} size={12} color={chip.c} />
+              {chip.l}
+            </div>
+          ))}
         </div>
       </div>
 
