@@ -6,6 +6,8 @@ import {
   addLineToCart,
   calculateCartSummary,
   createEmptyMockCart,
+  getCartSellerIds,
+  getSellerShippingProfile,
   type MockCart,
   updateCartLineQuantity,
 } from '@/lib/mock/mock-commerce'
@@ -24,18 +26,22 @@ import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 
 export async function addProductToCartAction(
   productId: string,
-  replaceExisting = false,
+  confirmSeparateShipment = false,
 ): Promise<
   | { ok: true; cart: MockCart }
-  | { ok: false; reason: 'not_found' | 'different_seller'; sellerId?: string }
+  | { ok: false; reason: 'not_found' | 'separate_shipping_confirmation' }
 > {
   const product = getMockProductById(productId)
   if (!product) return { ok: false, reason: 'not_found' }
 
-  const cart = replaceExisting ? createEmptyMockCart() : await getCurrentMockCart()
-  const result = addLineToCart(cart, { productId, sellerId: product.producer_id })
-  if (!result.ok) return result
+  const cart = await getCurrentMockCart()
+  const sellerIds = getCartSellerIds(cart)
+  const addsAnotherSeller = sellerIds.length > 0 && !sellerIds.includes(product.producer_id)
+  if (addsAnotherSeller && !confirmSeparateShipment) {
+    return { ok: false, reason: 'separate_shipping_confirmation' }
+  }
 
+  const result = addLineToCart(cart, { productId })
   await setCurrentMockCart(result.cart)
   return result
 }
@@ -94,14 +100,18 @@ type MockCheckoutCustomer = {
   city: string
 }
 
-export async function completeMockCheckoutAction(
-  customer: MockCheckoutCustomer,
-): Promise<
-  | { ok: true; orderId: string; totalEur: number; discountApplied: boolean }
+export async function completeMockCheckoutAction(customer: MockCheckoutCustomer): Promise<
+  | {
+      ok: true
+      orderId: string
+      totalEur: number
+      discountApplied: boolean
+      partnerOrders: Array<{ orderId: string; sellerId: string }>
+    }
   | { ok: false; error: 'empty_cart' }
 > {
   const cart = await getCurrentMockCart()
-  if (cart.lines.length === 0 || !cart.sellerId) return { ok: false, error: 'empty_cart' }
+  if (cart.lines.length === 0) return { ok: false, error: 'empty_cart' }
 
   const session = await getMockViewerSession()
   const events = await getCurrentMockCommerceEvents()
@@ -109,20 +119,27 @@ export async function completeMockCheckoutAction(
   const summary = calculateCartSummary(cart, { unlockedAdvantageIds: unlockedIds })
   const orderId = `MTC-BE-${Date.now().toString().slice(-6)}`
   const createdAt = new Date().toISOString()
+  const partnerOrders = summary.sellerGroups.map((group, index) => ({
+    orderId: `${orderId}-${index + 1}`,
+    sellerId: group.sellerId,
+  }))
+  const discountOrderId =
+    summary.sellerGroups.find((group) => group.appliedAdvantageId)?.sellerId ?? null
+  const discountPartnerOrder = partnerOrders.find((order) => order.sellerId === discountOrderId)
   const nextEvents = [
-    {
+    ...partnerOrders.map((order) => ({
       type: 'product_order' as const,
-      orderId,
-      sellerId: cart.sellerId,
+      orderId: order.orderId,
+      sellerId: order.sellerId,
       userId: session?.viewerId,
       createdAt,
-    },
+    })),
     ...(summary.appliedAdvantageId && session
       ? [
           {
             type: 'discount_used' as const,
             advantageId: summary.appliedAdvantageId,
-            orderId,
+            orderId: discountPartnerOrder?.orderId ?? orderId,
             userId: session.viewerId,
             createdAt,
           },
@@ -134,54 +151,58 @@ export async function completeMockCheckoutAction(
   await setCurrentMockCommerceEvents(nextEvents)
   if (session) {
     const nameParts = customer.name.trim().split(/\s+/)
-    const order: MockOrderRecord = {
-      id: orderId,
-      status: 'paid',
-      subtotal_points: 0,
-      shipping_cost_points: 0,
-      tax_points: 0,
-      total_points: 0,
-      subtotal_euros: summary.discountedSubtotalEur,
-      shipping_cost_euros: summary.shippingEur,
-      tax_euros: 0,
-      total_euros: summary.totalEur,
-      created_at: createdAt,
-      tracking_number: null,
-      carrier: cart.sellerId.includes('habeebee') ? 'Bpost' : 'Bpost / UPS',
-      shipping_address: {
-        firstName: nameParts[0] ?? '',
-        lastName: nameParts.slice(1).join(' '),
-        street: customer.street,
-        postalCode: customer.postalCode,
-        city: customer.city,
-        country: 'Belgique',
-      },
-      items: cart.lines.flatMap((line) => {
-        const product = getMockProductById(line.productId)
-        return product
-          ? [
-              {
-                id: `${orderId}-${product.id}`,
-                quantity: line.quantity,
-                unit_price_points: 0,
-                total_price_points: 0,
-                product_snapshot: {
-                  name: product.name_default,
-                  priceEuros: product.price_eur_equivalent,
-                  pricePoints: 0,
-                  cover_image_url: product.image_url,
+    for (const partnerOrder of partnerOrders) {
+      const group = summary.sellerGroups.find((entry) => entry.sellerId === partnerOrder.sellerId)
+      if (!group) continue
+      const order: MockOrderRecord = {
+        id: partnerOrder.orderId,
+        status: 'paid',
+        subtotal_points: 0,
+        shipping_cost_points: 0,
+        tax_points: 0,
+        total_points: 0,
+        subtotal_euros: group.discountedSubtotalEur,
+        shipping_cost_euros: group.shippingEur,
+        tax_euros: 0,
+        total_euros: group.totalEur,
+        created_at: createdAt,
+        tracking_number: null,
+        carrier: getSellerShippingProfile(group.sellerId)?.carrierLabel ?? null,
+        shipping_address: {
+          firstName: nameParts[0] ?? '',
+          lastName: nameParts.slice(1).join(' '),
+          street: customer.street,
+          postalCode: customer.postalCode,
+          city: customer.city,
+          country: 'Belgique',
+        },
+        items: cart.lines.flatMap((line) => {
+          const product = getMockProductById(line.productId)
+          return product && product.producer_id === partnerOrder.sellerId
+            ? [
+                {
+                  id: `${orderId}-${product.id}`,
+                  quantity: line.quantity,
+                  unit_price_points: 0,
+                  total_price_points: 0,
+                  product_snapshot: {
+                    name: product.name_default,
+                    priceEuros: product.price_eur_equivalent,
+                    pricePoints: 0,
+                    cover_image_url: product.image_url,
+                  },
+                  product: {
+                    id: product.id,
+                    name_default: product.name_default,
+                    slug: product.slug,
+                  },
                 },
-                product: {
-                  id: product.id,
-                  name_default: product.name_default,
-                  slug: product.slug,
-                },
-              },
-            ]
-          : []
-      }),
+              ]
+            : []
+        }),
+      }
+      await persistCurrentMockOrder(session.viewerId, order)
     }
-    await persistCurrentMockOrder(session.viewerId, order)
   }
   await clearCurrentMockCart()
   return {
@@ -189,5 +210,6 @@ export async function completeMockCheckoutAction(
     orderId,
     totalEur: summary.totalEur,
     discountApplied: Boolean(summary.appliedAdvantageId),
+    partnerOrders,
   }
 }

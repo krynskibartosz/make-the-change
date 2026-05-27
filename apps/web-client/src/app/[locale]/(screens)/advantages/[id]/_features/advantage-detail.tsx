@@ -75,12 +75,7 @@ export function AdvantageDetail({
         </div>
 
         <div className="px-4 pt-5">
-          <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/40">
-            {advantage.partner} · {advantage.location}
-          </p>
-          <h1 className="mt-2 text-[25px] font-black leading-tight text-white">
-            {advantage.title}
-          </h1>
+          <h1 className="text-[25px] font-black leading-tight text-white">{advantage.title}</h1>
           {advantage.details && (
             <p className="mt-2 text-[13px] font-medium text-white/50">{advantage.details}</p>
           )}
@@ -97,12 +92,6 @@ export function AdvantageDetail({
             </p>
           )}
         </div>
-
-        {advantage.isTemporaryVisual && (
-          <p className="mx-4 mt-4 rounded-xl border border-white/8 bg-white/[0.04] px-3 py-2 text-[11px] font-medium text-white/45">
-            Visuel provisoire, en attente de la photographie partenaire définitive.
-          </p>
-        )}
 
         {isSoon && (
           <div className="mx-4 mt-5 flex gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
@@ -131,12 +120,15 @@ export function AdvantageDetail({
           href={`/producers/${advantage.producerSlug}`}
           className="group mt-6 flex items-center gap-3 border-y border-white/5 px-4 py-3"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lime-300/10 text-xs font-black text-lime-300">
-            {advantage.partner[0]}
-          </div>
+          <img
+            src={advantage.partnerImageUrl}
+            alt=""
+            className="h-8 w-8 rounded-full border border-white/10 bg-white object-contain p-1"
+          />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold uppercase text-white/40">Partenaire</p>
             <p className="text-sm font-semibold text-white/80">{advantage.partner}</p>
+            <p className="text-[12px] font-medium text-white/45">{advantage.location}</p>
           </div>
           <ChevronRight className="h-4 w-4 text-white/25" aria-hidden="true" />
         </Link>

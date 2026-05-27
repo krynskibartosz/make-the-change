@@ -50,11 +50,6 @@ export function ClientCatalogProductCard({ product, outOfStockLabel }: Props) {
               <Package className="h-10 w-10 text-white/20" aria-hidden="true" />
             </div>
           )}
-          {product.isTemporaryVisual && (
-            <span className="absolute bottom-2 left-2 rounded-full bg-black/60 px-2 py-1 text-[9px] font-bold uppercase text-white/75">
-              Visuel provisoire
-            </span>
-          )}
           {!inStock && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/55">
               <span className="rounded-full bg-black/60 px-2 py-1 text-[10px] font-bold uppercase text-red-400">

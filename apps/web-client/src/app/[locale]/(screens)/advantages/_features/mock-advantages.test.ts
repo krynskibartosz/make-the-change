@@ -26,8 +26,11 @@ describe('filterAdvantagesByType', () => {
     expect(filtered.length > 0).toBe(true)
     expect(filtered.every((advantage) => advantage.type === 'discount')).toBe(true)
     expect(filtered[0]?.title).toBe('Collection de 3 Miels Ilanga')
-    expect(filtered[0]?.imageBadge).toBe('-10 %')
+    expect(filtered[0]?.imageBadge).toBe('-10 % à débloquer')
     expect(filtered[0]?.imageUrl.includes('ilanga-collection-3-miels-reduction.webp')).toBe(true)
+    expect(filtered[0]?.partnerImageUrl).toBe(
+      '/images/producteurs/illanga-nature/identity/pur-logo.png',
+    )
     expect(filtered[0]?.isTemporaryVisual).toBe(true)
   })
 
@@ -37,6 +40,7 @@ describe('filterAdvantagesByType', () => {
     expect(filtered.some((advantage) => advantage.type === 'experience')).toBe(true)
     expect(filtered.every((advantage) => advantage.type === 'experience')).toBe(true)
     expect(filtered[0]?.imageUrl.includes('visite-rucher-urbain.webp')).toBe(true)
+    expect(filtered[0]?.partnerImageUrl).toBe('/images/producteurs/habeebee/identity/pur-logo.png')
     expect(filtered[0]?.isTemporaryVisual).toBe(true)
   })
 

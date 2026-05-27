@@ -15,6 +15,7 @@ export type Advantage = {
   type: AdvantageType
   title: string
   partner: string
+  partnerImageUrl: string
   location: string
   imageUrl: string
   imageBadge?: string
@@ -37,9 +38,10 @@ const ADVANTAGES: Advantage[] = [
     type: 'discount',
     title: 'Collection de 3 Miels Ilanga',
     partner: 'Ilanga Nature',
+    partnerImageUrl: ILANGA_PATHS.identity.portrait,
     location: 'Mariembourg, Belgique',
     imageUrl: ILANGA_PATHS.media.advantageCollection3MielsReduction,
-    imageBadge: '-10 %',
+    imageBadge: '-10 % à débloquer',
     isTemporaryVisual: true,
     priceCredits: 200,
     status: 'available',
@@ -62,6 +64,7 @@ const ADVANTAGES: Advantage[] = [
     type: 'experience',
     title: 'Visite de rucher urbain Habeebee',
     partner: 'Habeebee',
+    partnerImageUrl: HABEEBEE_PATHS.identity.portrait,
     location: 'Bruxelles, Belgique',
     imageUrl: HABEEBEE_PATHS.media.advantageVisiteRucherUrbain,
     isTemporaryVisual: true,

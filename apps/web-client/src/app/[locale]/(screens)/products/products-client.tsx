@@ -44,6 +44,8 @@ const CATEGORIES = [
   { id: 'soins', label: 'Soins' },
 ]
 
+const CART_DOCK_BOTTOM = 'calc(env(safe-area-inset-bottom) + 1rem)'
+
 export function ProductsClient({ products, pagination, initialQueryState, cartCount }: Props) {
   const tProducts = useTranslations('products')
   const router = useRouter()
@@ -64,28 +66,14 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
 
   return (
     <>
-      <header className="flex items-start justify-between gap-4 px-4 pb-5 pt-7">
-        <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-black uppercase text-lime-300/70">Boutique partenaire</p>
-          <h1 className="mt-1 text-[30px] font-black leading-tight text-white">
-            Boutique partenaire
-          </h1>
-          <p className="mt-2 text-[14px] font-medium leading-relaxed text-white/55">
-            Produits vendus et expédiés par nos partenaires, payés en euros.
-          </p>
-        </div>
-        <Link
-          href="/products/cart"
-          aria-label="Voir le panier"
-          className="relative mt-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-white"
-        >
-          <ShoppingBag className="h-5 w-5" aria-hidden="true" />
-          {cartCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-lime-300 px-1 text-[10px] font-black text-[#0B0F15]">
-              {cartCount}
-            </span>
-          )}
-        </Link>
+      <header className="px-4 pb-5 pt-7">
+        <p className="text-[11px] font-black uppercase text-lime-300/70">Boutique partenaire</p>
+        <h1 className="mt-1 text-[30px] font-black leading-tight text-white">
+          Boutique partenaire
+        </h1>
+        <p className="mt-2 text-[14px] font-medium leading-relaxed text-white/55">
+          Produits vendus et expédiés par nos partenaires, payés en euros.
+        </p>
       </header>
 
       <nav className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-5" aria-label="Catégories">
@@ -105,7 +93,7 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
         ))}
       </nav>
 
-      <div className="w-full px-4 pb-24">
+      <div className="w-full px-4 pb-28">
         {products.length === 0 ? (
           <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
             <Package className="mb-4 h-11 w-11 text-white/25" aria-hidden="true" />
@@ -137,6 +125,25 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
             }}
           />
         </div>
+      </div>
+
+      <div
+        className="pointer-events-none fixed inset-x-0 z-50 flex justify-center px-4"
+        style={{ bottom: CART_DOCK_BOTTOM }}
+      >
+        <Link
+          href="/products/cart"
+          aria-label={cartCount > 0 ? `Voir le panier, ${cartCount} article(s)` : 'Voir le panier'}
+          className="pointer-events-auto flex h-12 items-center gap-2 rounded-full border border-white/10 bg-[#0B0F15]/92 px-4 text-sm font-black text-white shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl transition active:scale-[0.98]"
+        >
+          <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+          <span>Panier</span>
+          {cartCount > 0 && (
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-lime-300 px-1.5 text-[10px] font-black text-[#0B0F15]">
+              {cartCount}
+            </span>
+          )}
+        </Link>
       </div>
     </>
   )

@@ -6,6 +6,7 @@ import {
   CreditCard,
   Loader2,
   MapPin,
+  Plus,
   ShoppingBag,
   Trash2,
   Truck,
@@ -13,6 +14,7 @@ import {
 import Link from 'next/link'
 import { useMemo, useState, useTransition } from 'react'
 import {
+  addProductToCartAction,
   clearCartAction,
   completeMockCheckoutAction,
   updateCartLineAction,
@@ -20,6 +22,7 @@ import {
 import { getMockProductById } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import {
   calculateCartSummary,
+  getCartSuggestionProductIds,
   getSellerShippingProfile,
   type MockCart,
 } from '@/lib/mock/mock-commerce'
@@ -54,6 +57,9 @@ export function ProductCartClient({
   })
   const [orderId, setOrderId] = useState('')
   const [orderTotal, setOrderTotal] = useState(0)
+  const [partnerOrders, setPartnerOrders] = useState<Array<{ orderId: string; sellerId: string }>>(
+    [],
+  )
   const [isPending, startTransition] = useTransition()
   const lines = cart.lines.flatMap((line) => {
     const product = getMockProductById(line.productId)
@@ -63,8 +69,23 @@ export function ProductCartClient({
     () => calculateCartSummary(cart, { unlockedAdvantageIds }),
     [cart, unlockedAdvantageIds],
   )
-  const shipping = getSellerShippingProfile(cart.sellerId)
-  const sellerName = lines[0]?.product.producer.name_default ?? ''
+  const sellerGroups = summary.sellerGroups.flatMap((group) => {
+    const sellerLines = lines.filter((line) => line.product.producer_id === group.sellerId)
+    const firstLine = sellerLines[0]
+    if (!firstLine) return []
+    return [
+      {
+        ...group,
+        lines: sellerLines,
+        shipping: getSellerShippingProfile(group.sellerId),
+        sellerName: firstLine.product.producer.name_default,
+      },
+    ]
+  })
+  const suggestedProducts = getCartSuggestionProductIds(cart).flatMap((productId) => {
+    const product = getMockProductById(productId)
+    return product ? [product] : []
+  })
   const canCompleteCheckout =
     customer.email.includes('@') &&
     customer.name.trim().length > 1 &&
@@ -80,6 +101,13 @@ export function ProductCartClient({
     startTransition(async () => setCart(await clearCartAction()))
   }
 
+  function addSuggestedProduct(productId: string) {
+    startTransition(async () => {
+      const result = await addProductToCartAction(productId)
+      if (result.ok) setCart(result.cart)
+    })
+  }
+
   function completeOrder() {
     if (!canCompleteCheckout) return
     startTransition(async () => {
@@ -87,6 +115,7 @@ export function ProductCartClient({
       if (!result.ok) return
       setOrderId(result.orderId)
       setOrderTotal(result.totalEur)
+      setPartnerOrders(result.partnerOrders)
       setStage('success')
     })
   }
@@ -106,9 +135,28 @@ export function ProductCartClient({
         <div className="mt-8 w-full rounded-2xl border border-white/10 bg-white/[0.04] p-5">
           <p className="text-[11px] font-bold uppercase text-white/45">Achat partenaire</p>
           <p className="mt-2 text-3xl font-black text-white">{formatEuro(orderTotal)}</p>
-          <p className="mt-2 text-sm font-medium text-white/50">
-            Cet achat ne génère pas de Crédits Impact.
+        </div>
+        <div className="mt-4 w-full text-left">
+          <p className="text-[11px] font-bold uppercase text-white/45">Commandes partenaires</p>
+          <p className="mt-2 text-sm font-medium text-white/55">
+            {sellerGroups.length} partenaire{sellerGroups.length > 1 ? 's' : ''} ·{' '}
+            {sellerGroups.length} expédition{sellerGroups.length > 1 ? 's séparées' : ''}
           </p>
+          <div className="mt-3 space-y-2">
+            {sellerGroups.map((group) => (
+              <div
+                key={group.sellerId}
+                className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3"
+              >
+                <p className="text-sm font-bold text-white">{group.sellerName}</p>
+                <p className="mt-1 text-[12px] font-medium text-white/50">
+                  Commande{' '}
+                  {partnerOrders.find((order) => order.sellerId === group.sellerId)?.orderId} ·{' '}
+                  {group.shipping?.deliveryLabel}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="mt-auto flex w-full flex-col gap-3">
           {!isConnected && (
@@ -175,43 +223,117 @@ export function ProductCartClient({
             </button>
           </div>
           <p className="mt-2 text-sm font-medium text-white/50">
-            Vendu et expédié par {sellerName}
+            {sellerGroups.length} partenaire{sellerGroups.length > 1 ? 's' : ''}{' '}
+            {sellerGroups.length > 1
+              ? `· ${sellerGroups.length} expéditions séparées`
+              : '· 1 expédition partenaire'}
           </p>
-          <div className="mt-6 space-y-3">
-            {lines.map(({ product, quantity }) => (
-              <div
-                key={product.id}
-                className="flex gap-3 rounded-xl border border-white/8 bg-white/[0.03] p-3"
-              >
-                <img src={product.image_url} alt="" className="h-16 w-16 rounded-lg object-cover" />
-                <div className="min-w-0 flex-1">
-                  <p className="line-clamp-2 text-sm font-bold text-white">
-                    {product.name_default}
-                  </p>
-                  <p className="mt-1 text-sm font-black text-white">
-                    {formatEuro(product.price_eur_equivalent)}
+          <div className="mt-6 space-y-7">
+            {sellerGroups.map((group) => (
+              <section key={group.sellerId} className="space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase text-white/40">
+                      Vendu et expédié par
+                    </p>
+                    <p className="mt-1 text-sm font-black text-white">{group.sellerName}</p>
+                  </div>
+                  <p className="text-right text-[12px] font-medium text-white/45">
+                    {group.shipping?.deliveryLabel}
                   </p>
                 </div>
-                <div className="flex h-9 items-center rounded-lg border border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => updateQuantity(product.id, quantity - 1)}
-                    className="h-9 w-8 text-white/70"
+                {group.lines.map(({ product, quantity }) => (
+                  <div
+                    key={product.id}
+                    className="flex gap-3 rounded-xl border border-white/8 bg-white/[0.03] p-3"
                   >
-                    -
-                  </button>
-                  <span className="w-5 text-center text-sm font-bold text-white">{quantity}</span>
-                  <button
-                    type="button"
-                    onClick={() => updateQuantity(product.id, quantity + 1)}
-                    className="h-9 w-8 text-white/70"
-                  >
-                    +
-                  </button>
+                    <img
+                      src={product.image_url}
+                      alt=""
+                      className="h-16 w-16 rounded-lg object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm font-bold text-white">
+                        {product.name_default}
+                      </p>
+                      <p className="mt-1 text-sm font-black text-white">
+                        {formatEuro(product.price_eur_equivalent)}
+                      </p>
+                    </div>
+                    <div className="flex h-9 items-center rounded-lg border border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => updateQuantity(product.id, quantity - 1)}
+                        className="h-9 w-8 text-white/70"
+                      >
+                        -
+                      </button>
+                      <span className="w-5 text-center text-sm font-bold text-white">
+                        {quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => updateQuantity(product.id, quantity + 1)}
+                        className="h-9 w-8 text-white/70"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <div className="flex items-start justify-between gap-3 px-1 text-[12px] font-medium text-white/45">
+                  <span>Livraison {group.shipping?.carrierLabel}</span>
+                  <span>{group.shippingEur === 0 ? 'Offerte' : formatEuro(group.shippingEur)}</span>
                 </div>
-              </div>
+                {group.amountUntilFreeShippingEur > 0 && (
+                  <p className="px-1 text-[12px] font-medium text-white/45">
+                    Encore {formatEuro(group.amountUntilFreeShippingEur)} chez {group.sellerName}{' '}
+                    pour la livraison offerte.
+                  </p>
+                )}
+              </section>
             ))}
           </div>
+          {suggestedProducts.length > 0 && (
+            <section className="mt-8">
+              <h2 className="text-lg font-black text-white">Compléter votre commande</h2>
+              <div className="mt-4 space-y-3">
+                {suggestedProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.03] p-3"
+                  >
+                    <img
+                      src={product.image_url}
+                      alt=""
+                      className="h-14 w-14 shrink-0 rounded-lg object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-bold uppercase text-white/40">
+                        {product.producer.name_default}
+                      </p>
+                      <p className="mt-1 line-clamp-1 text-sm font-bold text-white">
+                        {product.name_default}
+                      </p>
+                      <p className="mt-1 text-sm font-black text-white">
+                        {formatEuro(product.price_eur_equivalent)}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isPending}
+                      onClick={() => addSuggestedProduct(product.id)}
+                      aria-label={`Ajouter ${product.name_default}`}
+                      className="flex shrink-0 items-center gap-1 rounded-lg border border-white/10 px-3 py-2 text-xs font-bold text-white/75 disabled:opacity-50"
+                    >
+                      <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                      Ajouter
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </>
       ) : (
         <>
@@ -222,17 +344,31 @@ export function ProductCartClient({
               : 'Achat invité · Belgique uniquement pour cette version'}
           </p>
           <div className="mt-6 rounded-xl border border-white/8 bg-white/[0.03] p-4">
-            <p className="text-[11px] font-bold uppercase text-white/45">Articles</p>
-            <div className="mt-3 space-y-3">
-              {lines.map(({ product, quantity }) => (
-                <div key={product.id} className="flex items-start justify-between gap-3 text-sm">
-                  <p className="min-w-0 font-semibold text-white/75">
-                    {quantity} x {product.name_default}
+            <p className="text-[11px] font-bold uppercase text-white/45">Commandes partenaires</p>
+            <div className="mt-4 space-y-5">
+              {sellerGroups.map((group) => (
+                <section key={group.sellerId}>
+                  <p className="text-sm font-black text-white">{group.sellerName}</p>
+                  <p className="mt-1 text-[12px] font-medium text-white/45">
+                    Vendeur et expéditeur · Livraison {group.shipping?.deliveryLabel}
                   </p>
-                  <p className="shrink-0 font-black text-white">
-                    {formatEuro(product.price_eur_equivalent * quantity)}
-                  </p>
-                </div>
+                  <p className="mt-3 text-[10px] font-bold uppercase text-white/40">Articles</p>
+                  <div className="mt-3 space-y-2">
+                    {group.lines.map(({ product, quantity }) => (
+                      <div
+                        key={product.id}
+                        className="flex items-start justify-between gap-3 text-sm"
+                      >
+                        <p className="min-w-0 font-semibold text-white/75">
+                          {quantity} x {product.name_default}
+                        </p>
+                        <p className="shrink-0 font-black text-white">
+                          {formatEuro(product.price_eur_equivalent * quantity)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
           </div>
@@ -302,15 +438,15 @@ export function ProductCartClient({
             <span>-{formatEuro(summary.discountEur)}</span>
           </div>
         )}
-        <div className="mt-3 flex justify-between text-sm text-white/60">
-          <span>Livraison {shipping?.carrierLabel}</span>
-          <span>{summary.shippingEur === 0 ? 'Offerte' : formatEuro(summary.shippingEur)}</span>
-        </div>
-        {shipping && summary.amountUntilFreeShippingEur > 0 && (
-          <p className="mt-3 text-[12px] font-medium text-white/45">
-            Encore {formatEuro(summary.amountUntilFreeShippingEur)} pour la livraison offerte.
-          </p>
-        )}
+        {sellerGroups.map((group) => (
+          <div
+            key={group.sellerId}
+            className="mt-3 flex justify-between gap-3 text-sm text-white/60"
+          >
+            <span>Livraison {group.sellerName}</span>
+            <span>{group.shippingEur === 0 ? 'Offerte' : formatEuro(group.shippingEur)}</span>
+          </div>
+        ))}
         <div className="my-4 h-px bg-white/10" />
         <div className="flex justify-between text-lg font-black text-white">
           <span>Total TTC</span>
@@ -318,25 +454,36 @@ export function ProductCartClient({
         </div>
       </div>
 
-      {shipping && (
-        <div className="mt-4 rounded-xl border border-white/8 p-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <Truck className="h-4 w-4 text-lime-300" aria-hidden="true" />
-            Livraison estimée : {shipping.deliveryLabel}
-          </div>
-          {shipping.feeStatus === 'prototype_estimate' && (
-            <p className="mt-2 text-[12px] font-medium text-amber-200/75">
-              Frais estimés pour le prototype, à confirmer par Ilanga.
-            </p>
-          )}
+      <div className="mt-4 rounded-xl border border-white/8 p-4">
+        <div className="flex items-center gap-2 text-sm font-bold text-white">
+          <Truck className="h-4 w-4 text-lime-300" aria-hidden="true" />
+          {sellerGroups.length > 1
+            ? `${sellerGroups.length} expéditions séparées`
+            : 'Expédition partenaire'}
         </div>
-      )}
+        <div className="mt-3 space-y-2">
+          {sellerGroups.map((group) => (
+            <p key={group.sellerId} className="text-[12px] font-medium text-white/55">
+              {group.sellerName} · {group.shipping?.deliveryLabel}
+            </p>
+          ))}
+        </div>
+        {sellerGroups.some((group) => group.shipping?.feeStatus === 'prototype_estimate') && (
+          <p className="mt-3 text-[12px] font-medium text-amber-200/75">
+            Frais Ilanga estimés pour le prototype, à confirmer par le partenaire.
+          </p>
+        )}
+      </div>
 
       {stage === 'checkout' && (
         <div className="mt-4 overflow-hidden rounded-xl border border-white/8">
-          <p className="px-4 pt-4 text-sm font-bold text-white">
-            Vendeur et expéditeur : {sellerName}
-          </p>
+          <div className="px-4 pt-4">
+            {sellerGroups.map((group) => (
+              <p key={group.sellerId} className="text-sm font-bold text-white">
+                Vendeur et expéditeur : {group.sellerName}
+              </p>
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => setConditionsOpen((open) => !open)}
@@ -350,13 +497,11 @@ export function ProductCartClient({
           </button>
           {conditionsOpen && (
             <p className="border-t border-white/8 px-4 py-4 text-[12px] font-medium leading-relaxed text-white/55">
-              Le partenaire vendeur assure livraison, retours et SAV. Le droit de rétractation
-              s’applique selon la réglementation, avec exceptions possibles pour certains biens.
+              Chaque partenaire vendeur assure la livraison, les retours et le SAV de ses articles.
+              Le droit de rétractation s’applique selon la réglementation, avec exceptions possibles
+              pour certains biens.
             </p>
           )}
-          <p className="border-t border-white/8 px-4 py-4 text-[12px] font-bold text-amber-200/80">
-            Cet achat ne génère pas de Crédits Impact.
-          </p>
         </div>
       )}
 
@@ -381,7 +526,9 @@ export function ProductCartClient({
             ) : (
               <CreditCard className="h-4 w-4" aria-hidden="true" />
             )}
-            {isPending ? 'Validation en cours...' : 'Simuler le paiement'}
+            {isPending
+              ? 'Validation en cours...'
+              : `Simuler le paiement · ${formatEuro(summary.totalEur)}`}
           </button>
         )}
       </div>

@@ -15,7 +15,7 @@ async function _getPublicProductById(idOrSlug: string): Promise<ProductWithRelat
 
 export const getPublicProductById = unstable_cache(
   _getPublicProductById,
-  ['v1-mock-product-detail'],
+  ['v1-mock-product-detail-format-selection'],
   {
     revalidate: 3600,
     tags: ['products-list'],

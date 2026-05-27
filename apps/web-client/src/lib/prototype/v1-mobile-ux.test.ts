@@ -185,11 +185,39 @@ describe('V1 mobile prototype UX guardrails', () => {
       'src/app/[locale]/(screens)/advantages/[id]/_features/advantage-detail.tsx',
     )
 
-    expect(advantages.includes("imageBadge: '-10 %'")).toBe(true)
+    expect(advantages.includes("imageBadge: '-10 % à débloquer'")).toBe(true)
+    expectNoMatches(advantages, [/imageBadge: '-10 %'/g], 'unconditional discount badge')
     expectNoMatches(advantages, [/title: '-10 %/g], 'discount advantage title')
     expect(tab.includes('advantage.imageBadge')).toBe(true)
+    expect(tab.includes('Soutiens des projets, reçois des Crédits Impact')).toBe(true)
+    expect(tab.includes('Découvrir les projets')).toBe(true)
+    expect(tab.includes('Disponible maintenant')).toBe(true)
+    expect(tab.includes('Bientôt disponible')).toBe(true)
+    expect(tab.includes('Débloquer la remise')).toBe(true)
+    expect(tab.includes('gap-9')).toBe(true)
+    expect(tab.includes('aspect-[16/10]')).toBe(true)
+    expect(
+      tab.includes('-mt-6 flex items-center gap-4 border-y border-white/[0.07] pb-5 pt-3'),
+    ).toBe(true)
+    expectNoMatches(
+      tab,
+      [
+        /Voir tout/g,
+        />Explorer</g,
+        /data\.categories\.map/g,
+        /group flex gap-3 rounded-2xl border border-white\/\[0\.08\] bg-white\/\[0\.03\]/g,
+      ],
+      'premature advantages catalogue navigation',
+    )
     expect(catalog.includes('advantage.imageBadge')).toBe(true)
     expect(detail.includes('advantage.imageBadge')).toBe(true)
+    expect(detail.includes('advantage.partnerImageUrl')).toBe(true)
+    expectNoMatches(detail, [/advantage\.partner\[0\]/g], 'partner identity on advantage detail')
+    expectNoMatches(
+      detail,
+      [/\{advantage\.partner\} · \{advantage\.location\}/g],
+      'duplicate partner label above advantage title',
+    )
   })
 
   it('shows partner advantages on producer and project details without mixing them with support', () => {
@@ -247,6 +275,12 @@ describe('V1 mobile prototype UX guardrails', () => {
     const productPayment = readSource(
       'src/app/[locale]/(screens)/products/cart/product-cart-client.tsx',
     )
+    const productDetail = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-quick-view.tsx',
+    )
+    const commerceActions = readSource(
+      'src/app/[locale]/(screens)/products/_features/mock-commerce-actions.ts',
+    )
 
     expect(productPayment.includes('Vendeur et expéditeur')).toBe(true)
     expect(productPayment.includes('Articles')).toBe(true)
@@ -255,6 +289,26 @@ describe('V1 mobile prototype UX guardrails', () => {
     expect(productPayment.includes('Aucun paiement réel')).toBe(true)
     expect(productPayment.includes('Commande liée à ton espace MTC')).toBe(true)
     expect(productPayment.includes('Achat invité')).toBe(true)
+    expect(productPayment.includes('expéditions séparées')).toBe(true)
+    expect(productPayment.includes('Commandes partenaires')).toBe(true)
+    expect(productPayment.includes('Compléter votre commande')).toBe(true)
+    expect(productDetail.includes('Expédition séparée')).toBe(true)
+    expect(commerceActions.includes('separate_shipping_confirmation')).toBe(true)
+    expectNoMatches(
+      productPayment,
+      [/Cet achat ne génère pas de Crédits Impact/g],
+      'irrelevant Credits Impact product wording',
+    )
+    expectNoMatches(
+      productDetail,
+      [/Vider et ajouter/g, /Ton panier contient un autre partenaire/g],
+      'multi-partner product addition',
+    )
+    expectNoMatches(
+      commerceActions,
+      [/replaceExisting/g, /different_seller/g],
+      'multi-partner cart action',
+    )
   })
 
   it('keeps the product shop euro-only and mock-only', () => {
@@ -295,6 +349,85 @@ describe('V1 mobile prototype UX guardrails', () => {
 
     const homeProducts = readSource('src/app/[locale]/(site)/(home)/_api/home.server-data.ts')
     expectNoMatches(homeProducts, [/featuredProductsQuery/g, /price_points/g], 'home products')
+  })
+
+  it('keeps the product cart accessible in a thumb-zone floating dock', () => {
+    const productCatalog = readSource('src/app/[locale]/(screens)/products/products-client.tsx')
+
+    expect(productCatalog.includes('CART_DOCK_BOTTOM')).toBe(true)
+    expect(productCatalog.includes('pointer-events-none fixed inset-x-0 z-50')).toBe(true)
+    expect(productCatalog.includes('Panier')).toBe(true)
+    expect(productCatalog.includes('cartCount > 0')).toBe(true)
+    expectNoMatches(
+      productCatalog,
+      [/relative mt-2 flex h-11 w-11 shrink-0/],
+      'cart icon in product hero',
+    )
+  })
+
+  it('restores verified product decision details without restoring a CI checkout', () => {
+    const productDetail = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-quick-view.tsx',
+    )
+    const productDetailData = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-detail-data.ts',
+    )
+    const informationSections = readSource(
+      'src/app/[locale]/(screens)/products/[id]/_components/product-information-sections.tsx',
+    )
+
+    expect(productDetail.includes('ProductInformationSections')).toBe(true)
+    expect(productDetail.includes('portrait')).toBe(true)
+    expect(productDetailData.includes('v1-mock-product-detail-format-selection')).toBe(true)
+    expect(informationSections.includes('Informations produit')).toBe(true)
+    expect(informationSections.includes('Notes aromatiques')).toBe(true)
+    expect(informationSections.includes('Valeurs nutritionnelles')).toBe(true)
+    expect(informationSections.includes('Contenu du coffret')).toBe(true)
+    expectNoMatches(
+      productDetail,
+      [/ProductCheckoutView/g, /displayPoints/g, /Crédits Impact/g],
+      'enriched product detail',
+    )
+  })
+
+  it('lets Ilanga honey format selection update the euro cart item only', () => {
+    const productDetail = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-quick-view.tsx',
+    )
+
+    expect(productDetail.includes('product.variants')).toBe(true)
+    expect(productDetail.includes('<select')).toBe(true)
+    expect(productDetail.includes('setSelectedFormat')).toBe(true)
+    expect(productDetail.includes('addProductToCartAction(selectedFormat.id')).toBe(true)
+    expectNoMatches(productDetail, [/ProductCheckoutView/g, /Crédits Impact/g], 'format checkout')
+  })
+
+  it('keeps internal asset and sourcing metadata out of the public commerce experience', () => {
+    const productDetail = readSource(
+      'src/app/[locale]/(screens)/products/[id]/product-quick-view.tsx',
+    )
+    const productInformation = readSource(
+      'src/app/[locale]/(screens)/products/[id]/_components/product-information-sections.tsx',
+    )
+    const productCard = readSource(
+      'src/app/[locale]/(screens)/products/_components/client-catalog-product-card.tsx',
+    )
+    const advantageDetail = readSource(
+      'src/app/[locale]/(screens)/advantages/[id]/_features/advantage-detail.tsx',
+    )
+
+    expectNoMatches(productDetail, [/Visuel provisoire/g], 'product detail asset metadata')
+    expectNoMatches(productCard, [/Visuel provisoire/g], 'product card asset metadata')
+    expectNoMatches(
+      advantageDetail,
+      [/Visuel provisoire/g, /photographie partenaire définitive/g],
+      'advantage asset metadata',
+    )
+    expectNoMatches(
+      productInformation,
+      [/Informations vérifiées/g, /sourceUrl/g],
+      'product sourcing metadata',
+    )
   })
 
   it('keeps project discovery mock-only and loads the map only after user intent', () => {
