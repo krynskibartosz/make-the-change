@@ -66,7 +66,7 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
 
   return (
     <>
-      <nav className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-5" aria-label="Catégories">
+      <nav className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-5 pt-5" aria-label="Catégories">
         {CATEGORIES.map((category) => (
           <button
             key={category.id || 'all'}
