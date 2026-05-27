@@ -2,7 +2,7 @@
 
 import { Package, ShoppingBag } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useCallback, useTransition } from 'react'
 import { ProductsPagination } from '@/app/[locale]/(screens)/products/_features/products-pagination'
 import type { ProductsPaginationData } from '@/app/[locale]/(screens)/products/_features/products-query'
@@ -11,7 +11,7 @@ import {
   DEFAULT_PRODUCTS_QUERY_STATE,
   type ProductsQueryState,
 } from '@/app/[locale]/(screens)/products/_features/query-state'
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { usePathname, useRouter } from '@/i18n/navigation'
 import { ClientCatalogProductCard } from './_components/client-catalog-product-card'
 
 export type Product = {
@@ -48,6 +48,7 @@ const CART_DOCK_BOTTOM = 'calc(env(safe-area-inset-bottom) + 1rem)'
 
 export function ProductsClient({ products, pagination, initialQueryState, cartCount }: Props) {
   const tProducts = useTranslations('products')
+  const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -131,8 +132,8 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
         className="pointer-events-none fixed inset-x-0 z-50 flex justify-center px-4"
         style={{ bottom: CART_DOCK_BOTTOM }}
       >
-        <Link
-          href="/products/cart"
+        <a
+          href={`/${locale}/products/cart`}
           aria-label={cartCount > 0 ? `Voir le panier, ${cartCount} article(s)` : 'Voir le panier'}
           className="pointer-events-auto flex h-12 items-center gap-2 rounded-full border border-white/10 bg-[#0B0F15]/92 px-4 text-sm font-black text-white shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl transition active:scale-[0.98]"
         >
@@ -143,7 +144,7 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
               {cartCount}
             </span>
           )}
-        </Link>
+        </a>
       </div>
     </>
   )
