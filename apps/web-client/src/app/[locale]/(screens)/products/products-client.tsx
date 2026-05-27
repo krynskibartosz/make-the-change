@@ -66,13 +66,6 @@ export function ProductsClient({ products, pagination, initialQueryState, cartCo
 
   return (
     <>
-      <header className="px-4 pb-5 pt-7">
-        <h1 className="text-[30px] font-black leading-tight text-white">Boutique partenaire</h1>
-        <p className="mt-2 text-[14px] font-medium leading-relaxed text-white/55">
-          Produits vendus et expédiés par nos partenaires, payés en euros.
-        </p>
-      </header>
-
       <nav className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-5" aria-label="Catégories">
         {CATEGORIES.map((category) => (
           <button
