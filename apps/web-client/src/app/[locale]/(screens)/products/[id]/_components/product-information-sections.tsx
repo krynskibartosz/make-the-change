@@ -1,4 +1,6 @@
-import type { ReactNode } from 'react'
+'use client'
+
+import { useState, type ReactNode } from 'react'
 import type { ProductInformation } from '../../_features/mock-products'
 
 type Props = {
@@ -14,15 +16,23 @@ function AccordionSection({
   children: ReactNode
   defaultOpen?: boolean
 }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+
   return (
-    <details open={defaultOpen} className="group border-b border-white/[0.06] last:border-b-0">
-      <summary className="flex cursor-pointer list-none items-center justify-between py-3.5">
+    <div className="border-b border-white/[0.06] last:border-b-0">
+      <button
+        type="button"
+        onClick={() => setIsOpen((v) => !v)}
+        className="flex w-full items-center justify-between py-3.5"
+        aria-expanded={isOpen}
+      >
         <span className="text-[13px] font-bold text-white">{title}</span>
-        <span className="text-[11px] font-semibold text-white/40 group-open:hidden">+</span>
-        <span className="hidden text-[11px] font-semibold text-white/40 group-open:inline">−</span>
-      </summary>
-      <div className="pb-4">{children}</div>
-    </details>
+        <span className="text-[11px] font-semibold text-white/40" aria-hidden="true">
+          {isOpen ? '−' : '+'}
+        </span>
+      </button>
+      {isOpen ? <div className="pb-4">{children}</div> : null}
+    </div>
   )
 }
 

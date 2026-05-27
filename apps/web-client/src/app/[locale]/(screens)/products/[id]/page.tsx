@@ -43,7 +43,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   const relatedProducts = getMockProducts()
-    .filter((p) => p.producer_id === product.producer_id && p.id !== product.id)
+    .filter(
+      (p) =>
+        p.producer_id === product.producer_id &&
+        p.id !== product.id &&
+        !p.variants?.some((v) => v.id === product.id),
+    )
     .slice(0, 4)
 
   const productName = getLocalizedContent(product.name_i18n, locale, product.name_default || '')
