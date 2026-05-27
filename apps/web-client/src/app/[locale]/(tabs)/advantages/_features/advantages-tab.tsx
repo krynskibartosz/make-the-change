@@ -121,7 +121,7 @@ function AvailableAdvantageCard({ advantage }: { advantage: Advantage }) {
         <span className="mt-1.5 block text-lg font-bold leading-snug text-white">
           {advantage.title}
         </span>
-        <span className="mt-4 flex flex-wrap items-center gap-1.5 text-sm font-black text-lime-300">
+        <span className="mt-2 flex flex-wrap items-center gap-1.5 text-sm font-black text-lime-300">
           <span>Débloquer la remise</span>
           <span aria-hidden="true">·</span>
           <CurrencyAmount
