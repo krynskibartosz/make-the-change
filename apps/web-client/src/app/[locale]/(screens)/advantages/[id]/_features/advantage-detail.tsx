@@ -127,7 +127,14 @@ export function AdvantageDetail({
           </div>
           {isConnected && (
             <p className="mt-2 text-[12px] font-medium text-white/45">
-              Solde disponible : {balance.toLocaleString('fr-FR')} Crédits Impact
+              {isReserved ? (
+                <span className="inline-flex items-center gap-1.5 text-lime-300/70">
+                  <Check className="h-3 w-3" aria-hidden="true" />
+                  Réservé · solde restant : {balance.toLocaleString('fr-FR')} CI
+                </span>
+              ) : (
+                <>Solde disponible : {balance.toLocaleString('fr-FR')} Crédits Impact</>
+              )}
             </p>
           )}
         </div>
@@ -244,8 +251,9 @@ export function AdvantageDetail({
             Se connecter pour réserver
           </Link>
         ) : isExperience && !selectedSlotId ? (
-          <div className="flex w-full justify-center rounded-2xl bg-white/5 py-4 text-[15px] font-black text-white/30">
-            Choisir un créneau
+          <div className="flex w-full flex-col items-center gap-0.5 rounded-2xl bg-white/5 py-4">
+            <span className="text-[15px] font-black text-white/30">Sélectionner un créneau</span>
+            <span className="text-[11px] font-medium text-white/20">pour continuer</span>
           </div>
         ) : isExperience && !hasEnoughImpactCredits ? (
           <div className="text-center text-[14px] font-bold text-white/50">
@@ -257,7 +265,7 @@ export function AdvantageDetail({
             onClick={() => setIsConfirmSheetOpen(true)}
             className="flex w-full justify-center rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15]"
           >
-            Réserver · {advantage.priceCredits.toLocaleString('fr-FR')} Crédits Impact
+            Réserver · {advantage.priceCredits.toLocaleString('fr-FR')} CI
           </button>
         ) : unlocked && advantage.productSlug && !initialUsed ? (
           <Link
@@ -361,10 +369,15 @@ function ReservationSuccess({
                 {slot.dateLabel} · {slot.timeLabel}
               </p>
             )}
-            <p className="mt-0.5 text-[12px] font-medium text-white/45">{advantage.location}</p>
+            <p className="mt-0.5 text-[12px] font-medium text-white/45">
+              {advantage.address ?? advantage.location}
+            </p>
             {reservationId && (
               <p className="mt-2 text-[11px] font-medium text-white/30">Réf. {reservationId}</p>
             )}
+            <p className="mt-2 text-[11px] font-medium text-white/35">
+              Un email de confirmation t'a été envoyé.
+            </p>
           </div>
         </div>
       </div>
@@ -411,7 +424,9 @@ function ReservationConfirmContent({
         <div>
           <p className="text-[14px] font-black text-white">{slot.dateLabel}</p>
           <p className="text-[12px] font-medium text-white/55">{slot.timeLabel}</p>
-          <p className="mt-0.5 text-[12px] font-medium text-white/40">{advantage.location}</p>
+          <p className="mt-0.5 text-[12px] font-medium text-white/40">
+            {advantage.address ?? advantage.location}
+          </p>
         </div>
       </div>
 
@@ -475,7 +490,7 @@ function ReservationConfirmContent({
 
 function buildCalendarUrl(slot: ExperienceSlot | null, advantage: Advantage): string {
   const title = encodeURIComponent(advantage.title)
-  const loc = encodeURIComponent(advantage.location)
+  const loc = encodeURIComponent(advantage.address ?? advantage.location)
   const details = encodeURIComponent(`Réservation Make the Change · ${advantage.partner}`)
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&location=${loc}&details=${details}`
 }

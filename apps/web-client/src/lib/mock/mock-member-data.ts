@@ -430,6 +430,13 @@ const EXISTING_VIEWER_POINTS_TRANSACTIONS: MockPointsTransactionRecord[] = [
     createdAt: '2026-04-14T09:20:00.000Z',
   },
   {
+    id: 'mock-points-support-habeebee',
+    label: 'Contribution projet Habeebee',
+    delta: -50,
+    impactDelta: 50, // Crédits Impact — soutien producteur
+    createdAt: '2026-05-02T11:15:00.000Z',
+  },
+  {
     id: 'mock-points-order-02',
     label: "Commande Miel d'Eucalyptus",
     delta: -1150,

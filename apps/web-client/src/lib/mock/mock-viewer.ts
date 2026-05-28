@@ -18,7 +18,7 @@ const EXISTING_VIEWER_PROFILE: MockProfileSeed = {
   defaultFaction: 'Vie Sauvage',
   memberSince: '2026-01-12',
   streakDays: 12,
-  impactCreditsBalance: 1175, // 780 (Manakara) + 395 (Antsirabe) — soutien producteur uniquement
+  impactCreditsBalance: 1225, // 780 (Manakara) + 395 (Antsirabe) + 50 (Habeebee) — soutien producteur
   totalSeedsContributed: 1280, // 250 (bienvenue) + 50+50 (défis) + 500 (parrainage) + 430 (streak)
   beesSaved: 3800,
   honeyGeneratedKg: 0.77,

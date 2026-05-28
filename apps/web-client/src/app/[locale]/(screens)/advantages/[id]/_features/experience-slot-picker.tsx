@@ -12,7 +12,13 @@ type ExperienceSlotPickerProps = {
 export function ExperienceSlotPicker({ slots, selectedSlotId, onSelect }: ExperienceSlotPickerProps) {
   return (
     <section>
-      <h2 className="text-base font-black text-white">Choisir un créneau</h2>
+      <h2 className="text-base font-black text-white">
+        Choisir un créneau
+        <span className="ml-2 text-[13px] font-medium text-white/35">
+          {slots.filter((s) => s.status !== 'full').length} disponible
+          {slots.filter((s) => s.status !== 'full').length > 1 ? 's' : ''}
+        </span>
+      </h2>
       <div className="mt-3 flex flex-col gap-2" role="radiogroup" aria-label="Créneaux disponibles">
         {slots.map((slot) => (
           <SlotCard

@@ -28,6 +28,7 @@ export type Advantage = {
   partner: string
   partnerImageUrl: string
   location: string
+  address?: string
   imageUrl: string
   imageBadge?: string
   isTemporaryVisual: boolean
@@ -78,6 +79,7 @@ const ADVANTAGES: Advantage[] = [
     partner: 'Habeebee',
     partnerImageUrl: HABEEBEE_PATHS.identity.portrait,
     location: 'Bruxelles, Belgique',
+    address: 'Rue Vanderstichelen 24, 1080 Molenbeek-Saint-Jean',
     imageUrl: HABEEBEE_PATHS.media.advantageVisiteRucherUrbain,
     isTemporaryVisual: true,
     priceCredits: 1200,
