@@ -41,7 +41,7 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-0 bottom-0 z-[210] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/[0.08] bg-background/85 shadow-[0_-12px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+            className="fixed inset-x-0 bottom-0 z-[210] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/[0.08] bg-[#0B0F15]/90 shadow-[0_-12px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl"
           >
             <div className="flex items-center justify-between px-5 pb-2 pt-4">
               {title ? (
