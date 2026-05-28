@@ -14,6 +14,7 @@ export type MockCheckoutCustomer = {
   street: string
   postalCode: string
   city: string
+  country: string
 }
 
 export type MockCheckoutCompletedOrder = {
@@ -33,7 +34,7 @@ export type MockCheckoutSession = {
 }
 
 export const createEmptyCheckoutSession = (): MockCheckoutSession => ({
-  customer: { email: '', name: '', street: '', postalCode: '', city: '' },
+  customer: { email: '', name: '', street: '', postalCode: '', city: '', country: 'BE' },
 })
 
 export function parseMockCheckoutSessionCookie(
@@ -53,6 +54,7 @@ export function parseMockCheckoutSessionCookie(
       street: typeof customerRaw.street === 'string' ? customerRaw.street : '',
       postalCode: typeof customerRaw.postalCode === 'string' ? customerRaw.postalCode : '',
       city: typeof customerRaw.city === 'string' ? customerRaw.city : '',
+      country: typeof customerRaw.country === 'string' ? customerRaw.country : 'BE',
     }
 
     const completedOrderRaw = parsed.completedOrder

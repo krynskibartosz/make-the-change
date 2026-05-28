@@ -7,6 +7,7 @@ import { completeCheckoutAction } from '@/app/[locale]/(screens)/products/checko
 import { getMockProductById } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { getSellerShippingProfile, type CartSummary, type MockCart } from '@/lib/mock/mock-commerce'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
+import { getCountryLabel } from '@/lib/checkout-countries'
 import { CheckoutSteps } from '../_components/checkout-steps'
 
 type Props = {
@@ -118,7 +119,7 @@ export function PaiementClient({ cart, summary, customer, isConnected, locale }:
         </div>
         <p className="mt-2 text-sm font-bold text-white">{customer.name}</p>
         <p className="mt-1 text-[12px] font-medium text-white/55">
-          {customer.street}, {customer.postalCode} {customer.city}, Belgique
+          {customer.street}, {customer.postalCode} {customer.city}, {getCountryLabel(customer.country)}
         </p>
         <p className="mt-1 text-[12px] font-medium text-white/40">{customer.email}</p>
       </div>

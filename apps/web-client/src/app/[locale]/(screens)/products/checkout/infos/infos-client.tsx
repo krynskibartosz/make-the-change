@@ -1,10 +1,12 @@
 'use client'
 
-import { Loader2, MapPin } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { saveCheckoutCustomerAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
+import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
+import { AddressAutocompleteInput } from './address-autocomplete-input'
 import { CheckoutSteps } from '../_components/checkout-steps'
 
 type Props = {
@@ -18,6 +20,10 @@ function isValidEmail(email: string): boolean {
   return parts.length === 2 && (parts[1]?.includes('.') ?? false)
 }
 
+const INPUT_BASE =
+  'h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
+const INPUT_CLASS = `${INPUT_BASE} w-full`
+
 export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
   const router = useRouter()
   const [customer, setCustomer] = useState<MockCheckoutCustomer>(initialCustomer)
@@ -29,6 +35,10 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
     customer.street.trim().length > 3 &&
     customer.postalCode.trim().length >= 4 &&
     customer.city.trim().length > 1
+
+  function handleCountryChange(country: string) {
+    setCustomer((v) => ({ ...v, country, street: '', postalCode: '', city: '' }))
+  }
 
   function handleContinue() {
     if (!canContinue) return
@@ -44,9 +54,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
 
       <h1 className="mt-1 text-2xl font-black text-white">Informations</h1>
       <p className="mt-1 text-sm font-medium text-white/50">
-        {isConnected
-          ? 'Commande liée à ton espace MTC · Belgique uniquement'
-          : 'Achat invité · Belgique uniquement'}
+        {isConnected ? 'Commande liée à ton espace MTC' : 'Achat invité'}
       </p>
 
       <div className="mt-6 space-y-4">
@@ -62,7 +70,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
             placeholder="votre@email.com"
             type="email"
             autoComplete="email"
-            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
+            className={INPUT_CLASS}
           />
         </div>
 
@@ -77,22 +85,43 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
             onChange={(e) => setCustomer((v) => ({ ...v, name: e.target.value }))}
             placeholder="Prénom Nom"
             autoComplete="name"
-            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
+            className={INPUT_CLASS}
           />
+        </div>
+
+        <div className="space-y-1.5">
+          <label htmlFor="checkout-country" className="block text-xs font-bold text-white/55">
+            Pays
+          </label>
+          <select
+            id="checkout-country"
+            value={customer.country}
+            onChange={(e) => handleCountryChange(e.target.value)}
+            autoComplete="country"
+            className={`${INPUT_CLASS} appearance-none`}
+          >
+            {CHECKOUT_COUNTRIES.map((c) => (
+              <option key={c.code} value={c.code} className="bg-[#0B0F15] text-white">
+                {c.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="space-y-1.5">
           <label htmlFor="checkout-street" className="block text-xs font-bold text-white/55">
             Rue et numéro
           </label>
-          <input
+          <AddressAutocompleteInput
             id="checkout-street"
-            required
             value={customer.street}
-            onChange={(e) => setCustomer((v) => ({ ...v, street: e.target.value }))}
+            country={customer.country}
             placeholder="Rue de la Paix 10"
-            autoComplete="street-address"
-            className="h-13 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
+            className={INPUT_CLASS}
+            onChange={(street) => setCustomer((v) => ({ ...v, street }))}
+            onSelect={({ street, postalCode, city }) =>
+              setCustomer((v) => ({ ...v, street, postalCode, city }))
+            }
           />
         </div>
 
@@ -107,7 +136,7 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
               placeholder="1000"
               inputMode="numeric"
               autoComplete="postal-code"
-              className="h-13 w-[38%] rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
+              className={`${INPUT_BASE} w-[38%]`}
             />
             <input
               id="checkout-city"
@@ -116,14 +145,9 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
               onChange={(e) => setCustomer((v) => ({ ...v, city: e.target.value }))}
               placeholder="Bruxelles"
               autoComplete="address-level2"
-              className="h-13 flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25"
+              className={`${INPUT_BASE} flex-1`}
             />
           </div>
-        </div>
-
-        <div className="flex h-13 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm font-semibold text-white/70">
-          <MapPin className="h-4 w-4" aria-hidden="true" />
-          Belgique
         </div>
       </div>
 

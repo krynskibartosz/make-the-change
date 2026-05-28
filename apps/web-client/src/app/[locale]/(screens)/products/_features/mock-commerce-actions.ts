@@ -26,6 +26,7 @@ import type { MockOrderRecord } from '@/lib/mock/mock-member-data'
 import { getCurrentMockImpactCreditsBalance } from '@/lib/mock/mock-member-data-server'
 import { persistCurrentMockOrder } from '@/lib/mock/mock-order-history-server'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
+import { getCountryLabel } from '@/lib/checkout-countries'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 
 export async function addProductToCartAction(
@@ -220,7 +221,7 @@ export async function completeMockCheckoutAction(customer: MockCheckoutCustomer)
           street: customer.street,
           postalCode: customer.postalCode,
           city: customer.city,
-          country: 'Belgique',
+          country: getCountryLabel(customer.country),
           email: customer.email,
         },
         items: cart.lines.flatMap((line) => {
