@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
-import { getCurrentCheckoutSession, clearCurrentCheckoutSession } from '@/lib/mock/mock-checkout-session-server'
+import { getCurrentCheckoutSession } from '@/lib/mock/mock-checkout-session-server'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 import { ConfirmationClient } from './confirmation-client'
 
@@ -19,14 +19,10 @@ export default async function CheckoutConfirmationPage({ params }: Props) {
     redirect(`/${locale}/products/cart`)
   }
 
-  // Données extraites avant suppression — la session peut être nettoyée maintenant.
-  const { completedOrder } = checkoutSession
-  await clearCurrentCheckoutSession()
-
   return (
     <Screen className="bg-[#0B0F15]">
       <ConfirmationClient
-        completedOrder={completedOrder}
+        completedOrder={checkoutSession.completedOrder}
         isConnected={Boolean(viewerSession)}
         locale={locale}
       />

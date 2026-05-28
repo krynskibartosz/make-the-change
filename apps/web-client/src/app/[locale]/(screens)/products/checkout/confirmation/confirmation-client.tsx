@@ -2,6 +2,8 @@
 
 import { Check } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect } from 'react'
+import { clearCheckoutSessionAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCompletedOrder } from '@/lib/mock/mock-checkout-session'
 
 type Props = {
@@ -15,6 +17,10 @@ const formatEuro = (value: number) =>
 
 export function ConfirmationClient({ completedOrder, isConnected, locale }: Props) {
   const { orderId, totalEur, partnerOrders } = completedOrder
+
+  useEffect(() => {
+    clearCheckoutSessionAction()
+  }, [])
 
   return (
     <div className="flex min-h-[100dvh] flex-col items-center px-5 pb-8 pt-16 text-center">
