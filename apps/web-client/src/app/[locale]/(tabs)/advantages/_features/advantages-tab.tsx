@@ -48,7 +48,11 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           <ul className="m-0 list-none p-0">
             {availableAdvantages.map((advantage) => (
               <li key={advantage.id}>
-                <AvailableAdvantageCard advantage={advantage} />
+                {advantage.type === 'experience' ? (
+                  <AvailableExperienceCard advantage={advantage} />
+                ) : (
+                  <AvailableAdvantageCard advantage={advantage} />
+                )}
               </li>
             ))}
           </ul>
@@ -130,6 +134,56 @@ function AvailableAdvantageCard({ advantage }: { advantage: Advantage }) {
             className="text-sm font-black"
           />
         </span>
+      </span>
+    </Link>
+  )
+}
+
+function AvailableExperienceCard({ advantage }: { advantage: Advantage }) {
+  const availableSlots = advantage.slots?.filter((s) => s.status !== 'full').length ?? 0
+
+  return (
+    <Link
+      href={`/advantages/${advantage.id}`}
+      className="group block transition active:scale-[0.99]"
+    >
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-zinc-800">
+        <img
+          src={advantage.imageUrl}
+          alt={advantage.title}
+          className="h-full w-full object-cover"
+        />
+        <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white/75 backdrop-blur-sm">
+          Expérience
+        </span>
+      </div>
+      <span className="mt-5 block px-1">
+        <span className="text-[11px] font-bold uppercase text-lime-300/75">
+          {advantage.partner}
+        </span>
+        <span className="mt-1.5 block text-lg font-bold leading-snug text-white">
+          {advantage.title}
+        </span>
+        {advantage.details && (
+          <span className="mt-1 block text-[12px] font-medium text-white/45">
+            {advantage.details}
+          </span>
+        )}
+        <span className="mt-2 flex flex-wrap items-center gap-1.5 text-sm font-black text-lime-300">
+          <span>Réserver</span>
+          <span aria-hidden="true">·</span>
+          <CurrencyAmount
+            kind="impactCredits"
+            value={advantage.priceCredits}
+            className="text-sm font-black"
+          />
+        </span>
+        {availableSlots > 0 && (
+          <span className="mt-1 block text-[12px] font-medium text-white/40">
+            {availableSlots} créneau{availableSlots > 1 ? 'x' : ''} disponible
+            {availableSlots > 1 ? 's' : ''}
+          </span>
+        )}
       </span>
     </Link>
   )

@@ -1,6 +1,9 @@
 'use server'
 
-import { getMockAdvantageById } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
+import {
+  getMockAdvantageById,
+  getMockSlotById,
+} from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
 import { getMockProductById } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import {
   addLineToCart,
@@ -92,6 +95,55 @@ export async function redeemAdvantageAction(
     ...existing,
   ])
   return { ok: true, balance: balance - advantage.priceCredits }
+}
+
+export async function reserveExperienceAction(
+  advantageId: string,
+  slotId: string,
+): Promise<
+  | { ok: true; reservationId: string; balance: number }
+  | { ok: false; error: 'auth' | 'insufficient' | 'invalid' | 'slot_not_found' | 'already_reserved' }
+> {
+  const session = await getMockViewerSession()
+  if (!session) return { ok: false, error: 'auth' }
+
+  const advantage = getMockAdvantageById(advantageId)
+  if (!advantage || advantage.type !== 'experience' || advantage.status !== 'available') {
+    return { ok: false, error: 'invalid' }
+  }
+
+  const slot = getMockSlotById(advantageId, slotId)
+  if (!slot || slot.status === 'full') return { ok: false, error: 'slot_not_found' }
+
+  const existing = await getCurrentMockCommerceEvents()
+  const alreadyReserved = existing.some(
+    (event) =>
+      event.type === 'reservation_confirmed' &&
+      event.userId === session.viewerId &&
+      event.advantageId === advantageId,
+  )
+  if (alreadyReserved) return { ok: false, error: 'already_reserved' }
+
+  const balance = await getCurrentMockImpactCreditsBalance(session.viewerId, session.faction)
+  if (balance < advantage.priceCredits) return { ok: false, error: 'insufficient' }
+
+  const reservationId =
+    'RES-' + advantageId.slice(-8).toUpperCase() + '-' + Date.now().toString().slice(-6)
+
+  await setCurrentMockCommerceEvents([
+    {
+      type: 'reservation_confirmed',
+      advantageId,
+      slotId,
+      costCi: advantage.priceCredits,
+      userId: session.viewerId,
+      reservationId,
+      createdAt: new Date().toISOString(),
+    },
+    ...existing,
+  ])
+
+  return { ok: true, reservationId, balance: balance - advantage.priceCredits }
 }
 
 export async function completeMockCheckoutAction(customer: MockCheckoutCustomer): Promise<

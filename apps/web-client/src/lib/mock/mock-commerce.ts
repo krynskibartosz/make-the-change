@@ -58,6 +58,15 @@ export type MockCommerceEvent =
       userId?: string
       createdAt: string
     }
+  | {
+      type: 'reservation_confirmed'
+      advantageId: string
+      slotId: string
+      costCi: number
+      userId: string
+      reservationId: string
+      createdAt: string
+    }
 
 export type CartSummary = {
   sellerGroups: SellerCartSummary[]
@@ -315,6 +324,15 @@ export function parseMockCommerceEventsCookie(
           typeof event.userId === 'string'
         )
       }
+      if (event.type === 'reservation_confirmed') {
+        return (
+          typeof event.advantageId === 'string' &&
+          typeof event.slotId === 'string' &&
+          typeof event.costCi === 'number' &&
+          typeof event.userId === 'string' &&
+          typeof event.reservationId === 'string'
+        )
+      }
       return (
         event.type === 'product_order' &&
         typeof event.orderId === 'string' &&
@@ -347,9 +365,24 @@ export function getUnlockedAdvantageIds(
 }
 
 export function getImpactCreditsDebit(events: MockCommerceEvent[], userId: string): number {
-  return events.reduce(
-    (sum, event) =>
-      event.type === 'ci_redemption' && event.userId === userId ? sum + event.costCi : sum,
-    0,
+  return events.reduce((sum, event) => {
+    if (event.type === 'ci_redemption' && event.userId === userId) return sum + event.costCi
+    if (event.type === 'reservation_confirmed' && event.userId === userId) return sum + event.costCi
+    return sum
+  }, 0)
+}
+
+export function getReservationByAdvantage(
+  events: MockCommerceEvent[],
+  advantageId: string,
+  userId: string,
+): { slotId: string; reservationId: string } | null {
+  const event = events.find(
+    (e) =>
+      e.type === 'reservation_confirmed' &&
+      e.userId === userId &&
+      e.advantageId === advantageId,
   )
+  if (!event || event.type !== 'reservation_confirmed') return null
+  return { slotId: event.slotId, reservationId: event.reservationId }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
+import { getReservationByAdvantage } from '@/lib/mock/mock-commerce'
 import { getCurrentMockCommerceEvents } from '@/lib/mock/mock-commerce-server'
 import { getCurrentProfile } from '@/lib/mock/mock-session-server'
 import { getMockAdvantageById } from '../_features/mock-advantages'
@@ -44,6 +45,8 @@ export default async function AdvantageDetailPage({ params }: Props) {
         event.advantageId === advantage.id,
     )
 
+  const reservation = profileId ? getReservationByAdvantage(events, advantage.id, profileId) : null
+
   return (
     <Screen className="bg-[#0B0F15]">
       <AdvantageDetail
@@ -53,6 +56,8 @@ export default async function AdvantageDetailPage({ params }: Props) {
         initialImpactCredits={profile?.impactCreditsBalance ?? 0}
         initialUnlocked={initialUnlocked}
         initialUsed={initialUsed}
+        initialReservationId={reservation?.reservationId ?? null}
+        initialReservedSlotId={reservation?.slotId ?? null}
       />
     </Screen>
   )
