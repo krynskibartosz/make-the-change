@@ -55,12 +55,13 @@ export function PaiementClient({ cart, summary, customer, isConnected, locale }:
   function handlePay() {
     setError(null)
     startTransition(async () => {
-      const result = await completeCheckoutAction()
-      if (!result.ok) {
-        setError('Une erreur est survenue. Veuillez réessayer.')
-        return
+      const result = await completeCheckoutAction(locale)
+      // Only reached on error — success triggers a server-side redirect.
+      if (result.error === 'empty_cart') {
+        setError('Ton panier est vide.')
+      } else {
+        setError("Informations de livraison manquantes. Retourne à l'étape précédente.")
       }
-      router.push(`/${locale}/products/checkout/confirmation`)
     })
   }
 

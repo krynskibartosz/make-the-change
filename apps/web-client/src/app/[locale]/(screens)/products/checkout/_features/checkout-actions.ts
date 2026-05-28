@@ -1,5 +1,6 @@
 'use server'
 
+import { redirect } from 'next/navigation'
 import { getMockProductById } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { completeMockCheckoutAction } from '@/app/[locale]/(screens)/products/_features/mock-commerce-actions'
 import { getSellerShippingProfile } from '@/lib/mock/mock-commerce'
@@ -16,9 +17,9 @@ export async function saveCheckoutCustomerAction(customer: MockCheckoutCustomer)
   await setCurrentCheckoutSession({ ...session, customer })
 }
 
-export async function completeCheckoutAction(): Promise<
-  { ok: true } | { ok: false; error: 'empty_cart' | 'no_customer' }
-> {
+export async function completeCheckoutAction(
+  locale: string,
+): Promise<{ ok: false; error: 'empty_cart' | 'no_customer' }> {
   const checkoutSession = await getCurrentCheckoutSession()
   const { customer } = checkoutSession
 
@@ -58,7 +59,7 @@ export async function completeCheckoutAction(): Promise<
     },
   })
 
-  return { ok: true }
+  redirect(`/${locale}/products/checkout/confirmation`)
 }
 
 export async function clearCheckoutSessionAction(): Promise<void> {
