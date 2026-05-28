@@ -459,6 +459,26 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
 
 
 
+      {/* ─── Connection lines from periphery to center hex ─── */}
+      <g style={{ pointerEvents: 'none' }}>
+        {([
+          { x1: 190, y1: 152, x2: 190, y2: 230 },
+          { x1: 98,  y1: 235, x2: 171, y2: 241 },
+          { x1: 284, y1: 235, x2: 209, y2: 241 },
+          { x1: 90,  y1: 360, x2: 171, y2: 263 },
+        ] as { x1: number; y1: number; x2: number; y2: number }[]).map((l, i) => (
+          <line
+            key={i}
+            x1={l.x1} y1={l.y1}
+            x2={l.x2} y2={l.y2}
+            stroke="#f0c460"
+            strokeOpacity="0.22"
+            strokeWidth="0.8"
+            strokeDasharray="3 4"
+          />
+        ))}
+      </g>
+
       {/* ─── Surrounding items ─── */}
       {L3_CONTENT.items.map((it) => {
         const [ix, iy] = it.iconXY
@@ -494,7 +514,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
               textAnchor="middle"
               fill={it.labelColor}
               fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-              fontSize="9"
+              fontSize="10"
               fontWeight="700"
               letterSpacing="1.6"
               style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.2px' }}
@@ -527,7 +547,8 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           'Espèces BioDex liées',
           () => onTapItem && onTapItem({ id: 'biodex', type: 'biodex', title: ['Espèces BioDex'] }),
         )}
-        style={{ cursor: 'pointer' }}
+        aria-hidden="true"
+        style={{ cursor: 'pointer', display: 'none' }}
       >
         <rect
           x={L3_CONTENT.biodex.labelXY[0] - 70}
@@ -545,7 +566,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#e6ad44"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="9"
+          fontSize="10"
           fontWeight="700"
           letterSpacing="1.6"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.2px' }}
@@ -621,7 +642,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
       </g>
 
       {/* ─── Toile vivante (bottom) ─── */}
-      <g>
+      <g aria-hidden="true" style={{ display: 'none' }}>
         <rect
           x={L3_CONTENT.toile.labelXY[0] - 60}
           y={L3_CONTENT.toile.labelXY[1] - 12}
@@ -638,7 +659,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#f0c460"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="9.5"
+          fontSize="10.5"
           fontWeight="700"
           letterSpacing="1.6"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.2px' }}
@@ -765,7 +786,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           textAnchor="middle"
           fill="#f0c460"
           fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
-          fontSize="9.2"
+          fontSize="10"
           fontWeight="700"
           letterSpacing="2"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '2.4px' }}
@@ -778,7 +799,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           y="312"
           textAnchor="middle"
           fill="#f6efdc"
-          fontFamily="'Cormorant Garamond', serif"
+          fontFamily="var(--atlas-prototype-serif), 'Cormorant Garamond', serif"
           fontSize="18.5"
           fontWeight="500"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '3px' }}
@@ -790,7 +811,7 @@ function PollinisationCarte({ onTapItem, onTapCenter, animate = true }) {
           y="334"
           textAnchor="middle"
           fill="#f6efdc"
-          fontFamily="'Cormorant Garamond', serif"
+          fontFamily="var(--atlas-prototype-serif), 'Cormorant Garamond', serif"
           fontSize="18.5"
           fontWeight="500"
           style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.85)', strokeWidth: '3px' }}
@@ -813,14 +834,58 @@ function PreviewSheet({ item, onClose }) {
   const c = item || last
 
   const TYPE_META = {
-    course: { label: 'COURS LIBRE', color: '#4d8be0', cta: 'Ouvrir (bientôt)' },
-    project: { label: 'PROJET LIÉ', color: '#7ab84a', cta: 'Voir (bientôt)' },
-    biodex: { label: 'ESPÈCES BIODEX', color: '#e6ad44', cta: 'Parcourir (bientôt)' },
-    toile: { label: 'TOILE VIVANTE', color: '#a05fb3', cta: 'Explorer (bientôt)' },
-    parcours: { label: 'PARCOURS GUIDÉ', color: '#f0c460', cta: 'Commencer (bientôt)' },
-    reco: { label: 'RECOMMANDÉ', color: '#f0c460', cta: 'Ouvrir (bientôt)' },
+    course: {
+      label: 'COURS LIBRE',
+      color: '#4d8be0',
+      cta: 'Disponible prochainement',
+      body: 'Un format court pour approfondir ce point sans quitter le thème Pollinisation.',
+      facts: ['Lecture guidée', '20 à 30 min', 'Relié aux espèces BioDex'],
+    },
+    project: {
+      label: 'PROJET LIÉ',
+      color: '#7ab84a',
+      cta: 'Disponible prochainement',
+      body: 'Un passage vers une action concrète liée au terrain et aux pollinisateurs.',
+      facts: ['Action locale', 'Impact visible', 'Lien avec les partenaires'],
+    },
+    biodex: {
+      label: 'ESPÈCES BIODEX',
+      color: '#e6ad44',
+      cta: 'Disponible prochainement',
+      body: 'Les espèces associées à ce thème, avec leurs rôles dans la pollinisation.',
+      facts: ['Abeille', 'Bourdon', 'Papillon'],
+    },
+    toile: {
+      label: 'TOILE VIVANTE',
+      color: '#a05fb3',
+      cta: 'Disponible prochainement',
+      body: 'Une lecture simple des liens entre fleur, insecte, fruit et autres espèces.',
+      facts: ['Fleur', 'Abeille', 'Fruit'],
+    },
+    parcours: {
+      label: 'PARCOURS GUIDÉ',
+      color: '#f0c460',
+      cta: 'Disponible prochainement',
+      body: 'Le chemin principal du thème. Il explique le rôle des pollinisateurs et pourquoi leur disparition change tout.',
+      facts: ['Parcours principal', '6 contenus explorés sur 18', '33 % du thème découvert'],
+    },
+    reco: {
+      label: 'RECOMMANDÉ',
+      color: '#f0c460',
+      cta: 'Disponible prochainement',
+      body: 'Des contenus conseilles pour continuer sans chercher.',
+      facts: ['Selection personnalisee', 'Cours et projets', 'A ouvrir plus tard'],
+    },
+    info: {
+      label: 'À PROPOS',
+      color: '#f0c460',
+      cta: 'Fermer',
+      body: 'Pollinisation rassemble le parcours principal, quelques cours libres et des liens vers les espèces concernées.',
+      facts: ['Thème ouvert', '6 contenus explorés sur 18', 'Cours, projet, BioDex'],
+    },
   }
   const meta = c ? TYPE_META[c.type] || TYPE_META.course : TYPE_META.course
+  const title = c ? (Array.isArray(c.title) ? c.title.join(' ') : c.title) : ''
 
   return (
     <>
@@ -861,7 +926,7 @@ function PreviewSheet({ item, onClose }) {
               margin: '0 8px 8px',
               background: 'linear-gradient(180deg, #1a1d20 0%, #0f1113 100%)',
               border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: '28px 28px 24px 24px',
+              borderRadius: 24,
               padding: '14px 22px 26px',
               color: '#eae3d2',
               boxShadow: '0 -10px 40px rgba(0,0,0,0.55)',
@@ -899,22 +964,57 @@ function PreviewSheet({ item, onClose }) {
                 marginBottom: 12,
               }}
             >
-              {Array.isArray(c.title) ? c.title.join(' ') : c.title}
+              {title}
             </div>
             <p style={{ margin: '0 0 18px', fontSize: 14, lineHeight: 1.5, color: '#cfc8b5' }}>
-              Aperçu rapide. Ouvrez pour découvrir le contenu complet, les ressources liées et les
-              espèces concernées.
+              {c.body || meta.body}
             </p>
+            {meta.facts && (
+              <div
+                style={{
+                  display: 'grid',
+                  gap: 8,
+                  marginBottom: 18,
+                }}
+              >
+                {meta.facts.map((fact) => (
+                  <div
+                    key={fact}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      fontSize: 12.5,
+                      color: '#d8cfae',
+                    }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      style={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: '50%',
+                        background: meta.color,
+                        boxShadow: `0 0 10px ${meta.color}88`,
+                      }}
+                    />
+                    {fact}
+                  </div>
+                ))}
+              </div>
+            )}
             <button
-              onClick={onClose}
+              onClick={meta.cta === 'Fermer' ? onClose : undefined}
+              disabled={meta.cta !== 'Fermer'}
               style={{
                 width: '100%',
                 padding: '14px 18px',
                 borderRadius: 9999,
                 border: 'none',
-                cursor: 'pointer',
+                cursor: meta.cta === 'Fermer' ? 'pointer' : 'default',
                 background: 'linear-gradient(180deg, #f4ecd8, #d9cfb0)',
                 color: '#1c1a14',
+                opacity: meta.cta === 'Fermer' ? 1 : 0.92,
                 fontWeight: 600,
                 fontSize: 15,
                 display: 'flex',
@@ -983,16 +1083,16 @@ export function Level3Screen({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingBottom: viewport.isShort ? 100 : 120,
-          paddingTop: 80,
+          paddingBottom: viewport.isShort ? 210 : 230,
+          paddingTop: viewport.isShort ? 112 : 122,
         }}
       >
         <div
           style={{
-            width: '100%',
-            maxWidth: 480,
+            width: viewport.isNarrow ? '94%' : '92%',
+            maxWidth: 430,
             aspectRatio: '380 / 540',
-            transform: 'scale(1.05)',
+            transform: 'scale(0.96)',
           }}
         >
           <PollinisationCarte
@@ -1053,7 +1153,7 @@ export function Level3Screen({
 
           <button
             aria-label="Informations"
-            onClick={() => setPreview({ type: 'course', title: ['À propos de ce thème'] })}
+            onClick={() => setPreview({ type: 'info', title: ['À propos de Pollinisation'] })}
             style={{
               width: navButtonSize,
               height: navButtonSize,
@@ -1083,11 +1183,11 @@ export function Level3Screen({
                 <circle cx="21" cy="21" r="17" fill="none" stroke="#f0c460" strokeWidth="3" strokeDasharray={`${2 * Math.PI * 17 * 0.33} ${2 * Math.PI * 17}`} strokeLinecap="round" transform="rotate(-90 21 21)" />
               </svg>
               <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 600, color: '#f6efdc' }}>
-                <div style={{ lineHeight: 1 }}>6/18</div>
+              <div style={{ lineHeight: 1 }}>6/18</div>
               </div>
             </div>
             <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: 10, color: '#9a937f', lineHeight: 1.2 }}>Progression</div>
+              <div style={{ fontSize: 10, color: '#9a937f', lineHeight: 1.2 }}>Thème découvert</div>
               <div style={{ fontSize: 12.5, color: '#f0c460', fontWeight: 700, marginTop: 1 }}>33 %</div>
             </div>
           </div>
@@ -1104,10 +1204,54 @@ export function Level3Screen({
           zIndex: 10,
           pointerEvents: 'none',
           paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 32px)',
-          paddingTop: 40,
+          paddingTop: 56,
           background: 'linear-gradient(0deg, rgba(4,6,10,0.95) 0%, rgba(4,6,10,0.6) 60%, rgba(4,6,10,0) 100%)',
         }}
       >
+        <div
+          style={{
+            padding: '0 16px 12px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 10,
+            pointerEvents: 'auto',
+          }}
+        >
+          <button
+            onClick={() => setPreview({ type: 'biodex', title: ['Espèces liées'] })}
+            style={{
+              border: '1px solid rgba(230,173,68,0.28)',
+              background: 'rgba(10,12,14,0.72)',
+              color: '#eae3d2',
+              borderRadius: 14,
+              padding: '10px 12px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
+          >
+            <div style={{ fontSize: 9, color: '#e6ad44', letterSpacing: 1.2, fontWeight: 700 }}>
+              BIODEX
+            </div>
+            <div style={{ marginTop: 3, fontSize: 12.5, fontWeight: 600 }}>Espèces liées</div>
+          </button>
+          <button
+            onClick={() => setPreview({ type: 'toile', title: ['Toile vivante'] })}
+            style={{
+              border: '1px solid rgba(160,95,179,0.3)',
+              background: 'rgba(10,12,14,0.72)',
+              color: '#eae3d2',
+              borderRadius: 14,
+              padding: '10px 12px',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
+          >
+            <div style={{ fontSize: 9, color: '#c9a4ff', letterSpacing: 1.2, fontWeight: 700 }}>
+              LIENS
+            </div>
+            <div style={{ marginTop: 3, fontSize: 12.5, fontWeight: 600 }}>Toile vivante</div>
+          </button>
+        </div>
         <div style={{ padding: '0 16px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div style={{ fontFamily: 'var(--atlas-prototype-serif), serif', fontSize: 18, fontWeight: 500, color: '#f6efdc', textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
             Recommandé pour toi
@@ -1121,7 +1265,9 @@ export function Level3Screen({
         </div>
         
         {/* Horizontal scroll list */}
+        <style>{`#atlas-reco-scroll::-webkit-scrollbar { display: none; }`}</style>
         <div
+          id="atlas-reco-scroll"
           style={{
             display: 'flex',
             gap: 12,
@@ -1133,11 +1279,6 @@ export function Level3Screen({
             scrollbarWidth: 'none',
           }}
         >
-          <style>{`
-            div::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
           <div style={{ scrollSnapAlign: 'start' }}>
             <RecoCard
               type="COURS LIBRE"
@@ -1175,11 +1316,11 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
     <button
       onClick={onClick}
       style={{
-        width: 156,
+        width: 150,
         flex: '0 0 auto',
         background: 'rgba(10,12,14,0.85)',
         border: '1px solid rgba(255,255,255,0.07)',
-        borderRadius: 14,
+        borderRadius: 16,
         padding: 0,
         cursor: 'pointer',
         textAlign: 'left',
@@ -1191,7 +1332,7 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
     >
       <div
         style={{
-          height: 60,
+          height: 42,
           background: `linear-gradient(180deg, ${gradient[0]}, ${gradient[1]})`,
           position: 'relative',
         }}
@@ -1208,10 +1349,10 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
           }}
         />
       </div>
-      <div style={{ padding: '8px 10px 12px' }}>
+      <div style={{ padding: '8px 10px 10px' }}>
         <div
           style={{
-            fontSize: 8.5,
+            fontSize: 10,
             letterSpacing: 1.2,
             fontWeight: 700,
             color: typeColor,
@@ -1222,11 +1363,11 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
         </div>
         <div
           style={{
-            fontSize: 11.5,
+            fontSize: 11,
             lineHeight: 1.25,
             color: '#eae3d2',
             fontWeight: 500,
-            minHeight: 28,
+            minHeight: 26,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -1235,7 +1376,7 @@ function RecoCard({ type, typeColor, title, meta, dotColor, gradient, imageTextu
         >
           {title}
         </div>
-        <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 5, fontSize: 9.5, color: '#9a937f' }}>
+        <div style={{ marginTop: 5, display: 'flex', alignItems: 'center', gap: 5, fontSize: 9.5, color: '#9a937f' }}>
           <span style={{ width: 5, height: 5, borderRadius: '50%', background: dotColor }} />
           {meta}
         </div>

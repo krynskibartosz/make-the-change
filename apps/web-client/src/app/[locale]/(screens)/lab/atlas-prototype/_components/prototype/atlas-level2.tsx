@@ -603,9 +603,9 @@ function SubdomainCarte({ onPick, glow = 1, animate = true, activeId = 'pollinis
               {/* Progress chip — with unit label */}
               <g>
                 <rect
-                  x={px - 36}
+                  x={px - (isActive ? 44 : 36)}
                   y={py - 11}
-                  width="72"
+                  width={isActive ? '88' : '72'}
                   height="21"
                   rx="10.5"
                   fill="rgba(8,10,12,0.82)"
@@ -623,7 +623,7 @@ function SubdomainCarte({ onPick, glow = 1, animate = true, activeId = 'pollinis
                   fontWeight="600"
                   letterSpacing="0.2"
                 >
-                  {done} / {total}{' '}récits
+                  {isActive ? `${done} récits dispo` : isCentral ? `${done} récits` : 'Bientôt'}
                 </text>
               </g>
 
@@ -634,7 +634,7 @@ function SubdomainCarte({ onPick, glow = 1, animate = true, activeId = 'pollinis
                   cy={iy}
                   r="26"
                   fill="none"
-                  stroke="#f4d889"
+                  stroke="#f0c460"
                   strokeWidth="1.8"
                   opacity="0.75"
                   style={{ pointerEvents: 'none' }}
@@ -671,7 +671,7 @@ function SubdomainCarte({ onPick, glow = 1, animate = true, activeId = 'pollinis
               cx={p[0]}
               cy={p[1]}
               r={9 * glow}
-              fill="#f4d889"
+              fill="#f0c460"
               opacity="0.30"
               filter="url(#l2NodeGlow)"
             />
@@ -679,13 +679,13 @@ function SubdomainCarte({ onPick, glow = 1, animate = true, activeId = 'pollinis
               cx={p[0]}
               cy={p[1]}
               r={5 * glow}
-              fill="#f4d889"
+              fill="#f0c460"
               opacity="0.5"
               filter="url(#l2NodeGlow)"
             />
-            <circle cx={p[0]} cy={p[1]} r="1.6" fill="#fff5d8" opacity="0.92" />
+            <circle cx={p[0]} cy={p[1]} r="1.6" fill="#fff8e8" opacity="0.92" />
             {animate && (
-              <circle cx={p[0]} cy={p[1]} r="1.6" fill="#fff5d8">
+              <circle cx={p[0]} cy={p[1]} r="1.6" fill="#fff8e8">
                 <animate
                   attributeName="r"
                   values="1.6;3.2;1.6"
@@ -823,7 +823,7 @@ export function Level2Screen({ onBack, onPickSubdomain, animateNodes = true }) {
                 color: '#b9b09a',
               }}
             >
-              Explore les liens qui unissent les espèces entre elles.
+              Pollinisation est ouverte. Les autres sous-domaines arrivent bientôt.
             </div>
           </div>
 

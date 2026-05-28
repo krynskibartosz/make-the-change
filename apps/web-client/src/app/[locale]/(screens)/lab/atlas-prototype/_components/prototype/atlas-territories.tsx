@@ -153,8 +153,8 @@ export const TERRITORIES = [
   },
   {
     id: 'impact',
-    label: "Lire l'impact",
-    lines: ['Lire l\u2019impact'],
+    label: 'Impact',
+    lines: ['Impact'],
     color: '#a8aeb8',
     dark: '#0e1014',
     texture: '/lab/atlas-prototype/assets/tex_impact.webp',
@@ -483,7 +483,11 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = nul
         const rw = bbox.w + pad * 2,
           rh = bbox.h + pad * 2
         const isPressed = pressed === t.id
-        const buttonProps = getSvgButtonProps(t.label, () => onPick && onPick(t))
+        const isAvailable = t.id === 'relations'
+        const buttonProps = getSvgButtonProps(
+          isAvailable ? t.label : `${t.label} bientot disponible`,
+          () => onPick && onPick(t),
+        )
         return (
           <g
             key={t.id}
@@ -494,6 +498,8 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = nul
               transition: 'transform 240ms cubic-bezier(.2,.7,.2,1)',
               transformOrigin: `${t.labelXY[0]}px ${t.iconXY[1]}px`,
               transform: isPressed ? 'scale(0.97)' : 'scale(1)',
+              opacity: isAvailable ? 1 : 0.68,
+              filter: isAvailable ? 'none' : 'saturate(0.7) brightness(0.82)',
             }}
             onPointerDown={() => setPressed(t.id)}
             onPointerUp={() => setPressed(null)}
@@ -591,7 +597,7 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = nul
               cx={p[0]}
               cy={p[1]}
               r={11 * glow}
-              fill="#f4d889"
+              fill="#f0c460"
               opacity="0.32"
               filter="url(#nodeGlow)"
             />
@@ -599,13 +605,13 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = nul
               cx={p[0]}
               cy={p[1]}
               r={6 * glow}
-              fill="#f4d889"
+              fill="#f0c460"
               opacity="0.5"
               filter="url(#nodeGlow)"
             />
-            <circle cx={p[0]} cy={p[1]} r="1.8" fill="#fff5d8" opacity="0.92" />
+            <circle cx={p[0]} cy={p[1]} r="1.8" fill="#fff8e8" opacity="0.92" />
             {animate && (
-              <circle cx={p[0]} cy={p[1]} r="1.8" fill="#fff5d8">
+              <circle cx={p[0]} cy={p[1]} r="1.8" fill="#fff8e8">
                 <animate
                   attributeName="r"
                   values="1.8;3.6;1.8"
@@ -632,6 +638,7 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = nul
           const r = t.big ? 28 : 24
           const iconSize = t.big ? 32 : 28
           const labelSize = t.big ? 19 : 18
+          const isAvailable = t.id === 'relations'
           return (
             <g key={t.id}>
               <circle
@@ -686,6 +693,32 @@ export function VoronoiAtlas({ onPick, glow = 1, animate = true, focusedId = nul
                   {line}
                 </text>
               ))}
+              {!isAvailable && (
+                <g>
+                  <rect
+                    x={lx - 36}
+                    y={ly + t.lines.length * (labelSize + 4) + 8}
+                    width="72"
+                    height="18"
+                    rx="9"
+                    fill="rgba(8,10,12,0.72)"
+                    stroke={t.color}
+                    strokeOpacity="0.34"
+                  />
+                  <text
+                    x={lx}
+                    y={ly + t.lines.length * (labelSize + 4) + 21}
+                    textAnchor="middle"
+                    fill="#d8cfae"
+                    fontFamily="var(--atlas-prototype-sans), Inter, system-ui, sans-serif"
+                    fontSize="8.5"
+                    fontWeight="700"
+                    letterSpacing="1.1"
+                  >
+                    BIENTÔT
+                  </text>
+                </g>
+              )}
             </g>
           )
         })}

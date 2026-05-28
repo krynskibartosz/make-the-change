@@ -212,23 +212,7 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
             gap: 10,
           }}
         >
-          <div style={{ pointerEvents: 'auto' }}>
-            <CircleButton ariaLabel="Retour" onClick={() => showToast('Retour à l’accueil')}>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 12H5" />
-                <polyline points="12 19 5 12 12 5" />
-              </svg>
-            </CircleButton>
-          </div>
+          <div aria-hidden="true" style={{ width: 44, flex: '0 0 auto' }} />
           <div style={{ flex: 1, textAlign: 'center', minWidth: 0, padding: '0 4px' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 0 }}>
               <svg width="22" height="22" viewBox="0 0 24 24">
@@ -272,6 +256,34 @@ function Level1Screen({ onPickTerritory, focusedId, transitioningOut, motionEnab
               }}
             >
               Explorer · Comprendre · Agir
+            </div>
+            <div
+              style={{
+                margin: '10px auto 0',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                borderRadius: 9999,
+                border: '1px solid rgba(244,216,137,0.18)',
+                background: 'rgba(10,12,14,0.42)',
+                padding: '5px 10px',
+                fontSize: 11,
+                lineHeight: 1,
+                color: '#d8cfae',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+              }}
+            >
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: '#f0c460',
+                  boxShadow: '0 0 10px rgba(240,196,96,0.8)',
+                }}
+              />
+              Choisis un territoire
             </div>
           </div>
           <div style={{ pointerEvents: 'auto' }}>
@@ -345,7 +357,7 @@ function AtlasScreen() {
 
   const pickTerritory = (t) => {
     if (t.id !== 'relations') {
-      showToast(`« ${t.label} » : bientôt disponible`)
+      showToast(`${t.label} arrive bientôt. Essaie Relations du vivant.`)
       return
     }
     transitionTimersRef.current.forEach((timer) => window.clearTimeout(timer))
@@ -368,7 +380,7 @@ function AtlasScreen() {
 
   const pickSubdomain = (c) => {
     if (c.id !== 'pollinisation') {
-      showToast(`« ${c.name + (c.name2 ? ' ' + c.name2 : '')} » : bientôt disponible`)
+      showToast(`${c.name + (c.name2 ? ' ' + c.name2 : '')} arrive bientôt. Essaie Pollinisation.`)
       return
     }
     void loadLevel3Screen()
@@ -443,9 +455,10 @@ function AtlasPrototypeStyles() {
         from { opacity: 0; transform: scale(0.92); }
         to   { opacity: 1; transform: scale(1); }
       }
+      svg [role="button"],
+      svg [role="button"]:focus,
       svg [role="button"]:focus-visible {
-        outline: 2px solid rgba(244,216,137,0.95);
-        outline-offset: 4px;
+        outline: none;
       }
     `}</style>
   )

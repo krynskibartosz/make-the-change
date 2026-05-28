@@ -115,7 +115,7 @@ export function SearchPanel({ open, onClose, onPickQuery }: SearchPanelProps) {
               alignItems: 'center',
               padding: '8px 12px',
               background: 'rgba(255,255,255,0.05)',
-              borderRadius: 14,
+              borderRadius: 16,
             }}
           >
             <svg
@@ -135,7 +135,7 @@ export function SearchPanel({ open, onClose, onPickQuery }: SearchPanelProps) {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Chercher une espèce, un milieu, un geste..."
+              placeholder="Rechercher dans l'Atlas"
               style={{
                 flex: 1,
                 background: 'transparent',
