@@ -45,7 +45,7 @@ export function AdvantagesTab({ impactCredits, isConnected, data }: AdvantagesTa
           <h2 className="mb-4 px-1 text-xl font-black tracking-tight text-white">
             Disponible maintenant
           </h2>
-          <ul className="m-0 list-none p-0">
+          <ul className="m-0 flex list-none flex-col gap-12 p-0">
             {availableAdvantages.map((advantage) => (
               <li key={advantage.id}>
                 {advantage.type === 'experience' ? (
