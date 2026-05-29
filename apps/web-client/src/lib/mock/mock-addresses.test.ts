@@ -96,7 +96,7 @@ describe('addAddress', () => {
       'addr-test-2',
     )
     expect(result).toHaveLength(2)
-    expect(result[1]?.isDefault).toBe(false)
+    expect(result.find((a) => a.id === 'addr-test-2')?.isDefault).toBe(false)
   })
 })
 
@@ -127,8 +127,10 @@ describe('removeAddress', () => {
   })
 
   it('does not remove addresses of other users', () => {
-    const other: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-b' }
-    const result = removeAddress([other], 'addr-1', 'user-a')
+    const ownAddr: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-a' }
+    const otherAddr: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-b' }
+    const result = removeAddress([ownAddr, otherAddr], 'addr-1', 'user-a')
     expect(result).toHaveLength(1)
+    expect(result[0]?.userId).toBe('user-b')
   })
 })
