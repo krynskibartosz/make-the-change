@@ -33,6 +33,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
   const [isPending, startTransition] = useTransition()
   const [showSheet, setShowSheet] = useState(false)
   const [saveAddress, setSaveAddress] = useState(false)
+  const [addressSaveError, setAddressSaveError] = useState(false)
 
   const hasSavedAddresses = savedAddresses.length > 0
 
@@ -62,12 +63,13 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
     startTransition(async () => {
       await saveCheckoutCustomerAction(customer)
       if (saveAddress && isConnected) {
-        await saveAddressAction({
+        const saved = await saveAddressAction({
           street: customer.street,
           postalCode: customer.postalCode,
           city: customer.city,
           country: customer.country,
         })
+        if (!saved.ok) setAddressSaveError(true)
       }
       router.push(`/${locale}/products/checkout/paiement`)
     })
@@ -187,17 +189,24 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
         </div>
 
         {isConnected && (
-          <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
-            <input
-              type="checkbox"
-              checked={saveAddress}
-              onChange={(e) => setSaveAddress(e.target.checked)}
-              className="h-4 w-4 accent-lime-300"
-            />
-            <span className="text-sm font-medium text-white/70">
-              Sauvegarder cette adresse dans mon profil
-            </span>
-          </label>
+          <>
+            <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+              <input
+                type="checkbox"
+                checked={saveAddress}
+                onChange={(e) => setSaveAddress(e.target.checked)}
+                className="h-4 w-4 accent-lime-300"
+              />
+              <span className="text-sm font-medium text-white/70">
+                Sauvegarder cette adresse dans mon profil
+              </span>
+            </label>
+            {addressSaveError && (
+              <p className="px-1 text-xs text-red-400/80">
+                L'adresse n'a pas pu être sauvegardée — tu peux l'ajouter depuis ton profil.
+              </p>
+            )}
+          </>
         )}
       </div>
 

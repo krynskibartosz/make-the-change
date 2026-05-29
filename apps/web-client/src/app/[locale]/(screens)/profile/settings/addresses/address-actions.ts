@@ -12,20 +12,22 @@ import {
 } from '@/lib/mock/mock-addresses-server'
 import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 
-export async function removeAddressAction(id: string): Promise<void> {
+export async function removeAddressAction(id: string): Promise<{ ok: boolean }> {
   const session = await getMockViewerSession()
-  if (!session) return
+  if (!session) return { ok: false }
   const addresses = await getCurrentMockAddresses()
   await setCurrentMockAddresses(removeAddress(addresses, id, session.viewerId))
   revalidatePath('/profile/settings/addresses')
+  return { ok: true }
 }
 
-export async function setDefaultAddressAction(id: string): Promise<void> {
+export async function setDefaultAddressAction(id: string): Promise<{ ok: boolean }> {
   const session = await getMockViewerSession()
-  if (!session) return
+  if (!session) return { ok: false }
   const addresses = await getCurrentMockAddresses()
   await setCurrentMockAddresses(setDefaultAddress(addresses, id, session.viewerId))
   revalidatePath('/profile/settings/addresses')
+  return { ok: true }
 }
 
 export async function addAddressAction(address: {
@@ -33,10 +35,11 @@ export async function addAddressAction(address: {
   postalCode: string
   city: string
   country: string
-}): Promise<void> {
+}): Promise<{ ok: boolean }> {
   const session = await getMockViewerSession()
-  if (!session) return
+  if (!session) return { ok: false }
   const addresses = await getCurrentMockAddresses()
   await setCurrentMockAddresses(addAddress(addresses, { userId: session.viewerId, ...address }))
   revalidatePath('/profile/settings/addresses')
+  return { ok: true }
 }

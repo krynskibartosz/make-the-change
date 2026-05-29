@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getMockProductById } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { completeMockCheckoutAction } from '@/app/[locale]/(screens)/products/_features/mock-commerce-actions'
@@ -87,5 +88,6 @@ export async function saveAddressAction(address: {
     ...address,
   })
   await setCurrentMockAddresses(updated)
+  revalidatePath('/profile/settings/addresses')
   return { ok: true }
 }

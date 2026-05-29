@@ -1,10 +1,9 @@
-// saved-addresses-sheet.tsx
 'use client'
 
 import { X } from 'lucide-react'
 import { useEffect } from 'react'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
-import { getCountryLabel } from '@/lib/checkout-countries'
+import { AddressLine } from '@/app/[locale]/(screens)/profile/settings/addresses/address-line'
 
 type Props = {
   addresses: MockUserAddress[]
@@ -47,7 +46,7 @@ export function SavedAddressesSheet({ addresses, onSelect, onClose }: Props) {
           </button>
         </div>
 
-        <ul className="max-h-72 overflow-y-auto px-4 space-y-2">
+        <ul className="max-h-72 overflow-y-auto space-y-2 px-4">
           {addresses.map((address) => (
             <li key={address.id}>
               <button
@@ -55,17 +54,7 @@ export function SavedAddressesSheet({ addresses, onSelect, onClose }: Props) {
                 onClick={() => { onSelect(address); onClose() }}
                 className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left transition-colors active:bg-white/[0.08]"
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-white">{address.street}</span>
-                  {address.isDefault && (
-                    <span className="rounded-full bg-lime-300/10 px-2 py-0.5 text-[10px] font-bold text-lime-300">
-                      Par défaut
-                    </span>
-                  )}
-                </div>
-                <p className="mt-0.5 text-xs text-white/50">
-                  {address.postalCode} {address.city} · {getCountryLabel(address.country)}
-                </p>
+                <AddressLine address={address} />
               </button>
             </li>
           ))}
