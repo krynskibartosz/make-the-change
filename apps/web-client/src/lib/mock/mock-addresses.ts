@@ -102,6 +102,17 @@ export function setDefaultAddress(
   )
 }
 
+export function updateAddress(
+  addresses: MockUserAddress[],
+  id: string,
+  userId: string,
+  updates: Pick<MockUserAddress, 'street' | 'postalCode' | 'city' | 'country'>,
+): MockUserAddress[] {
+  return addresses.map((a) =>
+    a.id === id && a.userId === userId ? { ...a, ...updates } : a,
+  )
+}
+
 export function removeAddress(
   addresses: MockUserAddress[],
   id: string,

@@ -5,6 +5,7 @@ import {
   addAddress,
   removeAddress,
   setDefaultAddress,
+  updateAddress,
 } from '@/lib/mock/mock-addresses'
 import {
   getCurrentMockAddresses,
@@ -40,6 +41,18 @@ export async function addAddressAction(address: {
   if (!session) return { ok: false }
   const addresses = await getCurrentMockAddresses()
   await setCurrentMockAddresses(addAddress(addresses, { userId: session.viewerId, ...address }))
+  revalidatePath('/profile/settings/addresses')
+  return { ok: true }
+}
+
+export async function updateAddressAction(
+  id: string,
+  address: { street: string; postalCode: string; city: string; country: string },
+): Promise<{ ok: boolean }> {
+  const session = await getMockViewerSession()
+  if (!session) return { ok: false }
+  const addresses = await getCurrentMockAddresses()
+  await setCurrentMockAddresses(updateAddress(addresses, id, session.viewerId, address))
   revalidatePath('/profile/settings/addresses')
   return { ok: true }
 }

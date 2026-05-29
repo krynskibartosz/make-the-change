@@ -11,6 +11,7 @@ type Props = {
   className?: string
   onChange: (value: string) => void
   onSelect: (suggestion: Pick<AddressSuggestion, 'street' | 'postalCode' | 'city'>) => void
+  onBlur?: () => void
 }
 
 export function AddressAutocompleteInput({
@@ -21,11 +22,13 @@ export function AddressAutocompleteInput({
   className,
   onChange,
   onSelect,
+  onBlur,
 }: Props) {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
   const [activeIndex, setActiveIndex] = useState(-1)
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [dropAbove, setDropAbove] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -40,14 +43,32 @@ export function AddressAutocompleteInput({
     }
   }, [])
 
-  // Reset dropdown when country changes, and cancel any in-flight request for the old country
+  // Reset dropdown when country changes
   useEffect(() => {
     abortRef.current?.abort()
     if (debounceRef.current) clearTimeout(debounceRef.current)
     setSuggestions([])
     setIsOpen(false)
     setActiveIndex(-1)
+    setIsLoading(false)
   }, [country])
+
+  // Recompute direction when viewport resizes (mobile keyboard open/close)
+  useEffect(() => {
+    if (!isOpen) return
+    function updateDirection() {
+      const rect = containerRef.current?.getBoundingClientRect()
+      if (rect) setDropAbove(window.innerHeight - rect.bottom < 260)
+    }
+    updateDirection()
+    window.addEventListener('resize', updateDirection)
+    return () => window.removeEventListener('resize', updateDirection)
+  }, [isOpen])
+
+  function computeDropDirection() {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (rect) setDropAbove(window.innerHeight - rect.bottom < 260)
+  }
 
   async function fetchSuggestions(query: string) {
     abortRef.current?.abort()
@@ -84,6 +105,7 @@ export function AddressAutocompleteInput({
       return
     }
     setIsLoading(true)
+    computeDropDirection()
     debounceRef.current = setTimeout(() => void fetchSuggestions(val), 300)
   }
 
@@ -114,14 +136,18 @@ export function AddressAutocompleteInput({
     }
   }
 
-  function handleBlur() {
-    // Delay to allow onMouseDown on a suggestion to fire first
+  function handleBlurInternal() {
     setTimeout(() => {
       if (!containerRef.current?.contains(document.activeElement)) {
         setIsOpen(false)
+        onBlur?.()
       }
     }, 150)
   }
+
+  const dropClass = dropAbove
+    ? 'bottom-full mb-1'
+    : 'top-full mt-1'
 
   return (
     <div ref={containerRef} className="relative">
@@ -135,7 +161,7 @@ export function AddressAutocompleteInput({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        onBlur={handleBlur}
+        onBlur={handleBlurInternal}
         placeholder={placeholder}
         autoComplete="off"
         role="combobox"
@@ -150,7 +176,7 @@ export function AddressAutocompleteInput({
         <ul
           id={listboxId}
           role="listbox"
-          className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
+          className={`absolute left-0 right-0 z-50 max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl ${dropClass}`}
         >
           {suggestions.map((suggestion, index) => (
             <li
